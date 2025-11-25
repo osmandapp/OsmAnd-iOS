@@ -66,8 +66,6 @@
     }
     if (alarm)
     {
-        NSLog(@"[test] alarm.intValue: %d", alarm.intValue);
-        NSLog(@"[test] alarm.stringValue: %@", @(alarm.intValue).stringValue);
         return alarm.intValue;
     }
     return -1;

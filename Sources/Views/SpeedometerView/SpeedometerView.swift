@@ -67,6 +67,8 @@ final class SpeedometerView: OATextInfoWidget {
         false
     }
     
+    private var didRunSpeedTests = false
+    
     @discardableResult
     override func updateInfo() -> Bool {
         guard settings.showSpeedometer.get() else {
@@ -74,20 +76,100 @@ final class SpeedometerView: OATextInfoWidget {
             return false
         }
         updateComponents()
-        let speedLimit: Int = Int(speedViewWrapper.speedLimit())
-        print("[test] speedLimit: \(speedLimit)")
-        updateSpeedometerSpeedView(speedLimit: speedLimit)
-        updateSpeedLimitView(speedLimit: speedLimit)
-        var isChangedVisible = false
-        if !speedometerSpeedView.isHidden && isHidden {
-            isChangedVisible = true
-        }
-        isHidden = speedometerSpeedView.isHidden
-        if isChangedVisible {
-            didChangeIsVisible?()
+        
+        if !didRunSpeedTests {
+            didRunSpeedTests = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+                guard let self else { return }
+                runSimpleSpeedTests()
+                runSimpleSpeedTests1()
+                isHidden = false
+                didChangeIsVisible?()
+               // let speedLimit: Int = Int(speedViewWrapper.speedLimit())
+              //  print("[test] speedLimit: \(speedLimit)")
+//                updateSpeedometerSpeedView(speedLimit: speedLimit)
+//                updateSpeedLimitView(speedLimit: speedLimit)
+//                var isChangedVisible = false
+//                if !speedometerSpeedView.isHidden && isHidden {
+//                    isChangedVisible = true
+//                }
+//                isHidden = speedometerSpeedView.isHidden
+//                if isChangedVisible {
+//                    didChangeIsVisible?()
+//                }
+            }
         }
         
         return true
+    }
+    
+//    @discardableResult
+//    override func updateInfo() -> Bool {
+//        guard settings.showSpeedometer.get() else {
+//            isHidden = true
+//            return false
+//        }
+//        updateComponents()
+//        let speedLimit: Float = Float(speedViewWrapper.speedLimit())
+//        updateSpeedometerSpeedView(speedLimit: speedLimit)
+//        updateSpeedLimitView(speedLimit: Int(speedLimit))
+//        var isChangedVisible = false
+//        if !speedometerSpeedView.isHidden && isHidden {
+//            isChangedVisible = true
+//        }
+//        isHidden = speedometerSpeedView.isHidden
+//        if isChangedVisible {
+//            didChangeIsVisible?()
+//        }
+//        
+//        return true
+//    }
+    
+    func runSimpleSpeedTests() {
+        let speedLimit: Float = 50
+
+        let sequence: [Float] = [
+//            0,     // стоим
+//            10,    // 36 км/ч
+//            14,    // 50 км/ч
+            16,    // превышение
+//            13,    // обратно к лимиту
+//            20,    // превышение
+//            11,    // нормально
+//            12,    // нормально
+//            13,    // обратно к лимиту
+//            18     // превышение
+        ]
+
+        var delay = 0.0
+        for s in sequence {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                guard let self else { return }
+                self.isHidden = false
+                updateSpeedometerSpeedView(speedLimit: speedLimit, mockSpeed: s)
+                updateSpeedLimitView(speedLimit: Int(speedLimit))
+            }
+            delay += 0.1
+        }
+    }
+    
+    func runSimpleSpeedTests1() {
+        let speedLimit: Float = 46
+
+        let sequence: [Float] = [
+            16,    // превышение
+        ]
+
+        var delay = 0.5
+        for s in sequence {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                guard let self else { return }
+                self.isHidden = false
+                updateSpeedometerSpeedView(speedLimit: speedLimit, mockSpeed: s)
+                updateSpeedLimitView(speedLimit: Int(speedLimit))
+            }
+            delay += 0.1
+        }
     }
     
     func configure() {
@@ -169,8 +251,8 @@ final class SpeedometerView: OATextInfoWidget {
         }
     }
     
-    private func updateSpeedometerSpeedView(speedLimit: Int) {
-        speedometerSpeedView.updateInfo(speedLimit: speedLimit)
+    private func updateSpeedometerSpeedView(speedLimit: Float, mockSpeed: Float? = nil) {
+        speedometerSpeedView.updateInfo(speedLimit: speedLimit, mockSpeed: mockSpeed)
     }
     
     private func updateSpeedLimitView(speedLimit: Int) {
@@ -182,11 +264,11 @@ final class SpeedometerView: OATextInfoWidget {
     
     private func setupSpeedLimitWith(view: SpeedLimitView, speedLimit: Int) {
         guard speedLimit > -1 else {
-            print("[test] setupSpeedLimitWith isHidden = true")
+          //  print("[test] setupSpeedLimitWith isHidden = true")
             view.isHidden = true
             return
         }
-        print("[test] setupSpeedLimitWith isHidden = false")
+       // print("[test] setupSpeedLimitWith isHidden = false")
         let value = String(speedLimit)
         view.isHidden = false
         view.updateWith(value: value)
@@ -217,36 +299,27 @@ enum SpeedometerState {
     /// Returns the background color for the speedometerSpeedView.
     var backgroundColor: UIColor {
         switch self {
-        case .normal:
-             .clear
-        case .tolerance:
-             UIColor(named: "speedometerToleranceBgColor") ?? .systemYellow
-        case .exceedingLimit:
-             UIColor(named: "speedometerLimitBgColor") ?? .systemRed
+        case .normal: .widgetBg
+        case .tolerance: .speedometerToleranceBg
+        case .exceedingLimit: .speedometerLimitBg
         }
     }
     
     /// Returns the color for the main speed value (the numbers).
     var valueColor: UIColor {
         switch self {
-        case .normal:
-             .label
-        case .tolerance:
-             UIColor(named: "speedometerToleranceValueColor") ?? .systemOrange
-        case .exceedingLimit:
-             UIColor(named: "speedometerLimitValueColor") ?? .white
+        case .normal: .widgetValue
+        case .tolerance: .speedometerToleranceValue
+        case .exceedingLimit: .speedometerLimitValue
         }
     }
     
     /// Returns the color for the units text (e.g., "km/h" or "mph").
     var unitsColor: UIColor {
         switch self {
-        case .normal:
-             .secondaryLabel
-        case .tolerance:
-             UIColor(named: "speedometerToleranceUnitsColor") ?? .systemBrown
-        case .exceedingLimit:
-             UIColor(named: "speedometerLimitUnitsColor") ?? .white
+        case .normal: .widgetUnits
+        case .tolerance: .speedometerToleranceUnits
+        case .exceedingLimit: .speedometerLimitUnits
         }
     }
 }

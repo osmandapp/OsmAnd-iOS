@@ -31,7 +31,9 @@ final class CarPlayNavigationModeManager: NSObject {
     }
     
     func configureForCarPlay() {
+        reconnectOBDIfNeeded()
         guard let routing = OARoutingHelper.sharedInstance() else { return }
+        
         let settings = OAAppSettings.sharedManager()
         captureOriginalModeIfNeeded()
         let current = settings.applicationMode.get()
@@ -52,6 +54,11 @@ final class CarPlayNavigationModeManager: NSObject {
         OAAppSettings.sharedManager().setApplicationModePref(originalAppMode)
         OARoutingHelper.sharedInstance()?.setAppMode(originalAppMode)
         self.originalAppMode = nil
+    }
+    
+    private func reconnectOBDIfNeeded() {
+        guard let plugin = OAPluginsHelper.getEnabledPlugin(VehicleMetricsPlugin.self) as? VehicleMetricsPlugin else { return }
+        plugin.reconnectOBDIfNeeded()
     }
     
     private func isRoutingActive() -> Bool {

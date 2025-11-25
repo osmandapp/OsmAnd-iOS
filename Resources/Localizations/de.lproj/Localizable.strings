@@ -3956,3 +3956,6 @@
 "efficient_grid" = "Effizientes Gitter";
 "lang_crh" = "Krimtatarisch (lateinisch)";
 "rendering_attr_shellsStyle_name" = "Muschelstil";
+"shared_string_release" = "Veröffentlicht";
+"routing_attr_weightrating_name" = "Maximales Gewicht bei voller Beladung";
+"routing_attr_maxaxleload_name" = "Maximale Achslast";

@@ -3960,3 +3960,4 @@
 "x" = "X (раніше Твіттер)";
 "routing_attr_weightrating_name" = "Максимальна вага при повному завантаженні";
 "routing_attr_maxaxleload_name" = "Максимальне навантаження на вісь";
+"shared_string_release" = "Дата випуску";

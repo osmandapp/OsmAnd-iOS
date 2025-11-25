@@ -3961,3 +3961,7 @@
 "routing_attr_weightrating_name" = "Максимальна вага при повному завантаженні";
 "routing_attr_maxaxleload_name" = "Максимальне навантаження на вісь";
 "shared_string_release" = "Дата випуску";
+"copy_as_new_folder" = "Копіювати як нову папку";
+"add_to_a_folder" = "Додати до папки";
+"add_to_favorites" = "Додати до обраного";
+"reconnect" = "Знову підключитися";

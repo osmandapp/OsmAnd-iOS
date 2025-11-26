@@ -166,20 +166,6 @@
                     BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
                     if (detailsObject)
                     {
-                        //controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
-                        
-                        OAPOI *a = targetPoint.targetObj;
-                        OAPOI *b = detailsObject.syntheticAmenity;
-                        [detailsObject addObject:a];
-                        OAPOI *c = detailsObject.syntheticAmenity;
-                        
-                        //TODO: delete
-//                        controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
-//                        controller = [[OAPOIViewController alloc] initWithPOI:detailsObject.syntheticAmenity];
-                        
-//                        controller = [[OAPOIViewController alloc] initWithPOI:a];
-//                        controller = [[OAPOIViewController alloc] initWithPOI:b];
-                        controller = [[OAPOIViewController alloc] initWithPOI:c];
                         controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
                     }
                 }

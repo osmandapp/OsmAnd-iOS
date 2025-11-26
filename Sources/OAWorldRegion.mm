@@ -864,9 +864,9 @@
         NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:subregions resourceTypes:resourceGroupTypes isGroup:YES];
         for (OAResourceItem *item in items)
         {
-            if (item.worldRegion && item.worldRegion.regionMap && item.worldRegion.regionJoinMap && item.resourceType == OsmAndResourceType::MapRegion)
+            if (item.worldRegion && item.worldRegion.regionMap && item.worldRegion.regionJoinMap)
                 continue;
-            
+
             if ([item isKindOfClass:OARepositoryResourceItem.class])
                 item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:((OARepositoryResourceItem *) item).resource->id.toNSString()]] firstObject];
 

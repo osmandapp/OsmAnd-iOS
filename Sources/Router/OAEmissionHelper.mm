@@ -114,6 +114,14 @@ static OAMotorType * HYBRID;
     return nil;
 }
 
++ (OAMotorType *)getMotorTypeByValue:(NSInteger)value
+{
+    NSArray<OAMotorType *> *motorTypes = @[OAMotorType.PETROL, OAMotorType.DIESEL, OAMotorType.LPG, OAMotorType.GAS, OAMotorType.ELECTRIC, OAMotorType.HYBRID];
+    if (value < 1 || value > motorTypes.count)
+        return nil;
+    return motorTypes[value - 1];
+}
+
 + (OAMotorType *)PETROL
 {
     if (!PETROL)

@@ -684,6 +684,9 @@ static BOOL _repositoryUpdated = NO;
 
         if (![self.region isKindOfClass:OACustomRegion.class])
             [self collectSubregionsDataAndItems];
+        else
+            [_regionMapItems removeAllObjects];
+        
         [self collectResourcesDataAndItems];
 
         _doDataUpdate = NO;
@@ -961,11 +964,11 @@ static BOOL _repositoryUpdated = NO;
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
     
     if ([self.region hasGroupItems]
-            && (([self.region getLevel] > 1 && _regionMapItems.count > 0)
-                || self.region.regionJoinMap
-                || [self.region.regionId hasPrefix:russiaRegionId]
-                || [self.region.regionId hasPrefix:unitedKingdomRegionId]
-                || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
+        && (([self.region getLevel] > 1 && _regionMapItems.count > 0)
+            || self.region.regionJoinMap
+            || [self.region.regionId hasPrefix:russiaRegionId]
+            || [self.region.regionId hasPrefix:unitedKingdomRegionId]
+            || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
     {
         NSMutableArray<NSNumber *> *regionMapItemsTypes = [NSMutableArray new];
         for (OAResourceItem *resource in _regionMapItems)

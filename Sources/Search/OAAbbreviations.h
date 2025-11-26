@@ -14,5 +14,6 @@
 
 + (NSString *) replace:(NSString *)word;
 + (NSString *) replaceAll:(NSString *)phrase;
++ (NSDictionary *) getAbbreviations;
 
 @end

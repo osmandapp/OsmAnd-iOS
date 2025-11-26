@@ -51,6 +51,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 {
     OAPOIHelper *_poiHelper;
     AmenityUIHelper *_amenityUIHelper;
+    AdditionalInfoBundle *_infoBundle;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
@@ -74,6 +75,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     if (self)
     {
         [self setup:poi];
+        
+        
+        //TODO: implement. fill with poi data
+//        extensions = amenity.getAmenityExtensions(app.getPoiTypes(), false);
+//        setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
+//        infoBundle = new AdditionalInfoBundle(app, extensions);
+        
+        _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:nil];
     }
     return self;
 }
@@ -312,6 +321,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
+    // new code launch order
+    
 //    processRoutePointAmenityTags(view);
 //    buildInternalRows(view);
     [self buildInternalRows:rows];
@@ -328,11 +339,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 //    }
     
     
-    
-    
-    // TODO: delete/refactor old code --------------------------------------
+
+    // TODO: delete/refactor old code launch order --------------------------------------
     return;
     
+    /*
     
     
     BOOL hasWiki = NO;
@@ -869,18 +880,35 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
     }
+     
+     */
+}
+
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
+{
+//    processRoutePointAmenityTags(view);
+    
+    [self buildInternalRows:rows];
+    
+//    buildNearestRows((ViewGroup) view);
+//    buildAltNamesRow((ViewGroup) view);
+//    buildNamesRow((ViewGroup) view);
+//    if (!amenityUIHelper.isFirstRow()) {
+//        firstRow = amenityUIHelper.isFirstRow();
+//    }
 }
 
 - (void)buildInternalRows:(NSMutableArray<OARowInfo *> *)rows
 {
-    //_amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:<#(NSString * _Nonnull)#> infoBundle:<#(AdditionalInfoBundle * _Nonnull)#>];
+    NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
+    _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
+    [_amenityUIHelper buildInternal];
     
 //    amenityUIHelper = new AmenityUIHelper(mapActivity, getPreferredMapAppLang(), infoBundle);
 //    amenityUIHelper.setLight(isLightContent());
 //    amenityUIHelper.setLatLon(getLatLon());
 //    amenityUIHelper.setCollapseExpandListener(getCollapseExpandListener());
 //    amenityUIHelper.buildInternal(view);
-    
 }
 
 - (NSString *) getOsmUrl

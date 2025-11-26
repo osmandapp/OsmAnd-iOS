@@ -14,7 +14,6 @@ final class HudGridOverlay: UIView {
         var cellSizePx: CGFloat = CGFloat(ButtonPositionSize.companion.CELL_SIZE_DP)
         var defaultMarginPx: CGFloat = CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)
         var cellFixPx: CGFloat = 0
-        var statusBarHeight: CGFloat = 0
         var safeAreaInsets: UIEdgeInsets = .zero
         var bottomOverlayPx: CGFloat = 0
         var showsEffectiveGrid: Bool = false
@@ -53,7 +52,7 @@ final class HudGridOverlay: UIView {
     
     override func draw(_ rect: CGRect) {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
-        let physical = UIEdgeInsets(top: cfg.statusBarHeight, left: cfg.safeAreaInsets.left, bottom: cfg.safeAreaInsets.bottom, right: cfg.safeAreaInsets.right)
+        let physical = UIEdgeInsets(top: cfg.safeAreaInsets.top, left: cfg.safeAreaInsets.left, bottom: cfg.safeAreaInsets.bottom, right: cfg.safeAreaInsets.right)
         if cfg.showsEffectiveGrid {
             drawFourCornerGrid(in: ctx)
         }
@@ -78,7 +77,7 @@ final class HudGridOverlay: UIView {
         guard cell > 0 else { return }
         let left0 = cfg.safeAreaInsets.left + cfg.cellFixPx + cfg.defaultMarginPx
         let right0 = bounds.width - cfg.safeAreaInsets.right - cfg.cellFixPx - cfg.defaultMarginPx
-        let top0 = cfg.statusBarHeight + cfg.cellFixPx + cfg.defaultMarginPx
+        let top0 = cfg.safeAreaInsets.top + cfg.cellFixPx + cfg.defaultMarginPx
         let bottom0 = bounds.height - cfg.safeAreaInsets.bottom - cfg.cellFixPx - cfg.defaultMarginPx - cfg.bottomOverlayPx
         guard left0 < right0, top0 < bottom0 else { return }
         let midX = snapToPixel((left0 + right0) / 2)

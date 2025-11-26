@@ -517,8 +517,16 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [resourceItems addObject:item];
             if ([item isKindOfClass:OALocalResourceItem.class])
             {
-                self.size += ((OALocalResourceItem *) item).resource->size;
-                self.sizePkg += [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize;
+                uint64_t size = ((OALocalResourceItem *) item).resource->size;
+                self.size += size;
+                
+                if (!item.resourceId.isNull() && !item.resourceId.isEmpty())
+                {
+                    const auto res = [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId);
+                    if (res != nullptr)
+                        size = res->packageSize;
+                }
+                self.sizePkg += size;
             }
             else if ([item isKindOfClass:OARepositoryResourceItem.class])
             {

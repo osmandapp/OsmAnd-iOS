@@ -77,12 +77,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         [self setup:poi];
         
         
-        //TODO: implement. fill with poi data
+        //TODO: implement. fill with real poi data
 //        extensions = amenity.getAmenityExtensions(app.getPoiTypes(), false);
 //        setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
 //        infoBundle = new AdditionalInfoBundle(app, extensions);
         
-        _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:nil];
+        NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:nil addPrefixes:NO];
+        _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
     }
     return self;
 }

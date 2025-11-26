@@ -844,6 +844,13 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         return _osmId >> AMENITY_ID_RIGHT_SHIFT;
 }
 
+- (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(id)mapPoiTypes addPrefixes:(BOOL)addPrefixes
+{
+    
+    //TODO: implement
+    return nil;
+}
+
 - (BOOL) isEqual:(id)o
 {
     if (self == o)

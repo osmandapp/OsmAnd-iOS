@@ -1416,7 +1416,7 @@
 "rendering_attr_alpineHiking_description" = "Jenis klasifikasi kesulitan untuk rute.";
 "rendering_attr_highway_class_bridleway_name" = "Kekang";
 "routing_attr_avoid_share_taxi_name" = "Tidak ada taksi berbagi";
-"rendering_attr_pisteRoutes_name" = "Rute ski";
+"rendering_attr_pisteRoutes_name" = "Lereng ski dan rute";
 "rendering_attr_piste_type_sled_name" = "Kereta luncur";
 "rendering_attr_noPolygons_description" = "Jadikan semua fitur lahan areal di peta transparan.";
 "routing_attr_allow_classic_only_description" = "Rute yang dipersiapkan untuk gaya klasik saja tanpa jalur skating. Ini termasuk rute yang dipersiapkan oleh mobil salju yang lebih kecil dengan jalur yang lebih longgar dan trek yang dibuat secara manual oleh pemain ski.";
@@ -1900,7 +1900,7 @@
 "rendering_attr_padusDisplayMode_description" = "Berdasarkan jenis akses atau nama pengelola";
 "rendering_value_sector2_name" = "Sektor 2";
 "rendering_value_sector4_name" = "Sektor 4";
-"rendering_attr_padusDisplayMode_name" = "Mode penampilan lahan umum";
+"rendering_attr_padusDisplayMode_name" = "Mode penampilan lahan pemerintah";
 "rendering_attr_lightDetail_name" = "Detail cahaya";
 "routing_attr_hazmat_category_usa_6_name" = "Zat Beracun dan Menular";
 "rendering_attr_showProposed_name" = "Obyek yang diusulkan";
@@ -1910,7 +1910,7 @@
 "routing_attr_hazmat_category_usa_4_name" = "Padatan Mudah Terbakar";
 "routing_attr_allow_via_ferrata_name" = "Rute lereng gunung (Via ferrata)";
 "routing_attr_hazmat_category_usa_5_name" = "Agen Pengoksidasi dan Peroksida Organik";
-"rendering_attr_padusHideBoundaries_description" = "Sembunyikan batasan lahan umum tetapi tetapkan area";
+"rendering_attr_padusHideBoundaries_description" = "Sembunyikan batas-batas lahan pemerintah tetapi biarkan area";
 "rendering_value_sectors_name" = "Sektor";
 "rendering_value_name_only_name" = "Nama saja";
 "rendering_value_sector1_name" = "Sektor 1";
@@ -1919,7 +1919,7 @@
 "routing_attr_hazmat_category_usa_2_name" = "Gas";
 "rendering_value_access_name" = "Berdasarkan jenis akses";
 "routing_attr_hazmat_category_usa_9_name" = "Lain-lain";
-"rendering_attr_padusHideBoundaries_name" = "Sembunyikan batasan lahan umum";
+"rendering_attr_padusHideBoundaries_name" = "Sembunyikan batas-batas lahan pemerintah";
 "rendering_value_managerName_name" = "Berdasarkan nama pengelola";
 "routing_attr_hazmat_category_usa_7_name" = "Zat Radioaktif";
 "rendering_attr_lightDetail_description" = "Bawaan: nama garis laut (karakter cahaya.grup.periode), pilih informasi tambahan di bagian 1 sampai 3 atau sektor karakter cahaya 1,2,3,4,5";
@@ -2363,7 +2363,7 @@
 "shared_string_always" = "Selalu";
 "in_case_of_reverse_direction" = "Jika arah balik";
 "avoid_pt_types" = "Hindari tipe angkutan…";
-"auto_zoom_smooth" = "Lembut";
+"auto_zoom_smooth" = "Halus";
 "custom_buttons" = "Tombol khusus";
 "shared_string_top_bottom" = "Atas dan bawah";
 "shared_string_top" = "Atas";
@@ -2384,8 +2384,8 @@
 "when_exceeded" = "Ketika melebihi";
 "track_appearance_3D_visualization" = "Visualisasi 3D";
 "empty_name" = "Nama kosong";
-"auto_zoom_discrete" = "Langsung";
-"speedometer_description" = "Menampilkan kecepatan Anda saat ini sesuai yang dilaporkan oleh GPS";
+"auto_zoom_discrete" = "Diskret";
+"speedometer_description" = "Menampilkan kecepatan Anda saat ini sesuai yang dilaporkan GPS";
 "edit_tilesource_minzoom" = "Zoom minimal";
 "dangerous_goods_description" = "Di beberapa jalan dan terowongan, pengangkutan bahan berbahaya dilarang.";
 "visualization_3d_wall_color" = "Warna tembok";
@@ -2532,7 +2532,7 @@
 "start_navigation" = "Mulai navigasi";
 "ios_release_5_0" = "• Memperkenalkan Folder Cerdas untuk pengaturan trek otomatis.\n• Menambahkan penampil galeri layar penuh untuk gambar Wikimedia.\n• Menambahkan dukungan untuk Text-to-Speech (TTS) Bahasa Vietnam dan Ibrani untuk navigasi.\n• Menambahkan Tindakan Cepat untuk mengontrol perekaman perjalanan.\n• Menambahkan opsi \"Panduan trek terperinci\" dan dialog saran \"Tempelkan ke jalan\".\n• Membuat puncak yang menonjol dapat ditemukan melalui peta dan pencarian.\n• Menambahkan penyorotan batas untuk bangunan dan area dengan informasi rinci.\n• Menambahkan opsi untuk mengaktifkan/menonaktifkan visibilitas untuk grup favorit terpisah di peta.\n• Memperluas opsi ikon untuk Favorit dengan menambahkan ikon dari semua kategori POI.\n• Menambahkan tampilan level baterai untuk sensor eksternal.\n• Menambahkan opsi untuk mengubah tampilan beberapa trek secara bersamaan.\n• Menambahkan tindakan \"Reset\" untuk widget Kecepatan Rata-Rata.\n• Pencarian CarPlay: Menambahkan kemampuan untuk memilih bangunan.\n• Memperbaiki urutan input koordinat UTM.\n• Memperbaiki masalah dengan warna titik jalan trek.\n• Memperbaiki tombol \"Unduh semua\" yang hilang untuk peta Medan.\n• Memperbaiki masalah di mana artikel populer terkadang hilang di Panduan Perjalanan.\n";
 "action_cant_be_undone" = "Tindakan ini tidak dapat diurungkan.";
-"shared_string_speedometer" = "Speedometer";
+"shared_string_speedometer" = "Spidometer";
 "weather_source_ecmwf_title" = "ECMWF";
 "calendar_new_event_title" = "Acara baru";
 "shared_string_row_number" = "Baris %d";
@@ -3802,3 +3802,20 @@
 "obd_fuel_type_not_provided" = "Tidak ada jenis bahan bakar yang disediakan";
 "map_text" = "Perenderan Peta";
 "obd_fuel_type_bifuel_hydrogen" = "Bifuel menjalankan Hidrogen";
+"slots" = "Slot";
+"routing_attr_weightrating_name" = "Berat maks saat muatan penuh";
+"routing_attr_maxaxleload_name" = "Muatan gandar maks";
+"rendering_attr_showSkiSlopes_name" = "Tampilkan lereng ski";
+"rendering_attr_showSkiSlopes_description" = "Tampilkan lereng ski sederhana";
+"next_turn_information" = "Informasi belokan selanjutnya";
+"next_turn_information_desc" = "Menampilkan arah belokan yang akan datang beserta nama jalannya.";
+"manage_purchases" = "Kelola pembelian";
+"altitude_metrics_description" = "Mengatur unit tampilan untuk ketinggian di widget dan statistik.";
+"map_orientations" = "Orientasi peta";
+"rendering_attr_hideFairways_name" = "Fairways";
+"rendering_attr_hideAreas_name" = "Area kedalaman";
+"rendering_attr_hideContours_name" = "Kontur kedalaman";
+"rendering_attr_hideFerries_name" = "Rute feri";
+"rendering_attr_hideTidalFlats_name" = "Kukup";
+"rendering_attr_showLNAMmarker_name" = "Penanda ENC";
+"rendering_attr_watercolor_name" = "Warna air";

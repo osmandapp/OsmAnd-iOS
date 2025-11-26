@@ -2183,6 +2183,11 @@
 "metric_ton" = "t";
 "kg" = "kg";
 
+"metric_lbs" = "lbs";
+"inch" = "in";
+"shared_string_inches" = "inches";
+"shared_string_pounds" = "pounds";
+
 "int_hour" = "h";
 "int_min" = "min.";
 "shared_string_sec" = "sec";
@@ -3981,6 +3986,9 @@
 "delete_folder" = "Delete folder";
 "root_folder" = "Root folder";
 "all_folders" = "All folders";
+"copy_as_new_folder" = "Copy as new folder";
+"add_to_a_folder" = "Add to a folder";
+"add_to_favorites" = "Add to favorites";
 "short_min" = "m";
 "remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
 "new_track" = "New track";
@@ -4402,3 +4410,5 @@
 "x" = "X (formerly Twitter)";
 "routing_attr_weightrating_name" = "Max weight at full load";
 "routing_attr_maxaxleload_name" = "Max axle load";
+"shared_string_release" = "Released";
+"reconnect" = "Reconnect";

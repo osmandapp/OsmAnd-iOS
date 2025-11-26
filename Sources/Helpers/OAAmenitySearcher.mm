@@ -272,28 +272,15 @@ int const kZoomToSearchPOI = 16.0;
     return detailsObject;
 }
 
-- (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
+- (NSMutableArray<OAPOI *> *)filterAmenities:(NSArray<OAPOI *> *)amenities request:(OAAmenitySearcherRequest*) request
 {
-    if (request.latLon == nil)
-    {
-        return nil;
-    }
-
-    CLLocation *latLon = request.latLon;
     int64_t osmId = request.osmId;
+    CLLocation *latLon = request.latLon;
     NSString *wikidata = request.wikidata;
     NSArray<NSString *> *names = request.names;
 
-    NSInteger radius = [request.type isEqualToString:kEntityTypeRelation]
-        ? AMENITY_SEARCH_RADIUS_FOR_RELATION
-        : AMENITY_SEARCH_RADIUS;
-
-    NSArray<OAPOI *> *amenities = [self searchAmenitiesWithFilter:[OASearchPoiTypeFilter acceptAllPoiTypeFilter]
-                                                     searchLatLon:latLon
-                                                           radius:radius
-                                                    includeTravel:YES];
-
     NSMutableArray<OAPOI *> *filtered = [NSMutableArray array];
+
     if (osmId > 0 || wikidata != nil)
     {
         filtered = [[self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata] mutableCopy];
@@ -309,7 +296,7 @@ int const kZoomToSearchPOI = 16.0;
                 filtered = [[self filterByOsmIdOrWikidata:amenities
                                                     osmId:[amenity getOsmId]
                                                     point:[amenity getLocation]
-                                                 wikidata:[amenity getWikidata]] mutableCopy] ;
+                                                 wikidata:[amenity getWikidata]] mutableCopy];
             }
             else
             {
@@ -318,11 +305,34 @@ int const kZoomToSearchPOI = 16.0;
             }
         }
     }
-    
+
     if (NSArrayIsEmpty(filtered) && !NSDictionaryIsEmpty(request.tags))
     {
         filtered = [[self filterByLatLonAndType:amenities point:latLon tags:request.tags] mutableCopy];
     }
+
+    return filtered;
+}
+
+- (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
+{
+    if (request.latLon == nil)
+    {
+        return nil;
+    }
+
+    CLLocation *latLon = request.latLon;
+
+    NSInteger radius = [request.type isEqualToString:kEntityTypeRelation]
+        ? AMENITY_SEARCH_RADIUS_FOR_RELATION
+        : AMENITY_SEARCH_RADIUS;
+
+    NSArray<OAPOI *> *amenities = [self searchAmenitiesWithFilter:[OASearchPoiTypeFilter acceptAllPoiTypeFilter]
+                                                     searchLatLon:latLon
+                                                           radius:radius
+                                                    includeTravel:YES];
+
+    NSMutableArray<OAPOI *> *filtered = [self filterAmenities:amenities request:request];
 
     if (!NSArrayIsEmpty(filtered))
     {
@@ -365,16 +375,23 @@ int const kZoomToSearchPOI = 16.0;
             {
                 double dist = [OAMapUtils getDistance:amenity.getLocation.coordinate second:point.coordinate];
                 if (dist < minDist)
+                {
                     [result insertObject:amenity atIndex:0]; // to the top
+                    minDist = dist;
+                }
                 else
+                {
                     [result addObject:amenity];
+                }
             }
         }
     }
     return [result copy];
 }
 
-- (NSArray<OAPOI *> *)filterByLatLonAndType:(NSArray<OAPOI *> *)amenities point:(CLLocation *)point tags:(NSDictionary *)tags
+- (NSMutableArray<OAPOI *> *)filterByLatLonAndType:(NSArray<OAPOI *> *)amenities
+                                             point:(CLLocation *)point
+                                              tags:(NSDictionary *)tags
 {
     NSMutableArray<OAPOI *> *result = [NSMutableArray array];
     for (OAPOI *amenity in amenities)
@@ -1096,15 +1113,16 @@ int const kZoomToSearchPOI = 16.0;
     
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
-    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
+    NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
     search->performSearch(*searchCriteria,
-                          [&arr, &tagName, &name, &location, &processedPoi]
+                          [&arr, &tagName, &name, &location, &deduplicateTypeIdSet]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                               const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                              if (![processedPoi containsObject:@(am->id.id)])
+                              NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:am];
+                              if (![deduplicateTypeIdSet containsObject:typeIdKey])
                               {
-                                  [processedPoi addObject:@(am->id.id)];
+                                  [deduplicateTypeIdSet addObject:typeIdKey];
                                   OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:tagName != nil withContent:NO];
                                   if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.name isEqualToString:name] || [poi.localizedNames.allValues containsObject:name]))
                                   {
@@ -1141,18 +1159,18 @@ int const kZoomToSearchPOI = 16.0;
     
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
-    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
-  
+    NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
+
     search->performTravelGuidesSearch(QString::fromNSString(reader), *searchCriteria,
-                                      [&categoryNames, &arr, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                      [&categoryNames, &arr, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                                 const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-        
-                                if (![processedPoi containsObject:@(am->id.id)])
+                                NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:am];
+                                if (![deduplicateTypeIdSet containsObject:typeIdKey])
                                 {
                                     if ([OATravelObfHelper.shared searchFilterShouldAccept:am->subType.toNSString() filterSubcategories:categoryNames])
                                     {
-                                        [processedPoi addObject:@(am->id.id)];
+                                        [deduplicateTypeIdSet addObject:typeIdKey];
                                         OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:YES];
                                         poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
                                         if (publish)
@@ -1211,13 +1229,12 @@ int const kZoomToSearchPOI = 16.0;
     }
     
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
-    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
-    
+
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
     
     search->performTravelGuidesSearch(QString::fromNSString(reader),
                                       *searchCriteria,
-                                      [self, &processedPoi, &arr, &publish]
+                                      [self, &arr, &publish]
                                         (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                         {
                                             const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
@@ -1260,16 +1277,17 @@ int const kZoomToSearchPOI = 16.0;
         OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
         OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
         searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
-        NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
+        NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
         search->performSearch(*searchCriteria,
-                              [&arr, &filter, &matcher, &processedPoi]
+                              [&arr, &filter, &matcher, &deduplicateTypeIdSet]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
                                   const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                  if (![processedPoi containsObject:@(amenity->id.id)])
+                                  NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:amenity];
+                                  if (![deduplicateTypeIdSet containsObject:typeIdKey])
                                   {
-                                      [processedPoi addObject:@(amenity->id.id)];
+                                      [deduplicateTypeIdSet addObject:typeIdKey];
                                       OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
                                       if (type && [filter accept:type.category subcategory:type.name])
                                       {
@@ -1296,13 +1314,22 @@ int const kZoomToSearchPOI = 16.0;
     return [self findPOI:searchFilter additionalFilter:additionalFilter bbox31:bbox31 currentLocation:point31 includeTravel:includeTravel matcher:matcher publish:publish];
 }
 
++ (NSString *) getAmenityTypeIdKey:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
+    if (type)
+        return [NSString stringWithFormat:@"%@-%@-%@", type.category.name, type.name, @(amenity->id.id)];
+    else
+        return [NSString stringWithFormat:@"%@", @(amenity->id.id)];
+}
+
 + (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter bbox31:(OsmAnd::AreaI )bbox31 currentLocation:(OsmAnd::PointI)currentLocation includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish
 {
     NSMutableSet<NSNumber *> *openAmenities = [NSMutableSet new];
     NSMutableSet<NSNumber *> *closedAmenities = [NSMutableSet new];
     NSMutableArray<OAPOI *> *actualAmenities = [NSMutableArray array];
-    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
-    
+    NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
+
     OASearchPoiTypeFilter *filter = searchFilter;
     BOOL done = false;
     
@@ -1339,20 +1366,20 @@ int const kZoomToSearchPOI = 16.0;
             }
             
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
-            
+
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
-                                              [&filter, &foundAmenities, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                              [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                        
-                                        uint64_t obfId = am->id.id;
-                    
+
                                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:am];
                                         BOOL accept = [filter accept:type.category subcategory:type.name];
-                
-                                        if (![processedPoi containsObject:@(obfId)] && accept)
+                                        NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:am];
+
+                                        if (![deduplicateTypeIdSet containsObject:typeIdKey] && accept)
                                         {
-                                            [processedPoi addObject:@(obfId)];
+                                            [deduplicateTypeIdSet addObject:typeIdKey];
+    
                                             OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
                                             

@@ -684,6 +684,9 @@ static BOOL _repositoryUpdated = NO;
 
         if (![self.region isKindOfClass:OACustomRegion.class])
             [self collectSubregionsDataAndItems];
+        else
+            [_regionMapItems removeAllObjects];
+        
         [self collectResourcesDataAndItems];
 
         _doDataUpdate = NO;

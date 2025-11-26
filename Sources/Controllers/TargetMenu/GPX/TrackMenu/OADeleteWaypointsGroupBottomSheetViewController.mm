@@ -119,14 +119,6 @@
     return NO;
 }
 
-- (void)hide:(BOOL)animated
-{
-    [self hide:animated completion:^{
-        if (self.trackMenuDelegate)
-            [self.trackMenuDelegate openWaypointsGroupOptionsScreen:_groupName];
-    }];
-}
-
 - (IBAction)leftButtonPressed:(id)sender
 {
     [self hide:YES];

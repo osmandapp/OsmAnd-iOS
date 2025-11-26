@@ -21,7 +21,7 @@
 "day_night_info" = "Informacije dan/noć";
 "daynight_mode_auto" = "Izlazak/zalazak sunca";
 "auto_follow_location_enabled" = "Automatsko centriranje karte je uključeno.";
-"unknown_location" = "Položaj nije poznat";
+"unknown_location" = "Položaj još nije poznat.";
 "animate_routing_route_not_calculated" = "Molimo vas, prvo izračunajte rutu";
 "settings_preset" = "Korisnički profil";
 "settings_preset_descr" = "Odaberite korisnički profil s već prilagođenim kartama i navigacijskim postavkama.";
@@ -32,7 +32,7 @@
 "rotate_map_compass_opt" = "Po kompasu";
 "rotate_map_bearing_opt" = "Po smijeru kretanja";
 "rotate_map_north_opt" = "Nemojte okretati (sjever je gore)";
-"driving_region_descr" = "Odaberite područje u kojem vozite: SAD, Europa, Velika Britanija, Azija i ostalo";
+"driving_region_descr" = "Odaberite područje u kojem vozite: SAD, Europa, Velika Britanija, Azija i ostalo.";
 "driving_region" = "Područje vožnje";
 "max_speed" = "Maksimalna brzina";
 
@@ -47,7 +47,7 @@
 "map_widget_intermediate_distance" = "Međutočka";
 "route_descr_destination" = "Odredište";
 "map_widget_altitude" = "Visina";
-"map_widget_plain_time" = "Trenutno vrijeme";
+"map_widget_plain_time" = "Trenutačno vrijeme";
 "map_widget_max_speed" = "Ograničenje brzine";
 "access_arrival_time" = "Vrijeme dolaska";
 "map_widget_time" = "Vrijeme za polazak";
@@ -71,34 +71,34 @@
 
 // Route info
 
-"int_seconds" = "sekundi";
+"int_seconds" = "sekunde";
 "shared_string_never" = "Nikad";
 "confirm_every_run" = "Uvijek pitaj";
 "general_settings_2" = "Opće postavke";
-"general_settings_descr" = "Definiraj opće postavke";
-"routing_settings_descr" = "Odredite mogućnosti za navigaciju";
+"general_settings_descr" = "Postavi prikaz i uobičajene postavke za aplikaciju.";
+"routing_settings_descr" = "Odredite mogućnosti za navigaciju.";
 "auto_zoom_none" = "Bez automatskog uvećanja";
 "fast_route_mode" = "Najbrži put";
 "routing_profile_direct_to" = "Izravno do točke";
-"fast_route_mode_descr" = "Označite za izračun najbrže rute ili od značite za najkraću rutu";
+"fast_route_mode_descr" = "Uključite za računanje najbrže rute ili isključite za rutu s uštedom goriva.";
 "avoid_in_routing_title" = "Izbjegni …";
 "avoid_in_routing_descr_" = "Izbjegni određene rute i vrste cesta";
 "prefer_in_routing_title" = "Preferiraj…";
 "prefer_in_routing_descr" = "Preferiraj autoceste.";
 "choose_auto_follow_route" = "Automatsko centriranje karte";
-"choose_auto_follow_route_descr" = "Vrijeme dok se prikaz karte sinkronizira s trenutnom pozicijom";
+"choose_auto_follow_route_descr" = "Vrijeme dok se prikaz karte sinkronizira s trenutnom pozicijom.";
 "auto_zoom_map" = "Automatsko zumiranje karte";
 "show_warnings_title" = "Prikaži upozorenja …";
-"show_warnings_descr" = "Konfiguracija prometnih upozorenja (ograničenja brzine, prisilno zaustavljanje, ležeći policajci), kontrola brzine i informacije";
+"show_warnings_descr" = "Konfiguracija prometnih upozorenja (ograničenja brzine, prisilno zaustavljanje, ležeći policajci, tuneli), radari i informacije o traci.";
 "speak_title" = "Najaviti…";
 "speed_limit_exceed" = "Tolerancija ograničenja brzine";
 "wake_on_voice" = "Uključi zaslon";
-"wake_on_voice_descr" = "Uključiti zaslon telefona (ako je isključen) kada se približavate skretanju";
+"wake_on_voice_descr" = "Uključi ekran uređaja (ako je isključen) kada se približavaš skretanju.";
 "voice_pref_title" = "Glas";
 "voice_provider" = "Glasovno navođenje";
-"voice_provider_descr" = "Odaberite glasovno navođenje za navigaciju (kodovi jezika vidi ISO 639-1)";
+"voice_provider_descr" = "Odaberite glasovno navođenje za navigaciju.";
 "choose_audio_stream" = "Izlaz za glasovno navođenje";
-"choose_audio_stream_descr" = "Odaberite kanal za reprodukciju glasovnih uputa";
+"choose_audio_stream_descr" = "Odaberite zvučnik za glasovno navođenje.";
 "guidance_preferences_descr" = "Postavke navigacije";
 "routing_settings" = "Navigacija";
 "get_directions" = "Smjer";
@@ -135,7 +135,7 @@
 "starting_point_too_far" = "Polazna točka je predaleko od najbliže ceste.";
 "ending_point_too_far" = "Krajnja točka je predaleko od najbliže ceste.";
 "intermediate_point_too_far" = "Međutočka %@ je predaleko od najbliže ceste.";
-"arrived_at_destination" = "Stigli ste na odredište";
+"arrived_at_destination" = "Stigli ste.";
 "towards" = "prema";
 "route_roundabout" = "Kružni tok: koristite %d. izlaz i nastavite voziti po";
 "route_kl" = "Držite se lijevo i vozite";
@@ -254,7 +254,7 @@
 "altitude_range" = "Visinska razlika";
 "shared_string_currently_recording_track" = "Snimanje trase";
 "save_current_track" = "Spremi trenutni GPX";
-"save_current_track_descr" = "Spremi trenutnu stazu na memorijsku karticu";
+"save_current_track_descr" = "Spremi trenutačnu stazu kao GPX datoteku sada.";
 "save_track_interval_globally" = "Interval bilježenja";
 "shared_string_clear" = "Resetiraj";
 "gpxup_public" = "Javni";
@@ -429,7 +429,7 @@
 "shared_string_commit" = "Izvršiti";
 "osb_comment_dialog_message" = "Poruka";
 "parking_place_limited" = "Vrijeme parkiranja ograničeno na";
-"osmand_parking_time_left" = "preostalo vrijeme";
+"osmand_parking_time_left" = "preostalo";
 "osmand_parking_overdue" = "zakasnio";
 // Units
 "mile" = "milja";
@@ -437,7 +437,7 @@
 "foot" = "stopa";
 
 // Help
-"other_location" = "Ostalo";
+"other_location" = "Druga";
 
 // Map
 
@@ -481,7 +481,7 @@
 "plugin_ski_name" = "Skijaška karta";
 "record_plugin_name" = "Bilježenje putovanja";
 "osm_editing_plugin_name" = "OSM uređivanje";
-"srtm_plugin_name" = "Slojnice";
+"srtm_plugin_name" = "Topografija";
 "wikivoyage_travel_guide" = "Turistički vodiči";
 "get_unlimited_access" = "Neograničen pristup";
 "navigate_point_latitude" = "Širina";
@@ -670,7 +670,7 @@
 "duration_ago" = "Prije %@";
 "copy_to_map_favorites" = "Kopiraj u favorite";
 "shared_string_selected" = "Odabran";
-"offline_edition_descr" = "Uvijek koristi offline uređivanje";
+"offline_edition_descr" = "Ako je izvanmrežno uređivanje uključeno, promjene će se najprije spremiti lokalno i prenijeti na zahtjev, inače će se promjene prenijeti odmah.";
 "download_all" = "Preuzmi sve";
 "shared_string_angle_param" = "Kut: %@°";
 "position_on_map_bottom" = "Na dnu";
@@ -1028,3 +1028,75 @@
 "poi_filter_fuel" = "Gorivo";
 "icon_group_nautical" = "Pomorstvo";
 "icon_group_industrial" = "Industrija";
+"nm_h" = "kn";
+"mile_per_hour" = "mph";
+"no_activity_for_intent" = "Instaliraj aplikaciju koja može izvršiti ovu radnju.";
+"km_h" = "km/h";
+"nm" = "nmi";
+"km" = "km";
+"m" = "m";
+"cubic_m" = "m³";
+"min_mile" = "min/m";
+"min_km" = "min/km";
+"m_s" = "m/s";
+"ft_s" = "stopa/s";
+"metric_ton" = "t";
+"kg" = "kg";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "s";
+"units_sec_short" = "s";
+"shared_string_minute_lowercase" = "min";
+"help_first_steps" = "Prvi koraci";
+"help_article_start_with_first_steps_name" = "Prvi koraci";
+"first_usage_item" = "Prvo korištenje";
+"help_first_use_descr" = "Kako preuzeti karte i postaviti osnovne postavke";
+"help_navigation_descr" = "Kako postaviti navigaciju";
+"faq_item" = "ČPP";
+"help_faq_descr" = "Često postavljana pitanja";
+"features_menu_group" = "Funkcije";
+"map_viewing_item" = "Prikaz karte";
+"help_search" = "Traženje karte";
+"key_event_action_zoom_in" = "Uvećaj";
+"default_speed_system_descr" = "Odredi jedinicu brzine.";
+"default_speed_system" = "Jedinica brzine";
+"arrival_distance" = "Obavijest o dostizanju cilja";
+"arrival_distance_descr" = "Kada želiš primati obavijest o dostizanju cilja?";
+"OsmAnd Maps" = "OsmAnd karte";
+"download_depth_countours" = "Konture nautičke dubine";
+"day_short" = "D";
+"day" = "Dan";
+"days_2_4" = "Dana";
+"days_5" = "Dana";
+"week" = "Tjedan";
+"weeks_2_4" = "Tjedna";
+"weeks_5" = "Tjedna";
+"month" = "Mjesec";
+"months_2_4" = "Mjeseca";
+"months_5" = "Mjeseci";
+"year" = "Godina";
+"years_2_4" = "Godine";
+"years_5" = "Godina";
+"months_3" = "Tri mjeseca";
+"years_3" = "Tri godine";
+"price_free" = "Besplatno";
+"get_discount_title" = "Dobi %d %@ s %@ popustom.";
+"topography_maps" = "Topografske karte";
+"external_device_status_connect" = "Poveži";
+"external_device_status_disconnecting" = "Odspajanje";
+"external_device_status_disconnected" = "Odspojeno";
+"external_device_menu_forget" = "Zaboravi";
+"external_device_status_connected" = "Povezano";
+"external_device_status_disconnect" = "Odspoji";
+"route_parameters" = "Parametri rute";
+"help_article_navigation_routing_name" = "Parametri rute";
+"week_short" = "Tj";
+"weeks_short" = "Tj";
+"month_short" = "Mj";
+"months_short" = "Mj";
+"year_short" = "God";
+"years_short" = "God";
+"screen_alerts" = "Upozoranja na ekranu";
+"shared_string_other" = "Drugi";
+"rendering_attr_piste_difficulty_extreme_name" = "Ekstremno";
+"rendering_attr_piste_difficulty_freeride_name" = "Izvan uređenih staza";

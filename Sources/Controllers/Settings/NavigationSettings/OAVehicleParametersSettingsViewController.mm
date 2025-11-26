@@ -71,20 +71,19 @@
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
         if ([arr[0] isEqualToString:@"-"])
             [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"shared_string_not_selected" : @"shared_string_none")];
+        if (_isMotorType)
+        {
+            for (NSInteger i = 1; i < _measurementRangeValuesArr.count; i++)
+                [arr replaceObjectAtIndex:i withObject:[OAUtilities getNameOfMotorTypeValue:_measurementRangeValuesArr[i].intValue]];
+        }
         _measurementRangeStringArr = [NSArray arrayWithArray:arr];
         _selectedParameter = _vehicleParameter[@"selectedItem"];
         NSString *valueString = _vehicleParameter[@"value"];
         
-        if ([_selectedParameter intValue] != -1)
+        if (_selectedParameter.intValue != -1 && (![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]] || _selectedParameter.intValue == 0))
         {
-            double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
-            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-            [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-            formatter.minimumIntegerDigits = 1;
-            formatter.minimumFractionDigits = 0;
-            formatter.maximumFractionDigits = 1;
-            formatter.decimalSeparator = kDot;
-            _measurementValue = [formatter stringFromNumber:@(vl)];
+            double value = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
+            _measurementValue = [VehicleAlgorithms formattedSelectedValue:value maximumFractionDigits:1];
         }
         else if (_isFuelTankCapacity)
         {
@@ -93,9 +92,20 @@
         }
         else
         {
-            _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0)];
+            NSString *unit = [VehicleAlgorithms weightOrSizeUnitWith:self.appMode isWeight:[self isWeight]];
+            _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0 ? unit.length : 0)];
         }
     }
+}
+
+- (BOOL)isWeight
+{
+    return [RouteParamVehicleHelper isWeightParameter:_vehicleParameter[@"name"]];
+}
+
+- (NSString *)roundToSecondSignificantDigitFormat:(float)value
+{
+    return [VehicleAlgorithms formattedSelectedValue:[VehicleAlgorithms roundToSecondSignificantDigit:value] maximumFractionDigits:1];
 }
 
 - (void)registerNotifications
@@ -247,9 +257,9 @@
 - (NSString *)getMeasurementUnit:(NSString *)parameter
 {
     if ([RouteParamVehicleHelper isWeightParameter:parameter])
-        return OALocalizedString(@"shared_string_tones");
+        return OALocalizedString([VehicleAlgorithms usePoundsWith:self.appMode] ? @"shared_string_pounds" : @"shared_string_tones");
     else if ([parameter isEqualToString:RouteParamVehicleHelper.height] || [parameter isEqualToString:RouteParamVehicleHelper.width] || [parameter isEqualToString:RouteParamVehicleHelper.length])
-        return OALocalizedString(@"shared_string_meters");
+        return OALocalizedString([VehicleAlgorithms useInchesWith:self.appMode] ? @"shared_string_inches" : @"shared_string_meters");
     else if ([parameter isEqualToString:RouteParamVehicleHelper.fuelTankCapacity])
         return [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     return @"";
@@ -407,16 +417,10 @@
     return @"";
 }
 
-- (NSString *) formattedSelectedValueStr:(NSInteger)index
+- (NSString *)formattedSelectedValueStr:(NSInteger)index
 {
-    double vl = floorf(_measurementRangeValuesArr[index].doubleValue * 10 + 0.5) / 10;
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
-    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    formatter.minimumIntegerDigits = 1;
-    formatter.minimumFractionDigits = 0;
-    formatter.maximumFractionDigits = 1;
-    formatter.decimalSeparator = kDot;
-    return [formatter stringFromNumber:@(vl)];
+    float value = floorf(_measurementRangeValuesArr[index].floatValue * 10 + 0.5) / 10;
+    return [VehicleAlgorithms formattedSelectedValue:value maximumFractionDigits:1];
 }
 
 #pragma mark - Selectors
@@ -434,11 +438,28 @@
         formatter.minimumIntegerDigits = 1;
         formatter.minimumFractionDigits = 0;
         formatter.maximumFractionDigits = 3;
+        formatter.usesGroupingSeparator = NO;
         NSNumber *number = [formatter numberFromString:_measurementValue];
         _measurementValue = [formatter stringFromNumber:number];
     }
     if (_selectedParameter.intValue != -1)
-        _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
+    {
+        if (!_isMotorType && [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]]) {
+            NSString *unit = [VehicleAlgorithms weightOrSizeUnitWith:self.appMode isWeight:[self isWeight]];
+            NSString *valueString = _measurementRangeStringArr[_selectedParameter.intValue];
+            _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0 ? unit.length : 0)];
+        }
+        else
+        {
+            _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].floatValue];
+        }
+    }
+    
+    if (!_isMotorType && !_isFuelTankCapacity && [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]])
+    {
+        _measurementValue = [VehicleAlgorithms formattedSelectedValue:[VehicleAlgorithms convertToMetric:_measurementValue.doubleValue isWeight:[self isWeight] appMode:self.appMode] - 0.0001 maximumFractionDigits:8];
+    }
+    
     if (_isFuelTankCapacity)
     {
         double value = [OAOsmAndFormatter prepareFuelTankCapacityToSave:[_settings.volumeUnits get:self.appMode] value:[_measurementValue doubleValue]];
@@ -464,7 +485,16 @@
 - (void) valueChanged:(NSInteger)newValueIndex
 {
     _selectedParameter = [NSNumber numberWithInteger:newValueIndex];
-    _measurementValue = [self formattedSelectedValueStr:newValueIndex];
+    if (_isFuelTankCapacity)
+    {
+        _measurementValue = [self formattedSelectedValueStr:newValueIndex];
+    }
+    else
+    {
+        float value = floorf(_measurementRangeValuesArr[newValueIndex].floatValue * 10 + 0.5) / 10;
+        value = [VehicleAlgorithms convertFromMetric:value isWeight:[self isWeight] appMode:self.appMode];
+        _measurementValue = [self roundToSecondSignificantDigitFormat:value];
+    }
     
     [self generateData];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];

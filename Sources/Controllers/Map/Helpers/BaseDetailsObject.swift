@@ -23,7 +23,7 @@ private enum ObjectCompleteness: UInt {
 @objcMembers
 final class BaseDetailsObject: NSObject {
     
-    var osmIds: Set<Int>
+    var osmIds: Set<UInt64>
     var wikidataIds: Set<String>
     var objects: Array<Any>
     var lang: String
@@ -35,7 +35,7 @@ final class BaseDetailsObject: NSObject {
     
     override init() {
         self.lang = "en"
-        self.osmIds = Set<Int>()
+        self.osmIds = Set<UInt64>()
         self.wikidataIds = Set<String>()
         self.objects = Array()
         self.syntheticAmenity = OAPOI()
@@ -84,7 +84,7 @@ final class BaseDetailsObject: NSObject {
         objectCompleteness == .empty
     }
     
-    @discardableResult
+    
     func addObject(_ object: Any) -> Bool {
         guard isSupportedObjectType(object) else { return false }
         
@@ -97,8 +97,8 @@ final class BaseDetailsObject: NSObject {
             let osmId = getOsmId(object)
             let wikidata = getWikidata(object)
             
-            if osmId != -1 {
-                osmIds.insert(Int(osmId))
+            if osmId > 0 {
+                osmIds.insert(UInt64(osmId))
             }
             if let wikidata, !wikidata.isEmpty {
                 wikidataIds.insert(wikidata)
@@ -120,22 +120,20 @@ final class BaseDetailsObject: NSObject {
         return nil
     }
     
-    private func getOsmId(_ object: Any) -> Int64 {
+    private func getOsmId(_ object: Any) -> UInt64 {
         if let amenity = object as? OAPOI {
             return amenity.getOsmId()
         } else if let mapObject = object as? OAMapObject {
             return ObfConstants.getOsmObjectId(mapObject)
-        } else if let detailsObject = object as? BaseDetailsObject {
-            return ObfConstants.getOsmObjectId(detailsObject.syntheticAmenity)
         }
-        return -1
+        return 0
     }
     
     func overlapsWith(_ object: Any) -> Bool {
         let osmId = getOsmId(object)
         let wikidata = getWikidata(object)
         
-        let osmIdEqual = osmId != -1 && osmIds.contains(Int(osmId))
+        let osmIdEqual = osmId > 0 && osmIds.contains(UInt64(osmId))
 
         var wikidataEqual = false
         if let wikidata, !wikidata.isEmpty, wikidataIds.contains(wikidata) {
@@ -232,7 +230,7 @@ final class BaseDetailsObject: NSObject {
         guard let transportStopPoi = transportStop.poi else { return }
         
         let osmId = ObfConstants.getOsmObjectId(transportStopPoi)
-        osmIds.insert(Int(osmId))
+        osmIds.insert(UInt64(osmId))
         
         if let amenity = transportStop.poi {
             if let wikidata = amenity.getWikidata() {
@@ -244,7 +242,7 @@ final class BaseDetailsObject: NSObject {
     
     private func mergeRenderedObject(_ renderedObject: OARenderedObject) {
         let osmId = ObfConstants.getOsmObjectId(renderedObject)
-        osmIds.insert(Int(osmId))
+        osmIds.insert(UInt64(osmId))
         
         if let wikidata = renderedObject.tags[WIKIDATA_TAG] as? String  {
             wikidataIds.insert(wikidata)
@@ -260,50 +258,15 @@ final class BaseDetailsObject: NSObject {
         var contentLocales = Set<String>()
         
         for object in objects {
-            if let amenity = object as? OAPOI {
-                processAmenity(amenity, contentLocales: &contentLocales)
-            } else if let transportStop = object as? OATransportStop {
-                if let poi = transportStop.poi {
-                    processAmenity(poi, contentLocales: &contentLocales)
-                } else {
-                    processId(transportStop)
-                    syntheticAmenity.copyNames(transportStop)
-                    if syntheticAmenity.getLocation() == nil {
-                        syntheticAmenity.latitude = transportStop.latitude
-                        syntheticAmenity.longitude = transportStop.longitude
-                    }
-                }
-            } else if let renderedObject = object as? OARenderedObject {
-                let type = ObfConstants.getOsmEntityType(renderedObject)
-                if let type {
-                    let osmId = ObfConstants.getOsmObjectId(renderedObject)
-                    let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
-                    
-                    if syntheticAmenity.obfId >= 0 && objectId > 0 {
-                        syntheticAmenity.obfId = objectId
-                    }
-                }
-                
-                if syntheticAmenity.type == nil {
-                    syntheticAmenity.copyAdditionalInfo(withMap: renderedObject.tags, overwrite: false)
-                }
-                
-                syntheticAmenity.copyNames(renderedObject)
-                if syntheticAmenity.getLocation() == nil {
-                    syntheticAmenity.latitude = renderedObject.latitude
-                    syntheticAmenity.longitude = renderedObject.longitude
-                }
-                
-                processPolygonCoordinates(x: renderedObject.x, y: renderedObject.y)
-            }
+            mergeObject(object, contentLocales: &contentLocales)
         }
         
         if contentLocales.count > 0 {
             syntheticAmenity.updateContentLocales(contentLocales)
         }
         
-        if objectCompleteness != .full {
-            objectCompleteness = syntheticAmenity.type != nil ? .combined : .empty
+        if objectCompleteness.rawValue < ObjectCompleteness.full.rawValue {
+            objectCompleteness = syntheticAmenity.type == nil ? .empty : .combined
         }
         
         if syntheticAmenity.type == nil {
@@ -313,9 +276,44 @@ final class BaseDetailsObject: NSObject {
         }
     }
     
+    private func mergeObject(_ object: Any, contentLocales: inout Set<String>) {
+        if let amenity = object as? OAPOI {
+            processAmenity(amenity, contentLocales: &contentLocales)
+        } else if let transportStop = object as? OATransportStop {
+            if let amenity = transportStop.poi {
+                processAmenity(amenity, contentLocales: &contentLocales)
+            } else {
+                processId(transportStop)
+                syntheticAmenity.copyNames(transportStop)
+                if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 {
+                    syntheticAmenity.latitude = transportStop.latitude
+                    syntheticAmenity.longitude = transportStop.longitude
+                }
+            }
+        } else if let renderedObject = object as? OARenderedObject {
+            if let type = ObfConstants.getOsmEntityType(renderedObject) {
+                let osmId = ObfConstants.getOsmObjectId(renderedObject)
+                let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
+                
+                if syntheticAmenity.obfId <= 0 && objectId > 0 {
+                    syntheticAmenity.obfId = objectId
+                }
+            }
+            if syntheticAmenity.type == nil {
+                syntheticAmenity.copyAdditionalInfo(withMap: renderedObject.tags, overwrite: false)
+            }
+            syntheticAmenity.copyNames(renderedObject)
+            if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 {
+                syntheticAmenity.latitude = renderedObject.latitude
+                syntheticAmenity.longitude = renderedObject.longitude
+            }
+            processPolygonCoordinates(x: renderedObject.x, y: renderedObject.y)
+        }
+    }
+    
     private func processId(_ object: OAMapObject?) {
         guard let object else { return }
-        if (syntheticAmenity.obfId <= 0) && ObfConstants.isOsmUrlAvailable(object) {
+        if (syntheticAmenity.obfId >= 0) && ObfConstants.isOsmUrlAvailable(object) {
             syntheticAmenity.obfId = object.obfId
         }
     }
@@ -364,9 +362,9 @@ final class BaseDetailsObject: NSObject {
             syntheticAmenity.localizedContent = MutableOrderedDictionary<NSString, NSString>()
         }
         
-        if amenity.localizedContent.count > 0 {
+        if let amenityContent = amenity.localizedContent, amenityContent.count > 0 {
             let localizedContent = MutableOrderedDictionary<NSString, NSString>(dictionary: syntheticAmenity.localizedContent)
-            localizedContent.addEntries(from: amenity.localizedContent as! [NSString : NSString])
+            localizedContent.addEntries(from: amenityContent as! [NSString : NSString])
             syntheticAmenity.localizedContent = localizedContent
         }
         

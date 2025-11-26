@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAMapObject : NSObject
 
-@property (nonatomic) long long obfId;
+@property (nonatomic) uint64_t obfId;
 
 @property (nonatomic, nullable) NSString *name;
 @property (nonatomic) NSString *enName;

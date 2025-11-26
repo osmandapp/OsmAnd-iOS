@@ -93,13 +93,13 @@
     return ETopToolbarTypeFloating;
 }
 
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
 {
     OAPOI *poi = self.transportStop.poi;
     if (poi)
     {
         OAPOIViewController *poiController = [[OAPOIViewController alloc] initWithPOI:poi];
-        [poiController buildRows:rows];
+        [poiController buildInternal:rows];
     }
 }
 

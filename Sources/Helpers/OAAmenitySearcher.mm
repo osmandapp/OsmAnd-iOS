@@ -239,10 +239,40 @@ int const kZoomToSearchPOI = 16.0;
 
 - (NSArray<OAPOI *> *)searchAmenitiesWithFilter:(OASearchPoiTypeFilter *)filter searchLatLon:(CLLocation *)searchLatLon radius:(NSInteger)radius includeTravel:(BOOL)includeTravel
 {
-    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:(int)radius includeTravel:includeTravel matcher:nil publish:nil];
+    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:radius includeTravel:includeTravel matcher:nil publish:nil];
 }
 
-- (nullable BaseDetailsObject *)searchDetailedObject:(OAAmenitySearcherRequest *)request
+- (nullable BaseDetailsObject *)searchDetailedObject:(id)object
+{
+    OAAmenitySearcherRequest *request;
+    if ([object isKindOfClass:OAMapObject.class])
+    {
+        request = [[OAAmenitySearcherRequest alloc] initWithMapObject:object];
+    }
+    else if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *detailsObject = object;
+        if ([detailsObject isObjectFull])
+        {
+            [self completeGeometry:detailsObject object:detailsObject.objects[0]];
+            return detailsObject;
+        }
+        if (!NSArrayIsEmpty(detailsObject.objects))
+        {
+            return detailsObject = [self searchDetailedObject:detailsObject.objects[0]];
+        }
+    }
+    BaseDetailsObject *detailsObject;
+    if (request)
+    {
+        detailsObject = [self searchDetailedObjectWithRequest:request];
+    }
+    
+    [self completeGeometry:detailsObject object:object];
+    return detailsObject;
+}
+
+- (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
 {
     if (request.latLon == nil)
     {
@@ -317,7 +347,7 @@ int const kZoomToSearchPOI = 16.0;
     return nil;
 }
 
-- (NSArray<OAPOI *> *)filterByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities osmId:(int64_t)osmId point:(CLLocation *)point wikidata:(nullable NSString *)wikidata
+- (NSMutableArray<OAPOI *> *)filterByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities osmId:(int64_t)osmId point:(CLLocation *)point wikidata:(nullable NSString *)wikidata
 {
     NSMutableArray<OAPOI *> *result = [NSMutableArray array];
     double minDist = AMENITY_SEARCH_RADIUS_FOR_RELATION * 4;
@@ -468,6 +498,59 @@ int const kZoomToSearchPOI = 16.0;
     return NO;
 }
 
+- (void) completeGeometry:(BaseDetailsObject *)detailsObject object:(id)object
+{
+    if (!detailsObject)
+        return;
+    
+    NSMutableArray<NSNumber *> *xx;
+    NSMutableArray<NSNumber *> *yy;
+    
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        OAPOI *amenity = object;
+        xx = amenity.x;
+        yy = amenity.y;
+    }
+    if ([object isKindOfClass:OARenderedObject.class])
+    {
+        OARenderedObject *renderedObject = object;
+        xx = renderedObject.x;
+        yy = renderedObject.y;
+    }
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *base = object;
+        xx = [base syntheticAmenity].x;
+        yy = [base syntheticAmenity].y;
+    }
+    
+    if (!NSArrayIsEmpty(xx) && !NSArrayIsEmpty(yy))
+    {
+        [detailsObject setX:xx];
+        [detailsObject setY:yy];
+    }
+    else
+    {
+        
+        //TODO: implement
+        
+//        List<BinaryMapDataObject> dataObjects = searchBinaryMapDataForAmenity(detailsObject.getSyntheticAmenity(), 1);
+//            for (BinaryMapDataObject dataObject : dataObjects) {
+//                if (copyCoordinates(detailsObject, dataObject)) {
+//                    break;
+//                }
+//            }
+    }
+}
+
+- (void) searchBinaryMapDataForAmenity:(OAPOI *)amenity limit:(int)limit
+{
+    //TODO: implement
+    
+    
+}
+
 
 // MARK: OAPOIHeler poi find methods
 // here are all existed methods exrtracted as is.
@@ -526,7 +609,7 @@ int const kZoomToSearchPOI = 16.0;
         if (nameB)
             nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
         
-        return [nameA compare:nameB] == NSOrderedDescending;
+        return [nameA compare:nameB] == NSOrderedAscending;
     });
     
     for (const auto& file : obfFiles)
@@ -895,7 +978,7 @@ int const kZoomToSearchPOI = 16.0;
     return nil;
 }
 
-+ (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon
++ (OAPOI *) findPOIByOsmId:(uint64_t)osmId lat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -1261,13 +1344,15 @@ int const kZoomToSearchPOI = 16.0;
                                               [&filter, &foundAmenities, &currentLocation, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                
+                                        
+                                        uint64_t obfId = am->id.id;
+                    
                                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:am];
                                         BOOL accept = [filter accept:type.category subcategory:type.name];
                 
-                                        if (![processedPoi containsObject:@(am->id.id)] && accept)
+                                        if (![processedPoi containsObject:@(obfId)] && accept)
                                         {
-                                            [processedPoi addObject:@(am->id.id)];
+                                            [processedPoi addObject:@(obfId)];
                                             OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
                                             
@@ -1291,7 +1376,7 @@ int const kZoomToSearchPOI = 16.0;
                 {
                     [closedAmenities addObject:obfId];
                 }
-                else if (![closedAmenities containsObject:obfId])
+                else if (![closedAmenities containsObject:obfId] && ![openAmenities containsObject:obfId])
                 {
                     [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];

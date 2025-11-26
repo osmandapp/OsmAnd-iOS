@@ -10,6 +10,7 @@
 #import "OrderedDictionary.h"
 #import "OAMapObject.h"
 
+extern NSString * const POI_NAME;
 extern NSString * const URL_TAG;
 extern NSString * const WEBSITE_TAG;
 extern NSString * const PHONE_TAG;
@@ -162,7 +163,7 @@ static int DEFAULT_ELO = 900;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 
-- (int64_t) getOsmId;
+- (uint64_t) getOsmId;
 
 - (BOOL) strictEquals:(id)object;
 

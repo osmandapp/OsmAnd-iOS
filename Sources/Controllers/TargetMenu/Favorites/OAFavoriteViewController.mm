@@ -30,6 +30,10 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
+static const NSInteger kOrderDescriptionRow = 0;
+static const NSInteger kOrderFavGroupRow = 1;
+
+
 @implementation OAFavoriteViewController
 {
     OsmAndAppInstance _app;
@@ -46,7 +50,7 @@
         _app = [OsmAndApp instance];
         _favorite = favorite;
         _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
-        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
+        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
 
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
@@ -63,15 +67,15 @@
         _originObject = [_favorite getAmenity];
 }
 
-- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildTopInternal:(NSMutableArray<OARowInfo *> *)rows
 {
-    [super buildTopRows:rows];
+    [super buildTopInternal:rows];
     [self buildGroupFavouritesView:rows];
 }
 
-- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildMenu:(NSMutableArray<OARowInfo *> *)rows
 {
-    [self buildTopRows:rows];
+    [self buildTopInternal:rows];
     
     if (_favorite && [_favorite.getTimestamp timeIntervalSince1970] > 0)
     {
@@ -82,7 +86,7 @@
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
         builder.location = CLLocationCoordinate2DMake([_favorite getLatitude], [_favorite getLongitude]);
         NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
-        [builder buildRowsInternal:internalRows];
+        [builder buildMenu:internalRows];
         [rows addObjectsFromArray:internalRows];
     }
     else
@@ -98,7 +102,7 @@
     NSString *desc = [_favorite getDescription];
     if (desc && desc.length > 0)
     {
-        OARowInfo *descriptionRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:0 typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
+        OARowInfo *descriptionRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:kOrderDescriptionRow typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:descriptionRow];
     }
 }
@@ -115,7 +119,7 @@
         NSString *name = [self.favorite getCategoryDisplayName];
         NSString *description = OALocalizedString(@"context_menu_points_of_group");
 
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:description text:name textColor:color isText:NO needLinks:NO order:1 typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
+        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:description text:name textColor:color isText:NO needLinks:NO order:kOrderFavGroupRow typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
         rowInfo.collapsed = YES;
         rowInfo.collapsable = YES;
         rowInfo.height = 64;

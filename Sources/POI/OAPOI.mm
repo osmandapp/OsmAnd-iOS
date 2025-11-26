@@ -79,9 +79,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     BACKGROUND_TYPE_EXTENSION_KEY,
     PROFILE_TYPE_EXTENSION_KEY,
     ADDRESS_EXTENSION_KEY,
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, AMENITY_NAME],
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, TYPE],
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, SUBTYPE]
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, AMENITY_NAME],
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, TYPE],
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, SUBTYPE]
 ];
 
 @implementation OAPOIRoutePoint
@@ -103,7 +103,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (UIImage *)icon
 {
     NSString *subwayRegion = [self getAdditionalInfo][@"subway_region"];
-	if (subwayRegion.length > 0)
+    if (subwayRegion.length > 0)
         return [UIImage svgImageNamed:[NSString stringWithFormat:@"map-icons-svg/c_mx_subway_%@", subwayRegion]];
     else if (_mapIconName && _mapIconName.length > 0 && ![_mapIconName containsString:@"_small"])
         return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
@@ -832,11 +832,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     self.y = renderedObject.y;
 }
 
-- (int64_t) getOsmId
+- (uint64_t) getOsmId
 {
-    int64_t _osmId = self.obfId;
-    if (_osmId == -1)
-        return -1;
+    uint64_t _osmId = self.obfId;
+    if (_osmId <= 0)
+        return 0;
     
     if ([ObfConstants isShiftedID:_osmId])
         return [ObfConstants getOsmId:_osmId];

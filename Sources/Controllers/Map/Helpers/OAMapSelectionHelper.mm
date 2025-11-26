@@ -78,12 +78,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
     [self collectObjectsFromMap:result point:point];
     
-    [self processTransportStops:result];
-    
     if ([result isEmpty])
         [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:YES];
-    
-    //parse tra()
     
     [result groupByOsmIdAndWikidataId];
     return result;
@@ -103,6 +99,11 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
     
     for (OAMapLayer *layer in layers)
     {
+        // Android doesn't have that layer here
+        if ([layer isKindOfClass:OAOsmBugsLayer.class] ||
+            [layer isKindOfClass:OAGPXRecLayer.class])
+            continue;
+        
         if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
             id<OAContextMenuProvider> provider = ((id<OAContextMenuProvider>)layer);
@@ -139,6 +140,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             if (symbolInfo.mapSymbol->ignoreClick)
                 continue;
             
+            OAPOI *amenity;
             std::shared_ptr<const OsmAnd::Amenity> cppAmenity;
             BaseDetailsObject *detailsObject;
             
@@ -188,7 +190,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
                 
                 OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:names];
-                detailsObject = [amenitySearcher searchDetailedObject:request];
+                detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
             }
             else
             {
@@ -201,16 +203,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         BOOL isTravelGpx = [OATravelObfHelper.shared isTravelGpxTags:tags];
                         BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
                         BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
-
-                        if (isTravelGpx) {
-                            NSString *routeId = tags[@"route_id"];
-                            if (routeId != nil && [routeId hasPrefix:@"O"]) {
-                                // TODO unhack this temporary workaround
-                                isTravelGpx = false;
-                                isOsmRoute = true;
-                            }
-                        }
-
+                        
                         if (isOsmRoute && !osmRoutesAlreadyAdded)
                         {
                             const auto selectorFilter = [self createRouteFilter];
@@ -259,7 +252,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                     else
                                     {
                                         OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:renderedObject];
-                                        detailsObject = [amenitySearcher searchDetailedObject:request];
+                                        detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
                                         if (detailsObject)
                                         {
                                             [detailsObject setMapIconName:[self getMapIconName:symbolInfo]];
@@ -622,75 +615,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         }
     }
     return _publicTransportTypes;
-}
-
-- (void)processTransportStops:(MapSelectionResult *)result
-{
-    // Android has same code in contex menu UI init()
-    
-    // TODO: make this code async in part of next task https://github.com/osmandapp/OsmAnd-iOS/issues/4594
-    // Step 1) ContextMenuLayer -> showContextMenu -> MapContextMenu.init() -> setSelectedObject(renderedObject)
-    // Step 2) RenderedObjectMenuBuilder -> build() -> searchAmenity() -> searchBaseDetailedObjectAsync() -> MapContextMenu.update() -> setSelectedObject(poi)
-    
-    NSMutableArray<SelectedMapObject *> *selectedObjects = [result.allObjects mutableCopy];
-    NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
-    if (publicTransportTypes)
-    {
-        NSMutableArray<OAPOI *> *transportStopAmenities = [NSMutableArray array];
-        
-        for (SelectedMapObject *selectedObject in selectedObjects)
-        {
-            if ([selectedObject.object isKindOfClass:[OARenderedObject class]])
-            {
-                OARenderedObject *renderedObject = selectedObject.object;
-                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:renderedObject];
-                BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:request];
-                if (detailsObject)
-                {
-                    selectedObject.object = detailsObject.syntheticAmenity;
-                }
-                else
-                {
-                    OAPOI *poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:(OARenderedObject *)selectedObject.object];
-                    if (poi)
-                    {
-                        NSString *type = [ObfConstants getOsmEntityType:selectedObject.object];
-                        if (type)
-                        {
-                            int64_t osmId = [ObfConstants getOsmObjectId:selectedObject.object];
-                            int64_t poiObjectId = [ObfConstants createMapObjectIdFromOsmId:osmId type:type];
-                            poi.obfId = poiObjectId;
-                        }
-                        selectedObject.object = poi;
-                    }
-                }
-            }
-            if ([selectedObject.object isKindOfClass:[OAPOI class]])
-            {
-                OAPOI *amenity = (OAPOI *)selectedObject.object;
-                if (!NSStringIsEmpty(amenity.type.name) && [publicTransportTypes containsObject:amenity.type.name])
-                    [transportStopAmenities addObject:amenity];
-            }
-        }
-        
-        if (!NSArrayIsEmpty(transportStopAmenities))
-        {
-            for (OAPOI *amenity in transportStopAmenities)
-            {
-                OATransportStopsLayer *transportStopsLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.transportStopsLayer;
-                OATransportStop *transportStop = [OATransportStopsBaseController findNearestTransportStopForAmenity:amenity];
-                if (transportStop && transportStopsLayer)
-                {
-                    SelectedMapObject *newTransportStop = [[SelectedMapObject alloc] initWithMapObject:transportStop provider:transportStopsLayer];
-                    [selectedObjects addObject:newTransportStop];
-                    
-                    [selectedObjects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(SelectedMapObject *selectedObject, NSDictionary *bindings) {
-                        return (!selectedObject && !amenity) || [amenity isEqual:selectedObject.object];
-                    }]];
-                }
-            }
-        }
-    }
 }
 
 - (NSMutableArray<NSString *> *)getValues:(QHash<QString, QString>)set

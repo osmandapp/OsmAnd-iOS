@@ -517,7 +517,7 @@
     {
         NSString *mapObjName = [marker.mapObjectName componentsSeparatedByString:@"_"][0];
         CLLocation *location = [[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude];
-        return [OAMapSelectionHelper findAmenity:location names:@[mapObjName] obfId:-1 radius:15];
+        return [OAMapSelectionHelper findAmenity:location names:@[mapObjName] obfId:0 radius:15];
     }
     return nil;
 }

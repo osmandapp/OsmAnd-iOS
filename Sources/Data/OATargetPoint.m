@@ -14,7 +14,6 @@
 #import "OAPOI.h"
 #import "OARenderedObject.h"
 #import "OAAmenitySearcher.h"
-#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATargetPoint
 {
@@ -62,12 +61,6 @@
     if (![object isKindOfClass:OARenderedObject.class])
     {
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:object];
-        
-        //TODO: delete
-//        OAPOI *a = [detailsObject syntheticAmenity];
-//        [detailsObject combineData];
-////        OAPOI *b = [detailsObject syntheticAmenity];
-        
         if (detailsObject)
         {
             _detailsObj = detailsObject;

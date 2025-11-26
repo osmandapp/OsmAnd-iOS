@@ -93,6 +93,11 @@
 
 + (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
+    return [self.class createMenuController:targetPoint selectedObject:nil activeTargetType:activeTargetType activeViewControllerState:activeViewControllerState headerOnly:headerOnly];
+}
+
++ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
+{
     double lat = targetPoint.location.latitude;
     double lon = targetPoint.location.longitude;
     OATargetMenuViewController *controller = nil;
@@ -154,9 +159,6 @@
             
         case OATargetPOI:
         {
-
-            controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
-
             if (selectedObject)
             {
                 if ([selectedObject isKindOfClass:BaseDetailsObject.class])
@@ -178,6 +180,7 @@
 //                        controller = [[OAPOIViewController alloc] initWithPOI:a];
 //                        controller = [[OAPOIViewController alloc] initWithPOI:b];
                         controller = [[OAPOIViewController alloc] initWithPOI:c];
+                        controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
                     }
                 }
             }
@@ -185,7 +188,6 @@
             {
                 controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
             }
-
             break;
         }
             

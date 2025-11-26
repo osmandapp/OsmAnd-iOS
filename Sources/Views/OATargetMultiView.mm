@@ -126,7 +126,7 @@
         {
             SelectedMapObject *selectedObject = _selectedMapObjects[indexPath.row];
             OAContextMenuLayer *contextLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.contextMenuLayer;
-            [contextLayer showContextMenu:_touchPoint object:selectedObject];
+            [contextLayer showContextMenu:selectedObject touchPointLatLon:_touchPoint];
         }
         else
         {

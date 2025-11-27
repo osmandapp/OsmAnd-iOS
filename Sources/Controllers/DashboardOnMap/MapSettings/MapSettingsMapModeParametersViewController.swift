@@ -10,11 +10,11 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
 
     private let newImageSize: CGFloat = 20
     
-    private lazy var baseMode = DayNightMode(rawValue: settings.appearanceMode.get())
-    private lazy var currentMode = DayNightMode(rawValue: settings.appearanceMode.get())
+    private lazy var baseAppearanceMode = DayNightMode(rawValue: settings.appearanceMode.get())
+    private lazy var currentAppearanceMode = DayNightMode(rawValue: settings.appearanceMode.get())
 
     override func updateModeUI() {
-        updateModeUI(isValueChanged: baseMode != currentMode, animated: true)
+        updateModeUI(isValueChanged: baseAppearanceMode != currentAppearanceMode, animated: true)
     }
     
     override func registerCells() {
@@ -66,8 +66,8 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
         let item = tableData.item(for: indexPath)
 
         if item.cellType == SegmentImagesWithRightLabelTableViewCell.reuseIdentifier {
-            var selectedMode = currentMode?.rawValue ?? 0
-            if currentMode == .appTheme {
+            var selectedMode = currentAppearanceMode?.rawValue ?? 0
+            if currentAppearanceMode == .appTheme {
                 selectedMode -= 1
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
@@ -82,13 +82,13 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
 
-                currentMode = DayNightMode(rawValue: Int32(index))
-                if currentMode == nil && index == 3 { // todo: compatibility with Android, 3 - light sensor
-                    currentMode = .appTheme
+                currentAppearanceMode = DayNightMode(rawValue: Int32(index))
+                if currentAppearanceMode == nil && index == 3 { // todo: compatibility with Android, 3 - light sensor
+                    currentAppearanceMode = .appTheme
                 }
                 updateModeUI()
-                if let currentMode {
-                    OADayNightHelper.instance().setTempMode(Int(currentMode.rawValue))
+                if let currentAppearanceMode {
+                    OADayNightHelper.instance().setTempMode(Int(currentAppearanceMode.rawValue))
                 }
             }
             return cell
@@ -102,7 +102,7 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
             cell.leftIconVisibility(false)
             cell.titleLabel.font = .preferredFont(forTextStyle: isName ? .body : .subheadline)
             cell.titleLabel.textColor = isName ? .textColorPrimary : UIColor(rgb: color_extra_text_gray)
-            cell.titleLabel.text = isName ? currentMode?.title : currentMode?.desc
+            cell.titleLabel.text = isName ? currentAppearanceMode?.title : currentAppearanceMode?.desc
             cell.titleLabel.accessibilityLabel = cell.titleLabel.text
             return cell
         }
@@ -119,17 +119,17 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
     }
 
     override func onApplyButtonPressed() {
-        if let currentMode {
-            settings.appearanceMode.set(currentMode.rawValue)
+        if let currentAppearanceMode {
+            settings.appearanceMode.set(currentAppearanceMode.rawValue)
         }
         super.onApplyButtonPressed()
     }
 
     override func resetButtonPressed() {
-        currentMode = baseMode
+        currentAppearanceMode = baseAppearanceMode
         updateModeUI()
-        if let baseMode {
-            OADayNightHelper.instance().setTempMode(Int(baseMode.rawValue))
+        if let baseAppearanceMode {
+            OADayNightHelper.instance().setTempMode(Int(baseAppearanceMode.rawValue))
         }
         super.resetButtonPressed()
     }

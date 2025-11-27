@@ -468,7 +468,6 @@
 		328EE35A2E171BA4003CDB48 /* SelectedMapObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE3592E171BA4003CDB48 /* SelectedMapObject.swift */; };
 		328EE35B2E171BA4003CDB48 /* SelectedGpxPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE3582E171BA4003CDB48 /* SelectedGpxPoint.swift */; };
 		328EE35D2E172146003CDB48 /* MapSelectionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328EE35C2E172146003CDB48 /* MapSelectionResult.swift */; };
-		328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */; };
 		3296B47F27F8790800108AF7 /* ic_custom_thermometer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44F27F878FE00108AF7 /* ic_custom_thermometer@2x.png */; };
 		3296B48127F8790800108AF7 /* ic_custom_terrain_any@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45127F878FF00108AF7 /* ic_custom_terrain_any@2x.png */; };
 		3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45627F8790000108AF7 /* ic_navbar_pencil@3x.png */; };
@@ -1497,6 +1496,8 @@
 		C5C472F22ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */; };
 		C5C472F42ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */; };
 		C5C472F62ED5B49300682CAB /* TripRecordingDistanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */; };
+		C5C472F82ED6E52300682CAB /* TripRecordingElevationWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */; };
+		C5C472FA2ED72FCF00682CAB /* TripRecordingElevationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
 		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
@@ -3992,8 +3993,6 @@
 		328EE35C2E172146003CDB48 /* MapSelectionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSelectionResult.swift; sourceTree = "<group>"; };
 		328EE35E2E172BE9003CDB48 /* OAContextMenuLayer+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAContextMenuLayer+cpp.h"; sourceTree = "<group>"; };
 		328EE3602E1732B1003CDB48 /* OASymbolMapLayer+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OASymbolMapLayer+cpp.h"; sourceTree = "<group>"; };
-		328EECD429DC5F91002922AA /* OATripRecordingElevationWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingElevationWidget.h; sourceTree = "<group>"; };
-		328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingElevationWidget.mm; sourceTree = "<group>"; };
 		32931B452E1EE3EF00197723 /* OATravelGuidesHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OATravelGuidesHelper+cpp.h"; sourceTree = "<group>"; };
 		32961CA62991377E00CF5DAB /* OAUploadGPXFilesTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadGPXFilesTask.h; sourceTree = "<group>"; };
 		3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
@@ -5315,6 +5314,8 @@
 		C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMaxSpeedWidget.swift; sourceTree = "<group>"; };
 		C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingDistanceWidgetState.swift; sourceTree = "<group>"; };
 		C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingDistanceWidget.swift; sourceTree = "<group>"; };
+		C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingElevationWidgetState.swift; sourceTree = "<group>"; };
+		C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingElevationWidget.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
 		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
@@ -11097,8 +11098,7 @@
 				DA5A798D26C563A000F274C7 /* OAMonitoringPlugin.h */,
 				DA5A798F26C563A000F274C7 /* OAMonitoringPlugin.mm */,
 				C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */,
-				328EECD429DC5F91002922AA /* OATripRecordingElevationWidget.h */,
-				328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */,
+				C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */,
 				326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */,
 				326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */,
 				C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */,
@@ -13074,6 +13074,7 @@
 				C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */,
 				C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */,
 				C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */,
+				C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */,
 			);
 			path = WidgetStates;
 			sourceTree = "<group>";
@@ -17271,6 +17272,7 @@
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
 				C558DC462D453B1F007C0230 /* OAGpxApproximationParams.mm in Sources */,
+				C5C472F82ED6E52300682CAB /* TripRecordingElevationWidgetState.swift in Sources */,
 				C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
 				FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */,
@@ -18111,6 +18113,7 @@
 				DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */,
+				C5C472FA2ED72FCF00682CAB /* TripRecordingElevationWidget.swift in Sources */,
 				32725F3E2B7E7B1500995806 /* OAZoom.m in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
 				DAB9AECD28E192D300AD01CE /* OAURLSessionProgress.m in Sources */,
@@ -18256,7 +18259,6 @@
 				CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.m in Sources */,
 				CA4EDD68D7B26540651A56EB /* OATitleDescriptionBigIconCell.mm in Sources */,
 				274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */,
-				328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */,
 				CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */,
 				3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */,
 				CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */,

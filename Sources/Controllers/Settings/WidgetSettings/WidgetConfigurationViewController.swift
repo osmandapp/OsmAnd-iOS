@@ -371,8 +371,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
         } else if let textWidget = self.widgetInfo.widget as? OBDTextWidget {
             textWidget.updatePrefs(prefsChanged: true)
-        } else if let slopeWidget = widgetInfo.widget as? TripRecordingSlopeWidget {
-            slopeWidget.updateInfo()
         }
         generateData()
         onWidgetStateChangedAction?()

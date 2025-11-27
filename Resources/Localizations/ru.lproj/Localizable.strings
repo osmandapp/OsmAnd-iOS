@@ -1326,7 +1326,7 @@
 "rendering_attr_hideBuildings_name" = "Строения";
 "rendering_attr_showSurfaces_name" = "Тип дорожного покрытия";
 "rendering_attr_surface_paved_name" = "Твёрдое";
-"rendering_attr_pisteRoutes_name" = "Горнолыжные маршруты";
+"rendering_attr_pisteRoutes_name" = "Горнолыжные склоны и маршруты";
 "rendering_attr_hmRendered_name" = "Больше деталей";
 "routing_attr_avoid_stairs_name" = "Без лестниц";
 "routing_attr_piste_type_nordic_name" = "Лыжные гонки и северные дисциплины";
@@ -3525,3 +3525,11 @@
 "map_orientations_choose_description" = "Оставьте поле пустым, чтобы переключаться между всеми доступными режимами, или добавьте только предпочитаемые вами режимы.";
 "map_orientations" = "Ориентации карты";
 "next_turn_information" = "Информация о следующем повороте";
+"altitude_metrics_description" = "Устанавливает единицы измерения высоты в виджетах и статистике.";
+"next_turn_information_desc" = "Показывает направление предстоящего поворота и название улицы.";
+"rendering_attr_hideTidalFlats_name" = "Приливные отмели (ватты)";
+"rendering_attr_hideTidalFlats_description" = "Скрыть приливные отмели (ватты)";
+"rendering_attr_depthColorScheme_name" = "Цветовая схема глубин";
+"rendering_attr_depthColorScheme_description" = "Цветовая схема глубин";
+"rendering_attr_fairwayStyle_name" = "Цвет фарватера";
+"rendering_attr_fairwayStyle_description" = "Цвет фарватеров";

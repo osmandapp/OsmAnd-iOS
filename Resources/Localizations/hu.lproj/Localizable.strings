@@ -3924,3 +3924,7 @@
 "add_to_a_folder" = "Hozzáadás egy mappához";
 "add_to_favorites" = "Hozzáadás a kedvencekhez";
 "reconnect" = "Újrakapcsolódás";
+"metric_lbs" = "font";
+"inch" = "hüvelyk";
+"shared_string_inches" = "hüvelyk";
+"shared_string_pounds" = "font";

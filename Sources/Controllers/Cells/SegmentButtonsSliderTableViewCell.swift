@@ -13,8 +13,9 @@ protocol SegmentButtonsSliderTableViewCellDelegate: AnyObject {
 
 final class SegmentButtonsSliderTableViewCell: UITableViewCell {
     @IBOutlet weak var sliderView: OASegmentedSlider!
-    @IBOutlet weak var plusButton: UIButton!
-    @IBOutlet weak var minusButton: UIButton!
+    @IBOutlet private weak var plusButton: UIButton!
+    @IBOutlet private weak var minusButton: UIButton!
+    
     weak var delegate: SegmentButtonsSliderTableViewCellDelegate?
     
     override func awakeFromNib() {

@@ -858,7 +858,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         }
         if (cell)
         {
-            BOOL isSize = item.key == kPositionIconSizeCellKey || kLocationIconSizeCellKey;
+            BOOL isSize = [item.key isEqualToString:kPositionIconSizeCellKey] || [item.key isEqualToString:kLocationIconSizeCellKey];
             cell.titleLabel.text = item.title;
             cell.titleLabel.textColor = (UIColor *)[item objForKey:kCellTitleColorKey];
             cell.valueLabel.text = item.descr;

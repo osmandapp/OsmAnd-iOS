@@ -438,11 +438,11 @@ typedef enum {
 
 - (void)generateMarkerCollectionFor:(OAApplicationMode *)mode baseOrder:(int)baseOrder locationIconScaleFactor:(float)locationIconScaleFactor courseIconScaleFactor:(float)courseIconScaleFactor
 {
-    OAMarkerCollection *c = [[OAMarkerCollection alloc] initWithMapView:self.mapView];
-    c.baseOrder = baseOrder;
+    OAMarkerCollection *collection = [[OAMarkerCollection alloc] initWithMapView:self.mapView];
+    collection.baseOrder = baseOrder;
 
-    c.markerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
-    c.markerCollection->setPriority(std::numeric_limits<int64_t>::max());
+    collection.markerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    collection.markerCollection->setPriority(std::numeric_limits<int64_t>::max());
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
 
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
@@ -512,8 +512,8 @@ typedef enum {
     }
     
     // Day
-    c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
+    collection.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    collection.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
     if (locationModel)
     {
         locationMarkerBuilder.setModel3D(locationModelCpp);
@@ -521,16 +521,16 @@ typedef enum {
     else
     {
         sk_sp<SkImage> locationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
-        locationMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyDay,
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationMainIconKeyDay,
                                                            OsmAnd::SingleSkImage(locationMainIcon));
 
         sk_sp<SkImage> locationHeadingIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor:iconColor].CGImage];
-        locationMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyDay,
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationHeadingIconKeyDay,
                                                            OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingIcon scaleFactor:locationIconScaleFactor]));
     }
-    c.locationMarkerDay = locationMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.locationMarkerDay = locationMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
 
-    c.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    collection.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     if (navigationModel)
     {
         courseMarkerBuilder.setModel3D(navigationModelCpp);
@@ -538,15 +538,15 @@ typedef enum {
     else
     {
         sk_sp<SkImage> courseMainIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
-        courseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyDay,
+        courseMarkerBuilder.addOnMapSurfaceIcon(collection.courseMainIconKeyDay,
                                                            OsmAnd::SingleSkImage(courseMainIcon));
     }
-    c.courseMarkerDay = courseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.courseMarkerDay = courseMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
     
     // Night
     locationMarkerBuilder.clearOnMapSurfaceIcons();
-    c.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
+    collection.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    collection.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
     if (locationModel)
     {
         locationMarkerBuilder.setModel3D(locationModelCpp);
@@ -554,17 +554,17 @@ typedef enum {
     else
     {
         sk_sp<SkImage> locationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
-        locationMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyNight,
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationMainIconKeyNight,
                                                            OsmAnd::SingleSkImage(locationMainNightIcon));
         
         sk_sp<SkImage> locationHeadingNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor :iconColor].CGImage];
-        locationMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationHeadingIconKeyNight,
                                                            OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingNightIcon scaleFactor:locationIconScaleFactor]));
     }
-    c.locationMarkerNight = locationMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.locationMarkerNight = locationMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
 
     courseMarkerBuilder.clearOnMapSurfaceIcons();
-    c.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    collection.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     if (navigationModel)
     {
         courseMarkerBuilder.setModel3D(navigationModelCpp);
@@ -572,16 +572,16 @@ typedef enum {
     else
     {
         sk_sp<SkImage> courseMainNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
-        courseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyNight,
+        courseMarkerBuilder.addOnMapSurfaceIcon(collection.courseMainIconKeyNight,
                                                            OsmAnd::SingleSkImage(courseMainNightIcon));
     }
-    c.courseMarkerNight = courseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.courseMarkerNight = courseMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
 
     locationMarkerBuilder.setIsAccuracyCircleSupported(false);
     courseMarkerBuilder.setIsAccuracyCircleSupported(false);
     
-    [self updateMode:c];
-    [_modeMarkers setObject:c forKey:mode];
+    [self updateMode:collection];
+    [_modeMarkers setObject:collection forKey:mode];
 }
 
 - (NSString *) layerId
@@ -641,8 +641,6 @@ typedef enum {
     if (![super updateLayer])
         return NO;
 
-    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-    OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
     CGFloat locationIconScaleFactor = [[OAAppSettings sharedManager].locationIconSize get];
     CGFloat courseIconScaleFactor = [[OAAppSettings sharedManager].courseIconSize get];
     if (_locationIconScaleFactor != locationIconScaleFactor || _courseIconScaleFactor != courseIconScaleFactor)

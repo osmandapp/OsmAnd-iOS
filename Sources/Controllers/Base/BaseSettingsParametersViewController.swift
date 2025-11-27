@@ -18,6 +18,10 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
 
     let mapPanel: OAMapPanelViewController = OARootViewController.instance().mapPanel
     let hideDuration: TimeInterval = 0.2
+    let settings: OAAppSettings = OAAppSettings.sharedManager()
+    
+    var applyButton = UIButton(type: .system)
+    var tableData = OATableDataModel()
     
     override var initialMenuHeight: CGFloat {
         OAUtilities.calculateScreenHeight() / 2 + OAUtilities.getBottomMargin()
@@ -31,11 +35,6 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
         false
     }
 
-    var applyButton = UIButton(type: .system)
-    var tableData = OATableDataModel()
-    
-    let settings: OAAppSettings = OAAppSettings.sharedManager()
-    
     private let applyButtonFontSize: CGFloat = 15.0
     private let applyButtonCornerRadius: CGFloat = 10
     private let applyButtonHorizontalMargin: CGFloat = 20

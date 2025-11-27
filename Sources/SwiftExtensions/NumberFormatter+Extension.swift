@@ -8,6 +8,8 @@
 
 @objc
 extension NumberFormatter {
+    /* For example I use [NSNumberFormatter.percentFormatter stringFromNumber:@(_changedProfile.locationIconSize)] row in OAProfileAppearanceViewController to convert location icon size to percent type view
+     */
     static let percentFormatter: NumberFormatter = {
         let percentFormatter = NumberFormatter()
         percentFormatter.numberStyle = .percent

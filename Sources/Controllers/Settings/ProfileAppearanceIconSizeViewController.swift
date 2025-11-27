@@ -237,17 +237,13 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     }
     
     private func suspendLocationService() {
-        guard locationServices?.allowed == true, !OARoutingHelper.sharedInstance().isFollowingMode() else { return }
+        guard !OARoutingHelper.sharedInstance().isFollowingMode() else { return }
         locationServices?.suspend()
     }
     
     private func resumeLocationService() {
         guard !OARoutingHelper.sharedInstance().isFollowingMode() else { return }
-        if locationServices?.allowed == true {
-            locationServices?.resume()
-        } else {
-            locationServices?.setLocationFromSimulation(nil)
-        }
+        locationServices?.resume()
     }
     
     @objc private func sliderChanged(sender: UISlider) {

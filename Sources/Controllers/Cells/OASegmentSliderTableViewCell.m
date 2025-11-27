@@ -7,7 +7,6 @@
 //
 
 #import "OASegmentSliderTableViewCell.h"
-#import "GeneratedAssetSymbols.h"
 
 @implementation OASegmentSliderTableViewCell
 

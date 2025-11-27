@@ -444,7 +444,6 @@
 		3266C96426B150D6007A9187 /* ic_custom_openplacereview_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3266C96026B150D5007A9187 /* ic_custom_openplacereview_logo@2x.png */; };
 		32672A0A2AAF3D0200D46608 /* GpxTravelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32672A092AAF3D0100D46608 /* GpxTravelCell.swift */; };
 		32672A0B2AAF3E9300D46608 /* GpxTravelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32672A082AAF374600D46608 /* GpxTravelCell.xib */; };
-		326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */; };
 		326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */; };
 		3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */ = {isa = PBXBuildFile; fileRef = 3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */; };
 		32725F3B2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32725F3A2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm */; };
@@ -1498,6 +1497,7 @@
 		C5C472F62ED5B49300682CAB /* TripRecordingDistanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */; };
 		C5C472F82ED6E52300682CAB /* TripRecordingElevationWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */; };
 		C5C472FA2ED72FCF00682CAB /* TripRecordingElevationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */; };
+		C5C472FC2ED87F9900682CAB /* TripRecordingTimeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472FB2ED87F9900682CAB /* TripRecordingTimeWidget.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
 		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
@@ -3938,8 +3938,6 @@
 		32672A082AAF374600D46608 /* GpxTravelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GpxTravelCell.xib; sourceTree = "<group>"; };
 		32672A092AAF3D0100D46608 /* GpxTravelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxTravelCell.swift; sourceTree = "<group>"; };
 		326B1B5F2AA5E7DF007954BB /* OAWikiArticleHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAWikiArticleHelper+cpp.h"; sourceTree = "<group>"; };
-		326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingTimeWidget.h; sourceTree = "<group>"; };
-		326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingTimeWidget.mm; sourceTree = "<group>"; };
 		326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeomagnetismObjCBridge.swift; sourceTree = "<group>"; };
 		326C470F2D423D4A0045A2D3 /* OAMapObject+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMapObject+cpp.h"; sourceTree = "<group>"; };
 		3271171B2B9B18A40082C2EA /* OATransportStopAggregated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopAggregated.h; sourceTree = "<group>"; };
@@ -5316,6 +5314,7 @@
 		C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingDistanceWidget.swift; sourceTree = "<group>"; };
 		C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingElevationWidgetState.swift; sourceTree = "<group>"; };
 		C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingElevationWidget.swift; sourceTree = "<group>"; };
+		C5C472FB2ED87F9900682CAB /* TripRecordingTimeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingTimeWidget.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
 		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
@@ -11099,8 +11098,7 @@
 				DA5A798F26C563A000F274C7 /* OAMonitoringPlugin.mm */,
 				C5C472F52ED5B49300682CAB /* TripRecordingDistanceWidget.swift */,
 				C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */,
-				326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */,
-				326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */,
+				C5C472FB2ED87F9900682CAB /* TripRecordingTimeWidget.swift */,
 				C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */,
 				C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */,
 				C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */,
@@ -17037,6 +17035,7 @@
 				DA5A824526C563A700F274C7 /* OAVehicleParametersViewController.mm in Sources */,
 				323B501D2C887ABB002BDF31 /* ProfileAppearanceLocationRadiusViewController.swift in Sources */,
 				DA5A853026C563A900F274C7 /* OAOsmAndLiveHelper.mm in Sources */,
+				C5C472FC2ED87F9900682CAB /* TripRecordingTimeWidget.swift in Sources */,
 				8A7DF79D27B94A2D0005BF39 /* OAWeatherBand.mm in Sources */,
 				32AD5D5A2A2F111600A51B60 /* OsmAccessTokenModel.swift in Sources */,
 				DA5A817626C563A700F274C7 /* OAPointDescription.mm in Sources */,
@@ -17328,7 +17327,6 @@
 				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA8DC3922A0CD9A3006C116B /* DistanceToIntermediateDestinationWidget.swift in Sources */,
 				FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */,
-				326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */,
 				C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,

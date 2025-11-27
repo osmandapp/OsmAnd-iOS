@@ -3966,3 +3966,11 @@
 "routing_attr_weightrating_name" = "Peso bruto máximo";
 "routing_attr_maxaxleload_name" = "Carga máxima de eje";
 "shared_string_release" = "Liberado";
+"metric_lbs" = "lbs";
+"inch" = "in";
+"shared_string_inches" = "pulgadas";
+"shared_string_pounds" = "libras";
+"copy_as_new_folder" = "Copiar como nueva carpeta";
+"add_to_a_folder" = "Agregar a una carpeta";
+"add_to_favorites" = "Agregar a favoritos";
+"reconnect" = "Reconectar";

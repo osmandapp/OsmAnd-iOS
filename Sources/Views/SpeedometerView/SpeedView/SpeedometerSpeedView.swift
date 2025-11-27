@@ -28,9 +28,11 @@ final class SpeedometerSpeedView: UIView {
     private let offset: CGFloat = 20.0
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
-    /// Meters per seconds
+    /// Meters per seconds (m/s)
     private var cachedSpeed = -1.0
+    /// km/h or mph
     private var cachedSpeedLimit: Float = -1.0
+    /// km/h or mph
     private var cachedFormattedSpeed: Float = -1.0
     private var cachedMetricSystem = -1
     
@@ -40,7 +42,7 @@ final class SpeedometerSpeedView: UIView {
     
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
         self.widgetSizeStyle = widgetSizeStyle
-        layer.masksToBounds = false
+        layer.masksToBounds = true
         withConstraint.constant = width
         valueSpeedLabel.font = .systemFont(ofSize: speedValueFontSize, weight: .semibold)
         configureConstraints()
@@ -52,7 +54,7 @@ final class SpeedometerSpeedView: UIView {
     }
     
     func updateInfo(speedLimit: Float, mockSpeed: Float? = nil) {
-        let currentSpeed: Double
+        let currentSpeed: Double // m/s
 
          if let mockSpeed {
              // скорость для теста
@@ -62,60 +64,49 @@ final class SpeedometerSpeedView: UIView {
              if let loc = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
                  currentSpeed = loc.speed
              } else {
-               //  print("[!!!] 3")
                  resetState()
                  stopSpeedExceedAnimation()
                  isHidden = true
                  return
              }
          }
-        
-        
-        
-        
 //        if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
 //            // meters per seconds
 //            let currentSpeed = lastKnownLocation.speed
-            var speedExceed = false
             if currentSpeed >= 0 {
                 let updateThreshold = cachedSpeed < LOW_SPEED_THRESHOLD_MPS ? LOW_SPEED_UPDATE_THRESHOLD_MPS : UPDATE_THRESHOLD_MPS
-                // TODO: cachedSpeedLimit
-                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold || cachedSpeed == -1 /*|| cachedSpeedLimit != speedLimit*/ {
+                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold || cachedSpeed == -1 || cachedSpeedLimit != speedLimit {
                     cachedSpeed = currentSpeed
                     cachedSpeedLimit = speedLimit
                     updateSpeedValueAndUnit(with: Float(cachedSpeed))
                     
-                    speedExceed = cachedSpeed > 0
+                    let cachedSpeedometerState = currentSpeedometerState
+                    updateCurrentState(with: speedLimit)
+                    
+                    let speedExceed = cachedSpeed > 0
                     && speedLimit > 0
                     && cachedFormattedSpeed > 0
-                    && cachedFormattedSpeed > Float(speedLimit) /*+ Float(OAAppSettings.sharedManager().speedLimitExceedKmh.get() / 3.6))*/
-                    let cachedSpeedometerState = currentSpeedometerState
-                    updateCurrentState(speedLimit: speedLimit)
+                    && currentSpeedometerState == .exceedingLimit
                     
                     if speedExceed, !isSpeedLimitAnimationActive, cachedSpeedometerState != currentSpeedometerState {
                         startSpeedExceedAnimation()
                     } else if !speedExceed || cachedFormattedSpeed < speedLimit {
                         stopSpeedExceedAnimation()
-                    } else {
-                       // print("[Alex] speedLimit: \(speedLimit), currentSpeed: \(currentSpeed), cachedFormattedSpeed: \(cachedFormattedSpeed)")
                     }
                 } else {
-                   // print("[Alex1] speedLimit: \(speedLimit), currentSpeed: \(currentSpeed), cachedFormattedSpeed: \(cachedFormattedSpeed)")
-                    updateCurrentState(speedLimit: speedLimit)
+                    updateCurrentState(with: speedLimit)
                     if !isSpeedLimitAnimationActive {
                         updateSpeedometerSpeedView()
                     }
                 }
                 isHidden = false
             } else if cachedSpeed != 0.0 {
-               // print("[!!!] 1")
                 cachedSpeed = 0
                 resetState()
                 updateSpeedValueAndUnit(with: Float(cachedSpeed))
                 stopSpeedExceedAnimation()
                 isHidden = false
             } else {
-              //  print("[!!!] 2")
                 resetState()
                 stopSpeedExceedAnimation()
                 isHidden = true
@@ -141,20 +132,46 @@ final class SpeedometerSpeedView: UIView {
         layer.shadowColor = UIColor.black.withAlphaComponent(0.30).cgColor
     }
     
-    private func updateCurrentState(speedLimit: Float) {
+    private func updateCurrentState(with speedLimit: Float) {
         guard speedLimit != -1 else {
             currentSpeedometerState = .normal
             return
         }
-        if cachedFormattedSpeed > speedLimit {
-            currentSpeedometerState = .exceedingLimit
-        } else if cachedFormattedSpeed > (speedLimit - Float(OAAppSettings.sharedManager().speedLimitExceedKmh.get())) {
-            currentSpeedometerState = .tolerance
+       // OAAppSettings.sharedManager().speedLimitExceedKmh.set(5.0)
+
+        //  tolerance (km/h or mph)
+        var tolerance = Float(OAAppSettings.sharedManager().speedLimitExceedKmh.get())
+        if OASpeedConstant.imperial(OAAppSettings.sharedManager().speedSystem.get()) {
+            tolerance /= 1.6
+        }
+
+        let overspeedThreshold = speedLimit + tolerance
+
+        if tolerance > 0 {
+            if cachedFormattedSpeed >= overspeedThreshold {
+                currentSpeedometerState = .exceedingLimit
+            } else if cachedFormattedSpeed >= speedLimit {
+                currentSpeedometerState = .tolerance
+            } else {
+                currentSpeedometerState = .normal
+            }
+        } else if tolerance == 0 {
+            if cachedFormattedSpeed > speedLimit {
+                currentSpeedometerState = .exceedingLimit
+            } else {
+                currentSpeedometerState = .normal
+            }
         } else {
-            currentSpeedometerState = .normal
+            if cachedFormattedSpeed >= overspeedThreshold {
+                currentSpeedometerState = .exceedingLimit
+            } else if cachedFormattedSpeed >= speedLimit + 2 * tolerance {
+                currentSpeedometerState = .tolerance
+            } else {
+                currentSpeedometerState = .normal
+            }
         }
     }
-    
+
     private func resetState() {
         cachedFormattedSpeed = -1
         cachedSpeedLimit = -1.0

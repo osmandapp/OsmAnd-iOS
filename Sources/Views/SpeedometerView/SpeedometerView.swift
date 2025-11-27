@@ -81,8 +81,9 @@ final class SpeedometerView: OATextInfoWidget {
             didRunSpeedTests = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
                 guard let self else { return }
+               // runSpeedLogicVisualTests()
                 runSimpleSpeedTests()
-                runSimpleSpeedTests1()
+//                runSimpleSpeedTests1()
                 isHidden = false
                 didChangeIsVisible?()
                // let speedLimit: Int = Int(speedViewWrapper.speedLimit())
@@ -125,20 +126,74 @@ final class SpeedometerView: OATextInfoWidget {
 //        return true
 //    }
     
+//    func runSpeedLogicVisualTests() {
+//        let speedLimit: Float = 60
+//        let tolerance0: Float = 0      // Допуск 0
+//        let tolerance5: Float = 5      // Допуск +5 км/ч
+//        let tolerance5Minus: Float = -5 // Допуск -5 км/ч (если нужен)
+//
+//        // Массив тестовых случаев: (скорость, допуск)
+//        let testCases: [(speed: Float, tolerance: Float)] = [
+//            // Допуск 0
+////            (60, tolerance0), // белый
+////            (61, tolerance0), // красный
+////
+////            // Допуск +5
+////            (59, tolerance5), // белый
+////            (60, tolerance5), // жёлтый
+////            (62, tolerance5), // жёлтый
+////            (66, tolerance5), // красный
+//
+//            // Допуск -5 (отрицательный, для теста)
+//            (55, tolerance5Minus), // красный
+//            (56, tolerance5Minus), // красный
+//            (50, tolerance5Minus), // жёлтый
+//            (54, tolerance5Minus), // жёлтый
+//            (49, tolerance5Minus), // белый
+//            (48, tolerance5Minus) // белый
+//        ]
+//
+//        var delay = 0.0
+//        for test in testCases {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+//                guard let self else { return }
+//
+//                self.isHidden = false
+//                
+//                OAAppSettings.sharedManager().speedLimitExceedKmh.set(Double(test.tolerance))
+//                
+//               // var tolerance = Float(OAAppSettings.sharedManager().speedLimitExceedKmh.get())
+//                
+//                // Обновляем скорость и лимит
+//                print("Speed: \(test.speed) km/h, tolerance: \(test.tolerance)")
+//                updateSpeedometerSpeedView(speedLimit: speedLimit, mockSpeed: test.speed / 3.6)
+//                updateSpeedLimitView(speedLimit: Int(speedLimit))
+//                
+//                // Обновляем состояние с учётом текущего допускa
+////                updateCurrentState(speedLimit: speedLimit, tolerance: test.tolerance)
+//                
+//                // Задержка между тестами — визуальная проверка
+//               
+//            }
+//            delay += 5.0 // пауза 2 секунды между тестами
+//        }
+//    }
+
+    
     func runSimpleSpeedTests() {
         let speedLimit: Float = 50
 
         let sequence: [Float] = [
-//            0,     // стоим
-//            10,    // 36 км/ч
-//            14,    // 50 км/ч
-            16,    // превышение
-//            13,    // обратно к лимиту
-//            20,    // превышение
-//            11,    // нормально
-//            12,    // нормально
-//            13,    // обратно к лимиту
-//            18     // превышение
+            0,      // 0 км/ч — стоим
+            10,     // 36 км/ч
+            14,     // 50 км/ч
+            16,     // 58 км/ч — превышение
+            13,     // 46.8 км/ч — обратно к лимиту
+            20,     // 72 км/ч — превышение
+            11,     // 39.6 км/ч — нормально
+            12,     // 43.2 км/ч — нормально
+            15,     // 46.8 км/ч — обратно к лимиту
+            18      // 64.8 км/ч — превышение
         ]
 
         var delay = 0.0
@@ -149,28 +204,28 @@ final class SpeedometerView: OATextInfoWidget {
                 updateSpeedometerSpeedView(speedLimit: speedLimit, mockSpeed: s)
                 updateSpeedLimitView(speedLimit: Int(speedLimit))
             }
-            delay += 0.1
+            delay += 1.5
         }
     }
     
-    func runSimpleSpeedTests1() {
-        let speedLimit: Float = 46
-
-        let sequence: [Float] = [
-            16,    // превышение
-        ]
-
-        var delay = 0.5
-        for s in sequence {
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-                guard let self else { return }
-                self.isHidden = false
-                updateSpeedometerSpeedView(speedLimit: speedLimit, mockSpeed: s)
-                updateSpeedLimitView(speedLimit: Int(speedLimit))
-            }
-            delay += 0.1
-        }
-    }
+//    func runSimpleSpeedTests1() {
+//        let speedLimit: Float = 64
+//
+//        let sequence: [Float] = [
+//            16,    // превышение
+//        ]
+//
+//        var delay = 0.5
+//        for s in sequence {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+//                guard let self else { return }
+//                self.isHidden = false
+//                updateSpeedometerSpeedView(speedLimit: speedLimit, mockSpeed: s)
+//                updateSpeedLimitView(speedLimit: Int(speedLimit))
+//            }
+//            delay += 0.1
+//        }
+//    }
     
     func configure() {
         sizeStyle = settings.speedometerSize.get()
@@ -230,8 +285,7 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     private func configureContentStackViewSemanticContentAttribute() {
-        let isDirectionRTL = isDirectionRTL()
-        contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
+        contentStackView.semanticContentAttribute = isDirectionRTL() ? .forceRightToLeft : .forceLeftToRight
     }
     
     private func configureUserInterfaceStyleWithMapTheme() {
@@ -264,11 +318,9 @@ final class SpeedometerView: OATextInfoWidget {
     
     private func setupSpeedLimitWith(view: SpeedLimitView, speedLimit: Int) {
         guard speedLimit > -1 else {
-          //  print("[test] setupSpeedLimitWith isHidden = true")
             view.isHidden = true
             return
         }
-       // print("[test] setupSpeedLimitWith isHidden = false")
         let value = String(speedLimit)
         view.isHidden = false
         view.updateWith(value: value)

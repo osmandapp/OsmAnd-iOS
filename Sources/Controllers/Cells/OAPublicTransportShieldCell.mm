@@ -66,6 +66,43 @@ static UIFont *_shieldFont;
     [self addSubview:arrowView];
 }
 
+// addTransportShieldForSegment extract by ChatGPT 5.1
+- (void)createRouteBadge:(const std::shared_ptr<TransportRouteResultSegment> &)segment
+                segIndex:(NSInteger)segIndex
+               locations:(NSMutableArray<NSArray<CLLocation *> *> *)locations
+                   views:(NSMutableArray<UIView *> *)views
+{
+    const auto& r = segment->route;
+    NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(false).c_str()];
+    NSString *colorName = [NSString stringWithUTF8String:r->color.c_str()];
+    OATransportStopType *stopType =
+    [OATransportStopType findType:[NSString stringWithUTF8String:r->type.c_str()]];
+    colorName = colorName.length == 0 ? stopType.renderAttr : colorName;
+
+    UIColor *color =
+        [OARootViewController.instance.mapPanel.mapViewController
+         getTransportRouteColor:OAAppSettings.sharedManager.nightMode
+         renderAttrName:colorName];
+
+    if (!color)
+        color = UIColorFromARGB(color_nav_route_default_argb);
+
+    NSString *iconName = stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS];
+
+    OARouteSegmentShieldView *shield =
+        [[OARouteSegmentShieldView alloc] initWithColor:color
+                                                  title:title
+                                               iconName:iconName
+                                                   type:EOATransportShiledTransport];
+    shield.delegate = self;
+    shield.tag = segIndex;
+
+    [locations addObject:[self generateLocationsFor:segment]];
+
+    [views addObject:shield];
+    [self addSubview:shield];
+}
+
 - (void) buildViews
 {
     if (_views)
@@ -122,23 +159,20 @@ static UIFont *_shieldFont;
                 [self drawArrowView:arr];
             }
         }
-        
-        const auto& r = s->route;
-        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(false).c_str()];
-        NSString *colorName = [NSString stringWithUTF8String:r->color.c_str()];
-        OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:r->type.c_str()]];
-        colorName = colorName.length == 0 ? stopType.renderAttr : colorName;
-        UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:colorName];
-        if (!color)
-            color = UIColorFromARGB(color_nav_route_default_argb);
-        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:color title:title iconName:stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS] type:EOATransportShiledTransport];
-        shield.delegate = self;
-        shield.tag  = segIndex++;
-        [locations addObject:[self generateLocationsFor:s]];
-        [arr addObject:shield];
-        [self addSubview:shield];
-        
-        
+
+        [self createRouteBadge:s
+                      segIndex:segIndex++
+                     locations:locations
+                         views:arr];
+
+        for (const auto &alt : s->alternatives)
+        {
+            [self createRouteBadge:alt
+                          segIndex:segIndex++
+                         locations:locations
+                             views:arr];
+        }
+
         if (_route->segments.end() - it != 1)
         {
             [self drawArrowView:arr];
@@ -152,7 +186,7 @@ static UIFont *_shieldFont;
                 if (walkTime > MIN_WALK_TIME)
                 {
                     [self drawArrowView:arr];
-                    title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
+                    NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                     OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
                     shield.delegate = self;
                     shield.tag  = segIndex++;
@@ -170,7 +204,7 @@ static UIFont *_shieldFont;
                         CLLocation *start = [[CLLocation alloc] initWithLatitude:s->getEnd().lat longitude:s->getEnd().lon];
                         CLLocation *end = _transportHelper.endLocation;
                         [self drawArrowView:arr];
-                        title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
+                        NSString *title = [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO];
                         OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
                         shield.tag  = segIndex++;
                         shield.delegate = self;
@@ -257,7 +291,7 @@ static UIFont *_shieldFont;
     return imgView;
 }
 
-+ (NSArray<NSString *> *)generateTitlesForFoute:(SHARED_PTR<TransportRouteResult>)route
++ (NSArray<NSString *> *)generateTitlesForRoute:(SHARED_PTR<TransportRouteResult>)route
 {
     NSMutableArray<NSString *> *titles = [NSMutableArray new];
     
@@ -323,7 +357,7 @@ static UIFont *_shieldFont;
 
 + (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route needsSafeArea:(BOOL)needsSafeArea
 {
-    NSArray<NSString *> *shields = [self generateTitlesForFoute:route];
+    NSArray<NSString *> *shields = [self generateTitlesForRoute:route];
     CGFloat margin = needsSafeArea ? OAUtilities.getLeftMargin : 0.;
     width = width - margin - kShieldMargin * 2;
     if (!_shieldFont)

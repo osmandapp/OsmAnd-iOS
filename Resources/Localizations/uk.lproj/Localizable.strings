@@ -3965,3 +3965,7 @@
 "add_to_a_folder" = "Додати до папки";
 "add_to_favorites" = "Додати до обраного";
 "reconnect" = "Знову підключитися";
+"metric_lbs" = "фунтів";
+"inch" = "дюйми";
+"shared_string_inches" = "дюйми";
+"shared_string_pounds" = "фунтів";

@@ -3959,3 +3959,7 @@
 "add_to_a_folder" = "Ajouter à un dossier";
 "add_to_favorites" = "Ajouter aux favoris";
 "reconnect" = "Se reconnecter";
+"inch" = "dans";
+"metric_lbs" = "lbs";
+"shared_string_inches" = "pouces";
+"shared_string_pounds" = "livres";

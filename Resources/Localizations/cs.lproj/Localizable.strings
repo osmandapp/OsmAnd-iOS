@@ -3938,3 +3938,11 @@
 "routing_attr_weightrating_name" = "Maximální hmotnost při plném zatížení";
 "routing_attr_maxaxleload_name" = "Maximální zatížení nápravy";
 "shared_string_release" = "Vydáno";
+"metric_lbs" = "lbs";
+"inch" = "\"";
+"shared_string_inches" = "palců";
+"shared_string_pounds" = "libry";
+"copy_as_new_folder" = "Kopírovat jako novou složku";
+"add_to_a_folder" = "Přidat do složky";
+"add_to_favorites" = "Přidat k oblíbeným";
+"reconnect" = "Znovu připojit";

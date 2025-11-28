@@ -3961,3 +3961,6 @@
 "add_to_a_folder" = "Tilføj til en mappe";
 "add_to_favorites" = "Tilføj til favoritter";
 "reconnect" = "Genopret forbindelse";
+"metric_lbs" = "lbs";
+"shared_string_inches" = "tommer";
+"shared_string_pounds" = "pund";

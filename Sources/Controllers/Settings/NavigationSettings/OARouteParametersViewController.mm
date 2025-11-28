@@ -568,9 +568,12 @@ static NSString *foregroundImageKey = @"foregroundImage";
     }
     else
     {
-        NSString *defaultValue = param.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue;
+        NSString *defaultValue = param.type == RoutingParameterType::NUMERIC
+            ? @(param.getDefaultString().c_str())
+            : kDefaultSymbolicValue;
         OACommonString *setting = [_settings getCustomRoutingProperty:paramId defaultValue:defaultValue];
-        NSString *value = [NSString stringWithUTF8String:param.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
+        int valueIndex = param.findIndexInPossibleValues([[setting get:self.appMode] UTF8String]);
+        NSString *value = [NSString stringWithUTF8String:param.possibleValueDescriptions[valueIndex].c_str()];
         [tableSection addObject:@{
             typeKey : [OAValueTableViewCell getCellIdentifier],
             keyKey : multiValuePrefKey,

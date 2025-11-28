@@ -3963,3 +3963,5 @@
 "metric_lbs" = "funta";
 "inch" = "inč";
 "shared_string_inches" = "inča";
+"shared_string_pounds" = "funti";
+"reconnect" = "Ponovo se poveži";

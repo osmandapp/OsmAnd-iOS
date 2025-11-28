@@ -96,12 +96,13 @@ final class TripRecordingMaxSpeedWidget: BaseRecordingWidget {
         let mode = currentMode()
         if mode == .total {
             if let analysis = getAnalysis() {
-                lastMaxSpeed = Int(analysis.maxSpeed)
+                let rawMaxSpeed = Double(analysis.maxSpeed)
+                lastMaxSpeed = Int(rawMaxSpeed.rounded())
+                return rawMaxSpeed
             } else {
                 lastMaxSpeed = 0
+                return 0
             }
-            
-            return Double(lastMaxSpeed)
         } else {
             return getLastSlopeMaxSpeed(mode: mode)
         }

@@ -219,6 +219,7 @@
 		274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167482E4DF5840051DD4B /* TopTextViewState.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
 		274C43F12DEDBA7100585952 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */; };
+		2753876E2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2753876D2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift */; };
 		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
@@ -3652,6 +3653,7 @@
 		274167482E4DF5840051DD4B /* TopTextViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTextViewState.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
 		274C43F02DEDBA7100585952 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
+		2753876D2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleAlgorithms.swift; sourceTree = "<group>"; };
 		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
@@ -11874,6 +11876,7 @@
 				DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */,
 				DA5A7B7726C563A100F274C7 /* OAVehicleParametersSettingsViewController.mm */,
 				DA5A7B7326C563A100F274C7 /* OAVehicleParametersViewController.h */,
+				2753876D2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift */,
 				DA5A7B7826C563A100F274C7 /* OAVehicleParametersViewController.mm */,
 				DA5A7B8626C563A100F274C7 /* OAVoicePromptsViewController.h */,
 				DA5A7B8C26C563A100F274C7 /* OAVoicePromptsViewController.mm */,
@@ -17005,6 +17008,7 @@
 				DA5A83FE26C563A800F274C7 /* OAQuickSearchListItem.mm in Sources */,
 				FAC166232B21BEF900D63755 /* DescriptorValue.swift in Sources */,
 				DA5A818E26C563A700F274C7 /* OANewAction.m in Sources */,
+				2753876E2ECDD0AD000CF0F3 /* VehicleAlgorithms.swift in Sources */,
 				DA5A814626C563A700F274C7 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				DA5A840626C563A800F274C7 /* OAPOIViewController.mm in Sources */,
 				DA5A850826C563A900F274C7 /* OATargetMultiView.mm in Sources */,

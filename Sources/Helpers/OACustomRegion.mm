@@ -181,7 +181,7 @@
     NSMutableArray<OAResourceItem *> *items = [NSMutableArray new];
     [items addObjectsFromArray:[self loadIndexItems:self.downloadItemsJson]];
     [items addObjectsFromArray:[self loadIndexItems:self.dynamicItemsJson]];
-    return items;
+    return [items copy];
 }
 
 - (NSArray<OAResourceItem *> *) loadIndexItems:(NSArray *)itemsJson
@@ -236,7 +236,7 @@
             }
         }
     }
-    return items;
+    return [items copy];
 }
 
 - (void) loadDynamicIndexItems

@@ -1416,7 +1416,7 @@
 "rendering_attr_alpineHiking_description" = "Jenis klasifikasi kesulitan untuk rute.";
 "rendering_attr_highway_class_bridleway_name" = "Kekang";
 "routing_attr_avoid_share_taxi_name" = "Tidak ada taksi berbagi";
-"rendering_attr_pisteRoutes_name" = "Rute ski";
+"rendering_attr_pisteRoutes_name" = "Lereng ski dan rute";
 "rendering_attr_piste_type_sled_name" = "Kereta luncur";
 "rendering_attr_noPolygons_description" = "Jadikan semua fitur lahan areal di peta transparan.";
 "routing_attr_allow_classic_only_description" = "Rute yang dipersiapkan untuk gaya klasik saja tanpa jalur skating. Ini termasuk rute yang dipersiapkan oleh mobil salju yang lebih kecil dengan jalur yang lebih longgar dan trek yang dibuat secara manual oleh pemain ski.";
@@ -3805,3 +3805,17 @@
 "slots" = "Slot";
 "routing_attr_weightrating_name" = "Berat maks saat muatan penuh";
 "routing_attr_maxaxleload_name" = "Muatan gandar maks";
+"rendering_attr_showSkiSlopes_name" = "Tampilkan lereng ski";
+"rendering_attr_showSkiSlopes_description" = "Tampilkan lereng ski sederhana";
+"next_turn_information" = "Informasi belokan selanjutnya";
+"next_turn_information_desc" = "Menampilkan arah belokan yang akan datang beserta nama jalannya.";
+"manage_purchases" = "Kelola pembelian";
+"altitude_metrics_description" = "Mengatur unit tampilan untuk ketinggian di widget dan statistik.";
+"map_orientations" = "Orientasi peta";
+"rendering_attr_hideFairways_name" = "Fairways";
+"rendering_attr_hideAreas_name" = "Area kedalaman";
+"rendering_attr_hideContours_name" = "Kontur kedalaman";
+"rendering_attr_hideFerries_name" = "Rute feri";
+"rendering_attr_hideTidalFlats_name" = "Kukup";
+"rendering_attr_showLNAMmarker_name" = "Penanda ENC";
+"rendering_attr_watercolor_name" = "Warna air";

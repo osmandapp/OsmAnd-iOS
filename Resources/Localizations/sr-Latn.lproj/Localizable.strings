@@ -3957,3 +3957,9 @@
 "routing_attr_weightrating_name" = "Maksimalna težina pri punom opterećenju";
 "routing_attr_maxaxleload_name" = "Maksimalno osovinsko opterećenje";
 "shared_string_release" = "Objavljeno";
+"copy_as_new_folder" = "Kopiraj kao novi folder";
+"add_to_a_folder" = "Dodaj u folder";
+"add_to_favorites" = "Dodaj u omiljene";
+"metric_lbs" = "funta";
+"inch" = "inč";
+"shared_string_inches" = "inča";

@@ -152,6 +152,8 @@
     NSMutableArray<OAItemWriterTask *> *heavyTasks = [NSMutableArray array];
     for (OASettingsItem *item in self.getItems)
     {
+        // Use a dedicated writer per task to avoid races inside OANetworkWriter.
+        OANetworkWriter *writer = [[OANetworkWriter alloc] initWithListener:self];
         if (item.getEstimatedSize > MAX_LIGHT_ITEM_SIZE)
             [heavyTasks addObject:[[OAItemWriterTask alloc] initWithWriter:writer item:item]];
         else
@@ -194,8 +196,8 @@
     _itemsProgress = [[OAConcurrentSet alloc] init];
     _errors = [[OAConcurrentDictionary alloc] init];
 
-    OANetworkWriter *networkWriter = [[OANetworkWriter alloc] initWithListener:self];
-    [self writeItems:networkWriter];
+    // Inside writeItems we now create a per-task writer.
+    [self writeItems:nil];
     [self deleteFiles:self];
     [self deleteOldFiles:self];
     [self deleteLocalFiles:_itemsProgress dataProgress:_dataProgress];

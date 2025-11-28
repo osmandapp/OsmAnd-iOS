@@ -3920,3 +3920,11 @@
 "routing_attr_maxaxleload_name" = "Megengedett legnagyobb tengelyterhelés";
 "x" = "X (korábban Twitter)";
 "shared_string_release" = "Kiadva";
+"copy_as_new_folder" = "Másolás új mappaként";
+"add_to_a_folder" = "Hozzáadás egy mappához";
+"add_to_favorites" = "Hozzáadás a kedvencekhez";
+"reconnect" = "Újrakapcsolódás";
+"metric_lbs" = "font";
+"inch" = "hüvelyk";
+"shared_string_inches" = "hüvelyk";
+"shared_string_pounds" = "font";

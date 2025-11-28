@@ -29,6 +29,7 @@
 + (OAMotorType *) ELECTRIC; // kWh fuelEmissionFactor "UE except France"
 + (OAMotorType *) HYBRID; // L, hybrid petrol
 
++ (OAMotorType *)getMotorTypeByValue:(NSInteger)value;
 - (BOOL)shouldCheckRegion;
 
 @end

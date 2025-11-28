@@ -221,10 +221,10 @@ static NSString *foregroundImageKey = @"foregroundImage";
     
     if (router)
     {
-        const auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
-        auto useShortestWayIterator = parameters.find(std::string(kRouteParamShortWay.UTF8String));
-        
-        if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR] && useShortestWayIterator != parameters.end())
+        const auto parametersMap = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
+        auto useShortestWayIterator = parametersMap.find(std::string(kRouteParamShortWay.UTF8String));
+
+        if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR] && useShortestWayIterator != parametersMap.end())
         {
             _fastRouteParameter = useShortestWayIterator->second;
             if ([[NSString stringWithUTF8String:_fastRouteParameter.id.c_str()] isEqualToString:kRouteParamShortWay])
@@ -249,10 +249,11 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 }];
             }
         }
-        
-        for (auto it = parameters.begin(); it != parameters.end(); ++it)
+
+        const auto parametersList = router->getParametersList(string(self.appMode.getDerivedProfile.UTF8String));
+
+        for (const auto& routingParameter : parametersList)
         {
-            const auto &routingParameter = it->second;
             NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
             NSString *group = [NSString stringWithUTF8String:routingParameter.group.c_str()];
 

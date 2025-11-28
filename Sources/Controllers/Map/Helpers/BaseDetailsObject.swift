@@ -355,6 +355,15 @@ final class BaseDetailsObject: NSObject {
         if let type = amenity.type, syntheticAmenity.type == nil {
             syntheticAmenity.type = type
         }
+        if syntheticAmenity.order != amenity.order {
+            let original = syntheticAmenity.order
+            let external = amenity.order
+            syntheticAmenity.order = (original == 0) ? external : min(original, external)
+            if external < original, let type = amenity.type {
+                // set new type if order is less
+                syntheticAmenity.type = type
+            }
+        }
         
         if let subType = amenity.subType {
             updateAmenitySubTypes(syntheticAmenity, subType)

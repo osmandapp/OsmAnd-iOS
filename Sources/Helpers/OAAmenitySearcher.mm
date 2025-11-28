@@ -690,6 +690,7 @@ int const kZoomToSearchPOI = 16.0;
     
     poi.type = type;
     poi.subType = amenity->subType.toNSString();
+    [poi initOrder];
 
     if (poi.name.length == 0)
         poi.name = type.nameLocalized;

@@ -25,6 +25,7 @@
 #import "OAStreet.h"
 #import "OAResultMatcher.h"
 #import "OABuilding.h"
+#import "OAPOI.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -41,6 +42,7 @@ static const NSSet<NSString *> *FILTER_DUPLICATE_POI_SUBTYPE = [NSSet setWithArr
 typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
     EOATopVisible = 0,
     EOAFoundWordCount, // more is better (top)
+    EOATransportationOrder, // sort transport by order declared in poi.xml
     EOAUnknownPhraseMatchWeight, // more is better (top)
     EOACompareAmenityTypeAdditional,
     EOASearchDistanceIfNotByName,
@@ -57,6 +59,7 @@ typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
 @end
 
 const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
+                                                        @(EOATransportationOrder),
                                                         @(EOAFoundWordCount),
                                                         @(EOAUnknownPhraseMatchWeight),
                                                         @(EOACompareAmenityTypeAdditional),
@@ -125,6 +128,21 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             if (o1.getFoundWordCount != o2.getFoundWordCount)
                 return [OAUtilities compareInt:o2.getFoundWordCount y:o1.getFoundWordCount];
 
+            break;
+        }
+        case EOATransportationOrder:
+        {
+            if ([o1.object isKindOfClass:OAPOI.class] && [o2.object isKindOfClass:OAPOI.class])
+            {
+                OAPOI * poi1 = (OAPOI *) o1.object;
+                OAPOI * poi2 = (OAPOI *) o2.object;
+                int order1 = [poi1 order];
+                int order2 = [poi2 order];
+                if (order1 != order2 && [poi1.name isEqualToString:poi2.name])
+                {
+                    return [OAUtilities compareInt:order1 y:order2];
+                }
+            }
             break;
         }
         case EOAUnknownPhraseMatchWeight:
@@ -505,6 +523,10 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
                 if (a1->type == QStringLiteral("natural"))
                 {
                     similarityRadius = 50000;
+                }
+                else if (a1->type == QStringLiteral("transportation"))
+                {
+                    similarityRadius = 1000;
                 }
                 else if (a1->subType == a2->subType)
                 {

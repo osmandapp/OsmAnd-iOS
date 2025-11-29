@@ -37,8 +37,8 @@ static NSCharacterSet *allDelimitersSet;
 
 static const int ZOOM_TO_SEARCH_POI = 16;
 
-static NSArray<NSString *> *CHARS_TO_NORMALIZE_KEY = @[@"’", @"ʼ", @"(", @")"]; // remove () subcities
-static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "];
+static NSArray<NSString *> *CHARS_TO_NORMALIZE_KEY = @[@"’", @"ʼ", @"(", @")", @"´", @"`"]; // remove () subcities
+static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ", @"'", @"'"];
 
 @interface OASearchPhrase ()
 

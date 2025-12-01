@@ -136,7 +136,7 @@
             }
             else
             {
-                OACommonString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
+                OACommonString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:@(p.getDefaultString().c_str())];
                 [stringSetting set:[stringSetting get:_sourceAppMode] mode:_targetAppMode];
             }
         }

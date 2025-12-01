@@ -75,9 +75,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     if (self)
     {
         _param = parameter;
-        NSString *defaultValue = _param.type == RoutingParameterType::NUMERIC
-            ? @(_param.getDefaultString().c_str())
-            : kDefaultSymbolicValue;
+        NSString *defaultValue = @(_param.getDefaultString().c_str());
         _setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:_param.id.c_str()]
                                           defaultValue:defaultValue];
         _type = EOARouteParamTypeNumeric;

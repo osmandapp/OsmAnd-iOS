@@ -172,7 +172,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             }
             else
             {
-                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue] set:obj mode:self.appMode];
+                [[settings getCustomRoutingProperty:paramName defaultValue:@(param->second.getDefaultString().c_str())] set:obj mode:self.appMode];
             }
         }
     }];
@@ -550,7 +550,8 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             }
             else
             {
-                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
+                NSString *defaultValue = [NSString stringWithUTF8String:p.getDefaultString().c_str()];
+                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:defaultValue];
                 NSString *stringValue = [stringSetting toStringValue:self.appMode];
                 if (![stringSetting.defValue isEqualToString:stringValue])
                 {

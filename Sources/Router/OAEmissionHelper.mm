@@ -204,7 +204,7 @@ static OAMotorType * HYBRID;
         if (!parameter.id.empty())
         {
             OACommonString *pref = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:parameter.id.c_str()]
-                                                          defaultValue:parameter.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
+                                                          defaultValue:@(parameter.getDefaultString().c_str())];
 
             OAListParameters *parameters = [self.class populateListParameters:parameter];
             NSInteger index = [parameters findIndexOfValue:[pref get:mode]];

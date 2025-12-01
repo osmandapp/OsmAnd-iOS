@@ -970,7 +970,8 @@
     if (self)
     {
         NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
-        _property = [self.settings getCustomRoutingProperty:id defaultValue:kDefaultNumericValue];
+        NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.getDefaultString().c_str()];
+        _property = [self.settings getCustomRoutingProperty:id defaultValue:defaultValue];
     }
     return self;
 }
@@ -1014,7 +1015,8 @@
 
 - (BOOL) isSelected
 {
-    if (![[_property get:[self getApplicationMode]] isEqualToString:kDefaultNumericValue] && ![self.settings.hazmatTransportingEnabled get])
+    NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.getDefaultString().c_str()];
+    if (![[_property get:[self getApplicationMode]] isEqualToString:defaultValue] && ![self.settings.hazmatTransportingEnabled get])
         [self.settings.hazmatTransportingEnabled set:YES];
     return [self.settings.hazmatTransportingEnabled get];
 }
@@ -1022,7 +1024,8 @@
 - (void) setSelected:(BOOL)isChecked
 {
     [self.settings.hazmatTransportingEnabled set:isChecked];
-    [_property set:kDefaultNumericValue mode:[self getApplicationMode]];
+    NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.getDefaultString().c_str()];
+    [_property set:defaultValue mode:[self getApplicationMode]];
 }
 
 - (NSString *) getCellType

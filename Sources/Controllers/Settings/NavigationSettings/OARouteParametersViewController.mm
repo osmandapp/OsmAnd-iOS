@@ -567,11 +567,9 @@ static NSString *foregroundImageKey = @"foregroundImage";
             }];
         }
     }
-    else
+    else // NUMERIC
     {
-        NSString *defaultValue = param.type == RoutingParameterType::NUMERIC
-            ? @(param.getDefaultString().c_str())
-            : kDefaultSymbolicValue;
+        NSString *defaultValue = @(param.getDefaultString().c_str());
         OACommonString *setting = [_settings getCustomRoutingProperty:paramId defaultValue:defaultValue];
         int valueIndex = param.findIndexInPossibleValues([[setting get:self.appMode] UTF8String]);
         NSString *value = [NSString stringWithUTF8String:param.possibleValueDescriptions[valueIndex].c_str()];

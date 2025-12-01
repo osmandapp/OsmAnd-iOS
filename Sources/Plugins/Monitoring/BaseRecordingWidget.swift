@@ -69,8 +69,8 @@ class BaseRecordingWidget: OASimpleWidget {
     }
     
     private func updateSlopeInfo(oldInfo: SlopeInfo?, newInfo: SlopeInfo?) -> SlopeInfo? {
-        guard let oldInfo = oldInfo else { return newInfo }
-        guard let newInfo = newInfo else { return oldInfo }
+        guard let oldInfo else { return newInfo }
+        guard let newInfo else { return oldInfo }
         let isSameSlope = oldInfo.startPointIndex == newInfo.startPointIndex
         let isNextSlope = oldInfo.startPointIndex < newInfo.startPointIndex
         if isSameSlope {

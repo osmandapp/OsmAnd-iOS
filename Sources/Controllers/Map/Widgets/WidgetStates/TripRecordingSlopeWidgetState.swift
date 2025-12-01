@@ -8,9 +8,9 @@
 
 import Foundation
 
-@objc enum AverageSlopeMode: Int {
-    case lastDownhill = 0
-    case lastUphill = 1
+@objc enum AverageSlopeMode: Int, CaseIterable {
+    case lastDownhill
+    case lastUphill
     
     var titleKey: String {
         switch self {
@@ -31,7 +31,7 @@ import Foundation
     }
     
     func next() -> AverageSlopeMode {
-        let nextRaw = (rawValue + 1) % 2
+        let nextRaw = (rawValue + 1) % Self.allCases.count
         return AverageSlopeMode(rawValue: nextRaw) ?? self
     }
 }

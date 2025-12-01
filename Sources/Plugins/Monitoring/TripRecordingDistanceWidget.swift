@@ -22,10 +22,8 @@ final class TripRecordingDistanceWidget: BaseRecordingWidget {
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         updateInfo()
         onClickFunction = { [weak self] _ in
-            guard let self else { return }
-            if let plugin = self.getMonitoringPlugin() {
-                plugin.showTripRecordingDialog()
-            }
+            guard let self, let plugin = self.getMonitoringPlugin() else { return }
+            plugin.showTripRecordingDialog()
         }
     }
     
@@ -123,12 +121,13 @@ final class TripRecordingDistanceWidget: BaseRecordingWidget {
     }
     
     private func setDistanceText(_ distance: Float) {
-        if distance > 0 {
-            let parts = OAOsmAndFormatter.getFormattedDistance(distance).components(separatedBy: " ")
-            setText(parts.first, subtext: parts.count > 1 ? parts.last : nil)
-        } else {
+        guard distance > 0 else {
             setText(localizedString("monitoring_control_start"), subtext: nil)
+            return
         }
+        
+        let parts = OAOsmAndFormatter.getFormattedDistance(distance).components(separatedBy: " ")
+        setText(parts.first, subtext: parts.dropFirst().last)
     }
     
     private func setRecordingIcons(globalRecording: Bool, liveMonitoring: Bool, recording: Bool) {

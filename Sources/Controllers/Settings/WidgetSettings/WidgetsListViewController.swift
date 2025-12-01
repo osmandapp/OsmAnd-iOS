@@ -588,62 +588,55 @@ extension WidgetsListViewController {
             row.setObj(params, forKey: kWidgetAddParamsKey)
         }
         
+        row.iconName = resolveIconName(for: widget, params: params)
+        row.title = widget.getTitle()
+        row.descr = widget.getMessage()
+        row.cellType = OASimpleTableViewCell.getIdentifier()
+    }
+    
+    private func resolveIconName(for widget: MapWidgetInfo, params: [String: Any]?) -> String? {
         let widgetView = widget.widget
         func intFromParams(_ key: String) -> Int? {
             guard let params, let string = params[key] as? String, let value = Int(string) else { return nil }
             return value
         }
         
-        let iconName: String? = {
-            switch widgetView.widgetType {
-            case .sunPosition:
-                if let sunState = widget.getWidgetState() as? OASunriseSunsetWidgetState {
-                    return sunState.getWidgetIconName()
-                }
-                
-                return widgetView.widgetType?.iconName
-            case .tripRecordingDistance:
-                if let raw = intFromParams(TripRecordingDistanceWidgetState.prefDistanceModeId), let mode = TripRecordingDistanceMode(rawValue: raw) {
-                    return mode.iconName
-                }
-                
-                return (widgetView as? TripRecordingDistanceWidget)?.getIconName() ?? widgetView.widgetType?.iconName
-            case .tripRecordingUphill, .tripRecordingDownhill:
-                let isUphill = widgetView.widgetType == .tripRecordingUphill
-                if let raw = intFromParams(TripRecordingElevationWidgetState.prefUphillWidgetModeId), let mode = TripRecordingElevationMode(rawValue: raw) {
-                    return mode.iconName(isUphill: isUphill)
-                }
-                
-                if isUphill, let uphill = widgetView as? TripRecordingUphillWidget {
-                    return uphill.getIconName()
-                }
-                
-                if !isUphill, let downhill = widgetView as? TripRecordingDownhillWidget {
-                    return downhill.getIconName()
-                }
-                
-                return widgetView.widgetType?.iconName
-            case .tripRecordingAverageSlope:
-                if let raw = intFromParams(TripRecordingSlopeWidgetState.prefAverageSlopeModeId), let mode = AverageSlopeMode(rawValue: raw) {
-                    return mode.iconName
-                }
-                
-                return (widgetView as? TripRecordingSlopeWidget)?.getIconName() ?? widgetView.widgetType?.iconName
-            case .tripRecordingMaxSpeed:
-                if let raw = intFromParams(TripRecordingMaxSpeedWidgetState.prefMaxSpeedModeId), let mode = MaxSpeedMode(rawValue: raw) {
-                    return mode.iconName
-                }
-                
-                return (widgetView as? TripRecordingMaxSpeedWidget)?.getIconName() ?? widgetView.widgetType?.iconName
-            default:
-                return widgetView.widgetType?.iconName
+        switch widgetView.widgetType {
+        case .sunPosition:
+            if let sunState = widget.getWidgetState() as? OASunriseSunsetWidgetState {
+                return sunState.getWidgetIconName()
             }
-        }()
-        
-        row.iconName = iconName
-        row.title = widget.getTitle()
-        row.descr = widget.getMessage()
-        row.cellType = OASimpleTableViewCell.getIdentifier()
+            return widgetView.widgetType?.iconName
+        case .tripRecordingDistance:
+            if let raw = intFromParams(TripRecordingDistanceWidgetState.prefDistanceModeId), let mode = TripRecordingDistanceMode(rawValue: raw) {
+                return mode.iconName
+            }
+            return (widgetView as? TripRecordingDistanceWidget)?.getIconName() ?? widgetView.widgetType?.iconName
+        case .tripRecordingUphill, .tripRecordingDownhill:
+            let isUphill = widgetView.widgetType == .tripRecordingUphill
+            if let raw = intFromParams(TripRecordingElevationWidgetState.prefUphillWidgetModeId), let mode = TripRecordingElevationMode(rawValue: raw) {
+                return mode.iconName(isUphill: isUphill)
+            }
+            if isUphill, let uphill = widgetView as? TripRecordingUphillWidget {
+                return uphill.getIconName()
+            }
+            if !isUphill, let downhill = widgetView as? TripRecordingDownhillWidget {
+                return downhill.getIconName()
+            }
+            return widgetView.widgetType?.iconName
+        case .tripRecordingAverageSlope:
+            if let raw = intFromParams(TripRecordingSlopeWidgetState.prefAverageSlopeModeId), let mode = AverageSlopeMode(rawValue: raw) {
+                return mode.iconName
+            }
+            return (widgetView as? TripRecordingSlopeWidget)?.getIconName() ?? widgetView.widgetType?.iconName
+        case .tripRecordingMaxSpeed:
+            if let raw = intFromParams(TripRecordingMaxSpeedWidgetState.prefMaxSpeedModeId), let mode = MaxSpeedMode(rawValue: raw) {
+                return mode.iconName
+            }
+            return (widgetView as? TripRecordingMaxSpeedWidget)?.getIconName() ?? widgetView.widgetType?.iconName
+        default:
+            return widgetView.widgetType?.iconName
+        }
     }
     
     private func updatePageNumbers() {

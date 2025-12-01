@@ -8,10 +8,10 @@
 
 import Foundation
 
-@objc enum MaxSpeedMode: Int {
-    case total = 0
-    case lastDownhill = 1
-    case lastUphill = 2
+@objc enum MaxSpeedMode: Int, CaseIterable {
+    case total
+    case lastDownhill
+    case lastUphill
     
     var titleKey: String {
         switch self {
@@ -36,7 +36,7 @@ import Foundation
     }
     
     func next() -> MaxSpeedMode {
-        let nextRaw = (rawValue + 1) % 3
+        let nextRaw = (rawValue + 1) % Self.allCases.count
         return MaxSpeedMode(rawValue: nextRaw) ?? self
     }
 }

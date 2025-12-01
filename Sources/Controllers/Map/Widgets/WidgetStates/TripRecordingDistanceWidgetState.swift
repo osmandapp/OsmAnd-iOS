@@ -8,10 +8,10 @@
 
 import Foundation
 
-@objc enum TripRecordingDistanceMode: Int {
-    case totalDistance = 0
-    case lastDownhill = 1
-    case lastUphill = 2
+@objc enum TripRecordingDistanceMode: Int, CaseIterable {
+    case totalDistance
+    case lastDownhill
+    case lastUphill
     
     var titleKey: String {
         switch self {
@@ -36,7 +36,7 @@ import Foundation
     }
     
     func next() -> TripRecordingDistanceMode {
-        let nextRaw = (rawValue + 1) % 3
+        let nextRaw = (rawValue + 1) % Self.allCases.count
         return TripRecordingDistanceMode(rawValue: nextRaw) ?? self
     }
 }

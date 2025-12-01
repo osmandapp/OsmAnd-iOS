@@ -8,9 +8,9 @@
 
 import Foundation
 
-@objc enum TripRecordingElevationMode: Int {
-    case total = 0
-    case last = 1
+@objc enum TripRecordingElevationMode: Int, CaseIterable {
+    case total
+    case last
     
     func titleKey(isUphill: Bool) -> String {
         switch self {
@@ -31,7 +31,7 @@ import Foundation
     }
     
     func next() -> TripRecordingElevationMode {
-        let nextRaw = (rawValue + 1) % 2
+        let nextRaw = (rawValue + 1) % Self.allCases.count
         return TripRecordingElevationMode(rawValue: nextRaw) ?? self
     }
 }

@@ -220,7 +220,7 @@
         }];
     }
 
-    // TODO: fix later for schedule
+    // fix later for schedule
     [startTime setObject:@(startTime.firstObject.integerValue + segment->travelTime) atIndexedSubscript:0];
     timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];
     
@@ -233,7 +233,29 @@
         @"line_color" : color,
         @"coords" : locations,
     }];
-    
+
+    // Insert alternative route shield rows by ChatGPT 5.1 (xcode)
+    for (const auto &alt : segment->alternatives)
+    {
+        const auto &altRoute = alt->route;
+        OATransportStopType *altStopType = [OATransportStopType findType:[NSString stringWithUTF8String:altRoute->type.c_str()]];
+        NSString *altColorName = [NSString stringWithUTF8String:altRoute->color.c_str()];
+        altColorName = altColorName.length == 0 ? altStopType.renderAttr : altColorName;
+        UIColor *altColor = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:altColorName];
+        if (!altColor)
+            altColor = color; // fallback to main color if none resolved
+
+        NSMutableArray<CLLocation *> *altLocations = [self generateLocationsFor:alt];
+
+        [arr addObject:@{
+            @"cell" : [OAPublicTransportRouteShieldCell getCellIdentifier],
+            @"img" : altStopType ? altStopType.resId : [OATransportStopType getResId:TST_BUS],
+            @"title" : [NSString stringWithUTF8String:altRoute->name.c_str()],
+            @"line_color" : altColor,
+            @"coords" : altLocations,
+        }];
+    }
+
     if (stops.size() > 2)
     {
         [dictionary setObject:[NSArray arrayWithArray:arr] forKey:@(section++)];

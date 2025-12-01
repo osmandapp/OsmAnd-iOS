@@ -3959,3 +3959,11 @@
 "routing_attr_weightrating_name" = "Највећа тежина при пуном оптерећењу";
 "routing_attr_maxaxleload_name" = "Највеће осовинско оптерећење";
 "shared_string_release" = "Издат";
+"metric_lbs" = "lbs";
+"inch" = "in";
+"shared_string_inches" = "инчи";
+"shared_string_pounds" = "фунти";
+"copy_as_new_folder" = "Копирај као нови фолдер";
+"add_to_a_folder" = "Додај у фолдеру";
+"add_to_favorites" = "Додај у омиљене";
+"reconnect" = "Поново се повежи";

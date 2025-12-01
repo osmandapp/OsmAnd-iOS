@@ -3955,3 +3955,11 @@
 "routing_attr_weightrating_name" = "Poids maximal à pleine charge";
 "routing_attr_maxaxleload_name" = "Charge maximale par essieu";
 "shared_string_release" = "sorti le";
+"copy_as_new_folder" = "Copier dans un nouveau dossier";
+"add_to_a_folder" = "Ajouter à un dossier";
+"add_to_favorites" = "Ajouter aux favoris";
+"reconnect" = "Se reconnecter";
+"inch" = "in";
+"metric_lbs" = "lbs";
+"shared_string_inches" = "pouces";
+"shared_string_pounds" = "livres";

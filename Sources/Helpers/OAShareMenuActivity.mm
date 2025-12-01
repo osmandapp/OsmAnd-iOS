@@ -47,7 +47,7 @@
     switch (_type)
     {
         case OAShareMenuActivityClipboard:
-            return OALocalizedString(@"shared_string_copy");
+            return OALocalizedString(@"copy_link");
         case OAShareMenuActivityCopyAddress:
             return OALocalizedString(@"copy_address");
         case OAShareMenuActivityCopyPOIName:
@@ -65,13 +65,15 @@
     switch (_type)
     {
         case OAShareMenuActivityCopyAddress:
-            return [UIImage imageNamed:@"ic_share_address"];
+            return [[UIImage systemImageNamed:@"building.2"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         case OAShareMenuActivityCopyCoordinates:
+            return [[UIImage systemImageNamed:@"mappin.and.ellipse.circle"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         case OAShareMenuActivityGeo:
-            return [UIImage imageNamed:@"ic_share_coordinates"];
+            return [[UIImage systemImageNamed:@"globe.europe.africa"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         case OAShareMenuActivityClipboard:
+            return [[UIImage systemImageNamed:@"link"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         case OAShareMenuActivityCopyPOIName:
-            return [UIImage imageNamed:@"ic_share_copy"];
+            return [[UIImage systemImageNamed:@"document.on.document"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return nil;
 }

@@ -200,7 +200,6 @@
     const auto stops = segment->getTravelStops();
     const auto& startStop = segment->getStart();
     OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:route->type.c_str()]];
-    [startTime setObject:@(startTime.firstObject.integerValue + routeRes->getBoardingTime()) atIndexedSubscript:0];
     NSString *timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];
     NSString *str = [NSString stringWithUTF8String:route->color.c_str()];
     str = str.length == 0 ? stopType.renderAttr : str;
@@ -288,34 +287,39 @@
         BOOL first = i == 0;
         BOOL last = i == segments.size() - 1;
         const auto& segment = segments[i];
+
         if (first)
         {
             [self addStartItems:arr route:routeRes segment:segment start:start startTime:startTime];
         }
+
         [self buildTransportSegmentItems:arr sectionsDictionary:resData routeRes:routeRes segment:segment startTime:startTime section:section];
         
         if (i < segments.size() - 1)
         {
             const auto& nextSegment = segments[i + 1];
-            
+
             if (nextSegment != nullptr) {
                 double walkDist = [self getWalkDistance:segment next:nextSegment dist:segment->walkDist];
                 if (walkDist > 0)
                 {
-                    NSInteger time = [self getWalkTime:segment next:nextSegment dist:walkDist speed:routeRes->getWalkSpeed()];
-                    if (time < 60)
-                        time = 60;
+                    NSInteger walkTime = [self getWalkTime:segment next:nextSegment dist:walkDist speed:routeRes->getWalkSpeed()];
+                    if (walkTime < 60)
+                        walkTime = 60;
                     OARouteCalculationResult *seg = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nextSegment]];
                     [arr addObject:@{
                         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
                         @"img" : @"ic_profile_pedestrian",
-                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
                         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
                     }];
-                    [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
-                    
+
+                    int changeTime = routeRes->getChangeTime(segment, nextSegment);
+                    [startTime setObject:@(startTime.firstObject.integerValue + walkTime) atIndexedSubscript:0];
+                    [startTime setObject:@(startTime.firstObject.integerValue + changeTime) atIndexedSubscript:0];
+
                     [arr addObject:@{
                         @"cell" : [OADividerCell getCellIdentifier],
                         @"custom_insets" : @(YES)

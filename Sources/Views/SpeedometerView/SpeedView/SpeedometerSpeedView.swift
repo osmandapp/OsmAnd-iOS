@@ -37,7 +37,7 @@ final class SpeedometerSpeedView: UIView {
     private var cachedMetricSystem = -1
     
     private var circleLayer: CAShapeLayer?
-    private var isSpeedLimitAnimationActive = false
+    private var isCircleRevealAnimationActive = false
     private var currentSpeedometerState: SpeedometerState = .normal
     
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
@@ -53,70 +53,53 @@ final class SpeedometerSpeedView: UIView {
         }
     }
     
-    func updateInfo(speedLimit: Float, mockSpeed: Float? = nil) {
-        let currentSpeed: Double // m/s
-
-         if let mockSpeed {
-             // скорость для теста
-             currentSpeed = Double(mockSpeed)
-         } else {
-             // реальная скорость
-             if let loc = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
-                 currentSpeed = loc.speed
-             } else {
-                 resetState()
-                 stopSpeedExceedAnimation()
-                 isHidden = true
-                 return
-             }
-         }
-//        if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
-//            // meters per seconds
-//            let currentSpeed = lastKnownLocation.speed
-            if currentSpeed >= 0 {
-                let updateThreshold = cachedSpeed < LOW_SPEED_THRESHOLD_MPS ? LOW_SPEED_UPDATE_THRESHOLD_MPS : UPDATE_THRESHOLD_MPS
-                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold || cachedSpeed == -1 || cachedSpeedLimit != speedLimit {
-                    cachedSpeed = currentSpeed
-                    cachedSpeedLimit = speedLimit
-                    updateSpeedValueAndUnit(with: Float(cachedSpeed))
-                    
-                    let cachedSpeedometerState = currentSpeedometerState
-                    updateCurrentState(with: speedLimit)
-                    
-                    let speedExceed = cachedSpeed > 0
-                    && speedLimit > 0
-                    && cachedFormattedSpeed > 0
-                    && currentSpeedometerState == .exceedingLimit
-                    
-                    if speedExceed, !isSpeedLimitAnimationActive, cachedSpeedometerState != currentSpeedometerState {
-                        startSpeedExceedAnimation()
-                    } else if !speedExceed || cachedFormattedSpeed < speedLimit {
-                        stopSpeedExceedAnimation()
-                    }
-                } else {
-                    updateCurrentState(with: speedLimit)
-                    if !isSpeedLimitAnimationActive {
-                        updateSpeedometerSpeedView()
-                    }
-                }
-                isHidden = false
-            } else if cachedSpeed != 0.0 {
-                cachedSpeed = 0
-                resetState()
+    func updateInfo(speedLimit: Float) {
+        guard let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else {
+            resetState()
+            stopSpeedometerSpeedAnimation(animated: false)
+            isHidden = true
+            return
+        }
+        // meters per seconds
+        let currentSpeed = lastKnownLocation.speed
+        if currentSpeed >= 0 {
+            let updateThreshold = cachedSpeed < LOW_SPEED_THRESHOLD_MPS ? LOW_SPEED_UPDATE_THRESHOLD_MPS : UPDATE_THRESHOLD_MPS
+            if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold || cachedSpeed == -1 || cachedSpeedLimit != speedLimit {
+                cachedSpeed = currentSpeed
+                cachedSpeedLimit = speedLimit
                 updateSpeedValueAndUnit(with: Float(cachedSpeed))
-                stopSpeedExceedAnimation()
-                isHidden = false
+                
+                let cachedSpeedometerState = currentSpeedometerState
+                updateCurrentState(with: speedLimit)
+                
+                let speedExceed = cachedSpeed > 0
+                && speedLimit > 0
+                && cachedFormattedSpeed > 0
+                && currentSpeedometerState == .exceedingLimit
+                
+                if (speedExceed || currentSpeedometerState == .tolerance), !isCircleRevealAnimationActive, cachedSpeedometerState != currentSpeedometerState {
+                    startSpeedometerSpeedAnimation()
+                } else if !speedExceed || cachedFormattedSpeed < speedLimit {
+                    stopSpeedometerSpeedAnimation(animated: cachedSpeedometerState != currentSpeedometerState)
+                }
             } else {
-                resetState()
-                stopSpeedExceedAnimation()
-                isHidden = true
+                updateCurrentState(with: speedLimit)
+                if !isCircleRevealAnimationActive {
+                    updateSpeedometerSpeedView(animated: false)
+                }
             }
-//        } else {
-//            resetState()
-//            stopCircleAnimation()
-//            print("[test] resetState 2")
-//            isHidden = true
-//        }
+            isHidden = false
+        } else if cachedSpeed != 0.0 {
+            cachedSpeed = 0
+            resetState()
+            updateSpeedValueAndUnit(with: Float(cachedSpeed))
+            stopSpeedometerSpeedAnimation(animated: false)
+            isHidden = false
+        } else {
+            resetState()
+            stopSpeedometerSpeedAnimation(animated: false)
+            isHidden = true
+        }
     }
     
     func configureTextAlignmentContent(isTextAlignmentRight: Bool) {
@@ -137,16 +120,15 @@ final class SpeedometerSpeedView: UIView {
             currentSpeedometerState = .normal
             return
         }
-       // OAAppSettings.sharedManager().speedLimitExceedKmh.set(5.0)
-
+        
         //  tolerance (km/h or mph)
         var tolerance = Float(OAAppSettings.sharedManager().speedLimitExceedKmh.get())
         if OASpeedConstant.imperial(OAAppSettings.sharedManager().speedSystem.get()) {
             tolerance /= 1.6
         }
-
+        
         let overspeedThreshold = speedLimit + tolerance
-
+        
         if tolerance > 0 {
             if cachedFormattedSpeed >= overspeedThreshold {
                 currentSpeedometerState = .exceedingLimit
@@ -171,7 +153,7 @@ final class SpeedometerSpeedView: UIView {
             }
         }
     }
-
+    
     private func resetState() {
         cachedFormattedSpeed = -1
         cachedSpeedLimit = -1.0
@@ -185,9 +167,9 @@ final class SpeedometerSpeedView: UIView {
             if let formattedValue = Float(result.value) {
                 cachedFormattedSpeed = formattedValue
             } else {
-                print("updateSpeedValueAndUnit -> Invalid number")
+                debugPrint("updateSpeedValueAndUnit -> Invalid number")
             }
-           
+            
             valueSpeedLabel.text = result.value
             unitSpeedLabel.text = result.unit.uppercased()
         }
@@ -274,7 +256,7 @@ extension SpeedometerSpeedView {
         case right // Animation starts from the right edge (current option)
         case left  // Animation starts from the left edge
     }
-
+    
     private class AnimationCompletionDelegate: NSObject, CAAnimationDelegate {
         var completion: () -> Void
         
@@ -289,44 +271,59 @@ extension SpeedometerSpeedView {
         }
     }
     
-    /// Animates the appearance of the red circle and the change of the text color (speed Exceed).
-    private func startSpeedExceedAnimation(duration: TimeInterval = 1.0) {
-        print("startSpeedExceedAnimation")
+    /// Animates the appearance of the red/yellow circle and the change of the text color.
+    private func startSpeedometerSpeedAnimation(duration: TimeInterval = 1.0) {
         startCircleRevealAnimation(duration: duration)
         animateText(valueColor: currentSpeedometerState.valueColor, unitColor: currentSpeedometerState.unitsColor, duration: duration)
     }
     
-    /// Immediately stops the speed exceed animation and removes the layer.
-    private func stopSpeedExceedAnimation() {
-        print("stopSpeedExceedAnimation 1")
+    private func stopSpeedometerSpeedAnimation(animated: Bool) {
         guard let circleLayer else {
-            print("stopSpeedExceedAnimation 2")
-            updateSpeedometerSpeedView()
-            isSpeedLimitAnimationActive = false
+            updateSpeedometerSpeedView(animated: animated)
+            isCircleRevealAnimationActive = false
             return
         }
-        print("stopSpeedExceedAnimation 3")
-        circleLayer.removeAllAnimations()
-        
+
+        let fadeOut = CABasicAnimation(keyPath: "opacity")
+        fadeOut.fromValue = circleLayer.presentation()?.opacity ?? circleLayer.opacity
+        fadeOut.toValue = 0.0
+        fadeOut.duration = 0.5
+        fadeOut.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        fadeOut.fillMode = .forwards
+        fadeOut.isRemovedOnCompletion = false
+
         CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        circleLayer.opacity = 0.0
-        circleLayer.removeFromSuperlayer()
+        CATransaction.setCompletionBlock {
+            circleLayer.removeAllAnimations()
+            circleLayer.removeFromSuperlayer()
+            self.circleLayer = nil
+            self.updateSpeedometerSpeedView(animated: animated)
+            self.isCircleRevealAnimationActive = false
+        }
+        circleLayer.add(fadeOut, forKey: "fadeOut")
         CATransaction.commit()
         
-        self.circleLayer = nil
-        
-        updateSpeedometerSpeedView()
-        isSpeedLimitAnimationActive = false
+        updateSpeedometerSpeedView(animated: animated)
+        isCircleRevealAnimationActive = false
     }
     
-    private func updateSpeedometerSpeedView() {
-        valueSpeedLabel.textColor = currentSpeedometerState.valueColor
-        unitSpeedLabel.textColor = currentSpeedometerState.unitsColor
-        backgroundColor = currentSpeedometerState.backgroundColor
+    private func updateSpeedometerSpeedView(animated: Bool = true) {
+        updateSpeedometerBackground()
+        if animated {
+            animateText(valueColor: currentSpeedometerState.valueColor, unitColor: currentSpeedometerState.unitsColor, duration: 0.5)
+        } else {
+            valueSpeedLabel.textColor = currentSpeedometerState.valueColor
+            unitSpeedLabel.textColor = currentSpeedometerState.unitsColor
+        }
     }
     
-     /// Animates the change of the text color.
+    func updateSpeedometerBackground() {
+        UIView.animate(withDuration: 0.5) {
+            self.backgroundColor = self.currentSpeedometerState.backgroundColor
+        }
+    }
+    
+    /// Animates the change of the text color.
     private func animateText(valueColor: UIColor,
                              unitColor: UIColor,
                              duration: TimeInterval) {
@@ -366,9 +363,8 @@ extension SpeedometerSpeedView {
         
         return (startPoint, endRadius)
     }
-
+    
     private func startCircleRevealAnimation(duration: TimeInterval) {
-        print("startCircleRevealAnimation")
         circleLayer?.removeFromSuperlayer()
         
         let newCircleLayer = CAShapeLayer()
@@ -398,10 +394,9 @@ extension SpeedometerSpeedView {
         animationGroup.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         let animationDelegate = AnimationCompletionDelegate { [weak self] in
             guard let self else { return }
-            print("startCircleRevealAnimation animationCompletionDelegate")
             circleLayer?.removeFromSuperlayer()
             circleLayer = nil
-            isSpeedLimitAnimationActive = false
+            isCircleRevealAnimationActive = false
             backgroundColor = currentSpeedometerState.backgroundColor
         }
         
@@ -413,6 +408,6 @@ extension SpeedometerSpeedView {
         
         animationGroup.delegate = animationDelegate
         newCircleLayer.add(animationGroup, forKey: "revealAnimation")
-        isSpeedLimitAnimationActive = true
+        isCircleRevealAnimationActive = true
     }
 }

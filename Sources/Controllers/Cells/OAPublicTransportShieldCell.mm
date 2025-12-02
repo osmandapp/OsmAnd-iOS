@@ -66,7 +66,6 @@ static UIFont *_shieldFont;
     [self addSubview:arrowView];
 }
 
-// addTransportShieldForSegment extract by ChatGPT 5.1
 - (void)createRouteBadge:(const std::shared_ptr<TransportRouteResultSegment> &)segment
                 segIndex:(NSInteger)segIndex
                locations:(NSMutableArray<NSArray<CLLocation *> *> *)locations

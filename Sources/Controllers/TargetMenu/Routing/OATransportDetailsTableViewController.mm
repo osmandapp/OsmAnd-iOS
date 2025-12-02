@@ -234,7 +234,6 @@
         @"coords" : locations,
     }];
 
-    // Insert alternative route shield rows by ChatGPT 5.1 (xcode)
     for (const auto &alt : segment->alternatives)
     {
         const auto &altRoute = alt->route;

@@ -2105,7 +2105,7 @@ static const NSInteger _buttonsCount = 4;
     
     UIButton *button = (UIButton *)sender;
     
-    [self.navController showActivity:items applicationActivities:@[shareClipboard, shareAddress, sharePOIName, shareCoordinates, shareGeo] excludedActivityTypes:@[UIActivityTypeCopyToPasteboard] sourceView:button sourceRect:CGRect() barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
+    [self.navController showActivity:items applicationActivities:@[shareClipboard, shareAddress, sharePOIName, shareCoordinates, shareGeo] excludedActivityTypes:nil sourceView:button sourceRect:CGRect() barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
 
     [self.menuViewDelegate targetPointShare];
 }
@@ -2674,38 +2674,12 @@ static const NSInteger _buttonsCount = 4;
             double lat = _targetPoint.location.latitude;
             double lon = _targetPoint.location.longitude;
             int zoom = _mapView.zoomLevel;
-            NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom];
-            NSString *httpUrl = [NSString stringWithFormat:kShareLinkTemplate, lat, lon, zoom, lat, lon];
-            NSMutableString *sms = [NSMutableString string];
-            if (_targetPoint.title && _targetPoint.title.length > 0)
-            {
-                [sms appendString:_targetPoint.title];
-                [sms appendString:@"\n"];
-            }
-            if (_targetPoint.titleAddress && _targetPoint.titleAddress.length > 0
-                    && ![_targetPoint.titleAddress isEqualToString:_targetPoint.title]
-                    && ![_targetPoint.titleAddress isEqualToString:OALocalizedString(@"no_address_found")])
-            {
-                [sms appendString:_targetPoint.titleAddress];
-                [sms appendString:@"\n"];
-            }
-
-            [sms appendString:OALocalizedString(@"shared_string_location")];
-            [sms appendString:@": "];
-
-            if ([self isDirectionRTL])
-                [sms appendString:@"\n"];
-
-            [sms appendString:geoUrl];
-            [sms appendString:@"\n"];
-            [sms appendString:httpUrl];
-
-            [self copyToClipboardWithToast:sms];
+            [self copyToClipboardWithToast:[NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon]];
             break;
         }
         case OAShareMenuActivityCopyAddress:
         {
-            if (_targetPoint.titleAddress && _targetPoint.titleAddress.length > 0)
+            if (_targetPoint.titleAddress.length > 0)
                 [self copyToClipboardWithToast:_targetPoint.titleAddress];
             else
                 [OAUtilities showToast:OALocalizedString(@"no_address_found") details:nil duration:4 inView:self.parentView];
@@ -2713,7 +2687,7 @@ static const NSInteger _buttonsCount = 4;
         }
         case OAShareMenuActivityCopyPOIName:
         {
-            if (_targetPoint.title && _targetPoint.title.length > 0)
+            if (_targetPoint.title.length > 0)
                 [self copyToClipboardWithToast:_targetPoint.title];
             else
                 [OAUtilities showToast:OALocalizedString(@"toast_empty_name_error") details:nil duration:4 inView:self.parentView];

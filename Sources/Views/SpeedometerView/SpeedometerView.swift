@@ -182,9 +182,8 @@ final class SpeedometerView: OATextInfoWidget {
             view.isHidden = true
             return
         }
-        let value = String(speedLimit)
         view.isHidden = false
-        view.updateWith(value: value)
+        view.updateWith(value: String(speedLimit))
     }
 }
 

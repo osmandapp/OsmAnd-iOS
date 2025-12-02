@@ -449,7 +449,7 @@
             self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x - _speedometerView.intrinsicContentSize.width;
         else
             self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x;
-        _speedometerViewYPosition = 500;//self.speedometerTopConstraint.constant;
+        _speedometerViewYPosition = self.speedometerTopConstraint.constant;
     }
     
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)

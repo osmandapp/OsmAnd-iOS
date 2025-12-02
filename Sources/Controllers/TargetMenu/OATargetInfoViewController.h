@@ -22,10 +22,10 @@
 @property (nonatomic) NSArray<OARowInfo *> *additionalRows;
 
 - (BOOL) needCoords;
-- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) buildTopInternal:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows;
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows;
+- (void) buildMenu:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp;
 - (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment;
 - (void) buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows;

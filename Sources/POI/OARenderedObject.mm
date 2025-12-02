@@ -101,4 +101,20 @@
     return abs(_bboxRight - _bboxLeft) * abs(_bboxTop - _bboxBottom);
 }
 
+- (NSMutableArray<NSString *> *) getOriginalNames
+{
+    NSMutableArray<NSString *> *names = [NSMutableArray new];
+    if (!NSStringIsEmpty(self.name))
+        [names addObject:self.name];
+    
+    for (NSString *key in self.localizedNames.allKeys)
+    {
+        NSString *value = self.localizedNames[key];
+        if (!NSStringIsEmpty(value))
+            [names addObject:value];
+    }
+    
+    return names;
+}
+
 @end

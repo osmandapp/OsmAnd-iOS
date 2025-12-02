@@ -8,7 +8,15 @@
 
 #import "OASlider.h"
 
+@protocol OASegmentedSliderDelegate <NSObject>
+
+- (void)onSliderFinishEditing;
+
+@end
+
 @interface OASegmentedSlider : OASlider
+
+@property (weak, nonatomic) id<OASegmentedSliderDelegate> delegate;
 
 @property (nonatomic) NSInteger selectedMark;
 @property (nonatomic) CGFloat currentMarkX;
@@ -27,5 +35,6 @@
 - (void)setUsingExtraThumbInset:(BOOL)isUsing;
 
 - (NSString *)getSelectingMarkTitleTextAtIndex:(NSInteger)index;
+- (NSInteger)getMarksCount;
 
 @end

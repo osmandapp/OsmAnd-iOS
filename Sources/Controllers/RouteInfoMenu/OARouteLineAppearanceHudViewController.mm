@@ -1190,12 +1190,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     if ([tableData.key isEqualToString:@"cell_color_map_style"] && [_selectedType.coloringType isCustomColor])
     {
-        UIColor *customColorDay = UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO]);
-        UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
-        UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
-        UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
-        if ([customColorDay isEqual:defaultColorDay] || [customColorNight isEqual:defaultColorNight])
-            [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:_nightMode];
+        [self updateSelectedColorsIfNeeded];
     }
     else if ([tableData.key isEqualToString:@"color_types"])
     {
@@ -1247,6 +1242,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     {
         OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
 
+        [self updateSelectedColorsIfNeeded];
         [self setColorCells];
 
         for (OAGPXTableCellData *cellData in sectionData.subjects)
@@ -1285,6 +1281,19 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             kCellTitle: [_selectedPaletteColorItem toHumanString]
         }];
     }
+}
+
+- (void)updateSelectedColorsIfNeeded
+{
+    UIColor *customColorDay = UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO]);
+    UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
+    UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
+    UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
+    
+    if ([customColorDay isEqual:defaultColorDay])
+        [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:NO];
+    if ([customColorNight isEqual:defaultColorNight])
+        [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:YES];
 }
 
 - (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
@@ -2036,8 +2045,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
         if (sectionData.subjects.count - 1 >= _cellColorGridIndex)
         {
-            OAGPXTableCellData *cellData = sectionData.subjects[_cellColorGridIndex];
-            [self updateData:cellData];
+            [self updateData:sectionData];
 
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGridIndex

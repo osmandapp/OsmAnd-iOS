@@ -217,8 +217,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private func shouldShowLeftIcon(forKey key: String?) -> Bool {
-        let keysWithoutIcon: Set<String> = ["average_obd_mode_key", "fuel_consumption_mode_key", "recording_widget_mode_key"]
         guard let key else { return true }
+        let keysWithoutIcon: Set<String> = ["average_obd_mode_key", "fuel_consumption_mode_key", "recording_widget_mode_key"]
         return !keysWithoutIcon.contains(key)
     }
     

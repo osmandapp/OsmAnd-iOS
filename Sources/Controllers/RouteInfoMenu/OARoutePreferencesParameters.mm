@@ -969,8 +969,8 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
-        NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
-        NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.getDefaultString().c_str()];
+        NSString *id = @(self.routingParameter.id.c_str());
+        NSString *defaultValue = @(self.routingParameter.getDefaultString().c_str());
         _property = [self.settings getCustomRoutingProperty:id defaultValue:defaultValue];
     }
     return self;
@@ -1015,7 +1015,7 @@
 
 - (BOOL) isSelected
 {
-    NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.getDefaultString().c_str()];
+    NSString *defaultValue = @(self.routingParameter.getDefaultString().c_str());
     if (![[_property get:[self getApplicationMode]] isEqualToString:defaultValue] && ![self.settings.hazmatTransportingEnabled get])
         [self.settings.hazmatTransportingEnabled set:YES];
     return [self.settings.hazmatTransportingEnabled get];
@@ -1024,7 +1024,7 @@
 - (void) setSelected:(BOOL)isChecked
 {
     [self.settings.hazmatTransportingEnabled set:isChecked];
-    NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.getDefaultString().c_str()];
+    NSString *defaultValue = @(self.routingParameter.getDefaultString().c_str());
     [_property set:defaultValue mode:[self getApplicationMode]];
 }
 

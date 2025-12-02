@@ -72,10 +72,10 @@ static UIFont *_shieldFont;
                    views:(NSMutableArray<UIView *> *)views
 {
     const auto& r = segment->route;
-    NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(false).c_str()];
-    NSString *colorName = [NSString stringWithUTF8String:r->color.c_str()];
+    NSString *title = @(r->getAdjustedRouteRef(false).c_str());
+    NSString *colorName = @(r->color.c_str());
     OATransportStopType *stopType =
-    [OATransportStopType findType:[NSString stringWithUTF8String:r->type.c_str()]];
+    [OATransportStopType findType:@(r->type.c_str())];
     colorName = colorName.length == 0 ? stopType.renderAttr : colorName;
 
     UIColor *color =

@@ -131,12 +131,12 @@
         {
             if (p.type == RoutingParameterType::BOOLEAN)
             {
-                OACommonBoolean *boolSetting = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                OACommonBoolean *boolSetting = [_settings getCustomRoutingBooleanProperty:@(p.id.c_str()) defaultValue:p.defaultBoolean];
                 [boolSetting set:[boolSetting get:_sourceAppMode] mode:_targetAppMode];
             }
             else
             {
-                OACommonString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:@(p.getDefaultString().c_str())];
+                OACommonString *stringSetting = [_settings getCustomRoutingProperty:@(p.id.c_str()) defaultValue:@(p.getDefaultString().c_str())];
                 [stringSetting set:[stringSetting get:_sourceAppMode] mode:_targetAppMode];
             }
         }

@@ -199,9 +199,9 @@
     const auto& route = segment->route;
     const auto stops = segment->getTravelStops();
     const auto& startStop = segment->getStart();
-    OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:route->type.c_str()]];
+    OATransportStopType *stopType = [OATransportStopType findType:@(route->type.c_str())];
     NSString *timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];
-    NSString *str = [NSString stringWithUTF8String:route->color.c_str()];
+    NSString *str = @(route->color.c_str());
     str = str.length == 0 ? stopType.renderAttr : str;
     UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
     if (color)
@@ -209,7 +209,7 @@
         [arr addObject:@{
             @"cell" : [OAPublicTransportPointCell getCellIdentifier],
             @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
-            @"title" : [NSString stringWithUTF8String:startStop.name.c_str()],
+            @"title" : @(startStop.name.c_str()),
             @"descr" : OALocalizedString(@"board_at"),
             @"time" : timeText,
             @"top_route_line" : @(NO),
@@ -229,7 +229,7 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportRouteShieldCell getCellIdentifier],
         @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
-        @"title" : [NSString stringWithUTF8String:route->name.c_str()],
+        @"title" : @(route->name.c_str()),
         @"line_color" : color,
         @"coords" : locations,
     }];
@@ -237,8 +237,8 @@
     for (const auto &alt : segment->alternatives)
     {
         const auto &altRoute = alt->route;
-        OATransportStopType *altStopType = [OATransportStopType findType:[NSString stringWithUTF8String:altRoute->type.c_str()]];
-        NSString *altColorName = [NSString stringWithUTF8String:altRoute->color.c_str()];
+        OATransportStopType *altStopType = [OATransportStopType findType:@(altRoute->type.c_str())];
+        NSString *altColorName = @(altRoute->color.c_str());
         altColorName = altColorName.length == 0 ? altStopType.renderAttr : altColorName;
         UIColor *altColor = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:altColorName];
         if (!altColor)
@@ -249,7 +249,7 @@
         [arr addObject:@{
             @"cell" : [OAPublicTransportRouteShieldCell getCellIdentifier],
             @"img" : altStopType ? altStopType.resId : [OATransportStopType getResId:TST_BUS],
-            @"title" : [NSString stringWithUTF8String:altRoute->name.c_str()],
+            @"title" : @(altRoute->name.c_str()),
             @"line_color" : altColor,
             @"coords" : altLocations,
         }];

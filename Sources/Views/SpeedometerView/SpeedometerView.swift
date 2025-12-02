@@ -39,7 +39,6 @@ final class SpeedometerView: OATextInfoWidget {
         }
     }
     let settings = OAAppSettings.sharedManager()
-    
     var sizeStyle: EOAWidgetSizeStyle = .medium
     var didChangeIsVisible: (() -> Void)?
     

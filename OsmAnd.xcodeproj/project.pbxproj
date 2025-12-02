@@ -223,6 +223,9 @@
 		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
+		275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */; };
+		2778FE372EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */; };
+		2778FE392EB242CD00B18E11 /* BaseSettingsParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */; };
 		277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987A42E7947E700607516 /* AddKeyViewController.swift */; };
 		277987AC2E79A7A700607516 /* KeyAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */; };
 		277987B22E7AB41600607516 /* InputDevicesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987B12E7AB41600607516 /* InputDevicesCollection.swift */; };
@@ -240,6 +243,7 @@
 		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
 		279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322462E82EEF300B9FC81 /* KeyEvent.swift */; };
 		279322492E82F4A400B9FC81 /* KeyEventMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322482E82F4A400B9FC81 /* KeyEventMapper.swift */; };
+		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
 		27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */; };
@@ -270,12 +274,16 @@
 		27E3168D2E717CB6007172DA /* ChangeMapOrientationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E3168C2E717CB6007172DA /* ChangeMapOrientationAction.swift */; };
 		27E316922E72F5CE007172DA /* CompassMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316912E72F5CE007172DA /* CompassMode.swift */; };
 		27E3C2032DF1ADD40053958E /* OAStreetNameWidgetParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */; };
+		27E8D9EC2ED461E900F98462 /* NumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */; };
+		27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */; };
+		27E8D9F22ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
 		27F050932DD38E310058075F /* RouteInfoDisplayValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */; };
 		27F050952DD38E400058075F /* RouteInfoWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050942DD38E400058075F /* RouteInfoWidgetState.swift */; };
 		27F050992DD4B6080058075F /* RouteInfoCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050982DD4B6060058075F /* RouteInfoCalculator.swift */; };
 		27F0509F2DD4DEB30058075F /* RouteInfoWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */; };
+		27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
@@ -801,7 +809,6 @@
 		46AF98FB28D077E900626C9C /* ic_custom_file_routing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AF98F928D077E800626C9C /* ic_custom_file_routing@2x.png */; };
 		46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */; };
 		46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */; };
-		46B159CF2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46B159CE2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib */; };
 		46B159D12C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */; };
 		46B2EAC128E5CA6B00F466F6 /* ic_custom_cloud_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B2EABF28E5CA6A00F466F6 /* ic_custom_cloud_info@2x.png */; };
 		46B2EAC228E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B2EAC028E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png */; };
@@ -3650,6 +3657,9 @@
 		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
+		275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceUpdateSize.swift; sourceTree = "<group>"; };
+		2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsParametersViewController.swift; sourceTree = "<group>"; };
+		2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseSettingsParametersViewController.xib; sourceTree = "<group>"; };
 		277987A42E7947E700607516 /* AddKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKeyViewController.swift; sourceTree = "<group>"; };
 		277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		277987B12E7AB41600607516 /* InputDevicesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesCollection.swift; sourceTree = "<group>"; };
@@ -3667,6 +3677,7 @@
 		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
 		279322462E82EEF300B9FC81 /* KeyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEvent.swift; sourceTree = "<group>"; };
 		279322482E82F4A400B9FC81 /* KeyEventMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventMapper.swift; sourceTree = "<group>"; };
+		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
 		27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyTableViewCell.xib; sourceTree = "<group>"; };
@@ -3698,12 +3709,16 @@
 		27E316912E72F5CE007172DA /* CompassMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassMode.swift; sourceTree = "<group>"; };
 		27E3C1FF2DF1AD340053958E /* OAStreetNameWidgetParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStreetNameWidgetParams.h; sourceTree = "<group>"; };
 		27E3C2022DF1ADD40053958E /* OAStreetNameWidgetParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStreetNameWidgetParams.mm; sourceTree = "<group>"; };
+		27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Extension.swift"; sourceTree = "<group>"; };
+		27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentButtonsSliderTableViewCell.swift; sourceTree = "<group>"; };
+		27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentButtonsSliderTableViewCell.xib; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
 		27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayValue.swift; sourceTree = "<group>"; };
 		27F0508F2DD38E310058075F /* RouteInfoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidget.swift; sourceTree = "<group>"; };
 		27F050942DD38E400058075F /* RouteInfoWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidgetState.swift; sourceTree = "<group>"; };
 		27F050982DD4B6060058075F /* RouteInfoCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoCalculator.swift; sourceTree = "<group>"; };
 		27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoWidget.xib; sourceTree = "<group>"; };
+		27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceIconSizeViewController.swift; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
@@ -4403,7 +4418,6 @@
 		46B0CC58299CEB45003D9F40 /* OABaseButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseButtonsViewController.h; sourceTree = "<group>"; };
 		46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseButtonsViewController.m; sourceTree = "<group>"; };
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
-		46B159CE2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapSettingsMapModeParametersViewController.xib; sourceTree = "<group>"; };
 		46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsMapModeParametersViewController.swift; sourceTree = "<group>"; };
 		46B2EABF28E5CA6A00F466F6 /* ic_custom_cloud_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_info@2x.png"; path = "Resources/Icons/ic_custom_cloud_info@2x.png"; sourceTree = "<group>"; };
 		46B2EAC028E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_info@3x.png"; path = "Resources/Icons/ic_custom_cloud_info@3x.png"; sourceTree = "<group>"; };
@@ -9856,6 +9870,8 @@
 				46903D6729B5F715004459F1 /* OABaseWebViewController.h */,
 				46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */,
 				DA5A7FE526C563A500F274C7 /* OACompoundViewController.h */,
+				2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */,
+				2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */,
 				DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */,
 			);
 			path = Base;
@@ -11779,6 +11795,9 @@
 				46DF1D8328C21E8700135D94 /* OSMEditing */,
 				323B501C2C887ABB002BDF31 /* ProfileAppearanceLocationRadiusViewController.swift */,
 				329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */,
+				27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */,
+				27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */,
+				275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */,
 				46843FD4286F5D2500B1F08C /* WeatherSettings */,
 				DAD3FD222A4ACAED00BFA03A /* WidgetSettings */,
 				32CA131F2AF1475200DD6EF5 /* WikipediaCacheSizeViewController.swift */,
@@ -12040,6 +12059,7 @@
 				DA5A7C7426C563A200F274C7 /* OASegmentSliderTableViewCell.h */,
 				DA5A7CD726C563A200F274C7 /* OASegmentSliderTableViewCell.m */,
 				DA5A7CEC26C563A200F274C7 /* OASegmentTableViewCell.h */,
+				27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */,
 				DA5A7C5E26C563A200F274C7 /* OASegmentTableViewCell.m */,
 				B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */,
 				B0D612B2FB498FC3CC394339 /* OASelectionCollapsableCell.mm */,
@@ -12126,6 +12146,7 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */,
 				27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */,
 				277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */,
 				DA5A7C1126C563A200F274C7 /* OAActivityViewWithTitleCell.xib */,
@@ -13388,7 +13409,6 @@
 				46433229291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m */,
 				46C49507291E57CA005A9D70 /* OANauticalDepthParametersViewController.h */,
 				46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */,
-				46B159CE2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib */,
 				46B159D02C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift */,
 			);
 			path = MapSettings;
@@ -13966,6 +13986,7 @@
 				FA54CE0E2EBB938E007F1F68 /* Locale+Extension.swift */,
 				FACBDBD92EABAF5A00C7BF98 /* NSString+LocalizedDocs.swift */,
 				FA82B9152E74132200A250F1 /* ByteCountFormatter+Extension.swift */,
+				27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */,
 				FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */,
 				FACB02A92D54C52000EBE87F /* ImageCache+Extension.swift */,
 				FA9217112D5277310074E958 /* DateFormatter+Extension.swift */,
@@ -15620,7 +15641,6 @@
 				DA32BBF025C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */,
 				DA45DA84230EE05A0083DFA2 /* img_mapstyle_lightrs@3x.png in Resources */,
 				DA5A82D426C563A800F274C7 /* OAPoiCollectionViewCell.xib in Resources */,
-				46B159CF2C9B4706000BD9A7 /* MapSettingsMapModeParametersViewController.xib in Resources */,
 				DAA738E923E2FE1A00FAB0DE /* ic_share_folder_trips@2x.png in Resources */,
 				46B9E78F29B2298F00FA802D /* ic_navbar_image_disabled_outlined@3x.png in Resources */,
 				15CD7E9525B1C17900BCB36A /* ic_custom_folder_outlined@3x.png in Resources */,
@@ -16217,6 +16237,7 @@
 				DA5A81A326C563A700F274C7 /* OASelectMapSourceViewController.xib in Resources */,
 				DA2DC41323B2116300F40D1D /* ic_custom_arrow_up@2x.png in Resources */,
 				DA8DB8E0218DA8AA00EBF914 /* ic_ruler_center_light@3x.png in Resources */,
+				2778FE392EB242CD00B18E11 /* BaseSettingsParametersViewController.xib in Resources */,
 				46C2FD8628B38EF600771E6E /* ic_custom_globe_latitude@3x.png in Resources */,
 				849E81561AFA5D2400549953 /* map_parking_pin@3x.png in Resources */,
 				46453B152835241B001F9A3A /* ic_custom_nautical_depth_colored_day@2x.png in Resources */,
@@ -16618,6 +16639,7 @@
 				8476E1E71F6AA01000EC274F /* ic_list_startpoint@2x.png in Resources */,
 				DA5A82B926C563A800F274C7 /* OAPointTableViewCell.xib in Resources */,
 				323BD8E82628850400D255ED /* ic_bg_point_comment_center_small@3x.png in Resources */,
+				27E8D9F22ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib in Resources */,
 				DA83602923449C6B003374B5 /* ic_custom_sound_off@3x.png in Resources */,
 				DA835FF823438512003374B5 /* ic_small_direction@3x.png in Resources */,
 				8412224E1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
@@ -17125,6 +17147,7 @@
 				DA5A814726C563A700F274C7 /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				DA5A81E526C563A700F274C7 /* OAGPXDatabase.mm in Sources */,
 				FAF068332C3BC6840054BBEA /* WeatherContoursButton.swift in Sources */,
+				2778FE372EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift in Sources */,
 				DA5A83C926C563A800F274C7 /* OAEditPointViewController.mm in Sources */,
 				DA5A84AD26C563A900F274C7 /* OARootViewController.m in Sources */,
 				DA5A81BC26C563A700F274C7 /* OAPOIMyLocationType.m in Sources */,
@@ -17339,6 +17362,7 @@
 				DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */,
 				320F712C2A8268B50071C0E7 /* OATravelGuidesHelper.mm in Sources */,
 				DA5A831726C563A800F274C7 /* OAHeaderRoundCell.m in Sources */,
+				27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */,
 				DA5A81F626C563A700F274C7 /* OAChoosePlanHelper.mm in Sources */,
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
 				462BF6DC2B7E8347003ECA2C /* DeleteAccountCommand.swift in Sources */,
@@ -17385,6 +17409,7 @@
 				FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
 				DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */,
+				27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */,
 				DA5A81C526C563A700F274C7 /* OANameStringMatcher.m in Sources */,
 				DAD3FD152A4984C300BFA03A /* WidgetParameterViewController.swift in Sources */,
 				DA14DC922A31D76A002A91BC /* OAWeatherWidget.mm in Sources */,
@@ -17449,6 +17474,7 @@
 				464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */,
 				279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
+				27E8D9EC2ED461E900F98462 /* NumberFormatter+Extension.swift in Sources */,
 				32F3A6AA2D5E1967008AE4CA /* PoiIconCollectionHandler.swift in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
@@ -17765,6 +17791,7 @@
 				32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */,
 				FA6408772D3E8295005FD12D /* NoImagesCell.swift in Sources */,
 				FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */,
+				275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */,
 				0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */,
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,
 				DA5A837126C563A800F274C7 /* OARoutingInfoCell.mm in Sources */,
@@ -18277,6 +18304,7 @@
 				CA4EDD1F67ADE2175D901873 /* OAManageTypeViewController.mm in Sources */,
 				2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */,
 				FACB02B52D562C4200EBE87F /* ExpandableTextView.swift in Sources */,
+				27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */,
 				FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */,
 				FA2431802DD202E800B52998 /* VehicleMetricsSensorsController.swift in Sources */,
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,

@@ -96,7 +96,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 #pragma mark - Initialization
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
+- (instancetype)initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
 {
     self = [super init];
     if (self)

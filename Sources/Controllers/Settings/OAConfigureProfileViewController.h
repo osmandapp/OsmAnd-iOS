@@ -14,6 +14,6 @@ extern NSString * const kNavigationSettings;
 
 @interface OAConfigureProfileViewController : OABaseNavbarViewController
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
+- (instancetype)initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
 
 @end

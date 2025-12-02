@@ -416,6 +416,8 @@ typedef enum
         _activeTargetType = OATargetTerrainParametersSettings;
     else if ([controller isKindOfClass:MapSettingsMapModeParametersViewController.class])
         _activeTargetType = OATargetMapModeParametersSettings;
+    else if ([controller isKindOfClass:ProfileAppearanceIconSizeViewController.class])
+        _activeTargetType = OATargetProfileAppearanceIconSizeSettings;
 
     [self setupScrollableHud:controller];
 }

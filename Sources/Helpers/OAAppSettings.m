@@ -4375,7 +4375,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     if (obj)
     {
         obj.key = key;
-        obj.defValue = defValue;
+        obj.defValue = (int)defValue;
     }
     return obj;
 }
@@ -4425,14 +4425,26 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
+    EOASunPositionMode type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+
+    EOASunPositionMode type = [value integerValue];
+    switch (type)
     {
         case EOASunPositionModeSunPositionMode:
             return @"SUN_POSITION_MODE";
         case EOASunPositionModeSunsetMode:
             return @"SUNSET_MODE";
-        default:
+        case EOASunPositionModeSunriseMode:
             return @"SUNRISE_MODE";
+        default:
+            return @"SUN_POSITION_MODE";
     }
 }
 

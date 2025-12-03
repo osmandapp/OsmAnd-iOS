@@ -317,7 +317,7 @@ extension SpeedometerSpeedView {
         }
     }
     
-    func updateSpeedometerBackground() {
+    private func updateSpeedometerBackground() {
         UIView.animate(withDuration: 0.5) {
             self.backgroundColor = self.currentSpeedometerState.backgroundColor
         }

@@ -172,7 +172,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             }
             else
             {
-                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue] set:obj mode:self.appMode];
+                [[settings getCustomRoutingProperty:paramName defaultValue:@(param->second.getDefaultString().c_str())] set:obj mode:self.appMode];
             }
         }
     }];
@@ -539,22 +539,23 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         {
             if (p.type == RoutingParameterType::BOOLEAN)
             {
-                OACommonBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                OACommonBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:@(p.id.c_str()) defaultValue:p.defaultBoolean];
                 
                 NSString *paramDefaultString = boolSetting.defValue ? @"true" : @"false";
                 NSString *stringValue = [boolSetting toStringValue:self.appMode];
                 if (![paramDefaultString isEqualToString:stringValue])
                 {
-                    json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = stringValue;
+                    json[[kRoutingPreferencePrefix stringByAppendingString:@(p.id.c_str())]] = stringValue;
                 }
             }
             else
             {
-                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
+                NSString *defaultValue = @(p.getDefaultString().c_str());
+                OACommonString *stringSetting = [settings getCustomRoutingProperty:@(p.id.c_str()) defaultValue:defaultValue];
                 NSString *stringValue = [stringSetting toStringValue:self.appMode];
                 if (![stringSetting.defValue isEqualToString:stringValue])
                 {
-                    json[[kRoutingPreferencePrefix stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = stringValue;
+                    json[[kRoutingPreferencePrefix stringByAppendingString:@(p.id.c_str())]] = stringValue;
                 }
             }
         }

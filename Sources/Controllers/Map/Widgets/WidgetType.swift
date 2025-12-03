@@ -315,6 +315,9 @@ extension WidgetType {
     static let OBDThrottlePosition = WidgetType(ordinal: 66, id: "obd_throttle_position", title: localizedString("obd_throttle_position"), descr: localizedString("obd_throttle_position_desc"), iconName: "widget_obd_throttle_position", group: .vehicleMetrics, defaultPanel: .rightPanel)
     static let OBDFuelConsumption = WidgetType(ordinal: 67, id: "obd_fuel_consumption", title: localizedString("obd_fuel_consumption"), descr: localizedString("obd_fuel_consumption_desc"), iconName: "widget_obd_fuel_consumption", group: .vehicleMetrics, defaultPanel: .rightPanel)
     
+    static let tripRecordingAverageSlope = WidgetType(ordinal: 68, id: "trip_recording_average_slope", title: localizedString("average_slope"), descr: localizedString("trip_recording_average_slope_widget_description"), iconName: "widget_track_recording_average_slope_uphill", group: .tripRecording, defaultPanel: .rightPanel)
+    static let tripRecordingMaxSpeed = WidgetType(ordinal: 69, id: "trip_recording_max_speed", title: localizedString("shared_string_max_speed"), descr: localizedString("trip_recording_max_speed_widget_description"), iconName: "widget_track_recording_max_speed", group: .tripRecording, defaultPanel: .rightPanel)
+    
     static let values = [nextTurn,
                          smallNextTurn,
                          secondNextTurn,
@@ -396,6 +399,8 @@ extension WidgetType {
                          OBDRemainingFuel,
                          OBDCalculatedEngineLoad,
                          OBDThrottlePosition,
-                         OBDFuelConsumption
+                         OBDFuelConsumption,
+                         tripRecordingAverageSlope,
+                         tripRecordingMaxSpeed
     ]
 }

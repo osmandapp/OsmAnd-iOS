@@ -2046,6 +2046,8 @@ static const NSInteger _buttonsCount = 4;
     NSMutableString *sharingText = [[NSMutableString alloc] init];
     double lat;
     double lon;
+    NSString *previewTitle = nil;
+    UIImage *previewIcon = nil;
     if (_previousTargetType == OATargetFavorite)
     {
         OAFavoriteViewController *source = (OAFavoriteViewController *) self.customController;
@@ -2069,6 +2071,7 @@ static const NSInteger _buttonsCount = 4;
         }
         lat = [source.favorite getLatitude];
         lon = [source.favorite getLongitude];
+        previewTitle = itemName;
     }
     else
     {
@@ -2082,8 +2085,19 @@ static const NSInteger _buttonsCount = 4;
         }
         lat = _targetPoint.location.latitude;
         lon = _targetPoint.location.longitude;
+        previewTitle = _targetPoint.title;
     }
+    
     [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon];
+    previewIcon = _imageView.image;
+    int zoom = _mapView.zoomLevel;
+    NSString *httpUrlString = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
+    NSURL *httpUrl = [NSURL URLWithString:httpUrlString];
+    if (httpUrl)
+    {
+        ShareLinkItem *linkItem = [[ShareLinkItem alloc] initWithUrl:httpUrl title:previewTitle icon:previewIcon];
+        [items addObject:linkItem];
+    }
     
     if (sharingText && sharingText.length > 0)
         [items addObject:sharingText];

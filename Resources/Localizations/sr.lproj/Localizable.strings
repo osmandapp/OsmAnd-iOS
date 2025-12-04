@@ -3967,3 +3967,12 @@
 "add_to_a_folder" = "Додај у фолдеру";
 "add_to_favorites" = "Додај у омиљене";
 "reconnect" = "Поново се повежи";
+"average_slope" = "Просечан нагиб";
+"trip_recording_average_slope_widget_description" = "Приказује просечан нагиб последње низбрдице или узбрдице тренутно снимљеног путовања.";
+"shared_string_max_speed" = "Макс. брзина";
+"trip_recording_max_speed_widget_description" = "Приказуј највећу брзину тренутно забележеног путовања. Тапните ради преласка између укупне највеће брзине и највеће брзине са последњег успона или падине.";
+"shared_string_last_uphill" = "Последњи успон";
+"shared_string_last_downhill" = "Последња низбрдица";
+"show_track_on_map" = "Прикажи траг на карти";
+"total_distance" = "Укупно растојање";
+"icon_size" = "Величина иконе";

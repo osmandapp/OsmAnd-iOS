@@ -226,8 +226,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::WeatherForecast;
     else if ([scopeId isEqualToString:@"heightmap"])
         return OsmAndResourceType::GeoTiffRegion;
-    else if ([scopeId isEqualToString:@"deleted_map"])
-        return OsmAndResourceType::DeletedMaps;
 
     //TODO: add another types from ResourcesManager.h
     //MapStyle,

@@ -3928,3 +3928,12 @@
 "inch" = "hüvelyk";
 "shared_string_inches" = "hüvelyk";
 "shared_string_pounds" = "font";
+"average_slope" = "Átlagos lejtés";
+"shared_string_max_speed" = "Legnagyobb sebesség";
+"shared_string_last_uphill" = "Utolsó emelkedő";
+"shared_string_last_downhill" = "Utolsó lejtő";
+"show_track_on_map" = "Nyomvonal megjelenítése a térképen";
+"total_distance" = "Teljes távolság";
+"icon_size" = "Ikonméret";
+"trip_recording_average_slope_widget_description" = "Megjeleníti a jelenleg rögzített utazás utolsó lejtő vagy emelkedő szakaszának átlagos meredekségét.";
+"trip_recording_max_speed_widget_description" = "Megjeleníti a jelenleg rögzített utazás legnagyobb sebességét. Koppintással válthat az általános legnagyobb sebesség és az utolsó emelkedőn vagy lejtőn elért legnagyobb sebesség között.";

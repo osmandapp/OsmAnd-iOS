@@ -3965,3 +3965,7 @@
 "shared_string_inches" = "inča";
 "shared_string_pounds" = "funti";
 "reconnect" = "Ponovo se poveži";
+"average_slope" = "Prosečan nagib";
+"trip_recording_average_slope_widget_description" = "Prikazuje prosečan nagib za poslednju nizbrdicu ili uzbrdicu trenutno snimljenog putovanja.";
+"shared_string_max_speed" = "Maks. brzina";
+"trip_recording_max_speed_widget_description" = "Prikazuje maksimalnu brzinu za trenutno snimljeno putovanje. Dodirnite za prebacivanje između ukupne maksimalne brzine i maksimalne brzine od poslednje uzbrdice ili nizbrdice.";

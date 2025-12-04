@@ -3903,3 +3903,5 @@
 "rendering_attr_hideFairways_description" = "隱藏航道";
 "rendering_attr_shellsStyle_description" = "海床上的貝殼樣式";
 "rendering_attr_depthColorScheme_name" = "深度顏色標準";
+"rendering_attr_hideContours_name" = "深海等高線";
+"rendering_attr_hideAreas_description" = "隱藏深海區域";

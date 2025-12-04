@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DeprecatedMapsViewController">
+            <connections>
+                <outlet property="deleteAllButton" destination="pQs-NF-xre" id="N8w-ek-MWb"/>
+                <outlet property="tableView" destination="TeH-hS-CxO" id="qSm-hM-f11"/>
+                <outlet property="view" destination="iN0-l3-epB" id="rqj-Q6-8Z2"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="TeH-hS-CxO">
+                    <rect key="frame" x="0.0" y="118" width="393" height="613"/>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pQs-NF-xre">
+                    <rect key="frame" x="20" y="740" width="353" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="hb9-tN-ttY"/>
+                    </constraints>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="Button"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="10"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" name="viewBg"/>
+            <constraints>
+                <constraint firstItem="pQs-NF-xre" firstAttribute="top" secondItem="TeH-hS-CxO" secondAttribute="bottom" constant="9" id="3uS-Qa-lCg"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="pQs-NF-xre" secondAttribute="trailing" constant="20" id="CTO-uN-z6A"/>
+                <constraint firstAttribute="trailing" secondItem="TeH-hS-CxO" secondAttribute="trailing" id="FEi-YO-FYv"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="pQs-NF-xre" secondAttribute="bottom" id="GxY-Lm-gRH"/>
+                <constraint firstItem="TeH-hS-CxO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="UFN-sr-sBJ"/>
+                <constraint firstItem="TeH-hS-CxO" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="a2c-2n-Rv8"/>
+                <constraint firstItem="pQs-NF-xre" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="pHB-NJ-XLR"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="154"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="viewBg">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

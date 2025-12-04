@@ -928,7 +928,7 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *regionMapArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
-
+    
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -1346,7 +1346,7 @@ static BOOL _repositoryUpdated = NO;
     
     for (OAResourceItem *item in _regionMapItems)
     {
-        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey))
+        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey) || item.resourceType == OsmAndResourceType::DeletedMaps)
         {
             [_regionMapItems removeObject:item];
             break;

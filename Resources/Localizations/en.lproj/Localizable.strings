@@ -3319,6 +3319,10 @@
 "local_file_will_be_restored" = "The local file will be restored";
 "local_changes_will_be_dismissed" = "Local changes will be dismissed";
 
+"deleted_maps_prompt" = "These maps are no longer supported and have been replaced by smaller regions. Please remove them and download the new versions.";
+"unsupported_maps" = "Unsupported maps";
+"deleted_maps_alert_message" = "Are you sure you want to delete %d maps?";
+
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
 "set_up_backup" = "Set up backup";

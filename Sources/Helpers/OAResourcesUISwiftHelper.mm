@@ -19,6 +19,8 @@
 #import "OsmAndApp.h"
 #import "OADownloadTask.h"
 #import "Localization.h"
+#import "OAFileNameTranslationHelper.h"
+#import "OALocalResourceInformationViewController.h"
 
 @implementation OAResourceSwiftItem
 
@@ -61,6 +63,8 @@
             return EOAOAResourceSwiftItemTypeUnknown;
         case OsmAndResourceType::MapRegion:
             return EOAOAResourceSwiftItemTypeMapRegion;
+        case OsmAndResourceType::DeletedMaps:
+            return EOAOAResourceSwiftItemTypeDeprecatedMap;
         case OsmAndResourceType::RoadMapRegion:
             return EOAOAResourceSwiftItemTypeRoadMapRegion;
         case OsmAndResourceType::SrtmMapRegion:
@@ -225,6 +229,20 @@
 
 @end
 
+@implementation OAResourcesUISwiftHelper (Navigation)
+
++ (void)showLocalResourceInformationViewController:(OAResourceSwiftItem *)item
+                              navigationController:(UINavigationController *)navigationController
+{
+    OALocalResourceInformationViewController *resourceInfoViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateViewControllerWithIdentifier:@"OALocalResourceInformationViewController"];
+    resourceInfoViewController.openFromSplash = YES;
+    resourceInfoViewController.regionTitle = item.title;
+    [resourceInfoViewController initWithLocalResourceId:item.resourceId];
+    resourceInfoViewController.localItem = item.objcResourceItem;
+    [navigationController pushViewController:resourceInfoViewController animated:YES];
+}
+
+@end
 
 @implementation OAResourcesUISwiftHelper
 
@@ -478,6 +496,47 @@
                                            inRegion:region
                                      withRegionName:includeRegionName
                                    withResourceType:includeResourceType];
+}
+
++ (NSArray<OAResourceSwiftItem *> *)getUnsupportedResourcesWith:(OAWorldRegion *)region
+{
+    NSMutableArray<OAResourceSwiftItem *> *swiftResources = [NSMutableArray array];
+    OsmAndAppInstance app = OsmAndApp.instance;
+    const auto& unsupportedMaps = app.resourcesManager->getUnsupportedResources();
+    
+    for (const auto& resource : unsupportedMaps)
+    {
+        OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:region
+                                                          thatContainsResource:resource->id];
+        OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.resourceType = resource->type;
+        if (match)
+        {
+            item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                     inRegion:match
+                                               withRegionName:YES
+                                             withResourceType:NO];
+        }
+        else
+        {
+            NSString *title = [OAFileNameTranslationHelper getMapName:resource->id.toNSString()];
+            item.title = title;
+        }
+        item.size = resource->size;
+        item.worldRegion = match;
+
+        const auto localResource = app.resourcesManager->getLocalResource(resource->id);
+        item.resource = localResource;
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
+        [swiftResources addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
+    }
+    return swiftResources;
+}
+
++ (NSString *)getCountryName:(OAResourceSwiftItem *)item
+{
+    return [OAResourcesUIHelper getCountryName:item.objcResourceItem];
 }
 
 @end

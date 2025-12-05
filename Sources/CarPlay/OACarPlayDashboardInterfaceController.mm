@@ -118,7 +118,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _mapTemplate = [[CPMapTemplate alloc] init];
     _mapTemplate.mapDelegate = self;
-    [self onUpdateMapTemplateStyle];
+
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES completion:nil];
@@ -995,6 +995,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
     BOOL isDarkStyle = style == UIUserInterfaceStyleDark;
+    NSLog(@"onUpdateMapTemplateStyle: %d (%@)", int(style), isDarkStyle ? @"dark" : @"light");
     _mapTemplate.guidanceBackgroundColor = isDarkStyle ? _darkGuidanceBackgroundColor : _lightGuidanceBackgroundColor;
     _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
 }

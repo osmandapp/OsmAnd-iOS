@@ -50,7 +50,7 @@ final class CarPlaySceneDelegate: UIResponder {
             if appDelegate.rootViewController == nil {
                 appDelegate.rootViewController = OARootViewController()
             }
-            CarPlayNavigationModeManager.shared.configureForCarPlay()
+            CarPlayService.shared.configure()
             presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
@@ -106,6 +106,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         
         OsmAndApp.swiftInstance().carPlayActive = true
         windowToAttach = window
+        CarPlayService.shared.connectScene()
         carPlayInterfaceController = interfaceController
         if isWaitingForConfiguration, isForegroundScene {
             isWaitingForConfiguration = false
@@ -117,7 +118,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
         
         OsmAndApp.swiftInstance().carPlayActive = false
-        CarPlayNavigationModeManager.shared.restoreOnDisconnect()
+        CarPlayService.shared.disconnectScene()
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")
             return

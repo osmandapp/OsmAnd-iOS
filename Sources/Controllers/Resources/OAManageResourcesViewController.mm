@@ -1791,6 +1791,9 @@ static BOOL _repositoryUpdated = NO;
         NSMutableArray *resourceItems = [NSMutableArray array];
         for (const auto& resource_ : regionResources.allResources)
         {
+            if (resource_->type == OsmAndResourceType::DeletedMaps)
+                continue;
+            
             OAResourceItem *item = [self createResourceItemResult:resource_ region:region regionResources:regionResources];
             if (item)
                 [resourceItems addObject:item];

@@ -173,7 +173,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     NSMutableArray<OAWorldRegion *> *list = [NSMutableArray array];
     for (OAPlugin *plugin in self.getEnabledPlugins)
         [list addObjectsFromArray:plugin.getDownloadMaps];
-    return list;
+    return [list copy];
 }
 
 + (NSString *)onGetMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale
@@ -420,7 +420,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
         if ([plugin isKindOfClass:OACustomPlugin.class])
             [lst addObject:(OACustomPlugin *)plugin];
     }
-    return lst;
+    return [lst copy];
 }
 
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region

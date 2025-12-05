@@ -684,6 +684,9 @@ static BOOL _repositoryUpdated = NO;
 
         if (![self.region isKindOfClass:OACustomRegion.class])
             [self collectSubregionsDataAndItems];
+        else
+            [_regionMapItems removeAllObjects];
+        
         [self collectResourcesDataAndItems];
 
         _doDataUpdate = NO;
@@ -824,9 +827,12 @@ static BOOL _repositoryUpdated = NO;
                 
                 switch (resource->type)
                 {
+                    case OsmAndResourceType::MapRegion:
+                        if (!region.regionJoinMap)
+                            [typesArray addObject:@((int) resource->type)];
+                        break;
                     case OsmAndResourceType::SrtmMapRegion:
                         hasSrtm = YES;
-                    case OsmAndResourceType::MapRegion:
                     case OsmAndResourceType::WikiMapRegion:
                     case OsmAndResourceType::DepthContourRegion:
                     case OsmAndResourceType::DepthMapRegion:
@@ -941,7 +947,7 @@ static BOOL _repositoryUpdated = NO;
             {
                 if ([OAResourceType isSRTMResourceItem:item_])
                     [srtmResourcesArray addObject:item_];
-                else
+                else if (!region.regionJoinMap || item_.resourceType != OsmAndResourceType::MapRegion)
                     [regionMapArray addObject:item_];
             }
             else
@@ -957,7 +963,12 @@ static BOOL _repositoryUpdated = NO;
     NSString *australiaAndOceaniaRegionId = [NSString stringWithFormat:@"%@_australia", OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()];
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
     
-    if ([self.region hasGroupItems] && (([self.region getLevel] > 1 && _regionMapItems.count > 0) || [self.region.regionId hasPrefix:russiaRegionId] || [self.region.regionId hasPrefix:unitedKingdomRegionId] || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
+    if ([self.region hasGroupItems]
+        && (([self.region getLevel] > 1 && _regionMapItems.count > 0)
+            || self.region.regionJoinMap
+            || [self.region.regionId hasPrefix:russiaRegionId]
+            || [self.region.regionId hasPrefix:unitedKingdomRegionId]
+            || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
     {
         NSMutableArray<NSNumber *> *regionMapItemsTypes = [NSMutableArray new];
         for (OAResourceItem *resource in _regionMapItems)

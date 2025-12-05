@@ -405,6 +405,14 @@
 "map_widget_trip_recording_uphill" = "Uphill";
 "map_widget_trip_recording_duration" = "Duration";
 "map_widget_trip_recording_distance" = "Distance";
+"average_slope" = "Average slope";
+"trip_recording_average_slope_widget_description" = "Shows the average slope for the last downhill or uphill section of the currently recorded trip.";
+"shared_string_max_speed" = "Max. speed";
+"trip_recording_max_speed_widget_description" = "Shows the maximum speed for the currently recorded trip. Tap to switch between the overall max speed and the max speed from the last uphill or downhill.";
+"shared_string_last_uphill" = "Last uphill";
+"shared_string_last_downhill" = "Last downhill";
+"show_track_on_map" = "Show track on map";
+"total_distance" = "Total distance";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
@@ -1700,6 +1708,7 @@
 "shared_string_type" = "Type";
 "res_unknown" = "Unknown";
 "shared_string_size" = "Size";
+"icon_size" = "Icon size";
 "created_on" = "Created on";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
@@ -2182,6 +2191,11 @@
 
 "metric_ton" = "t";
 "kg" = "kg";
+
+"metric_lbs" = "lbs";
+"inch" = "in";
+"shared_string_inches" = "inches";
+"shared_string_pounds" = "pounds";
 
 "int_hour" = "h";
 "int_min" = "min.";

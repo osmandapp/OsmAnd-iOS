@@ -829,6 +829,21 @@ static const NSInteger kDetailedMapZoom = 9;
     [self setViewportScaleY:mapPosition == BOTTOM_CONSTANT ? kViewportBottomScale : kViewportScale];
 }
 
+- (float)azimuth
+{
+    return _mapView.azimuth;
+}
+
+- (void)refreshMarkersCollectionWithLocationFactor:(float)factor
+{
+    [_mapLayers.myPositionLayer refreshMarkersCollectionWithLocationFactor:factor];
+}
+
+- (void)refreshMarkersCollectionWithCourseFactor:(float)factor
+{
+    [_mapLayers.myPositionLayer refreshMarkersCollectionWithCourseFactor:factor];
+}
+
 - (void) setupMapArrowsLocation
 {
     [self setupMapArrowsLocation:_centerLocationForMapArrows];

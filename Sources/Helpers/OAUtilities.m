@@ -28,6 +28,7 @@
 #import <sys/utsname.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAEmissionHelper.h"
 
 #include <CommonCrypto/CommonDigest.h>
 
@@ -3064,6 +3065,12 @@ static const double d180PI = 180.0 / M_PI_2;
     if ([res isEqualToString:key])
         res = defaultName;
     return res;
+}
+
++ (NSString *)getNameOfMotorTypeValue:(NSInteger)value
+{
+    NSString *key = [NSString stringWithFormat:@"routing_attr_motor_type_%@_name", [OAMotorType getMotorTypeByValue:value].name];
+    return OALocalizedString(key);
 }
 
 + (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2

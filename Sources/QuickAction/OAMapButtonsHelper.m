@@ -62,6 +62,7 @@ static QuickActionType *TYPE_INTERFACE;
     ZoomInButtonState *_zoomInButtonState;
     ZoomOutButtonState *_zoomOutButtonState;
     SearchButtonState *_searchButtonState;
+    DriveModeButtonState *_navigationModeButtonState;
     NSMutableArray<QuickActionButtonState *> *_mapButtonStates;
 
     NSArray<QuickActionType *> *_enabledTypes;
@@ -181,6 +182,7 @@ static QuickActionType *TYPE_INTERFACE;
     _zoomInButtonState = [ZoomInButtonState new];
     _zoomOutButtonState = [ZoomOutButtonState new];
     _searchButtonState = [SearchButtonState new];
+    _navigationModeButtonState = [DriveModeButtonState new];
 }
 
 - (Map3DButtonState *)getMap3DButtonState
@@ -206,6 +208,11 @@ static QuickActionType *TYPE_INTERFACE;
 - (SearchButtonState *)getSearchButtonState
 {
     return _searchButtonState;
+}
+
+- (DriveModeButtonState *)getNavigationModeButtonState
+{
+    return _navigationModeButtonState;
 }
 
 - (NSArray<QuickActionButtonState *> *)getButtonsStates;

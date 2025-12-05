@@ -223,8 +223,8 @@
 		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
-		275FE9A92ED6FE2A007E4945 /* DeprecatedMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9A82ED6FE2A007E4945 /* DeprecatedMapsViewController.swift */; };
-		275FE9B42ED753C0007E4945 /* DeprecatedMapsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 275FE9B32ED753C0007E4945 /* DeprecatedMapsViewController.xib */; };
+		275FE9A92ED6FE2A007E4945 /* DeletedMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9A82ED6FE2A007E4945 /* DeletedMapsViewController.swift */; };
+		275FE9B42ED753C0007E4945 /* DeletedMapsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 275FE9B32ED753C0007E4945 /* DeletedMapsViewController.xib */; };
 		277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987A42E7947E700607516 /* AddKeyViewController.swift */; };
 		277987AC2E79A7A700607516 /* KeyAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */; };
 		277987B22E7AB41600607516 /* InputDevicesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987B12E7AB41600607516 /* InputDevicesCollection.swift */; };
@@ -3654,8 +3654,8 @@
 		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
-		275FE9A82ED6FE2A007E4945 /* DeprecatedMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeprecatedMapsViewController.swift; sourceTree = "<group>"; };
-		275FE9B32ED753C0007E4945 /* DeprecatedMapsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeprecatedMapsViewController.xib; sourceTree = "<group>"; };
+		275FE9A82ED6FE2A007E4945 /* DeletedMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedMapsViewController.swift; sourceTree = "<group>"; };
+		275FE9B32ED753C0007E4945 /* DeletedMapsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeletedMapsViewController.xib; sourceTree = "<group>"; };
 		277987A42E7947E700607516 /* AddKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKeyViewController.swift; sourceTree = "<group>"; };
 		277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		277987B12E7AB41600607516 /* InputDevicesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevicesCollection.swift; sourceTree = "<group>"; };
@@ -8248,8 +8248,8 @@
 		27EB64252EDDF7DF001EF9FE /* UnsupportedMaps */ = {
 			isa = PBXGroup;
 			children = (
-				275FE9B32ED753C0007E4945 /* DeprecatedMapsViewController.xib */,
-				275FE9A82ED6FE2A007E4945 /* DeprecatedMapsViewController.swift */,
+				275FE9B32ED753C0007E4945 /* DeletedMapsViewController.xib */,
+				275FE9A82ED6FE2A007E4945 /* DeletedMapsViewController.swift */,
 				27EB64262EDDF833001EF9FE /* IconEmptyStateView.swift */,
 				27EB64282EDDF848001EF9FE /* IconEmptyStateView.xib */,
 			);
@@ -15185,7 +15185,7 @@
 				DA2EC73329FBBE0400ECEB37 /* ic_custom_compass_widget@2x.png in Resources */,
 				46453B3B283524B7001F9A3A /* ic_custom_unlimited_downloads_colored_day_big@3x.png in Resources */,
 				DAB985B4212423990081F8F8 /* el_tts.js in Resources */,
-				275FE9B42ED753C0007E4945 /* DeprecatedMapsViewController.xib in Resources */,
+				275FE9B42ED753C0007E4945 /* DeletedMapsViewController.xib in Resources */,
 				8466964C207CD7E000BA971B /* ic_action_clear_all@2x.png in Resources */,
 				DAF3454922F4482B009E2EB6 /* ic_custom_compound_action_hide_bottom@2x.png in Resources */,
 				845E06B21B5FF17400DFC2A7 /* ic_plugin_skimap@3x.png in Resources */,
@@ -17551,7 +17551,7 @@
 				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
-				275FE9A92ED6FE2A007E4945 /* DeprecatedMapsViewController.swift in Sources */,
+				275FE9A92ED6FE2A007E4945 /* DeletedMapsViewController.swift in Sources */,
 				DA5A847726C563A900F274C7 /* OALanesControl.mm in Sources */,
 				DA5A82F026C563A800F274C7 /* OARadiusCell.m in Sources */,
 				C51766662E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift in Sources */,

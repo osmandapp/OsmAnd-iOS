@@ -1,5 +1,5 @@
 //
-//  DeprecatedMapsViewController.swift
+//  DeletedMapsViewController.swift
 //  OsmAnd Maps
 //
 //  Created by Vladyslav Lysenko on 26.11.2025.
@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class DeprecatedMapsViewController: OASuperViewController, UITableViewDelegate, UITableViewDataSource {
+final class DeletedMapsViewController: OASuperViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var deleteAllButton: UIButton!
     

@@ -575,9 +575,9 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     }
     else if (indexPath.section == _updatesSection && indexPath.row == _unsupportedMapsRow)
     {
-        DeprecatedMapsViewController *deprecatedMapsViewController = [[DeprecatedMapsViewController alloc] init];
-        deprecatedMapsViewController.region = self.region;
-        [self showViewController:deprecatedMapsViewController];
+        DeletedMapsViewController *deletedMapsViewController = [[DeletedMapsViewController alloc] init];
+        deletedMapsViewController.region = self.region;
+        [self showViewController:deletedMapsViewController];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

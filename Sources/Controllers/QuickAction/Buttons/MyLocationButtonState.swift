@@ -10,12 +10,22 @@
 final class MyLocationButtonState: MapButtonState {
     static let hudId = "map.view.back_to_loc"
     
+    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
+    
     init() {
         super.init(withId: Self.hudId)
     }
     
     override func getName() -> String {
         localizedString("shared_string_my_location")
+    }
+    
+    override func getIcon() -> UIImage? {
+        UIImage.templateImageNamed("ic_custom_map_location_position")
+    }
+    
+    override func isEnabled() -> Bool {
+        visibilityPref.get()
     }
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {

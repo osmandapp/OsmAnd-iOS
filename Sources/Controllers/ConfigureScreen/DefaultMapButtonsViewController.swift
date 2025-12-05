@@ -15,6 +15,7 @@ struct DefaultMapButtons {
     private var zoomOutButtonState: ZoomOutButtonState
     private var searchButtonState: SearchButtonState
     private var navigationModeButtonState: DriveModeButtonState
+    private var myLocationButtonState: MyLocationButtonState
     
     init() {
         let mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
@@ -24,6 +25,7 @@ struct DefaultMapButtons {
         zoomOutButtonState = mapButtonsHelper.getZoomOutButtonState()
         searchButtonState = mapButtonsHelper.getSearchButtonState()
         navigationModeButtonState = mapButtonsHelper.getNavigationModeButtonState()
+        myLocationButtonState = mapButtonsHelper.getMyLocationButtonState()
     }
     
     func resetMode(toDefault appMode: OAApplicationMode) {
@@ -33,6 +35,7 @@ struct DefaultMapButtons {
         zoomOutButtonState.visibilityPref.resetMode(toDefault: appMode)
         searchButtonState.visibilityPref.resetMode(toDefault: appMode)
         navigationModeButtonState.visibilityPref.resetMode(toDefault: appMode)
+        myLocationButtonState.visibilityPref.resetMode(toDefault: appMode)
     }
     
     func states() -> [MapButtonState] {
@@ -41,7 +44,8 @@ struct DefaultMapButtons {
          zoomInButtonState,
          zoomOutButtonState,
          searchButtonState,
-         navigationModeButtonState]
+         navigationModeButtonState,
+         myLocationButtonState]
     }
     
     func key(for state: MapButtonState) -> String {
@@ -52,6 +56,7 @@ struct DefaultMapButtons {
         case is ZoomOutButtonState: return "zoomOut"
         case is SearchButtonState: return "search"
         case is DriveModeButtonState: return "navigation"
+        case is MyLocationButtonState: return "myLocation"
         default: return ""
         }
     }
@@ -63,6 +68,7 @@ struct DefaultMapButtons {
         zoomOutButtonState.visibilityPref.set(zoomOutButtonState.visibilityPref.get(fromAppMode), mode: appMode)
         searchButtonState.visibilityPref.set(searchButtonState.visibilityPref.get(fromAppMode), mode: appMode)
         navigationModeButtonState.visibilityPref.set(navigationModeButtonState.visibilityPref.get(fromAppMode), mode: appMode)
+        myLocationButtonState.visibilityPref.set(myLocationButtonState.visibilityPref.get(fromAppMode), mode: appMode)
     }
 }
 

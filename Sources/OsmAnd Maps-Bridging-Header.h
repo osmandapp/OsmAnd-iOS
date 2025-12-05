@@ -116,6 +116,7 @@
 #import "OAAverageSpeedComputer.h"
 #import "OADestinationBarWidget.h"
 #import "OADownloadMapWidget.h"
+#import "MBProgressHUD.h"
 
 // Plugins
 #import "OAPlugin.h"

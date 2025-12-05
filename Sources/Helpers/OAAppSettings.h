@@ -1048,6 +1048,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;
 
+@property (nonatomic) OACommonDouble *locationIconSize;
+@property (nonatomic) OACommonDouble *courseIconSize;
+
 @property (nonatomic) OACommonDouble *defaultSpeed;
 @property (nonatomic) OACommonDouble *minSpeed;
 @property (nonatomic) OACommonDouble *maxSpeed;

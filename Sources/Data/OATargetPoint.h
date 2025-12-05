@@ -56,7 +56,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetWeatherLayerSettings,
     OATargetWeatherToolbar,
     OATargetTerrainParametersSettings,
-    OATargetMapModeParametersSettings
+    OATargetMapModeParametersSettings,
+    OATargetProfileAppearanceIconSizeSettings
 };
 
 @interface OATargetPoint : NSObject

@@ -8,20 +8,57 @@
 
 import Foundation
 
+struct DefaultMapButtons {
+    private var map3DButtonState: Map3DButtonState
+    private var compassButtonState: CompassButtonState
+    private var zoomInButtonState: ZoomInButtonState
+    
+    init() {
+        let mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
+        map3DButtonState = mapButtonsHelper.getMap3DButtonState()
+        compassButtonState = mapButtonsHelper.getCompassButtonState()
+        zoomInButtonState = mapButtonsHelper.getZoomInButtonState()
+    }
+    
+    func resetMode(toDefault appMode: OAApplicationMode) {
+        map3DButtonState.visibilityPref.resetMode(toDefault: appMode)
+        compassButtonState.visibilityPref.resetMode(toDefault: appMode)
+        zoomInButtonState.visibilityPref.resetMode(toDefault: appMode)
+    }
+    
+    func states() -> [MapButtonState] {
+        [map3DButtonState,
+         compassButtonState,
+         zoomInButtonState]
+    }
+    
+    func key(for state: MapButtonState) -> String {
+        switch state {
+        case is Map3DButtonState: return "map3DMode"
+        case is CompassButtonState: return "compass"
+        case is ZoomInButtonState: return "zoomIn"
+        default: return ""
+        }
+    }
+        
+    func copyProfile(_ fromAppMode: OAApplicationMode, to appMode: OAApplicationMode) {
+        map3DButtonState.visibilityPref.set(map3DButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
+        compassButtonState.visibilityPref.set(compassButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
+        zoomInButtonState.visibilityPref.set(zoomInButtonState.visibilityPref.get(fromAppMode), mode: appMode)
+    }
+}
+
 final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     
     weak var delegate: MapButtonsDelegate?
-    private var appMode: OAApplicationMode!
-    private var map3DButtonState: Map3DButtonState!
-    private var compassButtonState: CompassButtonState!
+    private var defaultMapButtons: DefaultMapButtons!
+    private var appMode: OAApplicationMode?
     
     // MARK: Initialization
     
     override func commonInit() {
         appMode = OAAppSettings.sharedManager().applicationMode.get()
-        let mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
-        map3DButtonState = mapButtonsHelper.getMap3DButtonState()
-        compassButtonState = mapButtonsHelper.getCompassButtonState()
+        defaultMapButtons = DefaultMapButtons()
     }
     
     override func registerCells() {
@@ -40,14 +77,13 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
                                        message: localizedString("reset_all_settings_desc"),
                                        preferredStyle: .actionSheet)
         let resetAction: UIAction = UIAction(title: localizedString("reset_to_default"),
-                                             image: UIImage(systemName: "gobackward")) { [weak self] _ in
+                                             image: .icCustomReset) { [weak self] _ in
             let actionSheet = UIAlertController(title: self?.title,
                                                 message: localizedString("reset_all_settings_desc"),
                                                 preferredStyle: .actionSheet)
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
-                guard let self else { return }
-                self.map3DButtonState.visibilityPref.resetMode(toDefault: self.appMode)
-                self.compassButtonState.visibilityPref.resetMode(toDefault: self.appMode)
+                guard let self, let appMode = self.appMode else { return }
+                self.defaultMapButtons.resetMode(toDefault: appMode)
                 self.onSettingsChanged()
             })
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -57,10 +93,10 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
             self?.present(actionSheet, animated: true)
         }
         let copyAction: UIAction = UIAction(title: localizedString("copy_from_other_profile"),
-                                            image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
-            guard let self else { return }
+                                            image: .icCustomCopy) { [weak self] _ in
+            guard let self, let appMode = self.appMode else { return }
             
-            let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler(mode: self.appMode)
+            let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler(mode: appMode)
             bottomSheet.delegate = self
             bottomSheet.present(in: self)
         }
@@ -84,29 +120,21 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        
+        guard let appMode else { return }
         let iconTintColor = appMode.getProfileColor()
         let buttonsSection = tableData.createNewSection()
         
-        let compassRow = buttonsSection.createNewRow()
-        compassRow.key = "compass"
-        compassRow.cellType = OAValueTableViewCell.reuseIdentifier
-        compassRow.title = compassButtonState.getName()
-        compassRow.descr = getDescription(compassButtonState)
-        compassRow.accessibilityLabel = compassRow.title
-        compassRow.accessibilityValue = compassRow.descr
-        compassRow.iconTintColor = compassButtonState.isEnabled() ? iconTintColor : UIColor.iconColorDefault
-        compassRow.icon = compassButtonState.getIcon()
-        
-        let map3dModeRow = buttonsSection.createNewRow()
-        map3dModeRow.key = "map3DMode"
-        map3dModeRow.cellType = OAValueTableViewCell.reuseIdentifier
-        map3dModeRow.title = map3DButtonState.getName()
-        map3dModeRow.descr = getDescription(map3DButtonState)
-        map3dModeRow.accessibilityLabel = map3dModeRow.title
-        map3dModeRow.accessibilityValue = map3dModeRow.descr
-        map3dModeRow.iconTintColor = map3DButtonState.isEnabled() ? iconTintColor : UIColor.iconColorDefault
-        map3dModeRow.icon = map3DButtonState.getIcon()
+        for buttonState in defaultMapButtons.states() {
+            let row = buttonsSection.createNewRow()
+            row.key = defaultMapButtons.key(for: buttonState)
+            row.cellType = OAValueTableViewCell.reuseIdentifier
+            row.title = buttonState.getName()
+            row.descr = getDescription(buttonState)
+            row.accessibilityLabel = row.title
+            row.accessibilityValue = row.descr
+            row.iconTintColor = buttonState.isEnabled() ? iconTintColor : .iconColorDefault
+            row.icon = buttonState.getIcon()
+        }
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -153,7 +181,7 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
         case let compassButtonState as CompassButtonState:
             return compassButtonState.getVisibility().title
         default:
-            return ""
+            return localizedString(buttonState.isEnabled() ? "shared_string_on" : "shared_string_off")
         }
     }
 }
@@ -170,8 +198,8 @@ extension DefaultMapButtonsViewController: OACopyProfileBottomSheetDelegate {
     func onCopyProfileCompleted() {
     }
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
-        map3DButtonState.visibilityPref.set(map3DButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
-        compassButtonState.visibilityPref.set(compassButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
+        guard let appMode else { return }
+        defaultMapButtons.copyProfile(fromAppMode, to: appMode)
         onSettingsChanged()
     }
 }

@@ -16,7 +16,6 @@ final class DeprecatedMapsViewController: OASuperViewController, UITableViewDele
     private let emptyStateHeaderView: IconEmptyStateView = {
         let emptyStateHeaderView: IconEmptyStateView = .init()
         emptyStateHeaderView.configure(image: .icCustomUpdateDisabled.withRenderingMode(.alwaysTemplate), tintColor: .iconColorDefault, description: localizedString("deleted_maps_prompt"))
-        emptyStateHeaderView.layoutSubviews()
         return emptyStateHeaderView
     }()
     private let deleteAllButtonCornerRadius: CGFloat = 10
@@ -37,8 +36,7 @@ final class DeprecatedMapsViewController: OASuperViewController, UITableViewDele
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavbar()
-        generateData()
-        tableView.reloadData()
+        generateDataAndReload()
     }
     
     private func setupNavbar() {
@@ -99,6 +97,11 @@ final class DeprecatedMapsViewController: OASuperViewController, UITableViewDele
         }
     }
     
+    private func generateDataAndReload() {
+        generateData()
+        tableView.reloadData()
+    }
+    
     private func setupBottomButton() {
         deleteAllButton.setTitle(localizedString("shared_string_delete_all"), for: .normal)
         deleteAllButton.addTarget(self, action: #selector(onDeleteAllButtonPressed), for: .touchUpInside)
@@ -115,10 +118,7 @@ final class DeprecatedMapsViewController: OASuperViewController, UITableViewDele
                                       preferredStyle: .alert)
 
         let deleteAction = UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { _ in
-            OAResourcesUISwiftHelper.deleteResources(of: self.unsupportedMaps, progressHUD: nil) { [weak self] in
-                self?.generateData()
-                self?.tableView.reloadData()
-            }
+            OAResourcesUISwiftHelper.deleteResources(of: self.unsupportedMaps, progressHUD: nil, executeAfterSuccess: self.generateDataAndReload)
         }
 
         let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .default, handler: nil)

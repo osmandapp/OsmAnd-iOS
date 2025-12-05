@@ -12,24 +12,28 @@ struct DefaultMapButtons {
     private var map3DButtonState: Map3DButtonState
     private var compassButtonState: CompassButtonState
     private var zoomInButtonState: ZoomInButtonState
+    private var zoomOutButtonState: ZoomOutButtonState
     
     init() {
         let mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
         map3DButtonState = mapButtonsHelper.getMap3DButtonState()
         compassButtonState = mapButtonsHelper.getCompassButtonState()
         zoomInButtonState = mapButtonsHelper.getZoomInButtonState()
+        zoomOutButtonState = mapButtonsHelper.getZoomOutButtonState()
     }
     
     func resetMode(toDefault appMode: OAApplicationMode) {
         map3DButtonState.visibilityPref.resetMode(toDefault: appMode)
         compassButtonState.visibilityPref.resetMode(toDefault: appMode)
         zoomInButtonState.visibilityPref.resetMode(toDefault: appMode)
+        zoomOutButtonState.visibilityPref.resetMode(toDefault: appMode)
     }
     
     func states() -> [MapButtonState] {
         [map3DButtonState,
          compassButtonState,
-         zoomInButtonState]
+         zoomInButtonState,
+         zoomOutButtonState]
     }
     
     func key(for state: MapButtonState) -> String {
@@ -37,6 +41,7 @@ struct DefaultMapButtons {
         case is Map3DButtonState: return "map3DMode"
         case is CompassButtonState: return "compass"
         case is ZoomInButtonState: return "zoomIn"
+        case is ZoomOutButtonState: return "zoomOut"
         default: return ""
         }
     }
@@ -45,6 +50,7 @@ struct DefaultMapButtons {
         map3DButtonState.visibilityPref.set(map3DButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
         compassButtonState.visibilityPref.set(compassButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
         zoomInButtonState.visibilityPref.set(zoomInButtonState.visibilityPref.get(fromAppMode), mode: appMode)
+        zoomOutButtonState.visibilityPref.set(zoomOutButtonState.visibilityPref.get(fromAppMode), mode: appMode)
     }
 }
 

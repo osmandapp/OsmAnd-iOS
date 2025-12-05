@@ -10,12 +10,22 @@
 final class ZoomOutButtonState: MapButtonState {
     static let hudId = "map.view.zoom_out"
     
+    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
+    
     init() {
         super.init(withId: Self.hudId)
     }
     
     override func getName() -> String {
         localizedString("key_hint_zoom_out")
+    }
+    
+    override func getIcon() -> UIImage? {
+        UIImage.templateImageNamed("ic_custom_map_zoom_out")
+    }
+    
+    override func isEnabled() -> Bool {
+        visibilityPref.get()
     }
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {

@@ -94,7 +94,6 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
                 guard let url = URL(string: "osmandmaps://search") else { return }
                 templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
             })]
-        CarPlayService.shared.connectScene()
     }
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {

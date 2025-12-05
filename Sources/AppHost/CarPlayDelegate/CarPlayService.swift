@@ -25,9 +25,6 @@ final class CarPlayService: NSObject {
     
     func configure() {
         reconnectOBDIfNeeded()
-    }
-    
-    func connectScene() {
         navigationModeProvider.configureForCarPlay()
         saveAppMapAppearanceModeIfNeeded()
         saveCarPlayMapAppearanceIfNeeded()

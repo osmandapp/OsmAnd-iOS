@@ -106,7 +106,6 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         
         OsmAndApp.swiftInstance().carPlayActive = true
         windowToAttach = window
-        CarPlayService.shared.connectScene()
         carPlayInterfaceController = interfaceController
         if isWaitingForConfiguration, isForegroundScene {
             isWaitingForConfiguration = false

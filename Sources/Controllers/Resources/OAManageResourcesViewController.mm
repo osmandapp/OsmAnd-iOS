@@ -872,6 +872,19 @@ static BOOL _repositoryUpdated = NO;
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
         }
         
+        for (const auto& resource : _resourcesInRepository)
+        {
+            if (regionResources.allResources.contains(resource->id) && resource->isDeleted)
+            {
+                const auto& unsupportedResource = regionResources.allResources.value(resource->id);
+                if (unsupportedResource->type != OsmAndResourceType::DeletedMaps)
+                {
+                    regionResources.allResources.remove(resource->id);
+                    regionResources.allResources.insert(resource->id, resource);
+                }
+            }
+        }
+        
         _resourcesByRegions.insert(region, regionResources);
     }
 }

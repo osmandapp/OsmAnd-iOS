@@ -10,12 +10,22 @@
 final class SearchButtonState: MapButtonState {
     static let hudId = "map.view.quick_search"
     
+    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
+    
     init() {
         super.init(withId: Self.hudId)
     }
     
     override func getName() -> String {
         localizedString("shared_string_search")
+    }
+    
+    override func getIcon() -> UIImage? {
+        UIImage.templateImageNamed("ic_custom_search")
+    }
+    
+    override func isEnabled() -> Bool {
+        visibilityPref.get()
     }
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {

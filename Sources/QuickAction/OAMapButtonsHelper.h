@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAObservable, OAApplicationMode, OAQuickAction, QuickActionType, QuickActionButtonState, MapButtonState, Map3DButtonState, CompassButtonState, QuickActionSerializer, ZoomInButtonState, ZoomOutButtonState;
+@class OAObservable, OAApplicationMode, OAQuickAction, QuickActionType, QuickActionButtonState, MapButtonState, Map3DButtonState, CompassButtonState, QuickActionSerializer, ZoomInButtonState, ZoomOutButtonState, SearchButtonState;
 
 @interface OAMapButtonsHelper : NSObject
 
@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (CompassButtonState *)getCompassButtonState;
 - (ZoomInButtonState *)getZoomInButtonState;
 - (ZoomOutButtonState *)getZoomOutButtonState;
+- (SearchButtonState *)getSearchButtonState;
 - (NSArray<QuickActionButtonState *> *)getButtonsStates;
 - (NSArray<QuickActionButtonState *> *)getEnabledButtonsStates;
 - (QuickActionSerializer *)getSerializer;

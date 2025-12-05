@@ -61,6 +61,7 @@ static QuickActionType *TYPE_INTERFACE;
     CompassButtonState *_compassButtonState;
     ZoomInButtonState *_zoomInButtonState;
     ZoomOutButtonState *_zoomOutButtonState;
+    SearchButtonState *_searchButtonState;
     NSMutableArray<QuickActionButtonState *> *_mapButtonStates;
 
     NSArray<QuickActionType *> *_enabledTypes;
@@ -179,6 +180,7 @@ static QuickActionType *TYPE_INTERFACE;
     _compassButtonState = [CompassButtonState new];
     _zoomInButtonState = [ZoomInButtonState new];
     _zoomOutButtonState = [ZoomOutButtonState new];
+    _searchButtonState = [SearchButtonState new];
 }
 
 - (Map3DButtonState *)getMap3DButtonState
@@ -199,6 +201,11 @@ static QuickActionType *TYPE_INTERFACE;
 - (ZoomOutButtonState *)getZoomOutButtonState
 {
     return _zoomOutButtonState;
+}
+
+- (SearchButtonState *)getSearchButtonState
+{
+    return _searchButtonState;
 }
 
 - (NSArray<QuickActionButtonState *> *)getButtonsStates;

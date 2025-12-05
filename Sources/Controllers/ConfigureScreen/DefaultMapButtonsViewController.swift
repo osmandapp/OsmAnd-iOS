@@ -45,15 +45,15 @@ struct DefaultMapButtons {
     }
     
     func states() -> [MapButtonState] {
-        [map3DButtonState,
-         compassButtonState,
-         zoomInButtonState,
-         zoomOutButtonState,
+        [configureMapButtonState,
          searchButtonState,
-         navigationModeButtonState,
-         myLocationButtonState,
+         compassButtonState,
          menuButtonState,
-         configureMapButtonState]
+         navigationModeButtonState,
+         map3DButtonState,
+         myLocationButtonState,
+         zoomInButtonState,
+         zoomOutButtonState]
     }
     
     func key(for state: MapButtonState) -> String {

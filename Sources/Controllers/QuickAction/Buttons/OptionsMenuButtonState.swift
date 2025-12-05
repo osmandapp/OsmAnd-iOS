@@ -10,12 +10,22 @@
 final class OptionsMenuButtonState: MapButtonState {
     static let hudId = "map.view.menu"
     
+    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
+    
     init() {
         super.init(withId: Self.hudId)
     }
     
     override func getName() -> String {
         localizedString("shared_string_menu")
+    }
+    
+    override func getIcon() -> UIImage? {
+        UIImage.templateImageNamed("ic_custom_drawer")
+    }
+    
+    override func isEnabled() -> Bool {
+        visibilityPref.get()
     }
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {

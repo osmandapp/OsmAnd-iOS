@@ -64,6 +64,7 @@ static QuickActionType *TYPE_INTERFACE;
     SearchButtonState *_searchButtonState;
     DriveModeButtonState *_navigationModeButtonState;
     MyLocationButtonState *_myLocationButtonState;
+    OptionsMenuButtonState *_menuButtonState;
     NSMutableArray<QuickActionButtonState *> *_mapButtonStates;
 
     NSArray<QuickActionType *> *_enabledTypes;
@@ -185,6 +186,7 @@ static QuickActionType *TYPE_INTERFACE;
     _searchButtonState = [SearchButtonState new];
     _navigationModeButtonState = [DriveModeButtonState new];
     _myLocationButtonState = [MyLocationButtonState new];
+    _menuButtonState = [OptionsMenuButtonState new];
 }
 
 - (Map3DButtonState *)getMap3DButtonState
@@ -217,9 +219,14 @@ static QuickActionType *TYPE_INTERFACE;
     return _navigationModeButtonState;
 }
 
-- (MyLocationButtonState *)getMyLocationButtonState;
+- (MyLocationButtonState *)getMyLocationButtonState
 {
     return _myLocationButtonState;
+}
+
+- (OptionsMenuButtonState *)getMenuButtonState
+{
+    return _menuButtonState;
 }
 
 - (NSArray<QuickActionButtonState *> *)getButtonsStates;

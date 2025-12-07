@@ -35,6 +35,14 @@ final class CompassButtonState: MapButtonState {
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_TOP, xMove: false, yMove: true)
     }
+    
+    override func storedVisibilityPref() -> OACommonInteger {
+        visibilityPref
+    }
+    
+    override func copyPrefs(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        visibilityPref.set(getVisibility(fromMode).rawValue, mode: toMode)
+    }
 
     func getVisibility() -> CompassVisibility {
         CompassVisibility(rawValue: visibilityPref.get())!

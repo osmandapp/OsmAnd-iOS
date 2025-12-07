@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class DriveModeButtonState: MapButtonState {
+final class DriveModeButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.route_planning"
     
     lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
@@ -30,5 +30,9 @@ final class DriveModeButtonState: MapButtonState {
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: true, yMove: false)
+    }
+    
+    override func storedVisibilityPref() -> OACommonBoolean {
+        visibilityPref
     }
 }

@@ -8,93 +8,17 @@
 
 import Foundation
 
-struct DefaultMapButtons {
-    private var map3DButtonState: Map3DButtonState
-    private var compassButtonState: CompassButtonState
-    private var zoomInButtonState: ZoomInButtonState
-    private var zoomOutButtonState: ZoomOutButtonState
-    private var searchButtonState: SearchButtonState
-    private var navigationModeButtonState: DriveModeButtonState
-    private var myLocationButtonState: MyLocationButtonState
-    private var menuButtonState: OptionsMenuButtonState
-    private var configureMapButtonState: MapSettingsButtonState
-    
-    init() {
-        let mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
-        map3DButtonState = mapButtonsHelper.getMap3DButtonState()
-        compassButtonState = mapButtonsHelper.getCompassButtonState()
-        zoomInButtonState = mapButtonsHelper.getZoomInButtonState()
-        zoomOutButtonState = mapButtonsHelper.getZoomOutButtonState()
-        searchButtonState = mapButtonsHelper.getSearchButtonState()
-        navigationModeButtonState = mapButtonsHelper.getNavigationModeButtonState()
-        myLocationButtonState = mapButtonsHelper.getMyLocationButtonState()
-        menuButtonState = mapButtonsHelper.getMenuButtonState()
-        configureMapButtonState = mapButtonsHelper.getConfigureMapButtonState()
-    }
-    
-    func resetMode(toDefault appMode: OAApplicationMode) {
-        map3DButtonState.visibilityPref.resetMode(toDefault: appMode)
-        compassButtonState.visibilityPref.resetMode(toDefault: appMode)
-        zoomInButtonState.visibilityPref.resetMode(toDefault: appMode)
-        zoomOutButtonState.visibilityPref.resetMode(toDefault: appMode)
-        searchButtonState.visibilityPref.resetMode(toDefault: appMode)
-        navigationModeButtonState.visibilityPref.resetMode(toDefault: appMode)
-        myLocationButtonState.visibilityPref.resetMode(toDefault: appMode)
-        menuButtonState.visibilityPref.resetMode(toDefault: appMode)
-        configureMapButtonState.visibilityPref.resetMode(toDefault: appMode)
-    }
-    
-    func states() -> [MapButtonState] {
-        [configureMapButtonState,
-         searchButtonState,
-         compassButtonState,
-         menuButtonState,
-         navigationModeButtonState,
-         map3DButtonState,
-         myLocationButtonState,
-         zoomInButtonState,
-         zoomOutButtonState]
-    }
-    
-    func key(for state: MapButtonState) -> String {
-        switch state {
-        case is Map3DButtonState: return "map3DMode"
-        case is CompassButtonState: return "compass"
-        case is ZoomInButtonState: return "zoomIn"
-        case is ZoomOutButtonState: return "zoomOut"
-        case is SearchButtonState: return "search"
-        case is DriveModeButtonState: return "navigation"
-        case is MyLocationButtonState: return "myLocation"
-        case is OptionsMenuButtonState: return "menu"
-        case is MapSettingsButtonState: return "configureMap"
-        default: return ""
-        }
-    }
-        
-    func copyProfile(_ fromAppMode: OAApplicationMode, to appMode: OAApplicationMode) {
-        map3DButtonState.visibilityPref.set(map3DButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
-        compassButtonState.visibilityPref.set(compassButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
-        zoomInButtonState.visibilityPref.set(zoomInButtonState.visibilityPref.get(fromAppMode), mode: appMode)
-        zoomOutButtonState.visibilityPref.set(zoomOutButtonState.visibilityPref.get(fromAppMode), mode: appMode)
-        searchButtonState.visibilityPref.set(searchButtonState.visibilityPref.get(fromAppMode), mode: appMode)
-        navigationModeButtonState.visibilityPref.set(navigationModeButtonState.visibilityPref.get(fromAppMode), mode: appMode)
-        myLocationButtonState.visibilityPref.set(myLocationButtonState.visibilityPref.get(fromAppMode), mode: appMode)
-        menuButtonState.visibilityPref.set(menuButtonState.visibilityPref.get(fromAppMode), mode: appMode)
-        configureMapButtonState.visibilityPref.set(configureMapButtonState.visibilityPref.get(fromAppMode), mode: appMode)
-    }
-}
-
 final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     
     weak var delegate: MapButtonsDelegate?
-    private var defaultMapButtons: DefaultMapButtons!
+    private var buttonStates: [MapButtonState] = []
     private var appMode: OAApplicationMode?
     
     // MARK: Initialization
     
     override func commonInit() {
         appMode = OAAppSettings.sharedManager().applicationMode.get()
-        defaultMapButtons = DefaultMapButtons()
+        buttonStates = OAMapButtonsHelper.sharedInstance().getDefaultButtonsStates()
     }
     
     override func registerCells() {
@@ -119,7 +43,7 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
                                                 preferredStyle: .actionSheet)
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
                 guard let self, let appMode = self.appMode else { return }
-                self.defaultMapButtons.resetMode(toDefault: appMode)
+                self.buttonStates.forEach { $0.resetForMode(appMode) }
                 self.onSettingsChanged()
             })
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -160,9 +84,9 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
         let iconTintColor = appMode.getProfileColor()
         let buttonsSection = tableData.createNewSection()
         
-        for buttonState in defaultMapButtons.states() {
+        for buttonState in buttonStates {
             let row = buttonsSection.createNewRow()
-            row.key = defaultMapButtons.key(for: buttonState)
+            row.key = key(for: buttonState)
             row.cellType = OAValueTableViewCell.reuseIdentifier
             row.title = buttonState.getName()
             row.descr = getDescription(buttonState)
@@ -220,6 +144,21 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
             return localizedString(buttonState.isEnabled() ? "shared_string_on" : "shared_string_off")
         }
     }
+    
+    private func key(for state: MapButtonState) -> String {
+        switch state {
+        case is Map3DButtonState: return "map3DMode"
+        case is CompassButtonState: return "compass"
+        case is ZoomInButtonState: return "zoomIn"
+        case is ZoomOutButtonState: return "zoomOut"
+        case is SearchButtonState: return "search"
+        case is DriveModeButtonState: return "navigation"
+        case is MyLocationButtonState: return "myLocation"
+        case is OptionsMenuButtonState: return "menu"
+        case is MapSettingsButtonState: return "configureMap"
+        default: return ""
+        }
+    }
 }
 
 // MARK: WidgetStateDelegate
@@ -235,7 +174,7 @@ extension DefaultMapButtonsViewController: OACopyProfileBottomSheetDelegate {
     }
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
         guard let appMode else { return }
-        defaultMapButtons.copyProfile(fromAppMode, to: appMode)
+        buttonStates.forEach { $0.copyPrefs(from: fromAppMode, to: appMode) }
         onSettingsChanged()
     }
 }

@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class SearchButtonState: MapButtonState {
+final class SearchButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.quick_search"
     
     lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
@@ -30,5 +30,9 @@ final class SearchButtonState: MapButtonState {
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_TOP, xMove: true, yMove: false)
+    }
+    
+    override func storedVisibilityPref() -> OACommonBoolean {
+        visibilityPref
     }
 }

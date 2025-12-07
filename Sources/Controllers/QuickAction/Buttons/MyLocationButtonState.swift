@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class MyLocationButtonState: MapButtonState {
+final class MyLocationButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.back_to_loc"
     
     lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
@@ -30,5 +30,9 @@ final class MyLocationButtonState: MapButtonState {
     
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: true, yMove: false)
+    }
+    
+    override func storedVisibilityPref() -> OACommonBoolean {
+        visibilityPref
     }
 }

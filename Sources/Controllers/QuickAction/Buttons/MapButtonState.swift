@@ -65,6 +65,14 @@ open class MapButtonState: NSObject {
         updatePosition(position)
         return position
     }
+    
+    func storedVisibilityPref() -> OACommonPreference {
+        fatalError("visibilityPref is not defined")
+    }
+    
+    func copyPrefs(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        fatalError("copyPrefs is not defined")
+    }
 
     @discardableResult func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         fatalError("setupButtonPosition(position:) must be overridden in subclass")
@@ -99,6 +107,10 @@ open class MapButtonState: NSObject {
     func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
         portraitPositionPref.set(portraitPositionPref.get(fromMode), mode: toMode)
         landscapePositionPref.set(landscapePositionPref.get(fromMode), mode: toMode)
+    }
+    
+    func resetToDefault(for appMode: OAApplicationMode) {
+        storedVisibilityPref().resetMode(toDefault: appMode)
     }
 }
 

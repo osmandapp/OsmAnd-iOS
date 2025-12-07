@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (MapSettingsButtonState *)getConfigureMapButtonState;
 - (NSArray<QuickActionButtonState *> *)getButtonsStates;
 - (NSArray<QuickActionButtonState *> *)getEnabledButtonsStates;
+- (NSArray<MapButtonState *> *)getDefaultButtonsStates;
 - (QuickActionSerializer *)getSerializer;
 
 - (void)addQuickAction:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action;

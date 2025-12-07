@@ -46,6 +46,14 @@ final class Map3DButtonState: MapButtonState {
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: true, yMove: true)
     }
+    
+    override func storedVisibilityPref() -> OACommonInteger {
+        visibilityPref
+    }
+    
+    override func copyPrefs(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        visibilityPref.set(getVisibility(fromMode).rawValue, mode: toMode)
+    }
 
     func getVisibility() -> Map3DModeVisibility {
         Map3DModeVisibility(rawValue: visibilityPref.get())!

@@ -252,6 +252,19 @@ static QuickActionType *TYPE_INTERFACE;
     return list;
 }
 
+- (NSArray<MapButtonState *> *)getDefaultButtonsStates
+{
+    return @[_configureMapButtonState,
+             _searchButtonState,
+             _compassButtonState,
+             _menuButtonState,
+             _navigationModeButtonState,
+             _map3DButtonState,
+             _myLocationButtonState,
+             _zoomInButtonState,
+             _zoomOutButtonState];
+}
+
 - (QuickActionSerializer *)getSerializer
 {
     return _serializer;

@@ -268,6 +268,7 @@
 		27D33B5B2E745F6D00AD4F70 /* MapScrollDownAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */; };
 		27D33B5F2E74622A00AD4F70 /* OpenWeatherAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */; };
 		27D33B612E7473A900AD4F70 /* RouteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B602E7473A900AD4F70 /* RouteAction.swift */; };
+		27DC2A8A2EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */; };
 		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
 		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
 		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
@@ -3709,6 +3710,7 @@
 		27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollDownAction.swift; sourceTree = "<group>"; };
 		27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherAction.swift; sourceTree = "<group>"; };
 		27D33B602E7473A900AD4F70 /* RouteAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteAction.swift; sourceTree = "<group>"; };
+		27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVisibilityMapButtonState.swift; sourceTree = "<group>"; };
 		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
 		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
 		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
@@ -9931,6 +9933,7 @@
 				464BF4AA2C051909000D6908 /* Map3DButtonState.swift */,
 				464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */,
 				468D9C6B2C00FE0600ED368A /* MapButtonState.swift */,
+				27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */,
 				468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */,
 				C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */,
 				C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */,
@@ -17005,6 +17008,7 @@
 				C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */,
 				C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
+				27DC2A8A2EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift in Sources */,
 				32FEF47F2D071FD7005E8B55 /* OAMapObject.mm in Sources */,
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
 				FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */,

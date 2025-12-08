@@ -811,39 +811,35 @@
     }
     else if (_selectedTab == EOATrackMenuHudPointsTab)
     {
-        [self updateDistanceAndDirectionForPointsTab];
+        __weak __typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf updateDistanceAndDirectionForPointsTab];
+        });
     }
 }
 
 - (void)updateDistanceAndDirectionForPointsTab
 {
-    __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
+    if (_isContextMenuVisible)
+    {
+        _shouldUpdateTable = YES;
+        return;
+    }
+    
+    NSArray<NSIndexPath *> *visibleRows = [self.tableView indexPathsForVisibleRows];
+    NSMutableArray<NSIndexPath *> *rowsToReload = [NSMutableArray array];
+    for (NSIndexPath *visibleRow in visibleRows)
+    {
+        OAGPXTableCellData *cellData = self.tableData.subjects[visibleRow.section].subjects[visibleRow.row];
+        if ([cellData.key hasPrefix:@"cell_waypoints_group_"])
+            continue;
         
-        if (strongSelf->_isContextMenuVisible)
-        {
-            strongSelf->_shouldUpdateTable = YES;
-            return;
-        }
-        
-        NSArray<NSIndexPath *> *visibleRows = [strongSelf.tableView indexPathsForVisibleRows];
-        NSMutableArray<NSIndexPath *> *rowsToReload = [NSMutableArray array];
-        for (NSIndexPath *visibleRow in visibleRows)
-        {
-            OAGPXTableCellData *cellData = strongSelf.tableData.subjects[visibleRow.section].subjects[visibleRow.row];
-            if ([cellData.key hasPrefix:@"cell_waypoints_group_"])
-                continue;
-            
-            [strongSelf.uiBuilder updateProperty:@"update_distance_and_direction" tableData:cellData];
-            [rowsToReload addObject:visibleRow];
-        }
-        
-        if (rowsToReload.count > 0)
-            [strongSelf.tableView reloadRowsAtIndexPaths:[rowsToReload copy] withRowAnimation:UITableViewRowAnimationNone];
-    });
+        [self.uiBuilder updateProperty:@"update_distance_and_direction" tableData:cellData];
+        [rowsToReload addObject:visibleRow];
+    }
+    
+    if (rowsToReload.count > 0)
+        [self.tableView reloadRowsAtIndexPaths:[rowsToReload copy] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)updateGroupsButton

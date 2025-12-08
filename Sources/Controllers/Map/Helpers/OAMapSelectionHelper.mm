@@ -128,7 +128,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         OsmAnd::PointI br = OsmAnd::PointI(point.x + delta, point.y + delta);
         OsmAnd::AreaI area(tl, br);
         
-        BOOL osmRoutesAlreadyAdded = NO;
         const auto& symbols = [rendererView getSymbolsIn:area strict:NO];
         OAAmenitySearcher *amenitySearcher = [[OAAmenitySearcher alloc] init];
         
@@ -197,39 +196,45 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         MutableOrderedDictionary<NSString *,NSString *> *tags = [self getOrderedTags:obfMapObject->getResolvedAttributesListPairs()];
                         
                         BOOL isTravelGpx = [OATravelObfHelper.shared isTravelGpxTags:tags];
-                        BOOL isOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
+                        BOOL isOldOsmRoute = !OsmAnd::NetworkRouteKey::getRouteKeys([self toQHash:tags]).isEmpty();
                         BOOL isClickableWay = [_clickableWayHelper isClickableWay:obfMapObject tags:tags];
+                        BOOL isNewOsmRoute = false; // TODO implement new OSM routes
 
                         if (isTravelGpx) {
                             NSString *routeId = tags[@"route_id"];
                             if (routeId != nil && [routeId hasPrefix:@"O"]) {
-                                // TODO unhack this temporary workaround
-                                isTravelGpx = false;
-                                isOsmRoute = true;
+                                if (false) {
+                                    isNewOsmRoute = true;
+                                } else {
+                                    // TODO unhack me
+                                    isTravelGpx = false;
+                                    isOldOsmRoute = true;
+                                    isNewOsmRoute = false;
+                                }
                             }
                         }
 
-                        if (isOsmRoute && !osmRoutesAlreadyAdded)
+                        BOOL isSpecial = isOldOsmRoute || isNewOsmRoute || isTravelGpx || isClickableWay;
+
+                        if (isOldOsmRoute)
                         {
                             const auto selectorFilter = [self createRouteFilter];
-                            osmRoutesAlreadyAdded = [self addOsmRoutesAround:result point:point selectorFilter:selectorFilter];
+                            [self addOsmRoutesAround:result point:point selectorFilter:selectorFilter];
                         }
-                        
-                        if (!isOsmRoute || !osmRoutesAlreadyAdded)
+
+                        if (isClickableWay)
                         {
-                            if (isTravelGpx)
-                            {
-                                [self addTravelGpx:result routeId: tags[ROUTE_ID]];
-                            }
-                            else if (isClickableWay)
-                            {
-                                ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:result.pointLatLon obfMapObject:obfMapObject tags:tags];
-                                [self addClickableWay:result clickableWay:clickableWay];
-                            }
+                            ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:result.pointLatLon obfMapObject:obfMapObject tags:tags];
+                            [self addClickableWay:result clickableWay:clickableWay];
+                        }
+
+                        if (isTravelGpx && !isNewOsmRoute)
+                        {
+                            [self addTravelGpx:result routeId: tags[ROUTE_ID]]; // WikiVoyage or User TravelGpx
                         }
                         
-                        BOOL allowAmenityObjects = !isTravelGpx;
-                        
+                        BOOL allowAmenityObjects = !isSpecial;
+
                         if (allowAmenityObjects)
                         {   
                             auto onPathMapSymbol = std::dynamic_pointer_cast<const  OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
@@ -245,8 +250,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                     [tags removeObjectForKey:TAG_POI_LAT_LON];
                                 }
                                 
-                                BOOL allowRenderedObjects = !isOsmRoute && !isClickableWay &&  !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
-                                                                
+                                BOOL allowRenderedObjects = !isOldOsmRoute && !isClickableWay
+                                    && !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
+
                                 OARenderedObject *renderedObject = [self createRenderedObject:symbolInfo obfMapObject:obfMapObject tags:tags];
                                 if (renderedObject)
                                 {

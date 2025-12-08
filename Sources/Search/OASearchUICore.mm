@@ -372,13 +372,8 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         {
             OAPOI *that = (OAPOI *)sr.object;
             int64_t osmId = [that getOsmId];
-            NSNumber * osmIdObj = osmId == -1 ? nil : @(osmId);
+            NSNumber * osmIdObj = osmId < 0 ? nil : @(osmId);
             NSString *wikidata = [that getWikidata];
-
-            if (osmIdObj != nil && [osmIdObj longLongValue] < 0)
-            {
-                osmIdObj = nil; // do not merge synthetic osmId such as wiki
-            }
 
             if (that.isRouteTrack)
             {

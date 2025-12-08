@@ -710,7 +710,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
     // Setup renderer
     OsmAnd::MapRendererSetupOptions rendererSetup;
-    rendererSetup.maxNumberOfRasterMapLayersInBatch = 8;
+    rendererSetup.maxNumberOfRasterMapLayersInBatch = 4;
     rendererSetup.pathToOpenGLShadersCache = QString::fromNSString(NSTemporaryDirectory());
     rendererSetup.gpuWorkerThreadEnabled = true;
     rendererSetup.displayDensityFactor = _displayDensityFactor;

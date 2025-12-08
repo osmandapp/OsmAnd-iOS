@@ -765,7 +765,7 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if (_isContextMenuVisible)
+    if (_isContextMenuVisible && !forceUpdate)
     {
         _shouldUpdateTable = YES;
         return;
@@ -824,13 +824,19 @@
             }
 
             NSArray<NSIndexPath *> *visibleRows = [strongSelf.tableView indexPathsForVisibleRows];
+            NSMutableArray<NSIndexPath *> *rowsToReload = [NSMutableArray array];
             for (NSIndexPath *visibleRow in visibleRows)
             {
                 OAGPXTableCellData *cellData = strongSelf.tableData.subjects[visibleRow.section].subjects[visibleRow.row];
+                if ([cellData.key hasPrefix:@"cell_waypoints_group_"])
+                    continue;
+                
                 [strongSelf.uiBuilder updateProperty:@"update_distance_and_direction" tableData:cellData];
+                [rowsToReload addObject:visibleRow];
             }
-            [strongSelf.tableView reloadRowsAtIndexPaths:visibleRows
-                                  withRowAnimation:UITableViewRowAnimationNone];
+            
+            if (rowsToReload.count > 0)
+                [strongSelf.tableView reloadRowsAtIndexPaths:rowsToReload withRowAnimation:UITableViewRowAnimationNone];
         });
     }
 }
@@ -2554,8 +2560,7 @@
                     if (strongSelf->_shouldUpdateTable)
                     {
                         strongSelf->_shouldUpdateTable = NO;
-                        [strongSelf generateData];
-                        [strongSelf.tableView reloadData];
+                        [strongSelf updateDistanceAndDirection:YES];
                     }
                     
                     strongSelf->_isContextMenuVisible = NO;

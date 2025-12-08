@@ -170,7 +170,16 @@
     NSString *color = [self getGpxColorByTags:tags];
     if (color)
     {
-        [gpxFile setColorColor_:color]; // TODO more colors
+        [gpxFile setColorColor_:color];
+        NSDictionary<NSString *, NSString *> *shieldTags = [self getGpxShieldTags:color];
+        NSMutableDictionary *extensions = [gpxFile.metadata getExtensionsToWrite];
+        for (NSString *key in shieldTags)
+        {
+            if (!extensions[key]) // putIfAbsent
+            {
+                extensions[key] = shieldTags[key];
+            }
+        }
     }
 
     return [[ClickableWay alloc] initWithGpxFile:gpxFile osmId:osmId name:name selectedLatLon:selectedLatLon bbox:bbox];
@@ -193,6 +202,11 @@
         }
     }
     return nil;
+}
+
+- (NSDictionary<NSString *, NSString *> *)getGpxShieldTags:(NSString *)color
+{
+    return !NSStringIsEmpty(color) ? @{ @"shield_fg": [NSString stringWithFormat:@"osmc_%@_bar", color] } : @{};
 }
 
 - (OASKQuadRect *)calcSearchQuadRect:(NSMutableArray<NSNumber *> *)xPoints yPoints:(NSMutableArray<NSNumber *> *)yPoints

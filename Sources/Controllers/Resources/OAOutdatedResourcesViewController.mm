@@ -409,7 +409,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     if (section == _downloadingListCellSection)
         return kRowsDownloadingListCellSection;
     else if (section == _updatesSection)
-        return kRowsInUpdatesSection + (_unsupportedResources.count() > 0);
+        return kRowsInUpdatesSection + (_unsupportedResources.count() > 0 ? 1 : 0);
     else if (section == _availableMapsSection)
         return _resourcesItems.count;
 
@@ -512,11 +512,8 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
         else
         {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-            if (cell == nil)
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel.text = title;
             cell.detailTextLabel.text = nil;
             return cell;

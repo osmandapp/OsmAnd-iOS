@@ -872,6 +872,7 @@ static BOOL _repositoryUpdated = NO;
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
         }
         
+        // This code swaps downloaded unsupported maps from local resources with DeletedMaps resource with same id
         for (const auto& resource : _resourcesInRepository)
         {
             if (regionResources.allResources.contains(resource->id) && resource->isDeleted)

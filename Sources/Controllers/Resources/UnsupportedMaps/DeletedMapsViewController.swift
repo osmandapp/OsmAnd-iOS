@@ -7,10 +7,7 @@
 //
 
 @objcMembers
-final class DeletedMapsViewController: OASuperViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private weak var deleteAllButton: UIButton!
-    
+final class DeletedMapsViewController: OABaseButtonsViewController {
     var region: OAWorldRegion?
     
     private let emptyStateHeaderView: IconEmptyStateView = {
@@ -18,53 +15,122 @@ final class DeletedMapsViewController: OASuperViewController, UITableViewDelegat
         emptyStateHeaderView.configure(image: .icCustomUpdateDisabled.withRenderingMode(.alwaysTemplate), tintColor: .iconColorDefault, description: localizedString("deleted_maps_prompt"))
         return emptyStateHeaderView
     }()
-    private let deleteAllButtonCornerRadius: CGFloat = 10
-    private let titleFontSize: CGFloat = 15
-    private let unsupportedMapsHeaderHeight: CGFloat = 35
     
-    private var tableData = OATableDataModel()
     private var downloadingCellResourceHelper: DownloadingCellResourceHelper?
     private var unsupportedMaps: [OAResourceSwiftItem] = []
+    private var lastHeaderHeight: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDownloadingCellResourceHelper()
         setupTableView()
-        setupBottomButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavbar()
         generateDataAndReload()
     }
     
-    private func setupNavbar() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationItem.title = localizedString("unsupported_maps")
-        navigationController?.navigationBar.topItem?.setRightBarButton(nil, animated: false)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if lastHeaderHeight == 0 {
+            setupHeader()
+        }
+    }
+    
+    override func getTitle() -> String {
+        localizedString("unsupported_maps")
+    }
+    
+    override func getNavbarColorScheme() -> EOABaseNavbarColorScheme {
+        .orange
+    }
+    
+    override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
+        .vertical
+    }
+    
+    override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
+        .purple
+    }
+    
+    override func onBottomButtonPressed() {
+        showDeleteAllAlert()
+    }
+    
+    override func getBottomButtonTitle() -> String {
+        localizedString("shared_string_delete_all")
+    }
+    
+    override func getBottomColorScheme() -> EOABaseBottomColorScheme {
+        .blank
+    }
+    
+    override func useCustomTableViewHeader() -> Bool {
+        true
+    }
+    
+    override func isBottomSeparatorVisible() -> Bool {
+        false
+    }
+    
+    override func generateData() {
+        tableData.clearAllData()
+        fetchResources()
         
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .navBarBgColorPrimary
-        appearance.shadowColor = .navBarBgColorPrimary
-        appearance.titleTextAttributes = [
-            .font: UIFont.preferredFont(forTextStyle: .headline),
-            .foregroundColor: UIColor.navBarTextColorPrimary as Any
-        ]
-
-        let blurAppearance = UINavigationBarAppearance()
-        blurAppearance.backgroundEffect = UIBlurEffect(style: .regular)
-        blurAppearance.backgroundColor = .navBarBgColorPrimary
-        blurAppearance.titleTextAttributes = [
-            .font: UIFont.preferredFont(forTextStyle: .headline),
-            .foregroundColor: UIColor.navBarTextColorPrimary as Any
-        ]
-
-        navigationController?.navigationBar.standardAppearance = blurAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
-        navigationController?.navigationBar.prefersLargeTitles = false
+        if !unsupportedMaps.isEmpty {
+            let unsupportedMapsSection = tableData.createNewSection()
+            unsupportedMapsSection.headerText = localizedString("unsupported_maps")
+            
+            unsupportedMaps.forEach { _ in
+                let unsupportedMapsRow = unsupportedMapsSection.createNewRow()
+                unsupportedMapsRow.cellType = DownloadingCell.reuseIdentifier
+            }
+        }
+    }
+    
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+        let item = tableData.item(for: indexPath)
+        var outCell: UITableViewCell?
+        
+        if item.cellType == DownloadingCell.reuseIdentifier {
+            let mapItem = unsupportedMaps[indexPath.row]
+            let title: String
+            let description: String
+            
+            if mapItem.worldRegion() != nil && mapItem.worldRegion().subregions != nil {
+                if let countryName = OAResourcesUISwiftHelper.getCountryName(mapItem), let mapTitle = mapItem.title() {
+                    title = "\(countryName) - \(mapTitle)"
+                } else {
+                    title = mapItem.title()
+                }
+            } else {
+                title = mapItem.title()
+            }
+            
+            if let type = mapItem.type(), mapItem.sizePkg() > 0 {
+                let date = mapItem.getDate()
+                let dateDescription = date.flatMap { "  •  \($0)" } ?? ""
+                description = "\(type)  •  \(ByteCountFormatter.string(fromByteCount: mapItem.sizePkg(), countStyle: .file))\(dateDescription)"
+            } else {
+                description = mapItem.type()
+            }
+            
+            let cell = downloadingCellResourceHelper?.getOrCreateCell(mapItem.resourceId(), swiftResourceItem: mapItem)
+            cell?.titleLabel.text = title
+            cell?.descriptionLabel.text = description
+            outCell = cell
+        }
+        
+        return outCell ?? UITableViewCell()
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        guard item.cellType == DownloadingCell.reuseIdentifier else { return }
+        let mapItem = unsupportedMaps[indexPath.row]
+        OAResourcesUISwiftHelper.showLocalResourceInformationViewController(mapItem, navigationController: navigationController)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     private func setupTableView() {
@@ -72,43 +138,28 @@ final class DeletedMapsViewController: OASuperViewController, UITableViewDelegat
         tableView.dataSource = self
     }
     
+    private func setupHeader() {
+        let size = emptyStateHeaderView.systemLayoutSizeFitting(
+            CGSize(width: tableView.bounds.width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+
+        emptyStateHeaderView.frame.size.height = size.height
+        lastHeaderHeight = emptyStateHeaderView.frame.size.height
+        tableView.tableHeaderView = emptyStateHeaderView
+    }
+    
     private func setupDownloadingCellResourceHelper() {
-        downloadingCellResourceHelper = DownloadingCellResourceHelper();
+        downloadingCellResourceHelper = DownloadingCellResourceHelper()
         downloadingCellResourceHelper?.setHostTableView(tableView)
         downloadingCellResourceHelper?.rightIconStyle = .showInfoAndShevronAfterDownloading
         downloadingCellResourceHelper?.isAlwaysClickable = true
     }
     
-    private func generateData() {
-        tableData.clearAllData()
-        
-        fetchResources()
-        
-        tableData.createNewSection()
-        
-        if !unsupportedMaps.isEmpty {
-            let unsupportedMapsSection = tableData.createNewSection()
-            unsupportedMapsSection.headerText = localizedString("unsupported_maps")
-            
-            for _ in unsupportedMaps {
-                let unsupportedMapsRow = unsupportedMapsSection.createNewRow()
-                unsupportedMapsRow.cellType = DownloadingCell.reuseIdentifier
-            }
-        }
-    }
-    
     private func generateDataAndReload() {
         generateData()
         tableView.reloadData()
-    }
-    
-    private func setupBottomButton() {
-        deleteAllButton.setTitle(localizedString("shared_string_delete_all"), for: .normal)
-        deleteAllButton.addTarget(self, action: #selector(onDeleteAllButtonPressed), for: .touchUpInside)
-        deleteAllButton.backgroundColor = .buttonBgColorPrimary
-        deleteAllButton.setTitleColor(.buttonTextColorPrimary, for: .normal)
-        deleteAllButton.titleLabel?.font = .systemFont(ofSize: titleFontSize, weight: .semibold)
-        deleteAllButton.layer.cornerRadius = deleteAllButtonCornerRadius
     }
     
     private func showDeleteAllAlert() {
@@ -133,77 +184,5 @@ final class DeletedMapsViewController: OASuperViewController, UITableViewDelegat
     private func fetchResources() {
         guard let region else { return }
         unsupportedMaps = OAResourcesUISwiftHelper.getUnsupportedResources(with: region)
-    }
-    
-    @objc private func onDeleteAllButtonPressed() {
-        showDeleteAllAlert()
-    }
-    
-    // MARK: - TableView
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        Int(tableData.sectionCount())
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Int(tableData.rowCount(UInt(section)))
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        tableData.sectionCount() > 0 ? tableData.sectionData(for: UInt(section)).headerText : nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        section == 1 ? unsupportedMapsHeaderHeight : UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        section == 0 ? emptyStateHeaderView : nil
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell?
-        
-        if item.cellType == DownloadingCell.reuseIdentifier {
-            let mapItem = unsupportedMaps[indexPath.row]
-            let title: String
-            let description: String
-            
-            if mapItem.worldRegion() != nil && mapItem.worldRegion().subregions != nil {
-                if let countryName = OAResourcesUISwiftHelper.getCountryName(mapItem), let mapTitle = mapItem.title() {
-                    title = "\(countryName) - \(mapTitle)"
-                } else {
-                    title = mapItem.title()
-                }
-            }
-            else {
-                title = mapItem.title()
-            }
-            
-            if let type = mapItem.type(), mapItem.sizePkg() > 0 {
-                let date = mapItem.getDate()
-                let dateDescription = date != nil ? "  •  \(date!)" : ""
-                description = "\(type)  •  \(ByteCountFormatter.string(fromByteCount: mapItem.sizePkg(), countStyle: .file))\(dateDescription)"
-            }
-            else {
-                description = mapItem.type();
-            }
-            
-            let cell = downloadingCellResourceHelper?.getOrCreateCell(mapItem.resourceId(), swiftResourceItem: mapItem)
-            cell?.titleLabel.text = title;
-            cell?.descriptionLabel.text = description;
-            outCell = cell
-        }
-        
-        return outCell ?? UITableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = tableData.item(for: indexPath)
-        guard item.cellType == DownloadingCell.reuseIdentifier else { return }
-        let mapItem = unsupportedMaps[indexPath.row]
-        OAResourcesUISwiftHelper.showLocalResourceInformationViewController(mapItem, navigationController: navigationController)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

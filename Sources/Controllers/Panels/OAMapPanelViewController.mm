@@ -416,6 +416,8 @@ typedef enum
         _activeTargetType = OATargetTerrainParametersSettings;
     else if ([controller isKindOfClass:MapSettingsMapModeParametersViewController.class])
         _activeTargetType = OATargetMapModeParametersSettings;
+    else if ([controller isKindOfClass:ProfileAppearanceIconSizeViewController.class])
+        _activeTargetType = OATargetProfileAppearanceIconSizeSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -4116,7 +4118,7 @@ typedef enum
         }
         else
         {
-            //app.logEvent(mapActivity, "start_navigation");
+            [self reconnectOBDIfNeeded];
             [_settings setApplicationModePref:[_routingHelper getAppMode] markAsLastUsed:NO];
             [_mapViewTrackingUtilities backToLocationImpl:17 forceZoom:YES];
             [_settings.followTheRoute set:YES];
@@ -4154,6 +4156,15 @@ typedef enum
 
     if (_settings.simulateNavigation && [_app.locationServices.locationSimulation isRouteAnimating])
         [_app.locationServices.locationSimulation startStopRouteAnimation];
+}
+
+- (void)reconnectOBDIfNeeded
+{
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        [plugin reconnectOBDIfNeeded];
+    }
 }
 
 - (void) updateRouteButton

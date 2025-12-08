@@ -26,6 +26,7 @@
 #import "OAResultMatcher.h"
 #import "OABuilding.h"
 #import "OAPOI.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -305,6 +306,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     if (resortAll)
     {
         [_searchResults addObjectsFromArray:sr];
+        [self uniteSearchResultsByOsmIdOrWikidata:_searchResults];
         [self sortSearchResults];
         if (removeDuplicates)
             [self filterSearchDuplicateResults];
@@ -373,6 +375,122 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     }
     [self calculateAddressString];
     return self;
+}
+
+- (void)uniteSearchResultsByOsmIdOrWikidata:(NSMutableArray<OASearchResult *> *)input
+{
+    NSMutableArray<OASearchResult *> *output = [NSMutableArray array];
+    NSMutableDictionary<NSNumber *, NSNumber *> *osmIdMap = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *, NSNumber *> *wikidataMap = [NSMutableDictionary dictionary];
+
+    for (OASearchResult *sr in input)
+    {
+        if ([sr.object isKindOfClass:OAPOI.class])
+        {
+            OAPOI *that = (OAPOI *)sr.object;
+            int64_t osmId = [that getOsmId];
+            NSNumber * osmIdObj = osmId < 0 ? nil : @(osmId);
+            NSString *wikidata = [that getWikidata];
+
+            if (that.isRouteTrack)
+            {
+                osmIdObj = nil;
+                wikidata = nil; // do not merge routes
+            }
+
+            NSNumber *foundOsmIdIndexObj = osmIdObj != nil ? osmIdMap[osmIdObj] : nil;
+            NSNumber *foundWikidataIndexObj = wikidata != nil ? wikidataMap[wikidata] : nil;
+
+            int indexToUpdate = -1; // unique
+
+            BOOL osmIdFound = (foundOsmIdIndexObj != nil);
+            BOOL wikidataFound = (foundWikidataIndexObj != nil);
+            if (osmIdFound && wikidataFound && ![foundOsmIdIndexObj isEqualToNumber:foundWikidataIndexObj])
+            {
+                NSLog(@"Warning: foundOsmIdIndex != foundWikidataIndex (should never happens)");
+                indexToUpdate = [foundOsmIdIndexObj intValue];
+            }
+            else if (osmIdFound || wikidataFound)
+            {
+                indexToUpdate = osmIdFound ? [foundOsmIdIndexObj intValue] : [foundWikidataIndexObj intValue];
+            }
+
+            if (indexToUpdate == -1)
+            {
+                [output addObject:sr];
+                indexToUpdate = (int)(output.count - 1);
+            }
+            else
+            {
+                [self copyData:output[indexToUpdate] fromSearchResult:sr];
+            }
+
+            NSNumber *indexObj = @(indexToUpdate);
+            if (osmIdObj != nil)
+            {
+                osmIdMap[osmIdObj] = indexObj;
+            }
+            if (wikidata != nil)
+            {
+                wikidataMap[wikidata] = indexObj;
+            }
+        }
+        else
+        {
+            [output addObject:sr];
+        }
+    }
+
+    if (input.count != output.count)
+    {
+        [input removeAllObjects];
+        [input addObjectsFromArray:output];
+    }
+}
+
+- (void)copyData:(OASearchResult *)unique fromSearchResult:(OASearchResult *)iterated
+{
+
+    BaseDetailsObject *base = [[BaseDetailsObject alloc] initWithObject:unique.object lang:[[_phrase getSettings] getLang]];
+    [base addObject:iterated.object];
+    
+    unique.object = [base syntheticAmenity];
+    if (iterated.otherNames != nil)
+    {
+        if (![iterated.localeName isEqualToString:unique.localeName])
+        {
+            [iterated.otherNames addObject:iterated.localeName];
+        }
+        if (unique.otherNames == nil)
+        {
+            unique.otherNames = [NSMutableArray array];
+        }
+        else if (![unique.otherNames isKindOfClass:[NSMutableArray class]])
+        {
+            unique.otherNames = [unique.otherNames mutableCopy];
+        }
+        for (NSString *name in iterated.otherNames)
+        {
+            if (![unique.otherNames containsObject:name])
+            {
+                [unique.otherNames addObject:name];
+            }
+        }
+    }
+    
+    if (iterated.otherWordsMatch != nil)
+    {
+        if (unique.otherWordsMatch == nil)
+        {
+            unique.otherWordsMatch = [NSMutableSet set];
+        }
+        [unique.otherWordsMatch addObjectsFromArray:[iterated.otherWordsMatch allObjects]];
+    }
+    
+    if (iterated.unknownPhraseMatchWeight > unique.unknownPhraseMatchWeight)
+    {
+        unique.unknownPhraseMatchWeight = iterated.unknownPhraseMatchWeight;
+    }
 }
 
 - (NSArray<OASearchResult *> *) getCurrentSearchResults

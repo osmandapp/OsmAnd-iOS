@@ -463,6 +463,7 @@ static inline double normalizeDouble(double v)
 + (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
 
 + (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName;
++ (NSString *)getNameOfMotorTypeValue:(NSInteger)value;
 
 + (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2;
 

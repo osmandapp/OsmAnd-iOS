@@ -37,6 +37,33 @@ final class VehicleMetricsPlugin: OAPlugin {
         OBDDataComputer.shared.registerLocation(l: OBDDataComputer.OBDLocation(time: Int64(location.timestamp.timeIntervalSince1970), latLon: KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)))
     }
     
+    override func getWidgetIds() -> [String] {
+        [WidgetType.OBDSpeed.id, WidgetType.OBDRpm.id, WidgetType.OBDEngineRuntime.id, WidgetType.OBDFuelPressure.id, WidgetType.OBDAirIntakeTemp.id, WidgetType.engineOilTemperature.id, WidgetType.OBDAmbientAirTemp.id, WidgetType.OBDBatteryVoltage.id, WidgetType.OBDEngineCoolantTemp.id, WidgetType.OBDRemainingFuel.id, WidgetType.OBDCalculatedEngineLoad.id, WidgetType.OBDThrottlePosition.id, WidgetType.OBDFuelConsumption.id]
+    }
+
+    override func createWidgets(_ delegate: any WidgetRegistrationDelegate, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) {
+        let creator = WidgetInfoCreator(appMode: appMode)
+        let widgetTypeArray: [WidgetType] = [.OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption]
+        for widgetType in widgetTypeArray {
+            guard let widget = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: widgetParams), let info = creator.createWidgetInfo(widget: widget) else { continue }
+            delegate.addWidget(info)
+        }
+    }
+    
+    override func createMapWidget(forParams widgetType: WidgetType, customId: String?, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) -> OABaseWidgetView? {
+        let params = widgetParams as? [String: Any]
+        switch widgetType {
+        case .OBDFuelConsumption:
+            return OBDFuelConsumptionWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
+        case .OBDRemainingFuel:
+            return OBDRemainingFuelWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
+        case .OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDCalculatedEngineLoad, .OBDThrottlePosition:
+            return OBDTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
+        default:
+            return nil
+        }
+    }
+    
     func getWidgetUnit(_ computerWidget: OBDDataComputer.OBDTypeWidget) -> String? {
         switch computerWidget {
         case .speed:
@@ -141,31 +168,30 @@ final class VehicleMetricsPlugin: OAPlugin {
         return computerWidget.type.formatter.format(v: convertedData)
     }
     
-    override func getWidgetIds() -> [String] {
-        [WidgetType.OBDSpeed.id, WidgetType.OBDRpm.id, WidgetType.OBDEngineRuntime.id, WidgetType.OBDFuelPressure.id, WidgetType.OBDAirIntakeTemp.id, WidgetType.engineOilTemperature.id, WidgetType.OBDAmbientAirTemp.id, WidgetType.OBDBatteryVoltage.id, WidgetType.OBDEngineCoolantTemp.id, WidgetType.OBDRemainingFuel.id, WidgetType.OBDCalculatedEngineLoad.id, WidgetType.OBDThrottlePosition.id, WidgetType.OBDFuelConsumption.id]
-    }
-
-    override func createWidgets(_ delegate: any WidgetRegistrationDelegate, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) {
-        let creator = WidgetInfoCreator(appMode: appMode)
-        let widgetTypeArray: [WidgetType] = [.OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDRemainingFuel, .OBDCalculatedEngineLoad, .OBDThrottlePosition, .OBDFuelConsumption]
-        for widgetType in widgetTypeArray {
-            guard let widget = createMapWidget(forParams: widgetType, customId: nil, appMode: appMode, widgetParams: widgetParams), let info = creator.createWidgetInfo(widget: widget) else { continue }
-            delegate.addWidget(info)
+    func reconnectOBDIfNeeded() {
+        let deviceHelper = DeviceHelper.shared
+        let connectedDevices = deviceHelper.connectedDevices(ofType: .OBD_VEHICLE_METRICS).filter({ !$0.isSimulator })
+        
+        guard connectedDevices.isEmpty else {
+            return
         }
-    }
-    
-    override func createMapWidget(forParams widgetType: WidgetType, customId: String?, appMode: OAApplicationMode, widgetParams: [AnyHashable: Any]?) -> OABaseWidgetView? {
-        let params = widgetParams as? [String: Any]
-        switch widgetType {
-        case .OBDFuelConsumption:
-            return OBDFuelConsumptionWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
-        case .OBDRemainingFuel:
-            return OBDRemainingFuelWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
-        case .OBDSpeed, .OBDRpm, .OBDEngineRuntime, .OBDFuelPressure, .OBDAirIntakeTemp, .engineOilTemperature, .OBDAmbientAirTemp, .OBDBatteryVoltage, .OBDEngineCoolantTemp, .OBDCalculatedEngineLoad, .OBDThrottlePosition:
-            return OBDTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: params)
-        default:
-            return nil
+        
+        guard let pairedDevices = deviceHelper.getSettingsForPairedDevices(matching: .OBD_VEHICLE_METRICS) else { return
         }
+        
+        let filteredPairedDevices = pairedDevices.filter { !$0.deviceId.lowercased().contains("simulator") }
+        
+        guard !filteredPairedDevices.isEmpty else {
+            return
+        }
+        
+        let disconnectedDevices = deviceHelper.getDisconnectedDevices(for: filteredPairedDevices).filter { $0.deviceType == .OBD_VEHICLE_METRICS }
+        
+        guard !disconnectedDevices.isEmpty else {
+            return
+        }
+        
+        deviceHelper.updateConnected(devices: disconnectedDevices)
     }
 }
 

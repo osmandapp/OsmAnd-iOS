@@ -45,7 +45,6 @@
                newGroupColor:(UIColor *)newGroupColor;
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
 - (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData;
-- (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 - (void)openNewWaypointScreen;
 - (NSString *)getGpxName;
 - (NSString *)checkGroupName:(NSString *)groupName;

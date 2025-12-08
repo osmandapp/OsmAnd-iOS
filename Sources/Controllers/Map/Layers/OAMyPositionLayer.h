@@ -18,5 +18,7 @@
 - (void) setMyLocationCircleRadius:(float)radiusInMeters;
 - (BOOL) shouldShowHeading;
 - (BOOL) shouldShowLocationRadius;
+- (void)refreshMarkersCollectionWithLocationFactor:(float)factor;
+- (void)refreshMarkersCollectionWithCourseFactor:(float)factor;
 
 @end

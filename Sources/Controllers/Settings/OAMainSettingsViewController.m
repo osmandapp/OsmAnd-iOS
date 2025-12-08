@@ -57,7 +57,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
+- (instancetype)initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
 {
     self = [super init];
     if (self)

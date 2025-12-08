@@ -50,6 +50,7 @@
 #import "OAMapSource.h"
 #import "OAObservable.h"
 #import "StartupLogging.h"
+#import "OAAbbreviations.h"
 
 #include <algorithm>
 #include <QList>
@@ -700,6 +701,7 @@ NSString *const kXmlColon = @"_-_";
     // Load world regions
     [self loadWorldRegions];
     [self addRegionNamesToCommonWords];
+    [self addAbbrevationsToCommonWords];
     LogStartup(@"world regions loaded");
 
     [OAManageResourcesViewController prepareData];
@@ -832,6 +834,13 @@ NSString *const kXmlColon = @"_-_";
 
     [OAPluginsHelper initPlugins];
     LogStartup(@"plugins initialized");
+    
+    VehicleMetricsPlugin *plugin = (VehicleMetricsPlugin *)[OAPluginsHelper getEnabledPlugin:[VehicleMetricsPlugin class]];
+    if (plugin)
+    {
+        [plugin reconnectOBDIfNeeded];
+        LogStartup(@"reconnectOBDIfNeeded");
+    }
     
     [URLSessionManager cleanupExpiredResponsesWithSessionKey:[URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey]];
     LogStartup(@"cleanupExpiredResponses");
@@ -1182,6 +1191,19 @@ NSString *const kXmlColon = @"_-_";
     for (NSString * region in regionNames)
     {
         OsmAnd::CommonWords::addRegionName(QString::fromNSString(region));
+    }
+}
+
+- (void) addAbbrevationsToCommonWords
+{
+    NSDictionary * abbreviations = [OAAbbreviations getAbbreviations];
+    for (id key in abbreviations)
+    {
+        int indx = OsmAnd::CommonWords::getCommonGeocoding(QString::fromNSString(abbreviations[key]).toLower());
+        if (indx != -1)
+        {
+            OsmAnd::CommonWords::insertCommonWord(QString::fromNSString(key).toLower(), indx);
+        }
     }
 }
 

@@ -15,6 +15,7 @@
 
 - (void)valueVisibility:(BOOL)show;
 - (void)showProButton:(BOOL)show;
+- (void)leftTitleSpace:(CGFloat)space;
 - (void)setupValueLabelFlexible;
 - (void)resetValueLabelToDefault;
 

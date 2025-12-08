@@ -297,13 +297,14 @@
     OAAlarmInfo *speedAlarm = nil;
     if (mxspeed != 0 && loc && loc.speed >= 0 && mxspeed != 40.f/*NONE_MAX_SPEED*/)
     {
+        // m/s > m/s + m/s
         if (loc.speed > mxspeed + delta)
         {
             int speed;
             if ([OASpeedConstant imperial:sc])
-                speed = roundf(mxspeed * 3.6f / 1.6f);
+                speed = roundf(mxspeed * 3.6f / 1.6f); // mph
             else
-                speed = roundf(mxspeed * 3.6f);
+                speed = roundf(mxspeed * 3.6f); // km/h
             speedAlarm = [OAAlarmInfo createSpeedLimit:speed coordinate:loc.coordinate];
         }
     }
@@ -317,7 +318,9 @@
     CLLocation *lastProjection = [routingHelper getLastProjection];
     if (_route)
     {
+        // m/s
         float maxSpeed = [_route getCurrentMaxSpeed:[_appMode getRouteTypeProfile]];
+        // m/s
         float delta = whenExceeded
         ? [[OAAppSettings sharedManager].speedLimitExceedKmh get] / 3.6f
         : maxSpeed * -1;

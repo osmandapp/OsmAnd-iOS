@@ -454,6 +454,16 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 {
     for (SelectedMapObject *selectedObject in selectedObjects)
     {
+        if ([selectedObject.object isKindOfClass:OAPOI.class] &&
+            [self haveSameActivityType:(OAPOI *)selectedObject.object clickableWay:clickableWay])
+        {
+            return NO; // skip if same-kind-of OSM route(s) found before
+        }
+        if ([selectedObject.object isKindOfClass:OAPOI.class] &&
+            clickableWay.osmId == [((OAPOI *) selectedObject.object) getOsmId])
+        {
+            return NO; // skip if ClickableWayAmenity is selected
+        }
         if ([selectedObject.object isKindOfClass:ClickableWay.class] &&
             clickableWay.osmId == ((ClickableWay *) selectedObject.object).osmId)
         {
@@ -463,6 +473,17 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
  
     NSString *gpxFileName = [[clickableWay getGpxFileName] stringByAppendingPathExtension:GPX_FILE_EXT];
     return [self isUniqueGpxFileName:selectedObjects gpxFileName:gpxFileName];
+}
+
+- (BOOL)haveSameActivityType:(OAPOI *)amenity clickableWay:(ClickableWay *)clickableWay
+{
+    NSString *gpxActivityType = [clickableWay.gpxFile getExtensionsToRead][[OASGpxUtilities.shared ACTIVITY_TYPE]];
+    if (gpxActivityType) {
+        NSString *amenityActivityType = amenity.getAdditionalInfo[[NSString stringWithFormat:@"%@_%@",
+                                                                   OATravelGpx.ROUTE_ACTIVITY_TYPE, gpxActivityType]];
+        return [gpxActivityType isEqualToString:amenityActivityType];
+    }
+    return NO;
 }
 
 - (BOOL)isUniqueTravelGpx:(NSMutableArray<SelectedMapObject *> *)selectedObjects travelGpx:(OATravelGpx *)travelGpx
@@ -909,4 +930,3 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 }
 
 @end
-

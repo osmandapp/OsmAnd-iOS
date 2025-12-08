@@ -54,12 +54,15 @@
         @"name",
         @"ref",
         @"piste:name",
-        @"mtb:name"
+        @"mtb:name",
+        @"shield_stub_name"
     ]];
     
     _forbiddenTags = @{
         @"area": @"yes",
         @"access": @"no",
+        @"piste:type": @"connection",
+        // @"osmc_stub_name": @".", // enable to hide shields for Ways inside Relations
         @"aerialway": @"*"
     };
     _gpxColors = @{
@@ -76,7 +79,7 @@
         @"advanced": @"black",
         @"expert": @"black",
         @"freeride": @"yellow"
-        // others are default (red)
+        // others use default track color (red)
     };
     
     _activator = [[OAClickableWayMenuProvider alloc] init];
@@ -162,14 +165,14 @@
     
     OASTrack *track = [[OASTrack alloc] init];
     [track.segments addObject:trkSegment];
-    [gpxFile setTracks:@[track]];
+    [gpxFile setTracks:[@[track] mutableCopy]];
     
     NSString *color = [self getGpxColorByTags:tags];
     if (color)
     {
-        [gpxFile setColorColor_:color];
+        [gpxFile setColorColor_:color]; // TODO more colors
     }
-   
+
     return [[ClickableWay alloc] initWithGpxFile:gpxFile osmId:osmId name:name selectedLatLon:selectedLatLon bbox:bbox];
 }
 
@@ -213,13 +216,14 @@
         if ([forbiddenValue isEqualToString:tagValue] ||
             ([@"*" isEqualToString:forbiddenValue] && tagValue))
         {
-            return  NO;
+            return NO;
         }
     }
     
     for (NSString *required in _requiredTagsAny)
     {
         // some objects have name passed from object props but not in the tags
+        // nameless objects may be included using a fake name, such as "shield_stub_name"
         BOOL isRequiredNameFound = [required isEqualToString:@"name"] && !NSStringIsEmpty(name);
                     
         if (tags[required] || isRequiredNameFound)
@@ -230,7 +234,7 @@
                     return YES;
                 
                 NSString *value = tags[key]; // snowmobile=yes, etc
-                if (value )
+                if (value)
                 {
                     NSString *keyValueLine = [NSString stringWithFormat:@"%@=%@", key, value];
                     if ([_clickableTags containsObject:keyValueLine])

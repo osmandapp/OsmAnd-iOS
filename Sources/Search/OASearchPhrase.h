@@ -120,6 +120,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 + (NSString *) stripBraces:(NSString *)localeName;
 + (NSString *) ALLDELIMITERS;
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
+- (BOOL) isLikelyAddressSearch;
 
 
 @end

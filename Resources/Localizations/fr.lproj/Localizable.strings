@@ -3815,7 +3815,7 @@
 "obd_fuel_type_unknown" = "Carburant inconnu";
 "shared_string_large" = "Grand";
 "unit_of_temperature_description" = "Les unités sélectionnées seront appliquées à toutes les données de température pour le profil actuel.";
-"distance_by_tap_use_description" = "Un appui sur la carte affiche la distance entre l\'emplacement d\'appui et votre position.\nUn appui simultané avec deux doigts affiche la distance entre les deux points d\'appui.";
+"distance_by_tap_use_description" = "Touchez la carte pour afficher la distance entre votre position actuelle et le point sélectionné.\nTouchez la carte avec deux doigts pour afficher la distance entre les points cliqués.";
 "shared_string_normal" = "Normale";
 "standard_maps" = "Cartes standard";
 "wikipedia_and_travel_maps" = "Wikipédia et Cartes de voyage";
@@ -3887,8 +3887,8 @@
 "application_profile_changed" = "Le profil de l'application a été modifié en « %@ »";
 "duration" = "Durée";
 "shared_string_estimated_duration" = "Durée estimée";
-"shared_string_degrees" = "Diplômes";
-"auto_zoom_3d_angle" = "Zoom automatique de l'angle 3D";
+"shared_string_degrees" = "Degrés";
+"auto_zoom_3d_angle" = "Angle 3D du zoom auto";
 "altitude_metrics_description" = "Définit l'unité d'affichage de l'altitude dans les widgets et les statistiques.";
 "ios_release_5_2" = "• Ajout d'un mappage de boutons personnalisable pour les manettes externes, permettant d'assigner n'importe quelle action rapide à un bouton du clavier ou de la manette.\n• Ajout de nouvelles actions rapides pour contrôler l'application avec une manette externe.\n• Amélioration de la visibilité des widgets en mode transparence grâce à l'ajout de contours de texte.\n• Ajout d'une grille de précision pour l'alignement des boutons de la carte.\n• Introduction d'un nouveau style de carte nautique « Marine » avec de nombreuses options de personnalisation.\n• Ajout des détails des rues et des villes aux résultats de recherche.\n• Ajout d'une option pour augmenter la taille du texte dans l'outil de mesure de distance.\n• Déplacement de la sélection de l'unité de température dans les Paramètres généraux.\n• Les unités d'altitude peuvent désormais être définies séparément des unités de distance.\n• Ajout d'une action rapide d'orientation de la carte avec modes de boussole sélectionnables.\n• Correction d'un problème empêchant le déplacement de certains widgets.\n• Correction d'un affichage incorrect de la distance dans le widget « Prochain virage ».\n• Amélioration de la recherche de marques grâce à l'inclusion de marques locales.\n• Améliorations générales de la stabilité et des performances.\n";
 "lang_zh_hans" = "Chinois simplifié";
@@ -3959,3 +3959,7 @@
 "add_to_a_folder" = "Ajouter à un dossier";
 "add_to_favorites" = "Ajouter aux favoris";
 "reconnect" = "Se reconnecter";
+"inch" = "in";
+"metric_lbs" = "lbs";
+"shared_string_inches" = "pouces";
+"shared_string_pounds" = "livres";

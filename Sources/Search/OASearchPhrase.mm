@@ -71,6 +71,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ",
 @property (nonatomic) QuadRect *cache1kmRect;
 
 @property (nonatomic) OAPOIBaseType *unselectedPoiType;
+@property (nonatomic) BOOL likelyAddressSearch;
 
 @end
 
@@ -192,6 +193,7 @@ static NSComparator _OACommonWordsComparator = nil;
             }
         }
     }
+    sp.likelyAddressSearch = [self likelyAddressSearch:text] || !sp.lastUnknownSearchWordComplete;
     return sp;
 }
 
@@ -341,6 +343,7 @@ static NSComparator _OACommonWordsComparator = nil;
             [genUnknownSearchPhrase appendString:@" "];
         }
         sp.fullTextSearchPhrase = _fullTextSearchPhrase;
+        sp.likelyAddressSearch = _likelyAddressSearch;
         sp.unknownSearchPhrase = genUnknownSearchPhrase.trim;
     }
     return sp;
@@ -1111,6 +1114,21 @@ static NSComparator _OACommonWordsComparator = nil;
         }
     }
     return @"";
+}
+
+- (BOOL) likelyAddressSearch:(NSString *) fullText
+{
+    NSCharacterSet *digitSet = [NSCharacterSet decimalDigitCharacterSet];
+    if ([fullText rangeOfCharacterFromSet:digitSet].location != NSNotFound)
+    {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) isLikelyAddressSearch
+{
+    return _likelyAddressSearch;
 }
 
 @end

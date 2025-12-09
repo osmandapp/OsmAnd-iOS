@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-- (instancetype) initWithParentProfile:(OAApplicationMode *)profile;
-- (instancetype) initWithProfile:(OAApplicationMode *)profile;
+- (instancetype)initWithParentProfile:(OAApplicationMode *)profile;
+- (instancetype)initWithProfile:(OAApplicationMode *)profile;
 
 @end

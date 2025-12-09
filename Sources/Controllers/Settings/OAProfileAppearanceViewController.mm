@@ -25,7 +25,6 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAIconsPaletteCell.h"
 #import "GeneratedAssetSymbols.h"
-#import "OsmAnd_Maps-Swift.h"
 
 static const int kNameSectionIndex = 0;
 static const int kColorSectionIndex = 1;
@@ -35,10 +34,14 @@ static const int kLocationIconSectionIndex = 3;
 static const int kNavigationIconSectionIndex = 4;
 static const int kOptionsSectionIndex = 5;
 
+static const CGFloat kLeftTitleSpace = 4;
+
 static NSString *kColorsCellKey =  @"kColorsCellKey";
 static NSString *kProfileIconCellKey =  @"kProfileIconCellKey";
 static NSString *kPositionIconCellKey =  @"kPositionIconCellKey";
+static NSString *kPositionIconSizeCellKey =  @"kPositionIconSizeCellKey";
 static NSString *kLocationIconCellKey =  @"kLocationIconCellKey";
+static NSString *kLocationIconSizeCellKey =  @"kLocationIconSizeCellKey";
 static NSString *kViewAngleCellKey =  @"kViewAngleButtonKey";
 static NSString *kLocationRadiusCellKey =  @"kLocationRadiusButtonKey";
 
@@ -67,6 +70,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 @property (nonatomic) int locationRadiusVisibility;
 @property (nonatomic) CGFloat minSpeed;
 @property (nonatomic) CGFloat maxSpeed;
+@property (nonatomic) double locationIconSize;
+@property (nonatomic) double courseIconSize;
 
 - (int) profileColor;
 
@@ -107,6 +112,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             return NO;
         if (_maxSpeed != that.maxSpeed)
             return NO;
+        if (_locationIconSize != that.locationIconSize)
+            return NO;
+        if (_courseIconSize != that.courseIconSize)
+            return NO;
         return _locationIcon == that.locationIcon;
     }
 }
@@ -137,7 +146,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 @end
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OACollectionCellDelegate, ProfileAppearanceViewAngleUpdatable, ProfileAppearanceLocationRadiusUpdatable, UITextFieldDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OACollectionCellDelegate, ProfileAppearanceViewAngleUpdatable, ProfileAppearanceLocationRadiusUpdatable, UITextFieldDelegate, ProfileAppearanceUpdateSize>
 
 @end
 
@@ -145,6 +154,9 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 {
     OAApplicationProfileObject *_profile;
     OAApplicationProfileObject *_changedProfile;
+    
+    OAAppSettings *_settings;
+    OAApplicationMode *_appMode;
     
     BOOL _isNewProfile;
     BOOL _hasChangesBeenMade;
@@ -168,6 +180,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     NSArray<NSString *> *_navigationIconNames;
     NSArray<UIImage *> *_locationIconImages;
     NSArray<UIImage *> *_navigationIconImages;
+    
+    id<ProfileAppearanceConfig> _profileAppearanceIconSize;
 }
 
 - (instancetype) initWithParentProfile:(OAApplicationMode *)profile
@@ -182,7 +196,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         
         [self setupChangedProfile];
         
-        [self commonInit];
+        [self commonInit:profile];
     }
     return self;
 }
@@ -197,7 +211,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         
         [self setupChangedProfile];
         
-        [self commonInit];
+        [self commonInit:profile];
     }
     return self;
 }
@@ -220,6 +234,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _changedProfile.locationIcon = _profile.locationIcon;
     _changedProfile.minSpeed = _profile.minSpeed;
     _changedProfile.maxSpeed = _profile.maxSpeed;
+    _changedProfile.locationIconSize = _profile.locationIconSize;
+    _changedProfile.courseIconSize = _profile.courseIconSize;
 }
 
 - (void) setupAppProfileObjectFromAppMode:(OAApplicationMode *) baseModeForNewProfile
@@ -237,10 +253,14 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profile.navigationIcon = [baseModeForNewProfile.getNavigationIcon name];
     _profile.viewAngleVisibility = [baseModeForNewProfile getViewAngleVisibility];
     _profile.locationRadiusVisibility = [baseModeForNewProfile getLocationRadiusVisibility];
+    _profile.locationIconSize = [baseModeForNewProfile getLocationIconSize];
+    _profile.courseIconSize = [baseModeForNewProfile getCourseIconSize];
 }
 
-- (void) commonInit
+- (void) commonInit:(OAApplicationMode *)appMode
 {
+    _settings = [OAAppSettings sharedManager];
+    _appMode = appMode;
     [self prepareData];
 }
 
@@ -338,33 +358,40 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *profileNameSection = [_data createNewSection];
     [profileNameSection addRowFromDictionary:@{
-        kCellTypeKey : [OAInputTableViewCell getCellIdentifier],
-        kCellTitleKey : _changedProfile.name,
+        kCellTypeKey: [OAInputTableViewCell reuseIdentifier],
+        kCellTitleKey: _changedProfile.name,
     }];
     
     OATableSectionData *profileColorSection = [_data createNewSection];
     [profileColorSection addRowFromDictionary:@{
-        kCellTypeKey : [OAColorsPaletteCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"shared_string_color"),
-        kCellDescrKey : OALocalizedString(@"shared_string_all_colors"),
-        kCellKeyKey : kColorsCellKey,
+        kCellTypeKey: [OAColorsPaletteCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"shared_string_color"),
+        kCellDescrKey: OALocalizedString(@"shared_string_all_colors"),
+        kCellKeyKey: kColorsCellKey,
     }];
     
     OATableSectionData *profileIconSection = [_data createNewSection];
     [profileIconSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"profile_icon"),
-        kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
-        kCellKeyKey : kProfileIconCellKey,
+        kCellTypeKey: [OAIconsPaletteCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"profile_icon"),
+        kCellDescrKey: OALocalizedString(@"shared_string_all_icons"),
+        kCellKeyKey: kProfileIconCellKey,
     }];
     
     OATableSectionData *positionIconsSection = [_data createNewSection];
     [positionIconsSection addRowFromDictionary:@{
-        kCellHeaderTitleKey : OALocalizedString(@"resting_position_icon"),
-        kCellTypeKey : [OAIconsPaletteCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"resting_position_icon_summary"),
-        kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
-        kCellKeyKey : kPositionIconCellKey,
+        kCellHeaderTitleKey: OALocalizedString(@"resting_position_icon"),
+        kCellTypeKey: [OAIconsPaletteCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"resting_position_icon_summary"),
+        kCellDescrKey: OALocalizedString(@"shared_string_all_icons"),
+        kCellKeyKey: kPositionIconCellKey,
+    }];
+    [positionIconsSection addRowFromDictionary:@{
+        kCellTypeKey: [OAValueTableViewCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"shared_string_size"),
+        kCellDescrKey: [NSNumberFormatter.percentFormatter stringFromNumber:@(_changedProfile.locationIconSize)],
+        kCellTitleColorKey: [UIColor colorNamed:ACColorNameTextColorActive],
+        kCellKeyKey: kPositionIconSizeCellKey,
     }];
     
     OATableSectionData *navigationIconsSection = [_data createNewSection];
@@ -374,6 +401,13 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTitleKey : OALocalizedString(@"navigation_position_icon_summary"),
         kCellDescrKey : OALocalizedString(@"shared_string_all_icons"),
         kCellKeyKey : kLocationIconCellKey,
+    }];
+    [navigationIconsSection addRowFromDictionary:@{
+        kCellTypeKey: [OAValueTableViewCell reuseIdentifier],
+        kCellTitleKey: OALocalizedString(@"shared_string_size"),
+        kCellDescrKey: [NSNumberFormatter.percentFormatter stringFromNumber:@(_changedProfile.courseIconSize)],
+        kCellTitleColorKey: [UIColor colorNamed:ACColorNameTextColorActive],
+        kCellKeyKey: kLocationIconSizeCellKey,
     }];
 
     OATableSectionData *optionsSection = [_data createNewSection];
@@ -595,6 +629,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [mode setNavigationIconName:_changedProfile.navigationIcon];
         [mode setViewAngleVisibility:_changedProfile.viewAngleVisibility];
         [mode setLocationRadiusVisibility:_changedProfile.locationRadiusVisibility];
+        [mode setLocationIconSize:_changedProfile.locationIconSize];
+        [mode setCourseIconSize:_changedProfile.courseIconSize];
         
         [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
@@ -616,6 +652,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [builder setNavigationIcon:_changedProfile.navigationIcon];
     [builder setViewAngleVisibility:_changedProfile.viewAngleVisibility];
     [builder setLocationRadiusVisibility:_changedProfile.locationRadiusVisibility];
+    [builder setLocationIconSize:_changedProfile.locationIconSize];
+    [builder setCourseIconSize:_changedProfile.courseIconSize];
     [builder setOrder:(int) OAApplicationMode.allPossibleValues.count];
     
     OAApplicationMode *mode = [OAApplicationMode saveProfile:builder];
@@ -820,10 +858,14 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         }
         if (cell)
         {
+            BOOL isSize = [item.key isEqualToString:kPositionIconSizeCellKey] || [item.key isEqualToString:kLocationIconSizeCellKey];
             cell.titleLabel.text = item.title;
+            cell.titleLabel.textColor = (UIColor *)[item objForKey:kCellTitleColorKey];
             cell.valueLabel.text = item.descr;
             cell.leftIconView.tintColor = item.iconTintColor;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            [cell leftTitleSpace:isSize ? kLeftTitleSpace : 0];
+            [cell leftIconVisibility:item.iconName];
             return cell;
         }
     }
@@ -861,6 +903,18 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         vc.delegate = self;
         vc.selectedIndex = _changedProfile.locationRadiusVisibility;
         [self showMediumSheetViewController:vc isLargeAvailable:NO];
+    }
+    else if ([item.key isEqualToString:kPositionIconSizeCellKey] || [item.key isEqualToString:kLocationIconSizeCellKey])
+    {
+        ProfileAppearanceIconSizeViewController *vc = [[ProfileAppearanceIconSizeViewController alloc] init];
+        vc.appMode = _appMode;
+        vc.isNavigationIconSize = [item.key isEqualToString:kLocationIconSizeCellKey];
+        vc.baseIconSize = _profileAppearanceIconSize
+        ? (ProfileAppearanceIconSize *)_profileAppearanceIconSize
+        : [[ProfileAppearanceIconSize alloc] initWithLocationIconSize:[_settings.locationIconSize get:_appMode] courseIconSize:[_settings.courseIconSize get:_appMode]];
+        vc.navControllerHistory = [OARootViewController.instance.navigationController saveCurrentStateForScrollableHud];
+        [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
+        [self.navigationController popToViewController:OARootViewController.instance animated:NO];
     }
 }
 
@@ -996,6 +1050,21 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _changedProfile.locationRadiusVisibility = newValue;
     [self generateData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - ProfileAppearanceUpdateSize
+
+- (void)updateIconSize:(id<ProfileAppearanceConfig>)profileAppearanceIconSize
+{
+    ProfileAppearanceIconSize *iconSize = (ProfileAppearanceIconSize *)profileAppearanceIconSize;
+    if (iconSize)
+    {
+        _profileAppearanceIconSize = profileAppearanceIconSize;
+        _changedProfile.locationIconSize = iconSize.locationIconSize;
+        _changedProfile.courseIconSize = iconSize.courseIconSize;
+    }
+    [self generateData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kProfileIconSectionIndex, kLocationIconSectionIndex)] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

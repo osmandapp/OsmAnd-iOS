@@ -3849,3 +3849,6 @@
 "rendering_attr_shellsStyle_description" = "Stil för snäckor på havsbotten";
 "rendering_attr_showLNAMmarker_name" = "ENC-markörer";
 "rendering_attr_showLNAMmarker_description" = "Visa ENC-markörer";
+"average_slope" = "Genomsnittlig lutning";
+"shared_string_last_uphill" = "Senaste uppförsbacke";
+"shared_string_last_downhill" = "Senaste nedförsbacke";

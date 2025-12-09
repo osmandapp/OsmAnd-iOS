@@ -115,16 +115,9 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
-        let data = tableData.item(for: indexPath)
-        if data.key == "compass" {
-            let vc = CompassVisibilityViewController()
-            vc.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
-        } else if data.key == "map3DMode" {
-            let vc = Map3dModeButtonVisibilityViewController()
-            vc.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
-        }
+        let vc = DefaultMapButtonViewController()
+        vc.mapButtonState = buttonStates[indexPath.row]
+        show(vc)
     }
     
     // MARK: Additions

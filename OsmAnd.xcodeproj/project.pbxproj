@@ -215,6 +215,8 @@
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
 		271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */; };
+		27291B612EE81169005D0B0A /* PreviewImageViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */; };
+		27291B622EE81169005D0B0A /* PreviewImageViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */; };
 		274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */; };
 		274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167482E4DF5840051DD4B /* TopTextViewState.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
@@ -269,6 +271,7 @@
 		27D33B5F2E74622A00AD4F70 /* OpenWeatherAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */; };
 		27D33B612E7473A900AD4F70 /* RouteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B602E7473A900AD4F70 /* RouteAction.swift */; };
 		27DC2A8A2EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */; };
+		27DC2A8E2EE6CA160051B247 /* DefaultMapButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */; };
 		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
 		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
 		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
@@ -3657,6 +3660,8 @@
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
 		271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceByTapViewController.swift; sourceTree = "<group>"; };
+		27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewImageViewTableViewCell.swift; sourceTree = "<group>"; };
+		27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreviewImageViewTableViewCell.xib; sourceTree = "<group>"; };
 		274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseWidgetView+Extension.swift"; sourceTree = "<group>"; };
 		274167482E4DF5840051DD4B /* TopTextViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTextViewState.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
@@ -3711,6 +3716,7 @@
 		27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherAction.swift; sourceTree = "<group>"; };
 		27D33B602E7473A900AD4F70 /* RouteAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteAction.swift; sourceTree = "<group>"; };
 		27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVisibilityMapButtonState.swift; sourceTree = "<group>"; };
+		27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMapButtonViewController.swift; sourceTree = "<group>"; };
 		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
 		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
 		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
@@ -12150,6 +12156,7 @@
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
 				277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */,
 				27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */,
+				27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -12160,6 +12167,7 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */,
 				27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */,
 				27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */,
 				277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */,
@@ -13990,6 +13998,7 @@
 				DAABE4EA2A16483300569F71 /* ConfigureScreenViewController.swift */,
 				462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */,
 				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
+				27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */,
 				32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */,
 				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
 				271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */,
@@ -16089,6 +16098,7 @@
 				DA540D94229E63270069201E /* ic_custom_plus@3x.png in Resources */,
 				323BD8E72628850400D255ED /* ic_bg_point_comment_top@2x.png in Resources */,
 				DA25FA5A23FFFC90009CDEAD /* ic_custom_change_object_position@3x.png in Resources */,
+				27291B622EE81169005D0B0A /* PreviewImageViewTableViewCell.xib in Resources */,
 				DA5A829126C563A700F274C7 /* OAFolderCardsCell.xib in Resources */,
 				DA84E84D21D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png in Resources */,
 				0A0EAC0126E619210044E82C /* ic_custom_magnifier@2x.png in Resources */,
@@ -17955,6 +17965,7 @@
 				FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */,
 				FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */,
 				C5C472E82ED17F5A00682CAB /* TripRecordingSlopeWidget.swift in Sources */,
+				27291B612EE81169005D0B0A /* PreviewImageViewTableViewCell.swift in Sources */,
 				DAA61CC42A03983A00AFF65D /* CenterWidgetInfo.swift in Sources */,
 				DA5A815326C563A700F274C7 /* OACarPlayDashboardInterfaceController.mm in Sources */,
 				DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */,
@@ -18291,6 +18302,7 @@
 				32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */,
 				CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.m in Sources */,
 				CA4EDD68D7B26540651A56EB /* OATitleDescriptionBigIconCell.mm in Sources */,
+				27DC2A8E2EE6CA160051B247 /* DefaultMapButtonViewController.swift in Sources */,
 				274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */,
 				CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */,
 				3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */,

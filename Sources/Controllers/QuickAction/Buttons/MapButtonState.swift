@@ -55,6 +55,10 @@ open class MapButtonState: NSObject {
     func getIcon() -> UIImage? {
         UIImage.templateImageNamed("ic_custom_quick_action")
     }
+    
+    func getPreviewIcon() -> UIImage? {
+        getIcon()
+    }
 
     func getPositionSize() -> ButtonPositionSize {
         positionSize

@@ -17,6 +17,10 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
         setupImageContainerShadow()
     }
     
+    func rotateImage(_ angle: CGFloat) {
+        previewImageView.transform = CGAffineTransform(rotationAngle: angle)
+    }
+    
     private func setupImageContainerShadow() {
         previewImageContainerView.layer.shadowColor = UIColor.black.withAlphaComponent(0.35).cgColor
         previewImageContainerView.layer.shadowOpacity = 1

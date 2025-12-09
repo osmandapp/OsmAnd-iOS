@@ -42,6 +42,9 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             guard let previewIcon = mapButtonState.getPreviewIcon() else { return nil }
             let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as! PreviewImageViewTableViewCell
             cell.configure(image: previewIcon)
+            if mapButtonState is CompassButtonState {
+                cell.rotateImage(-CGFloat(OARootViewController.instance().mapPanel.mapViewController.azimuth()) / 180.0 * CGFloat.pi)
+            }
             return cell
         } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell

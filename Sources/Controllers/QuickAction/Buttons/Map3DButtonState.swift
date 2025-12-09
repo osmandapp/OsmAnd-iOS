@@ -39,6 +39,10 @@ final class Map3DButtonState: MapButtonState {
         UIImage.templateImageNamed("ic_custom_3d")
     }
     
+    override func buttonDescription() -> String {
+        localizedString("map_3d_mode_action_descr")
+    }
+    
     override func updatePosition(_ position: ButtonPositionSize) {
         position.marginX = Int32(ButtonPositionSize.companion.CELL_SIZE_DP)
         position.marginY = Int32(ButtonPositionSize.companion.CELL_SIZE_DP)

@@ -2172,6 +2172,15 @@
 
 "no_activity_for_intent" = "Install an app that can perform this action.";
 
+"change_zoom_action_descr" = "Change map zoom.";
+"search_action_descr" = "Opens Search.";
+"configure_map_description" = "Change map style, layers, or other settings.";
+"map_3d_mode_action_descr" = "Change map tilt.";
+"my_location_action_descr" = "Centers map on your current location.";
+"navigation_action_descr" = "Opens Navigation.";
+"drawer_button_description" = "Opens the main menu.";
+"key_event_action_change_map_orientation" = "Change Map orientation.";
+
 // Units
 "cubic_m" = "m³";
 "mile" = "mi";

@@ -24,6 +24,10 @@ final class SearchButtonState: SwitchVisibilityMapButtonState {
         UIImage.templateImageNamed("ic_custom_search")
     }
     
+    override func buttonDescription() -> String {
+        localizedString("search_action_descr")
+    }
+    
     override func isEnabled() -> Bool {
         visibilityPref.get()
     }

@@ -32,6 +32,10 @@ final class CompassButtonState: MapButtonState {
         UIImage.templateImageNamed(getVisibility().iconName)
     }
     
+    override func buttonDescription() -> String {
+        localizedString("key_event_action_change_map_orientation")
+    }
+    
     override func getPreviewIcon() -> UIImage? {
         UIImage(named: CompassModeWrapper.iconName(forValue: Int(OAAppSettings.sharedManager().rotateMap.get()), isLightMode: ThemeManager.shared.isLightTheme()))
     }

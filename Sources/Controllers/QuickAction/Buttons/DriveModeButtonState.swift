@@ -24,6 +24,10 @@ final class DriveModeButtonState: SwitchVisibilityMapButtonState {
         UIImage.templateImageNamed("ic_custom_navigation")
     }
     
+    override func buttonDescription() -> String {
+        localizedString("navigation_action_descr")
+    }
+    
     override func isEnabled() -> Bool {
         visibilityPref.get()
     }

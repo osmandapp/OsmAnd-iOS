@@ -24,6 +24,10 @@ final class MyLocationButtonState: SwitchVisibilityMapButtonState {
         UIImage.templateImageNamed("ic_custom_map_location_position")
     }
     
+    override func buttonDescription() -> String {
+        localizedString("my_location_action_descr")
+    }
+    
     override func isEnabled() -> Bool {
         visibilityPref.get()
     }

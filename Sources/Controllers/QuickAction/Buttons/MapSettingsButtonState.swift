@@ -24,6 +24,10 @@ final class MapSettingsButtonState: SwitchVisibilityMapButtonState {
         UIImage.templateImageNamed("ic_custom_overlay_map")
     }
     
+    override func buttonDescription() -> String {
+        localizedString("configure_map_description")
+    }
+    
     override func isEnabled() -> Bool {
         visibilityPref.get()
     }

@@ -70,6 +70,10 @@ open class MapButtonState: NSObject {
         return position
     }
     
+    func buttonDescription() -> String {
+        fatalError("buttonDescription is not defined")
+    }
+    
     func storedVisibilityPref() -> OACommonPreference {
         fatalError("visibilityPref is not defined")
     }

@@ -7,6 +7,8 @@
 //
 
 final class DefaultMapButtonViewController: OABaseNavbarViewController {
+    private static let descriptionFontSize: CGFloat = 15
+    
     weak var mapButtonState: MapButtonState?
     
     override func getTitle() -> String {
@@ -18,6 +20,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
     }
     
     override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(PreviewImageViewTableViewCell.reuseIdentifier)
     }
     
@@ -26,6 +29,10 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         let visibilitySection = tableData.createNewSection()
         let imageHeaderRow = visibilitySection.createNewRow()
         imageHeaderRow.cellType = PreviewImageViewTableViewCell.reuseIdentifier
+        
+        let descriptionRow = visibilitySection.createNewRow()
+        descriptionRow.title = mapButtonState?.buttonDescription()
+        descriptionRow.cellType = OASimpleTableViewCell.reuseIdentifier
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -35,6 +42,15 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             guard let previewIcon = mapButtonState.getPreviewIcon() else { return nil }
             let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as! PreviewImageViewTableViewCell
             cell.configure(image: previewIcon)
+            return cell
+        } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
+            cell.descriptionVisibility(false)
+            cell.leftIconVisibility(false)
+            cell.selectionStyle = .none
+            cell.titleLabel.text = item.title
+            cell.titleLabel.textColor = .textColorSecondary
+            cell.titleLabel.font = .systemFont(ofSize: Self.descriptionFontSize)
             return cell
         }
         return nil

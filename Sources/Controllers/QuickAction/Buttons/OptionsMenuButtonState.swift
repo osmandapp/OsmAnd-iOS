@@ -24,6 +24,10 @@ final class OptionsMenuButtonState: SwitchVisibilityMapButtonState {
         UIImage.templateImageNamed("ic_custom_drawer")
     }
     
+    override func buttonDescription() -> String {
+        localizedString("drawer_button_description")
+    }
+    
     override func isEnabled() -> Bool {
         visibilityPref.get()
     }

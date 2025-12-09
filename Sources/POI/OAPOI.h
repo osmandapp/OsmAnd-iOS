@@ -165,7 +165,7 @@ static int DEFAULT_ELO = 900;
 
 - (uint64_t) getOsmId;
 
-- (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(id)mapPoiTypes addPrefixes:(BOOL)addPrefixes;
+- (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes;
 
 - (BOOL) strictEquals:(id)object;
 

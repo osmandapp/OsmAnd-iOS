@@ -55,10 +55,12 @@ final class AmenityUIHelper: NSObject {
         preferredLang = lang
     }
     
-    func buildInternal() {
+    func buildInternal() -> [OARowInfo] {
         initVariables()
         var infoRows = [OARowInfo]()
         var descriptions = [OARowInfo]()
+        var resultRows = [OARowInfo]()
+        
         let filteredInfo = additionalInfo.getFilteredLocalizedInfo()
         for entry in filteredInfo {
             let key = entry.key
@@ -111,7 +113,7 @@ final class AmenityUIHelper: NSObject {
                     for record in records {
                         var pt = helper.getPoiAdditionalType(poiCategory, name: record)
                         if pt == nil {
-                            helper.getAnyPoiAdditionalType(byKey: record)
+                            pt = helper.getAnyPoiAdditionalType(byKey: record) as! OAPOIType
                         }
                         if let pt {
                             categoryTypes.append(pt)
@@ -123,7 +125,7 @@ final class AmenityUIHelper: NSObject {
                     }
                     
                     var icon: UIImage?
-                    let pType = categoryTypes[0]
+                    let pType = categoryTypes[0]   //TODO: fix crash here!
                     let poiAdditionalCategoryName = pType.poiAdditionalCategory
                     let poiAdditionalIconName = helper.getPoiAdditionalCategoryIcon(poiAdditionalCategoryName)
                     
@@ -176,13 +178,22 @@ final class AmenityUIHelper: NSObject {
         for info in infoRows {
 //            buildAmenityRow(view, info);
             // TODO: implement
+            
+            // ??temp code
+            resultRows.append(info)
         }
         
         sortDescriptionRows(&descriptions)
-        for info in infoRows {
+        for info in descriptions {
 //            buildAmenityRow(view, info);
             // TODO: implement
         }
+        
+//        if (PluginsHelper.getActivePlugin(OsmEditingPlugin.class) != null) {
+//            buildWikiDataRow(view);
+//        }
+        
+        return resultRows
     }
     
     func buildWikiDataRow() {
@@ -265,6 +276,12 @@ final class AmenityUIHelper: NSObject {
     // protected void buildRow(View view, Drawable icon, String text, String textPrefix,
     
     // public void buildAmenityRow(View view, AmenityInfoRow info) {
+    
+//    func buildAmenityRow(_ info: OARowInfo) {
+////        if let icon = info.icon {
+////            
+////        }
+//    }
     
     // private CollapsableView getPoiTypeCollapsableView(Context context, boolean collapsed,
     private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, textRow: OARowInfo?, type: OAPOICategory?) -> OACollapsableView? {

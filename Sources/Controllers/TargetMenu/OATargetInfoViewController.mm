@@ -228,38 +228,38 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     
     _rows = rows;
 
-    [self buildTopInternal:_rows];
-    
-    
-    //        if (showTitleIfTruncated) {
-    //            buildTitleRow(view);
-    //        }
-    
-    // ?? don't exist in android
-    [self appdendDetailsButtonRow:_rows];
-    
-    
-    
-    [self buildWithinRow];
-    [self buildNearestRows];
-    
-    //        if (needBuildPlainMenuItems()) {
-    //            buildPlainMenuItems(view);
+//    [self buildTopInternal:_rows];
+//    
+//    
+//    //        if (showTitleIfTruncated) {
+//    //            buildTitleRow(view);
+//    //        }
+//    
+//    // ?? don't exist in android
+//    [self appdendDetailsButtonRow:_rows];
+//    
+//    
+//    
+//    [self buildWithinRow];
+//    [self buildNearestRows];
+//    
+//    //        if (needBuildPlainMenuItems()) {
+//    //            buildPlainMenuItems(view);
     //        }
     
     [self buildInternal:_rows];
     
-    [self buildPluginRows];
-
-    // ?? don't exist in android
-    if (self.additionalRows)
-    {
-        [_rows addObjectsFromArray:self.additionalRows];
-    }
-
-    [self buildCoordinateRows:rows];
-    [self buildPhotosRow];
-    
+//    [self buildPluginRows];
+//
+//    // ?? don't exist in android
+//    if (self.additionalRows)
+//    {
+//        [_rows addObjectsFromArray:self.additionalRows];
+//    }
+//
+//    [self buildCoordinateRows:rows];
+//    [self buildPhotosRow];
+//    
     // ?? don't exist in android. move to buildPluginRows()
 //    [self addMapillaryCardsRowInfoIfNeeded];
     

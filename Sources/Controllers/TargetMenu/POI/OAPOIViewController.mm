@@ -82,7 +82,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 //        setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
 //        infoBundle = new AdditionalInfoBundle(app, extensions);
         
-        NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:nil addPrefixes:NO];
+        NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
+        
+        //setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
+        
         _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
     }
     return self;
@@ -899,11 +902,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 //    }
 }
 
+//TODO: implement
 - (void)buildInternalRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
-    [_amenityUIHelper buildInternal];
+    NSArray<OARowInfo *> *buildedRows = [_amenityUIHelper buildInternal]; //row
+    [rows addObjectsFromArray:buildedRows];
     
 //    amenityUIHelper = new AmenityUIHelper(mapActivity, getPreferredMapAppLang(), infoBundle);
 //    amenityUIHelper.setLight(isLightContent());

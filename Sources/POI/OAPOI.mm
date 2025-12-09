@@ -84,6 +84,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, SUBTYPE]
 ];
 
+static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
+    PHONE_TAG,
+    WEBSITE_TAG
+];
+
 @implementation OAPOIRoutePoint
 
 @end
@@ -853,10 +858,107 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         return _osmId >> AMENITY_ID_RIGHT_SHIFT;
 }
 
-- (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(id)mapPoiTypes addPrefixes:(BOOL)addPrefixes
+- (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes
 {
+    NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *categories = [NSMutableDictionary new]; //Map<String, List<PoiType>>
     
-    //TODO: implement
+    if (self.name)
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:POI_NAME] : POI_NAME] = self.name;
+    
+    if (self.subType)
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:SUBTYPE] : SUBTYPE] = self.subType;
+    
+    if (self.type && [self.type name])
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:TYPE] : TYPE] = [self.type name];
+    
+    if (self.openingHours)
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG] : OPENING_HOURS_TAG] = self.openingHours;
+    
+    if (!NSDictionaryIsEmpty(self.values))
+    {
+        NSDictionary<NSString *,NSString *> *additionalInfo = [self getAdditionalInfoAndCollectCategories:categories addPrefixes:addPrefixes];
+        [result addEntriesFromDictionary:additionalInfo];
+        
+        //join collected tags by category into one string
+        for (NSString *entryKey in categories)
+        {
+            NSString *key = [COLLAPSABLE_PREFIX stringByAppendingString:entryKey];
+            NSMutableArray<OAPOIType *> *categoryTypes = categories[entryKey];
+            
+            if (!NSArrayIsEmpty(categoryTypes))
+            {
+                NSString *builder = @"";
+                for (OAPOIType *poiType in categoryTypes)
+                {
+                    if (builder.length > 0)
+                        builder = [builder stringByAppendingString:SEPARATOR];
+                    
+                    builder = [builder stringByAppendingString:poiType.name];
+                }
+                result[key] = builder;
+            }
+        }
+    }
+    
+    return result;
+}
+
+- (NSDictionary<NSString *, NSString *> *) getAdditionalInfoAndCollectCategories:(NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *)categories addPrefixes:(BOOL)addPrefixes
+{
+    NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
+    
+    for (NSString *k in [self getAdditionalInfoKeys])
+    {
+        NSString *key = k; //mutable copy
+        NSString *value = [self getAdditionalInfo:key];
+        
+        OAPOIType *poiType = [self getPoiType:key value:value];
+        if (poiType && poiType.filterOnly)
+            continue;
+        
+        if (poiType && !poiType.isText)
+        {
+            if (categories)
+            {
+                NSString *category = poiType.poiAdditionalCategory;
+                if (!NSStringIsEmpty(category))
+                {
+                    NSMutableArray<OAPOIType *> *types = categories[category];
+                    if (!types)
+                    {
+                        types = [NSMutableArray new];
+                        categories[category] = types;
+                    }
+                    [types addObject:poiType];
+                    continue;
+                }
+            }
+        }
+        
+        //save all other values to separate lines
+        if ([key hasSuffix:OPENING_HOURS_TAG])
+            continue;
+        
+        if (![HIDING_EXTENSIONS_AMENITY_TAGS containsObject:key] && addPrefixes)
+            key = [OSM_PREFIX_KEY stringByAppendingString:key];
+        
+        result[key] = value;
+    }
+    return result;
+}
+
+- (OAPOIType *) getPoiType:(NSString *)key value:(NSString *)value
+{
+    OAPOIBaseType *abstractPoiType = [OAPOIHelper.sharedInstance getAnyPoiAdditionalTypeByKey:key];
+    if (!abstractPoiType)
+    {
+        abstractPoiType = [OAPOIHelper.sharedInstance getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", key, value]];
+    }
+    if ([abstractPoiType isKindOfClass:OAPOIType.class])
+    {
+        return (OAPOIType *) abstractPoiType;
+    }
     return nil;
 }
 

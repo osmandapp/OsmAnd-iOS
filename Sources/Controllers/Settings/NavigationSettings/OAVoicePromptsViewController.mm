@@ -256,7 +256,6 @@
     else if ([item.key isEqualToString:@"speedLimitTolerance"])
     {
         NSArray<NSNumber *> *speedLimitsKm = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
-        NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
         if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
         {
             value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
@@ -265,7 +264,10 @@
         {
             NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
             if (index != NSNotFound)
+            {
+                NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
                 value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"mile_per_hour")];
+            }
         }
     }
     else if ([item.key isEqualToString:@"repeatInstructions"])

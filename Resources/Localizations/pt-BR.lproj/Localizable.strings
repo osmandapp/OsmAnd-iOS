@@ -3966,3 +3966,12 @@
 "add_to_favorites" = "Adicionar aos favoritos";
 "shared_string_release" = "Lançado";
 "reconnect" = "Reconectar";
+"average_slope" = "Inclinação média";
+"trip_recording_average_slope_widget_description" = "Mostra a inclinação média da última descida ou subida da viagem atualmente registrada.";
+"shared_string_max_speed" = "Velocidade máxima";
+"trip_recording_max_speed_widget_description" = "Mostra a velocidade máxima da viagem atualmente registrada. Toque para alternar entre a velocidade máxima geral e a velocidade máxima da última subida ou descida.";
+"shared_string_last_uphill" = "Última subida";
+"shared_string_last_downhill" = "Última descida";
+"show_track_on_map" = "Mostrar trilha no mapa";
+"total_distance" = "Distância total";
+"icon_size" = "Tamanho do ícone";

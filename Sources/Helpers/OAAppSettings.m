@@ -4855,7 +4855,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 {
     NSNumber *value = [self valueFromString:strValue appMode:mode];
     if (value)
-        [super set:value.integerValue mode:mode];
+        [super set:value.intValue mode:mode];
 }
 
 - (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode

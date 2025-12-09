@@ -157,17 +157,30 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
             NSString *value = mutableTags[shield];
             if (value)
             {
-                value = [value stringByReplacingOccurrencesOfString:@"^osmc_"
-                                                         withString:@""
-                                                            options:NSRegularExpressionSearch
-                                                              range:NSMakeRange(0, value.length)];
+                BOOL shieldIsForeground = [shield hasPrefix:@"shield_fg"];
+                BOOL valueStartsWithOsmc = [value hasPrefix:@"osmc_"];
                 
-                value = [value stringByReplacingOccurrencesOfString:@"_bg$"
-                                                         withString:@""
-                                                            options:NSRegularExpressionSearch
-                                                              range:NSMakeRange(0, value.length)];
-                
-                mutableTags[osmc] = value;
+                if (shieldIsForeground && !valueStartsWithOsmc)
+                {
+                    // Apply native OsmAnd shield_fg icon (OsmcIconParams.OSMAND_FOREGROUND)
+                    NSString *osmandKey = [osmc stringByReplacingOccurrencesOfString:@"^osmc_"
+                                                                          withString:@"osmand_"
+                                                                             options:NSRegularExpressionSearch
+                                                                               range:NSMakeRange(0, osmc.length)];
+                    mutableTags[osmandKey] = value;
+                }
+                else
+                {
+                    NSString *processed = [value stringByReplacingOccurrencesOfString:@"^osmc_"
+                                                                           withString:@""
+                                                                              options:NSRegularExpressionSearch
+                                                                                range:NSMakeRange(0, value.length)];
+                    processed = [processed stringByReplacingOccurrencesOfString:@"_bg$"
+                                                                     withString:@""
+                                                                        options:NSRegularExpressionSearch
+                                                                          range:NSMakeRange(0, processed.length)];
+                    mutableTags[osmc] = processed;
+                }
             }
         }
         

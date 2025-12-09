@@ -13,7 +13,6 @@
 #import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OACarPlayDashboardInterfaceController.h"
 #import "OAAlarmWidget.h"
 #import "OsmAnd_Maps-Swift.h"
 

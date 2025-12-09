@@ -23,7 +23,6 @@ final class DeletedMapsViewController: OABaseButtonsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDownloadingCellResourceHelper()
-        setupTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -131,11 +130,6 @@ final class DeletedMapsViewController: OABaseButtonsViewController {
         let mapItem = unsupportedMaps[indexPath.row]
         OAResourcesUISwiftHelper.showLocalResourceInformationViewController(mapItem, navigationController: navigationController)
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    private func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
     }
     
     private func setupHeader() {

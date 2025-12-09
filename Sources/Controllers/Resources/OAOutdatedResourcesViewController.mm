@@ -154,6 +154,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 - (void)registerCells
 {
     [self.tableView registerNib:[UINib nibWithNibName:[OAValueTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAValueTableViewCell reuseIdentifier]];
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:[UITableViewCell reuseIdentifier]];
 }
 
 - (void) setupDownloadingCellHelper
@@ -426,12 +427,6 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *const outdatedResourceCell = @"outdatedResourceCell";
-    static NSString *const downloadingResourceCell = @"downloadingResourceCell";
-    static NSString *const liveUpdatesCell = @"liveUpdatesCell";
-    static NSString *const weatherForecastCell = @"weatherForecastCell";
-
-    NSString* cellTypeId = nil;
     NSString* title = nil;
     NSString* description = nil;
     OAResourceItem *item;
@@ -439,29 +434,15 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     if (indexPath.section == _updatesSection)
     {
         if (indexPath.row == _liveUpdatesRow)
-        {
-            cellTypeId = liveUpdatesCell;
             title = OALocalizedString(@"live_updates");
-        }
         else if (indexPath.row == _weatherForecastsRow)
-        {
-            cellTypeId = weatherForecastCell;
             title = OALocalizedString(@"weather_forecast");
-        }
         else if (indexPath.row == _unsupportedMapsRow)
-        {
-            cellTypeId = [OAValueTableViewCell reuseIdentifier];
             title = OALocalizedString(@"unsupported_maps");
-        }
     }
     else if (indexPath.section == _availableMapsSection && _resourcesItems.count > 0)
     {
         item = (OAResourceItem *) _resourcesItems[indexPath.row];
-
-        if (item.downloadTask != nil)
-            cellTypeId = downloadingResourceCell;
-        else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
-            cellTypeId = outdatedResourceCell;
 
         if (item.worldRegion && item.worldRegion.superregion)
         {
@@ -511,8 +492,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
         }
         else
         {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[UITableViewCell reuseIdentifier]];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel.text = title;
             cell.detailTextLabel.text = nil;

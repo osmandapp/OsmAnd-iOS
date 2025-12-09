@@ -113,7 +113,6 @@
             if (shield)
                 layers << shield;
         }
-
     }
 
     if (background.isEmpty() && foreground.isEmpty() && text.isEmpty())

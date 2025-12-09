@@ -1982,18 +1982,52 @@ static const NSInteger _buttonsCount = 4;
 {
     int zoom = _mapView.zoomLevel;
     NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom];
+    NSString *poiName = [self.customController encodedPoiNameForLink];
+    NSString *poiType = [self.customController encodedPoiTypeForLink];
     if (geoUrl.length > 0)
     {
         NSString *cordinates = [NSString stringWithFormat:@"Location: %@", geoUrl];
         [sharingText appendString:@"\n"];
         [sharingText appendString:cordinates];
     }
-    NSString *httpUrl = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
+    NSString *httpUrl = [self buildSharePoiUrlWithPoiName:poiName poiType:poiType lat:lat lon:lon zoom:zoom];
     if (httpUrl.length > 0)
     {
         [sharingText appendString:@"\n"];
         [sharingText appendString:httpUrl];
     }
+}
+
+- (NSString *)buildSharePoiUrlWithPoiName:(NSString *)poiName poiType:(NSString *)poiType lat:(double)lat lon:(double)lon zoom:(int)zoom
+{
+    NSString *base = kSharePoiBaseUrl;
+    NSMutableArray<NSString *> *query = [NSMutableArray array];
+    
+    if (poiName.length > 0)
+    {
+        NSString *nameKey = @"name";
+        if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
+        {
+            OAPOI *poi = (OAPOI *)_targetPoint.targetObj;
+            if ([poi.type.category isWiki])
+                nameKey = @"wikidataId";
+            else
+                nameKey = poi.name.length == 0 ? @"osmId" : @"name";
+        }
+        
+        [query addObject:[NSString stringWithFormat:@"%@=%@", nameKey, poiName]];
+    }
+    
+    if (poiType.length > 0)
+        [query addObject:[NSString stringWithFormat:@"type=%@", poiType]];
+    
+    NSString *pin = [NSString stringWithFormat:@"%.6f%%2C%.6f", lat, lon];
+    [query addObject:[NSString stringWithFormat:@"pin=%@", pin]];
+    
+    NSString *queryPart = [query componentsJoinedByString:@"&"];
+    NSString *fragment = [NSString stringWithFormat:@"%d/%.4f/%.4f", zoom, lat, lon];
+    
+    return [NSString stringWithFormat:@"%@?%@#%@", base, queryPart, fragment];
 }
 
 #pragma mark - Actions
@@ -2091,7 +2125,9 @@ static const NSInteger _buttonsCount = 4;
     [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon];
     previewIcon = _imageView.image;
     int zoom = _mapView.zoomLevel;
-    NSString *httpUrlString = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
+    NSString *poiName = [self.customController encodedPoiNameForLink];;
+    NSString *poiType = [self.customController encodedPoiTypeForLink];
+    NSString *httpUrlString = [self buildSharePoiUrlWithPoiName:poiName poiType:poiType lat:lat lon:lon zoom:zoom];
     NSURL *httpUrl = [NSURL URLWithString:httpUrlString];
     if (httpUrl)
     {
@@ -2688,7 +2724,9 @@ static const NSInteger _buttonsCount = 4;
             double lat = _targetPoint.location.latitude;
             double lon = _targetPoint.location.longitude;
             int zoom = _mapView.zoomLevel;
-            [self copyToClipboardWithToast:[NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon]];
+            NSString *poiName = [self.customController encodedPoiNameForLink];
+            NSString *poiType = [self.customController encodedPoiTypeForLink];
+            [self copyToClipboardWithToast:[self buildSharePoiUrlWithPoiName:poiName poiType:poiType lat:lat lon:lon zoom:zoom]];
             break;
         }
         case OAShareMenuActivityCopyAddress:

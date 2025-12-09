@@ -33,6 +33,7 @@
 #define kInactiveHoursResetLocation 24
 #define kLastMapUsedTime @"kLastMapUsedTime"
 
+#define kSharePoiBaseUrl @"https://osmand.net/map/poi/"
 #define kShareLink @"https://osmand.net/map?pin=%.6f,%.6f#%d/%.4f/%.4f"
 #define kOsmCoordinatesLink @"https://www.openstreetmap.org/?mlat=%.4f&mlon=%.4f#map=%i/%.4f/%.4f"
 

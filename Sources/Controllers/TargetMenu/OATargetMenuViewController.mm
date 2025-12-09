@@ -1047,6 +1047,16 @@
     // override
 }
 
+- (NSString *)encodedPoiNameForLink
+{
+    return @"";
+}
+
+- (NSString *)encodedPoiTypeForLink
+{
+    return @"";
+}
+
 - (void) downloadControlButtonPressed
 {
     if (_localMapIndexItem)

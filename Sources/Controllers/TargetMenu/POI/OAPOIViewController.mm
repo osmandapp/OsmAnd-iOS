@@ -1018,6 +1018,62 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return prefix != nil && prefix.length > 0 ? [NSString stringWithFormat:@"%@, %@", prefix, units] : units;
 }
 
+- (NSString *)encodedPoiNameForLink
+{
+    NSString *name = @"";
+    if ([self.poi.type.category isWiki])
+    {
+        NSString *wikidata = [self.poi getWikidata];
+        if (wikidata.length == 0)
+            return @"";
+        
+        if ([wikidata hasPrefix:@"Q"] || [wikidata hasPrefix:@"q"])
+            wikidata = [wikidata substringFromIndex:1];
+        
+        name = wikidata;
+    }
+    else
+    {
+        name = self.poi.name ?: @"";
+        if (name.length == 0)
+        {
+            int64_t osmId = [self.poi getOsmId];
+            if (osmId > 0)
+                name = [NSString stringWithFormat:@"%lld", osmId];
+        }
+    }
+    
+    return [name escapeUrl] ?: @"";
+}
+
+- (NSString *)encodedPoiTypeForLink
+{
+    NSString *shareType = @"";
+    BOOL isWiki = [self.poi.type.category isWiki];
+    NSString *subType = self.poi.subType ?: @"";
+    NSRange sep = [subType rangeOfString:@";"];
+    if (sep.location != NSNotFound)
+        subType = [subType substringToIndex:sep.location];
+    
+    NSString *typeKey = self.poi.type.category.name;
+    if (isWiki)
+        shareType = [self prepareShareType:typeKey.length > 0 ? typeKey : subType];
+    else
+        shareType = [self prepareShareType:subType.length > 0 ? subType : typeKey];
+    
+    NSString *rawType = shareType.length > 0 ? shareType : OSM_WIKI_CATEGORY;
+    return [rawType escapeUrl] ?: @"";
+}
+
+- (NSString *)prepareShareType:(NSString *)strType
+{
+    if (strType.length == 0)
+        return strType;
+    
+    NSString *replaced = [strType stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    return [OAUtilities capitalizeFirstLetter:replaced];
+}
+
 - (BOOL) isNumericValue:(NSString *)value
 {
     return [value rangeOfCharacterFromSet: [ [NSCharacterSet characterSetWithCharactersInString:@"0123456789.-"] invertedSet] ].location == NSNotFound;

@@ -556,6 +556,10 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
         deletedMapsViewController.region = self.region;
         [self showViewController:deletedMapsViewController];
     }
+    else if (indexPath.section == _updatesSection && indexPath.row == _liveUpdatesRow)
+    {
+        [self performSegueWithIdentifier:kOpenLiveUpdatesSegue sender:nil];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -1009,7 +1009,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (IBAction) goPressed:(id)sender
 {
-    if (_app.carPlayActive)
+    if (UIApplication.sharedApplication.isCarPlayConnected)
     {
         [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayTripStartedNotification object:nil];
         [[OARootViewController instance].mapPanel closeRouteInfo:YES

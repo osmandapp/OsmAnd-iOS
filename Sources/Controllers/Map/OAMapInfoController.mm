@@ -429,8 +429,6 @@
 
 - (void) layoutWidgets
 {
-    BOOL portrait = ![OAUtilities isLandscape];
-
     BOOL hasTopWidgets = [_topPanelController hasWidgets];
     BOOL hasTopSpecialWidgets = [_topPanelController.specialPanelController hasWidgets];
     BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
@@ -531,8 +529,7 @@
     if (bottomOffset > 0)
         bottomOffset += _mapHudViewController.bottomBarViewHeightConstraint.constant;
     
-    OAMapViewController* mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    if (!mapViewController.isCarPlayActive && !mapViewController.isCarPlayDashboardActive)
+    if (!UIApplication.sharedApplication.isAnyCarPlaySceneActive)
     {
         // map render in CarPlay shouldn't take into account topOffset and bottomOffset, which are used in the main app for (top/bottom widget, context menu, etc.). For _renderer->setMapTarget"
         [mapView setTopOffsetOfViewSize:topOffset bottomOffset:bottomOffset];

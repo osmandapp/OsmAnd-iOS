@@ -61,6 +61,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         super.viewDidLoad()
         updateCurrentLocation()
         switchAppMode(toChoosenAppMode: true)
+        refreshMarkerIconSize()
         suspendLocationService()
     }
     
@@ -245,7 +246,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         } else {
             baseAppMode.flatMap(settings.applicationMode.set)
         }
-        refreshMarkerIconSize()
     }
     
     private func suspendLocationService() {

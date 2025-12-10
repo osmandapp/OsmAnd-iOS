@@ -633,6 +633,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [mode setCourseIconSize:_changedProfile.courseIconSize];
         
         [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
 }
 

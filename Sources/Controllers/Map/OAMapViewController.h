@@ -54,7 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer;
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OAApplicationMode;
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
@@ -143,6 +143,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void)setViewportForCarPlayScaleY:(double)y;
 - (void)refreshMarkersCollectionWithLocationFactor:(float)factor;
 - (void)refreshMarkersCollectionWithCourseFactor:(float)factor;
+- (void)setMyLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode;
 - (float)azimuth;
 
 - (void) goToPosition:(Point31)position31

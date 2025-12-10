@@ -20,5 +20,6 @@
 - (BOOL) shouldShowLocationRadius;
 - (void)refreshMarkersCollectionWithLocationFactor:(float)factor;
 - (void)refreshMarkersCollectionWithCourseFactor:(float)factor;
+- (void)setMyLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode;
 
 @end

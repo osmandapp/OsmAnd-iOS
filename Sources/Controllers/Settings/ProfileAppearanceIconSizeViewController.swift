@@ -200,6 +200,9 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         } else {
             mapViewController.refreshMarkersCollection(withLocationFactor: Float(currentIconSize.locationIconSize))
         }
+        if let appMode {
+            mapViewController.setMyLocationSectorRadiusWithFactor(Float(currentIconSize.size(isNavigation: isNavigationIconSize)), mode: appMode)
+        }
     }
     
     private func updateCurrentLocation() {

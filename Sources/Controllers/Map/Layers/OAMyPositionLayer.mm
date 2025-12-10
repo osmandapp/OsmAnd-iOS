@@ -165,7 +165,7 @@ typedef enum {
                 withCircle = true;
             }
             if (showHeading)
-                sectorRadius = [self getSizeOfMarker:_courseMarkerNight icon:_locationHeadingIconKeyNight];
+                sectorRadius = [self getSizeOfMarker:_courseMarkerNight icon:_locationHeadingIconKeyNight] * [[OAAppSettings sharedManager].courseIconSize get];
             break;
         }
         case EOAMarkerStateStay:
@@ -196,6 +196,7 @@ typedef enum {
                 if (showHeading)
                     sectorRadius = [self getSizeOfMarker:_locationMarkerNight icon:_locationHeadingIconKeyNight];
             }
+            sectorRadius *= [[OAAppSettings sharedManager].locationIconSize get];
             break;
         }
         default:
@@ -232,6 +233,28 @@ typedef enum {
     if (surfaceIcon != nullptr)
         return int(MAX(surfaceIcon->width(), surfaceIcon->height()) / 2);
     return 76;
+}
+
+- (void)setMyLocationSectorRadiusWithFactor:(float)factor
+{
+    float sectorRadius = 0.0f;
+    switch (_currentMarkerState)
+    {
+        case EOAMarkerStateStay:
+        {
+            if (_mode == OAMarkerColletionModeDay)
+                sectorRadius = [self getSizeOfMarker:_locationMarkerDay icon:_locationHeadingIconKeyDay];
+            else if (_mode == OAMarkerColletionModeNight)
+                sectorRadius = [self getSizeOfMarker:_locationMarkerNight icon:_locationHeadingIconKeyNight];
+            sectorRadius *= factor;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    [_mapView setMyLocationSectorRadius:sectorRadius];
 }
 
 - (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy bearing:(CLLocationDirection)bearing heading:(CLLocationDirection)heading visible:(BOOL)visible
@@ -687,6 +710,14 @@ typedef enum {
         [self invalidateMarkersCollection];
         [self generateMarkersCollectionWithLocationFactor:_locationIconScaleFactor courseFactor:factor];
         [self updateMyLocationCourseProvider];
+    }];
+}
+
+- (void)setMyLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode
+{
+    [self.mapViewController runWithRenderSync:^{
+        OAMarkerCollection *collection = [_modeMarkers objectForKey:mode];
+        [collection setMyLocationSectorRadiusWithFactor:factor];
     }];
 }
 

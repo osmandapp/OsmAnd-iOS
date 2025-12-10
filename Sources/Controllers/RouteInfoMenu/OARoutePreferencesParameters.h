@@ -43,9 +43,6 @@ static NSString *kRouteParamPreferParameterPrefix = @"prefer_";
 static NSString *kRouteParamMotorType = @"motor_type";
 static NSString *kRouteParamHazmatCategoryUsaPrefix = @"hazmat_category_usa_";
 
-static NSString *kDefaultNumericValue = @"0.0";
-static NSString *kDefaultSymbolicValue = @"-";
-
 static NSString *cellTypeRouteSettingsKey = @"cellTypeRouteSettingsKey";
 static NSString *keyRouteSettingsKey = @"keyRouteSettingsKey";
 static NSString *titleRouteSettingsKey = @"titleRouteSettingsKey";

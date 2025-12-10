@@ -1060,6 +1060,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     if (iconSize)
     {
         _profileAppearanceIconSize = profileAppearanceIconSize;
+        _hasChangesBeenMade = _profile.locationIconSize != iconSize.locationIconSize || _profile.courseIconSize != iconSize.courseIconSize;
         _changedProfile.locationIconSize = iconSize.locationIconSize;
         _changedProfile.courseIconSize = iconSize.courseIconSize;
     }

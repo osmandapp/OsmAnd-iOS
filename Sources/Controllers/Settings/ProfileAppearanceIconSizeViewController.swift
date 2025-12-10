@@ -55,6 +55,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     private var baseAppMode: OAApplicationMode?
     
     private lazy var currentIconSize: ProfileAppearanceIconSize? = baseIconSize?.clone()
+    private lazy var defaultValue = isNavigationIconSize ? settings.courseIconSize.defValue : settings.locationIconSize.defValue
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +71,11 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     }
     
     override func updateModeUI() {
-        updateModeUI(isValueChanged: baseIconSize != currentIconSize, animated: false)
+        let isValueChangedForApply = baseIconSize != currentIconSize
+        updateApplyButton(isValueChanged: isValueChangedForApply)
+        resetButton.isEnabled = isNavigationIconSize ? currentIconSize?.courseIconSize != defaultValue : currentIconSize?.locationIconSize != defaultValue
+
+        tableView.reloadSections(IndexSet(integer: 0), with: .none)
     }
     
     override func registerCells() {
@@ -161,7 +166,11 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     }
     
     override func resetButtonPressed() {
-        currentIconSize = baseIconSize?.clone()
+        if isNavigationIconSize {
+            currentIconSize?.courseIconSize = defaultValue
+        } else {
+            currentIconSize?.locationIconSize = defaultValue
+        }
         refreshMarkerIconSize()
         updateModeUI()
         super.resetButtonPressed()

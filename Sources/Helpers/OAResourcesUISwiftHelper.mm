@@ -63,7 +63,7 @@
             return EOAOAResourceSwiftItemTypeUnknown;
         case OsmAndResourceType::MapRegion:
             return EOAOAResourceSwiftItemTypeMapRegion;
-        case OsmAndResourceType::DeletedMaps:
+        case OsmAndResourceType::DeletedMap:
             return EOAOAResourceSwiftItemTypeDeprecatedMap;
         case OsmAndResourceType::RoadMapRegion:
             return EOAOAResourceSwiftItemTypeRoadMapRegion;

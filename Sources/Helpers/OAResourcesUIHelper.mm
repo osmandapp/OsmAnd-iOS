@@ -76,7 +76,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::DepthContourRegion:
             return OALocalizedString(@"download_regular_maps");
-        case OsmAndResourceType::DeletedMaps:
+        case OsmAndResourceType::DeletedMap:
             return OALocalizedString(@"unsupported_maps");
         case OsmAndResourceType::DepthMapRegion:
             return OALocalizedString(@"nautical_depth");
@@ -160,7 +160,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     switch ([self.class toResourceType:type isGroup:NO])
     {
-        case OsmAndResourceType::DeletedMaps:
+        case OsmAndResourceType::DeletedMap:
             return 5;
         case OsmAndResourceType::MapRegion:
             return 10;
@@ -243,7 +243,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (NSArray<NSNumber *> *)allResourceTypes
 {
     return @[
-            [self.class toValue:OsmAndResourceType::DeletedMaps],
+            [self.class toValue:OsmAndResourceType::DeletedMap],
             [self.class toValue:OsmAndResourceType::MapRegion],
             [self.class toValue:OsmAndResourceType::VoicePack],
             [self.class toValue:OsmAndResourceType::RoadMapRegion],
@@ -769,7 +769,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     NSString *nameStr;
     switch (type)
     {
-        case OsmAndResourceType::DeletedMaps:
+        case OsmAndResourceType::DeletedMap:
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::RoadMapRegion:
         case OsmAndResourceType::SrtmMapRegion:

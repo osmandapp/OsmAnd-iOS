@@ -872,13 +872,13 @@ static BOOL _repositoryUpdated = NO;
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
         }
         
-        // This code swaps downloaded unsupported maps from local resources with DeletedMaps resource with same id
+        // This code swaps downloaded unsupported maps from local resources with DeletedMap resource with same id
         for (const auto& resource : _resourcesInRepository)
         {
             if (regionResources.allResources.contains(resource->id) && resource->isDeleted)
             {
                 const auto& unsupportedResource = regionResources.allResources.value(resource->id);
-                if (unsupportedResource->type != OsmAndResourceType::DeletedMaps)
+                if (unsupportedResource->type != OsmAndResourceType::DeletedMap)
                 {
                     regionResources.allResources.remove(resource->id);
                     regionResources.allResources.insert(resource->id, resource);
@@ -1360,7 +1360,7 @@ static BOOL _repositoryUpdated = NO;
     
     for (OAResourceItem *item in _regionMapItems)
     {
-        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey) || item.resourceType == OsmAndResourceType::DeletedMaps)
+        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey) || item.resourceType == OsmAndResourceType::DeletedMap)
         {
             [_regionMapItems removeObject:item];
             break;
@@ -1792,7 +1792,7 @@ static BOOL _repositoryUpdated = NO;
         NSMutableArray *resourceItems = [NSMutableArray array];
         for (const auto& resource_ : regionResources.allResources)
         {
-            if (resource_->type == OsmAndResourceType::DeletedMaps)
+            if (resource_->type == OsmAndResourceType::DeletedMap)
                 continue;
             
             OAResourceItem *item = [self createResourceItemResult:resource_ region:region regionResources:regionResources];

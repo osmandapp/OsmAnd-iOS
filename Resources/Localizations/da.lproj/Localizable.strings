@@ -3973,3 +3973,6 @@
 "show_track_on_map" = "Vis spor på kort";
 "total_distance" = "Samlet afstand";
 "icon_size" = "Ikonstørrelse";
+"deleted_maps_prompt" = "Disse kort understøttes ikke længere og er blevet erstattet af mindre regioner. Fjern dem og download de nye versioner.";
+"unsupported_maps" = "Ikke-understøttede kort";
+"deleted_maps_alert_message" = "Er du sikker på, at du vil slette %d kort?";

@@ -857,7 +857,7 @@
 
     NSMutableArray<NSNumber *> *resourceGroupTypes = [[OAResourceType mapResourceTypes] mutableCopy];
     [resourceGroupTypes removeObjectsInArray:self.resourceTypes];
-
+    
     if (![self hasGroupItems] && resourceGroupTypes.count > 0)
     {
         OAResourceGroupItem *group = [OAResourceGroupItem withParent:self];

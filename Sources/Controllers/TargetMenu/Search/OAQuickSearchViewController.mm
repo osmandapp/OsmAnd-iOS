@@ -1547,7 +1547,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self showWaitingIndicator];
     [self runCoreSearch:text updateResult:updateResult searchMore:searchMore onSearchStarted:nil onPublish:^(OASearchResultCollection *res, BOOL append) {
         [self updateSearchResult:res append:append];
-    } onSearchFinished:nil];
+    } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
+        OASearchWord * lastSelectedWord = [[self.searchUICore getPhrase] getLastSelectedWord];
+        if (_tableController != nil && [_tableController isShowResult] && [self isResultEmpty] && lastSelectedWord != nil)
+        {
+            [_tableController showOnMap:lastSelectedWord.result searchType:_tableController.searchType delegate:_tableController.delegate];
+        }
+        return YES;
+    }];
 }
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore onSearchStarted:(OASearchStartedCallback)onSearchStarted onPublish:(OAPublishCallback)onPublish onSearchFinished:(OASearchFinishedCallback)onSearchFinished
@@ -2147,6 +2154,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.searchHelper refreshCustomPoiFilters];
     [self reloadCategories];
     return removed;
+}
+
+- (BOOL) isResultEmpty
+{
+    return ![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0;
 }
 
 @end

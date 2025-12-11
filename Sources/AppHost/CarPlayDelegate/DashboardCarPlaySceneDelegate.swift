@@ -17,7 +17,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
         isForegroundScene = false
-        mapVC?.isCarPlayDashboardActive = false
     }
     
     private func configureScene() {
@@ -36,7 +35,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 mapVC = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
-            mapVC?.isCarPlayDashboardActive = true
             if let mapVC {
                 let settings: OAAppSettings = OAAppSettings.sharedManager()
                 CarPlayService.shared.configure()

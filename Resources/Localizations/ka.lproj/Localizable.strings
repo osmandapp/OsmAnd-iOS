@@ -2297,3 +2297,6 @@
 "dd_mm_mmm_format" = "DD°MM.MMM′";
 "shared_string_degrees" = "გრადუსი";
 "app_mode_osm" = "OSM";
+"facebook" = "Facebook";
+"reddit" = "Reddit";
+"poi_operator" = "ოპერატორი";

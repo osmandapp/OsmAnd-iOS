@@ -3983,3 +3983,6 @@
 "show_track_on_map" = "Mostrar traza en el mapa";
 "total_distance" = "Distancia total";
 "icon_size" = "Tamaño del ícono";
+"deleted_maps_prompt" = "Estos mapas no se admiten más y debés reemplazarlos por sus regiones más pequeñas. Por favor, quitalos y descargá las versiones nuevas.";
+"unsupported_maps" = "Mapas incompatibles";
+"deleted_maps_alert_message" = "¿Borrar %d mapa(s)?";

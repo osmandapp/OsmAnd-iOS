@@ -3974,3 +3974,6 @@
 "show_track_on_map" = "Prikaži putanju na mapi";
 "total_distance" = "Ukupno rastojanje";
 "icon_size" = "Veličina ikone";
+"unsupported_maps" = "Nepodržane mape";
+"deleted_maps_alert_message" = "Da li ste sigurni da želite da izbrišete %d mape?";
+"deleted_maps_prompt" = "Ove mape više nisu podržane i zamenjene su manjim regionima. Molimo Vas da ih uklonite i preuzmete nove verzije.";

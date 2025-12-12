@@ -222,11 +222,7 @@ static NSString * const kLinkExternalType = @"ext_link";
           @"icon": @"ic_custom_logo_osmand",
           @"url": kOsmAndTeam},
         @{@"title": OALocalizedString(@"help_what_is_new"),
-          @"descr": [NSString stringWithFormat:@"%@ %@, %@ %@",
-                     OALocalizedString(@"OsmAnd Maps"),
-                     [OAAppVersion getBuildVersion],
-                     OALocalizedString(@"shared_string_release").lowercaseString,
-                     [self releaseDateString]],
+          @"descr": [self whatIsNewDescription],
           @"icon": @"ic_custom_clipboard",
           @"url": kDocsLatestVersion},
         @{@"title": OALocalizedString(@"testFlight"),
@@ -267,6 +263,15 @@ static NSString * const kLinkExternalType = @"ext_link";
     outputDateFormatter.timeStyle = NSDateFormatterNoStyle;
 
     return [outputDateFormatter stringFromDate:date] ?: dateString;
+}
+
+- (NSString *)whatIsNewDescription
+{
+    return [NSString stringWithFormat:@"%@ %@, %@ %@",
+            OALocalizedString(@"OsmAnd Maps"),
+            [OAAppVersion getBuildVersion],
+            OALocalizedString(@"shared_string_release").lowercaseString,
+            [self releaseDateString]];
 }
 
 - (void)loadAndParseJson
@@ -399,7 +404,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)copyBuildVersion
 {
-    [UIPasteboard generalPasteboard].string = [OAAppVersion getBuildVersion];
+    [UIPasteboard generalPasteboard].string = [self whatIsNewDescription];
 }
 
 - (void)sendLogFile

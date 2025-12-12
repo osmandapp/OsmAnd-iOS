@@ -20,18 +20,20 @@ final class SpeedometerSpeedView: UIView {
     /// The side from which the animation starts (and ends). Default is right.
     var animationOrigin: CircleAnimationOrigin = .right
     
+    /// km/h or mph
+    private(set) var cachedSpeedLimit: Float = -1.0
+    
     private let LOW_SPEED_THRESHOLD_MPS = 6.0
     private let UPDATE_THRESHOLD_MPS = 0.1
     private let LOW_SPEED_UPDATE_THRESHOLD_MPS = 0.015 // Update more often while walking/running
     private let previewValueDefault: Int = 85
     /// Offsets the circle's center beyond the screen for a smoother start/end.
     private let offset: CGFloat = 20.0
+    private let contentView = UIView()
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
     /// Meters per seconds (m/s)
     private var cachedSpeed = -1.0
-    /// km/h or mph
-    private var cachedSpeedLimit: Float = -1.0
     /// km/h or mph
     private var cachedFormattedSpeed: Float = -1.0
     private var cachedMetricSystem = -1
@@ -40,9 +42,24 @@ final class SpeedometerSpeedView: UIView {
     private var isCircleRevealAnimationActive = false
     private var currentSpeedometerState: SpeedometerState = .normal
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        insertSubview(contentView, at: 0)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+    }
+    
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
         self.widgetSizeStyle = widgetSizeStyle
-        layer.masksToBounds = true
+        contentView.layer.masksToBounds = true
+        contentView.layer.cornerRadius = layer.cornerRadius
+        layer.masksToBounds = false
         withConstraint.constant = width
         valueSpeedLabel.font = .systemFont(ofSize: speedValueFontSize, weight: .semibold)
         configureConstraints()
@@ -287,7 +304,7 @@ extension SpeedometerSpeedView {
         let fadeOut = CABasicAnimation(keyPath: "opacity")
         fadeOut.fromValue = circleLayer.presentation()?.opacity ?? circleLayer.opacity
         fadeOut.toValue = 0.0
-        fadeOut.duration = 0.5
+        fadeOut.duration = 1.0
         fadeOut.timingFunction = CAMediaTimingFunction(name: .easeOut)
         fadeOut.fillMode = .forwards
         fadeOut.isRemovedOnCompletion = false
@@ -310,7 +327,7 @@ extension SpeedometerSpeedView {
     private func updateSpeedometerSpeedView(animated: Bool = true) {
         updateSpeedometerBackground()
         if animated {
-            animateText(valueColor: currentSpeedometerState.valueColor, unitColor: currentSpeedometerState.unitsColor, duration: 0.5)
+            animateText(valueColor: currentSpeedometerState.valueColor, unitColor: currentSpeedometerState.unitsColor, duration: 1.0)
         } else {
             valueSpeedLabel.textColor = currentSpeedometerState.valueColor
             unitSpeedLabel.textColor = currentSpeedometerState.unitsColor
@@ -318,7 +335,7 @@ extension SpeedometerSpeedView {
     }
     
     private func updateSpeedometerBackground() {
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 1.0) {
             self.backgroundColor = self.currentSpeedometerState.backgroundColor
         }
     }
@@ -370,7 +387,7 @@ extension SpeedometerSpeedView {
         let newCircleLayer = CAShapeLayer()
         newCircleLayer.fillColor = currentSpeedometerState.backgroundColor.cgColor
         newCircleLayer.opacity = 0.0
-        layer.insertSublayer(newCircleLayer, at: 0)
+        contentView.layer.insertSublayer(newCircleLayer, at: 0)
         self.circleLayer = newCircleLayer
         
         let (startPoint, endRadius) = calculateAnimationParameters()

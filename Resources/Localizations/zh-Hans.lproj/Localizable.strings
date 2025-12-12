@@ -2842,3 +2842,9 @@
 "next_turn_information" = "下一转弯信息";
 "next_turn_information_desc" = "显示即将转弯的方向和街道名称。";
 "manage_purchases" = "管理购买";
+"rendering_attr_hideSpots_name" = "离散水深";
+"rendering_attr_hideTidalFlats_description" = "隐藏潮间带";
+"rendering_attr_depthContoursDashed_name" = "虚线等深线";
+"rendering_attr_safetyContour_name" = "安全等深线";
+"rendering_attr_safetyContour_description" = "安全等深线";
+"rendering_attr_spotDistance_name" = "离散水深间距";

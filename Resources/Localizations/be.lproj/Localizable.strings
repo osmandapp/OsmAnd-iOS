@@ -2610,7 +2610,7 @@
 "map_widget_sunrise_sunset_time_left" = "Засталося часу";
 "osm_upload_gpx_tags_footer" = "Увадзіце пазнакі праз коску.";
 "announcement_time_intervals" = "Інтэрвалы часу і адлегласці";
-"trip_recording_downhill_widget_desc" = "Паказвае колькасць усіх з\'ездаў бягучай запісанай паездкі.";
+"trip_recording_downhill_widget_desc" = "Паказвае колькасць усіх з'ездаў бягучай запісанай паездкі.";
 "shared_string_dark" = "Цёмная";
 "map_widget_trip_recording_uphill" = "Пад\'ём";
 "shared_string_move" = "Перамясціць";
@@ -2738,7 +2738,7 @@
 "activity_type_snowmobile_name" = "Снегаход";
 "no_travel_guides_data_descr" = "Спампуйце даведнікі Wikivoyage для прагляду артыкулаў аб мясцінах па ўсім свеце без Інтэрнэту.";
 "air_pressure_widget_desc" = "Паказвае атмасферны ціск для бягучага цэнтра мапы.";
-"trip_recording_uphill_widget_desc" = "Паказвае суму ўсіх пад\'ёмаў у бягучай запісанай паездцы.";
+"trip_recording_uphill_widget_desc" = "Паказвае суму ўсіх пад'ёмаў у бягучай запісанай паездцы.";
 "delete_account" = "Выдаліць уліковы запіс";
 "external_device_details_received_data" = "Атрыманыя даныя";
 "map_widget_camera_distance_desc" = "Паказвае вышыню камеры над узроўнем паверхні.";

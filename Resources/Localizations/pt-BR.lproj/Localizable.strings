@@ -3975,3 +3975,6 @@
 "show_track_on_map" = "Mostrar trilha no mapa";
 "total_distance" = "Distância total";
 "icon_size" = "Tamanho do ícone";
+"deleted_maps_prompt" = "Esses mapas não são mais compatíveis e foram substituídos por regiões menores. Remova-os e baixe as novas versões.";
+"unsupported_maps" = "Mapas não suportados";
+"deleted_maps_alert_message" = "Tem certeza de que deseja excluir %d mapas?";

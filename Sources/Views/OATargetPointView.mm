@@ -2723,6 +2723,12 @@ static const NSInteger _buttonsCount = 4;
         {
             double lat = _targetPoint.location.latitude;
             double lon = _targetPoint.location.longitude;
+            if (_targetPoint.type == OATargetFavorite && [_targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
+            {
+                OAFavoriteItem *fav = (OAFavoriteItem *)_targetPoint.targetObj;
+                lat = [fav getLatitude];
+                lon = [fav getLongitude];
+            }
             int zoom = _mapView.zoomLevel;
             NSString *poiName = [self.customController encodedPoiNameForLink];
             NSString *poiType = [self.customController encodedPoiTypeForLink];

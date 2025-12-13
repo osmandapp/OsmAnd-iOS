@@ -43,6 +43,8 @@
 #import "OAAppDelegate.h"
 #import "OAFirstUsageWizardController.h"
 #import "StartupLogging.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 
 #include <QDir>
 #include <QFile>
@@ -356,6 +358,9 @@
 
 - (BOOL)handleIncomingSetPinOnMapURL:(NSURL *)url
 {
+    if ([self handleIncomingMapPoiURL:url])
+        return YES;
+    
     NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
     NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
     BOOL hasPin = NO;
@@ -394,6 +399,161 @@
     }
 
     return NO;
+}
+
+- (BOOL)handleIncomingMapPoiURL:(NSURL *)url
+{
+    if (![OAUtilities isOsmAndSite:url] || ![OAUtilities isPathPrefix:url pathPrefix:@"/map/poi"])
+        return NO;
+    
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+    NSArray<NSURLQueryItem *> *items = components.queryItems ?: @[];
+    NSString *nameParam = nil;
+    NSString *typeParam = nil;
+    for (NSURLQueryItem *item in items)
+    {
+        NSString *key = item.name.lowercaseString;
+        if ([key isEqualToString:@"name"])
+            nameParam = item.value;
+        else if ([key isEqualToString:@"type"])
+            typeParam = item.value;
+    }
+    
+    if (typeParam.length > 0)
+        return [self handleIncomingAmenityURL:url];
+    else if (nameParam.length > 0)
+        return [self handleIncomingFavouriteURL:url];
+    
+    return NO;
+}
+
+- (BOOL)handleIncomingAmenityURL:(NSURL *)url
+{
+    if (!_rootViewController)
+        return NO;
+    
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+    NSArray<NSURLQueryItem *> *items = components.queryItems ?: @[];
+    NSString *name = nil;
+    NSString *type = nil;
+    NSString *wikiDataId = nil;
+    NSString *osmId = nil;
+    NSString *latLonParam = nil;
+    for (NSURLQueryItem *item in items)
+    {
+        NSString *key = item.name.lowercaseString;
+        if ([key isEqualToString:@"name"])
+            name = item.value;
+        else if ([key isEqualToString:@"type"])
+            type = item.value;
+        else if ([key isEqualToString:@"wikidataid"])
+            wikiDataId = item.value;
+        else if ([key isEqualToString:@"osmid"])
+            osmId = item.value;
+        else if ([key isEqualToString:@"pin"])
+            latLonParam = item.value;
+    }
+    
+    CLLocation *latLon = latLonParam.length == 0 ? nil : [OAUtilities parseLatLon:latLonParam];
+    if (latLon != nil)
+    {
+        double pinLat = latLon.coordinate.latitude;
+        double pinLon = latLon.coordinate.longitude;
+        int zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
+        BaseDetailsObject *amenity = [self searchBaseDetailsObjectWithPinLat:pinLat pinLon:pinLon name:name poiType:type wikiDataId:wikiDataId osmId:osmId];
+        if (amenity == nil)
+            return NO;
+        
+        OATargetPoint*targetPoint=[_rootViewController.mapPanel.mapViewController.mapLayers.poiLayer getTargetPoint:[amenity syntheticAmenity]];
+        targetPoint.location = latLon.coordinate;
+        [targetPoint initAdderssIfNeeded];
+        targetPoint.centerMap = YES;
+        [OARootViewController.instance.mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:zoom];
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL)handleIncomingFavouriteURL:(NSURL *)url
+{
+    if (!_rootViewController)
+        return NO;
+    
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+    NSArray<NSURLQueryItem *> *items = components.queryItems ?: @[];
+    NSString *name = nil;
+    NSString *latLonParam = nil;
+    for (NSURLQueryItem *item in items)
+    {
+        NSString *key = item.name.lowercaseString;
+        if ([key isEqualToString:@"name"])
+            name = item.value;
+        else if ([key isEqualToString:@"pin"])
+            latLonParam = item.value;
+    }
+    
+    CLLocation *latLon = latLonParam.length == 0 ? nil : [OAUtilities parseLatLon:latLonParam];
+    if (latLon && name.length > 0)
+    {
+        double lat = latLon.coordinate.latitude;
+        double lon = latLon.coordinate.longitude;
+        int zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
+        OAFavoriteItem *point = [OAFavoritesHelper getVisibleFavByLat:lat lon:lon];
+        if (point && [name isEqualToString:[point getName]])
+        {
+            OATargetPoint*targetPoint = [_rootViewController.mapPanel.mapViewController.mapLayers.favoritesLayer getTargetPoint:point];
+            targetPoint.location = latLon.coordinate;
+            [targetPoint initAdderssIfNeeded];
+            targetPoint.centerMap = YES;
+            [OARootViewController.instance.mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:zoom];
+        }
+        else
+        {
+            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:name];
+        }
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (nullable BaseDetailsObject *)searchBaseDetailsObjectWithPinLat:(double)pinLat pinLon:(double)pinLon name:(nullable NSString *)name poiType:(nullable NSString *)poiType wikiDataId:(nullable NSString *)wikiDataId osmId:(nullable NSString *)osmId
+{
+    NSMutableArray<NSString *> *names = [NSMutableArray array];
+    if (name)
+        [names addObject:name];
+    
+    int64_t parsedOsmId = -1;
+    if (osmId.length > 0)
+    {
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        formatter.numberStyle = NSNumberFormatterDecimalStyle;
+        NSNumber *num = [formatter numberFromString:osmId];
+        if (num)
+            parsedOsmId = num.longLongValue;
+        else
+            NSLog(@"[SceneDelegate] Incorrect OsmId: %@", osmId);
+    }
+    
+    NSString *subType = nil;
+    OAPOICategory *category = poiType.length == 0 ? nil : [[OAPOIHelper sharedInstance] getPoiCategoryByName:poiType];
+    if (category == nil || category == [OAPOIHelper sharedInstance].otherPoiCategory)
+        subType = poiType;
+    
+    NSString *wikidata = wikiDataId;
+    if (wikidata.length > 0 && ![wikidata hasPrefix:@"Q"])
+        wikidata = [@"Q" stringByAppendingString:wikidata];
+    
+    OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] init];
+    request.type = kEntityTypeNode;
+    request.latLon = [[CLLocation alloc] initWithLatitude:pinLat longitude:pinLon];
+    request.names = [names mutableCopy];
+    request.wikidata = wikidata;
+    request.osmId = parsedOsmId;
+    request.mainAmenityType = subType;
+    return [[OAAmenitySearcher sharedInstance] searchDetailedObject:request];
 }
 
 - (BOOL)handleIncomingMoveMapToLocationURL:(NSURL *)url

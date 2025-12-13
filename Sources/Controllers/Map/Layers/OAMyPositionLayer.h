@@ -18,8 +18,9 @@
 - (void) setMyLocationCircleRadius:(float)radiusInMeters;
 - (BOOL) shouldShowHeading;
 - (BOOL) shouldShowLocationRadius;
-- (void)refreshMarkersCollectionWithLocationFactor:(float)factor;
-- (void)refreshMarkersCollectionWithCourseFactor:(float)factor;
-- (void)setMyLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode;
+- (void)invalidatePreviewMarkerCollection;
+- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
+- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
+- (void)setMyPreviewLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode;
 
 @end

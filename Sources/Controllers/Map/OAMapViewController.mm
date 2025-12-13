@@ -834,19 +834,24 @@ static const NSInteger kDetailedMapZoom = 9;
     return _mapView.azimuth;
 }
 
-- (void)refreshMarkersCollectionWithLocationFactor:(float)factor
+- (void)invalidatePreviewMarkerCollection
 {
-    [_mapLayers.myPositionLayer refreshMarkersCollectionWithLocationFactor:factor];
+    [_mapLayers.myPositionLayer invalidatePreviewMarkerCollection];
 }
 
-- (void)refreshMarkersCollectionWithCourseFactor:(float)factor
+- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation
 {
-    [_mapLayers.myPositionLayer refreshMarkersCollectionWithCourseFactor:factor];
+    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithLocationFactor:factor mode:mode newLocation:newLocation];
 }
 
-- (void)setMyLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode
+- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation
 {
-    [_mapLayers.myPositionLayer setMyLocationSectorRadiusWithFactor:factor mode:mode];
+    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithCourseFactor:factor mode:mode newLocation:newLocation];
+}
+
+- (void)setMyPreviewLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode
+{
+    [_mapLayers.myPositionLayer setMyPreviewLocationSectorRadiusWithFactor:factor mode:mode];
 }
 
 - (void) setupMapArrowsLocation

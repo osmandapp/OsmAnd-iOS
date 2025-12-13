@@ -702,6 +702,7 @@ typedef enum {
         OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
         [self generateMarkerCollectionFor:mode baseOrder:c.baseOrder];
         [self updateMarkersCollectionProviderForMode:mode];
+        [self.mapView invalidateFrame];
     }];
 }
 
@@ -711,6 +712,7 @@ typedef enum {
         [self invalidatePreviewMarkerCollection];
         [self generatePreviewMarkerCollectionFor:mode locationIconScaleFactor:factor courseIconScaleFactor:_courseIconScaleFactor];
         [self updateMyPreviewLocationCourseProviderFor:mode showBearing:NO newLocation:newLocation];
+        [self.mapView invalidateFrame];
     }];
 }
 

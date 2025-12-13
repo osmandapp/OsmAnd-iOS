@@ -499,6 +499,8 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 @interface OACommonDouble : OACommonPreference
 
+@property (nonatomic, readonly) double defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue;
 
 - (double) get;

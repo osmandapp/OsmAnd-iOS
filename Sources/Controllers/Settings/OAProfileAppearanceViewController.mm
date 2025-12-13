@@ -633,6 +633,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         [mode setCourseIconSize:_changedProfile.courseIconSize];
         
         [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
+        if (_profileAppearanceIconSize)
+            [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
 }
 
@@ -1060,6 +1062,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     if (iconSize)
     {
         _profileAppearanceIconSize = profileAppearanceIconSize;
+        _hasChangesBeenMade = _profile.locationIconSize != iconSize.locationIconSize || _profile.courseIconSize != iconSize.courseIconSize;
         _changedProfile.locationIconSize = iconSize.locationIconSize;
         _changedProfile.courseIconSize = iconSize.courseIconSize;
     }

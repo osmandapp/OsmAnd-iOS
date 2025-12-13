@@ -53,24 +53,34 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     private let iconSizeSelectedValueKey = "iconSizeSelectedValueKey"
     private let iconSizeArrayValues: [Double] = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
     private var baseAppMode: OAApplicationMode?
+    private var markerLocation: CLLocation?
     
     private lazy var currentIconSize: ProfileAppearanceIconSize? = baseIconSize?.clone()
+    private lazy var defaultValue = isNavigationIconSize ? settings.courseIconSize.defValue : settings.locationIconSize.defValue
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        OsmAndApp.swiftInstance().mapMode = .free
         updateCurrentLocation()
         switchAppMode(toChoosenAppMode: true)
-        suspendLocationService()
+        refreshMarkerIconSize()
+        toogleLockScreen()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         switchAppMode(toChoosenAppMode: false)
-        resumeLocationService()
+        mapViewController.invalidatePreviewMarkerCollection()
+        appMode.flatMap { mapViewController.setMyPreviewLocationSectorRadiusWithFactor(0, mode: $0) }
+        toogleLockScreen()
     }
     
     override func updateModeUI() {
-        updateModeUI(isValueChanged: baseIconSize != currentIconSize, animated: false)
+        let isValueChangedForApply = baseIconSize != currentIconSize
+        updateApplyButton(isValueChanged: isValueChangedForApply)
+        resetButton.isEnabled = isNavigationIconSize ? currentIconSize?.courseIconSize != defaultValue : currentIconSize?.locationIconSize != defaultValue
+
+        tableView.reloadSections(IndexSet(integer: 0), with: .none)
     }
     
     override func registerCells() {
@@ -161,7 +171,11 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     }
     
     override func resetButtonPressed() {
-        currentIconSize = baseIconSize?.clone()
+        if isNavigationIconSize {
+            currentIconSize?.courseIconSize = defaultValue
+        } else {
+            currentIconSize?.locationIconSize = defaultValue
+        }
         refreshMarkerIconSize()
         updateModeUI()
         super.resetButtonPressed()
@@ -174,7 +188,12 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             self?.goMinimized()
         } completion: { [weak self] _ in
             self?.updateCurrentLocation()
+            self?.refreshMarkerIconSize()
         }
+    }
+    
+    private func toogleLockScreen() {
+        LockHelper.shared.toggleLockScreen()
     }
     
     private func setCurrentIconSize(_ selectedIndex: Int) {
@@ -185,12 +204,13 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     }
     
     private func refreshMarkerIconSize() {
-        guard let currentIconSize else { return }
+        guard let currentIconSize, let appMode, let markerLocation else { return }
         if isNavigationIconSize {
-            mapViewController.refreshMarkersCollection(withCourseFactor: Float(currentIconSize.courseIconSize))
+            mapViewController.refreshPreviewMarkersCollection(withCourseFactor: Float(currentIconSize.courseIconSize), mode: appMode, newLocation: markerLocation)
         } else {
-            mapViewController.refreshMarkersCollection(withLocationFactor: Float(currentIconSize.locationIconSize))
+            mapViewController.refreshPreviewMarkersCollection(withLocationFactor: Float(currentIconSize.locationIconSize), mode: appMode, newLocation: markerLocation)
         }
+        mapViewController.setMyPreviewLocationSectorRadiusWithFactor(0, mode: appMode)
     }
     
     private func updateCurrentLocation() {
@@ -216,14 +236,13 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             direction = -(azimuth > 0 ? azimuth : 360 + azimuth)
         }
         
-        let newLocation = CLLocation(coordinate: location.coordinate,
-                                     altitude: location.altitude,
-                                     horizontalAccuracy: location.horizontalAccuracy,
-                                     verticalAccuracy: location.verticalAccuracy,
-                                     course: CLLocationDirection(direction),
-                                     speed: location.speed,
-                                     timestamp: location.timestamp)
-        locationServices?.setLocationFromSimulation(newLocation)
+        markerLocation = CLLocation(coordinate: location.coordinate,
+                                    altitude: location.altitude,
+                                    horizontalAccuracy: location.horizontalAccuracy,
+                                    verticalAccuracy: location.verticalAccuracy,
+                                    course: CLLocationDirection(direction),
+                                    speed: location.speed,
+                                    timestamp: location.timestamp)
     }
     
     private func switchAppMode(toChoosenAppMode: Bool) {
@@ -233,7 +252,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         } else {
             baseAppMode.flatMap(settings.applicationMode.set)
         }
-        refreshMarkerIconSize()
     }
     
     private func suspendLocationService() {

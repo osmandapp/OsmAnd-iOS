@@ -73,9 +73,16 @@ final class SpeedometerView: OATextInfoWidget {
             return false
         }
         updateComponents()
-        let speedLimit: Float = Float(speedViewWrapper.speedLimit())
+        let speedLimit = Float(speedViewWrapper.speedLimit())
+        let oldLimit = speedometerSpeedView.cachedSpeedLimit
+
+        let shouldShowSpeedLimitSign = oldLimit == -1 && speedLimit != -1
+        let shouldHideSpeedLimitSign = oldLimit != -1 && speedLimit == -1
+        
         updateSpeedometerSpeedView(speedLimit: speedLimit)
-        updateSpeedLimitView(speedLimit: Int(speedLimit))
+        updateSpeedLimitView(speedLimit: Int(speedLimit),
+                             shouldShowSpeedLimitSign: shouldShowSpeedLimitSign,
+                             shouldHideSpeedLimitSign: shouldHideSpeedLimitSign)
         var isChangedVisible = false
         if !speedometerSpeedView.isHidden && isHidden {
             isChangedVisible = true
@@ -170,20 +177,31 @@ final class SpeedometerView: OATextInfoWidget {
         speedometerSpeedView.updateInfo(speedLimit: speedLimit)
     }
     
-    private func updateSpeedLimitView(speedLimit: Int) {
-        speedLimitEUView.isHidden = true
-        speedLimitNAMView.isHidden = true
-        
-        setupSpeedLimitWith(view: isDrivingRegionNAM ? speedLimitNAMView : speedLimitEUView, speedLimit: speedLimit)
+    private func updateSpeedLimitView(speedLimit: Int, shouldShowSpeedLimitSign: Bool, shouldHideSpeedLimitSign: Bool) {
+        let speedLimitSignView: SpeedLimitView = isDrivingRegionNAM ? speedLimitNAMView : speedLimitEUView
+        if speedLimit <= 0 {
+            if shouldHideSpeedLimitSign {
+                speedLimitSignView.fadeOut()
+            } else {
+                speedLimitSignView.isHidden = true
+            }
+        } else {
+            setupSpeedLimitWith(view: speedLimitSignView,
+                                speedLimit: speedLimit,
+                                shouldShowSpeedLimitSign: shouldShowSpeedLimitSign)
+        }
     }
     
-    private func setupSpeedLimitWith(view: SpeedLimitView, speedLimit: Int) {
-        guard speedLimit > -1 else {
-            view.isHidden = true
-            return
+    private func setupSpeedLimitWith(view: SpeedLimitView,
+                                     speedLimit: Int,
+                                     shouldShowSpeedLimitSign: Bool) {
+        if shouldShowSpeedLimitSign {
+            view.fadeIn()
         }
-        view.isHidden = false
-        view.updateWith(value: String(speedLimit))
+        
+        if speedLimit != -1 {
+            view.updateWith(value: "\(speedLimit)")
+        }
     }
 }
 
@@ -233,5 +251,29 @@ enum SpeedometerState {
         case .tolerance: .speedometerToleranceUnits
         case .exceedingLimit: .speedometerLimitUnits
         }
+    }
+}
+
+private extension UIView {
+    
+    func fadeIn(duration: TimeInterval = 1.0) {
+        guard isHidden || alpha < 1.0 else { return }
+        
+        alpha = 0
+        isHidden = false
+
+        UIView.animate(withDuration: duration) {
+            self.alpha = 1.0
+        }
+    }
+
+    func fadeOut(duration: TimeInterval = 1.0) {
+        guard !isHidden, alpha > 0 else { return }
+        
+        UIView.animate(withDuration: duration, animations: {
+            self.alpha = 0
+        }, completion: { _ in
+            self.isHidden = true
+        })
     }
 }

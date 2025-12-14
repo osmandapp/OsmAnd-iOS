@@ -687,7 +687,7 @@
 "lang_gl" = "გალიციური";
 "lang_gn_py" = "გუარანი";
 "lang_gu" = "გუჯარათული";
-"lang_he" = "ებრაული";
+"lang_he" = "ივრითი";
 "lang_hi" = "ჰინდი";
 "lang_hr" = "ხორვატული";
 "lang_hsb" = "სორბული (ზედა)";
@@ -698,7 +698,7 @@
 "lang_id" = "ინდონეზიური";
 "lang_is" = "ისლანდიური";
 "lang_it" = "იტალიური";
-"lang_iw" = "ებრაული";
+"lang_iw" = "ივრითი";
 "lang_ja" = "იაპონური";
 "lang_jv" = "იავური";
 "lang_ka" = "ქართული";
@@ -1442,7 +1442,7 @@
 "delete_custom_categories" = "მომხმარებლის კატეგორიების წაშლა";
 "poi_filter_closest_poi" = "უახლოესი POI";
 "shared_string_is_open_24_7" = "ღიაა 24/7";
-"shared_string_is_open" = "ღიაა";
+"shared_string_is_open" = "ახლა ღიაა";
 "poi_filter_by_name" = "სახელით ძებნა";
 "subcategories" = "ქვეკატეგორიები";
 "shared_string_select_all" = "ყველაფრის არჩევა";
@@ -1578,7 +1578,7 @@
 "rendering_attr_highway_class_street_name" = "ქუჩა";
 "rendering_attr_surface_grass_name" = "ბალახი";
 "routing_attr_piste_type_skitour_description" = "გზები სასრიალოდ.";
-"rendering_attr_surface_fine_gravel_name" = "ქვიშა";
+"rendering_attr_surface_fine_gravel_name" = "წმინდა მსხვილი ქვიშა";
 "rendering_value_orange_name" = "ნარინჯისფერი";
 "rendering_value_medium_w_name" = "საშუალო";
 "rendering_attr_contourDensity_description" = "კონტურული ხაზის სიმკვრივე";
@@ -1610,7 +1610,7 @@
 "rendering_value_translucent_yellow_name" = "გამჭირვალე ყვითელი";
 "rendering_attr_OSMMapperAssistant_name" = "OSM კარტოგრაფის დამხმარე";
 "routing_attr_avoid_borders_name" = "საზღვრის გადაკვეთის გარეშე";
-"rendering_value_walkingRoutesScopeOSMC_name" = "ქსელი";
+"rendering_value_walkingRoutesScopeOSMC_name" = "ქსელის წევრობა";
 "rendering_attr_smoothness_excellent_name" = "შესანიშნავი";
 "rendering_value_pink_name" = "ვარდისფერი";
 "routing_attr_allow_expert_name" = "ექსპერტის გზების დაშვება";
@@ -2094,7 +2094,7 @@
 "shared_string_travel_guides" = "მოგზაურთა გიდები";
 "map_markers_history" = "რუკის სანიშნის ისტორია";
 "map_widget_gps_info" = "GPS ინფორმაცია";
-"troubleshooting" = "დიაგნოსტიკა";
+"troubleshooting" = "პრობლემების აღმოფხვრა";
 "activity_type_winter_name" = "ზამთარი";
 "weather_update_disabled" = "გამორთული";
 "activity_type_cycling_name" = "ველოსიპედით";

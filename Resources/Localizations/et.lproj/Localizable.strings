@@ -1009,7 +1009,7 @@
 "open_map_settings" = "Ava kaardi seaded";
 "plugin_popup_ski_title" = "Lülita sisse suusakaardi stiil";
 "plugin_popup_ski_desc" = "<b>Suusakaart</b> stiili sisse lülitamiseks, palun mine <b>Kaardi seaded</b> > <b>Kaardi liik</b>";
-"plugin_popup_wiki_title" = "Laadi alla Vikipeedia andmeid";
+"plugin_popup_wiki_title" = "Laadi alla Vikipeedia andmed";
 "plugin_popup_wiki_desc" = "Vikipeedia lisamooduli kasutamise alustamiseks, palun laadi esmalt alla Vikipeedia andmed piirkonna kohta";
 "plugin_popup_wiki_ask" = "Vikipeedia andmete allalaadimiseks on vajalik lülitada sisse lisa: <b>Vikipeedia</b>";
 "plugin_popup_srtm_title" = "Laadi alla kõrgusjooned";
@@ -1354,7 +1354,7 @@
 "rendering_attr_hideWaterPolygons_description" = "Peida vesi";
 "rendering_attr_depthContours_name" = "Meresügavuse kontuurid";
 "rendering_value_translucent_lightblue_name" = "Läbikumav helesinine";
-"rendering_attr_pisteRoutes_name" = "Suusamarsruudid";
+"rendering_attr_pisteRoutes_name" = "Suusanõlvad ja rajad";
 "rendering_attr_showSurfaces_name" = "Kuva tee pind";
 "rendering_attr_tracktype_grade2_name" = "Tahke (katteta)";
 "rendering_value_orange_name" = "Oranž";
@@ -2390,7 +2390,7 @@
 "routing_attr_prefer_tactile_paving_description" = "Eelista kombatava sillutise kasutamist";
 "routing_attr_avoid_footways_description" = "Väldi jalgteid";
 "rendering_attr_horse_scale_impossible_name" = "Võimatu";
-"rendering_attr_natureReserves_name" = "Looduskaitseala";
+"rendering_attr_natureReserves_name" = "Looduskaitseala ja muud kaitsealad";
 "routing_attr_allow_intermittent_name" = "Luba vahele jäävad veeteed";
 "routing_attr_prefer_tactile_paving_name" = "Eelista kombatava sillutise kasutamist";
 "rendering_attr_horse_scale_difficult_name" = "Raske";
@@ -2440,7 +2440,7 @@
 "weather_update_disabled" = "Keelatud";
 "subscribe_email_error" = "Viga";
 "shared_string_deleted" = "Kustutatud";
-"shared_string_accessibility" = "Juurdepääs";
+"shared_string_accessibility" = "Hõlpsus";
 "lang_zh-Hans" = "Hiina (lihtsustatud)";
 "wikivoyage_download_pics" = "Laadi pildid alla";
 "user_points" = "Kasutaja punktid";
@@ -3007,7 +3007,7 @@
 "help_article_navigation_routing_osmand_routing_name" = "Teave OsmAndi teekonna koostamise kohta";
 "help_article_navigation_routing_pedestrian_routing_name" = "Teekonna koostamine jalakäijatele";
 "help_article_navigation_routing_public_transport_navigation_name" = "Teekonna koostamine kasutades ühistransporti";
-"help_article_navigation_routing_ski_routing_name" = "Teekonna koostamine suusatamiseks";
+"help_article_navigation_routing_ski_routing_name" = "Suusanõlvad ja rajad";
 "help_article_navigation_routing_straight_line_routing_name" = "Teekonna koostamine linnulennul lendamiseks";
 "help_article_navigation_routing_train_routing_name" = "Teekonna koostamine rongisõiduks";
 "help_article_navigation_setup_gpx_navigation_name" = "Tee juhatamine raja alusel";
@@ -3271,8 +3271,8 @@
 "map_widget_target_distance_desc" = "Näitab vahemaad kaamera ja sihtmärgi asukoha vahel.";
 "av_notes_video_widget_desc" = "Videot filmida saad vidinal klõpsides.";
 "av_notes_audio_widget_desc" = "Häälmärget saad salvestada vidinal klõpsides.";
-"trip_recording_downhill_widget_desc" = "Näitab salvestatud teekonna kõikide laskumiste summat.";
-"trip_recording_uphill_widget_desc" = "Näitab salvestatud teekonna kõikide tõusude summat.";
+"trip_recording_downhill_widget_desc" = "Näitab salvestatud teekonna kõikide laskumiste summat või viimast laskumist.";
+"trip_recording_uphill_widget_desc" = "Näitab salvestatud teekonna kõikide tõusude summat või viimast tõusu.";
 "map_widget_target_distance" = "Kaugus kaamerast sihtmärgini";
 "map_widget_rendering_fps" = "Kaadrisagedus kaardi kuvamisel";
 "poi_operator" = "Käitaja";
@@ -3341,7 +3341,7 @@
 "unsaved_changes_will_be_lost_discard" = "Kõik salvestamata muudatused lähevad kaotsi. Kas loobud neist?";
 "select_items" = "Vali objektid";
 "trip_recording_duration_widget_desc" = "Näitab hetkel salvestatud teekonna aega.";
-"trip_recording_distance_widget_desc" = "Näitab hetkel salvestatud teekonna vahemaad.";
+"trip_recording_distance_widget_desc" = "Näitab hetkel salvestatud teekonna vahemaad ja võimaldab vajadusel vaadata viimase tõusu või laskumise vahemaad.";
 "average_speed_time_interval_desc" = "Vali välp keskmise kiiruse arvutamiseks.";
 "widget_secondary_desc_part_of" = "Osa „%@“ lisamoodulist.";
 "download_heightmap_maps" = "Kõrguskaart";
@@ -3465,7 +3465,7 @@
 "min_mile" = "min/m";
 "change_activity" = "Muuda tegevust";
 "map_widget_route_information" = "Teekonna teave";
-"map_widget_route_information_desc" = "Kuvab antud teekonna kohta hinnangulist saabumisaega, allesjäänud reisiaega ja vahemaad.";
+"map_widget_route_information_desc" = "Kuvab aktiivse teekonna kohta hinnangulist saabumisaega, allesjäänud reisiaega ja vahemaad.";
 "shared_string_default_view" = "Vaikimisi vaade";
 "dd_mm_mmm_format" = "DD°MM.MMM′";
 "type_of_activity" = "Tegevuse tüüp";
@@ -3483,7 +3483,7 @@
 "rendering_attr_hideMilitaryAreas_name" = "Sõjaväealad";
 "wheel_circumference" = "Ratta ümbermõõt";
 "routing_attr_avoid_4wd_only_description" = "Väldi teid, mis sobivad vaid neljarattaveoga sõidukitele";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Näita ikoone väiksema suumitaseme puhul üldistatuna";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Ikoonide lihtsustatud visuaal väiksema suumitaseme nende huvipunktide jaoks, mida tavaliselt ei kuvata";
 "speak_gps_signal_status" = "Teata GPS-i signaali kadumisest ja taastamisest";
 "dangerous_goods_description" = "Mõnedel teedel ja mõnedes tunnelites on ohtlike kaupade vedu keelatud.";
 "speak_route_recalculation" = "Teata teekonna muutmise arvutamisest";
@@ -3614,3 +3614,7 @@
 "three_years_subscription" = "Tellimus kolmeks aastaks";
 "osm_live_payment_renews_3_years" = "Uueneb iga kolme aasta järel";
 "shared_string_litres" = "liitrit";
+"key_event_action_zoom_in" = "Suumi sisse";
+"altitude_metrics_description" = "Seadistab kõrguse mõõtühiku vidinate ja statistika jaoks.";
+"quick_action_map_center_widget_descr" = "Nupp, mis võimaldab näidata või peita kaardi keskpunkti vidinat.";
+"key_event_category_map_interactions" = "Tegevused kaardiga";

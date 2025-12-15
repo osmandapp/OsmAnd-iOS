@@ -105,9 +105,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
 
-@property (nonatomic, assign) BOOL isCarPlayActive;
-@property (nonatomic, assign) BOOL isCarPlayDashboardActive;
-
 - (CLLocation *) getMapLocation;
 
 - (float) getMapZoom;

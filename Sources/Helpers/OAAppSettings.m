@@ -4855,7 +4855,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 {
     NSNumber *value = [self valueFromString:strValue appMode:mode];
     if (value)
-        [super set:value.integerValue mode:mode];
+        [super set:value.intValue mode:mode];
 }
 
 - (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
@@ -6834,6 +6834,8 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         {
             value = [OACommonString withKey:[NSString stringWithFormat:@"%@%@", kRoutingPreferencePrefix, attrName] defValue:defaultValue];
             [_customRoutingProps setObject:value forKey:attrName];
+        } else {
+            value.defValue = defaultValue; // update with actual default value from routing.xml
         }
         return value;
     }

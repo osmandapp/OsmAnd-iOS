@@ -2124,8 +2124,10 @@
                     continue;
                 
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-                if ((![streetMatch matches:street->nativeName.toNSString()] && ![streetMatch matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName]]) || ![phrase isSearchTypeAllowed:EOAObjectTypeStreetIntersection])
+                if (![self matchAddressName:phrase parent:nil res:res fullMatch:false])
+                {
                     continue;
+                }
                 
                 res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName];
                 res.localeName = street->getName(lang, transliterate).toNSString();

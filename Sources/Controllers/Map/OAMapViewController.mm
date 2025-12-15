@@ -528,7 +528,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (BOOL) isMapHidden
 {
-    return self.view.window == nil && !_app.carPlayActive;
+    return self.view.window == nil && !UIApplication.sharedApplication.isCarPlayConnected;
 }
 
 #pragma mark - OAMapRendererDelegate
@@ -589,7 +589,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) showWhatsNewDialogIfNeeded
 {
-    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !_isCarPlayActive && !_isCarPlayDashboardActive)
+    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)
     {
         OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
         [bottomSheet presentInViewController:self];
@@ -601,7 +601,7 @@ static const NSInteger kDetailedMapZoom = 9;
 {
     [super viewDidDisappear:animated];
 
-    if (self.mapViewLoaded && !_app.carPlayActive)
+    if (self.mapViewLoaded && !UIApplication.sharedApplication.isCarPlayConnected)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -649,7 +649,7 @@ static const NSInteger kDetailedMapZoom = 9;
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    if (self.mapViewLoaded && !_app.carPlayActive)
+    if (self.mapViewLoaded && !UIApplication.sharedApplication.isCarPlayConnected)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -658,7 +658,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) applicationWillEnterForeground:(UIApplication*)application
 {
-    if (self.mapViewLoaded && !_app.carPlayActive)
+    if (self.mapViewLoaded && !UIApplication.sharedApplication.isCarPlayConnected)
     {
         // Resume rendering
         [_mapView resumeRendering];
@@ -691,7 +691,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) showProgressHUD
 {
-    if (_app.carPlayActive)
+    if (UIApplication.sharedApplication.isCarPlayConnected)
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -795,13 +795,13 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void)setViewportScaleX:(double)x
 {
-    if (_mapView.viewportXScale != x && !_isCarPlayActive && !_isCarPlayDashboardActive)
+    if (_mapView.viewportXScale != x && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)
         _mapView.viewportXScale = x;
 }
 
 - (void)setViewportScaleY:(double)y
 {
-    if (_mapView.viewportYScale != y && !_isCarPlayActive && !_isCarPlayDashboardActive)
+    if (_mapView.viewportYScale != y && !UIApplication.sharedApplication.isAnyCarPlaySceneActive)
         _mapView.viewportYScale = y;
 }
 
@@ -813,13 +813,13 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void)setViewportForCarPlayScaleX:(double)x
 {
-    if (_mapView.viewportXScale != x && (_isCarPlayActive || _isCarPlayDashboardActive))
+    if (_mapView.viewportXScale != x && UIApplication.sharedApplication.isAnyCarPlaySceneActive)
         _mapView.viewportXScale = x;
 }
 
 - (void)setViewportForCarPlayScaleY:(double)y
 {
-    if (_mapView.viewportYScale != y && (_isCarPlayActive || _isCarPlayDashboardActive))
+    if (_mapView.viewportYScale != y && UIApplication.sharedApplication.isAnyCarPlaySceneActive)
         _mapView.viewportYScale = y;
 }
 
@@ -3963,9 +3963,12 @@ static const NSInteger kDetailedMapZoom = 9;
         if (!helper.isPublicTransportMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (_isCarPlayActive)
+                if (UIApplication.sharedApplication.isCarPlayConnected)
                 {
-                    [[UIApplication sharedApplication].carPlaySceneDelegate showAlertWithTitle:error];
+                    if (UIApplication.sharedApplication.isCarPlayAppActive)
+                    {
+                        [[UIApplication sharedApplication].carPlaySceneDelegate showAlertWithTitle:error];
+                    }
                 }
                 else
                 {

@@ -245,6 +245,9 @@
 		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
 		279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322462E82EEF300B9FC81 /* KeyEvent.swift */; };
 		279322492E82F4A400B9FC81 /* KeyEventMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322482E82F4A400B9FC81 /* KeyEventMapper.swift */; };
+		279AB4202EE2DAD300377620 /* DeletedMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */; };
+		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
+		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
@@ -1530,7 +1533,7 @@
 		C5E202952A2102D800BFC32C /* ic_navbar_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5E202932A2102D800BFC32C /* ic_navbar_add@2x.png */; };
 		C5E3B59F2DDDC40800083695 /* SelectRouteActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B59E2DDDC40800083695 /* SelectRouteActivityViewController.swift */; };
 		C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */; };
-		C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeManager.swift */; };
+		C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */; };
 		C9DC5FD49885FD738343EB13 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */; };
 		CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB13C1566E5C9A2B0D3E /* OADeleteAllFilesCommand.mm */; };
 		CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */; };
@@ -3275,6 +3278,7 @@
 		FA66F15A2D5CD40600A4FF9E /* ImageViewerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA66F14B2D5CD40600A4FF9E /* ImageViewerController.swift */; };
 		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
 		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
+		FA6BC19F2EE04780006CBA11 /* CarPlayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6BC19E2EE04780006CBA11 /* CarPlayService.swift */; };
 		FA73410A2BBAE44A00CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7341092BBAE44A00CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.xib */; };
 		FA73410D2BBAED8600CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA73410C2BBAED8600CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.swift */; };
 		FA7341142BBC1C2000CBF7EC /* OARequiredMapsResourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA7341122BBC1C2000CBF7EC /* OARequiredMapsResourceViewController.mm */; };
@@ -3690,6 +3694,9 @@
 		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
 		279322462E82EEF300B9FC81 /* KeyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEvent.swift; sourceTree = "<group>"; };
 		279322482E82F4A400B9FC81 /* KeyEventMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventMapper.swift; sourceTree = "<group>"; };
+		279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedMapsViewController.swift; sourceTree = "<group>"; };
+		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
+		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
@@ -5361,7 +5368,7 @@
 		C5E202932A2102D800BFC32C /* ic_navbar_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_add@2x.png"; path = "Resources/Icons/ic_navbar_add@2x.png"; sourceTree = "<group>"; };
 		C5E3B59E2DDDC40800083695 /* SelectRouteActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRouteActivityViewController.swift; sourceTree = "<group>"; };
 		C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterDevelopmentViewController.swift; sourceTree = "<group>"; };
-		C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayNavigationModeManager.swift; sourceTree = "<group>"; };
+		C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayNavigationModeProvider.swift; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
 		CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherForecastDetailsViewController.h; sourceTree = "<group>"; };
 		CA4ED0674197CBD54D7AB46B /* OAWeatherCacheSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherCacheSettingsViewController.h; sourceTree = "<group>"; };
@@ -7991,6 +7998,7 @@
 		FA66F14D2D5CD40600A4FF9E /* SimpleImageDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleImageDatasource.swift; sourceTree = "<group>"; };
 		FA6797ED2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherAutoUpdateSettingsViewController.h; sourceTree = "<group>"; };
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
+		FA6BC19E2EE04780006CBA11 /* CarPlayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayService.swift; sourceTree = "<group>"; };
 		FA7341092BBAE44A00CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LeftIconRightStackTitleDescriptionButtonView.xib; sourceTree = "<group>"; };
 		FA73410C2BBAED8600CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftIconRightStackTitleDescriptionButtonView.swift; sourceTree = "<group>"; };
 		FA7341122BBC1C2000CBF7EC /* OARequiredMapsResourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARequiredMapsResourceViewController.mm; sourceTree = "<group>"; };
@@ -8268,6 +8276,16 @@
 				274167482E4DF5840051DD4B /* TopTextViewState.swift */,
 			);
 			path = OATopTextView;
+			sourceTree = "<group>";
+		};
+		27EB64252EDDF7DF001EF9FE /* UnsupportedMaps */ = {
+			isa = PBXGroup;
+			children = (
+				279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */,
+				279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */,
+				279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */,
+			);
+			path = UnsupportedMaps;
 			sourceTree = "<group>";
 		};
 		27F050902DD38E310058075F /* RouteInfo */ = {
@@ -12394,6 +12412,7 @@
 				DA5A7D8626C563A300F274C7 /* OAOsmAndLiveViewController.mm */,
 				DA5A7D7B26C563A300F274C7 /* OAOutdatedResourcesViewController.h */,
 				DA5A7D8E26C563A300F274C7 /* OAOutdatedResourcesViewController.mm */,
+				27EB64252EDDF7DF001EF9FE /* UnsupportedMaps */,
 				322AF8FB2A0CD68500D2FF37 /* OAPluginDetailsViewController.xib */,
 				DA5A7D8C26C563A300F274C7 /* OAPluginDetailsViewController.h */,
 				DA5A7D8426C563A300F274C7 /* OAPluginDetailsViewController.mm */,
@@ -14259,11 +14278,12 @@
 		FA44BF562A72A8FC000D2F5F /* CarPlayDelegate */ = {
 			isa = PBXGroup;
 			children = (
+				FA6BC19E2EE04780006CBA11 /* CarPlayService.swift */,
 				FA77E7A52AE16E90001BABE2 /* OACarPlayMapDashboardViewController.h */,
 				FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */,
 				FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */,
 				FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */,
-				C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeManager.swift */,
+				C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */,
 			);
 			path = CarPlayDelegate;
 			sourceTree = "<group>";
@@ -14885,6 +14905,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81E0C9432D37DE5B00BC7D85 /* bundled_assets.json in Resources */,
+				279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */,
 				32309A4426989180005751F5 /* ic_custom_map_zoom_in@3x.png in Resources */,
 				32B50ADF26BBE3C7002E6C92 /* ic_custom_map_location_follow@3x.png in Resources */,
 				84F3A9631B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png in Resources */,
@@ -17052,6 +17073,7 @@
 				DA8DC3962A0CE32E006C116B /* TimeToNavigationPointWidget.swift in Sources */,
 				DA5A813526C563A700F274C7 /* OAOsmBugsDBHelper.m in Sources */,
 				DA5A847926C563A900F274C7 /* OARulerWidget.mm in Sources */,
+				279AB4202EE2DAD300377620 /* DeletedMapsViewController.swift in Sources */,
 				FA4C56FF2D48E84500438A5C /* NoInternetCard.swift in Sources */,
 				DA5A843D26C563A800F274C7 /* OACollapsableNearestPoiWikiView.mm in Sources */,
 				DA5A817B26C563A700F274C7 /* OAFavoriteAction.mm in Sources */,
@@ -17465,6 +17487,7 @@
 				C5BC8DD72E0408D400CF0815 /* OBDRemainingFuelWidget.swift in Sources */,
 				DA5A83AA26C563A800F274C7 /* OAAdvancedEditingViewController.mm in Sources */,
 				FAC346F52E052D3D002653CA /* VehicleMetricsItem.swift in Sources */,
+				FA6BC19F2EE04780006CBA11 /* CarPlayService.swift in Sources */,
 				27C6D5BB2E81666300695D5B /* KeyEventCommand.swift in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
@@ -17640,6 +17663,7 @@
 				DA9A2C3726FF0F4D00BEC681 /* OAColoringType.mm in Sources */,
 				DA5A81FD26C563A700F274C7 /* OAFeatureCardRow.m in Sources */,
 				FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */,
+				279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */,
 				C58924012D6906DB00EC5910 /* StartNewTripSegmentAction.swift in Sources */,
 				DA5A818C26C563A700F274C7 /* OAQuickAction.m in Sources */,
 				FAC166212B21BEF900D63755 /* Util.swift in Sources */,
@@ -17955,7 +17979,7 @@
 				DA5A824F26C563A700F274C7 /* OAVoicePromptsViewController.mm in Sources */,
 				DA5A844826C563A900F274C7 /* OAMultiDestinationCell.mm in Sources */,
 				DA5A850526C563A900F274C7 /* OAMapRulerView.m in Sources */,
-				C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeManager.swift in Sources */,
+				C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift in Sources */,
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,

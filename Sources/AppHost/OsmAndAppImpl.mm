@@ -110,7 +110,6 @@ NSString *const kXmlColon = @"_-_";
     BOOL _firstLaunch;
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
 
-    BOOL _carPlayActive;
     BOOL _isInBackground;
 }
 
@@ -156,7 +155,6 @@ NSString *const kXmlColon = @"_-_";
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
-@synthesize carPlayActive = _carPlayActive;
 @synthesize backgroundStateObservable = _backgroundStateObservable;
 
 - (instancetype) init
@@ -1075,8 +1073,6 @@ NSString *const kXmlColon = @"_-_";
 {
     BOOL prevIsInBackground = self.isInBackground;
 
-    _carPlayActive = carPlayActive;
-
     BOOL isInBackground = self.isInBackground;
     if (prevIsInBackground != isInBackground)
         [self.backgroundStateObservable notifyEvent];
@@ -1084,7 +1080,7 @@ NSString *const kXmlColon = @"_-_";
 
 - (BOOL) isInBackground
 {
-    return _isInBackground && !self.carPlayActive;
+    return _isInBackground && !UIApplication.sharedApplication.isCarPlayConnected;
 }
 
 - (BOOL) isInBackgroundOnDevice
@@ -1436,11 +1432,11 @@ NSString *const kXmlColon = @"_-_";
     
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     
-    OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? [[CarPlayNavigationModeManager shared] firstCarMode] : [OAAppSettings.sharedManager.carPlayMode get];
+    OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? [[CarPlayService shared] firstCarMode] : [OAAppSettings.sharedManager.carPlayMode get];
     OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
         settings.defaultApplicationMode.get;
-    [settings setApplicationModePref:_carPlayActive ? carPlayMode : defaultAppMode markAsLastUsed:NO];
+    [settings setApplicationModePref:UIApplication.sharedApplication.isCarPlayConnected ? carPlayMode : defaultAppMode markAsLastUsed:NO];
 }
 
 - (void) setupDrivingRegion:(OAWorldRegion *)reg

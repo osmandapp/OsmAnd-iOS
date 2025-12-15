@@ -3964,3 +3964,15 @@
 "metric_lbs" = "lbs";
 "shared_string_inches" = "tommer";
 "shared_string_pounds" = "pund";
+"average_slope" = "Gennemsnitlig hældning";
+"trip_recording_average_slope_widget_description" = "Viser den gennemsnitlige hældning for den seneste nedadgående eller opadgående sektion af den aktuelt registrerede tur.";
+"shared_string_max_speed" = "Maks. hastighed";
+"trip_recording_max_speed_widget_description" = "Viser den maksimale hastighed for den aktuelt registrerede tur. Tryk for at skifte mellem den samlede maksimale hastighed og den maksimale hastighed fra den seneste op- eller nedkørsel.";
+"shared_string_last_uphill" = "Seneste opkørsel";
+"shared_string_last_downhill" = "Seneste nedkørsel";
+"show_track_on_map" = "Vis spor på kort";
+"total_distance" = "Samlet afstand";
+"icon_size" = "Ikonstørrelse";
+"deleted_maps_prompt" = "Disse kort understøttes ikke længere og er blevet erstattet af mindre regioner. Fjern dem og download de nye versioner.";
+"unsupported_maps" = "Ikke-understøttede kort";
+"deleted_maps_alert_message" = "Er du sikker på, at du vil slette %d kort?";

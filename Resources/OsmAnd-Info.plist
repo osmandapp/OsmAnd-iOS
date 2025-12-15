@@ -209,7 +209,7 @@
 					<key>UISceneClassName</key>
 					<string>CPTemplateApplicationDashboardScene</string>
 					<key>UISceneConfigurationName</key>
-					<string>CarPlay-Dashboard</string>
+					<string>CarPlay-Dashboard Configuration</string>
 					<key>UISceneDelegateClassName</key>
 					<string>${PRODUCT_MODULE_NAME}.DashboardCarPlaySceneDelegate</string>
 				</dict>

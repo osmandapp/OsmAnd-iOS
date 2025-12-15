@@ -60,18 +60,17 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        (view as? OAUserInteractionPassThroughView)?.isScreenClickable = false
         OsmAndApp.swiftInstance().mapMode = .free
         updateCurrentLocation()
         switchAppMode(toChoosenAppMode: true)
         refreshMarkerIconSize()
-        toogleLockScreen()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         switchAppMode(toChoosenAppMode: false)
         mapViewController.invalidatePreviewMarkerCollection()
-        toogleLockScreen()
     }
     
     override func updateModeUI() {
@@ -189,10 +188,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             self?.updateCurrentLocation()
             self?.refreshMarkerIconSize()
         }
-    }
-    
-    private func toogleLockScreen() {
-        LockHelper.shared.toggleLockScreen()
     }
     
     private func setCurrentIconSize(_ selectedIndex: Int) {

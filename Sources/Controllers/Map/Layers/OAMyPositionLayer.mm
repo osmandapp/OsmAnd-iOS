@@ -241,10 +241,23 @@ typedef enum {
     {
         case EOAMarkerStateStay:
         {
-            if (_mode == OAMarkerColletionModeDay)
-                sectorRadius = [self getSizeOfMarker:_locationMarkerDay icon:_locationHeadingIconKeyDay];
-            else if (_mode == OAMarkerColletionModeNight)
-                sectorRadius = [self getSizeOfMarker:_locationMarkerNight icon:_locationHeadingIconKeyNight];
+            switch (_mode)
+            {
+                case OAMarkerColletionModeDay:
+                {
+                    sectorRadius = [self getSizeOfMarker:_locationMarkerDay icon:_locationHeadingIconKeyDay];
+                    break;
+                }
+                case OAMarkerColletionModeNight:
+                {
+                    sectorRadius = [self getSizeOfMarker:_locationMarkerNight icon:_locationHeadingIconKeyNight];
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
             sectorRadius *= factor;
             break;
         }

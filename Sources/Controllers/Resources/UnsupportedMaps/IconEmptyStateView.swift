@@ -27,7 +27,7 @@ final class IconEmptyStateView: UIView {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.12
         descriptionLabel.attributedText = NSAttributedString(string: description,
-                                                             attributes:  [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+                                                             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
     }
     
     private func commonInit() {

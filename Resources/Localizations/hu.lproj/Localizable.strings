@@ -1195,7 +1195,7 @@
 "app_mode_skiing" = "Síelés";
 "app_mode_shuttle_bus" = "Ingajáratú busz";
 "app_mode_monowheel" = "Egykerekű";
-"app_mode_ufo" = "Azonosítatlan repülő tárgy";
+"app_mode_ufo" = "UFO (azonosítatlan repülő tárgy)";
 "online_webpage_warning" = "Az oldal csak online érhető el. Megnyitja böngészőben\?";
 "srtm_color_scheme" = "Színséma";
 "app_mode_camper" = "Lakókocsi";
@@ -3937,3 +3937,6 @@
 "icon_size" = "Ikonméret";
 "trip_recording_average_slope_widget_description" = "Megjeleníti a jelenleg rögzített utazás utolsó lejtő vagy emelkedő szakaszának átlagos meredekségét.";
 "trip_recording_max_speed_widget_description" = "Megjeleníti a jelenleg rögzített utazás legnagyobb sebességét. Koppintással válthat az általános legnagyobb sebesség és az utolsó emelkedőn vagy lejtőn elért legnagyobb sebesség között.";
+"deleted_maps_prompt" = "Ezek a térképek már nem támogatottak, és kisebb régiók váltották fel őket. Távolítsa el őket, és töltse le az új verziókat.";
+"unsupported_maps" = "Nem támogatott térképek";
+"deleted_maps_alert_message" = "Biztosan törölni szeretné a %d térképet?";

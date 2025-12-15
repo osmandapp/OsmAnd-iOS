@@ -199,10 +199,9 @@
     const auto& route = segment->route;
     const auto stops = segment->getTravelStops();
     const auto& startStop = segment->getStart();
-    OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:route->type.c_str()]];
-    [startTime setObject:@(startTime.firstObject.integerValue + routeRes->getBoardingTime()) atIndexedSubscript:0];
+    OATransportStopType *stopType = [OATransportStopType findType:@(route->type.c_str())];
     NSString *timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];
-    NSString *str = [NSString stringWithUTF8String:route->color.c_str()];
+    NSString *str = @(route->color.c_str());
     str = str.length == 0 ? stopType.renderAttr : str;
     UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
     if (color)
@@ -210,7 +209,7 @@
         [arr addObject:@{
             @"cell" : [OAPublicTransportPointCell getCellIdentifier],
             @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
-            @"title" : [NSString stringWithUTF8String:startStop.name.c_str()],
+            @"title" : @(startStop.name.c_str()),
             @"descr" : OALocalizedString(@"board_at"),
             @"time" : timeText,
             @"top_route_line" : @(NO),
@@ -221,7 +220,7 @@
         }];
     }
 
-    // TODO: fix later for schedule
+    // fix later for schedule
     [startTime setObject:@(startTime.firstObject.integerValue + segment->travelTime) atIndexedSubscript:0];
     timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];
     
@@ -230,11 +229,32 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportRouteShieldCell getCellIdentifier],
         @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
-        @"title" : [NSString stringWithUTF8String:route->name.c_str()],
+        @"title" : @(route->name.c_str()),
         @"line_color" : color,
         @"coords" : locations,
     }];
-    
+
+    for (const auto &alt : segment->alternatives)
+    {
+        const auto &altRoute = alt->route;
+        OATransportStopType *altStopType = [OATransportStopType findType:@(altRoute->type.c_str())];
+        NSString *altColorName = @(altRoute->color.c_str());
+        altColorName = altColorName.length == 0 ? altStopType.renderAttr : altColorName;
+        UIColor *altColor = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:altColorName];
+        if (!altColor)
+            altColor = color; // fallback to main color if none resolved
+
+        NSMutableArray<CLLocation *> *altLocations = [self generateLocationsFor:alt];
+
+        [arr addObject:@{
+            @"cell" : [OAPublicTransportRouteShieldCell getCellIdentifier],
+            @"img" : altStopType ? altStopType.resId : [OATransportStopType getResId:TST_BUS],
+            @"title" : @(altRoute->name.c_str()),
+            @"line_color" : altColor,
+            @"coords" : altLocations,
+        }];
+    }
+
     if (stops.size() > 2)
     {
         [dictionary setObject:[NSArray arrayWithArray:arr] forKey:@(section++)];
@@ -288,34 +308,39 @@
         BOOL first = i == 0;
         BOOL last = i == segments.size() - 1;
         const auto& segment = segments[i];
+
         if (first)
         {
             [self addStartItems:arr route:routeRes segment:segment start:start startTime:startTime];
         }
+
         [self buildTransportSegmentItems:arr sectionsDictionary:resData routeRes:routeRes segment:segment startTime:startTime section:section];
         
         if (i < segments.size() - 1)
         {
             const auto& nextSegment = segments[i + 1];
-            
+
             if (nextSegment != nullptr) {
                 double walkDist = [self getWalkDistance:segment next:nextSegment dist:segment->walkDist];
                 if (walkDist > 0)
                 {
-                    NSInteger time = [self getWalkTime:segment next:nextSegment dist:walkDist speed:routeRes->getWalkSpeed()];
-                    if (time < 60)
-                        time = 60;
+                    NSInteger walkTime = [self getWalkTime:segment next:nextSegment dist:walkDist speed:routeRes->getWalkSpeed()];
+                    if (walkTime < 60)
+                        walkTime = 60;
                     OARouteCalculationResult *seg = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nextSegment]];
                     [arr addObject:@{
                         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
                         @"img" : @"ic_profile_pedestrian",
-                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:walkTime shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
                         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
                     }];
-                    [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
-                    
+
+                    int changeTime = routeRes->getChangeTime(segment, nextSegment);
+                    [startTime setObject:@(startTime.firstObject.integerValue + walkTime) atIndexedSubscript:0];
+                    [startTime setObject:@(startTime.firstObject.integerValue + changeTime) atIndexedSubscript:0];
+
                     [arr addObject:@{
                         @"cell" : [OADividerCell getCellIdentifier],
                         @"custom_insets" : @(YES)

@@ -2082,6 +2082,10 @@ static const NSInteger kDetailedMapZoom = 9;
     [self goToPosition:[OANativeUtilities convertFromPointI:target31] animated:YES];
 }
 
+- (void)cancelAllAnimations
+{
+    [_mapView cancelAllAnimations];
+}
 
 - (float) calculateMapRuler
 {

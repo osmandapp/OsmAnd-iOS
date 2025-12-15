@@ -61,6 +61,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     override func viewDidLoad() {
         super.viewDidLoad()
         (view as? OAUserInteractionPassThroughView)?.isScreenClickable = false
+        mapViewController.cancelAllAnimations()
         OsmAndApp.swiftInstance().mapMode = .free
         updateCurrentLocation()
         switchAppMode(toChoosenAppMode: true)

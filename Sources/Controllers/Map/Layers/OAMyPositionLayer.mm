@@ -165,7 +165,7 @@ typedef enum {
                 withCircle = true;
             }
             if (showHeading)
-                sectorRadius = [self getSizeOfMarker:_courseMarkerNight icon:_locationHeadingIconKeyNight] * [[OAAppSettings sharedManager].courseIconSize get];
+                sectorRadius = [self getSizeOfMarker:_courseMarkerNight icon:_locationHeadingIconKeyNight];
             break;
         }
         case EOAMarkerStateStay:
@@ -196,7 +196,6 @@ typedef enum {
                 if (showHeading)
                     sectorRadius = [self getSizeOfMarker:_locationMarkerNight icon:_locationHeadingIconKeyNight];
             }
-            sectorRadius *= [[OAAppSettings sharedManager].locationIconSize get];
             break;
         }
         default:
@@ -216,7 +215,7 @@ typedef enum {
             [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(circleRadius)];
         });
         [_mapView setMyLocationSectorDirection:(sectorDirection)];
-        [_mapView setMyLocationSectorRadius:(sectorRadius)];
+        [_mapView setMyLocationSectorRadius:(sectorRadius * [[OAAppSettings sharedManager].locationIconSize get])];
     }
     else
     {
@@ -722,6 +721,7 @@ typedef enum {
         [self invalidatePreviewMarkerCollection];
         [self generatePreviewMarkerCollectionFor:mode locationIconScaleFactor:_locationIconScaleFactor courseIconScaleFactor:factor];
         [self updateMyPreviewLocationCourseProviderFor:mode showBearing:YES newLocation:newLocation];
+        [self.mapView invalidateFrame];
     }];
 }
 

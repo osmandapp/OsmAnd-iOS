@@ -116,16 +116,12 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath) {
         let vc = DefaultMapButtonViewController()
+        vc.delegate = self
         vc.mapButtonState = buttonStates[indexPath.row]
         show(vc)
     }
     
     // MARK: Additions
-    
-    private func onSettingsChanged() {
-        reloadDataWith(animated: true, completion: nil)
-        delegate?.onButtonsChanged()
-    }
     
     private func getDescription(_ buttonState: MapButtonState) -> String {
         switch buttonState {
@@ -154,13 +150,6 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     }
 }
 
-// MARK: WidgetStateDelegate
-extension DefaultMapButtonsViewController: WidgetStateDelegate {
-    func onWidgetStateChanged() {
-        onSettingsChanged()
-    }
-}
-
 // MARK: OACopyProfileBottomSheetDelegate
 extension DefaultMapButtonsViewController: OACopyProfileBottomSheetDelegate {
     func onCopyProfileCompleted() {
@@ -169,5 +158,19 @@ extension DefaultMapButtonsViewController: OACopyProfileBottomSheetDelegate {
         guard let appMode else { return }
         buttonStates.forEach { $0.copyPrefs(from: fromAppMode, to: appMode) }
         onSettingsChanged()
+    }
+}
+
+// MARK: OASettingsDataDelegate
+extension DefaultMapButtonsViewController: OASettingsDataDelegate {
+    func onSettingsChanged() {
+        reloadDataWith(animated: true, completion: nil)
+        delegate?.onButtonsChanged()
+    }
+    
+    func closeSettingsScreenWithRouteInfo() {
+    }
+    
+    func openNavigationSettings() {
     }
 }

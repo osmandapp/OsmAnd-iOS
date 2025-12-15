@@ -8,8 +8,16 @@
 
 final class DefaultMapButtonViewController: OABaseNavbarViewController {
     private static let descriptionFontSize: CGFloat = 15
+    private static let selectedKey = "selected"
+    
+    private var appMode: OAApplicationMode?
     
     weak var mapButtonState: MapButtonState?
+    weak var delegate: OASettingsDataDelegate?
+    
+    override func commonInit() {
+        appMode = OAAppSettings.sharedManager().applicationMode.get()
+    }
     
     override func getTitle() -> String {
         mapButtonState?.getName() ?? ""
@@ -22,9 +30,12 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(PreviewImageViewTableViewCell.reuseIdentifier)
+        addCell(OASwitchTableViewCell.reuseIdentifier)
+        addCell(OAValueTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
+        guard let appMode else { return }
         tableData.clearAllData()
         let visibilitySection = tableData.createNewSection()
         let imageHeaderRow = visibilitySection.createNewRow()
@@ -33,6 +44,26 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         let descriptionRow = visibilitySection.createNewRow()
         descriptionRow.title = mapButtonState?.buttonDescription()
         descriptionRow.cellType = OASimpleTableViewCell.reuseIdentifier
+        
+        let visibilityRow = visibilitySection.createNewRow()
+        visibilityRow.title = localizedString("visibility")
+        visibilityRow.accessibilityLabel = visibilityRow.title
+        visibilityRow.iconTintColor = appMode.getProfileColor()
+        if let boolPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean {
+            visibilityRow.setObj(NSNumber(value: boolPref.get(appMode)), forKey: Self.selectedKey)
+            visibilityRow.cellType = OASwitchTableViewCell.reuseIdentifier
+        } else if let intPref = mapButtonState?.storedVisibilityPref() as? OACommonInteger {
+            if mapButtonState is CompassButtonState, let visibility = CompassVisibility(rawValue: intPref.get(appMode)) {
+                visibilityRow.iconName = visibility.iconName
+                visibilityRow.descr = visibility.title
+                visibilityRow.setObj(NSNumber(value: visibility != .alwaysHidden), forKey: Self.selectedKey)
+            } else if mapButtonState is Map3DButtonState, let visibility = Map3DModeVisibility(rawValue: intPref.get(appMode)) {
+                visibilityRow.iconName = visibility.iconName
+                visibilityRow.descr = visibility.title
+                visibilityRow.setObj(NSNumber(value: visibility != .hidden), forKey: Self.selectedKey)
+            }
+            visibilityRow.cellType = OAValueTableViewCell.reuseIdentifier
+        }
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -54,8 +85,72 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = .textColorSecondary
             cell.titleLabel.font = .systemFont(ofSize: Self.descriptionFontSize)
+            cell.setCustomLeftSeparatorInset(true)
+            cell.separatorInset = .zero
+            return cell
+        } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as! OASwitchTableViewCell
+            let selected = item.bool(forKey: Self.selectedKey)
+            cell.descriptionVisibility(false)
+            cell.leftIconView.image = UIImage.templateImageNamed(selected ? "ic_custom_show" : "ic_custom_hide")
+            cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
+            cell.titleLabel.text = item.title
+            cell.accessibilityLabel = item.accessibilityLabel
+            cell.accessibilityValue = item.accessibilityValue
+            cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
+            cell.switchView.isOn = selected
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row
+            cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
+            return cell
+        } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
+            let selected = item.bool(forKey: Self.selectedKey)
+            cell.descriptionVisibility(false)
+            cell.titleLabel.text = item.title
+            cell.valueLabel.text = item.descr
+            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
+            cell.accessibilityLabel = item.accessibilityLabel
+            cell.accessibilityValue = item.accessibilityValue
             return cell
         }
         return nil
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath) {
+        if mapButtonState is CompassButtonState {
+            let vc = CompassVisibilityViewController()
+            vc.delegate = self
+            showMediumSheetViewController(vc, isLargeAvailable: false)
+        } else if mapButtonState is Map3DButtonState {
+            let vc = Map3dModeButtonVisibilityViewController()
+            vc.delegate = self
+            showMediumSheetViewController(vc, isLargeAvailable: false)
+        }
+    }
+    
+    private func updateData() {
+        reloadDataWith(animated: true, completion: nil)
+        delegate?.onSettingsChanged()
+    }
+    
+    @objc private func onSwitchClick(_ sender: Any) -> Bool {
+        guard let sw = sender as? UISwitch else {
+            return false
+        }
+        
+        if let boolPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean, let appMode {
+            boolPref.set(sw.isOn, mode: appMode)
+        }
+        updateData()
+        
+        return false
+    }
+}
+
+// MARK: WidgetStateDelegate
+extension DefaultMapButtonViewController: WidgetStateDelegate {
+    func onWidgetStateChanged() {
+        updateData()
     }
 }

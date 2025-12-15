@@ -443,9 +443,10 @@ typedef enum {
     [_modeMarkers setObject:collection forKey:mode];
 }
 
-- (void)generatePreviewMarkerCollectionFor:(OAApplicationMode *)mode locationIconScaleFactor:(float)locationIconScaleFactor courseIconScaleFactor:(float)courseIconScaleFactor
+- (void)generatePreviewMarkerCollectionFor:(float)locationIconScaleFactor courseIconScaleFactor:(float)courseIconScaleFactor
 {
     int baseOrder = self.pointsOrder;
+    OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
     _tempPreviewMarker = [self getMarkerCollectionFor:mode baseOrder:baseOrder locationIconScaleFactor:locationIconScaleFactor courseIconScaleFactor:courseIconScaleFactor];
 }
 
@@ -686,9 +687,8 @@ typedef enum {
 {
     [self.mapViewController runWithRenderSync:^{
         [self invalidatePreviewMarkerCollection];
-        OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
-        [self generatePreviewMarkerCollectionFor:mode locationIconScaleFactor:factor courseIconScaleFactor:_courseIconScaleFactor];
-        [self updateMyPreviewLocationCourseProviderFor:mode showBearing:NO newLocation:newLocation];
+        [self generatePreviewMarkerCollectionFor:factor courseIconScaleFactor:_courseIconScaleFactor];
+        [self updateMyPreviewLocationCourseProviderFor:NO newLocation:newLocation];
         [self.mapView invalidateFrame];
     }];
 }
@@ -697,9 +697,8 @@ typedef enum {
 {
     [self.mapViewController runWithRenderSync:^{
         [self invalidatePreviewMarkerCollection];
-        OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
-        [self generatePreviewMarkerCollectionFor:mode locationIconScaleFactor:_locationIconScaleFactor courseIconScaleFactor:factor];
-        [self updateMyPreviewLocationCourseProviderFor:mode showBearing:YES newLocation:newLocation];
+        [self generatePreviewMarkerCollectionFor:_locationIconScaleFactor courseIconScaleFactor:factor];
+        [self updateMyPreviewLocationCourseProviderFor:YES newLocation:newLocation];
         [self.mapView invalidateFrame];
     }];
 }
@@ -785,22 +784,12 @@ typedef enum {
     }];
 }
 
-- (void)updateMyPreviewLocationCourseProviderFor:(OAApplicationMode *)mode showBearing:(BOOL)showBearing newLocation:(CLLocation *)newLocation
+- (void)updateMyPreviewLocationCourseProviderFor:(BOOL)showBearing newLocation:(CLLocation *)newLocation
 {
     [self.mapViewController runWithRenderSync:^{
-        OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-        
         OAMarkerCollection *collection = _tempPreviewMarker;
-        if (mode == currentMode)
-        {
-            [self updatePreviewLocation:mode showBearing:showBearing newLocation:newLocation];
-            [self.mapView addKeyedSymbolsProvider:collection.markerCollection];
-        }
-        else
-        {
-            [collection hideMarkers];
-            [self.mapView removeKeyedSymbolsProvider:collection.markerCollection];
-        }
+        [self updatePreviewLocation:showBearing newLocation:newLocation];
+        [self.mapView addKeyedSymbolsProvider:collection.markerCollection];
     }];
 }
 
@@ -816,7 +805,7 @@ typedef enum {
     c.mode = [OAAppSettings sharedManager].nightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
 }
 
-- (void)updatePreviewLocation:(OAApplicationMode *)mode showBearing:(BOOL)showBearing newLocation:(CLLocation *)newLocation
+- (void)updatePreviewLocation:(BOOL)showBearing newLocation:(CLLocation *)newLocation
 {
     OAMarkerCollection *collection = _tempPreviewMarker;
     

@@ -19,7 +19,7 @@
 - (BOOL) shouldShowHeading;
 - (BOOL) shouldShowLocationRadius;
 - (void)invalidatePreviewMarkerCollection;
-- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
-- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
+- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor newLocation:(CLLocation *)newLocation;
+- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor newLocation:(CLLocation *)newLocation;
 
 @end

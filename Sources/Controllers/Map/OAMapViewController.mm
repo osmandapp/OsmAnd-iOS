@@ -839,14 +839,14 @@ static const NSInteger kDetailedMapZoom = 9;
     [_mapLayers.myPositionLayer invalidatePreviewMarkerCollection];
 }
 
-- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation
+- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor newLocation:(CLLocation *)newLocation
 {
-    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithLocationFactor:factor mode:mode newLocation:newLocation];
+    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithLocationFactor:factor newLocation:newLocation];
 }
 
-- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation
+- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor newLocation:(CLLocation *)newLocation
 {
-    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithCourseFactor:factor mode:mode newLocation:newLocation];
+    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithCourseFactor:factor newLocation:newLocation];
 }
 
 - (void) setupMapArrowsLocation

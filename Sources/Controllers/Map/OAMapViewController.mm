@@ -849,11 +849,6 @@ static const NSInteger kDetailedMapZoom = 9;
     [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithCourseFactor:factor mode:mode newLocation:newLocation];
 }
 
-- (void)setMyPreviewLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode
-{
-    [_mapLayers.myPositionLayer setMyPreviewLocationSectorRadiusWithFactor:factor mode:mode];
-}
-
 - (void) setupMapArrowsLocation
 {
     [self setupMapArrowsLocation:_centerLocationForMapArrows];

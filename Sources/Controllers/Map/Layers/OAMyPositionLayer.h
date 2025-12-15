@@ -21,6 +21,5 @@
 - (void)invalidatePreviewMarkerCollection;
 - (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
 - (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
-- (void)setMyPreviewLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode;
 
 @end

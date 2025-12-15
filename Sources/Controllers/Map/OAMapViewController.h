@@ -141,7 +141,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void)invalidatePreviewMarkerCollection;
 - (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
 - (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor mode:(OAApplicationMode *)mode newLocation:(CLLocation *)newLocation;
-- (void)setMyPreviewLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode;
 - (float)azimuth;
 
 - (void) goToPosition:(Point31)position31

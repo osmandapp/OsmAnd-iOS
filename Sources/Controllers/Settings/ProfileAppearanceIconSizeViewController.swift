@@ -71,7 +71,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         super.viewDidDisappear(animated)
         switchAppMode(toChoosenAppMode: false)
         mapViewController.invalidatePreviewMarkerCollection()
-        appMode.flatMap { mapViewController.setMyPreviewLocationSectorRadiusWithFactor(0, mode: $0) }
         toogleLockScreen()
     }
     
@@ -210,7 +209,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         } else {
             mapViewController.refreshPreviewMarkersCollection(withLocationFactor: Float(currentIconSize.locationIconSize), mode: appMode, newLocation: markerLocation)
         }
-        mapViewController.setMyPreviewLocationSectorRadiusWithFactor(0, mode: appMode)
     }
     
     private func updateCurrentLocation() {

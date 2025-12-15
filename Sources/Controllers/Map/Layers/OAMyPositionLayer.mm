@@ -234,41 +234,6 @@ typedef enum {
     return 76;
 }
 
-- (void)setMyLocationSectorRadiusWithFactor:(float)factor
-{
-    float sectorRadius = 0.0f;
-    switch (_currentMarkerState)
-    {
-        case EOAMarkerStateStay:
-        {
-            switch (_mode)
-            {
-                case OAMarkerColletionModeDay:
-                {
-                    sectorRadius = [self getSizeOfMarker:_locationMarkerDay icon:_locationHeadingIconKeyDay];
-                    break;
-                }
-                case OAMarkerColletionModeNight:
-                {
-                    sectorRadius = [self getSizeOfMarker:_locationMarkerNight icon:_locationHeadingIconKeyNight];
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
-            }
-            sectorRadius *= factor;
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    [_mapView setMyLocationSectorRadius:sectorRadius];
-}
-
 - (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy bearing:(CLLocationDirection)bearing heading:(CLLocationDirection)heading visible:(BOOL)visible
 {
     std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
@@ -737,14 +702,6 @@ typedef enum {
     }];
 }
 
-- (void)setMyPreviewLocationSectorRadiusWithFactor:(float)factor mode:(OAApplicationMode *)mode
-{
-    [self.mapViewController runWithRenderSync:^{
-        OAMarkerCollection *collection = _tempPreviewMarker;
-        [collection setMyLocationSectorRadiusWithFactor:factor];
-    }];
-}
-
 - (void) onSettingsChanged
 {
     __weak OAMyPositionLayer *weakSelf = self;
@@ -862,22 +819,15 @@ typedef enum {
     OAMarkerCollection *collection = _tempPreviewMarker;
     
     CLLocationDirection newHeading = newLocation.course;
-    BOOL showHeading = YES;
-    
-    if (!newLocation)
-    {
-        [collection hideMarkers];
-        return;
-    }
     
     const OsmAnd::PointI newTarget31 =
             OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
     
-    [self updateCollectionLocation:collection newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:YES showBearing:showBearing showHeading:showHeading pointCourse:newHeading];
+    [self updateCollectionLocation:collection newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:YES showBearing:showBearing showHeading:NO pointCourse:newHeading];
     OAMarkerCollection *markerCollection = _tempPreviewMarker;
     if (markerCollection != collection)
-        [self updateCollectionLocation:markerCollection newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO showBearing:showBearing showHeading:showHeading pointCourse:newHeading];
+        [self updateCollectionLocation:markerCollection newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO showBearing:showBearing showHeading:NO pointCourse:newHeading];
 }
 
 - (void) updateLocation:(OAApplicationMode *)mode

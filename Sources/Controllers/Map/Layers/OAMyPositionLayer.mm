@@ -714,7 +714,6 @@ typedef enum {
         OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
         [self generateMarkerCollectionFor:mode baseOrder:c.baseOrder];
         [self updateMarkersCollectionProviderForMode:mode];
-        [self.mapView invalidateFrame];
     }];
 }
 

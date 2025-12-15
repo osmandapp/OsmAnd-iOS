@@ -34,11 +34,11 @@ final class ShareLinkItem: NSObject, UIActivityItemSource {
         let metadata = LPLinkMetadata()
         metadata.originalURL = url
         metadata.url = url
-        if let title = title, !title.isEmpty {
+        if let title, !title.isEmpty {
             metadata.title = title
         }
         
-        if let icon = icon, icon.size.width > 0, icon.size.height > 0 {
+        if let icon {
             let renderer = UIGraphicsImageRenderer(size: icon.size)
             let rendered = renderer.image { _ in
                 icon.draw(in: CGRect(origin: .zero, size: icon.size))

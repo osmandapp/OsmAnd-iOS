@@ -2127,11 +2127,11 @@ static const NSInteger _buttonsCount = 4;
     int zoom = _mapView.zoomLevel;
     NSString *poiName = [self.customController encodedPoiNameForLink];;
     NSString *poiType = [self.customController encodedPoiTypeForLink];
-    NSString *httpUrlString = [self buildSharePoiUrlWithPoiName:poiName poiType:poiType lat:lat lon:lon zoom:zoom];
-    NSURL *httpUrl = [NSURL URLWithString:httpUrlString];
-    if (httpUrl)
+    NSString *urlString = [self buildSharePoiUrlWithPoiName:poiName poiType:poiType lat:lat lon:lon zoom:zoom];
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (url)
     {
-        ShareLinkItem *linkItem = [[ShareLinkItem alloc] initWithUrl:httpUrl title:previewTitle icon:previewIcon];
+        ShareLinkItem *linkItem = [[ShareLinkItem alloc] initWithUrl:url title:previewTitle icon:previewIcon];
         [items addObject:linkItem];
     }
     

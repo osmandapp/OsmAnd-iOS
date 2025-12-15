@@ -464,7 +464,7 @@
         if (amenity == nil)
             return NO;
         
-        OATargetPoint*targetPoint=[_rootViewController.mapPanel.mapViewController.mapLayers.poiLayer getTargetPoint:[amenity syntheticAmenity]];
+        OATargetPoint*targetPoint = [_rootViewController.mapPanel.mapViewController.mapLayers.poiLayer getTargetPoint:[amenity syntheticAmenity]];
         targetPoint.location = latLon.coordinate;
         [targetPoint initAdderssIfNeeded];
         targetPoint.centerMap = YES;

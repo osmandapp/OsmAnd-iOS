@@ -2177,7 +2177,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @interface OACommonDouble ()
 
-@property (nonatomic) double defValue;
+@property (nonatomic, readwrite) double defValue;
 
 @end
 

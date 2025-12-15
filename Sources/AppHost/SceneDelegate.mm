@@ -356,7 +356,7 @@
 
 - (BOOL)handleIncomingSetPinOnMapURL:(NSURL *)url
 {
-    if ([DeepLinkParser handleIncomingMapPoiURL:url])
+    if ([DeepLinkParser handleIncomingMapPoiURL:url rootViewController:_rootViewController])
         return YES;
     
     NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];

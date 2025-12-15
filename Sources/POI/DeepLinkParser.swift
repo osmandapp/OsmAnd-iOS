@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 final class DeepLinkParser: NSObject {
     
-    static func handleIncomingMapPoiURL(_ url: URL) -> Bool {
+    static func handleIncomingMapPoiURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
         guard OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: "/map/poi") else { return false }
         let items = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems ?? []
         var nameParam: String?
@@ -26,16 +26,16 @@ final class DeepLinkParser: NSObject {
         }
         
         if !(typeParam?.isEmpty ?? true) {
-            return handleIncomingAmenityURL(url)
+            return handleIncomingAmenityURL(url, rootViewController: rootViewController)
         } else if !(nameParam?.isEmpty ?? true) {
-            return handleIncomingFavouriteURL(url)
+            return handleIncomingFavouriteURL(url, rootViewController: rootViewController)
         }
         
         return false
     }
     
-    static func handleIncomingAmenityURL(_ url: URL) -> Bool {
-        guard let rootViewController = OARootViewController.instance() else { return false }
+    static func handleIncomingAmenityURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController else { return false }
         let items = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems ?? []
         var name: String?
         var type: String?
@@ -79,8 +79,8 @@ final class DeepLinkParser: NSObject {
         return false
     }
     
-    static func handleIncomingFavouriteURL(_ url: URL) -> Bool {
-        guard let rootViewController = OARootViewController.instance() else { return false }
+    static func handleIncomingFavouriteURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController else { return false }
         let items = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems ?? []
         var name: String?
         var latLonParam: String?

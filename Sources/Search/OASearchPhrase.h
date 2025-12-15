@@ -118,6 +118,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (void) setUnselectedPoiType:(OAPOIBaseType *)unselectedPoiType;
 + (NSString *) getDelimiter;
 + (NSString *) stripBraces:(NSString *)localeName;
++ (NSMutableArray<NSString *> *) stripBracesArray:(NSMutableArray<NSString *> *)names;
 + (NSString *) ALLDELIMITERS;
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
 - (BOOL) isLikelyAddressSearch;

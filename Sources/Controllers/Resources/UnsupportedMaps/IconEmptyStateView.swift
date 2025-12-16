@@ -23,7 +23,11 @@ final class IconEmptyStateView: UIView {
     func configure(image: UIImage, tintColor: UIColor, description: String) {
         iconView.image = image
         iconView.tintColor = tintColor
-        descriptionLabel.text = description
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.12
+        descriptionLabel.attributedText = NSAttributedString(string: description,
+                                                             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
     }
     
     private func commonInit() {

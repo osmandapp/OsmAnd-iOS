@@ -3787,6 +3787,15 @@
 • Improved brand search by including more local brands\n
 • General stability and performance improvements\n";
 
+"ios_release_5_3" = "• Added interactive animation for the Speedometer widget\n
+• Added an option to resize the location position icon\n
+• New Trip Recording widgets: Max Speed and Average Slope; improved Uphill/Downhill widgets\n
+• Added deep linking support for sharing specific POIs\n
+• Fixed an issue where ETA in Navigation widgets did not update while stationary\n
+• Improved connectivity for paired OBDII adapters\n
+• Added the ability to merge waypoints into a selected favorites folder\n
+• CarPlay: Fixed an issue with an unresponsive map on the Dashboard and added support for the \"Always show dark map\" parameter\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 final class DistanceByTapViewController: OABaseNavbarViewController {
     private static let imgRowKey = "imgRowKey"
     private static let selectedKey = "isSelected"
@@ -15,6 +13,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
     private static let textSizeKey = "textSizeKey"
     
     weak var delegate: OASettingsDataDelegate?
+    
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
     
@@ -119,7 +118,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
         for textSize in [EOADistanceByTapTextSizeConstant.NORMAL, EOADistanceByTapTextSizeConstant.LARGE] {
             let action = UIAction(title: OADistanceByTapTextSizeConstant.toHumanString(textSize), state: settings.distanceByTapTextSize.get() == textSize ? .on : .off) { [weak self] _ in
                 guard let self else { return }
-                self.settings.distanceByTapTextSize.set(textSize, mode: self.appMode)
+                settings.distanceByTapTextSize.set(textSize, mode: appMode)
             }
             actions.append(action)
         }

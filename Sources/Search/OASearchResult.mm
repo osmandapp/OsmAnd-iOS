@@ -558,7 +558,7 @@
     }
     else
     {
-        [backup addObject:nil];
+        [backup addObject:@""];
     }
         
     if (self.alternateName)
@@ -568,7 +568,7 @@
     }
     else
     {
-        [backup addObject:nil];
+        [backup addObject:@""];
     }
 
     if (self.otherNames)
@@ -583,7 +583,7 @@
                 }
             else
             {
-                [backup addObject:nil];
+                [backup addObject:@""];
                 [strippedNames addObject:@""];
             }
         }
@@ -596,12 +596,12 @@
 {
     if (backup != nil)
     {
-        if (backup.count > 0 && backup[0] != nil)
+        if (backup.count > 0 && backup[0].length > 0)
         {
             self.localeName = (NSString *)backup[0];
         }
         
-        if (backup.count > 1 && backup[1] != nil)
+        if (backup.count > 1 && backup[1].length > 0)
         {
             self.alternateName = (NSString *)backup[1];
         }

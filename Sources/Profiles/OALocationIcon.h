@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *) headingIconName;
 - (NSString *) modelName;
 
-- (UIImage *) getMapIcon:(UIColor *)color;
+- (UIImage *)getMapIcon:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor;
 - (UIImage *) getHeadingIconWithColor:(UIColor *)color;
 - (UIImage *) getPreviewIconWithColor:(UIColor *)color;
 

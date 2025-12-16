@@ -533,9 +533,9 @@ typedef enum {
     }
     else
     {
-        sk_sp<SkImage> locationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
+        sk_sp<SkImage> locationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor scaleFactor:locationIconScaleFactor].CGImage];
         locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationMainIconKeyDay,
-                                                  OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationMainIcon scaleFactor:locationIconScaleFactor]));
+                                                  OsmAnd::SingleSkImage(locationMainIcon));
 
         sk_sp<SkImage> locationHeadingIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor:iconColor].CGImage];
         locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationHeadingIconKeyDay,
@@ -550,9 +550,9 @@ typedef enum {
     }
     else
     {
-        sk_sp<SkImage> courseMainIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
+        sk_sp<SkImage> courseMainIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor scaleFactor:courseIconScaleFactor].CGImage];
         courseMarkerBuilder.addOnMapSurfaceIcon(collection.courseMainIconKeyDay,
-                                                OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:courseMainIcon scaleFactor:courseIconScaleFactor]));
+                                                OsmAnd::SingleSkImage(courseMainIcon));
     }
     collection.courseMarkerDay = courseMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
     
@@ -566,9 +566,9 @@ typedef enum {
     }
     else
     {
-        sk_sp<SkImage> locationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
+        sk_sp<SkImage> locationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor scaleFactor:locationIconScaleFactor].CGImage];
         locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationMainIconKeyNight,
-                                                  OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationMainNightIcon scaleFactor:locationIconScaleFactor]));
+                                                  OsmAnd::SingleSkImage(locationMainNightIcon));
         
         sk_sp<SkImage> locationHeadingNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor :iconColor].CGImage];
         locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationHeadingIconKeyNight,
@@ -584,9 +584,9 @@ typedef enum {
     }
     else
     {
-        sk_sp<SkImage> courseMainNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
+        sk_sp<SkImage> courseMainNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor scaleFactor:courseIconScaleFactor].CGImage];
         courseMarkerBuilder.addOnMapSurfaceIcon(collection.courseMainIconKeyNight,
-                                                OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:courseMainNightIcon scaleFactor:courseIconScaleFactor]));
+                                                OsmAnd::SingleSkImage(courseMainNightIcon));
     }
     collection.courseMarkerNight = courseMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
 

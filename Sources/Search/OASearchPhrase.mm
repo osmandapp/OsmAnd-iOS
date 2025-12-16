@@ -1080,6 +1080,10 @@ static NSComparator _OACommonWordsComparator = nil;
 
 + (NSString *) stripBraces:(NSString *)localeName
 {
+    if (localeName == nil)
+    {
+        return nil;
+    }
     NSInteger i = [localeName rangeOfString:@"("].location;
         NSString *retName = localeName;
         
@@ -1094,6 +1098,17 @@ static NSComparator _OACommonWordsComparator = nil;
             }
         }
         return retName;
+}
+
++ (NSMutableArray<NSString *> *) stripBracesArray:(NSMutableArray<NSString *> *)names
+{
+    NSMutableArray<NSString *> *lst = [NSMutableArray arrayWithCapacity:names.count];
+    for (NSString *s in names)
+    {
+        NSString *strippedString = [self stripBraces:s];
+        [lst addObject:strippedString];
+    }
+    return lst;
 }
 
 + (NSString *) ALLDELIMITERS

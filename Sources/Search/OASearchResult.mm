@@ -519,4 +519,112 @@
     return [OAObjectType getTypeWeight:objectType];
 }
 
+- (NSArray<NSString *> *)stripBracesNames
+{
+    NSString *brace = @"(";
+    BOOL noBrace = YES;
+        
+    if (self.localeName)
+    {
+        noBrace &= ![self.localeName containsString:brace];
+    }
+        
+    if (self.alternateName)
+    {
+        noBrace &= ![self.alternateName containsString:brace];
+    }
+        
+    if (self.otherNames)
+    {
+        for (NSString *name in self.otherNames)
+        {
+            noBrace &= ![name containsString:brace];
+            if (!noBrace)
+            {
+                break;
+            }
+        }
+    }
+        
+    if (noBrace) {
+        return nil;
+    }
+    
+    NSMutableArray<NSString *> *backup = [NSMutableArray array];
+    if (self.localeName)
+    {
+        [backup addObject:self.localeName];
+        self.localeName = [OASearchPhrase stripBraces:self.localeName];
+    }
+    else
+    {
+        [backup addObject:@""];
+    }
+        
+    if (self.alternateName)
+    {
+        [backup addObject:self.alternateName];
+        self.alternateName = [OASearchPhrase stripBraces:self.alternateName];
+    }
+    else
+    {
+        [backup addObject:@""];
+    }
+
+    if (self.otherNames)
+    {
+        NSMutableArray<NSString *> *strippedNames = [NSMutableArray array];
+        for (NSString *name in self.otherNames)
+        {
+            if (name)
+            {
+                [backup addObject:name];
+                [strippedNames addObject:[OASearchPhrase stripBraces:name]];
+                }
+            else
+            {
+                [backup addObject:@""];
+                [strippedNames addObject:@""];
+            }
+        }
+        self.otherNames = [strippedNames copy];
+    }
+    return [backup copy];
+}
+
+- (void)restoreBraceNames:(NSArray<NSString *> *)backup
+{
+    if (backup != nil)
+    {
+        if (backup.count > 0 && backup[0].length > 0)
+        {
+            self.localeName = (NSString *)backup[0];
+        }
+        
+        if (backup.count > 1 && backup[1].length > 0)
+        {
+            self.alternateName = (NSString *)backup[1];
+        }
+        
+        if (backup.count > 2)
+        {
+            NSMutableArray<NSString *> *oth = [NSMutableArray array];
+            for (NSUInteger i = 2; i < backup.count; i++)
+            {
+                id nameBackup = backup[i];
+                if (nameBackup != nil)
+                {
+                    [oth addObject:(NSString *)nameBackup];
+                }
+                else
+                {
+                    [oth addObject:@""];
+                }
+            }
+            
+            self.otherNames = [oth copy];
+        }
+    }
+}
+
 @end

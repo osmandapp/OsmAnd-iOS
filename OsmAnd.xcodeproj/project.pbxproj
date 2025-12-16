@@ -226,6 +226,7 @@
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
 		275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */; };
+		276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */; };
 		2778FE372EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */; };
 		2778FE392EB242CD00B18E11 /* BaseSettingsParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */; };
 		277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987A42E7947E700607516 /* AddKeyViewController.swift */; };
@@ -3675,6 +3676,7 @@
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
 		275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceUpdateSize.swift; sourceTree = "<group>"; };
+		276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonAppearanceViewController.swift; sourceTree = "<group>"; };
 		2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsParametersViewController.swift; sourceTree = "<group>"; };
 		2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseSettingsParametersViewController.xib; sourceTree = "<group>"; };
 		277987A42E7947E700607516 /* AddKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKeyViewController.swift; sourceTree = "<group>"; };
@@ -14018,6 +14020,7 @@
 				462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */,
 				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
 				27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */,
+				276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */,
 				32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */,
 				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
 				271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */,
@@ -17944,6 +17947,7 @@
 				DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
 				46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */,
 				46D5E41A2D31A3F000428227 /* BackupUtils.swift in Sources */,
+				276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */,
 				DA5A839A26C563A800F274C7 /* OALocalResourceInfoCell.m in Sources */,
 				DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */,
 				DA5A815C26C563A700F274C7 /* OAPlugin.mm in Sources */,

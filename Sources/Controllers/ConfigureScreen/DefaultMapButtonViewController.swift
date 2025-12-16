@@ -9,6 +9,8 @@
 final class DefaultMapButtonViewController: OABaseNavbarViewController {
     private static let descriptionFontSize: CGFloat = 15
     private static let selectedKey = "selected"
+    private static let visibilityRowKey = "visibilityRowKey"
+    private static let appearanceRowKey = "appearanceRowKey"
     
     private var appMode: OAApplicationMode?
     
@@ -62,8 +64,19 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
                 visibilityRow.descr = visibility.title
                 visibilityRow.setObj(NSNumber(value: visibility != .hidden), forKey: Self.selectedKey)
             }
+            visibilityRow.key = Self.visibilityRowKey
             visibilityRow.cellType = OAValueTableViewCell.reuseIdentifier
         }
+        
+        let appearanceSection = tableData.createNewSection()
+        let appearanceRow = appearanceSection.createNewRow()
+        appearanceRow.title = localizedString("shared_string_appearance")
+        appearanceRow.accessibilityLabel = appearanceRow.title
+        appearanceRow.descr = localizedString("rendering_value_default_name") // TODO
+        appearanceRow.key = Self.appearanceRowKey
+        appearanceRow.cellType = OAValueTableViewCell.reuseIdentifier
+        appearanceRow.iconName = "ic_custom_appearance"
+        appearanceRow.iconTintColor = .iconColorDefault
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -104,12 +117,19 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             return cell
         } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
-            let selected = item.bool(forKey: Self.selectedKey)
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
+            if item.key == Self.appearanceRowKey {
+                cell.accessoryType = .disclosureIndicator
+            }
+            if item.key == Self.visibilityRowKey {
+                let selected = item.bool(forKey: Self.selectedKey)
+                cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
+            } else {
+                cell.leftIconView.tintColor = item.iconTintColor
+            }
             cell.accessibilityLabel = item.accessibilityLabel
             cell.accessibilityValue = item.accessibilityValue
             return cell
@@ -118,14 +138,20 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
-        if mapButtonState is CompassButtonState {
-            let vc = CompassVisibilityViewController()
-            vc.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
-        } else if mapButtonState is Map3DButtonState {
-            let vc = Map3dModeButtonVisibilityViewController()
-            vc.delegate = self
-            showMediumSheetViewController(vc, isLargeAvailable: false)
+        let item = tableData.item(for: indexPath)
+        if item.key == Self.appearanceRowKey {
+            let vc = MapButtonAppearanceViewController()
+            show(vc)
+        } else {
+            if mapButtonState is CompassButtonState {
+                let vc = CompassVisibilityViewController()
+                vc.delegate = self
+                showMediumSheetViewController(vc, isLargeAvailable: false)
+            } else if mapButtonState is Map3DButtonState {
+                let vc = Map3dModeButtonVisibilityViewController()
+                vc.delegate = self
+                showMediumSheetViewController(vc, isLargeAvailable: false)
+            }
         }
     }
     

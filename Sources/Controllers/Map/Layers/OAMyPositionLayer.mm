@@ -396,7 +396,7 @@ typedef enum {
     OALocationServices *_locationProvider;
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
-    OAMarkerCollection *_tempPreviewMarker;
+    OAMarkerCollection *_previewMarker;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
     CLLocationDirection _lastCourse;
@@ -447,7 +447,7 @@ typedef enum {
 {
     int baseOrder = self.pointsOrder;
     OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
-    _tempPreviewMarker = [self getMarkerCollectionFor:mode baseOrder:baseOrder locationIconScaleFactor:locationIconScaleFactor courseIconScaleFactor:courseIconScaleFactor];
+    _previewMarker = [self getMarkerCollectionFor:mode baseOrder:baseOrder locationIconScaleFactor:locationIconScaleFactor courseIconScaleFactor:courseIconScaleFactor];
 }
 
 - (OAMarkerCollection *)getMarkerCollectionFor:(OAApplicationMode *)mode baseOrder:(int)baseOrder locationIconScaleFactor:(float)locationIconScaleFactor courseIconScaleFactor:(float)courseIconScaleFactor
@@ -739,7 +739,7 @@ typedef enum {
 
 - (void)hidePreviewMarker
 {
-    OAMarkerCollection *collection = _tempPreviewMarker;
+    OAMarkerCollection *collection = _previewMarker;
     [collection hideMarkers];
     [self.mapView removeKeyedSymbolsProvider:collection.markerCollection];
 }
@@ -787,7 +787,7 @@ typedef enum {
 - (void)updateMyPreviewLocationCourseProviderFor:(BOOL)showBearing newLocation:(CLLocation *)newLocation
 {
     [self.mapViewController runWithRenderSync:^{
-        OAMarkerCollection *collection = _tempPreviewMarker;
+        OAMarkerCollection *collection = _previewMarker;
         [self updatePreviewLocation:showBearing newLocation:newLocation];
         [self.mapView addKeyedSymbolsProvider:collection.markerCollection];
     }];
@@ -807,7 +807,7 @@ typedef enum {
 
 - (void)updatePreviewLocation:(BOOL)showBearing newLocation:(CLLocation *)newLocation
 {
-    OAMarkerCollection *collection = _tempPreviewMarker;
+    OAMarkerCollection *collection = _previewMarker;
     
     CLLocationDirection newHeading = newLocation.course;
     

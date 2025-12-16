@@ -697,7 +697,7 @@
 "show_poi_over_map" = "POI-Overlay anzeigen";
 "search_radius" = "Suchradius";
 "transport_Routes" = "Routen";
-"transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
+"transport_nearby_routes_within" = "Nahe gelegene Routen innerhalb von";
 "shared_string_control_stop" = "Stopp";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%@ Haltestellen davor";

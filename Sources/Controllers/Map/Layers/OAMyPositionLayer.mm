@@ -816,9 +816,6 @@ typedef enum {
                            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
     
     [self updateCollectionLocation:collection newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:YES showBearing:showBearing showHeading:NO pointCourse:newHeading];
-    OAMarkerCollection *markerCollection = _tempPreviewMarker;
-    if (markerCollection != collection)
-        [self updateCollectionLocation:markerCollection newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO showBearing:showBearing showHeading:NO pointCourse:newHeading];
 }
 
 - (void) updateLocation:(OAApplicationMode *)mode

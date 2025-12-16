@@ -671,7 +671,8 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         if (wikidata.length == 0)
             return @"";
         
-        if ([wikidata hasPrefix:@"Q"] || [wikidata hasPrefix:@"q"])
+        unichar firstChar = [wikidata characterAtIndex:0];
+        if (firstChar == 'Q' || firstChar == 'q')
             wikidata = [wikidata substringFromIndex:1];
         
         name = wikidata;

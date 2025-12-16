@@ -363,15 +363,7 @@
     {
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf || !strongSelf->_rootViewController)
-                return;
-            
-            OAMapViewController *mapVC = [strongSelf->_rootViewController.mapPanel mapViewController];
-            if (!mapVC || !mapVC.mapViewLoaded)
-                return;
-            
-            [DeepLinkParser handleIncomingMapPoiURL:url rootViewController:strongSelf->_rootViewController];
+            [weakSelf handleMapPoiURLWhenMapIsReady:url];
         });
         
         return YES;
@@ -415,6 +407,18 @@
     }
 
     return NO;
+}
+
+- (void)handleMapPoiURLWhenMapIsReady:(NSURL *)url
+{
+    if (!_rootViewController)
+        return;
+    
+    OAMapViewController *mapVC = [_rootViewController.mapPanel mapViewController];
+    if (!mapVC || !mapVC.mapViewLoaded)
+        return;
+    
+    [DeepLinkParser handleIncomingMapPoiURL:url rootViewController:_rootViewController];
 }
 
 - (BOOL)handleIncomingMoveMapToLocationURL:(NSURL *)url

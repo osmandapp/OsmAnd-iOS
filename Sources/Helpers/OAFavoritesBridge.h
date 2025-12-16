@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAFavoriteItem;
-
 @interface OAFavoritesBridge : NSObject
 
 + (BOOL)openFavouriteOrMoveMapWithLat:(double)lat lon:(double)lon zoom:(int)zoom name:(nullable NSString *)name;

@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+@objc
 final class MapButtonAppearanceViewController: OABaseNavbarViewController {
     // TODO
 }

@@ -36,6 +36,45 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
     
+    override func getRightNavbarButtons() -> [UIBarButtonItem] {
+        let resetAction: UIAction = UIAction(title: localizedString("reset_to_default"),
+                                             image: .icCustomReset) { [weak self] _ in
+            let actionSheet = UIAlertController(title: self?.title,
+                                                message: localizedString("reset_all_settings_desc"),
+                                                preferredStyle: .actionSheet)
+            actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
+                guard let self, let appMode = self.appMode else { return }
+                self.mapButtonState?.resetToDefault(for: appMode)
+                self.updateData()
+            })
+            actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+            if let popoverController = actionSheet.popoverPresentationController {
+                popoverController.barButtonItem = self?.navigationItem.rightBarButtonItem
+            }
+            self?.present(actionSheet, animated: true)
+        }
+        let copyAction: UIAction = UIAction(title: localizedString("copy_from_other_profile"),
+                                            image: .icCustomCopy) { [weak self] _ in
+            guard let self, let appMode = self.appMode else { return }
+            
+            let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler(mode: appMode)
+            bottomSheet.delegate = self
+            bottomSheet.present(in: self)
+        }
+        let menuElements = [resetAction, copyAction]
+        let menu = UIMenu(children: menuElements)
+        let button = createRightNavbarButton(nil,
+                                             iconName: "ic_navbar_overflow_menu_stroke",
+                                             action: #selector(onRightNavbarButtonPressed),
+                                             menu: menu)
+        button?.accessibilityLabel = localizedString("shared_string_options")
+        var buttons = [UIBarButtonItem]()
+        if let button {
+            buttons.append(button)
+        }
+        return buttons
+    }
+    
     override func generateData() {
         guard let appMode else { return }
         tableData.clearAllData()
@@ -121,9 +160,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            if item.key == Self.appearanceRowKey {
-                cell.accessoryType = .disclosureIndicator
-            }
+            cell.accessoryType = .disclosureIndicator
             if item.key == Self.visibilityRowKey {
                 let selected = item.bool(forKey: Self.selectedKey)
                 cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
@@ -177,6 +214,17 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
 // MARK: WidgetStateDelegate
 extension DefaultMapButtonViewController: WidgetStateDelegate {
     func onWidgetStateChanged() {
+        updateData()
+    }
+}
+
+// MARK: OACopyProfileBottomSheetDelegate
+extension DefaultMapButtonViewController: OACopyProfileBottomSheetDelegate {
+    func onCopyProfileCompleted() {
+    }
+    func onCopyProfile(_ fromAppMode: OAApplicationMode) {
+        guard let appMode else { return }
+        mapButtonState?.copyPrefs(from: fromAppMode, to: appMode)
         updateData()
     }
 }

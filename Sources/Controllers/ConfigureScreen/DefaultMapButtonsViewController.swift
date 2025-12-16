@@ -43,7 +43,7 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
                                                 preferredStyle: .actionSheet)
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
                 guard let self, let appMode = self.appMode else { return }
-                self.buttonStates.forEach { $0.resetForMode(appMode) }
+                self.buttonStates.forEach { $0.resetToDefault(for: appMode) }
                 self.onSettingsChanged()
             })
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))

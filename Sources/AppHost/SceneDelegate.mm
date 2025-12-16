@@ -359,6 +359,24 @@
     if ([DeepLinkParser handleIncomingMapPoiURL:url rootViewController:_rootViewController])
         return YES;
     
+    if ([OAUtilities isOsmAndSite:url] && [OAUtilities isPathPrefix:url pathPrefix:@"/map/poi"])
+    {
+        __weak __typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || !strongSelf->_rootViewController)
+                return;
+            
+            OAMapViewController *mapVC = [strongSelf->_rootViewController.mapPanel mapViewController];
+            if (!mapVC || !mapVC.mapViewLoaded)
+                return;
+            
+            [DeepLinkParser handleIncomingMapPoiURL:url rootViewController:strongSelf->_rootViewController];
+        });
+        
+        return YES;
+    }
+    
     NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
     NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
     BOOL hasPin = NO;

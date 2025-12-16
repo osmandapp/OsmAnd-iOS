@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 final class DeepLinkParser: NSObject {
     
-    static func handleIncomingMapPoiURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+    @discardableResult static func handleIncomingMapPoiURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
         guard OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: "/map/poi") else { return false }
         let items = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems ?? []
         var nameParam: String?
@@ -34,8 +34,8 @@ final class DeepLinkParser: NSObject {
         return false
     }
     
-    static func handleIncomingAmenityURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        guard let rootViewController else { return false }
+    private static func handleIncomingAmenityURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController, rootViewController.mapPanel.mapViewController.mapViewLoaded else { return false }
         let items = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems ?? []
         var name: String?
         var type: String?
@@ -79,8 +79,8 @@ final class DeepLinkParser: NSObject {
         return false
     }
     
-    static func handleIncomingFavouriteURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        guard let rootViewController else { return false }
+    private static func handleIncomingFavouriteURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController, rootViewController.mapPanel.mapViewController.mapViewLoaded else { return false }
         let items = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems ?? []
         var name: String?
         var latLonParam: String?
@@ -101,7 +101,7 @@ final class DeepLinkParser: NSObject {
         return OAFavoritesBridge.openFavouriteOrMoveMap(withLat: lat, lon: lon, zoom: Int32(zoom), name: name)
     }
     
-    static func searchBaseDetailsObject(pinLat: Double, pinLon: Double, name: String?, poiType: String?, wikiDataId: String?, osmId: String?) -> BaseDetailsObject? {
+    private static func searchBaseDetailsObject(pinLat: Double, pinLon: Double, name: String?, poiType: String?, wikiDataId: String?, osmId: String?) -> BaseDetailsObject? {
         let names = [name].compactMap { $0 }
         var parsedOsmId: Int64 = -1
         if let osmId, !osmId.isEmpty {

@@ -81,6 +81,7 @@ typedef enum {
 {
     OAMapRendererView *_mapView;
     BOOL _showHeadingCached;
+    float _locationIconScaleFactor;
 }
 
 - (instancetype) initWithMapView:(OAMapRendererView *)mapView
@@ -110,8 +111,9 @@ typedef enum {
     });
 }
 
-- (void) setCurrentMarkerState:(EOAMarkerState)state showHeading:(BOOL)showHeading
+- (void) setCurrentMarkerState:(EOAMarkerState)state showHeading:(BOOL)showHeading locationIconScaleFactor:(float)locationIconScaleFactor
 {
+    _locationIconScaleFactor = locationIconScaleFactor;
     if (_currentMarkerState != state || showHeading != _showHeadingCached)
     {
         _currentMarkerState = state;
@@ -215,7 +217,7 @@ typedef enum {
             [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(circleRadius)];
         });
         [_mapView setMyLocationSectorDirection:(sectorDirection)];
-        [_mapView setMyLocationSectorRadius:(sectorRadius * [[OAAppSettings sharedManager].locationIconSize get])];
+        [_mapView setMyLocationSectorRadius:(sectorRadius * _locationIconScaleFactor)];
     }
     else
     {
@@ -860,7 +862,7 @@ typedef enum {
 {
     double bearing = (pointCourse < 0 ? newHeading : pointCourse) - 90;
     
-    [collection setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading];
+    [collection setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading locationIconScaleFactor:_locationIconScaleFactor];
     [collection updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading visible:visible];
     [collection updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading];
 }

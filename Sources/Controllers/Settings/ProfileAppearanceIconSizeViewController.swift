@@ -71,7 +71,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         switchAppMode(toChoosenAppMode: false)
-        mapViewController.invalidatePreviewMarkerCollection()
+        mapViewController.hidePreviewMarker()
     }
     
     override func updateModeUI() {

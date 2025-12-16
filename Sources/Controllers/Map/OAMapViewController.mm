@@ -834,9 +834,9 @@ static const NSInteger kDetailedMapZoom = 9;
     return _mapView.azimuth;
 }
 
-- (void)invalidatePreviewMarkerCollection
+- (void)hidePreviewMarker
 {
-    [_mapLayers.myPositionLayer invalidatePreviewMarkerCollection];
+    [_mapLayers.myPositionLayer hidePreviewMarker];
 }
 
 - (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor newLocation:(CLLocation *)newLocation

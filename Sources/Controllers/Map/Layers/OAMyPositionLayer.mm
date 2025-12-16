@@ -686,7 +686,7 @@ typedef enum {
 - (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor newLocation:(CLLocation *)newLocation
 {
     [self.mapViewController runWithRenderSync:^{
-        [self invalidatePreviewMarkerCollection];
+        [self hidePreviewMarker];
         [self generatePreviewMarkerCollectionFor:factor courseIconScaleFactor:_courseIconScaleFactor];
         [self updateMyPreviewLocationCourseProviderFor:NO newLocation:newLocation];
         [self.mapView invalidateFrame];
@@ -696,7 +696,7 @@ typedef enum {
 - (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor newLocation:(CLLocation *)newLocation
 {
     [self.mapViewController runWithRenderSync:^{
-        [self invalidatePreviewMarkerCollection];
+        [self hidePreviewMarker];
         [self generatePreviewMarkerCollectionFor:_locationIconScaleFactor courseIconScaleFactor:factor];
         [self updateMyPreviewLocationCourseProviderFor:YES newLocation:newLocation];
         [self.mapView invalidateFrame];
@@ -737,7 +737,7 @@ typedef enum {
     }
 }
 
-- (void)invalidatePreviewMarkerCollection
+- (void)hidePreviewMarker
 {
     OAMarkerCollection *collection = _tempPreviewMarker;
     [collection hideMarkers];

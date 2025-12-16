@@ -839,14 +839,9 @@ static const NSInteger kDetailedMapZoom = 9;
     [_mapLayers.myPositionLayer hidePreviewMarker];
 }
 
-- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor newLocation:(CLLocation *)newLocation
+- (void)updatePreviewMarker:(CLLocation *)newLocation locationFactor:(float)locationFactor courseFactor:(float)courseFactor showBearing:(BOOL)showBearing
 {
-    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithLocationFactor:factor newLocation:newLocation];
-}
-
-- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor newLocation:(CLLocation *)newLocation
-{
-    [_mapLayers.myPositionLayer refreshPreviewMarkersCollectionWithCourseFactor:factor newLocation:newLocation];
+    [_mapLayers.myPositionLayer updatePreviewMarker:newLocation locationFactor:locationFactor courseFactor:courseFactor showBearing:showBearing];
 }
 
 - (void) setupMapArrowsLocation

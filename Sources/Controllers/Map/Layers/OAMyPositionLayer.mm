@@ -683,22 +683,12 @@ typedef enum {
     }];
 }
 
-- (void)refreshPreviewMarkersCollectionWithLocationFactor:(float)factor newLocation:(CLLocation *)newLocation
+- (void)updatePreviewMarker:(CLLocation *)newLocation locationFactor:(float)locationFactor courseFactor:(float)courseFactor showBearing:(BOOL)showBearing
 {
     [self.mapViewController runWithRenderSync:^{
         [self hidePreviewMarker];
-        [self generatePreviewMarkerCollectionFor:factor courseIconScaleFactor:_courseIconScaleFactor];
-        [self updateMyPreviewLocationCourseProviderFor:NO newLocation:newLocation];
-        [self.mapView invalidateFrame];
-    }];
-}
-
-- (void)refreshPreviewMarkersCollectionWithCourseFactor:(float)factor newLocation:(CLLocation *)newLocation
-{
-    [self.mapViewController runWithRenderSync:^{
-        [self hidePreviewMarker];
-        [self generatePreviewMarkerCollectionFor:_locationIconScaleFactor courseIconScaleFactor:factor];
-        [self updateMyPreviewLocationCourseProviderFor:YES newLocation:newLocation];
+        [self generatePreviewMarkerCollectionFor:locationFactor courseIconScaleFactor:courseFactor];
+        [self updateMyPreviewLocationCourseProviderFor:showBearing newLocation:newLocation];
         [self.mapView invalidateFrame];
     }];
 }

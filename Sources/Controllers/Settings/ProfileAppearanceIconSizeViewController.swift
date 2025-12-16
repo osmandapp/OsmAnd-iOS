@@ -200,11 +200,7 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     
     private func refreshMarkerIconSize() {
         guard let currentIconSize, let markerLocation else { return }
-        if isNavigationIconSize {
-            mapViewController.refreshPreviewMarkersCollection(withCourseFactor: Float(currentIconSize.courseIconSize), newLocation: markerLocation)
-        } else {
-            mapViewController.refreshPreviewMarkersCollection(withLocationFactor: Float(currentIconSize.locationIconSize), newLocation: markerLocation)
-        }
+        mapViewController.updatePreviewMarker(markerLocation, locationFactor: Float(currentIconSize.locationIconSize), courseFactor: Float(currentIconSize.courseIconSize), showBearing: isNavigationIconSize)
     }
     
     private func updateCurrentLocation() {

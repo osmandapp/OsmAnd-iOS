@@ -834,14 +834,14 @@ static const NSInteger kDetailedMapZoom = 9;
     return _mapView.azimuth;
 }
 
-- (void)refreshMarkersCollectionWithLocationFactor:(float)factor
+- (void)hidePreviewMarker
 {
-    [_mapLayers.myPositionLayer refreshMarkersCollectionWithLocationFactor:factor];
+    [_mapLayers.myPositionLayer hidePreviewMarker];
 }
 
-- (void)refreshMarkersCollectionWithCourseFactor:(float)factor
+- (void)updatePreviewMarker:(CLLocation *)newLocation locationFactor:(float)locationFactor courseFactor:(float)courseFactor showBearing:(BOOL)showBearing
 {
-    [_mapLayers.myPositionLayer refreshMarkersCollectionWithCourseFactor:factor];
+    [_mapLayers.myPositionLayer updatePreviewMarker:newLocation locationFactor:locationFactor courseFactor:courseFactor showBearing:showBearing];
 }
 
 - (void) setupMapArrowsLocation
@@ -2077,6 +2077,10 @@ static const NSInteger kDetailedMapZoom = 9;
     [self goToPosition:[OANativeUtilities convertFromPointI:target31] animated:YES];
 }
 
+- (void)cancelAllAnimations
+{
+    [_mapView cancelAllAnimations];
+}
 
 - (float) calculateMapRuler
 {

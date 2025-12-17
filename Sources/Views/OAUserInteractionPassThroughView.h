@@ -19,6 +19,7 @@
 @interface OAUserInteractionPassThroughView : UIView
 
 @property (nonatomic, weak) id<OAUserInteractionPassThroughDelegate> delegate;
+@property (nonatomic) BOOL isScreenClickable;
 @property (readonly) OAObservable* didLayoutObservable;
 
 @end

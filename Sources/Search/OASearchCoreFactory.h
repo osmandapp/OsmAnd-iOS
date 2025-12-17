@@ -71,7 +71,7 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 - (int) getSearchPriority:(OASearchPhrase *)p;
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 - (NSSet<NSString *> *)splitAddressSearchNames:(NSString *)name;
-- (BOOL)matchAddressName:(OASearchPhrase *)phrase parent:(nullable OASearchResult *)parent res:(OASearchResult *)res fullMatch:(BOOL)fullMatch;
+- (BOOL)matchAddressName:(OASearchPhrase *)phrase prevRes:(nullable OASearchResult *)prevRes res:(OASearchResult *)res fullMatch:(BOOL)fullMatch;
 
 @end
 

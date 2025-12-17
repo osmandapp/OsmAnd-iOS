@@ -68,9 +68,14 @@
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_BORDER_CONTROL locationIndex:locInd];
         }
     }
-    else if("traffic_calming" == ruleType.getTag())
+    else if ("traffic_calming" == ruleType.getTag())
     {
-        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TRAFFIC_CALMING locationIndex:locInd];
+        const auto& v = ruleType.getValue();
+        bool isIslandType = (v == "island") || (v == "choked_island") || (v == "painted_island");
+        if (!isIslandType)
+        {
+            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TRAFFIC_CALMING locationIndex:locInd];
+        }
     }
     else if ("hazard" == (ruleType.getTag()))
     {

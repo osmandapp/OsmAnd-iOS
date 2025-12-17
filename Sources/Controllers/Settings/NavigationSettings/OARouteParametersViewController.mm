@@ -221,19 +221,19 @@ static NSString *foregroundImageKey = @"foregroundImage";
     
     if (router)
     {
-        const auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
-        auto useShortestWayIterator = parameters.find(std::string(kRouteParamShortWay.UTF8String));
-        
-        if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR] && useShortestWayIterator != parameters.end())
+        const auto parametersMap = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
+        auto useShortestWayIterator = parametersMap.find(std::string(kRouteParamShortWay.UTF8String));
+
+        if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR] && useShortestWayIterator != parametersMap.end())
         {
             _fastRouteParameter = useShortestWayIterator->second;
-            if ([[NSString stringWithUTF8String:_fastRouteParameter.id.c_str()] isEqualToString:kRouteParamShortWay])
+            if ([@(_fastRouteParameter.id.c_str()) isEqualToString:kRouteParamShortWay])
             {
                 OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
                 rp.routingParameter = _fastRouteParameter;
                 
-                NSString *paramId = [NSString stringWithUTF8String:_fastRouteParameter.id.c_str()];
-                NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:_fastRouteParameter.name.c_str()]];
+                NSString *paramId = @(_fastRouteParameter.id.c_str());
+                NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:@(_fastRouteParameter.name.c_str())];
                 NSString *icon = [self getParameterIcon:paramId isSelected:YES];
                 if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR])
                 {
@@ -249,12 +249,13 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 }];
             }
         }
-        
-        for (auto it = parameters.begin(); it != parameters.end(); ++it)
+
+        const auto parametersList = router->getParametersList(string(self.appMode.getDerivedProfile.UTF8String));
+
+        for (const auto& routingParameter : parametersList)
         {
-            const auto &routingParameter = it->second;
-            NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
-            NSString *group = [NSString stringWithUTF8String:routingParameter.group.c_str()];
+            NSString *param = @(routingParameter.id.c_str());
+            NSString *group = @(routingParameter.group.c_str());
 
             if ([param hasPrefix:kRouteParamAvoidParameterPrefix])
                 _avoidParameters.push_back(routingParameter);
@@ -566,11 +567,12 @@ static NSString *foregroundImageKey = @"foregroundImage";
             }];
         }
     }
-    else
+    else // NUMERIC
     {
-        NSString *defaultValue = param.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue;
+        NSString *defaultValue = @(param.getDefaultString().c_str());
         OACommonString *setting = [_settings getCustomRoutingProperty:paramId defaultValue:defaultValue];
-        NSString *value = [NSString stringWithUTF8String:param.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
+        int valueIndex = param.findIndexInPossibleValues([[setting get:self.appMode] UTF8String]);
+        NSString *value = @(param.possibleValueDescriptions[valueIndex].c_str());
         [tableSection addObject:@{
             typeKey : [OAValueTableViewCell getCellIdentifier],
             keyKey : multiValuePrefKey,

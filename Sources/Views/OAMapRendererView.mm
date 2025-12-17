@@ -11,6 +11,7 @@
 #import "OANativeUtilities.h"
 #import "OAObservable.h"
 #import "OALog.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -975,7 +976,6 @@ forcedUpdate:(BOOL)forcedUpdate
                   (int)self.bounds.size.height);
             return;
         }
-
         // Allocate new buffers
         [self allocateRenderAndFrameBuffers];
 
@@ -993,7 +993,6 @@ forcedUpdate:(BOOL)forcedUpdate
             
             // Normalize elevation angle
             [self setElevationAngle:self.elevationAngle];
-
             _renderer->setMapTarget(centerPixel, self.target31);
         }
     }
@@ -1067,8 +1066,10 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (void) didMoveToWindow
 {
-    // Resume rendering only if in foreground
-    if ([self isRenderingSuspended] && [[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground && self.window)
+    if (![self isRenderingSuspended] || !self.window)
+        return;
+    
+    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground || UIApplication.sharedApplication.isCarPlayConnected)
     {
         [self resumeRendering];
     }
@@ -1085,7 +1086,7 @@ forcedUpdate:(BOOL)forcedUpdate
                     format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return FALSE;
     }
-
+    
     // Setup display link
     _displayLink = [self.window.screen displayLinkWithTarget:self
                                                selector:@selector(render:)];

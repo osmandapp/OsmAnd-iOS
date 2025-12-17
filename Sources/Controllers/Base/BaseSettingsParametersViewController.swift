@@ -104,12 +104,16 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
     }
     
     func updateModeUI(isValueChanged: Bool, animated: Bool) {
-        applyButton.backgroundColor = isValueChanged ? .buttonBgColorPrimary : .buttonBgColorSecondary
-        applyButton.setTitleColor(isValueChanged ? .buttonTextColorPrimary : .lightGray, for: .normal)
-        applyButton.isUserInteractionEnabled = isValueChanged
+        updateApplyButton(isValueChanged: isValueChanged)
         resetButton.isEnabled = isValueChanged
 
         tableView.reloadSections(IndexSet(integer: 0), with: animated ? .automatic : .none)
+    }
+    
+    func updateApplyButton(isValueChanged: Bool) {
+        applyButton.backgroundColor = isValueChanged ? .buttonBgColorPrimary : .buttonBgColorSecondary
+        applyButton.setTitleColor(isValueChanged ? .buttonTextColorPrimary : .lightGray, for: .normal)
+        applyButton.isUserInteractionEnabled = isValueChanged
     }
 
     func registerCells() {

@@ -243,6 +243,9 @@
 		2783B43C2E66EA3000682723 /* WunderLINQDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */; };
 		279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322462E82EEF300B9FC81 /* KeyEvent.swift */; };
 		279322492E82F4A400B9FC81 /* KeyEventMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279322482E82F4A400B9FC81 /* KeyEventMapper.swift */; };
+		279AB4202EE2DAD300377620 /* DeletedMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */; };
+		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
+		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
@@ -3689,6 +3692,9 @@
 		2783B43B2E66EA3000682723 /* WunderLINQDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WunderLINQDeviceProfile.swift; sourceTree = "<group>"; };
 		279322462E82EEF300B9FC81 /* KeyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEvent.swift; sourceTree = "<group>"; };
 		279322482E82F4A400B9FC81 /* KeyEventMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyEventMapper.swift; sourceTree = "<group>"; };
+		279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedMapsViewController.swift; sourceTree = "<group>"; };
+		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
+		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
@@ -8273,6 +8279,16 @@
 			path = OATopTextView;
 			sourceTree = "<group>";
 		};
+		27EB64252EDDF7DF001EF9FE /* UnsupportedMaps */ = {
+			isa = PBXGroup;
+			children = (
+				279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */,
+				279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */,
+				279AB41F2EE2DAD300377620 /* DeletedMapsViewController.swift */,
+			);
+			path = UnsupportedMaps;
+			sourceTree = "<group>";
+		};
 		27F050902DD38E310058075F /* RouteInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -12396,6 +12412,7 @@
 				DA5A7D8626C563A300F274C7 /* OAOsmAndLiveViewController.mm */,
 				DA5A7D7B26C563A300F274C7 /* OAOutdatedResourcesViewController.h */,
 				DA5A7D8E26C563A300F274C7 /* OAOutdatedResourcesViewController.mm */,
+				27EB64252EDDF7DF001EF9FE /* UnsupportedMaps */,
 				322AF8FB2A0CD68500D2FF37 /* OAPluginDetailsViewController.xib */,
 				DA5A7D8C26C563A300F274C7 /* OAPluginDetailsViewController.h */,
 				DA5A7D8426C563A300F274C7 /* OAPluginDetailsViewController.mm */,
@@ -14890,6 +14907,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81E0C9432D37DE5B00BC7D85 /* bundled_assets.json in Resources */,
+				279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */,
 				32309A4426989180005751F5 /* ic_custom_map_zoom_in@3x.png in Resources */,
 				32B50ADF26BBE3C7002E6C92 /* ic_custom_map_location_follow@3x.png in Resources */,
 				84F3A9631B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png in Resources */,
@@ -17056,6 +17074,7 @@
 				DA8DC3962A0CE32E006C116B /* TimeToNavigationPointWidget.swift in Sources */,
 				DA5A813526C563A700F274C7 /* OAOsmBugsDBHelper.m in Sources */,
 				DA5A847926C563A900F274C7 /* OARulerWidget.mm in Sources */,
+				279AB4202EE2DAD300377620 /* DeletedMapsViewController.swift in Sources */,
 				FA4C56FF2D48E84500438A5C /* NoInternetCard.swift in Sources */,
 				DA5A843D26C563A800F274C7 /* OACollapsableNearestPoiWikiView.mm in Sources */,
 				DA5A817B26C563A700F274C7 /* OAFavoriteAction.mm in Sources */,
@@ -17645,6 +17664,7 @@
 				DA9A2C3726FF0F4D00BEC681 /* OAColoringType.mm in Sources */,
 				DA5A81FD26C563A700F274C7 /* OAFeatureCardRow.m in Sources */,
 				FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */,
+				279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */,
 				C58924012D6906DB00EC5910 /* StartNewTripSegmentAction.swift in Sources */,
 				DA5A818C26C563A700F274C7 /* OAQuickAction.m in Sources */,
 				FAC166212B21BEF900D63755 /* Util.swift in Sources */,

@@ -96,6 +96,7 @@
 #import "UINavigationController+keyCommands.h"
 #import "OAWeatherHelperBridge.h"
 #import "OADeepLinkBridge.h"
+#import "OAUserInteractionPassThroughView.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -117,6 +118,7 @@
 #import "OAAverageSpeedComputer.h"
 #import "OADestinationBarWidget.h"
 #import "OADownloadMapWidget.h"
+#import "MBProgressHUD.h"
 
 // Plugins
 #import "OAPlugin.h"

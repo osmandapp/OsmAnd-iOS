@@ -203,8 +203,8 @@ static OAMotorType * HYBRID;
         RoutingParameter parameter = [OARoutingHelperUtils getParameterForDerivedProfile:@"motor_type" appMode:mode router:router];
         if (!parameter.id.empty())
         {
-            OACommonString *pref = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:parameter.id.c_str()]
-                                                          defaultValue:parameter.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
+            OACommonString *pref = [_settings getCustomRoutingProperty:@(parameter.id.c_str())
+                                                          defaultValue:@(parameter.getDefaultString().c_str())];
 
             OAListParameters *parameters = [self.class populateListParameters:parameter];
             NSInteger index = [parameters findIndexOfValue:[pref get:mode]];
@@ -237,7 +237,7 @@ static OAMotorType * HYBRID;
         else
         {
             NSString *key = [NSString stringWithFormat:@"%@_%@",
-                             [NSString stringWithUTF8String:parameter.id.c_str()],
+                             @(parameter.id.c_str()),
                              [name.lowercaseString stringByReplacingOccurrencesOfString:@" " withString:@"_"]];
             [names addObject:[OAUtilities getRoutingStringPropertyName:key defaultName:name]];
         }

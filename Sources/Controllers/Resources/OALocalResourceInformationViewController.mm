@@ -110,11 +110,18 @@
     if (!_localItem)
         return;
     
-    [self.baseController offerDeleteResourceOf:self.localItem executeAfterSuccess:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.navigationController popViewControllerAnimated:YES];
-        });
-    }];
+    if (self.baseController)
+        [self.baseController offerDeleteResourceOf:self.localItem executeAfterSuccess:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }];
+    else
+        [OAResourcesUIHelper offerDeleteResourceOf:self.localItem viewController:self progressHUD:nil executeAfterSuccess:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }];
 }
 
 - (void) clearCacheClicked

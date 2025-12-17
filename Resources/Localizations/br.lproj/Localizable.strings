@@ -1,7 +1,7 @@
 "transport_nearby_routes_within" = "Hentadurioù dindan";
 "transport_nearby_routes" = "Dindan";
 "shared_string_current" = "Bremanel";
-"make_as_start_point" = "Merkañ evel lec\'h loc\'hañ";
+"make_as_start_point" = "Merkañ evel lec'h loc'hañ";
 "subsequent_dest_description" = "Pignat ha krouiñ un arvoned";
 "first_intermediate_dest_description" = "Ouzhpennañ a ra an arsav kentañ war an hent";
 "last_intermediate_dest_description" = "Ouzhpenn a ra an arsav diwezhañ war an hent";
@@ -35,7 +35,7 @@
 
 // Intro
 // Settings
-"nav_type_hint" = "Doare Merdeiñ";
+"nav_type_hint" = "Doare merdeiñ";
 
 // Purchases
 
@@ -143,3 +143,22 @@
 "month" = "Miz";
 "shared_string_close" = "Seriñ";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
+"routing_attr_weightrating_name" = "Pouezh uhelañ gant kargad leun";
+"routing_attr_maxaxleload_name" = "Nerzh uhelañ ouzh ahel";
+"deleted_maps_prompt" = "N’eo ket en o reizh ar c'hartennoù-mañ ken ha lakaet eo bet rannvroioù bihanoc'h e-lec'h. Diskarit anezho ha pellgargit ar re nevez mar plij ganeoc'h.";
+"unsupported_maps" = "Kartennoù diglot";
+"months_2_4" = "miz";
+"months_5" = "Miz";
+"year" = "bloaz";
+"years_2_4" = "Bloaz";
+"years_5" = "Bloaz";
+"get_discount_first_few_parts" = "%@ d’ar %@ kentañ";
+"get_discount_second_part" = "Neuze";
+"unit_of_length" = "Unanenn hirder";
+"access_default_color" = "Liv a-fell";
+"access_hint_enter_name" = "Lakit oc’h anv";
+"osm_live_hide_user_name" = "Chom hep diskouez ma anv en embannadurioù";
+"osm_live_enter_user_name" = "Lakit un anv publik mar plij ganeoc’h";
+"shared_string_sound" = "Son";
+"map_downloaded" = "Kartenn bellgarget";
+"angular_units" = "Unanenn gogn";

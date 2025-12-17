@@ -872,6 +872,20 @@ static BOOL _repositoryUpdated = NO;
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
         }
         
+        // This code swaps downloaded unsupported maps from local resources with DeletedMap resource with same id
+        for (const auto& resource : _resourcesInRepository)
+        {
+            if (regionResources.allResources.contains(resource->id) && resource->isDeleted)
+            {
+                const auto& unsupportedResource = regionResources.allResources.value(resource->id);
+                if (unsupportedResource->type != OsmAndResourceType::DeletedMap)
+                {
+                    regionResources.allResources.remove(resource->id);
+                    regionResources.allResources.insert(resource->id, resource);
+                }
+            }
+        }
+        
         _resourcesByRegions.insert(region, regionResources);
     }
 }
@@ -928,7 +942,7 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *regionMapArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
-
+    
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -972,9 +986,7 @@ static BOOL _repositoryUpdated = NO;
     {
         NSMutableArray<NSNumber *> *regionMapItemsTypes = [NSMutableArray new];
         for (OAResourceItem *resource in _regionMapItems)
-        {
             [regionMapItemsTypes addObject:[OAResourceType toValue:resource.resourceType]];
-        }
         NSMutableArray<NSNumber *> *regionMapItemsTypesInGroup = [[self.region.groupItem getTypes] mutableCopy];
         [regionMapItemsTypesInGroup removeObjectsInArray:regionMapItemsTypes];
 
@@ -1348,7 +1360,7 @@ static BOOL _repositoryUpdated = NO;
     
     for (OAResourceItem *item in _regionMapItems)
     {
-        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey))
+        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey) || item.resourceType == OsmAndResourceType::DeletedMap)
         {
             [_regionMapItems removeObject:item];
             break;
@@ -1780,6 +1792,9 @@ static BOOL _repositoryUpdated = NO;
         NSMutableArray *resourceItems = [NSMutableArray array];
         for (const auto& resource_ : regionResources.allResources)
         {
+            if (resource_->type == OsmAndResourceType::DeletedMap)
+                continue;
+            
             OAResourceItem *item = [self createResourceItemResult:resource_ region:region regionResources:regionResources];
             if (item)
                 [resourceItems addObject:item];

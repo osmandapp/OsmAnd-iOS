@@ -11,6 +11,7 @@
 #import "OAArabicNormalizer.h"
 
 static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch | NSDiacriticInsensitiveSearch;
+static NSCharacterSet * _APOSTROPHES;
 
 @implementation OACollatorStringMatcher
 {
@@ -18,6 +19,17 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     NSString *_part;
 }
 
++ (void) initialize
+{
+    if (self == [OACollatorStringMatcher class])
+    {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            NSString *charString = @"'’ʼ´`";
+            _APOSTROPHES = [NSCharacterSet characterSetWithCharactersInString:charString];
+        });
+    }
+}
 
 - (instancetype)initWithPart:(NSString *)part mode:(StringMatcherMode)mode
 {
@@ -221,12 +233,21 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     if ([OAArabicNormalizer isSpecialArabic:fullText]) {
         fullText = [OAArabicNormalizer normalize:fullText] ?: fullText;
     }
-    fullText = [fullText stringByReplacingOccurrencesOfString:@"'" withString:@""];
+    fullText = [self removeApostrophes:fullText];
     int i;
     while( (i = [fullText indexOf:@"ß"] ) != -1 ) {
         fullText = [NSString stringWithFormat:@"%@ss%@", [fullText substringToIndex:i], [fullText substringFromIndex:i+1]];
     }
     return fullText;
+}
+
++ (NSString *) removeApostrophes:(NSString *)input
+{
+    if (!input)
+    {
+        return nil;
+    }
+    return [[input componentsSeparatedByCharactersInSet:_APOSTROPHES] componentsJoinedByString:@""];
 }
 
 @end

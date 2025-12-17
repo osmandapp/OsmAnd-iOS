@@ -141,7 +141,7 @@
 
 - (void)buildParameters:(NSString *)styleName
 {
-    NSDictionary<NSString*, NSString*> *iosSpecificAttributeCategory = @{
+    NSDictionary<NSString*, NSString*> *iosNonSkiMapAttributeCategory = @{
         SKI_SLOPES_ATTR: @"routes" // TODO implement combined "Ski slopes and routes" as in Android
     };
 
@@ -172,8 +172,8 @@
         param.mapPresetName = self.mapPresetName;
         param.name = name;
 
-        if ([iosSpecificAttributeCategory objectForKey:name]) {
-            param.category = iosSpecificAttributeCategory[name];
+        if (![self.mapStyleName isEqualToString:@"skimap"] && [iosNonSkiMapAttributeCategory objectForKey:name]) {
+            param.category = iosNonSkiMapAttributeCategory[name];
         } else {
             param.category = p->getCategory().toNSString();
         }

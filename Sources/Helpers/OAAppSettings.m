@@ -2177,7 +2177,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 @interface OACommonDouble ()
 
-@property (nonatomic) double defValue;
+@property (nonatomic, readwrite) double defValue;
 
 @end
 
@@ -6834,6 +6834,8 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         {
             value = [OACommonString withKey:[NSString stringWithFormat:@"%@%@", kRoutingPreferencePrefix, attrName] defValue:defaultValue];
             [_customRoutingProps setObject:value forKey:attrName];
+        } else {
+            value.defValue = defaultValue; // update with actual default value from routing.xml
         }
         return value;
     }

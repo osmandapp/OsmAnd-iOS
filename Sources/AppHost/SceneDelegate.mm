@@ -15,30 +15,16 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OANavigationController.h"
-#import "OAUtilities.h"
-#import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
 #import "OALaunchScreenViewController.h"
-#import "OAOnlineTilesEditingViewController.h"
-#import "OAMapLayers.h"
-#import "OAPOILayer.h"
-#import "OAMapViewState.h"
-#import "OACarPlayPurchaseViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
 #import "OACarPlayActiveViewController.h"
 #import "Localization.h"
-#import "OALog.h"
-#import "OARoutingHelper.h"
-#import "OATargetPointsHelper.h"
-#import "OAMapActions.h"
 #import "OADiscountHelper.h"
 #import "OALinks.h"
-#import "OABackupHelper.h"
-#import "OAApplicationMode.h"
 #import "OAFetchBackgroundDataOperation.h"
-#import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAAppDelegate.h"
 #import "OAFirstUsageWizardController.h"
@@ -59,7 +45,8 @@
 
 @end
 
-@implementation SceneDelegate {
+@implementation SceneDelegate
+{
     UIWindowScene *_windowScene;
 }
 
@@ -133,7 +120,9 @@
                 NSString *urlDescription = [webpageURL absoluteString];
                 NSString *handledMessage = [NSString stringWithFormat:@"Handled Universal Link: %@", urlDescription];
                 LogStartup(handledMessage);
-            } else {
+            }
+            else
+            {
                 LogStartup(@"Attempted to handle Universal Link, but URL was nil or cannot be opened.");
             }
         }
@@ -170,14 +159,16 @@
     [[self appDelegate] applicationDidEnterBackground];
 }
 
-- (void)sceneDidDisconnect:(UIScene *)scene {
+- (void)sceneDidDisconnect:(UIScene *)scene
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)launchUpdateStateNotification:(NSNotification *)notification
 {
     NSDictionary *info = notification.userInfo;
-    if (info[@"event"]) {
+    if (info[@"event"])
+    {
         NSNumber *num = info[@"event"];
         NSLog(@"launchUpdateStateNotification: %@", num);
         [self configureSceneState:(AppLaunchEvent)num.intValue];
@@ -231,7 +222,8 @@
     [BLEInitHeader configure];
 }
 
-- (OAAppDelegate *)appDelegate {
+- (OAAppDelegate *)appDelegate
+{
     return (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
@@ -239,14 +231,7 @@
 {
     if (_rootViewController)
     {
-        return [self handleIncomingFileURL:url]
-            || [self handleIncomingActionsURL:url]
-            || [self handleIncomingNavigationURL:url]
-            || [self handleIncomingSetPinOnMapURL:url]
-            || [self handleIncomingMoveMapToLocationURL:url]
-            || [self handleIncomingOpenLocationMenuURL:url]
-            || [self handleIncomingTileSourceURL:url]
-            || [self handleIncomingOsmAndCloudURL:url];
+        return [[DeepLinkManager shared] handleDeepLinkWithUrl:url rootViewController:_rootViewController];
     }
     else
     {
@@ -255,334 +240,10 @@
     }
 }
 
-- (BOOL)handleIncomingActionsURL:(NSURL *)url
-{
-    // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
-    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kOsmAndActionScheme])
-    {
-        NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
-        double lat = [params[@"lat"] doubleValue];
-        double lon = [params[@"lon"] doubleValue];
-        int zoom = [params[@"z"] intValue];
-        NSString *title = params[@"title"];
-        NSString *host = url.host;
-
-        if ([host isEqualToString:kNavigateActionHost])
-        {
-            OAMapViewController *mapViewController = [_rootViewController.mapPanel mapViewController];
-            OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
-            if (title.length > 0)
-                targetPoint.title = title;
-
-            [_rootViewController.mapPanel navigate:targetPoint];
-            [_rootViewController.mapPanel closeRouteInfo];
-            [_rootViewController.mapPanel startNavigation];
-        }
-        else
-        {
-            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:title];
-        }
-    }
-    return NO;
-}
-
-- (BOOL)handleIncomingFileURL:(NSURL *)url
-{
-    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kFileScheme])
-        return [_rootViewController handleIncomingURL:url];
-    return NO;
-}
-
-- (BOOL)handleIncomingNavigationURL:(NSURL *)url
-{
-    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
-    NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
-    BOOL hasNavigationDestination = NO;
-    NSString *startLatLonParam;
-    NSString *intermediatePointsParam;
-    NSString *endLatLonParam;
-    NSString *appModeKeyParam;
-    for (NSURLQueryItem *queryItem in queryItems)
-    {
-        if ([queryItem.name.lowercaseString isEqualToString:@"end"])
-        {
-            hasNavigationDestination = YES;
-            endLatLonParam = queryItem.value;
-        }
-        else if ([queryItem.name.lowercaseString isEqualToString:@"start"])
-        {
-            startLatLonParam = queryItem.value;
-        }
-        else if ([queryItem.name.lowercaseString isEqualToString:@"profile"])
-        {
-            appModeKeyParam = queryItem.value;
-        }
-        else if ([queryItem.name.lowercaseString isEqualToString:@"via"])
-        {
-            intermediatePointsParam = queryItem.value;
-        }
-    }
-
-    if (_rootViewController && hasNavigationDestination && [OAUtilities isOsmAndMapUrl:url])
-    {
-        if (!endLatLonParam || endLatLonParam.length == 0)
-        {
-            OALog(@"Malformed OsmAnd navigation URL: destination location is missing");
-            return YES;
-        }
-
-        CLLocation *startLatLon = [OAUtilities parseLatLon:startLatLonParam];
-        if (startLatLonParam && !startLatLon)
-            OALog(@"Malformed OsmAnd navigation URL: start location is broken");
-        
-        CLLocation *endLatLon = [OAUtilities parseLatLon:endLatLonParam];
-        if (!endLatLon)
-        {
-            OALog(@"Malformed OsmAnd navigation URL: destination location is broken");
-            return YES;
-        }
-
-        OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:appModeKeyParam def:nil];
-        if (appModeKeyParam && appModeKeyParam.length > 0 && !appMode)
-            OALog(@"App mode with specified key not available, using default navigation app mode");
-        
-        NSArray<CLLocation *> *points = [self parseIntermediatePoints:intermediatePointsParam];
-
-        [_rootViewController.mapPanel buildRoute:startLatLon end:endLatLon appMode:appMode points:points];
-        return YES;
-    }
-    return NO;
-}
-
-- (BOOL)handleIncomingSetPinOnMapURL:(NSURL *)url
-{
-    if ([DeepLinkParser handleIncomingMapPoiURL:url rootViewController:_rootViewController])
-        return YES;
-    
-    if ([OAUtilities isOsmAndSite:url] && [OAUtilities isPathPrefix:url pathPrefix:@"/map/poi"])
-    {
-        __weak __typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf handleMapPoiURLWhenMapIsReady:url];
-        });
-        
-        return YES;
-    }
-    
-    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
-    NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
-    BOOL hasPin = NO;
-    NSString *latLonParam;
-    for (NSURLQueryItem *queryItem in queryItems)
-    {
-        if ([queryItem.name.lowercaseString isEqualToString:@"pin"])
-        {
-            hasPin = YES;
-            latLonParam = queryItem.value;
-        }
-    }
-
-    if (_rootViewController && hasPin && [OAUtilities isOsmAndMapUrl:url])
-    {
-        CLLocation *latLon = !latLonParam || latLonParam.length == 0 ? nil : [OAUtilities parseLatLon:latLonParam];
-        if (latLon)
-        {
-            double lat = latLon.coordinate.latitude;
-            double lon = latLon.coordinate.longitude;
-            int zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
-            NSString *decoded = [url.absoluteString stringByRemovingPercentEncoding];
-            NSString *pathPrefix = [@"pin=" stringByAppendingString:latLonParam];
-            NSRange range = [decoded rangeOfString:pathPrefix];
-            if (range.location != NSNotFound)
-            {
-                NSString *afterPin = [decoded substringFromIndex:(range.location + range.length)];
-                NSArray<NSString *> *params = [afterPin componentsSeparatedByString:@"/"];
-                if (params.count == 3)
-                    zoom = [[params.firstObject stringByReplacingOccurrencesOfString:@"#" withString:@""] intValue];
-            }
-
-            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:nil];
-            return YES;
-        }
-    }
-
-    return NO;
-}
-
-- (void)handleMapPoiURLWhenMapIsReady:(NSURL *)url
-{
-    if (!_rootViewController)
-        return;
-    
-    OAMapViewController *mapVC = [_rootViewController.mapPanel mapViewController];
-    if (!mapVC || !mapVC.mapViewLoaded)
-        return;
-    
-    [DeepLinkParser handleIncomingMapPoiURL:url rootViewController:_rootViewController];
-}
-
-- (BOOL)handleIncomingMoveMapToLocationURL:(NSURL *)url
-{
-    NSString *pathPrefix = @"/map#";
-    NSInteger pathStartIndex = [url.absoluteString indexOf:pathPrefix];
-    if (_rootViewController && pathStartIndex != -1 && [OAUtilities isOsmAndMapUrl:url])
-    {
-        NSArray<NSString *> *params = [[url.absoluteString substringFromIndex:pathStartIndex + pathPrefix.length] componentsSeparatedByString:@"/"];
-        if (params.count == 3)
-        {
-            int zoom = [params[0] intValue];
-            double lat = [params[1] doubleValue];
-            double lon = [params[2] doubleValue];
-            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:nil];
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (BOOL)handleIncomingOpenLocationMenuURL:(NSURL *)url
-{
-    if ([OAUtilities isOsmAndGoUrl:url])
-    {
-        NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
-        NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
-        NSString *latParam;
-        NSString *lonParam;
-        NSString *zoomParam;
-        NSString *titleParam;
-        for (NSURLQueryItem *queryItem in queryItems)
-        {
-            if ([queryItem.name.lowercaseString isEqualToString:@"lat"])
-                latParam = queryItem.value;
-            else if ([queryItem.name.lowercaseString isEqualToString:@"lon"])
-                lonParam = queryItem.value;
-            else if ([queryItem.name.lowercaseString isEqualToString:@"z"])
-                zoomParam = queryItem.value;
-            else if ([queryItem.name.lowercaseString isEqualToString:@"title"])
-                titleParam = queryItem.value;
-        }
-
-        if (_rootViewController && latParam && lonParam)
-        {
-            double lat = [latParam doubleValue];
-            double lon = [lonParam doubleValue];
-            int zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
-            if (zoomParam)
-                zoom = [zoomParam intValue];
-            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:titleParam];
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (BOOL)handleIncomingTileSourceURL:(NSURL *)url
-{
-    if (_rootViewController && [OAUtilities isOsmAndSite:url] && [OAUtilities isPathPrefix:url pathPrefix:@ "/add-tile-source"])
-    {
-        NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
-        // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
-        OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
-        [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
-        return YES;
-    }
-    return NO;
-}
-
-- (BOOL)handleIncomingOsmAndCloudURL:(NSURL *)url
-{
-    if (![OAUtilities isOsmAndSite:url] || ![OAUtilities isPathPrefix:url pathPrefix:@ "/premium/device-registration"])
-        return NO;
-    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
-    NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
-    NSString *tokenParam;
-    for (NSURLQueryItem *queryItem in queryItems)
-    {
-        if ([queryItem.name.lowercaseString isEqualToString:@"token"])
-            tokenParam = queryItem.value;
-    }
-    
-    UIViewController *vc = _rootViewController.navigationController.visibleViewController;
-    
-    if ([vc isKindOfClass:OACloudAccountVerificationViewController.class])
-    {
-        if ([BackupUtils isTokenValid:tokenParam])
-        {
-            [OABackupHelper.sharedInstance registerDevice:tokenParam];
-        }
-        else
-        {
-            OACloudAccountVerificationViewController *verificationVC = (OACloudAccountVerificationViewController *)vc;
-            verificationVC.errorMessage = OALocalizedString(@"backup_error_invalid_token");
-            [verificationVC updateScreen];
-        }
-    }
-    else
-    {
-        _rootViewController.token = tokenParam;
-    }
-    return YES;
-}
-
-- (nullable NSArray<CLLocation *> *)parseIntermediatePoints:(nullable NSString *)parameter
-{
-    if (parameter.length == 0)
-        return nil;
-    
-    NSArray<NSString *> *params = [parameter componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",;"]];
-    
-    NSUInteger count = params.count;
-    if (count < 2 || count % 2 != 0)
-    {
-        NSLog(@"Malformed OsmAnd navigation URL: corrupted intermediate points");
-        return nil;
-    }
-    
-    NSMutableArray<CLLocation *> *points = [NSMutableArray arrayWithCapacity:count / 2];
-    
-    for (NSUInteger i = 0; i < count; i += 2)
-    {
-        double lat = params[i].doubleValue;
-        double lon = params[i + 1].doubleValue;
-        
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(lat, lon);
-        if (!CLLocationCoordinate2DIsValid(coordinate))
-        {
-            NSLog(@"Malformed OsmAnd navigation URL: corrupted intermediate point (%@, %@)",
-                  params[i], params[i + 1]);
-            continue;
-        }
-        
-        [points addObject:[[CLLocation alloc] initWithLatitude:coordinate.latitude
-                                                     longitude:coordinate.longitude]];
-    }
-    
-    return points.count > 0 ? points : nil;
-}
-
-- (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
-{
-    Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAMapViewController *mapViewController = [_rootViewController.mapPanel mapViewController];
-
-        if (!_rootViewController || !mapViewController || !mapViewController.mapViewLoaded)
-        {
-            OAMapViewState *state = [[OAMapViewState alloc] init];
-            state.target31 = pos31;
-            state.zoom = zoom;
-            state.azimuth = 0.0f;
-            [OsmAndApp instance].initialURLMapState = state;
-            return;
-        }
-
-        [_rootViewController.mapPanel moveMapToLat:lat lon:lon zoom:zoom withTitle:title];
-    });
-}
-
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
 {
-    if ([URLContexts allObjects].count > 0) {
+    if ([URLContexts allObjects].count > 0)
+    {
         NSURL *url = [[URLContexts allObjects] firstObject].URL;
         [self openURL:url];
     }

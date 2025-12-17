@@ -1444,7 +1444,7 @@
 		C558A2A029B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */; };
 		C558DC462D453B1F007C0230 /* OAGpxApproximationParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = C558DC452D453B1F007C0230 /* OAGpxApproximationParams.mm */; };
 		C563193E2EF0353E008854B3 /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C563193D2EF0353E008854B3 /* DeepLinkParser.swift */; };
-		C56319442EF05389008854B3 /* OAFavoritesBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56319432EF05389008854B3 /* OAFavoritesBridge.mm */; };
+		C56319442EF05389008854B3 /* OADeepLinkBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56319432EF05389008854B3 /* OADeepLinkBridge.mm */; };
 		C56319462EF189EC008854B3 /* DeepLinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56319452EF189EC008854B3 /* DeepLinkManager.swift */; };
 		C5693B802A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */; };
 		C5693B812A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */; };
@@ -5184,8 +5184,8 @@
 		C558DC442D453B1F007C0230 /* OAGpxApproximationParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationParams.h; sourceTree = "<group>"; };
 		C558DC452D453B1F007C0230 /* OAGpxApproximationParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationParams.mm; sourceTree = "<group>"; };
 		C563193D2EF0353E008854B3 /* DeepLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkParser.swift; sourceTree = "<group>"; };
-		C56319422EF05389008854B3 /* OAFavoritesBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBridge.h; sourceTree = "<group>"; };
-		C56319432EF05389008854B3 /* OAFavoritesBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBridge.mm; sourceTree = "<group>"; };
+		C56319422EF05389008854B3 /* OADeepLinkBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADeepLinkBridge.h; sourceTree = "<group>"; };
+		C56319432EF05389008854B3 /* OADeepLinkBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADeepLinkBridge.mm; sourceTree = "<group>"; };
 		C56319452EF189EC008854B3 /* DeepLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkManager.swift; sourceTree = "<group>"; };
 		C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day@3x.png"; sourceTree = "<group>"; };
@@ -13690,8 +13690,8 @@
 				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
 				DA5A80D126C563A600F274C7 /* OAFavoritesHelper.h */,
 				DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */,
-				C56319422EF05389008854B3 /* OAFavoritesBridge.h */,
-				C56319432EF05389008854B3 /* OAFavoritesBridge.mm */,
+				C56319422EF05389008854B3 /* OADeepLinkBridge.h */,
+				C56319432EF05389008854B3 /* OADeepLinkBridge.mm */,
 				DA5A80DC26C563A600F274C7 /* OAFileNameTranslationHelper.h */,
 				DA5A80B526C563A600F274C7 /* OAFileNameTranslationHelper.m */,
 				32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */,
@@ -17705,7 +17705,7 @@
 				DA5A836B26C563A800F274C7 /* OADestinationItemsListViewController.mm in Sources */,
 				DA5A81B026C563A700F274C7 /* OADownloadsManager.m in Sources */,
 				DA5A84D326C563A900F274C7 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
-				C56319442EF05389008854B3 /* OAFavoritesBridge.mm in Sources */,
+				C56319442EF05389008854B3 /* OADeepLinkBridge.mm in Sources */,
 				46A35EF52C53F9510089B21C /* DirectoryObserver.swift in Sources */,
 				DA5A813126C563A700F274C7 /* OAWebClient.mm in Sources */,
 				DA5A833926C563A800F274C7 /* OAFoldersCell.m in Sources */,

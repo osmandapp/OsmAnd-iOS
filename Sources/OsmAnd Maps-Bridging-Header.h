@@ -95,7 +95,7 @@
 #import "UITableViewCell+getTableView.h"
 #import "UINavigationController+keyCommands.h"
 #import "OAWeatherHelperBridge.h"
-#import "OAFavoritesBridge.h"
+#import "OADeepLinkBridge.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -189,6 +189,8 @@
 #import "OAAddQuickActionViewController.h"
 #import "OAMapillaryImageViewController.h"
 #import "OABottomSheetViewController.h"
+#import "OAOnlineTilesEditingViewController.h"
+#import "OACloudAccountVerificationViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

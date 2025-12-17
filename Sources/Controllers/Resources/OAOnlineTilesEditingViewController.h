@@ -7,7 +7,8 @@
 //
 
 #import "OABaseNavbarViewController.h"
-#import "OAResourcesBaseViewController.h"
+
+@class OAResourcesBaseViewController, OALocalResourceItem;
 
 typedef NS_ENUM(NSInteger, EOASourceFormat)
 {
@@ -21,15 +22,12 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
 
 @end
 
-@class OAResourcesBaseViewController;
-
 @interface OAOnlineTilesEditingViewController : OABaseNavbarViewController
 
 @property (nonatomic) id<OATilesEditingViewControllerDelegate> delegate;
 
-- (instancetype) initWithLocalItem:(OALocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
-- (instancetype) initWithUrlParameters:(NSDictionary<NSString *, NSString *> *)params;
-- (instancetype) initWithEmptyItem;
+- (instancetype)initWithLocalItem:(OALocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
+- (instancetype)initWithUrlParameters:(NSDictionary<NSString *, NSString *> *)params;
+- (instancetype)initWithEmptyItem;
 
 @end
-

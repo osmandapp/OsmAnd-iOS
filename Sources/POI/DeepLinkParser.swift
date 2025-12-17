@@ -28,6 +28,7 @@ final class DeepLinkParser: NSObject {
     }
     
     private func handleIncomingActionsURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
         guard let rootViewController, url.scheme?.lowercased() == kOsmAndActionScheme else { return false }
         let params = OAUtilities.parseUrlQuery(url)
         let lat = (params["lat"] as NSString?)?.doubleValue ?? 0.0
@@ -81,8 +82,8 @@ final class DeepLinkParser: NSObject {
         }
         
         let startLatLon: CLLocation? = {
-            guard let startParam = startLatLonParam, !startParam.isEmpty else { return nil }
-            let parsed = OAUtilities.parseLatLon(startParam)
+            guard let startLatLonParam, !startLatLonParam.isEmpty else { return nil }
+            let parsed = OAUtilities.parseLatLon(startLatLonParam)
             if !CLLocationCoordinate2DIsValid(parsed.coordinate) {
                 NSLog("Malformed OsmAnd navigation URL: start location is broken")
                 return nil
@@ -98,7 +99,7 @@ final class DeepLinkParser: NSObject {
         }
         
         let appMode = OAApplicationMode.value(ofStringKey: appModeKeyParam, def: nil)
-        if let key = appModeKeyParam, !key.isEmpty, appMode == nil {
+        if let appModeKeyParam, !appModeKeyParam.isEmpty, appMode == nil {
             NSLog("App mode with specified key not available, using default navigation app mode")
         }
         
@@ -225,12 +226,12 @@ final class DeepLinkParser: NSObject {
         let vc = rootViewController.navigationController?.visibleViewController
         if let verificationVC = vc as? OACloudAccountVerificationViewController {
             let isValidToken: Bool = {
-                guard let token = tokenParam else { return false }
-                return BackupUtils.isTokenValid(token)
+                guard let tokenParam else { return false }
+                return BackupUtils.isTokenValid(tokenParam)
             }()
             
-            if isValidToken, let token = tokenParam {
-                OABackupHelper.sharedInstance().registerDevice(token)
+            if isValidToken, let tokenParam {
+                OABackupHelper.sharedInstance().registerDevice(tokenParam)
             } else {
                 verificationVC.errorMessage = localizedString("backup_error_invalid_token")
                 verificationVC.updateScreen()

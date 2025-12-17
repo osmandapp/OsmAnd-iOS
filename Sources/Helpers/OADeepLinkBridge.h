@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OARootViewController, OATargetPoint;
 
 @interface OADeepLinkBridge : NSObject
@@ -17,3 +19,5 @@
 + (nullable OATargetPoint *)unknownTargetPointWithLat:(double)lat lon:(double)lon rootViewController:(nullable OARootViewController *)rootViewController;
 
 @end
+
+NS_ASSUME_NONNULL_END

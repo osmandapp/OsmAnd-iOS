@@ -225,6 +225,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [self setupButtonVisibilityFor:_compassButton shouldShow:[self shouldShowCompass]];
     [self setupButtonVisibilityFor:_mapSettingsButton shouldShow:[self shouldShowConfigureMap]];
     [self setupButtonVisibilityFor:_searchButton shouldShow:[self shouldShowSearch]];
+    [self setupButtonVisibilityFor:_optionsMenuButton shouldShow:[self shouldShowMenu]];
 
     [self updateWeatherButtonVisibility];
 
@@ -541,6 +542,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (BOOL)shouldShowSearch
 {
     return [[[[OAMapButtonsHelper sharedInstance] getSearchButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowMenu
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get];
 }
 
 - (BOOL)needsSettingsForWeatherToolbar
@@ -910,6 +916,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
         OACommonBoolean *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState].visibilityPref;
         OACommonBoolean *searchButtonState = [mapButtonsHelper getSearchButtonState].visibilityPref;
+        OACommonBoolean *menuButtonState = [mapButtonsHelper getMenuButtonState].visibilityPref;
 
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
@@ -951,6 +958,12 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButtonVisibility:_searchButton showButton:[self shouldShowSearch]];
+            });
+        }
+        else if (obj == menuButtonState)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButtonVisibility:_optionsMenuButton showButton:[self shouldShowMenu]];
             });
         }
     }
@@ -1612,7 +1625,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
         _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
         BOOL optionsMenuButtonVisible = visible;
-        _optionsMenuButton.alpha = optionsMenuButtonVisible ? 1. : 0.;
+        _optionsMenuButton.alpha = [self shouldShowMenu] && optionsMenuButtonVisible ? 1. : 0.;
         BOOL zoomButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
         _zoomInButton.alpha = zoomButtonsVisible ? 1. : 0.;
         _zoomOutButton.alpha = zoomButtonsVisible ? 1. : 0.;

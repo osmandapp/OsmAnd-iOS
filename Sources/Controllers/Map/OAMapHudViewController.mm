@@ -226,6 +226,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [self setupButtonVisibilityFor:_mapSettingsButton shouldShow:[self shouldShowConfigureMap]];
     [self setupButtonVisibilityFor:_searchButton shouldShow:[self shouldShowSearch]];
     [self setupButtonVisibilityFor:_optionsMenuButton shouldShow:[self shouldShowMenu]];
+    [self setupButtonVisibilityFor:_driveModeButton shouldShow:[self shouldShowNavigation]];
 
     [self updateWeatherButtonVisibility];
 
@@ -547,6 +548,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (BOOL)shouldShowMenu
 {
     return [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowNavigation
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] visibilityPref] get];
 }
 
 - (BOOL)needsSettingsForWeatherToolbar
@@ -917,6 +923,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         OACommonBoolean *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState].visibilityPref;
         OACommonBoolean *searchButtonState = [mapButtonsHelper getSearchButtonState].visibilityPref;
         OACommonBoolean *menuButtonState = [mapButtonsHelper getMenuButtonState].visibilityPref;
+        OACommonBoolean *navigationButtonState = [mapButtonsHelper getNavigationModeButtonState].visibilityPref;
 
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
@@ -964,6 +971,12 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButtonVisibility:_optionsMenuButton showButton:[self shouldShowMenu]];
+            });
+        }
+        else if (obj == navigationButtonState)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButtonVisibility:_driveModeButton showButton:[self shouldShowNavigation]];
             });
         }
     }
@@ -1632,7 +1645,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         BOOL mapModeButtonVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
         _mapModeButton.alpha = mapModeButtonVisible ? 1. : 0.;
         BOOL driveModeButtonVisible = visible;
-        _driveModeButton.alpha = driveModeButtonVisible ? 1. : 0.;
+        _driveModeButton.alpha = [self shouldShowNavigation] && driveModeButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 
         if (self.mapInfoController.bottomPanelController)

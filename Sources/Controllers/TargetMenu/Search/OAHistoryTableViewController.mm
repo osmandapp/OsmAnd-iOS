@@ -369,16 +369,16 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(NSArray*)getItemsForRows:(NSArray*)indexPath
+- (NSArray *)getItemsForRows:(NSArray *)indexPath
 {
-    NSMutableArray* itemList = [[NSMutableArray alloc] init];
+    NSMutableArray *itemList = [NSMutableArray array];
     
-    [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
-        OASearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:path.section];
+    [indexPath enumerateObjectsUsingBlock:^(NSIndexPath *path, NSUInteger idx, BOOL *stop) {
+        OASearchHistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:path.section];
         [itemList addObject:[groupData.groupItems objectAtIndex:path.row]];
     }];
     
-    return itemList;
+    return [itemList copy];
 }
 
 -(void)onHistorySettingsButtonPressed

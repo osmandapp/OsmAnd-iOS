@@ -714,7 +714,7 @@
 "rendering_attr_hideIcons_name" = "Εικονίδια ΣΕ";
 "rendering_attr_publicTransportMode_name" = "Λεωφορεία, τρόλεϊ, κλειστά δρομολόγια";
 "routing_attr_avoid_bus_name" = "Χωρίς λεωφορεία";
-"rendering_attr_surface_grass_paver_name" = "Χορτάρι με πλάκες";
+"rendering_attr_surface_grass_paver_name" = "Διάτρητο γκαζόν";
 "rendering_attr_pisteRoutes_name" = "Χιονοδρομικές διαδρομές";
 "rendering_value_light_brown_name" = "Ανοιχτό καφετί";
 "routing_attr_piste_type_nordic_name" = "Εκτός πίστας και σκανδιναβική χιονοδρομία";
@@ -1817,7 +1817,7 @@
 "help_article_map_legend_ski_map_name" = "Στυλ χάρτη σκι";
 "verify_account_deletion_descr" = "Πρέπει να επαληθεύσουμε τον λογαριασμό σας πριν τον διαγράψουμε. \n \nΠαρακαλούμε εισάγετε την διεύθυνση email με την οποία κάνατε εγγραφή. Ένας κωδικός μια χρήσης θα σας σταλεί εκεί για το επόμενο βήμα.";
 "help_article_widgets_map_buttons_name" = "Κουμπιά χάρτη";
-"tracker_item" = "OsmAnd tracker (Ιχνηλάτης OsmAnd)";
+"tracker_item" = "OsmAnd Tracker";
 "osmand_cloud_deletion_all_data_warning" = "Όλα τα δεδομένα από το OsmAnd Cloud θα είναι %@. Τα δεδομένα στη συσκευή παραμένουν ανέγγιχτα.";
 "map_widget_sunset" = "Δύση ηλίου";
 "help_article_start_with_name" = "Ξεκινήστε με το OsmAnd";

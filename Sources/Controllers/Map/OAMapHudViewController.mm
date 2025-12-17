@@ -220,13 +220,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [_compassButton addSubview:_compassImage];
     _compassImage.translatesAutoresizingMaskIntoConstraints = YES;
     _compassImage.frame = CGRectMake(9.0, 9.0, 30.0, 30.0);
-
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
-    _compassButton.alpha = [self shouldShowCompass] ? 1.0 : 0.0;
-    _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
     
-    _mapSettingsButton.alpha = [self shouldShowConfigureMap] ? 1.0 : 0.0;
-    _mapSettingsButton.userInteractionEnabled = _mapSettingsButton.alpha > 0.0;
+    [self setupButtonVisibilityFor:_compassButton shouldShow:[self shouldShowCompass]];
+    [self setupButtonVisibilityFor:_mapSettingsButton shouldShow:[self shouldShowConfigureMap]];
+    [self setupButtonVisibilityFor:_searchButton shouldShow:[self shouldShowSearch]];
 
     [self updateWeatherButtonVisibility];
 
@@ -281,6 +279,12 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [self.leftWidgetsView addShadow];
     [self.rightWidgetsView addShadow];
     [self.middleWidgetsView addShadow];
+}
+
+- (void)setupButtonVisibilityFor:(UIButton *)button shouldShow:(BOOL)shouldShow
+{
+    button.alpha = shouldShow ? 1.0 : 0.0;
+    button.userInteractionEnabled = button.alpha > 0.0;
 }
 
 - (void)configureWeatherContoursButton
@@ -532,6 +536,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (BOOL)shouldShowConfigureMap
 {
     return [[[[OAMapButtonsHelper sharedInstance] getConfigureMapButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowSearch
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getSearchButtonState] visibilityPref] get];
 }
 
 - (BOOL)needsSettingsForWeatherToolbar
@@ -900,6 +909,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         OACommonInteger *compassButtonState = [mapButtonsHelper getCompassButtonState].visibilityPref;
         OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
         OACommonBoolean *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState].visibilityPref;
+        OACommonBoolean *searchButtonState = [mapButtonsHelper getSearchButtonState].visibilityPref;
 
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
@@ -934,33 +944,38 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         else if (obj == configureMapButtonState)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateConfigureMapButtonVisibility];
+                [self updateMapButtonVisibility:_mapSettingsButton showButton:[self shouldShowConfigureMap]];
+            });
+        }
+        else if (obj == searchButtonState)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButtonVisibility:_searchButton showButton:[self shouldShowSearch]];
             });
         }
     }
 }
 
-- (void)updateConfigureMapButtonVisibility
+- (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton
 {
-    BOOL showButton = [self shouldShowConfigureMap];
-    BOOL needShow = _mapSettingsButton.alpha == 0.0 && showButton;
-    BOOL needHide = _mapSettingsButton.alpha == 1.0 && !showButton;
+    BOOL needShow = button.alpha == 0.0 && showButton;
+    BOOL needHide = button.alpha == 1.0 && !showButton;
     if (needShow)
     {
-        _mapSettingsButton.hidden = NO;
+        button.hidden = NO;
         [UIView animateWithDuration:.25 animations:^{
-            _mapSettingsButton.alpha = 1.0;
+            button.alpha = 1.0;
         } completion:^(BOOL finished) {
-            _mapSettingsButton.userInteractionEnabled = _mapSettingsButton.alpha > 0.0;
+            button.userInteractionEnabled = button.alpha > 0.0;
         }];
     }
     else if (needHide)
     {
-        _mapSettingsButton.userInteractionEnabled = NO;
+        button.userInteractionEnabled = NO;
         [UIView animateWithDuration:.25 animations:^{
-            _mapSettingsButton.alpha = 0.0;
+            button.alpha = 0.0;
         } completion:^(BOOL finished) {
-            _mapSettingsButton.hidden = YES;
+            button.hidden = YES;
         }];
     }
 }
@@ -1517,7 +1532,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
         _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _compassButton.alpha = [self shouldShowCompass] && isButtonsVisible ? 1. : 0.;
-        _searchButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        _searchButton.alpha = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         
         if (_toolbarViewController && _toolbarViewController.view.superview)

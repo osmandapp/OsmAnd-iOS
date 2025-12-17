@@ -37,6 +37,10 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
+        var resetAlert: UIAlertController?
+        resetAlert = UIAlertController(title: title,
+                                       message: localizedString("reset_all_settings_desc"),
+                                       preferredStyle: .actionSheet)
         let resetAction: UIAction = UIAction(title: localizedString("reset_to_default"),
                                              image: .icCustomReset) { [weak self] _ in
             let actionSheet = UIAlertController(title: self?.title,
@@ -68,6 +72,8 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
                                              action: #selector(onRightNavbarButtonPressed),
                                              menu: menu)
         button?.accessibilityLabel = localizedString("shared_string_options")
+        let popover = resetAlert?.popoverPresentationController
+        popover?.barButtonItem = button
         var buttons = [UIBarButtonItem]()
         if let button {
             buttons.append(button)

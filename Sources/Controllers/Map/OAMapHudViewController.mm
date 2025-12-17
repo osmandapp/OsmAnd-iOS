@@ -224,6 +224,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassButton.alpha = [self shouldShowCompass] ? 1.0 : 0.0;
     _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
+    
+    _mapSettingsButton.alpha = [self shouldShowConfigureMap] ? 1.0 : 0.0;
+    _mapSettingsButton.userInteractionEnabled = _mapSettingsButton.alpha > 0.0;
 
     [self updateWeatherButtonVisibility];
 
@@ -526,6 +529,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     return _mapViewController.mapRendererView && [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
 }
 
+- (BOOL)shouldShowConfigureMap
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getConfigureMapButtonState] visibilityPref] get];
+}
+
 - (BOOL)needsSettingsForWeatherToolbar
 {
     return _mapInfoController.weatherToolbarVisible || _weatherToolbar.needsSettingsForToolbar;
@@ -564,7 +572,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     NSInteger rotateMap = [_settings.rotateMap get];
     CompassVisibility compassVisibility = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] getVisibility];
-    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == CompassVisibilityVisibleIfMapRotated) || compassVisibility == CompassVisibilityAlwaysVisible) && _mapSettingsButton.alpha == 1.0;
+    return ((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == CompassVisibilityVisibleIfMapRotated) || compassVisibility == CompassVisibilityAlwaysVisible;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -891,6 +899,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
         OACommonInteger *compassButtonState = [mapButtonsHelper getCompassButtonState].visibilityPref;
         OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
+        OACommonBoolean *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState].visibilityPref;
 
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
@@ -922,12 +931,43 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 [self updateDependentButtonsVisibility];
             });
         }
+        else if (obj == configureMapButtonState)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateConfigureMapButtonVisibility];
+            });
+        }
+    }
+}
+
+- (void)updateConfigureMapButtonVisibility
+{
+    BOOL showButton = [self shouldShowConfigureMap];
+    BOOL needShow = _mapSettingsButton.alpha == 0.0 && showButton;
+    BOOL needHide = _mapSettingsButton.alpha == 1.0 && !showButton;
+    if (needShow)
+    {
+        _mapSettingsButton.hidden = NO;
+        [UIView animateWithDuration:.25 animations:^{
+            _mapSettingsButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            _mapSettingsButton.userInteractionEnabled = _mapSettingsButton.alpha > 0.0;
+        }];
+    }
+    else if (needHide)
+    {
+        _mapSettingsButton.userInteractionEnabled = NO;
+        [UIView animateWithDuration:.25 animations:^{
+            _mapSettingsButton.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            _mapSettingsButton.hidden = YES;
+        }];
     }
 }
 
 - (void) updateCompassVisibility:(BOOL)showCompass
 {
-    BOOL needShow = _compassButton.alpha == 0.0 && showCompass && _mapSettingsButton.alpha == 1.0;
+    BOOL needShow = _compassButton.alpha == 0.0 && showCompass;
     BOOL needHide = _compassButton.alpha == 1.0 && !showCompass;
     if (needShow)
         [self showCompass];
@@ -1475,7 +1515,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
-        _mapSettingsButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _compassButton.alpha = [self shouldShowCompass] && isButtonsVisible ? 1. : 0.;
         _searchButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;

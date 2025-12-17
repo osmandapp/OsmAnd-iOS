@@ -12,10 +12,10 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
     private static let visibilityRowKey = "visibilityRowKey"
     private static let appearanceRowKey = "appearanceRowKey"
     
-    private var appMode: OAApplicationMode?
-    
     weak var mapButtonState: MapButtonState?
     weak var delegate: OASettingsDataDelegate?
+    
+    private var appMode: OAApplicationMode?
     
     override func commonInit() {
         appMode = OAAppSettings.sharedManager().applicationMode.get()

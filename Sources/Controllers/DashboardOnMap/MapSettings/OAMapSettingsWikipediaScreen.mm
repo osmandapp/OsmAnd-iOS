@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 {
     EOAMapSettingsWikipediaSectionVisibility = 0,
     EOAMapSettingsWikipediaSectionLanguages,
+    EOAMapSettingsWikipediaSectionOnlinePreview,
     EOAMapSettingsWikipediaSectionAvailable
 };
 
@@ -54,6 +55,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     NSObject *_dataLock;
     BOOL _wikipediaEnabled;
     NSArray<NSArray <NSDictionary *> *> *_data;
+    OAAppSettings *_settings;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -72,6 +74,10 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         _dataLock = [[NSObject alloc] init];
         _wikipediaEnabled = _app.data.wikipedia;
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        _settings = OAAppSettings.sharedManager;
+        
+        [self.tblView registerNib:[UINib nibWithNibName:OAButtonTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAButtonTableViewCell.reuseIdentifier];
+        [self.tblView registerNib:[UINib nibWithNibName:OASwitchTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASwitchTableViewCell.reuseIdentifier];
         
         [self setupDownloadingCellHelper];
         [self updateResources];
@@ -105,15 +111,42 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (void)initData
 {
     NSMutableArray *dataArr = [NSMutableArray new];
-    [dataArr addObject:@[@{@"type": [OASwitchTableViewCell getCellIdentifier]}]];
+    [dataArr addObject:@[
+        @{
+            @"type": [OASwitchTableViewCell reuseIdentifier],
+            @"key": @"wikipediaSwitch",
+            @"title": _wikipediaEnabled ? OALocalizedString(@"shared_string_enabled")
+            : OALocalizedString(@"rendering_value_disabled_name"),
+            @"img": _wikipediaEnabled ? @"ic_custom_show" : @"ic_custom_hide",
+            @"isSelected": @(_wikipediaEnabled)
+        }
+    ]];
 
     if (_wikipediaEnabled)
     {
         [dataArr addObject:@[@{
-                        @"type": [OAValueTableViewCell getCellIdentifier],
-                        @"img": @"ic_custom_map_languge",
-                        @"title": OALocalizedString(@"shared_string_language")
-                }]];
+            @"type": [OAValueTableViewCell reuseIdentifier],
+            @"img": @"ic_custom_map_languge",
+            @"title": OALocalizedString(@"shared_string_language")
+        }]];
+        BOOL isOffline = [_settings.wikiDataSourceType get] == EOAWikiDataSourceTypeOffline;
+        DataSourceType dataSourceType = isOffline ? DataSourceTypeOffline : DataSourceTypeOnline;
+        BOOL wikiShowImagePreviews = [_settings.wikiShowImagePreviews get];
+        [dataArr addObject:@[
+            @{
+                @"type": [OAButtonTableViewCell reuseIdentifier],
+                @"icon": [DataSourceTypeWrapper iconForType:dataSourceType],
+                @"title": OALocalizedString(@"poi_source"),
+                @"tintColor": isOffline ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected]
+            },
+            @{
+                @"type": [OASwitchTableViewCell reuseIdentifier],
+                @"key": @"wikiShowImagePreviews",
+                @"img": wikiShowImagePreviews ? @"ic_custom_photo" : @"ic_custom_photo_disable",
+                @"title": OALocalizedString(@"show_image_previews"),
+                @"isSelected": @(wikiShowImagePreviews)
+            }
+        ]];
     }
 
     if (_mapItems.count > 0)
@@ -132,17 +165,17 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         [dataArr addObject:availableMapsArr];
     }
 
-    _data = dataArr;
+    _data = [dataArr copy];
 }
 
 - (void)setupView
 {
-    title = OALocalizedString(@"download_wikipedia_maps");
+    title = [(OAWikipediaPlugin *)[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] popularPlacesTitle];
 
     self.tblView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16., 0., 0.);
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
-    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView reuseIdentifier]];
     self.tblView.estimatedRowHeight = kEstimatedRowHeight;
 
     [self updateResources];
@@ -158,9 +191,19 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
-        UISwitch *sw = (UISwitch *) sender;
-        [(OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class] wikipediaChanged:sw.isOn];
-        _wikipediaEnabled = _app.data.wikipedia;
+        UISwitch *sw = (UISwitch *)sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        NSDictionary *item = [self getItem:indexPath];
+        
+        NSString *key = item[@"key"];
+        
+        if ([key isEqualToString: @"wikipediaSwitch"]) {
+            [(OAWikipediaPlugin *)[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] wikipediaChanged:sw.isOn];
+            _wikipediaEnabled = _app.data.wikipedia;
+        } else if ([key isEqualToString: @"wikiShowImagePreviews"]) {
+            [_settings.wikiShowImagePreviews set:sw.isOn];
+            [self refreshPOI];
+        }
         [self updateResources];
     }
 }
@@ -216,36 +259,29 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell reuseIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = _wikipediaEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-
-            NSString *imgName = _wikipediaEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = _wikipediaEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-
-            [cell.switchView setOn:_wikipediaEnabled];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell reuseIdentifier]];
+        [cell descriptionVisibility:NO];
+        cell.titleLabel.text = item[@"title"];
+        
+        BOOL isSelected = ((NSNumber *)item[@"isSelected"]).boolValue;
+        
+        cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+        cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        
+        [cell.switchView setOn:isSelected];
+        cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+        [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+        [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell reuseIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell reuseIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell reuseIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
         }
@@ -264,8 +300,76 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"item"]];
         return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
     }
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell reuseIdentifier]])
+    {
+        OAButtonTableViewCell *cell =
+            (OAButtonTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OAButtonTableViewCell.reuseIdentifier];
 
+        if (cell.contentHeightConstraint == nil)
+        {
+            NSLayoutConstraint *constraint =
+                [cell.contentView.heightAnchor constraintGreaterThanOrEqualToConstant:48.0];
+            constraint.active = YES;
+            cell.contentHeightConstraint = constraint;
+        }
+
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+        [cell descriptionVisibility:NO];
+
+        cell.titleLabel.text = item[@"title"];
+        cell.leftIconView.image = item[@"icon"];
+        cell.leftIconView.tintColor = item[@"tintColor"];
+
+        UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
+        config.contentInsets = NSDirectionalEdgeInsetsZero;
+        cell.button.configuration = config;
+
+        cell.button.menu = [self createMenuForCellButton:cell];
+
+        cell.button.showsMenuAsPrimaryAction = YES;
+        cell.button.changesSelectionAsPrimaryAction = YES;
+
+        [cell.button setContentHuggingPriority:UILayoutPriorityRequired
+                                       forAxis:UILayoutConstraintAxisHorizontal];
+        [cell.button setContentCompressionResistancePriority:UILayoutPriorityRequired
+                                                     forAxis:UILayoutConstraintAxisHorizontal];
+
+        return cell;
+    }
     return nil;
+}
+
+- (UIMenu *)createMenuForCellButton:(OAButtonTableViewCell *)cell
+{
+    BOOL isOffline = [_settings.wikiDataSourceType get] == EOAWikiDataSourceTypeOffline;
+    
+    __weak __typeof(cell) weakCell = cell;
+    __weak __typeof(self) weakSelf = self;
+    UIAction *onlineAction = [UIAction actionWithTitle:[DataSourceTypeWrapper titleForType:DataSourceTypeOnline] image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        [_settings.wikiDataSourceType set:EOAWikiDataSourceTypeOnline];
+        weakCell.leftIconView.image = [DataSourceTypeWrapper iconForType:DataSourceTypeOnline];
+        weakCell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+        [weakSelf refreshPOI];
+    }];
+    
+    UIAction *offlineAction = [UIAction actionWithTitle:[DataSourceTypeWrapper titleForType:DataSourceTypeOffline] image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        [_settings.wikiDataSourceType set:EOAWikiDataSourceTypeOffline];
+        weakCell.leftIconView.image = [DataSourceTypeWrapper iconForType:DataSourceTypeOffline];
+        weakCell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+        [weakSelf refreshPOI];
+    }];
+    
+    onlineAction.state = isOffline ? UIMenuElementStateOff : UIMenuElementStateOn;
+    offlineAction.state = isOffline ? UIMenuElementStateOn : UIMenuElementStateOff;
+    
+    return [UIMenu composedMenuFrom:@[@[onlineAction, offlineAction]]];
+}
+
+- (void)refreshPOI
+{
+    [[OARootViewController instance].mapPanel refreshMap];
+    [_mapViewController updatePoiLayer];
 }
 
 #pragma mark - UITableViewDelegate
@@ -337,7 +441,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     if (!_wikipediaEnabled)
         return nil;
 
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView reuseIdentifier]];
     NSString *text = [self getTextForFooter:section];
     vw.label.text = text;
     return vw;
@@ -348,7 +452,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if (indexPath.section == EOAMapSettingsWikipediaSectionLanguages && [item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    if (indexPath.section == EOAMapSettingsWikipediaSectionLanguages && [item[@"type"] isEqualToString:[OAValueTableViewCell reuseIdentifier]])
     {
         OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] initWithAppMode:[[OAAppSettings sharedManager].applicationMode get]];
         controller.wikipediaDelegate = self;

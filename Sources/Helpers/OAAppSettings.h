@@ -842,7 +842,6 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
     EOAWidgetMapScale
 };
 
-
 @interface OACommonWidgetZoomLevelType : OACommonInteger
 
 + (instancetype)withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
@@ -851,6 +850,23 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode;
 - (void)set:(EOAWidgetZoomLevelType)type;
 - (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
+{
+    EOAWikiDataSourceTypeOnline,
+    EOAWikiDataSourceTypeOffline
+};
+
+@interface OAWikiDataSourceType : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAWikiDataSourceType)defValue;
+
+- (EOAWikiDataSourceType)get;
+- (EOAWikiDataSourceType)get:(OAApplicationMode *)mode;
+- (void)set:(EOAWikiDataSourceType)type;
+- (void)set:(EOAWikiDataSourceType)type mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -1070,6 +1086,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (assign, nonatomic) BOOL firstMapIsDownloaded;
 
 @property (nonatomic) OACommonString *renderer;
+
+@property (nonatomic) OAWikiDataSourceType *wikiDataSourceType;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
@@ -1449,6 +1467,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonBoolean *useOldRouting;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
 
+@property (nonatomic) OACommonBoolean *wikiShowImagePreviews;
+
 // Developer plugin
 @property (nonatomic) OACommonBoolean *simulateOBDData;
 
@@ -1466,5 +1486,14 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (void) setLastStartPoint:(double)lat lon:(double)lon;
 
 @end
+
+//public final CommonPreference<Boolean> WIKI_SHOW_IMAGE_PREVIEWS = new BooleanPreference(this, "wiki_show_image_previews", true).makeGlobal();
+//public final CommonPreference<DataSourceType> WIKI_DATA_SOURCE_TYPE = new EnumStringPreference<>(this, "wiki_data_source_type", DataSourceType.ONLINE, DataSourceType.values()) {
+//    @Override
+//    public DataSourceType getProfileDefaultValue(@Nullable ApplicationMode mode) {
+//        boolean paidVersion = Version.isPaidVersion(getContext());
+//        return paidVersion ? DataSourceType.OFFLINE : DataSourceType.ONLINE;
+//    }
+//}.makeGlobal().makeShared();
 
 NS_ASSUME_NONNULL_END

@@ -842,6 +842,7 @@
 "shared_string_maximum" = "Maximum";
 "osmand_parking_warning" = "Warning";
 "shared_string_copy" = "Copy";
+"copy_link" = "Copy link";
 "shared_string_continue" = "Continue";
 "shared_string_deselect_all" = "Deselect all";
 "shared_string_preparing" = "Preparing";

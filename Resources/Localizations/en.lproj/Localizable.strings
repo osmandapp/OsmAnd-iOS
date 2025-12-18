@@ -2070,6 +2070,7 @@
 "wind_layer" = "Wind layer";
 "cloud_layer" = "Cloud layer";
 "precipitation_layer" = "Precipitation layer";
+"wind_animation_layer" = "Wind animation layer";
 "app_profile" = "App profile";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";

@@ -165,9 +165,9 @@ static OALocationIcon *_MOVEMENT_CAR;
     return _modelName;
 }
 
-- (UIImage *) getMapIcon:(UIColor *)color
+- (UIImage *)getMapIcon:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
-    return [self.class getIcon:self.iconName color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
+    return [self.class getIcon:self.iconName color:color scaleFactor:currentScaleFactor];
 }
 
 + (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor

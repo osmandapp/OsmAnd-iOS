@@ -85,6 +85,8 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 - (NSMutableArray<NSString *> *) getSearchPhraseNames;
 - (double) getPhraseWeightForCompleteMatch:(OASearchResult *)exactResult completeMatchRes:(CheckWordsMatchCount *)completeMatchRes;
 - (NSMutableArray<NSString *> *)filterUnknownSearchWord:(NSMutableArray<NSString *> *)leftUnknownSearchWords;
+- (NSArray<NSString *> *)stripBracesNames;
+- (void)restoreBraceNames:(NSArray<NSString *> *)backup;
 
 - (NSString *) toString;
 

@@ -243,15 +243,18 @@
     return nil;
 }
 
-- (BOOL)matchAddressName:(OASearchPhrase *)phrase parent:(nullable OASearchResult *)parent res:(OASearchResult *)res fullMatch:(BOOL)fullMatch
+- (BOOL)matchAddressName:(OASearchPhrase *)phrase prevRes:(nullable OASearchResult *)prevRes res:(OASearchResult *)res fullMatch:(BOOL)fullMatch
 {
     BOOL match = NO;
-    if (parent != nil)
+    if (prevRes != nil)
     {
-        [phrase countUnknownWordsMatchMainResult:parent];
-        NSMutableArray<NSString *> * leftUnknownSearchWords = [parent filterUnknownSearchWord:nil];
+        // remove braces to not count them
+        NSArray<NSString *> * backup = [prevRes stripBracesNames];
+        [phrase countUnknownWordsMatchMainResult:prevRes];
+        [prevRes restoreBraceNames:backup];
+        NSMutableArray<NSString *> * leftUnknownSearchWords = [prevRes filterUnknownSearchWord:nil];
         BOOL lastComplete = [phrase isLastUnknownSearchWordComplete] || ![leftUnknownSearchWords containsObject:[phrase getLastUnknownSearchWord]];
-        OASearchPhrase * nphrase = [phrase selectWord:parent unknownWords:leftUnknownSearchWords lastComplete:lastComplete];
+        OASearchPhrase * nphrase = [phrase selectWord:prevRes unknownWords:leftUnknownSearchWords lastComplete:lastComplete];
         QString unknownWordToSearch = QString::fromNSString([nphrase getUnknownWordToSearch]);
         for (NSString * otherName in res.otherNames)
         {
@@ -276,7 +279,7 @@
     }
 
     NSMutableArray<NSString *> *localeNames = [OASearchPhrase splitWords:localeName ws:[NSMutableArray array] delimiters:[OASearchPhrase ALLDELIMITERS]];
-    if (parent == nil || !parent.firstUnknownWordMatches)
+    if (prevRes == nil || !prevRes.firstUnknownWordMatches)
     {
         OANameStringMatcher * firstUnknownMatcher = [phrase getFirstUnknownNameStringMatcher];
         [localeNames enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSString *lName, NSUInteger idx, BOOL *stop) {
@@ -287,7 +290,7 @@
         }];
     }
 
-    NSArray<NSString *> *leftUnknownSearchWords = (parent == nil) ? [phrase getUnknownSearchWords] : [parent filterUnknownSearchWord:nil];
+    NSArray<NSString *> *leftUnknownSearchWords = (prevRes == nil) ? [phrase getUnknownSearchWords] : [prevRes filterUnknownSearchWord:nil];
     NSArray<NSString *> *unknownSearchWords = [phrase getUnknownSearchWords];
 
     for (NSUInteger i = 0; i < unknownSearchWords.count && !match; i++)
@@ -589,7 +592,7 @@
         QuadRect *streetBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
         QuadRect *postcodeBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
         QuadRect *villagesBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 3];
-        QuadRect *cityBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5]; // covered by separate search before
+        QuadRect *cityBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5]; // covered by separate radius before
         int priority = [phrase isNoSelectedType] ? SEARCH_ADDRESS_BY_NAME_PRIORITY : SEARCH_ADDRESS_BY_NAME_PRIORITY_RADIUS2;
         
         NSString *currentResId;
@@ -663,6 +666,7 @@
                                       
                                       OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
                                       sr.resourceId = currentResId;
+                                      // IMPORTANT: the names with braces restored here (check matchAddressName)
                                       sr.localeName = address->getName(lang, transliterate).toNSString();
                                       sr.otherNames = [OASearchCoreFactory getAllNames:address->localizedNames nativeName:address->nativeName];
                                       sr.localeRelatedObjectName = currentRegionName;
@@ -795,7 +799,7 @@
                                 cityResult.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
                             cityResult.relatedResourceId = res.resourceId;
                         }
-                        bool match = [self matchAddressName:phrase parent:res res:cityResult fullMatch:true];
+                        bool match = [self matchAddressName:phrase prevRes:res res:cityResult fullMatch:true];
                         if (match)
                         {
                             newParentSearchResult = cityResult;
@@ -823,7 +827,7 @@
                                 cityResult.localeName = [boundary getName:phrase.getSettings.getLang transliterate:phrase.getSettings.isTransliterate];
                                 cityResult.otherNames = [boundary getOtherNames:true];
                                 // for another city require exact matching
-                                if ([self matchAddressName:phrase parent:res  res:cityResult fullMatch:true])
+                                if ([self matchAddressName:phrase prevRes:res  res:cityResult fullMatch:true])
                                 {
                                     cityResult.object = boundary;
                                     cityResult.location =  [[CLLocation alloc] initWithLatitude:boundary.latitude longitude:boundary.longitude];
@@ -838,7 +842,7 @@
                 else if (res.objectType == EOAObjectTypeBoundary)
                 {
                     // require exact matching to speed up
-                    if ([self matchAddressName:phrase parent:nil res:res fullMatch:true])
+                    if ([self matchAddressName:phrase prevRes:nil res:res fullMatch:true])
                     {
                         [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:self];
                     }
@@ -850,7 +854,7 @@
                     // but it's tricky to check how good matching reuslts (case Hohlmaier 1 Breuningsweiler)
 
                     // require exact matching to search street by name (not attached to city)
-                    if ([self matchAddressName:phrase parent:nil res:res fullMatch:true])
+                    if ([self matchAddressName:phrase prevRes:nil res:res fullMatch:true])
                     {
                         [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:self];
                     }
@@ -2079,37 +2083,56 @@
         QString lw = QString::fromNSString([phrase getUnknownWordToSearchBuilding]);
         OANameStringMatcher *buildingMatch = [phrase getUnknownWordToSearchBuildingNameMatcher];
         OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithNamePart:lw.toNSString() mode:CHECK_ONLY_STARTS_WITH];
-        for (const auto& b : s->buildings)
+        int number = [OAUtilities extractFirstIntegerNumber:lw.toNSString()];
+        if ([phrase isSearchTypeAllowed:EOAObjectTypeHouse])
         {
-            if ([resultMatcher isCancelled])
-                break;
-            
-            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-            bool interpolation = b->belongsToInterpolation(lw);
-            if ((![buildingMatch matches:b->nativeName.toNSString()] && !interpolation) || ![phrase isSearchTypeAllowed:EOAObjectTypeHouse])
-                continue;
-            if (interpolation)
+            for (const auto& b : s->buildings)
             {
-                res.localeName = lw.toNSString();
-                res.location = [OASearchCoreFactory getLocation:b hno:lw];
+                if ([resultMatcher isCancelled])
+                    break;
+                
+                OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+                bool interpolation = false;
+                if (b->belongsToInterpolation(lw))
+                {
+                    interpolation = true;
+                }
+                else if (number > 0 && number == [OAUtilities extractFirstIntegerNumber:b->nativeName.toNSString()] && lw.startsWith(b->nativeName))
+                {
+                    // match by partial name
+                }
+                else if([buildingMatch matches:b->nativeName.toNSString()])
+                {
+                    // match by name
+                }
+                else
+                {
+                    continue;
+                }
+                
+                if (interpolation)
+                {
+                    res.localeName = lw.toNSString();
+                    res.location = [OASearchCoreFactory getLocation:b hno:lw];
+                }
+                else
+                {
+                    res.localeName = b->getName(lang, transliterate).toNSString();
+                    res.location = [OASearchCoreFactory getLocation:b->position31];
+                }
+                res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames nativeName:b->nativeName];
+                res.object = [[OABuilding alloc] initWithBuilding:b];
+                res.resourceId = resId;
+                res.priority = priority;
+                res.priorityDistance = 0;
+                res.firstUnknownWordMatches = [startMatch matches:res.localeName];
+                res.relatedObject = [[OAStreet alloc] initWithStreet:s];
+                res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
+                res.objectType = EOAObjectTypeHouse;
+                res.preferredZoom = PREFERRED_BUILDING_ZOOM;
+                
+                [resultMatcher publish:res];
             }
-            else
-            {
-                res.localeName = b->getName(lang, transliterate).toNSString();
-                res.location = [OASearchCoreFactory getLocation:b->position31];
-            }
-            res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames nativeName:b->nativeName];
-            res.object = [[OABuilding alloc] initWithBuilding:b];
-            res.resourceId = resId;
-            res.priority = priority;
-            res.priorityDistance = 0;
-            res.firstUnknownWordMatches = [startMatch matches:res.localeName];
-            res.relatedObject = [[OAStreet alloc] initWithStreet:s];
-            res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
-            res.objectType = EOAObjectTypeHouse;
-            res.preferredZoom = PREFERRED_BUILDING_ZOOM;
-            
-            [resultMatcher publish:res];
         }
         QString streetIntersection = QString::fromNSString([phrase getUnknownWordToSearch]);
         OANameStringMatcher *streetMatch = [phrase getMainUnknownNameStringMatcher];
@@ -2124,7 +2147,7 @@
                     continue;
                 
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-                if (![self matchAddressName:phrase parent:nil res:res fullMatch:false])
+                if (![self matchAddressName:phrase prevRes:nil res:res fullMatch:false])
                 {
                     continue;
                 }
@@ -2233,7 +2256,7 @@
             BOOL pub = YES;
             if (object->nativeName.startsWith('<'))
                 pub = NO; // streets related to city
-            else if ([phrase isUnknownSearchWordPresent] && ![self matchAddressName:phrase parent:nil res:res fullMatch:false])
+            else if ([phrase isUnknownSearchWordPresent] && ![self matchAddressName:phrase prevRes:nil res:res fullMatch:false])
                 continue;
             
             res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();

@@ -50,6 +50,8 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 @implementation OAPOIViewController
 {
     OAPOIHelper *_poiHelper;
+    AmenityUIHelper *_amenityUIHelper;
+    AdditionalInfoBundle *_infoBundle;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
@@ -73,6 +75,18 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     if (self)
     {
         [self setup:poi];
+        
+        
+        //TODO: implement. fill with real poi data
+//        extensions = amenity.getAmenityExtensions(app.getPoiTypes(), false);
+//        setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
+//        infoBundle = new AdditionalInfoBundle(app, extensions);
+        
+        NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
+        
+        //setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
+        
+        _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
     }
     return self;
 }
@@ -311,6 +325,31 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
+    // new code launch order
+    
+//    processRoutePointAmenityTags(view);
+//    buildInternalRows(view);
+    [self buildInternalRows:rows];
+//
+//    if (PluginsHelper.getActivePlugin(OsmEditingPlugin.class) != null) {
+//        amenityUIHelper.buildWikiDataRow(view);
+//    }
+//
+//    buildNearestRows((ViewGroup) view);
+//    buildAltNamesRow((ViewGroup) view);
+//    buildNamesRow((ViewGroup) view);
+//    if (!amenityUIHelper.isFirstRow()) {
+//        firstRow = amenityUIHelper.isFirstRow();
+//    }
+    
+    
+
+    // TODO: delete/refactor old code launch order --------------------------------------
+    return;
+    
+    /*
+    
+    
     BOOL hasWiki = NO;
     NSString *preferredLang = [OAUtilities preferredLang];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
@@ -845,6 +884,37 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
     }
+     
+     */
+}
+
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
+{
+//    processRoutePointAmenityTags(view);
+    
+    [self buildInternalRows:rows];
+    
+//    buildNearestRows((ViewGroup) view);
+//    buildAltNamesRow((ViewGroup) view);
+//    buildNamesRow((ViewGroup) view);
+//    if (!amenityUIHelper.isFirstRow()) {
+//        firstRow = amenityUIHelper.isFirstRow();
+//    }
+}
+
+//TODO: implement
+- (void)buildInternalRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
+    _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
+    NSArray<OARowInfo *> *buildedRows = [_amenityUIHelper buildInternal]; //row
+    [rows addObjectsFromArray:buildedRows];
+    
+//    amenityUIHelper = new AmenityUIHelper(mapActivity, getPreferredMapAppLang(), infoBundle);
+//    amenityUIHelper.setLight(isLightContent());
+//    amenityUIHelper.setLatLon(getLatLon());
+//    amenityUIHelper.setCollapseExpandListener(getCollapseExpandListener());
+//    amenityUIHelper.buildInternal(view);
 }
 
 - (NSString *) getOsmUrl

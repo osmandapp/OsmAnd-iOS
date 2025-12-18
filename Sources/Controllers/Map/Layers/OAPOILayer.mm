@@ -40,7 +40,6 @@
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-#include <OsmAndCore/Data/ObfPoiSectionReader.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
@@ -49,11 +48,12 @@
 #include <OsmAndCore/NetworkRouteSelector.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/Map/IOnPathMapSymbol.h>
-#include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
 
 #define kPoiSearchRadius 50 // AMENITY_SEARCH_RADIUS
 #define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
 #define kTrackSearchDelta 40
+
+static const int START_ZOOM = 5;
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
@@ -173,25 +173,21 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     if (noValidByName)
         [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
 
-    OAPOIUIFilter *poiFilter = _poiUiFilter;
-    OAPOIUIFilter *wikiFilter = _wikiUiFilter;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doShowPoiUiFilterOnMapWithPoiFilter:poiFilter wikiFilter:wikiFilter];
+        [self doShowPoiUiFilterOnMap];
     });
 }
 
-- (void) doShowPoiUiFilterOnMapWithPoiFilter:(OAPOIUIFilter *)poiFilter wikiFilter:(OAPOIUIFilter *)wikiFilter
+- (void) doShowPoiUiFilterOnMap
 {
-    if (!poiFilter && !wikiFilter)
+    if (!_poiUiFilter && !_wikiUiFilter)
         return;
 
     [self.mapViewController runWithRenderSync:^{
 
-        OAAmenityExtendedNameFilter *poiNameFilter = [poiFilter getNameAmenityFilter:poiFilter.filterByName];
-        OAAmenityExtendedNameFilter *wikiNameFilter = [wikiFilter getNameAmenityFilter:wikiFilter.filterByName];
-
-        void (^_generate)(OAPOIUIFilter *, OAAmenityExtendedNameFilter *) = ^(OAPOIUIFilter *f, OAAmenityExtendedNameFilter *nameFilter) {
+        void (^_generate)(OAPOIUIFilter *) = ^(OAPOIUIFilter *f) {
             BOOL isWiki = [f isWikiFilter];
+
             auto categoriesFilter = QHash<QString, QStringList>();
             NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [f getAcceptedTypes];
             for (OAPOICategory *category in types.keyEnumerator)
@@ -206,20 +202,34 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                 categoriesFilter.insert(QString::fromNSString(category.name), list);
             }
 
+            if (isWiki)
+                _wikiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
+            else
+                _poiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
+
+            __weak OAAmenityExtendedNameFilter *weakWikiUiNameFilter = _wikiUiNameFilter;
+            __weak OAPOIUIFilter *weakWikiUiFilter = _wikiUiFilter;
+            __weak OAAmenityExtendedNameFilter *weakPoiUiNameFilter = _poiUiNameFilter;
+            __weak OAPOIUIFilter *weakPoiUiFilter = _poiUiFilter;
             OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
                     [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
                     {
+                        OAAmenityExtendedNameFilter *wikiUiNameFilter = weakWikiUiNameFilter;
+                        OAPOIUIFilter *wikiUiFilter = weakWikiUiFilter;
+                        OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
+                        OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
+
                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
                         QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
                         
-                        BOOL check = !wikiNameFilter && !wikiFilter && poiNameFilter
-                                && poiFilter && poiFilter.filterByName && poiFilter.filterByName.length > 0;
-                        BOOL accepted = poiNameFilter && [poiNameFilter acceptAmenity:amenity values:decodedValues type:type];
+                        BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
+                                && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
+                        BOOL accepted = poiUiNameFilter && [poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
 
                         if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
                             return check ? accepted : false;
                         
-                        if ((check && accepted) || (isWiki ? wikiNameFilter && [wikiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
+                        if ((check && accepted) || (isWiki ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
                         {
                             BOOL isClosed = decodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
                             return !isClosed;
@@ -242,29 +252,28 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-
-            auto iconProvider = std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate);
-
             if (categoriesFilter.count() > 0)
             {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, iconProvider, self.pointsOrder));
+                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
             }
             else
             {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, iconProvider, self.pointsOrder));
+                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
             }
 
             [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
         };
 
-        _poiUiNameFilter = poiNameFilter;
-        _wikiUiNameFilter = wikiNameFilter;
+        if (_poiUiFilter)
+            _generate(_poiUiFilter);
+        else
+            _poiUiNameFilter = nil;
 
-        if (poiFilter)
-            _generate(poiFilter, poiNameFilter);
+        if (_wikiUiFilter)
+            _generate(_wikiUiFilter);
+        else
+            _wikiUiNameFilter = nil;
 
-        if (wikiFilter)
-            _generate(wikiFilter, wikiNameFilter);
     }];
 }
 
@@ -286,6 +295,104 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     NSString *s = [text substringFromIndex:r.location + 1];
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
+}
+
+- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity mapObject:(std::shared_ptr<const OsmAnd::MapObject>)mapObject poi:(OAPOI *)poi
+{
+    const auto& decodedCategories = amenity->getDecodedCategories();
+    if (!decodedCategories.isEmpty())
+    {
+        const auto& entry = decodedCategories.first();
+        poi.type = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:entry.category.toNSString() name:entry.subcategory.toNSString()];
+    }
+    
+    poi.obfId = amenity->id;
+    poi.name = amenity->nativeName.toNSString();
+    poi.subType = amenity->subType.toNSString();
+
+    NSMutableDictionary *names = [NSMutableDictionary dictionary];
+    NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];
+    if (nameLocalized.length > 0)
+        poi.name = nameLocalized;
+    poi.nameLocalized = poi.name;
+    poi.localizedNames = names;
+    
+    if (poi.name.length == 0 && poi.type)
+        poi.name = poi.type.name;
+    if (poi.nameLocalized.length == 0 && poi.type)
+        poi.nameLocalized = poi.type.nameLocalized;
+    if (poi.nameLocalized.length == 0)
+        poi.nameLocalized = poi.name;
+    
+    const auto decodedValues = amenity->getDecodedValues();
+    [self processAmenityFields:poi decodedValues:decodedValues];
+    
+    if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mapObject))
+    {
+        for (const OsmAnd::PointI pointI : obfMapObject->points31)
+        {
+            [poi addLocation:pointI.x y:pointI.y];
+        }
+    }
+}
+
+- (void) processAmenityFields:(OAPOI *)poi decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
+{
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
+
+    for (const auto& entry : decodedValues)
+    {
+        if (entry.declaration->tagName.startsWith(QString("content")))
+        {
+            NSString *key = entry.declaration->tagName.toNSString();
+            NSString *loc;
+            if (key.length > 8)
+                loc = [[key substringFromIndex:8] lowercaseString];
+            else
+                loc = @"";
+            
+            [content setObject:entry.value.toNSString() forKey:loc];
+        }
+        else
+        {
+            [values setObject:entry.value.toNSString() forKey:entry.declaration->tagName.toNSString()];
+        }
+    }
+    
+    poi.values = values;
+    poi.localizedContent = content;
+}
+
+- (void) addRoute:(NSMutableArray<OATargetPoint *> *)points touchPoint:(CGPoint)touchPoint mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj
+{
+    CGPoint topLeft;
+    topLeft.x = touchPoint.x - kTrackSearchDelta;
+    topLeft.y = touchPoint.y - kTrackSearchDelta;
+    CGPoint bottomRight;
+    bottomRight.x = touchPoint.x + kTrackSearchDelta;
+    bottomRight.y = touchPoint.y + kTrackSearchDelta;
+    OsmAnd::PointI topLeft31;
+    OsmAnd::PointI bottomRight31;
+    [self.mapView convert:topLeft toLocation:&topLeft31];
+    [self.mapView convert:bottomRight toLocation:&bottomRight31];
+    
+    OsmAnd::AreaI area31(topLeft31, bottomRight31);
+    const auto center31 = area31.center();
+    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center31);
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>(self.app.resourcesManager->obfsCollection);
+    auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
+    NSMutableSet<OARouteKey *> *routeKeys = [NSMutableSet set];
+    for (auto it = routes.begin(); it != routes.end(); ++it)
+    {
+        OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
+        if (![routeKeys containsObject:routeKey] && [self isRouteEnabledForKey:routeKey])
+        {
+            [routeKeys addObject:routeKey];
+            [self putRouteToSelected:routeKey location:coord mapObj:mapObj points:points area:area31];
+        }
+    }
 }
 
 - (BOOL)isRouteEnabledForKey:(OARouteKey *)routeKey
@@ -473,64 +580,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return NO;
 }
 
-- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
-{
-    NSArray<OAPOI *> *amenities = [self getDisplayedResults:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];
-    for (OAPOI *amenity in amenities)
-    {
-        [result collect:amenity provider:self];
-    }
-}
-
-- (NSArray<OAPOI *> *) getDisplayedResults:(double)lat lon:(double)lon
-{
-    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
-    if (!_amenitySymbolsProvider)
-        return result;
-    
-    const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    OsmAnd::AreaI area31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
-    const auto tileId = OsmAnd::Utilities::getTileId(point31, self.mapView.zoomLevel);
-    
-    OsmAnd::IMapTiledSymbolsProvider::Request request;
-    request.tileId = tileId;
-    request.zoom = self.mapView.zoomLevel;
-    const auto& mapState = [self.mapView getMapState];
-    request.mapState = mapState;
-    request.visibleArea31 = area31;
-    
-    std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
-    _amenitySymbolsProvider->obtainData(request, data, nullptr);
-    
-    std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider::Data> tiledData =
-        std::static_pointer_cast<OsmAnd::IMapTiledSymbolsProvider::Data>(data);
-    if (tiledData && !tiledData->symbolsGroups.isEmpty())
-    {
-        for (const auto group : tiledData->symbolsGroups)
-        {
-            if (!group->symbols.isEmpty())
-            {
-                for (const auto symbol : group->symbols)
-                {
-                    if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbol->groupPtr))
-                    {
-                        if (const auto cppAmenity = amenitySymbolGroup->amenity)
-                        {
-                            if (area31.contains(cppAmenity->position31))
-                            {
-                                OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
-                                if (poi)
-                                    [result addObject:poi];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return [result copy];
-}
-
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
@@ -554,7 +603,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         else if ([object isKindOfClass:BaseDetailsObject.class])
             placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
         
-        return placeId != -1 && _topPlaces[@(placeId)];
+        return placeId > 0 && _topPlaces[@(placeId)];
     }
     
     return NO;

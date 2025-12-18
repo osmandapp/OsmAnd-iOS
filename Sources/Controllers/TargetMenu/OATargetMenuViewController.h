@@ -113,6 +113,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 + (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
 
++ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
+
 - (id) getTargetObj;
 
 - (nullable UIImage *) getIcon;

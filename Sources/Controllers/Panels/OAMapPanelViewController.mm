@@ -1389,25 +1389,25 @@ typedef enum
         }
     }
     
+    if (validSelectedObjects && validSelectedObjects.count != validPoints.count)
+        validSelectedObjects = nil;
+    
     if (validPoints.count == 0)
     {
         return;
     }
     if (selectedObjects.count == 1)
     {
-        [contextLayer showContextMenu:touchPointLatLon object:selectedObjects[0]];
+        [self showContextMenu:validPoints[0] selectedObject:selectedObjects[0]];
     }
     else if (validPoints.count == 1)
     {
-        [self showContextMenu:validPoints[0]];
+        [self showContextMenu:validPoints[0] selectedObject:validSelectedObjects ? validSelectedObjects[0] : nil];
     }
     else
     {
         for (OATargetPoint *targetPoint in validPoints)
             [self applyTargetPointController:targetPoint];
-
-        if (validSelectedObjects && validSelectedObjects.count != validPoints.count)
-            validSelectedObjects = nil;
         
         [self showMultiContextMenu:touchPointLatLon points:validPoints selectedObjects:validSelectedObjects];
     }
@@ -1435,6 +1435,11 @@ typedef enum
 }
 
 - (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
+{
+    [self showContextMenu:targetPoint saveState:saveState preferredZoom:preferredZoom selectedObject:nil];
+}
+
+- (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
 {
     if (_activeTargetType == OATargetGPX)
         [self hideScrollableHudViewController];
@@ -1468,6 +1473,8 @@ typedef enum
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
+    
+    [_targetMenuView setSelectedObject:selectedObject.object];
     
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
@@ -1533,6 +1540,11 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
+    [self showContextMenu:targetPoint selectedObject:nil];
+}
+
+- (void) showContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
+{
     if (targetPoint.type == OATargetGPX)
     {
         OASTrackItem *trackItem;
@@ -1578,7 +1590,7 @@ typedef enum
     }
     else
     {
-        [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
+        [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM selectedObject:selectedObject];
     }
 }
 
@@ -2348,7 +2360,7 @@ typedef enum
     
     _mapStateSaved = saveMapState;
     
-    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
+    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint selectedObject:_targetMenuView.selectedObject activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
     {
@@ -2727,7 +2739,7 @@ typedef enum
 
 - (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed preferredZoom:(float)preferredZoom
 {
-    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom icon:nil];
+    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom];
 }
 
 - (void)openTargetViewWithAddress:(OAAddress *)address
@@ -2736,7 +2748,6 @@ typedef enum
                            pushed:(BOOL)pushed
                         saveState:(BOOL)saveState
                     preferredZoom:(float)preferredZoom
-                             icon:(UIImage *)icon
 {
     double lat = address.latitude;
     double lon = address.longitude;
@@ -2752,6 +2763,7 @@ typedef enum
     
     NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
     NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;
+    UIImage *icon = [address icon];
     
     targetPoint.type = OATargetAddress;
     

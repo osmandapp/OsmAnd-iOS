@@ -27,6 +27,10 @@
 #include <OsmAndCore/Data/TransportRoute.h>
 #include <OsmAndCore/Data/TransportStop.h>
 
+
+static const NSInteger kOrderPreviousStopsCountRow = -1;
+
+
 static OATransportRouteToolbarViewController *toolbarController;
 
 @interface OATransportRouteController ()<OARowInfoDelegate>
@@ -213,7 +217,7 @@ static OATransportRouteToolbarViewController *toolbarController;
     return -1;
 }
 
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
 {
     const auto& stops = _transportRoute.route->forwardStops;
     int currentStop = [_transportRoute getStopIndex];
@@ -224,7 +228,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         startPosition = (currentStop == -1 ? 0 : currentStop);
         if (currentStop > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), @(currentStop).stringValue] text:OALocalizedString(@"recording_context_menu_show") textColor:nil isText:YES needLinks:NO order:-1 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), @(currentStop).stringValue] text:OALocalizedString(@"recording_context_menu_show") textColor:nil isText:YES needLinks:NO order:kOrderPreviousStopsCountRow typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.delegate = self;
             [rows addObject:rowInfo];
         }

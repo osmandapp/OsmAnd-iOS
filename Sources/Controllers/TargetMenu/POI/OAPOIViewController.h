@@ -14,6 +14,7 @@
 
 - (id) initWithPOI:(OAPOI *)poi;
 
+- (void) setObject:(id)object;
 - (void) setup:(OAPOI *)poi;
 - (NSString *) getOsmUrl;
 

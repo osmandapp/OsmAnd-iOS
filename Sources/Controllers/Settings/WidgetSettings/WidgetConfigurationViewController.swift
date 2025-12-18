@@ -197,7 +197,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell.contentHeightConstraint = constraint
             }
             cell.selectionStyle = .none
-            cell.leftIconVisibility(item.key != "average_obd_mode_key" && item.key != "fuel_consumption_mode_key")
+            cell.leftIconVisibility(shouldShowLeftIcon(forKey: item.key))
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -206,13 +206,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             config.baseForegroundColor = .textColorActive
             config.contentInsets = .zero
             cell.button.configuration = config
-            if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
-                cell.button.menu = createDisplayPriorityMenuWith(value: value ?? defValue, pref: pref, indexPath: indexPath)
-            } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
-                cell.button.menu = createBooleanMenuWith(currentValue: value, pref: boolPref, options: options, indexPath: indexPath)
-            } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let value {
-                cell.button.menu = createStringMenuWith(currentValue: value, pref: pref, options: options, indexPath: indexPath)
-            }
+            cell.button.menu = buildButtonMenu(for: item, currentValue: value, indexPath: indexPath)
             cell.button.showsMenuAsPrimaryAction = true
             cell.button.changesSelectionAsPrimaryAction = true
             cell.button.setContentHuggingPriority(.required, for: .horizontal)
@@ -220,6 +214,26 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             outCell = cell
         }
         return outCell
+    }
+    
+    private func shouldShowLeftIcon(forKey key: String?) -> Bool {
+        guard let key else { return true }
+        let keysWithoutIcon: Set<String> = ["average_obd_mode_key", "fuel_consumption_mode_key", "recording_widget_mode_key"]
+        return !keysWithoutIcon.contains(key)
+    }
+    
+    private func buildButtonMenu(for item: OATableRowData, currentValue: String?, indexPath: IndexPath) -> UIMenu? {
+        if let pref = item.obj(forKey: "pref") as? OACommonWidgetDisplayPriority, let defValue = RouteInfoDisplayPriority(rawValue: pref.defValue)?.key {
+            return createDisplayPriorityMenuWith(value: currentValue ?? defValue, pref: pref, indexPath: indexPath)
+        } else if let boolPref = item.obj(forKey: "pref") as? OACommonBoolean, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let currentValue {
+            return createBooleanMenuWith(currentValue: currentValue, pref: boolPref, options: options, indexPath: indexPath)
+        } else if item.key == "fuel_consumption_mode_key", let pref = item.obj(forKey: "pref") as? OACommonString, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let currentValue {
+            return createStringMenuWith(currentValue: currentValue, pref: pref, options: options, indexPath: indexPath)
+        } else if item.key == "recording_widget_mode_key", let pref = item.obj(forKey: "pref") as? OACommonInteger, let options = item.obj(forKey: "possible_values") as? [OATableRowData], let currentValue {
+            return createIntegerMenuWith(currentValue: currentValue, pref: pref, options: options, indexPath: indexPath)
+        }
+        
+        return nil
     }
     
     private func createDisplayPriorityMenuWith(value: String, pref: OACommonWidgetDisplayPriority, indexPath: IndexPath) -> UIMenu {
@@ -273,6 +287,26 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                     self.widgetConfigurationParams?[pref.key] = raw
                 } else {
                     pref.set(raw)
+                }
+                
+                self.onWidgetStateChanged()
+            }
+        }
+        
+        return UIMenu(options: .singleSelection, children: actions)
+    }
+    
+    private func createIntegerMenuWith(currentValue: String, pref: OACommonInteger, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
+        let actions = options.compactMap { row -> UIAction? in
+            guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
+            let state: UIMenuElement.State = title == currentValue ? .on : .off
+            return UIAction(title: title, state: state) { [weak self] _ in
+                guard let self else { return }
+                let newRaw = (row.obj(forKey: "value") as? Int) ?? 0
+                if self.createNew {
+                    self.widgetConfigurationParams?[pref.key] = "\(newRaw)"
+                } else {
+                    pref.set(Int32(newRaw))
                 }
                 
                 self.onWidgetStateChanged()

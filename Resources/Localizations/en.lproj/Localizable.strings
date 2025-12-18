@@ -405,6 +405,14 @@
 "map_widget_trip_recording_uphill" = "Uphill";
 "map_widget_trip_recording_duration" = "Duration";
 "map_widget_trip_recording_distance" = "Distance";
+"average_slope" = "Average slope";
+"trip_recording_average_slope_widget_description" = "Shows the average slope for the last downhill or uphill section of the currently recorded trip.";
+"shared_string_max_speed" = "Max. speed";
+"trip_recording_max_speed_widget_description" = "Shows the maximum speed for the currently recorded trip. Tap to switch between the overall max speed and the max speed from the last uphill or downhill.";
+"shared_string_last_uphill" = "Last uphill";
+"shared_string_last_downhill" = "Last downhill";
+"show_track_on_map" = "Show track on map";
+"total_distance" = "Total distance";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
@@ -1700,6 +1708,7 @@
 "shared_string_type" = "Type";
 "res_unknown" = "Unknown";
 "shared_string_size" = "Size";
+"icon_size" = "Icon size";
 "created_on" = "Created on";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
@@ -3319,6 +3328,10 @@
 "local_file_will_be_restored" = "The local file will be restored";
 "local_changes_will_be_dismissed" = "Local changes will be dismissed";
 
+"deleted_maps_prompt" = "These maps are no longer supported and have been replaced by smaller regions. Please remove them and download the new versions.";
+"unsupported_maps" = "Unsupported maps";
+"deleted_maps_alert_message" = "Are you sure you want to delete %d maps?";
+
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
 "set_up_backup" = "Set up backup";
@@ -3773,6 +3786,15 @@
 • Fixed an incorrect distance display in the Next Turn widget\n
 • Improved brand search by including more local brands\n
 • General stability and performance improvements\n";
+
+"ios_release_5_3" = "• Added interactive animation for the Speedometer widget\n
+• Added an option to resize the location position icon\n
+• New Trip Recording widgets: Max Speed and Average Slope; improved Uphill/Downhill widgets\n
+• Added deep linking support for sharing specific POIs\n
+• Fixed an issue where ETA in Navigation widgets did not update while stationary\n
+• Improved connectivity for paired OBDII adapters\n
+• Added the ability to merge waypoints into a selected favorites folder\n
+• CarPlay: Fixed an issue with an unresponsive map on the Dashboard and added support for the \"Always show dark map\" parameter\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";

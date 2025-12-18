@@ -11,6 +11,7 @@
 #import "OAArabicNormalizer.h"
 
 static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch | NSDiacriticInsensitiveSearch;
+static NSCharacterSet * _APOSTROPHES;
 
 @implementation OACollatorStringMatcher
 {
@@ -18,13 +19,24 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     NSString *_part;
 }
 
++ (void) initialize
+{
+    if (self == [OACollatorStringMatcher class])
+    {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            NSString *charString = @"'’ʼ´`";
+            _APOSTROPHES = [NSCharacterSet characterSetWithCharactersInString:charString];
+        });
+    }
+}
 
 - (instancetype)initWithPart:(NSString *)part mode:(StringMatcherMode)mode
 {
     self = [super init];
     if (self)
     {
-        part = [self.class simplifyStringAndAlignChars:part];
+        part = [self.class lowercaseAndAlignChars:part];
         if (part.length > 0 && [part characterAtIndex:(part.length - 1)] == '.')
         {
             part = [part substringToIndex:part.length - 1];
@@ -41,19 +53,32 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
 
 - (BOOL) matches:(NSString *)name
 {
-    return [self.class cmatches:name part:_part mode:_mode];
+    return [self.class cmatches:name part:_part alignPart:NO mode:_mode];
 }
-
 
 + (BOOL) cmatches:(NSString *)fullName part:(NSString *)part mode:(StringMatcherMode)mode
 {
-    if ([OAArabicNormalizer isSpecialArabic:fullName]) {
-        fullName = [OAArabicNormalizer normalize:fullName] ?: fullName;
-    }
+    return [self cmatches:fullName part:part alignPart:YES mode:mode];
+}
 
-    if ([OAArabicNormalizer isSpecialArabic:part]) {
-        part = [OAArabicNormalizer normalize:part] ?: part;
++ (BOOL) cmatches:(NSString *)fullName part:(NSString *)part alignPart:(BOOL)alignPart  mode:(StringMatcherMode)mode
+{
+    if (fullName != nil && [fullName rangeOfString:@"-"].location != NSNotFound)
+    {
+        NSString *stringWithoutHyphen = [fullName stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        if ([self.class cmatches:stringWithoutHyphen part:part mode:mode])
+        {
+            return YES;
+        }
     }
+    
+    if (alignPart)
+    {
+        part = [self.class alignChars:part];
+    }
+    
+    fullName = [self.class lowercaseAndAlignChars:fullName];
+    
     switch (mode)
     {
         case CHECK_CONTAINS:
@@ -133,13 +158,13 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     // FUTURE: This is not effective code, it runs on each comparision
     // It would be more efficient to normalize all strings in file and normalize search string before collator
     theStart = [self alignChars:theStart];
-    NSString *searchIn = [self simplifyStringAndAlignChars:fullTextP];
+    NSString *searchIn = [self lowercaseAndAlignChars:fullTextP];
     NSInteger searchInLength = searchIn.length;
     
     NSInteger startLength = theStart.length;
     if (startLength == 0)
         return YES;
-    // this is not correct without (simplifyStringAndAlignChars) because of Auhofstrasse != Auhofstraße
+    // this is not correct without (lowercaseAndAlignChars) because of Auhofstrasse != Auhofstraße
     if (startLength > searchInLength)
         return NO;
 
@@ -196,7 +221,7 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     return ![[NSCharacterSet letterCharacterSet] characterIsMember:c] && ![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:c];
 }
 
-+ (NSString *) simplifyStringAndAlignChars:(NSString *)fullText
++ (NSString *) lowercaseAndAlignChars:(NSString *)fullText
 {
     fullText = fullText.lowerCase;
     fullText = [self alignChars:fullText];
@@ -205,11 +230,24 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
 
 + (NSString *) alignChars:(NSString *)fullText
 {
+    if ([OAArabicNormalizer isSpecialArabic:fullText]) {
+        fullText = [OAArabicNormalizer normalize:fullText] ?: fullText;
+    }
+    fullText = [self removeApostrophes:fullText];
     int i;
     while( (i = [fullText indexOf:@"ß"] ) != -1 ) {
         fullText = [NSString stringWithFormat:@"%@ss%@", [fullText substringToIndex:i], [fullText substringFromIndex:i+1]];
     }
     return fullText;
+}
+
++ (NSString *) removeApostrophes:(NSString *)input
+{
+    if (!input)
+    {
+        return nil;
+    }
+    return [[input componentsSeparatedByCharactersInSet:_APOSTROPHES] componentsJoinedByString:@""];
 }
 
 @end

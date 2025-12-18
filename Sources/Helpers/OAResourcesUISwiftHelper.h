@@ -13,13 +13,14 @@
 
 @protocol OADownloadTask;
 
-@class OAWorldRegion, FFCircularProgressView;
+@class OAWorldRegion, FFCircularProgressView, MBProgressHUD;
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
     EOAOAResourceSwiftItemTypeUnknown = -1,
     EOAOAResourceSwiftItemTypeMapRegion = 0,
+    EOAOAResourceSwiftItemTypeDeprecatedMap,
     EOAOAResourceSwiftItemTypeRoadMapRegion,
     EOAOAResourceSwiftItemTypeSrtmMapRegion,
     EOAOAResourceSwiftItemTypeDepthContourRegion,
@@ -108,6 +109,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
                             onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                             onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
++ (void)deleteResourcesOf:(NSArray<OAResourceSwiftItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
+
 + (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck;
 
 + (void) onDownldedResourceInstalled;
@@ -124,4 +127,16 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
                          inRegion:(OAWorldRegion *)region
                    withRegionName:(BOOL)includeRegionName
                  withResourceType:(BOOL)includeResourceType;
+
++ (NSArray<OAResourceSwiftItem *> *)getUnsupportedResourcesWith:(OAWorldRegion *)region;
+
++ (NSString *)getCountryName:(OAResourceSwiftItem *)item;
+
+@end
+
+@interface OAResourcesUISwiftHelper (Navigation)
+
++ (void)showLocalResourceInformationViewController:(OAResourceSwiftItem *)item
+                              navigationController:(UINavigationController *)navigationController;
+
 @end

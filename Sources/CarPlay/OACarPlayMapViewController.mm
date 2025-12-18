@@ -13,7 +13,6 @@
 #import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OACarPlayDashboardInterfaceController.h"
 #import "OAAlarmWidget.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -132,7 +131,7 @@
 
 - (void)updateMapCenterPoint
 {
-    if (_mapVc.isCarPlayDashboardActive)
+    if (UIApplication.sharedApplication.isCarPlayDashboardActive)
         return;
     
     UIEdgeInsets insets = self.view.safeAreaInsets;
@@ -254,7 +253,6 @@
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
         
-        _mapVc.isCarPlayActive = YES;
         [_mapVc.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
         [self addChildViewController:_mapVc];
         [self.view addSubview:_mapVc.view];
@@ -274,7 +272,6 @@
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
 
-        _mapVc.isCarPlayActive = NO;
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
 
         [mapPanel addChildViewController:_mapVc];

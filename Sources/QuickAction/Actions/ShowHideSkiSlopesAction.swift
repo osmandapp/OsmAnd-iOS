@@ -30,8 +30,8 @@ final class ShowHideSkiSlopesAction: BaseRouteQuickAction {
     
     override func isEnabled() -> Bool {
         let styleSettings = OAMapStyleSettings.sharedInstance()
-        if let paraeter = styleSettings?.getParameter(PISTE_ROUTES_ATTR) {
-            return paraeter.value == "true"
+        if let parameter = styleSettings?.getParameter(PISTE_ROUTES_ATTR) {
+            return parameter.value == "true"
         }
         return false
     }

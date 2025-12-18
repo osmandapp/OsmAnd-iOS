@@ -41,8 +41,10 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     NSInteger _availableMapsSection;
     NSInteger _liveUpdatesRow;
     NSInteger _weatherForecastsRow;
+    NSInteger _unsupportedMapsRow;
 
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
+    QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _unsupportedResources;
     NSMutableArray* _resourcesItems;
 
     CALayer *_horizontalLine;
@@ -69,6 +71,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self registerCells];
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
@@ -148,6 +151,12 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
         _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
 }
 
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:[OAValueTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAValueTableViewCell reuseIdentifier]];
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:[UITableViewCell reuseIdentifier]];
+}
+
 - (void) setupDownloadingCellHelper
 {
     __weak OAOutdatedResourcesViewController *weakSelf = self;
@@ -170,6 +179,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
         
         _liveUpdatesRow = 0;
         _weatherForecastsRow = 1;
+        _unsupportedMapsRow = 2;
     }
 }
 
@@ -233,6 +243,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
     // IOS-199
     _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+    _unsupportedResources = _app.resourcesManager->getUnsupportedResources();
 }
 
 - (void)collectResourcesDataAndItems
@@ -399,7 +410,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     if (section == _downloadingListCellSection)
         return kRowsDownloadingListCellSection;
     else if (section == _updatesSection)
-        return kRowsInUpdatesSection;
+        return kRowsInUpdatesSection + (_unsupportedResources.count() > 0 ? 1 : 0);
     else if (section == _availableMapsSection)
         return _resourcesItems.count;
 
@@ -416,12 +427,6 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const outdatedResourceCell = @"outdatedResourceCell";
-    static NSString* const downloadingResourceCell = @"downloadingResourceCell";
-    static NSString * const liveUpdatesCell = @"liveUpdatesCell";
-    static NSString * const weatherForecastCell = @"weatherForecastCell";
-
-    NSString* cellTypeId = nil;
     NSString* title = nil;
     NSString* description = nil;
     OAResourceItem *item;
@@ -429,24 +434,15 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     if (indexPath.section == _updatesSection)
     {
         if (indexPath.row == _liveUpdatesRow)
-        {
-            cellTypeId = liveUpdatesCell;
             title = OALocalizedString(@"live_updates");
-        }
         else if (indexPath.row == _weatherForecastsRow)
-        {
-            cellTypeId = weatherForecastCell;
             title = OALocalizedString(@"weather_forecast");
-        }
+        else if (indexPath.row == _unsupportedMapsRow)
+            title = OALocalizedString(@"unsupported_maps");
     }
     else if (indexPath.section == _availableMapsSection && _resourcesItems.count > 0)
     {
         item = (OAResourceItem *) _resourcesItems[indexPath.row];
-
-        if (item.downloadTask != nil)
-            cellTypeId = downloadingResourceCell;
-        else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
-            cellTypeId = outdatedResourceCell;
 
         if (item.worldRegion && item.worldRegion.superregion)
         {
@@ -483,15 +479,25 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     }
     else if (indexPath.section == _updatesSection)
     {
-        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-        if (cell == nil)
+        if (indexPath.row == _unsupportedMapsRow)
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
+            OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell reuseIdentifier]];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.titleLabel.text = title;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%d", _unsupportedResources.count()];
+            return cell;
         }
-        cell.textLabel.text = title;
-        cell.detailTextLabel.text = nil;
-        return cell;
+        else
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[UITableViewCell reuseIdentifier]];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.text = title;
+            cell.detailTextLabel.text = nil;
+            return cell;
+        }
     }
     else if (indexPath.section == _availableMapsSection)
     {
@@ -543,6 +549,16 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
             [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Weather];
         else
             [self showViewController:[[OAWeatherForecastViewController alloc] init]];
+    }
+    else if (indexPath.section == _updatesSection && indexPath.row == _unsupportedMapsRow)
+    {
+        DeletedMapsViewController *deletedMapsViewController = [[DeletedMapsViewController alloc] init];
+        deletedMapsViewController.region = self.region;
+        [self showViewController:deletedMapsViewController];
+    }
+    else if (indexPath.section == _updatesSection && indexPath.row == _liveUpdatesRow)
+    {
+        [self performSegueWithIdentifier:kOpenLiveUpdatesSegue sender:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

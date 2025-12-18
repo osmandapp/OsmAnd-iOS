@@ -313,11 +313,11 @@ typedef enum
     
     [self.targetMenuView setNavigationController:self.navigationController];
     
-    BOOL carPlayActive = OsmAndApp.instance.carPlayActive;
-    if ([_mapViewController parentViewController] != self && !carPlayActive)
+    BOOL isCarPlayConnected = UIApplication.sharedApplication.isCarPlayConnected;
+    if ([_mapViewController parentViewController] != self && !isCarPlayConnected)
         [self doMapRestore];
     
-    if (carPlayActive)
+    if (isCarPlayConnected)
         [self onCarPlayConnected];
     
     [[OADiscountHelper instance] checkAndDisplay];
@@ -416,6 +416,8 @@ typedef enum
         _activeTargetType = OATargetTerrainParametersSettings;
     else if ([controller isKindOfClass:MapSettingsMapModeParametersViewController.class])
         _activeTargetType = OATargetMapModeParametersSettings;
+    else if ([controller isKindOfClass:ProfileAppearanceIconSizeViewController.class])
+        _activeTargetType = OATargetProfileAppearanceIconSizeSettings;
 
     [self setupScrollableHud:controller];
 }

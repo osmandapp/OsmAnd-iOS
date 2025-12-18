@@ -425,14 +425,20 @@ const static int kDoubleTouchCount = 2;
 
 - (void)moveDetected:(UIPanGestureRecognizer *)recognizer
 {
-    if (recognizer.state == UIGestureRecognizerStateBegan && ![self isTouchCountOppositeToDist:recognizer])
-    {
-        [self handleTouchWith:recognizer];
-        [self cancelPreviousHideTouchRuler];
-    }
-    else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled)
-    {
-        [self hideTouchRulerInDrawTime];
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            if (![self isTouchCountOppositeToDist:recognizer])
+                [self cancelPreviousHideTouchRuler];
+            break;
+        case UIGestureRecognizerStateChanged:
+            [self cancelPreviousHideTouchRuler];
+            break;
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+            [self hideTouchRulerInDrawTime];
+            break;
+        default:
+            break;
     }
 }
 

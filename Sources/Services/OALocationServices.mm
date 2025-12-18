@@ -313,7 +313,7 @@
     }
 }
 
-- (void) resume
+- (void)resume
 {
     @synchronized(_lock)
     {
@@ -475,7 +475,7 @@
 
 - (BOOL) shouldBeRunningInBackground
 {
-    if (_settings.mapSettingTrackRecording || [_routingHelper isFollowingMode] || _app.carPlayActive)
+    if (_settings.mapSettingTrackRecording || [_routingHelper isFollowingMode] || UIApplication.sharedApplication.isCarPlayConnected)
         return YES;
 
     return NO;

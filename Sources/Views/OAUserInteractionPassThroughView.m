@@ -19,6 +19,7 @@
     self = [super initWithCoder:coder];
     if (self) {
         _didLayoutObservable = [[OAObservable alloc] init];
+        _isScreenClickable = YES;
     }
     return self;
 }
@@ -31,7 +32,7 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if (LockHelper.shared.isScreenLocked)
+    if (LockHelper.shared.isScreenLocked || !_isScreenClickable)
     {
         if ([self.delegate respondsToSelector:@selector(isTouchEventAllowedForView:)])
         {

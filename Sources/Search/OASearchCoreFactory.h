@@ -36,9 +36,9 @@ static const int SEARCH_ADDRESS_BY_NAME_PRIORITY = 500;
 static const int SEARCH_ADDRESS_BY_NAME_PRIORITY_RADIUS2 = 500;
 
 // context less (slower)
-static const int SEARCH_AMENITY_BY_NAME_PRIORITY = 700;
-static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_POI_TYPE = 700;
-static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
+static const int SEARCH_AMENITY_BY_NAME_PRIORITY = 500;
+static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_POI_TYPE = 500;
+static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 500;
 
 static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
 static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
@@ -71,7 +71,7 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 - (int) getSearchPriority:(OASearchPhrase *)p;
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 - (NSSet<NSString *> *)splitAddressSearchNames:(NSString *)name;
-- (BOOL)matchAddressName:(OASearchPhrase *)phrase parent:(nullable OASearchResult *)parent res:(OASearchResult *)res fullMatch:(BOOL)fullMatch;
+- (BOOL)matchAddressName:(OASearchPhrase *)phrase prevRes:(nullable OASearchResult *)prevRes res:(OASearchResult *)res fullMatch:(BOOL)fullMatch;
 
 @end
 

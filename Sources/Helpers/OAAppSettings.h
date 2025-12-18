@@ -499,6 +499,8 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 @interface OACommonDouble : OACommonPreference
 
+@property (nonatomic, readonly) double defValue;
+
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue;
 
 - (double) get;
@@ -1047,6 +1049,9 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonInteger *appModeOrder;
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;
+
+@property (nonatomic) OACommonDouble *locationIconSize;
+@property (nonatomic) OACommonDouble *courseIconSize;
 
 @property (nonatomic) OACommonDouble *defaultSpeed;
 @property (nonatomic) OACommonDouble *minSpeed;

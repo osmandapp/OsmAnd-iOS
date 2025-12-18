@@ -105,9 +105,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
 
-@property (nonatomic, assign) BOOL isCarPlayActive;
-@property (nonatomic, assign) BOOL isCarPlayDashboardActive;
-
 - (CLLocation *) getMapLocation;
 
 - (float) getMapZoom;
@@ -142,11 +139,17 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void)setViewportForCarPlayScaleX:(double)x;
 - (void)setViewportForCarPlayScaleY:(double)y;
 
+- (void)hidePreviewMarker;
+- (void)updatePreviewMarker:(CLLocation *)newLocation locationFactor:(float)locationFactor courseFactor:(float)courseFactor showBearing:(BOOL)showBearing;
+
+- (float)azimuth;
+
 - (void) goToPosition:(Point31)position31
             animated:(BOOL)animated;
 - (void) goToPosition:(Point31)position31
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
+- (void)cancelAllAnimations;
 
 - (void) correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31

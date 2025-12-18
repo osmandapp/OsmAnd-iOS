@@ -17,7 +17,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
         isForegroundScene = false
-        mapVC?.isCarPlayDashboardActive = false
     }
     
     private func configureScene() {
@@ -36,10 +35,9 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 mapVC = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
-            mapVC?.isCarPlayDashboardActive = true
             if let mapVC {
                 let settings: OAAppSettings = OAAppSettings.sharedManager()
-                CarPlayNavigationModeManager.shared.configureForCarPlay()
+                CarPlayService.shared.configure()
                 dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
                 dashboardVC?.attachMapToWindow()
                 self.window?.rootViewController = dashboardVC
@@ -86,11 +84,11 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
         self.window = window
         dashboardController.shortcutButtons = [
-            CPDashboardButton(titleVariants: [localizedString("shared_string_navigation")], subtitleVariants: [""], image: UIImage(named: "ic_carplay_navigation")!, handler: { _ in
+            CPDashboardButton(titleVariants: [localizedString("shared_string_navigation")], subtitleVariants: [""], image: .icCarplayNavigation, handler: { _ in
                 guard let url = URL(string: "osmandmaps://navigation") else { return }
                 templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
             }),
-            CPDashboardButton(titleVariants: [localizedString("address_search_desc")], subtitleVariants: [""], image: UIImage(named: "ic_carplay_search")!, handler: { _ in
+            CPDashboardButton(titleVariants: [localizedString("address_search_desc")], subtitleVariants: [""], image: .icCarplaySearch, handler: { _ in
                 guard let url = URL(string: "osmandmaps://search") else { return }
                 templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
             })]
@@ -98,8 +96,9 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
-        CarPlayNavigationModeManager.shared.restoreOnDisconnect()
+        CarPlayService.shared.disconnectScene()
         dashboardVC?.detachFromCarPlayWindow()
+        dashboardVC = nil
         mapVC = nil
         self.window = nil
         OARootViewController.instance()?.mapPanel.detachFromCarPlayWindow()

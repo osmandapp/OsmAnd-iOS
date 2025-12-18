@@ -231,15 +231,22 @@
         std::string key = it->first;
         RoutingParameter pr = it->second;
         std::string vl;
+        NSString *attrName = @(key.c_str());
         if (pr.type == RoutingParameterType::BOOLEAN)
         {
-            OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
+            OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:attrName defaultValue:pr.defaultBoolean];
             BOOL b = [pref get:params.mode];
             vl = b ? "true" : "";
         }
-        else
+        else // NUMERIC
         {
-            vl = [[[_settings getCustomRoutingProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:@""] get:params.mode] UTF8String];
+            NSString *defaultNumericAsString = @(pr.getDefaultString().c_str());
+            OACommonString *pref = [_settings getCustomRoutingProperty:attrName defaultValue:defaultNumericAsString];
+            NSString *s = [pref get:params.mode];
+            if ([s doubleValue] != 0 || pr.defaultNumeric != 0)
+            {
+                vl = [s UTF8String];
+            }
         }
         
         if (vl.length() > 0)

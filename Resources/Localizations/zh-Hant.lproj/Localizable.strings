@@ -605,7 +605,7 @@
 "auto_zoom_close" = "近距";
 "auto_zoom_far" = "中距";
 "auto_zoom_farthest" = "遠距";
-"keep_informing_never" = "手動（輕觸箭咀）";
+"keep_informing_never" = "僅限手動（輕點箭頭）";
 "arrival_distance_factor_early" = "提早";
 "arrival_distance_factor_normally" = "正常";
 "arrival_distance_factor_late" = "稍遲";
@@ -3903,3 +3903,5 @@
 "rendering_attr_hideFairways_description" = "隱藏航道";
 "rendering_attr_shellsStyle_description" = "海床上的貝殼樣式";
 "rendering_attr_depthColorScheme_name" = "深度顏色標準";
+"rendering_attr_hideContours_name" = "深海等高線";
+"rendering_attr_hideAreas_description" = "隱藏深海區域";

@@ -37,8 +37,8 @@ static NSCharacterSet *allDelimitersSet;
 
 static const int ZOOM_TO_SEARCH_POI = 16;
 
-static NSArray<NSString *> *CHARS_TO_NORMALIZE_KEY = @[@"’", @"ʼ", @"(", @")"]; // remove () subcities
-static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "];
+static NSArray<NSString *> *CHARS_TO_NORMALIZE_KEY = @[@"’", @"ʼ", @"(", @")", @"´", @"`"]; // remove () subcities
+static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ", @"'", @"'"];
 
 @interface OASearchPhrase ()
 
@@ -71,6 +71,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" "]
 @property (nonatomic) QuadRect *cache1kmRect;
 
 @property (nonatomic) OAPOIBaseType *unselectedPoiType;
+@property (nonatomic) BOOL likelyAddressSearch;
 
 @end
 
@@ -192,6 +193,7 @@ static NSComparator _OACommonWordsComparator = nil;
             }
         }
     }
+    sp.likelyAddressSearch = [self likelyAddressSearch:text] || !sp.lastUnknownSearchWordComplete;
     return sp;
 }
 
@@ -341,6 +343,7 @@ static NSComparator _OACommonWordsComparator = nil;
             [genUnknownSearchPhrase appendString:@" "];
         }
         sp.fullTextSearchPhrase = _fullTextSearchPhrase;
+        sp.likelyAddressSearch = _likelyAddressSearch;
         sp.unknownSearchPhrase = genUnknownSearchPhrase.trim;
     }
     return sp;
@@ -1077,6 +1080,10 @@ static NSComparator _OACommonWordsComparator = nil;
 
 + (NSString *) stripBraces:(NSString *)localeName
 {
+    if (localeName == nil)
+    {
+        return nil;
+    }
     NSInteger i = [localeName rangeOfString:@"("].location;
         NSString *retName = localeName;
         
@@ -1091,6 +1098,17 @@ static NSComparator _OACommonWordsComparator = nil;
             }
         }
         return retName;
+}
+
++ (NSMutableArray<NSString *> *) stripBracesArray:(NSMutableArray<NSString *> *)names
+{
+    NSMutableArray<NSString *> *lst = [NSMutableArray arrayWithCapacity:names.count];
+    for (NSString *s in names)
+    {
+        NSString *strippedString = [self stripBraces:s];
+        [lst addObject:strippedString];
+    }
+    return lst;
 }
 
 + (NSString *) ALLDELIMITERS
@@ -1111,6 +1129,21 @@ static NSComparator _OACommonWordsComparator = nil;
         }
     }
     return @"";
+}
+
+- (BOOL) likelyAddressSearch:(NSString *) fullText
+{
+    NSCharacterSet *digitSet = [NSCharacterSet decimalDigitCharacterSet];
+    if ([fullText rangeOfCharacterFromSet:digitSet].location != NSNotFound)
+    {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) isLikelyAddressSearch
+{
+    return _likelyAddressSearch;
 }
 
 @end

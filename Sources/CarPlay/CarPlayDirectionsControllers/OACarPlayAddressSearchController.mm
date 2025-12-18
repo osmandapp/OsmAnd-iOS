@@ -32,6 +32,7 @@
 #import "OADownloadsManager.h"
 #import "OAAutoObserverProxy.h"
 #import "OAObservable.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -60,18 +61,6 @@
     NSMutableDictionary<NSString *, CPListItem *> *_activeMapDownloads;
     OsmAndAppInstance _app;
     NSNumberFormatter *_percentFormatter;
-}
-
-- (NSNumberFormatter *)percentFormatter
-{
-    if (!_percentFormatter)
-    {
-        _percentFormatter = [[NSNumberFormatter alloc] init];
-        _percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
-        _percentFormatter.maximumFractionDigits = 0;
-        _percentFormatter.multiplier = @100; // 0.45 → "45%"
-    }
-    return _percentFormatter;
 }
 
 - (void)onStreetSelected:(OASearchResult *)street completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler {
@@ -503,7 +492,7 @@
             {
                 NSMutableArray<NSString *> *trimmedComponents = [NSMutableArray array];
                 
-                NSString *replacement = [self.percentFormatter stringFromNumber:@([value floatValue])];
+                NSString *replacement = [NSNumberFormatter.percentFormatter stringFromNumber:@([value floatValue])];
                 [trimmedComponents addObject:[replacement stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
                 
                 for (NSUInteger i = 1; i < components.count; i++)

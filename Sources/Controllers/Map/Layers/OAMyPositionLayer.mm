@@ -81,6 +81,7 @@ typedef enum {
 {
     OAMapRendererView *_mapView;
     BOOL _showHeadingCached;
+    float _locationIconScaleFactor;
 }
 
 - (instancetype) initWithMapView:(OAMapRendererView *)mapView
@@ -110,8 +111,9 @@ typedef enum {
     });
 }
 
-- (void) setCurrentMarkerState:(EOAMarkerState)state showHeading:(BOOL)showHeading
+- (void) setCurrentMarkerState:(EOAMarkerState)state showHeading:(BOOL)showHeading locationIconScaleFactor:(float)locationIconScaleFactor
 {
+    _locationIconScaleFactor = locationIconScaleFactor;
     if (_currentMarkerState != state || showHeading != _showHeadingCached)
     {
         _currentMarkerState = state;
@@ -215,7 +217,7 @@ typedef enum {
             [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(circleRadius)];
         });
         [_mapView setMyLocationSectorDirection:(sectorDirection)];
-        [_mapView setMyLocationSectorRadius:(sectorRadius)];
+        [_mapView setMyLocationSectorRadius:(sectorRadius * _locationIconScaleFactor)];
     }
     else
     {
@@ -396,11 +398,13 @@ typedef enum {
     OALocationServices *_locationProvider;
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
+    OAMarkerCollection *_previewMarker;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
     CLLocationDirection _lastCourse;
     CLLocation *_prevLocation;
-    float _textScaleFactor;
+    float _locationIconScaleFactor;
+    float _courseIconScaleFactor;
     
     EOAMarkerState _currentMarkerState;
 
@@ -411,7 +415,12 @@ typedef enum {
     BOOL _initDone;
 }
 
-- (void) generateMarkersCollection
+- (void)generateMarkersCollection
+{
+    [self generateMarkersCollectionWithLocationFactor:_locationIconScaleFactor courseFactor:_courseIconScaleFactor];
+}
+
+- (void)generateMarkersCollectionWithLocationFactor:(float)locationFactor courseFactor:(float)courseFactor
 {
     // Create location and course markers
     int baseOrder = self.pointsOrder;
@@ -421,34 +430,57 @@ typedef enum {
     for (OAApplicationMode *mode in modes)
     {
         int order = baseOrder--;
-        [self generateMarkerCollectionFor:mode baseOrder:order];
+        [self generateMarkerCollectionFor:mode baseOrder:order locationIconScaleFactor:locationFactor courseIconScaleFactor:courseFactor];
     }
 }
 
-- (void) generateMarkerCollectionFor:(OAApplicationMode *)mode baseOrder:(int)baseOrder
+- (void)generateMarkerCollectionFor:(OAApplicationMode *)mode baseOrder:(int)baseOrder
 {
-    OAMarkerCollection *c = [[OAMarkerCollection alloc] initWithMapView:self.mapView];
-    c.baseOrder = baseOrder;
+    [self generateMarkerCollectionFor:mode baseOrder:baseOrder locationIconScaleFactor:_locationIconScaleFactor courseIconScaleFactor:_courseIconScaleFactor];
+}
 
-    c.markerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
-    c.markerCollection->setPriority(std::numeric_limits<int64_t>::max());
+- (void)generateMarkerCollectionFor:(OAApplicationMode *)mode baseOrder:(int)baseOrder locationIconScaleFactor:(float)locationIconScaleFactor courseIconScaleFactor:(float)courseIconScaleFactor
+{
+    OAMarkerCollection *collection = [self getMarkerCollectionFor:mode baseOrder:baseOrder locationIconScaleFactor:locationIconScaleFactor courseIconScaleFactor:courseIconScaleFactor];
+    [_modeMarkers setObject:collection forKey:mode];
+}
+
+- (void)generatePreviewMarkerCollectionFor:(float)locationIconScaleFactor courseIconScaleFactor:(float)courseIconScaleFactor
+{
+    int baseOrder = self.pointsOrder;
+    OAApplicationMode *mode = [[OAAppSettings sharedManager].applicationMode get];
+    _previewMarker = [self getMarkerCollectionFor:mode baseOrder:baseOrder locationIconScaleFactor:locationIconScaleFactor courseIconScaleFactor:courseIconScaleFactor];
+}
+
+- (OAMarkerCollection *)getMarkerCollectionFor:(OAApplicationMode *)mode baseOrder:(int)baseOrder locationIconScaleFactor:(float)locationIconScaleFactor courseIconScaleFactor:(float)courseIconScaleFactor
+{
+    OAMarkerCollection *collection = [[OAMarkerCollection alloc] initWithMapView:self.mapView];
+    collection.baseOrder = baseOrder;
+
+    collection.markerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    collection.markerCollection->setPriority(std::numeric_limits<int64_t>::max());
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
 
-    OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilder;
+    OsmAnd::MapMarkerBuilder locationMarkerBuilder;
 
-    locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
-    locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilder.setBaseOrder(baseOrder);
-    locationAndCourseMarkerBuilder.setIsHidden(true);
-    locationAndCourseMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * _textScaleFactor * [[UIScreen mainScreen] scale]));
+    locationMarkerBuilder.setIsAccuracyCircleSupported(true);
+    locationMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
+    locationMarkerBuilder.setBaseOrder(baseOrder);
+    locationMarkerBuilder.setIsHidden(true);
+    locationMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * locationIconScaleFactor * [[UIScreen mainScreen] scale]));
+    
+    OsmAnd::MapMarkerBuilder courseMarkerBuilder;
+
+    courseMarkerBuilder.setIsAccuracyCircleSupported(true);
+    courseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
+    courseMarkerBuilder.setBaseOrder(baseOrder);
+    courseMarkerBuilder.setIsHidden(true);
+    courseMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * courseIconScaleFactor * [[UIScreen mainScreen] scale]));
     
     UIColor *iconColor = [mode getProfileColor];
     
     NSString *locationIconName = [mode.getLocationIcon name];
     NSString *navigationIconName = [mode.getNavigationIcon name];
-    sk_sp<SkImage> navigationSkImage;
-    sk_sp<SkImage> locationSkImage;
-    sk_sp<SkImage> locationHeadingSkImage;
     
     OAModel3dWrapper *navigationModel;
     OAModel3dWrapper *locationModel;
@@ -493,76 +525,76 @@ typedef enum {
     }
     
     // Day
-    c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
+    collection.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    collection.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
     if (locationModel)
     {
-        locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
+        locationMarkerBuilder.setModel3D(locationModelCpp);
     }
     else
     {
-        sk_sp<SkImage> locationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyDay,
-                                                           OsmAnd::SingleSkImage(locationMainIcon));
+        sk_sp<SkImage> locationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor scaleFactor:locationIconScaleFactor].CGImage];
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationMainIconKeyDay,
+                                                  OsmAnd::SingleSkImage(locationMainIcon));
 
         sk_sp<SkImage> locationHeadingIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor:iconColor].CGImage];
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyDay,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingIcon scaleFactor:_textScaleFactor]));
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationHeadingIconKeyDay,
+                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingIcon scaleFactor:locationIconScaleFactor]));
     }
-    c.locationMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.locationMarkerDay = locationMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
 
-    locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-    c.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    collection.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     if (navigationModel)
     {
-        locationAndCourseMarkerBuilder.setModel3D(navigationModelCpp);
+        courseMarkerBuilder.setModel3D(navigationModelCpp);
     }
     else
     {
-        sk_sp<SkImage> courseMainIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyDay,
-                                                           OsmAnd::SingleSkImage(courseMainIcon));
+        sk_sp<SkImage> courseMainIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor scaleFactor:courseIconScaleFactor].CGImage];
+        courseMarkerBuilder.addOnMapSurfaceIcon(collection.courseMainIconKeyDay,
+                                                OsmAnd::SingleSkImage(courseMainIcon));
     }
-    c.courseMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.courseMarkerDay = courseMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
     
     // Night
-    locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-    c.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
+    locationMarkerBuilder.clearOnMapSurfaceIcons();
+    collection.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    collection.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
     if (locationModel)
     {
-        locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
+        locationMarkerBuilder.setModel3D(locationModelCpp);
     }
     else
     {
-        sk_sp<SkImage> locationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyNight,
-                                                           OsmAnd::SingleSkImage(locationMainNightIcon));
+        sk_sp<SkImage> locationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor scaleFactor:locationIconScaleFactor].CGImage];
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationMainIconKeyNight,
+                                                  OsmAnd::SingleSkImage(locationMainNightIcon));
         
         sk_sp<SkImage> locationHeadingNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor :iconColor].CGImage];
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingNightIcon scaleFactor:_textScaleFactor]));
+        locationMarkerBuilder.addOnMapSurfaceIcon(collection.locationHeadingIconKeyNight,
+                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingNightIcon scaleFactor:locationIconScaleFactor]));
     }
-    c.locationMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.locationMarkerNight = locationMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
 
-    locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-    c.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    courseMarkerBuilder.clearOnMapSurfaceIcons();
+    collection.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     if (navigationModel)
     {
-        locationAndCourseMarkerBuilder.setModel3D(navigationModelCpp);
+        courseMarkerBuilder.setModel3D(navigationModelCpp);
     }
     else
     {
-        sk_sp<SkImage> courseMainNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyNight,
-                                                           OsmAnd::SingleSkImage(courseMainNightIcon));
+        sk_sp<SkImage> courseMainNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor scaleFactor:courseIconScaleFactor].CGImage];
+        courseMarkerBuilder.addOnMapSurfaceIcon(collection.courseMainIconKeyNight,
+                                                OsmAnd::SingleSkImage(courseMainNightIcon));
     }
-    c.courseMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    collection.courseMarkerNight = courseMarkerBuilder.buildAndAddToCollection(collection.markerCollection);
 
-    locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(false);
+    locationMarkerBuilder.setIsAccuracyCircleSupported(false);
+    courseMarkerBuilder.setIsAccuracyCircleSupported(false);
     
-    [self updateMode:c];
-    [_modeMarkers setObject:c forKey:mode];
+    [self updateMode:collection];
+    return collection;
 }
 
 - (NSString *) layerId
@@ -589,7 +621,8 @@ typedef enum {
                                                        withHandler:@selector(onSettingsChanged)
                                                         andObserve:[OsmAndApp instance].mapSettingsChangeObservable];
 
-    _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
+    _locationIconScaleFactor = [[OAAppSettings sharedManager].locationIconSize get];
+    _courseIconScaleFactor = [[OAAppSettings sharedManager].courseIconSize get];
     
     __weak OAMyPositionLayer *weakSelf = self;
     [Model3dHelper.shared loadAllModelsWithCallback:
@@ -621,10 +654,12 @@ typedef enum {
     if (![super updateLayer])
         return NO;
 
-    CGFloat textScaleFactor = [[OAAppSettings sharedManager].textSize get];
-    if (_textScaleFactor != textScaleFactor)
+    CGFloat locationIconScaleFactor = [[OAAppSettings sharedManager].locationIconSize get];
+    CGFloat courseIconScaleFactor = [[OAAppSettings sharedManager].courseIconSize get];
+    if (_locationIconScaleFactor != locationIconScaleFactor || _courseIconScaleFactor != courseIconScaleFactor)
     {
-        _textScaleFactor = textScaleFactor;
+        _locationIconScaleFactor = locationIconScaleFactor;
+        _courseIconScaleFactor = courseIconScaleFactor;
         [self refreshMarkersCollection];
     }
 
@@ -647,6 +682,16 @@ typedef enum {
         OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
         [self generateMarkerCollectionFor:mode baseOrder:c.baseOrder];
         [self updateMarkersCollectionProviderForMode:mode];
+    }];
+}
+
+- (void)updatePreviewMarker:(CLLocation *)newLocation locationFactor:(float)locationFactor courseFactor:(float)courseFactor showBearing:(BOOL)showBearing
+{
+    [self.mapViewController runWithRenderSync:^{
+        [self hidePreviewMarker];
+        [self generatePreviewMarkerCollectionFor:locationFactor courseIconScaleFactor:courseFactor];
+        [self updateMyPreviewLocationCourseProviderFor:showBearing newLocation:newLocation];
+        [self.mapView invalidateFrame];
     }];
 }
 
@@ -682,6 +727,13 @@ typedef enum {
     {
         [self invalidateMarkersCollectionForMode:mode];
     }
+}
+
+- (void)hidePreviewMarker
+{
+    OAMarkerCollection *collection = _previewMarker;
+    [collection hideMarkers];
+    [self.mapView removeKeyedSymbolsProvider:collection.markerCollection];
 }
 
 - (void) invalidateMarkersCollectionForMode:(OAApplicationMode *)mode
@@ -724,6 +776,15 @@ typedef enum {
     }];
 }
 
+- (void)updateMyPreviewLocationCourseProviderFor:(BOOL)showBearing newLocation:(CLLocation *)newLocation
+{
+    [self.mapViewController runWithRenderSync:^{
+        OAMarkerCollection *collection = _previewMarker;
+        [self updatePreviewLocation:showBearing newLocation:newLocation];
+        [self.mapView addKeyedSymbolsProvider:collection.markerCollection];
+    }];
+}
+
 - (void) updateMode
 {
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
@@ -734,6 +795,19 @@ typedef enum {
 - (void) updateMode:(OAMarkerCollection *)c
 {
     c.mode = [OAAppSettings sharedManager].nightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
+}
+
+- (void)updatePreviewLocation:(BOOL)showBearing newLocation:(CLLocation *)newLocation
+{
+    OAMarkerCollection *collection = _previewMarker;
+    
+    CLLocationDirection newHeading = newLocation.course;
+    
+    const OsmAnd::PointI newTarget31 =
+            OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                           OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+    
+    [self updateCollectionLocation:collection newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:YES showBearing:showBearing showHeading:NO pointCourse:newHeading];
 }
 
 - (void) updateLocation:(OAApplicationMode *)mode
@@ -780,11 +854,17 @@ typedef enum {
     BOOL showBearing = [self shouldShowBearing:newLocation];
     
     double pointCourse = [self getPointCourse];
+    
+    [self updateCollectionLocation:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:visible showBearing:showBearing showHeading:showHeading pointCourse:pointCourse];
+}
+
+- (void)updateCollectionLocation:(OAMarkerCollection *)collection newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading animationDuration:(float)animationDuration visible:(BOOL)visible showBearing:(BOOL)showBearing showHeading:(BOOL)showHeading pointCourse:(double)pointCourse
+{
     double bearing = (pointCourse < 0 ? newHeading : pointCourse) - 90;
     
-    [c setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading];
-    [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading visible:visible];
-    [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading];
+    [collection setCurrentMarkerState:showBearing ? EOAMarkerStateMove : EOAMarkerStateStay showHeading:showHeading locationIconScaleFactor:_locationIconScaleFactor];
+    [collection updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading visible:visible];
+    [collection updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy bearing:bearing heading:newHeading];
 }
 
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading

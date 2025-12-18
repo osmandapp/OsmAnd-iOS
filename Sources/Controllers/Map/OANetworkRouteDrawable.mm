@@ -92,7 +92,7 @@
         if (shield)
             layers << shield;
     }
-    
+
     const auto foreground = QString::fromNSString([_routeKey getRouteValue:@"osmc_foreground"]);
     if (!foreground.isEmpty())
     {
@@ -102,7 +102,19 @@
         if (shield)
             layers << shield;
     }
-    
+    else
+    {
+        // Support OsmcIconParams.OSMAND_FOREGROUND for non osmc-based icons (activity icons, etc)
+        const auto osmandForeground = QString::fromNSString([_routeKey getRouteValue:@"osmand_foreground"]);
+        if (!osmandForeground.isEmpty())
+        {
+            sk_sp<const SkImage> shield;
+            env->obtainMapIcon(osmandForeground, 1.0f, shield);
+            if (shield)
+                layers << shield;
+        }
+    }
+
     if (background.isEmpty() && foreground.isEmpty() && text.isEmpty())
         return nil;
     

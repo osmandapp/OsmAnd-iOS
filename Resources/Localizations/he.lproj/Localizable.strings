@@ -1530,7 +1530,7 @@
 "app_mode_personal_transporter" = "אמצעי תעבורה אישי";
 "app_mode_monowheel" = "חד־אופן";
 "app_mode_scooter" = "קטנוע/קורקינט";
-"app_mode_ufo" = "חיזר";
+"app_mode_ufo" = "עב״מ";
 "app_mode_offroad" = "שטח";
 "app_mode_camper" = "מחנאות";
 "app_mode_campervan" = "רכב מחנאות (קרוואן)";
@@ -2290,3 +2290,5 @@
 "shared_string_normal" = "רגיל";
 "average" = "ממוצע";
 "shared_string_large" = "גדול";
+"reconnect" = "התחברות מחדש";
+"add_to_favorites" = "הוספה למועדפים";

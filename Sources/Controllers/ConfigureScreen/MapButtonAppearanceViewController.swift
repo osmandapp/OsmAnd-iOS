@@ -49,9 +49,11 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     override func onLeftNavbarButtonPressed() {
-        // TODO
-        //showUnsavedChangesAlert()
-        super.onLeftNavbarButtonPressed()
+        if hasAppearanceChanged {
+            showUnsavedChangesAlert()
+        } else {
+            super.onLeftNavbarButtonPressed()
+        }
     }
     
     override func onRightNavbarButtonPressed() {
@@ -171,8 +173,11 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         let actionSheet = UIAlertController(title: localizedString("reset_to_default"),
                                             message: localizedString("reset_all_settings_desc"),
                                             preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
-            // TODO
+        actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
+            guard let mapButtonState = self?.mapButtonState else { return }
+            let defaultParams = mapButtonState.createDefaultAppearanceParams()
+            self?.appearanceParams?.cornerRadius = defaultParams.cornerRadius
+            self?.updateData()
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         if let popoverController = actionSheet.popoverPresentationController {
@@ -191,6 +196,10 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         if key == Self.cornerRadiusRowKey {
             appearanceParams?.cornerRadius = Self.cornerRadiusArrayValues[selectedIndex]
         }
+        updateData()
+    }
+    
+    private func updateData() {
         reloadDataWith(animated: true, completion: nil)
         updateBottomButtons()
     }

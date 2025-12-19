@@ -182,7 +182,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if item.key == Self.appearanceRowKey {
-            let vc = MapButtonAppearanceViewController()
+            guard let vc = MapButtonAppearanceViewController() else { return }
             vc.mapButtonState = mapButtonState
             show(vc)
         } else {

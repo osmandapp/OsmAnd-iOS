@@ -7,7 +7,7 @@
 //
 
 @objc
-final class MapButtonAppearanceViewController: OABaseNavbarViewController {
+final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private static let valueKey = "valueKey"
     private static let arrayValuesKey = "arrayValuesKey"
     private static let cornerRadiusRowKey = "cornerRadiusRowKey"
@@ -18,6 +18,9 @@ final class MapButtonAppearanceViewController: OABaseNavbarViewController {
     private var appMode: OAApplicationMode?
     private var appearanceParams: ButtonAppearanceParams?
     private var originalAppearanceParams: ButtonAppearanceParams?
+    private var hasAppearanceChanged: Bool {
+        appearanceParams != originalAppearanceParams
+    }
     
     override func commonInit() {
         appMode = OAAppSettings.sharedManager().applicationMode.get()
@@ -57,6 +60,23 @@ final class MapButtonAppearanceViewController: OABaseNavbarViewController {
     
     override func hideFirstHeader() -> Bool {
         true
+    }
+    
+    override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
+        .vertical
+    }
+    
+    override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
+        hasAppearanceChanged ? .purple : .inactive
+    }
+    
+    override func onBottomButtonPressed() {
+        guard hasAppearanceChanged else { return }
+        dismiss()
+    }
+    
+    override func getBottomButtonTitle() -> String {
+        localizedString("shared_string_apply")
     }
     
     override func registerCells() {
@@ -172,6 +192,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarViewController {
             appearanceParams?.cornerRadius = Self.cornerRadiusArrayValues[selectedIndex]
         }
         reloadDataWith(animated: true, completion: nil)
+        updateBottomButtons()
     }
     
     @objc private func sliderChanged(sender: UISlider) {

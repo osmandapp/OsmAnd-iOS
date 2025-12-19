@@ -20,8 +20,8 @@ final class MyLocationButtonState: SwitchVisibilityMapButtonState {
         localizedString("shared_string_my_location")
     }
     
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_map_location_position")
+    override func defaultIconName() -> String {
+        "ic_custom_map_location_position"
     }
     
     override func buttonDescription() -> String {

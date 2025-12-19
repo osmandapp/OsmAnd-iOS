@@ -48,7 +48,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
                                                 preferredStyle: .actionSheet)
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
                 guard let self, let appMode = self.appMode else { return }
-                self.mapButtonState?.resetToDefault(for: appMode)
+                self.mapButtonState?.resetForMode(appMode)
                 self.updateData()
             })
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -128,9 +128,8 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         guard let mapButtonState else { return nil }
         let item = tableData.item(for: indexPath)
         if item.cellType == PreviewImageViewTableViewCell.reuseIdentifier {
-            guard let previewIcon = mapButtonState.getPreviewIcon() else { return nil }
             let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as! PreviewImageViewTableViewCell
-            cell.configure(image: previewIcon) // TODO
+            cell.configure(appearanceParams: nil, buttonState: mapButtonState)
             if mapButtonState is CompassButtonState {
                 cell.rotateImage(-CGFloat(OARootViewController.instance().mapPanel.mapViewController.azimuth()) / 180.0 * CGFloat.pi)
             }
@@ -184,6 +183,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if item.key == Self.appearanceRowKey {
             let vc = MapButtonAppearanceViewController()
+            vc.mapButtonState = mapButtonState
             show(vc)
         } else {
             if mapButtonState is CompassButtonState {
@@ -230,7 +230,7 @@ extension DefaultMapButtonViewController: OACopyProfileBottomSheetDelegate {
     }
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
         guard let appMode else { return }
-        mapButtonState?.copyPrefs(from: fromAppMode, to: appMode)
+        mapButtonState?.copyForMode(from: fromAppMode, to: appMode)
         updateData()
     }
 }

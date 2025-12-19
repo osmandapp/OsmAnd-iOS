@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MapButtonState, OASButtonPositionSize;
+@class MapButtonState, OASButtonPositionSize, ButtonAppearanceParams;
 
 @interface OAHudButton : UIButton
 
@@ -32,6 +32,8 @@
 - (void)updatePositions;
 - (void)setUseCustomPosition:(BOOL)useCustomPosition;
 - (void)savePosition;
+- (void)setCustomAppearanceParams:(ButtonAppearanceParams *_Nullable)appearanceParams;
 - (nullable OASButtonPositionSize *)getDefaultPositionSize;
+- (NSInteger)getSize;
 
 @end

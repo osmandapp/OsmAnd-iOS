@@ -20,8 +20,12 @@ final class OptionsMenuButtonState: SwitchVisibilityMapButtonState {
         localizedString("shared_string_menu")
     }
     
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_drawer")
+    override func defaultIconName() -> String {
+        "ic_custom_drawer"
+    }
+    
+    override func defaultCornerRadius() -> Int32 {
+        MapButtonState.rectangleRadiusDp
     }
     
     override func buttonDescription() -> String {

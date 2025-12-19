@@ -10,10 +10,12 @@
 #import "OAAppSettings.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAHudButton
 {
     NSInteger _id;
+    ButtonAppearanceParams *_customAppearanceParams;
 }
 
 - (instancetype)init
@@ -86,6 +88,94 @@
 {
     _buttonState = buttonState;
     [self updatePositions];
+}
+
+- (ButtonAppearanceParams *)createDefaultAppearanceParams
+{
+    return [[ButtonAppearanceParams alloc] initWithIconName:@"ic_custom_quick_action" size:MapButtonState.defaultSizeDp opacity:MapButtonState.opaqueAlpha cornerRadius:MapButtonState.roundRadiusDp];
+}
+
+- (void)setCustomAppearanceParams:(ButtonAppearanceParams *)customAppearanceParams
+{
+    _customAppearanceParams = customAppearanceParams;
+    [self updateContent];
+}
+
+- (void)updateContent
+{
+    [self updateIcon];
+    [self updateBackground];
+    [self updateCornerRadius];
+    [self updateSize];
+}
+
+- (void)updateIcon
+{
+    NSString *iconName = _customAppearanceParams != nil ? _customAppearanceParams.iconName : nil;
+    if (iconName == nil || iconName.length == 0)
+        iconName = [self createDefaultAppearanceParams].iconName;
+    
+    UIImage *image;
+    if (_buttonState)
+        image = [_buttonState getPreviewIcon];
+    else
+        image = [UIImage imageNamed:iconName];
+    [self setImage:image forState:UIControlStateNormal];
+}
+
+- (void)updateBackground
+{
+    self.backgroundColor = [[UIColor colorNamed:ACColorNameMapButtonBgColorDefault] colorWithAlphaComponent:[self getOpacity]];
+}
+
+- (void)updateCornerRadius
+{
+    self.layer.cornerRadius = [self getCornerRadius];
+}
+
+- (void)updateSize
+{
+    CGFloat size = (CGFloat)[self getSize];
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size, size);
+}
+
+- (NSInteger)getSize
+{
+    if (_customAppearanceParams)
+    {
+        NSInteger size = _customAppearanceParams.size;
+        if (size == MapButtonState.originalValue)
+            return _buttonState ? [_buttonState defaultSize] : [self createDefaultAppearanceParams].size;
+        return size;
+    }
+
+    return _buttonState ? [_buttonState defaultSize] : [self createDefaultAppearanceParams].size;
+}
+
+- (CGFloat)getOpacity
+{
+    if (_customAppearanceParams)
+    {
+        CGFloat opacity = _customAppearanceParams.opacity;
+        if (opacity == MapButtonState.originalValue)
+            return _buttonState ? [_buttonState defaultOpacity] : [self createDefaultAppearanceParams].opacity;
+        return opacity;
+    }
+
+    return _buttonState ? [_buttonState defaultOpacity] : [self createDefaultAppearanceParams].opacity;
+}
+
+- (NSInteger)getCornerRadius
+{
+    if (_customAppearanceParams)
+    {
+        NSInteger cornerRadius = _customAppearanceParams.cornerRadius;
+        if (cornerRadius == MapButtonState.originalValue)
+            return _buttonState ? [_buttonState defaultCornerRadius] : [self createDefaultAppearanceParams].cornerRadius;
+        return cornerRadius;
+    }
+
+    return _buttonState ? [_buttonState defaultCornerRadius] : [self createDefaultAppearanceParams].cornerRadius;
 }
 
 - (void)updatePositions

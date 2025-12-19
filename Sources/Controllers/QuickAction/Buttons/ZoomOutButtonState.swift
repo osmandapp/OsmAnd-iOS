@@ -20,8 +20,8 @@ final class ZoomOutButtonState: SwitchVisibilityMapButtonState {
         localizedString("key_hint_zoom_out")
     }
     
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_map_zoom_out")
+    override func defaultIconName() -> String {
+        "ic_custom_map_zoom_out"
     }
     
     override func buttonDescription() -> String {

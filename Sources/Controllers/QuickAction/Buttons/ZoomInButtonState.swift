@@ -20,8 +20,8 @@ final class ZoomInButtonState: SwitchVisibilityMapButtonState {
         localizedString("key_hint_zoom_in")
     }
     
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_map_zoom_in")
+    override func defaultIconName() -> String {
+        "ic_custom_map_zoom_in"
     }
     
     override func buttonDescription() -> String {

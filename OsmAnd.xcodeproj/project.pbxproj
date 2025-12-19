@@ -291,6 +291,7 @@
 		27F050952DD38E400058075F /* RouteInfoWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050942DD38E400058075F /* RouteInfoWidgetState.swift */; };
 		27F050992DD4B6080058075F /* RouteInfoCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050982DD4B6060058075F /* RouteInfoCalculator.swift */; };
 		27F0509F2DD4DEB30058075F /* RouteInfoWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */; };
+		27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */; };
 		27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
@@ -3742,6 +3743,7 @@
 		27F050942DD38E400058075F /* RouteInfoWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidgetState.swift; sourceTree = "<group>"; };
 		27F050982DD4B6060058075F /* RouteInfoCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoCalculator.swift; sourceTree = "<group>"; };
 		27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoWidget.xib; sourceTree = "<group>"; };
+		27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAppearanceParams.swift; sourceTree = "<group>"; };
 		27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceIconSizeViewController.swift; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
@@ -9958,6 +9960,7 @@
 				46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */,
 				464BF4AA2C051909000D6908 /* Map3DButtonState.swift */,
 				464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */,
+				27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */,
 				468D9C6B2C00FE0600ED368A /* MapButtonState.swift */,
 				27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */,
 				468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */,
@@ -17274,6 +17277,7 @@
 				323F04BE2C6532EF0058DD78 /* BaseRouteQuickAction.swift in Sources */,
 				DA5A824A26C563A700F274C7 /* OADefaultSpeedViewController.mm in Sources */,
 				DA5A846126C563A900F274C7 /* OAContextMenuLayer.mm in Sources */,
+				27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */,
 				DA5A813E26C563A700F274C7 /* OANode.m in Sources */,
 				05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */,
 				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,

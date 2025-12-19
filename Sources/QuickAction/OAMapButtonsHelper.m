@@ -71,6 +71,10 @@ static QuickActionType *TYPE_INTERFACE;
     NSArray<QuickActionType *> *_enabledTypes;
     NSDictionary<NSNumber *, QuickActionType *> *_quickActionTypesInt;
     NSDictionary<NSString *, QuickActionType *> *_quickActionTypesStr;
+    
+    OACommonInteger *_defaultSizePref;
+    OACommonDouble *_defaultOpacityPref;
+    OACommonInteger *_defaultCornerRadiusPref;
 }
 
 + (void)initialize
@@ -171,6 +175,10 @@ static QuickActionType *TYPE_INTERFACE;
         _quickActionsChangedObservable = [[OAObservable alloc] init];
         _quickActionButtonsChangedObservable = [[OAObservable alloc] init];
         _serializer = [QuickActionSerializer new];
+        
+        _defaultSizePref = [[_settings registerIntPreference:@"default_map_button_size" defValue:(int)MapButtonState.originalValue] makeProfile];
+        _defaultOpacityPref = [[_settings registerFloatPreference:@"default_map_button_opacity" defValue:(float)MapButtonState.originalValue] makeProfile];
+        _defaultCornerRadiusPref = [[_settings registerIntPreference:@"default_map_button_corner_radius" defValue:(int)MapButtonState.originalValue] makeProfile];
         
         [self updateActionTypes];
         [self initDefaultButtons];
@@ -572,6 +580,21 @@ static QuickActionType *TYPE_INTERFACE;
             return buttonState;
     }
     return nil;
+}
+
+- (OACommonInteger *)getDefaultSizePref
+{
+    return _defaultSizePref;
+}
+
+- (OACommonDouble *)getDefaultOpacityPref
+{
+    return _defaultOpacityPref;
+}
+
+- (OACommonInteger *)getDefaultCornerRadiusPref
+{
+    return _defaultCornerRadiusPref;
 }
 
 - (QuickActionButtonState *)createNewButtonState

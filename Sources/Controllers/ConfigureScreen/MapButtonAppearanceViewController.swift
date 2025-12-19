@@ -8,6 +8,26 @@
 
 @objc
 final class MapButtonAppearanceViewController: OABaseNavbarViewController {
+    weak var mapButtonState: MapButtonState?
+    
+    private var appMode: OAApplicationMode?
+    private var appearanceParams: ButtonAppearanceParams?
+    private var originalAppearanceParams: ButtonAppearanceParams?
+    
+    override func commonInit() {
+        appMode = OAAppSettings.sharedManager().applicationMode.get()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        guard let mapButtonState else { return }
+        let savedIconName = mapButtonState.savedIconName()
+        appearanceParams = mapButtonState.createAppearanceParams()
+        originalAppearanceParams = mapButtonState.createAppearanceParams()
+        appearanceParams?.iconName = savedIconName
+        originalAppearanceParams?.iconName = savedIconName
+    }
+    
     override func getTitle() -> String {
         localizedString("shared_string_appearance")
     }
@@ -32,6 +52,31 @@ final class MapButtonAppearanceViewController: OABaseNavbarViewController {
     
     override func hideFirstHeader() -> Bool {
         true
+    }
+    
+    override func registerCells() {
+        addCell(PreviewImageViewTableViewCell.reuseIdentifier)
+    }
+    
+    override func generateData() {
+        tableData.clearAllData()
+        let visibilitySection = tableData.createNewSection()
+        let imageHeaderRow = visibilitySection.createNewRow()
+        imageHeaderRow.cellType = PreviewImageViewTableViewCell.reuseIdentifier
+    }
+    
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
+        guard let mapButtonState else { return nil }
+        let item = tableData.item(for: indexPath)
+        if item.cellType == PreviewImageViewTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as! PreviewImageViewTableViewCell
+            cell.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
+            if mapButtonState is CompassButtonState {
+                cell.rotateImage(-CGFloat(OARootViewController.instance().mapPanel.mapViewController.azimuth()) / 180.0 * CGFloat.pi)
+            }
+            return cell
+        }
+        return nil
     }
     
     private func showUnsavedChangesAlert() {

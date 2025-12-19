@@ -20,8 +20,8 @@ final class DriveModeButtonState: SwitchVisibilityMapButtonState {
         localizedString("shared_string_navigation")
     }
     
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_navigation")
+    override func defaultIconName() -> String {
+        "ic_custom_navigation"
     }
     
     override func buttonDescription() -> String {

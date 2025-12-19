@@ -31,12 +31,13 @@ final class Map3DButtonState: MapButtonState {
         getVisibility() != .hidden
     }
 
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed(getVisibility().iconName)
+    override func defaultIconName() -> String {
+        getVisibility().iconName
     }
     
     override func getPreviewIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_3d")
+        let iconName = storedIconPref().get()
+        return UIImage.templateImageNamed(!iconName.isEmpty ? iconName : "ic_custom_3d")
     }
     
     override func buttonDescription() -> String {
@@ -59,7 +60,8 @@ final class Map3DButtonState: MapButtonState {
         visibilityPref
     }
     
-    override func copyPrefs(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+    override func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        super.copyForMode(from: fromMode, to: toMode)
         visibilityPref.set(getVisibility(fromMode).rawValue, mode: toMode)
     }
 

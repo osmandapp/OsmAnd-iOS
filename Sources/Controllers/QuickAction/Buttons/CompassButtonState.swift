@@ -27,9 +27,9 @@ final class CompassButtonState: MapButtonState {
     override func isEnabled() -> Bool {
         getVisibility() != .alwaysHidden
     }
-
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed(getVisibility().iconName)
+    
+    override func defaultIconName() -> String {
+        getVisibility().iconName
     }
     
     override func buttonDescription() -> String {
@@ -37,7 +37,8 @@ final class CompassButtonState: MapButtonState {
     }
     
     override func getPreviewIcon() -> UIImage? {
-        UIImage(named: CompassModeWrapper.iconName(forValue: Int(OAAppSettings.sharedManager().rotateMap.get()), isLightMode: ThemeManager.shared.isLightTheme()))
+        let iconName = storedIconPref().get()
+        return !iconName.isEmpty ? UIImage.templateImageNamed(iconName) : UIImage(named: CompassModeWrapper.iconName(forValue: Int(OAAppSettings.sharedManager().rotateMap.get()), isLightMode: ThemeManager.shared.isLightTheme()))
     }
     
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
@@ -48,7 +49,8 @@ final class CompassButtonState: MapButtonState {
         visibilityPref
     }
     
-    override func copyPrefs(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+    override func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        super.copyForMode(from: fromMode, to: toMode)
         visibilityPref.set(getVisibility(fromMode).rawValue, mode: toMode)
     }
 

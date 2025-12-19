@@ -20,8 +20,8 @@ final class SearchButtonState: SwitchVisibilityMapButtonState {
         localizedString("shared_string_search")
     }
     
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_search")
+    override func defaultIconName() -> String {
+        "ic_custom_search"
     }
     
     override func buttonDescription() -> String {

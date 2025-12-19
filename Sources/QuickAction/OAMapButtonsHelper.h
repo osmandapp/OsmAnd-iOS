@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAObservable, OAApplicationMode, OAQuickAction, QuickActionType, QuickActionButtonState, MapButtonState, Map3DButtonState, CompassButtonState, QuickActionSerializer, ZoomInButtonState, ZoomOutButtonState, SearchButtonState, DriveModeButtonState, MyLocationButtonState, OptionsMenuButtonState, MapSettingsButtonState;
+@class OAObservable, OAApplicationMode, OAQuickAction, QuickActionType, QuickActionButtonState, MapButtonState, Map3DButtonState, CompassButtonState, QuickActionSerializer, ZoomInButtonState, ZoomOutButtonState, SearchButtonState, DriveModeButtonState, MyLocationButtonState, OptionsMenuButtonState, MapSettingsButtonState, OACommonInteger, OACommonDouble;
 
 @interface OAMapButtonsHelper : NSObject
 
@@ -67,6 +67,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isActionButtonNameUnique:(NSString *)name;
 - (nullable QuickActionButtonState *)getButtonStateByName:(NSString *)name;
 - (nullable QuickActionButtonState *)getButtonStateById:(NSString *)id;
+
+- (OACommonInteger *)getDefaultSizePref;
+- (OACommonDouble *)getDefaultOpacityPref;
+- (OACommonInteger *)getDefaultCornerRadiusPref;
+
 - (QuickActionButtonState *)createNewButtonState;
 - (void)addQuickActionButtonState:(QuickActionButtonState *)buttonState;
 - (void)removeQuickActionButtonState:(QuickActionButtonState *)buttonState;

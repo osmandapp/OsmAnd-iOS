@@ -7,7 +7,8 @@
 //
 
 class SwitchVisibilityMapButtonState: MapButtonState {
-    override func copyPrefs(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+    override func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        super.copyForMode(from: fromMode, to: toMode)
         storedVisibilityPref().set(storedVisibilityPref().get(fromMode), mode: toMode)
     }
     

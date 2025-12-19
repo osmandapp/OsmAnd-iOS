@@ -3941,3 +3941,4 @@
 "unsupported_maps" = "Nem támogatott térképek";
 "deleted_maps_alert_message" = "Biztosan törölni szeretné a %d térképet?";
 "ios_release_5_3" = "• Interaktív animáció a sebességmérő modulhoz\n• Beállítási lehetőség a helymeghatározó ikon méretének módosításához\n• Új utazásrögzítő modulok: legnagyobb sebesség és átlagos lejtés; továbbfejlesztett emelkedő-/lejtőmodulok\n• Mélyhivatkozások támogatása konkrét POI-k megosztásához\n• Javítva lett az a hiba, amely miatt a navigációs modulok ETA-ja nem frissült álló helyzetben\n• Továbbfejlesztett párosított OBDII adapterek csatlakozása\n• Beállítási lehetőség: az útpontok egy kiválasztott kedvencek mappába való egyesítéséhez\n• CarPlay: Javítva lett a műszerfalon nem reagáló térkép hibája, és hozzá lett adva a „Mindig sötét térkép megjelenítése” paraméter támogatása\n";
+"copy_link" = "Hivatkozás másolása";

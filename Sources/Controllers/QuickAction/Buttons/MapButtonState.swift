@@ -11,7 +11,7 @@ open class MapButtonState: NSObject {
     static let originalValue: Int64 = -1
     static let rectangleRadiusDp: Int32 = 6
     static let defaultSizeDp: Int32 = 48
-    static let roundRadiusDp: Int32 = 24
+    static let roundRadiusDp: Int32 = 36
     static let opaqueAlpha: Float = 1
     
     private let settings: OAAppSettings = OAAppSettings.sharedManager()

@@ -2206,6 +2206,9 @@
 "shared_string_inches" = "inches";
 "shared_string_pounds" = "pounds";
 
+"corner_radius" = "Corner radius";
+"shared_string_pt" = "pt";
+
 "int_hour" = "h";
 "int_min" = "min.";
 "shared_string_sec" = "sec";

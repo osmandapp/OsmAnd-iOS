@@ -3207,6 +3207,9 @@
 		FA282AEF2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */; };
 		FA282AF62C2C456700CC7AC1 /* WeatherNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */; };
 		FA282AF72C2C456700CC7AC1 /* WeatherNavigationBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */; };
+		FA2CFCE22EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2CFCE12EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift */; };
+		FA2CFCE52EF549ED00CD1AF9 /* ExplorePlacesOnlineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2CFCE42EF549ED00CD1AF9 /* ExplorePlacesOnlineProvider.swift */; };
+		FA2CFCE72EF54A1F00CD1AF9 /* ExplorePlacesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2CFCE62EF54A1F00CD1AF9 /* ExplorePlacesProvider.swift */; };
 		FA2E95C12DDDD97600B0ACA0 /* SearchOBDDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */; };
 		FA2E95C32DDE0A6C00B0ACA0 /* OBDService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */; };
 		FA30E6292DE9932400F09141 /* UIMenu+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */; };
@@ -7921,6 +7924,9 @@
 		FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataSourceViewController.swift; sourceTree = "<group>"; };
 		FA282AF32C2C456700CC7AC1 /* WeatherNavigationBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherNavigationBarView.swift; sourceTree = "<group>"; };
 		FA282AF42C2C456700CC7AC1 /* WeatherNavigationBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeatherNavigationBarView.xib; sourceTree = "<group>"; };
+		FA2CFCE12EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiUIFilterDataProvider.swift; sourceTree = "<group>"; };
+		FA2CFCE42EF549ED00CD1AF9 /* ExplorePlacesOnlineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorePlacesOnlineProvider.swift; sourceTree = "<group>"; };
+		FA2CFCE62EF54A1F00CD1AF9 /* ExplorePlacesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorePlacesProvider.swift; sourceTree = "<group>"; };
 		FA2E95C02DDDD97500B0ACA0 /* SearchOBDDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOBDDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		FA2E95C22DDE0A6000B0ACA0 /* OBDService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDService.swift; sourceTree = "<group>"; };
 		FA30E6282DE9932400F09141 /* UIMenu+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIMenu+Extension.swift"; sourceTree = "<group>"; };
@@ -11490,6 +11496,9 @@
 		DA5A7A4E26C563A000F274C7 /* POI */ = {
 			isa = PBXGroup;
 			children = (
+				FA2CFCE62EF54A1F00CD1AF9 /* ExplorePlacesProvider.swift */,
+				FA2CFCE42EF549ED00CD1AF9 /* ExplorePlacesOnlineProvider.swift */,
+				FA2CFCE12EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift */,
 				DA5A7A5126C563A000F274C7 /* OACustomSearchPoiFilter.h */,
 				DA5A7A6226C563A000F274C7 /* OACustomSearchPoiFilter.m */,
 				DA5A7A6B26C563A000F274C7 /* OAPhrasesParser.h */,
@@ -17065,6 +17074,7 @@
 				DA5A817B26C563A700F274C7 /* OAFavoriteAction.mm in Sources */,
 				DA5A834426C563A800F274C7 /* OATitleDescriptionIconRoundCell.m in Sources */,
 				DA5A847D26C563A900F274C7 /* OANextTurnWidget.mm in Sources */,
+				FA2CFCE72EF54A1F00CD1AF9 /* ExplorePlacesProvider.swift in Sources */,
 				C51766622E9FACCA00F2B085 /* ShowHideWindAction.swift in Sources */,
 				C5C472F02ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift in Sources */,
 				DA5A817326C563A700F274C7 /* OAFavoriteItem.mm in Sources */,
@@ -17265,6 +17275,7 @@
 				46B159D12C9B49BE000BD9A7 /* MapSettingsMapModeParametersViewController.swift in Sources */,
 				05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.mm in Sources */,
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
+				FA2CFCE52EF549ED00CD1AF9 /* ExplorePlacesOnlineProvider.swift in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
 				4609FAA22C5158F100B57F06 /* UIImageView+Extension.swift in Sources */,
@@ -17596,6 +17607,7 @@
 				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
+				FA2CFCE22EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift in Sources */,
 				DA5A847726C563A900F274C7 /* OALanesControl.mm in Sources */,
 				DA5A82F026C563A800F274C7 /* OARadiusCell.m in Sources */,
 				C51766662E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift in Sources */,

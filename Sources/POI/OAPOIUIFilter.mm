@@ -24,6 +24,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OASvgHelper.h"
 #import "OAAmenitySearcher.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -65,6 +66,7 @@
     OAPOIHelper *poiHelper;
     OAPOIFiltersHelper *filtersHelper;
     OsmAndAppInstance app;
+    PoiUIFilterDataProvider *_dataProvider;
 }
 
 @synthesize acceptedTypes, acceptedTypesOrigin, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult;
@@ -89,6 +91,7 @@
         _isActive = YES;
         isStandardFilter = YES;
         filterId = STD_PREFIX;
+        _dataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:self];
     }
     return self;
 }
@@ -272,6 +275,11 @@
     return [self.filterId isEqualToString:[NSString stringWithFormat:@"%@%@", STD_PREFIX, OSM_WIKI_CATEGORY]];
 }
 
+- (BOOL)isTopImagesFilter
+{
+    return [self isTopWikiFilter];
+}
+
 -(void)setSavedFilterByName:(NSString *)savedFilterByName
 {
     _savedFilterByName = savedFilterByName;
@@ -398,7 +406,23 @@
     }
     NSArray<OAPOI *> *amenities = [self searchAmenitiesInternal:top / 2 + bottom / 2 lon:left / 2 + right / 2 topLatitude:top bottomLatitude:bottom leftLongitude:left rightLongitude:right zoom:zoom matcher:matcher];
     [results addObjectsFromArray:amenities];
-    return results;
+    
+    NSMutableArray<OAPOI *> *resultList = [results mutableCopy];
+
+    if ([self isTopWikiFilter])
+    {
+        [resultList sortUsingComparator:^NSComparisonResult(OAPOI *p1, OAPOI *p2) {
+            NSInteger elo1 = [p1 getTravelEloNumber];
+            NSInteger elo2 = [p2 getTravelEloNumber];
+            if (elo1 < elo2)
+                return NSOrderedDescending;
+            if (elo1 > elo2)
+                return NSOrderedAscending;
+            return NSOrderedSame;
+        }];
+    }
+    
+    return [resultList copy];
 }
 
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius
@@ -406,9 +430,36 @@
     return [OAAmenitySearcher searchPOIsOnThePath:locs radius:poiSearchDeviationRadius filter:self matcher:[self wrapResultMatcher:nil]];
 }
 
-- (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher
+- (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat
+                                           lon:(double)lon
+                                   topLatitude:(double)topLatitude
+                                bottomLatitude:(double)bottomLatitude
+                                 leftLongitude:(double)leftLongitude
+                                rightLongitude:(double)rightLongitude
+                                          zoom:(int)zoom
+                                       matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    return [OAAmenitySearcher findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
+    if ([self isTopWikiFilter] && _dataProvider.dataSourceType == DataSourceTypeOnline)
+    {
+        NSArray<OAPOI *> *result = [_dataProvider searchAmenitiesWithLat:lat lon:lon topLatitude:topLatitude bottomLatitude:bottomLatitude leftLongitude:leftLongitude rightLongitude:rightLongitude zoom:zoom matcher:^BOOL(OAPOI *poi) {
+            return matcher == nil || [matcher publish:poi];
+        }];
+        result = [result sortedArrayUsingComparator:^NSComparisonResult(OAPOI *p1, OAPOI *p2) {
+                NSInteger elo1 = p1.getTravelEloNumber;
+                NSInteger elo2 = p2.getTravelEloNumber;
+
+                if (elo1 < elo2)
+                    return NSOrderedDescending;
+                if (elo1 > elo2)
+                    return NSOrderedAscending;
+                return NSOrderedSame;
+            }];
+        return result;
+    }
+    else
+    {
+        return [OAAmenitySearcher findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
+    }
 }
 
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter

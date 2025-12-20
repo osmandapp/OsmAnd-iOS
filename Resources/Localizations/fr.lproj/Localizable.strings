@@ -180,7 +180,7 @@
 "show_region_on_map_go" = "Aller à la carte";
 "prch_failed" = "L'achat de \"%@\" a échoué";
 // Resources
-"res_mapsres" = "Cartes et Ressources";
+"res_mapsres" = "Cartes et ressources";
 "res_install_no_space" = "Espace disque insuffisant pour installer";
 "res_update_no_space" = "Espace disque insuffisant pour mettre à jour";
 "res_no_space_free" = "est nécessaire. Veuillez libérer de l'espace.";
@@ -2900,7 +2900,7 @@
 "purchases_feature_desc_external_sensors" = "Affiche et enregistre les données des capteurs externes : vitesse du vélo, puissance du vélo, cadence et fréquence cardiaque.";
 "external_sensors_support" = "Support des capteurs externes";
 "shared_string_finger" = "Doigt";
-"travel_guides_beta" = "Guides de voyage (Beta)";
+"travel_guides_beta" = "Guides de voyage (bêta)";
 "ant_plus_bluetooth_off_description" = "Activez le Bluetooth pour rechercher et appairer des capteurs.";
 "clear_history" = "Vider l'historique";
 "search_history" = "Historique de recherche";
@@ -3032,7 +3032,7 @@
 "help_article_personal_profiles_name" = "Profils (paramètres)";
 "help_article_navigation_routing_car_based_routing_name" = "Navigation en voiture (camion, moto)";
 "general_settings" = "Général";
-"help_article_troubleshooting_maps_data_name" = "Cartes & Données";
+"help_article_troubleshooting_maps_data_name" = "Cartes & données";
 "help_article_navigation_setup_route_details_name" = "Détails de l\'itinéraire";
 "help_article_navigation_setup_route_navigation_name" = "Préparation de l\'itinéraire";
 "shared_string_link" = "Lien";

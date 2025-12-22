@@ -2739,7 +2739,7 @@ typedef enum
 
 - (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed preferredZoom:(float)preferredZoom
 {
-    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom];
+    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom icon:nil];
 }
 
 - (void)openTargetViewWithAddress:(OAAddress *)address
@@ -2748,6 +2748,7 @@ typedef enum
                            pushed:(BOOL)pushed
                         saveState:(BOOL)saveState
                     preferredZoom:(float)preferredZoom
+                             icon:(UIImage *)icon
 {
     double lat = address.latitude;
     double lon = address.longitude;
@@ -2763,7 +2764,6 @@ typedef enum
     
     NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
     NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;
-    UIImage *icon = [address icon];
     
     targetPoint.type = OATargetAddress;
     

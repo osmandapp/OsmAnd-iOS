@@ -258,7 +258,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)buildRoute:(nullable CLLocation *)start
                 end:(nullable CLLocation *)end
-            appMode:(OAApplicationMode *)appMode
+            appMode:(nullable OAApplicationMode *)appMode
              points:(nullable NSArray<CLLocation *> *)points;
 
 - (void) onNavigationClick:(BOOL)hasTargets;

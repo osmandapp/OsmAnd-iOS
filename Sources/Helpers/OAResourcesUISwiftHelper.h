@@ -130,6 +130,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 
 + (NSArray<OAResourceSwiftItem *> *)getUnsupportedResourcesWith:(OAWorldRegion *)region;
 
++ (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAtCurrentMapLocation;
+
 + (NSString *)getCountryName:(OAResourceSwiftItem *)item;
 
 @end

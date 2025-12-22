@@ -40,7 +40,6 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
            let waypoints, waypoints.count > 0,
            let tracks = clickableWay.gpxFile.tracks as? [Track],
            let segments = tracks.first?.segments as? [TrkSegment] {
-            
             segments[0].points = waypoints
             return true
         }
@@ -55,8 +54,10 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
             let name = clickableWay.getGpxFileName()
             let safeFileName = clickableWay.getGpxFileName() + GPX_FILE_EXT
             let selectedPoint = clickableWay.selectedGpxPoint.selectedPoint
-            
-            OAGPXUIHelper.saveAndOpenGpx(name, filepath: safeFileName, gpxFile: gpxFile, selectedPoint: selectedPoint, analysis: analysis, routeKey: nil, forceAdjustCentering: true)
+            let forceAdjustCentering = !gpxFile.isEmpty()
+
+            OAGPXUIHelper.saveAndOpenGpx(name, filepath: safeFileName, gpxFile: gpxFile, selectedPoint: selectedPoint,
+                                         analysis: analysis, routeKey: nil, forceAdjustCentering: forceAdjustCentering)
             return true
         }
         return false

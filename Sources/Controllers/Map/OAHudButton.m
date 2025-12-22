@@ -168,7 +168,12 @@
 - (NSInteger)getCornerRadius
 {
     NSInteger circleRadius = [self getSize] / 2;
-    NSInteger buttonStateCornerRadius = _buttonState ? [_buttonState defaultCornerRadius] : [self createDefaultAppearanceParams].cornerRadius;
+    NSInteger buttonStateCornerRadius = [self createDefaultAppearanceParams].cornerRadius;
+    if (_buttonState)
+    {
+        NSInteger cornerRadius = [[_buttonState storedCornerRadiusPref] get];
+        buttonStateCornerRadius = cornerRadius != MapButtonState.originalValue ? cornerRadius : [_buttonState defaultCornerRadius];
+    }
     if (_customAppearanceParams)
     {
         NSInteger cornerRadius = _customAppearanceParams.cornerRadius;

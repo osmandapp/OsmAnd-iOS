@@ -183,6 +183,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if item.key == Self.appearanceRowKey {
             guard let vc = MapButtonAppearanceViewController() else { return }
+            vc.delegate = self
             vc.mapButtonState = mapButtonState
             show(vc)
         } else {
@@ -232,5 +233,18 @@ extension DefaultMapButtonViewController: OACopyProfileBottomSheetDelegate {
         guard let appMode else { return }
         mapButtonState?.copyForMode(from: fromAppMode, to: appMode)
         updateData()
+    }
+}
+
+// MARK: OASettingsDataDelegate
+extension DefaultMapButtonViewController: OASettingsDataDelegate {
+    func onSettingsChanged() {
+        updateData()
+    }
+    
+    func closeSettingsScreenWithRouteInfo() {
+    }
+    
+    func openNavigationSettings() {
     }
 }

@@ -14,6 +14,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private static let cornerRadiusArrayValues: [Int32] = [3, 6, 9, 12, 36]
     
     weak var mapButtonState: MapButtonState?
+    weak var delegate: OASettingsDataDelegate?
     
     private var appMode: OAApplicationMode?
     private var appearanceParams: ButtonAppearanceParams?
@@ -73,7 +74,9 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     override func onBottomButtonPressed() {
-        guard hasAppearanceChanged else { return }
+        guard hasAppearanceChanged, let appearanceParams else { return }
+        mapButtonState?.storedCornerRadiusPref().set(appearanceParams.cornerRadius)
+        delegate?.onSettingsChanged()
         dismiss()
     }
     

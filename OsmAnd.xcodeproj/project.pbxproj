@@ -1469,6 +1469,8 @@
 		C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */; };
 		C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */; };
 		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
+		C58106742EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */; };
+		C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
 		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
 		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
@@ -5299,6 +5301,8 @@
 		C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTracksAppearanceTask.swift; sourceTree = "<group>"; };
 		C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachRoadsBannerCell.swift; sourceTree = "<group>"; };
 		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
+		C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWindAnimationAction.swift; sourceTree = "<group>"; };
+		C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWeatherLayersAction.swift; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
 		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
 		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
@@ -11368,12 +11372,14 @@
 				DA5A79E926C563A000F274C7 /* OAShowHideOSMBugAction.m */,
 				DA5A79E626C563A000F274C7 /* OAShowHidePoiAction.h */,
 				DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */,
+				C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */,
 				C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */,
 				C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */,
 				C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */,
 				C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */,
 				C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */,
 				C51766652E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift */,
+				C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */,
 				DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */,
 				46C841462C32F41A00E284B0 /* OAShowHideTransportLinesAction.m */,
 				DA5A7A0726C563A000F274C7 /* OASwitchableAction.h */,
@@ -17265,6 +17271,7 @@
 				46F494132B4D9D6400CAB805 /* OAGPXDataSetType.m in Sources */,
 				DA5A838626C563A800F274C7 /* OADestinationItem.m in Sources */,
 				DA5A823D26C563A700F274C7 /* OAConfigureProfileViewController.m in Sources */,
+				C58106742EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift in Sources */,
 				DA5A819126C563A700F274C7 /* OAShowHideMapillaryAction.m in Sources */,
 				DA5A850626C563A900F274C7 /* OAMultiselectableHeaderView.m in Sources */,
 				DA5A830E26C563A800F274C7 /* OATitleIconRoundCell.m in Sources */,
@@ -18006,6 +18013,7 @@
 				467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */,
 				DA5A823126C563A700F274C7 /* OAImportSettingsViewController.mm in Sources */,
 				FAA650522ADD42C50020DCEA /* BLEBatterySensor.swift in Sources */,
+				C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */,
 				DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */,
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,

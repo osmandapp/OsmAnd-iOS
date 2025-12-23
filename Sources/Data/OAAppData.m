@@ -658,6 +658,7 @@
     {
         [_weatherProfile set:weather];
         [_weatherChangeObservable notifyEventWithKey:self andValue:@(self.weather)];
+        [[OAMapButtonsHelper sharedInstance] refreshQuickActionButtons];
     }
 }
 

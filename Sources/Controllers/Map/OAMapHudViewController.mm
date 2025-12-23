@@ -929,8 +929,13 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateDependentButtons
 {
-    [_floatingButtonsController updateViewVisibility];
+    [self updateDependentButtonsVisibility];
     [_floatingButtonsController updateMap3dModeButtonAppearance];
+}
+
+- (void)updateDependentButtonsVisibility
+{
+    [_floatingButtonsController updateViewVisibility];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode

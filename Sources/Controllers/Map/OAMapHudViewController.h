@@ -77,8 +77,8 @@
 - (void) updateMapRulerData;
 - (void) updateMapRulerDataWithDelay;
 
-- (void) updateDependentButtonsVisibility;
-- (void) updateCompassButton;
+- (void)updateDependentButtonsVisibility;
+- (void)updateCompassButton;
 
 - (BOOL) needsSettingsForWeatherToolbar;
 - (void) changeWeatherToolbarVisible;

@@ -77,6 +77,7 @@
         self.backgroundColor = isNight ? self.pressedColorNight : self.pressedColorDay;
     else
         self.backgroundColor = isNight ? self.unpressedColorNight : self.unpressedColorDay;
+    self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self getOpacity]];
 
     self.tintColor = isNight ? self.tintColorNight : self.tintColorDay;
     
@@ -107,6 +108,7 @@
     [self updateBackground];
     [self updateCornerRadius];
     [self updateSize];
+    [self updateShadow];
 }
 
 - (void)updateIcon
@@ -133,6 +135,13 @@
     self.layer.cornerRadius = [self getCornerRadius];
 }
 
+- (void)updateShadow
+{
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds
+                                                          cornerRadius:self.layer.cornerRadius];
+    self.layer.shadowPath = shadowPath.CGPath;
+}
+
 - (void)updateSize
 {
     CGFloat size = (CGFloat)[self getSize];
@@ -154,15 +163,19 @@
 
 - (CGFloat)getOpacity
 {
+    float buttonStateOpacity = [self createDefaultAppearanceParams].opacity;
+    if (_buttonState)
+    {
+        float opacity = [[_buttonState storedOpacityPref] get];
+        buttonStateOpacity = opacity != MapButtonState.originalValue ? opacity : [_buttonState defaultOpacity];
+    }
     if (_customAppearanceParams)
     {
         CGFloat opacity = _customAppearanceParams.opacity;
-        if (opacity == MapButtonState.originalValue)
-            return _buttonState ? [_buttonState defaultOpacity] : [self createDefaultAppearanceParams].opacity;
-        return opacity;
+        return opacity == MapButtonState.originalValue ? buttonStateOpacity : opacity;
     }
 
-    return _buttonState ? [_buttonState defaultOpacity] : [self createDefaultAppearanceParams].opacity;
+    return buttonStateOpacity;
 }
 
 - (NSInteger)getCornerRadius

@@ -22,6 +22,8 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
     }
     
     private func setupImageContainerShadow() {
+        let shadowPath = UIBezierPath(roundedRect: previewImageButton.bounds, cornerRadius: previewImageButton.layer.cornerRadius)
+        previewImageButton.layer.shadowPath = shadowPath.cgPath
         previewImageButton.layer.shadowColor = UIColor.black.withAlphaComponent(0.35).cgColor
         previewImageButton.layer.shadowOpacity = 1
         previewImageButton.layer.shadowRadius = 12

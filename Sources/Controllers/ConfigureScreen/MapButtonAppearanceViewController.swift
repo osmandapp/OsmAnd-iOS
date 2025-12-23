@@ -12,6 +12,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private static let arrayValuesKey = "arrayValuesKey"
     private static let cornerRadiusRowKey = "cornerRadiusRowKey"
     private static let cornerRadiusArrayValues: [Int32] = [3, 6, 9, 12, 36]
+    private static let backgroundOpacityRowKey = "backgroundOpacityRowKey"
     
     weak var mapButtonState: MapButtonState?
     weak var delegate: OASettingsDataDelegate?
@@ -76,6 +77,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     override func onBottomButtonPressed() {
         guard hasAppearanceChanged, let appearanceParams else { return }
         mapButtonState?.storedCornerRadiusPref().set(appearanceParams.cornerRadius)
+        mapButtonState?.storedOpacityPref().set(Double(appearanceParams.opacity))
         delegate?.onSettingsChanged()
         dismiss()
     }
@@ -88,6 +90,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         addCell(PreviewImageViewTableViewCell.reuseIdentifier)
         addCell(SegmentButtonsSliderTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
+        addCell(TopBottomValuesSliderTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -108,6 +111,13 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         cornerRadiusSliderRow.key = Self.cornerRadiusRowKey
         cornerRadiusSliderRow.setObj(Self.cornerRadiusArrayValues.map { String($0) }, forKey: Self.arrayValuesKey)
         cornerRadiusSliderRow.setObj(String(appearanceParams.cornerRadius), forKey: Self.valueKey)
+        
+        let backgroundOpacitySection = tableData.createNewSection()
+        let backgroundOpacityRow = backgroundOpacitySection.createNewRow()
+        backgroundOpacityRow.key = Self.backgroundOpacityRowKey
+        backgroundOpacityRow.cellType = TopBottomValuesSliderTableViewCell.reuseIdentifier
+        backgroundOpacityRow.title = localizedString("background_opacity")
+        backgroundOpacityRow.setObj(appearanceParams.opacity as Any, forKey: Self.valueKey)
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -151,6 +161,23 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             cell.valueLabel.text = value
             cell.valueLabel.accessibilityLabel = cell.valueLabel.text
             return cell
+        } else if item.cellType == TopBottomValuesSliderTableViewCell.reuseIdentifier {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TopBottomValuesSliderTableViewCell.reuseIdentifier) as? TopBottomValuesSliderTableViewCell, let value = item.obj(forKey: Self.valueKey) as? Float else {
+                return UITableViewCell()
+            }
+            cell.selectionStyle = .none
+            cell.slider.value = value
+            cell.slider.tag = (indexPath.section << 10) | indexPath.row
+            cell.slider.removeTarget(self, action: nil, for: .valueChanged)
+            cell.slider.addTarget(self, action: #selector(sliderChanged(sender:)), for: .valueChanged)
+            cell.topLeftLabel.text = item.title
+            cell.topRightLabel.text = NumberFormatter.percentFormatter.string(from: value as NSNumber)
+            cell.topRightLabel.textColor = .textColorSecondary
+            cell.bottomLeftLabel.text = NumberFormatter.percentFormatter.string(from: cell.slider.minimumValue as NSNumber)
+            cell.bottomLeftLabel.textColor = .textColorSecondary
+            cell.bottomRightLabel.text = NumberFormatter.percentFormatter.string(from: cell.slider.maximumValue as NSNumber)
+            cell.bottomRightLabel.textColor = .textColorSecondary
+            return cell
         }
         return nil
     }
@@ -180,6 +207,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             guard let mapButtonState = self?.mapButtonState else { return }
             let defaultParams = mapButtonState.createDefaultAppearanceParams()
             self?.appearanceParams?.cornerRadius = defaultParams.cornerRadius
+            self?.appearanceParams?.opacity = defaultParams.opacity
             self?.updateData()
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -210,10 +238,15 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     @objc private func sliderChanged(sender: UISlider) {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
-        guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell, let arrayValues = item.obj(forKey: Self.arrayValuesKey) as? [String] else { return }
-        let selectedIndex = Int(cell.sliderView.selectedMark)
-        guard selectedIndex >= 0, selectedIndex < arrayValues.count else { return }
-        setAppearanceParameter(selectedIndex, key: item.key)
+        if item.key == Self.cornerRadiusRowKey {
+            guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell, let arrayValues = item.obj(forKey: Self.arrayValuesKey) as? [String] else { return }
+            let selectedIndex = Int(cell.sliderView.selectedMark)
+            guard selectedIndex >= 0, selectedIndex < arrayValues.count else { return }
+            setAppearanceParameter(selectedIndex, key: item.key)
+        } else if item.key == Self.backgroundOpacityRowKey {
+            appearanceParams?.opacity = sender.value
+            updateData()
+        }
     }
 }
 

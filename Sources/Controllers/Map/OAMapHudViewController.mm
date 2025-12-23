@@ -950,25 +950,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (obj)
     {
         OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
-        OACommonInteger *compassButtonStateVisibility = [mapButtonsHelper getCompassButtonState].visibilityPref;
-        OACommonInteger *map3DButtonStateVisibility = [mapButtonsHelper getMap3DButtonState].visibilityPref;
-        OACommonBoolean *configureMapButtonStateVisibility = [mapButtonsHelper getConfigureMapButtonState].visibilityPref;
-        OACommonBoolean *searchButtonStateVisibility = [mapButtonsHelper getSearchButtonState].visibilityPref;
-        OACommonBoolean *menuButtonStateVisibility = [mapButtonsHelper getMenuButtonState].visibilityPref;
-        OACommonBoolean *navigationButtonStateVisibility = [mapButtonsHelper getNavigationModeButtonState].visibilityPref;
-        OACommonBoolean *myLocationButtonStateVisibility = [mapButtonsHelper getMyLocationButtonState].visibilityPref;
-        OACommonBoolean *zoomInButtonStateVisibility = [mapButtonsHelper getZoomInButtonState].visibilityPref;
-        OACommonBoolean *zoomOutButtonStateVisibility = [mapButtonsHelper getZoomOutButtonState].visibilityPref;
-        
-        OACommonInteger *compassButtonStateCornerRadius = [[mapButtonsHelper getCompassButtonState] storedCornerRadiusPref];
-        OACommonInteger *map3DButtonStateCornerRadius = [[mapButtonsHelper getMap3DButtonState] storedCornerRadiusPref];
-        OACommonInteger *configureMapButtonStateCornerRadius = [[mapButtonsHelper getConfigureMapButtonState] storedCornerRadiusPref];
-        OACommonInteger *searchButtonStateCornerRadius = [[mapButtonsHelper getSearchButtonState] storedCornerRadiusPref];
-        OACommonInteger *menuButtonStateCornerRadius = [[mapButtonsHelper getMenuButtonState] storedCornerRadiusPref];
-        OACommonInteger *navigationButtonStateCornerRadius = [[mapButtonsHelper getNavigationModeButtonState] storedCornerRadiusPref];
-        OACommonInteger *myLocationButtonStateCornerRadius = [[mapButtonsHelper getMyLocationButtonState] storedCornerRadiusPref];
-        OACommonInteger *zoomInButtonStateCornerRadius = [[mapButtonsHelper getZoomInButtonState] storedCornerRadiusPref];
-        OACommonInteger *zoomOutButtonStateCornerRadius = [[mapButtonsHelper getZoomOutButtonState] storedCornerRadiusPref];
+        CompassButtonState *compassButtonState = [mapButtonsHelper getCompassButtonState];
+        Map3DButtonState *map3DButtonState = [mapButtonsHelper getMap3DButtonState];
+        MapSettingsButtonState *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState];
+        SearchButtonState *searchButtonState = [mapButtonsHelper getSearchButtonState];
+        OptionsMenuButtonState *menuButtonState = [mapButtonsHelper getMenuButtonState];
+        DriveModeButtonState *navigationButtonState = [mapButtonsHelper getNavigationModeButtonState];
+        MyLocationButtonState *myLocationButtonState = [mapButtonsHelper getMyLocationButtonState];
+        ZoomInButtonState *zoomInButtonState = [mapButtonsHelper getZoomInButtonState];
+        ZoomOutButtonState *zoomOutButtonState = [mapButtonsHelper getZoomOutButtonState];
 
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
@@ -980,7 +970,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             }
         }
 
-        if (obj == _settings.rotateMap || obj == compassButtonStateVisibility || obj == compassButtonStateCornerRadius)
+        if (obj == _settings.rotateMap || obj == compassButtonState.visibilityPref || obj == [compassButtonState storedCornerRadiusPref] || obj == [compassButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateCompassButton];
@@ -994,49 +984,49 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 [self updateColors];
             });
         }
-        else if (obj == map3DButtonStateVisibility || obj == map3DButtonStateCornerRadius || isQuickAction)
+        else if (obj == map3DButtonState.visibilityPref || obj == [map3DButtonState storedCornerRadiusPref] || obj == [map3DButtonState storedOpacityPref] || isQuickAction)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateDependentButtons];
             });
         }
-        else if (obj == configureMapButtonStateVisibility || obj == configureMapButtonStateCornerRadius)
+        else if (obj == configureMapButtonState.visibilityPref || obj == [configureMapButtonState storedCornerRadiusPref] || obj == [configureMapButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButton:_mapSettingsButton showButton:[self shouldShowConfigureMap] appearanceParams:[[mapButtonsHelper getConfigureMapButtonState] createAppearanceParams]];
             });
         }
-        else if (obj == searchButtonStateVisibility || obj == searchButtonStateCornerRadius)
+        else if (obj == searchButtonState.visibilityPref || obj == [searchButtonState storedCornerRadiusPref] || obj == [searchButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButton:_searchButton showButton:[self shouldShowSearch] appearanceParams:[[mapButtonsHelper getSearchButtonState] createAppearanceParams]];
             });
         }
-        else if (obj == menuButtonStateVisibility || obj == menuButtonStateCornerRadius)
+        else if (obj == menuButtonState.visibilityPref || obj == [menuButtonState storedCornerRadiusPref] || obj == [menuButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButton:_optionsMenuButton showButton:[self shouldShowMenu] appearanceParams:[[mapButtonsHelper getMenuButtonState] createAppearanceParams]];
             });
         }
-        else if (obj == navigationButtonStateVisibility || obj == navigationButtonStateCornerRadius)
+        else if (obj == navigationButtonState.visibilityPref || obj == [navigationButtonState storedCornerRadiusPref] || obj == [navigationButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButton:_driveModeButton showButton:[self shouldShowNavigation] appearanceParams:[[mapButtonsHelper getNavigationModeButtonState] createAppearanceParams]];
             });
         }
-        else if (obj == myLocationButtonStateVisibility || obj == myLocationButtonStateCornerRadius)
+        else if (obj == myLocationButtonState.visibilityPref || obj == [myLocationButtonState storedCornerRadiusPref] || obj == [myLocationButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButton:_mapModeButton showButton:[self shouldShowMyLocation] appearanceParams:[[mapButtonsHelper getMyLocationButtonState] createAppearanceParams]];
             });
         }
-        else if (obj == zoomInButtonStateVisibility || obj == zoomInButtonStateCornerRadius)
+        else if (obj == zoomInButtonState.visibilityPref || obj == [zoomInButtonState storedCornerRadiusPref] || obj == [zoomInButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButton:_zoomInButton showButton:[self shouldShowZoomIn] appearanceParams:[[mapButtonsHelper getZoomInButtonState] createAppearanceParams]];
             });
         }
-        else if (obj == zoomOutButtonStateVisibility || obj == zoomOutButtonStateCornerRadius)
+        else if (obj == zoomOutButtonState.visibilityPref || obj == [zoomOutButtonState storedCornerRadiusPref] || obj == [zoomOutButtonState storedOpacityPref])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateMapButton:_zoomOutButton showButton:[self shouldShowZoomOut] appearanceParams:[[mapButtonsHelper getZoomOutButtonState] createAppearanceParams]];
@@ -1097,6 +1087,20 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     NSInteger circleRadius = params.size / 2;
     NSInteger cornerRadius = params.cornerRadius;
     _compassButton.layer.cornerRadius = cornerRadius > circleRadius ? circleRadius : cornerRadius;
+}
+
+- (void)updateCompassOpacity
+{
+    CompassButtonState *buttonState = [[OAMapButtonsHelper sharedInstance] getCompassButtonState];
+    float opacity = [buttonState createAppearanceParams].opacity;
+    _compassButton.backgroundColor = [_compassButton.backgroundColor colorWithAlphaComponent:opacity];
+}
+
+- (void)updateCompassShadow
+{
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:_compassButton.bounds
+                                                          cornerRadius:_compassButton.layer.cornerRadius];
+    _compassButton.layer.shadowPath = shadowPath.CGPath;
 }
 
 - (void) updateWeatherButtonVisibility
@@ -1170,6 +1174,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     
     [self updateCompassVisibility:showCompass];
     [self updateCompassCornerRadius];
+    [self updateCompassOpacity];
+    [self updateCompassShadow];
     [_compassButton updateColorsForPressedState:NO];
 }
 

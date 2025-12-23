@@ -117,7 +117,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         let appearanceRow = appearanceSection.createNewRow()
         appearanceRow.title = localizedString("shared_string_appearance")
         appearanceRow.accessibilityLabel = appearanceRow.title
-        appearanceRow.descr = localizedString("rendering_value_default_name") // TODO
+        appearanceRow.descr = localizedString(mapButtonState?.hasCustomAppearance() == true ? "shared_string_custom" : "shared_string_default")
         appearanceRow.key = Self.appearanceRowKey
         appearanceRow.cellType = OAValueTableViewCell.reuseIdentifier
         appearanceRow.iconName = "ic_custom_appearance"

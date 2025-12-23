@@ -2209,6 +2209,8 @@
 "background_opacity" = "Background opacity";
 "corner_radius" = "Corner radius";
 "shared_string_pt" = "pt";
+"shared_string_default" = "Default";
+"shared_string_custom" = "Custom";
 
 "int_hour" = "h";
 "int_min" = "min.";

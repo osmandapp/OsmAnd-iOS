@@ -212,7 +212,7 @@ open class MapButtonState: NSObject {
     }
     
     func hasCustomAppearance() -> Bool {
-        createAppearanceParams() == createDefaultAppearanceParams()
+        createAppearanceParams() != createDefaultAppearanceParams()
     }
 }
 

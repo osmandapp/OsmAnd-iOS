@@ -3978,3 +3978,5 @@
 "deleted_maps_prompt" = "Esses mapas não são mais compatíveis e foram substituídos por regiões menores. Remova-os e baixe as novas versões.";
 "unsupported_maps" = "Mapas não suportados";
 "deleted_maps_alert_message" = "Tem certeza de que deseja excluir %d mapas?";
+"copy_link" = "Copiar link";
+"ios_release_5_3" = "• Adicionada animação interativa para o widget Velocímetro.\n• Adicionada uma opção para redimensionar o ícone de localização.\n• Novos widgets de registro de viagem: Velocidade máxima e Inclinação média; widgets de subida/descida aprimorados.\n• Adicionado suporte a links diretos para compartilhar POIs específicos.\n• Corrigido um problema em que a ETA nos widgets de navegação não era atualizada quando o veículo estava parado\n• Conectividade aprimorada para adaptadores OBDII emparelhados\n• Adicionada a capacidade de mesclar pontos de referência em uma pasta de favoritos selecionada\n• CarPlay: corrigido um problema com um mapa que não respondia no painel e adicionado suporte para o parâmetro “Sempre mostrar mapa escuro”\n";

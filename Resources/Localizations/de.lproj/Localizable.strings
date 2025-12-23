@@ -3988,3 +3988,5 @@
 "rendering_attr_hideLightSectors_description" = "Helle Bereiche verbergen";
 "ble_scanner" = "BLE-Scanner";
 "reconnect" = "Erneut verbinden";
+"slots" = "Slots";
+"copy_link" = "Link kopieren";

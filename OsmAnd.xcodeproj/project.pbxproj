@@ -1454,6 +1454,9 @@
 		C558A29F29B1355A00E79DDB /* ic_custom_direction_manual_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29929B1355900E79DDB /* ic_custom_direction_manual_day@2x.png */; };
 		C558A2A029B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */; };
 		C558DC462D453B1F007C0230 /* OAGpxApproximationParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = C558DC452D453B1F007C0230 /* OAGpxApproximationParams.mm */; };
+		C563193E2EF0353E008854B3 /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C563193D2EF0353E008854B3 /* DeepLinkParser.swift */; };
+		C56319442EF05389008854B3 /* OADeepLinkBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56319432EF05389008854B3 /* OADeepLinkBridge.mm */; };
+		C56319462EF189EC008854B3 /* DeepLinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56319452EF189EC008854B3 /* DeepLinkManager.swift */; };
 		C5693B802A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */; };
 		C5693B812A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */; };
 		C5693B822A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */; };
@@ -1474,6 +1477,8 @@
 		C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */; };
 		C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */; };
 		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
+		C58106742EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */; };
+		C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
 		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
 		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
@@ -1529,6 +1534,7 @@
 		C5CD4CF129EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */; };
 		C5CD4CF229EFE6AC00B35C3D /* ic_navbar_trash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */; };
 		C5CD4CF329EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEF29EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@2x.png */; };
+		C5D3D2B22EE006A100664956 /* ShareLinkItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D3D2B12EE006A100664956 /* ShareLinkItem.swift */; };
 		C5D4D7312987C56000D3BC04 /* OAHistorySettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */; };
 		C5D8F809292F5B2900C01065 /* ic_custom_download_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */; };
 		C5D8F80B292F5B3A00C01065 /* ic_custom_download_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */; };
@@ -5201,6 +5207,10 @@
 		C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual_day@3x.png"; path = "Resources/Icons/ic_custom_direction_manual_day@3x.png"; sourceTree = "<group>"; };
 		C558DC442D453B1F007C0230 /* OAGpxApproximationParams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationParams.h; sourceTree = "<group>"; };
 		C558DC452D453B1F007C0230 /* OAGpxApproximationParams.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationParams.mm; sourceTree = "<group>"; };
+		C563193D2EF0353E008854B3 /* DeepLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkParser.swift; sourceTree = "<group>"; };
+		C56319422EF05389008854B3 /* OADeepLinkBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADeepLinkBridge.h; sourceTree = "<group>"; };
+		C56319432EF05389008854B3 /* OADeepLinkBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADeepLinkBridge.mm; sourceTree = "<group>"; };
+		C56319452EF189EC008854B3 /* DeepLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkManager.swift; sourceTree = "<group>"; };
 		C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day@3x.png"; sourceTree = "<group>"; };
 		C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day@2x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day@2x.png"; sourceTree = "<group>"; };
@@ -5307,6 +5317,8 @@
 		C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTracksAppearanceTask.swift; sourceTree = "<group>"; };
 		C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachRoadsBannerCell.swift; sourceTree = "<group>"; };
 		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
+		C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWindAnimationAction.swift; sourceTree = "<group>"; };
+		C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWeatherLayersAction.swift; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
 		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
 		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
@@ -5366,6 +5378,7 @@
 		C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
 		C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@3x.png"; path = "Resources/Icons/ic_navbar_trash@3x.png"; sourceTree = "<group>"; };
 		C5CD4CEF29EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@2x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@2x.png"; sourceTree = "<group>"; };
+		C5D3D2B12EE006A100664956 /* ShareLinkItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareLinkItem.swift; sourceTree = "<group>"; };
 		C5D4D72E2987C56000D3BC04 /* OAHistorySettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAHistorySettingsViewController.h; sourceTree = "<group>"; };
 		C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHistorySettingsViewController.mm; sourceTree = "<group>"; };
 		C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@2x.png"; path = "Resources/Icons/ic_custom_download_map@2x.png"; sourceTree = "<group>"; };
@@ -11377,12 +11390,14 @@
 				DA5A79E926C563A000F274C7 /* OAShowHideOSMBugAction.m */,
 				DA5A79E626C563A000F274C7 /* OAShowHidePoiAction.h */,
 				DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */,
+				C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */,
 				C51766582E9F8F5300F2B085 /* BaseWeatherQuickAction.swift */,
 				C517665D2E9FA15900F2B085 /* ShowHideTemperatureAction.swift */,
 				C517665F2E9FA90C00F2B085 /* ShowHideAirPressureAction.swift */,
 				C51766612E9FACCA00F2B085 /* ShowHideWindAction.swift */,
 				C51766632E9FB91500F2B085 /* ShowHideCloudAction.swift */,
 				C51766652E9FBC2100F2B085 /* ShowHidePrecipitationAction.swift */,
+				C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */,
 				DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */,
 				46C841462C32F41A00E284B0 /* OAShowHideTransportLinesAction.m */,
 				DA5A7A0726C563A000F274C7 /* OASwitchableAction.h */,
@@ -11551,6 +11566,8 @@
 				320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */,
 				9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */,
 				9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */,
+				C563193D2EF0353E008854B3 /* DeepLinkParser.swift */,
+				C56319452EF189EC008854B3 /* DeepLinkManager.swift */,
 			);
 			path = POI;
 			sourceTree = "<group>";
@@ -13718,6 +13735,8 @@
 				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
 				DA5A80D126C563A600F274C7 /* OAFavoritesHelper.h */,
 				DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */,
+				C56319422EF05389008854B3 /* OADeepLinkBridge.h */,
+				C56319432EF05389008854B3 /* OADeepLinkBridge.mm */,
 				DA5A80DC26C563A600F274C7 /* OAFileNameTranslationHelper.h */,
 				DA5A80B526C563A600F274C7 /* OAFileNameTranslationHelper.m */,
 				32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */,
@@ -13771,6 +13790,7 @@
 				05898FB12B511E0500E64B58 /* OASvgHelper.mm */,
 				DAB9AECB28E192D300AD01CE /* OAURLSessionProgress.h */,
 				DAB9AECC28E192D300AD01CE /* OAURLSessionProgress.m */,
+				C5D3D2B12EE006A100664956 /* ShareLinkItem.swift */,
 				32AD5D582A2F10EA00A51B60 /* OAuthHelper */,
 				DA5A80C226C563A600F274C7 /* OAUtilities.h */,
 				DA5A809226C563A500F274C7 /* OAUtilities.m */,
@@ -16983,6 +17003,7 @@
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,
 				DA5A855626C563A900F274C7 /* OALocationServices.mm in Sources */,
+				C56319462EF189EC008854B3 /* DeepLinkManager.swift in Sources */,
 				4603FD222AD4B97600525A93 /* OABaseNavbarSubviewViewController.m in Sources */,
 				DA5A831126C563A800F274C7 /* OARouteInfoCell.m in Sources */,
 				DA5A835A26C563A800F274C7 /* OABottomSheetHeaderButtonCell.m in Sources */,
@@ -17277,6 +17298,7 @@
 				46F494132B4D9D6400CAB805 /* OAGPXDataSetType.m in Sources */,
 				DA5A838626C563A800F274C7 /* OADestinationItem.m in Sources */,
 				DA5A823D26C563A700F274C7 /* OAConfigureProfileViewController.m in Sources */,
+				C58106742EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift in Sources */,
 				DA5A819126C563A700F274C7 /* OAShowHideMapillaryAction.m in Sources */,
 				DA5A850626C563A900F274C7 /* OAMultiselectableHeaderView.m in Sources */,
 				DA5A830E26C563A800F274C7 /* OATitleIconRoundCell.m in Sources */,
@@ -17699,6 +17721,7 @@
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				32EB34492E462D6A004F7C75 /* OAAmenitySearcher.mm in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
+				C5D3D2B22EE006A100664956 /* ShareLinkItem.swift in Sources */,
 				C5DF39B52DBB6CA800332496 /* OACoordinatesGridLayer.mm in Sources */,
 				DA4ABEEC2876DA5D00B996EF /* OAExportSettingsType.mm in Sources */,
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
@@ -17737,6 +17760,7 @@
 				DA5A836B26C563A800F274C7 /* OADestinationItemsListViewController.mm in Sources */,
 				DA5A81B026C563A700F274C7 /* OADownloadsManager.m in Sources */,
 				DA5A84D326C563A900F274C7 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
+				C56319442EF05389008854B3 /* OADeepLinkBridge.mm in Sources */,
 				46A35EF52C53F9510089B21C /* DirectoryObserver.swift in Sources */,
 				DA5A813126C563A700F274C7 /* OAWebClient.mm in Sources */,
 				DA5A833926C563A800F274C7 /* OAFoldersCell.m in Sources */,
@@ -18020,6 +18044,7 @@
 				467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */,
 				DA5A823126C563A700F274C7 /* OAImportSettingsViewController.mm in Sources */,
 				FAA650522ADD42C50020DCEA /* BLEBatterySensor.swift in Sources */,
+				C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */,
 				DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */,
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
@@ -18365,6 +18390,7 @@
 				CA4EDA76E3361F7FEB8D4A1E /* OAWeatherForecastDetailsViewController.mm in Sources */,
 				CA4ED2FE0185FC36F0229614 /* OAWeatherFrequencySettingsViewController.mm in Sources */,
 				27D33B452E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift in Sources */,
+				C563193E2EF0353E008854B3 /* DeepLinkParser.swift in Sources */,
 				CA4ED6AAA32538E21DD77883 /* OASettingsBackupViewController.mm in Sources */,
 				46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */,
 				CA4EDCD4B8149095B74FD700 /* OACloudAccountLogoutViewController.mm in Sources */,

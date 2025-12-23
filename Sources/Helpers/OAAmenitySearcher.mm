@@ -337,7 +337,7 @@ int const kZoomToSearchPOI = 16.0;
 
     for (OAPOI *amenity in amenities)
     {
-        if (amenity.obfId > 0)
+        if (amenity.obfId != 0)
         {
             NSString *wiki = [amenity getWikidata];
             BOOL wikiEqual = (wiki && [wiki isEqualToString:wikidata]);

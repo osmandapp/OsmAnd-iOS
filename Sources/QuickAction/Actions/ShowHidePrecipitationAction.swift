@@ -19,6 +19,10 @@ final class ShowHidePrecipitationAction: BaseWeatherQuickAction {
         type
     }
     
+    override func getText() -> String? {
+        localizedString("quick_action_precipitation_layer")
+    }
+    
     override func weatherBandIndex() -> EOAWeatherBand {
         .WEATHER_BAND_PRECIPITATION
     }

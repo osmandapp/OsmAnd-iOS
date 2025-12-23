@@ -143,6 +143,9 @@ static int DEFAULT_ELO = 900;
 - (int)getTravelEloNumber;
 - (void)setTravelEloNumber:(int)elo;
 
+- (NSString *)encodedPoiNameForLink;
+- (NSString *)encodedPoiTypeForLink;
+
 - (NSString *) toStringEn;
 
 - (NSString *) getSubTypeStr;

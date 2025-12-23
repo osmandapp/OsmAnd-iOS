@@ -814,3 +814,8 @@
 "shared_string_pause" = "Bedd";
 "shared_string_other" = "Wayeḍ";
 "average" = "Talemmast";
+"map_settings_weather_temp" = "Tazɣelt";
+"map_settings_weather_wind" = "Aḍu";
+"map_settings_weather_cloud" = "Asigna";
+"routing_settings_2" = "Iɣewwaren n tunigin";
+"osmand_settings" = "Iɣewwaren n OsmAnd";

@@ -3958,3 +3958,5 @@
 "deleted_maps_prompt" = "Tyto mapy již nejsou podporovány a byly nahrazeny menšími oblastmi. Odstraňte je prosím a stáhněte si nové verze.";
 "unsupported_maps" = "Nepodporované mapy";
 "deleted_maps_alert_message" = "Opravdu chcete odstranit %d map?";
+"ios_release_5_3" = "• Přidána interaktivní animace pro widget rychloměru\n• Přidána možnost změnit velikost ikony polohy\n• Nové widgety pro zaznamenávání trasy: maximální rychlost a průměrný sklon; vylepšené widgety pro stoupání/klesání\n• Přidána podpora hloubkových odkazů pro sdílení konkrétních bodů zájmu\n• Opravena chyba, kdy se odhadovaný čas ve widgetech navigace neaktualizoval při stání\n• Vylepšeno připojení pro spárované adaptéry OBDII\n• Přidána možnost sloučit body do vybrané složky oblíbených\n• CarPlay: Opravena chyba s nereagující mapou a přidána podpora pro parametr „Vždy zobrazovat tmavou mapu“\n";
+"copy_link" = "Kopírovat odkaz";

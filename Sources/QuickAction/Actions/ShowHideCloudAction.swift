@@ -19,6 +19,10 @@ final class ShowHideCloudAction: BaseWeatherQuickAction {
         type
     }
     
+    override func getText() -> String? {
+        localizedString("quick_action_cloud_layer")
+    }
+    
     override func weatherBandIndex() -> EOAWeatherBand {
         .WEATHER_BAND_CLOUD
     }

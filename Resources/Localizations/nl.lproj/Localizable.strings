@@ -2580,7 +2580,7 @@
 "daynight_mode_app_theme_summary" = "De weergave van de map is aangepast aan het kleurenschema van de app - dagmodus voor een licht schema, en nachtmodus voor een donker schema";
 "daynight_mode_day_summary" = "Toont de kaart altijd in een licht kleurenschema, ideaal voor zichtbaarheid in daglicht.";
 "daynight_mode_night_summary" = "Toont de kaart altijd in een donker kleurenschema, geschikt voor \'s nachts of in lichtarme omstandigheden.";
-"daynight_mode_sunrise_sunset_summary" = "Schakelt automatisch tussen dacht- en nachtschema\'s op basis van de lokale zonsopgangs- en zonsondergangstijden.";
+"daynight_mode_sunrise_sunset_summary" = "Automatisch schakelen tussen dag- en nachtmodus op basis van de lokale zonsopgang- en zonsondergangtijden.";
 "quick_action_need_to_add_item_to_list" = "Voeg tenminste één item toe aan de lijst via de instelling \'Sneltoetsen\'";
 "quick_action_terrain_color_scheme" = "Kleurenschema voor terrein";
 "OsmAnd Maps" = "OsmAnd Kaarten";

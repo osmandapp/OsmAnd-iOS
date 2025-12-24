@@ -35,7 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (OAAmenitySearcher *) sharedInstance;
 
-- (nullable BaseDetailsObject *)searchDetailedObject:(OAAmenitySearcherRequest *)request;
+- (nullable BaseDetailsObject *)searchDetailedObject:(id)object;
+- (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request;
 
 - (NSArray<NSString *> *) getAmenityRepositories:(BOOL)includeTravel;
 

@@ -158,6 +158,8 @@ static int DEFAULT_ELO = 900;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 
+- (NSDictionary<NSString *, NSString *> *)getOsmTags;
+
 - (int64_t) getOsmId;
 
 - (BOOL) strictEquals:(id)object;

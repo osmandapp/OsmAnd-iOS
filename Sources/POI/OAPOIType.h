@@ -49,8 +49,10 @@
 - (NSString *)getEditOsmValue2;
 - (NSString *)getOsmValue;
 - (NSString *)getOsmValue2;
+- (NSString *)getRawOsmTag;
 - (NSString *)getOsmTag;
 - (NSString *)getOsmTag2;
+- (NSDictionary<NSString *, NSString *> *)getOsmTagsValues;
 
 - (BOOL) isReference;
 

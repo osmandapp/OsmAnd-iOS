@@ -50,7 +50,7 @@ open class MapButtonState: NSObject {
             position.fromLongValue(v: Int64(value))
         }
         
-        var size = Self.defaultSizeDp
+        var size = createAppearanceParams().size
         size = (size / 8) + 1
         position.setSize(width8dp: Int32(size), height8dp: Int32(size))
     }

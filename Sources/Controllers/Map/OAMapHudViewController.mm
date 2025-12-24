@@ -931,6 +931,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     [self updateDependentButtonsVisibility];
     [_floatingButtonsController updateMap3dModeButtonAppearance];
+    [_mapHudLayout updateButtons];
 }
 
 - (void)updateDependentButtonsVisibility
@@ -979,6 +980,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateCompassButton];
+                [_mapHudLayout updateButtons];
             });
         }
         else if (obj == _settings.transparentMapTheme
@@ -1044,6 +1046,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     [self updateMapButtonVisibility:button showButton:showButton];
     [self updateMapButtonAppearance:button appearanceParams:appearanceParams];
+    [_mapHudLayout updateButtons];
 }
 
 - (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton

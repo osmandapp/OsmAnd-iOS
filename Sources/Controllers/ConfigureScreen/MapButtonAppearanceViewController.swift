@@ -12,6 +12,8 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private static let arrayValuesKey = "arrayValuesKey"
     private static let cornerRadiusRowKey = "cornerRadiusRowKey"
     private static let cornerRadiusArrayValues: [Int32] = [3, 6, 9, 12, 36]
+    private static let sizeRowKey = "sizeRowKey"
+    private static let sizeArrayValues: [Int32] = [40, 48, 56, 64, 72]
     private static let backgroundOpacityRowKey = "backgroundOpacityRowKey"
     
     weak var mapButtonState: MapButtonState?
@@ -76,6 +78,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     
     override func onBottomButtonPressed() {
         guard hasAppearanceChanged, let appearanceParams else { return }
+        mapButtonState?.storedSizePref().set(appearanceParams.size)
         mapButtonState?.storedCornerRadiusPref().set(appearanceParams.cornerRadius)
         mapButtonState?.storedOpacityPref().set(Double(appearanceParams.opacity))
         delegate?.onSettingsChanged()
@@ -99,6 +102,18 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         let visibilitySection = tableData.createNewSection()
         let imageHeaderRow = visibilitySection.createNewRow()
         imageHeaderRow.cellType = PreviewImageViewTableViewCell.reuseIdentifier
+        
+        let sizeSection = tableData.createNewSection()
+        let sizeValueRow = sizeSection.createNewRow()
+        sizeValueRow.cellType = OAValueTableViewCell.reuseIdentifier
+        sizeValueRow.title = localizedString("shared_string_size")
+        sizeValueRow.setObj(String(format: localizedString("ltr_or_rtl_combine_via_space"), "\(appearanceParams.size)", localizedString("shared_string_pt")), forKey: Self.valueKey)
+        
+        let sizeSliderRow = sizeSection.createNewRow()
+        sizeSliderRow.cellType = SegmentButtonsSliderTableViewCell.reuseIdentifier
+        sizeSliderRow.key = Self.sizeRowKey
+        sizeSliderRow.setObj(Self.sizeArrayValues.map { String($0) }, forKey: Self.arrayValuesKey)
+        sizeSliderRow.setObj(String(appearanceParams.size), forKey: Self.valueKey)
         
         let cornerRadiusSection = tableData.createNewSection()
         let cornerRadiusValueRow = cornerRadiusSection.createNewRow()
@@ -206,6 +221,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
             guard let mapButtonState = self?.mapButtonState else { return }
             let defaultParams = mapButtonState.createDefaultAppearanceParams()
+            self?.appearanceParams?.size = defaultParams.size
             self?.appearanceParams?.cornerRadius = defaultParams.cornerRadius
             self?.appearanceParams?.opacity = defaultParams.opacity
             self?.updateData()
@@ -226,6 +242,8 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private func setAppearanceParameter(_ selectedIndex: Int, key: String?) {
         if key == Self.cornerRadiusRowKey {
             appearanceParams?.cornerRadius = Self.cornerRadiusArrayValues[selectedIndex]
+        } else if key == Self.sizeRowKey {
+            appearanceParams?.size = Self.sizeArrayValues[selectedIndex]
         }
         updateData()
     }
@@ -238,7 +256,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     @objc private func sliderChanged(sender: UISlider) {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
-        if item.key == Self.cornerRadiusRowKey {
+        if item.key == Self.cornerRadiusRowKey || item.key == Self.sizeRowKey {
             guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell, let arrayValues = item.obj(forKey: Self.arrayValuesKey) as? [String] else { return }
             let selectedIndex = Int(cell.sliderView.selectedMark)
             guard selectedIndex >= 0, selectedIndex < arrayValues.count else { return }

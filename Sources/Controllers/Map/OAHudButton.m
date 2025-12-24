@@ -150,15 +150,19 @@
 
 - (NSInteger)getSize
 {
+    NSInteger buttonStateSize = [self createDefaultAppearanceParams].size;
+    if (_buttonState)
+    {
+        float size = [[_buttonState storedSizePref] get];
+        buttonStateSize = size != MapButtonState.originalValue ? size : [_buttonState defaultSize];
+    }
     if (_customAppearanceParams)
     {
         NSInteger size = _customAppearanceParams.size;
-        if (size == MapButtonState.originalValue)
-            return _buttonState ? [_buttonState defaultSize] : [self createDefaultAppearanceParams].size;
-        return size;
+        return size == MapButtonState.originalValue ? buttonStateSize : size;
     }
 
-    return _buttonState ? [_buttonState defaultSize] : [self createDefaultAppearanceParams].size;
+    return buttonStateSize;
 }
 
 - (CGFloat)getOpacity

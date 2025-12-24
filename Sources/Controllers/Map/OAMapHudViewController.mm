@@ -1087,8 +1087,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateCompassSize
 {
-    ButtonAppearanceParams *params = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] createAppearanceParams];
-    _compassButton.frame = CGRectMake(_compassButton.frame.origin.x, _compassButton.frame.origin.y, params.size, params.size);
+    CGFloat size = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] createAppearanceParams].size;
+    _compassImage.center = CGPointMake(size / 2, size / 2);
+    _compassButton.frame = CGRectMake(_compassButton.frame.origin.x, _compassButton.frame.origin.y, size, size);
 }
 
 - (void)updateCompassCornerRadius

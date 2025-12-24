@@ -18,6 +18,7 @@ final class QuickActionButtonState: MapButtonState {
 
     private let app = OsmAndApp.swiftInstance()
     private let settings = OAAppSettings.sharedManager()
+    private let defaultIconKey = "ic_custom_quick_action"
     private(set) var quickActions = [OAQuickAction]()
 
     override init(withId id: String) {
@@ -116,6 +117,13 @@ final class QuickActionButtonState: MapButtonState {
             return action?.getIcon()
         }
         return super.getIcon()
+    }
+    
+    override func defaultIconName() -> String {
+        guard let firstActionIconResName = quickActions.first?.getIconResName() else {
+            return defaultIconKey
+        }
+        return isSingleAction() ? firstActionIconResName : defaultIconKey
     }
 
     override func resetForMode(_ appMode: OAApplicationMode) {

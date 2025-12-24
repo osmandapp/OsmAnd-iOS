@@ -117,6 +117,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     _map3dModeFloatingButton.tag = [OAUtilities getMap3DModeButtonTag];
     _map3dModeFloatingButton.alpha = 0;
     [self onMap3dModeUpdated];
+    [self updateMap3dModeButtonAppearance];
     
     _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
     [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
@@ -535,6 +536,11 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         [self setupQuickActionBtnVisibility:quickActionButton];
     }
     [self setupMap3dModeButtonVisibility];
+}
+
+- (void)updateMap3dModeButtonAppearance
+{
+    [_map3dModeFloatingButton setCustomAppearanceParams:[_map3DButtonState createAppearanceParams]];
 }
 
 - (void)setupQuickActionBtnVisibility:(OAHudButton *)quickActionButton

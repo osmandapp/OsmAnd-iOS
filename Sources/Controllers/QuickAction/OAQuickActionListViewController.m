@@ -100,6 +100,14 @@
 
         __weak __typeof(self) weakSelf = self;
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+        UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_appearance")
+                                                         image:[UIImage imageNamed:@"ic_custom_appearance_outlined"]
+                                                    identifier:nil
+                                                       handler:^(UIAction * _Nonnull action) {
+            MapButtonAppearanceViewController *vc = [[MapButtonAppearanceViewController alloc] init];
+            [weakSelf showViewController:vc];
+        }];
+        appearanceAction.accessibilityLabel = appearanceAction.title;
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
                                                      image:[UIImage systemImageNamed:@"square.and.pencil"]
                                                 identifier:nil
@@ -142,6 +150,8 @@
         }];
 
         renameAction.accessibilityLabel = renameAction.title;
+        
+        [menuElements addObject:appearanceAction];
         [menuElements addObject:renameAction];
 
         UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")

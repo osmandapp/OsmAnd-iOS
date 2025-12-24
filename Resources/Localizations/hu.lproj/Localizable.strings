@@ -3942,3 +3942,12 @@
 "deleted_maps_alert_message" = "Biztosan törölni szeretné a %d térképet?";
 "ios_release_5_3" = "• Interaktív animáció a sebességmérő modulhoz\n• Beállítási lehetőség a helymeghatározó ikon méretének módosításához\n• Új utazásrögzítő modulok: legnagyobb sebesség és átlagos lejtés; továbbfejlesztett emelkedő-/lejtőmodulok\n• Mélyhivatkozások támogatása konkrét POI-k megosztásához\n• Javítva lett az a hiba, amely miatt a navigációs modulok ETA-ja nem frissült álló helyzetben\n• Továbbfejlesztett párosított OBDII adapterek csatlakozása\n• Beállítási lehetőség: az útpontok egy kiválasztott kedvencek mappába való egyesítéséhez\n• CarPlay: Javítva lett a műszerfalon nem reagáló térkép hibája, és hozzá lett adva a „Mindig sötét térkép megjelenítése” paraméter támogatása\n";
 "copy_link" = "Hivatkozás másolása";
+"wind_animation_layer" = "Szélanimációs réteg";
+"quick_action_wind_animation_layer" = "A szélanimációs réteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"weather_layers" = "Időjárási rétegek";
+"quick_action_weather_layers" = "Az időjárási réteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"quick_action_precipitation_layer" = "A csapadékréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"quick_action_cloud_layer" = "A felhőzetréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"quick_action_wind_layer" = "A szélréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"quick_action_air_pressure_layer" = "A nyomásréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"quick_action_temperature_layer" = "A hőmérsékletréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";

@@ -3580,6 +3580,9 @@ typedef enum
 
 - (void) displayGpxOnMap:(OASGpxFile *)item
 {
+    if ([item isEmpty])
+        return;
+
     auto rect = item.getRect;
     
     if (rect.top == DBL_MAX || rect.left == DBL_MAX)

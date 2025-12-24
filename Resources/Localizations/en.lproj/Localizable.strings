@@ -2070,6 +2070,15 @@
 "wind_layer" = "Wind layer";
 "cloud_layer" = "Cloud layer";
 "precipitation_layer" = "Precipitation layer";
+"wind_animation_layer" = "Wind animation layer";
+"quick_action_wind_animation_layer" = "A toggle to show or hide the wind animation layer on the map.";
+"weather_layers" = "Weather layers";
+"quick_action_weather_layers" = "A toggle to show or hide weather layers on the map.";
+"quick_action_precipitation_layer" = "A toggle to show or hide the precipitation layer on the map.";
+"quick_action_cloud_layer" = "A toggle to show or hide the cloud layer on the map.";
+"quick_action_wind_layer" = "A toggle to show or hide the wind layer on the map.";
+"quick_action_air_pressure_layer" = "A toggle to show or hide the air pressure layer on the map.";
+"quick_action_temperature_layer" = "A toggle to show or hide the temperature layer on the map.";
 "app_profile" = "App profile";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";

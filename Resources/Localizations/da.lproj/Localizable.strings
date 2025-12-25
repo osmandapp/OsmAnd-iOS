@@ -3979,3 +3979,12 @@
 "inch" = "tom";
 "ios_release_5_3" = "• Tilføjet interaktiv animation til speedometer-modul\n• Tilføjet en mulighed for at ændre størrelsen på placeringsikonet\n• Nye moduler til registrering af ture: Maksimal hastighed og gennemsnitlig stigning; forbedrede moduler til op-/nedstigninger\n• Tilføjet understøttelse af dybe links til deling af specifikke interessepunkter\n• Rettet et problem, hvor ETA i navigationsmoduler ikke blev opdateret, mens man stod stille.\n• Forbedret forbindelse til parrede OBDII-adaptere\n• Tilføjet mulighed for at flette rutepunkter i en valgt favoritmappe\n• CarPlay: Rettet et problem med et kort, der ikke reagerede på Dashboard, og tilføjet support til parameteren \"Vis altid mørkt kort\"\n";
 "copy_link" = "Kopiér link";
+"wind_animation_layer" = "Vindanimationslag";
+"quick_action_wind_animation_layer" = "En skifter til at vise eller skjule vindanimationslaget på kortet.";
+"weather_layers" = "Vejrlag";
+"quick_action_weather_layers" = "En skifter til at vise eller skjule vejrlag på kortet.";
+"quick_action_precipitation_layer" = "En skifter til at vise eller skjule nedbørslaget på kortet.";
+"quick_action_cloud_layer" = "En skifter til at vise eller skjule skylaget på kortet.";
+"quick_action_wind_layer" = "En skifter til at vise eller skjule vindlaget på kortet.";
+"quick_action_air_pressure_layer" = "En skifter til at vise eller skjule lufttrykslaget på kortet.";
+"quick_action_temperature_layer" = "En skifter til at vise eller skjule temperaturlaget på kortet.";

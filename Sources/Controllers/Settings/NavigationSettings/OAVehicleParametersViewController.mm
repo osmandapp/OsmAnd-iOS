@@ -194,7 +194,9 @@
 - (NSString *)parameterValueNoUnits:(NSString *)value paramId:(NSString *)paramId cutUnit:(BOOL)cutUnit isDescription:(BOOL)isDescription
 {
     NSString *noUnitValue = cutUnit && value.length > 1 ? [value substringToIndex:value.length - 1] : value;
-    float newValue = [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]] ? noUnitValue.floatValue + 0.0001 : noUnitValue.floatValue;
+    double newValue = [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]]
+        ? noUnitValue.doubleValue + 0.0001
+        : noUnitValue.doubleValue;
     newValue = [VehicleAlgorithms convertFromMetric:newValue isWeight:[self isWeight:paramId] appMode:self.appMode];
     if ([VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight:paramId]])
         newValue = floorf(newValue * 100.0f + 0.5f) / 100.0f;

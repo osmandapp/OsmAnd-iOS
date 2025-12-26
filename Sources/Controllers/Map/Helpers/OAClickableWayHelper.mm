@@ -192,8 +192,7 @@
     NSMutableArray<NSNumber *> *xPoints = [amenity.x mutableCopy];
     NSMutableArray<NSNumber *> *yPoints = [amenity.y mutableCopy];
     CLLocation *selectedLatLon = [amenity getLocation];
-    NSDictionary<NSString *, NSString *> *osmTags = [amenity getOsmTags]; 
-    MutableOrderedDictionary<NSString *, NSString *> *tags = [[MutableOrderedDictionary alloc] initWithDictionary:osmTags];
+    MutableOrderedDictionary<NSString *, NSString *> *tags = [amenity getOsmTags];
     OASKQuadRect *bbox = [self calcSearchQuadRect:xPoints yPoints:yPoints];
     return [self loadClickableWay:selectedLatLon bbox:bbox xPoints:xPoints yPoints:yPoints osmId:osmId name:name tags:tags];
 }

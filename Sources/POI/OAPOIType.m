@@ -232,7 +232,7 @@
     NSString *tag2 = [self getOsmTag2];
     NSString *val2 = [self getOsmValue2];
     if (tag2 && val2)
-        tags[tag1] = val1;
+        tags[tag2] = val2;
     
     return tags;
 }

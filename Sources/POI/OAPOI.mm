@@ -908,10 +908,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         return _osmId >> AMENITY_ID_RIGHT_SHIFT;
 }
 
-- (NSDictionary<NSString *, NSString *> *)getOsmTags
+- (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags
 {
-    NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
-    NSMutableDictionary<NSString *, NSString *> *amenityTags = [NSMutableDictionary new];
+    MutableOrderedDictionary<NSString *, NSString *> *result = [MutableOrderedDictionary new];
+    MutableOrderedDictionary<NSString *, NSString *> *amenityTags = [MutableOrderedDictionary new];
     
     for (NSString *key in [self getAdditionalInfoKeys])
         amenityTags[key] = [self getAdditionalInfo:key];

@@ -97,6 +97,7 @@
 #import "OAWeatherHelperBridge.h"
 #import "OADeepLinkBridge.h"
 #import "OAUserInteractionPassThroughView.h"
+#import "OAClickableWayHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

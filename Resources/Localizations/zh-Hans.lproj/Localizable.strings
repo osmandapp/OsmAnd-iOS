@@ -853,7 +853,7 @@
 "rendering_attr_hideIcons_name" = "兴趣点图标";
 "routing_attr_avoid_subway_description" = "避开地铁和轻轨交通";
 "rendering_attr_contourWidth_name" = "等高线线宽";
-"rendering_attr_highway_class_path_name" = "步道";
+"rendering_attr_highway_class_path_name" = "路径";
 "rendering_attr_hideAccess_name" = "访问限制";
 "rendering_value_car_name" = "汽车";
 "rendering_attr_contourDensity_name" = "等高线密度";
@@ -1445,8 +1445,8 @@
 "import_duplicates_title" = "有些项目已经存在";
 "import_duplicates_description" = "OsmAnd 已经具有与导入的元素同名的元素。 \n \n选择一个操作。";
 "add_custom_category" = "添加自定义类别";
-"rendering_attr_showFitnessTrails_name" = "健身步道";
-"rendering_attr_showFitnessTrails_description" = "显示健身步道";
+"rendering_attr_showFitnessTrails_name" = "健身路线";
+"rendering_attr_showFitnessTrails_description" = "显示健身路线";
 "routeInfo_tracktype_description" = "根据表面成分给路线或轨迹线上色。通常适用于道路网络大部分未铺设的情况。";
 "save_heading" = "包括航向";
 "selected_profile" = "当前所选配置文件";
@@ -1733,7 +1733,7 @@
 "simulation_real_mode_desc" = "在笔直的路段，速度将近似于允许的最大速度。 \n在十字路口，模拟将放慢速度。 \n在交通信号灯、停车标志等处将会有额外的惩罚措施。";
 "purchases_feature_desc_cross_buy" = "在不同的平台（Android/iOS/Web）上使用您的订阅功能，无需额外费用。";
 "backup_restore_data" = "恢复数据";
-"shared_string_added" = "添加于";
+"shared_string_added" = "新增";
 "internet_connection_required_for_online_route" = "在线导航不能离线工作。";
 "shared_string_weather" = "天气";
 "routing_attr_goods_restrictions_name" = "货物运送";

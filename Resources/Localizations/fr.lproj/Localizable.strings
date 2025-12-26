@@ -3977,3 +3977,12 @@
 "deleted_maps_alert_message" = "Êtes-vous sûr de vouloir supprimer %d cartes ?";
 "ios_release_5_3" = "• Ajout d'une animation interactive pour le widget Compteur de vitesse\n• Ajout d'une option pour redimensionner l'icône de position\n• Nouveaux widgets d'enregistrement de trajet : Vitesse maximale et Pente moyenne ; widgets Montée/Descente améliorés\n• Ajout de la prise en charge des liens profonds pour le partage de points d'intérêt spécifiques\n• Correction d'un problème d'actualisation de l'heure d'arrivée estimée dans les widgets de navigation à l'arrêt\n• Amélioration de la connectivité pour les adaptateurs OBDII appairés\n• Ajout de la possibilité de fusionner les waypoints dans un dossier de favoris sélectionné\n• CarPlay : Correction d'un problème d'affichage de la carte sur le tableau de bord et ajout de la prise en charge du paramètre « Toujours afficher la carte en mode sombre »\n";
 "copy_link" = "Copier le lien";
+"wind_animation_layer" = "Couche d'animation du vent";
+"quick_action_wind_animation_layer" = "Un bouton permettant d'afficher ou de masquer la couche d'animation du vent sur la carte.";
+"weather_layers" = "Couches météorologiques";
+"quick_action_weather_layers" = "Un bouton permettant d'afficher ou de masquer les calques météorologiques sur la carte.";
+"quick_action_precipitation_layer" = "Un bouton permettant d'afficher ou de masquer la couche des précipitations sur la carte.";
+"quick_action_cloud_layer" = "Un bouton permettant d'afficher ou de masquer la couche nuageuse sur la carte.";
+"quick_action_wind_layer" = "Un bouton permettant d'afficher ou de masquer la couche de vent sur la carte.";
+"quick_action_air_pressure_layer" = "Un bouton permettant d'afficher ou de masquer la couche de pression atmosphérique sur la carte.";
+"quick_action_temperature_layer" = "Un bouton permettant d'afficher ou de masquer la couche de température sur la carte.";

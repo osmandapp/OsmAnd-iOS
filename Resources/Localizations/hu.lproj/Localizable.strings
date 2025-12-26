@@ -3945,7 +3945,7 @@
 "wind_animation_layer" = "Szélanimációs réteg";
 "quick_action_wind_animation_layer" = "A szélanimációs réteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "weather_layers" = "Időjárási rétegek";
-"quick_action_weather_layers" = "Az időjárási réteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"quick_action_weather_layers" = "Az időjárási rétegek megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_precipitation_layer" = "A csapadékréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_cloud_layer" = "A felhőzetréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_wind_layer" = "A szélréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";

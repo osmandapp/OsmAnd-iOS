@@ -3820,7 +3820,7 @@
 "standard_maps" = "Cartes standard";
 "wikipedia_and_travel_maps" = "Wikipédia et Cartes de voyage";
 "topography_maps" = "Cartes topographiques";
-"download_live_updates" = "Mises à jour en direct";
+"download_live_updates" = "Mises à jour temps réel";
 "local_indexes_cat_tts" = "Invites vocales (TTS)";
 "local_indexes_cat_voice" = "Messages vocaux (enregistrés)";
 "rendering_styles" = "Styles de rendu";
@@ -3982,7 +3982,7 @@
 "weather_layers" = "Couches météorologiques";
 "quick_action_weather_layers" = "Un bouton permettant d'afficher ou de masquer les calques météorologiques sur la carte.";
 "quick_action_precipitation_layer" = "Un bouton permettant d'afficher ou de masquer la couche des précipitations sur la carte.";
-"quick_action_cloud_layer" = "Un bouton permettant d'afficher ou de masquer la couche nuageuse sur la carte.";
+"quick_action_cloud_layer" = "Un bouton permettant d'afficher ou de masquer la couche couverture nuageuse sur la carte.";
 "quick_action_wind_layer" = "Un bouton permettant d'afficher ou de masquer la couche de vent sur la carte.";
 "quick_action_air_pressure_layer" = "Un bouton permettant d'afficher ou de masquer la couche de pression atmosphérique sur la carte.";
 "quick_action_temperature_layer" = "Un bouton permettant d'afficher ou de masquer la couche de température sur la carte.";

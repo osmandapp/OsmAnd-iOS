@@ -676,7 +676,7 @@
 "local_indexes_cat_backup" = "Nieaktywny";
 "gpx_trip_groups" = "Grupy tras";
 "gpx_group_select" = "Wybierz grupę";
-"plugin_popup_wiki_title" = "Pobierz Wikipedię";
+"plugin_popup_wiki_title" = "Pobierz dane z Wikipedii";
 "restore_all_purchases" = "Przywróć wszystkie zakupy";
 "show_region_on_map_go" = "Przejdź do mapy";
 "save_track_interval" = "Częstość rejestrowania podczas nawigacji";
@@ -1316,7 +1316,7 @@
 "rendering_value_red_name" = "Czerwony";
 "rendering_value_translucent_red_name" = "Przezroczysty czerwony";
 "rendering_value_darkyellow_name" = "Ciemnożółty";
-"rendering_attr_pisteRoutes_name" = "Trasy narciarskie";
+"rendering_attr_pisteRoutes_name" = "Stoki i trasy narciarskie";
 "rendering_value_translucent_lightblue_name" = "Przezroczysty jasnoniebieski";
 "rendering_value_disabled_name" = "Wyłączenie";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Płaski";
@@ -2484,7 +2484,7 @@
 "rendering_attr_weatherWindSpeedContours_name" = "Izolinie prędkości wiatru";
 "routing_attr_driving_style_description" = "Wybierz cel jazdy, aby wyznaczyć krótszą, szybszą lub bezpieczniejszą trasę";
 "routing_attr_length_description" = "Określ długość pojazdu dozwoloną na trasach.";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematyczne wyświetlanie ikon przy małych powiększeniach";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematyczna reprezentacja ikon przy niskim poziomie powiększenia dla punktów POI, które zazwyczaj nie są wyświetlane";
 "rendering_attr_horse_scale_common_name" = "Zwykły";
 "rendering_attr_showBusRoutes_name" = "Linie autobusowe";
 "rendering_attr_horse_scale_demanding_name" = "Wymagająca";
@@ -2714,7 +2714,7 @@
 "network" = "Sieć GSM";
 "activity_type_winter_name" = "Zimowe";
 "activity_type_motorbike_name" = "Motocykl";
-"help_article_navigation_routing_ski_routing_name" = "Trasy narciarskie";
+"help_article_navigation_routing_ski_routing_name" = "Stoki i trasy narciarskie";
 "map_screen_orientation" = "Orientacja ekranu";
 "skip_download" = "Pomiń pobieranie";
 "osmand_cloud_deletion_all_data_warning" = "Wszystkie dane z OsmAnd Cloud zostaną %@. Dane na urządzeniu pozostaną nienaruszone.";
@@ -2944,7 +2944,7 @@
 "newest_date_first" = "Najpierw najnowsza data";
 "activity_type_car_name" = "Samochód";
 "trash_is_empty_banner_desc" = "Pliki usunięte z OsmAnd Cloud będą dostępne tutaj przez %@ dni.";
-"trip_recording_distance_widget_desc" = "Pokazuje aktualnie zarejestrowany dystans podróży.";
+"trip_recording_distance_widget_desc" = "Pokazuje całkowity dystans aktualnie zarejestrowanej podróży, z trybami wyświetlania dystansu ostatniego podjazdu i zjazdu.";
 "help_article_troubleshooting_maps_data_name" = "Mapy i dane";
 "mapillary_widget_desc" = "Zapewnia szybki dostęp do aplikacji Mapillary w celu dodania zdjęć z poziomu ulicy.";
 "travel_card_download_descr" = "Proszę pobrać przewodniki Wikipodróży, aby wyświetlić artykuły o miejscach na całym świecie bez połączenia z Internetem.";
@@ -2995,7 +2995,7 @@
 "help_article_purchases_android_name" = "Zakupy na Androidzie";
 "help_article_navigation_routing_moped_routing_name" = "Trasa motoroweru";
 "wikivoyage_download_pics" = "Pobierz obrazy";
-"trip_recording_downhill_widget_desc" = "Pokazuje sumę wszystkich zjazdów aktualnie zarejestrowanej podróży.";
+"trip_recording_downhill_widget_desc" = "Pokazuje sumę wszystkich zjazdów lub ostatni zjazd aktualnie zarejestrowanej podróży.";
 "map_markers_desc" = "Widżet pokazuje odległość lub szacowany czas przybycia (ETA) dla pierwszych dwóch markerów na liście markerów mapy.";
 "simulate_location_movement_speed_original" = "Oryginalny";
 "ant_plus_open_settings" = "Otwórz ustawienia";
@@ -3008,7 +3008,7 @@
 "gps_info_widget_desc" = "Pokazuje liczbę aktualnie widocznych i używanych satelitów.";
 "activity_type_snowmobile_name" = "Skuter śnieżny";
 "external_device_status_disconnect" = "Odłącz";
-"trip_recording_uphill_widget_desc" = "Pokazuje sumę wszystkich podjazdów aktualnie zarejestrowanej podróży.";
+"trip_recording_uphill_widget_desc" = "Pokazuje sumę wszystkich podjazdów lub ostatni podjazd aktualnie zarejestrowanej podróży.";
 "wheel_circumference" = "Obwód koła";
 "bearing_desc" = "Pokazuje bezwzględne lub względne namiary na cel w jednostkach kątowych (w trybie 180 stopni, 360 stopni lub miliradianów).";
 "help_article_map_tracks_on_map_name" = "Ślady i trasy";
@@ -3518,3 +3518,11 @@
 "map_text" = "Renderowanie mapy";
 "manage_purchases" = "Zarządzaj zakupami";
 "manage_storage" = "Zarządzaj przechowywaniem";
+"copy_link" = "Kopiuj odnośnik";
+"reconnect" = "Połącz ponownie";
+"unsupported_maps" = "Mapy nieobsługiwane";
+"efficient_grid" = "Siatka efektywna";
+"slots" = "Sloty";
+"button_frames" = "Ramki przycisku";
+"visualizing_button_grid" = "Siatka przycisków mapy";
+"routing_attr_weightrating_name" = "Maksymalna waga przy pełnym załadunku";

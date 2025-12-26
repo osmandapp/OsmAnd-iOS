@@ -166,7 +166,6 @@
 #import "OADirectionAppearanceViewController.h"
 #import "OABaseEditorViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
-#import "OAWikipediaLanguagesViewController.h"
 #import "OAWebViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OAOsmUploadGPXViewConroller.h"

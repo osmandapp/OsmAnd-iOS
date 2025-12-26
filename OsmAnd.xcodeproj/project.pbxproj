@@ -1487,6 +1487,7 @@
 		C589BCA12C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */; };
 		C596D5832E8D634300D13D93 /* AutoZoom3DAngleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C596D5822E8D634300D13D93 /* AutoZoom3DAngleViewController.swift */; };
 		C5983E132EF93B51003F2639 /* MapSettingsWikipediaScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5983E122EF93B51003F2639 /* MapSettingsWikipediaScreen.swift */; };
+		C5983E1C2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5983E1B2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift */; };
 		C5A466BA2D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A466B92D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift */; };
 		C5A466BC2D2E69B6008E0C87 /* ImageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A466BB2D2E69B6008E0C87 /* ImageHeaderCell.swift */; };
 		C5A466BE2D2E6B41008E0C87 /* ImageHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */; };
@@ -2687,7 +2688,6 @@
 		DA5A84D326C563A900F274C7 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FEF26C563A500F274C7 /* OAMapSettingsOverlayUnderlayScreen.mm */; };
 		DA5A84D426C563A900F274C7 /* OAMapSettingsOnlineSourcesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF126C563A500F274C7 /* OAMapSettingsOnlineSourcesScreen.mm */; };
 		DA5A84D526C563A900F274C7 /* OAMapSettingsSettingScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF226C563A500F274C7 /* OAMapSettingsSettingScreen.mm */; };
-		DA5A84D726C563A900F274C7 /* OAWikipediaLanguagesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF526C563A500F274C7 /* OAWikipediaLanguagesViewController.mm */; };
 		DA5A84D826C563A900F274C7 /* OAMapSettingsContourLinesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF726C563A500F274C7 /* OAMapSettingsContourLinesScreen.mm */; };
 		DA5A84D926C563A900F274C7 /* OAMapSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FF926C563A500F274C7 /* OAMapSettingsViewController.mm */; };
 		DA5A84DA26C563A900F274C7 /* OAMapSettingsMapTypeScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FFB26C563A500F274C7 /* OAMapSettingsMapTypeScreen.mm */; };
@@ -5322,6 +5322,7 @@
 		C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoIconsButtonTableViewCell.xib; sourceTree = "<group>"; };
 		C596D5822E8D634300D13D93 /* AutoZoom3DAngleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoZoom3DAngleViewController.swift; sourceTree = "<group>"; };
 		C5983E122EF93B51003F2639 /* MapSettingsWikipediaScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsWikipediaScreen.swift; sourceTree = "<group>"; };
+		C5983E1B2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaLanguagesViewController.swift; sourceTree = "<group>"; };
 		C5A466B92D2D80B0008E0C87 /* DetailedTrackGuidanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTrackGuidanceViewController.swift; sourceTree = "<group>"; };
 		C5A466BB2D2E69B6008E0C87 /* ImageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHeaderCell.swift; sourceTree = "<group>"; };
 		C5A466BD2D2E6B41008E0C87 /* ImageHeaderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageHeaderCell.xib; sourceTree = "<group>"; };
@@ -7223,10 +7224,8 @@
 		DA5A7FF026C563A500F274C7 /* OAMapSettingsOnlineSourcesScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsOnlineSourcesScreen.h; sourceTree = "<group>"; };
 		DA5A7FF126C563A500F274C7 /* OAMapSettingsOnlineSourcesScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsOnlineSourcesScreen.mm; sourceTree = "<group>"; };
 		DA5A7FF226C563A500F274C7 /* OAMapSettingsSettingScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsSettingScreen.mm; sourceTree = "<group>"; };
-		DA5A7FF526C563A500F274C7 /* OAWikipediaLanguagesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikipediaLanguagesViewController.mm; sourceTree = "<group>"; };
 		DA5A7FF626C563A500F274C7 /* OAMapSettingsParameterScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsParameterScreen.h; sourceTree = "<group>"; };
 		DA5A7FF726C563A500F274C7 /* OAMapSettingsContourLinesScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsContourLinesScreen.mm; sourceTree = "<group>"; };
-		DA5A7FF826C563A500F274C7 /* OAWikipediaLanguagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikipediaLanguagesViewController.h; sourceTree = "<group>"; };
 		DA5A7FF926C563A500F274C7 /* OAMapSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsViewController.mm; sourceTree = "<group>"; };
 		DA5A7FFA26C563A500F274C7 /* OAMapSettingsPreferredLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsPreferredLanguageScreen.h; sourceTree = "<group>"; };
 		DA5A7FFB26C563A500F274C7 /* OAMapSettingsMapTypeScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsMapTypeScreen.mm; sourceTree = "<group>"; };
@@ -13450,8 +13449,7 @@
 				C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */,
 				DA5A801126C563A500F274C7 /* OAMapSettingsViewController.h */,
 				DA5A7FF926C563A500F274C7 /* OAMapSettingsViewController.mm */,
-				DA5A7FF826C563A500F274C7 /* OAWikipediaLanguagesViewController.h */,
-				DA5A7FF526C563A500F274C7 /* OAWikipediaLanguagesViewController.mm */,
+				C5983E1B2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift */,
 				C5983E122EF93B51003F2639 /* MapSettingsWikipediaScreen.swift */,
 				8A90CED927A7C2310001C84D /* OAMapSettingsWeatherScreen.h */,
 				8A90CEDA27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm */,
@@ -17813,6 +17811,7 @@
 				DA5A82F326C563A800F274C7 /* OATargetPointViewCell.mm in Sources */,
 				DA5A845226C563A900F274C7 /* OAMapLayers.mm in Sources */,
 				FA9F416F2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift in Sources */,
+				C5983E1C2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift in Sources */,
 				DA4ABEEB2876DA5D00B996EF /* OASettingsCategoryItems.m in Sources */,
 				FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */,
 				27E316922E72F5CE007172DA /* CompassMode.swift in Sources */,
@@ -17977,7 +17976,6 @@
 				DA5A845D26C563A900F274C7 /* OAMapillaryLayer.mm in Sources */,
 				DA5A83B526C563A800F274C7 /* OAActionAddProfileViewController.m in Sources */,
 				DA5A822F26C563A700F274C7 /* OABaseSettingsListViewController.mm in Sources */,
-				DA5A84D726C563A900F274C7 /* OAWikipediaLanguagesViewController.mm in Sources */,
 				DA5A82FB26C563A800F274C7 /* OAImageDescTableViewCell.m in Sources */,
 				05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */,
 				DAA61CC62A039BC700AFF65D /* SideWidgetInfo.swift in Sources */,

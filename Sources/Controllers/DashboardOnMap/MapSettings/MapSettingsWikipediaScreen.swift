@@ -199,7 +199,7 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
         let item = data.item(for: indexPath)
         switch item.key {
         case RowKey.languagesRowKey.rawValue:
-            guard let controller = OAWikipediaLanguagesViewController(appMode: settings.applicationMode.get()) else { break }
+            guard let controller = WikipediaLanguagesViewController(appMode: settings.applicationMode.get()) else { break }
             controller.wikipediaDelegate = self
             vwController?.showModalViewController(controller)
         case RowKey.mapItemRowKey.rawValue:
@@ -295,7 +295,7 @@ extension MapSettingsWikipediaScreen: DownloadingCellResourceHelperDelegate {
     }
 }
 
-extension MapSettingsWikipediaScreen: OAWikipediaScreenDelegate {
+extension MapSettingsWikipediaScreen: WikipediaScreenDelegate {
     func updateWikipediaSettings() {
         initData()
         tblView?.reloadData()

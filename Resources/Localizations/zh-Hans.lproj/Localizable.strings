@@ -1025,7 +1025,7 @@
 "poi_filter_public_transport" = "公共交通";
 "whole_track" = "整个轨迹";
 "shared_string_zoom_levels" = "缩放等级";
-"arrived_at_destination" = "您已到达。";
+"arrived_at_destination" = "您已抵达目的地。";
 "shared_string_min_speed" = "最低速度";
 "sqlite_db_file" = "SQLiteDB 文件";
 "pseudo_mercator_projection" = "球面正轴等角圆柱投影";
@@ -2493,7 +2493,7 @@
 "transport_hazmat_title" = "危险品运输";
 "pressure_layer" = "压力图层";
 "shared_string_favorites" = "收藏";
-"shared_string_action" = "动作";
+"shared_string_action" = "操作";
 "map_source" = "地图来源";
 "voices" = "语音提示";
 "shared_string_change" = "更改";

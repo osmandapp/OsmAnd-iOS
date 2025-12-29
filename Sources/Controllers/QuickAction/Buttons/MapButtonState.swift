@@ -69,7 +69,7 @@ open class MapButtonState: NSObject {
         if cornerRadius < 0 {
             cornerRadius = defaultCornerRadius()
         }
-        return ButtonAppearanceParams(iconName: defaultIconName(), size: size, opacity: opacity, cornerRadius: cornerRadius)
+        return ButtonAppearanceParams(iconName: defaultPreviewIconName(), size: size, opacity: opacity, cornerRadius: cornerRadius)
     }
     
     func getName() -> String {

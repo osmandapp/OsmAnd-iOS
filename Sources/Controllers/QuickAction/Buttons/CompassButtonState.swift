@@ -38,7 +38,19 @@ final class CompassButtonState: MapButtonState {
     
     override func getPreviewIcon() -> UIImage? {
         let iconName = storedIconPref().get()
-        return !iconName.isEmpty ? UIImage.templateImageNamed(iconName) : UIImage(named: CompassModeWrapper.iconName(forValue: Int(OAAppSettings.sharedManager().rotateMap.get()), isLightMode: ThemeManager.shared.isLightTheme()))
+        if !iconName.isEmpty && iconName != defaultPreviewIconName() {
+            var icon = UIImage.templateImageNamed(iconName)
+            if icon == nil {
+                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            }
+            return icon
+        } else {
+            return UIImage(named: defaultPreviewIconName())
+        }
+    }
+    
+    override func defaultPreviewIconName() -> String {
+        CompassModeWrapper.iconName(forValue: Int(OAAppSettings.sharedManager().rotateMap.get()), isLightMode: ThemeManager.shared.isLightTheme())
     }
     
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {

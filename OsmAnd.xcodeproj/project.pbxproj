@@ -213,6 +213,7 @@
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
 		2702BC612EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */; };
 		2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */; };
+		2709E3B22EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */; };
 		2717D3B52DBBA2F800B7BD22 /* ShapesAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */; };
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
@@ -287,6 +288,7 @@
 		27E8D9EC2ED461E900F98462 /* NumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */; };
 		27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */; };
 		27E8D9F22ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */; };
+		27EAAFB62EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27EAAFB52EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
 		27F050932DD38E310058075F /* RouteInfoDisplayValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */; };
@@ -3672,6 +3674,7 @@
 		2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
 		2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBottomValuesSliderTableViewCell.swift; sourceTree = "<group>"; };
 		2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopBottomValuesSliderTableViewCell.xib; sourceTree = "<group>"; };
+		2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceIconCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesAppearanceCategory.swift; sourceTree = "<group>"; };
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
@@ -3747,6 +3750,7 @@
 		27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Extension.swift"; sourceTree = "<group>"; };
 		27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentButtonsSliderTableViewCell.swift; sourceTree = "<group>"; };
 		27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentButtonsSliderTableViewCell.xib; sourceTree = "<group>"; };
+		27EAAFB52EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAppearanceIconCollectionHandler.swift; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
 		27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayValue.swift; sourceTree = "<group>"; };
 		27F0508F2DD38E310058075F /* RouteInfoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidget.swift; sourceTree = "<group>"; };
@@ -9959,6 +9963,8 @@
 				322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */,
 				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
 				32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */,
+				27EAAFB52EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift */,
+				2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */,
 				2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */,
 				32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */,
 				274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */,
@@ -17527,6 +17533,7 @@
 				27C6D5BB2E81666300695D5B /* KeyEventCommand.swift in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
+				27EAAFB62EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift in Sources */,
 				C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */,
 				DA5A84F826C563A900F274C7 /* OAMapStyleSettings.mm in Sources */,
 				DA5A840926C563A800F274C7 /* OAMapDownloadController.mm in Sources */,
@@ -17675,6 +17682,7 @@
 				DA8DC39A2A0D0876006C116B /* MarkerWidgetsHelper.swift in Sources */,
 				DA5A84D626C563A900F274C7 /* OAMapSettingsWikipediaScreen.mm in Sources */,
 				321E95252823B5C10040312C /* OASimulationNavigationSettingViewController.mm in Sources */,
+				2709E3B22EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift in Sources */,
 				DA5A824226C563A700F274C7 /* OAMainSettingsViewController.m in Sources */,
 				32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */,
 				DA5A834A26C563A800F274C7 /* OAWaypointHeaderCell.m in Sources */,

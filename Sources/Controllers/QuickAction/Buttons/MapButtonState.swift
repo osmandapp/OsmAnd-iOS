@@ -82,7 +82,11 @@ open class MapButtonState: NSObject {
 
     func getIcon() -> UIImage? {
         if let iconName = createAppearanceParams().iconName {
-            return UIImage.templateImageNamed(iconName)
+            var icon = UIImage.templateImageNamed(iconName == defaultPreviewIconName() ? defaultIconName() : iconName)
+            if icon == nil {
+                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            }
+            return icon
         } else {
             return UIImage.templateImageNamed("ic_custom_quick_action")
         }
@@ -94,6 +98,10 @@ open class MapButtonState: NSObject {
     
     func getPreviewIcon() -> UIImage? {
         getIcon()
+    }
+    
+    func defaultPreviewIconName() -> String {
+        defaultIconName()
     }
 
     func getPositionSize() -> ButtonPositionSize {
@@ -141,7 +149,7 @@ open class MapButtonState: NSObject {
     func createAppearanceParams() -> ButtonAppearanceParams {
         let defaultParams = createDefaultAppearanceParams()
         var iconName: String? = savedIconName()
-        if iconName == nil || iconName?.isEmpty == true {
+        if iconName == nil || iconName?.isEmpty == true || iconName == defaultPreviewIconName() {
             iconName = defaultParams.iconName
         }
         var size = sizePref.get()

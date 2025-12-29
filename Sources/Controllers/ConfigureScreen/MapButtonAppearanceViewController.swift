@@ -22,6 +22,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private var appMode: OAApplicationMode?
     private var appearanceParams: ButtonAppearanceParams?
     private var originalAppearanceParams: ButtonAppearanceParams?
+    private var iconCollectionHandler: ButtonAppearanceIconCollectionHandler?
     private var hasAppearanceChanged: Bool {
         appearanceParams != originalAppearanceParams
     }
@@ -37,6 +38,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         originalAppearanceParams = mapButtonState.createAppearanceParams()
         appearanceParams?.iconName = savedIconName
         originalAppearanceParams?.iconName = savedIconName
+        setupIconHandler()
         super.viewDidLoad()
     }
     
@@ -78,6 +80,9 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     
     override func onBottomButtonPressed() {
         guard hasAppearanceChanged, let appearanceParams else { return }
+        if let iconName = appearanceParams.iconName {
+            mapButtonState?.storedIconPref().set(iconName)
+        }
         mapButtonState?.storedSizePref().set(appearanceParams.size)
         mapButtonState?.storedCornerRadiusPref().set(appearanceParams.cornerRadius)
         mapButtonState?.storedOpacityPref().set(Double(appearanceParams.opacity))
@@ -94,6 +99,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         addCell(SegmentButtonsSliderTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(TopBottomValuesSliderTableViewCell.reuseIdentifier)
+        addCell(OAIconsPaletteCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -102,6 +108,12 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         let visibilitySection = tableData.createNewSection()
         let imageHeaderRow = visibilitySection.createNewRow()
         imageHeaderRow.cellType = PreviewImageViewTableViewCell.reuseIdentifier
+        
+        let iconSection = tableData.createNewSection()
+        let iconRow = iconSection.createNewRow()
+        iconRow.cellType = OAIconsPaletteCell.reuseIdentifier
+        iconRow.title = localizedString("shared_string_icon")
+        iconRow.descr = localizedString("shared_string_all_icons")
         
         let sizeSection = tableData.createNewSection()
         let sizeValueRow = sizeSection.createNewRow()
@@ -193,8 +205,45 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             cell.bottomRightLabel.text = NumberFormatter.percentFormatter.string(from: cell.slider.maximumValue as NSNumber)
             cell.bottomRightLabel.textColor = .textColorSecondary
             return cell
+        } else if item.cellType == OAIconsPaletteCell.reuseIdentifier {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OAIconsPaletteCell.reuseIdentifier) as? OAIconsPaletteCell else {
+                return UITableViewCell()
+            }
+            cell.useMultyLines = false
+            cell.forceScrollOnStart = true
+            cell.disableAnimationsOnStart = true
+            cell.topLabel.font = .preferredFont(forTextStyle: .body)
+            cell.topLabel.textColor = .textColorPrimary
+            cell.hostVC = self
+            cell.descriptionLabel.text = localizedString("dynamic_icon_type_summary")
+            iconCollectionHandler?.setCollectionView(cell.collectionView)
+            cell.setCollectionHandler(iconCollectionHandler)
+            iconCollectionHandler?.updateHostCellIfNeeded()
+            cell.topLabel.text = item.title
+            cell.topButtonVisibility(true)
+            cell.bottomButton.setTitle(item.descr, for: .normal)
+            cell.collectionView.reloadData()
+            return cell
         }
         return nil
+    }
+    
+    private func setupIconHandler() {
+        guard let iconName = appearanceParams?.iconName,
+              let defaultIcon = mapButtonState?.defaultPreviewIconName() else {
+            return
+        }
+        iconCollectionHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: [defaultIcon])
+        iconCollectionHandler?.delegate = self
+        iconCollectionHandler?.handlerDelegate = self
+        iconCollectionHandler?.hostVC = self
+        iconCollectionHandler?.regularIconColor = .iconColorSecondary
+        iconCollectionHandler?.selectedIconColor = UIColor(rgb: OAAppSettings.sharedManager().profileIconColor.get())
+        iconCollectionHandler?.setItemSize(size: 48)
+        iconCollectionHandler?.setIconBackgroundSize(size: 36)
+        iconCollectionHandler?.setIconSize(size: 24)
+        iconCollectionHandler?.setSpacing(spacing: 9)
+        iconCollectionHandler?.setIconName(iconName)
     }
     
     private func showUnsavedChangesAlert() {
@@ -221,6 +270,9 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
             guard let mapButtonState = self?.mapButtonState else { return }
             let defaultParams = mapButtonState.createDefaultAppearanceParams()
+            self?.appearanceParams?.iconName = ""
+            self?.iconCollectionHandler?.setIconName("")
+            self?.iconCollectionHandler?.selectCategory(ButtonAppearanceIconCollectionHandler.dynamicKey)
             self?.appearanceParams?.size = defaultParams.size
             self?.appearanceParams?.cornerRadius = defaultParams.cornerRadius
             self?.appearanceParams?.opacity = defaultParams.opacity
@@ -276,5 +328,31 @@ extension MapButtonAppearanceViewController: SegmentButtonsSliderTableViewCellDe
     
     func onMinusTapped(_ selectedMark: Int, sender: UISlider) {
         setAppearanceParameter(selectedMark, sender: sender)
+    }
+}
+
+// MARK: - OACollectionCellDelegate
+extension MapButtonAppearanceViewController: OACollectionCellDelegate {
+    func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any, collectionView: UICollectionView, shouldDismiss: Bool) {
+        if let selectedItem = iconCollectionHandler?.getSelectedItem() as? String {
+            appearanceParams?.iconName = selectedItem
+        }
+        updateData()
+    }
+    
+    func reloadCollectionData() {
+    }
+}
+
+// MARK: - OABaseCollectionHandlerDelegate
+extension MapButtonAppearanceViewController: OABaseCollectionHandlerDelegate {
+    func onCategorySelected(with cell: OACollectionSingleLineTableViewCell) {
+    }
+    
+    func onCategorySelected(_ category: String, with cell: OACollectionSingleLineTableViewCell) {
+        if category == ButtonAppearanceIconCollectionHandler.dynamicKey {
+            appearanceParams?.iconName = ""
+        }
+        updateData()
     }
 }

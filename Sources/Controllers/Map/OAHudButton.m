@@ -114,14 +114,22 @@
 - (void)updateIcon
 {
     NSString *iconName = _customAppearanceParams != nil ? _customAppearanceParams.iconName : nil;
-    if (iconName == nil || iconName.length == 0)
-        iconName = [self createDefaultAppearanceParams].iconName;
     
     UIImage *image;
-    if (_buttonState)
-        image = [_buttonState getPreviewIcon];
-    else
+    if (iconName && iconName.length > 0)
+    {
         image = [UIImage imageNamed:iconName];
+        if (!image)
+            image = [OAUtilities getMxIcon:[iconName lowercaseString]];
+    }
+    else if (_buttonState)
+    {
+        image = _customAppearanceParams != nil && (iconName == nil || iconName.length == 0) ? [UIImage imageNamed:[_buttonState defaultPreviewIconName]] : [_buttonState getPreviewIcon];
+    }
+    else
+    {
+        image = [UIImage imageNamed:[self createDefaultAppearanceParams].iconName];
+    }
     [self setImage:image forState:UIControlStateNormal];
 }
 

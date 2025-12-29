@@ -37,7 +37,19 @@ final class Map3DButtonState: MapButtonState {
     
     override func getPreviewIcon() -> UIImage? {
         let iconName = storedIconPref().get()
-        return UIImage.templateImageNamed(!iconName.isEmpty ? iconName : "ic_custom_3d")
+        if !iconName.isEmpty && iconName != defaultPreviewIconName() {
+            var icon = UIImage.templateImageNamed(iconName)
+            if icon == nil {
+                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            }
+            return icon
+        } else {
+            return UIImage.templateImageNamed(defaultPreviewIconName())
+        }
+    }
+    
+    override func defaultPreviewIconName() -> String {
+        "ic_custom_3d"
     }
     
     override func buttonDescription() -> String {

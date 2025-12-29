@@ -240,11 +240,14 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     private func setupIconHandler() {
-        guard let iconName = appearanceParams?.iconName,
-              let defaultIcon = mapButtonState?.defaultPreviewIconName() else {
-            return
+        guard let iconName = appearanceParams?.iconName else { return }
+        
+        if let mapButtonState = mapButtonState as? QuickActionButtonState, !mapButtonState.isSingleAction() {
+            let customIconKeys = [mapButtonState.defaultPreviewIconName()] + mapButtonState.quickActions.compactMap { $0.getIconResName() }
+            iconCollectionHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: customIconKeys)
+        } else if let defaultIcon = mapButtonState?.defaultPreviewIconName() {
+            iconCollectionHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: [defaultIcon])
         }
-        iconCollectionHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: [defaultIcon])
         iconCollectionHandler?.delegate = self
         iconCollectionHandler?.handlerDelegate = self
         iconCollectionHandler?.hostVC = self

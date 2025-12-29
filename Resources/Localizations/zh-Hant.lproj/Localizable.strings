@@ -3907,3 +3907,6 @@
 "rendering_attr_hideAreas_description" = "隱藏深海區域";
 "total_distance" = "路線總長度";
 "lang_mi" = "毛利語";
+"average_slope" = "平均坡度";
+"trip_recording_average_slope_widget_description" = "為目前記錄的旅程最後的下坡或是上坡片段顯示平均坡度。";
+"shared_string_max_speed" = "最大速度";

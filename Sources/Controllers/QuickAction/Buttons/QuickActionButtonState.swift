@@ -112,7 +112,14 @@ final class QuickActionButtonState: MapButtonState {
     }
 
     override func getIcon() -> UIImage? {
-        if isSingleAction() {
+        let storedIconName = storedIconPref().get()
+        if !storedIconName.isEmpty {
+            var iconImage = UIImage(named: storedIconName)
+            if iconImage == nil {
+                iconImage = OAUtilities.getMxIcon(storedIconName)
+            }
+            return iconImage
+        } else if isSingleAction() {
             let action = quickActions.first
             return action?.getIcon()
         }
@@ -120,10 +127,11 @@ final class QuickActionButtonState: MapButtonState {
     }
     
     override func defaultIconName() -> String {
-        guard let firstActionIconResName = quickActions.first?.getIconResName() else {
+        if let firstActionIconResName = quickActions.first?.getIconResName(), isSingleAction() {
+            return firstActionIconResName
+        } else {
             return defaultIconKey
         }
-        return isSingleAction() ? firstActionIconResName : defaultIconKey
     }
 
     override func resetForMode(_ appMode: OAApplicationMode) {

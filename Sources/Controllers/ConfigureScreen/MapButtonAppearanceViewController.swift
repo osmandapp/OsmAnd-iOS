@@ -6,7 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-@objc
+@objcMembers
 final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private static let valueKey = "valueKey"
     private static let arrayValuesKey = "arrayValuesKey"
@@ -154,8 +154,19 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as? PreviewImageViewTableViewCell else {
                 return UITableViewCell()
             }
+            let shouldRotate: Bool = {
+                if mapButtonState is CompassButtonState {
+                    return true
+                }
+
+                if let state = mapButtonState as? QuickActionButtonState, state.isSingleAction() && state.quickActions.first?.actionType?.stringId == ChangeMapOrientationAction.getType().stringId {
+                    return true
+                }
+
+                return false
+            }()
             cell.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
-            if mapButtonState is CompassButtonState {
+            if shouldRotate {
                 cell.rotateImage(-CGFloat(OARootViewController.instance().mapPanel.mapViewController.azimuth()) / 180.0 * CGFloat.pi)
             }
             return cell

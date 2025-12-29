@@ -25,7 +25,7 @@
 #define kEnableSection 0
 #define kRowsPerSection 6
 
-@interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
+@interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate, OASettingsDataDelegate>
 
 @property (nonatomic) QuickActionButtonState *buttonState;
 @property (nonatomic) OAMapButtonsHelper *mapButtonsHelper;
@@ -105,6 +105,8 @@
                                                     identifier:nil
                                                        handler:^(UIAction * _Nonnull action) {
             MapButtonAppearanceViewController *vc = [[MapButtonAppearanceViewController alloc] init];
+            vc.delegate = self;
+            vc.mapButtonState = _buttonState;
             [weakSelf showViewController:vc];
         }];
         appearanceAction.accessibilityLabel = appearanceAction.title;
@@ -566,6 +568,13 @@
     [self reloadDataWithAnimated:YES completion:nil];
     if (self.delegate)
         [self.delegate onWidgetStateChanged];
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void)onSettingsChanged;
+{
+    [self updateData];
 }
 
 @end

@@ -117,13 +117,13 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     _map3dModeFloatingButton.tag = [OAUtilities getMap3DModeButtonTag];
     _map3dModeFloatingButton.alpha = 0;
     [self onMap3dModeUpdated];
-    [self updateMap3dModeButtonAppearance];
     
     _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
     [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
     [_map3dModeFloatingButton addGestureRecognizer:_map3dModeButtonDragRecognizer];
     
     [self createQuickActionButtons];
+    [self updateButtonsAppearance];
     
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
@@ -160,7 +160,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     if (sender.buttonState && [sender.buttonState isKindOfClass:QuickActionButtonState.class])
     {
         QuickActionButtonState *quickActionButtonState = (QuickActionButtonState *) sender.buttonState;
-        if (quickActionButtonState.quickActions.count == 1)
+        if ([quickActionButtonState isSingleAction])
         {
             [quickActionButtonState.quickActions.firstObject execute];
             [_mapButtonsHelper.quickActionsChangedObservable notifyEventWithKey:quickActionButtonState];
@@ -394,7 +394,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         return NO;
     
     QuickActionButtonState *state = (QuickActionButtonState *)button.buttonState;
-    return state && [[state.quickActions.firstObject getActionTypeId] isEqualToString:ChangeMapOrientationAction.getQuickActionType.stringId] && state.quickActions.count == 1;
+    return state && [[state.quickActions.firstObject getActionTypeId] isEqualToString:ChangeMapOrientationAction.getQuickActionType.stringId] && [state isSingleAction];
 }
 
 - (void)setupButtonRotation:(OAHudButton *)button
@@ -441,8 +441,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
         }
         else
         {
-            UIImage *quickActionIcon = quickActionButtonState ? [self iconForQuickActionButton:quickActionButton state:quickActionButtonState] : [UIImage templateImageNamed:@"ic_custom_quick_action"];
-            [quickActionButton setImage:quickActionIcon forState:UIControlStateNormal];
+            [quickActionButton setCustomAppearanceParams:[quickActionButtonState createAppearanceParams]];
             if (quickActionButtonState && [quickActionButtonState isSingleAction])
             {
                 if (![quickActionButtonState.quickActions.firstObject isActionWithSlash])
@@ -472,13 +471,6 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     });
 }
 
-- (UIImage *)iconForQuickActionButton:(OAHudButton *)button state:(QuickActionButtonState *)state
-{
-    return [self isMapOrientationButton:button]
-    ? [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[_settings.rotateMap get:[_settings.applicationMode get]] isLightMode:![_settings nightMode]]]
-    : [state getIcon];
-}
-
 - (void)createQuickActionButtons
 {
     for (QuickActionButtonState *quickActionButtonState in [_mapButtonsHelper getButtonsStates])
@@ -493,6 +485,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     [_quickActionFloatingButtons addObject:quickActionButton];
     quickActionButton.useCustomPosition = YES;
     quickActionButton.buttonState = quickActionButtonState;
+    [quickActionButton setCustomAppearanceParams:[quickActionButtonState createAppearanceParams]];
     [_mapHudController.mapHudLayout addMapButton:quickActionButton];
     quickActionButton.tag = [OAUtilities getQuickActionButtonTag];
     quickActionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
@@ -536,8 +529,10 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     [self setupMap3dModeButtonVisibility];
 }
 
-- (void)updateMap3dModeButtonAppearance
+- (void)updateButtonsAppearance
 {
+    for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+        [self updateQuickActionButtonColors:quickActionButton];
     [_map3dModeFloatingButton setCustomAppearanceParams:[_map3DButtonState createAppearanceParams]];
 }
 

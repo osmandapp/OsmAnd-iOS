@@ -930,7 +930,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void)updateDependentButtons
 {
     [self updateDependentButtonsVisibility];
-    [_floatingButtonsController updateMap3dModeButtonAppearance];
+    [_floatingButtonsController updateButtonsAppearance];
     [_mapHudLayout updateButtons];
 }
 
@@ -969,7 +969,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
         {
-            if (obj == buttonState.statePref || obj == buttonState.quickActionsPref)
+            if (obj == buttonState.statePref || obj == [buttonState storedCornerRadiusPref] || obj == [buttonState storedOpacityPref] || obj == [buttonState storedSizePref] || obj == [buttonState storedIconPref] || obj == buttonState.quickActionsPref)
             {
                 isQuickAction = YES;
                 break;

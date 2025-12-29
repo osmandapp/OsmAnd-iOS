@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithMapHudViewController:(OAMapHudViewController *)mapHudController;
 
 - (void)updateViewVisibility;
-- (void)updateMap3dModeButtonAppearance;
+- (void)updateButtonsAppearance;
 - (BOOL)isActionSheetVisible;
 - (BOOL)isQuickActionButtonVisible;
 - (void)hideActionsSheetAnimated:(void (^ _Nullable)(void))completion;

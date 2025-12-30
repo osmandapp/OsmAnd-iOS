@@ -260,14 +260,8 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupMap3dModeButtonVisibility];
         [_map3dModeFloatingButton updateColorsForPressedState: NO];
-        NSString *iconName = [[_map3DButtonState storedIconPref] get];
-        BOOL isIconNameEmpty = !iconName || iconName.length == 0;
-        BOOL is3DMode = [OAMapViewTrackingUtilities.instance is3DMode];
-        UIImage *iconImage = [UIImage templateImageNamed:isIconNameEmpty ? (is3DMode ? @"ic_custom_2d" : @"ic_custom_3d") : iconName];
-        if (!iconImage)
-            iconImage = [OAUtilities getMxIcon:iconName];
-        [_map3dModeFloatingButton setImage:iconImage forState:UIControlStateNormal];
-        _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(is3DMode ? @"map_3d_mode_action" : @"map_2d_mode_action");
+        [_map3dModeFloatingButton setImage:[_map3DButtonState previewIcon] forState:UIControlStateNormal];
+        _map3dModeFloatingButton.accessibilityLabel = OALocalizedString([OAMapViewTrackingUtilities.instance is3DMode] ? @"map_3d_mode_action" : @"map_2d_mode_action");
         Map3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
         _map3dModeFloatingButton.accessibilityValue = [Map3DModeVisibilityWrapper getTitleForType:map3DMode];
     });
@@ -534,6 +528,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
         [self updateQuickActionButtonColors:quickActionButton];
     [_map3dModeFloatingButton setCustomAppearanceParams:[_map3DButtonState createAppearanceParams]];
+    [self onMap3dModeUpdated];
 }
 
 - (void)setupQuickActionBtnVisibility:(OAHudButton *)quickActionButton

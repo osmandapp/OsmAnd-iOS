@@ -80,6 +80,8 @@
 - (void)updateDependentButtonsVisibility;
 - (void)updateCompassButton;
 
+- (BOOL)isLocationAvailable;
+
 - (BOOL) needsSettingsForWeatherToolbar;
 - (void) changeWeatherToolbarVisible;
 - (void) hideWeatherToolbarIfNeeded;

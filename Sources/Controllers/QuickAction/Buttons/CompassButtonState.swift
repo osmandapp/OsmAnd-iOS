@@ -36,7 +36,7 @@ final class CompassButtonState: MapButtonState {
         localizedString("key_event_action_change_map_orientation")
     }
     
-    override func getPreviewIcon() -> UIImage? {
+    override func previewIcon() -> UIImage? {
         let iconName = storedIconPref().get()
         if !iconName.isEmpty && iconName != defaultPreviewIconName() {
             var icon = UIImage.templateImageNamed(iconName)

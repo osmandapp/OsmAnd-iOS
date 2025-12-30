@@ -688,20 +688,14 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     [self updateMapSettingsButton];
     [self updateCompassButton];
-
-    [_searchButton setImage:[UIImage imageNamed:@"ic_custom_search"] forState:UIControlStateNormal];
-    [_searchButton updateColorsForPressedState:NO];
     
-    [_zoomInButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_in"] forState:UIControlStateNormal];
-    [_zoomOutButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_out"] forState:UIControlStateNormal];
+    [_searchButton updateColorsForPressedState:NO];
     [_zoomInButton updateColorsForPressedState:NO];
     [_zoomOutButton updateColorsForPressedState:NO];
 
     [self updateMapModeButton];
 
-    [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];
-    _optionsMenuButton.layer.cornerRadius = 6;
 
     [_floatingButtonsController updateColors];
     [self.rulerLabel updateColors];
@@ -718,7 +712,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     });
 }
 
-- (BOOL) isLocationAvailable
+- (BOOL)isLocationAvailable
 {
     return _app.locationServices.lastKnownLocation && _app.locationServices.status == OALocationServicesStatusActive && !_app.locationServices.denied;
 }
@@ -731,13 +725,14 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) updateMapModeButton
 {
+    UIImage *iconImage = [[[OAMapButtonsHelper sharedInstance] getMyLocationButtonState] previewIcon];
     if ([self isLocationAvailable])
     {
         switch (_app.mapMode)
         {
             case OAMapModeFree: // Free mode
             {
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_position"] forState:UIControlStateNormal];
+                [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
                 _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_active);
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_active);
                 _mapModeButton.tintColorDay = UIColor.whiteColor;
@@ -749,7 +744,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 
             case OAMapModePositionTrack: // Trace point
             {
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_position"] forState:UIControlStateNormal];
+                [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
                 _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
                 _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
@@ -766,7 +761,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     }
     else
     {
-        [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_free"] forState:UIControlStateNormal];
+        [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
         _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
         _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
         _mapModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
@@ -1046,6 +1041,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     [self updateMapButtonVisibility:button showButton:showButton];
     [self updateMapButtonAppearance:button appearanceParams:appearanceParams];
+    [self updateColors];
     [_mapHudLayout updateButtons];
 }
 
@@ -1175,18 +1171,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     OACommonInteger *rotateMap = _settings.rotateMap;
     BOOL showCompass = [self shouldShowCompass];
-    NSString *iconName = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] createAppearanceParams].iconName;
-    if (iconName && iconName.length > 0)
-    {
-        UIImage *iconImage = [UIImage imageNamed:iconName];
-        if (!iconImage)
-            iconImage = [OAUtilities getMxIcon:iconName];
-        _compassImage.image = iconImage;
-    }
-    else
-    {
-        _compassImage.image = [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[rotateMap get] isLightMode:!_settings.nightMode]];
-    }
+    _compassImage.image = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] previewIcon];
     
     if ([rotateMap get] == ROTATE_MAP_NONE)
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_north_opt");
@@ -1867,7 +1852,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) updateMapSettingsButton
 {
     OAApplicationMode *mode = [_settings.applicationMode get];
-    [_mapSettingsButton setImage:mode.getIcon forState:UIControlStateNormal];
+    UIImage *storedIconImage = [[[OAMapButtonsHelper sharedInstance] getConfigureMapButtonState] previewIcon];
+    [_mapSettingsButton setImage:storedIconImage forState:UIControlStateNormal];
     _mapSettingsButton.tintColorDay = [mode getProfileColor];
     _mapSettingsButton.tintColorNight = [mode getProfileColor];
     [_mapSettingsButton updateColorsForPressedState:NO];
@@ -1960,23 +1946,24 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) updateRouteButton:(BOOL)routePlanningMode followingMode:(BOOL)followingMode
 {
+    UIImage *navigationIconImage = [[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] previewIcon];
     if (followingMode)
     {
-        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
+        [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else if (routePlanningMode)
     {
-        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
+        [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else
     {
-        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
+        [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
         _driveModeButton.accessibilityValue = nil;

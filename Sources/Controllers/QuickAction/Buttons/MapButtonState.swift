@@ -96,7 +96,7 @@ open class MapButtonState: NSObject {
         fatalError("default icon has no name")
     }
     
-    func getPreviewIcon() -> UIImage? {
+    func previewIcon() -> UIImage? {
         getIcon()
     }
     

@@ -21,7 +21,7 @@ final class MyLocationButtonState: SwitchVisibilityMapButtonState {
     }
     
     override func defaultIconName() -> String {
-        "ic_custom_map_location_position"
+        OARootViewController.instance().mapPanel.hudViewController?.isLocationAvailable() == true ? "ic_custom_map_location_position" : "ic_custom_map_location_free"
     }
     
     override func buttonDescription() -> String {

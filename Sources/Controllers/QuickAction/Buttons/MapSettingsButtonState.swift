@@ -10,7 +10,9 @@
 final class MapSettingsButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.layers"
     
-    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
+    lazy var visibilityPref: OACommonBoolean = settings.registerBooleanPreference("\(id)_state", defValue: true)
+    
+    private let settings = OAAppSettings.sharedManager()
     
     init() {
         super.init(withId: Self.hudId)
@@ -21,7 +23,8 @@ final class MapSettingsButtonState: SwitchVisibilityMapButtonState {
     }
     
     override func defaultIconName() -> String {
-        "ic_custom_overlay_map"
+        let mode = settings.applicationMode.get()
+        return mode.getIconName()
     }
     
     override func buttonDescription() -> String {

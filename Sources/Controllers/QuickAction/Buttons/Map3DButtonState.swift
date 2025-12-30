@@ -35,7 +35,7 @@ final class Map3DButtonState: MapButtonState {
         getVisibility().iconName
     }
     
-    override func getPreviewIcon() -> UIImage? {
+    override func previewIcon() -> UIImage? {
         let iconName = storedIconPref().get()
         if !iconName.isEmpty && iconName != defaultPreviewIconName() {
             var icon = UIImage.templateImageNamed(iconName)
@@ -49,7 +49,7 @@ final class Map3DButtonState: MapButtonState {
     }
     
     override func defaultPreviewIconName() -> String {
-        "ic_custom_3d"
+        OAMapViewTrackingUtilities.instance().is3DMode() ? "ic_custom_2d" : "ic_custom_3d"
     }
     
     override func buttonDescription() -> String {

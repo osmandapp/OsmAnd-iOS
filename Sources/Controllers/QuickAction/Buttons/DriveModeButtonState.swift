@@ -21,7 +21,7 @@ final class DriveModeButtonState: SwitchVisibilityMapButtonState {
     }
     
     override func defaultIconName() -> String {
-        "ic_custom_navigation"
+        OARoutingHelper.sharedInstance().isFollowingMode() ? "ic_custom_navigation_arrow" : "ic_custom_navigation"
     }
     
     override func buttonDescription() -> String {

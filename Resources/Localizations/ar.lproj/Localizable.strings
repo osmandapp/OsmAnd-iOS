@@ -3825,3 +3825,16 @@
 "shared_string_last_downhill" = "آخر انحدار";
 "obd_alt_battery_voltage" = "جهد المحول";
 "liter_single" = "لتر";
+"kilometers" = "كيلومتر";
+"miles" = "ميل";
+"mpg" = "MPG";
+"copy_as_new_folder" = "نسخ كمجلد جديد";
+"add_to_a_folder" = "إضافة إلى مجلد";
+"add_to_favorites" = "إضافة إلى المفضلة";
+"max_weight_at_full_load_description" = "قم بتحديد أقصى وزن مسموح به لسيارتك عند التحميل الكامل لتجنب الطرق والجسور التي تفرض قيودًا على الوزن.";
+"max_axle_load_description" = "قم بتوفير أقصى حمولة لمحور سيارتك لتجنب الطرق والجسور ذات حدود الوزن.";
+"imperial_gallon" = "جالون امبراطوري";
+"us_gallon" = "جالون أمريكي";
+"map_orientations_choose_description" = "اترك هذا الحقل فارغًا للتبديل بين جميع الأوضاع المتاحة، أو أضف الأوضاع التي تفضلها فقط.";
+"map_orientations" = "اتجاهات الخريطة";
+"altitude_metrics_description" = "يحدد وحدة عرض الارتفاع في الأدوات والإحصائيات.";

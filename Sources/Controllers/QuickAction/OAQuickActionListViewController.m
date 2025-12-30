@@ -25,7 +25,7 @@
 #define kEnableSection 0
 #define kRowsPerSection 6
 
-@interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
+@interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate, OASettingsDataDelegate>
 
 @property (nonatomic) QuickActionButtonState *buttonState;
 @property (nonatomic) OAMapButtonsHelper *mapButtonsHelper;
@@ -100,6 +100,16 @@
 
         __weak __typeof(self) weakSelf = self;
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+        UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_appearance")
+                                                         image:[UIImage imageNamed:@"ic_custom_appearance_outlined"]
+                                                    identifier:nil
+                                                       handler:^(UIAction * _Nonnull action) {
+            MapButtonAppearanceViewController *vc = [[MapButtonAppearanceViewController alloc] init];
+            vc.delegate = self;
+            vc.mapButtonState = _buttonState;
+            [weakSelf showViewController:vc];
+        }];
+        appearanceAction.accessibilityLabel = appearanceAction.title;
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
                                                      image:[UIImage systemImageNamed:@"square.and.pencil"]
                                                 identifier:nil
@@ -142,6 +152,8 @@
         }];
 
         renameAction.accessibilityLabel = renameAction.title;
+        
+        [menuElements addObject:appearanceAction];
         [menuElements addObject:renameAction];
 
         UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
@@ -556,6 +568,13 @@
     [self reloadDataWithAnimated:YES completion:nil];
     if (self.delegate)
         [self.delegate onWidgetStateChanged];
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void)onSettingsChanged;
+{
+    [self updateData];
 }
 
 @end

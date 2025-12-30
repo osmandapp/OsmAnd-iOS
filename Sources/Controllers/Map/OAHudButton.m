@@ -10,10 +10,12 @@
 #import "OAAppSettings.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAHudButton
 {
     NSInteger _id;
+    ButtonAppearanceParams *_customAppearanceParams;
 }
 
 - (instancetype)init
@@ -75,6 +77,7 @@
         self.backgroundColor = isNight ? self.pressedColorNight : self.pressedColorDay;
     else
         self.backgroundColor = isNight ? self.unpressedColorNight : self.unpressedColorDay;
+    self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self getOpacity]];
 
     self.tintColor = isNight ? self.tintColorNight : self.tintColorDay;
     
@@ -86,6 +89,124 @@
 {
     _buttonState = buttonState;
     [self updatePositions];
+}
+
+- (ButtonAppearanceParams *)createDefaultAppearanceParams
+{
+    return [[ButtonAppearanceParams alloc] initWithIconName:@"ic_custom_quick_action" size:MapButtonState.defaultSizeDp opacity:MapButtonState.opaqueAlpha cornerRadius:MapButtonState.roundRadiusDp];
+}
+
+- (void)setCustomAppearanceParams:(ButtonAppearanceParams *)customAppearanceParams
+{
+    _customAppearanceParams = customAppearanceParams;
+    [self updateContent];
+}
+
+- (void)updateContent
+{
+    [self updateIcon];
+    [self updateBackground];
+    [self updateCornerRadius];
+    [self updateSize];
+    [self updateShadow];
+}
+
+- (void)updateIcon
+{
+    NSString *iconName = _customAppearanceParams != nil ? _customAppearanceParams.iconName : nil;
+    
+    UIImage *image;
+    if (iconName && iconName.length > 0 && ![_customAppearanceParams.iconName isEqualToString:[self createDefaultAppearanceParams].iconName])
+    {
+        image = [UIImage imageNamed:iconName];
+        if (!image)
+            image = [OAUtilities getMxIcon:[iconName lowercaseString]];
+    }
+    else if (_buttonState)
+    {
+        image = _customAppearanceParams != nil && (iconName == nil || iconName.length == 0) ? [UIImage imageNamed:[_buttonState defaultPreviewIconName]] : [_buttonState previewIcon];
+    }
+    else
+    {
+        image = [UIImage imageNamed:[self createDefaultAppearanceParams].iconName];
+    }
+    [self setImage:image forState:UIControlStateNormal];
+}
+
+- (void)updateBackground
+{
+    self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self getOpacity]];
+}
+
+- (void)updateCornerRadius
+{
+    self.layer.cornerRadius = [self getCornerRadius];
+}
+
+- (void)updateShadow
+{
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds
+                                                          cornerRadius:self.layer.cornerRadius];
+    self.layer.shadowPath = shadowPath.CGPath;
+}
+
+- (void)updateSize
+{
+    CGFloat size = (CGFloat)[self getSize];
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size, size);
+}
+
+- (NSInteger)getSize
+{
+    NSInteger buttonStateSize = [self createDefaultAppearanceParams].size;
+    if (_buttonState)
+    {
+        float size = [[_buttonState storedSizePref] get];
+        buttonStateSize = size != MapButtonState.originalValue ? size : [_buttonState defaultSize];
+    }
+    if (_customAppearanceParams)
+    {
+        NSInteger size = _customAppearanceParams.size;
+        return size == MapButtonState.originalValue ? buttonStateSize : size;
+    }
+
+    return buttonStateSize;
+}
+
+- (CGFloat)getOpacity
+{
+    float buttonStateOpacity = [self createDefaultAppearanceParams].opacity;
+    if (_buttonState)
+    {
+        float opacity = [[_buttonState storedOpacityPref] get];
+        buttonStateOpacity = opacity != MapButtonState.originalValue ? opacity : [_buttonState defaultOpacity];
+    }
+    if (_customAppearanceParams)
+    {
+        CGFloat opacity = _customAppearanceParams.opacity;
+        return opacity == MapButtonState.originalValue ? buttonStateOpacity : opacity;
+    }
+
+    return buttonStateOpacity;
+}
+
+- (NSInteger)getCornerRadius
+{
+    NSInteger circleRadius = [self getSize] / 2;
+    NSInteger buttonStateCornerRadius = [self createDefaultAppearanceParams].cornerRadius;
+    if (_buttonState)
+    {
+        NSInteger cornerRadius = [[_buttonState storedCornerRadiusPref] get];
+        buttonStateCornerRadius = cornerRadius != MapButtonState.originalValue ? cornerRadius : [_buttonState defaultCornerRadius];
+    }
+    if (_customAppearanceParams)
+    {
+        NSInteger cornerRadius = _customAppearanceParams.cornerRadius;
+        if (cornerRadius == MapButtonState.originalValue)
+            return buttonStateCornerRadius > circleRadius ? circleRadius : buttonStateCornerRadius;
+        return cornerRadius > circleRadius ? circleRadius : cornerRadius;
+    }
+    return buttonStateCornerRadius > circleRadius ? circleRadius : buttonStateCornerRadius;
 }
 
 - (void)updatePositions

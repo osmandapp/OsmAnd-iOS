@@ -15,6 +15,7 @@ import UIKit
     case iconItems
     case bigIconItems
     case poiIconCategories
+    case baseAppearanceCategories
 }
 
 @objc protocol ColorCollectionViewControllerDelegate: AnyObject {
@@ -57,7 +58,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     var iconCategories = [IconsAppearanceCategory]()
     private var iconItems = [String]()
     private var selectedIconItem: String?
-    private var poiIconHandlers = [IndexPath : PoiIconCollectionHandler]()
+    private var baseIconHandlers = [IndexPath: BaseAppearanceIconCollectionHandler]()
     
     private var chipsCell: OAFoldersCell?
     private var chipsCellScrollState: OACollectionViewCellState?
@@ -109,7 +110,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 self.iconItems = icons
                 self.selectedIconItem = selectedItem as? String
             }
-        case .poiIconCategories:
+        case .poiIconCategories, .baseAppearanceCategories:
             if let categories = items as? [IconsAppearanceCategory] {
                 self.iconCategories = categories
                 self.selectedIconItem = selectedItem as? String
@@ -142,7 +143,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     override func registerCells() {
         switch collectionType {
-        case .colorItems, .iconItems, .bigIconItems, .poiIconCategories:
+        case .colorItems, .iconItems, .bigIconItems, .poiIconCategories, .baseAppearanceCategories:
             tableView.register(UINib(nibName: OACollectionSingleLineTableViewCell.reuseIdentifier, bundle: nil),
                                forCellReuseIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier)
             tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil),
@@ -169,7 +170,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         switch collectionType {
         case .colorizationPaletteItems,
              .terrainPaletteItems,
-             .poiIconCategories where inSearchMode:
+             .poiIconCategories,
+             .baseAppearanceCategories where inSearchMode:
             tableView.separatorStyle = .singleLine
         default:
             tableView.separatorStyle = .none
@@ -189,7 +191,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     tableView.scrollToRow(at: selectedIndexPath, at: .middle, animated: true)
                 }
             }
-        } else if collectionType == .poiIconCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
             setupSearch()
         }
     }
@@ -202,7 +204,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             return localizedString("shared_string_all_colors")
         case .iconItems, .bigIconItems:
             return localizedString("shared_string_all_icons")
-        case .poiIconCategories:
+        case .poiIconCategories, .baseAppearanceCategories:
             return localizedString("select_icon_profile_dialog_title")
         }
     }
@@ -217,9 +219,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 addButton.accessibilityLabel = localizedString("shared_string_add_color")
                 return [addButton]
             }
-        } else if collectionType == .poiIconCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
             if  !inSearchMode,
-                let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
+                let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler,
                 let menu = poiIconsDelegate.buildTopButtonContextMenu(),
                 let categoriesButton = createRightNavbarButton(nil, iconName: "ic_navbar_list", action: nil, menu: menu) {
                 return [categoriesButton]
@@ -247,7 +249,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 iconNamesKey: iconItems
             ])
             colorCollectionIndexPath = IndexPath(row: Int(section.rowCount()) - 1, section: Int(data.sectionCount()) - 1)
-        } else if collectionType == .poiIconCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
             
             if inSearchMode {
                 tableView.separatorStyle = .singleLine
@@ -265,7 +267,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 }
             } else {
                 tableView.separatorStyle = .none
-                if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                if let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler {
                     selectedChipsIndex = iconCategories.firstIndex(where: { $0.key == poiIconsDelegate.selectedCatagoryKey }) ?? 0
                 }
                 var chipsValues = [[String: String]]()
@@ -308,10 +310,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler, section == 0 {
-            return 14
-        }
-        return super.getCustomHeight(forHeader: section)
+        iconsDelegate is BaseAppearanceIconCollectionHandler && section == 0 ? 14 : super.getCustomHeight(forHeader: section)
     }
     
     private func generateRowData(for paletteColor: PaletteColor) -> OATableRowData {
@@ -357,7 +356,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier, for: indexPath) as? OACollectionSingleLineTableViewCell {
                 if collectionType == .colorItems {
                     setupColorCollectionCell(cell)
-                } else if collectionType == .iconItems || collectionType == .bigIconItems || collectionType == .poiIconCategories {
+                } else if collectionType == .iconItems || collectionType == .bigIconItems || collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
                     
                     if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String],
                        let selectedIndex = item.obj(forKey: chipsSelectedIndexKey) as? Int {
@@ -434,7 +433,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             cell.collectionView.reloadData()
             
             return cell
-        } 
+        }
         
         return UITableViewCell()
     }
@@ -465,30 +464,37 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupIconCollectionCell(_ cell: OACollectionSingleLineTableViewCell, indexPath: IndexPath, iconNames: [String], poiCategoryKey: String?) {
-        if self.collectionType == .poiIconCategories {
-            let poiIconHandler = PoiIconCollectionHandler()
-            poiIconHandler.delegate = self
-            poiIconHandler.hostVC = self
-            poiIconHandlers[indexPath] = poiIconHandler
-            poiIconHandler.selectedIconColor = selectedIconColor
-            poiIconHandler.regularIconColor = regularIconColor
-            poiIconHandler.setScrollDirection(.vertical)
-            poiIconHandler.setItemSize(size: 48)
-            poiIconHandler.setIconBackgroundSize(size: 36)
-            poiIconHandler.setIconSize(size: 24)
-            poiIconHandler.setSpacing(spacing: 10)
+        if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
+            var iconHandler: BaseAppearanceIconCollectionHandler
+            if let customIconKeys = iconCategories.first(where: { $0.key == ButtonAppearanceIconCollectionHandler.customKey })?.iconKeys, collectionType == .baseAppearanceCategories {
+                iconHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: customIconKeys)
+            } else {
+                iconHandler = PoiIconCollectionHandler()
+            }
+            iconHandler.delegate = self
+            iconHandler.hostVC = self
+            baseIconHandlers[indexPath] = iconHandler
+            iconHandler.selectedIconColor = selectedIconColor
+            iconHandler.regularIconColor = regularIconColor
+            iconHandler.setScrollDirection(.vertical)
+            iconHandler.setItemSize(size: 48)
+            iconHandler.setIconBackgroundSize(size: 36)
+            iconHandler.setIconSize(size: 24)
+            iconHandler.setSpacing(spacing: 10)
             
-            poiIconHandler.roundedSquareCells = false
-            poiIconHandler.innerViewCornerRadius = -1
+            iconHandler.roundedSquareCells = false
+            iconHandler.innerViewCornerRadius = -1
             if let poiCategoryKey {
-                poiIconHandler.addProfileIconsCategoryIfNeeded(categoryKey: poiCategoryKey)
-                poiIconHandler.selectCategory(poiCategoryKey)
+                if let poiIconHandler = iconHandler as? PoiIconCollectionHandler {
+                    poiIconHandler.addProfileIconsCategoryIfNeeded(categoryKey: poiCategoryKey)
+                }
+                iconHandler.selectCategory(poiCategoryKey)
             }
             if let selectedIconItem, let selectedIndex = iconNames.firstIndex(of: selectedIconItem) {
-                poiIconHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+                iconHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             }
-            poiIconHandler.setCollectionView(cell.collectionView)
-            cell.setCollectionHandler(poiIconHandler)
+            iconHandler.setCollectionView(cell.collectionView)
+            cell.setCollectionHandler(iconHandler)
             cell.disableAnimationsOnStart = true
         } else {
             if let iconHandler = IconCollectionHandler(data: [iconNames], collectionView: cell.collectionView) {
@@ -548,9 +554,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 delegate?.selectPaletteItem(palette)
             }
             dismissWith(animated: true)
-        } else if collectionType == .poiIconCategories && inSearchMode {
+        } else if (collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories) && inSearchMode {
             if let searchIconName = item.iconName,
-                let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
+                let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler {
                 selectedIconItem = searchIconName
                 poiIconsDelegate.setIconName(searchIconName)
                 poiIconsDelegate.selectIconName(searchIconName)
@@ -865,12 +871,12 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
             if let selectedIconItem {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
-        } else if collectionType == .poiIconCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
             let chipsTitles = iconCategories.map { $0.translatedName }
-            if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler,
+            if let baseIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler,
                let selectedName = selectedItem as? String {
                 
-                for handler in poiIconHandlers.values {
+                for handler in baseIconHandlers.values {
                     if !handler.iconNamesData.isEmpty,
                        let selectedIndex = handler.iconNamesData[0].firstIndex(of: selectedName) {
                         let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
@@ -882,9 +888,9 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 }
                 
                 selectedIconItem = selectedName
-                poiIconsDelegate.setIconName(selectedName)
-                poiIconsDelegate.selectIconName(selectedName)
-                poiIconsDelegate.allIconsVCDelegate = nil
+                baseIconsDelegate.setIconName(selectedName)
+                baseIconsDelegate.selectIconName(selectedName)
+                baseIconsDelegate.allIconsVCDelegate = nil
             }
         } else {
             selectedColorItem = colorCollectionHandler?.getSelectedItem()
@@ -997,7 +1003,7 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
                 delegate.changeColorItem(editingColor, withColor: viewController.selectedColor)
                 if let editColorIndexPath {
                     colorCollectionHandler?.replaceOldColor(editColorIndexPath)
-                } 
+                }
             }
             delegate.selectColorItem(editingColor)
         }
@@ -1023,14 +1029,13 @@ extension ItemsCollectionViewController: PoiIconsCollectionViewControllerDelegat
     }
     
     func scrollToIndex(_ index: Int) {
-        if let poiIconsDelegate = iconsDelegate as? PoiIconCollectionHandler {
-            poiIconsDelegate.selectedCatagoryKey = iconCategories[index].key
-            selectedChipsIndex = index
-            generateData()
-            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-            tableView.scrollToRow(at: IndexPath(row: 0, section: index + 1), at: .top, animated: true)
-            tableView.layoutIfNeeded()
-        }
+        guard let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler else { return }
+        poiIconsDelegate.selectedCatagoryKey = iconCategories[index].key
+        selectedChipsIndex = index
+        generateData()
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        tableView.scrollToRow(at: IndexPath(row: 0, section: index + 1), at: .top, animated: true)
+        tableView.layoutIfNeeded()
     }
 }
 

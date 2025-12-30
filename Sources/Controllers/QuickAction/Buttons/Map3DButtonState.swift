@@ -31,8 +31,29 @@ final class Map3DButtonState: MapButtonState {
         getVisibility() != .hidden
     }
 
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed(getVisibility().iconName)
+    override func defaultIconName() -> String {
+        getVisibility().iconName
+    }
+    
+    override func previewIcon() -> UIImage? {
+        let iconName = storedIconPref().get()
+        if !iconName.isEmpty && iconName != defaultPreviewIconName() {
+            var icon = UIImage.templateImageNamed(iconName)
+            if icon == nil {
+                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            }
+            return icon
+        } else {
+            return UIImage.templateImageNamed(defaultPreviewIconName())
+        }
+    }
+    
+    override func defaultPreviewIconName() -> String {
+        OAMapViewTrackingUtilities.instance().is3DMode() ? "ic_custom_2d" : "ic_custom_3d"
+    }
+    
+    override func buttonDescription() -> String {
+        localizedString("map_3d_mode_action_descr")
     }
     
     override func updatePosition(_ position: ButtonPositionSize) {
@@ -45,6 +66,15 @@ final class Map3DButtonState: MapButtonState {
     
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_RIGHT, posV: ButtonPositionSize.companion.POS_BOTTOM, xMove: true, yMove: true)
+    }
+    
+    override func storedVisibilityPref() -> OACommonInteger {
+        visibilityPref
+    }
+    
+    override func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        super.copyForMode(from: fromMode, to: toMode)
+        visibilityPref.set(getVisibility(fromMode).rawValue, mode: toMode)
     }
 
     func getVisibility() -> Map3DModeVisibility {

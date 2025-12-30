@@ -265,11 +265,11 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
 
 // MARK: - SegmentButtonsSliderTableViewCellDelegate
 extension ProfileAppearanceIconSizeViewController: SegmentButtonsSliderTableViewCellDelegate {
-    func onPlusTapped(_ selectedMark: Int) {
+    func onPlusTapped(_ selectedMark: Int, sender: UISlider) {
         setCurrentIconSize(selectedMark)
     }
     
-    func onMinusTapped(_ selectedMark: Int) {
+    func onMinusTapped(_ selectedMark: Int, sender: UISlider) {
         setCurrentIconSize(selectedMark)
     }
 }

@@ -7,26 +7,18 @@
 //
 
 @objcMembers
-final class PoiIconCollectionHandler: IconCollectionHandler {
-    
+final class PoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
     static var cachedCategories = [IconsAppearanceCategory]()
     static var cachedCategoriesByKeyName = [String: IconsAppearanceCategory]()
     
-    var categories = [IconsAppearanceCategory]()
-    var categoriesByKeyName = [String: IconsAppearanceCategory]()
-    var selectedCatagoryKey = ""
     var lastUsedIcons = [String]()
     var groupIcons = [String]()
     var profileIcons = [String]()
     var isFavoriteList = false
-    weak var allIconsVCDelegate: PoiIconsCollectionViewControllerDelegate?
     
     private let LAST_USED_ICONS_LIMIT = 12
     private let POI_CATEGORIES_FILE = "poi_categories.json"
     private let ORIGINAL_KEY = "original"
-    private let LAST_USED_KEY = "last_used_icons"
-    private let SPECIAL_KEY = "special"
-    private let SYMBOLS_KEY = "symbols"
     private let ACTIVITIES_KEY = "activities"
     private let PROFILE_ICONS_KEY = "profile_icons"
     private let SAMPLE_ICON_KEY = "ic_sample"
@@ -42,13 +34,13 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         setup()
     }
     
-    private func setup() {
-        initIconCategories()
-        setScrollDirection(.horizontal)
-        selectCategory(categoriesByKeyName.keys.contains(LAST_USED_KEY) ? LAST_USED_KEY : SPECIAL_KEY)
+    override func setup() {
+        super.setup()
+        collectionType = .poiIconCategories
+        selectCategory(categoriesByKeyName.keys.contains(lastUsedKey) ? lastUsedKey : specialKey)
     }
     
-    func initIconCategories() {
+    override func initIconCategories() {
         if Self.cachedCategories.isEmpty {
             initOriginalCategory()
             initAssetsCategories()
@@ -73,7 +65,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
     }
     
-    func setIconName(_ iconName: String) {
+    override func setIconName(_ iconName: String) {
         guard !iconName.isEmpty else { return }
         for category in categories {
             if allIconsVCDelegate == nil && isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
@@ -93,35 +85,11 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
         addIconToLastUsed(iconName)
         setSelectedIndexPath(IndexPath(row: 0, section: 0))
-        selectCategory(LAST_USED_KEY)
-    }
-    
-    override func getSelectedItem() -> Any {
-        if let category = categoriesByKeyName[selectedCatagoryKey],
-           let indexPath = getSelectedIndexPath() {
-           return category.iconKeys[indexPath.row]
-        }
-        return ""
+        selectCategory(lastUsedKey)
     }
     
     func categoryNames() -> [String] {
         categories.map { $0.key }
-    }
-    
-    func selectCategory(_ categoryKey: String) {
-        guard !categoryKey.isEmpty else { return }
-        
-        selectedCatagoryKey = categoryKey
-        
-        if let category = categoriesByKeyName[categoryKey] {
-            generateData([category.iconKeys])
-            updateHostCellIfNeeded()
-            if let hostCell {
-                handlerDelegate?.onCategorySelected(categoryKey, with: hostCell)
-            }
-            getCollectionView()?.reloadData()
-            return
-        }
     }
     
     private func initOriginalCategory() {
@@ -129,53 +97,11 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func initLastUsedCategory() {
-        guard !categories.contains(where: { $0.key == LAST_USED_KEY }), !OAAppSettings.sharedManager().lastUsedFavIcons.get().isEmpty else { return }
+        guard !categories.contains(where: { $0.key == lastUsedKey }), !OAAppSettings.sharedManager().lastUsedFavIcons.get().isEmpty else { return }
         lastUsedIcons = OAAppSettings.sharedManager().lastUsedFavIcons.get()
-        let category = IconsAppearanceCategory(key: LAST_USED_KEY, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+        let category = IconsAppearanceCategory(key: lastUsedKey, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
         categories.append(category)
-        categoriesByKeyName[LAST_USED_KEY] = category
-    }
-    
-    private func initAssetsCategories() {
-        readCategoriesFromAssets([SPECIAL_KEY, SYMBOLS_KEY])
-    }
-    
-    private func initActivitiesCategory() {
-        var iconKeys = [String]()
-        RouteActivityHelper().getActivities().forEach {
-            if shouldAppend(iconName: $0.iconName, toIconsList: iconKeys) {
-                iconKeys.append($0.iconName)
-            }
-        }
-        if !iconKeys.isEmpty {
-            let translatedName = localizedString("shared_string_activity")
-            categories.append(IconsAppearanceCategory(key: ACTIVITIES_KEY, translatedName: translatedName, iconKeys: iconKeys))
-        }
-    }
-    
-    private func initPoiCategories() {
-        if let poiCategories = OAPOIHelper.sharedInstance().poiCategories {
-            for poiCategory in poiCategories {
-                guard !["access_private", "osmwiki", "user_defined_other"].contains(poiCategory.name) else { continue }
-                if var poiTypeList = poiCategory.poiTypes {
-                    poiTypeList.sort { $0.nameLocalized < $1.nameLocalized }
-                    var iconKeys = [String]()
-                    for poiType in poiTypeList {
-                        if let iconName = poiType.iconName(),
-                           shouldAppend(iconName: iconName, toIconsList: iconKeys) {
-                            iconKeys.append(iconName)
-                        }
-                    }
-                    if !iconKeys.isEmpty {
-                        categories.append(IconsAppearanceCategory(key: poiCategory.name, translatedName: poiCategory.nameLocalized, iconKeys: iconKeys))
-                    }
-                }
-            }
-        }
-    }
-    
-    private func shouldAppend(iconName: String, toIconsList iconsList: [String]) -> Bool {
-        !iconsList.contains(iconName) && iconName != SAMPLE_ICON_KEY && OASvgHelper.hasMxMapImageNamed(iconName)
+        categoriesByKeyName[lastUsedKey] = category
     }
     
     func addProfileIconsCategoryIfNeeded(categoryKey: String) {
@@ -244,50 +170,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
     }
     
     private func sortCategories() {
-        categories.sort { a, b in
-            if a.isTopCategory && !b.isTopCategory {
-                return true
-            } else if !a.isTopCategory && b.isTopCategory {
-                return false
-            }
-            return a.translatedName < b.translatedName
-        }
-        
-        if let index = categories.firstIndex(where: { $0.key == ORIGINAL_KEY }) {
-            let original = categories.remove(at: index)
-            categories.insert(original, at: 0)
-        }
-    }
-    
-    private func readCategoriesFromAssets(_ categoriesKeys: [String]) {
-        if let json = parsePoiCategoriesJson() {
-            for categoryKey in categoriesKeys {
-                if let iconsKeys = json.categories[categoryKey], !iconsKeys.icons.isEmpty {
-                    let translatedName = localizedString("icon_group_" + categoryKey)
-                    categories.append(IconsAppearanceCategory(key: categoryKey, translatedName: translatedName, iconKeys: iconsKeys.icons, isTopCategory: categoryKey == SPECIAL_KEY))
-                }
-            }
-        }
-    }
-    
-    private func parsePoiCategoriesJson() -> Categories? {
-        if let path = Bundle.main.path(forResource: "poi_categories", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                let decoder = JSONDecoder()
-                if let parsedData = try? decoder.decode(Categories.self, from: data) {
-                    return parsedData
-                }
-            } catch {
-            }
-        }
-        return nil
-    }
-    
-    private func updateMenuElements(_ menuElements: inout [UIMenuElement], with category: IconsAppearanceCategory) {
-        menuElements.append(UIAction(title: category.translatedName, image: nil, identifier: nil, handler: { [weak self] _ in
-            self?.onMenuItemSelected(name: category.key)
-        }))
+        sortCategoriesAndMoveKeyUp(ORIGINAL_KEY)
     }
     
     override func buildTopButtonContextMenu() -> UIMenu? {
@@ -295,7 +178,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         var bottomMenuElements = [UIMenuElement]()
         
         for category in categories {
-            if category.key == ORIGINAL_KEY || category.key == LAST_USED_KEY || (!isFavoriteList && category.key == SPECIAL_KEY) {
+            if category.key == ORIGINAL_KEY || category.key == lastUsedKey || (!isFavoriteList && category.key == specialKey) {
                 updateMenuElements(&topMenuElements, with: category)
             } else {
                 updateMenuElements(&bottomMenuElements, with: category)
@@ -307,7 +190,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         return UIMenu(title: "", children: [topMenu, bottomMenu])
     }
     
-    func onMenuItemSelected(name: String) {
+    override func onMenuItemSelected(name: String) {
         guard !name.isEmpty else { return }
         
         if let allIconsVCDelegate {
@@ -320,33 +203,9 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         }
     }
     
-    func updateHostCellIfNeeded() {
-        updateTopButtonName()
-        updateHostCellIfOriginalCategory(selectedCatagoryKey == ORIGINAL_KEY)
-    }
-    
-    private func updateHostCellIfOriginalCategory(_ isOriginal: Bool) {
-        guard let hostCell else { return }
-        hostCell.collectionStackViewVisibility(!isOriginal)
-        hostCell.descriptionLabelStackView.isHidden = !isOriginal
-        hostCell.bottomButtonStackView.isHidden = isOriginal
-        hostCell.underTitleView.isHidden = isOriginal
-        hostCell.separatorOffsetViewWidth.constant = isOriginal ? 20 : .zero
-    }
-    
-    func updateTopButtonName() {
-        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold)
-        if let category = categoriesByKeyName[selectedCatagoryKey],
-           var iconImage = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: config) {
-            iconImage = iconImage.withRenderingMode(.alwaysTemplate)
-            let attachment = NSTextAttachment()
-            attachment.image = iconImage
-            let imageString = NSAttributedString(attachment: attachment)
-            
-            let attributedString = NSMutableAttributedString(string: category.translatedName + " ")
-            attributedString.append(imageString)
-            hostCell?.topButton.setAttributedTitle(attributedString, for: .normal)
-        }
+    override func updateHostCellIfNeeded() {
+        super.updateHostCellIfNeeded()
+        updateHostCellIfNoIconCategory(selectedCatagoryKey == ORIGINAL_KEY)
     }
     
     func addIconToLastUsed(_ iconKey: String) {
@@ -359,13 +218,13 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
         if lastUsedIcons.count > LAST_USED_ICONS_LIMIT {
             lastUsedIcons = Array(lastUsedIcons[0..<LAST_USED_ICONS_LIMIT])
         }
-        if let lastUsedIconsIndex = categories.firstIndex(where: { $0.key == LAST_USED_KEY }) {
+        if let lastUsedIconsIndex = categories.firstIndex(where: { $0.key == lastUsedKey }) {
             categories[lastUsedIconsIndex].iconKeys = lastUsedIcons
         }
         OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
     }
     
-    func loadAllIconsData() {
+    override func loadAllIconsData() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
@@ -392,7 +251,7 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
                 if !brokenIcons.isEmpty {
                     let filteredIcons = category.iconKeys.filter { !brokenIcons.contains($0) }
                     self.categoriesByKeyName[category.key]?.iconKeys = filteredIcons
-                    if category.key == LAST_USED_KEY {
+                    if category.key == lastUsedKey {
                         lastUsedIcons = category.iconKeys
                         OAAppSettings.sharedManager().lastUsedFavIcons.set(lastUsedIcons)
                     }
@@ -401,30 +260,4 @@ final class PoiIconCollectionHandler: IconCollectionHandler {
             }
         }
     }
-    
-    override func openAllIconsScreen() {
-        guard let hostVC else { return }
-        let vc = ItemsCollectionViewController(collectionType: .poiIconCategories, items: categories, selectedItem: getSelectedItem())
-        vc.customTitle = customTitle
-        vc.iconsDelegate = self
-        allIconsVCDelegate = vc
-        if let selectedIconColor {
-            vc.selectedIconColor = selectedIconColor
-        }
-        if let regularIconColor {
-            vc.regularIconColor = regularIconColor
-        }
-        
-        let navController = UINavigationController(rootViewController: vc)
-        navController.modalPresentationStyle = .fullScreen
-        hostVC.present(navController, animated: true)
-    }
-}
-
-private struct Categories: Codable {
-    let categories: [String: Category]
-}
-
-private struct Category: Codable {
-    let icons: [String]
 }

@@ -2293,7 +2293,7 @@
 "shared_string_progress" = "Förlopp";
 "weather_precip_inches" = "Tum";
 "si_nm_mt" = "Nautisk mil/meter";
-"empty_purchases_description" = "Om dina inköp inte visas här, tryck på \"%@\" eller kontakta vår support.";
+"empty_purchases_description" = "Om dina köp inte visas här, tryck på \"%@\" eller kontakta vår support.";
 "use_login_and_password" = "Använd användarnamn och lösenord";
 "recalc_angle_dialog_descr" = "En rak linje mellan min position och den beräknade rutten visas, tills rutten har beräknats om";
 "sign_in_with_open_street_map" = "Logga in på OpenStreetMap";

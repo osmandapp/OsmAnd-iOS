@@ -450,7 +450,7 @@
 "traffic_warning_calming" = "交通稳静化";
 "traffic_warning_speed_camera" = "测速摄像机";
 "traffic_warning" = "交通警告";
-"traffic_warning_railways" = "铁道交口";
+"traffic_warning_railways" = "铁路道口";
 "traffic_warning_hazard" = "危险";
 "route_to" = "到：";
 "route_via" = "途经：";

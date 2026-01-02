@@ -3992,3 +3992,5 @@
 "copy_link" = "Link kopieren";
 "visualizing_button_grid" = "Raster der Karten-Schaltflächen";
 "lang_mi" = "Maori";
+"wind_animation_layer" = "Windanimationsebene";
+"weather_layers" = "Wetterebenen";

@@ -3569,3 +3569,14 @@
 "vertical_exaggeration" = "Κάθετη υπερβολή";
 "vertical_exaggeration_description" = "Αλλάζοντας την τιμή κλίμακας, μπορείτε να τονίσετε το 3D ανάγλυφο.";
 "route_preferred_terrain_any" = "Το προφίλ εδάφους δε λαμβάνεται υπόψη όταν επιλέγεται μια διαδρομή.";
+"lang_mi" = "Μάορι";
+"ble_scanner" = "Σαρωτής BLE";
+"x" = "X (πρώην Twitter)";
+"reconnect" = "Επανασύνδεση";
+"shared_string_release" = "Εκδόθηκε";
+"rendering_attr_watercolor_description" = "Χρώμα του νερού";
+"rendering_attr_hideContours_description" = "Απόκρυψη ισοϋψών βάθους";
+"rendering_attr_hideContours_name" = "Ισοϋψείς βάθους";
+"rendering_attr_hideAreas_description" = "Απόκρυψη περιοχών βάθους";
+"rendering_attr_hideAreas_name" = "Περιοχές βάθους";
+"rendering_attr_watercolor_name" = "Χρώμα νερού";

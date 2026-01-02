@@ -3605,3 +3605,6 @@
 "shared_string_available_until" = "Доступно до";
 "shared_string_updates_size" = "Размер обновлений";
 "shared_string_updates_frequency" = "Частота обновлений";
+"select_tracks" = "Выбрать треки";
+"selected_tracks_count" = "Треки - %d";
+"delete_tracks_bottom_sheet_title" = "Удалить треки?";

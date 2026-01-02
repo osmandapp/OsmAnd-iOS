@@ -284,7 +284,41 @@ int const kZoomToSearchPOI = 16.0;
     return filtered;
 }
 
-- (nullable BaseDetailsObject *)searchDetailedObject:(OAAmenitySearcherRequest *)request
+- (nullable BaseDetailsObject *)searchDetailedObject:(id)object
+{
+    OAAmenitySearcherRequest *request = nil;
+    if ([object isKindOfClass:[OAAmenitySearcherRequest class]])
+    {
+        return [self searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)object];
+    }
+    else if ([object isKindOfClass:[OAMapObject class]])
+    {
+        request = [[OAAmenitySearcherRequest alloc] initWithMapObject:(OAMapObject *)object];
+    }
+    else if ([object isKindOfClass:[BaseDetailsObject class]])
+    {
+        BaseDetailsObject *detailsObject = (BaseDetailsObject *)object;
+        if (detailsObject.isObjectFull)
+        {
+            [self completeGeometry:detailsObject object:detailsObject.objects.firstObject];
+            return detailsObject;
+        }
+        if (!NSArrayIsEmpty(detailsObject.objects))
+        {
+            id obj = detailsObject.objects.firstObject;
+            return [self searchDetailedObject:obj];
+        }
+    }
+
+    BaseDetailsObject *detailsObject = nil;
+    if (request != nil)
+        detailsObject = [self searchDetailedObject:request];
+    
+    [self completeGeometry:detailsObject object:object];
+    return detailsObject;
+}
+
+- (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
 {
     if (request.latLon == nil)
     {
@@ -325,6 +359,51 @@ int const kZoomToSearchPOI = 16.0;
     }
 
     return nil;
+}
+
+- (void) completeGeometry:(BaseDetailsObject *)detailsObject object:(id)object
+{
+    if (!detailsObject)
+        return;
+
+    NSMutableArray<NSNumber *> *xx;
+    NSMutableArray<NSNumber *> *yy;
+
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        OAPOI *amenity = object;
+        xx = amenity.x;
+        yy = amenity.y;
+    }
+    if ([object isKindOfClass:OARenderedObject.class])
+    {
+        OARenderedObject *renderedObject = object;
+        xx = renderedObject.x;
+        yy = renderedObject.y;
+    }
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *base = object;
+        xx = [base syntheticAmenity].x;
+        yy = [base syntheticAmenity].y;
+    }
+
+    if (!NSArrayIsEmpty(xx) && !NSArrayIsEmpty(yy))
+    {
+        [detailsObject setX:xx];
+        [detailsObject setY:yy];
+    }
+    else
+    {
+        //TODO: implement?
+//        List<BinaryMapDataObject> dataObjects = searchBinaryMapDataForAmenity(detailsObject.getSyntheticAmenity(), 1);
+//            for (BinaryMapDataObject dataObject : dataObjects) {
+//                if (copyCoordinates(detailsObject, dataObject)) {
+//                    break;
+//                }
+//            }
+        BOOL implement = YES;
+    }
 }
 
 - (NSMutableArray<OAPOI *> *)filterByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities

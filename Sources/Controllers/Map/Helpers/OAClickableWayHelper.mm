@@ -185,6 +185,18 @@
     return [[ClickableWay alloc] initWithGpxFile:gpxFile osmId:osmId name:name selectedLatLon:selectedLatLon bbox:bbox];
 }
 
+- (ClickableWay *)loadClickableWay:(OAPOI *)amenity
+{
+    uint64_t osmId = [amenity getOsmId];
+    NSString *name = amenity.name;
+    NSMutableArray<NSNumber *> *xPoints = [amenity.x mutableCopy];
+    NSMutableArray<NSNumber *> *yPoints = [amenity.y mutableCopy];
+    CLLocation *selectedLatLon = [amenity getLocation];
+    MutableOrderedDictionary<NSString *, NSString *> *tags = [amenity getOsmTags];
+    OASKQuadRect *bbox = [self calcSearchQuadRect:xPoints yPoints:yPoints];
+    return [self loadClickableWay:selectedLatLon bbox:bbox xPoints:xPoints yPoints:yPoints osmId:osmId name:name tags:tags];
+}
+
 - (NSString *)getGpxColorByTags:(MutableOrderedDictionary<NSString *,NSString *> *)tags
 {
     for (NSString *key in _clickableTags)

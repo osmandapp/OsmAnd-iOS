@@ -195,7 +195,7 @@
 "navigate_point_longitude" = "Kinh độ";
 "shared_string_not_selected" = "Chưa được chọn";
 "shared_string_open" = "Mở";
-"transport_stops" = "dừng lại";
+"transport_stops" = "điểm dừng";
 "local_indexes_cat_backup" = "Sao lưu";
 "search_nearby" = "Tìm kiếm quanh đây";
 "shared_string_history" = "Lịch sử";
@@ -1999,7 +1999,7 @@
 "cubic_m" = "m³";
 "rendering_attr_highway_class_track_grade1_name" = "Cấp 1";
 "three_years_subscription" = "Gói đăng ký ba năm";
-"exit_at" = "Thoát ở";
+"exit_at" = "Xuống xe ở";
 "route_add_start_point" = "Thêm điểm xuất phát";
 "rendering_attr_surface_ground_name" = "Mặt đất";
 "rendering_attr_highway_class_cycleway_name" = "Đường xe đạp";
@@ -2472,3 +2472,5 @@
 "none_point_error" = "Vui lòng thêm ít nhất một điểm.";
 "quick_action_resume_pause_navigation" = "Tạm dừng/tiếp tục điều hướng";
 "quick_action_start_stop_navigation" = "Bắt đầu/dừng điều hướng";
+"app_mode_bus" = "Xe buýt";
+"stop_routing_confirm" = "Dừng điều hướng?";

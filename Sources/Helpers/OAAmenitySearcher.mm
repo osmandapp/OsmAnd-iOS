@@ -429,9 +429,7 @@ int const kZoomToSearchPOI = 16.0;
 }
 
 //TODO: draft. implement
-- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>)
-searchBinaryMapDataForAmenity:(OAPOI *)amenity
-                        limit:(int)limit
+- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataForAmenity:(OAPOI *)amenity limit:(int)limit
 {
     if (!amenity)
         return {};
@@ -475,87 +473,10 @@ searchBinaryMapDataForAmenity:(OAPOI *)amenity
     return [self searchBinaryMapDataObjects:[amenity getLocation] matcher:matcher limit:limit];
 }
 
-
-//private List<BinaryMapDataObject> searchBinaryMapDataForAmenity(Amenity amenity, int limit) {
-//    long osmId = ObfConstants.getOsmObjectId(amenity);
-//    boolean checkId = osmId > 0;
-//    String wikidata = amenity.getWikidata();
-//    boolean checkWikidata = !Algorithms.isEmpty(wikidata);
-//    String routeId = amenity.getRouteId();
-//    boolean checkRouteId = !Algorithms.isEmpty(routeId);
-//
-//    ResultMatcher<BinaryMapDataObject> matcher = new ResultMatcher<>() {
-//        @Override
-//        public boolean publish(BinaryMapDataObject object) {
-//            if (checkId && osmId == ObfConstants.getOsmObjectId(object)) {
-//                return true;
-//            }
-//            if (checkWikidata) {
-//                TIntObjectHashMap<String> names = object.getObjectNames();
-//                return names != null && !names.isEmpty() && names.containsValue(wikidata);
-//            }
-//            if (checkRouteId) {
-//                TIntObjectHashMap<String> names = object.getObjectNames();
-//                return names != null && !names.isEmpty() && names.containsValue(routeId);
-//            }
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean isCancelled() {
-//            return false;
-//        }
-//    };
-//    return searchBinaryMapDataObjects(amenity.getLocation(), matcher, limit);
-//}
-
-
-//private List<BinaryMapDataObject> searchBinaryMapDataObjects(LatLon latLon,
-//                                                              ResultMatcher<BinaryMapDataObject> matcher, int limit) {
-//     List<BinaryMapDataObject> list = new ArrayList<>();
-//
-//     int y = MapUtils.get31TileNumberY(latLon.getLatitude());
-//     int x = MapUtils.get31TileNumberX(latLon.getLongitude());
-//
-//     BinaryMapIndexReader.SearchRequest<BinaryMapDataObject> request = BinaryMapIndexReader
-//             .buildSearchRequest(x, x + 1, y, y + 1, 15, null, new ResultMatcher<>() {
-//                 @Override
-//                 public boolean publish(BinaryMapDataObject object) {
-//                     if (matcher == null || matcher.publish(object)) {
-//                         list.add(object);
-//                         return true;
-//                     }
-//                     return false;
-//                 }
-//
-//                 @Override
-//                 public boolean isCancelled() {
-//                     return matcher != null && matcher.isCancelled()
-//                             || limit != -1 && list.size() == limit;
-//                 }
-//             });
-//
-//     for (AmenityIndexRepository repository : getAmenityRepositories(false, null)) {
-//         if (matcher != null && matcher.isCancelled()) {
-//             break;
-//         }
-//         if (repository.isPoiSectionIntersects(request)) {
-//             repository.searchMapIndex(request);
-//         }
-//     }
-//     return list;
-// }
-
 //TODO: draft. implement
-- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>)
-searchBinaryMapDataObjects:(CLLocation *)latLon
-                   matcher:(std::function<bool(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)>)matcher
-                     limit:(int)limit
+- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataObjects:(CLLocation *)latLon matcher:(std::function<bool(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)>)matcher limit:(int)limit
 {
-    QList<std::shared_ptr<const OsmAnd::BinaryMapObject>> result;
-    if (!latLon)
-        return result;
-
+    QList<std::shared_ptr<const OsmAnd::BinaryMapObject>> list;
     const int y31 = OsmAnd::Utilities::get31TileNumberY(latLon.coordinate.latitude);
     const int x31 = OsmAnd::Utilities::get31TileNumberX(latLon.coordinate.longitude);
 
@@ -564,19 +485,16 @@ searchBinaryMapDataObjects:(CLLocation *)latLon
         OsmAnd::PointI(x31 + 1, y31 + 1)
     );
 
-    // По аналогии с Java: zoom = 15, bbox = 1 тайл
-    const OsmAnd::ZoomLevel zoom = OsmAnd::ZoomLevel15;
-
-    // Идём по obf-файлам как в Java (репозитории)
     const auto repositories = [OAAmenitySearcher getAmenityRepositories:YES];
-
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     if (!obfsCollection)
-        return result;
-
+        return list;
+    
     for (const auto& res : repositories)
     {
-        if (limit != -1 && result.size() >= limit)
+        // ???
+        
+        if (limit != -1 && list.size() >= limit)
             break;
 
         const auto& obfsDataInterface = obfsCollection->obtainDataInterface(res);
@@ -587,13 +505,12 @@ searchBinaryMapDataObjects:(CLLocation *)latLon
         QList<std::shared_ptr<const OsmAnd::Road>> loadedRoads;
         auto tileSurfaceType = OsmAnd::MapSurfaceType::Undefined;
 
-        // ВАЖНО: используем твою сигнатуру
         obfsDataInterface->loadMapObjects(
             &loadedBinaryMapObjects,
             &loadedRoads,
             &tileSurfaceType,
             nullptr,
-            zoom,
+            OsmAnd::ZoomLevel15,
             &bbox31
             // остальные параметры — дефолтные
         );
@@ -605,77 +522,15 @@ searchBinaryMapDataObjects:(CLLocation *)latLon
 
             if (!matcher || matcher(obj))
             {
-                result.append(obj);
-                if (limit != -1 && result.size() >= limit)
+                list.append(obj);
+                if (limit != -1 && list.size() >= limit)
                     break;
             }
         }
     }
 
-    return result;
+    return list;
 }
-
-
-//- (QList<std::shared_ptr<const OsmAnd::ObfMapObject>>) searchBinaryMapDataObjects:(CLLocationCoordinate2D)coord matcher:(std::function<bool(const std::shared_ptr<const OsmAnd::ObfMapObject>&)>)matcher limit:(int)limit
-//{
-//    QList<std::shared_ptr<const OsmAnd::ObfMapObject>> result;
-//
-//    const int y31 = OsmAnd::Utilities::get31TileNumberY(coord.latitude);
-//    const int x31 = OsmAnd::Utilities::get31TileNumberX(coord.longitude);
-//
-//    const OsmAnd::AreaI bbox31(
-//        OsmAnd::PointI(x31, y31),
-//        OsmAnd::PointI(x31 + 1, y31 + 1)
-//    );
-//
-//    // cancel when limit reached
-//    const auto controller = std::make_shared<OsmAnd::FunctorQueryController>([&]() -> bool {
-//        return (limit != -1) && (result.size() >= limit);
-//    });
-//
-//    const auto obfsCollection = OsmAndApp.instance.resourcesManager->obfsCollection;
-//    if (!obfsCollection)
-//        return result;
-//
-//    const auto dataInterface = std::make_shared<OsmAnd::ObfDataInterface>(obfsCollection);
-//
-//    const OsmAnd::ZoomLevel zoom = (OsmAnd::ZoomLevel)15;
-//    
-//    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > loadedBinaryMapObjects;
-//    QList< std::shared_ptr<const OsmAnd::Road> > loadedRoads;
-//    auto tileSurfaceType = OsmAnd::MapSurfaceType::Undefined;
-//    
-//    dataInterface->loadMapObjects(&loadedBinaryMapObjects, &loadedRoads, &tileSurfaceType, nullptr, OsmAnd::ZoomLevel15, &bbox31);
-//
-//    dataInterface->loadMapObjects(
-//        bbox31,
-//        zoom,
-//        controller,
-//        [&](const std::shared_ptr<const OsmAnd::MapObject>& mo) -> bool
-//        {
-//            if (!mo)
-//                return true;
-//
-//            // Нам нужна геометрия => кастуем к ObfMapObject, если возможно.
-//            const auto obfObj = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(mo);
-//            if (!obfObj)
-//                return true;
-//
-//            if (!matcher || matcher(obfObj))
-//            {
-//                result.append(obfObj);
-//            }
-//
-//            // continue scanning until controller cancels
-//            return true;
-//        }
-//    );
-//
-//    return result;
-//}
-
-
-
 
 - (NSMutableArray<OAPOI *> *)filterByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities
                                                osmId:(int64_t)osmId

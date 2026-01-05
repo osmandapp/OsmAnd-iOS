@@ -399,39 +399,32 @@ int const kZoomToSearchPOI = 16.0;
         const auto dataObjects = [self searchBinaryMapDataForAmenity:detailsObject.syntheticAmenity limit:1];
         for (const auto& dataObject : dataObjects)
         {
-            //TODO: implement?
-            
-//            if ([self copyCoordinates:detailsObject binaryObject:detailsObject])
-//            {
-//                break;
-//            }
+            if ([self copyCoordinates:detailsObject binaryObject:dataObject])
+            {
+                break;
+            }
         }
-        
-        BOOL implement = YES;
     }
 }
 
 - (BOOL)copyCoordinates:(BaseDetailsObject *)detailsObject binaryObject:(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)mapObject
 {
-    if (!detailsObject || !mapObject)
-        return NO;
-    
     const int pointsLength = mapObject->points31.size();
     if ([detailsObject getPointsLength] < pointsLength)
     {
         [detailsObject clearGeometry];
         for (int i = 0; i < pointsLength; i++)
         {
+            //detailsObject.addX(mapObject.getPoint31XTile(i));
+            //detailsObject.addY(mapObject.getPoint31YTile(i));
+            
             //TODO: Implement
-//            mapObject->get31
-//            const int x31 = OAGetPoint31X(mapObject, i);
-//            const int y31 = OAGetPoint31Y(mapObject, i);
-//
+//            const int x31 = OAGetPoint31XTile(mapObject, i);  // ?
+//            const int y31 = OAGetPoint31YTile(mapObject, i);  // ?
 //            [detailsObject addX:x31];
 //            [detailsObject addY:y31];
         }
     }
-
     return pointsLength > 0;
 }
 
@@ -443,7 +436,7 @@ searchBinaryMapDataForAmenity:(OAPOI *)amenity
     if (!amenity)
         return {};
 
-    const long long osmId = [ObfConstants getOsmObjectId:amenity];
+    const auto osmId = [ObfConstants getOsmObjectId:amenity];
     const BOOL checkId = osmId > 0;
 
     NSString *wikidata = [amenity getWikidata];;
@@ -456,52 +449,30 @@ searchBinaryMapDataForAmenity:(OAPOI *)amenity
 
     auto matcher = [=](const std::shared_ptr<const OsmAnd::BinaryMapObject>& obj) -> bool
     {
-        if (!obj)
-            return false;
-
-        if (checkId)
+        const auto objId = [ObfConstants getOsmObjectId:amenity];
+        if (checkId && osmId == objId)
         {
-            const long long objId = (long long)obj->id.id;
-            if (objId == osmId)
-                return true;
+            return YES;
         }
 
-        // 2) wikidata: проверяем и по ключу, и "любой value" (как в Java containsValue)
         if (checkWikidata)
         {
-//            
-//            const auto a = obj->getResolvedAttributes();
-//            const auto b = obj->getResolvedAttributesListPairs();
-//            const auto c = obj->containsTag(QStringLiteral("wikidata"))
-//            
-            
-//            if (OAHasTagKV(obj, QStringLiteral("wikidata"), wikidata))
-//                return true;
-//
-//            if (OAHasAnyValue(obj, wikidata))
-//                return true;
+            //TODO: implement
+            // TIntObjectHashMap<String> names = object.getObjectNames();
+            // return names != null && !names.isEmpty() && names.containsValue(wikidata);
         }
 
-        // 3) routeId: аналогично
         if (checkRouteId)
         {
-//            if (OAHasTagKV(obj, QStringLiteral("route_id"), routeId))
-//                return true;
-//            if (OAHasTagKV(obj, QStringLiteral("routeId"), routeId))
-//                return true;
-//
-//            if (OAHasAnyValue(obj, routeId))
-//                return true;
+            //TODO: implement
+            // TIntObjectHashMap<String> names = object.getObjectNames();
+            // return names != null && !names.isEmpty() && names.containsValue(routeId);
         }
 
-        return false;
+        return NO;
     };
 
-    CLLocation *loc = [amenity getLocation];
-    if (!loc)
-        return {};
-
-    return [self searchBinaryMapDataObjects:loc matcher:matcher limit:limit];
+    return [self searchBinaryMapDataObjects:[amenity getLocation] matcher:matcher limit:limit];
 }
 
 

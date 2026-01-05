@@ -2100,7 +2100,7 @@
 "av_notes_photo_widget_desc" = "Door te tikken op de widget kun je een foto maken.";
 "av_notes_video_widget_desc" = "Door te tikken op de widget kun je een video opnemen.";
 "av_notes_audio_widget_desc" = "Door te tikken op de widget kun je een audio-opname maken.";
-"trip_recording_downhill_widget_desc" = "Toont de som van alle afdalingen van deze opgenomen rit.";
+"trip_recording_downhill_widget_desc" = "Toont de som van alle afdalingen of de laatste afdaling van deze opgenomen rit.";
 "trip_recording_uphill_widget_desc" = "Toont de som van alle beklimmingen of de laatste klim van deze opgenomen rit.";
 "trip_recording_duration_widget_desc" = "Toont de tijdsduur van deze opgenomen rit.";
 "trip_recording_distance_widget_desc" = "Toont de afgelegde afstand van deze opgenomen rit.";
@@ -3777,3 +3777,6 @@
 "plugin_popup_srtm_title" = "Contourlijnen downloaden";
 "plugin_popup_nautical_title" = "Nautische kaarten downloaden";
 "lang_mi" = "Maori";
+"average_slope" = "Gemiddelde helling";
+"liter_single" = "Liter";
+"us_gallon" = "US gallon";

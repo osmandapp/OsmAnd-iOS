@@ -62,6 +62,7 @@ static const int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
 int const kSearchLimitRaw = 5000;
 int const kRadiusKmToMetersKoef = 1200.0;
 int const kZoomToSearchPOI = 16.0;
+using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)>;
 
 
 @implementation OAAmenitySearcherRequest
@@ -413,20 +414,13 @@ int const kZoomToSearchPOI = 16.0;
         [detailsObject clearGeometry];
         for (int i = 0; i < pointsLength; i++)
         {
-            //detailsObject.addX(mapObject.getPoint31XTile(i));
-            //detailsObject.addY(mapObject.getPoint31YTile(i));
-            
-            //TODO: Implement
-//            const int x31 = OAGetPoint31XTile(mapObject, i);  // ?
-//            const int y31 = OAGetPoint31YTile(mapObject, i);  // ?
-//            [detailsObject addX:x31];
-//            [detailsObject addY:y31];
+            [detailsObject addX:@(mapObject->points31[i].x)];
+            [detailsObject addY:@(mapObject->points31[i].y)];
         }
     }
     return pointsLength > 0;
 }
 
-//TODO: draft. implement
 - (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataForAmenity:(OAPOI *)amenity limit:(int)limit
 {
     const auto osmId = [ObfConstants getOsmObjectId:amenity];
@@ -434,42 +428,32 @@ int const kZoomToSearchPOI = 16.0;
 
     NSString *wikidata = [amenity getWikidata];;
     const BOOL checkWikidata = !NSStringIsEmpty(wikidata);
-    //const QString qWikidata = QString::fromNSString(wikidata);
+    const QString qWikidata = QString::fromNSString(wikidata);
 
     NSString *routeId = [amenity getRouteId];
     const BOOL checkRouteId = !NSStringIsEmpty(routeId);
-    //const QString qRouteId = QString::fromNSString(routeId);
+    const QString qRouteId = QString::fromNSString(routeId);
 
-    auto matcher = [=](const std::shared_ptr<const OsmAnd::BinaryMapObject>& obj) -> bool
+    BinaryObjectMatcher matcher = [=](const std::shared_ptr<const OsmAnd::BinaryMapObject>& obj) -> bool
     {
-        const auto objId = [ObfConstants getOsmObjectId:amenity];
-        if (checkId && osmId == objId)
-        {
-            return YES;
+        const auto objId = obj->id.getOsmId() >> 1;
+        if (checkId && osmId == objId) {
+            return true;
         }
-
-        if (checkWikidata)
-        {
-            //TODO: implement
-            // TIntObjectHashMap<String> names = object.getObjectNames();
-            // return names != null && !names.isEmpty() && names.containsValue(wikidata);
+        
+        for (const auto& captionAttributeId : OsmAnd::constOf(obj->captionsOrder)) {
+            const QString & value = OsmAnd::constOf(obj->captions)[captionAttributeId];
+            if ((checkWikidata && value == qWikidata) || (checkRouteId && value == qRouteId)) {
+                return true;
+            }
         }
-
-        if (checkRouteId)
-        {
-            //TODO: implement
-            // TIntObjectHashMap<String> names = object.getObjectNames();
-            // return names != null && !names.isEmpty() && names.containsValue(routeId);
-        }
-
-        return NO;
+        return false;
     };
 
     return [self searchBinaryMapDataObjects:[amenity getLocation] matcher:matcher limit:limit];
 }
 
-//TODO: draft. implement
-- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataObjects:(CLLocation *)latLon matcher:(std::function<bool(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)>)matcher limit:(int)limit
+- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataObjects:(CLLocation *)latLon matcher:(BinaryObjectMatcher)matcher limit:(int)limit
 {
     QList<std::shared_ptr<const OsmAnd::BinaryMapObject>> list;
     const int y31 = OsmAnd::Utilities::get31TileNumberY(latLon.coordinate.latitude);
@@ -480,15 +464,13 @@ int const kZoomToSearchPOI = 16.0;
         OsmAnd::PointI(x31 + 1, y31 + 1)
     );
 
-    const auto repositories = [OAAmenitySearcher getAmenityRepositories:YES];
+    const QList< std::shared_ptr<const OsmAnd::ObfFile> > repositories = [OAAmenitySearcher getAmenityRepositories:YES];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     if (!obfsCollection)
         return list;
     
-    for (const auto& res : repositories)
+    for (const std::shared_ptr<const OsmAnd::ObfFile> & res : repositories)
     {
-        //TODO: draft code. diff with android?
-        
         if (limit != -1 && list.size() >= limit)
             break;
 
@@ -500,9 +482,8 @@ int const kZoomToSearchPOI = 16.0;
         QList<std::shared_ptr<const OsmAnd::Road>> loadedRoads;
         auto tileSurfaceType = OsmAnd::MapSurfaceType::Undefined;
 
-        obfsDataInterface->loadMapObjects(
+        obfsDataInterface->loadBinaryMapObjects(
             &loadedBinaryMapObjects,
-            &loadedRoads,
             &tileSurfaceType,
             nullptr,
             OsmAnd::ZoomLevel15,

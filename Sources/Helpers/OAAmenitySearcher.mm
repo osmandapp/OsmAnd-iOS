@@ -400,9 +400,7 @@ int const kZoomToSearchPOI = 16.0;
         for (const auto& dataObject : dataObjects)
         {
             if ([self copyCoordinates:detailsObject binaryObject:dataObject])
-            {
                 break;
-            }
         }
     }
 }
@@ -431,9 +429,6 @@ int const kZoomToSearchPOI = 16.0;
 //TODO: draft. implement
 - (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataForAmenity:(OAPOI *)amenity limit:(int)limit
 {
-    if (!amenity)
-        return {};
-
     const auto osmId = [ObfConstants getOsmObjectId:amenity];
     const BOOL checkId = osmId > 0;
 
@@ -492,7 +487,7 @@ int const kZoomToSearchPOI = 16.0;
     
     for (const auto& res : repositories)
     {
-        // ???
+        //TODO: draft code. diff with android?
         
         if (limit != -1 && list.size() >= limit)
             break;
@@ -512,7 +507,6 @@ int const kZoomToSearchPOI = 16.0;
             nullptr,
             OsmAnd::ZoomLevel15,
             &bbox31
-            // остальные параметры — дефолтные
         );
 
         for (const auto& obj : loadedBinaryMapObjects)

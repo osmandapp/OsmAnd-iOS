@@ -793,7 +793,7 @@
 "update_now" = "Jetzt aktualisieren";
 "product_desc_sea_depth_contours" = "Meeresbodenkonturlinien und Seezeichen";
 "free_version_message" = "%@ Karten zum Herunterladen oder Aktualisieren.";
-"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Plugins, Wikipedia, Wikivoyage und vieles mehr.";
+"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Erweiterungen, Wikipedia, Wikivoyage und vieles mehr.";
 "osm_live_subscription" = "OsmAnd-Live-Abonnement";
 "unlimited_downloads" = "Unbegrenzte Downloads";
 "contour_lines_hillshade_maps" = "Karten mit Höhenlinien und Relief";
@@ -2810,7 +2810,7 @@
 "coordinates_format" = "Koordinatenformat";
 "coordinates_widget_secondary_desc" = "Sie können das Koordinatenformat ändern in %@ - %@ - %@.";
 "widget_secondary_desc_part_of" = "Teil des Plugins %@.";
-"weather_widgets_secondary_desc" = "Die Maßeinheiten können in den Einstellungen des Wetter-Plugins geändert werden.";
+"weather_widgets_secondary_desc" = "Die Maßeinheiten können in den Einstellungen der Erweiterung „Wetter“ geändert werden.";
 "shared_string_dark" = "Dunkel";
 "shared_string_light" = "Hell";
 "shared_string_page_number" = "Seite %d";
@@ -3318,7 +3318,7 @@
 "cloud_layer" = "Wolkenebene";
 "download_srtm_maps" = "Konturlinie";
 "driving_region_india" = "Indien";
-"driving_region_uk" = "UK und andere";
+"driving_region_uk" = "GB und andere";
 "key_event_category_map_interactions" = "Karten-Interaktionen";
 "map_source" = "Kartenquelle";
 "precipitation_layer" = "Niederschlagsebene";

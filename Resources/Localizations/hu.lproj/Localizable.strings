@@ -270,7 +270,7 @@
 "product_desc_asia" = "Korlátlan térképletöltés: Ázsia";
 "my_location" = "Saját helyzet";
 "all_categories" = "Minden kategória";
-"get_unlimited_access" = "Szerezz korlátlan hozzáférést";
+"get_unlimited_access" = "Szerezzen korlátlan hozzáférést";
 "navigate_point_latitude" = "Szélességi fok";
 "navigate_point_longitude" = "Hosszúsági fok";
 "track_save_short_q" = "Az út túl rövid, szeretné menteni?";
@@ -398,7 +398,7 @@
 "search_my_location" = "Saját pozíció meghatározása";
 "no_inet_connection" = "Nincs internetkapcsolat";
 "no_inet_connection_desc_map" = "A térképek letöltéséhez szükséges.";
-"try_again" = "Próbáld újra";
+"try_again" = "Próbálja újra";
 "search_location" = "Hely keresése…";
 "search_another_country" = "Másik régió kijelölése";
 "skip_map_downloading" = "Térképletöltés kihagyása";
@@ -647,7 +647,7 @@
 "routing_settings" = "Navigáció";
 "show_cameras" = "Sebességmérő kamerák";
 "show_lanes" = "Sávok";
-"speak_street_names" = "Utcanevek (TTS)";
+"speak_street_names" = "Utcanevek (szövegfelolvasás)";
 "speak_cameras" = "Sebességmérő kamerák";
 "speak_traffic_warnings" = "Forgalmi figyelmeztetések";
 "auto_zoom_none" = "Nincs automatikus nagyítás";
@@ -938,7 +938,7 @@
 "rendering_attr_highway_class_steps_name" = "Lépcső";
 "rendering_value__name" = "Alapértelmezett";
 "rendering_attr_appMode_name" = "Megjelenítési mód";
-"rendering_attr_hikingRoutesOSMC_description" = "Ösvények renderelése az OSMC-nyomvonalak szerint.";
+"rendering_attr_hikingRoutesOSMC_description" = "Ösvények megjelenítése az OSMC-nyomvonalak szerint.";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Sík";
 "routing_attr_avoid_subway_description" = "Elkerüli a metrókat és a HÉV-eket";
 "rendering_attr_smoothness_very_bad_name" = "Nagyon rossz";
@@ -1199,7 +1199,7 @@
 "online_webpage_warning" = "Az oldal csak online érhető el. Megnyitja böngészőben\?";
 "srtm_color_scheme" = "Színséma";
 "app_mode_camper" = "Lakókocsi";
-"app_mode_personal_transporter" = "Egyéni személyszállító (pl. Segway)";
+"app_mode_personal_transporter" = "Személyszállító (például: kerékpár)";
 "how_to_open_wiki_title" = "Hogyan lehet Wikipédia szócikkeket megnyitni\?";
 "context_menu_points_of_group" = "A csoport összes pontja";
 "app_mode_wagon" = "Családi autó";
@@ -1222,7 +1222,7 @@
 "base_profile_descr_boat" = "Hajózás, evezés, vitorlázás";
 "base_profile_descr_public_transport" = "Tömegközlekedés-típusok";
 "base_profile_descr_pedestrian" = "Gyaloglás, túrázás, futás";
-"base_profile_descr_bicycle" = "Mountain bike, kismotor, ló";
+"base_profile_descr_bicycle" = "Hegyi kerékpár, kismotor, ló";
 "base_profile_descr_car" = "Személyautó, teherautó, motorkerékpár";
 "new_profile" = "Új profil";
 "screen_alerts" = "Képernyő riasztások";
@@ -1288,7 +1288,7 @@
 "get_discount_short_descr" = "%@ %d %@, utána %@";
 "get_discount_title" = "Szerezze meg %d %@ %@ kedvezménnyel.";
 "vessel_width_limit_description" = "Adja meg a hajószélességet a keskeny hidak elkerüléséhez";
-"profile_type_osmand_string" = "OsmAnd profil";
+"profile_type_osmand_string" = "OsmAnd-profil";
 "monitoring_min_accuracy" = "Legkisebb pontosság";
 "listed_exist" = "A felsorolt %@ már létezik az OsmAndban.";
 "monitoring_min_distance" = "Legkisebb elmozdulás";
@@ -1427,7 +1427,7 @@
 "searching" = "Keresés…";
 "rearrange_categories" = "Kategóriák átrendezése";
 "icon_group_symbols" = "Szimbólumok";
-"custom_osmand_plugin" = "Egyéni OsmAnd bővítmény";
+"custom_osmand_plugin" = "Egyéni OsmAnd-bővítmény";
 "icon_group_travel" = "Utazás";
 "shared_string_visible" = "Látható";
 "coordinates" = "Koordináták";
@@ -1813,7 +1813,7 @@
 "simulation_real_mode_title" = "Realisztikus szimuláció";
 "unlimited_map_downloads" = "Korlátlan térképletöltés";
 "transport_hazmat_no_desc" = "Egyes utakon és alagutakban korlátozott lehet a veszélyes anyagok szállítása.";
-"purchases_feature_desc_osmand_cloud" = "Szerezzen OsmAnd Cloud tárhelyet az összes OsmAnd adat online tárolásához. Nincs többé adatvesztés az újratelepítés után. Az összes információ biztonsági mentése és visszaállítása egyszerű lesz.";
+"purchases_feature_desc_osmand_cloud" = "Szerezzen OsmAnd Cloud tárhelyet az összes OsmAnd-adat online tárolásához. Nincs többé adatvesztés az újratelepítés után. Az összes információ biztonsági mentése és visszaállítása egyszerű lesz.";
 "complete_purchase" = "Vásárlás véglegesítése";
 "routing_attr_allow_private_for_truck_description" = "Tehergépjárművek számára a magánterületre való behajtás engedélyezése.";
 "routing_attr_hazmat_category_no_restrictions_name" = "„A” (nincs korlátozás)";
@@ -2099,7 +2099,7 @@
 "save_poi_without_poi_type_message" = "Biztosan típus nélkül menti az érdekes helyet?";
 "download_heightmap_maps" = "Magassági térkép";
 "backup_deleting_all_data" = "Összes adat törlése…";
-"rendering_attr_showMtbScaleIMBATrails_name" = "Az IMBA MTB-útvonalainak megjelenítése";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA MTB-útvonalak megjelenítése";
 "si_nm_mt" = "Tengeri mérföld/méter";
 "depth_contour_lines" = "Mélységvonalak";
 "show_borders_of_downloaded_maps" = "Letöltött térképpel rendelkező területek eltérő színnel";
@@ -2267,7 +2267,7 @@
 "rendering_attr_horse_scale_common_name" = "Könnyű";
 "rendering_attr_showTrolleybusRoutes_name" = "Trolibuszvonalak";
 "rendering_attr_depthContourColorScheme_description" = "Mélységvonalak színsémája";
-"rendering_attr_OSMMapperAssistantNote_description" = "Note (térképszerkesztői megjegyzés) címkék megjelenítése";
+"rendering_attr_OSMMapperAssistantNote_description" = "Térképszerkesztői jegyzetcímkék megjelenítése";
 "routing_attr_avoid_4wd_only_description" = "A csak összkerék-meghajtású járművel használható utak elkerülése";
 "rendering_value_all_name" = "Minden";
 "rendering_attr_weatherPressureContours_name" = "Légnyomás izobár vonalak";
@@ -2667,7 +2667,7 @@
 "longest_duration_first" = "Először a leghosszabb időtartam";
 "ant_plus_bluetooth_off" = "A Bluetooth ki van kapcsolva";
 "activity_type_car_name" = "Személyautó";
-"external_sensors_plugin_description" = "Hozzáférés külső érzékelők adataihoz, mint pl pulzusszám, kerékpársebesség, -teljesítmény és pedálfordulatszám. Az eszközének ANT+ vezeték nélküli személyi hálózati protokollon keresztül kell kapcsolódnia a megfelelő érzékelőkhöz.";
+"external_sensors_plugin_description" = "Hozzáférés külső érzékelők adataihoz, mint például: pulzusszám, kerékpársebesség, -teljesítmény és pedálfordulatszám. Az eszközének ANT+ vezeték nélküli személyi hálózati protokollon keresztül kell kapcsolódnia a megfelelő érzékelőkhöz.";
 "help_article_map_tracks_on_map_name" = "Nyomvonalak és útvonalak";
 "shared_string_temperature" = "Hőmérséklet";
 "terrain_3D_maps" = "Domborzati térképek";
@@ -3101,7 +3101,7 @@
 "obd_engine_coolant_temp_desc" = "Megjeleníti a hűtőfolyadék hőmérsékletét";
 "obd_fuel_type_hybrid_gasoline" = "Hibrid benzines";
 "trace_rendering" = "Teljesítmény hibakeresési (debug) információ";
-"map_text" = "Térkép renderelés";
+"map_text" = "Térkép-megjelenítés";
 "remaining_fuel_description" = "Megjeleníti a tankban lévő maradék üzemanyag mennyiségét";
 "obd_fuel_type_diesel" = "Gázolaj";
 "obd_fuel_level_liter" = "Üzemanyagszint (l)";
@@ -3175,7 +3175,7 @@
 "lang_zh_hant" = "Hagyományos kínai";
 "osmand_live" = "OsmAnd Live";
 "download_live_updates" = "Élő frissítések";
-"local_indexes_cat_tts" = "Hangutasítások (TTS-szövegfelolvasás)";
+"local_indexes_cat_tts" = "Hangutasítások (szövegfelolvasás)";
 "local_indexes_cat_voice" = "Hangutasítások (rögzített)";
 "rendering_styles" = "Megjelenítő stílusok";
 "osm_building_num" = "Épület házszáma";
@@ -3197,7 +3197,7 @@
 "quick_action_drawer_desc" = "Kapcsoló az oldalsó menü ki/bekapcsolásához.";
 "quick_action_previous_screen_title" = "Előző képernyő";
 "quick_action_previous_screen_desc" = "Kapcsoló az előző képernyőre való navigáláshoz.";
-"wunderlinq_datagrid" = "WunderLINQ adatrács";
+"wunderlinq_datagrid" = "WunderLINQ-adatrács";
 "key_event_action_zoom_out" = "Kicsinyítés";
 "quick_action_move_map_left" = "Térkép balra";
 "key_event_action_move_left" = "Mozgás balra";
@@ -3301,7 +3301,7 @@
 "battery_widget_level_privacy_ios_desc" = "Az iOS adatvédelmi okokból a modul csak 5%-os lépésekben tudja megjeleníteni az akkumulátor töltöttségi szintjét, például 35%, 60% vagy 85%";
 "monitoring_control_start" = "Rögzítés";
 "widget_panels_descr" = "Válassza ki a képernyő azon részét, ahová modulokat szeretne hozzáadni vagy átrendezni.";
-"tts_title" = "TTS";
+"tts_title" = "Szövegfelolvasás";
 "poi_operator" = "Üzemeltető";
 "nav_type_brouter" = "BRouter";
 "preview_next_turn_descr" = "Térkép automatikus elforgatása a következő kanyar vagy manőver előnézetéhez";
@@ -3888,7 +3888,7 @@
 "osm_login_needs_ios_16_4" = "Az OpenStreetMap bejelentkezéshez iOS 16.4+ szükséges";
 "download_successful" = "Kép letöltve a Dokumentumok/Letöltések mappába.";
 "sensor_data_settings_description" = "az érzékelő fő adatainak megjelenítése";
-"battery_level_settings_description" = "az érzékelő akkumulátor töltöttségi szintjét fő értékként való megjelenítése";
+"battery_level_settings_description" = "érzékelő akkumulátorának töltöttségi szintjének fő értékként való megjelenítése";
 "image_cache_online_photo_high_res" = "Online nagy felbontású képek gyorsítótára";
 "image_cache_online_photo_mapillary_default_cache" = "Online képek/Mapillary alapértelmezett gyorsítótára";
 "visualizing_button_grid" = "Gombrács megjelenítése a térképen";
@@ -3911,7 +3911,7 @@
 "ios_release_4_5" = "• Teljesen átalakított modulélmény: modulpozíció megváltoztatásának lehetősége, oldalak szerinti csoportosítás, egy lista a bal és jobb oldali panel moduljaihoz\n• Átalakított konfigurációs képernyő\n• Ingyenes biztonsági mentés a kedvencekről, beállításokról és OSM-szerkesztésekről az OsmAnd Cloudba\n• „CAI” skála hozzáadása az „Útvonalak nehézségi osztályozásához”\n• A „Szintvonalak bővítmény” átnevezve „Topográfia”-ra, az új tereptérkép-formátum támogatása\n• 3D domborzat hozzáadása\n• OAuth engedélyezés hozzáadása az OpenStreetMap szerkesztő bővítményhez\n• Külön gomb hozzáadása a 2D vagy 3D mód közötti váltáshoz\n• Megváltoztatva a dőlés gesztus iránya\n• Javítva a kedvencek exportálásával kapcsolatos probléma, amely adatvesztéshez vezethetett\n";
 "ios_release_4_6" = "• Rögzítse és kövesse nyomon mérőszámait külső érzékelőkkel, beleértve a kerékpársebességet, a kerékpár-pedálfordulatot, a kerékpártávolságot, a pulzusszámot és a hőmérsékletet\n• Mostantól közvetlenül a CarPlay műszerfalán is megtekintheti a térképet\n• Éjszakai téma hozzáadása a kényelmes megtekintési élményért alacsony fényviszonyok mellett\n• Fedezze fel a „Wikivoyage” utazási útmutatóit\n• Továbbfejlesztett párbeszédpanelek jegyzetek hozzáadásához és jegyzetek, valamint POI-k feltöltéséhez az OpenStreetMapre\n• Könnyedén visszaállíthatja a bővítménybeállításokat a telepítési alapértékekre egy új „Visszaállítás alaphelyzetbe” opcióval\n• „Képernyőtájolás” opció hozzáadása az előnyben részesített tájolás beállításához automatikus váltás nélkül\n• Külön gomb hozzáadása a 3D mód váltásához közvetlenül a CarPlay képernyőn\n• Legkisebb és legnagyobb magassági információk hozzáadása a navigációs útvonalakhoz a hegymenet és lejtmenet mellett\n• Továbbfejlesztett nyomvonalszínezés lejtő módban új szimmetrikus színátmenettel\n • A kedvenc mappák mostantól alapértelmezett megjelenést tárolnak, amely automatikusan alkalmazódik minden hozzáadott pontra\n• Javítva a „Sugárvonalzó” középpontjának eltérése a térképközépponttól\n• „Cikk olvasása” gomb hozzáadása a Wikipédia POI-k helyi menüjéhez\n• Javítva a GPX-fájl importálása a kedvencekbe\n• Javítva a naptáreseménnyel kapcsolatos probléma a parkolási pozíciónál\n• Javítva az összeomlás a szín eltávolításakor a palettáról\n";
 "ios_release_4_7" = "• Továbbfejlesztett felső és alsó modulpanel az összes modul elhelyezéséhez\n• Továbbfejlesztett kezelése a térképen látható nyomvonalaknak\n• Frissített „Elemzés a térképen” funkció az érzékelők mérőszámainak megjelenítésével\n• Bővített címketámogatás a GPX-hez: link, szerző, szerzői jog és kulcsszavak\n• Továbbfejlesztett modulkonfiguráció, lehetővé téve a felhasználók számára oldalak és sorok mozgatását\n• Továbbfejlesztett nyomvonal-kezelés a „Saját helyek” menüben almappákkal és helyi menükkel a nyomvonalakhoz és mappákhoz\n• Körforgalom kijáratszámmal mostantól megjelenik a CarPlay-en navigáció közben\n• Irányítsa a 3D domborzatot egy új „Függőleges eltúlzás” opcióval a drámaibb tájért\n• Jelenítse meg a nyomvonal magasságát közvetlenül a térképen dinamikus 3D nézetben\n• Új modulok: „Siklószám” és „Napszak”\n• Testre szabhatja a „Távolság navigáció közben” beállítást: válasszon a pontos vagy a kerekített számok között\n• Az alkalmazás nyelve lesz használva a neveknél a világ áttekintő térképén a helyi nyelvek helyett\n• OsmAnd Cloud: Lehetőség az adatok kezelésére, beleértve a törölt fájlok visszaállítását és a fiók törlését\n• További címketámogatás hozzáadása a turistaútvonalakhoz\n• Javítva a „Koordináták” modul, ahol egyes esetekben hiányoztak az utolsó számjegyek\n• Javítva a „3D mód” gomb viselkedése: a gombra koppintás nem menti el a dőlésszöget\n• Javítva az állapotsor színe régebbi iOS verziókon\n• Javítva a térkép forgatása és csippentéssel való nagyítása gesztusok macOS-en futó alkalmazás esetén\n";
-"ios_release_4_8" = "• Új „Sebességmérő” modul, amely kompatibilis a CarPlay-jel\n• Részletes útvonal-utasítások hozzáadása az útvonal részleteihez\n• A térképképernyő testreszabása több „Gyorsművelet” gomb hozzáadásával\n• 3D nyomvonal fejlesztések: új megjelenítési és színezési lehetőségek\n• Egyéni színpaletták a terephez, nyomvonalakhoz és útvonalakhoz\n• Továbbfejlesztett többes kiválasztási mód a nyomvonalakhoz\n• 3D változat a helypozíció ikonokhoz\n• Bővített turistaútvonal-választék a térképen\n• Időjárás: felhasználói felület frissítése, szélanimáció hozzáadása\n• Sima átmenetek hozzáadása 3D módban való nagyításkor\n• A „Helypozíció a képernyőn” most a Képernyő konfigurálása menüben található\n• A „Kerék kerülete” módosítása a BLE érzékelő beállításaiban\n• Külön „Sebességkorlátozás” navigációs riasztás hozzáadása\n• Javítva az irányszög modulok nevei\n• Javítva a „Sugárvonalzó” láthatósága minden modulpanelen\n";
+"ios_release_4_8" = "• Új „Sebességmérő” modul, amely kompatibilis a CarPlay-jel\n• Részletes útvonal-utasítások hozzáadása az útvonal részleteihez\n• A térképképernyő testreszabása több „Gyorsművelet” gomb hozzáadásával\n• 3D nyomvonal fejlesztések: új megjelenítési és színezési lehetőségek\n• Egyéni színpaletták a terephez, nyomvonalakhoz és útvonalakhoz\n• Továbbfejlesztett többes kiválasztási mód a nyomvonalakhoz\n• 3D változat a helypozíció ikonokhoz\n• Bővített turistaútvonal-választék a térképen\n• Időjárás: felhasználói felület frissítése, szélanimáció hozzáadása\n• Sima átmenetek hozzáadása 3D módban való nagyításkor\n• A „Helypozíció a képernyőn” most a Képernyő konfigurálása menüben található\n• A „Kerék kerülete” módosítása a BLE-érzékelő beállításaiban\n• Külön „Sebességkorlátozás” navigációs riasztás hozzáadása\n• Javítva az irányszög modulok nevei\n• Javítva a „Sugárvonalzó” láthatósága minden modulpanelen\n";
 "ios_release_4_9" = "• Módosított iránytű viselkedés: egy koppintás északra forgatja a térképet, míg dupla koppintással a tájolási módok között vált\n• Keresési funkció hozzáadása a legnépszerűbb márkanevekhez\n• Továbbfejlesztett grafikonmegjelenés: az Y-tengely feliratai már nem fedik át a grafikont\n• Teljes nyomvonal-statisztikák hozzáadása minden mappa láblécéhez\n• Az összes fordítással rendelkező címke egyetlen elembe csoportosítása a helyi menüben\n• Javítva egy hiba, amely miatt a POI-kategória hiányzott a helyi menüből\n• Javítva egy hiba a hangutasítás nyelvének automatikus észlelésével\n• Javítva az összeomlás a Hajózási profil útvonal paramétereinél\n• CarPlay fejlesztések: megoldva egy probléma, amely miatt a fő navigációs modul nem frissült az útvonal újraszámításai után, és javítva a nyilak mérete a következő kanyar modulban\n• Bevezetve egy Térképmód paraméter, amely mostantól követi az alkalmazás témáját\n• Továbbfejlesztett felhasználói felület a helyikon kiválasztásához, opciók hozzáadása a helysugár és a látószög letiltásához\n• Gyorsművelet hozzáadása a „Helypozíció a képernyőn” módosításához\n";
 "ios_release_5_0" = "• Okosmappák bevezetése az automatikus nyomvonalszervezéshez.\n• Teljes képernyős galérianézegető hozzáadása a Wikimedia képekhez.\n• Vietnámi és héber szövegfelolvasás (TTS) támogatása a navigációhoz.\n• Gyorsműveletek hozzáadása az utazásrögzítés vezérléséhez.\n• „Részletes nyomvonal-útmutatás” opció és „Utakhoz csatolás” javaslati párbeszédpanel hozzáadása.\n• Kiemelkedő csúcsok felfedezhetők a térképen és kereséssel.\n• Szegélykiemelés hozzáadása az épületekhez és területekhez részletes információkkal.\n• Opció hozzáadása a különálló kedvenc csoportok láthatóságának váltásához a térképen.\n• Bővített ikonopciók a kedvencekhez az összes POI-kategória ikonjainak hozzáadásával.\n• Akkumulátorszint-kijelzés hozzáadása a külső érzékelőkhöz.\n• Opció hozzáadása több nyomvonal megjelenésének egyidejű módosításához.\n• „Visszaállítás” művelet hozzáadása az Átlagsebesség modulhoz.\n• CarPlay keresés: Épületek kiválasztásának lehetősége.\n• Javítva az UTM koordináta beviteli sorrendje.\n• Javítva egy probléma a nyomvonal-útpontok színeivel.\n• Javítva a hiányzó „Összes letöltése” gomb a domborzati térképeknél.\n• Javítva egy probléma, amely miatt a népszerű cikkek néha hiányoztak az utazási útmutatókból.\n";
 "ios_release_5_1" = "• Webes és platformfüggetlen vásárlások támogatása\n• Új navigációs modul, amely egyesíti a kanyarodási nyilat és a navigációs utasításokat\n• Átnevezés művelet hozzáadása a kedvenc csoportokhoz\n• „Térfogategység” és „Üzemanyagtartály-kapacitás” opciók hozzáadása\n• „Koordinátarács” fedvény hozzáadása\n• A bal és jobb oldali paneleken lévő modulok mostantól magassági opciót is tartalmaznak\n• Tevékenységek nyomvonalakhoz való hozzárendelésének lehetősége\n• Javítva egy összeomlás a CarPlay-en iOS 15 alatt\n• Megoldva az automatikus átméretezési problémák a bal és jobb oldali paneleken lévő modulokkal\n• Javítva az utazási útmutatók inkompatibilitása\n• Megoldva a platformfüggetlen vásárlásokkal kapcsolatos probléma\n• Javítva a fekete képernyő problémája a CarPlay-en indítás után\n";
@@ -3945,9 +3945,10 @@
 "wind_animation_layer" = "Szélanimációs réteg";
 "quick_action_wind_animation_layer" = "A szélanimációs réteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "weather_layers" = "Időjárási rétegek";
-"quick_action_weather_layers" = "Az időjárási réteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"quick_action_weather_layers" = "Az időjárási rétegek megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_precipitation_layer" = "A csapadékréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_cloud_layer" = "A felhőzetréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_wind_layer" = "A szélréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_air_pressure_layer" = "A nyomásréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
 "quick_action_temperature_layer" = "A hőmérsékletréteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
+"lang_mi" = "maori";

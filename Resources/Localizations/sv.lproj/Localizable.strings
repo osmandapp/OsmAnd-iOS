@@ -391,7 +391,7 @@
 "nearest_cities" = "Närmaste städer";
 "type_address" = "Ange adress";
 "search_poi_category_hint" = "Skriv för att söka alla";
-"poi_categories" = "Intressepunkt-kategorier";
+"poi_categories" = "Intressepunkt (POI) kategorier";
 "shared_string_search_history" = "Sökhistorik";
 "track_coloring_solid" = "Fast";
 "attribute" = "Attribut";
@@ -1060,7 +1060,7 @@
 "welmode_download_maps" = "Hämta kartor";
 "srtm_unit_format" = "Måttenhet för höjdkurvor";
 "srtm_download_single_help_message" = "Vänligen välj variant. Du kommer behöva ladda ner filen på nytt för att ändra formatet.";
-"srtm_download_list_help_message" = "OsmAnd kan visa höjdkurvor i meter eller i fot. Du behöver ladda ner filen på nytt för att ändra måttenhet.";
+"srtm_download_list_help_message" = "OsmAnd tillhandahåller konturlinjedata i meter och fot. Du kommer behöva ladda ner filen igen för att ändra formatet.";
 "shared_string_meters" = "meter";
 "shared_string_feet" = "fot";
 
@@ -1444,7 +1444,7 @@
 "product_desc_wiki" = "Platsbaserade Wikipedia-artiklar direkt i kartan";
 "purchases_feature_desc_wikipedia" = "Förmedlar alla platsrelaterade Wikipedia-artiklar offline, och hjälper dig lära om platser du besöker på din resa med enkla klick i kartan. Glöm inte att ladda ner WIkipedia-kartfilerna för respektive region.";
 "shared_string_all_languages" = "Alla språk";
-"select_wikipedia_article_langs" = "Välj språk för Wikipedia-artiklar på kartan. Byt till vilket annat tillgängligt språk som helst vid läsning av artikeln.";
+"select_wikipedia_article_langs" = "Välj språk för Wikipedia-artiklar på kartan. Byt till vilket annat tillgängligt språk som medans du läser artikeln.";
 "wiki_menu_download_descr" = "Ytterligare kartor behövs för att via Wikipedias intressepunkter på kartan.";
 "some_articles_may_not_available_in_lang" = "Vissa Wikipedia-artiklar finns kanske inte tillgängliga på ditt språk.";
 "available_languages" = "Tillgängliga språk";
@@ -2293,7 +2293,7 @@
 "shared_string_progress" = "Förlopp";
 "weather_precip_inches" = "Tum";
 "si_nm_mt" = "Nautisk mil/meter";
-"empty_purchases_description" = "Om dina inköp inte visas här, tryck på \"%@\" eller kontakta vår support.";
+"empty_purchases_description" = "Om dina köp inte visas här, tryck på \"%@\" eller kontakta vår support.";
 "use_login_and_password" = "Använd användarnamn och lösenord";
 "recalc_angle_dialog_descr" = "En rak linje mellan min position och den beräknade rutten visas, tills rutten har beräknats om";
 "sign_in_with_open_street_map" = "Logga in på OpenStreetMap";
@@ -2373,7 +2373,7 @@
 "rendering_attr_showBusRoutes_name" = "Bussrutter";
 "routing_attr_allow_streams_description" = "Tillåt strömmar och torrläggningar";
 "rendering_attr_depthContourColorScheme_description" = "Färgsättning av djupkurvor";
-"rendering_attr_natureReserves_name" = "Naturreservat";
+"rendering_attr_natureReserves_name" = "Naturreservat och skyddade områden";
 "rendering_attr_weatherWindSpeedContours_name" = "Konturlinjer för vindhastighet";
 "routing_attr_avoid_highway_description" = "Undvik motorvägar";
 "rendering_attr_horse_scale_common_name" = "Allmän";
@@ -2534,7 +2534,7 @@
 "network" = "Nätverk";
 "switch_profile" = "Byt profil";
 "toggle_pressure" = "Visa/dölj - Lufttryckslager";
-"map_widget_sunset_desc" = "Visar klockslag för eller återstående tid till kommande solnedgång.";
+"map_widget_sunset_desc" = "Visar klockslag för eller återstående tid till solnedgången.";
 "map_markers_bar_widget_desc" = "Övre panelen visar avstånd och riktning till nästa kartmarkör från din aktuella position. Du kan ställa in att visa 1 eller 2 markörer.";
 "rendering_attr_showFunicularRoutes_name" = "Bergbanor";
 "specify_number_of_dir_indicators_desc" = "Ange antalet riktningsindikatorer.";
@@ -2547,7 +2547,7 @@
 "route_maneuvers" = "Ruttmanövrar";
 "widget_panels_descr" = "Välj skärmdel att tillföra eller ändra widgetar.";
 "add_row" = "Lägg till rad";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematisk visning av ikoner vid låga zoomnivåer";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "En schematisk representation av ikoner vid låga zoomnivåer för de intressepunkter som vanligtvis inte visas";
 "bottom_widgets_panel" = "Nedre panel";
 "max_speed_widget_desc" = "Visar hastighetsbegränsningen för aktuell väg.";
 "shared_string_total_size" = "Total storlek";
@@ -2903,7 +2903,7 @@
 "audionotes_plugin_name" = "Ljud-/Videoanteckningar";
 "shared_string_accessibility" = "Tillgänglighet";
 "user_guide" = "Användarmanual";
-"general_settings" = "Allmänna inställningar";
+"general_settings" = "Allmänt";
 "temperature_hide" = "Dölj temperatur";
 "toggle_temperature" = "Visa/dölj - temperaturlager";
 "shared_string_row_number" = "Rad %d";
@@ -3146,7 +3146,7 @@
 "edit_tilesource_minzoom" = "Minimal zoom";
 "vertical_exaggeration" = "Vertikal överdrift";
 "calculate_online" = "Beräkna online";
-"calculate_online_title" = "Listan över kartor som krävs baseras på den rutt som utgörs av en rak linje. För att få en korrekt lista över kartor kan OsmAnd beräkna din rutt online på förhand";
+"calculate_online_title" = "Listan över kartor som saknas baseras på den rutt som utgörs av en rak linje. För att få en korrekt lista över kartor kan OsmAnd förhandsberäkna din rutt online";
 "required_maps_list" = "Kartor som också kommer användas: %@";
 "required_maps" = "Kartor som krävs";
 "missing_or_outdated_maps_description" = "Några offlinekartor som krävs för denna rutt saknas eller är inte uppdaterade. Vänliga ladda ner eller uppdatera dessa kartor.";
@@ -3506,7 +3506,7 @@
 "rendering_attr_padusDisplayMode_name" = "Visningsläge för allmän mark";
 "rendering_attr_padusDisplayMode_description" = "Efter åtkomsttyp eller administratörsnamn";
 "rendering_value_access_name" = "Efter åtkomsttyp";
-"rendering_value_managerName_name" = "Efter chefens namn";
+"rendering_value_managerName_name" = "Efter administratörsnamn";
 "rendering_attr_padusHideBoundaries_name" = "Dölj gränser för offentlig mark";
 "rendering_attr_padusHideBoundaries_description" = "Dölj gränser för offentlig mark men lämna områden";
 "shared_string_subfolders_in" = "Undermappar i";
@@ -3675,7 +3675,7 @@
 "app_store" = "App Store";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
-"osmand_web" = "OsmAnd webb";
+"osmand_web" = "OsmAnd Web (FastSpring)";
 "routing_attr_difficulty_preference_expert_name" = "Expert";
 "shared_string_finger" = "Finger";
 "shared_string_hand" = "Hand";
@@ -3707,7 +3707,7 @@
 "wiki_buy_description" = "För att läsa hela artiklar - köp Wikipedia-pluginen och ladda ner Wikipedia-data från %@";
 "default_price_currency_format" = "%.2f %@";
 "subscriptions_public_info" = "Betalning debiteras till ditt iTunes-konto vid bekräftelse av inköp. Prenumerationen kommer automatiskt att förnyas om inte automatisk förnyelse stängs av minst 24 timmar före utgången av den aktuella perioden. Ditt konto debiteras enligt din plan för förnyelse inom 24 timmar före utgången av den aktuella perioden. Du kan hantera eller stänga av automatisk förnyelse i dina kontoinställningar efter köp. Om du köper en prenumeration under en gratis provperiod kommer den oanvända delen av denna period att förverkas.";
-"activity_type_racing_name" = "Tävling";
+"activity_type_racing_name" = "Racing";
 "mtb_imba_full" = "International Mountain Bicycling Association";
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
@@ -3894,7 +3894,7 @@
 "key_event_action_move_up" = "Flytta upp";
 "quick_action_move_map_down" = "Flytta ner";
 "key_event_action_move_down" = "Flytta ner";
-"quick_action_move_map_up" = "Karta åvan";
+"quick_action_move_map_up" = "Karta upp";
 "weather_screen" = "Väderskärm";
 "open_weather_action_description" = "Låter dig öppna en skärm med detaljerad väderinformation.";
 "quick_action_new_route" = "Ny rutt";
@@ -3902,7 +3902,7 @@
 "shared_string_create" = "Skapa";
 "no_activity_for_intent" = "Installera en app som kan utföra den här åtgärden.";
 "nm_h" = "kn";
-"metric_lbs" = "pund";
+"metric_lbs" = "pund (lbs)";
 "inch" = "tum";
 "shared_string_inches" = "tum";
 "shared_string_pounds" = "pund";
@@ -3917,19 +3917,19 @@
 "obd_fuel_type_diesel" = "Diesel";
 "image_cache_online_photo_mapillary_default_cache" = "Standardcache för onlinefoto/Mapilary";
 "image_cache_online_photo_high_res" = "Onlinefoto cache för högupplösta bilder";
-"rendering_attr_hideLightSectorSources_name" = "Ljussektorkällor";
+"rendering_attr_hideLightSectorSources_name" = "Källor till ljusa sektorer";
 "rendering_attr_hideFerries_description" = "Dölj färjerutter";
 "rendering_attr_hideAreas_name" = "Djupområden";
 "rendering_attr_hideFairways_name" = "Fairways";
 "rendering_attr_hideFerries_name" = "Färjerutter";
 "rendering_attr_hideContours_description" = "Dölj djupkonturer";
-"rendering_attr_hideLightSectors_name" = "Ljussektorer";
-"rendering_attr_hideLightSectorSources_description" = "Dölj ljussektorkällor";
+"rendering_attr_hideLightSectors_name" = "Ljusa sektorer";
+"rendering_attr_hideLightSectorSources_description" = "Dölj källor till ljusa sektorer";
 "rendering_attr_hideNoLNAM_description" = "Dölj OSM-sjömärken (vissa)";
 "rendering_attr_hideContours_name" = "Djupkonturer";
 "rendering_attr_hideAreas_description" = "Dölj djupområden";
 "rendering_attr_hideNoLNAM_name" = "OSM-sjömärken (vissa)";
-"rendering_attr_hideLightSectors_description" = "Dölj ljussektorer";
+"rendering_attr_hideLightSectors_description" = "Dölj ljusa sektorer";
 "ble_scanner" = "BLE-skanner";
 "shared_string_release" = "Släppt";
 "reconnect" = "Återanslut";
@@ -3968,7 +3968,7 @@
 "fastspring_subscription_desc" = "Du kan hantera eller avsluta din prenumeration via FastSprings kontohanteringsportal.";
 "fastspring_one_time_payment_desc" = "Du kan hantera dina köp via FastSprings kontohanteringsportal.";
 "next_turn_information" = "Information om nästa sväng";
-"next_turn_information_desc" = "Visar kommande svängriktning och gatunamn.";
+"next_turn_information_desc" = "Visar nästkommande svängriktning och gatunamn.";
 "ios_release_4_7" = "• Förbättrade övre och undre widgetpaneler för att ackommodera alla widgetar\n• Förbättrad hantering av spår som syns på kartan\n• Uppdaterad \"Analysera på karta\" med möjligheten att visa mätvärden från sensorer\n• Förbättrat taggstöd för GPX har lagts till: länk, författare, upphovsrätt och nyckelord\n• Förbättrad widgetkonfiguration genom att låta användare flytta sidor och rader\n• Förbättrad spårhantering i \"Mina platser\" med undermappar och kontextmenyer för spår och mappar\n• Rondell med avfartsnummer visas nu på CarPlay vid navigering\n• Styr 3D-reliefen med ett nytt alternativ för \"Vertikal överdrift\" för ett mer dramatiskt landskap\n• Visualisera spårhöjden direkt på kartan i en dynamisk 3D-vy\n• Nya widgetar: \"Glidförhållande\" och \"Solposition\"\n• Anpassa \"Avstånd under navigering\": välj mellan exakta eller avrundade siffror\n• Appspråket kommer att användas för namn på världskartan istället för lokala språk\n• OsmAnd Cloud: Lade till möjligheten att hantera dina data, inklusive att återställa raderade filer och ta bort ditt konto\n• Lade till ytterligare taggstöd för turistvägar\n• Åtgärdade widgeten \"Koordinater\" där, i I vissa fall missades de sista siffrorna\n• Åtgärdade knappbeteendet i \"3D-läge\": att trycka på knappen sparar inte lutningsvinkeln\n• Åtgärdade statusfältets färg för äldre iOS-versioner\n• Åtgärdade rotations- och nypnings- för att zooma kartgester för appen som körs på macOS\n";
 "ios_release_4_8" = "• Ny widget \"Hastighetsmätare\" kompatibel med CarPlay\n• Lade till sväng-för-sväng-instruktioner för ruttdetaljer\n• Anpassa kartskärmen genom att lägga till flera \"Snabbåtgärd\"-knappar\n• 3D-spårförbättringar: nya visualiserings- och färgläggningsalternativ\n• Anpassade färgpaletter för terräng, spår och rutter\n• Lade till förbättrat flervalsläge för spår\n• 3D-variant för platspositionsikoner\n• Utökat urval av turistrutter på kartan\n• Väder: UI-uppdatering, la till vindanimering\n• Lade till mjuka övergångar vid zoomning i 3D-läge\n• \"Platsposition på skärmen\" finns nu i konfigurationsskärmen\n• Ändra \"Hjulomkrets\" i BLE-sensorinställningar\n• Lade till separat navigeringsvarning \"Hastighetsgräns\"\n• Åtgärdade namn för bäringswidgetar\n• Åtgärdade synligheten för \"Radielinjal\" i alla widgetpaneler\n";
 "ios_release_4_9" = "• Modifierat kompassbeteende: ett enda tryck roterar kartan mot norr, medan ett dubbeltryck ändrar orienteringen\n• Lade till sökfunktion för de mest populära varumärkena\n• Förbättrat grafutseende: Y-axeletiketter överlappar inte längre grafen\n• Lade till total spårstatistik i varje mapps sidfot\n• Grupperade alla taggar med översättningar till ett enda objekt i snabbmenyn\n• Åtgärdade ett problem där POI-kategorin saknades i snabbmenyn\n• Åtgärdade ett problem med automatisk detektering av röstmeddelandets språk\n• Åtgärdade krasch i båtprofilens ruttparametrar\n• CarPlay-förbättringar: löste ett problem där huvudnavigationswidgeten inte uppdaterades efter omberäkningar av rutten och fixade storleken på pilarna i nästa sväng-widgeten\n• Introducerade en kartlägesparameter som nu följer appens tema\n• Förbättrat användargränssnitt för val av platsikon, lagt till alternativ för att inaktivera platsradie och synvinkel\n• Lade till snabbåtgärd för att ändra \"Platsposition på skärmen\"\n";
@@ -3976,6 +3976,16 @@
 "ios_release_5_1" = "• Lade till stöd för webb- och plattformsoberoende köp\n• Ny navigeringswidget kombinerar svängpil och navigeringsinstruktioner\n• Lade till en namnbytesåtgärd för favoritgrupper\n• Lade till alternativen \"Volymenhet\" och \"Bränsletankkapacitet\"\n• Lade till ett överlägg med \"Koordinatnät\"\n• Widgetar på vänster och höger panel inkluderar nu ett höjdalternativ\n• Lade till möjligheten att tilldela aktiviteter till spår\n• Åtgärdade en krasch i CarPlay med iOS 15\n• Problem med automatisk storleksändring med widgetar på vänster och höger panel har åtgärdats\n• Inkompatibilitet mellan reseguider har åtgärdats\n• Problemet med plattformsoberoende köp har åtgärdats\n• Åtgärdade problemet med en svart skärm i CarPlay efter start\n";
 "ios_release_5_2" = "• Introducerade anpassningsbar knappmappning för externa styrenheter, vilket gör att valfri snabbåtgärd kan tilldelas en tangentbords- eller kontrollknapp\n• Lade till nya snabbåtgärder för att styra appen med en extern styrenhet\n• Förbättrad widgets synlighet i transparensläge genom att lägga till textkonturer\n• Lade till ett precisionsrutnät för att justera kartknappar\n• Introducerade en ny \"Marin\" nautisk kartstil med omfattande anpassningsalternativ\n• Lade till gatu- och stadsinformation i sökresultaten\n• Lade till ett alternativ för att öka textstorleken i avståndsmätningsverktyget\n• Flyttade valet av temperaturenhet till Allmänna inställningar\n• Höjdenheter kan nu ställas in separat från avståndsenheter\n• Lade till en snabbåtgärd för kartorientering med valbara kompasslägen\n• Åtgärdade ett problem som förhindrade att vissa widgetar flyttades\n• Åtgärdade en felaktig avståndsvisning i widgeten Nästa sväng\n• Förbättrade varumärkessökningen genom att inkludera fler lokala varumärken\n• Allmänna stabilitets- och prestandaförbättringar\n";
 "copy_as_new_folder" = "Kopiera som ny mapp";
-"obd_fuel_type_cng" = "CNG";
+"obd_fuel_type_cng" = "CNG, komprimerad naturgas";
 "copy_link" = "Kopiera länk";
 "ios_release_5_3" = "• Lade till interaktiv animation för hastighetsmätarwidgeten\n• Lade till ett alternativ för att ändra storlek på platspositionsikonen\n• Nya widgetar för reseinspelning: Maxhastighet och genomsnittlig lutning; förbättrade widgetar för uppförsbacke/nedförsbacke\n• Lade till stöd för djuplänkning för att dela specifika intressepunkter\n• Åtgärdade ett problem där beräknad ankomsttid i navigationswidgetar inte uppdaterades vid stillastående\n• Förbättrad anslutning för parade OBDII-adaptrar\n• Lade till möjligheten att slå samman waypoints i en vald favoritmapp\n• CarPlay: Åtgärdade ett problem med en karta som inte svarar på instrumentpanelen och lade till stöd för parametern \"Visa alltid mörk karta\"\n";
+"lang_mi" = "Maori";
+"wind_animation_layer" = "Vindanimeringslager";
+"quick_action_wind_animation_layer" = "Ett växlingsknapp för att visa eller dölja vindanimationsskiktet på kartan.";
+"weather_layers" = "Väderlager";
+"quick_action_weather_layers" = "En växlingsknapp för att visa eller dölja väderlager på kartan.";
+"quick_action_precipitation_layer" = "En knapp för att visa eller dölja nederbördslagret på kartan.";
+"quick_action_cloud_layer" = "En knapp för att visa eller dölja molnlagret på kartan.";
+"quick_action_wind_layer" = "En knapp för att visa eller dölja vindlagret på kartan.";
+"quick_action_air_pressure_layer" = "En knapp för att visa eller dölja lufttryckslagret på kartan.";
+"quick_action_temperature_layer" = "En knapp för att visa eller dölja temperaturlagret på kartan.";

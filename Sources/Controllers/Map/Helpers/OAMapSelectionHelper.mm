@@ -839,8 +839,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (BOOL)showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename
 {
-    //This function don't exists in Android. Maybe whole this function need be deleted or refactored.
-    
+    // The method is used to handle new->old OSM routes from search results.
+    // After implementing new OSM routes scheme, this method will be refactored.
+
     BOOL canBeRoute = [poi isRouteTrack] || !NSStringIsEmpty(poi.values[@"ref"]) || !NSStringIsEmpty(poi.values[@"route_id"]);
     if (!canBeRoute)
         return NO;

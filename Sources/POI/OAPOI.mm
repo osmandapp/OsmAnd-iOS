@@ -908,6 +908,45 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         return _osmId >> AMENITY_ID_RIGHT_SHIFT;
 }
 
+- (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags
+{
+    MutableOrderedDictionary<NSString *, NSString *> *result = [MutableOrderedDictionary new];
+    MutableOrderedDictionary<NSString *, NSString *> *amenityTags = [MutableOrderedDictionary new];
+    
+    for (NSString *key in [self getAdditionalInfoKeys])
+        amenityTags[key] = [self getAdditionalInfo:key];
+    
+    NSString *amenityName = self.name;
+    if (!NSStringIsEmpty(amenityName))
+        result[POI_NAME] = amenityName;
+    
+    OAPOICategory *category = self.type.category;
+    NSString *subTypesList = self.subType;
+    
+    if (subTypesList)
+    {
+        NSArray<NSString *> *separatedSubTypes = [subTypesList componentsSeparatedByString:@";"];
+        for (NSString *subType : separatedSubTypes)
+        {
+            OAPOIType *type = [category getPoiTypeByKeyName:subType];
+            if (type)
+            {
+                [result addEntriesFromDictionary:[type getOsmTagsValues]];
+                for (OAPOIType *additional in type.poiAdditionals)
+                {
+                    BOOL objectExisted = amenityTags[additional.name] != nil;
+                    [amenityTags removeObjectForKey:additional.name];
+                    if (objectExisted)
+                        [result addEntriesFromDictionary:[additional getOsmTagsValues]];
+                }
+            }
+        }
+    }
+    
+    [result addEntriesFromDictionary:amenityTags]; // unresolved residues
+    return result;
+}
+
 - (BOOL) isEqual:(id)o
 {
     if (self == o)

@@ -793,7 +793,7 @@
 "update_now" = "Jetzt aktualisieren";
 "product_desc_sea_depth_contours" = "Meeresbodenkonturlinien und Seezeichen";
 "free_version_message" = "%@ Karten zum Herunterladen oder Aktualisieren.";
-"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Plugins, Wikipedia, Wikivoyage und vieles mehr.";
+"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Erweiterungen, Wikipedia, Wikivoyage und vieles mehr.";
 "osm_live_subscription" = "OsmAnd-Live-Abonnement";
 "unlimited_downloads" = "Unbegrenzte Downloads";
 "contour_lines_hillshade_maps" = "Karten mit Höhenlinien und Relief";
@@ -2810,7 +2810,7 @@
 "coordinates_format" = "Koordinatenformat";
 "coordinates_widget_secondary_desc" = "Sie können das Koordinatenformat ändern in %@ - %@ - %@.";
 "widget_secondary_desc_part_of" = "Teil des Plugins %@.";
-"weather_widgets_secondary_desc" = "Die Maßeinheiten können in den Einstellungen des Wetter-Plugins geändert werden.";
+"weather_widgets_secondary_desc" = "Die Maßeinheiten können in den Einstellungen der Erweiterung „Wetter“ geändert werden.";
 "shared_string_dark" = "Dunkel";
 "shared_string_light" = "Hell";
 "shared_string_page_number" = "Seite %d";
@@ -3318,7 +3318,7 @@
 "cloud_layer" = "Wolkenebene";
 "download_srtm_maps" = "Konturlinie";
 "driving_region_india" = "Indien";
-"driving_region_uk" = "UK und andere";
+"driving_region_uk" = "GB und andere";
 "key_event_category_map_interactions" = "Karten-Interaktionen";
 "map_source" = "Kartenquelle";
 "precipitation_layer" = "Niederschlagsebene";
@@ -3994,3 +3994,15 @@
 "lang_mi" = "Maori";
 "wind_animation_layer" = "Windanimationsebene";
 "weather_layers" = "Wetterebenen";
+"quick_action_wind_animation_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Ebene \"wind animation\".";
+"quick_action_weather_layers" = "Eine Schaltfläche zum Ein- und Ausblenden der Wetterebenen auf der Karte.";
+"quick_action_precipitation_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Niederschlagsebene auf der Karte.";
+"quick_action_cloud_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Wolkenebene auf der Karte.";
+"quick_action_wind_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Windebene auf der Karte.";
+"quick_action_air_pressure_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Luftdruckebene auf der Karte.";
+"quick_action_temperature_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Temperaturebene auf der Karte.";
+"deleted_maps_alert_message" = "%d Karten löschen?";
+"ios_release_5_2" = "* Benutzerdefinierte Zuordnung von Tasten externer Eingabegeräte eingeführt, ermöglicht die Zuordnung einer beliebigen Schnellaktion zur Taste einer Tastatur oder eines Controllers\n• Neue Schnellaktionen zur Steuerung der App über ein externes Eingabegerät hinzugefügt\n• Sichtbarkeit von Widgets im transparenten Modus verbessert durch Hinzufügung von Textkonturen\n• Genaues Gitter zur Ausrichtung von Karten-Bedienfeldern hinzugefügt\n• Neuen Seekartendarstellung \"Seefahrt\" mit umfangreichen Einstellmöglichkeiten eingeführt\n• Straßen- und Stadtangaben zu Suchergebnissen hinzugefügt\n• Einstellmöglichkeit zur Vergrößerung der Textgröße des Abstandsmesswerkzeugs hinzugefügt\n• Auswahl der Einheit der Temperatur zu Allgemeine Einstellungen verschoben\n• Einheit der Höhe kann nun getrennt von Einheit der Länge eingestellt werden\n• Schnellaktion für Kartenausrichtung mit auswählbaren Kartenausrichtungsmodi hinzugefügt\t\n• Problem gelöst, das die Bewegung einiger Widgets verhinderte\n• Falsche Anzeige des Abstands im Widget \"Nächste Abzweigung\" behoben\n• Suche nach Marke (brand) verbessert durch Einbeziehung von mehr lokalen Marken\n• Allgemeine Stabilitäts- und Leistungsverbesserungen\n";
+"ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n• Fähigkeit hinzugefügt Wegpunkte in einen ausgewählten Favoriten-Ordner zusammenzuführen\n• CarPlay: Problem mit nicht reagierender Karte auf dem Dashboard behoben und Unterstützung hinzugefügt für Parameter „Zeige immer dunkle Karte“\n";
+"image_cache_online_photo_high_res" = "Hochauflösende Zwischenspeicherung von Online-Fotos";
+"image_cache_online_photo_mapillary_default_cache" = "Automatische Zwischenspeicherung von Online-Fotos/Mapillary";

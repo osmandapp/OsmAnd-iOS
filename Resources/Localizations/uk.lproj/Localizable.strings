@@ -3645,7 +3645,7 @@
 "no_photos_available_descr" = "До цього місця ще не додано жодної фотографії користувача";
 "sensor_data" = "Дані датчиків";
 "sensor_data_settings_description" = "показати основні дані з датчика";
-"battery_level_settings_description" = "показувати рівень заряду датчика як основне значення";
+"battery_level_settings_description" = "показувати рівень заряду батареї датчика як основне значення";
 "profile_icons" = "Значок профілю";
 "add_hidden_group_info" = "Додану точку можна знайти в \"%@\". Відобразити вибрану групу, щоб показати її на карті.";
 "terrain_map" = "Карта рельєфу (3D)";

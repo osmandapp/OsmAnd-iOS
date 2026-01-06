@@ -839,6 +839,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (BOOL)showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename
 {
+    //This function don't exists in Android. Maybe whole this function need be deleted or refactored.
+    
     BOOL canBeRoute = [poi isRouteTrack] || !NSStringIsEmpty(poi.values[@"ref"]) || !NSStringIsEmpty(poi.values[@"route_id"]);
     if (!canBeRoute)
         return NO;
@@ -868,7 +870,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         
         if (isClickableWay)
         {
-            //TODO: is this correct place to this code launch?
             [ClickableWayHelper openClickableWayAmenityWithAmenity:poi adjustMapPosition:YES];
             return YES;
         }

@@ -2126,7 +2126,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (filter)
     {
         [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];
-        [[OARootViewController instance].mapPanel openSearch:filter location:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude] searchQuery:_searchQuery ?: @""];
+        [[OARootViewController instance].mapPanel reopenSearchFromShowOnMap:filter location:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude] searchQuery:_searchQuery ?: @""];
     }
     else
     {

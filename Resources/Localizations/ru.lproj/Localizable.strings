@@ -49,7 +49,7 @@
 "gpx_import_export" = "Импорт/Экспорт";
 "import_tracks" = "Импорт треков";
 "shared_string_ok" = "ОК";
-"OsmAnd Maps" = "OsmAnd Maps";
+"OsmAnd Maps" = "OsmAnd Карты";
 // Shared Strings
 "shared_string_back" = "Назад";
 "shared_string_cancel" = "Отмена";
@@ -1027,7 +1027,7 @@
 "live_updates" = "Live обновления";
 "osmand_live_last_changed" = "Последнее изменение карты: %@";
 "osmand_live_reports" = "Отчеты";
-"osmand_live_server_date" = "Последнее обновление сервера: %@";
+"osmand_live_server_date" = "Обновлено: %@";
 "osmand_live_donation_header" = "Настройки пожертвований";
 "osmand_live_donation_switch_title" = "Пожертвование для сообщества OpenStreetMap";
 "inapp_not_found" = "%@ не найден в OsmAnd. Вероятно, он был отменён.";
@@ -1764,7 +1764,7 @@
 "metric_ton" = "т";
 "recalculate_wrong_dir" = "Пересчитать маршрут в случае обратного направления";
 "repeat_after" = "Повторить после";
-"profile_alert_delete_msg" = "Удалить профиль «%@»?";
+"profile_alert_delete_msg" = "Удалить профиль \"%@\"";
 "profile_alert_delete_title" = "Удалить профиль";
 "reset_to_default" = "Сброс к настройкам по умолчанию";
 "copy_from_other_profile_descr" = "Вы можете скопировать все настройки из любого профиля в выбранный профиль: ";
@@ -1977,7 +1977,7 @@
 "hide_current_location" = "Скрыть координаты";
 "show_current_location" = "Показать координаты";
 "toggle_current_location" = "Показать/скрыть виджет координат";
-"shared_string_loading" = "Скачивание";
+"shared_string_loading" = "Загрузка";
 "select_profile" = "Выбрать профиль";
 "track_multiple_segments_select" = "%@ содержит более одного сегмента. Пожалуйста, выберите часть трека, которую вы хотите использовать для навигации.";
 "select_segment" = "Выбрать сегмент";
@@ -2574,7 +2574,7 @@
 "routing_attr_allow_intermittent_name" = "Разрешить пересыхающие водные пути";
 "rendering_attr_depthContourWidth_description" = "Толщина контурных линий глубины (изобат)";
 "routing_attr_avoid_footways_description" = "Избегать пешеходных дорожек";
-"rendering_attr_showMtbScale_description" = "Показать MTB-трейлы в соответствии с их сложностью.";
+"rendering_attr_showMtbScale_description" = "Показать MTB-трассы в соответствии с их сложностью.";
 "rendering_attr_showWaterwayTunnels_name" = "Повысить видимость водных туннелей";
 "rendering_value_omit_name" = "Пропустить";
 "routing_attr_length_description" = "Укажите длину транспортного средства, разрешённую для движения по маршрутам.";
@@ -2661,7 +2661,7 @@
 "shared_string_link" = "Ссылка";
 "shared_string_keywords" = "Ключевые слова";
 "bluetooth_found_title" = "Найдено: %d";
-"no_bt_permission" = "Разрешение Bluetooth не предоставлено";
+"no_bt_permission" = "Bluetooth не разрешён в настройках";
 "routing_attr_hazmat_category_usa_8_name" = "Коррозионные вещества";
 "rendering_value_sector5_name" = "Сектор 5";
 "routing_attr_hazmat_category_usa_5_name" = "Окислители и органические пероксиды";
@@ -3244,7 +3244,7 @@
 "avg_sensor_cadence" = "Каденс, средний";
 "avg_sensor_temperature" = "Температура, средняя";
 "discard_filter_changes_prompt" = "Сбросить все фильтры?";
-"max_sensor_bycicle_power" = "Вело мощность, макс.";
+"max_sensor_bycicle_power" = "Вело мощность, MAX";
 "shared_string_minute_lowercase" = "мин";
 "shared_string_visible_on_map" = "Видно на карте";
 "delete_widget_description" = "Этот виджет будет удален. Вы сможете восстановить его позже в настройках экрана.";
@@ -3256,7 +3256,7 @@
 "avg_sensor_bycicle_power" = "Мощность, средняя";
 "sort_subfolders_tracks" = "Сортировать подпапки";
 "help_article_personal_color_palette_schemes_name" = "Цветовые схемы";
-"max_sensor_cadence" = "Вело каденс, макс.";
+"max_sensor_cadence" = "Вело каденс, MAX";
 "root_folder" = "Корневая папка";
 "add_widget_to_the_left" = "Добавить виджет слева";
 "screen_is_unlocked" = "Сенсорный экран разблокирован.";
@@ -3268,7 +3268,7 @@
 "reset_average_speed" = "Сбросить среднюю скорость";
 "not_specified" = "Не указано";
 "with_waypoints" = "С путевыми точками";
-"max_sensor_temperature" = "Температура, макс.";
+"max_sensor_temperature" = "Температура, MAX";
 "transport_stop" = "Остановка";
 "obd_plugin_name" = "Авто-датчики";
 "lock_screen_description" = "Включение/отключение сенсорного экрана для предотвращения случайных нажатий";
@@ -3572,7 +3572,7 @@
 "nav_type_brouter" = "BRouter";
 "preview_next_turn_descr" = "Автоматически поворачивает карту для предварительного просмотра следующего поворота или манёвра";
 "download_persian_voice_alert_title" = "Скачать персидский голосовой файл:";
-"download_persian_voice_alert_descr_ios" = "Настройки -> Универсальный доступ -> Чтение вслух -> Голоса -> Персидский -> Дариуш";
+"download_persian_voice_alert_descr_ios" = "Настройки -> Универсальный доступ -> Чтение вслух -> Голоса -> Русский -> Голос -> Русский (Россия) -> Катя (улучшенный)";
 "no_track_files" = "Нет файлов с треками";
 "no_tracks_on_map" = "На карте нет треков";
 "shared_string_subfolders_in" = "Вложенные папки в";
@@ -3595,7 +3595,7 @@
 "copy_link" = "Скопировать ссылку";
 "shared_string_not_available" = "Не доступно";
 "shared_string_clear_offline_cache" = "Очистить офлайн кэш";
-"download_persian_voice_alert_descr_macos" = "Settings -> Accessibility -> Spoken Content -> System Voice -> Manage Voices -> Persian -> Dariush";
+"download_persian_voice_alert_descr_macos" = "Системные настройки-> Универсальный доступ-> Устный контент -> Голос системы -> Управление голосами -> Русский (Россия) - Катя -> Катя (улучшенный)";
 "shared_string_ellipsis" = "…";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_total_size" = "Общий размер";

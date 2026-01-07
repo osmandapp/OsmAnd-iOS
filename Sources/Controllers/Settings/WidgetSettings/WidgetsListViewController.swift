@@ -634,6 +634,11 @@ extension WidgetsListViewController {
                 return mode.iconName
             }
             return (widgetView as? TripRecordingMaxSpeedWidget)?.getIconName() ?? widgetView.widgetType?.iconName
+        case .tripRecordingMovingTime:
+            if let raw = intFromParams(TripRecordingMovingTimeWidgetState.prefMovingTimeModeId), let mode = TripRecordingMovingTimeMode(rawValue: raw) {
+                return mode.iconName
+            }
+            return (widgetView as? TripRecordingMovingTimeWidget)?.getIconName() ?? widgetView.widgetType?.iconName
         default:
             return widgetView.widgetType?.iconName
         }

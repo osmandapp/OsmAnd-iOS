@@ -95,7 +95,7 @@
 
 - (NSArray<NSString *> *) getWidgetIds
 {
-    return @[OAWidgetType.tripRecordingDistance.id, OAWidgetType.tripRecordingTime.id, OAWidgetType.tripRecordingUphill.id, OAWidgetType.tripRecordingDownhill.id, OAWidgetType.tripRecordingAverageSlope.id, OAWidgetType.tripRecordingMaxSpeed.id];
+    return @[OAWidgetType.tripRecordingDistance.id, OAWidgetType.tripRecordingTime.id, OAWidgetType.tripRecordingUphill.id, OAWidgetType.tripRecordingDownhill.id, OAWidgetType.tripRecordingAverageSlope.id, OAWidgetType.tripRecordingMaxSpeed.id, OAWidgetType.tripRecordingMovingTime.id];
 }
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate
@@ -121,6 +121,9 @@
     
     OABaseWidgetView *maxSpeedWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMaxSpeed customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:maxSpeedWidget]];
+    
+    OABaseWidgetView *movingTimeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMovingTime customId:nil appMode:appMode widgetParams:widgetParams];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:movingTimeWidget]];
 }
 
 - (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
@@ -140,6 +143,8 @@
         return [[TripRecordingSlopeWidget alloc] initWithCustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.tripRecordingMaxSpeed) {
         return [[TripRecordingMaxSpeedWidget alloc] initWithCustomId:customId appMode:appMode widgetParams:widgetParams];
+    } else if (widgetType == OAWidgetType.tripRecordingMovingTime) {
+        return [[TripRecordingMovingTimeWidget alloc] initWithCustomId:customId appMode:appMode widgetParams:widgetParams];
     }
     return nil;
 }

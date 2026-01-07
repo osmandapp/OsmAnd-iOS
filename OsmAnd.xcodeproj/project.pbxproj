@@ -1432,6 +1432,8 @@
 		C54260202AA0D2A000E76C00 /* ic_custom_visibility@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C542601E2AA0D29F00E76C00 /* ic_custom_visibility@3x.png */; };
 		C54260232AA0F90700E76C00 /* ic_custom_3d_relief@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54260212AA0F90700E76C00 /* ic_custom_3d_relief@2x.png */; };
 		C54260242AA0F90700E76C00 /* ic_custom_3d_relief@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54260222AA0F90700E76C00 /* ic_custom_3d_relief@3x.png */; };
+		C5455E5C2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5455E5B2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift */; };
+		C5455E5E2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5455E5D2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift */; };
 		C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */; };
 		C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */; };
 		C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */; };
@@ -5171,6 +5173,8 @@
 		C542601E2AA0D29F00E76C00 /* ic_custom_visibility@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_visibility@3x.png"; path = "Resources/Icons/ic_custom_visibility@3x.png"; sourceTree = "<group>"; };
 		C54260212AA0F90700E76C00 /* ic_custom_3d_relief@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief@2x.png"; path = "Resources/Icons/ic_custom_3d_relief@2x.png"; sourceTree = "<group>"; };
 		C54260222AA0F90700E76C00 /* ic_custom_3d_relief@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief@3x.png"; path = "Resources/Icons/ic_custom_3d_relief@3x.png"; sourceTree = "<group>"; };
+		C5455E5B2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMovingTimeWidgetState.swift; sourceTree = "<group>"; };
+		C5455E5D2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMovingTimeWidget.swift; sourceTree = "<group>"; };
 		C546C0022AC242D600377EDE /* OAOsmUploadPOIViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmUploadPOIViewController.h; sourceTree = "<group>"; };
 		C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadPOIViewController.m; sourceTree = "<group>"; };
 		C546C0052AC2438F00377EDE /* OAOsmNoteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNoteViewController.h; sourceTree = "<group>"; };
@@ -11151,6 +11155,7 @@
 				C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */,
 				C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */,
 				C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */,
+				C5455E5D2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift */,
 			);
 			path = Monitoring;
 			sourceTree = "<group>";
@@ -13132,6 +13137,7 @@
 				C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */,
 				C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */,
 				C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */,
+				C5455E5B2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift */,
 				C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */,
 			);
 			path = WidgetStates;
@@ -17039,6 +17045,7 @@
 				DA5A845E26C563A900F274C7 /* OARoutePointsLayer.mm in Sources */,
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
 				327A19862A98D57800F4A027 /* TravelJsonParser.swift in Sources */,
+				C5455E5E2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift in Sources */,
 				DA5A815426C563A700F274C7 /* OACarPlayMapViewController.mm in Sources */,
 				27D33B3F2E7432DD00AD4F70 /* OpenNavigationViewAction.swift in Sources */,
 				C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */,
@@ -17236,6 +17243,7 @@
 				DA5A813426C563A700F274C7 /* OAOpenStreetMapPoint.m in Sources */,
 				DA5A82FD26C563A800F274C7 /* OAProgressTitleCell.m in Sources */,
 				DA5A845126C563A900F274C7 /* OAMyPositionLayer.mm in Sources */,
+				C5455E5C2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift in Sources */,
 				FA39D2972E819B030095DF8E /* ErrorHelper.swift in Sources */,
 				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
 				320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */,

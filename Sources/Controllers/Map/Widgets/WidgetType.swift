@@ -317,6 +317,7 @@ extension WidgetType {
     
     static let tripRecordingAverageSlope = WidgetType(ordinal: 68, id: "trip_recording_average_slope", title: localizedString("average_slope"), descr: localizedString("trip_recording_average_slope_widget_description"), iconName: "widget_track_recording_average_slope_uphill", group: .tripRecording, defaultPanel: .rightPanel)
     static let tripRecordingMaxSpeed = WidgetType(ordinal: 69, id: "trip_recording_max_speed", title: localizedString("shared_string_max_speed"), descr: localizedString("trip_recording_max_speed_widget_description"), iconName: "widget_track_recording_max_speed", group: .tripRecording, defaultPanel: .rightPanel)
+    static let tripRecordingMovingTime = WidgetType(ordinal: 70, id: "trip_recording_moving_time", title: localizedString("trip_recording_moving_time"), descr: localizedString("trip_recording_moving_time_widget_description"), iconName: "widget_track_recording_moving_time", group: .tripRecording, defaultPanel: .rightPanel)
     
     static let values = [nextTurn,
                          smallNextTurn,
@@ -401,6 +402,7 @@ extension WidgetType {
                          OBDThrottlePosition,
                          OBDFuelConsumption,
                          tripRecordingAverageSlope,
-                         tripRecordingMaxSpeed
+                         tripRecordingMaxSpeed,
+                         tripRecordingMovingTime
     ]
 }

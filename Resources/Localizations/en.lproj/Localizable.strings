@@ -413,6 +413,8 @@
 "shared_string_last_downhill" = "Last downhill";
 "show_track_on_map" = "Show track on map";
 "total_distance" = "Total distance";
+"trip_recording_moving_time" = "Moving time";
+"trip_recording_moving_time_widget_description" = "Shows the currently recorded moving time, or the time for the last uphill and downhill.";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";

@@ -10,7 +10,7 @@
 final class MapSettingsButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.layers"
     
-    lazy var visibilityPref: OACommonBoolean = settings.registerBooleanPreference("\(id)_state", defValue: true)
+    lazy var visibilityPref: OACommonBoolean = settings.registerBooleanPreference("\(id)_state", defValue: true).makeProfile()
     
     private let settings = OAAppSettings.sharedManager()
     

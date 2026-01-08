@@ -10,7 +10,7 @@
 final class OptionsMenuButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.menu"
     
-    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
+    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true).makeProfile()
     
     init() {
         super.init(withId: Self.hudId)

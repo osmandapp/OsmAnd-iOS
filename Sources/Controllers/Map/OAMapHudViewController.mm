@@ -937,6 +937,13 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapButtonVisibilityAndAppearance:_mapSettingsButton showButton:[self shouldShowConfigureMap] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getConfigureMapButtonState] createAppearanceParams]];
+        [self updateMapButtonVisibilityAndAppearance:_searchButton showButton:[self shouldShowSearch] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getSearchButtonState] createAppearanceParams]];
+        [self updateMapButtonVisibilityAndAppearance:_optionsMenuButton showButton:[self shouldShowMenu] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] createAppearanceParams]];
+        [self updateMapButtonVisibilityAndAppearance:_driveModeButton showButton:[self shouldShowNavigation] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] createAppearanceParams]];
+        [self updateMapButtonVisibilityAndAppearance:_mapModeButton showButton:[self shouldShowMyLocation] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getMyLocationButtonState] createAppearanceParams]];
+        [self updateMapButtonVisibilityAndAppearance:_zoomInButton showButton:[self shouldShowZoomIn] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getZoomInButtonState] createAppearanceParams]];
+        [self updateMapButtonVisibilityAndAppearance:_zoomOutButton showButton:[self shouldShowZoomOut] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getZoomOutButtonState] createAppearanceParams]];
         [self updateColors];
         [self recreateAllControls];
         if (@available(iOS 16.0, *)) {
@@ -1039,10 +1046,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateMapButton:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams
 {
-    [self updateMapButtonVisibility:button showButton:showButton];
-    [self updateMapButtonAppearance:button appearanceParams:appearanceParams];
+    [self updateMapButtonVisibilityAndAppearance:button showButton:showButton appearanceParams:appearanceParams];
     [self updateColors];
     [_mapHudLayout updateButtons];
+}
+
+- (void)updateMapButtonVisibilityAndAppearance:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams
+{
+    [self updateMapButtonVisibility:button showButton:showButton];
+    [self updateMapButtonAppearance:button appearanceParams:appearanceParams];
 }
 
 - (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton

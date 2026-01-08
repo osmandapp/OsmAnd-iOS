@@ -10,7 +10,7 @@
 final class ZoomOutButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.zoom_out"
     
-    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true)
+    lazy var visibilityPref: OACommonBoolean = OAAppSettings.sharedManager().registerBooleanPreference("\(id)_state", defValue: true).makeProfile()
     
     init() {
         super.init(withId: Self.hudId)

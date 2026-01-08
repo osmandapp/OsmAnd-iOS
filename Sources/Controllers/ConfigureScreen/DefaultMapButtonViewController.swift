@@ -209,8 +209,8 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             return false
         }
         
-        if let boolPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean, let appMode {
-            boolPref.set(sw.isOn, mode: appMode)
+        if let boolPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean {
+            boolPref.set(sw.isOn)
         }
         updateData()
         

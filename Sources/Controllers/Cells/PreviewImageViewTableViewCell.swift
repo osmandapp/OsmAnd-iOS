@@ -34,8 +34,8 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
                 previewImageButton.addSubview(previewImageView)
                 previewImageView.translatesAutoresizingMaskIntoConstraints = true
                 previewImageView.frame = CGRect(x: defaultImageOrigin, y: defaultImageOrigin, width: defaultImageSize, height: defaultImageSize)
-                previewImageView.image = buttonState.previewIcon()
             }
+            previewImageView.image = previewImageButton.currentImage
             previewImageView.center = CGPoint(x: previewImageButton.frame.width / 2, y: previewImageButton.frame.height / 2)
             previewImageButton.setImage(nil, for: .normal)
         } else {

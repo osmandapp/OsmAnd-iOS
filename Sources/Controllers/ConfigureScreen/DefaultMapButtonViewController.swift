@@ -164,7 +164,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
-            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.image = .templateImageNamed(item.iconName)
             cell.accessoryType = .disclosureIndicator
             if item.key == Self.visibilityRowKey {
                 let selected = item.bool(forKey: Self.selectedKey)

@@ -141,7 +141,7 @@
             [targetChangedObservalbe notifyEvent];
         });
 
-    _renderer->setMinZoomLevel(OsmAnd::ZoomLevel1);
+    _renderer->setMinZoomLevel(OsmAnd::ZoomLevel2);
     _renderer->setMaxZoomLevel(OsmAnd::ZoomLevel22);
 
     // Create animator for that map

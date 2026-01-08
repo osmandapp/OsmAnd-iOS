@@ -2859,7 +2859,7 @@
 "manage_subscriptions" = "Gestiona les subscripcions.";
 "deleting_complete" = "Supressió completa";
 "delete_account" = "Suprimeix el compte";
-"verify_account_deletion_descr" = "Hem de verificar el vostre compte abans d'eliminar-lo.\n\nSi us plau, introdueixi l'adreça de correu electrònic amb la qual es va registrar. S'hi enviarà una contrasenya única per al pas següent.";
+"verify_account_deletion_descr" = "Hem de verificar el vostre compte abans d'eliminar-lo.\n\nIntroduïu l'adreça de correu electrònic amb la qual us vau registrar. S'hi enviarà una contrasenya única per al pas següent.";
 "verify_account" = "Verifiqueu el vostre compte";
 "terrain_map" = "Mapa de terreny (3D)";
 "map_2d_mode_action" = "Mode 2D";
@@ -3021,7 +3021,7 @@
 "logout_from_osmand_cloud_decsr" = "Sortiu?\nHaureu de tornar a iniciar la sessió per fer còpies de seguretat o restaurar les dades.";
 "duration_moment_ago" = "fa un moment";
 "backup_error_no_valid_subscription" = "No hi ha subscripció vàlida";
-"backup_error_user_is_not_registered" = "Cap usuari registrat amb aquesta adreça de correu electrònic";
+"backup_error_user_is_not_registered" = "No hi ha cap usuari registrat amb aquesta adreça de correu electrònic";
 "backup_error_token_is_not_valid_or_expired" = "Testimoni no vàlid o caducat";
 "backup_error_token_is_not_valid" = "Alguna cosa no és correcta amb l'identificador o el testimoni del dispositiu proporcionat";
 "backup_error_file_not_available" = "El fitxer no està disponible";
@@ -3071,8 +3071,8 @@
 "verification_code_missing" = "No he rebut cap codi de verificació";
 "cloud_email_already_registered" = "Aquesta adreça de correu electrònic ja està registrada.";
 "cloud_email_not_registered" = "Aquesta adreça de correu electrònic no està registrada a OsmAnd Cloud";
-"osmand_cloud_login_descr" = "Si us plau, introdueixi l'adreça de correu electrònic amb la qual va registrar. S'hi enviarà una contrasenya única.";
-"osmand_cloud_create_account_descr" = "Si us plau, introdueixi la seva adreça de correu electrònic, s'enviarà un codi de verificació allà,\ni totes les teves dades estaran vinculades a ella.";
+"osmand_cloud_login_descr" = "Introduïu l'adreça de correu electrònic amb la qual us vau registrar. S'hi enviarà una contrasenya única.";
+"osmand_cloud_create_account_descr" = "Introduïu la vostra adreça electrònica, s'hi enviarà un codi de verificació,\ni s'hi vincularan totes les vostres dades.";
 "backup_into_file" = "Fes una còpia de seguretat com a fitxer";
 "local_backup" = "Còpia local";
 "osmand_cloud_authorize_descr" = "No perdis mai les teves dades. Fes una còpia de seguretat i restaura tota la informació fàcilment.";

@@ -1410,6 +1410,7 @@
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
 "lang_crh" = "Crimean Tatar (latin)";
+"lang_mi" = "Māori";
 
 "shared_string_maps" = "Maps";
 "purchases" = "Purchases";
@@ -4300,7 +4301,7 @@
 
 "sensor_data" = "Sensor data";
 "sensor_data_settings_description" = "show main data from sensor";
-"battery_level_settings_description" = "show sensor batter level as main value";
+"battery_level_settings_description" = "show sensor battery level as main value";
 "shared_string_date" = "Date";
 
 "add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";

@@ -239,6 +239,10 @@
         NSString *routeTagTitle = poiType ? poiType.nameLocalized : [OAPOIHelper.sharedInstance getPhraseByName:routeTagKey];
         routeTagTitle = routeTagTitle ?: @"";
         
+        if ([poiType isKindOfClass:OAPOIType.class] && ((OAPOIType *)poiType).isHidden)
+        {
+            continue;
+        }
         NSNumber *routeTagOrder = poiType && [poiType isKindOfClass:OAPOIType.class] ? @(((OAPOIType *) poiType).order) : @(90);
         
         if ([routeTagKey isEqualToString:@"ascent"] || [routeTagKey isEqualToString:@"descent"])

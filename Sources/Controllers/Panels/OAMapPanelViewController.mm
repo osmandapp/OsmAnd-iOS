@@ -1125,12 +1125,12 @@ typedef enum
 
 - (void) openSearch:(NSObject *)object location:(CLLocation *)location
 {
-    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:@"" object:object];
+    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:@"" object:object openedFromShowOnMap:NO];
 }
 
-- (void) openSearch:(NSObject *)object location:(CLLocation *)location searchQuery:(NSString *)searchQuery
+- (void) reopenSearchFromShowOnMap:(NSObject *)object location:(CLLocation *)location searchQuery:(NSString *)searchQuery
 {
-    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:searchQuery object:object];
+    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:searchQuery object:object openedFromShowOnMap:YES];
 }
 
 - (void) openSearch:(OAQuickSearchType)searchType
@@ -1140,10 +1140,10 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex
 {
-    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil object:nil];
+    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil object:nil openedFromShowOnMap:NO];
 }
 
-- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object openedFromShowOnMap:(BOOL)openedFromShowOnMap
 {
     [OAAnalyticsHelper logEvent:@"search_open"];
     [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandSearchScreenOpen];
@@ -1214,21 +1214,22 @@ typedef enum
 
         if ([object isKindOfClass:[OAPOICategory class]])
         {
-            if (NSStringIsEmpty(objectLocalizedName))
-            {
-                objectLocalizedName = ((OAPOICategory *) object).nameLocalized;
-            }
+            OAPOICategory *c = ((OAPOICategory *) object);
+            objectLocalizedName = c.nameLocalized;
             phrase = [searchUICore resetPhrase:[NSString stringWithFormat:@"%@ ", objectLocalizedName]];
         }
         else if ([object isKindOfClass:[OAPOIUIFilter class]])
         {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) object;
             filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID] || [filter.filterId hasPrefix:topIndexBrandPrefix];
-            if (NSStringIsEmpty(objectLocalizedName))
-            {
-                objectLocalizedName = filterByName ? filter.filterByName : filter.name;
-            }
+            objectLocalizedName = filterByName ? filter.filterByName : filter.name;
             phrase = [searchUICore resetPhrase];
+            
+            if (openedFromShowOnMap)
+            {
+                // This line don't exist in Android. Because Android don't use this function for recreating search screen.
+                objectLocalizedName = searchQuery;
+            }
         }
 
         if (phrase)
@@ -1241,12 +1242,8 @@ typedef enum
             sr.objectType = EOAObjectTypePoiType;
             [searchUICore selectSearchResult:sr];
         }
-        
-        if (NSStringIsEmpty(objectLocalizedName))
-        {
-            searchQuery = [NSString stringWithFormat:@"%@ ",
-                           filterByName ? ((OAPOIUIFilter *) object).filterByName : objectLocalizedName.trim];
-        }
+                
+        searchQuery = [NSString stringWithFormat:@"%@ ", objectLocalizedName.trim];
     }
 
     if (searchQuery)

@@ -2217,7 +2217,7 @@
 "shared_string_inches" = "inches";
 "shared_string_pounds" = "pounds";
 
-"background_opacity" = "Background opacity";
+"background" = "Background";
 "corner_radius" = "Corner radius";
 "shared_string_pt" = "pt";
 "shared_string_default" = "Default";

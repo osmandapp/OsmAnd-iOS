@@ -143,7 +143,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         let backgroundOpacityRow = backgroundOpacitySection.createNewRow()
         backgroundOpacityRow.key = Self.backgroundOpacityRowKey
         backgroundOpacityRow.cellType = TopBottomValuesSliderTableViewCell.reuseIdentifier
-        backgroundOpacityRow.title = localizedString("background_opacity")
+        backgroundOpacityRow.title = localizedString("background")
         backgroundOpacityRow.setObj(appearanceParams.opacity as Any, forKey: Self.valueKey)
     }
     

@@ -208,6 +208,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             cell.slider.tag = (indexPath.section << 10) | indexPath.row
             cell.slider.removeTarget(self, action: nil, for: .valueChanged)
             cell.slider.addTarget(self, action: #selector(sliderChanged(sender:)), for: .valueChanged)
+            cell.slider.tintColor = .menuButton
             cell.topLeftLabel.text = item.title
             cell.topRightLabel.text = NumberFormatter.percentFormatter.string(from: value as NSNumber)
             cell.topRightLabel.textColor = .textColorSecondary

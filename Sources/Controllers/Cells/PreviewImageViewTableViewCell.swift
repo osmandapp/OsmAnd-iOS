@@ -8,18 +8,39 @@
 
 final class PreviewImageViewTableViewCell: UITableViewCell {
     @IBOutlet private weak var previewImageButton: OAHudButton!
+    @IBOutlet private weak var previewImageView: UIImageView!
     @IBOutlet private weak var sizeConstraint: NSLayoutConstraint!
+    
+    private let defaultImageSize: CGFloat = 30
+    private let defaultImageOrigin: CGFloat = 9
     
     func configure(appearanceParams: ButtonAppearanceParams?, buttonState: MapButtonState) {
         previewImageButton.buttonState = buttonState
         previewImageButton.setCustomAppearanceParams(appearanceParams)
+        setupImageViewWith(buttonState: buttonState, appearanceParams: appearanceParams)
         setupButtonColorWith(buttonState: buttonState)
         sizeConstraint.constant = previewImageButton.frame.width
         setupImageContainerShadow()
     }
     
     func rotateImage(_ angle: CGFloat) {
-        previewImageButton.transform = CGAffineTransform(rotationAngle: angle)
+        previewImageView.transform = CGAffineTransform(rotationAngle: angle)
+    }
+    
+    private func setupImageViewWith(buttonState: MapButtonState, appearanceParams: ButtonAppearanceParams?) {
+        if buttonState is CompassButtonState || (buttonState is QuickActionButtonState && (buttonState as! QuickActionButtonState).quickActions.first?.getTypeId() == ChangeMapOrientationAction.getType().stringId && (buttonState as! QuickActionButtonState).isSingleAction() == true) {
+            if !(previewImageView.superview is OAHudButton) {
+                previewImageView.removeFromSuperview()
+                previewImageButton.addSubview(previewImageView)
+                previewImageView.translatesAutoresizingMaskIntoConstraints = true
+                previewImageView.frame = CGRect(x: defaultImageOrigin, y: defaultImageOrigin, width: defaultImageSize, height: defaultImageSize)
+                previewImageView.image = buttonState.previewIcon()
+            }
+            previewImageView.center = CGPoint(x: previewImageButton.frame.width / 2, y: previewImageButton.frame.height / 2)
+            previewImageButton.setImage(nil, for: .normal)
+        } else {
+            previewImageView.isHidden = true
+        }
     }
     
     private func setupButtonColorWith(buttonState: MapButtonState) {

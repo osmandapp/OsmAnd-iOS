@@ -18,13 +18,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yz3-cW-eZi">
-                        <rect key="frame" x="20" y="12.999999999999998" width="180.66666666666666" height="20.333333333333329"/>
+                        <rect key="frame" x="20" y="12.999999999999998" width="319.66666666666669" height="20.333333333333329"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" name="textColorPrimary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eut-uc-mgZ">
-                        <rect key="frame" x="216.66666666666663" y="12.999999999999998" width="180.33333333333337" height="20.333333333333329"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eut-uc-mgZ">
+                        <rect key="frame" x="355.66666666666669" y="12.999999999999998" width="41.333333333333314" height="20.333333333333329"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
@@ -69,7 +69,6 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="yz3-cW-eZi" firstAttribute="width" secondItem="Eut-uc-mgZ" secondAttribute="width" id="4Ot-5I-Zb3"/>
                     <constraint firstItem="yz3-cW-eZi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="CYU-SQ-eV6"/>
                     <constraint firstAttribute="trailingMargin" secondItem="lT0-1Z-JXT" secondAttribute="trailing" id="FFR-nO-7gJ"/>
                     <constraint firstItem="yz3-cW-eZi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="J3U-7z-wss"/>

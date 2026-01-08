@@ -303,6 +303,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     button.alpha = shouldShow ? 1.0 : 0.0;
     button.userInteractionEnabled = button.alpha > 0.0;
+    button.hidden = !shouldShow;
 }
 
 - (void)configureWeatherContoursButton
@@ -1048,7 +1049,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     [self updateMapButtonVisibilityAndAppearance:button showButton:showButton appearanceParams:appearanceParams];
     [self updateColors];
-    [_mapHudLayout updateButtons];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
+        [_mapHudLayout updateButtons];
+    });
 }
 
 - (void)updateMapButtonVisibilityAndAppearance:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams

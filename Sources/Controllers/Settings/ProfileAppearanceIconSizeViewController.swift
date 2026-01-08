@@ -83,8 +83,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
     }
     
     override func registerCells() {
-        tableView.register(UINib(nibName: OAValueTableViewCell.reuseIdentifier, bundle: nil),
-                           forCellReuseIdentifier: OAValueTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: SegmentButtonsSliderTableViewCell.reuseIdentifier, bundle: nil),
                            forCellReuseIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier)
     }
@@ -94,11 +92,6 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         guard let currentIconSize else { return }
 
         let section = createSectionWithName()
-        
-        section.addRow(from: [
-            kCellKeyKey: "name",
-            kCellTypeKey: OAValueTableViewCell.reuseIdentifier
-        ])
         
         section.addRow(from: [
             kCellKeyKey: "slider",
@@ -131,7 +124,8 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
         let item = tableData.item(for: indexPath)
 
         if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell,
+                  let currentIconSize else {
                 return UITableViewCell()
             }
             let arrayValue = item.obj(forKey: iconSizeArrayValueKey) as? [String] ?? []
@@ -144,20 +138,10 @@ final class ProfileAppearanceIconSizeViewController: BaseSettingsParametersViewC
             cell.sliderView.tag = (indexPath.section << 10) | indexPath.row
             cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside, .touchUpOutside])
             cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])
-            return cell
-        } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell, let currentIconSize else {
-                return UITableViewCell()
-            }
-            cell.selectionStyle = .none
-            cell.setCustomLeftSeparatorInset(true)
-            cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
-            cell.descriptionVisibility(false)
-            cell.leftIconVisibility(false)
-            cell.titleLabel.text = localizedString("shared_string_size")
-            cell.titleLabel.accessibilityLabel = cell.titleLabel.text
-            cell.valueLabel.text = NumberFormatter.percentFormatter.string(from: currentIconSize.size(isNavigation: isNavigationIconSize) as NSNumber)
-            cell.valueLabel.accessibilityLabel = cell.valueLabel.text
+            cell.topLeftLabel.text = localizedString("shared_string_size")
+            cell.topLeftLabel.accessibilityLabel = cell.topLeftLabel.text
+            cell.topRightLabel.text = NumberFormatter.percentFormatter.string(from: currentIconSize.size(isNavigation: isNavigationIconSize) as NSNumber)
+            cell.topRightLabel.accessibilityLabel = cell.topRightLabel.text
             return cell
         }
         return UITableViewCell()

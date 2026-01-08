@@ -13,6 +13,8 @@ protocol SegmentButtonsSliderTableViewCellDelegate: AnyObject {
 
 final class SegmentButtonsSliderTableViewCell: UITableViewCell {
     @IBOutlet weak var sliderView: OASegmentedSlider!
+    @IBOutlet weak var topLeftLabel: UILabel!
+    @IBOutlet weak var topRightLabel: UILabel!
     @IBOutlet private weak var plusButton: UIButton!
     @IBOutlet private weak var minusButton: UIButton!
     

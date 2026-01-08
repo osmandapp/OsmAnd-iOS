@@ -9,6 +9,7 @@
 @objcMembers
 final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private static let valueKey = "valueKey"
+    private static let unitKey = "unitKey"
     private static let arrayValuesKey = "arrayValuesKey"
     private static let cornerRadiusRowKey = "cornerRadiusRowKey"
     private static let cornerRadiusArrayValues: [Int32] = [3, 6, 9, 12, 36]
@@ -97,7 +98,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     override func registerCells() {
         addCell(PreviewImageViewTableViewCell.reuseIdentifier)
         addCell(SegmentButtonsSliderTableViewCell.reuseIdentifier)
-        addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(TopBottomValuesSliderTableViewCell.reuseIdentifier)
         addCell(OAIconsPaletteCell.reuseIdentifier)
     }
@@ -116,28 +116,22 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         iconRow.descr = localizedString("shared_string_all_icons")
         
         let sizeSection = tableData.createNewSection()
-        let sizeValueRow = sizeSection.createNewRow()
-        sizeValueRow.cellType = OAValueTableViewCell.reuseIdentifier
-        sizeValueRow.title = localizedString("shared_string_size")
-        sizeValueRow.setObj(String(format: localizedString("ltr_or_rtl_combine_via_space"), "\(appearanceParams.size)", localizedString("shared_string_pt")), forKey: Self.valueKey)
-        
         let sizeSliderRow = sizeSection.createNewRow()
         sizeSliderRow.cellType = SegmentButtonsSliderTableViewCell.reuseIdentifier
         sizeSliderRow.key = Self.sizeRowKey
+        sizeSliderRow.title = localizedString("shared_string_size")
         sizeSliderRow.setObj(Self.sizeArrayValues.map { String($0) }, forKey: Self.arrayValuesKey)
         sizeSliderRow.setObj(String(appearanceParams.size), forKey: Self.valueKey)
+        sizeSliderRow.setObj(localizedString("shared_string_pt"), forKey: Self.unitKey)
         
         let cornerRadiusSection = tableData.createNewSection()
-        let cornerRadiusValueRow = cornerRadiusSection.createNewRow()
-        cornerRadiusValueRow.cellType = OAValueTableViewCell.reuseIdentifier
-        cornerRadiusValueRow.title = localizedString("corner_radius")
-        cornerRadiusValueRow.setObj(String(format: localizedString("ltr_or_rtl_combine_via_space"), "\(appearanceParams.cornerRadius)", localizedString("shared_string_pt")), forKey: Self.valueKey)
-        
         let cornerRadiusSliderRow = cornerRadiusSection.createNewRow()
         cornerRadiusSliderRow.cellType = SegmentButtonsSliderTableViewCell.reuseIdentifier
         cornerRadiusSliderRow.key = Self.cornerRadiusRowKey
+        cornerRadiusSliderRow.title = localizedString("corner_radius")
         cornerRadiusSliderRow.setObj(Self.cornerRadiusArrayValues.map { String($0) }, forKey: Self.arrayValuesKey)
         cornerRadiusSliderRow.setObj(String(appearanceParams.cornerRadius), forKey: Self.valueKey)
+        cornerRadiusSliderRow.setObj(localizedString("shared_string_pt"), forKey: Self.unitKey)
         
         let backgroundOpacitySection = tableData.createNewSection()
         let backgroundOpacityRow = backgroundOpacitySection.createNewRow()
@@ -171,33 +165,25 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             }
             return cell
         } else if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell,
+                  let value = item.obj(forKey: Self.valueKey) as? String,
+                  let unit = item.obj(forKey: Self.unitKey) as? String else {
                 return UITableViewCell()
             }
             let arrayValue = item.obj(forKey: Self.arrayValuesKey) as? [String] ?? []
             cell.delegate = self
             cell.sliderView.setNumberOfMarks(arrayValue.count)
-            if let customString = item.obj(forKey: Self.valueKey) as? String, let index = arrayValue.firstIndex(of: customString) {
+            if let index = arrayValue.firstIndex(of: value) {
                 cell.sliderView.selectedMark = index
                 cell.setupButtonsEnabling()
             }
             cell.sliderView.tag = (indexPath.section << 10) | indexPath.row
             cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside, .touchUpOutside])
             cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])
-            return cell
-        } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell, let value = item.obj(forKey: Self.valueKey) as? String else {
-                return UITableViewCell()
-            }
-            cell.selectionStyle = .none
-            cell.setCustomLeftSeparatorInset(true)
-            cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
-            cell.descriptionVisibility(false)
-            cell.leftIconVisibility(false)
-            cell.titleLabel.text = item.title
-            cell.titleLabel.accessibilityLabel = cell.titleLabel.text
-            cell.valueLabel.text = value
-            cell.valueLabel.accessibilityLabel = cell.valueLabel.text
+            cell.topLeftLabel.text = item.title
+            cell.topLeftLabel.accessibilityLabel = cell.topLeftLabel.text
+            cell.topRightLabel.text = String(format: localizedString("ltr_or_rtl_combine_via_space"), value, unit)
+            cell.topRightLabel.accessibilityLabel = cell.topRightLabel.text
             return cell
         } else if item.cellType == TopBottomValuesSliderTableViewCell.reuseIdentifier {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TopBottomValuesSliderTableViewCell.reuseIdentifier) as? TopBottomValuesSliderTableViewCell, let value = item.obj(forKey: Self.valueKey) as? Float else {

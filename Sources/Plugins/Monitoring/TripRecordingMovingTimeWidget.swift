@@ -42,7 +42,9 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
             cachedTimeMoving = timeMoving
             forceUpdate = false
             let formatted = OAOsmAndFormatter.getFormattedDurationShort(Double(timeMoving) / 1000, fullForm: false)
-            setText(formatted, subtext: nil)
+            let isHourOrMore = timeMoving >= 60 * 60 * 1000
+            let unitKey = isHourOrMore ? "int_hour" : "shared_string_minute_lowercase"
+            setText(formatted, subtext: localizedString(unitKey))
         }
         
         updateTitleAndIcon()
@@ -84,6 +86,10 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
         currentMode().iconName
     }
     
+    override func resolvedModeTitleKeyForList() -> String? {
+        currentMode().titleKey
+    }
+    
     private func getTimeMoving() -> Int64 {
         let mode = currentMode()
         if mode == .total {
@@ -111,15 +117,10 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
     private func updateTitleAndIcon() {
         let mode = currentMode()
         let baseTitle = widgetType?.title ?? ""
-        if mode == .total {
-            setContentTitle(baseTitle)
-        } else {
-            let modeTitle = localizedString(mode.titleKey)
-            let format = localizedString("ltr_or_rtl_combine_via_colon")
-            let fullTitle = String(format: format, baseTitle, modeTitle)
-            setContentTitle(fullTitle)
-        }
-        
+        let modeTitle = localizedString(mode.titleKey)
+        let format = localizedString("ltr_or_rtl_combine_via_colon")
+        let fullTitle = String(format: format, baseTitle, modeTitle)
+        setContentTitle(fullTitle)
         setIcon(mode.iconName)
         configureSimpleLayout()
     }

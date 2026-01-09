@@ -21,7 +21,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         let section = tableData.createNewSection()
-        let sortedWidgets = widgetGroup.getWidgets(withPanel: widgetPanel).sorted { $0.ordinal < $1.ordinal }
+        let sortedWidgets = widgetGroup.getWidgets(withPanel: widgetPanel).sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
         for widget in sortedWidgets {
             let widgetInfo = widgetRegistry.getWidgetInfo(for: widget)
             guard let widgetInfo else { continue }

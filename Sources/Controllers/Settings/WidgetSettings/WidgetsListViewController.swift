@@ -589,9 +589,59 @@ extension WidgetsListViewController {
         }
         
         row.iconName = resolveIconName(for: widget, params: params)
-        row.title = widget.getTitle()
+        row.title = resolveTitle(for: widget, params: params) ?? widget.getTitle()
         row.descr = widget.getMessage()
         row.cellType = OASimpleTableViewCell.getIdentifier()
+    }
+    
+    private func resolveTitle(for widget: MapWidgetInfo, params: [String: Any]?) -> String? {
+        let widgetView = widget.widget
+        let baseTitle = widgetView.widgetType?.title ?? widget.getTitle()
+        let format = localizedString("ltr_or_rtl_combine_via_colon")
+        func intFromParams(_ key: String) -> Int? {
+            guard let params, let rawStr = params[key] as? String, let raw = Int(rawStr) else { return nil }
+            return raw
+        }
+        
+        func fallbackTitle() -> String {
+            (widgetView as? BaseRecordingWidget)?.getResolvedTitleForList() ?? baseTitle
+        }
+        
+        switch widgetView.widgetType {
+        case .tripRecordingDistance:
+            if let raw = intFromParams(TripRecordingDistanceWidgetState.prefDistanceModeId) {
+                let mode = TripRecordingDistanceMode(rawValue: raw) ?? .totalDistance
+                return String(format: format, baseTitle, localizedString(mode.titleKey))
+            }
+            return fallbackTitle()
+        case .tripRecordingUphill, .tripRecordingDownhill:
+            if let raw = intFromParams(TripRecordingElevationWidgetState.prefUphillWidgetModeId) {
+                let mode = TripRecordingElevationMode(rawValue: raw) ?? .total
+                let isUphill = widgetView.widgetType == .tripRecordingUphill
+                return String(format: format, baseTitle, localizedString(mode.titleKey(isUphill: isUphill)))
+            }
+            return fallbackTitle()
+        case .tripRecordingAverageSlope:
+            if let raw = intFromParams(TripRecordingSlopeWidgetState.prefAverageSlopeModeId) {
+                let mode = AverageSlopeMode(rawValue: raw) ?? .lastUphill
+                return String(format: format, baseTitle, localizedString(mode.titleKey))
+            }
+            return fallbackTitle()
+        case .tripRecordingMaxSpeed:
+            if let raw = intFromParams(TripRecordingMaxSpeedWidgetState.prefMaxSpeedModeId) {
+                let mode = MaxSpeedMode(rawValue: raw) ?? .total
+                return String(format: format, baseTitle, localizedString(mode.titleKey))
+            }
+            return fallbackTitle()
+        case .tripRecordingMovingTime:
+            if let raw = intFromParams(TripRecordingMovingTimeWidgetState.prefMovingTimeModeId) {
+                let mode = TripRecordingMovingTimeMode(rawValue: raw) ?? .total
+                return String(format: format, baseTitle, localizedString(mode.titleKey))
+            }
+            return fallbackTitle()
+        default:
+            return baseTitle
+        }
     }
     
     private func resolveIconName(for widget: MapWidgetInfo, params: [String: Any]?) -> String? {

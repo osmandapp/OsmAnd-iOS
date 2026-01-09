@@ -52,7 +52,7 @@ final class TripRecordingDistanceWidget: BaseRecordingWidget {
             let recording = savingTrackHelper.getIsRecording()
             let liveMonitoring = plugin.isLiveMonitoringEnabled()
             let distance = savingTrackHelper.distance
-            setDistanceText(distance)
+            setDistanceText(distance, mode: recordingDistanceMode)
             setRecordingIcons(globalRecording: globalRecording, liveMonitoring: liveMonitoring, recording: recording)
             if distance > 0 {
                 lastUpdateTime = Int64(savingTrackHelper.lastTimeUpdated)
@@ -112,17 +112,25 @@ final class TripRecordingDistanceWidget: BaseRecordingWidget {
         currentMode().iconName
     }
     
+    override func resolvedModeTitleKeyForList() -> String? {
+        currentMode().titleKey
+    }
+    
     private func updateLastSlopeDistance(mode: TripRecordingDistanceMode) {
         if let lastSlope = getLastSlope(isUphill: mode == .lastUphill) {
-            setDistanceText(Float(lastSlope.distance))
+            setDistanceText(Float(lastSlope.distance), mode: mode)
         } else {
-            setDistanceText(0)
+            setDistanceText(0, mode: mode)
         }
     }
     
-    private func setDistanceText(_ distance: Float) {
+    private func setDistanceText(_ distance: Float, mode: TripRecordingDistanceMode) {
         guard distance > 0 else {
-            setText(localizedString("monitoring_control_start"), subtext: nil)
+            if mode == .totalDistance {
+                setText(localizedString("monitoring_control_start"), subtext: nil)
+            } else {
+                setText("0", subtext: nil)
+            }
             return
         }
         
@@ -150,7 +158,7 @@ final class TripRecordingDistanceWidget: BaseRecordingWidget {
     private func updateTitleAndIcon() {
         let mode = currentMode()
         let baseTitle = widgetType?.title ?? ""
-        let modeTitle = localizedString(mode.titleKey)
+        let modeTitle = mode == .totalDistance ? localizedString("shared_string_total") : localizedString(mode.titleKey)
         let format = localizedString("ltr_or_rtl_combine_via_colon")
         let fullTitle = String(format: format, baseTitle, modeTitle)
         setContentTitle(fullTitle)

@@ -466,6 +466,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) registerMapButton:(OAHudButton *)button stateClass:(Class)stateClass
 {
     button.useCustomPosition = NO;
+    button.useDefaultAppearance = [button isKindOfClass:CompassButtonState.class];
     button.buttonState = [[stateClass alloc] init];
     [_mapHudLayout addMapButton:button];
 }
@@ -1099,34 +1100,6 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         [self hideCompass];
 }
 
-- (void)updateCompassSize
-{
-    CGFloat size = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] createAppearanceParams].size;
-    _compassImage.center = CGPointMake(size / 2, size / 2);
-    _compassButton.frame = CGRectMake(_compassButton.frame.origin.x, _compassButton.frame.origin.y, size, size);
-}
-
-- (void)updateCompassCornerRadius
-{
-    CompassButtonState *buttonState = [[OAMapButtonsHelper sharedInstance] getCompassButtonState];
-    ButtonAppearanceParams *params = [buttonState createAppearanceParams];
-    NSInteger circleRadius = params.size / 2;
-    NSInteger cornerRadius = params.cornerRadius;
-    _compassButton.layer.cornerRadius = cornerRadius > circleRadius ? circleRadius : cornerRadius;
-}
-
-- (void)updateCompassOpacity
-{
-    _compassButton.backgroundColor = [_compassButton.backgroundColor colorWithAlphaComponent:[[[OAMapButtonsHelper sharedInstance] getCompassButtonState] createAppearanceParams].opacity];
-}
-
-- (void)updateCompassShadow
-{
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:_compassButton.bounds
-                                                          cornerRadius:_compassButton.layer.cornerRadius];
-    _compassButton.layer.shadowPath = shadowPath.CGPath;
-}
-
 - (void) updateWeatherButtonVisibility
 {
     if (!self.weatherToolbar.hidden && (_weatherContoursButton.alpha < 1. || _weatherLayersButton.alpha < 1.))
@@ -1198,10 +1171,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_compass_opt");
     
     [self updateCompassVisibility:showCompass];
-    [self updateCompassSize];
-    [self updateCompassCornerRadius];
-    [self updateCompassOpacity];
-    [self updateCompassShadow];
+    [self updateMapButtonAppearance:_compassButton appearanceParams:[[[OAMapButtonsHelper sharedInstance] getCompassButtonState] createAppearanceParams]];
+    _compassImage.center = CGPointMake(_compassButton.frame.size.width / 2, _compassButton.frame.size.height / 2);
+    [_compassButton setImage:nil forState:UIControlStateNormal];
     [_compassButton updateColorsForPressedState:NO];
 }
 

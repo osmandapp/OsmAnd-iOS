@@ -12,7 +12,7 @@ open class MapButtonState: NSObject {
     static let rectangleRadiusDp: Int32 = 6
     static let defaultSizeDp: Int32 = 48
     static let roundRadiusDp: Int32 = 36
-    static let opaqueAlpha: Float = 1
+    static let opaqueAlpha: Double = 1
     
     private let settings: OAAppSettings = OAAppSettings.sharedManager()
     private let portraitPositionPref: OACommonLong
@@ -61,7 +61,7 @@ open class MapButtonState: NSObject {
         if size <= 0 {
             size = defaultSize()
         }
-        var opacity = Float(buttonsHelper.getDefaultOpacityPref().get())
+        var opacity = buttonsHelper.getDefaultOpacityPref().get()
         if opacity < 0 {
             opacity = defaultOpacity()
         }
@@ -118,7 +118,7 @@ open class MapButtonState: NSObject {
         Self.defaultSizeDp
     }
     
-    func defaultOpacity() -> Float {
+    func defaultOpacity() -> Double {
         Self.opaqueAlpha
     }
 
@@ -156,7 +156,7 @@ open class MapButtonState: NSObject {
         if size <= 0 {
             size = defaultParams.size
         }
-        var opacity = Float(opacityPref.get())
+        var opacity = opacityPref.get()
         if opacity < 0 {
             opacity = defaultParams.opacity
         }

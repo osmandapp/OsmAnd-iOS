@@ -27,10 +27,12 @@
 
 @property (nonatomic, strong, nullable) MapButtonState *buttonState;
 @property (nonatomic, assign) BOOL useCustomPosition;
+@property (nonatomic, assign) BOOL useDefaultAppearance;
 
 - (void)updateColorsForPressedState:(BOOL)isPressed;
 - (void)updatePositions;
 - (void)setUseCustomPosition:(BOOL)useCustomPosition;
+- (void)setUseDefaultAppearance:(BOOL)useDefaultAppearance;
 - (void)savePosition;
 - (void)setCustomAppearanceParams:(ButtonAppearanceParams *_Nullable)appearanceParams;
 - (nullable OASButtonPositionSize *)getDefaultPositionSize;

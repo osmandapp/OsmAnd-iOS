@@ -269,15 +269,15 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
                                             message: localizedString("reset_all_settings_desc"),
                                             preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
-            guard let mapButtonState = self?.mapButtonState else { return }
+            guard let self, let mapButtonState = self.mapButtonState else { return }
             let defaultParams = mapButtonState.createDefaultAppearanceParams()
-            self?.appearanceParams?.iconName = ""
-            self?.iconCollectionHandler?.setIconName("")
-            self?.iconCollectionHandler?.selectCategory(ButtonAppearanceIconCollectionHandler.dynamicKey)
-            self?.appearanceParams?.size = defaultParams.size
-            self?.appearanceParams?.cornerRadius = defaultParams.cornerRadius
-            self?.appearanceParams?.opacity = defaultParams.opacity
-            self?.updateData()
+            self.appearanceParams?.iconName = ""
+            self.iconCollectionHandler?.setIconName("")
+            self.iconCollectionHandler?.selectCategory(ButtonAppearanceIconCollectionHandler.dynamicKey)
+            self.appearanceParams?.size = defaultParams.size
+            self.appearanceParams?.cornerRadius = defaultParams.cornerRadius
+            self.appearanceParams?.opacity = defaultParams.opacity
+            self.updateData()
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         if let popoverController = actionSheet.popoverPresentationController {
@@ -315,7 +315,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             guard selectedIndex >= 0, selectedIndex < arrayValues.count else { return }
             setAppearanceParameter(selectedIndex, key: item.key)
         } else if item.key == Self.backgroundOpacityRowKey {
-            appearanceParams?.opacity = sender.value
+            appearanceParams?.opacity = Double(sender.value)
             updateData()
         }
     }

@@ -10,10 +10,10 @@
 final class ButtonAppearanceParams: NSObject {
     var iconName: String?
     var size: Int32
-    var opacity: Float
+    var opacity: Double
     var cornerRadius: Int32
     
-    init(iconName: String?, size: Int32, opacity: Float, cornerRadius: Int32) {
+    init(iconName: String?, size: Int32, opacity: Double, cornerRadius: Int32) {
         self.iconName = iconName
         self.size = size
         self.opacity = opacity

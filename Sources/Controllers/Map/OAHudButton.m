@@ -15,6 +15,7 @@
 @implementation OAHudButton
 {
     NSInteger _id;
+    ButtonAppearanceParams *_appearanceParams;
     ButtonAppearanceParams *_customAppearanceParams;
 }
 
@@ -104,6 +105,9 @@
 
 - (void)updateContent
 {
+    ButtonAppearanceParams *params = [self getAppearanceParams];
+    if (params != _appearanceParams)
+        _appearanceParams = params;
     [self updateIcon];
     [self updateBackground];
     [self updateCornerRadius];
@@ -158,55 +162,48 @@
 
 - (NSInteger)getSize
 {
-    NSInteger buttonStateSize = [self createDefaultAppearanceParams].size;
-    if (_buttonState)
-    {
-        float size = [[_buttonState storedSizePref] get];
-        buttonStateSize = size != MapButtonState.originalValue ? size : [_buttonState defaultSize];
-    }
     if (_customAppearanceParams)
     {
         NSInteger size = _customAppearanceParams.size;
-        return size == MapButtonState.originalValue ? buttonStateSize : size;
+        if (size == MapButtonState.originalValue)
+            return _buttonState ? _buttonState.defaultSize : [self createDefaultAppearanceParams].size;
+        return size;
     }
 
-    return buttonStateSize;
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    return params.size;
 }
 
 - (CGFloat)getOpacity
 {
-    float buttonStateOpacity = [self createDefaultAppearanceParams].opacity;
-    if (_buttonState)
-    {
-        float opacity = [[_buttonState storedOpacityPref] get];
-        buttonStateOpacity = opacity != MapButtonState.originalValue ? opacity : [_buttonState defaultOpacity];
-    }
     if (_customAppearanceParams)
     {
         CGFloat opacity = _customAppearanceParams.opacity;
-        return opacity == MapButtonState.originalValue ? buttonStateOpacity : opacity;
+        if (opacity == MapButtonState.originalValue)
+            return _buttonState ? _buttonState.defaultOpacity : [self createDefaultAppearanceParams].opacity;
+        return opacity;
     }
-
-    return buttonStateOpacity;
+    
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    return params.opacity;
 }
 
 - (NSInteger)getCornerRadius
 {
     NSInteger circleRadius = [self getSize] / 2;
-    NSInteger buttonStateCornerRadius = [self createDefaultAppearanceParams].cornerRadius;
-    if (_buttonState)
-    {
-        NSInteger cornerRadius = [[_buttonState storedCornerRadiusPref] get];
-        buttonStateCornerRadius = cornerRadius != MapButtonState.originalValue ? cornerRadius : [_buttonState defaultCornerRadius];
-    }
     if (_customAppearanceParams)
     {
         NSInteger cornerRadius = _customAppearanceParams.cornerRadius;
         if (cornerRadius == MapButtonState.originalValue)
-            return buttonStateCornerRadius > circleRadius ? circleRadius : buttonStateCornerRadius;
+        {
+            NSInteger defaultCornerRadius = _buttonState ? _buttonState.defaultCornerRadius : [self createDefaultAppearanceParams].cornerRadius;
+            return defaultCornerRadius > circleRadius ? circleRadius : defaultCornerRadius;
+        }
+            
         return cornerRadius > circleRadius ? circleRadius : cornerRadius;
     }
-    return buttonStateCornerRadius > circleRadius ? circleRadius : buttonStateCornerRadius;
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    return params.cornerRadius > circleRadius ? circleRadius : params.cornerRadius;
 }
 
 - (void)updatePositions
@@ -221,6 +218,11 @@
         [self updatePositions];
 }
 
+- (void)setUseDefaultAppearance:(BOOL)useDefaultAppearance
+{
+    _useDefaultAppearance = useDefaultAppearance;
+}
+
 - (void)savePosition
 {
     if (_buttonState && _useCustomPosition)
@@ -230,6 +232,13 @@
 - (nullable OASButtonPositionSize *)getDefaultPositionSize
 {
     return _buttonState ? [_buttonState getDefaultPositionSize] : nil;
+}
+
+- (ButtonAppearanceParams *)getAppearanceParams
+{
+    if (_buttonState)
+        return _useDefaultAppearance ? [_buttonState createDefaultAppearanceParams] : [_buttonState createAppearanceParams];
+    return [self createDefaultAppearanceParams];
 }
 
 - (IBAction)onButtonTouched:(id)sender

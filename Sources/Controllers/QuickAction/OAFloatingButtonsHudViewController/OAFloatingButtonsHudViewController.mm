@@ -112,6 +112,7 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     ((OAUserInteractionPassThroughView *)self.view).delegate = self;
 
     _map3dModeFloatingButton.useCustomPosition = YES;
+    _map3dModeFloatingButton.useDefaultAppearance = YES;
     _map3dModeFloatingButton.buttonState = _map3DButtonState;
     [_mapHudController.mapHudLayout addMapButton:_map3dModeFloatingButton];
     _map3dModeFloatingButton.tag = [OAUtilities getMap3DModeButtonTag];

@@ -43,8 +43,7 @@ final class ShowHideWeatherLayersAction: OAQuickAction {
     
     override func execute() {
         guard let plugin = OAPluginsHelper.getPlugin(OAWeatherPlugin.self) as? OAWeatherPlugin, plugin.isEnabled(), let app = OsmAndApp.swiftInstance() else { return }
-        app.data.weather = !app.data.weather
-        plugin.updateLayers()
+        plugin.weatherChanged(!app.data.weather)
     }
     
     override func isActionWithSlash() -> Bool {

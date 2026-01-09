@@ -7,12 +7,14 @@
 //
 
 protocol SegmentButtonsSliderTableViewCellDelegate: AnyObject {
-    func onPlusTapped(_ selectedMark: Int)
-    func onMinusTapped(_ selectedMark: Int)
+    func onPlusTapped(_ selectedMark: Int, sender: UISlider)
+    func onMinusTapped(_ selectedMark: Int, sender: UISlider)
 }
 
 final class SegmentButtonsSliderTableViewCell: UITableViewCell {
     @IBOutlet weak var sliderView: OASegmentedSlider!
+    @IBOutlet weak var topLeftLabel: UILabel!
+    @IBOutlet weak var topRightLabel: UILabel!
     @IBOutlet private weak var plusButton: UIButton!
     @IBOutlet private weak var minusButton: UIButton!
     
@@ -42,13 +44,13 @@ final class SegmentButtonsSliderTableViewCell: UITableViewCell {
     @objc private func plusTapped(_ sender: Any) {
         guard sliderView.selectedMark < (sliderView.getMarksCount() - 1) else { return }
         sliderView.selectedMark = sliderView.selectedMark + 1
-        delegate?.onPlusTapped(sliderView.selectedMark)
+        delegate?.onPlusTapped(sliderView.selectedMark, sender: sliderView)
     }
     
     @objc private func minusTapped(_ sender: Any) {
         guard sliderView.selectedMark > 0 else { return }
         sliderView.selectedMark = sliderView.selectedMark - 1
-        delegate?.onMinusTapped(sliderView.selectedMark)
+        delegate?.onMinusTapped(sliderView.selectedMark, sender: sliderView)
     }
 }
 

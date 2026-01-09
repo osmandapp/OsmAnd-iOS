@@ -27,13 +27,43 @@ final class CompassButtonState: MapButtonState {
     override func isEnabled() -> Bool {
         getVisibility() != .alwaysHidden
     }
-
-    override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed(getVisibility().iconName)
+    
+    override func defaultIconName() -> String {
+        getVisibility().iconName
+    }
+    
+    override func buttonDescription() -> String {
+        localizedString("key_event_action_change_map_orientation")
+    }
+    
+    override func previewIcon() -> UIImage? {
+        let iconName = storedIconPref().get()
+        if !iconName.isEmpty && iconName != defaultPreviewIconName() {
+            var icon = UIImage.templateImageNamed(iconName)
+            if icon == nil {
+                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            }
+            return icon
+        } else {
+            return UIImage(named: defaultPreviewIconName())
+        }
+    }
+    
+    override func defaultPreviewIconName() -> String {
+        CompassModeWrapper.iconName(forValue: Int(OAAppSettings.sharedManager().rotateMap.get()), isLightMode: ThemeManager.shared.isLightTheme())
     }
     
     override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_TOP, xMove: false, yMove: true)
+    }
+    
+    override func storedVisibilityPref() -> OACommonInteger {
+        visibilityPref
+    }
+    
+    override func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        super.copyForMode(from: fromMode, to: toMode)
+        visibilityPref.set(getVisibility(fromMode).rawValue, mode: toMode)
     }
 
     func getVisibility() -> CompassVisibility {

@@ -1700,7 +1700,7 @@
 "max_speed" = "Максимальная скорость";
 "shared_string_min_speed" = "Мин. скорость";
 "default_speed_setting_title" = "Скорость по умолчанию";
-"routing_attr_length_name" = "Длина";
+"routing_attr_length_name" = "Расстояние";
 "do_not_rotate" = "Не вращать";
 "select_distance_route_will_recalc" = "Автоперестроение маршрута при сходе с него.";
 "special_routing_type" = "Специальная навигация";

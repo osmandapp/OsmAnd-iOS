@@ -3418,7 +3418,7 @@
 "save_as_smart_folder" = "Spara som smart mapp";
 "route_roundabout_exit" = "Ta %d utfarten";
 "auto_25_chars_route_tsll" = "Svag sväng vänster";
-"attach_roads_descr" = "Anpassa ditt spår efter tillgängliga vägar för att beräkna rutt mellan punkter och koppla till svänginstruktioner och ruttegenskaper.";
+"attach_roads_descr" = "Koppla ditt spår till vägar för att få detaljerad ruttinformation, inklusive detaljerade svänginstruktioner och vägattribut.";
 "shared_strings_dimensions" = "Dimensioner";
 "fuel_tank_capacity" = "Bränsletankens kapacitet";
 "shared_string_items" = "Objekt";

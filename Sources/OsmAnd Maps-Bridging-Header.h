@@ -288,4 +288,8 @@
 #import "OAMapillaryImageCardWrapper.h"
 #import "OAOBDConnector.h"
 
+#import "QuadRect.h"
+#import "OAWikipediaPlugin.h"
+#import "OAAmenitySearcher.h"
+
 #pragma clang diagnostic pop

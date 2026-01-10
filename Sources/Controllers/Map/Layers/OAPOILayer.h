@@ -9,8 +9,6 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
-@class OAPOIUIFilter;
-
 @interface OAPOILayer : OASymbolMapLayer<OAContextMenuProvider>
 
 @end

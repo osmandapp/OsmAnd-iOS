@@ -108,6 +108,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (void) removeUnsavedFilterByName;
 - (BOOL) isWikiFilter;
 - (BOOL) isTopWikiFilter;
+- (BOOL)isTopImagesFilter;
 - (void) updateAcceptedTypeOrigins;
 - (void) setFilterByKey:(NSString *)key;
 @end

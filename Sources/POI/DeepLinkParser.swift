@@ -367,7 +367,7 @@ final class DeepLinkParser: NSObject {
         request.wikidata = wikidata
         request.osmId = parsedOsmId
         request.mainAmenityType = subType
-        return OAAmenitySearcher.sharedInstance().searchDetailedObject(request)
+        return OAAmenitySearcher.sharedInstance().searchDetailedObject(with: request)
     }
     
     private func parseIntermediatePoints(_ parameter: String?) -> [CLLocation]? {

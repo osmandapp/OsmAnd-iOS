@@ -197,7 +197,7 @@
 "import_export" = "Импорт/экспорт";
 "gpx_import_desc" = "Для импорта GPX-файлов (общепринятый формат GPS-данных) из Dropbox, электронной почты, или любого другого источника, используйте функцию «Копировать в OsmAnd Maps»";
 "prch_ski_q" = "Пожалуйста активируйте стиль \"Ski map\" в настройках карты";
-"prch_nau_q1" = "Пожалуйста активируйте стиль \"Nautical\" в настройках карты и скачайте мировую карту морских ориентиров.";
+"prch_nau_q1" = "Пожалуйста активируйте стиль «Nautical» в «Настройках карты», выбрав «Тип карты» и скачайте «Мировую карту морских ориентиров».";
 "prch_nau_q2_cell" = "Для скачивания %@ необходима сотовая сеть.";
 "incur_high_charges" = "Это может привести к значительным расходам.";
 "prch_nau_q2_wifi" = "Для скачивания %@ необходима WiFi сеть.";
@@ -978,7 +978,7 @@
 "context_menu_item_directions_from" = "Маршрут от этой точки";
 "start_editing_card_image_text" = "Бесплатный путеводитель по всему миру, который может править каждый.";
 "wikivoyage_travel_guide_descr" = "Гид по самым интересным местам планеты в OsmAnd без подключения к интернету.";
-"product_desc_sea_depth_contours" = "Изобаты и плавучие отметки глубин";
+"product_desc_sea_depth_contours" = "Изобаты и Морские ориентиры";
 "poi_context_menu_modify" = "Править POI";
 "product_desc_africa_short" = "Карты Африканского региона";
 "product_desc_australia_short" = "Карты Австралийского региона";
@@ -2777,7 +2777,7 @@
 "specify_number_of_dir_indicators_desc" = "Выберите количество указателей направления.";
 "delete_history_items" = "Удалить записи истории (%@ шт.)?";
 "help_article_purchases_ios_name" = "Покупки на iOS";
-"help_article_map_legend_ski_map_name" = "Стиль карты «Зимний/лыжный»";
+"help_article_map_legend_ski_map_name" = "Лыжный стиль карты";
 "ant_plus_open_settings" = "Открыть настройки";
 "map_widget_group_glide_desc" = "Виджеты показывают соотношение планирования к целевому значению или среднему значению для текущего полета.";
 "average_speed_time_interval_desc" = "Укажите временной интервал для усреднения скорости.";
@@ -2796,7 +2796,7 @@
 "help_article_map_raster_maps_name" = "Растровые карты (online/offline)";
 "map_widget_camera_distance_desc" = "Виджет показывает высоту камеры над уровнем поверхности.";
 "shared_string_view" = "Просмотр";
-"help_article_map_legend_nautical_map_name" = "Cтиль карты «Морской»";
+"help_article_map_legend_nautical_map_name" = "Cтиль карты «Nautical »";
 "verify_account" = "Подтвердите ваш аккаунт";
 "help_article_navigation_routing_train_routing_name" = "Поезд";
 "deleting_complete" = "Удаление завершено";

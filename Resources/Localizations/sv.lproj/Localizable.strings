@@ -3814,7 +3814,7 @@
 "quick_action_template_name" = "Mallnamn";
 "quick_action_get_info" = "Få info";
 "quick_action_enter_message" = "Ange meddelande";
-"quick_action_parking_descr" = "Tryck på denna åtgärdsknapp lägger till en parkeringsplats på kartans centrumpunkt.";
+"quick_action_parking_descr" = "Tryck på denna åtgärdsknapp lägger till en parkeringsplats på kartans mittpunkt.";
 "quick_action_next_app_profile" = "App profil till nästa";
 "key_event_action_next_app_profile" = "Nästa app-profil";
 "efficient_grid" = "Effektivt rutnät";
@@ -3942,7 +3942,7 @@
 "clear_all_key_shortcuts_summary" = "Alla kortkommandon för den valda typen kommer att tas bort.";
 "add_new_device" = "Lägg till ny enhet";
 "remove_device" = "Ta bort enheten";
-"remove_device_message" = "Är du säker på att du vill ta bort \"%@\" och alla tangenttilldelningar?";
+"remove_device_message" = "Är du säker på att du vill ta bort \"%@\" och alla tangentbordsgenvägar?";
 "added_devices" = "Tillagda enheter";
 "remove_key_assignment" = "Ta bort kortkommandot";
 "remove_key_assignment_summary" = "Kortkommandot för den valda åtgärden kommer att tas bort.";

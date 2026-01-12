@@ -3140,3 +3140,4 @@
 "x" = "X (predtým Twitter)";
 "routing_attr_weightrating_name" = "Maximálna hmotnosť pri plnom zaťažení";
 "routing_attr_maxaxleload_name" = "Maximálne zaťaženie na nápravu";
+"copy_link" = "Kopírovať odkaz";

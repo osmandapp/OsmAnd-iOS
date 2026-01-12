@@ -95,6 +95,7 @@ var languageDict = [
     "lv" : "lv",                // Latvian
     "mk" : "mk",                // Macedonian
     "ml" : "ml",                // Malayalam
+    "mi" : "mi",                // Maori
     "mn" : "mn",                // Mongolian
     "mr" : "mr",                // Marathi
     "my" : "my",                // Burmese

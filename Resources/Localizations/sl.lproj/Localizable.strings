@@ -2476,3 +2476,4 @@
 "shared_string_normal" = "Običajno";
 "trace_rendering_descr" = "Pokaži zmogljivost izvajanja izrisovanja in navigacije.";
 "shared_string_other" = "Drugo";
+"day_short" = "D";

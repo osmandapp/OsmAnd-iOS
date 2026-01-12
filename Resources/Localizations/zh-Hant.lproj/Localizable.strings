@@ -285,7 +285,7 @@
 "sett_lang_trans" = "直譯";
 "fav_select" = "請選擇我的最愛";
 "enter_description" = "輸入記述";
-"shared_string_description" = "敘述";
+"shared_string_description" = "說明";
 "enter_fav_name" = "輸入我的最愛名稱";
 "res_installing" = "正在安裝…";
 "download_wikipedia_maps" = "維基百科";
@@ -371,7 +371,7 @@
 "purchases_feature_desc_wikipedia" = "離線存取與地點相關的維基百科條目，只需在地圖上輕點即可了解旅途中的景點。記得下載各地區的維基百科地圖檔。";
 "osmand_parking_plugin_description" = "標記您的汽車停放位置，並在停車計時器到期時通知您的日曆。要放置標記，請在地圖上選擇一個地點，點擊「動作」，然後選擇「新增停車位」。";
 "plugin_nautical_descr" = "使用關於航行路線、導航燈、航海危險區域、航行或停靠限制區域等資訊豐富您的地圖。要使用，請下載對應的航海地圖並在「設定地圖」下啟用「航海地圖」樣式。 \n \n在 %@ 取得進一步資訊。";
-"plugin_ski_descr" = "用來在冬季運動區導航：檢視滑雪道、滑雪纜車以及越野滑雪道，彩色線條指示難度等級。要使用，請啟用此外掛程式並到「設定地圖」然後選擇「冬季和滑雪」地圖樣式。";
+"plugin_ski_descr" = "專為冬季運動區域導航而設計：顯示滑雪雪道、纜車和越野滑雪道，並以彩色線條標示難度等級。如要使用此功能，請啟用此插件，並前往「設定地圖」，選擇「冬季和滑雪」地圖樣式。";
 "record_plugin_description" = "記錄您的旅行或訓練，並根據速度、累積的上升與下降、海拔剖面等分析資料。記錄的軌跡可以封存、與朋友分享、編輯與後處理等。 \n \n在 %@ 取得進一步的資訊。";
 "product_title_trip_planning" = "旅程規劃";
 "no_statistics" = "沒有統計資料";
@@ -507,7 +507,7 @@
 "route_tshl" = "向左急轉後直行";
 "route_tsll" = "向左急轉後直行";
 "route_tu" = "迴轉後直行";
-"route_head" = "前方";
+"route_head" = "直行";
 "looking_up_address" = "搜尋地址";
 "no_address_found" = "地址不詳";
 "traffic_warning_speed_limit" = "速限";
@@ -632,7 +632,7 @@
 "choose_audio_stream_descr" = "選取要播放語音導航的揚聲器。";
 "map_markers" = "地圖標記";
 "select_gpx" = "選擇 GPX …";
-"layer_map_appearance" = "組態螢幕顯示";
+"layer_map_appearance" = "組態螢幕界面";
 "map_widget_right" = "右面板";
 "map_widget_left" = "左面板";
 "shared_string_collapse" = "收合";
@@ -1552,7 +1552,7 @@
 "walking_route_osmc_description" = "按其各自的當地顏色（如果存在於 OpenStreetMap 之上的話）與類型（國際、區域、當地）為路徑上色。";
 "suggested_maps_descr" = "這些地圖是外掛程式所需的。";
 "travel_routes" = "旅行路線";
-"plugin_mapillary_descr" = "街道級影像。你也可以自己貢獻。要將現有資料作為地圖圖層視圖，請在「設定地圖」選單中開啟「街道級照片」。";
+"plugin_mapillary_descr" = "街景圖像。您也可以自己參與貢獻。若要將現有資料顯示為地圖圖層，請在「設定地圖」功能表中開啟「街景圖像」。";
 "routes_color_by_type" = "使用……為路徑上色";
 "gpxup_private" = "私人的";
 "shared_string_all_languages" = "所有語言";
@@ -1945,7 +1945,7 @@
 "contact_support_description" = "如果您有任何問題，請於 %@ 聯絡我們。";
 "contact_support" = "技術支援";
 "subscription_banner_free_maps_description" = "獲得無限制的地圖下載和更新。";
-"backup_delete_types_descr" = "要從 OsmAnd Cloud 刪除已器用資料類型的所有資料嗎？";
+"backup_delete_types_descr" = "要從 OsmAnd Cloud 中刪除所有過時數據類型的數據嗎？";
 "gpx_upload_identifiable_visibility_descr" = "「可識別」模式下，您的軌跡將同時顯示在個人 GPS 軌跡和公開 GPS 軌跡清單中。這意味著其他使用者可下載原始軌跡，並將其與您的使用者名稱建立關聯。透過追蹤點 API，帶有公開時間戳的追蹤點資料將直接引用您的原始追蹤頁面。";
 "rendering_attr_depthContourWidth_name" = "線條寬度";
 "login_open_street_map_org" = "登入 OpenStreetMap.org";
@@ -1970,7 +1970,7 @@
 "promo_subscription" = "促銷訂閱";
 "weather_wind_knots" = "節";
 "backup_delete_all_data_warning" = "您將要刪除先前上傳至 OsmAnd Cloud 的所有資料，包含版本歷史紀錄。 \n \n您將無法復原已刪除的資料。";
-"backup_delete_old_data_warning" = "您將要刪除先前載入資料的變更歷史紀錄。 \n \n目前版本的資料將會儲存到伺服氣上，但您將無法回退到之前的修改。";
+"backup_delete_old_data_warning" = "您即將刪除先前載入資料的變更歷史紀錄。 \n \n目前版本的資料將保存在伺服器上，但您將無法回復到先前所做的變更。";
 "rendering_attr_depthContourColorScheme_name" = "等深線配色方案";
 "routing_attr_hazmat_category_name" = "危險品分類";
 "simulate_your_location_gpx_descr" = "使用已紀錄的 GPX 軌跡模擬您的位置。";
@@ -2084,7 +2084,7 @@
 "local_backup" = "本機備份";
 "quick_action_transport_descr" = "在地圖上顯示或隱藏大眾運輸的按鈕。";
 "co2_mission" = "二氧化碳排放";
-"route_between_points_add_track_desc" = "選取要加入新片段的軌跡檔案。";
+"route_between_points_add_track_desc" = "選擇一個軌跡檔案以添加新的段落。";
 "no_purchases" = "您尚未進行任何購買";
 "routing_attr_avoid_tunnels_description" = "避開隧道";
 "mtb_imba_full" = "國際登山車協會";
@@ -2193,7 +2193,7 @@
 "quick_action_add_osm_bug" = "增加 OSM 的註解";
 "local_openstreetmap_uploading" = "正在上傳 …";
 "add_point_before" = "新增標點之前";
-"move_marker_bottom_sheet_title" = "移動地圖到要變更標記的位置";
+"move_marker_bottom_sheet_title" = "移動地圖以變更標記位置";
 "route_add_start_point" = "增設出發地";
 "quick_action_map_style_action" = "新增地圖樣式";
 "mgrs_format_descr" = "OsmAnd 使用 MGRS，其類似於 UTM NATO 格式。";
@@ -2798,7 +2798,7 @@
 "magnetic_bearing_widget_desc" = "從您的位置觀察到的磁北與目標點之間的角度。";
 "max_speed_widget_desc" = "顯示目前行駛道路的速度限制。";
 "arrival_time_widget_desc" = "到達目的地點的時間。";
-"lanes_widgets_desc" = "顯示目前道路車道佈局並在導航時突出顯示要採取的車道。";
+"lanes_widgets_desc" = "顯示當前路線車道佈局並強調在導航時應該行駛的車道。";
 "coordinates_widget_secondary_desc" = "您可以變更座標格式為 %@ – %@ – %@。";
 "widget_secondary_desc_part_of" = "%@ 外掛程式的一部分。";
 "weather_widgets_secondary_desc" = "可以在天氣外掛設定中更改測量單位。";
@@ -3281,7 +3281,7 @@
 "shared_string_speedometer" = "車速錶";
 "shared_string_item" = "項目";
 "custom_buttons" = "自訂按鈕";
-"avoid_pt_types_descr" = "選取要避免在導航中使用的大眾運輸類型：";
+"avoid_pt_types_descr" = "選取在導航中避免使用的大眾運輸類型：";
 "shared_string_millimeters_short" = "公釐";
 "track_appearance_3D_visualization" = "3D 視覺化";
 "shared_string_class" = "分類";
@@ -3656,7 +3656,7 @@
 "us_gallons" = "美制加侖";
 "auto_25_chars_route_tslr" = "稍向右轉";
 "auto_25_chars_route_tsll" = "稍向左轉";
-"no_photos_available_descr" = "尚未將使用者照片新增至此處";
+"no_photos_available_descr" = "尚未有使用者照片上傳至這個地點";
 "liter" = "公升";
 "attach_roads_descr" = "將追蹤路徑附加在道路上，即可獲得詳細的路徑資訊，包括轉彎指示與道路屬性。";
 "auto_25_chars_route_tr_kl" = "向右轉並靠左";
@@ -3905,3 +3905,8 @@
 "rendering_attr_depthColorScheme_name" = "深度顏色標準";
 "rendering_attr_hideContours_name" = "深海等高線";
 "rendering_attr_hideAreas_description" = "隱藏深海區域";
+"total_distance" = "路線總長度";
+"lang_mi" = "毛利語";
+"average_slope" = "平均坡度";
+"trip_recording_average_slope_widget_description" = "為目前記錄的旅程最後的下坡或是上坡片段顯示平均坡度。";
+"shared_string_max_speed" = "最大速度";

@@ -3977,4 +3977,15 @@
 "unsupported_maps" = "Nepodržane mape";
 "deleted_maps_alert_message" = "Da li ste sigurni da želite da izbrišete %d mape?";
 "deleted_maps_prompt" = "Ove mape više nisu podržane i zamenjene su manjim regionima. Molimo Vas da ih uklonite i preuzmete nove verzije.";
-"ios_release_5_3" = "• Dodana interaktivna animacija za vidžet brzinomera\n• Dodata opcija za promenu veličine ikone položaja lokacije\n• Novi vidžeti za snimanje putovanja: Maksimalna brzina i prosečan nagib; poboljšani vidžeti za uzbrdo/nizbrdo\n• Dodana podrška za duboko povezivanje za deljenje određenih POI\n• Rešen je problem gde se ETA u vidžetima za navigaciju nije se ažurirao dok nije u pokreta\n• Poboljšana povezanost za uparene OBDII adaptere\n• Dodata mogućnost spajanja međuodredišta  u izabranu folder favorita\n• CarPlay: Rešen je problem sa mapom koja ne reaguje na kontrolnoj tabli i dodana podrška za parametar \"Uvek prikaži tamnu mapu\"\n";
+"ios_release_5_3" = "• Dodana interaktivna animacija za vidžet brzinomera\n• Dodata opcija za promenu veličine ikone položaja lokacije\n• Novi vidžeti za snimanje putovanja: Maksimalna brzina i prosečan nagib; poboljšani vidžeti za uzbrdo/nizbrdo\n• Dodana podrška za duboko povezivanje za deljenje određenih POI\n• Rešen je problem gde se ETA u vidžetima za navigaciju nije se ažurirao dok nije u pokretu\n• Poboljšana povezanost za uparene OBDII adaptere\n• Dodata mogućnost spajanja međuodredišta u izabranu folder favorita\n• CarPlay: Rešen je problem sa mapom koja ne reaguje na kontrolnoj tabli i dodana podrška za parametar \"Uvek prikaži tamnu mapu\"\n";
+"weather_layers" = "Vremenski slojevi";
+"quick_action_weather_layers" = "Prekidač za prikazivanje ili skrivanje vremenskih slojeva na mapi.";
+"quick_action_precipitation_layer" = "Prekidač za prikaz ili skrivanje sloja padavina na mapi.";
+"quick_action_cloud_layer" = "Prekidač za prikazivanje ili skrivanje sloja oblaka na mapi.";
+"quick_action_wind_layer" = "Prekidač za prikaz ili skrivanje sloja vetra na mapi.";
+"quick_action_air_pressure_layer" = "Prekidač za prikazivanje ili skrivanje sloja pritiska vazduha na mapi.";
+"quick_action_temperature_layer" = "Prekidač za prikaz ili skrivanje temperaturnog sloja na mapi.";
+"quick_action_wind_animation_layer" = "Prekidač za prikaz ili skrivanje sloja animacije vetra na mapi.";
+"wind_animation_layer" = "Animacija sloja vetra";
+"lang_mi" = "Maorski";
+"copy_link" = "Kopiraj link";

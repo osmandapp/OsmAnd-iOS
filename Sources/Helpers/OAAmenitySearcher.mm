@@ -54,6 +54,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/MapObject.h>
+#include <OsmAndCore/Data/BinaryMapObject.h>
 
 static const int AMENITY_SEARCH_RADIUS = 50;
 static const int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
@@ -61,6 +62,7 @@ static const int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
 int const kSearchLimitRaw = 5000;
 int const kRadiusKmToMetersKoef = 1200.0;
 int const kZoomToSearchPOI = 16.0;
+using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)>;
 
 
 @implementation OAAmenitySearcherRequest
@@ -284,7 +286,41 @@ int const kZoomToSearchPOI = 16.0;
     return filtered;
 }
 
-- (nullable BaseDetailsObject *)searchDetailedObject:(OAAmenitySearcherRequest *)request
+- (nullable BaseDetailsObject *)searchDetailedObject:(id)object
+{
+    OAAmenitySearcherRequest *request = nil;
+    if ([object isKindOfClass:[OAAmenitySearcherRequest class]])
+    {
+        return [self searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)object];
+    }
+    else if ([object isKindOfClass:[OAMapObject class]])
+    {
+        request = [[OAAmenitySearcherRequest alloc] initWithMapObject:(OAMapObject *)object];
+    }
+    else if ([object isKindOfClass:[BaseDetailsObject class]])
+    {
+        BaseDetailsObject *detailsObject = (BaseDetailsObject *)object;
+        if (detailsObject.isObjectFull)
+        {
+            [self completeGeometry:detailsObject object:detailsObject.objects.firstObject];
+            return detailsObject;
+        }
+        if (!NSArrayIsEmpty(detailsObject.objects))
+        {
+            id obj = detailsObject.objects.firstObject;
+            return [self searchDetailedObject:obj];
+        }
+    }
+
+    BaseDetailsObject *detailsObject = nil;
+    if (request != nil)
+        detailsObject = [self searchDetailedObject:request];
+    
+    [self completeGeometry:detailsObject object:object];
+    return detailsObject;
+}
+
+- (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
 {
     if (request.latLon == nil)
     {
@@ -325,6 +361,150 @@ int const kZoomToSearchPOI = 16.0;
     }
 
     return nil;
+}
+
+- (void) completeGeometry:(BaseDetailsObject *)detailsObject object:(id)object
+{
+    if (!detailsObject)
+        return;
+
+    NSMutableArray<NSNumber *> *xx;
+    NSMutableArray<NSNumber *> *yy;
+
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        OAPOI *amenity = object;
+        xx = amenity.x;
+        yy = amenity.y;
+    }
+    if ([object isKindOfClass:OARenderedObject.class])
+    {
+        OARenderedObject *renderedObject = object;
+        xx = renderedObject.x;
+        yy = renderedObject.y;
+    }
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *base = object;
+        xx = [base syntheticAmenity].x;
+        yy = [base syntheticAmenity].y;
+    }
+
+    if (!NSArrayIsEmpty(xx) && !NSArrayIsEmpty(yy))
+    {
+        [detailsObject setX:xx];
+        [detailsObject setY:yy];
+    }
+    else
+    {
+        const auto dataObjects = [self searchBinaryMapDataForAmenity:detailsObject.syntheticAmenity limit:1];
+        for (const auto& dataObject : dataObjects)
+        {
+            if ([self copyCoordinates:detailsObject binaryObject:dataObject])
+                break;
+        }
+    }
+}
+
+- (BOOL)copyCoordinates:(BaseDetailsObject *)detailsObject binaryObject:(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)mapObject
+{
+    const int pointsLength = mapObject->points31.size();
+    if ([detailsObject getPointsLength] < pointsLength)
+    {
+        [detailsObject clearGeometry];
+        for (int i = 0; i < pointsLength; i++)
+        {
+            [detailsObject addX:@(mapObject->points31[i].x)];
+            [detailsObject addY:@(mapObject->points31[i].y)];
+        }
+    }
+    return pointsLength > 0;
+}
+
+- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataForAmenity:(OAPOI *)amenity limit:(int)limit
+{
+    const auto osmId = [ObfConstants getOsmObjectId:amenity];
+    const BOOL checkId = osmId > 0;
+
+    NSString *wikidata = [amenity getWikidata];;
+    const BOOL checkWikidata = !NSStringIsEmpty(wikidata);
+    const QString qWikidata = QString::fromNSString(wikidata);
+
+    NSString *routeId = [amenity getRouteId];
+    const BOOL checkRouteId = !NSStringIsEmpty(routeId);
+    const QString qRouteId = QString::fromNSString(routeId);
+
+    BinaryObjectMatcher matcher = [=](const std::shared_ptr<const OsmAnd::BinaryMapObject>& obj) -> bool
+    {
+        const auto objId = obj->id.getOsmId() >> 1;
+        if (checkId && osmId == objId) {
+            return true;
+        }
+        
+        for (const auto& captionAttributeId : OsmAnd::constOf(obj->captionsOrder)) {
+            const QString & value = OsmAnd::constOf(obj->captions)[captionAttributeId];
+            if ((checkWikidata && value == qWikidata) || (checkRouteId && value == qRouteId)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    return [self searchBinaryMapDataObjects:[amenity getLocation] matcher:matcher limit:limit];
+}
+
+- (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataObjects:(CLLocation *)latLon matcher:(BinaryObjectMatcher)matcher limit:(int)limit
+{
+    QList<std::shared_ptr<const OsmAnd::BinaryMapObject>> list;
+    const int y31 = OsmAnd::Utilities::get31TileNumberY(latLon.coordinate.latitude);
+    const int x31 = OsmAnd::Utilities::get31TileNumberX(latLon.coordinate.longitude);
+
+    const OsmAnd::AreaI bbox31(
+        OsmAnd::PointI(x31, y31),
+        OsmAnd::PointI(x31 + 1, y31 + 1)
+    );
+
+    const QList< std::shared_ptr<const OsmAnd::ObfFile> > repositories = [OAAmenitySearcher getAmenityRepositories:YES];
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    if (!obfsCollection)
+        return list;
+    
+    for (const std::shared_ptr<const OsmAnd::ObfFile> & res : repositories)
+    {
+        if (limit != -1 && list.size() >= limit)
+            break;
+
+        const auto& obfsDataInterface = obfsCollection->obtainDataInterface(res);
+        if (!obfsDataInterface)
+            continue;
+
+        QList<std::shared_ptr<const OsmAnd::BinaryMapObject>> loadedBinaryMapObjects;
+        QList<std::shared_ptr<const OsmAnd::Road>> loadedRoads;
+        auto tileSurfaceType = OsmAnd::MapSurfaceType::Undefined;
+
+        obfsDataInterface->loadBinaryMapObjects(
+            &loadedBinaryMapObjects,
+            &tileSurfaceType,
+            nullptr,
+            OsmAnd::ZoomLevel15,
+            &bbox31
+        );
+
+        for (const auto& obj : loadedBinaryMapObjects)
+        {
+            if (!obj)
+                continue;
+
+            if (!matcher || matcher(obj))
+            {
+                list.append(obj);
+                if (limit != -1 && list.size() >= limit)
+                    break;
+            }
+        }
+    }
+
+    return list;
 }
 
 - (NSMutableArray<OAPOI *> *)filterByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities

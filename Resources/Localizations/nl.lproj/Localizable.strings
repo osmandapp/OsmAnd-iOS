@@ -84,8 +84,8 @@
 "map_widget_time" = "Resterende tijd";
 "shared_string_collapse" = "Inklappen";
 "shared_string_topbar" = "Bovenste balk";
-"map_widget_right" = "Widgets Rechter Kolom";
-"map_widget_left" = "Widgets Linker Kolom";
+"map_widget_right" = "Rechterpaneel";
+"map_widget_left" = "Linkerpaneel";
 "layer_map_appearance" = "Configureer scherm";
 "map_markers" = "Markeervlaggetjes";
 "confirm_usage_speed_cameras" = "In veel landen (onder meer in Duitsland, Frankrijk, Italië) is het verboden om waarschuwingen voor snelheidscontroles te gebruiken. OsmAnd neemt geen verantwoordelijkheid als je de wet overtreedt. Druk alleen op Ja als je deze functie mag gebruiken.";
@@ -2010,7 +2010,7 @@
 "map_widget_time_to_destination" = "Tijd tot bestemming";
 "get_osmand_cloud" = "Neem OsmAnd Cloud";
 "add_row" = "Rij toevoegen";
-"map_markers_bar" = "Markeringen balk";
+"map_markers_bar" = "Kaartmarkeringenbalk";
 "map_widget_distance_to_destination" = "Afstand tot bestemming";
 "route_maneuvers_desc" = "Navigatie widgets worden ingeschakeld tijdens navigatie om informatie te tonen, zoals afstand, aankomst- of resterende tijd, volgende afslagen, richting, huidige straatnaam, rijstrook informatie, maximale snelheid, naderende waarschuwingen, bezienswaardigheden, opgeslagen tussenpunten.";
 "map_widget_trip_recording_duration" = "Tijdsduur";
@@ -2053,7 +2053,7 @@
 "developer_widgets" = "Widgets voor ontwikkelaars";
 "shared_string_bearing" = "Richting";
 "map_widget_current_speed" = "Huidige snelheid";
-"navigation_points" = "Navigatie punten";
+"navigation_points" = "Navigatiepunten";
 "map_widget_sunset_desc" = "Toont het tijdstip van - of de tijd tot zonsondergang.";
 "map_widget_next_sunset" = "Volgende zonsondergang";
 "map_widget_trip_recording_distance" = "Afstand";
@@ -2100,7 +2100,7 @@
 "av_notes_photo_widget_desc" = "Door te tikken op de widget kun je een foto maken.";
 "av_notes_video_widget_desc" = "Door te tikken op de widget kun je een video opnemen.";
 "av_notes_audio_widget_desc" = "Door te tikken op de widget kun je een audio-opname maken.";
-"trip_recording_downhill_widget_desc" = "Toont de som van alle afdalingen van deze opgenomen rit.";
+"trip_recording_downhill_widget_desc" = "Toont de som van alle afdalingen of de laatste afdaling van deze opgenomen rit.";
 "trip_recording_uphill_widget_desc" = "Toont de som van alle beklimmingen of de laatste klim van deze opgenomen rit.";
 "trip_recording_duration_widget_desc" = "Toont de tijdsduur van deze opgenomen rit.";
 "trip_recording_distance_widget_desc" = "Toont de afgelegde afstand van deze opgenomen rit.";
@@ -2937,7 +2937,7 @@
 "start_point" = "Start";
 "info_button" = "Info";
 "help_article_navigation_car_play_name" = "CarPlay";
-"map_widget_gps_info" = "GPS info";
+"map_widget_gps_info" = "GPS-info";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Ski";
 "route_via" = "Via:";
@@ -3776,3 +3776,7 @@
 "plugin_popup_wiki_ask" = "Om Wikipedia gegevens te downloaden moet je eerst de plugin <b>Wikipedia</b> activeren";
 "plugin_popup_srtm_title" = "Contourlijnen downloaden";
 "plugin_popup_nautical_title" = "Nautische kaarten downloaden";
+"lang_mi" = "Maori";
+"average_slope" = "Gemiddelde helling";
+"liter_single" = "Liter";
+"us_gallon" = "US gallon";

@@ -3978,3 +3978,15 @@
 "deleted_maps_prompt" = "Esses mapas não são mais compatíveis e foram substituídos por regiões menores. Remova-os e baixe as novas versões.";
 "unsupported_maps" = "Mapas não suportados";
 "deleted_maps_alert_message" = "Tem certeza de que deseja excluir %d mapas?";
+"copy_link" = "Copiar link";
+"ios_release_5_3" = "• Adicionada animação interativa para o widget Velocímetro.\n• Adicionada uma opção para redimensionar o ícone de localização.\n• Novos widgets de registro de viagem: Velocidade máxima e Inclinação média; widgets de subida/descida aprimorados.\n• Adicionado suporte a links diretos para compartilhar POIs específicos.\n• Corrigido um problema em que a ETA nos widgets de navegação não era atualizada quando o veículo estava parado\n• Conectividade aprimorada para adaptadores OBDII emparelhados\n• Adicionada a capacidade de mesclar pontos de referência em uma pasta de favoritos selecionada\n• CarPlay: corrigido um problema com um mapa que não respondia no painel e adicionado suporte para o parâmetro “Sempre mostrar mapa escuro”\n";
+"lang_mi" = "Maori";
+"wind_animation_layer" = "Camada de animação do vento";
+"quick_action_wind_animation_layer" = "Um botão para mostrar ou ocultar a camada de animação do vento no mapa.";
+"weather_layers" = "Camadas climáticas";
+"quick_action_weather_layers" = "Um botão para mostrar ou ocultar as camadas meteorológicas no mapa.";
+"quick_action_precipitation_layer" = "Uma alternância para mostrar ou ocultar a camada de precipitação no mapa.";
+"quick_action_cloud_layer" = "Uma alternância para mostrar ou ocultar a camada de nuvens no mapa.";
+"quick_action_wind_layer" = "Uma alternância para mostrar ou ocultar a camada de vento no mapa.";
+"quick_action_air_pressure_layer" = "Uma alternância para mostrar ou ocultar a camada de pressão do ar no mapa.";
+"quick_action_temperature_layer" = "Uma alternância para mostrar ou ocultar a camada de temperatura no mapa.";

@@ -1125,13 +1125,12 @@ typedef enum
 
 - (void) openSearch:(NSObject *)object location:(CLLocation *)location
 {
-    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:@"" object:object saveSearchQuery:NO];
+    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:@"" object:object openedFromShowOnMap:NO];
 }
 
-- (void) saveSearchQuery:(NSObject *)object location:(CLLocation *)location searchQuery:(NSString *)searchQuery
+- (void) reopenSearchFromShowOnMap:(NSObject *)object location:(CLLocation *)location searchQuery:(NSString *)searchQuery
 {
-    //Called to reopening search screen with state restoring (after pressed "Show on map" button and then coming back to search screen).
-    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:searchQuery object:object saveSearchQuery:YES];
+    [self openSearch:OAQuickSearchType::REGULAR location:location tabIndex:1 searchQuery:searchQuery object:object openedFromShowOnMap:YES];
 }
 
 - (void) openSearch:(OAQuickSearchType)searchType
@@ -1141,10 +1140,10 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex
 {
-    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil object:nil saveSearchQuery:NO];
+    [self openSearch:searchType location:location tabIndex:tabIndex searchQuery:nil object:nil openedFromShowOnMap:NO];
 }
 
-- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object saveSearchQuery:(BOOL)openedFromShowOnMap
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object openedFromShowOnMap:(BOOL)openedFromShowOnMap
 {
     [OAAnalyticsHelper logEvent:@"search_open"];
     [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandSearchScreenOpen];
@@ -1225,12 +1224,12 @@ typedef enum
             filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID] || [filter.filterId hasPrefix:topIndexBrandPrefix];
             objectLocalizedName = filterByName ? filter.filterByName : filter.name;
             phrase = [searchUICore resetPhrase];
-        }
-        
-        if (openedFromShowOnMap)
-        {
-            // Android doesn't use this method to recreate the search screen.
-            objectLocalizedName = searchQuery;
+            
+            if (openedFromShowOnMap)
+            {
+                // This line don't exist in Android. Because Android don't use this function for recreating search screen.
+                objectLocalizedName = searchQuery;
+            }
         }
 
         if (phrase)

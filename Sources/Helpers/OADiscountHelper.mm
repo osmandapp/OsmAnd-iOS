@@ -486,7 +486,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
             if ([query length] > 0)
             {
                 OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchQuery:query object:nil saveSearchQuery:NO];
+                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchQuery:query object:nil openedFromShowOnMap:NO];
             }
         }
         else if ([_url hasPrefix:@"osmand-show-poi:"])

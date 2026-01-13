@@ -203,6 +203,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             cell.slider.removeTarget(self, action: nil, for: .valueChanged)
             cell.slider.addTarget(self, action: #selector(sliderChanged(sender:)), for: .valueChanged)
             cell.slider.tintColor = .menuButton
+            cell.slider.maximumTrackTintColor = .sliderGray
             cell.topLeftLabel.text = item.title
             
             if #available(iOS 26, *) {

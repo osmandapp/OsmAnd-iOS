@@ -167,11 +167,9 @@
             UIVisualEffectView *glassView =
                 [[UIVisualEffectView alloc] initWithEffect:glass];
             glassView.frame = self.bounds;
-            glassView.autoresizingMask =
-                UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             glassView.userInteractionEnabled = NO;
             glassView.layer.cornerRadius = [self getCornerRadius];
-            glassView.clipsToBounds = YES;
+            glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
             
             [self insertSubview:glassView atIndex:0];
         }

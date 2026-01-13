@@ -768,6 +768,7 @@
 "enable_search_history" = "You can enable search history in Settings";
 "last_seven_days" = "Last 7 days";
 
+"liquid_glass" = "Liquid Glass";
 "track_coloring_solid" = "Solid";
 "attribute" = "Attribute";
 
@@ -2224,6 +2225,9 @@
 "shared_string_custom" = "Custom";
 "dynamic_icon_type_summary" = "Icon changes based on action state.";
 "shared_string_dynamic" = "Dynamic";
+
+"shared_string_tinted" = "Tinted";
+"background_opacity_description" = "Clear is more transparent, revealing the content beneath. Tinted increases opacity and adds more contrast.";
 
 "int_hour" = "h";
 "int_min" = "min.";

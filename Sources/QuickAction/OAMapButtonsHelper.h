@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (OACommonInteger *)getDefaultSizePref;
 - (OACommonDouble *)getDefaultOpacityPref;
 - (OACommonInteger *)getDefaultCornerRadiusPref;
+- (OACommonInteger *)getDefaultGlassStylePref;
 
 - (QuickActionButtonState *)createNewButtonState;
 - (void)addQuickActionButtonState:(QuickActionButtonState *)buttonState;

@@ -36,6 +36,5 @@
 - (void)savePosition;
 - (void)setCustomAppearanceParams:(ButtonAppearanceParams *_Nullable)appearanceParams;
 - (nullable OASButtonPositionSize *)getDefaultPositionSize;
-- (NSInteger)getSize;
 
 @end

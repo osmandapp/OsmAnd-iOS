@@ -253,6 +253,7 @@
 		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
 		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
+		27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
 		27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */; };
@@ -3715,6 +3716,7 @@
 		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
 		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
+		27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundOpacityType.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
 		27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyTableViewCell.xib; sourceTree = "<group>"; };
@@ -9988,6 +9990,7 @@
 				464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */,
 				27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */,
 				468D9C6B2C00FE0600ED368A /* MapButtonState.swift */,
+				27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */,
 				27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */,
 				468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */,
 				C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */,
@@ -17994,6 +17997,7 @@
 				DA5A815F26C563A700F274C7 /* OALiveMonitoringHelper.m in Sources */,
 				DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
 				46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */,
+				27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */,
 				46D5E41A2D31A3F000428227 /* BackupUtils.swift in Sources */,
 				276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */,
 				DA5A839A26C563A800F274C7 /* OALocalResourceInfoCell.m in Sources */,

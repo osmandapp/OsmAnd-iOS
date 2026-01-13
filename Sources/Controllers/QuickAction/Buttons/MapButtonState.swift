@@ -13,6 +13,7 @@ open class MapButtonState: NSObject {
     static let defaultSizeDp: Int32 = 48
     static let roundRadiusDp: Int32 = 36
     static let opaqueAlpha: Double = 1
+    static let defaultGlassStyle: Int32 = -1
     
     private let settings: OAAppSettings = OAAppSettings.sharedManager()
     private let portraitPositionPref: OACommonLong
@@ -21,6 +22,7 @@ open class MapButtonState: NSObject {
     private let sizePref: OACommonInteger
     private let opacityPref: OACommonDouble
     private let cornerRadiusPref: OACommonInteger
+    private let glassStylePref: OACommonInteger
     private let positionSize: ButtonPositionSize
     private let defaultPositionSize: ButtonPositionSize
     
@@ -36,6 +38,7 @@ open class MapButtonState: NSObject {
         sizePref = settings.registerIntPreference(id + "_size", defValue: Int32(Self.originalValue)).makeProfile()
         opacityPref = settings.registerFloatPreference(id + "_opacity", defValue: Double(Self.originalValue)).makeProfile()
         cornerRadiusPref = settings.registerIntPreference(id + "_corner_radius", defValue: Int32(Self.originalValue)).makeProfile()
+        glassStylePref = settings.registerIntPreference(id + "_glass_style", defValue: Int32(Self.originalValue)).makeProfile()
         self.positionSize = ButtonPositionSize(id: id)
         self.defaultPositionSize = ButtonPositionSize(id: id)
         super.init()
@@ -69,7 +72,11 @@ open class MapButtonState: NSObject {
         if cornerRadius < 0 {
             cornerRadius = defaultCornerRadius()
         }
-        return ButtonAppearanceParams(iconName: defaultPreviewIconName(), size: size, opacity: opacity, cornerRadius: cornerRadius)
+        var glassStyle = buttonsHelper.getDefaultGlassStylePref().get()
+        if glassStyle < 0 {
+            glassStyle = defaultGlassStyle()
+        }
+        return ButtonAppearanceParams(iconName: defaultPreviewIconName(), size: size, opacity: opacity, cornerRadius: cornerRadius, glassStyle: glassStyle)
     }
     
     func getName() -> String {
@@ -126,6 +133,10 @@ open class MapButtonState: NSObject {
         Self.roundRadiusDp
     }
     
+    func defaultGlassStyle() -> Int32 {
+        Self.defaultGlassStyle
+    }
+    
     func savedIconName() -> String {
         iconPref.get()
     }
@@ -146,6 +157,10 @@ open class MapButtonState: NSObject {
         cornerRadiusPref
     }
     
+    func storedGlassStylePref() -> OACommonInteger {
+        glassStylePref
+    }
+    
     func createAppearanceParams() -> ButtonAppearanceParams {
         let defaultParams = createDefaultAppearanceParams()
         var iconName: String? = savedIconName()
@@ -164,7 +179,11 @@ open class MapButtonState: NSObject {
         if cornerRadius < 0 {
             cornerRadius = defaultParams.cornerRadius
         }
-        return ButtonAppearanceParams(iconName: iconName, size: size, opacity: opacity, cornerRadius: cornerRadius)
+        var glassStyle = glassStylePref.get()
+        if glassStyle < 0 {
+            glassStyle = defaultParams.glassStyle
+        }
+        return ButtonAppearanceParams(iconName: iconName, size: size, opacity: opacity, cornerRadius: cornerRadius, glassStyle: glassStyle)
     }
     
     func buttonDescription() -> String {
@@ -205,6 +224,7 @@ open class MapButtonState: NSObject {
         sizePref.resetMode(toDefault: appMode)
         opacityPref.resetMode(toDefault: appMode)
         cornerRadiusPref.resetMode(toDefault: appMode)
+        glassStylePref.resetMode(toDefault: appMode)
         portraitPositionPref.resetMode(toDefault: appMode)
         landscapePositionPref.resetMode(toDefault: appMode)
         storedVisibilityPref().resetMode(toDefault: appMode)
@@ -215,6 +235,7 @@ open class MapButtonState: NSObject {
         sizePref.set(sizePref.get(fromMode), mode: toMode)
         opacityPref.set(opacityPref.get(fromMode), mode: toMode)
         cornerRadiusPref.set(cornerRadiusPref.get(fromMode), mode: toMode)
+        glassStylePref.set(glassStylePref.get(fromMode), mode: toMode)
         portraitPositionPref.set(portraitPositionPref.get(fromMode), mode: toMode)
         landscapePositionPref.set(landscapePositionPref.get(fromMode), mode: toMode)
     }

@@ -75,6 +75,7 @@ static QuickActionType *TYPE_INTERFACE;
     OACommonInteger *_defaultSizePref;
     OACommonDouble *_defaultOpacityPref;
     OACommonInteger *_defaultCornerRadiusPref;
+    OACommonInteger *_defaultGlassStylePref;
 }
 
 + (void)initialize
@@ -179,6 +180,7 @@ static QuickActionType *TYPE_INTERFACE;
         _defaultSizePref = [[_settings registerIntPreference:@"default_map_button_size" defValue:(int)MapButtonState.originalValue] makeProfile];
         _defaultOpacityPref = [[_settings registerFloatPreference:@"default_map_button_opacity" defValue:(float)MapButtonState.originalValue] makeProfile];
         _defaultCornerRadiusPref = [[_settings registerIntPreference:@"default_map_button_corner_radius" defValue:(int)MapButtonState.originalValue] makeProfile];
+        _defaultGlassStylePref = [[_settings registerIntPreference:@"default_map_button_glass_style" defValue:(int)MapButtonState.originalValue] makeProfile];
         
         [self updateActionTypes];
         [self initDefaultButtons];
@@ -595,6 +597,11 @@ static QuickActionType *TYPE_INTERFACE;
 - (OACommonInteger *)getDefaultCornerRadiusPref
 {
     return _defaultCornerRadiusPref;
+}
+
+- (OACommonInteger *)getDefaultGlassStylePref
+{
+    return _defaultGlassStylePref;
 }
 
 - (QuickActionButtonState *)createNewButtonState

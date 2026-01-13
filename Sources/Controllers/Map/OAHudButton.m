@@ -78,7 +78,8 @@
         self.backgroundColor = isNight ? self.pressedColorNight : self.pressedColorDay;
     else
         self.backgroundColor = isNight ? self.unpressedColorNight : self.unpressedColorDay;
-    self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self getOpacity]];
+    
+    [self updateBackground];
 
     self.tintColor = isNight ? self.tintColorNight : self.tintColorDay;
     
@@ -94,7 +95,7 @@
 
 - (ButtonAppearanceParams *)createDefaultAppearanceParams
 {
-    return [[ButtonAppearanceParams alloc] initWithIconName:@"ic_custom_quick_action" size:MapButtonState.defaultSizeDp opacity:MapButtonState.opaqueAlpha cornerRadius:MapButtonState.roundRadiusDp];
+    return [[ButtonAppearanceParams alloc] initWithIconName:@"ic_custom_quick_action" size:MapButtonState.defaultSizeDp opacity:MapButtonState.opaqueAlpha cornerRadius:MapButtonState.roundRadiusDp glassStyle:MapButtonState.defaultGlassStyle];
 }
 
 - (void)setCustomAppearanceParams:(ButtonAppearanceParams *)customAppearanceParams
@@ -137,9 +138,50 @@
     [self setImage:image forState:UIControlStateNormal];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    for (UIView *subview in self.subviews)
+    {
+        if ([subview isKindOfClass:UIVisualEffectView.class])
+            [self sendSubviewToBack:subview];
+    }
+}
+
 - (void)updateBackground
 {
-    self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self getOpacity]];
+    if (@available(iOS 26.0, *))
+    {
+        BOOL isGlass = [self getGlassStyle] == UIGlassEffectStyleRegular || [self getGlassStyle] == UIGlassEffectStyleClear;
+        
+        for (UIView *subview in self.subviews)
+        {
+            if ([subview isKindOfClass:UIVisualEffectView.class])
+                [subview removeFromSuperview];
+        }
+        
+        if (isGlass)
+        {
+            UIGlassEffect *glass = [UIGlassEffect effectWithStyle:[self getGlassStyle]];
+            UIVisualEffectView *glassView =
+                [[UIVisualEffectView alloc] initWithEffect:glass];
+            glassView.frame = self.bounds;
+            glassView.autoresizingMask =
+                UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            glassView.userInteractionEnabled = NO;
+            glassView.layer.cornerRadius = [self getCornerRadius];
+            glassView.clipsToBounds = YES;
+            
+            [self insertSubview:glassView atIndex:0];
+        }
+        
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:isGlass ? 0.5 : [self getOpacity]];
+    }
+    else
+    {
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self getOpacity]];
+    }
 }
 
 - (void)updateCornerRadius
@@ -204,6 +246,20 @@
     }
     ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
     return params.cornerRadius > circleRadius ? circleRadius : params.cornerRadius;
+}
+
+- (NSInteger)getGlassStyle
+{
+    if (_customAppearanceParams)
+    {
+        CGFloat glassStyle = _customAppearanceParams.glassStyle;
+        if (glassStyle == MapButtonState.originalValue)
+            return _buttonState ? _buttonState.defaultGlassStyle : [self createDefaultAppearanceParams].glassStyle;
+        return glassStyle;
+    }
+    
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    return params.glassStyle;
 }
 
 - (void)updatePositions

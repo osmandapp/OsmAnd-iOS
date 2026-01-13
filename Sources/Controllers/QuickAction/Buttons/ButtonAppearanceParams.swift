@@ -12,18 +12,20 @@ final class ButtonAppearanceParams: NSObject {
     var size: Int32
     var opacity: Double
     var cornerRadius: Int32
+    var glassStyle: Int32
     
-    init(iconName: String?, size: Int32, opacity: Double, cornerRadius: Int32) {
+    init(iconName: String?, size: Int32, opacity: Double, cornerRadius: Int32, glassStyle: Int32) {
         self.iconName = iconName
         self.size = size
         self.opacity = opacity
         self.cornerRadius = cornerRadius
+        self.glassStyle = glassStyle
     }
     
     override func isEqual(_ object: Any?) -> Bool {
         guard let other = object as? ButtonAppearanceParams else {
             return false
         }
-        return iconName == other.iconName && size == other.size && opacity == other.opacity && cornerRadius == other.cornerRadius
+        return iconName == other.iconName && size == other.size && opacity == other.opacity && cornerRadius == other.cornerRadius && glassStyle == other.glassStyle
     }
 }

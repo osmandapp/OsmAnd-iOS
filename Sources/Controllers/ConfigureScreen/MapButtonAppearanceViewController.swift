@@ -10,6 +10,7 @@
 final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private static let valueKey = "valueKey"
     private static let unitKey = "unitKey"
+    private static let glassStyleKey = "glassStyleKey"
     private static let arrayValuesKey = "arrayValuesKey"
     private static let cornerRadiusRowKey = "cornerRadiusRowKey"
     private static let cornerRadiusArrayValues: [Int32] = [3, 6, 9, 12, 36]
@@ -24,6 +25,8 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private var appearanceParams: ButtonAppearanceParams?
     private var originalAppearanceParams: ButtonAppearanceParams?
     private var iconCollectionHandler: ButtonAppearanceIconCollectionHandler?
+    private var opacityType: BackgroundOpacityType = .solid
+    
     private var hasAppearanceChanged: Bool {
         appearanceParams != originalAppearanceParams
     }
@@ -39,6 +42,9 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         originalAppearanceParams = mapButtonState.createAppearanceParams()
         appearanceParams?.iconName = savedIconName
         originalAppearanceParams?.iconName = savedIconName
+        if #available(iOS 26.0, *) {
+            opacityType = appearanceParams?.glassStyle == MapButtonState.defaultGlassStyle ? .solid : .liquidGlass
+        }
         setupIconHandler()
         super.viewDidLoad()
     }
@@ -87,6 +93,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         mapButtonState?.storedSizePref().set(appearanceParams.size)
         mapButtonState?.storedCornerRadiusPref().set(appearanceParams.cornerRadius)
         mapButtonState?.storedOpacityPref().set(Double(appearanceParams.opacity))
+        mapButtonState?.storedGlassStylePref().set(appearanceParams.glassStyle)
         delegate?.onSettingsChanged()
         dismiss()
     }
@@ -139,6 +146,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         backgroundOpacityRow.cellType = TopBottomValuesSliderTableViewCell.reuseIdentifier
         backgroundOpacityRow.title = localizedString("background")
         backgroundOpacityRow.setObj(appearanceParams.opacity as Any, forKey: Self.valueKey)
+        backgroundOpacityRow.setObj(appearanceParams.glassStyle as Any, forKey: Self.glassStyleKey)
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -196,8 +204,45 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             cell.slider.addTarget(self, action: #selector(sliderChanged(sender:)), for: .valueChanged)
             cell.slider.tintColor = .menuButton
             cell.topLeftLabel.text = item.title
-            cell.topRightLabel.text = NumberFormatter.percentFormatter.string(from: value as NSNumber)
-            cell.topRightLabel.textColor = .textColorSecondary
+            
+            if #available(iOS 26, *) {
+                cell.topRightButton.showsMenuAsPrimaryAction = true
+                cell.topRightButton.menu = createOpacityModeMenu()
+                let config = UIImage.SymbolConfiguration(pointSize: 17)
+                if var iconImage = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: config) {
+                    iconImage = iconImage.withRenderingMode(.alwaysTemplate)
+                    let attachment = NSTextAttachment()
+                    attachment.image = iconImage
+                    let imageString = NSAttributedString(attachment: attachment)
+                    
+                    let attributedString = NSMutableAttributedString(string: opacityType.title + " ")
+                    attributedString.append(imageString)
+                    cell.topRightButton.setAttributedTitle(attributedString, for: .normal)
+                }
+                cell.topRightLabelVisibility(false)
+                cell.topRightButtonVisibility(true)
+                cell.sliderValuesVisibility(opacityType == .solid)
+                cell.segmentValuesVisibility(opacityType == .liquidGlass)
+                cell.segmentedControl.setTitle(localizedString("shared_string_clear"), forSegmentAt: 0)
+                cell.segmentedControl.setTitle(localizedString("shared_string_tinted"), forSegmentAt: 1)
+                cell.segmentedControl.removeTarget(self, action: nil, for: .valueChanged)
+                cell.segmentedControl.addTarget(self, action: #selector(segmentChanged(sender:)), for: .valueChanged)
+                if let glassStyle = item.obj(forKey: Self.glassStyleKey) as? Int32 {
+                    cell.segmentedControl.selectedSegmentIndex = glassStyle == UIGlassEffect.Style.regular.rawValue ? 1 : 0
+                }
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineHeightMultiple = 1.12
+                cell.descriptionLabel.attributedText = NSAttributedString(string: localizedString("background_opacity_description"), attributes: [.paragraphStyle: paragraphStyle])
+            } else {
+                cell.topRightLabel.text = NumberFormatter.percentFormatter.string(from: value as NSNumber)
+                cell.topRightLabel.textColor = .textColorSecondary
+                cell.topRightLabelVisibility(true)
+                cell.topRightButtonVisibility(false)
+                cell.sliderValuesVisibility(true)
+                cell.segmentValuesVisibility(false)
+            }
+            
             cell.bottomLeftLabel.text = NumberFormatter.percentFormatter.string(from: cell.slider.minimumValue as NSNumber)
             cell.bottomLeftLabel.textColor = .textColorSecondary
             cell.bottomRightLabel.text = NumberFormatter.percentFormatter.string(from: cell.slider.maximumValue as NSNumber)
@@ -224,6 +269,22 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             return cell
         }
         return nil
+    }
+    
+    private func createOpacityModeMenu() -> UIMenu {
+        let solidAction = UIAction(title: BackgroundOpacityType.solid.title, state: opacityType == .solid ? .on : .off) { [weak self] _ in
+            self?.switchOpacityType(to: .solid)
+        }
+        let liquidGlassAction = UIAction(title: BackgroundOpacityType.liquidGlass.title, state: opacityType == .liquidGlass ? .on : .off) { [weak self] _ in
+            self?.switchOpacityType(to: .liquidGlass)
+        }
+        return UIMenu.composedMenu(from: [[solidAction], [liquidGlassAction]])
+    }
+    
+    private func switchOpacityType(to opacityType: BackgroundOpacityType) {
+        self.opacityType = opacityType
+        appearanceParams?.glassStyle = opacityType == .liquidGlass ? 1 : MapButtonState.defaultGlassStyle
+        updateData()
     }
     
     private func setupIconHandler() {
@@ -277,6 +338,8 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             self.appearanceParams?.size = defaultParams.size
             self.appearanceParams?.cornerRadius = defaultParams.cornerRadius
             self.appearanceParams?.opacity = defaultParams.opacity
+            self.appearanceParams?.glassStyle = defaultParams.glassStyle
+            self.opacityType = .solid
             self.updateData()
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -318,6 +381,12 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             appearanceParams?.opacity = Double(sender.value)
             updateData()
         }
+    }
+    
+    @objc private func segmentChanged(sender: UISegmentedControl) {
+        guard #available(iOS 26.0, *) else { return }
+        appearanceParams?.glassStyle = Int32(sender.selectedSegmentIndex == 0 ? UIGlassEffect.Style.clear.rawValue : UIGlassEffect.Style.regular.rawValue)
+        updateData()
     }
 }
 

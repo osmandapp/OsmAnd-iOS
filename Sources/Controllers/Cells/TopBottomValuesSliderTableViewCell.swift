@@ -12,4 +12,35 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
     @IBOutlet weak var topRightLabel: UILabel!
     @IBOutlet weak var bottomLeftLabel: UILabel!
     @IBOutlet weak var bottomRightLabel: UILabel!
+    @IBOutlet weak var topRightButton: UIButton!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet private weak var sliderValuesView: UIView!
+    @IBOutlet private weak var segmentValuesView: UIView!
+    @IBOutlet private var topRightLabelLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet private var topRightButtonLeadingConstraint: NSLayoutConstraint!
+    
+    func topRightLabelVisibility(_ show: Bool) {
+        topRightButton.isHidden = show
+        topRightLabel.isHidden = !show
+        topRightButtonLeadingConstraint.isActive = !show
+        topRightLabelLeadingConstraint.isActive = show
+    }
+    
+    func topRightButtonVisibility(_ show: Bool) {
+        topRightButton.isHidden = !show
+        topRightLabel.isHidden = show
+        topRightButtonLeadingConstraint.isActive = show
+        topRightLabelLeadingConstraint.isActive = !show
+    }
+    
+    func sliderValuesVisibility(_ show: Bool) {
+        sliderValuesView.isHidden = !show
+        segmentValuesView.isHidden = show
+    }
+    
+    func segmentValuesVisibility(_ show: Bool) {
+        sliderValuesView.isHidden = show
+        segmentValuesView.isHidden = !show
+    }
 }

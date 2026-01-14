@@ -9,17 +9,30 @@
 final class PreviewImageViewTableViewCell: UITableViewCell {
     @IBOutlet private weak var previewImageButton: OAHudButton!
     @IBOutlet private weak var previewImageView: UIImageView!
-    @IBOutlet private weak var sizeConstraint: NSLayoutConstraint!
     
     private let defaultImageSize: CGFloat = 30
     private let defaultImageOrigin: CGFloat = 9
+    private let colorOnMapIconBackgroundColorLight = UIColor(rgb: 0xFFFFFF)
+    private let colorOnMapIconBackgroundColorDark = UIColor(rgb: 0x3F3F3F)
+    private let colorPrimaryPurple = UIColor(rgb: 0x5714CC)
+    private let colorPrimaryLightBlue = UIColor(rgb: 0x7499F1)
+    private let colorOnMapIconTintColorLight = UIColor(rgb: 0x545454)
+    private let colorOnMapIconTintColorDark = UIColor(rgb: 0xcccccc)
+    private let colorOnMapIconBackgroundColorActive = UIColor(rgb: 0x682AD5)
+    private let defaultBorderWidthNight: CGFloat = 2
+    private let defaultShadowOpacity: Float = 1
+    private let defaultShadowRadius: CGFloat = 12
+    private let defaultShadowColor: CGColor = UIColor.black.withAlphaComponent(0.35).cgColor
+    private let defaultShadowOffset = CGSize(width: 0, height: 2)
     
     func configure(appearanceParams: ButtonAppearanceParams?, buttonState: MapButtonState) {
         previewImageButton.buttonState = buttonState
         previewImageButton.setCustomAppearanceParams(appearanceParams)
+        previewImageButton.translatesAutoresizingMaskIntoConstraints = true
+        previewImageButton.center = contentView.center
+        previewImageButton.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
         setupImageViewWith(buttonState: buttonState, appearanceParams: appearanceParams)
         setupButtonColorWith(buttonState: buttonState)
-        sizeConstraint.constant = previewImageButton.frame.width
         setupImageContainerShadow()
     }
     
@@ -59,11 +72,11 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
             }
             
             if routingHelper.isFollowingMode() || routePlanningMode {
-                previewImageButton.tintColorDay = UIColor(rgb: 0x5714CC)
-                previewImageButton.tintColorNight = UIColor(rgb: 0x7499F1)
+                previewImageButton.tintColorDay = colorPrimaryPurple
+                previewImageButton.tintColorNight = colorPrimaryLightBlue
             } else {
-                previewImageButton.tintColorDay = UIColor(rgb: 0x545454)
-                previewImageButton.tintColorNight = UIColor(rgb: 0xcccccc)
+                previewImageButton.tintColorDay = colorOnMapIconTintColorLight
+                previewImageButton.tintColorNight = colorOnMapIconTintColorDark
             }
 
             previewImageButton.updateColors(forPressedState: false)
@@ -71,26 +84,26 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
             if OARootViewController.instance().mapPanel.hudViewController?.isLocationAvailable() == true {
                 switch OsmAndApp.swiftInstance().mapMode {
                 case .free:
-                    previewImageButton.unpressedColorDay = UIColor(rgb: 0x682AD5)
-                    previewImageButton.unpressedColorNight = UIColor(rgb: 0x682AD5)
+                    previewImageButton.unpressedColorDay = colorOnMapIconBackgroundColorActive
+                    previewImageButton.unpressedColorNight = colorOnMapIconBackgroundColorActive
                     previewImageButton.tintColorDay = .white
                     previewImageButton.tintColorNight = .white
                     previewImageButton.borderWidthNight = 0
                 case .positionTrack:
-                    previewImageButton.unpressedColorDay = UIColor(rgb: 0xFFFFFF)
-                    previewImageButton.unpressedColorNight = UIColor(rgb: 0x3F3F3F)
-                    previewImageButton.tintColorDay = UIColor(rgb: 0x5714CC)
-                    previewImageButton.tintColorNight = UIColor(rgb: 0x7499F1)
-                    previewImageButton.borderWidthNight = 2
+                    previewImageButton.unpressedColorDay = colorOnMapIconBackgroundColorLight
+                    previewImageButton.unpressedColorNight = colorOnMapIconBackgroundColorDark
+                    previewImageButton.tintColorDay = colorPrimaryPurple
+                    previewImageButton.tintColorNight = colorPrimaryLightBlue
+                    previewImageButton.borderWidthNight = defaultBorderWidthNight
                 default:
                     break
                 }
             } else {
-                previewImageButton.unpressedColorDay = UIColor(rgb: 0xFFFFFF)
-                previewImageButton.unpressedColorNight = UIColor(rgb: 0x3F3F3F)
-                previewImageButton.tintColorDay = UIColor(rgb: 0x545454)
-                previewImageButton.tintColorNight = UIColor(rgb: 0xcccccc)
-                previewImageButton.borderWidthNight = 2
+                previewImageButton.unpressedColorDay = colorOnMapIconBackgroundColorLight
+                previewImageButton.unpressedColorNight = colorOnMapIconBackgroundColorDark
+                previewImageButton.tintColorDay = colorOnMapIconTintColorLight
+                previewImageButton.tintColorNight = colorOnMapIconTintColorDark
+                previewImageButton.borderWidthNight = defaultBorderWidthNight
             }
             
             previewImageButton.updateColors(forPressedState: false)
@@ -100,9 +113,9 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
     private func setupImageContainerShadow() {
         let shadowPath = UIBezierPath(roundedRect: previewImageButton.bounds, cornerRadius: previewImageButton.layer.cornerRadius)
         previewImageButton.layer.shadowPath = shadowPath.cgPath
-        previewImageButton.layer.shadowColor = UIColor.black.withAlphaComponent(0.35).cgColor
-        previewImageButton.layer.shadowOpacity = 1
-        previewImageButton.layer.shadowRadius = 12
-        previewImageButton.layer.shadowOffset = CGSize(width: 0, height: 2)
+        previewImageButton.layer.shadowColor = defaultShadowColor
+        previewImageButton.layer.shadowOpacity = defaultShadowOpacity
+        previewImageButton.layer.shadowRadius = defaultShadowRadius
+        previewImageButton.layer.shadowOffset = defaultShadowOffset
     }
 }

@@ -3656,10 +3656,10 @@
 "type_of_activity" = "نوع النشاط";
 "map_widget_distance" = "المسافة";
 "grid_color" = "لون الشبكة";
-"quick_action_showhide_coordinates_grid_descr" = "إجراء للتحكم في رؤية شبكة الإحداثيات على الخريطة.";
+"quick_action_showhide_coordinates_grid_descr" = "تبديل رؤية شبكة الإحداثيات على الخريطة.";
 "litres" = "لترات";
 "preview_next_turn" = "معاينة المنعطف التالي";
-"save_favorite_default_appearance" = "تطبيق التغييرات على النقاط الموجودة في المجلد أم على النقاط الجديدة فقط؟";
+"save_favorite_default_appearance" = "تطبيق التغييرات على كل النقاط الموجودة في المجلد أم على النقاط المضافة حديثًا فقط؟";
 "unchanged_parameter_summary" = "سيحتفظ كل مسار بمعاييره الخاصة.";
 "map_widget_route_information" = "معلومات المسار";
 "layer_coordinates_grid" = "شبكة الإحداثيات";
@@ -3668,7 +3668,7 @@
 "poi_filter_fuel" = "وقود";
 "fuel_tank_capacity" = "سعة خزان الوقود";
 "labels_position" = "موضع التسميات";
-"original_icon_description" = "ستحتفظ كل نقطة برمزها.";
+"original_icon_description" = "تحتفظ كل نقطة برمزها.";
 "meridian_180" = "خط الطول 180";
 "prime_meridian" = "خط الطول الأول";
 "change_activity" = "تغيير النشاط";
@@ -3676,7 +3676,7 @@
 "unit_of_volume" = "وحدة الحجم";
 "routing_attr_allow_ferries_description" = "السماح بالعبور عبر ممرات العبّارات البحرية";
 "unit_of_volume_description" = "سيتم تطبيق الوحدات المحددة على كافة البيانات المتعلقة بالحجم في الملف الشخصي الحالي.";
-"original_shape_description" = "ستحتفظ كل نقطة بشكلها.";
+"original_shape_description" = "تحتفظ كل نقطة بشكلها.";
 "display_priority" = "أولوية العرض";
 "shared_string_edges" = "الحواف";
 "route_roundabout_exit" = "خذ %d للخروج";
@@ -3686,7 +3686,7 @@
 "shared_string_original" = "أصلي";
 "default_appearance" = "المظهر الافتراضي";
 "fuel_tank_capacity_description" = "أدخل سعة خزان الوقود لديك لتتبع مستويات الوقود والاستهلاك بدقة";
-"original_color_description" = "ستحتفظ كل نقطة بلونها.";
+"original_color_description" = "تحتفظ كل نقطة بلونها.";
 "three_months_subscription" = "اشتراك ثلاثة اشهر";
 "intermediate_first" = "المتوسط أولاً";
 "imperial_gallons" = "جالون إمبراطوري";

@@ -64,12 +64,7 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
             previewImageButton.updateColors(forPressedState: false)
         } else if buttonState is DriveModeButtonState {
             guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
-            var routePlanningMode = false
-            if routingHelper.isRoutePlanningMode() {
-                routePlanningMode = true
-            } else if (routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) && !routingHelper.isFollowingMode() {
-                routePlanningMode = true
-            }
+            let routePlanningMode = routingHelper.isRoutePlanningMode() || ((routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) && !routingHelper.isFollowingMode())
             
             if routingHelper.isFollowingMode() || routePlanningMode {
                 previewImageButton.tintColorDay = colorPrimaryPurple

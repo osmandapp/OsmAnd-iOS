@@ -947,6 +947,26 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return result;
 }
 
+- (nullable NSString *)wikiPhoto
+{
+    return [self getAdditionalInfo:WIKI_PHOTO_TAG];
+}
+
+- (NSString *)wikiIconUrl
+{
+    if (_wikiIconUrl == nil)
+    {
+        NSString *wikiPhoto = [self wikiPhoto];
+        if (wikiPhoto != nil && wikiPhoto.length > 0)
+        {
+            OASWikiImage *wikiImage = [[OASWikiHelper shared] getImageDataImageFileName:wikiPhoto];
+            _wikiIconUrl = wikiImage.imageIconUrl;
+            _wikiImageStubUrl = wikiImage.imageStubUrl;
+        }
+    }
+    return _wikiIconUrl;
+}
+
 - (BOOL) isEqual:(id)o
 {
     if (self == o)

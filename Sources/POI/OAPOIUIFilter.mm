@@ -405,6 +405,9 @@
         }
     }
     NSArray<OAPOI *> *amenities = [self searchAmenitiesInternal:top / 2 + bottom / 2 lon:left / 2 + right / 2 topLatitude:top bottomLatitude:bottom leftLongitude:left rightLongitude:right zoom:zoom matcher:matcher];
+    if ([amenities count] > 0) {
+        NSLog(@"");
+    }
     [results addObjectsFromArray:amenities];
     
     NSMutableArray<OAPOI *> *resultList = [results mutableCopy];

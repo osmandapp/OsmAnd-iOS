@@ -1357,7 +1357,12 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     return [NSArray arrayWithArray:arr];
 }
 
-+ (NSArray<OAPOI *> *) findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher
++ (NSArray<OAPOI *> *)findPOIsByFilter:(OASearchPoiTypeFilter *)filter
+                           topLatitude:(double)topLatitude
+                         leftLongitude:(double)leftLongitude
+                        bottomLatitude:(double)bottomLatitude
+                        rightLongitude:(double)rightLongitude
+                               matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
     if (filter && ![filter isEmpty])
@@ -1389,8 +1394,8 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                                   {
                                       [deduplicateTypeIdSet addObject:typeIdKey];
                                       OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
-                                      if (type && [filter accept:type.category subcategory:type.name])
-                                      {
+//                                      if (type && [filter accept:type.category subcategory:type.name])
+//                                      {
                                           OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity type:type];
                                           if (poi)
                                           {
@@ -1400,7 +1405,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                                               [arr addObject:poi];
                                           }
                                       }
-                                  }
+//                                  }
                               },
                               ctrl);
     }

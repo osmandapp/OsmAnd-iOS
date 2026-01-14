@@ -11,14 +11,13 @@
 @implementation OAMapTopPlace
 
 - (instancetype)initWithPlaceId:(NSInteger)placeId
-                    //    position:(PointI)position
-                           image:(UIImage *)image
-                   alreadyExists:(BOOL)alreadyExists
-{
+                       position:(const OsmAnd::PointI &)position
+                          image:(UIImage *)image
+                  alreadyExists:(BOOL)alreadyExists {
     self = [super init];
     if (self) {
         _placeId = placeId;
-      //  _position = position;
+        _position = position;
         _image = image;
         _alreadyExists = alreadyExists;
     }

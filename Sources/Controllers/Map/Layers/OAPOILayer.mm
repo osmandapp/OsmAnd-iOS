@@ -35,6 +35,9 @@
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
 #import "OAPointDescription.h"
+#import "QuadTree.h"
+#import "OAMapTopPlace.h"
+#import "OANativeUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
@@ -51,6 +54,8 @@
 #include <OsmAndCore/Map/IOnPathMapSymbol.h>
 #include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/Map/MapMarker.h>
 
 #define kPoiSearchRadius 50 // AMENITY_SEARCH_RADIUS
 #define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
@@ -61,6 +66,9 @@ static const NSInteger kTilePointsLimit = 25;
 static const NSInteger kStartZoom = 5;
 static const NSInteger kStartZoomRouteTrack = 11;
 static const NSInteger kEndZoomRouteTrack = 22;
+static const NSInteger kImageIconSizeDP = 45;
+static const NSInteger kImageIconBorderDP = 2;
+
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
@@ -83,15 +91,21 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     /// Popular places [start]
     NSMutableDictionary<NSNumber *, OAPOI *> *_topPlaces;
     NSMutableDictionary<NSNumber *, UIImage *> *_topPlacesImages;
+    NSDictionary<NSString *, NSArray<OAPOI *> *> *_topPlaceData;
     NSMutableArray<OAPOI *> *_visiblePlaces;
     DataSourceType _wikiDataSource;
     BOOL _showTopPlacesPreviews;
     OAPOIUIFilter *_topPlacesFilter;
     NSSet<OAPOIUIFilter *> *_calculatedFilters;
+    QuadRect *_topPlacesBox;
+    
+    POIImageLoader *_imageLoader;
+    
     /// Popular places [end]
     
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _mapMarkersCollection;
 }
 
 /// Popular places [start]
@@ -126,6 +140,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     _visiblePlaces = res;
 }
+
 // updatePopularPlaces -> Android: public void onPrepareBufferImage(Canvas canvas, RotatedTileBox tileBox, DrawSettings settings) {
 - (void)updatePopularPlaces
 {
@@ -133,17 +148,61 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     BOOL showTopPlacesPreviewsChanged = _showTopPlacesPreviews != showTopPlacesPreviews;
     _showTopPlacesPreviews = showTopPlacesPreviews;
     
-    const auto screenBbox = self.mapView.getVisibleBBox31;
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
-    QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
-    // TODO:
-//    if (showTopPlacesPreviewsChanged)
-//    {
-//        CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-//        [self updateVisiblePlaces:[self getDisplayedResults:loc.coordinate.latitude lon:loc.coordinate.longitude] latLonBounds:screenRect];
+    if (showTopPlacesPreviewsChanged/* || topPlacesBox == null || !topPlacesBox.containsTileBox(tileBox)*/)
+    {
+        // FIXME:
+        [self calcResultTest];
         
-//    }
+        const auto screenBbox = self.mapView.getVisibleBBox31;
+        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
+        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
+        QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+        
+        NSArray<OAPOI *> *allPlaces = _topPlaceData[@"all"];
+        [self updateVisiblePlaces:_topPlaceData[@"displayed"] latLonBounds:screenRect];
+        
+//        BOOL intersects = [QuadRect intersects:_topPlacesBox b:screenRect];
+//        if (!intersects) {
+//        }
+        
+        BOOL notContains = (_topPlacesBox == nil) || ![_topPlacesBox contains:screenRect];
+        if (notContains) {
+            // аналог !topPlacesBox.containsTileBox(tileBox)
+        }
+
+        if (showTopPlacesPreviews)
+        {
+            // TODO: copy
+            QuadRect *extendedBox = screenRect;
+            int bigIconSize = kImageIconSizeDP * [self textScale];
+//                            extendedBox.increasePixelDimensions(bigIconSize * 2, bigIconSize * 2);
+            _topPlacesBox = extendedBox;
+            [self updateTopPlaces:allPlaces latLonBounds:screenRect zoom:[self.mapView zoom]];
+            [self updateTopPlacesCollection];
+        }
+        else
+        {
+            [self clearMapMarkersCollections];
+            [self cancelLoadingImages];
+        }
+    }
+    
+//    if (updated || showTopPlacesPreviewsChanged || topPlacesBox == null || !topPlacesBox.containsTileBox(tileBox)) {
+//                List<Amenity> places = data.getResults();
+//                List<Amenity> places1 = data.getDisplayedResults();
+//                updateVisiblePlaces(data.getDisplayedResults(), tileBox.getLatLonBounds());
+//                if (showTopPlacesPreviews && places != null) {
+//                    RotatedTileBox extendedBox = tileBox.copy();
+//                    int bigIconSize = getBigIconSize();
+//                    extendedBox.increasePixelDimensions(bigIconSize * 2, bigIconSize * 2);
+//                    topPlacesBox = extendedBox;
+//                    updateTopPlaces(places, tileBox.getLatLonBounds(), zoom);
+//                    updateTopPlacesCollection();
+//                } else {
+//                    clearMapMarkersCollections();
+//                    cancelLoadingImages();
+//                }
+//            }
 }
 
 - (void)calcResultTest
@@ -154,9 +213,11 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
     const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
     QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
-    // TODO: screenRect / 2 ?
-    NSDictionary<NSString *, NSArray<OAPOI *> *> *result = [self calculateResult:screenRect zoom:[self.mapView zoom]];
-    NSLog(@"result");
+    [screenRect inset:-(screenRect.width / 2.0) dy:-(screenRect.height / 2.0)];
+    
+    _topPlaceData = [self calculateResult:screenRect zoom:[self.mapView zoom]];
+    
+    NSLog(@"calcResultTest");
 }
 
 - (void)onMapFrameAnimatorsUpdated
@@ -164,6 +225,318 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePopularPlaces];
     });
+}
+
+- (void)updateTopPlaceImageForId:(NSNumber *)placeId
+                           image:(UIImage *)image
+{
+    if (_topPlaces && _topPlacesImages)
+    {
+        OAPOI *poi = _topPlaces[placeId];
+        if (poi)
+        {
+            _topPlacesImages[placeId] = image;
+            [self updateTopPlacesCollection];
+        }
+    }
+}
+
+- (void)updateTopPlacesCollection
+{
+    NSArray<OAPOI *> *places = _topPlaces ? [_topPlaces allValues] : nil;
+    if (!places)
+    {
+        [self clearMapMarkersCollections];
+        return;
+    }
+
+    if (!_mapMarkersCollection)
+        _mapMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    
+    QList<std::shared_ptr<OsmAnd::MapMarker>> existingMapPoints = _mapMarkersCollection->getMarkers();
+
+    NSMutableArray<NSNumber *> *existingIds = [NSMutableArray arrayWithCapacity:existingMapPoints.size()];
+
+    for (int i = 0; i < existingMapPoints.size(); ++i)
+    {
+        std::shared_ptr<OsmAnd::MapMarker> marker = existingMapPoints[i];
+        [existingIds addObject:@(marker->markerId)];
+    }
+    
+    NSMutableArray<OAMapTopPlace *> *mapPlaces = [NSMutableArray array];
+
+    for (OAPOI *place in places)
+    {
+        NSInteger placeId = place.obfId ? place.obfId : place.getTravelEloNumber;
+        
+        OsmAnd::PointI position = [OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(place.getLocation.coordinate.latitude, place.getLocation.coordinate.longitude)];
+
+
+        BOOL alreadyExists = NO;
+        for (NSInteger i = 0; i < existingIds.count; i++)
+        {
+            if (placeId == existingIds[i].integerValue)
+            {
+                existingIds[i] = @0;
+                alreadyExists = YES;
+                break;
+            }
+        }
+
+        UIImage *topPlaceImage = [self topPlaceImage:place];
+        if (topPlaceImage)
+        {
+            OAMapTopPlace *mapTopPlace = [[OAMapTopPlace alloc] initWithPlaceId:placeId
+                                                                       position:position
+                                                                          image:topPlaceImage
+                                                                  alreadyExists:alreadyExists];
+            [mapPlaces addObject:mapTopPlace];
+        }
+
+        if (mapPlaces.count >= kTopPlacesLimit) {
+            break;
+        }
+    }
+
+    for (int i = 0; i < existingIds.count; i++)
+    {
+        if (existingIds[i].intValue != 0)
+            _mapMarkersCollection->removeMarker(existingMapPoints[i]);
+    }
+
+    for (OAMapTopPlace *place in mapPlaces)
+    {
+        if (place.alreadyExists)
+            continue;
+        
+        NSData *data = UIImagePNGRepresentation(place.image);
+        if (data) {
+            OsmAnd::MapMarkerBuilder builder;
+            builder.setIsAccuracyCircleSupported(false)
+                .setMarkerId((int)place.placeId)
+                .setBaseOrder([self topPlaceBaseOrder])
+                .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromNSData:data]))
+                .setPosition(place.position)
+                .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
+                .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
+                .buildAndAddToCollection(_mapMarkersCollection);
+        } else {
+            NSLog(@"UIImageJPEGRepresentation is nil");
+        }
+    }
+    // TOP_PLACES_POI_SECTION
+    self.mapView.renderer->addSymbolsProvider(kFavoritesSymbolSection, _mapMarkersCollection);
+}
+
+- (int)topPlaceBaseOrder
+{
+    return self.pointsOrder - 100;;
+}
+
+
+- (void)clearMapMarkersCollections
+{
+    if (_mapMarkersCollection != nil)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_mapMarkersCollection];
+        _mapMarkersCollection = nil;
+    }
+}
+
+- (void)updateTopPlaces:(NSArray<OAPOI *> *)places
+           latLonBounds:(QuadRect *)latLonBounds
+                   zoom:(int)zoom
+{
+    NSArray<OAPOI *> *topPlacesList = nil;
+
+    if (_topPlacesFilter != nil)
+    {
+        _topPlaces = [[self obtainTopPlacesToDisplay:places
+                                        latLonBounds:latLonBounds
+                                                zoom:zoom] mutableCopy];
+        _topPlacesImages = [NSMutableDictionary dictionary];
+        topPlacesList = [_topPlaces allValues];
+    }
+
+    if (topPlacesList != nil)
+    {
+        if (topPlacesList.count > 0)
+        {
+            
+            if (!_imageLoader)
+                _imageLoader = [POIImageLoader new];
+
+            __weak __typeof(self) weakSelf = self;
+            [_imageLoader fetchImages:places completion:^(NSNumber *placeId, UIImage *image) {
+                NSLog(@"Loaded image for placeId %@", placeId);
+                [weakSelf updateTopPlaceImageForId:placeId image:image];
+            }];
+           // [self fetchImages:[NSSet setWithArray:topPlacesList]];
+            
+            /*
+             {(
+                 "https://data.osmand.net/wikimedia/images-1280/6/67/\U0418\U043d\U0441\U0442\U0438\U0442\U0443\U0442_\U0447\U0435\U0440\U043d\U043e\U0439_\U043c\U0435\U0442\U0430\U043b\U043b\U0443\U0440\U0433\U0438\U0438_\U041d\U0410\U041d_\U0423\U043a\U0440\U0430\U0438\U043d\U044b.jpg?width=160",
+                 "https://data.osmand.net/wikimedia/images-1280/a/ab/DNU_library.JPG?width=160",
+                 "https://data.osmand.net/wikimedia/images-1280/0/05/\U0411\U043e\U0442\U0430\U043d\U0456\U0447\U043d\U0438\U0439_\U0441\U0430\U0434_\U0414\U041d\U0423_17.JPG?width=160",
+                 "https://data.osmand.net/wikimedia/images-1280/1/1b/Gagarina_Prospekt10_(Dnepropetrovsk).jpg?width=160"
+             )}
+
+             */
+            
+            NSMutableSet<NSString *> *imagesToLoad = [NSMutableSet set];
+
+            for (OAPOI *place in places) {
+                NSString *iconUrl = place.wikiIconUrl; // лениво загрузится, если нужно
+                if (iconUrl != nil && iconUrl.length > 0) {
+                    [imagesToLoad addObject:iconUrl];
+                }
+            }
+            NSLog(@"%@", imagesToLoad);
+        } else {
+            [self cancelLoadingImages];
+        }
+    }
+}
+
+- (nonnull NSDictionary<NSNumber *, OAPOI *> *)obtainTopPlacesToDisplay:(nonnull NSArray<OAPOI *> *)places
+                                                           latLonBounds:(nonnull QuadRect *)latLonBounds
+                                                                   zoom:(int)zoom
+{
+    NSMutableDictionary<NSNumber *, OAPOI *> *res = [NSMutableDictionary dictionary];
+
+    long long tileSize31 = (1LL << (31 - zoom));
+    double from31toPixelsScale = 256.0 / (double)tileSize31;
+    double estimatedIconSize = kImageIconSizeDP * [self textScale];
+    float iconSize31 = (float)(estimatedIconSize / from31toPixelsScale);
+
+    int left   = [OASKMapUtils.shared get31TileNumberXLongitude:latLonBounds.left];
+    int top    = [OASKMapUtils.shared get31TileNumberYLatitude:latLonBounds.top];
+    int right  = [OASKMapUtils.shared get31TileNumberXLongitude:latLonBounds.right];
+    int bottom = [OASKMapUtils.shared get31TileNumberYLatitude:latLonBounds.bottom];
+
+    QuadTree *boundIntersections =
+        [[self class] initBoundIntersections:left
+                                          top:top
+                                        right:right
+                                       bottom:bottom];
+
+    int i = 0;
+    for (OAPOI *place in places)
+    {
+        double lat = place.latitude;
+        double lon = place.longitude;
+        
+        if (![latLonBounds contains:lon top:lat right:lon bottom:lat]
+            || place.wikiIconUrl == nil
+            || place.wikiIconUrl.length == 0)
+        {
+            continue;
+        }
+
+        int x31 = [OASKMapUtils.shared get31TileNumberXLongitude:lon];
+        int y31 = [OASKMapUtils.shared get31TileNumberYLatitude:lat];
+
+        if (![[self class] intersectsD:boundIntersections
+                             x:x31
+                             y:y31
+                         width:iconSize31
+                        height:iconSize31])
+        {
+            res[@(place.obfId)] = place;
+        }
+
+        if (i++ > kTopPlacesLimit)
+        {
+            break;
+        }
+    }
+
+    return res;
+}
+
++ (nonnull QuadTree *)initBoundIntersections:(double)left
+                                         top:(double)top
+                                       right:(double)right
+                                      bottom:(double)bottom
+{
+    QuadRect *bounds = [[QuadRect alloc] initWithLeft:left
+                                                   top:top
+                                                 right:right
+                                                bottom:bottom];
+    
+    [bounds inset:-bounds.width / 4.0 dy:-bounds.height / 4.0];
+
+    return [[QuadTree alloc] initWithQuadRect:bounds
+                                        depth:4
+                                        ratio:0.6f];
+}
+
++ (BOOL)intersectsD:(QuadTree *)boundIntersections
+                  x:(double)x
+                  y:(double)y
+              width:(double)width
+             height:(double)height
+{
+    QuadRect *visibleRect = [self calculateRectDWithX:x y:y width:width height:height];
+    return [self intersects:boundIntersections visibleRect:visibleRect insert:YES];
+}
+
++ (BOOL)intersects:(QuadTree *)boundIntersections
+       visibleRect:(QuadRect *)visibleRect
+            insert:(BOOL)insert
+{
+    NSMutableArray<QuadRect *> *result = [NSMutableArray array];
+
+    QuadRect *rectCopy = [[QuadRect alloc] initWithRect:visibleRect];
+
+    [boundIntersections queryInBox:rectCopy result:result];
+
+    for (QuadRect *rect in result)
+    {
+        if ([QuadRect intersects:rect b:visibleRect])
+        {
+            return YES;
+        }
+    }
+
+    if (insert)
+        [boundIntersections insert:rectCopy box:[[QuadRect alloc] initWithRect:visibleRect]];
+
+    return NO;
+}
+
++ (QuadRect *)calculateRectDWithX:(double)x
+                                y:(double)y
+                            width:(double)width
+                           height:(double)height
+{
+    double left   = x - width / 2.0;
+    double top    = y - height / 2.0;
+    double right  = left + width;
+    double bottom = top + height;
+
+    QuadRect *rect = [[QuadRect alloc] initWithLeft:left
+                                               top:top
+                                             right:right
+                                            bottom:bottom];
+    return rect;
+}
+
+- (CGFloat)textScale
+{
+    return [[OAAppSettings sharedManager].textSize get] * [OARootViewController.instance.mapPanel.mapViewController displayDensityFactor];
+}
+
+- (void)cancelLoadingImages
+{
+    if (_imageLoader)
+    {
+        [_imageLoader cancelAll];
+        _imageLoader = nil;
+        _topPlaces = nil;
+        _topPlacesImages = nil;
+        _visiblePlaces = nil;
+    }
 }
 
 - (NSSet<OAPOI *> *)collectDisplayedPoints:(QuadRect *)latLonBounds
@@ -296,6 +669,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             }
         }
     }
+
 
     NSSet<OAPOI *> *displayedPoints = [self collectDisplayedPoints:latLonBounds zoom:zoom res:res];
 
@@ -442,7 +816,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return NO;
 
     [self updateVisiblePoiFilter];
-    [self calcResultTest];
+//    [self calcResultTest];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePopularPlaces];
     });

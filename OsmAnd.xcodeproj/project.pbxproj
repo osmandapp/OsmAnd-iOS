@@ -3346,6 +3346,7 @@
 		FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6243E2E0953830048965E /* SelectionManagerTests.swift */; };
 		FAB624412E0954F90048965E /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* SelectionManager.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
+		FABDBF362F165AD80092F3C1 /* POIImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABDBF352F165AD80092F3C1 /* POIImageLoader.swift */; };
 		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
 		FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166172B21BEF800D63755 /* PeripheralProxy.swift */; };
 		FAC166232B21BEF900D63755 /* DescriptorValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166182B21BEF800D63755 /* DescriptorValue.swift */; };
@@ -8073,6 +8074,7 @@
 		FAB6243E2E0953830048965E /* SelectionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManagerTests.swift; sourceTree = "<group>"; };
 		FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OsmAnd MapsTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		FABDBF352F165AD80092F3C1 /* POIImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POIImageLoader.swift; sourceTree = "<group>"; };
 		FAC166162B21BEF700D63755 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FAC166172B21BEF800D63755 /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
 		FAC166182B21BEF800D63755 /* DescriptorValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptorValue.swift; sourceTree = "<group>"; };
@@ -8469,6 +8471,7 @@
 		32C1C4EC2DD4C4F200A053D4 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FABDBF352F165AD80092F3C1 /* POIImageLoader.swift */,
 				328EE34B2E16AE64003CDB48 /* BaseDetailsObject.swift */,
 				328EE3492E169049003CDB48 /* ClickableWay.swift */,
 				328EE3512E171093003CDB48 /* ClickableWayAsyncTask.swift */,
@@ -17392,6 +17395,7 @@
 				27D33B4B2E744D9100AD4F70 /* BaseMapZoomAction.swift in Sources */,
 				460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */,
 				323F04C82C6577340058DD78 /* ShowHideWhitewaterSportsAction.swift in Sources */,
+				FABDBF362F165AD80092F3C1 /* POIImageLoader.swift in Sources */,
 				C57693172D66159200E4F772 /* AppearanceData.swift in Sources */,
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,

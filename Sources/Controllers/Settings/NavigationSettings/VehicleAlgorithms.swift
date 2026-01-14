@@ -34,7 +34,9 @@ final class VehicleAlgorithms: NSObject {
         isWeight ? convertWeightToTons(value, usePounds: usePounds(with: appMode), appMode: appMode) : convertLengthToMeters(value, appMode: appMode)
     }
     
-    static func formattedSelectedValue(_ value: Float, maximumFractionDigits: Int) -> String {
+    static func formattedSelectedValue(_ value: Double, maximumFractionDigits: Int) -> String {
+        let factor = pow(10.0, Double(maximumFractionDigits))
+        let rounded = round(value * factor) / factor
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumIntegerDigits = 1
@@ -42,7 +44,7 @@ final class VehicleAlgorithms: NSObject {
         formatter.maximumFractionDigits = maximumFractionDigits
         formatter.decimalSeparator = "."
         formatter.usesGroupingSeparator = false
-        return formatter.string(from: NSNumber(value: value)) ?? "0"
+        return formatter.string(from: NSNumber(value: rounded)) ?? "0"
     }
     
     static func roundToSecondSignificantDigit(_ value: Double) -> Double {
@@ -51,7 +53,7 @@ final class VehicleAlgorithms: NSObject {
         let power = floor(log10(absValue)) - 1
         let factor = pow(10.0, power)
         var rounded = absValue / factor
-        rounded = floor(rounded)
+        rounded = round(rounded)
         rounded *= factor
         let sign = value > 0 ? 1.0 : (value < 0 ? -1.0 : 0.0)
 

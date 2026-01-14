@@ -97,7 +97,9 @@
 #import "OAWeatherHelperBridge.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAOsmEditingPlugin.h"
+#import "OADeepLinkBridge.h"
 #import "OAUserInteractionPassThroughView.h"
+#import "OAClickableWayHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -192,6 +194,8 @@
 #import "OAAddQuickActionViewController.h"
 #import "OAMapillaryImageViewController.h"
 #import "OABottomSheetViewController.h"
+#import "OAOnlineTilesEditingViewController.h"
+#import "OACloudAccountVerificationViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

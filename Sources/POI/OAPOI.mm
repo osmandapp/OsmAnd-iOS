@@ -669,6 +669,63 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     return @"";
 }
 
+- (NSString *)encodedPoiNameForLink
+{
+    NSString *name = @"";
+    if ([self.type.category isWiki])
+    {
+        NSString *wikidata = [self getWikidata];
+        if (wikidata.length == 0)
+            return @"";
+        
+        unichar firstChar = [wikidata characterAtIndex:0];
+        if (firstChar == 'Q' || firstChar == 'q')
+            wikidata = [wikidata substringFromIndex:1];
+        
+        name = wikidata;
+    }
+    else
+    {
+        name = self.name ?: @"";
+        if (name.length == 0)
+        {
+            int64_t osmId = [self getOsmId];
+            if (osmId > 0)
+                name = [NSString stringWithFormat:@"%lld", osmId];
+        }
+    }
+    
+    return [name escapeUrl] ?: @"";
+}
+
+- (NSString *)encodedPoiTypeForLink
+{
+    NSString *shareType = @"";
+    BOOL isWiki = [self.type.category isWiki];
+    NSString *subType = self.subType ?: @"";
+    NSRange sep = [subType rangeOfString:@";"];
+    if (sep.location != NSNotFound)
+        subType = [subType substringToIndex:sep.location];
+    
+    NSString *typeKey = self.type.category.name;
+    if (isWiki)
+        shareType = [self prepareShareType:typeKey.length > 0 ? typeKey : subType];
+    else
+        shareType = [self prepareShareType:subType.length > 0 ? subType : typeKey];
+    
+    NSString *rawType = shareType.length > 0 ? shareType : OSM_WIKI_CATEGORY;
+    return [rawType escapeUrl] ?: @"";
+}
+
+- (NSString *)prepareShareType:(NSString *)strType
+{
+    if (strType.length == 0)
+        return strType;
+    
+    NSString *replaced = [strType stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    return [OAUtilities capitalizeFirstLetter:replaced];
+}
+
 - (NSString *)toStringEn
 {
     NSString *nameEn = self.localizedNames[@"en"] ? self.localizedNames[@"en"] : @"";
@@ -960,6 +1017,45 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
         return (OAPOIType *) abstractPoiType;
     }
     return nil;
+}
+
+- (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags
+{
+    MutableOrderedDictionary<NSString *, NSString *> *result = [MutableOrderedDictionary new];
+    MutableOrderedDictionary<NSString *, NSString *> *amenityTags = [MutableOrderedDictionary new];
+    
+    for (NSString *key in [self getAdditionalInfoKeys])
+        amenityTags[key] = [self getAdditionalInfo:key];
+    
+    NSString *amenityName = self.name;
+    if (!NSStringIsEmpty(amenityName))
+        result[POI_NAME] = amenityName;
+    
+    OAPOICategory *category = self.type.category;
+    NSString *subTypesList = self.subType;
+    
+    if (subTypesList)
+    {
+        NSArray<NSString *> *separatedSubTypes = [subTypesList componentsSeparatedByString:@";"];
+        for (NSString *subType : separatedSubTypes)
+        {
+            OAPOIType *type = [category getPoiTypeByKeyName:subType];
+            if (type)
+            {
+                [result addEntriesFromDictionary:[type getOsmTagsValues]];
+                for (OAPOIType *additional in type.poiAdditionals)
+                {
+                    BOOL objectExisted = amenityTags[additional.name] != nil;
+                    [amenityTags removeObjectForKey:additional.name];
+                    if (objectExisted)
+                        [result addEntriesFromDictionary:[additional getOsmTagsValues]];
+                }
+            }
+        }
+    }
+    
+    [result addEntriesFromDictionary:amenityTags]; // unresolved residues
+    return result;
 }
 
 - (BOOL) isEqual:(id)o

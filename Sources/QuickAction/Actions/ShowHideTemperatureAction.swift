@@ -19,6 +19,10 @@ final class ShowHideTemperatureAction: BaseWeatherQuickAction {
         type
     }
     
+    override func getText() -> String? {
+        localizedString("quick_action_temperature_layer")
+    }
+    
     override func weatherBandIndex() -> EOAWeatherBand {
         .WEATHER_BAND_TEMPERATURE
     }

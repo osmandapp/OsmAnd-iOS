@@ -567,7 +567,7 @@
 
 // Map settings
 "routing_engine_vehicle_type_driving" = "მანქანით";
-"poi_filter_public_transport" = "საზოგადო ტრანსპორტი";
+"poi_filter_public_transport" = "საჯარო ტრანსპორტი";
 "shared_string_map" = "რუკა";
 "layer_amenity_label" = "წერტილის ჭდეები (POI, რჩეულები)";
 "shared_string_show_on_map" = "რუკაზე ჩვენება";
@@ -1549,7 +1549,7 @@
 "routing_attr_allow_classic_only_name" = "მხოლოდ, კლასიკური გზების დაშვება";
 "rendering_attr_streetLighting_name" = "ქუჩის განათება";
 "rendering_attr_appMode_name" = "რენდერის რეჟიმი";
-"routing_attr_avoid_subway_description" = "მიწისქვეშა და მსუბუქი მატარებლების თავიდან აცილება";
+"routing_attr_avoid_subway_description" = "მეტროს და მსუბუქი მატარებლების თავიდან აცილება";
 "rendering_value_light_brown_name" = "ღია ყავისფერი";
 "rendering_attr_surface_ice_name" = "ყინული";
 "routing_attr_piste_type_sled_name" = "ციგა";
@@ -1594,7 +1594,7 @@
 "rendering_attr_piste_type_sleigh_name" = "მარხილი";
 "rendering_attr_surface_paved_name" = "მოკირწყლული";
 "routing_attr_difficulty_preference_name" = "არჩეული სირთულე";
-"routing_attr_avoid_subway_name" = "მიწისქვეშა გადასასვლელების გარეშე";
+"routing_attr_avoid_subway_name" = "მეტროს გარეშე";
 "rendering_attr_surfaceIntegrity_name" = "გზის საფრის ერთიანობა";
 "rendering_attr_coloredBuildings_name" = "შენობების გაფერადება ტიპის მიხედვით";
 "rendering_attr_piste_difficulty_advanced_name" = "გამოცდილი";
@@ -1688,7 +1688,7 @@
 "routing_attr_weight_name" = "წონა";
 "rendering_value_bold_name" = "სქელი";
 "rendering_attr_surface_stone_name" = "ქვა";
-"rendering_attr_pisteGrooming_name" = "თხილამურების მოვლა";
+"rendering_attr_pisteGrooming_name" = "ტრასის მოვლა";
 "rendering_attr_noAdminboundaries_name" = "საზღვრები";
 "rendering_attr_tracktype_grade3_name" = "უმეტესად მყარი";
 "rendering_attr_showSurfaces_name" = "გზის ზედაპირის ჩვენება";
@@ -1781,7 +1781,7 @@
 "routing_attr_prefer_unpaved_name" = "უპირატესობის მინიჭება დაუგებელი გზებისთვის";
 "rendering_value_default_name" = "ნაგულისხმევი";
 "routing_attr_no_new_routing_name" = "არ გამოიყენო v1.9 გზის წესებ";
-"rendering_attr_subwayMode_name" = "მიწისქვეშა გზები";
+"rendering_attr_subwayMode_name" = "მეტროს ხაზები";
 "rendering_attr_highway_class_motorway_name" = "ავტომაგისტრალი";
 "rendering_value_brown_name" = "ყავისფერი";
 "rendering_attr_hideIcons_name" = "POI ხატულები";
@@ -1818,7 +1818,7 @@
 "app_mode_pedestrian" = "სიარული";
 "app_mode_taxi" = "ტაქსი";
 "app_mode_shuttle_bus" = "სამარშრუტო ავტობუსი";
-"app_mode_subway" = "მიწისქვეშა გადასასვლელი";
+"app_mode_subway" = "მეტრო";
 "app_mode_horse" = "ცხენი";
 "app_mode_helicopter" = "ვერტმფრენი";
 "app_mode_skiing" = "სრიალი";
@@ -2399,3 +2399,26 @@
 "shared_string_volume" = "მოცულობა";
 "shared_string_instant" = "მწყისიერი";
 "shared_string_engine" = "ძრავა";
+"zoom_levels_difference_description" = "დიდი სხვაობას გადიდების დონეებს შორის შეუძლია გადმოსაწერი მონაცემების ზომა გაზარდოს.";
+"gpx_parse_error" = "აღმოჩენილია GPX ფაილის პრობლემები.\n\nგამოსაკვლევად დაუკავშირდით OsmAnd-ის მხარდაჭერის გუნდს.";
+"track_rec_addon_q" = "თქვენი გზების თვალყურის მისადევნებლად გაააქტიურეთ გზების ჩაწერის მოდული";
+"save_track_to_gpx_descrp" = "გზის ჩაწერის რეჟიმის ავტოგაშვება ნავიგაციისას და მისი ავტოშენახვა დასრულების შემდეგ.";
+"map_settings_zoom_level_description" = "დააყენეთ მინიმალური და მაქსიმალური გადიდების დონე, რომლითაც ფენა იქნება ნაჩვენები";
+"download_tab_conflicts" = "გადაუწყვეტელია";
+"shared_string_road_exit" = "გასვლა";
+"equator" = "ეკვატორი";
+"shared_string_edges" = "წიბოები";
+"shared_string_litres" = "ლიტრი";
+"rendering_attr_hideFairways_name" = "ფარვატერები";
+"liter_single" = "ლიტრი";
+"kilometers" = "კილომეტრი";
+"miles" = "მილი";
+"mpg" = "MPG";
+"available" = "ხელმისაწვდომია";
+"shared_string_device" = "მოწყობილობა";
+"reconnect" = "თავიდან დაკავშირება";
+"slots" = "სლოტები";
+"metric_lbs" = "გირვანქა";
+"inch" = "დუიმ";
+"shared_string_inches" = "დუიმი";
+"shared_string_pounds" = "გირვანქა";

@@ -151,6 +151,9 @@ static int DEFAULT_ELO = 900;
 - (int)getTravelEloNumber;
 - (void)setTravelEloNumber:(int)elo;
 
+- (NSString *)encodedPoiNameForLink;
+- (NSString *)encodedPoiTypeForLink;
+
 - (NSString *) toStringEn;
 
 - (NSString *) getSubTypeStr;
@@ -166,6 +169,7 @@ static int DEFAULT_ELO = 900;
 - (uint64_t) getOsmId;
 
 - (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes;
+- (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags;
 
 - (BOOL) strictEquals:(id)object;
 

@@ -842,6 +842,7 @@
 "shared_string_maximum" = "Maximum";
 "osmand_parking_warning" = "Warning";
 "shared_string_copy" = "Copy";
+"copy_link" = "Copy link";
 "shared_string_continue" = "Continue";
 "shared_string_deselect_all" = "Deselect all";
 "shared_string_preparing" = "Preparing";
@@ -1409,6 +1410,7 @@
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
 "lang_crh" = "Crimean Tatar (latin)";
+"lang_mi" = "Māori";
 
 "shared_string_maps" = "Maps";
 "purchases" = "Purchases";
@@ -2069,6 +2071,15 @@
 "wind_layer" = "Wind layer";
 "cloud_layer" = "Cloud layer";
 "precipitation_layer" = "Precipitation layer";
+"wind_animation_layer" = "Wind animation layer";
+"quick_action_wind_animation_layer" = "A toggle to show or hide the wind animation layer on the map.";
+"weather_layers" = "Weather layers";
+"quick_action_weather_layers" = "A toggle to show or hide weather layers on the map.";
+"quick_action_precipitation_layer" = "A toggle to show or hide the precipitation layer on the map.";
+"quick_action_cloud_layer" = "A toggle to show or hide the cloud layer on the map.";
+"quick_action_wind_layer" = "A toggle to show or hide the wind layer on the map.";
+"quick_action_air_pressure_layer" = "A toggle to show or hide the air pressure layer on the map.";
+"quick_action_temperature_layer" = "A toggle to show or hide the temperature layer on the map.";
 "app_profile" = "App profile";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";
@@ -4273,7 +4284,7 @@
 
 "sensor_data" = "Sensor data";
 "sensor_data_settings_description" = "show main data from sensor";
-"battery_level_settings_description" = "show sensor batter level as main value";
+"battery_level_settings_description" = "show sensor battery level as main value";
 "shared_string_date" = "Date";
 
 "add_hidden_group_info" = "The added point can be found in \"%@\". Unhide the selected group to show it on the map.";

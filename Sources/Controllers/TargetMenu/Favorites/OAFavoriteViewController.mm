@@ -147,6 +147,11 @@ static const NSInteger kOrderFavGroupRow = 1;
     return YES;
 }
 
+- (NSString *)encodedPoiNameForLink
+{
+    return [[_favorite getName] escapeUrl] ?: @"";
+}
+
 - (NSString *)getTypeStr
 {
     NSString *group = [self getItemGroup];

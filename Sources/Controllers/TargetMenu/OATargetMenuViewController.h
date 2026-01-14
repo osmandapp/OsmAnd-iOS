@@ -122,6 +122,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) needAddress;
 - (nullable NSString *) getTypeStr;
 - (NSString *) getCommonTypeStr;
+- (NSString *)encodedPoiNameForLink;
+- (NSString *)encodedPoiTypeForLink;
 - (NSAttributedString *) getAttributedTypeStr;
 - (NSAttributedString *) getAttributedCommonTypeStr;
 

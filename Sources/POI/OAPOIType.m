@@ -193,6 +193,14 @@
     return _value2;
 }
 
+-(NSString *) getRawOsmTag
+{
+    if(self.reference) {
+        return [_referenceType getOsmTag];
+    }
+    return _tag;
+}
+
 -(NSString *) getOsmTag
 {
     if(self.reference)
@@ -210,6 +218,23 @@
         return [_referenceType getOsmTag2];
     }
     return _tag2;
+}
+
+- (NSDictionary<NSString *, NSString *> *)getOsmTagsValues
+{
+    NSMutableDictionary<NSString *, NSString *> *tags = [NSMutableDictionary new];
+    
+    NSString *tag1 = [self getRawOsmTag];
+    NSString *val1 = [self getOsmValue];
+    if (tag1 && val1)
+        tags[tag1] = val1;
+    
+    NSString *tag2 = [self getOsmTag2];
+    NSString *val2 = [self getOsmValue2];
+    if (tag2 && val2)
+        tags[tag2] = val2;
+    
+    return tags;
 }
 
 - (BOOL)isReference

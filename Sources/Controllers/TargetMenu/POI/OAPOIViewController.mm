@@ -1088,6 +1088,16 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return prefix != nil && prefix.length > 0 ? [NSString stringWithFormat:@"%@, %@", prefix, units] : units;
 }
 
+- (NSString *)encodedPoiNameForLink
+{
+    return [self.poi encodedPoiNameForLink];
+}
+
+- (NSString *)encodedPoiTypeForLink
+{
+    return [self.poi encodedPoiTypeForLink];
+}
+
 - (BOOL) isNumericValue:(NSString *)value
 {
     return [value rangeOfCharacterFromSet: [ [NSCharacterSet characterSetWithCharactersInString:@"0123456789.-"] invertedSet] ].location == NSNotFound;

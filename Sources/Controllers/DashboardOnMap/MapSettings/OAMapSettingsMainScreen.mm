@@ -52,6 +52,7 @@
 
 #define kUIHiddenCategory @"ui_hidden"
 #define kOSMAssistantCategory @"osm_assistant"
+#define k3DBuildingsCategory @"3D Buildings"
 
 #define kMaxCountRoutesWithoutGroup 5
 
@@ -636,7 +637,8 @@
     {
         if (![[cName lowercaseString] isEqualToString:kUIHiddenCategory]
                 && ![[cName lowercaseString] isEqualToString:kRoutesCategory]
-                && ![[cName lowercaseString] isEqualToString:kOSMAssistantCategory])
+                && ![[cName lowercaseString] isEqualToString:kOSMAssistantCategory]
+                && ![cName isEqualToString:k3DBuildingsCategory])
             [res addObject:cName];
     }
     _allCategories = res;

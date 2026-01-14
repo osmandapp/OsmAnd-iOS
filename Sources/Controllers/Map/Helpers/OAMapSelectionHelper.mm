@@ -775,6 +775,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (BOOL)showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename
 {
+    // The method is used to handle new->old OSM routes from search results.
+    // After implementing new OSM routes scheme, this method will be refactored.
+
     BOOL canBeRoute = [poi isRouteTrack] || !NSStringIsEmpty(poi.values[@"ref"]) || !NSStringIsEmpty(poi.values[@"route_id"]);
     if (!canBeRoute)
         return NO;
@@ -804,8 +807,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         
         if (isClickableWay)
         {
-            ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:latLon obfMapObject:obfMapObject tags:tags];
-            [self addClickableWay:result clickableWay:clickableWay];
+            [ClickableWayHelper openClickableWayAmenityWithAmenity:poi adjustMapPosition:YES];
+            return YES;
         }
         if (isOsmRoute || !osmRoutesAlreadyAdded)
         {
@@ -833,16 +836,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             {
                 OARouteKey *routeKey = selectedObject.object[0];
                 NSString *name = [[routeKey getRouteName] lowercaseString];
-                if ([poiName isEqualToString:name])
-                {
-                    [selectedObject.provider showMenuAction:selectedObject];
-                    return YES;
-                }
-            }
-            else if ([selectedObject.object isKindOfClass:ClickableWay.class])
-            {
-                ClickableWay *clickableWay = selectedObject.object;
-                NSString *name = [[clickableWay toString] lowercaseString];
                 if ([poiName isEqualToString:name])
                 {
                     [selectedObject.provider showMenuAction:selectedObject];

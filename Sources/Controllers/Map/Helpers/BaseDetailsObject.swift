@@ -544,6 +544,15 @@ final class BaseDetailsObject: NSObject {
         syntheticAmenity.x.count > 0 && syntheticAmenity.y.count > 0
     }
     
+    func getPointsLength() -> Int {
+        syntheticAmenity.x.count
+    }
+    
+    func clearGeometry() {
+        syntheticAmenity.x.removeAllObjects()
+        syntheticAmenity.y.removeAllObjects()
+    }
+    
     static func getLangForTravel(_ object: Any) -> String {
         var amenity: OAPOI?
         

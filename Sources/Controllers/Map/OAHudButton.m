@@ -121,7 +121,7 @@
     NSString *iconName = _customAppearanceParams != nil ? _customAppearanceParams.iconName : nil;
     
     UIImage *image;
-    if (iconName && iconName.length > 0 && ![_customAppearanceParams.iconName isEqualToString:[self createDefaultAppearanceParams].iconName])
+    if (iconName.length > 0 && ![_customAppearanceParams.iconName isEqualToString:[self createDefaultAppearanceParams].iconName])
     {
         image = [UIImage imageNamed:iconName];
         if (!image)
@@ -129,7 +129,7 @@
     }
     else if (_buttonState)
     {
-        image = _customAppearanceParams != nil && (iconName == nil || iconName.length == 0) ? [UIImage imageNamed:[_buttonState defaultPreviewIconName]] : [_buttonState previewIcon];
+        image = _customAppearanceParams != nil && iconName.length == 0 ? [UIImage imageNamed:[_buttonState defaultPreviewIconName]] : [_buttonState previewIcon];
     }
     else
     {

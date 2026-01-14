@@ -19,8 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define IMAGE_BASE_URL @"https://commons.wikimedia.org/wiki/Special:FilePath/"
 
 #define WIKIDATA_PREFIX @"Q"
-#define WIKIMEDIA_FILE @"File:"
-#define WIKIMEDIA_CATEGORY @"Category:"
+static NSString * const WIKIMEDIA_FILE = @"File:";
+static NSString * const WIKIMEDIA_CATEGORY = @"Category:";
 #define WIKIMEDIA_WIDTH @"?width="
 
 #define THUMB_SIZE 480

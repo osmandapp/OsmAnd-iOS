@@ -154,6 +154,11 @@ static NSString * const kGpxImportDir = @"import";
     return [[OASKFile alloc] initWithFilePath:OsmAndApp.instance.documentsPath];
 }
 
+- (OASKFile *)getCacheDir __attribute__((swift_name("getCacheDir()")))
+{
+    return [[OASKFile alloc] initWithFilePath:OsmAndApp.instance.documentsPath];
+}
+
 - (OASKFile *)getGpxDir __attribute__((swift_name("getGpxDir()")))
 {
     return [[OASKFile alloc] initWithFilePath:OsmAndApp.instance.gpxPath];

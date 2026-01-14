@@ -1214,22 +1214,24 @@ typedef enum
 
         if ([object isKindOfClass:[OAPOICategory class]])
         {
-            if (NSStringIsEmpty(objectLocalizedName))
-            {
-                objectLocalizedName = ((OAPOICategory *) object).nameLocalized;
-            }
+            OAPOICategory *c = ((OAPOICategory *) object);
+            objectLocalizedName = c.nameLocalized;
             phrase = [searchUICore resetPhrase:[NSString stringWithFormat:@"%@ ", objectLocalizedName]];
         }
         else if ([object isKindOfClass:[OAPOIUIFilter class]])
         {
             OAPOIUIFilter *filter = (OAPOIUIFilter *) object;
             filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID] || [filter.filterId hasPrefix:topIndexBrandPrefix];
-            if (NSStringIsEmpty(objectLocalizedName))
-            {
-                objectLocalizedName = filterByName ? filter.filterByName : filter.name;
-            }
+            objectLocalizedName = filterByName ? filter.filterByName : filter.name;
             phrase = [searchUICore resetPhrase];
         }
+        
+        if (!NSStringIsEmpty(searchQuery))
+        {
+            //Restore state after returning from "Show on map".
+            objectLocalizedName = searchQuery;
+        }
+        searchQuery = [NSString stringWithFormat:@"%@ ", objectLocalizedName.trim];
 
         if (phrase)
         {
@@ -1240,12 +1242,6 @@ typedef enum
             sr.priorityDistance = 0;
             sr.objectType = EOAObjectTypePoiType;
             [searchUICore selectSearchResult:sr];
-        }
-        
-        if (NSStringIsEmpty(objectLocalizedName))
-        {
-            searchQuery = [NSString stringWithFormat:@"%@ ",
-                           filterByName ? ((OAPOIUIFilter *) object).filterByName : objectLocalizedName.trim];
         }
     }
 

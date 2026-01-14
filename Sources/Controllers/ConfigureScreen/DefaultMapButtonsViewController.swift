@@ -136,16 +136,16 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     
     private func key(for state: MapButtonState) -> String {
         switch state {
-        case is Map3DButtonState: return "map3DMode"
-        case is CompassButtonState: return "compass"
-        case is ZoomInButtonState: return "zoomIn"
-        case is ZoomOutButtonState: return "zoomOut"
-        case is SearchButtonState: return "search"
-        case is DriveModeButtonState: return "navigation"
-        case is MyLocationButtonState: return "myLocation"
-        case is OptionsMenuButtonState: return "menu"
-        case is MapSettingsButtonState: return "configureMap"
-        default: return ""
+        case is Map3DButtonState: "map3DMode"
+        case is CompassButtonState: "compass"
+        case is ZoomInButtonState: "zoomIn"
+        case is ZoomOutButtonState: "zoomOut"
+        case is SearchButtonState: "search"
+        case is DriveModeButtonState: "navigation"
+        case is MyLocationButtonState: "myLocation"
+        case is OptionsMenuButtonState: "menu"
+        case is MapSettingsButtonState: "configureMap"
+        default: ""
         }
     }
 }

@@ -67,10 +67,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         }
         let menuElements = [resetAction, copyAction]
         let menu = UIMenu(children: menuElements)
-        let button = createRightNavbarButton(nil,
-                                             iconName: "ic_navbar_overflow_menu_stroke",
-                                             action: #selector(onRightNavbarButtonPressed),
-                                             menu: menu)
+        let button = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onRightNavbarButtonPressed), menu: menu)
         button?.accessibilityLabel = localizedString("shared_string_options")
         let popover = resetAlert?.popoverPresentationController
         popover?.barButtonItem = button
@@ -96,15 +93,15 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         visibilityRow.title = localizedString("visibility")
         visibilityRow.accessibilityLabel = visibilityRow.title
         visibilityRow.iconTintColor = appMode.getProfileColor()
-        if let boolPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean {
-            visibilityRow.setObj(NSNumber(value: boolPref.get(appMode)), forKey: Self.selectedKey)
+        if let boolVisibilityPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean {
+            visibilityRow.setObj(NSNumber(value: boolVisibilityPref.get(appMode)), forKey: Self.selectedKey)
             visibilityRow.cellType = OASwitchTableViewCell.reuseIdentifier
-        } else if let intPref = mapButtonState?.storedVisibilityPref() as? OACommonInteger {
-            if mapButtonState is CompassButtonState, let visibility = CompassVisibility(rawValue: intPref.get(appMode)) {
+        } else if let intVisibilityPref = mapButtonState?.storedVisibilityPref() as? OACommonInteger {
+            if mapButtonState is CompassButtonState, let visibility = CompassVisibility(rawValue: intVisibilityPref.get(appMode)) {
                 visibilityRow.iconName = visibility.iconName
                 visibilityRow.descr = visibility.title
                 visibilityRow.setObj(NSNumber(value: visibility != .alwaysHidden), forKey: Self.selectedKey)
-            } else if mapButtonState is Map3DButtonState, let visibility = Map3DModeVisibility(rawValue: intPref.get(appMode)) {
+            } else if mapButtonState is Map3DButtonState, let visibility = Map3DModeVisibility(rawValue: intVisibilityPref.get(appMode)) {
                 visibilityRow.iconName = visibility.iconName
                 visibilityRow.descr = visibility.title
                 visibilityRow.setObj(NSNumber(value: visibility != .hidden), forKey: Self.selectedKey)
@@ -128,14 +125,18 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         guard let mapButtonState else { return nil }
         let item = tableData.item(for: indexPath)
         if item.cellType == PreviewImageViewTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as! PreviewImageViewTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as? PreviewImageViewTableViewCell else {
+                return nil
+            }
             cell.configure(appearanceParams: nil, buttonState: mapButtonState)
             if mapButtonState is CompassButtonState {
                 cell.rotateImage(-CGFloat(OARootViewController.instance().mapPanel.mapViewController.azimuth()) / 180.0 * CGFloat.pi)
             }
             return cell
         } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as? OASimpleTableViewCell else {
+                return nil
+            }
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
             cell.selectionStyle = .none
@@ -146,7 +147,9 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             cell.separatorInset = .zero
             return cell
         } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as! OASwitchTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as? OASwitchTableViewCell else {
+                return nil
+            }
             let selected = item.bool(forKey: Self.selectedKey)
             cell.descriptionVisibility(false)
             cell.leftIconView.image = UIImage.templateImageNamed(selected ? "ic_custom_show" : "ic_custom_hide")
@@ -160,7 +163,9 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
             return cell
         } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell else {
+                return nil
+            }
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
@@ -209,8 +214,8 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             return false
         }
         
-        if let boolPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean {
-            boolPref.set(sw.isOn)
+        if let boolVisibilityPref = mapButtonState?.storedVisibilityPref() as? OACommonBoolean {
+            boolVisibilityPref.set(sw.isOn)
         }
         updateData()
         

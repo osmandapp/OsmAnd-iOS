@@ -70,6 +70,20 @@
     [self addTarget:self action:@selector(onButtonReleased:) forControlEvents:UIControlEventTouchCancel];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    if (@available(iOS 26.0, *))
+    {
+        for (UIView *subview in self.subviews)
+        {
+            if ([subview isKindOfClass:UIVisualEffectView.class])
+                [self sendSubviewToBack:subview];
+        }
+    }
+}
+
 - (void)updateColorsForPressedState:(BOOL)isPressed
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
@@ -138,17 +152,6 @@
     [self setImage:image forState:UIControlStateNormal];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    for (UIView *subview in self.subviews)
-    {
-        if ([subview isKindOfClass:UIVisualEffectView.class])
-            [self sendSubviewToBack:subview];
-    }
-}
-
 - (void)updateBackground
 {
     if (@available(iOS 26.0, *))
@@ -189,8 +192,7 @@
 
 - (void)updateShadow
 {
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds
-                                                          cornerRadius:self.layer.cornerRadius];
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.layer.cornerRadius];
     self.layer.shadowPath = shadowPath.CGPath;
 }
 

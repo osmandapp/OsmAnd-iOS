@@ -12,13 +12,13 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
     
     private let defaultImageSize: CGFloat = 30
     private let defaultImageOrigin: CGFloat = 9
-    private let colorOnMapIconBackgroundColorLight = UIColor(rgb: 0xFFFFFF)
-    private let colorOnMapIconBackgroundColorDark = UIColor(rgb: 0x3F3F3F)
-    private let colorPrimaryPurple = UIColor(rgb: 0x5714CC)
-    private let colorPrimaryLightBlue = UIColor(rgb: 0x7499F1)
-    private let colorOnMapIconTintColorLight = UIColor(rgb: 0x545454)
-    private let colorOnMapIconTintColorDark = UIColor(rgb: 0xcccccc)
-    private let colorOnMapIconBackgroundColorActive = UIColor(rgb: 0x682AD5)
+    private let colorOnMapIconBackgroundColorLight: UIColor = .mapButtonBgColorDefault.light
+    private let colorOnMapIconBackgroundColorDark: UIColor = .mapButtonBgColorDefault.dark
+    private let colorPrimaryPurple: UIColor = .mapButtonIconColorActive.light
+    private let colorPrimaryLightBlue: UIColor = .mapButtonIconColorActive.dark
+    private let colorOnMapIconTintColorLight: UIColor = .mapButtonIconColorDefault.light
+    private let colorOnMapIconTintColorDark: UIColor = .mapButtonIconColorDefault.dark
+    private let colorOnMapIconBackgroundColorActive: UIColor = .mapButtonBgColorActive
     private let defaultBorderWidthNight: CGFloat = 2
     private let defaultShadowOpacity: Float = 1
     private let defaultShadowRadius: CGFloat = 12

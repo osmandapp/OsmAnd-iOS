@@ -735,8 +735,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             case OAMapModeFree: // Free mode
             {
                 [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
-                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_active);
-                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_active);
+                _mapModeButton.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorActive].light;
+                _mapModeButton.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorActive].dark;
                 _mapModeButton.tintColorDay = UIColor.whiteColor;
                 _mapModeButton.tintColorNight = UIColor.whiteColor;
                 _mapModeButton.accessibilityHint = OALocalizedString(@"with_permission_my_position_value");
@@ -747,10 +747,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             case OAMapModePositionTrack: // Trace point
             {
                 [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
-                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
-                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
-                _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-                _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                _mapModeButton.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light;
+                _mapModeButton.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark;
+                _mapModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].light;
+                _mapModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].dark;
                 _mapModeButton.accessibilityHint = nil;
                 _mapModeButton.borderWidthNight = 2;
                 break;
@@ -764,10 +764,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     else
     {
         [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
-        _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
-        _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
-        _mapModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
-        _mapModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        _mapModeButton.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light;
+        _mapModeButton.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark;
+        _mapModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].light;
+        _mapModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].dark;
         _mapModeButton.borderWidthNight = 2;
         _mapModeButton.accessibilityHint = OALocalizedString(@"without_permission_my_position_value");
         _mapModeButton.accessibilityValue = OALocalizedString(@"shared_string_location_unknown");
@@ -2015,22 +2015,22 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (followingMode)
     {
         [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
-        _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-        _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+        _driveModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].light;
+        _driveModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].dark;
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else if (routePlanningMode)
     {
         [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
-        _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-        _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+        _driveModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].light;
+        _driveModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].dark;
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else
     {
         [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
-        _driveModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
-        _driveModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        _driveModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].light;
+        _driveModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].dark;
         _driveModeButton.accessibilityValue = nil;
     }
 

@@ -48,12 +48,12 @@
 
 - (void)commonInit
 {
-    self.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
-    self.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
+    self.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light;
+    self.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark;
     self.pressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_tap_light);
     self.pressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_tap_dark);
-    self.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
-    self.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+    self.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].light;
+    self.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].dark;
     self.borderColor = UIColorFromRGB(color_on_map_icon_border_color);
     self.borderWidthDay = 0;
     self.borderWidthNight = 2;

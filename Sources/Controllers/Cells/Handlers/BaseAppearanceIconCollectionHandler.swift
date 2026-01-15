@@ -89,8 +89,7 @@ class BaseAppearanceIconCollectionHandler: IconCollectionHandler {
             }
         }
         if !iconKeys.isEmpty {
-            let translatedName = localizedString("shared_string_activity")
-            categories.append(IconsAppearanceCategory(key: activitiesKey, translatedName: translatedName, iconKeys: iconKeys))
+            categories.append(IconsAppearanceCategory(key: activitiesKey, translatedName: localizedString("shared_string_activity"), iconKeys: iconKeys))
         }
     }
     

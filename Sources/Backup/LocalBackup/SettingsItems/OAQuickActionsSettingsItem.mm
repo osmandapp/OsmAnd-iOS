@@ -143,7 +143,7 @@
                 : [object[@"enabled"] isEqualToString:@"true"] ? YES : NO];
             
             NSString *iconName = object[@"icon"];
-            if (iconName.length != 0)
+            if (iconName.length > 0)
                 [[_buttonState storedIconPref] set:iconName];
             
             int size = [object[@"size"] intValue];
@@ -257,7 +257,7 @@
     jsonObject[@"enabled"] = [_buttonState isEnabled] ? @"true" : @"false";
     
     NSString *iconName = [[_buttonState storedIconPref] get];
-    if (iconName.length != 0)
+    if (iconName.length > 0)
         jsonObject[@"icon"] = iconName;
 
     int size = [[_buttonState storedSizePref] get];

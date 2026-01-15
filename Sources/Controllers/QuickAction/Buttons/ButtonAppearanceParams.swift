@@ -22,10 +22,28 @@ final class ButtonAppearanceParams: NSObject {
         self.glassStyle = glassStyle
     }
     
+    override var hash: Int {
+        var hasher = Hasher()
+        hasher.combine(iconName)
+        hasher.combine(size)
+        hasher.combine(opacity)
+        hasher.combine(cornerRadius)
+        hasher.combine(glassStyle)
+        return hasher.finalize()
+    }
+    
     override func isEqual(_ object: Any?) -> Bool {
         guard let other = object as? ButtonAppearanceParams else {
             return false
         }
-        return iconName == other.iconName && size == other.size && opacity == other.opacity && cornerRadius == other.cornerRadius && glassStyle == other.glassStyle
+        return isEqual(to: other)
+    }
+    
+    private func isEqual(to other: ButtonAppearanceParams) -> Bool {
+        iconName == other.iconName
+            && size == other.size
+            && opacity == other.opacity
+            && cornerRadius == other.cornerRadius
+            && glassStyle == other.glassStyle
     }
 }

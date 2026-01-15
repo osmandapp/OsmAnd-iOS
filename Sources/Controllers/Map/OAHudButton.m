@@ -78,7 +78,7 @@
     {
         for (UIView *subview in self.subviews)
         {
-            if ([subview isKindOfClass:UIVisualEffectView.class])
+            if ([subview isKindOfClass:UIVisualEffectView.class] && subview != self.subviews.firstObject)
                 [self sendSubviewToBack:subview];
         }
     }
@@ -156,7 +156,8 @@
 {
     if (@available(iOS 26.0, *))
     {
-        BOOL isGlass = [self getGlassStyle] == UIGlassEffectStyleRegular || [self getGlassStyle] == UIGlassEffectStyleClear;
+        NSInteger glassStyle = [self getGlassStyle];
+        BOOL isGlass = glassStyle == UIGlassEffectStyleRegular || glassStyle == UIGlassEffectStyleClear;
         
         for (UIView *subview in self.subviews)
         {
@@ -166,7 +167,7 @@
         
         if (isGlass)
         {
-            UIGlassEffect *glass = [UIGlassEffect effectWithStyle:[self getGlassStyle]];
+            UIGlassEffect *glass = [UIGlassEffect effectWithStyle:glassStyle];
             UIVisualEffectView *glassView =
                 [[UIVisualEffectView alloc] initWithEffect:glass];
             glassView.frame = self.bounds;

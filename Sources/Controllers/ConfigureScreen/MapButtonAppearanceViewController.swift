@@ -36,14 +36,9 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     override func viewDidLoad() {
-        guard let mapButtonState else { return }
-        let savedIconName = mapButtonState.savedIconName()
-        appearanceParams = mapButtonState.createAppearanceParams()
-        originalAppearanceParams = mapButtonState.createAppearanceParams()
-        appearanceParams?.iconName = savedIconName
-        originalAppearanceParams?.iconName = savedIconName
+        setupAppearanceParams()
         if #available(iOS 26.0, *) {
-            opacityType = appearanceParams?.glassStyle == MapButtonState.defaultGlassStyle ? .solid : .liquidGlass
+            setupOpacityType()
         }
         setupIconHandler()
         super.viewDidLoad()
@@ -144,7 +139,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         let backgroundOpacityRow = backgroundOpacitySection.createNewRow()
         backgroundOpacityRow.key = Self.backgroundOpacityRowKey
         backgroundOpacityRow.cellType = TopBottomValuesSliderTableViewCell.reuseIdentifier
-        backgroundOpacityRow.title = localizedString("background")
+        backgroundOpacityRow.title = localizedString("shared_background")
         backgroundOpacityRow.setObj(appearanceParams.opacity as Any, forKey: Self.valueKey)
         backgroundOpacityRow.setObj(appearanceParams.glassStyle as Any, forKey: Self.glassStyleKey)
     }
@@ -156,21 +151,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as? PreviewImageViewTableViewCell else {
                 return UITableViewCell()
             }
-            let shouldRotate: Bool = {
-                if mapButtonState is CompassButtonState {
-                    return true
-                }
-
-                if let state = mapButtonState as? QuickActionButtonState, state.isSingleAction() && state.quickActions.first?.actionType?.stringId == ChangeMapOrientationAction.getType().stringId {
-                    return true
-                }
-
-                return false
-            }()
             cell.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
-            if shouldRotate {
-                cell.rotateImage(-CGFloat(OARootViewController.instance().mapPanel.mapViewController.azimuth()) / 180.0 * CGFloat.pi)
-            }
             return cell
         } else if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell,
@@ -272,6 +253,20 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         return nil
     }
     
+    private func setupAppearanceParams() {
+        guard let mapButtonState else { return }
+        let savedIconName = mapButtonState.savedIconName()
+        appearanceParams = mapButtonState.createAppearanceParams()
+        originalAppearanceParams = mapButtonState.createAppearanceParams()
+        appearanceParams?.iconName = savedIconName
+        originalAppearanceParams?.iconName = savedIconName
+    }
+    
+    private func setupOpacityType() {
+        guard let appearanceParams else { return }
+        opacityType = appearanceParams.glassStyle == MapButtonState.defaultGlassStyle ? .solid : .liquidGlass
+    }
+    
     private func createOpacityModeMenu() -> UIMenu {
         let solidAction = UIAction(title: BackgroundOpacityType.solid.title, state: opacityType == .solid ? .on : .off) { [weak self] _ in
             self?.switchOpacityType(to: .solid)
@@ -291,12 +286,18 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private func setupIconHandler() {
         guard let iconName = appearanceParams?.iconName else { return }
         
-        if let mapButtonState = mapButtonState as? QuickActionButtonState, !mapButtonState.isSingleAction() {
-            let customIconKeys = [mapButtonState.defaultPreviewIconName()] + mapButtonState.quickActions.compactMap { $0.getIconResName() }
-            iconCollectionHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: customIconKeys)
-        } else if let defaultIcon = mapButtonState?.defaultPreviewIconName() {
-            iconCollectionHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: [defaultIcon])
-        }
+        let iconKeys: [String] = {
+            if let quickActionState = mapButtonState as? QuickActionButtonState, !quickActionState.isSingleAction() {
+                return [quickActionState.defaultPreviewIconName()] + quickActionState.quickActions.compactMap { $0.getIconResName() }
+            }
+            if let defaultIcon = mapButtonState?.defaultPreviewIconName() {
+                return [defaultIcon]
+            }
+            return []
+        }()
+            
+        guard !iconKeys.isEmpty else { return }
+        iconCollectionHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: iconKeys)
         iconCollectionHandler?.delegate = self
         iconCollectionHandler?.handlerDelegate = self
         iconCollectionHandler?.hostVC = self
@@ -331,23 +332,27 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
                                             message: localizedString("reset_all_settings_desc"),
                                             preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self] _ in
-            guard let self, let mapButtonState = self.mapButtonState else { return }
-            let defaultParams = mapButtonState.createDefaultAppearanceParams()
-            self.appearanceParams?.iconName = ""
-            self.iconCollectionHandler?.setIconName("")
-            self.iconCollectionHandler?.selectCategory(ButtonAppearanceIconCollectionHandler.dynamicKey)
-            self.appearanceParams?.size = defaultParams.size
-            self.appearanceParams?.cornerRadius = defaultParams.cornerRadius
-            self.appearanceParams?.opacity = defaultParams.opacity
-            self.appearanceParams?.glassStyle = defaultParams.glassStyle
-            self.opacityType = .solid
-            self.updateData()
+            self?.resetAppearanceToDefault()
         })
         actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         if let popoverController = actionSheet.popoverPresentationController {
             popoverController.barButtonItem = navigationItem.rightBarButtonItem
         }
         present(actionSheet, animated: true)
+    }
+    
+    private func resetAppearanceToDefault() {
+        guard let mapButtonState else { return }
+        let defaultParams = mapButtonState.createDefaultAppearanceParams()
+        appearanceParams?.iconName = ""
+        iconCollectionHandler?.setIconName("")
+        iconCollectionHandler?.selectCategory(ButtonAppearanceIconCollectionHandler.dynamicKey)
+        appearanceParams?.size = defaultParams.size
+        appearanceParams?.cornerRadius = defaultParams.cornerRadius
+        appearanceParams?.opacity = defaultParams.opacity
+        appearanceParams?.glassStyle = defaultParams.glassStyle
+        opacityType = .solid
+        updateData()
     }
     
     private func setAppearanceParameter(_ selectedIndex: Int, sender: UISlider) {
@@ -384,8 +389,8 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         }
     }
     
+    @available(iOS 26.0, *)
     @objc private func segmentChanged(sender: UISegmentedControl) {
-        guard #available(iOS 26.0, *) else { return }
         appearanceParams?.glassStyle = Int32(sender.selectedSegmentIndex == 0 ? UIGlassEffect.Style.clear.rawValue : UIGlassEffect.Style.regular.rawValue)
         updateData()
     }
@@ -410,16 +415,10 @@ extension MapButtonAppearanceViewController: OACollectionCellDelegate {
         }
         updateData()
     }
-    
-    func reloadCollectionData() {
-    }
 }
 
 // MARK: - OABaseCollectionHandlerDelegate
 extension MapButtonAppearanceViewController: OABaseCollectionHandlerDelegate {
-    func onCategorySelected(with cell: OACollectionSingleLineTableViewCell) {
-    }
-    
     func onCategorySelected(_ category: String, with cell: OACollectionSingleLineTableViewCell) {
         if category == ButtonAppearanceIconCollectionHandler.dynamicKey {
             appearanceParams?.iconName = ""

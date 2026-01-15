@@ -49,12 +49,10 @@ final class ButtonAppearanceIconCollectionHandler: BaseAppearanceIconCollectionH
     override func setIconName(_ iconName: String) {
         guard !iconName.isEmpty else { return }
         for category in categories {
-            for j in 0 ..< category.iconKeys.count {
-                guard iconName == category.iconKeys[j] else { continue }
-                selectCategory(category.key)
-                setSelectedIndexPath(IndexPath(row: j, section: 0))
-                return
-            }
+            guard let selectedIndex = category.iconKeys.firstIndex(where: { $0 == iconName }) else { continue }
+            selectCategory(category.key)
+            setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+            return
         }
         setSelectedIndexPath(IndexPath(row: 0, section: 0))
         selectCategory(Self.dynamicKey)

@@ -41,7 +41,7 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
     }
     
     private func setupImageViewWith(buttonState: MapButtonState, appearanceParams: ButtonAppearanceParams?) {
-        if buttonState is CompassButtonState || (buttonState is QuickActionButtonState && (buttonState as! QuickActionButtonState).quickActions.first?.getTypeId() == ChangeMapOrientationAction.getType().stringId && (buttonState as! QuickActionButtonState).isSingleAction() == true) {
+        if isCompassButton(buttonState) {
             if !(previewImageView.superview is OAHudButton) {
                 previewImageView.removeFromSuperview()
                 previewImageButton.addSubview(previewImageView)
@@ -51,8 +51,19 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
             previewImageView.image = previewImageButton.currentImage
             previewImageView.center = CGPoint(x: previewImageButton.frame.width / 2, y: previewImageButton.frame.height / 2)
             previewImageButton.setImage(nil, for: .normal)
+            previewImageView.transform = CGAffineTransform(rotationAngle: -CGFloat(OARootViewController.instance().mapPanel.mapViewController.azimuth()) / 180.0 * CGFloat.pi)
         } else {
             previewImageView.isHidden = true
+        }
+    }
+    
+    private func isCompassButton(_ buttonState: MapButtonState) -> Bool {
+        if buttonState is CompassButtonState {
+            return true
+        } else if let quickAction = buttonState as? QuickActionButtonState {
+            return quickAction.quickActions.first?.getTypeId() == ChangeMapOrientationAction.getType().stringId && quickAction.isSingleAction()
+        } else {
+            return false
         }
     }
     

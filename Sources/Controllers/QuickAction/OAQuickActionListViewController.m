@@ -104,10 +104,7 @@
                                                          image:[UIImage imageNamed:@"ic_custom_appearance_outlined"]
                                                     identifier:nil
                                                        handler:^(UIAction * _Nonnull action) {
-            MapButtonAppearanceViewController *vc = [[MapButtonAppearanceViewController alloc] init];
-            vc.delegate = self;
-            vc.mapButtonState = _buttonState;
-            [weakSelf showViewController:vc];
+            [weakSelf showMapButtonViewController];
         }];
         appearanceAction.accessibilityLabel = appearanceAction.title;
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
@@ -402,6 +399,14 @@
 }
 
 #pragma mark - Additions
+
+- (void)showMapButtonViewController
+{
+    MapButtonAppearanceViewController *vc = [[MapButtonAppearanceViewController alloc] init];
+    vc.delegate = self;
+    vc.mapButtonState = _buttonState;
+    [self showViewController:vc];
+}
 
 - (void)saveChanges
 {

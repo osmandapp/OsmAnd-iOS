@@ -2441,7 +2441,7 @@
     NSArray<NSString *> *unknownWords = phrase.getUnknownSearchWords;
     NSString *text = unknownWords.count > 0 ? unknownWords[0] : phrase.getUnknownWordToSearch;
 
-    NSArray<NSString *> *allowedTypes = @[@"town", @"village", @"city"];
+    NSArray<NSString *> *allowedTypes = @[@"village", @"town", @"city"]; // ascending priority
     int totalLimit = 500;
     QuadRect *searchBBox31 = [[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX];
     OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];

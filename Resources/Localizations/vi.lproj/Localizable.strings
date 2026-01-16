@@ -1,5 +1,5 @@
 "shared_string_previous" = "Trước";
-"shared_string_next" = "Tiếp";
+"shared_string_next" = "Tiếp theo";
 "transport_Routes" = "Tuyến xe";
 "shared_string_control_stop" = "Dừng";
 "switch_start_finish" = "Đảo ngược điểm xuất phát và đích đến";
@@ -2474,3 +2474,6 @@
 "quick_action_start_stop_navigation" = "Bắt đầu/dừng điều hướng";
 "app_mode_bus" = "Xe buýt";
 "stop_routing_confirm" = "Dừng điều hướng?";
+"coordinates" = "Toạ độ";
+"online_photos" = "Ảnh trực tuyến";
+"tunnel_warning" = "Hầm ở phía trước";

@@ -16,8 +16,8 @@ import UIKit
 final class WikiLanguageItem: NSObject {
     let locale: String
     let title: String
-    var checked: Bool
     let preferred: Bool
+    var checked: Bool
     
     init(locale: String, title: String, checked: Bool, preferred: Bool) {
         self.locale = locale
@@ -27,8 +27,11 @@ final class WikiLanguageItem: NSObject {
     }
     
     func compare(_ object: WikiLanguageItem) -> ComparisonResult {
-        let result: ComparisonResult = object.checked ? (!checked ? .orderedDescending : .orderedSame) : (checked ? .orderedAscending  : .orderedSame)
-        return result != .orderedSame ? result : (title as NSString).localizedCaseInsensitiveCompare(object.title)
+        if checked != object.checked {
+            return checked ? .orderedAscending : .orderedDescending
+        }
+        
+        return (title as NSString).localizedCaseInsensitiveCompare(object.title)
     }
 }
 
@@ -227,10 +230,7 @@ final class WikipediaLanguagesViewController: OABaseSettingsViewController {
     
     @objc private func onSwitchPressed(_ sw: UISwitch) {
         isGlobalWikiPoiEnabled = sw.isOn
-        UIView.transition(with: view, duration: 0.2, options: .transitionCrossDissolve, animations: { [weak self] in
-            guard let self else { return }
-            self.generateData()
-            self.tableView.reloadData()
-        }, completion: nil)
+        generateData()
+        tableView.reloadData()
     }
 }

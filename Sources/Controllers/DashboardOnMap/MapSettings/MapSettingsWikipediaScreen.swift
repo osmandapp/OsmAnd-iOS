@@ -93,7 +93,7 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
         sourceRow.cellType = OAButtonTableViewCell.reuseIdentifier
         sourceRow.key = RowKey.dataSourceRowKey.rawValue
         sourceRow.title = localizedString("poi_source")
-        sourceRow.icon = DataSourceTypeWrapper.iconFor(type: isOffline ? .offline : .online)
+        sourceRow.icon = (isOffline ? DataSourceType.offline : .online).icon?.withRenderingMode(.alwaysTemplate)
         sourceRow.iconTintColor = isOffline ? UIColor.iconColorDisabled : UIColor.iconColorSelected
         sourceRow.setObj(isOffline, forKey: ObjKey.isOffline)
         let previewsRow = previewSection.createNewRow()
@@ -182,7 +182,7 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
             return cell
         }
         if item.cellType == Self.mapCellType {
-            if let swiftItem = item.obj(forKey: ObjKey.resourceItem) as? OAResourceSwiftItem, let cell = downloadingHelper.getOrCreateCell(swiftItem.resourceId(), swiftResourceItem: swiftItem) {
+            if let resourceItem = item.obj(forKey: ObjKey.resourceItem) as? OAResourceSwiftItem, let cell = downloadingHelper.getOrCreateCell(resourceItem.resourceId(), swiftResourceItem: resourceItem) {
                 return cell
             }
         }
@@ -215,18 +215,18 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
     
     private func createDataSourceMenu(for cell: OAButtonTableViewCell) -> UIMenu {
         let isOffline = settings.wikiDataSourceType.get() == .offline
-        let online = UIAction(title: DataSourceTypeWrapper.titleFor(type: .online), state: isOffline ? .off : .on) { [weak self, weak cell] _ in
+        let online = UIAction(title: DataSourceType.online.title, state: isOffline ? .off : .on) { [weak self, weak cell] _ in
             guard let self else { return }
             self.settings.wikiDataSourceType.set(.online)
-            cell?.leftIconView.image = DataSourceTypeWrapper.iconFor(type: .online)
+            cell?.leftIconView.image = DataSourceType.online.icon?.withRenderingMode(.alwaysTemplate)
             cell?.leftIconView.tintColor = .iconColorSelected
             self.refreshPOI()
         }
         
-        let offline = UIAction(title: DataSourceTypeWrapper.titleFor(type: .offline), state: isOffline ? .on : .off) { [weak self, weak cell] _ in
+        let offline = UIAction(title: DataSourceType.offline.title, state: isOffline ? .on : .off) { [weak self, weak cell] _ in
             guard let self else { return }
             self.settings.wikiDataSourceType.set(.offline)
-            cell?.leftIconView.image = DataSourceTypeWrapper.iconFor(type: .offline)
+            cell?.leftIconView.image = DataSourceType.offline.icon?.withRenderingMode(.alwaysTemplate)
             cell?.leftIconView.tintColor = .iconColorDisabled
             self.refreshPOI()
         }

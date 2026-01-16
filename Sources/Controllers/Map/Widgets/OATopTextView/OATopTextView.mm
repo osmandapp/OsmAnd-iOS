@@ -667,10 +667,11 @@ static int stackViewLeadingToRefViewPadding = 16;
         BOOL isShieldSet = NO;
         NSInteger maxShields = MIN(shields.count, MAX_SHIELDS_QUANTITY);
         
-        for (NSInteger i = 0; i < maxShields; i++) 
+        NSMutableArray<RoadShield *> *addedShields = [NSMutableArray new];
+        for (NSInteger i = 0; i < maxShields; i++)
         {
             RoadShield * shield = shields[i];
-            isShieldSet |= [self setRoadShield:view shield:shield];
+            isShieldSet |= [self.class setRoadShield:view shield:shield addedShields:addedShields];
         }
         
         return isShieldSet;
@@ -678,13 +679,13 @@ static int stackViewLeadingToRefViewPadding = 16;
     return NO;
 }
 
-- (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield
++ (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield addedShields:(NSMutableArray<RoadShield *> *)addedShields
 {
     const auto& object = shield.rdo;
     const auto& tps = object->types;
-    NSString* nameTag = shield.tag;
-    NSString* name = shield.value;
-    NSMutableString * additional = [shield.additional mutableCopy];
+    NSString *nameTag = shield.tag;
+    NSString *name = shield.value;
+    NSMutableString *additional = [shield.additional mutableCopy];
     OAMapPresentationEnvironment *mapPres = OARootViewController.instance.mapPanel.mapViewController.mapPresentationEnv;
     const auto& env = mapPres.mapPresentationEnvironment;
     if (!env)
@@ -706,6 +707,11 @@ static int stackViewLeadingToRefViewPadding = 16;
         {
             [additional appendFormat:@"%s=%s;", tp.getTag().c_str(), tp.getValue().c_str()];
         }
+    }
+    
+    if ([self isSameShieldAdded:shield previousShields:addedShields additionalTagsString:additional])
+    {
+        return NO;
     }
     
     textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_TEXT_LENGTH, (unsigned int) name.length);
@@ -750,15 +756,58 @@ static int stackViewLeadingToRefViewPadding = 16;
     if (textSize != -1)
         textStyle.setSize(textSize);
     
-    
-    const auto textImage = _textRasterizer->rasterize(QString::fromNSString(name), textStyle);
+    auto textRasterizer = OsmAnd::TextRasterizer::getDefault();
+    const auto textImage = textRasterizer->rasterize(QString::fromNSString(name), textStyle);
     if (textImage)
     {
         view.image = [OANativeUtilities skImageToUIImage:textImage];
+        [addedShields addObject:shield];
         return YES;
     }
 
     return NO;
+}
+
++ (BOOL)isSameShieldAdded:(RoadShield *)currentShield previousShields:(NSArray<RoadShield *> *)previousShields additionalTagsString:(NSString *)additionalTagsString
+{
+    if (!NSArrayIsEmpty(previousShields))
+    {
+        NSDictionary<NSString *, NSString *> *tags = [self getShieldTagsMap:additionalTagsString];
+        
+        NSString *currentLabel = currentShield.value;
+        // @"route_road_1_ref"  ->  @"route_road_1_shield_color"
+        NSString *currentColorKey = [currentShield.tag stringByReplacingOccurrencesOfString:@"_ref" withString:@"_shield_color"];
+        NSString *currentColor = tags[currentColorKey];
+        
+        for (RoadShield *previousShield in previousShields)
+        {
+            NSString *previousLabel = previousShield.value;
+            NSString *previousColorKey = [previousShield.tag stringByReplacingOccurrencesOfString:@"_ref" withString:@"_shield_color"];
+            NSString *previousColor = tags[previousColorKey];
+            
+            if ([currentLabel isEqualToString:previousLabel] && [currentColor isEqualToString:previousColor])
+            {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
++ (NSDictionary<NSString *, NSString *> *)getShieldTagsMap:(NSString *)tagsString
+{
+    // convert NSString @"tag1=val1;tag2=val2;"  to  NSDictionary {tag1: val1, tag2: val2}
+    NSMutableDictionary<NSString *, NSString *> *map = [NSMutableDictionary new];
+    for (NSString *tagValue in [tagsString componentsSeparatedByString:@";"])
+    {
+        NSRange index = [tagValue rangeOfString:@"="];
+        if (index.location != NSNotFound && index.location != 0) {
+            NSString *key = [tagValue substringToIndex:index.location];
+            NSString *value = [tagValue substringFromIndex:index.location + 1];
+            map[key] = value;
+        }
+    }
+    return map;
 }
 
 - (void) onTopTextViewClicked:(id)sender

@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RoadShield;
+
 static const int MAX_SHIELDS_QUANTITY = 3;
 
 @interface OATopTextView : OABaseWidgetView
@@ -22,6 +24,8 @@ static const int MAX_SHIELDS_QUANTITY = 3;
                    bold:(BOOL)bold
            shadowRadius:(float)shadowRadius
               nightMode:(BOOL)nightMode;
+
++ (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield addedShields:(NSMutableArray<RoadShield *> *)addedShields;
 
 @end
 

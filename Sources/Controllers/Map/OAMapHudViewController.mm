@@ -1114,31 +1114,19 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateMapButton:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams
 {
-    [self updateMapButtonVisibilityAndAppearance:button showButton:showButton appearanceParams:appearanceParams];
-    [self updateColors];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void){
+    [self updateMapButtonVisibilityAndAppearance:button showButton:showButton appearanceParams:appearanceParams completionHandler:^{
         [_mapHudLayout updateButtons];
-    });
+    }];
+    [self updateColors];
 }
 
-- (void)updateMapButtonVisibilityAndAppearance:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams
+- (void)updateMapButtonVisibilityAndAppearance:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams completionHandler:(void (^)(void))completionHandler
 {
-    [self updateMapButtonVisibility:button showButton:showButton];
+    [self updateMapButtonVisibility:button showButton:showButton completionHandler:completionHandler];
     [self updateMapButtonAppearance:button appearanceParams:appearanceParams];
 }
 
-- (void)updateMapButtonsVisibilityAndAppearance
-{
-    [self updateMapButtonVisibilityAndAppearance:_mapSettingsButton showButton:[self shouldShowConfigureMap] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getConfigureMapButtonState] createAppearanceParams]];
-    [self updateMapButtonVisibilityAndAppearance:_searchButton showButton:[self shouldShowSearch] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getSearchButtonState] createAppearanceParams]];
-    [self updateMapButtonVisibilityAndAppearance:_optionsMenuButton showButton:[self shouldShowMenu] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] createAppearanceParams]];
-    [self updateMapButtonVisibilityAndAppearance:_driveModeButton showButton:[self shouldShowNavigation] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] createAppearanceParams]];
-    [self updateMapButtonVisibilityAndAppearance:_mapModeButton showButton:[self shouldShowMyLocation] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getMyLocationButtonState] createAppearanceParams]];
-    [self updateMapButtonVisibilityAndAppearance:_zoomInButton showButton:[self shouldShowZoomIn] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getZoomInButtonState] createAppearanceParams]];
-    [self updateMapButtonVisibilityAndAppearance:_zoomOutButton showButton:[self shouldShowZoomOut] appearanceParams:[[[OAMapButtonsHelper sharedInstance] getZoomOutButtonState] createAppearanceParams]];
-}
-
-- (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton
+- (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton completionHandler:(void (^)(void))completionHandler
 {
     BOOL needShow = button.alpha == 0.0 && showButton;
     BOOL needHide = button.alpha == 1.0 && !showButton;
@@ -1149,6 +1137,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             button.alpha = 1.0;
         } completion:^(BOOL finished) {
             button.userInteractionEnabled = button.alpha > 0.0;
+            if (completionHandler)
+                completionHandler();
         }];
     }
     else if (needHide)
@@ -1158,6 +1148,131 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             button.alpha = 0.0;
         } completion:^(BOOL finished) {
             button.hidden = YES;
+            if (completionHandler)
+                completionHandler();
+        }];
+    }
+}
+
+- (void)updateMapButtonsVisibilityAndAppearance
+{
+    [self updateMapButtonsVisibilityAndAppearance:[self getShowButtons] appearanceButtons:[self getAppearanceButtons] completionHandler:^{
+        [_mapHudLayout updateButtons];
+    }];
+}
+
+- (NSDictionary<NSNumber *, NSArray<OAHudButton *> *> *)getShowButtons
+{
+    NSMutableDictionary<NSNumber *, NSArray<OAHudButton *> *> *showButtons = [[NSMutableDictionary alloc] init];
+    NSMutableArray<OAHudButton *> *needShow = [[NSMutableArray alloc] init];
+    NSMutableArray<OAHudButton *> *needHide = [[NSMutableArray alloc] init];
+    
+    if ([self shouldShowConfigureMap])
+        [needShow addObject:_mapSettingsButton];
+    else
+        [needHide addObject:_mapSettingsButton];
+    
+    if ([self shouldShowSearch])
+        [needShow addObject:_searchButton];
+    else
+        [needHide addObject:_searchButton];
+    
+    if ([self shouldShowMenu])
+        [needShow addObject:_optionsMenuButton];
+    else
+        [needHide addObject:_optionsMenuButton];
+    
+    if ([self shouldShowNavigation])
+        [needShow addObject:_driveModeButton];
+    else
+        [needHide addObject:_driveModeButton];
+    
+    if ([self shouldShowMyLocation])
+        [needShow addObject:_mapModeButton];
+    else
+        [needHide addObject:_mapModeButton];
+    
+    if ([self shouldShowZoomIn])
+        [needShow addObject:_zoomInButton];
+    else
+        [needHide addObject:_zoomInButton];
+    
+    if ([self shouldShowZoomOut])
+        [needShow addObject:_zoomOutButton];
+    else
+        [needHide addObject:_zoomOutButton];
+    
+    showButtons[@(YES)] = needShow;
+    showButtons[@(NO)] = needHide;
+    return showButtons;
+}
+
+- (NSDictionary<NSValue *, OAHudButton *> *)getAppearanceButtons
+{
+    OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
+    NSMutableDictionary<NSValue *, OAHudButton *> *appearanceButtons = [[NSMutableDictionary alloc] init];
+    
+    ButtonAppearanceParams *configureParams = [[mapButtonsHelper getConfigureMapButtonState] createAppearanceParams];
+    ButtonAppearanceParams *searchParams = [[mapButtonsHelper getSearchButtonState] createAppearanceParams];
+    ButtonAppearanceParams *menuParams = [[mapButtonsHelper getMenuButtonState] createAppearanceParams];
+    ButtonAppearanceParams *navParams = [[mapButtonsHelper getNavigationModeButtonState] createAppearanceParams];
+    ButtonAppearanceParams *myLocParams = [[mapButtonsHelper getMyLocationButtonState] createAppearanceParams];
+    ButtonAppearanceParams *zoomInParams = [[mapButtonsHelper getZoomInButtonState] createAppearanceParams];
+    ButtonAppearanceParams *zoomOutParams = [[mapButtonsHelper getZoomOutButtonState] createAppearanceParams];
+
+    appearanceButtons[[NSValue valueWithNonretainedObject:configureParams]] = _mapSettingsButton;
+    appearanceButtons[[NSValue valueWithNonretainedObject:searchParams]] = _searchButton;
+    appearanceButtons[[NSValue valueWithNonretainedObject:menuParams]] = _optionsMenuButton;
+    appearanceButtons[[NSValue valueWithNonretainedObject:navParams]] = _driveModeButton;
+    appearanceButtons[[NSValue valueWithNonretainedObject:myLocParams]] = _mapModeButton;
+    appearanceButtons[[NSValue valueWithNonretainedObject:zoomInParams]] = _zoomInButton;
+    appearanceButtons[[NSValue valueWithNonretainedObject:zoomOutParams]] = _zoomOutButton;
+    
+    return appearanceButtons;
+}
+
+- (void)updateMapButtonsVisibilityAndAppearance:(NSDictionary<NSNumber *, NSArray<OAHudButton *> *> *)showButtons appearanceButtons:(NSDictionary<NSValue *, OAHudButton*> *)appearanceButtons completionHandler:(void (^)(void))completionHandler
+{
+    [self updateMapButtonsVisibility:showButtons completionHandler:completionHandler];
+    for (NSValue *key in appearanceButtons)
+    {
+        ButtonAppearanceParams *params = [key nonretainedObjectValue];
+        [self updateMapButtonAppearance:appearanceButtons[key] appearanceParams:params];
+    }
+}
+
+- (void)updateMapButtonsVisibility:(NSDictionary<NSNumber *, NSArray<OAHudButton *> *> *)buttons completionHandler:(void (^)(void))completionHandler
+{
+    NSArray<OAHudButton *> *needShowButtons = buttons[@(YES)];
+    NSArray<OAHudButton *> *needHideButtons = buttons[@(NO)];
+    if (needShowButtons)
+    {
+        for(OAHudButton *button in needShowButtons)
+            button.hidden = NO;
+        [UIView animateWithDuration:.25 animations:^{
+            for(OAHudButton *button in needShowButtons)
+                button.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            for(OAHudButton *button in needShowButtons)
+                button.userInteractionEnabled = button.alpha > 0.0;
+            
+            if (completionHandler)
+                completionHandler();
+        }];
+    }
+    if (needHideButtons)
+    {
+        for(OAHudButton *button in needHideButtons)
+            button.userInteractionEnabled = NO;
+        [UIView animateWithDuration:.25 animations:^{
+            for(OAHudButton *button in needHideButtons)
+                button.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            for(OAHudButton *button in needHideButtons)
+                button.hidden = YES;
+            
+            if (completionHandler)
+                completionHandler();
         }];
     }
 }

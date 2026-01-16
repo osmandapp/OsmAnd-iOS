@@ -1157,7 +1157,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void)updateMapButtonsVisibilityAndAppearance
 {
     [self updateMapButtonsVisibilityAndAppearance:[self getShowButtons] appearanceButtons:[self getAppearanceButtons] completionHandler:^{
-        [_mapHudLayout updateButtons];
+        [self updateDependentButtons];
     }];
 }
 
@@ -1204,6 +1204,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     
     showButtons[@(YES)] = needShow;
     showButtons[@(NO)] = needHide;
+    
     return showButtons;
 }
 

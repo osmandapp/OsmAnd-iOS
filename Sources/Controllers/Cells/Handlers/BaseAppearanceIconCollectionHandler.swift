@@ -54,11 +54,11 @@ class BaseAppearanceIconCollectionHandler: IconCollectionHandler {
     }
     
     func initIconCategories() {
-        // Overrides in child classes
+        fatalError("initIconCategories is not overridden")
     }
     
     func setIconName(_ iconName: String) {
-        // Overrides in child classes
+        fatalError("setIconName is not overridden")
     }
     
     func selectCategory(_ categoryKey: String) {
@@ -181,7 +181,7 @@ class BaseAppearanceIconCollectionHandler: IconCollectionHandler {
     }
     
     func loadAllIconsData() {
-        // Overrides in child classes
+        fatalError("loadAllIconsData is not overridden")
     }
     
     private func readCategoriesFromAssets(_ categoriesKeys: [String]) {

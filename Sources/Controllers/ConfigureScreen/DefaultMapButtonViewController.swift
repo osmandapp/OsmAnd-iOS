@@ -8,7 +8,7 @@
 
 final class DefaultMapButtonViewController: OABaseNavbarViewController {
     private static let descriptionFontSize: CGFloat = 15
-    private static let selectedKey = "selected"
+    private static let selectedKey = "selectedKey"
     private static let visibilityRowKey = "visibilityRowKey"
     private static let appearanceRowKey = "appearanceRowKey"
     
@@ -46,8 +46,8 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             let actionSheet = UIAlertController(title: self?.title,
                                                 message: localizedString("reset_all_settings_desc"),
                                                 preferredStyle: .actionSheet)
-            actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
-                guard let self, let appMode = self.appMode else { return }
+            actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { [weak self]  _ in
+                guard let self, let appMode else { return }
                 self.mapButtonState?.resetForMode(appMode)
                 self.updateData()
             })
@@ -59,7 +59,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
         }
         let copyAction: UIAction = UIAction(title: localizedString("copy_from_other_profile"),
                                             image: .icCustomCopy) { [weak self] _ in
-            guard let self, let appMode = self.appMode else { return }
+            guard let self, let appMode else { return }
             
             let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler(mode: appMode)
             bottomSheet.delegate = self

@@ -54,8 +54,7 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
         }
         let copyAction: UIAction = UIAction(title: localizedString("copy_from_other_profile"),
                                             image: .icCustomCopy) { [weak self] _ in
-            guard let self, let appMode = self.appMode else { return }
-            
+            guard let self, let appMode else { return }
             let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler(mode: appMode)
             bottomSheet.delegate = self
             bottomSheet.present(in: self)

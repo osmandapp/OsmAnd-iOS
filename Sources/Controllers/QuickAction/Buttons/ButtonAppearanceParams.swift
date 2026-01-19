@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class ButtonAppearanceParams: NSObject {
+final class ButtonAppearanceParams: NSObject, NSCopying {
     var iconName: String?
     var size: Int32
     var opacity: Double
@@ -37,6 +37,10 @@ final class ButtonAppearanceParams: NSObject {
             return false
         }
         return isEqual(to: other)
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        self
     }
     
     private func isEqual(to other: ButtonAppearanceParams) -> Bool {

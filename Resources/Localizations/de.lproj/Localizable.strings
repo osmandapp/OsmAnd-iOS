@@ -953,12 +953,12 @@
 "osmand_live_updates_size" = "Größe der heruntergeladenen Updates";
 "mapil_select_user" = "Benutzer auswählen";
 // Rendering attributes
-"day_short" = "T";
-"week_short" = "Wo";
-"weeks_short" = "Wn";
-"month_short" = "Mt";
-"months_short" = "Mte";
-"year_short" = "J";
+"day_short" = "Tg.";
+"week_short" = "Wo.";
+"weeks_short" = "Wo.";
+"month_short" = "Mo.";
+"months_short" = "Mon.";
+"year_short" = "J.";
 "years_short" = "Jahre";
 "day" = "Tag";
 "days_2_4" = "Tage";
@@ -1164,7 +1164,7 @@
 // World Regions
 "index_name_antarctica" = "Antarktis";
 "download_select_map_types" = "Andere Karten";
-"download_depth_countours" = "Nautische Tiefenlinien";
+"download_depth_countours" = "Tiefenlinien";
 // Route info
 "average_altitude" = "Durchschnittliche Höhe";
 "altitude_range" = "Höhenbereich";

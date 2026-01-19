@@ -1,6 +1,6 @@
-"shared_string_previous" = "Quay lại";
-"shared_string_next" = "Tiếp";
-"transport_Routes" = "Tuyến đường";
+"shared_string_previous" = "Trước";
+"shared_string_next" = "Tiếp theo";
+"transport_Routes" = "Tuyến xe";
 "shared_string_control_stop" = "Dừng";
 "switch_start_finish" = "Đảo ngược điểm xuất phát và đích đến";
 "show_poi_over_map" = "Hiện lớp phủ POI";
@@ -1557,7 +1557,7 @@
 "open_saved_track" = "Mở cung đường đã lưu";
 "restore_from_file" = "Khôi phục từ tệp";
 "attribute" = "Thuộc tính";
-"shared_string_interval" = "Khoảng thời gian";
+"shared_string_interval" = "Giãn cách";
 "activity_type_hiking_name" = "Leo núi";
 "icon_group_travel" = "Du lịch";
 "backup_error_file_not_available" = "Tệp không có sẵn";
@@ -2474,3 +2474,6 @@
 "quick_action_start_stop_navigation" = "Bắt đầu/dừng điều hướng";
 "app_mode_bus" = "Xe buýt";
 "stop_routing_confirm" = "Dừng điều hướng?";
+"coordinates" = "Toạ độ";
+"online_photos" = "Ảnh trực tuyến";
+"tunnel_warning" = "Hầm ở phía trước";

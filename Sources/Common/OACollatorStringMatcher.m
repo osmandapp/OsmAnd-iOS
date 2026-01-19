@@ -25,7 +25,7 @@ static NSCharacterSet * _APOSTROPHES;
     {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            NSString *charString = @"'’ʼ´`";
+            NSString *charString = @"'’ʼ´`ʹ‵′";
             _APOSTROPHES = [NSCharacterSet characterSetWithCharactersInString:charString];
         });
     }

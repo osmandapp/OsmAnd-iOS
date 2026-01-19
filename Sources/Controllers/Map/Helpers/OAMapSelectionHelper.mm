@@ -185,7 +185,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                 [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
                 
                 OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:names];
-                detailsObject = [amenitySearcher searchDetailedObject:request];
+                detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
             }
             else
             {
@@ -263,7 +263,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                                     else
                                     {
                                         OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:renderedObject];
-                                        detailsObject = [amenitySearcher searchDetailedObject:request];
+                                        detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
                                         if (detailsObject)
                                         {
                                             [detailsObject setMapIconName:[self getMapIconName:symbolInfo]];
@@ -669,7 +669,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             {
                 OARenderedObject *renderedObject = selectedObject.object;
                 OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:renderedObject];
-                BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:request];
+                BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObjectWithRequest:request];
                 if (detailsObject)
                 {
                     selectedObject.object = detailsObject.syntheticAmenity;
@@ -839,6 +839,9 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 
 - (BOOL)showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename
 {
+    // The method is used to handle new->old OSM routes from search results.
+    // After implementing new OSM routes scheme, this method will be refactored.
+
     BOOL canBeRoute = [poi isRouteTrack] || !NSStringIsEmpty(poi.values[@"ref"]) || !NSStringIsEmpty(poi.values[@"route_id"]);
     if (!canBeRoute)
         return NO;
@@ -868,8 +871,8 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
         
         if (isClickableWay)
         {
-            ClickableWay *clickableWay = [_clickableWayHelper loadClickableWay:latLon obfMapObject:obfMapObject tags:tags];
-            [self addClickableWay:result clickableWay:clickableWay];
+            [ClickableWayHelper openClickableWayAmenityWithAmenity:poi adjustMapPosition:YES];
+            return YES;
         }
         if (isOsmRoute || !osmRoutesAlreadyAdded)
         {
@@ -897,16 +900,6 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
             {
                 OARouteKey *routeKey = selectedObject.object[0];
                 NSString *name = [[routeKey getRouteName] lowercaseString];
-                if ([poiName isEqualToString:name])
-                {
-                    [selectedObject.provider showMenuAction:selectedObject];
-                    return YES;
-                }
-            }
-            else if ([selectedObject.object isKindOfClass:ClickableWay.class])
-            {
-                ClickableWay *clickableWay = selectedObject.object;
-                NSString *name = [[clickableWay toString] lowercaseString];
                 if ([poiName isEqualToString:name])
                 {
                     [selectedObject.provider showMenuAction:selectedObject];

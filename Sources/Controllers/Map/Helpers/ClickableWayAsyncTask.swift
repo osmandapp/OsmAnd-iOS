@@ -22,43 +22,12 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
     }
     
     override func doInBackground() -> Any? {
-        let result = readHeightData(clickableWay)
+        let result = ClickableWayHelper.readHeightData(clickableWay, canceller: self)
         return result ? clickableWay : nil
     }
     
     override func onPostExecute(result: Any?) {
-        openAsGpxFile(result as? ClickableWay)
+        ClickableWayHelper.openAsGpxFile(result as? ClickableWay)
         super.onPostExecute(result: result)
     }
-    
-    private func readHeightData(_ clickableWay: ClickableWay) -> Bool {
-        let loader = OAHeightDataLoader()
-        loader.cancellable = self
-        let waypoints = loader.loadHeightData(asWaypoints: Int64(clickableWay.osmId), bbox31: clickableWay.bbox)
-        
-        if !isCancelled(),
-           let waypoints, waypoints.count > 0,
-           let tracks = clickableWay.gpxFile.tracks as? [Track],
-           let segments = tracks.first?.segments as? [TrkSegment] {
-            
-            segments[0].points = waypoints
-            return true
-        }
-        return false
-    }
-    
-    @discardableResult
-    private func openAsGpxFile(_ clickableWay: ClickableWay?) -> Bool {
-        if let clickableWay {
-            let gpxFile = clickableWay.gpxFile
-            let analysis = gpxFile.getAnalysis(fileTimestamp: 0)
-            let name = clickableWay.getGpxFileName()
-            let safeFileName = clickableWay.getGpxFileName() + GPX_FILE_EXT
-            let selectedPoint = clickableWay.selectedGpxPoint.selectedPoint
-            
-            OAGPXUIHelper.saveAndOpenGpx(name, filepath: safeFileName, gpxFile: gpxFile, selectedPoint: selectedPoint, analysis: analysis, routeKey: nil, forceAdjustCentering: true)
-            return true
-        }
-        return false
-    }
-} 
+}

@@ -174,7 +174,7 @@
 "import_cannot" = "El archivo elegido no fue importado";
 "import_gpx" = "Traza GPX";
 // Alerts
-"alert_inet_needed" = "Requieres conexión a Internet para realizar esta acción. Comprueba su conexión a Internet.";
+"alert_inet_needed" = "Requiere conexión a Internet para realizar esta acción. Compruebe su conexión a Internet.";
 // Context menu
 "ctx_mnu_edit_fav" = "Editar favorito";
 "ctx_mnu_add_fav" = "Añadir favorito";
@@ -267,7 +267,7 @@
 "add_as" = "Añadir como";
 "shared_string_buy_for" = "por";
 "product_desc_parking" = "Rastrea el tiempo de aparcamiento y la ubicación de su vehículo";
-"track_save_short_q" = "La traza es muy corta, ¿quieres guardarla?";
+"track_save_short_q" = "La traza es muy corta, ¿quiere guardarla?";
 "shared_string_and" = "y";
 "fav_select" = "Elige los favoritos";
 "map_locale" = "Idioma del mapa";
@@ -601,7 +601,7 @@
 "keep_informing" = "Repetir instrucciones de navegación";
 "keep_informing_descr" = "Repite instrucciones de navegación a intervalos regulares.";
 "arrival_distance" = "Anuncio de llegada";
-"arrival_distance_descr" = "¿Cuándo quieres el anuncio de llegada\?";
+"arrival_distance_descr" = "¿Cuándo quiere el anuncio de llegada?";
 "default_speed_system" = "Unidad de velocidad";
 "default_speed_system_descr" = "Define la unidad de velocidad.";
 "speed_limit_exceed" = "Tolerancia del límite de velocidad";
@@ -848,7 +848,7 @@
 "exit_without_saving" = "¿Salir sin guardar?";
 "unsaved_changes_will_be_lost" = "Se perderán los cambios no guardados. ¿Continuar?";
 "osm_upload_no_internet" = "Comprueba la conexión a Internet e inténtalo de nuevo.";
-"osm_delete_confirmation_descr" = "¿Seguro que desea borrar este PDI?";
+"osm_delete_confirmation_descr" = "¿Confirma que quiere eliminar este PDI?";
 "osn_bug_name" = "Nota de OSM";
 "osm_created" = "Creado";
 "poi_remove_success" = "Borrado";
@@ -2172,7 +2172,7 @@
 "invalid_format" = "Formato inválido";
 "folder_already_exsists" = "Una carpeta con este nombre ya existe";
 "select_folder_descr" = "Elegir carpeta o añadir una nueva";
-"track_multiple_segments_select" = "%@ tiene más de un segmento. Marca la parte de la ruta que quieres utilizar para la navegación.";
+"track_multiple_segments_select" = "%@ tiene más de un segmento. Seleccione la parte de la traza que quiere usar para la navegación.";
 "selected_tracks_count" = "Trazas - %d";
 "map_widget_parking" = "Aparcamiento";
 "select_wikipedia_article_langs" = "Selecciona los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
@@ -2203,7 +2203,7 @@
 "select_track_to_follow" = "Marca la traza a seguir";
 "delete_group_confirm_short" = "¿Borrar grupo(s)?";
 "delete_group_confirm" = "¿Borrar el grupo «%@»?";
-"delete_tracks_bottom_sheet_description_regular_part" = "¿Quieres borrar ";
+"delete_tracks_bottom_sheet_description_regular_part" = "¿Confirma que quiere eliminar ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d trazas?";
 "delete_tracks_bottom_sheet_title" = "¿Borrar trazas?";
 "available_languages" = "Idiomas disponibles";
@@ -2671,7 +2671,7 @@
 "routing_attr_length_description" = "Indica la longitud permitida del vehículo en rutas.";
 "routing_attr_prefer_hiking_routes_description" = "Prefiere rutas de senderismo";
 "rendering_attr_weatherPressureContours_name" = "Isolíneas de presión";
-"rendering_attr_natureReserves_name" = "Reserva natural";
+"rendering_attr_natureReserves_name" = "Reserva natural y áreas protegidas";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolíneas de las ráfagas de viento";
 "rendering_attr_horse_scale_critical_name" = "Crítico";
 "routing_attr_prefer_tactile_paving_description" = "Preferir el pavimento táctil";
@@ -2722,10 +2722,10 @@
 "enable_search_history" = "Puedes activar el historial de búsqueda en Ajustes";
 "last_seven_days" = "Últimos 7 días";
 "history_preferences_descr" = "Puedes desactivar el registro del historial individualmente para cada tipo de historial.";
-"history_clear_alert_message" = "¿Estás seguro de que quieres borrar todos los elementos del historial?";
+"history_clear_alert_message" = "¿Confirma que quiere eliminar todos los elementos del historial?";
 "history_actions_footer_text" = "Puede exportar el historial a un archivo. Puede borrar todas las entradas del historial registradas hasta el momento.";
 "ltr_or_rtl_combine_via_of" = "%ld de %ld";
-"confirm_history_item_delete" = "¿Estás seguro de que quieres borrar (%ld) elementos del historial?";
+"confirm_history_item_delete" = "¿Confirma que quiere eliminar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
 "rotate_map_manual_opt" = "Rotación manual";
 "compass_click_desc" = "Mantén pulsado el botón de la brújula para cambiar el modo de orientación del mapa.";
@@ -2953,7 +2953,7 @@
 "image_cache" = "Almacén de imágenes";
 "download_images_settings_footer" = "La descarga de las imágenes se puede realizar a través de cualquier red. Se pueden utilizar datos móviles.";
 "travel_guides_search_placeholder" = "Buscar por país, la ciudad o la provincia";
-"remove_cache_alert" = "¿Seguro que quieres borrar la caché?";
+"remove_cache_alert" = "¿Confirma que quiere vaciar la antememoria?";
 "shared_string_read" = "Leer";
 "travel_guides_beta" = "Guías de viaje (Beta)";
 "clear_history" = "Borrar el historial";
@@ -3192,7 +3192,7 @@
 "my_places_no_tracks_title" = "Carpeta vacía";
 "my_places_no_tracks_descr" = "Esta carpeta aún no tiene ninguna pista.";
 "delete_folder" = "Borrar carpeta";
-"remove_folder_with_files_descr" = "¿Estás seguro de que quieres eliminar la carpeta \"%@\" y todas las pistas %d?";
+"remove_folder_with_files_descr" = "¿Confirma que quiere eliminar la carpeta «%@» y las %d trazas?";
 "new_track" = "Nueva pista";
 "not_recorded" = "Sin guardar";
 "start_recording" = "Iniciar grabación";
@@ -3220,7 +3220,7 @@
 "action_cant_be_undone" = "Esta acción es irreversible.";
 "delete_account" = "Borrar cuenta";
 "verify_account" = "Comprobar cuenta";
-"osmand_cloud_delete_account_descr" = "¿Estás seguro de que quieres eliminar la cuenta de OsmAnd Cloud?";
+"osmand_cloud_delete_account_descr" = "¿Confirma que quiere eliminar la cuenta de OsmAnd Cloud?";
 "osmand_cloud_delete_account_confirmation" = "¿Borrar la cuenta\?";
 "osmand_cloud_deletion_all_data_warning" = "Todos los datos de OsmAnd Cloud serán %@. Los datos del dispositivo permanecen intactos.";
 "skip_download" = "Omitir descarga";
@@ -3385,7 +3385,7 @@
 "route_your_destination_is_on_ahead" = "Tu destino está enfrente";
 "shared_string_show" = "Mostrar";
 "weather_wind_animation_enable_descr" = "Habilite la visualización de la capa de animación del viento en el mapa.";
-"osmand_cloud_delete_account_descr_with_email" = "¿Estás seguro de que quieres borrar la cuenta de OsmAnd Cloud: %@?";
+"osmand_cloud_delete_account_descr_with_email" = "¿Confirma que quiere eliminar la cuenta de OsmAnd Cloud: %@?";
 "battery_saving_mode" = "Modo ahorro de batería";
 "quick_action_toggle_preference" = "Un botón que cambia las preferencias.";
 "map_settings_weather_temp_air" = "Temperatura atmosférica";
@@ -3548,7 +3548,7 @@
 "terrain_map" = "Mapa topográfico (3D)";
 "shared_string_unchanged" = "Sin cambios";
 "labels_position" = "Ubicación de las etiquetas";
-"map_widget_route_information_desc" = "Muestra la hora estimada de llegada, el tiempo de viaje restante y la distancia para la ruta de navegación actual.";
+"map_widget_route_information_desc" = "Muestra la hora estimada de llegada, el tiempo de viaje restante y la distancia para la ruta de navegación activa.";
 "meridian_180" = "Meridiano 180";
 "prime_meridian" = "Meridiano cero";
 "quick_action_showhide_coordinates_grid_descr" = "Acción para controlar la visibilidad de la red de coordenadas en el mapa.";
@@ -3853,3 +3853,31 @@
 "rendering_attr_hideNoLNAM_name" = "Balizajes OSM (algunos)";
 "rendering_attr_hideNoLNAM_description" = "Ocultar balizajes OSM (algunos)";
 "ios_release_5_3" = "• Se ha añadido una animación interactiva para el widget del velocímetro.\n• Se ha añadido una opción para cambiar el tamaño del ícono de ubicación.\n• Nuevos widgets de grabación de viajes: velocidad máxima y pendiente media; widgets mejorados de ascenso/descenso.\n• Se admiten enlaces profundos para compartir puntos de interés específicos.\n• Se ha corregido un problema por el que la hora estimada de llegada en los widgets de navegación no se actualizaba mientras el vehículo estaba parado.\n• Se ha mejorado la conectividad para los adaptadores OBDII vinculados.\n• Se ha añadido la posibilidad de fusionar puntos de ruta en una carpeta de favoritos específica.\n• CarPlay: se ha corregido un problema por el que el mapa no respondía en el tablero y se ha corregido la compatibilidad con el parámetro «Mostrar siempre mapa oscuro».\n";
+"duration" = "Duración";
+"shared_string_estimated_duration" = "Duración estimada";
+"copy_link" = "Copiar enlace";
+"total_distance" = "Distancia total";
+"lang_zh_hans" = "Chino simplificado";
+"lang_zh_hant" = "Chino tradicional";
+"lang_mi" = "Maorí";
+"icon_size" = "Tamaño de iconos";
+"quick_action_search_view_title" = "Vista de búsqueda";
+"quick_action_drawer_title" = "Menú lateral";
+"quick_action_previous_screen_title" = "Pantalla anterior";
+"key_event_action_zoom_out" = "Alejar";
+"quick_action_to_my_location" = "A mi ubicación";
+"key_event_action_move_to_my_location" = "Mover a mi ubicación";
+"shared_string_inches" = "pulgadas";
+"shared_string_pounds" = "libras";
+"shared_string_degrees" = "Grados";
+"shared_string_device" = "Dispositivo";
+"quick_action_verb_navigate" = "Navegar";
+"shared_string_create" = "Crear";
+"key_event_action_zoom_in" = "Acercar";
+"key_assignment_add_action" = "Añadir acción";
+"key_assignment_add_key" = "Añadir clave";
+"key_name_pattern" = "Clave «%@»";
+"shared_string_max_speed" = "";
+"x" = "X (antes Twitter)";
+"application_profile_changed" = "Se cambió el perfil de la aplicación a «%@»";
+"no_activity_for_intent" = "Instale una aplicación que pueda efectuar esta acción.";

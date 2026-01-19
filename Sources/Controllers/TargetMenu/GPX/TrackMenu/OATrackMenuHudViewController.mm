@@ -1229,6 +1229,7 @@
                 OASGpxUtilitiesPointsGroup *metaGroup = self.doc.pointsGroups[oldKey];
                 if (metaGroup)
                 {
+                    metaGroup.color = [_groupColor toRGBNumber];
                     [self.doc.pointsGroups removeObjectForKey:oldKey];
                     self.doc.pointsGroups[newKey] = metaGroup;
                 }

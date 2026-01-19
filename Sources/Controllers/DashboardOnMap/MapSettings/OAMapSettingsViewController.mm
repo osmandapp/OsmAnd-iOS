@@ -31,7 +31,6 @@
 #import "OAAppData.h"
 #import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsTerrainScreen.h"
-#import "OAMapSettingsWikipediaScreen.h"
 #import "OAMapSettingsRoutesScreen.h"
 #import "OAMapStyleSettings.h"
 #import "OAMapSettingsWeatherScreen.h"
@@ -165,7 +164,7 @@
             break;
         case EMapSettingsScreenWikipedia:
             if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsWikipediaScreen alloc] initWithTable:self.tableView viewController:self];
+                self.screenObj = [[MapSettingsWikipediaScreen alloc] initWithTable:self.tableView viewController:self];
             break;
         case EMapSettingsScreenRoutes:
             if (!self.screenObj)

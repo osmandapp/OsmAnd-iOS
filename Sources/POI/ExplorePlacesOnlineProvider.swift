@@ -7,31 +7,28 @@
 //
 
 final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
-
-    static let maxLevelZoomCache = 13
-    
-    private static let defaultLimitPoints = 200
-    private static let maxTilesPerQuadRect = 12
-    private static let maxTilesPerCache = maxTilesPerQuadRect * 2
-    private static let loadAllTinyRect: Double = 0.5
-    // FIXME:
-
-  //  private let dbHelper: PlacesDatabaseHelper
-
     private struct TileKey: Hashable {
         let zoom: Int
         let tileX: Int
         let tileY: Int
     }
-    // FIXME:
-  //  private var loadingTasks: [TileKey: GetExplorePlacesImagesTask] = [:]
+    
+    static let maxLevelZoomCache = 13
+    static let defaultLimitPoints = 200
+    
+    private static let nearbyMinRadius = 50
+    private static let maxTilesPerQuadRect = 12
+    private static let maxTilesPerCache = maxTilesPerQuadRect * 2
+    private static let loadAllTinyRect: Double = 0.5
+    
+    //    private let dbHelper: PlacesDatabaseHelper
+    
+    //    private var loadingTasks: [TileKey: GetExplorePlacesImagesTask] = [:]
     private var tilesCache: [TileKey: [OAPOI]] = [:]
-
     private var listeners: [ExplorePlacesListener] = []
 
     init() {
-        // FIXME:
-      //  self.dbHelper = PlacesDatabaseHelper(app)
+        //  self.dbHelper = PlacesDatabaseHelper(app)
     }
 
     // MARK: - Listeners
@@ -50,13 +47,12 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         DispatchQueue.main.async {
             self.listeners.forEach {
                 isPartial
-                    ? $0.onPartialExplorePlacesDownloaded()
-                    : $0.onNewExplorePlacesDownloaded()
+                ? $0.onPartialExplorePlacesDownloaded()
+                : $0.onNewExplorePlacesDownloaded()
             }
         }
     }
     
-
     // MARK: - Preferred languages
     
     private func getPreferredLangs() -> [String] {
@@ -68,10 +64,8 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
                 if plugin.getLanguagesToShow().contains(preferred), seen.insert(preferred).inserted {
                     result.append(preferred)
                 }
-                for lang in plugin.getLanguagesToShow() {
-                    if seen.insert(lang).inserted {
-                        result.append(lang)
-                    }
+                for lang in plugin.getLanguagesToShow() where seen.insert(lang).inserted {
+                    result.append(lang)
                 }
             }
         }

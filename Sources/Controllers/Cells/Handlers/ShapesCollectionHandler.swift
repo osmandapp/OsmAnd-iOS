@@ -48,7 +48,7 @@ final class ShapesCollectionHandler: OABaseCollectionHandler {
         selectedCatagoryKey = categoryKey
         updateHostCellIfNeeded()
         if let hostCell, shouldPerformOnCategorySelected {
-            handlerDelegate?.onCategorySelected(with: hostCell)
+            handlerDelegate?.onCategorySelected?(with: hostCell)
         }
     }
     

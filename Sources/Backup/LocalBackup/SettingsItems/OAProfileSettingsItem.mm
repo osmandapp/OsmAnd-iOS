@@ -426,6 +426,8 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
             [builder setCustomIconColor:_modeBean.customIconColor];
             [builder setLocationIcon:_modeBean.locIcon];
             [builder setNavigationIcon:_modeBean.navIcon];
+            [builder setLocationIconSize:_modeBean.locIconSize];
+            [builder setCourseIconSize:_modeBean.navIconSize];
             //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
             _appMode = [OAApplicationMode saveProfile:builder];
         }

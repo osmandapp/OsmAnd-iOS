@@ -141,6 +141,22 @@
             [_buttonState setEnabled:[object[@"enabled"] isKindOfClass:NSNumber.class]
                 ? [object[@"enabled"] boolValue]
                 : [object[@"enabled"] isEqualToString:@"true"] ? YES : NO];
+            
+            NSString *iconName = object[@"icon"];
+            if (iconName.length > 0)
+                [[_buttonState storedIconPref] set:iconName];
+            
+            int size = [object[@"size"] intValue];
+            if (size > 0)
+                [[_buttonState storedSizePref] set:size];
+            
+            int cornerRadius = [object[@"corner_radius"] intValue];
+            if (cornerRadius > 0)
+                [[_buttonState storedCornerRadiusPref] set:cornerRadius];
+            
+            double opacity = [object[@"opacity"] doubleValue];
+            if (opacity > 0)
+                [[_buttonState storedOpacityPref] set:opacity];
         }
         else
         {
@@ -239,6 +255,23 @@
     jsonObject[@"id"] = _buttonState.id;
     jsonObject[@"name"] = [_buttonState hasCustomName] ? [_buttonState getName] : @"";
     jsonObject[@"enabled"] = [_buttonState isEnabled] ? @"true" : @"false";
+    
+    NSString *iconName = [[_buttonState storedIconPref] get];
+    if (iconName.length > 0)
+        jsonObject[@"icon"] = iconName;
+
+    int size = [[_buttonState storedSizePref] get];
+    if (size > 0)
+        jsonObject[@"size"] = [@(size) stringValue];
+
+    int cornerRadius = [[_buttonState storedCornerRadiusPref] get];
+    if (cornerRadius > 0)
+        jsonObject[@"corner_radius"] = [@(cornerRadius) stringValue];
+
+    double opacity = [[_buttonState storedOpacityPref] get];
+    if (opacity > 0)
+        jsonObject[@"opacity"] = [@(opacity) stringValue];
+
     json[@"buttonState"] = jsonObject;
 }
 

@@ -251,9 +251,9 @@ final class DeepLinkParser: NSObject {
         for item in items {
             let key = item.name.lowercased()
             if key == "name" {
-                nameParam = item.value
+                nameParam = normalizeQueryValue(item.value)
             } else if key == "type" {
-                typeParam = item.value
+                typeParam = normalizeQueryValue(item.value)
             }
         }
         
@@ -278,15 +278,15 @@ final class DeepLinkParser: NSObject {
         for item in items {
             switch item.name.lowercased() {
             case "name":
-                name = item.value
+                name = normalizeQueryValue(item.value)
             case "type":
-                type = item.value
+                type = normalizeQueryValue(item.value)
             case "wikidataid":
-                wikiDataId = item.value
+                wikiDataId = normalizeQueryValue(item.value)
             case "osmid":
-                osmId = item.value
+                osmId = normalizeQueryValue(item.value)
             case "pin":
-                latLonParam = item.value
+                latLonParam = normalizeQueryValue(item.value)
             default:
                 break
             }
@@ -316,9 +316,9 @@ final class DeepLinkParser: NSObject {
         for item in items {
             switch item.name.lowercased() {
             case "name":
-                name = item.value
+                name = normalizeQueryValue(item.value)
             case "pin":
-                latLonParam = item.value
+                latLonParam = normalizeQueryValue(item.value)
             default:
                 break
             }
@@ -368,6 +368,12 @@ final class DeepLinkParser: NSObject {
         request.osmId = parsedOsmId
         request.mainAmenityType = subType
         return OAAmenitySearcher.sharedInstance().searchDetailedObject(with: request)
+    }
+    
+    private func normalizeQueryValue(_ rawValue: String?) -> String? {
+        guard let rawValue, !rawValue.isEmpty else { return nil }
+        let normalized = (rawValue.replacingOccurrences(of: "+", with: " ").removingPercentEncoding ?? rawValue).trimmingCharacters(in: .whitespacesAndNewlines)
+        return normalized.isEmpty ? nil : normalized
     }
     
     private func parseIntermediatePoints(_ parameter: String?) -> [CLLocation]? {

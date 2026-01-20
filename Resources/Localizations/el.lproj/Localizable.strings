@@ -1383,7 +1383,7 @@
 "si_nm_h" = "Ναυτικά μίλια ανά ώρα (κόμβοι)";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / μήνα";
 "save_heading_descr" = "Αποθήκευση κατεύθυνσης για κάθε σημείο ίχνους κατά την εγγραφή.";
-"sort_last_modified" = "Τελευταία επεξεργασία";
+"sort_last_modified" = "Τελευταία τροποποίηση";
 "osm_live_enter_user_name" = "Παρακαλούμε, εισάγετε ένα δημόσιο όνομα";
 "avoid_in_routing_descr_" = "Αποφυγή συγκεκριμένων διαδρομών και τύπων δρόμων";
 "profile_alert_delete_msg" = "Διαγραφή του προφίλ \"%@\"";

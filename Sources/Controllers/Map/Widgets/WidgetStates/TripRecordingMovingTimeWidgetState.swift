@@ -46,7 +46,7 @@ final class TripRecordingMovingTimeWidgetState: OAWidgetState {
     static let prefMovingTimeModeId = "trip_recording_moving_time_widget_mode"
     
     private let widgetType: WidgetType
-    private let movingTimeModePreference: OACommonInteger
+    private let movingTimeModePreference: OACommonTripRecordingMovingTimeMode
     
     init(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) {
         self.widgetType = widgetType
@@ -62,26 +62,26 @@ final class TripRecordingMovingTimeWidgetState: OAWidgetState {
     }
     
     override func changeToNextState() {
-        movingTimeModePreference.set(Int32(getMovingTimeMode().next().rawValue))
+        movingTimeModePreference.set(getMovingTimeMode().next().rawValue)
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(movingTimeModePreference.get(appMode), mode: appMode)
     }
     
-    func getMovingTimeModePreference() -> OACommonInteger {
+    func getMovingTimeModePreference() -> OACommonTripRecordingMovingTimeMode {
         movingTimeModePreference
     }
     
-    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonInteger {
+    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonTripRecordingMovingTimeMode {
         var prefId = Self.prefMovingTimeModeId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
         
-        let pref = OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(TripRecordingMovingTimeMode.total.rawValue)).makeProfile()
+        let pref = OAAppSettings.sharedManager().registerTripRecordingMovingTimeModePreference(prefId, defValue: TripRecordingMovingTimeMode.total.rawValue).makeProfile()
         if let string = widgetParams?[Self.prefMovingTimeModeId] as? String, let intVal = Int32(string) {
-            pref.set(intVal)
+            pref.set(Int(intVal))
         }
         
         return pref

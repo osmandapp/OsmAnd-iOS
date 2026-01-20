@@ -46,7 +46,7 @@ final class TripRecordingDistanceWidgetState: OAWidgetState {
     static let prefDistanceModeId = "trip_recording_distance_widget_mode"
     
     private let widgetType: WidgetType
-    private let distanceModePreference: OACommonInteger
+    private let distanceModePreference: OACommonTripRecordingDistanceMode
     
     init(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) {
         self.widgetType = widgetType
@@ -62,26 +62,26 @@ final class TripRecordingDistanceWidgetState: OAWidgetState {
     }
     
     override func changeToNextState() {
-        distanceModePreference.set(Int32(getDistanceMode().next().rawValue))
+        distanceModePreference.set(getDistanceMode().next().rawValue)
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(distanceModePreference.get(appMode), mode: appMode)
     }
     
-    func getDistanceModePreference() -> OACommonInteger {
+    func getDistanceModePreference() -> OACommonTripRecordingDistanceMode {
         distanceModePreference
     }
     
-    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonInteger {
+    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonTripRecordingDistanceMode {
         var prefId = Self.prefDistanceModeId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
         
-        let pref = OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(TripRecordingDistanceMode.totalDistance.rawValue)).makeProfile()
+        let pref = OAAppSettings.sharedManager().registerTripRecordingDistanceModePreference(prefId, defValue: TripRecordingDistanceMode.totalDistance.rawValue).makeProfile()
         if let string = widgetParams?[Self.prefDistanceModeId] as? String, let intVal = Int32(string) {
-            pref.set(intVal)
+            pref.set(Int(intVal))
         }
         
         return pref

@@ -41,7 +41,7 @@ final class TripRecordingSlopeWidgetState: OAWidgetState {
     static let prefAverageSlopeModeId = "average_slope_widget_mode"
     
     private let widgetType: WidgetType
-    private let averageSlopeModePreference: OACommonInteger
+    private let averageSlopeModePreference: OACommonTripRecordingAverageSlopeMode
     
     init(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) {
         self.widgetType = widgetType
@@ -57,26 +57,26 @@ final class TripRecordingSlopeWidgetState: OAWidgetState {
     }
     
     override func changeToNextState() {
-        averageSlopeModePreference.set(Int32(getAverageSlopeMode().next().rawValue))
+        averageSlopeModePreference.set(getAverageSlopeMode().next().rawValue)
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(averageSlopeModePreference.get(appMode), mode: appMode)
     }
     
-    func getAverageSlopeModePreference() -> OACommonInteger {
+    func getAverageSlopeModePreference() -> OACommonTripRecordingAverageSlopeMode {
         averageSlopeModePreference
     }
     
-    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonInteger {
+    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonTripRecordingAverageSlopeMode {
         var prefId = Self.prefAverageSlopeModeId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
         
-        let pref = OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(AverageSlopeMode.lastUphill.rawValue)).makeProfile()
+        let pref = OAAppSettings.sharedManager().registerAverageSlopeModePreference(prefId, defValue: AverageSlopeMode.lastUphill.rawValue).makeProfile()
         if let string = widgetParams?[Self.prefAverageSlopeModeId] as? String, let intVal = Int32(string) {
-            pref.set(intVal)
+            pref.set(Int(intVal))
         }
         
         return pref

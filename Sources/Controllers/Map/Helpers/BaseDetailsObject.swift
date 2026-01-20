@@ -65,7 +65,9 @@ final class BaseDetailsObject: NSObject {
             self.addObject(amenity)
         }
         
-        self.objectCompleteness = .full
+        if self.objectCompleteness.rawValue < ObjectCompleteness.full.rawValue {
+            self.objectCompleteness = syntheticAmenity.type == nil ? .empty : .combined
+        }
     }
     
     func setObfResourceName(_ obfName: String) {
@@ -300,6 +302,9 @@ final class BaseDetailsObject: NSObject {
                 }
             }
             if syntheticAmenity.type == nil {
+                let converted = BaseDetailsObject.convertRenderedObjectToAmenity(renderedObject)
+                syntheticAmenity.type = converted.type
+                syntheticAmenity.subType = converted.subType
                 syntheticAmenity.copyAdditionalInfo(withMap: renderedObject.tags, overwrite: false)
             }
             syntheticAmenity.copyNames(renderedObject)
@@ -551,6 +556,102 @@ final class BaseDetailsObject: NSObject {
     func clearGeometry() {
         syntheticAmenity.x.removeAllObjects()
         syntheticAmenity.y.removeAllObjects()
+    }
+    
+    static func convertRenderedObjectToAmenity(_ renderedObject: OARenderedObject) -> OAPOI {
+        let am = OAPOI()
+        
+        let mapPoiTypes = OAPOIHelper.sharedInstance()
+        am.type = mapPoiTypes?.getDefaultOtherCategoryType()
+        am.subType = ""
+        
+        var pt: OAPOIType?
+        var otherPt: OAPOIType?
+        var subtype: String?
+        
+        let additionalInfo = NSMutableDictionary()
+        
+        guard let tags = renderedObject.tags as? [String: String] else { return am }
+        
+        for (tag, value) in tags {
+            if tag == "name" {
+                am.name = value
+                continue
+            }
+            
+            if tag.hasPrefix("name:") {
+                let langSuffix = String(tag.dropFirst("name:".count))
+                am.setName(langSuffix, name: value)
+                continue
+            }
+            
+            if tag == "amenity" {
+                if pt != nil {
+                    otherPt = pt
+                }
+                pt = mapPoiTypes?.getPoiType(byKey: value)
+            } else {
+                var poiType = mapPoiTypes?.getPoiType(byKey: "\(tag)_\(value)")
+                if poiType == nil {
+                    poiType = mapPoiTypes?.getPoiType(byKey: tag)
+                }
+                
+                if let foundType = poiType {
+                    if pt != nil {
+                        otherPt = foundType
+                    } else {
+                        pt = foundType
+                        subtype = value
+                    }
+                }
+            }
+            
+            if value.isEmpty && otherPt == nil {
+                otherPt = mapPoiTypes?.getPoiType(byKey: tag)
+            }
+            
+            if otherPt == nil {
+                if let poiType = mapPoiTypes?.getPoiType(byKey: value), poiType.getOsmTag() == tag {
+                    otherPt = poiType
+                }
+            }
+            
+            if !value.isEmpty {
+                let translate = mapPoiTypes?.getTranslation("\(tag)_\(value)")
+                let translate2 = mapPoiTypes?.getTranslation(value)
+                
+                if let t1 = translate, let t2 = translate2 {
+                    additionalInfo[t1] = t2
+                } else {
+                    additionalInfo[tag] = value
+                }
+            }
+        }
+        
+        if let primaryType = pt {
+            am.type = primaryType
+        } else if let secondaryType = otherPt {
+            am.type = secondaryType
+            am.subType = secondaryType.name
+        }
+        
+        if let st = subtype {
+            am.subType = st
+        }
+        
+        if let type = ObfConstants.getOsmEntityType(renderedObject) {
+            let osmId = ObfConstants.getOsmObjectId(renderedObject)
+            let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
+            am.obfId = objectId
+        }
+        
+        if let finalInfo = additionalInfo as? [String: String] {
+            am.setAdditionalInfo(finalInfo)
+        }
+        am.x = renderedObject.x
+        am.y = renderedObject.y
+        
+        return am
     }
     
     static func getLangForTravel(_ object: Any) -> String {

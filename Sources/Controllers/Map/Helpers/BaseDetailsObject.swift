@@ -22,17 +22,17 @@ private enum ObjectCompleteness: UInt {
 
 @objcMembers
 final class BaseDetailsObject: NSObject {
-    
+
     var osmIds: Set<UInt64>
     var wikidataIds: Set<String>
     var objects: Array<Any>
     var lang: String
-    
+
     private(set) var syntheticAmenity: OAPOI
     private var objectCompleteness: ObjectCompleteness
     private var searchResultResource: EOASearchResultResource
     private var obfResourceName: String?
-    
+
     override init() {
         self.lang = "en"
         self.osmIds = Set<UInt64>()
@@ -43,53 +43,53 @@ final class BaseDetailsObject: NSObject {
         self.searchResultResource = .detailed
         super.init()
     }
-    
+
     convenience init(lang: String) {
         self.init()
         self.lang = lang
     }
-    
+
     convenience init(object: Any, lang: String) {
         let effectiveLang = lang.isEmpty ? "en" : lang
         self.init(lang: effectiveLang)
         self.lang = effectiveLang
         self.addObject(object)
     }
-    
+
     convenience init(amenities: [OAPOI], lang: String) {
         let effectiveLang = lang.isEmpty ? "en" : lang
         self.init(lang: effectiveLang)
         self.lang = effectiveLang
-        
+
         for amenity in amenities {
             self.addObject(amenity)
         }
-        
+
         if self.objectCompleteness.rawValue < ObjectCompleteness.full.rawValue {
             self.objectCompleteness = syntheticAmenity.type == nil ? .empty : .combined
         }
     }
-    
+
     func setObfResourceName(_ obfName: String) {
         obfResourceName = obfName
     }
-    
+
     func getLocation() -> CLLocation? {
         syntheticAmenity.getLocation()
     }
-    
+
     func isObjectFull() -> Bool {
         objectCompleteness == .full || objectCompleteness == .combined
     }
-    
+
     func isObjectEmpty() -> Bool {
         objectCompleteness == .empty
     }
-    
-    
+
+
     func addObject(_ object: Any) -> Bool {
         guard isSupportedObjectType(object) else { return false }
-        
+
         if let detailsObject = object as? BaseDetailsObject {
             for obj in detailsObject.objects {
                 addObject(obj)
@@ -98,7 +98,7 @@ final class BaseDetailsObject: NSObject {
             objects.append(object)
             let osmId = getOsmId(object)
             let wikidata = getWikidata(object)
-            
+
             if osmId > 0 {
                 osmIds.insert(UInt64(osmId))
             }
@@ -109,7 +109,7 @@ final class BaseDetailsObject: NSObject {
         combineData()
         return true
     }
-    
+
     private func getWikidata(_ object: Any) -> String? {
         if let amenity = object as? OAPOI {
             return amenity.getWikidata()
@@ -121,7 +121,7 @@ final class BaseDetailsObject: NSObject {
         }
         return nil
     }
-    
+
     private func getOsmId(_ object: Any) -> UInt64 {
         if let amenity = object as? OAPOI {
             return amenity.getOsmId()
@@ -130,46 +130,46 @@ final class BaseDetailsObject: NSObject {
         }
         return 0
     }
-    
+
     func overlapsWith(_ object: Any) -> Bool {
         let osmId = getOsmId(object)
         let wikidata = getWikidata(object)
-        
+
         let osmIdEqual = osmId > 0 && osmIds.contains(UInt64(osmId))
 
         var wikidataEqual = false
         if let wikidata, !wikidata.isEmpty, wikidataIds.contains(wikidata) {
             wikidataEqual = true
         }
-        
+
         if osmIdEqual || wikidataEqual {
             return true
         }
-        
+
         if let renderedObject = object as? OARenderedObject {
             let stops = getTransportStops()
             return overlapPublicTransport([renderedObject], stops: stops)
         }
-        
+
         if let transportStop = object as? OATransportStop {
             let renderedObjects = getRenderedObjects()
             return overlapPublicTransport(renderedObjects, stops: [transportStop])
         }
-        
+
         return false
     }
-    
+
     private func overlapPublicTransport(_ renderedObjects: [OARenderedObject], stops: [OATransportStop]) -> Bool {
         renderedObjects.contains { overlapPublicTransport(withRenderedObject: $0, stops: stops) }
     }
-    
+
     private func overlapPublicTransport(withRenderedObject renderedObject: OARenderedObject, stops: [OATransportStop]) -> Bool {
         guard let transportTypes = OAPOIHelper.sharedInstance().getPublicTransportTypes() as? [String] else { return false }
         guard !transportTypes.isEmpty && !stops.isEmpty else { return false }
-        
+
         let tags = renderedObject.tags
         let name = renderedObject.name
-        
+
         if let name, !name.isEmpty {
             var namesEqual = false
             for stop in stops {
@@ -184,7 +184,7 @@ final class BaseDetailsObject: NSObject {
                 return false
             }
         }
-        
+
         var isStop = false
         if let tags, let keys = tags.allKeys as? [String] {
             for key in keys {
@@ -197,7 +197,7 @@ final class BaseDetailsObject: NSObject {
                 }
             }
         }
-        
+
         if isStop {
             for stop in stops {
                 let distance = OAMapUtils.getDistance(stop.getLocation().coordinate, second: renderedObject.getLocation().coordinate)
@@ -206,10 +206,10 @@ final class BaseDetailsObject: NSObject {
                 }
             }
         }
-        
+
         return false
     }
-    
+
     func merge(_ object: Any) {
         if let detailsObject = object as? BaseDetailsObject {
             mergeBaseDetailsObject(detailsObject)
@@ -221,19 +221,19 @@ final class BaseDetailsObject: NSObject {
             mergeRenderedObject(renderedObject)
         }
     }
-    
+
     private func mergeBaseDetailsObject(_ other: BaseDetailsObject) {
         osmIds.formUnion(other.osmIds)
         wikidataIds.formUnion(other.wikidataIds)
         objects.append(contentsOf: other.objects)
     }
-    
+
     private func mergeTransportStop(_ transportStop: OATransportStop) {
         guard let transportStopPoi = transportStop.poi else { return }
-        
+
         let osmId = ObfConstants.getOsmObjectId(transportStopPoi)
         osmIds.insert(UInt64(osmId))
-        
+
         if let amenity = transportStop.poi {
             if let wikidata = amenity.getWikidata() {
                 wikidataIds.insert(wikidata)
@@ -241,43 +241,43 @@ final class BaseDetailsObject: NSObject {
         }
         objects.append(transportStop)
     }
-    
+
     private func mergeRenderedObject(_ renderedObject: OARenderedObject) {
         let osmId = ObfConstants.getOsmObjectId(renderedObject)
         osmIds.insert(UInt64(osmId))
-        
+
         if let wikidata = renderedObject.tags[WIKIDATA_TAG] as? String  {
             wikidataIds.insert(wikidata)
         }
-        
+
         objects.append(renderedObject)
     }
-    
+
     func combineData() {
         syntheticAmenity = OAPOI()
         sortObjects()
-        
+
         var contentLocales = Set<String>()
-        
+
         for object in objects {
             mergeObject(object, contentLocales: &contentLocales)
         }
-        
+
         if contentLocales.count > 0 {
             syntheticAmenity.updateContentLocales(contentLocales)
         }
-        
+
         if objectCompleteness.rawValue < ObjectCompleteness.full.rawValue {
             objectCompleteness = syntheticAmenity.type == nil ? .empty : .combined
         }
-        
+
         if syntheticAmenity.type == nil {
             syntheticAmenity.type = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType()
             syntheticAmenity.subType = ""
             objectCompleteness = .empty
         }
     }
-    
+
     private func mergeObject(_ object: Any, contentLocales: inout Set<String>) {
         if let amenity = object as? OAPOI {
             processAmenity(amenity, contentLocales: &contentLocales)
@@ -296,7 +296,7 @@ final class BaseDetailsObject: NSObject {
             if let type = ObfConstants.getOsmEntityType(renderedObject) {
                 let osmId = ObfConstants.getOsmObjectId(renderedObject)
                 let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
-                
+
                 if syntheticAmenity.obfId <= 0 && objectId > 0 {
                     syntheticAmenity.obfId = objectId
                 }
@@ -315,7 +315,7 @@ final class BaseDetailsObject: NSObject {
             processPolygonCoordinates(x: renderedObject.x, y: renderedObject.y)
         }
     }
-    
+
     private func processId(_ object: OAMapObject?) {
         guard let object else { return }
         if (syntheticAmenity.obfId >= 0) && ObfConstants.isOsmUrlAvailable(object) {
@@ -348,60 +348,60 @@ final class BaseDetailsObject: NSObject {
 
     private func processAmenity(_ amenity: OAPOI, contentLocales: inout Set<String>) {
         processId(amenity)
-        
+
         if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 &&
            amenity.latitude != 0 && amenity.longitude != 0 {
             syntheticAmenity.latitude = amenity.latitude
             syntheticAmenity.longitude = amenity.longitude
         }
-        
+
         if let type = amenity.type, syntheticAmenity.type == nil {
             syntheticAmenity.type = type
         }
-        
+
         if let subType = amenity.subType {
             updateAmenitySubTypes(syntheticAmenity, subType)
         }
-        
+
         if let mapIconName = amenity.mapIconName, syntheticAmenity.mapIconName == nil {
             syntheticAmenity.mapIconName = mapIconName
         }
-        
+
         if let regionName = amenity.regionName, syntheticAmenity.regionName == nil {
             syntheticAmenity.regionName = regionName
         }
-        
+
         // Android also reads here tagGroups.
         //Map<Integer, List<TagValuePair>> groups = amenity.getTagGroups();
         //if (syntheticAmenity.getTagGroups() == null && groups != null) {
         //    syntheticAmenity.setTagGroups(new HashMap<>(groups));
         //}
-        
+
         let travelElo = amenity.getTravelEloNumber()
         if syntheticAmenity.getTravelEloNumber() == DEFAULT_ELO && travelElo != DEFAULT_ELO {
             syntheticAmenity.setTravelEloNumber(travelElo)
         }
-        
+
         syntheticAmenity.copyNames(amenity)
         syntheticAmenity.copyAdditionalInfo(amenity, overwrite: false)
         processPolygonCoordinates(x: amenity.x, y: amenity.y)
-        
+
         if syntheticAmenity.localizedContent == nil {
             syntheticAmenity.localizedContent = MutableOrderedDictionary<NSString, NSString>()
         }
-        
+
         if let amenityContent = amenity.localizedContent, amenityContent.count > 0 {
             let localizedContent = MutableOrderedDictionary<NSString, NSString>(dictionary: syntheticAmenity.localizedContent)
             localizedContent.addEntries(from: amenityContent as! [NSString : NSString])
             syntheticAmenity.localizedContent = localizedContent
         }
-        
+
         contentLocales.formUnion(amenity.getSupportedContentLocales())
     }
-    
+
     private func processPolygonCoordinates(x: NSMutableArray, y: NSMutableArray) {
         guard let xArray = x as? [Any], let yArray = y as? [Any], let syntXArray = syntheticAmenity.x as? [Any], let syntYArray = syntheticAmenity.y as? [Any] else { return }
-        
+
         if !xArray.isEmpty, !syntXArray.isEmpty {
             syntheticAmenity.x.addObjects(from: xArray)
         }
@@ -409,7 +409,7 @@ final class BaseDetailsObject: NSObject {
             syntheticAmenity.y.addObjects(from: yArray)
         }
     }
-    
+
     private func processPolygonCoordinates(_ object: Any) {
         if let amenity = object as? OAPOI {
             processPolygonCoordinates(x: amenity.x, y: amenity.y)
@@ -418,21 +418,21 @@ final class BaseDetailsObject: NSObject {
             processPolygonCoordinates(x: renderedObject.x, y: renderedObject.y)
         }
     }
-    
+
     private func sortObjects() {
         // Android uses sort with 3 gradations: ascending, same, descending
         // Swift sort() uses only 2: true/false.
         // So results can differ
-        
+
         sortObjectsByLang()
         sortObjectsByResourceType()
         sortObjectsByClass()
     }
-    
+
     private func sortObjectsByLang() {
         objects.sort { o1, o2 in
             let result: ComparisonResult
-            
+
             let lang1 = Self.getLangForTravel(o1)
             let lang2 = Self.getLangForTravel(o2)
 
@@ -444,7 +444,7 @@ final class BaseDetailsObject: NSObject {
             } else {
                 result = preferred1 ? .orderedAscending : .orderedDescending
             }
-            
+
             return result == .orderedAscending
         }
     }
@@ -458,43 +458,43 @@ final class BaseDetailsObject: NSObject {
     private func sortObjectsByClass() {
         objects.sort { obj1, obj2 in
             let result: ComparisonResult
-            
+
             let ord1 = Self.getClassOrder(obj1)
             let ord2 = Self.getClassOrder(obj2)
-            
+
             if ord1 != ord2 {
                 result = ord2 > ord1 ? .orderedAscending : .orderedDescending
             } else {
                 result = .orderedSame
             }
-            
+
             return result == .orderedAscending
         }
     }
-    
+
     private func isSupportedObjectType(_ object: Any) -> Bool {
         return object is OAPOI ||
                object is OATransportStop ||
                object is OARenderedObject ||
                object is BaseDetailsObject
     }
-    
+
     private func getObjects<T>(ofType type: T.Type) -> [T] {
        objects.compactMap { $0 as? T }
     }
-    
+
     func getAmenities() -> [OAPOI] {
         getObjects(ofType: OAPOI.self)
     }
-    
+
     func getTransportStops() -> [OATransportStop] {
         getObjects(ofType: OATransportStop.self)
     }
-    
+
     func getRenderedObjects() -> [OARenderedObject] {
         getObjects(ofType: OARenderedObject.self)
     }
-    
+
     static func findObfType(_ obfResourceName: String?, amenity: OAPOI) -> EOASearchResultResource {
         if let obfResourceName {
             if obfResourceName.contains("basemap") {
@@ -509,12 +509,12 @@ final class BaseDetailsObject: NSObject {
         }
         return .detailed
     }
-    
+
     func getResourceType() -> EOASearchResultResource {
         searchResultResource = Self.findObfType(obfResourceName, amenity: syntheticAmenity)
         return searchResultResource
     }
-    
+
     static func getResourceType(_ object: Any) -> EOASearchResultResource {
         if let detailsObject = object as? BaseDetailsObject {
             return detailsObject.getResourceType()
@@ -524,67 +524,67 @@ final class BaseDetailsObject: NSObject {
         }
         return .detailed
     }
-    
+
     func setMapIconName(_ mapIconName: String) {
         syntheticAmenity.mapIconName = mapIconName
     }
-    
+
     func setX(_ x: [Int]) {
         syntheticAmenity.x = x as? NSMutableArray ?? []
     }
-    
+
     func setY(_ y: [Int]) {
         syntheticAmenity.y = y as? NSMutableArray ?? []
     }
-    
+
     func addX(_ x: NSNumber) {
         syntheticAmenity.x.add(x)
     }
-    
+
     func addY(_ y: NSNumber) {
         syntheticAmenity.y.add(y)
     }
-    
+
     func hasGeometry() -> Bool {
         syntheticAmenity.x.count > 0 && syntheticAmenity.y.count > 0
     }
-    
+
     func getPointsLength() -> Int {
         syntheticAmenity.x.count
     }
-    
+
     func clearGeometry() {
         syntheticAmenity.x.removeAllObjects()
         syntheticAmenity.y.removeAllObjects()
     }
-    
+
     static func convertRenderedObjectToAmenity(_ renderedObject: OARenderedObject) -> OAPOI {
         let am = OAPOI()
-        
+
         let mapPoiTypes = OAPOIHelper.sharedInstance()
         am.type = mapPoiTypes?.getDefaultOtherCategoryType()
         am.subType = ""
-        
+
         var pt: OAPOIType?
         var otherPt: OAPOIType?
         var subtype: String?
-        
+
         let additionalInfo = NSMutableDictionary()
-        
+
         guard let tags = renderedObject.tags as? [String: String] else { return am }
-        
+
         for (tag, value) in tags {
             if tag == "name" {
                 am.name = value
                 continue
             }
-            
+
             if tag.hasPrefix("name:") {
                 let langSuffix = String(tag.dropFirst("name:".count))
                 am.setName(langSuffix, name: value)
                 continue
             }
-            
+
             if tag == "amenity" {
                 if pt != nil {
                     otherPt = pt
@@ -595,7 +595,7 @@ final class BaseDetailsObject: NSObject {
                 if poiType == nil {
                     poiType = mapPoiTypes?.getPoiType(byKey: tag)
                 }
-                
+
                 if let foundType = poiType {
                     if pt != nil {
                         otherPt = foundType
@@ -605,21 +605,21 @@ final class BaseDetailsObject: NSObject {
                     }
                 }
             }
-            
+
             if value.isEmpty && otherPt == nil {
                 otherPt = mapPoiTypes?.getPoiType(byKey: tag)
             }
-            
+
             if otherPt == nil {
                 if let poiType = mapPoiTypes?.getPoiType(byKey: value), poiType.getOsmTag() == tag {
                     otherPt = poiType
                 }
             }
-            
+
             if !value.isEmpty {
                 let translate = mapPoiTypes?.getTranslation("\(tag)_\(value)")
                 let translate2 = mapPoiTypes?.getTranslation(value)
-                
+
                 if let t1 = translate, let t2 = translate2 {
                     additionalInfo[t1] = t2
                 } else {
@@ -627,53 +627,53 @@ final class BaseDetailsObject: NSObject {
                 }
             }
         }
-        
+
         if let primaryType = pt {
             am.type = primaryType
         } else if let secondaryType = otherPt {
             am.type = secondaryType
             am.subType = secondaryType.name
         }
-        
+
         if let st = subtype {
             am.subType = st
         }
-        
+
         if let type = ObfConstants.getOsmEntityType(renderedObject) {
             let osmId = ObfConstants.getOsmObjectId(renderedObject)
             let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
             am.obfId = objectId
         }
-        
+
         if let finalInfo = additionalInfo as? [String: String] {
             am.setAdditionalInfo(finalInfo)
         }
         am.x = renderedObject.x
         am.y = renderedObject.y
-        
+
         return am
     }
-    
+
     static func getLangForTravel(_ object: Any) -> String {
         var amenity: OAPOI?
-        
+
         if let poi = object as? OAPOI {
             amenity = poi
         }
         if let detailsObject = object as? BaseDetailsObject {
             amenity = detailsObject.syntheticAmenity
         }
-        
+
         if let amenity, getResourceType(object) == .travel {
             let lang = amenity.getTagSuffix("\(LANG_YES):")
             if let lang {
                 return lang
             }
         }
-        
+
         return "en"
     }
-    
+
     static func getClassOrder(_ object: Any) -> Int {
         switch object {
         case is BaseDetailsObject:
@@ -688,4 +688,5 @@ final class BaseDetailsObject: NSObject {
             return 5
         }
     }
-} 
+}
+

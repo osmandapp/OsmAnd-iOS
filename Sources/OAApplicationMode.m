@@ -216,6 +216,8 @@ static int PROFILE_TRUCK = 1000;
     [builder setRouteService:modeBean.routeService];
     [builder setLocationIcon:modeBean.locIcon];
     [builder setNavigationIcon:modeBean.navIcon];
+    [builder setLocationIconSize:modeBean.locIconSize];
+    [builder setCourseIconSize:modeBean.navIconSize];
     [builder setOrder:modeBean.order];
     return builder;
 }
@@ -305,6 +307,8 @@ static int PROFILE_TRUCK = 1000;
         @"derivedProfile" : self.getDerivedProfile,
         @"routingProfile" : self.getRoutingProfile,
         @"locIcon" : [self.getLocationIcon name],
+        @"locIconSize" : @([self getLocationIconSize]),
+        @"navIconSize" : @([self getCourseIconSize]),
         @"navIcon" : [self.getNavigationIcon name],
         @"order" : @(self.getOrder)
     };
@@ -977,6 +981,10 @@ static int PROFILE_TRUCK = 1000;
     res.iconName = [self parseProfileIcon:jsonData[@"iconName"]];
     res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"]] name];
     res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"]] name];
+    double locIconSize = [jsonData[@"locIconSize"] doubleValue];
+    double navIconSize = [jsonData[@"navIconSize"] doubleValue];
+    res.locIconSize = locIconSize == 0 ? [OAAppSettings sharedManager].locationIconSize.defValue : locIconSize;
+    res.navIconSize = navIconSize == 0 ? [OAAppSettings sharedManager].courseIconSize.defValue : navIconSize;
     res.order = [jsonData[@"order"] intValue];
     NSInteger routerService = [self.class parseRouterService:jsonData[@"routeService"]];
     res.routeService = routerService;

@@ -2101,10 +2101,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
 }
 
-- (void)reloadCollectionData
-{
-}
-
 #pragma mark - ColorCollectionViewControllerDelegate
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem

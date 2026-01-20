@@ -259,7 +259,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private func setupPageControl() {
         let isNight = OAAppSettings.sharedManager().nightMode
         pageControl.backgroundColor = UIColor(rgb: Int(isNight ? color_control_night : color_control_day))
-        pageControl.currentPageIndicatorTintColor = UIColor(rgb: Int(isNight ? color_on_map_icon_tint_color_dark : color_on_map_icon_tint_color_light))
+        pageControl.currentPageIndicatorTintColor = isNight ? .mapButtonIconColorDefault.dark : .mapButtonIconColorDefault.light
         pageControl.pageIndicatorTintColor = UIColor(rgb: Int(isNight ? color_icon_inactive_night : color_icon_inactive))
     }
     

@@ -23,6 +23,8 @@
 @property (nonatomic) NSInteger routeService;
 @property (nonatomic) NSString *locIcon;
 @property (nonatomic) NSString *navIcon;
+@property (nonatomic) double locIconSize;
+@property (nonatomic) double navIconSize;
 @property (nonatomic) int order;
 
 + (OAApplicationModeBean *) fromJson:(NSDictionary *)jsonData;

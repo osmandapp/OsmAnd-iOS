@@ -220,10 +220,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [_compassButton addSubview:_compassImage];
     _compassImage.translatesAutoresizingMaskIntoConstraints = YES;
     _compassImage.frame = CGRectMake(9.0, 9.0, 30.0, 30.0);
-
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
-    _compassButton.alpha = [self shouldShowCompass] ? 1.0 : 0.0;
-    _compassButton.userInteractionEnabled = _compassButton.alpha > 0.0;
+    
+    OAMapButtonsHelper *mapButtonHelper = [OAMapButtonsHelper sharedInstance];
+    [self setupCompassButton];
+    [self setupButton:_mapSettingsButton shouldShow:[self shouldShowConfigureMap] appearanceParams:[[mapButtonHelper getConfigureMapButtonState] createAppearanceParams]];
+    [self setupButton:_searchButton shouldShow:[self shouldShowSearch] appearanceParams:[[mapButtonHelper getSearchButtonState] createAppearanceParams]];
+    [self setupButton:_optionsMenuButton shouldShow:[self shouldShowMenu] appearanceParams:[[mapButtonHelper getMenuButtonState] createAppearanceParams]];
+    [self setupButton:_driveModeButton shouldShow:[self shouldShowNavigation] appearanceParams:[[mapButtonHelper getNavigationModeButtonState] createAppearanceParams]];
+    [self setupButton:_mapModeButton shouldShow:[self shouldShowMyLocation] appearanceParams:[[mapButtonHelper getMyLocationButtonState] createAppearanceParams]];
+    [self setupButton:_zoomInButton shouldShow:[self shouldShowZoomIn] appearanceParams:[[mapButtonHelper getZoomInButtonState] createAppearanceParams]];
+    [self setupButton:_zoomOutButton shouldShow:[self shouldShowZoomOut] appearanceParams:[[mapButtonHelper getZoomOutButtonState] createAppearanceParams]];
 
     [self updateWeatherButtonVisibility];
 
@@ -278,6 +285,25 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [self.leftWidgetsView addShadow];
     [self.rightWidgetsView addShadow];
     [self.middleWidgetsView addShadow];
+}
+
+- (void)setupCompassButton
+{
+    [self setupButtonVisibilityFor:_compassButton shouldShow:[self shouldShowCompass]];
+    [self updateCompassButton];
+}
+
+- (void)setupButton:(OAHudButton *)button shouldShow:(BOOL)shouldShow appearanceParams:(ButtonAppearanceParams *)appearanceParams
+{
+    [self setupButtonVisibilityFor:button shouldShow:shouldShow];
+    [self updateMapButtonAppearance:button appearanceParams:appearanceParams];
+}
+
+- (void)setupButtonVisibilityFor:(OAHudButton *)button shouldShow:(BOOL)shouldShow
+{
+    button.alpha = shouldShow ? 1.0 : 0.0;
+    button.userInteractionEnabled = button.alpha > 0.0;
+    button.hidden = !shouldShow;
 }
 
 - (void)configureWeatherContoursButton
@@ -440,6 +466,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) registerMapButton:(OAHudButton *)button stateClass:(Class)stateClass
 {
     button.useCustomPosition = NO;
+    button.useDefaultAppearance = [button isKindOfClass:CompassButtonState.class];
     button.buttonState = [[stateClass alloc] init];
     [_mapHudLayout addMapButton:button];
 }
@@ -526,6 +553,41 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     return _mapViewController.mapRendererView && [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
 }
 
+- (BOOL)shouldShowConfigureMap
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getConfigureMapButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowSearch
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getSearchButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowMenu
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowNavigation
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowMyLocation
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getMyLocationButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowZoomIn
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getZoomInButtonState] visibilityPref] get];
+}
+
+- (BOOL)shouldShowZoomOut
+{
+    return [[[[OAMapButtonsHelper sharedInstance] getZoomOutButtonState] visibilityPref] get];
+}
+
 - (BOOL)needsSettingsForWeatherToolbar
 {
     return _mapInfoController.weatherToolbarVisible || _weatherToolbar.needsSettingsForToolbar;
@@ -564,7 +626,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     NSInteger rotateMap = [_settings.rotateMap get];
     CompassVisibility compassVisibility = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] getVisibility];
-    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == CompassVisibilityVisibleIfMapRotated) || compassVisibility == CompassVisibilityAlwaysVisible) && _mapSettingsButton.alpha == 1.0;
+    return ((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == CompassVisibilityVisibleIfMapRotated) || compassVisibility == CompassVisibilityAlwaysVisible;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -628,20 +690,14 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     [self updateMapSettingsButton];
     [self updateCompassButton];
-
-    [_searchButton setImage:[UIImage imageNamed:@"ic_custom_search"] forState:UIControlStateNormal];
-    [_searchButton updateColorsForPressedState:NO];
     
-    [_zoomInButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_in"] forState:UIControlStateNormal];
-    [_zoomOutButton setImage:[UIImage templateImageNamed:@"ic_custom_map_zoom_out"] forState:UIControlStateNormal];
+    [_searchButton updateColorsForPressedState:NO];
     [_zoomInButton updateColorsForPressedState:NO];
     [_zoomOutButton updateColorsForPressedState:NO];
 
     [self updateMapModeButton];
 
-    [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];
-    _optionsMenuButton.layer.cornerRadius = 6;
 
     [_floatingButtonsController updateColors];
     [self.rulerLabel updateColors];
@@ -658,7 +714,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     });
 }
 
-- (BOOL) isLocationAvailable
+- (BOOL)isLocationAvailable
 {
     return _app.locationServices.lastKnownLocation && _app.locationServices.status == OALocationServicesStatusActive && !_app.locationServices.denied;
 }
@@ -671,15 +727,16 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) updateMapModeButton
 {
+    UIImage *iconImage = [[[OAMapButtonsHelper sharedInstance] getMyLocationButtonState] previewIcon];
     if ([self isLocationAvailable])
     {
         switch (_app.mapMode)
         {
             case OAMapModeFree: // Free mode
             {
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_position"] forState:UIControlStateNormal];
-                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_active);
-                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_active);
+                [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
+                _mapModeButton.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorActive].light;
+                _mapModeButton.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorActive].dark;
                 _mapModeButton.tintColorDay = UIColor.whiteColor;
                 _mapModeButton.tintColorNight = UIColor.whiteColor;
                 _mapModeButton.accessibilityHint = OALocalizedString(@"with_permission_my_position_value");
@@ -689,11 +746,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 
             case OAMapModePositionTrack: // Trace point
             {
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_position"] forState:UIControlStateNormal];
-                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
-                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
-                _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-                _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
+                _mapModeButton.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light;
+                _mapModeButton.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark;
+                _mapModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].light;
+                _mapModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].dark;
                 _mapModeButton.accessibilityHint = nil;
                 _mapModeButton.borderWidthNight = 2;
                 break;
@@ -706,11 +763,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     }
     else
     {
-        [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_free"] forState:UIControlStateNormal];
-        _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
-        _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
-        _mapModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
-        _mapModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        [_mapModeButton setImage:iconImage forState:UIControlStateNormal];
+        _mapModeButton.unpressedColorDay = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].light;
+        _mapModeButton.unpressedColorNight = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault].dark;
+        _mapModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].light;
+        _mapModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].dark;
         _mapModeButton.borderWidthNight = 2;
         _mapModeButton.accessibilityHint = OALocalizedString(@"without_permission_my_position_value");
         _mapModeButton.accessibilityValue = OALocalizedString(@"shared_string_location_unknown");
@@ -867,7 +924,14 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
-- (void) updateDependentButtonsVisibility
+- (void)updateDependentButtons
+{
+    [self updateDependentButtonsVisibility];
+    [_floatingButtonsController updateButtonsAppearance];
+    [_mapHudLayout updateButtons];
+}
+
+- (void)updateDependentButtonsVisibility
 {
     [_floatingButtonsController updateViewVisibility];
 }
@@ -875,11 +939,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapButtonsVisibilityAndAppearance];
         [self updateColors];
         [self recreateAllControls];
-        if (@available(iOS 16.0, *)) {
+        if (@available(iOS 16.0, *))
             [self setNeedsUpdateOfSupportedInterfaceOrientations];
-        }
     });
 }
 
@@ -889,23 +953,40 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (obj)
     {
         OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
-        OACommonInteger *compassButtonState = [mapButtonsHelper getCompassButtonState].visibilityPref;
-        OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
+        CompassButtonState *compassButtonState = [mapButtonsHelper getCompassButtonState];
+        Map3DButtonState *map3DButtonState = [mapButtonsHelper getMap3DButtonState];
+        MapSettingsButtonState *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState];
+        SearchButtonState *searchButtonState = [mapButtonsHelper getSearchButtonState];
+        OptionsMenuButtonState *menuButtonState = [mapButtonsHelper getMenuButtonState];
+        DriveModeButtonState *navigationButtonState = [mapButtonsHelper getNavigationModeButtonState];
+        MyLocationButtonState *myLocationButtonState = [mapButtonsHelper getMyLocationButtonState];
+        ZoomInButtonState *zoomInButtonState = [mapButtonsHelper getZoomInButtonState];
+        ZoomOutButtonState *zoomOutButtonState = [mapButtonsHelper getZoomOutButtonState];
 
         BOOL isQuickAction = NO;
         for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
         {
-            if (obj == buttonState.statePref || obj == buttonState.quickActionsPref)
+            BOOL isQuickActionProperty = [[NSSet setWithArray:@[
+                buttonState.statePref,
+                [buttonState storedCornerRadiusPref],
+                [buttonState storedOpacityPref],
+                [buttonState storedSizePref],
+                [buttonState storedIconPref],
+                buttonState.quickActionsPref
+            ]] containsObject:obj];
+            
+            if (isQuickActionProperty)
             {
                 isQuickAction = YES;
                 break;
             }
         }
 
-        if (obj == _settings.rotateMap || obj == compassButtonState)
+        if ([self isCompassProperty:obj buttonState:compassButtonState])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateCompassButton];
+                [_mapHudLayout updateButtons];
             });
         }
         else if (obj == _settings.transparentMapTheme
@@ -916,18 +997,308 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 [self updateColors];
             });
         }
-        else if (obj == map3DButtonState || isQuickAction)
+        else if ([self isMap3DProperty:obj buttonState:map3DButtonState] || isQuickAction)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateDependentButtonsVisibility];
+                [self updateDependentButtons];
+            });
+        }
+        else if ([self isConfigureMapProperty:obj buttonState:configureMapButtonState])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButton:_mapSettingsButton showButton:[self shouldShowConfigureMap] appearanceParams:[[mapButtonsHelper getConfigureMapButtonState] createAppearanceParams]];
+            });
+        }
+        else if ([self isSearchProperty:obj buttonState:searchButtonState])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButton:_searchButton showButton:[self shouldShowSearch] appearanceParams:[[mapButtonsHelper getSearchButtonState] createAppearanceParams]];
+            });
+        }
+        else if ([self isMenuProperty:obj buttonState:menuButtonState])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButton:_optionsMenuButton showButton:[self shouldShowMenu] appearanceParams:[[mapButtonsHelper getMenuButtonState] createAppearanceParams]];
+            });
+        }
+        else if ([self isNavigationProperty:obj buttonState:navigationButtonState])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButton:_driveModeButton showButton:[self shouldShowNavigation] appearanceParams:[[mapButtonsHelper getNavigationModeButtonState] createAppearanceParams]];
+            });
+        }
+        else if ([self isMyLocationProperty:obj buttonState:myLocationButtonState])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButton:_mapModeButton showButton:[self shouldShowMyLocation] appearanceParams:[[mapButtonsHelper getMyLocationButtonState] createAppearanceParams]];
+            });
+        }
+        else if ([self isZoomInProperty:obj buttonState:zoomInButtonState])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButton:_zoomInButton showButton:[self shouldShowZoomIn] appearanceParams:[[mapButtonsHelper getZoomInButtonState] createAppearanceParams]];
+            });
+        }
+        else if ([self isZoomOutProperty:obj buttonState:zoomOutButtonState])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateMapButton:_zoomOutButton showButton:[self shouldShowZoomOut] appearanceParams:[[mapButtonsHelper getZoomOutButtonState] createAppearanceParams]];
             });
         }
     }
 }
 
+- (BOOL)isCompassProperty:(OACommonPreference *)obj buttonState:(CompassButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        _settings.rotateMap,
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isMap3DProperty:(OACommonPreference *)obj buttonState:(Map3DButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isConfigureMapProperty:(OACommonPreference *)obj buttonState:(MapSettingsButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isSearchProperty:(OACommonPreference *)obj buttonState:(SearchButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isMenuProperty:(OACommonPreference *)obj buttonState:(OptionsMenuButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isNavigationProperty:(OACommonPreference *)obj buttonState:(DriveModeButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isMyLocationProperty:(OACommonPreference *)obj buttonState:(MyLocationButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isZoomInProperty:(OACommonPreference *)obj buttonState:(ZoomInButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (BOOL)isZoomOutProperty:(OACommonPreference *)obj buttonState:(ZoomOutButtonState *)buttonState
+{
+    return [[NSSet setWithArray:@[
+        buttonState.visibilityPref,
+        [buttonState storedCornerRadiusPref],
+        [buttonState storedOpacityPref],
+        [buttonState storedSizePref],
+        [buttonState storedIconPref]
+    ]] containsObject:obj];
+}
+
+- (void)updateMapButton:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams
+{
+    [self updateMapButtonVisibilityAndAppearance:button showButton:showButton appearanceParams:appearanceParams completionHandler:^{
+        [_mapHudLayout updateButtons];
+    }];
+    [self updateColors];
+}
+
+- (void)updateMapButtonVisibilityAndAppearance:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams completionHandler:(void (^)(void))completionHandler
+{
+    [self updateMapButtonVisibility:button showButton:showButton completionHandler:completionHandler];
+    [self updateMapButtonAppearance:button appearanceParams:appearanceParams];
+}
+
+- (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton completionHandler:(void (^)(void))completionHandler
+{
+    BOOL needShow = button.alpha == 0.0 && showButton;
+    BOOL needHide = button.alpha == 1.0 && !showButton;
+    if (needShow)
+        button.hidden = NO;
+    if (needHide)
+        button.userInteractionEnabled = NO;
+    [UIView animateWithDuration:.25 animations:^{
+        button.alpha = needShow ? 1.0 : 0.0;
+    } completion:^(BOOL finished) {
+        if (needShow)
+            button.userInteractionEnabled = button.alpha > 0.0;
+        if (needHide)
+            button.hidden = YES;
+        if (completionHandler)
+            completionHandler();
+    }];
+}
+
+- (void)updateMapButtonsVisibilityAndAppearance
+{
+    [self updateMapButtonsVisibilityAndAppearance:[self getShowButtons] appearanceButtons:[self getAppearanceButtons] completionHandler:^{
+        [self updateDependentButtons];
+    }];
+}
+
+- (NSDictionary<NSNumber *, NSArray<OAHudButton *> *> *)getShowButtons
+{
+    NSMutableDictionary<NSNumber *, NSArray<OAHudButton *> *> *showButtons = [NSMutableDictionary dictionary];
+    NSMutableArray<OAHudButton *> *needShow = [NSMutableArray array];
+    NSMutableArray<OAHudButton *> *needHide = [NSMutableArray array];
+    
+    if ([self shouldShowConfigureMap])
+        [needShow addObject:_mapSettingsButton];
+    else
+        [needHide addObject:_mapSettingsButton];
+    
+    if ([self shouldShowSearch])
+        [needShow addObject:_searchButton];
+    else
+        [needHide addObject:_searchButton];
+    
+    if ([self shouldShowMenu])
+        [needShow addObject:_optionsMenuButton];
+    else
+        [needHide addObject:_optionsMenuButton];
+    
+    if ([self shouldShowNavigation])
+        [needShow addObject:_driveModeButton];
+    else
+        [needHide addObject:_driveModeButton];
+    
+    if ([self shouldShowMyLocation])
+        [needShow addObject:_mapModeButton];
+    else
+        [needHide addObject:_mapModeButton];
+    
+    if ([self shouldShowZoomIn])
+        [needShow addObject:_zoomInButton];
+    else
+        [needHide addObject:_zoomInButton];
+    
+    if ([self shouldShowZoomOut])
+        [needShow addObject:_zoomOutButton];
+    else
+        [needHide addObject:_zoomOutButton];
+    
+    showButtons[@(YES)] = needShow;
+    showButtons[@(NO)] = needHide;
+    
+    return showButtons;
+}
+
+- (NSDictionary<ButtonAppearanceParams *, OAHudButton *> *)getAppearanceButtons
+{
+    OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
+    NSMutableDictionary<ButtonAppearanceParams *, OAHudButton *> *appearanceButtons = [NSMutableDictionary dictionary];
+    
+    ButtonAppearanceParams *configureParams = [[mapButtonsHelper getConfigureMapButtonState] createAppearanceParams];
+    ButtonAppearanceParams *searchParams = [[mapButtonsHelper getSearchButtonState] createAppearanceParams];
+    ButtonAppearanceParams *menuParams = [[mapButtonsHelper getMenuButtonState] createAppearanceParams];
+    ButtonAppearanceParams *navParams = [[mapButtonsHelper getNavigationModeButtonState] createAppearanceParams];
+    ButtonAppearanceParams *myLocParams = [[mapButtonsHelper getMyLocationButtonState] createAppearanceParams];
+    ButtonAppearanceParams *zoomInParams = [[mapButtonsHelper getZoomInButtonState] createAppearanceParams];
+    ButtonAppearanceParams *zoomOutParams = [[mapButtonsHelper getZoomOutButtonState] createAppearanceParams];
+
+    appearanceButtons[configureParams] = _mapSettingsButton;
+    appearanceButtons[searchParams] = _searchButton;
+    appearanceButtons[menuParams] = _optionsMenuButton;
+    appearanceButtons[navParams] = _driveModeButton;
+    appearanceButtons[myLocParams] = _mapModeButton;
+    appearanceButtons[zoomInParams] = _zoomInButton;
+    appearanceButtons[zoomOutParams] = _zoomOutButton;
+    
+    return appearanceButtons;
+}
+
+- (void)updateMapButtonsVisibilityAndAppearance:(NSDictionary<NSNumber *, NSArray<OAHudButton *> *> *)showButtons appearanceButtons:(NSDictionary<ButtonAppearanceParams *, OAHudButton*> *)appearanceButtons completionHandler:(void (^)(void))completionHandler
+{
+    [self updateMapButtonsVisibility:showButtons completionHandler:completionHandler];
+    for (ButtonAppearanceParams *params in appearanceButtons)
+        [self updateMapButtonAppearance:appearanceButtons[params] appearanceParams:params];
+}
+
+- (void)updateMapButtonsVisibility:(NSDictionary<NSNumber *, NSArray<OAHudButton *> *> *)buttons completionHandler:(void (^)(void))completionHandler
+{
+    NSArray<OAHudButton *> *needShowButtons = buttons[@(YES)];
+    NSArray<OAHudButton *> *needHideButtons = buttons[@(NO)];
+    for (OAHudButton *button in needShowButtons)
+        button.hidden = NO;
+    for (OAHudButton *button in needHideButtons)
+        button.userInteractionEnabled = NO;
+    [UIView animateWithDuration:.25 animations:^{
+        for (OAHudButton *button in needShowButtons)
+            button.alpha = 1.0;
+        for (OAHudButton *button in needHideButtons)
+            button.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        for (OAHudButton *button in needShowButtons)
+            button.userInteractionEnabled = button.alpha > 0.0;
+        for (OAHudButton *button in needHideButtons)
+            button.hidden = YES;
+        
+        if (completionHandler)
+            completionHandler();
+    }];
+}
+
+- (void)updateMapButtonAppearance:(OAHudButton *)button appearanceParams:(ButtonAppearanceParams *)appearanceParams
+{
+    [button setCustomAppearanceParams:appearanceParams];
+}
+
 - (void) updateCompassVisibility:(BOOL)showCompass
 {
-    BOOL needShow = _compassButton.alpha == 0.0 && showCompass && _mapSettingsButton.alpha == 1.0;
+    BOOL needShow = _compassButton.alpha == 0.0 && showCompass;
     BOOL needHide = _compassButton.alpha == 1.0 && !showCompass;
     if (needShow)
         [self showCompass];
@@ -994,7 +1365,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     OACommonInteger *rotateMap = _settings.rotateMap;
     BOOL showCompass = [self shouldShowCompass];
-    _compassImage.image = [UIImage imageNamed:[CompassModeWrapper iconNameForValue:[rotateMap get] isLightMode:!_settings.nightMode]];
+    _compassImage.image = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] previewIcon];
+    
     if ([rotateMap get] == ROTATE_MAP_NONE)
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_north_opt");
     else if ([rotateMap get] == ROTATE_MAP_BEARING)
@@ -1005,6 +1377,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_compass_opt");
     
     [self updateCompassVisibility:showCompass];
+    [self updateMapButtonAppearance:_compassButton appearanceParams:[[[OAMapButtonsHelper sharedInstance] getCompassButtonState] createAppearanceParams]];
+    _compassImage.center = CGPointMake(_compassButton.frame.size.width / 2, _compassButton.frame.size.height / 2);
+    [_compassButton setImage:nil forState:UIControlStateNormal];
     [_compassButton updateColorsForPressedState:NO];
 }
 
@@ -1475,9 +1850,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
-        _mapSettingsButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _compassButton.alpha = [self shouldShowCompass] && isButtonsVisible ? 1. : 0.;
-        _searchButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        _searchButton.alpha = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         
         if (_toolbarViewController && _toolbarViewController.view.superview)
@@ -1557,14 +1932,14 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
         _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
         BOOL optionsMenuButtonVisible = visible;
-        _optionsMenuButton.alpha = optionsMenuButtonVisible ? 1. : 0.;
+        _optionsMenuButton.alpha = [self shouldShowMenu] && optionsMenuButtonVisible ? 1. : 0.;
         BOOL zoomButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
-        _zoomInButton.alpha = zoomButtonsVisible ? 1. : 0.;
-        _zoomOutButton.alpha = zoomButtonsVisible ? 1. : 0.;
+        _zoomInButton.alpha = [self shouldShowZoomIn] && zoomButtonsVisible ? 1. : 0.;
+        _zoomOutButton.alpha = [self shouldShowZoomOut] && zoomButtonsVisible ? 1. : 0.;
         BOOL mapModeButtonVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
-        _mapModeButton.alpha = mapModeButtonVisible ? 1. : 0.;
+        _mapModeButton.alpha = [self shouldShowMyLocation] && mapModeButtonVisible ? 1. : 0.;
         BOOL driveModeButtonVisible = visible;
-        _driveModeButton.alpha = driveModeButtonVisible ? 1. : 0.;
+        _driveModeButton.alpha = [self shouldShowNavigation] && driveModeButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 
         if (self.mapInfoController.bottomPanelController)
@@ -1664,13 +2039,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         [self updateMapSettingsButton];
         [self updateMapModeButton];
         [self updateCompassButton];
+        [self updateMapButtonsVisibilityAndAppearance];
     });
 }
 
 - (void) updateMapSettingsButton
 {
     OAApplicationMode *mode = [_settings.applicationMode get];
-    [_mapSettingsButton setImage:mode.getIcon forState:UIControlStateNormal];
+    UIImage *storedIconImage = [[[OAMapButtonsHelper sharedInstance] getConfigureMapButtonState] previewIcon];
+    [_mapSettingsButton setImage:storedIconImage forState:UIControlStateNormal];
     _mapSettingsButton.tintColorDay = [mode getProfileColor];
     _mapSettingsButton.tintColorNight = [mode getProfileColor];
     [_mapSettingsButton updateColorsForPressedState:NO];
@@ -1763,25 +2140,26 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) updateRouteButton:(BOOL)routePlanningMode followingMode:(BOOL)followingMode
 {
+    UIImage *navigationIconImage = [[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] previewIcon];
     if (followingMode)
     {
-        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
-        _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-        _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+        [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
+        _driveModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].light;
+        _driveModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].dark;
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else if (routePlanningMode)
     {
-        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
-        _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-        _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+        [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
+        _driveModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].light;
+        _driveModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorActive].dark;
         _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else
     {
-        [_driveModeButton setImage:[[UIImage templateImageNamed:@"ic_custom_navigation"] imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
-        _driveModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
-        _driveModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        [_driveModeButton setImage:[navigationIconImage imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
+        _driveModeButton.tintColorDay = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].light;
+        _driveModeButton.tintColorNight = [UIColor colorNamed:ACColorNameMapButtonIconColorDefault].dark;
         _driveModeButton.accessibilityValue = nil;
     }
 

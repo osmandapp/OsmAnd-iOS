@@ -8,12 +8,21 @@
 
 @objcMembers
 open class MapButtonState: NSObject {
-    private static let originalValue: Int64 = -1
-    private static let defaultSizeDp: Int32 = 48
+    static let originalValue: Int64 = -1
+    static let rectangleRadiusDp: Int32 = 6
+    static let defaultSizeDp: Int32 = 48
+    static let roundRadiusDp: Int32 = 36
+    static let opaqueAlpha: Double = 1
+    static let defaultGlassStyle: Int32 = -1
     
     private let settings: OAAppSettings = OAAppSettings.sharedManager()
     private let portraitPositionPref: OACommonLong
     private let landscapePositionPref: OACommonLong
+    private let iconPref: OACommonString
+    private let sizePref: OACommonInteger
+    private let opacityPref: OACommonDouble
+    private let cornerRadiusPref: OACommonInteger
+    private let glassStylePref: OACommonInteger
     private let positionSize: ButtonPositionSize
     private let defaultPositionSize: ButtonPositionSize
     
@@ -25,6 +34,11 @@ open class MapButtonState: NSObject {
         self.id = id
         self.portraitPositionPref  = settings.registerLongPreference("\(id)_position_portrait", defValue: Int(Self.originalValue)).makeProfile()
         self.landscapePositionPref = settings.registerLongPreference("\(id)_position_landscape", defValue: Int(Self.originalValue)).makeProfile()
+        iconPref = settings.registerStringPreference(id + "_icon", defValue: nil).makeProfile()
+        sizePref = settings.registerIntPreference(id + "_size", defValue: Int32(Self.originalValue)).makeProfile()
+        opacityPref = settings.registerFloatPreference(id + "_opacity", defValue: Double(Self.originalValue)).makeProfile()
+        cornerRadiusPref = settings.registerIntPreference(id + "_corner_radius", defValue: Int32(Self.originalValue)).makeProfile()
+        glassStylePref = settings.registerIntPreference(id + "_glass_style", defValue: Int32(Self.originalValue)).makeProfile()
         self.positionSize = ButtonPositionSize(id: id)
         self.defaultPositionSize = ButtonPositionSize(id: id)
         super.init()
@@ -39,9 +53,30 @@ open class MapButtonState: NSObject {
             position.fromLongValue(v: Int64(value))
         }
         
-        var size = Self.defaultSizeDp
+        var size = createAppearanceParams().size
         size = (size / 8) + 1
         position.setSize(width8dp: Int32(size), height8dp: Int32(size))
+    }
+    
+    func createDefaultAppearanceParams() -> ButtonAppearanceParams {
+        let buttonsHelper = OAMapButtonsHelper.sharedInstance()
+        var size = buttonsHelper.getDefaultSizePref().get()
+        if size <= 0 {
+            size = defaultSize()
+        }
+        var opacity = buttonsHelper.getDefaultOpacityPref().get()
+        if opacity < 0 {
+            opacity = defaultOpacity()
+        }
+        var cornerRadius = buttonsHelper.getDefaultCornerRadiusPref().get()
+        if cornerRadius < 0 {
+            cornerRadius = defaultCornerRadius()
+        }
+        var glassStyle = buttonsHelper.getDefaultGlassStylePref().get()
+        if glassStyle < 0 {
+            glassStyle = defaultGlassStyle()
+        }
+        return ButtonAppearanceParams(iconName: defaultPreviewIconName(), size: size, opacity: opacity, cornerRadius: cornerRadius, glassStyle: glassStyle)
     }
     
     func getName() -> String {
@@ -53,7 +88,27 @@ open class MapButtonState: NSObject {
     }
 
     func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_custom_quick_action")
+        if let iconName = createAppearanceParams().iconName {
+            var icon = UIImage.templateImageNamed(iconName == defaultPreviewIconName() ? defaultIconName() : iconName)
+            if icon == nil {
+                icon = OAUtilities.getMxIcon(iconName.lowercased())
+            }
+            return icon
+        } else {
+            return UIImage.templateImageNamed("ic_custom_quick_action")
+        }
+    }
+    
+    func defaultIconName() -> String {
+        fatalError("default icon has no name")
+    }
+    
+    func previewIcon() -> UIImage? {
+        getIcon()
+    }
+    
+    func defaultPreviewIconName() -> String {
+        defaultIconName()
     }
 
     func getPositionSize() -> ButtonPositionSize {
@@ -64,6 +119,79 @@ open class MapButtonState: NSObject {
         let position = setupButtonPosition(defaultPositionSize)
         updatePosition(position)
         return position
+    }
+    
+    func defaultSize() -> Int32 {
+        Self.defaultSizeDp
+    }
+    
+    func defaultOpacity() -> Double {
+        Self.opaqueAlpha
+    }
+
+    func defaultCornerRadius() -> Int32 {
+        Self.roundRadiusDp
+    }
+    
+    func defaultGlassStyle() -> Int32 {
+        Self.defaultGlassStyle
+    }
+    
+    func savedIconName() -> String {
+        iconPref.get()
+    }
+    
+    func storedIconPref() -> OACommonString {
+        iconPref
+    }
+    
+    func storedSizePref() -> OACommonInteger {
+        sizePref
+    }
+    
+    func storedOpacityPref() -> OACommonDouble {
+        opacityPref
+    }
+    
+    func storedCornerRadiusPref() -> OACommonInteger {
+        cornerRadiusPref
+    }
+    
+    func storedGlassStylePref() -> OACommonInteger {
+        glassStylePref
+    }
+    
+    func createAppearanceParams() -> ButtonAppearanceParams {
+        let defaultParams = createDefaultAppearanceParams()
+        var iconName: String? = savedIconName()
+        if iconName == nil || iconName?.isEmpty == true || iconName == defaultPreviewIconName() {
+            iconName = defaultParams.iconName
+        }
+        var size = sizePref.get()
+        if size <= 0 {
+            size = defaultParams.size
+        }
+        var opacity = opacityPref.get()
+        if opacity < 0 {
+            opacity = defaultParams.opacity
+        }
+        var cornerRadius = cornerRadiusPref.get()
+        if cornerRadius < 0 {
+            cornerRadius = defaultParams.cornerRadius
+        }
+        var glassStyle = glassStylePref.get()
+        if glassStyle < 0 {
+            glassStyle = defaultParams.glassStyle
+        }
+        return ButtonAppearanceParams(iconName: iconName, size: size, opacity: opacity, cornerRadius: cornerRadius, glassStyle: glassStyle)
+    }
+    
+    func buttonDescription() -> String {
+        fatalError("buttonDescription is not defined")
+    }
+    
+    func storedVisibilityPref() -> OACommonPreference {
+        fatalError("visibilityPref is not defined")
     }
 
     @discardableResult func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
@@ -92,13 +220,28 @@ open class MapButtonState: NSObject {
     }
 
     func resetForMode(_ appMode: OAApplicationMode) {
+        iconPref.resetMode(toDefault: appMode)
+        sizePref.resetMode(toDefault: appMode)
+        opacityPref.resetMode(toDefault: appMode)
+        cornerRadiusPref.resetMode(toDefault: appMode)
+        glassStylePref.resetMode(toDefault: appMode)
         portraitPositionPref.resetMode(toDefault: appMode)
         landscapePositionPref.resetMode(toDefault: appMode)
+        storedVisibilityPref().resetMode(toDefault: appMode)
     }
 
     func copyForMode(from fromMode: OAApplicationMode, to toMode: OAApplicationMode) {
+        iconPref.set(iconPref.get(fromMode), mode: toMode)
+        sizePref.set(sizePref.get(fromMode), mode: toMode)
+        opacityPref.set(opacityPref.get(fromMode), mode: toMode)
+        cornerRadiusPref.set(cornerRadiusPref.get(fromMode), mode: toMode)
+        glassStylePref.set(glassStylePref.get(fromMode), mode: toMode)
         portraitPositionPref.set(portraitPositionPref.get(fromMode), mode: toMode)
         landscapePositionPref.set(landscapePositionPref.get(fromMode), mode: toMode)
+    }
+    
+    func hasCustomAppearance() -> Bool {
+        createAppearanceParams() != createDefaultAppearanceParams()
     }
 }
 

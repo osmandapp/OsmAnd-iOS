@@ -59,11 +59,23 @@ static QuickActionType *TYPE_INTERFACE;
     
     Map3DButtonState *_map3DButtonState;
     CompassButtonState *_compassButtonState;
+    ZoomInButtonState *_zoomInButtonState;
+    ZoomOutButtonState *_zoomOutButtonState;
+    SearchButtonState *_searchButtonState;
+    DriveModeButtonState *_navigationModeButtonState;
+    MyLocationButtonState *_myLocationButtonState;
+    OptionsMenuButtonState *_menuButtonState;
+    MapSettingsButtonState *_configureMapButtonState;
     NSMutableArray<QuickActionButtonState *> *_mapButtonStates;
 
     NSArray<QuickActionType *> *_enabledTypes;
     NSDictionary<NSNumber *, QuickActionType *> *_quickActionTypesInt;
     NSDictionary<NSString *, QuickActionType *> *_quickActionTypesStr;
+    
+    OACommonInteger *_defaultSizePref;
+    OACommonDouble *_defaultOpacityPref;
+    OACommonInteger *_defaultCornerRadiusPref;
+    OACommonInteger *_defaultGlassStylePref;
 }
 
 + (void)initialize
@@ -165,6 +177,11 @@ static QuickActionType *TYPE_INTERFACE;
         _quickActionButtonsChangedObservable = [[OAObservable alloc] init];
         _serializer = [QuickActionSerializer new];
         
+        _defaultSizePref = [[_settings registerIntPreference:@"default_map_button_size" defValue:(int)MapButtonState.originalValue] makeProfile];
+        _defaultOpacityPref = [[_settings registerFloatPreference:@"default_map_button_opacity" defValue:(float)MapButtonState.originalValue] makeProfile];
+        _defaultCornerRadiusPref = [[_settings registerIntPreference:@"default_map_button_corner_radius" defValue:(int)MapButtonState.originalValue] makeProfile];
+        _defaultGlassStylePref = [[_settings registerIntPreference:@"default_map_button_glass_style" defValue:(int)MapButtonState.originalValue] makeProfile];
+        
         [self updateActionTypes];
         [self initDefaultButtons];
     }
@@ -175,6 +192,13 @@ static QuickActionType *TYPE_INTERFACE;
 {
     _map3DButtonState = [Map3DButtonState new];
     _compassButtonState = [CompassButtonState new];
+    _zoomInButtonState = [ZoomInButtonState new];
+    _zoomOutButtonState = [ZoomOutButtonState new];
+    _searchButtonState = [SearchButtonState new];
+    _navigationModeButtonState = [DriveModeButtonState new];
+    _myLocationButtonState = [MyLocationButtonState new];
+    _menuButtonState = [OptionsMenuButtonState new];
+    _configureMapButtonState = [MapSettingsButtonState new];
 }
 
 - (Map3DButtonState *)getMap3DButtonState
@@ -185,6 +209,41 @@ static QuickActionType *TYPE_INTERFACE;
 - (CompassButtonState *)getCompassButtonState
 {
     return _compassButtonState;
+}
+
+- (ZoomInButtonState *)getZoomInButtonState
+{
+    return _zoomInButtonState;
+}
+
+- (ZoomOutButtonState *)getZoomOutButtonState
+{
+    return _zoomOutButtonState;
+}
+
+- (SearchButtonState *)getSearchButtonState
+{
+    return _searchButtonState;
+}
+
+- (DriveModeButtonState *)getNavigationModeButtonState
+{
+    return _navigationModeButtonState;
+}
+
+- (MyLocationButtonState *)getMyLocationButtonState
+{
+    return _myLocationButtonState;
+}
+
+- (OptionsMenuButtonState *)getMenuButtonState
+{
+    return _menuButtonState;
+}
+
+- (MapSettingsButtonState *)getConfigureMapButtonState
+{
+    return _configureMapButtonState;
 }
 
 - (NSArray<QuickActionButtonState *> *)getButtonsStates;
@@ -201,6 +260,19 @@ static QuickActionType *TYPE_INTERFACE;
             [list addObject:buttonState];
     }
     return list;
+}
+
+- (NSArray<MapButtonState *> *)getDefaultButtonsStates
+{
+    return @[_configureMapButtonState,
+             _searchButtonState,
+             _compassButtonState,
+             _menuButtonState,
+             _navigationModeButtonState,
+             _map3DButtonState,
+             _myLocationButtonState,
+             _zoomInButtonState,
+             _zoomOutButtonState];
 }
 
 - (QuickActionSerializer *)getSerializer
@@ -510,6 +582,26 @@ static QuickActionType *TYPE_INTERFACE;
             return buttonState;
     }
     return nil;
+}
+
+- (OACommonInteger *)getDefaultSizePref
+{
+    return _defaultSizePref;
+}
+
+- (OACommonDouble *)getDefaultOpacityPref
+{
+    return _defaultOpacityPref;
+}
+
+- (OACommonInteger *)getDefaultCornerRadiusPref
+{
+    return _defaultCornerRadiusPref;
+}
+
+- (OACommonInteger *)getDefaultGlassStylePref
+{
+    return _defaultGlassStylePref;
 }
 
 - (QuickActionButtonState *)createNewButtonState

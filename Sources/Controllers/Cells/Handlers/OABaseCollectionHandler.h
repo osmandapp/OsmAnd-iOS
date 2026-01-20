@@ -14,14 +14,18 @@
 @protocol OACollectionCellDelegate <NSObject>
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss;
+
+@optional
 - (void)reloadCollectionData;
 
 @end
 
 @protocol OABaseCollectionHandlerDelegate
 
-- (void)onCategorySelectedWith:(OACollectionSingleLineTableViewCell *)cell;
 - (void)onCategorySelected:(NSString *)category with:(OACollectionSingleLineTableViewCell *)cell;
+
+@optional
+- (void)onCategorySelectedWith:(OACollectionSingleLineTableViewCell *)cell;
 
 @end
 

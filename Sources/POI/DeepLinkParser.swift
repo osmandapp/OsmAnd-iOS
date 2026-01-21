@@ -297,7 +297,7 @@ final class DeepLinkParser: NSObject {
         guard CLLocationCoordinate2DIsValid(latLon.coordinate) else { return false }
         let pinLat = latLon.coordinate.latitude
         let pinLon = latLon.coordinate.longitude
-        let zoom = rootViewController.mapPanel.mapViewController.getMapZoom()
+        let zoom = extractZoom(from: url, fallback: rootViewController.mapPanel.mapViewController.getMapZoom())
         guard let amenity = searchBaseDetailsObject(pinLat: pinLat, pinLon: pinLon, name: name, poiType: type, wikiDataId: wikiDataId, osmId: osmId) else { return false }
         let synthetic = amenity.syntheticAmenity
         guard let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic) else { return false }
@@ -329,7 +329,7 @@ final class DeepLinkParser: NSObject {
         guard CLLocationCoordinate2DIsValid(latLon.coordinate) else { return false }
         let lat = latLon.coordinate.latitude
         let lon = latLon.coordinate.longitude
-        let zoom = rootViewController.mapPanel.mapViewController.getMapZoom()
+        let zoom = extractZoom(from: url, fallback: rootViewController.mapPanel.mapViewController.getMapZoom())
         return OADeepLinkBridge.openFavouriteOrMoveMap(withLat: lat, lon: lon, zoom: Int32(zoom), name: name)
     }
     
@@ -410,5 +410,15 @@ final class DeepLinkParser: NSObject {
     
     private func moveMapToLat(_ lat: Double, lon: Double, zoom: Int, title: String?, rootViewController: OARootViewController) {
         OADeepLinkBridge.moveMap(toLat: lat, lon: lon, zoom: Int32(zoom), title: title, rootViewController: rootViewController)
+    }
+    
+    private func extractZoom(from url: URL, fallback: Float) -> Float {
+        guard let fragment = URLComponents(url: url, resolvingAgainstBaseURL: true)?.fragment else { return fallback }
+        let parts = fragment.split(separator: "/", omittingEmptySubsequences: true)
+        if let first = parts.first, let zoom = Float(first) {
+            return zoom
+        }
+        
+        return fallback
     }
 }

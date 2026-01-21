@@ -36,7 +36,6 @@ static const NSInteger kOrderDescriptionRow = 0;
 static const NSInteger kOrderWptPointRow = 1;
 static const NSInteger kOrderWptPointLinkRow = 2;
 
-
 @implementation OAGPXWptViewController
 {
     OsmAndAppInstance _app;

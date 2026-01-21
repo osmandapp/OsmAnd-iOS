@@ -33,7 +33,6 @@
 static const NSInteger kOrderDescriptionRow = 0;
 static const NSInteger kOrderFavGroupRow = 1;
 
-
 @implementation OAFavoriteViewController
 {
     OsmAndAppInstance _app;

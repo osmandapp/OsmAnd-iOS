@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-public class AdditionalInfoBundle: NSObject {
+final class AdditionalInfoBundle: NSObject {
     
     private static let HIDDEN_EXTENSIONS: [String] = [COLOR_NAME_EXTENSION_KEY, ICON_NAME_EXTENSION_KEY, BACKGROUND_TYPE_EXTENSION_KEY, PROFILE_TYPE_EXTENSION_KEY, ADDRESS_EXTENSION_KEY, AMENITY_ORIGIN_EXTENSION_KEY, POITYPE, SUBTYPE]
     
@@ -54,12 +54,7 @@ public class AdditionalInfoBundle: NSObject {
     }
     
     func containsAny(_ keys: [String]) -> Bool {
-        for key in keys {
-            if contains(key) {
-                return true
-            }
-        }
-        return false
+        keys.contains(where: { contains($0) })
     }
     
     func contains(_ key: String) -> Bool {

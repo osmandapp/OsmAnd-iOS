@@ -7,7 +7,6 @@
 //
 
 #import "OAWikipediaSettingsViewController.h"
-#import "OAWikipediaLanguagesViewController.h"
 #import "OAWikipediaImagesSettingsViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OATableDataModel.h"
@@ -23,7 +22,7 @@
 
 #import "OsmAnd_Maps-Swift.h"
 
-@interface OAWikipediaSettingsViewController () <OAWikipediaScreenDelegate>
+@interface OAWikipediaSettingsViewController () <WikipediaScreenDelegate>
 
 @end
 
@@ -192,7 +191,7 @@
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.key isEqualToString:@"language"])
     {
-        OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] initWithAppMode:self.appMode];
+        WikipediaLanguagesViewController *controller = [[WikipediaLanguagesViewController alloc] initWithAppMode:self.appMode];
         controller.wikipediaDelegate = self;
         [self showModalViewController:controller];
     }
@@ -210,7 +209,7 @@
     }
 }
 
-#pragma mark - OAWikipediaScreenDelegate
+#pragma mark - WikipediaScreenDelegate
 
 - (void)updateWikipediaSettings
 {

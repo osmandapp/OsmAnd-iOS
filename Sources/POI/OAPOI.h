@@ -10,6 +10,8 @@
 #import "OrderedDictionary.h"
 #import "OAMapObject.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString * const URL_TAG;
 extern NSString * const WEBSITE_TAG;
 extern NSString * const PHONE_TAG;
@@ -72,8 +74,8 @@ static int DEFAULT_ELO = 900;
 
 @interface OAPOI : OAMapObject
 
-@property (nonatomic) OAPOIType *type;
-@property (nonatomic) NSString *subType;
+@property (nonatomic, nullable) OAPOIType *type;
+@property (nonatomic, nullable) NSString *subType;
 @property (nonatomic, assign) BOOL hasOpeningHours;
 @property (nonatomic) NSString *openingHours;
 @property (nonatomic) NSString *desc;
@@ -88,9 +90,15 @@ static int DEFAULT_ELO = 900;
 @property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
-@property (nonatomic) NSString *mapIconName;
+@property (nonatomic, nullable) NSString *mapIconName;
 @property (nonatomic) NSString *cityName;
-@property (nonatomic) NSString *regionName;
+@property (nonatomic, nullable) NSString *regionName;
+
+@property (nonatomic, copy, nullable) NSString *wikiIconUrl;
+@property (nonatomic, copy, nullable) NSString *wikiImageStubUrl;
+
+
+- (nullable NSString *)wikiPhoto;
 
 - (UIImage *)icon;
 - (NSString *)iconName;
@@ -105,19 +113,19 @@ static int DEFAULT_ELO = 900;
 - (NSSet<NSString *> *)getSupportedContentLocales;
 - (void)updateContentLocales:(NSSet<NSString *> *)locales;
 
-- (NSString *)getName:(NSString *)lang;
-- (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate;
+- (nullable NSString *)getName:(nullable NSString *)lang;
+- (nullable NSString *)getName:(nullable NSString *)lang transliterate:(BOOL)transliterate;
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 - (NSDictionary<NSString *, NSString *> *)getAltNamesMap;
 
 - (NSString *)getEnName:(BOOL)transliterate;
 
-- (NSString *)getGpxFileName:(NSString *)lang;
+- (NSString *)getGpxFileName:(nullable NSString *)lang;
 
-- (MutableOrderedDictionary<NSString *, NSString *> *) getAdditionalInfo;
+- (MutableOrderedDictionary<NSString *, NSString *> *)getAdditionalInfo;
 
-- (NSString *) getAdditionalInfo:(NSString *)key;
+- (nullable NSString *) getAdditionalInfo:(NSString *)key;
 - (NSArray<NSString *> *) getAdditionalInfoKeys;
 
 - (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo;
@@ -128,8 +136,8 @@ static int DEFAULT_ELO = 900;
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
-- (NSString *)getTagContent:(NSString *)tag;
-- (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
+- (nullable NSString *)getTagContent:(NSString *)tag;
+- (nullable NSString *)getTagContent:(NSString *)tag lang:(nullable NSString *)lang;
 - (NSString *)getLocalizedContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getDescription:(NSString *)lang;
 
@@ -137,7 +145,7 @@ static int DEFAULT_ELO = 900;
 - (NSString *)getColor;
 - (NSString *)getRef;
 - (NSString *)getRouteId;
-- (NSString *)getWikidata;
+- (nullable NSString *)getWikidata;
 
 - (NSString *)getTravelElo;
 - (int)getTravelEloNumber;
@@ -152,9 +160,9 @@ static int DEFAULT_ELO = 900;
 
 - (NSString *)getRouteActivityType;
 
-- (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
+- (nullable NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
-- (NSString *)getTagSuffix:(NSString *)tagPrefix;
+- (nullable NSString *)getTagSuffix:(NSString *)tagPrefix;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 
@@ -165,3 +173,5 @@ static int DEFAULT_ELO = 900;
 - (BOOL) strictEquals:(id)object;
 
 @end
+
+NS_ASSUME_NONNULL_END

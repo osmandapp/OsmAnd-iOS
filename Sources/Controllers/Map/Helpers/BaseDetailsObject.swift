@@ -287,7 +287,7 @@ final class BaseDetailsObject: NSObject {
             } else {
                 processId(transportStop)
                 syntheticAmenity.copyNames(transportStop)
-                if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 {
+                if !syntheticAmenity.hasLocation() {
                     syntheticAmenity.latitude = transportStop.latitude
                     syntheticAmenity.longitude = transportStop.longitude
                 }
@@ -308,7 +308,7 @@ final class BaseDetailsObject: NSObject {
                 syntheticAmenity.copyAdditionalInfo(withMap: renderedObject.tags, overwrite: false)
             }
             syntheticAmenity.copyNames(renderedObject)
-            if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 {
+            if !syntheticAmenity.hasLocation() {
                 syntheticAmenity.latitude = renderedObject.latitude
                 syntheticAmenity.longitude = renderedObject.longitude
             }

@@ -20,11 +20,18 @@
 {
     self = [super init];
     if (self) {
+        _latitude = NAN;
+        _longitude = NAN;
         _x = [NSMutableArray new];
         _y = [NSMutableArray new];
         _localizedNames = [NSMutableDictionary new];
     }
     return self;
+}
+
+- (BOOL) hasLocation
+{
+    return isnan(_latitude) && isnan(_longitude);
 }
 
 - (CLLocation *) getLocation

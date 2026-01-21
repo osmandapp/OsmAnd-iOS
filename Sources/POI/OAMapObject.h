@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CLLocation *) getLocation;
 
+- (BOOL)hasLocation;
 - (void)addLocation:(int)x y:(int)y;
 - (void)setName:(NSString * _Nullable)lang name:(NSString * _Nonnull)name;
 

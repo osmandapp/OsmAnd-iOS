@@ -31,7 +31,7 @@
 
 - (BOOL) hasLocation
 {
-    return isnan(_latitude) && isnan(_longitude);
+    return !isnan(_latitude) && !isnan(_longitude);
 }
 
 - (CLLocation *) getLocation

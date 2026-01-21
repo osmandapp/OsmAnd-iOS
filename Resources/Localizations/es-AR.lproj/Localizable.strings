@@ -4013,5 +4013,5 @@
 "shared_string_default" = "Predefinido";
 "dynamic_icon_type_summary" = "El ícono cambia según el estado de la acción.";
 "shared_string_dynamic" = "Dinámico";
-"background_opacity_description" = "Transparente, revela el contenido que hay debajo. Tintado aumenta la opacidad y añade más contraste.";
-"shared_string_tinted" = "Tintado";
+"background_opacity_description" = "Transparente, revela el contenido que hay debajo. Tonalizado, aumenta la opacidad y añade más contraste.";
+"shared_string_tinted" = "Tonalizado";

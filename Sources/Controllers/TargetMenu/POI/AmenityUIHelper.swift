@@ -142,7 +142,7 @@ final class AmenityUIHelper: NSObject {
                     
                     let cuisineOrDish = key == CUISINE_TAG || key == DISH_TAG
                     let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: poiCategory)
-                    let row = OARowInfo(key: poiAdditionalCategoryName ?? "", icon: icon, textPrefix: pType.poiAdditionalCategoryLocalized, text: sb, textColor: nil, isText: true, needLinks: true, collapsable: collapsableView, order: pType.order, typeName: pType.name, isPhoneNumber: false, isUrl: false)
+                    let row = OARowInfo(key: poiAdditionalCategoryName ?? "", icon: icon, textPrefix: pType.poiAdditionalCategoryLocalized, text: sb, textColor: nil, isText: true, needLinks: true, collapsable: collapsableView, order: Int(pType.order), typeName: pType.name, isPhoneNumber: false, isUrl: false)
                     infoRows.append(row)
                 }
             }

@@ -47,6 +47,7 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
     
     private func searchAmenity() async throws -> OAPOI? {
+        // TODO @RZR search BaseDetailsObject and rebuild menu with updated syntheticAmenity of BaseDetailsObject
         OAAmenitySearcher.findPOI(byOsmId: ObfConstants.getOsmObjectId(renderedObject), lat: poi.latitude, lon: poi.longitude)
     }
     

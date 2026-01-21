@@ -238,7 +238,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                             [self addTravelGpx:result routeId: tags[ROUTE_ID]]; // WikiVoyage or User TravelGpx
                         }
                         
-                        BOOL allowAmenityObjects = !isSpecial;
+                        BOOL allowAmenityObjects = !isSpecial; // TODO @RZR sync with Java and replace with allowMapObjects
 
                         if (allowAmenityObjects)
                         {   

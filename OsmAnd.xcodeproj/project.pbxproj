@@ -3255,6 +3255,7 @@
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
 		FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */; };
+		FA5DD0F82F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DD0F72F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m */; };
 		FA5FB63F2DE06AF800ABECCF /* OAOBDConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */; };
 		FA5FB6422DE0757700ABECCF /* OBDComputerWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
@@ -7976,6 +7977,8 @@
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXDataItemGPXFileWrapper.swift; sourceTree = "<group>"; };
 		FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockHelper.swift; sourceTree = "<group>"; };
+		FA5DD0F62F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPoiUIFilterDataProviderWrapper.h; sourceTree = "<group>"; };
+		FA5DD0F72F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPoiUIFilterDataProviderWrapper.m; sourceTree = "<group>"; };
 		FA5FB63D2DE06AD500ABECCF /* OAOBDConnector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOBDConnector.h; sourceTree = "<group>"; };
 		FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOBDConnector.m; sourceTree = "<group>"; };
 		FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDComputerWidgetExtension.swift; sourceTree = "<group>"; };
@@ -11506,9 +11509,9 @@
 		DA5A7A4E26C563A000F274C7 /* POI */ = {
 			isa = PBXGroup;
 			children = (
+				FA5DD0F52F20CA5E002F3F79 /* PoiUIFilterDataProvider */,
 				FA2CFCE62EF54A1F00CD1AF9 /* ExplorePlacesProvider.swift */,
 				FA2CFCE42EF549ED00CD1AF9 /* ExplorePlacesOnlineProvider.swift */,
-				FA2CFCE12EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift */,
 				DA5A7A5126C563A000F274C7 /* OACustomSearchPoiFilter.h */,
 				DA5A7A6226C563A000F274C7 /* OACustomSearchPoiFilter.m */,
 				DA5A7A6B26C563A000F274C7 /* OAPhrasesParser.h */,
@@ -14351,6 +14354,16 @@
 				DA5A7DCE26C563A300F274C7 /* OAFloatingButtonsHudViewController.mm */,
 			);
 			path = OAFloatingButtonsHudViewController;
+			sourceTree = "<group>";
+		};
+		FA5DD0F52F20CA5E002F3F79 /* PoiUIFilterDataProvider */ = {
+			isa = PBXGroup;
+			children = (
+				FA2CFCE12EF4501800CD1AF9 /* PoiUIFilterDataProvider.swift */,
+				FA5DD0F62F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.h */,
+				FA5DD0F72F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m */,
+			);
+			path = PoiUIFilterDataProvider;
 			sourceTree = "<group>";
 		};
 		FA5FB6402DE06E1600ABECCF /* OBDConnector */ = {
@@ -17956,6 +17969,7 @@
 				DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
 				46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */,
 				46D5E41A2D31A3F000428227 /* BackupUtils.swift in Sources */,
+				FA5DD0F82F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m in Sources */,
 				DA5A839A26C563A800F274C7 /* OALocalResourceInfoCell.m in Sources */,
 				DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */,
 				DA5A815C26C563A700F274C7 /* OAPlugin.mm in Sources */,

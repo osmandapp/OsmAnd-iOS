@@ -91,12 +91,12 @@
     UIImage *_targetImage;
 }
 
-+ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
++ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
     return [self.class createMenuController:targetPoint selectedObject:nil activeTargetType:activeTargetType activeViewControllerState:activeViewControllerState headerOnly:headerOnly];
 }
 
-+ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
++ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
     double lat = targetPoint.location.latitude;
     double lon = targetPoint.location.longitude;
@@ -434,7 +434,7 @@
     return controller;
 }
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super init];
     if (self)
@@ -445,63 +445,63 @@
     return self;
 }
 
-- (void) setLocation:(CLLocationCoordinate2D)location
+- (void)setLocation:(CLLocationCoordinate2D)location
 {
     _location = location;
     _formattedCoords = [OAPointDescription getLocationName:location.latitude lon:location.longitude sh:YES];
 }
 
-- (UIImage *) getIcon
+- (UIImage *)getIcon
 {
     return nil;
 }
 
-- (BOOL) needAddress
+- (BOOL)needAddress
 {
     return YES;
 }
 
--(UIView *) getTopView
+-(UIView *)getTopView
 {
     return _navBar;
 }
 
--(UIView *) getMiddleView
+-(UIView *)getMiddleView
 {
     return _contentView;
 }
 
--(CGFloat) getToolBarHeight
+-(CGFloat)getToolBarHeight
 {
     return defaultToolBarHeight;
 }
 
-- (NSString *) getTypeStr
+- (NSString *)getTypeStr
 {
     return [self getCommonTypeStr];
 }
 
-- (NSString *) getCommonTypeStr
+- (NSString *)getCommonTypeStr
 {
     return OALocalizedString(@"shared_string_location");
 }
 
-- (NSAttributedString *) getAttributedTypeStr
+- (NSAttributedString *)getAttributedTypeStr
 {
     return nil;
 }
 
-- (NSAttributedString *) getAttributedCommonTypeStr
+- (NSAttributedString *)getAttributedCommonTypeStr
 {
     return nil;
 }
 
-- (NSAttributedString *) getAttributedTypeStr:(NSString *)group
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group
 {
     return [self getAttributedTypeStr:group color:nil];
 }
 
-- (NSAttributedString *) getAttributedTypeStr:(NSString *)group color:(UIColor *)color
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(UIColor *)color
 {
     UIColor *iconColor = color ?: [UIColor colorNamed:ACColorNameIconColorDefault];
     
@@ -522,22 +522,22 @@
     return string;
 }
 
-- (UIColor *) getAdditionalInfoColor
+- (UIColor *)getAdditionalInfoColor
 {
     return nil;
 }
 
-- (NSAttributedString *) getAdditionalInfoStr
+- (NSAttributedString *)getAdditionalInfoStr
 {
     return nil;
 }
 
-- (UIImage *) getAdditionalInfoImage
+- (UIImage *)getAdditionalInfoImage
 {
     return nil;
 }
 
-- (void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     
@@ -563,7 +563,7 @@
     [self updateNavBarSubviewsLayout];
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
@@ -574,7 +574,7 @@
     } completion:nil];
 }
 
--(void) updateNavBarSubviewsLayout
+-(void)updateNavBarSubviewsLayout
 {
     CGRect buttonFrame = self.buttonBack.frame;
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
@@ -582,7 +582,7 @@
     self.buttonBack.frame = buttonFrame;
 }
 
-- (void) didReceiveMemoryWarning
+- (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
@@ -608,7 +608,7 @@
     });
 }
 
-- (void) onDownloadCancelled
+- (void)onDownloadCancelled
 {
     if (_localMapIndexItem)
     {
@@ -676,7 +676,7 @@
     });
 }
 
-- (void) createMapDownloadControls
+- (void)createMapDownloadControls
 {
     if (_localMapIndexItem)
     {
@@ -691,17 +691,17 @@
         [self.delegate hideProgressBar];
 }
 
-- (BOOL) showRegionNameOnDownloadButton
+- (BOOL)showRegionNameOnDownloadButton
 {
     return YES; //override
 }
 
-- (BOOL) showDetailsButton
+- (BOOL)showDetailsButton
 {
     return NO; //override
 }
 
-- (CGFloat) detailsButtonHeight
+- (CGFloat)detailsButtonHeight
 {
     return 0.; //override
 }
@@ -715,7 +715,7 @@
     _targetImage = image;
 }
 
-- (IBAction) buttonBackPressed:(id)sender
+- (IBAction)buttonBackPressed:(id)sender
 {
     if (self.topToolbarType == ETopToolbarTypeFloating)
     {
@@ -726,13 +726,13 @@
     [self backPressed];
 }
 
-- (IBAction) buttonOKPressed:(id)sender
+- (IBAction)buttonOKPressed:(id)sender
 {
     _actionButtonPressed = YES;
     [self okPressed];
 }
 
-- (IBAction) buttonCancelPressed:(id)sender
+- (IBAction)buttonCancelPressed:(id)sender
 {
     _actionButtonPressed = YES;
     if (self.topToolbarType == ETopToolbarTypeFloating)
@@ -743,62 +743,62 @@
     [self cancelPressed];
 }
 
-- (void) backPressed
+- (void)backPressed
 {
     // override
 }
 
-- (void) okPressed
+- (void)okPressed
 {
     // override
 }
 
-- (void) cancelPressed
+- (void)cancelPressed
 {
     // override
 }
 
-- (BOOL) hasContent
+- (BOOL)hasContent
 {
     return YES; // override
 }
 
-- (CGFloat) contentHeight
+- (CGFloat)contentHeight
 {
     return 0.0; // override
 }
 
-- (CGFloat) contentHeight:(CGFloat)width
+- (CGFloat)contentHeight:(CGFloat)width
 {
     return [self contentHeight];
 }
 
-- (void) setContentBackgroundColor:(UIColor *)color
+- (void)setContentBackgroundColor:(UIColor *)color
 {
     _contentView.backgroundColor = color;
 }
 
-- (BOOL) hasInfoView
+- (BOOL)hasInfoView
 {
     return [self hasInfoButton] || [self hasRouteButton];
 }
 
-- (BOOL) hasInfoButton
+- (BOOL)hasInfoButton
 {
     return [self hasContent] && ![self isLandscape];
 }
 
-- (BOOL) hasRouteButton
+- (BOOL)hasRouteButton
 {
     return YES;
 }
 
-- (BOOL) showTopViewInFullscreen
+- (BOOL)showTopViewInFullscreen
 {
     return NO;
 }
 
-- (BOOL) showTopControls
+- (BOOL)showTopControls
 {
     if (self.delegate)
         return ![self.delegate isInFullMode] && ![self.delegate isInFullScreenMode] && self.topToolbarType != ETopToolbarTypeFixed;
@@ -806,108 +806,108 @@
         return NO;
 }
 
-- (BOOL) shouldEnterContextModeManually
+- (BOOL)shouldEnterContextModeManually
 {
     return NO; // override
 }
 
-- (BOOL) supportMapInteraction
+- (BOOL)supportMapInteraction
 {
     return NO; // override
 }
 
-- (BOOL) supportsForceClose
+- (BOOL)supportsForceClose
 {
     return NO; // override
 }
 
-- (BOOL) showNearestWiki;
+- (BOOL)showNearestWiki;
 {
     return NO; // override
 }
 
-- (BOOL) showNearestPoi;
+- (BOOL)showNearestPoi;
 {
     return NO; // override
 }
 
-- (BOOL) supportFullMenu
+- (BOOL)supportFullMenu
 {
     return YES; // override
 }
 
-- (BOOL) supportFullScreen
+- (BOOL)supportFullScreen
 {
     return YES; // override
 }
 
-- (void) goHeaderOnly
+- (void)goHeaderOnly
 {
     // override
 }
 
-- (void) goFull
+- (void)goFull
 {
     // override
 }
 
-- (void) goFullScreen
+- (void)goFullScreen
 {
     // override
 }
 
-- (BOOL) hasTopToolbar
+- (BOOL)hasTopToolbar
 {
     return NO; // override
 }
 
-- (BOOL) shouldShowToolbar
+- (BOOL)shouldShowToolbar
 {
     return NO; // override
 }
 
-- (BOOL) hasTopToolbarShadow
+- (BOOL)hasTopToolbarShadow
 {
     return YES;
 }
 
-- (BOOL) hasBottomToolbar
+- (BOOL)hasBottomToolbar
 {
     return NO; // override
 }
 
-- (BOOL) needsAdditionalBottomMargin
+- (BOOL)needsAdditionalBottomMargin
 {
     return YES; // override
 }
 
-- (BOOL) needsMapRuler
+- (BOOL)needsMapRuler
 {
     return NO; // override
 }
 
-- (CGFloat) additionalContentOffset
+- (CGFloat)additionalContentOffset
 {
     return 0.0; // override
 }
 
-- (BOOL) needsLayoutOnModeChange
+- (BOOL)needsLayoutOnModeChange
 {
     return YES; // override
 }
 
-- (void) setTopToolbarType:(ETopToolbarType)topToolbarType
+- (void)setTopToolbarType:(ETopToolbarType)topToolbarType
 {
     _topToolbarType = topToolbarType;
 }
 
-- (void) applyTopToolbarTargetTitle
+- (void)applyTopToolbarTargetTitle
 {
     if (self.delegate)
         self.titleView.text = [self.delegate getTargetTitle];
 }
 
-- (void) setTopToolbarAlpha:(CGFloat)alpha
+- (void)setTopToolbarAlpha:(CGFloat)alpha
 {
     if ([self hasTopToolbar])
     {
@@ -931,7 +931,7 @@
     }
 }
 
-- (void) setMiddleToolbarAlpha:(CGFloat)alpha
+- (void)setMiddleToolbarAlpha:(CGFloat)alpha
 {
     if ([self hasTopToolbar])
     {
@@ -966,12 +966,12 @@
         self.buttonBack.alpha = 1 - self.navBar.alpha;
 }
 
-- (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha
+- (void)applyGradient:(BOOL)gradient alpha:(CGFloat)alpha
 {
     [self applyGradient:gradient topToolbarType:self.topToolbarType alpha:alpha];
 }
 
-- (void) applyGradient:(BOOL)gradient topToolbarType:(ETopToolbarType)topToolbarType alpha:(CGFloat)alpha
+- (void)applyGradient:(BOOL)gradient topToolbarType:(ETopToolbarType)topToolbarType alpha:(CGFloat)alpha
 {
     if (self.titleGradient && gradient)
     {
@@ -1006,37 +1006,37 @@
     }
 }
 
-- (BOOL) disablePanWhileEditing
+- (BOOL)disablePanWhileEditing
 {
     return NO; // override
 }
 
-- (BOOL) disableScroll
+- (BOOL)disableScroll
 {
     return NO; // override
 }
 
-- (BOOL) supportEditing
+- (BOOL)supportEditing
 {
     return NO; // override
 }
 
-- (void) activateEditing
+- (void)activateEditing
 {
     // override
 }
 
-- (BOOL) commitChangesAndExit
+- (BOOL)commitChangesAndExit
 {
     return YES; // override
 }
 
-- (BOOL) preHide
+- (BOOL)preHide
 {
     return YES; // override
 }
 
-- (id) getTargetObj
+- (id)getTargetObj
 {
     return nil; // override
 }
@@ -1046,22 +1046,22 @@
     return nil; // override
 }
 
-- (BOOL) isLandscape
+- (BOOL)isLandscape
 {
     return OAUtilities.isLandscape;
 }
 
-- (BOOL) hasControlButtons
+- (BOOL)hasControlButtons
 {
     return self.leftControlButton || self.rightControlButton;
 }
 
-- (void) leftControlButtonPressed;
+- (void)leftControlButtonPressed;
 {
     // override
 }
 
-- (void) rightControlButtonPressed;
+- (void)rightControlButtonPressed;
 {
     // override
 }
@@ -1076,7 +1076,7 @@
     return @"";
 }
 
-- (void) downloadControlButtonPressed
+- (void)downloadControlButtonPressed
 {
     if (_localMapIndexItem)
     {
@@ -1096,36 +1096,36 @@
     }
 }
 
-- (void) onMenuSwipedOff
+- (void)onMenuSwipedOff
 {
     // override
 }
-- (void) onMenuDismissed
-{
-    // override
-}
-
-- (void) onMenuShown
+- (void)onMenuDismissed
 {
     // override
 }
 
-- (void) setupToolBarButtonsWithWidth:(CGFloat)width
+- (void)onMenuShown
 {
     // override
 }
 
-- (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
+- (void)setupToolBarButtonsWithWidth:(CGFloat)width
+{
+    // override
+}
+
+- (NSArray<OATransportStopRoute *> *)getSubTransportStopRoutes:(BOOL)nearby
 {
     return @[];
 }
 
-- (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes
+- (NSArray<OATransportStopRoute *> *)getLocalTransportStopRoutes
 {
     return [self getSubTransportStopRoutes:false];
 }
 
-- (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes
+- (NSArray<OATransportStopRoute *> *)getNearbyTransportStopRoutes
 {
     return [self getSubTransportStopRoutes:true];
 }
@@ -1134,27 +1134,27 @@
 {
 }
 
-- (BOOL) isBottomsControlVisible
+- (BOOL)isBottomsControlVisible
 {
     return YES; // override
 }
 
-- (BOOL) isMapFrameNeeded
+- (BOOL)isMapFrameNeeded
 {
     return NO;
 }
 
-- (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view
+- (void)addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view
 {
     // override
 }
 
-- (void) removeMapFrameLayer:(UIView *)view
+- (void)removeMapFrameLayer:(UIView *)view
 {
     // override
 }
 
-- (CGFloat) mapHeightKoef
+- (CGFloat)mapHeightKoef
 {
     return 0; // override
 }
@@ -1174,7 +1174,7 @@
     return NO;
 }
 
-- (BOOL) offerMapDownload
+- (BOOL)offerMapDownload
 {
     return YES;
 }

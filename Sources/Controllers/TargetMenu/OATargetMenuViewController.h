@@ -111,77 +111,77 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
-+ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
++ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
 
-+ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
++ (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint selectedObject:(id)selectedObject activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
 
-- (id) getTargetObj;
+- (id)getTargetObj;
 
-- (nullable UIImage *) getIcon;
+- (nullable UIImage *)getIcon;
 
-- (BOOL) needAddress;
-- (nullable NSString *) getTypeStr;
-- (NSString *) getCommonTypeStr;
+- (BOOL)needAddress;
+- (nullable NSString *)getTypeStr;
+- (NSString *)getCommonTypeStr;
 - (NSString *)encodedPoiNameForLink;
 - (NSString *)encodedPoiTypeForLink;
-- (NSAttributedString *) getAttributedTypeStr;
-- (NSAttributedString *) getAttributedCommonTypeStr;
+- (NSAttributedString *)getAttributedTypeStr;
+- (NSAttributedString *)getAttributedCommonTypeStr;
 
-- (NSAttributedString *) getAttributedTypeStr:(NSString *)group;
-- (NSAttributedString *) getAttributedTypeStr:(NSString *)group color:(UIColor *)color;
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group;
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group color:(UIColor *)color;
 
-- (UIColor *) getAdditionalInfoColor;
-- (NSAttributedString *) getAdditionalInfoStr;
-- (UIImage *) getAdditionalInfoImage;
+- (UIColor *)getAdditionalInfoColor;
+- (NSAttributedString *)getAdditionalInfoStr;
+- (UIImage *)getAdditionalInfoImage;
 
-- (BOOL) supportFullMenu;
-- (BOOL) supportFullScreen;
+- (BOOL)supportFullMenu;
+- (BOOL)supportFullScreen;
 
-- (void) goHeaderOnly;
-- (void) goFull;
-- (void) goFullScreen;
+- (void)goHeaderOnly;
+- (void)goFull;
+- (void)goFullScreen;
 
-- (BOOL) showTopViewInFullscreen;
-- (BOOL) showTopControls;
-- (BOOL) supportMapInteraction;
-- (BOOL) supportsForceClose;
-- (BOOL) showNearestWiki;
-- (BOOL) showNearestPoi;
-- (BOOL) shouldEnterContextModeManually;
+- (BOOL)showTopViewInFullscreen;
+- (BOOL)showTopControls;
+- (BOOL)supportMapInteraction;
+- (BOOL)supportsForceClose;
+- (BOOL)showNearestWiki;
+- (BOOL)showNearestPoi;
+- (BOOL)shouldEnterContextModeManually;
 
-- (BOOL) hasTopToolbar;
-- (BOOL) hasBottomToolbar;
-- (BOOL) shouldShowToolbar;
-- (BOOL) hasTopToolbarShadow;
-- (void) applyTopToolbarTargetTitle;
-- (void) setTopToolbarAlpha:(CGFloat)alpha;
-- (void) setMiddleToolbarAlpha:(CGFloat)alpha;
-- (BOOL) needsAdditionalBottomMargin;
-- (BOOL) showRegionNameOnDownloadButton;
-- (BOOL) showDetailsButton;
-- (CGFloat) detailsButtonHeight;
+- (BOOL)hasTopToolbar;
+- (BOOL)hasBottomToolbar;
+- (BOOL)shouldShowToolbar;
+- (BOOL)hasTopToolbarShadow;
+- (void)applyTopToolbarTargetTitle;
+- (void)setTopToolbarAlpha:(CGFloat)alpha;
+- (void)setMiddleToolbarAlpha:(CGFloat)alpha;
+- (BOOL)needsAdditionalBottomMargin;
+- (BOOL)showRegionNameOnDownloadButton;
+- (BOOL)showDetailsButton;
+- (CGFloat)detailsButtonHeight;
 
-- (BOOL) needsMapRuler;
+- (BOOL)needsMapRuler;
 
-- (BOOL) needsLayoutOnModeChange;
+- (BOOL)needsLayoutOnModeChange;
 
-- (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha;
+- (void)applyGradient:(BOOL)gradient alpha:(CGFloat)alpha;
 
-- (BOOL) disableScroll;
-- (BOOL) disablePanWhileEditing;
-- (BOOL) supportEditing;
-- (void) activateEditing;
-- (BOOL) commitChangesAndExit;
-- (BOOL) preHide;
+- (BOOL)disableScroll;
+- (BOOL)disablePanWhileEditing;
+- (BOOL)supportEditing;
+- (void)activateEditing;
+- (BOOL)commitChangesAndExit;
+- (BOOL)preHide;
 
-- (BOOL) denyClose;
-- (BOOL) hideButtons;
-- (BOOL) hasDismissButton;
-- (BOOL) offerMapDownload;
+- (BOOL)denyClose;
+- (BOOL)hideButtons;
+- (BOOL)hasDismissButton;
+- (BOOL)offerMapDownload;
 
-- (void) backPressed;
-- (void) okPressed;
-- (void) cancelPressed;
+- (void)backPressed;
+- (void)okPressed;
+- (void)cancelPressed;
 
 - (BOOL)hasContent;
 - (CGFloat)contentHeight;
@@ -191,34 +191,34 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void)refreshContent;
 - (void)updateNavBarSubviewsLayout;
 
-- (BOOL) hasInfoView;
-- (BOOL) hasInfoButton;
-- (BOOL) hasRouteButton;
+- (BOOL)hasInfoView;
+- (BOOL)hasInfoButton;
+- (BOOL)hasRouteButton;
 
-- (BOOL) hasControlButtons;
-- (void) leftControlButtonPressed;
-- (void) rightControlButtonPressed;
-- (void) downloadControlButtonPressed;
-- (void) onDownloadCancelled;
+- (BOOL)hasControlButtons;
+- (void)leftControlButtonPressed;
+- (void)rightControlButtonPressed;
+- (void)downloadControlButtonPressed;
+- (void)onDownloadCancelled;
 
-- (void) onMenuSwipedOff;
-- (void) onMenuDismissed;
-- (void) onMenuShown;
+- (void)onMenuSwipedOff;
+- (void)onMenuDismissed;
+- (void)onMenuShown;
 
-- (void) setupToolBarButtonsWithWidth:(CGFloat)width;
+- (void)setupToolBarButtonsWithWidth:(CGFloat)width;
 
-- (OATargetMenuViewControllerState *) getCurrentState;
+- (OATargetMenuViewControllerState *)getCurrentState;
 
-- (BOOL) isLandscape;
+- (BOOL)isLandscape;
 
-- (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby;
-- (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
-- (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
-- (BOOL) isBottomsControlVisible;
-- (BOOL) isMapFrameNeeded;
-- (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view;
-- (void) removeMapFrameLayer:(UIView *)view;
-- (CGFloat) mapHeightKoef;
+- (NSArray<OATransportStopRoute *> *)getSubTransportStopRoutes:(BOOL)nearby;
+- (NSArray<OATransportStopRoute *> *)getLocalTransportStopRoutes;
+- (NSArray<OATransportStopRoute *> *)getNearbyTransportStopRoutes;
+- (BOOL)isBottomsControlVisible;
+- (BOOL)isMapFrameNeeded;
+- (void)addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view;
+- (void)removeMapFrameLayer:(UIView *)view;
+- (CGFloat)mapHeightKoef;
 - (void)setTargetImage:(UIImage * _Nullable)image;
 - (UIImage *_Nullable)targetImage;
 

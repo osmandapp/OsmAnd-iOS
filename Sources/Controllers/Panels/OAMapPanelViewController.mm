@@ -1471,19 +1471,19 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [_targetMenuView setSelectedObject:selectedObject.object];
-    
-    if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
+
+    if (targetPoint.type != OATargetRenderedObject)
     {
-        QVector<OsmAnd::PointI> points;
-        OAMapObject *obj = targetPoint.targetObj;
-        if (obj.x && obj.x.count > 0)
+        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
+        if (detailsObject)
         {
-            for (int i = 0; i < obj.x.count; i++)
-                points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+            // todo perhaps other properties
+            targetPoint.type = OATargetBaseDetailsObject;
+            targetPoint.targetObj = detailsObject;
         }
-        
-        [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
+
+    [self setSelectedObject:targetPoint];
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
@@ -1493,6 +1493,22 @@ typedef enum
         if (_targetMenuView.needsManualContextMode)
             [self enterContextMenuMode];
     }];
+}
+
+- (void) setSelectedObject:(OATargetPoint *)targetPoint
+{
+    if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
+    {
+        QVector<OsmAnd::PointI> points;
+        OAMapObject *obj = targetPoint.targetObj;
+        if (obj.x && obj.x.count > 0)
+        {
+            for (int i = 0; i < obj.x.count; i++)
+                points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+        }
+
+        [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
+    }
 }
 
 - (void) setupNetworkGpxProgress

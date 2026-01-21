@@ -156,9 +156,16 @@
             controller = [[OAMyLocationViewController alloc] init];
             break;
         }
-            
+
+        case OATargetBaseDetailsObject:
+        {
+            controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj];
+            break;
+        }
+
         case OATargetPOI:
         {
+            // todo refactor @nggrach !!!
             if (selectedObject)
             {
                 if ([selectedObject isKindOfClass:BaseDetailsObject.class])

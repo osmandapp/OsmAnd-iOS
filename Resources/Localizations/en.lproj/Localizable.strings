@@ -2222,7 +2222,6 @@
 "corner_radius" = "Corner radius";
 "shared_string_pt" = "pt";
 "shared_string_default" = "Default";
-"shared_string_custom" = "Custom";
 "dynamic_icon_type_summary" = "Icon changes based on action state.";
 "shared_string_dynamic" = "Dynamic";
 

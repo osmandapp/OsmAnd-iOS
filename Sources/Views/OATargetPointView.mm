@@ -1978,10 +1978,10 @@ static const NSInteger _buttonsCount = 4;
     }];
 }
 
-- (void)addCoordinatesAndUrlTo:(NSMutableString *)sharingText withLat:(double)lat lon:(double)lon
+- (void)addCoordinatesAndUrlTo:(NSMutableString *)sharingText withLat:(double)lat lon:(double)lon label:(NSString *)label
 {
     int zoom = _mapView.zoomLevel;
-    NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom];
+    NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom label:label];
     NSString *poiName = [self.customController encodedPoiNameForLink];
     NSString *poiType = [self.customController encodedPoiTypeForLink];
     if (geoUrl.length > 0)
@@ -2122,7 +2122,7 @@ static const NSInteger _buttonsCount = 4;
         previewTitle = _targetPoint.title;
     }
     
-    [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon];
+    [self addCoordinatesAndUrlTo:sharingText withLat:lat lon:lon label:previewTitle];
     previewIcon = _imageView.image;
     int zoom = _mapView.zoomLevel;
     NSString *poiName = [self.customController encodedPoiNameForLink];;
@@ -2763,9 +2763,7 @@ static const NSInteger _buttonsCount = 4;
         }
         case OAShareMenuActivityGeo:
         {
-            NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
-                                              longitude:_targetPoint.location.longitude
-                                                   zoom:_mapView.zoomLevel];
+            NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude longitude:_targetPoint.location.longitude zoom:_mapView.zoomLevel label:_targetPoint.title];
             [self copyToClipboardWithToast:geoUrl];
             break;
         }

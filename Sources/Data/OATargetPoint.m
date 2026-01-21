@@ -60,7 +60,7 @@
     
     if (![object isKindOfClass:OARenderedObject.class])
     {
-        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:object];
+        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:object]; // TODO double call?
         if (detailsObject)
         {
             _detailsObj = detailsObject;

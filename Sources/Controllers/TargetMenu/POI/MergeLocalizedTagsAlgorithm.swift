@@ -14,10 +14,7 @@ final class MergeLocalizedTagsAlgorithm: NSObject {
     
     private override init() {}
     
-    static var shared: MergeLocalizedTagsAlgorithm = {
-        let instance = MergeLocalizedTagsAlgorithm()
-        return instance
-    }()
+    static let shared = MergeLocalizedTagsAlgorithm()
     
     func execute(originalDict: [String: Any]) -> [String: Any] {
         executeImpl(originalDict)

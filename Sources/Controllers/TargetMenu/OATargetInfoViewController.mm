@@ -796,7 +796,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
                            self.location.longitude,
                            [OAIAPHelper isPaidVersion] ? @"paid" : @"free"];
 
-    if (preferredLang && preferredLang.length > 0)
+    if (!NSStringIsEmpty(preferredLang))
         urlString = [urlString stringByAppendingFormat:@"&lang=%@", preferredLang];
     if (myLocation)
         urlString = [urlString stringByAppendingFormat:@"&mloc=%f,%f", myLocation.coordinate.latitude, myLocation.coordinate.longitude];

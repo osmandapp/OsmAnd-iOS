@@ -12,7 +12,6 @@
 
 static const NSInteger kOrderContentRow = 1;
 
-
 @interface OAWikiMenuViewController ()<OARowInfoDelegate>
 
 @end

@@ -12,6 +12,8 @@ final class AmenityUIHelper: NSObject {
     private static let DISH_INFO_ID = COLLAPSABLE_PREFIX + "dish"
     private static let US_MAPS_RECREATION_AREA = "us_maps_recreation_area"
     
+    private let helper: OAPOIHelper
+    
     private var additionalInfo: AdditionalInfoBundle
     
     private var preferredLang: String
@@ -25,8 +27,6 @@ final class AmenityUIHelper: NSObject {
     private var collectedPoiTypes = [String: [OAPOIType]]()
     private var osmEditingEnabled = OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self) // PluginsHelper.isActive(OsmEditingPlugin.class);
     private var lastBuiltRowIsDescription = false
-    
-    private let helper: OAPOIHelper
     
     init(preferredLang: String, infoBundle: AdditionalInfoBundle) {
         self.preferredLang = preferredLang
@@ -79,10 +79,8 @@ final class AmenityUIHelper: NSObject {
             
             var infoRow: OARowInfo?
             if let strValue = value as? String {
-                //infoRow = createPoiAdditionalInfoRow(context, key, strValue, null);
                 infoRow = createPoiAdditionalInfoRow(key: key, value: strValue)
-            } else if value != nil {
-                //infoRow = createLocalizedAmenityInfoRow(context, key, value);
+            } else {
                 infoRow = createLocalizedAmenityInfoRow(key: key, value: value)
             }
             

@@ -91,8 +91,6 @@
 #define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
 
-NSString *const kXmlColon = @"_-_";
-
 #define _(name)
 @implementation OsmAndAppImpl
 {
@@ -1329,13 +1327,13 @@ NSString *const kXmlColon = @"_-_";
 - (NSString *)getGroupFileName:(NSString *)groupName
 {
     NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
-    result = [result stringByReplacingOccurrencesOfString:@":" withString:kXmlColon];
+    result = [result stringByReplacingOccurrencesOfString:@":" withString:XML_COLON];
     return result;
 }
 
 - (NSString *)getGroupName:(NSString *)fileName {
     NSString *result = [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
-    result = [result stringByReplacingOccurrencesOfString:kXmlColon withString:@":"];
+    result = [result stringByReplacingOccurrencesOfString:XML_COLON withString:@":"];
     return result;
 }
 

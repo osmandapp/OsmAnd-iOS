@@ -1697,7 +1697,7 @@
 "routing_profile_geocoding" = "Геокодирование";
 "routing_profile_ski" = "Лыжи";
 "voice_announces" = "Голосовая навигация";
-"max_speed" = "Максимальная скорость";
+"max_speed" = "Макс. скорость";
 "shared_string_min_speed" = "Мин. скорость";
 "default_speed_setting_title" = "Скорость по умолчанию";
 "routing_attr_length_name" = "Расстояние";
@@ -1825,7 +1825,7 @@
 "plan_route" = "Проект маршрута";
 "listed_exist" = "Указанные %@ уже существуют в OsmAnd.";
 "keep_both_desc" = "Импортированные элементы будут добавлены с префиксом";
-"shared_string_max" = "Max";
+"shared_string_max" = "Макс.";
 "shared_string_min" = "Min";
 "road_speeds" = "Скорость движения по дороге";
 "road_speeds_descr" = "Эти параметры могут повлиять на расчет маршрута.";
@@ -2729,7 +2729,7 @@
 "external_device_blood_pressure" = "Артериальное давление";
 "map_widget_next_sunset" = "Следующий закат";
 "help_article_map_point_layers_on_map_name" = "Точки на карте";
-"compass_click_desc" = "Коснитесь компаса чтобы сменить режим ориентации карты.";
+"compass_click_desc" = "Дважды коснитесь кнопки компаса, чтобы изменить режим ориентации карты.";
 "simulate_in_progress" = "В процессе";
 "map_3d_mode_hint" = "Удерживайте кнопку для изменения положения.";
 "average_speed_skip_stops" = "Учитывать остановки";
@@ -2811,7 +2811,7 @@
 "second_next_turn_widget_desc" = "Виджет показывает информацию о вашем втором следующем повороте, который включается, если поворот находится на расстоянии приближения.";
 "external_device_menu_forget" = "Забыть";
 "map_widget_zoom_level_desc" = "Виджет показывает текущий уровень масштабирования карты.";
-"external_sensors_plugin_name" = "Вело-датчики";
+"external_sensors_plugin_name" = "Внешние датчики";
 "send_log" = "Отправить лог";
 "osmand_cloud_deleting_account_descr" = "Вскоре все ваши данные и аккаунт будут удалены из OsmAnd Cloud. \n \nПри этом данные на устройстве сохранятся без изменений.";
 "activity_type_cycling_name" = "Езда на велосипеде";
@@ -2822,7 +2822,7 @@
 "coordinates_widget_secondary_desc" = "Формат координат может быть изменён в: %@ - %@ - %@.";
 "help_article_troubleshooting_maps_data_name" = "Карты и данные";
 "help_article_navigation_guidance_voice_navigation_name" = "Голосовые подсказки/уведомления";
-"external_sensors_support" = "Поддержка вело-датчиков";
+"external_sensors_support" = "Поддержка внешних датчиков";
 "activity_type_snowmobile_name" = "Снегоход";
 "shared_string_foot" = "Нога";
 "trip_recording_uphill_widget_desc" = "Виджет показывает сумму всех подъемов или последний подъем в текущей записываемом маршруте.";
@@ -2882,7 +2882,7 @@
 "external_device_details_received_data" = "Полученные данные";
 "map_widget_sunrise_sunset_time_left" = "Осталось времени";
 "shared_string_deleting" = "Удаление";
-"purchases_feature_desc_external_sensors" = "Отображение и запись данных с вело-датчиков: скорость велосипеда, мощность, каденс и пульс.";
+"purchases_feature_desc_external_sensors" = "Отображение и запись данных с внешних датчиков: скорость велосипеда, мощность, каденс и пульс.";
 "map_widget_ant_heart_rate" = "Частота сердцебиения";
 "shared_string_hand" = "Рука";
 "shared_string_delete_immediately" = "Удалить сразу";
@@ -2920,7 +2920,7 @@
 "manage_subscriptions" = "Управление подписками.";
 "help_article_map_tracks_on_map_name" = "Треки и маршруты";
 "help_article_personal_import_export_name" = "Импорт/экспорт";
-"ant_plus_pair_bluetooth_prompt" = "Сопрягайте вело-датчики Bluetooth LE и ANT+ с OsmAnd.";
+"ant_plus_pair_bluetooth_prompt" = "Сопрягайте датчики Bluetooth LE и ANT+ с OsmAnd.";
 "help_article_troubleshooting_track_recording_issues_name" = "Запись маршрута";
 "map_widget_altitude_current_location" = "Высота: текущее местоположение";
 "osmand_cloud_delete_account_confirmation" = "Удалить аккаунт\?";
@@ -2989,7 +2989,7 @@
 "help_article_navigation_routing_name" = "Параметры маршрута";
 "map_widget_sunrise" = "Восход";
 "relative_bearing_widget_desc" = "Показывает угол между направлением вашего движения и целевой точкой.";
-"write_data_from_sensor_to_track" = "Сохранять данные с вело-датчиков в GPX-файл при записи маршрута.";
+"write_data_from_sensor_to_track" = "Сохранять данные с внешних датчиков в GPX-файл при записи маршрута.";
 "shared_string_buttons" = "Кнопки";
 "distance_to_intermediate_widget_desc" = "Виджет показывает расстояние до первого промежуточного пункта. После прохождения промежуточного пункта расстояние будет обновлено до следующего промежуточного пункта.";
 "show_icon" = "Показать значок";
@@ -3244,7 +3244,7 @@
 "avg_sensor_cadence" = "Каденс, средний";
 "avg_sensor_temperature" = "Температура, средняя";
 "discard_filter_changes_prompt" = "Сбросить все фильтры?";
-"max_sensor_bycicle_power" = "Вело мощность, MAX";
+"max_sensor_bycicle_power" = "Мощность, макс.";
 "shared_string_minute_lowercase" = "мин";
 "shared_string_visible_on_map" = "Видно на карте";
 "delete_widget_description" = "Этот виджет будет удален. Вы сможете восстановить его позже в настройках экрана.";
@@ -3256,19 +3256,19 @@
 "avg_sensor_bycicle_power" = "Мощность, средняя";
 "sort_subfolders_tracks" = "Сортировать подпапки";
 "help_article_personal_color_palette_schemes_name" = "Цветовые схемы";
-"max_sensor_cadence" = "Вело каденс, MAX";
+"max_sensor_cadence" = "Каденс, макс.";
 "root_folder" = "Корневая папка";
 "add_widget_to_the_left" = "Добавить виджет слева";
 "screen_is_unlocked" = "Сенсорный экран разблокирован.";
 "power_watts_unit" = "Ватты";
-"max_sensor_heartrate" = "Пульс, max";
+"max_sensor_heartrate" = "Пульс, макс.";
 "map_widget_map_scale" = "Масштаб карты";
-"max_sensor_speed" = "Датчик скорости, MAX";
+"max_sensor_speed" = "Датчик скорости, макс.";
 "lock_screen" = "Блокировка экрана OsmAnd";
 "reset_average_speed" = "Сбросить среднюю скорость";
 "not_specified" = "Не указано";
 "with_waypoints" = "С путевыми точками";
-"max_sensor_temperature" = "Температура, MAX";
+"max_sensor_temperature" = "Температура, макс.";
 "transport_stop" = "Остановка";
 "obd_plugin_name" = "Авто-датчики";
 "lock_screen_description" = "Включение/отключение сенсорного экрана для предотвращения случайных нажатий";
@@ -3427,7 +3427,7 @@
 "obd_fuel_type_gasoline" = "Бензин";
 "obd_fuel_type_cng" = "Сжатый природный газ (CNG)";
 "reset_average_value" = "Сбросить среднее значение";
-"obd_speed_desc" = "Виджет показывает данные с вело-датчика скорости транспортного средства (VSS).";
+"obd_speed_desc" = "Виджет показывает данные с датчика скорости транспортного средства (VSS).";
 "obd_fuel_consumption_rate_scanner" = "Расход топлива (OBD)";
 "obd_fuel_level_desc" = "Уровень топлива по датчику OBD";
 "obd_fuel_consumption_rate_sensor" = "Датчик нормы расхода топлива";

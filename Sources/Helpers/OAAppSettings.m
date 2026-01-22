@@ -4616,9 +4616,9 @@ static NSString *kLastUphill = @"LAST_UPHILL";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         map = @{
-            kTotal: @(0),
-            kLastDownhill: @(1),
-            kLastUphill: @(2)
+            kTotal: @(MaxSpeedModeTotal),
+            kLastDownhill: @(MaxSpeedModeLastDownhill),
+            kLastUphill: @(MaxSpeedModeLastUphill)
         };
     });
     
@@ -4639,11 +4639,11 @@ static NSString *kLastUphill = @"LAST_UPHILL";
     NSInteger type = [value integerValue];
     switch (type)
     {
-        case 0:
+        case MaxSpeedModeTotal:
             return kTotal;
-        case 1:
+        case MaxSpeedModeLastDownhill:
             return kLastDownhill;
-        case 2:
+        case MaxSpeedModeLastUphill:
             return kLastUphill;
         default:
             return @"";
@@ -4713,8 +4713,8 @@ static NSString *kElevationLast  = @"LAST";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         map = @{
-            kElevationTotal: @(0),
-            kElevationLast: @(1)
+            kElevationTotal: @(TripRecordingElevationModeTotal),
+            kElevationLast: @(TripRecordingElevationModeLast)
         };
     });
     
@@ -4735,9 +4735,9 @@ static NSString *kElevationLast  = @"LAST";
     NSInteger type = [value integerValue];
     switch (type)
     {
-        case 0:
+        case TripRecordingElevationModeTotal:
             return kElevationTotal;
-        case 1:
+        case TripRecordingElevationModeLast:
             return kElevationLast;
         default:
             return @"";
@@ -4807,8 +4807,8 @@ static NSString *kSlopeLastUphill   = @"LAST_UPHILL";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         map = @{
-            kSlopeLastDownhill: @(0),
-            kSlopeLastUphill: @(1)
+            kSlopeLastDownhill: @(AverageSlopeModeLastDownhill),
+            kSlopeLastUphill: @(AverageSlopeModeLastUphill)
         };
     });
     
@@ -4829,9 +4829,9 @@ static NSString *kSlopeLastUphill   = @"LAST_UPHILL";
     NSInteger type = [value integerValue];
     switch (type)
     {
-        case 0:
+        case AverageSlopeModeLastDownhill:
             return kSlopeLastDownhill;
-        case 1:
+        case AverageSlopeModeLastUphill:
             return kSlopeLastUphill;
         default:
             return @"";
@@ -4902,9 +4902,9 @@ static NSString *kDistanceLastUphill = @"LAST_UPHILL";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         map = @{
-            kDistanceTotal: @(0),
-            kDistanceLastDownhill: @(1),
-            kDistanceLastUphill: @(2)
+            kDistanceTotal: @(TripRecordingDistanceModeTotalDistance),
+            kDistanceLastDownhill: @(TripRecordingDistanceModeLastDownhill),
+            kDistanceLastUphill: @(TripRecordingDistanceModeLastUphill)
         };
     });
     
@@ -4925,11 +4925,11 @@ static NSString *kDistanceLastUphill = @"LAST_UPHILL";
     NSInteger type = [value integerValue];
     switch (type)
     {
-        case 0:
+        case TripRecordingDistanceModeTotalDistance:
             return kDistanceTotal;
-        case 1:
+        case TripRecordingDistanceModeLastDownhill:
             return kDistanceLastDownhill;
-        case 2:
+        case TripRecordingDistanceModeLastUphill:
             return kDistanceLastUphill;
         default:
             return @"";
@@ -5000,9 +5000,9 @@ static NSString *kMovingTimeLastUphill = @"LAST_UPHILL";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         map = @{
-            kMovingTimeTotal: @(0),
-            kMovingTimeLastDownhill: @(1),
-            kMovingTimeLastUphill: @(2)
+            kMovingTimeTotal: @(TripRecordingMovingTimeModeTotal),
+            kMovingTimeLastDownhill: @(TripRecordingMovingTimeModeLastDownhill),
+            kMovingTimeLastUphill: @(TripRecordingMovingTimeModeLastUphill)
         };
     });
     
@@ -5023,11 +5023,11 @@ static NSString *kMovingTimeLastUphill = @"LAST_UPHILL";
     NSInteger type = [value integerValue];
     switch (type)
     {
-        case 0:
+        case TripRecordingMovingTimeModeTotal:
             return kMovingTimeTotal;
-        case 1:
+        case TripRecordingMovingTimeModeLastDownhill:
             return kMovingTimeLastDownhill;
-        case 2:
+        case TripRecordingMovingTimeModeLastUphill:
             return kMovingTimeLastUphill;
         default:
             return @"";

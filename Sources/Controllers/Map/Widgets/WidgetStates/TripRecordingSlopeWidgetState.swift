@@ -75,8 +75,8 @@ final class TripRecordingSlopeWidgetState: OAWidgetState {
         }
         
         let pref = OAAppSettings.sharedManager().registerAverageSlopeModePreference(prefId, defValue: AverageSlopeMode.lastUphill.rawValue).makeProfile()
-        if let string = widgetParams?[Self.prefAverageSlopeModeId] as? String, let intVal = Int32(string) {
-            pref.set(Int(intVal))
+        if let string = widgetParams?[Self.prefAverageSlopeModeId] as? String, let intVal = Int(string) {
+            pref.set(intVal)
         }
         
         return pref

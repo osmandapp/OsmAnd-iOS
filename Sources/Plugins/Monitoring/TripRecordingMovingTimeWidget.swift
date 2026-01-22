@@ -10,6 +10,8 @@ import Foundation
 
 @objcMembers
 final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
+    private static let oneHourMillis: Int64 = 60 * 60 * 1000
+
     private var widgetState: TripRecordingMovingTimeWidgetState?
     private var cachedTimeMoving: Int64 = -1
     private var forceUpdate = false
@@ -42,7 +44,7 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
             cachedTimeMoving = timeMoving
             forceUpdate = false
             let formatted = OAOsmAndFormatter.getFormattedDurationShort(Double(timeMoving) / 1000, fullForm: false)
-            let isHourOrMore = timeMoving >= 60 * 60 * 1000
+            let isHourOrMore = timeMoving >= Self.oneHourMillis
             let unitKey = isHourOrMore ? "int_hour" : "shared_string_minute_lowercase"
             setText(formatted, subtext: localizedString(unitKey))
         }

@@ -80,8 +80,8 @@ final class TripRecordingMovingTimeWidgetState: OAWidgetState {
         }
         
         let pref = OAAppSettings.sharedManager().registerTripRecordingMovingTimeModePreference(prefId, defValue: TripRecordingMovingTimeMode.total.rawValue).makeProfile()
-        if let string = widgetParams?[Self.prefMovingTimeModeId] as? String, let intVal = Int32(string) {
-            pref.set(Int(intVal))
+        if let string = widgetParams?[Self.prefMovingTimeModeId] as? String, let intVal = Int(string) {
+            pref.set(intVal)
         }
         
         return pref

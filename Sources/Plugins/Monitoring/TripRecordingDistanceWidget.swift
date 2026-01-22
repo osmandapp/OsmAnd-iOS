@@ -158,7 +158,7 @@ final class TripRecordingDistanceWidget: BaseRecordingWidget {
     private func updateTitleAndIcon() {
         let mode = currentMode()
         let baseTitle = widgetType?.title ?? ""
-        let modeTitle = mode == .totalDistance ? localizedString("shared_string_total") : localizedString(mode.titleKey)
+        let modeTitle = localizedString(mode == .totalDistance ? "shared_string_total" : mode.titleKey)
         let format = localizedString("ltr_or_rtl_combine_via_colon")
         let fullTitle = String(format: format, baseTitle, modeTitle)
         setContentTitle(fullTitle)

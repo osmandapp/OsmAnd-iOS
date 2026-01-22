@@ -80,8 +80,8 @@ final class TripRecordingDistanceWidgetState: OAWidgetState {
         }
         
         let pref = OAAppSettings.sharedManager().registerTripRecordingDistanceModePreference(prefId, defValue: TripRecordingDistanceMode.totalDistance.rawValue).makeProfile()
-        if let string = widgetParams?[Self.prefDistanceModeId] as? String, let intVal = Int32(string) {
-            pref.set(Int(intVal))
+        if let string = widgetParams?[Self.prefDistanceModeId] as? String, let intVal = Int(string) {
+            pref.set(intVal)
         }
         
         return pref

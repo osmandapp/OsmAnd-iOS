@@ -10,6 +10,8 @@ import Foundation
 
 @objcMembers
 final class TripRecordingTimeWidget: OASimpleWidget {
+    private static let oneHourMillis: Int64 = 60 * 60 * 1000
+    
     private let savingTrackHelper = OASavingTrackHelper.sharedInstance()
     
     private var cachedTimeSpan: Int64 = -1
@@ -39,7 +41,7 @@ final class TripRecordingTimeWidget: OASimpleWidget {
         if cachedTimeSpan != timeSpan {
             cachedTimeSpan = timeSpan
             let formattedTime = OAOsmAndFormatter.getFormattedDurationShort(Double(timeSpan) / 1000, fullForm: false)
-            let isHourOrMore = timeSpan >= 60 * 60 * 1000
+            let isHourOrMore = timeSpan >= Self.oneHourMillis
             let unitKey = isHourOrMore ? "int_hour" : "shared_string_minute_lowercase"
             setText(formattedTime, subtext: localizedString(unitKey))
         }

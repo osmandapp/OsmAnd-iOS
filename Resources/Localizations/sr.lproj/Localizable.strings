@@ -313,7 +313,7 @@
 "select_work_point" = "Изаберите радну тачку";
 "sort_by_distance" = "Распоред по даљини";
 "sort_by_name" = "Распоред по имену";
-"sort_by" = "Распореди по";
+"sort_by" = "Сортирај по";
 "map_markers_other" = "Остале ознаке";
 "directions_other" = "Други правци";
 "shared_string_turn" = "Скрени";

@@ -312,6 +312,10 @@ final class BaseDetailsObject: NSObject {
                 syntheticAmenity.latitude = renderedObject.latitude
                 syntheticAmenity.longitude = renderedObject.longitude
             }
+            if !syntheticAmenity.hasLocation() {
+                syntheticAmenity.latitude = renderedObject.labelLatLon.coordinate.latitude
+                syntheticAmenity.longitude = renderedObject.labelLatLon.coordinate.longitude
+            }
             processPolygonCoordinates(x: renderedObject.x, y: renderedObject.y)
         }
     }

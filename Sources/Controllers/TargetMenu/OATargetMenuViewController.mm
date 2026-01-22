@@ -183,10 +183,15 @@
             }
             break;
         }
-            
+
+        case OATargetRenderedObject:
+        {
+            controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            break;
+        }
+
         case OATargetLocation:
         {
-            // TODO @RZR refactor to OATargedRenderedObject
             controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }

@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetMapModeParametersSettings,
     OATargetProfileAppearanceIconSizeSettings,
     OATargetBaseDetailsObject,
-    OATargetRenderedObject // TODO @rzr
+    OATargetRenderedObject
 };
 
 @interface OATargetPoint : NSObject

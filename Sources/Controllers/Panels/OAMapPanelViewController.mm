@@ -1477,7 +1477,7 @@ typedef enum
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)
         {
-            // todo perhaps other properties
+            // TODO perhaps other properties
             targetPoint.type = OATargetBaseDetailsObject;
             targetPoint.targetObj = detailsObject;
         }
@@ -2390,6 +2390,8 @@ typedef enum
         case OATargetTurn:
         case OATargetMyLocation:
         case OATargetLocation:
+        case OATargetRenderedObject:
+        case OATargetBaseDetailsObject:
         {
             if (controller)
                 [self.targetMenuView doInit:showFullMenu];

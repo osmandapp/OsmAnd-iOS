@@ -8,28 +8,28 @@
 
 @objcMembers
 final class RenderedObjectViewController: OAPOIViewController {
-    
+
     private var renderedObject: OARenderedObject!
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: "OAPOIViewController", bundle: nibBundleOrNil)
     }
-    
+
     init(renderedObject: OARenderedObject) {
         let poi = RenderedObjectHelper.getSyntheticAmenity(renderedObject: renderedObject)
         super.init(poi: poi)
         self.renderedObject = renderedObject
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUIAfterAmenitySearch()
     }
-    
+
     private func updateUIAfterAmenitySearch() {
         Task {
             do {
@@ -47,8 +47,16 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
     
     private func searchAmenity() async throws -> OAPOI? {
-        // TODO @RZR search BaseDetailsObject and rebuild menu with updated syntheticAmenity of BaseDetailsObject
-        OAAmenitySearcher.findPOI(byOsmId: ObfConstants.getOsmObjectId(renderedObject), lat: poi.latitude, lon: poi.longitude)
+        guard let ro = renderedObject else {
+            return nil
+        }
+        if let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) {
+            return details.syntheticAmenity
+        } else {
+            // TODO no fallback
+            return OAAmenitySearcher
+                .findPOI(byOsmId: ObfConstants.getOsmObjectId(ro), lat: poi.latitude, lon: poi.longitude)
+        }
     }
     
     override func getTypeStr() -> String? {

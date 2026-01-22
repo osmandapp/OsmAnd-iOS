@@ -353,8 +353,7 @@ final class BaseDetailsObject: NSObject {
     private func processAmenity(_ amenity: OAPOI, contentLocales: inout Set<String>) {
         processId(amenity)
 
-        if syntheticAmenity.latitude == 0 && syntheticAmenity.longitude == 0 &&
-           amenity.latitude != 0 && amenity.longitude != 0 {
+        if syntheticAmenity.latitude.isNaN && !amenity.latitude.isNaN {
             syntheticAmenity.latitude = amenity.latitude
             syntheticAmenity.longitude = amenity.longitude
         }

@@ -93,7 +93,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         {
             OARenderedObject *renderedObject = (OARenderedObject *)mapObject;
             _latLon = [renderedObject getLocation];
-            if (_latLon == nil || (_latLon.coordinate.latitude == 0 && _latLon.coordinate.longitude == 0)) // TODO RZR fix == 0 with isnan()
+            if (_latLon == nil || !CLLocationCoordinate2DIsValid(_latLon.coordinate))
             {
                 _latLon = renderedObject.labelLatLon;
             }

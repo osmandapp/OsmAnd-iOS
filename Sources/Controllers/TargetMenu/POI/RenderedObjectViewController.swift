@@ -41,7 +41,7 @@ final class RenderedObjectViewController: OAPOIViewController {
                     }
                 }
             } catch {
-                print("Poi finding error: \(error)")
+                print("searchAmenity() error: \(error)")
             }
         }
     }
@@ -52,11 +52,8 @@ final class RenderedObjectViewController: OAPOIViewController {
         }
         if let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) {
             return details.syntheticAmenity
-        } else {
-            // TODO no fallback
-            return OAAmenitySearcher
-                .findPOI(byOsmId: ObfConstants.getOsmObjectId(ro), lat: poi.latitude, lon: poi.longitude)
         }
+        return nil
     }
     
     override func getTypeStr() -> String? {

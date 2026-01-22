@@ -405,9 +405,6 @@
         }
     }
     NSArray<OAPOI *> *amenities = [self searchAmenitiesInternal:top / 2 + bottom / 2 lon:left / 2 + right / 2 topLatitude:top bottomLatitude:bottom leftLongitude:left rightLongitude:right zoom:zoom matcher:matcher];
-    if ([amenities count] > 0) {
-        NSLog(@"");
-    }
     [results addObjectsFromArray:amenities];
     
     NSMutableArray<OAPOI *> *resultList = [results mutableCopy];
@@ -442,27 +439,30 @@
                                           zoom:(int)zoom
                                        matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    if ([self isTopWikiFilter] && _dataProvider.dataSourceType == DataSourceTypeOnline)
+    NSMutableArray<OAPOI *> *tempSearchResult = [[_dataProvider searchAmenitiesWithLat:lat
+                                                                                   lon:lon
+                                                                           topLatitude:topLatitude
+                                                                        bottomLatitude:bottomLatitude
+                                                                         leftLongitude:leftLongitude
+                                                                        rightLongitude:rightLongitude
+                                                                                  zoom:zoom
+                                                                               matcher:matcher] mutableCopy];
+    if ([self isTopWikiFilter])
     {
-        NSArray<OAPOI *> *result = [_dataProvider searchAmenitiesWithLat:lat lon:lon topLatitude:topLatitude bottomLatitude:bottomLatitude leftLongitude:leftLongitude rightLongitude:rightLongitude zoom:zoom matcher:^BOOL(OAPOI *poi) {
-            return matcher == nil || [matcher publish:poi];
-        }];
-        result = [result sortedArrayUsingComparator:^NSComparisonResult(OAPOI *p1, OAPOI *p2) {
-                NSInteger elo1 = p1.getTravelEloNumber;
-                NSInteger elo2 = p2.getTravelEloNumber;
+        [tempSearchResult sortUsingComparator:^NSComparisonResult(OAPOI *p1, OAPOI *p2) {
+            NSInteger elo1 = [p1 getTravelEloNumber];
+            NSInteger elo2 = [p2 getTravelEloNumber];
 
-                if (elo1 < elo2)
-                    return NSOrderedDescending;
-                if (elo1 > elo2)
-                    return NSOrderedAscending;
-                return NSOrderedSame;
-            }];
-        return result;
+            if (elo1 < elo2)
+                return NSOrderedDescending;
+            else if (elo1 > elo2)
+                return NSOrderedAscending;
+         
+            return NSOrderedSame;
+        }];
     }
-    else
-    {
-        return [OAAmenitySearcher findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
-    }
+    currentSearchResult = [tempSearchResult copy];
+    return currentSearchResult;
 }
 
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter

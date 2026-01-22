@@ -3256,6 +3256,7 @@
 		FA5D19E12CC00B1100E01A27 /* GPXDataItemGPXFileWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */; };
 		FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */; };
 		FA5DD0F82F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DD0F72F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m */; };
+		FA5DD0FD2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DD0FC2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m */; };
 		FA5FB63F2DE06AF800ABECCF /* OAOBDConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */; };
 		FA5FB6422DE0757700ABECCF /* OBDComputerWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
@@ -7979,6 +7980,8 @@
 		FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockHelper.swift; sourceTree = "<group>"; };
 		FA5DD0F62F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPoiUIFilterDataProviderWrapper.h; sourceTree = "<group>"; };
 		FA5DD0F72F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPoiUIFilterDataProviderWrapper.m; sourceTree = "<group>"; };
+		FA5DD0FB2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOILayerTopPlacesProvider.h; sourceTree = "<group>"; };
+		FA5DD0FC2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPOILayerTopPlacesProvider.m; sourceTree = "<group>"; };
 		FA5FB63D2DE06AD500ABECCF /* OAOBDConnector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOBDConnector.h; sourceTree = "<group>"; };
 		FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOBDConnector.m; sourceTree = "<group>"; };
 		FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDComputerWidgetExtension.swift; sourceTree = "<group>"; };
@@ -13004,8 +13007,7 @@
 				DA5A7EDA26C563A400F274C7 /* OAOsmEditsLayer.mm */,
 				DA5A7EF026C563A400F274C7 /* OAOverlayMapLayer.h */,
 				DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */,
-				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
-				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
+				FA5DD0FA2F222977002F3F79 /* OAPOILayer */,
 				DA3FBFEC27D60DB000D25E86 /* OAPreviewRouteLineLayer.h */,
 				DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */,
 				DA5A7EF526C563A400F274C7 /* OARasterMapLayer.h */,
@@ -14364,6 +14366,17 @@
 				FA5DD0F72F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m */,
 			);
 			path = PoiUIFilterDataProvider;
+			sourceTree = "<group>";
+		};
+		FA5DD0FA2F222977002F3F79 /* OAPOILayer */ = {
+			isa = PBXGroup;
+			children = (
+				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
+				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
+				FA5DD0FB2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.h */,
+				FA5DD0FC2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m */,
+			);
+			path = OAPOILayer;
 			sourceTree = "<group>";
 		};
 		FA5FB6402DE06E1600ABECCF /* OBDConnector */ = {
@@ -17240,6 +17253,7 @@
 				329E56BA2C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift in Sources */,
 				DA5A84F626C563A900F274C7 /* OAMapLayersConfiguration.m in Sources */,
 				DA5A81AD26C563A700F274C7 /* OASearchPhrase.mm in Sources */,
+				FA5DD0FD2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m in Sources */,
 				32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */,
 				DA5A81D526C563A700F274C7 /* OAVoiceCommandPending.mm in Sources */,
 				DA5A819826C563A700F274C7 /* OAShowHideFavoritesAction.m in Sources */,

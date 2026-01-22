@@ -373,7 +373,8 @@ final class DeepLinkParser: NSObject {
     private func normalizeQueryValue(_ rawValue: String?) -> String? {
         guard let rawValue, !rawValue.isEmpty else { return nil }
         let normalized = (rawValue.replacingOccurrences(of: "+", with: " ").removingPercentEncoding ?? rawValue).trimmingCharacters(in: .whitespacesAndNewlines)
-        return normalized.isEmpty ? nil : normalized
+        guard !normalized.isEmpty else { return nil }
+        return normalized
     }
     
     private func parseIntermediatePoints(_ parameter: String?) -> [CLLocation]? {

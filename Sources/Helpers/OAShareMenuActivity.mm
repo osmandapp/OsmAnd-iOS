@@ -80,7 +80,7 @@
 
 - (UIImage *)sfSymbol:(NSString *)name
 {
-    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:23 weight:UIImageSymbolWeightRegular scale:UIImageSymbolScaleLarge];
+    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithScale:UIImageSymbolScaleLarge];
     UIImage *image = [UIImage systemImageNamed:name withConfiguration:config];
     return [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }

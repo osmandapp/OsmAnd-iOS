@@ -7981,7 +7981,7 @@
 		FA5DD0F62F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPoiUIFilterDataProviderWrapper.h; sourceTree = "<group>"; };
 		FA5DD0F72F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPoiUIFilterDataProviderWrapper.m; sourceTree = "<group>"; };
 		FA5DD0FB2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOILayerTopPlacesProvider.h; sourceTree = "<group>"; };
-		FA5DD0FC2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPOILayerTopPlacesProvider.m; sourceTree = "<group>"; };
+		FA5DD0FC2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = OAPOILayerTopPlacesProvider.m; sourceTree = "<group>"; };
 		FA5FB63D2DE06AD500ABECCF /* OAOBDConnector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOBDConnector.h; sourceTree = "<group>"; };
 		FA5FB63E2DE06AF800ABECCF /* OAOBDConnector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOBDConnector.m; sourceTree = "<group>"; };
 		FA5FB6412DE0757700ABECCF /* OBDComputerWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDComputerWidgetExtension.swift; sourceTree = "<group>"; };

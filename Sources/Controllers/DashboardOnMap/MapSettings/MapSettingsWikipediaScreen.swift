@@ -25,14 +25,14 @@ private enum ObjKey {
 
 @objcMembers
 final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
+    private static let mapCellType = "mapCell"
+    
     var settingsScreen: EMapSettingsScreen = .wikipedia
     var vwController: OADashboardViewController?
     var tblView: UITableView?
     var title: String?
     var isOnlineMapSource = false
     var tableData: [Any]?
-    
-    private static let mapCellType = "mapCell"
     
     private let app = OsmAndApp.swiftInstance()
     private let wikiPlugin = OAPluginsHelper.getPlugin(OAWikipediaPlugin.self) as! OAWikipediaPlugin

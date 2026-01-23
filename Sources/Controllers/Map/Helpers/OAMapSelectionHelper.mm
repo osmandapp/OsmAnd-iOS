@@ -72,7 +72,7 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
 - (MapSelectionResult *)collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
 {
     if (!_provider)
-        _provider = _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
+        _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
     
     MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:point];
     [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];

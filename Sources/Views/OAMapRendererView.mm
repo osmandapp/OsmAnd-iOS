@@ -898,7 +898,7 @@ forcedUpdate:(BOOL)forcedUpdate
     validateGL();
 
     GLint maxSamples = 0;
-    glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
     OALog(@"Max MSAA samples supported: %d", maxSamples);
 
     GLint samples = MIN(4, maxSamples);
@@ -921,8 +921,8 @@ forcedUpdate:(BOOL)forcedUpdate
     glBindRenderbuffer(GL_RENDERBUFFER, _msaaColorRenderBuffer);
     validateGL();
 
-    // Use glRenderbufferStorageMultisampleAPPLE for MSAAx4
-    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_RGBA8, _viewSize.x, _viewSize.y);
+    // Use glRenderbufferStorageMultisample for MSAAx4
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, _viewSize.x, _viewSize.y);
     validateGL();
     
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _msaaColorRenderBuffer);
@@ -935,7 +935,7 @@ forcedUpdate:(BOOL)forcedUpdate
     glBindRenderbuffer(GL_RENDERBUFFER, _msaaDepthRenderBuffer);
     validateGL();
     
-    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y);
     validateGL();
     
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
@@ -1136,14 +1136,13 @@ forcedUpdate:(BOOL)forcedUpdate
         if (_msaaFramebuffer != 0)
         {
             // Bind the resolve framebuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _framebuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _framebuffer);
             validateGL();
             // Bind the MSAA framebuffer as read
-            glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _msaaFramebuffer);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, _msaaFramebuffer);
             validateGL();
             
             // Resolve MSAA framebuffer to resolve framebuffer
-            //glResolveMultisampleFramebufferAPPLE();
             glBlitFramebuffer(0, 0, _viewSize.x, _viewSize.y, 0, 0, _viewSize.x, _viewSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
             validateGL();
             
@@ -1152,9 +1151,9 @@ forcedUpdate:(BOOL)forcedUpdate
                 GL_COLOR_ATTACHMENT0,
                 GL_DEPTH_ATTACHMENT
             };
-            glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _msaaFramebuffer);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, _msaaFramebuffer);
             validateGL();
-            glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, msaaDiscardAttachments);
+            glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER, 2, msaaDiscardAttachments);
             validateGL();
             
             // Bind resolve framebuffer for discard

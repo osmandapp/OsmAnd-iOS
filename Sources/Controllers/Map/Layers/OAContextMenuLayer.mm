@@ -441,7 +441,7 @@
 {
     MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
     CLLocation *pointLatLon = result.pointLatLon;
-    NSMutableArray<SelectedMapObject *> *selectedObjects = [result getProcessedObjects];
+    NSMutableArray<SelectedMapObject *> *selectedObjects = [[result getProcessedObjects] mutableCopy];
     
     int64_t objectSelectionThreshold = 0;
     for (SelectedMapObject *selectedObject in selectedObjects)
@@ -495,7 +495,7 @@
     {
         SelectedMapObject *selectedObject = selectedObjects[0];
         CLLocation *latLon = [result objectLatLon];
-        if (!latLon || objectSelectionThreshold < 0 && selectedObject.provider)
+        if ((!latLon || objectSelectionThreshold < 0) && selectedObject.provider)
         {
             id<OAContextMenuProvider> provider = selectedObject.provider;
             latLon = [provider getObjectLocation:selectedObject];

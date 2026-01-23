@@ -844,131 +844,83 @@ forcedUpdate:(BOOL)forcedUpdate
 
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
-        [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
+        [NSException raise:NSGenericException format:@"Failed to set current context"];
         return;
     }
 
-    // Setup frame-buffer
     glGenFramebuffers(1, &_framebuffer);
-    validateGL();
-    NSAssert(_framebuffer != 0, @"Failed to allocate frame buffer");
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
-    validateGL();
 
-    // Setup color component of renderbuffer
     glGenRenderbuffers(1, &_colorRenderBuffer);
-    validateGL();
-    NSAssert(_colorRenderBuffer != 0, @"Failed to allocate color component for renderbuffer");
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
-    validateGL();
-    if (![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
-    {
-        [NSException raise:NSGenericException
-                    format:@"Failed to create render buffer (color component) 0x%08x", glGetError()];
-        return;
-    }
+    [_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
+
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_viewSize.x);
-    validateGL();
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
-    validateGL();
     OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
-    validateGL();
 
-    // Setup render buffer (depth component)
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    validateGL();
-    NSAssert(_depthRenderBuffer != 0, @"Failed to allocate render buffer (depth component)");
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    validateGL();
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewSize.x, _viewSize.y);
-    validateGL();
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-    validateGL();
+    GLint maxSamples = 0;
+    glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+    GLint samples = MIN(4, maxSamples);
+    BOOL useMSAA = (samples >= 2);
 
-    // Check that we've initialized our framebuffer fully
+    if (useMSAA)
+    {
+        glGenFramebuffers(1, &_msaaFramebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, _msaaFramebuffer);
+
+        // MSAA Color
+        glGenRenderbuffers(1, &_msaaColorRenderBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, _msaaColorRenderBuffer);
+        glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_RGBA8, _viewSize.x, _viewSize.y);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _msaaColorRenderBuffer);
+
+        // MSAA Depth
+        glGenRenderbuffers(1, &_msaaDepthRenderBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, _msaaDepthRenderBuffer);
+        glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
+            OALog(@"[OAMapRendererView] MSAA setup failed, falling back to standard.");
+            // Clean up partial MSAA and fallback
+            glDeleteFramebuffers(1, &_msaaFramebuffer); _msaaFramebuffer = 0;
+            glDeleteRenderbuffers(1, &_msaaColorRenderBuffer); _msaaColorRenderBuffer = 0;
+            glDeleteRenderbuffers(1, &_msaaDepthRenderBuffer); _msaaDepthRenderBuffer = 0;
+            useMSAA = NO;
+        }
+        else
+        {
+            OALog(@"[OAMapRendererView %p] MSAAx4 enabled", self);
+        }
+    }
+
+    if (!useMSAA)
+    {
+        // If MSAA is OFF, the presentation FBO needs its own Depth buffer.
+        glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+
+        glGenRenderbuffers(1, &_depthRenderBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewSize.x, _viewSize.y);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+    }
+
+    // Final Validation
+    GLuint activeFramebuffer = useMSAA ? _msaaFramebuffer : _framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, activeFramebuffer);
+
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         [NSException raise:NSGenericException
                     format:@"Failed to make complete framebuffer (status 0x%08x) 0x%08x", glCheckFramebufferStatus(GL_FRAMEBUFFER), glGetError()];
-        return;
-    }
-    validateGL();
-
-    GLint maxSamples = 0;
-    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
-    OALog(@"Max MSAA samples supported: %d", maxSamples);
-
-    GLint samples = MIN(4, maxSamples);
-    if (samples < 2)
-    {
-        return;
     }
 
-    // Setup MSAA framebuffer
-    glGenFramebuffers(1, &_msaaFramebuffer);
-    validateGL();
-    NSAssert(_msaaFramebuffer != 0, @"Failed to allocate MSAA frame buffer");
-    glBindFramebuffer(GL_FRAMEBUFFER, _msaaFramebuffer);
-    validateGL();
-
-    // Setup MSAA color renderbuffer
-    glGenRenderbuffers(1, &_msaaColorRenderBuffer);
-    validateGL();
-    NSAssert(_msaaColorRenderBuffer != 0, @"Failed to allocate MSAA color renderbuffer");
-    glBindRenderbuffer(GL_RENDERBUFFER, _msaaColorRenderBuffer);
-    validateGL();
-
-    // Use glRenderbufferStorageMultisample for MSAAx4
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, _viewSize.x, _viewSize.y);
-    validateGL();
-    
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _msaaColorRenderBuffer);
-    validateGL();
-
-    // Setup MSAA depth renderbuffer
-    glGenRenderbuffers(1, &_msaaDepthRenderBuffer);
-    validateGL();
-    NSAssert(_msaaDepthRenderBuffer != 0, @"Failed to allocate MSAA depth renderbuffer");
-    glBindRenderbuffer(GL_RENDERBUFFER, _msaaDepthRenderBuffer);
-    validateGL();
-    
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y);
-    validateGL();
-    
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
-    validateGL();
-
-    // Check that we've initialized our MSAA framebuffer fully
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        OALog(@"[OAMapRendererView %p] MSAA framebuffer not complete, falling back to non-MSAA rendering", self);
-        // Clean up MSAA buffers if they failed
-        if (_msaaFramebuffer != 0)
-        {
-            glDeleteFramebuffers(1, &_msaaFramebuffer);
-            _msaaFramebuffer = 0;
-        }
-        if (_msaaColorRenderBuffer != 0)
-        {
-            glDeleteRenderbuffers(1, &_msaaColorRenderBuffer);
-            _msaaColorRenderBuffer = 0;
-        }
-        if (_msaaDepthRenderBuffer != 0)
-        {
-            glDeleteRenderbuffers(1, &_msaaDepthRenderBuffer);
-            _msaaDepthRenderBuffer = 0;
-        }
-    }
-    else
-    {
-        OALog(@"[OAMapRendererView %p] MSAAx4 framebuffer initialized successfully", self);
-    }
     validateGL();
 }
-
 - (void) releaseRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Releasing render and frame buffers", self);

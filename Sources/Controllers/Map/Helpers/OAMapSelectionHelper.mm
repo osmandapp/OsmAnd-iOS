@@ -48,8 +48,6 @@ static int AMENITY_SEARCH_RADIUS = 50;
 static int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
 static int TILE_SIZE = 256;
 
-static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
-
 @implementation OAMapSelectionHelper
 {
     NSArray<OAMapLayer *> *_pointLayers;
@@ -237,46 +235,19 @@ static NSString *TAG_POI_LAT_LON = @"osmand_poi_lat_lon";
                         {
                             [self addTravelGpx:result routeId: tags[ROUTE_ID]]; // WikiVoyage or User TravelGpx
                         }
-                        
-                        BOOL allowAmenityObjects = !isSpecial; // TODO @RZR sync with Java and replace with allowMapObjects
 
-                        if (allowAmenityObjects)
-                        {   
-                            auto onPathMapSymbol = std::dynamic_pointer_cast<const  OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
-                            if (onPathMapSymbol == nullptr)
+                        auto onPathMapSymbol =
+                            std::dynamic_pointer_cast<const OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
+                        BOOL allowMapObjects = onPathMapSymbol == nullptr &&
+                            !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
+
+                        if (allowMapObjects)
+                        {
+                            OARenderedObject *renderedObject =
+                                [self createRenderedObject:symbolInfo obfMapObject:obfMapObject tags:tags];
+                            if (renderedObject)
                             {
-                                CLLocation *latLon = result.objectLatLon;
-                                NSString *latLonTag = tags[TAG_POI_LAT_LON];
-                                if (latLonTag)
-                                {
-                                    CLLocation *l = [self parsePoiLatLon:latLonTag];
-                                    if (l)
-                                        latLon = l;
-                                    [tags removeObjectForKey:TAG_POI_LAT_LON];
-                                }
-                                
-                                BOOL allowRenderedObjects = !isOldOsmRoute && !isClickableWay
-                                    && !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
-
-                                OARenderedObject *renderedObject = [self createRenderedObject:symbolInfo obfMapObject:obfMapObject tags:tags];
-                                if (renderedObject)
-                                {
-                                    if (allowRenderedObjects)
-                                    {
-                                        [result collect:renderedObject provider:nil];
-                                    }
-                                    else
-                                    {
-                                        OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:renderedObject];
-                                        detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
-                                        if (detailsObject)
-                                        {
-                                            [detailsObject setMapIconName:[self getMapIconName:symbolInfo]];
-                                            [self addGeometry:detailsObject obfMapObject:obfMapObject];
-                                            [detailsObject setObfResourceName:obfMapObject->obfSection->name.toNSString()];
-                                        }
-                                    }
-                                }
+                                [result collect:renderedObject provider:nil];
                             }
                         }
                     }

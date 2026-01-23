@@ -4006,3 +4006,5 @@
 "shared_string_tinted" = "Tonet";
 "background_opacity_description" = "Klar er mere gennemsigtig og afslører indholdet nedenunder. Tonet øger opaciteten og tilføjer mere kontrast.";
 "shared_string_pt" = "pt";
+"trip_recording_moving_time" = "Tid i bevægelse";
+"trip_recording_moving_time_widget_description" = "Viser den aktuelt registrerede tid i bevægelse eller tiden for den sidste op- og nedkørsel.";

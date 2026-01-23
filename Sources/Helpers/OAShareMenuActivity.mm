@@ -65,17 +65,24 @@
     switch (_type)
     {
         case OAShareMenuActivityCopyAddress:
-            return [[UIImage systemImageNamed:@"building.2"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            return [self sfSymbol:@"building.2"];
         case OAShareMenuActivityCopyCoordinates:
-            return [[UIImage systemImageNamed:@"mappin.and.ellipse.circle"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            return [self sfSymbol:@"mappin.and.ellipse.circle"];
         case OAShareMenuActivityGeo:
-            return [[UIImage systemImageNamed:@"globe.europe.africa"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            return [self sfSymbol:@"globe.europe.africa"];
         case OAShareMenuActivityClipboard:
-            return [[UIImage systemImageNamed:@"link"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            return [self sfSymbol:@"link"];
         case OAShareMenuActivityCopyPOIName:
-            return [[UIImage systemImageNamed:@"document.on.document"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            return [self sfSymbol:@"document.on.document"];
     }
     return nil;
+}
+
+- (UIImage *)sfSymbol:(NSString *)name
+{
+    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithScale:UIImageSymbolScaleLarge];
+    UIImage *image = [UIImage systemImageNamed:name withConfiguration:config];
+    return [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems

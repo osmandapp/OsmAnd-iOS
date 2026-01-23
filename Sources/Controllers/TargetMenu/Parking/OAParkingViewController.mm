@@ -226,6 +226,11 @@
     _addToCalActive = ((UISwitch*)sender).isOn;
 }
 
+- (NSString *)encodedPoiNameForLink
+{
+    return [[self.delegate getTargetTitle] escapeUrl] ?: @"";
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -348,8 +353,6 @@
     return nil;
 }
 
-
-
 #pragma mark - UITableViewDelegate
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -365,6 +368,5 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 }
-
 
 @end

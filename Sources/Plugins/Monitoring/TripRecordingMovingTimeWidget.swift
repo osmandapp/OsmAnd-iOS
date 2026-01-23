@@ -1,22 +1,24 @@
 //
-//  TripRecordingSlopeWidget.swift
+//  TripRecordingMovingTimeWidget.swift
 //  OsmAnd Maps
 //
-//  Created by Dmitry Svetlichny on 22.11.2025.
-//  Copyright © 2025 OsmAnd. All rights reserved.
+//  Created by Dmitry Svetlichny on 07.01.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
 import Foundation
 
 @objcMembers
-final class TripRecordingSlopeWidget: BaseRecordingWidget {
-    private var widgetState: TripRecordingSlopeWidgetState?
-    private var cachedSlope: Int = -1
+final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
+    private static let oneHourMillis: Int64 = 60 * 60 * 1000
+
+    private var widgetState: TripRecordingMovingTimeWidgetState?
+    private var cachedTimeMoving: Int64 = -1
     private var forceUpdate = false
     
     init(customId: String?, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
-        super.init(type: .tripRecordingAverageSlope)
-        self.widgetState = TripRecordingSlopeWidgetState(customId: customId, widgetType: .tripRecordingAverageSlope, widgetParams: widgetParams)
+        super.init(type: .tripRecordingMovingTime)
+        self.widgetState = TripRecordingMovingTimeWidgetState(customId: customId, widgetType: .tripRecordingMovingTime, widgetParams: widgetParams)
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         updateInfo()
         onClickFunction = { [weak self] _ in
@@ -37,11 +39,14 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
     
     @discardableResult override func updateInfo() -> Bool {
         super.updateInfo()
-        let elevationSlope = getSlope()
-        if forceUpdate || isUpdateNeeded() || cachedSlope != elevationSlope {
-            cachedSlope = elevationSlope
+        let timeMoving = getTimeMoving()
+        if forceUpdate || isUpdateNeeded() || cachedTimeMoving != timeMoving {
+            cachedTimeMoving = timeMoving
             forceUpdate = false
-            setText("\(elevationSlope)", subtext: "%")
+            let formatted = OAOsmAndFormatter.getFormattedDurationShort(Double(timeMoving) / 1000, fullForm: false)
+            let isHourOrMore = timeMoving >= Self.oneHourMillis
+            let unitKey = isHourOrMore ? "int_hour" : "shared_string_minute_lowercase"
+            setText(formatted, subtext: localizedString(unitKey))
         }
         
         updateTitleAndIcon()
@@ -50,7 +55,7 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
     
     override func getSettingsData(_ appMode: OAApplicationMode, widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> OATableDataModel? {
         let data = OATableDataModel()
-        guard let pref = widgetState?.getAverageSlopeModePreference() else { return data }
+        guard let pref = widgetState?.getMovingTimeModePreference() else { return data }
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
         let modeRow = section.createNewRow()
@@ -58,16 +63,16 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
         modeRow.key = "recording_widget_mode_key"
         modeRow.title = localizedString("shared_string_mode")
         modeRow.setObj(pref, forKey: "pref")
-        var currentRaw = AverageSlopeMode.lastUphill.rawValue
+        var currentRaw = TripRecordingMovingTimeMode.total.rawValue
         if isCreate, let widgetConfigurationParams, let str = widgetConfigurationParams[pref.key] as? String, let v = Int(str) {
             currentRaw = v
         } else if !isCreate {
             currentRaw = Int(pref.get(appMode))
         }
         
-        let currentMode = AverageSlopeMode(rawValue: currentRaw) ?? .lastUphill
+        let currentMode = TripRecordingMovingTimeMode(rawValue: currentRaw) ?? .total
         modeRow.setObj(localizedString(currentMode.titleKey), forKey: "value")
-        let possibleValues: [OATableRowData] = [AverageSlopeMode.lastDownhill, .lastUphill].map { mode in
+        let possibleValues: [OATableRowData] = [TripRecordingMovingTimeMode.total, .lastDownhill, .lastUphill].map { mode in
             let row = OATableRowData()
             row.cellType = OASimpleTableViewCell.reuseIdentifier
             row.setObj(mode.rawValue, forKey: "value")
@@ -87,13 +92,28 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
         currentMode().titleKey
     }
     
-    private func getSlope() -> Int {
-        let lastSlope = getLastSlope(isUphill: (widgetState?.getAverageSlopeModePreference().get() ?? AverageSlopeMode.lastUphill.rawValue) == AverageSlopeMode.lastUphill.rawValue)
-        if let lastSlope {
-            return Int(lastSlope.elevDiff / lastSlope.distance * 100.0)
+    private func getTimeMoving() -> Int64 {
+        let mode = currentMode()
+        if mode == .total {
+            return getTotalMovingTime()
         } else {
-            return 0
+            return getLastSlopeMovingTime(mode: mode)
         }
+    }
+    
+    private func getTotalMovingTime() -> Int64 {
+        guard let currentTrack = OASavingTrackHelper.sharedInstance().currentTrack else { return 0 }
+        let joinSegments = OAAppSettings.sharedManager().currentTrackIsJoinSegments.get()
+        let tracks = (currentTrack.tracks as? [Track]) ?? []
+        let firstIsGeneral = tracks.first?.generalTrack ?? false
+        let withoutGaps = !joinSegments && (tracks.isEmpty || firstIsGeneral)
+        let analysis = currentTrack.getAnalysis(fileTimestamp: 0)
+        return withoutGaps ? analysis.timeMovingWithoutGaps : analysis.timeMoving
+    }
+    
+    private func getLastSlopeMovingTime(mode: TripRecordingMovingTimeMode) -> Int64 {
+        guard let lastSlope = getLastSlope(isUphill: mode == .lastUphill) else { return 0 }
+        return Int64(lastSlope.movingTime)
     }
     
     private func updateTitleAndIcon() {
@@ -107,8 +127,8 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
         configureSimpleLayout()
     }
     
-    private func currentMode() -> AverageSlopeMode {
-        guard let pref = widgetState?.getAverageSlopeModePreference() else { return .lastUphill }
-        return AverageSlopeMode(rawValue: Int(pref.get())) ?? .lastUphill
+    private func currentMode() -> TripRecordingMovingTimeMode {
+        guard let pref = widgetState?.getMovingTimeModePreference() else { return .total }
+        return TripRecordingMovingTimeMode(rawValue: Int(pref.get())) ?? .total
     }
 }

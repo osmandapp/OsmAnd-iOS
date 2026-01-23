@@ -46,7 +46,7 @@ final class TripRecordingMaxSpeedWidgetState: OAWidgetState {
     static let prefMaxSpeedModeId = "max_speed_widget_mode"
     
     private let widgetType: WidgetType
-    private let maxSpeedModePreference: OACommonInteger
+    private let maxSpeedModePreference: OACommonTripRecordingMaxSpeedMode
     
     init(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) {
         self.widgetType = widgetType
@@ -62,25 +62,25 @@ final class TripRecordingMaxSpeedWidgetState: OAWidgetState {
     }
     
     override func changeToNextState() {
-        maxSpeedModePreference.set(Int32(getMaxSpeedMode().next().rawValue))
+        maxSpeedModePreference.set(getMaxSpeedMode().next().rawValue)
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(maxSpeedModePreference.get(appMode), mode: appMode)
     }
     
-    func getMaxSpeedModePreference() -> OACommonInteger {
+    func getMaxSpeedModePreference() -> OACommonTripRecordingMaxSpeedMode {
         maxSpeedModePreference
     }
     
-    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonInteger {
+    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonTripRecordingMaxSpeedMode {
         var prefId = Self.prefMaxSpeedModeId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
         
-        let pref = OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(MaxSpeedMode.total.rawValue)).makeProfile()
-        if let string = widgetParams?[Self.prefMaxSpeedModeId] as? String, let intVal = Int32(string) {
+        let pref = OAAppSettings.sharedManager().registerMaxSpeedModePreference(prefId, defValue: MaxSpeedMode.total.rawValue).makeProfile()
+        if let string = widgetParams?[Self.prefMaxSpeedModeId] as? String, let intVal = Int(string) {
             pref.set(intVal)
         }
         

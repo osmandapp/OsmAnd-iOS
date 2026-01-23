@@ -105,6 +105,10 @@ class TripRecordingElevationWidget: BaseRecordingWidget {
         forceUpdate || super.isUpdateNeeded()
     }
     
+    override func resolvedModeTitleKeyForList() -> String? {
+        widgetState?.getModeTitleKey() ?? TripRecordingElevationMode.total.titleKey(isUphill: isUphillType)
+    }
+    
     func setIsUphillType(_ value: Bool) {
         isUphillType = value
     }

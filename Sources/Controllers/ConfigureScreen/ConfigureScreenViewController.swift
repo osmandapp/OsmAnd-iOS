@@ -121,7 +121,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         customButtonsRow.accessibilityLabel = customButtonsRow.title
         customButtonsRow.accessibilityValue = customButtonsRow.descr
         
-        let defaultButtons = [mapButtonsHelper.getCompassButtonState(), mapButtonsHelper.getMap3DButtonState()]
+        let defaultButtons = mapButtonsHelper.getDefaultButtonsStates()
         let defaultButtonsEnabledCount = defaultButtons.filter { $0.isEnabled() }.count
         let defaultButtonsRow = buttonsSection.createNewRow()
         defaultButtonsRow.key = "defaultButtons"

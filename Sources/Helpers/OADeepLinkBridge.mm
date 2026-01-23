@@ -20,7 +20,7 @@
 + (BOOL)openFavouriteOrMoveMapWithLat:(double)lat lon:(double)lon zoom:(int)zoom name:(NSString *)name
 {
     OAFavoriteItem *point = [OAFavoritesHelper getVisibleFavByLat:lat lon:lon];
-    if (point && [name isEqualToString:[point getName]])
+    if (point && ([name isEqualToString:[point getName]] || [point isSpecialPoint]))
     {
         OATargetPoint *targetPoint = [[OARootViewController instance].mapPanel.mapViewController.mapLayers.favoritesLayer getTargetPoint:point];
         targetPoint.location = CLLocationCoordinate2DMake(lat, lon);

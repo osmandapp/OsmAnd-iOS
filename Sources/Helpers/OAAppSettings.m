@@ -4554,6 +4554,488 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 
 @end
 
+@implementation OACommonTripRecordingMaxSpeedMode
+static NSString *kTotal = @"TOTAL";
+static NSString *kLastDownhill = @"LAST_DOWNHILL";
+static NSString *kLastUphill = @"LAST_UPHILL";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(NSInteger)defValue
+{
+    OACommonTripRecordingMaxSpeedMode *obj = [[OACommonTripRecordingMaxSpeedMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    
+    return obj;
+}
+
+- (NSInteger)get
+{
+    return [super get];
+}
+
+- (NSInteger)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(NSInteger)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    NSInteger defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:(int)value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kTotal: @(MaxSpeedModeTotal),
+            kLastDownhill: @(MaxSpeedModeLastDownhill),
+            kLastUphill: @(MaxSpeedModeLastUphill)
+        };
+    });
+    
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSInteger type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    NSInteger type = [value integerValue];
+    switch (type)
+    {
+        case MaxSpeedModeTotal:
+            return kTotal;
+        case MaxSpeedModeLastDownhill:
+            return kLastDownhill;
+        case MaxSpeedModeLastUphill:
+            return kLastUphill;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonTripRecordingElevationMode
+static NSString *kElevationTotal = @"TOTAL";
+static NSString *kElevationLast  = @"LAST";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(NSInteger)defValue
+{
+    OACommonTripRecordingElevationMode *obj = [[OACommonTripRecordingElevationMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    
+    return obj;
+}
+
+- (NSInteger)get
+{
+    return [super get];
+}
+
+- (NSInteger)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(NSInteger)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    NSInteger defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:(int)value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kElevationTotal: @(TripRecordingElevationModeTotal),
+            kElevationLast: @(TripRecordingElevationModeLast)
+        };
+    });
+    
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSInteger type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    NSInteger type = [value integerValue];
+    switch (type)
+    {
+        case TripRecordingElevationModeTotal:
+            return kElevationTotal;
+        case TripRecordingElevationModeLast:
+            return kElevationLast;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonTripRecordingAverageSlopeMode
+static NSString *kSlopeLastDownhill = @"LAST_DOWNHILL";
+static NSString *kSlopeLastUphill   = @"LAST_UPHILL";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(NSInteger)defValue
+{
+    OACommonTripRecordingAverageSlopeMode *obj = [[OACommonTripRecordingAverageSlopeMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    
+    return obj;
+}
+
+- (NSInteger)get
+{
+    return [super get];
+}
+
+- (NSInteger)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(NSInteger)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    NSInteger defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:(int)value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kSlopeLastDownhill: @(AverageSlopeModeLastDownhill),
+            kSlopeLastUphill: @(AverageSlopeModeLastUphill)
+        };
+    });
+    
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSInteger type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    NSInteger type = [value integerValue];
+    switch (type)
+    {
+        case AverageSlopeModeLastDownhill:
+            return kSlopeLastDownhill;
+        case AverageSlopeModeLastUphill:
+            return kSlopeLastUphill;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonTripRecordingDistanceMode
+static NSString *kDistanceTotal = @"TOTAL_DISTANCE";
+static NSString *kDistanceLastDownhill = @"LAST_DOWNHILL";
+static NSString *kDistanceLastUphill = @"LAST_UPHILL";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(NSInteger)defValue
+{
+    OACommonTripRecordingDistanceMode *obj = [[OACommonTripRecordingDistanceMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    
+    return obj;
+}
+
+- (NSInteger)get
+{
+    return [super get];
+}
+
+- (NSInteger)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(NSInteger)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    NSInteger defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:(int)value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kDistanceTotal: @(TripRecordingDistanceModeTotalDistance),
+            kDistanceLastDownhill: @(TripRecordingDistanceModeLastDownhill),
+            kDistanceLastUphill: @(TripRecordingDistanceModeLastUphill)
+        };
+    });
+    
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSInteger type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    NSInteger type = [value integerValue];
+    switch (type)
+    {
+        case TripRecordingDistanceModeTotalDistance:
+            return kDistanceTotal;
+        case TripRecordingDistanceModeLastDownhill:
+            return kDistanceLastDownhill;
+        case TripRecordingDistanceModeLastUphill:
+            return kDistanceLastUphill;
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@implementation OACommonTripRecordingMovingTimeMode
+static NSString *kMovingTimeTotal = @"TOTAL";
+static NSString *kMovingTimeLastDownhill = @"LAST_DOWNHILL";
+static NSString *kMovingTimeLastUphill = @"LAST_UPHILL";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(NSInteger)defValue
+{
+    OACommonTripRecordingMovingTimeMode *obj = [[OACommonTripRecordingMovingTimeMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    
+    return obj;
+}
+
+- (NSInteger)get
+{
+    return [super get];
+}
+
+- (NSInteger)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(NSInteger)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (void)resetToDefault
+{
+    NSInteger defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:(int)value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kMovingTimeTotal: @(TripRecordingMovingTimeModeTotal),
+            kMovingTimeLastDownhill: @(TripRecordingMovingTimeModeLastDownhill),
+            kMovingTimeLastUphill: @(TripRecordingMovingTimeModeLastUphill)
+        };
+    });
+    
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSInteger type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    NSInteger type = [value integerValue];
+    switch (type)
+    {
+        case TripRecordingMovingTimeModeTotal:
+            return kMovingTimeTotal;
+        case TripRecordingMovingTimeModeLastDownhill:
+            return kMovingTimeLastDownhill;
+        case TripRecordingMovingTimeModeLastUphill:
+            return kMovingTimeLastUphill;
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACommonDistanceByTapTextSizeConstant
 
 @dynamic defValue;
@@ -6346,6 +6828,66 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
             return (OACommonWidgetZoomLevelType *) [_registeredPreferences objectForKey:key];
         
         OACommonWidgetZoomLevelType *p = [OACommonWidgetZoomLevelType withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
+}
+
+- (OACommonTripRecordingMaxSpeedMode *)registerMaxSpeedModePreference:(NSString *)key defValue:(NSInteger)defValue
+{
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonTripRecordingMaxSpeedMode *) [_registeredPreferences objectForKey:key];
+        
+        OACommonTripRecordingMaxSpeedMode *p = [OACommonTripRecordingMaxSpeedMode withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
+}
+
+- (OACommonTripRecordingElevationMode *)registerTripRecordingElevationModePreference:(NSString *)key defValue:(NSInteger)defValue
+{
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonTripRecordingElevationMode *) [_registeredPreferences objectForKey:key];
+        
+        OACommonTripRecordingElevationMode *p = [OACommonTripRecordingElevationMode withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
+}
+
+- (OACommonTripRecordingAverageSlopeMode *)registerAverageSlopeModePreference:(NSString *)key defValue:(NSInteger)defValue
+{
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonTripRecordingAverageSlopeMode *) [_registeredPreferences objectForKey:key];
+        
+        OACommonTripRecordingAverageSlopeMode *p = [OACommonTripRecordingAverageSlopeMode withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
+}
+
+- (OACommonTripRecordingDistanceMode *)registerTripRecordingDistanceModePreference:(NSString *)key defValue:(NSInteger)defValue
+{
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonTripRecordingDistanceMode *) [_registeredPreferences objectForKey:key];
+        
+        OACommonTripRecordingDistanceMode *p = [OACommonTripRecordingDistanceMode withKey:key defValue:defValue];
+        [self registerPreference:p forKey:key];
+        return p;
+    }
+}
+
+- (OACommonTripRecordingMovingTimeMode *)registerTripRecordingMovingTimeModePreference:(NSString *)key defValue:(NSInteger)defValue
+{
+    @synchronized(_registeredPreferences) {
+        if ([_registeredPreferences objectForKey:key])
+            return (OACommonTripRecordingMovingTimeMode *) [_registeredPreferences objectForKey:key];
+        
+        OACommonTripRecordingMovingTimeMode *p = [OACommonTripRecordingMovingTimeMode withKey:key defValue:defValue];
         [self registerPreference:p forKey:key];
         return p;
     }

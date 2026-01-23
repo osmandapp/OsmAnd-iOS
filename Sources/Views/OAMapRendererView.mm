@@ -48,6 +48,9 @@
     GLuint _depthRenderBuffer;
     GLuint _colorRenderBuffer;
     GLuint _framebuffer;
+    GLuint _msaaFramebuffer;
+    GLuint _msaaColorRenderBuffer;
+    GLuint _msaaDepthRenderBuffer;
     CADisplayLink* _displayLink;
     BOOL _limitFrameRate;
 
@@ -105,6 +108,9 @@
     _depthRenderBuffer = 0;
     _colorRenderBuffer = 0;
     _framebuffer = 0;
+    _msaaFramebuffer = 0;
+    _msaaColorRenderBuffer = 0;
+    _msaaDepthRenderBuffer = 0;
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
 
@@ -890,6 +896,77 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     }
     validateGL();
+
+    GLint maxSamples = 0;
+    glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+    OALog(@"Max MSAA samples supported: %d", maxSamples);
+
+    GLint samples = MIN(4, maxSamples);
+    if (samples < 2)
+    {
+        return;
+    }
+
+    // Setup MSAA framebuffer
+    glGenFramebuffers(1, &_msaaFramebuffer);
+    validateGL();
+    NSAssert(_msaaFramebuffer != 0, @"Failed to allocate MSAA frame buffer");
+    glBindFramebuffer(GL_FRAMEBUFFER, _msaaFramebuffer);
+    validateGL();
+
+    // Setup MSAA color renderbuffer
+    glGenRenderbuffers(1, &_msaaColorRenderBuffer);
+    validateGL();
+    NSAssert(_msaaColorRenderBuffer != 0, @"Failed to allocate MSAA color renderbuffer");
+    glBindRenderbuffer(GL_RENDERBUFFER, _msaaColorRenderBuffer);
+    validateGL();
+
+    // Use glRenderbufferStorageMultisampleAPPLE for MSAAx4
+    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_RGBA8, _viewSize.x, _viewSize.y);
+    validateGL();
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _msaaColorRenderBuffer);
+    validateGL();
+
+    // Setup MSAA depth renderbuffer
+    glGenRenderbuffers(1, &_msaaDepthRenderBuffer);
+    validateGL();
+    NSAssert(_msaaDepthRenderBuffer != 0, @"Failed to allocate MSAA depth renderbuffer");
+    glBindRenderbuffer(GL_RENDERBUFFER, _msaaDepthRenderBuffer);
+    validateGL();
+    
+    glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y);
+    validateGL();
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
+    validateGL();
+
+    // Check that we've initialized our MSAA framebuffer fully
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        OALog(@"[OAMapRendererView %p] MSAA framebuffer not complete, falling back to non-MSAA rendering", self);
+        // Clean up MSAA buffers if they failed
+        if (_msaaFramebuffer != 0)
+        {
+            glDeleteFramebuffers(1, &_msaaFramebuffer);
+            _msaaFramebuffer = 0;
+        }
+        if (_msaaColorRenderBuffer != 0)
+        {
+            glDeleteRenderbuffers(1, &_msaaColorRenderBuffer);
+            _msaaColorRenderBuffer = 0;
+        }
+        if (_msaaDepthRenderBuffer != 0)
+        {
+            glDeleteRenderbuffers(1, &_msaaDepthRenderBuffer);
+            _msaaDepthRenderBuffer = 0;
+        }
+    }
+    else
+    {
+        OALog(@"[OAMapRendererView %p] MSAAx4 framebuffer initialized successfully", self);
+    }
+    validateGL();
 }
 
 - (void) releaseRenderAndFrameBuffers
@@ -903,6 +980,24 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     }
 
+    if (_msaaFramebuffer != 0)
+    {
+        glDeleteFramebuffers(1, &_msaaFramebuffer);
+        _msaaFramebuffer = 0;
+        validateGL();
+    }
+    if (_msaaColorRenderBuffer != 0)
+    {
+        glDeleteRenderbuffers(1, &_msaaColorRenderBuffer);
+        _msaaColorRenderBuffer = 0;
+        validateGL();
+    }
+    if (_msaaDepthRenderBuffer != 0)
+    {
+        glDeleteRenderbuffers(1, &_msaaDepthRenderBuffer);
+        _msaaDepthRenderBuffer = 0;
+        validateGL();
+    }
     if (_framebuffer != 0)
     {
         glDeleteFramebuffers(1, &_framebuffer);
@@ -1016,8 +1111,9 @@ forcedUpdate:(BOOL)forcedUpdate
     shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
     if (shouldRenderFrame && _renderer->prepareFrame())
     {
-        // Activate framebuffer
-        glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+        // Activate MSAA framebuffer if available, otherwise use regular framebuffer
+        GLuint targetFramebuffer = (_msaaFramebuffer != 0) ? _msaaFramebuffer : _framebuffer;
+        glBindFramebuffer(GL_FRAMEBUFFER, targetFramebuffer);
         validateGL();
 
         // Clear buffer
@@ -1036,7 +1132,35 @@ forcedUpdate:(BOOL)forcedUpdate
 
         validateGL();
 
-        //TODO: apply multisampling?
+        // Resolve MSAA to resolve framebuffer if MSAA is enabled
+        if (_msaaFramebuffer != 0)
+        {
+            // Bind the resolve framebuffer
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _framebuffer);
+            validateGL();
+            // Bind the MSAA framebuffer as read
+            glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _msaaFramebuffer);
+            validateGL();
+            
+            // Resolve MSAA framebuffer to resolve framebuffer
+            //glResolveMultisampleFramebufferAPPLE();
+            glBlitFramebuffer(0, 0, _viewSize.x, _viewSize.y, 0, 0, _viewSize.x, _viewSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            validateGL();
+            
+            // Discard MSAA buffers after resolve
+            const GLenum msaaDiscardAttachments[] = {
+                GL_COLOR_ATTACHMENT0,
+                GL_DEPTH_ATTACHMENT
+            };
+            glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _msaaFramebuffer);
+            validateGL();
+            glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, msaaDiscardAttachments);
+            validateGL();
+            
+            // Bind resolve framebuffer for discard
+            glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+            validateGL();
+        }
 
         // Erase depthbuffer, since not needed
         const GLenum buffersToDiscard[] =

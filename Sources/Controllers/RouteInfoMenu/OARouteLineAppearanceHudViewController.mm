@@ -35,7 +35,6 @@
 #import "OADayNightHelper.h"
 #import "OAMapLayers.h"
 #import "OAPreviewRouteLineInfo.h"
-#import "OADefaultFavorite.h"
 #import "OARouteStatisticsHelper.h"
 #import "OAProducts.h"
 #import "OAConcurrentCollections.h"
@@ -248,8 +247,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     OACollectionViewCellState *_scrollCellsState;
     NSArray<OARouteAppearanceType *> *_coloringTypes;
     OARouteAppearanceType *_selectedType;
-    NSArray<NSNumber *> *_availableColors;
-
     OARouteWidthMode *_selectedWidthMode;
 }
 
@@ -1274,14 +1271,16 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)updateSelectedColorsIfNeeded
 {
-    UIColor *customColorDay = UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO]);
-    UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
-    UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
-    UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
-    if ([customColorDay isEqual:defaultColorDay] && _availableColors.count > 0)
-        [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:NO];
-    if ([customColorNight isEqual:defaultColorNight] && _availableColors.count > 0)
-        [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:YES];
+    NSInteger dayVal = [_previewRouteLineInfo getCustomColor:NO];
+    NSInteger nightVal = [_previewRouteLineInfo getCustomColor:YES];
+    if (_sortedColorItems.count > 0)
+    {
+        NSInteger firstVal = (NSInteger)_sortedColorItems.firstObject.value;
+        if (dayVal == kDefaultRouteLineDayColor)
+            [_previewRouteLineInfo setCustomColor:(int)firstVal nightMode:NO];
+        if (nightVal == kDefaultRouteLineNightColor)
+            [_previewRouteLineInfo setCustomColor:(int)firstVal nightMode:YES];
+    }
     
     NSInteger currentValue = [_previewRouteLineInfo getCustomColor:_nightMode];
     OAColorItem *item = nil;

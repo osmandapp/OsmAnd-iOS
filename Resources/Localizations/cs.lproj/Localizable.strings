@@ -3987,3 +3987,5 @@
 "shared_string_dynamic" = "Dynamická";
 "shared_string_tinted" = "Tónovaná";
 "background_opacity_description" = "Čistá je průhlednější, díky čemuž je vidět obsah pod ní. Tónovaná sníží průhlednost a přidá kontrast.";
+"trip_recording_moving_time" = "Čas v pohybu";
+"trip_recording_moving_time_widget_description" = "Zobrazí aktuálně zaznamenaný čas v pohybu nebo čas posledního stoupání a klesání.";

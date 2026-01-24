@@ -22,8 +22,6 @@
 #import "OAMapRendererView.h"
 #import "OASlider.h"
 #import "OADividerCell.h"
-#import "OASwitchTableViewCell.h"
-#import "OAColorsTableViewCell.h"
 #import "OAFoldersCell.h"
 #import "OASegmentedControlCell.h"
 #import "OASegmentSliderTableViewCell.h"
@@ -193,7 +191,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 @end
 
-@interface OARouteLineAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate, OACollectionCellDelegate, ColorCollectionViewControllerDelegate>
+@interface OARouteLineAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OAFoldersCellDelegate, OACollectionCellDelegate, ColorCollectionViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 
@@ -223,9 +221,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 @property (nonatomic) OAMapPanelViewController *mapPanelViewController;
 @property (nonatomic) EOARouteLineAppearancePrevScreen prevScreen;
 @property (nonatomic) OAPreviewRouteLineInfo *previewRouteLineInfo;
+@property (nonatomic) NSMutableArray<OAColorItem *> *sortedColorItems;
 @property (nonatomic) OAConcurrentArray<PaletteColor *> *sortedPaletteColorItems;
 @property (nonatomic) BOOL isDefaultColorRestored;
+@property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
 @property (nonatomic) GradientColorsCollection *gradientColorsCollection;
+@property (nonatomic) OAColorItem *selectedColorItem;
 @property (nonatomic) PaletteColor *selectedPaletteColorItem;
 @property (nonatomic) NSInteger cellPaletteLegendIndex;
 @property (nonatomic) NSInteger cellPaletteNameIndex;
@@ -271,6 +272,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     _app = [OsmAndApp instance];
     _dataLock = [[NSObject alloc] init];
+    _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     _sortedPaletteColorItems = [[OAConcurrentArray alloc] init];
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     [_mapPanelViewController.mapViewController.mapView setAzimuth:0.0];
@@ -289,6 +291,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
     [self updateAllValues];
     [self setOldValues];
+    [self updateRouteLayer:_previewRouteLineInfo];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onCollectionDeleted:)
@@ -311,7 +314,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)updateAllValues
 {
+    _nightMode = _settings.nightMode;
+    _selectedDayNightMode = _nightMode ? kColorNightMode : kColorDayMode;
+    
     _previewRouteLineInfo = [self createPreviewRouteLineInfo];
+    
+    _selectedColorItem = [_appearanceCollection getColorItemWithValue:(int)[_previewRouteLineInfo getCustomColor:_nightMode]] ?: [_appearanceCollection getDefaultLineColorItem];
+    _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
 
     [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
     _selectedPaletteColorItem = [_gradientColorsCollection getPaletteColorByName:_previewRouteLineInfo.gradientPalette];
@@ -360,19 +369,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
 
     _coloringTypes = types;
-
-    _nightMode = _settings.nightMode;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
-    _selectedDayNightMode = _nightMode ? kColorNightMode : kColorDayMode;
-
-    NSArray<OAFavoriteColor *> *colors = [OADefaultFavorite builtinColors];
-    NSMutableArray<NSNumber *> *lineColors = [NSMutableArray array];
-    for (OAFavoriteColor *lineColor in colors)
-    {
-        [lineColors addObject:@([lineColor.color toRGBNumber])];
-    }
-    _availableColors = lineColors;
-
     _selectedWidthMode = [self findAppropriateMode:_previewRouteLineInfo.width];
 }
 
@@ -1031,12 +1028,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 }]];
                 [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
                         kTableKey: @"color_grid",
-                        kCellType: [OAColorsTableViewCell getCellIdentifier],
-                        kTableValues: @{
-                                @"array_value": _availableColors,
-                                @"int_value": @([_previewRouteLineInfo getCustomColor:_nightMode])
-                        }
+                        kCellType: [OACollectionSingleLineTableViewCell getCellIdentifier],
                 }]];
+                [sectionData.subjects addObject:[self generateAllColorsCellData]];
             }
             else if ([_selectedType.coloringType isGradient])
             {
@@ -1200,11 +1194,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     {
         [[OADayNightHelper instance] setTempMode:_nightMode ? DayNightModeNight : DayNightModeDay];
     }
-    else if ([tableData.key isEqualToString:@"color_grid"] && [_selectedType.coloringType isGradient])
-    {
-        tableData.values[@"array_value"] = _availableColors;
-        tableData.values[@"int_value"] = @([_previewRouteLineInfo getCustomColor:_nightMode]);
-    }
     else if ([tableData.key isEqualToString:@"top_description"])
     {
         [tableData setData:@{ kCellTitle: _selectedType.topDescription }];
@@ -1289,11 +1278,23 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
     UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
     UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
-    
-    if ([customColorDay isEqual:defaultColorDay])
+    if ([customColorDay isEqual:defaultColorDay] && _availableColors.count > 0)
         [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:NO];
-    if ([customColorNight isEqual:defaultColorNight])
+    if ([customColorNight isEqual:defaultColorNight] && _availableColors.count > 0)
         [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:YES];
+    
+    NSInteger currentValue = [_previewRouteLineInfo getCustomColor:_nightMode];
+    OAColorItem *item = nil;
+    for (OAColorItem *ci in _sortedColorItems)
+    {
+        if ((NSInteger)ci.value == currentValue)
+        {
+            item = ci;
+            break;
+        }
+    }
+    
+    _selectedColorItem = item ?: [_appearanceCollection getColorItemWithValue:(int)currentValue] ?: [_appearanceCollection getDefaultLineColorItem];
 }
 
 - (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
@@ -1344,10 +1345,24 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
     else if ([tableData.key isEqualToString:@"allColors"])
     {
-        ItemsCollectionViewController *colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeTerrainPaletteItems items:_gradientColorsCollection selectedItem:_selectedPaletteColorItem];
+        ItemsCollectionViewController *vc = nil;
+        if ([_selectedType.coloringType isCustomColor])
+        {
+            vc = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:[_appearanceCollection getAvailableColorsSortingByLastUsed] selectedItem:_selectedColorItem];
+            OACollectionSingleLineTableViewCell *cell = (OACollectionSingleLineTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors]];
+            OAColorCollectionHandler *handler = (OAColorCollectionHandler *)[cell getCollectionHandler];
+            vc.hostColorHandler = handler;
+        }
+        else if ([_selectedType.coloringType isGradient])
+        {
+            vc = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeTerrainPaletteItems items:_gradientColorsCollection selectedItem:_selectedPaletteColorItem];
+        }
         
-        colorCollectionViewController.delegate = self;
-        [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+        if (vc)
+        {
+            vc.delegate = self;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 }
 
@@ -1451,30 +1466,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
-    }
-    else if ([cellData.type isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
-    {
-        NSArray *arrayValue = cellData.values[@"array_value"];
-        OAColorsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = (OAColorsTableViewCell *) nib[0];
-            cell.dataArray = arrayValue;
-            cell.delegate = self;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell showLabels:NO];
-            cell.valueLabel.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        }
-        if (cell)
-        {
-            cell.currentColor = [arrayValue indexOfObject:cellData.values[@"int_value"]];
-
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
-        }
-        outCell = cell;
     }
     else if ([cellData.type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
@@ -1642,21 +1633,41 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell =
-            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        BOOL isRightActionButtonVisible = [_selectedType.coloringType isCustomColor];
         cell.separatorInset = UIEdgeInsetsZero;
-        [cell rightActionButtonVisibility:NO];
-
-        PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
-        paletteHandler.delegate = self;
-        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:_selectedPaletteColorItem] inSection:0];
-        if (selectedIndexPath.row == NSNotFound)
-            selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
-        [paletteHandler setSelectedIndexPath:selectedIndexPath];
-        [cell setCollectionHandler:paletteHandler];
-        cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
-        [cell configureTopOffset:12];
-        [cell configureBottomOffset:12];
+        [cell rightActionButtonVisibility:isRightActionButtonVisible];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
+        [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+        if (isRightActionButtonVisible)
+            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        if ([_selectedType.coloringType isCustomColor])
+        {
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
+            colorHandler.delegate = self;
+            NSInteger selectedIndex = [_sortedColorItems indexOfObject:_selectedColorItem];
+            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]];
+            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
+            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:colorHandler];
+        }
+        else if ([_selectedType.coloringType isGradient])
+        {
+            PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
+            paletteHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:_selectedPaletteColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
+            [paletteHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:paletteHandler];
+            cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
+            [cell configureTopOffset:12];
+            [cell configureBottomOffset:12];
+        }
         return cell;
     }
     else if ([cellData.type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
@@ -1831,6 +1842,19 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [self updateData:cellData];
 
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+- (void)onCellButtonPressed:(UIButton *)sender
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    if ([cellData.key isEqualToString:@"color_grid"])
+    {
+        UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
+        colorViewController.delegate = self;
+        colorViewController.selectedColor = [_selectedColorItem getColor];
+        [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
     }
 }
 
@@ -2033,29 +2057,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [self checkColoringAvailability];
 }
 
-#pragma mark - OAColorsTableViewCellDelegate
-
-- (void)colorChanged:(NSInteger)tag
-{
-    [_previewRouteLineInfo setCustomColor:_availableColors[tag].intValue nightMode:_nightMode];
-    [self updateRouteLayer:_previewRouteLineInfo];
-
-    if (_cellColorGridIndex > -1 && _tableData.subjects.count >= 1)
-    {
-        OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
-        if (sectionData.subjects.count - 1 >= _cellColorGridIndex)
-        {
-            [self updateData:sectionData];
-
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGridIndex
-                                                                        inSection:_sectionColors]]
-                                  withRowAnimation:UITableViewRowAnimationNone];
-            [UIView setAnimationsEnabled:YES];
-        }
-    }
-}
-
 - (void) onMapSourceUpdated
 {
     __weak __typeof(self) weakSelf = self;
@@ -2068,6 +2069,37 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
+    if ([_selectedType.coloringType isCustomColor])
+    {
+        if (indexPath.row < 0 || indexPath.row >= _sortedColorItems.count)
+            return;
+        
+        OAColorItem *picked = _sortedColorItems[indexPath.row];
+        _selectedColorItem = picked;
+        [_previewRouteLineInfo setCustomColor:(int)picked.value nightMode:_nightMode];
+        [self updateRouteLayer:_previewRouteLineInfo];
+        if (_cellColorGridIndex > -1 && _tableData.subjects.count > _sectionColors)
+        {
+            OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
+            if (sectionData.subjects.count > _cellColorGridIndex)
+            {
+                OAGPXTableCellData *gridCellData = sectionData.subjects[_cellColorGridIndex];
+                [self updateData:gridCellData];
+                [UIView setAnimationsEnabled:NO];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors]]withRowAnimation:UITableViewRowAnimationNone];
+                [UIView setAnimationsEnabled:YES];
+            }
+        }
+
+        return;
+    }
+
+    if (![_selectedType.coloringType isGradient])
+        return;
+
+    if (indexPath.row < 0 || indexPath.row >= [_sortedPaletteColorItems countSync])
+        return;
+
     _selectedPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];
     if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
     {
@@ -2101,11 +2133,107 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
 }
 
+- (void)reloadCollectionData
+{
+    [self updateAllValues];
+}
+
 #pragma mark - ColorCollectionViewControllerDelegate
 
 - (void)selectPaletteItem:(PaletteColor *)paletteItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+    NSInteger row = [_sortedPaletteColorItems indexOfObjectSync:paletteItem];
+    if (row == NSNotFound)
+        return;
+    
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:row inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+}
+
+- (void)selectColorItem:(OAColorItem *)colorItem
+{
+    NSInteger row = [_sortedColorItems indexOfObject:colorItem];
+    if (row == NSNotFound)
+        return;
+    
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:row inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+}
+
+- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
+{
+    OAColorItem *newColorItem = [_appearanceCollection addNewSelectedColor:color];
+    if (_cellColorGridIndex != -1)
+    {
+        NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        if (colorHandler)
+        {
+            [_sortedColorItems insertObject:newColorItem atIndex:0];
+            [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0] newItem:newColorItem];
+        }
+    }
+
+    return newColorItem;
+}
+
+- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
+{
+    NSInteger row = [_sortedColorItems indexOfObject:colorItem];
+    if (_cellColorGridIndex == -1 || row == NSNotFound)
+        return;
+    
+    [_appearanceCollection changeColor:colorItem newColor:color];
+    NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors];
+    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
+    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *)[colorCell getCollectionHandler];
+    if (colorHandler)
+        [colorHandler replaceOldColor:[NSIndexPath indexPathForRow:row inSection:0]];
+}
+
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
+{
+    OAColorItem *duplicatedColorItem = [_appearanceCollection duplicateColor:colorItem];
+    NSInteger row = [_sortedColorItems indexOfObject:colorItem];
+    if (_cellColorGridIndex == -1 || row == NSNotFound)
+        return duplicatedColorItem;
+    
+    NSInteger newRow = row + 1;
+    [_sortedColorItems insertObject:duplicatedColorItem atIndex:newRow];
+    NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors];
+    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
+    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *)[colorCell getCollectionHandler];
+    if (colorHandler)
+        [colorHandler addColor:[NSIndexPath indexPathForRow:newRow inSection:0] newItem:duplicatedColorItem];
+    
+    return duplicatedColorItem;
+}
+
+- (void)deleteColorItem:(OAColorItem *)colorItem
+{
+    NSInteger row = [_sortedColorItems indexOfObject:colorItem];
+    if (_cellColorGridIndex == -1 || row == NSNotFound)
+        return;
+    
+    [_appearanceCollection deleteColor:colorItem];
+    [_sortedColorItems removeObjectAtIndex:row];
+    NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors];
+    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
+    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *)[colorCell getCollectionHandler];
+    if (colorHandler)
+        [colorHandler removeColor:[NSIndexPath indexPathForRow:row inSection:0]];
+}
+
+#pragma mark - UIColorPickerViewControllerDelegate
+
+- (void)colorPickerViewController:(UIColorPickerViewController *)viewController didSelectColor:(UIColor *)color continuously:(BOOL)continuously
+{
+    if ([OAUtilities isiOSAppOnMac])
+        [self addAndGetNewColorItem:color];
+}
+
+- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+{
+    [self addAndGetNewColorItem:viewController.selectedColor];
 }
 
 @end

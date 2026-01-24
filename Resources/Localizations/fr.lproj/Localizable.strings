@@ -3993,7 +3993,7 @@
 "search_action_descr" = "Ouvre la recherche.";
 "configure_map_description" = "Modifie le style de la carte, les couches ou d'autres paramètres.";
 "map_3d_mode_action_descr" = "Modifie l'inclinaison de la carte.";
-"my_location_action_descr" = "Centre votre carte en fonction de votre position actuelle.";
+"my_location_action_descr" = "Centre la carte sur votre position actuelle.";
 "navigation_action_descr" = "Ouvre la navigation.";
 "drawer_button_description" = "Ouvre le menu principal.";
 "key_event_action_change_map_orientation" = "Modifier l'orientation de la carte.";

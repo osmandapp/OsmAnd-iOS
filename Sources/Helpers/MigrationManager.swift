@@ -21,6 +21,7 @@ final class MigrationManager: NSObject {
         case migrateExternalInputDevicePreferenceType
         case migrationHudButtonPositionsKey
         case migrateRouteRecalculationValues
+        case migrateLocationIconSizeAndCourseIconSize
     }
     
     private struct HudMigrationScenario {
@@ -98,6 +99,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateRouteRecalculationValues.rawValue) {
                 migrateRouteRecalulationValues()
                 defaults.set(true, forKey: MigrationKey.migrateRouteRecalculationValues.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue) {
+                migrateLocationIconSizeAndCourseIconSize()
+                defaults.set(true, forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue)
             }
         }
     }
@@ -625,7 +630,7 @@ final class MigrationManager: NSObject {
             "map_info_controls"
         ]
         
-        let json = changeRouteRecalulationValuesForJson(json)
+        let json = changeRouteRecalculationValuesForJson(json)
 
         return Dictionary(uniqueKeysWithValues: json.map {
             var settingKey = $0
@@ -713,7 +718,7 @@ final class MigrationManager: NSObject {
         })
     }
     
-    private func changeRouteRecalulationValuesForJson(_ json: [String: String]) -> [String: String] {
+    private func changeRouteRecalculationValuesForJson(_ json: [String: String]) -> [String: String] {
         var json = json
         if let disableOffrouteRecalc = json["disable_offroute_recalc"],
            let routingRecalcDistance = json["routing_recalc_distance"] {
@@ -726,5 +731,19 @@ final class MigrationManager: NSObject {
             }
         }
         return json
+    }
+    
+    private func migrateLocationIconSizeAndCourseIconSize() {
+        let settings = OAAppSettings.sharedManager()
+        for appMode in OAApplicationMode.allPossibleValues() {
+            let locationIconSize = settings.locationIconSize.get(appMode)
+            if locationIconSize <= 0 {
+                settings.locationIconSize.resetToDefault()
+            }
+            let courseIconSize = settings.courseIconSize.get(appMode)
+            if courseIconSize <= 0 {
+                settings.courseIconSize.resetToDefault()
+            }
+        }
     }
 }

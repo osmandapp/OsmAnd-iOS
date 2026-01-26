@@ -1325,8 +1325,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     if ([tableData.key isEqualToString:@"reset"])
     {
+        _previewRouteLineInfo = _oldPreviewRouteLineInfo;
         [self updateAllValues];
-        [self updateRouteLayer:_oldPreviewRouteLineInfo];
+        [self updateRouteLayer:_previewRouteLineInfo];
         [self generateData];
         [UIView transitionWithView:self.tableView
                           duration:0.35f
@@ -1368,8 +1369,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        [weakSelf.settings.customRouteColorDay set:[weakSelf.previewRouteLineInfo getCustomColor:NO] mode:weakSelf.appMode];
-        [weakSelf.settings.customRouteColorNight set:[weakSelf.previewRouteLineInfo getCustomColor:YES] mode:weakSelf.appMode];
+        [weakSelf.settings.customRouteColorDay set:(int)[weakSelf.previewRouteLineInfo getCustomColor:NO] mode:weakSelf.appMode];
+        [weakSelf.settings.customRouteColorNight set:(int)[weakSelf.previewRouteLineInfo getCustomColor:YES] mode:weakSelf.appMode];
         [weakSelf.settings.routeColoringType set:weakSelf.previewRouteLineInfo.coloringType mode:weakSelf.appMode];
         [weakSelf.settings.routeInfoAttribute set:weakSelf.previewRouteLineInfo.routeInfoAttribute mode:weakSelf.appMode];
         [weakSelf.settings.routeLineWidth set:weakSelf.previewRouteLineInfo.width mode:weakSelf.appMode];

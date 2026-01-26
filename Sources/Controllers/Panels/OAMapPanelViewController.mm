@@ -611,7 +611,7 @@ typedef enum
     renderView.elevationAngle = newElevationAngle;
 }
 
-- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
+- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize updateScale:(BOOL)updateScale
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -622,9 +622,12 @@ typedef enum
     
     double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
     double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
+    float scale = 1;
+    if (updateScale)
+        scale = mapSize.width > mapSize.height && distanceV > distanceH ? mapSize.width / mapSize.height : DeviceScreenHeight / DeviceScreenWidth;
     
-    CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel);
-    CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel);
+    CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel * scale);
+    CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel * scale);
     CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
     
     CGFloat zoom = renderView.zoom - newZoom;
@@ -1766,11 +1769,9 @@ typedef enum
     bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
     
-    float currentZoom = MIN([self getZoomForBounds:bounds mapSize:[self getScreenBBox]], zoom);
+    float currentZoom = MIN([self getZoomForBounds:bounds mapSize:[self getScreenBBox] updateScale:NO], zoom);
     if (currentZoom != zoom && currentZoom < zoom - MAX_ZOOM_OUT_STEPS)
-    {
         currentZoom = zoom;
-    }
         
     renderView.zoom = currentZoom;
     
@@ -3596,6 +3597,7 @@ typedef enum
                  leftInset:0.
                   topInset:0.
       changeElevationAngle:YES
+               updateScale:NO
                   animated:NO];
 }
 
@@ -3658,6 +3660,7 @@ typedef enum
                bottomInset:bottomInset
                  leftInset:leftInset
       changeElevationAngle:YES
+               updateScale:NO
                   animated:animated];
 }
 
@@ -3667,6 +3670,7 @@ typedef enum
              bottomInset:(float)bottomInset
                leftInset:(float)leftInset
     changeElevationAngle:(BOOL)changeElevationAngle
+             updateScale:(BOOL)updateScale
                 animated:(BOOL)animated
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
@@ -3682,6 +3686,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:changeElevationAngle
+               updateScale:updateScale
                   animated:animated];
 }
 
@@ -3693,6 +3698,7 @@ typedef enum
                leftInset:(float)leftInset
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
+             updateScale:(BOOL)updateScale
                 animated:(BOOL)animated
 {
     [self displayAreaOnMap:topLeft
@@ -3704,6 +3710,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:changeElevationAngle
+               updateScale:updateScale
                   animated:animated];
 }
 
@@ -3726,6 +3733,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:YES
+               updateScale:NO
                   animated:animated];
 }
 
@@ -3738,6 +3746,7 @@ typedef enum
                leftInset:(float)leftInset
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
+             updateScale:(BOOL)updateScale
                 animated:(BOOL)animated
 {
     OAGpxBounds bounds;
@@ -3747,7 +3756,7 @@ typedef enum
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
 
     if (maxZoom > 0 && zoom <= 0)
-        zoom = MIN([self getZoomForBounds:bounds mapSize:screenBBox], maxZoom);
+        zoom = MIN([self getZoomForBounds:bounds mapSize:screenBBox updateScale:updateScale], maxZoom);
 
     [self displayAreaOnMap:bounds
                       zoom:zoom
@@ -3756,6 +3765,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:changeElevationAngle
+               updateScale:updateScale
                   animated:animated];
 }
 
@@ -3766,6 +3776,7 @@ typedef enum
                leftInset:(float)leftInset
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
+             updateScale:(BOOL)updateScale
                 animated:(BOOL)animated
 {
     if (bounds.topLeft.latitude == DBL_MAX)
@@ -3773,7 +3784,7 @@ typedef enum
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
-    _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
+    _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox updateScale:updateScale] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     
     _targetLatitude = bounds.bottomRight.latitude;
@@ -4062,18 +4073,18 @@ typedef enum
 
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
-    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:YES animated:YES];
+    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:YES updateScale:NO animated:YES];
 }
 
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle updateScale:(BOOL)updateScale
 {
-    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:changeElevationAngle animated:YES];
+    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:changeElevationAngle  updateScale:updateScale animated:YES];
 }
 
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle animated:(BOOL)animated
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle updateScale:(BOOL)updateScale animated:(BOOL)animated
 {
     BOOL landscape = [self.targetMenuView isLandscape];
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 changeElevationAngle:changeElevationAngle animated:NO];
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 changeElevationAngle:changeElevationAngle updateScale:updateScale animated:NO];
 }
 
 - (void)buildRoute:(CLLocation *)start

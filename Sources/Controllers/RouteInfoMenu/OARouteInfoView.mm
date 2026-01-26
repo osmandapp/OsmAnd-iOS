@@ -948,7 +948,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         case EOARouteInfoMenuStateInitial:
             return 170.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y + ([_routingHelper isRouteBeingCalculated] ? 2.0 : 0.0);
         case EOARouteInfoMenuStateExpanded:
-            return DeviceScreenHeight - DeviceScreenHeight / 4;
+            return DeviceScreenHeight - DeviceScreenHeight / 3;
         case EOARouteInfoMenuStateFullScreen:
             return DeviceScreenHeight;
         default:
@@ -2207,7 +2207,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                         routeBBox = _routingHelper.isPublicTransportMode? [_transportHelper getBBox] : [_routingHelper getBBox];
                         if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
                         {
-                            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) changeElevationAngle:NO];
+                            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) changeElevationAngle:NO updateScale:YES];
                         }
                     }
                 }

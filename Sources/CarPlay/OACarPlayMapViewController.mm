@@ -377,6 +377,7 @@
                                                      leftInset:0.
                                                       topInset:0.
                                           changeElevationAngle:YES
+                                                   updateScale:NO
                                                       animated:YES];
 }
 

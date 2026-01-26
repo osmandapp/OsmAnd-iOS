@@ -45,10 +45,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import <DGCharts/DGCharts-Swift.h>
 
-#define kColorDayMode OALocalizedString(@"day")
-#define kColorNightMode OALocalizedString(@"daynight_mode_night")
-
-#define kAppearanceLineMargin 20.
+static const CGFloat kAppearanceLineMargin = 20.0;
 
 @interface OARouteAppearanceType : NSObject
 
@@ -312,7 +309,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)updateAllValues
 {
     _nightMode = _settings.nightMode;
-    _selectedDayNightMode = _nightMode ? kColorNightMode : kColorDayMode;
+    _selectedDayNightMode = OALocalizedString(_nightMode ? @"daynight_mode_night" : @"day");
     
     _previewRouteLineInfo = [self createPreviewRouteLineInfo];
     
@@ -1014,7 +1011,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
                         kTableKey: @"color_day_night_value",
                         kCellType: OASegmentedControlCell.reuseIdentifier,
-                        kTableValues: @{ @"array_value": @[kColorDayMode, kColorNightMode] },
+                        kTableValues: @{ @"array_value": @[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] },
                         kCellToggle: @NO
                 }]];
                 [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
@@ -1287,7 +1284,16 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
     }
     
-    _selectedColorItem = item ?: [_appearanceCollection getColorItemWithValue:(int)currentValue] ?: [_appearanceCollection getDefaultLineColorItem];
+    if (item)
+    {
+        _selectedColorItem = item;
+    }
+    else
+    {
+        _selectedColorItem = [_appearanceCollection getColorItemWithValue:(int)currentValue];
+        if (!_selectedColorItem)
+            _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
+    }
 }
 
 - (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
@@ -1298,7 +1304,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         {
             NSInteger index = [value integerValue];
             NSArray<NSString *> *dayNightValues = tableData.values[@"array_value"];
-            _nightMode = [dayNightValues[index] isEqualToString:kColorNightMode];
+            _nightMode = [dayNightValues[index] isEqualToString:OALocalizedString(@"daynight_mode_night")];
             _selectedDayNightMode = _nightMode ? dayNightValues[1] : dayNightValues[0];
         }
     }
@@ -1533,9 +1539,18 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         
         NSInteger selectedIndex = 0;
         if ([cellData.key isEqualToString:@"color_day_night_value"])
-            selectedIndex = [arrayValue indexOfObject:_selectedDayNightMode];
+        {
+            NSInteger idx = [arrayValue indexOfObject:_selectedDayNightMode];
+            if (idx != NSNotFound)
+                selectedIndex = idx;
+        }
         else if ([cellData.key isEqualToString:@"width_value"])
-            selectedIndex = [[OARouteWidthMode getRouteWidthModes] indexOfObject:_selectedWidthMode];
+        {
+            NSInteger idx = [[OARouteWidthMode getRouteWidthModes] indexOfObject:_selectedWidthMode];
+            if (idx != NSNotFound)
+                selectedIndex = idx;
+        }
+
         [cell.segmentedControl setSelectedSegmentIndex:selectedIndex];
         cell.segmentedControl.tag = indexPath.section << 10 | indexPath.row;
         [cell.segmentedControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

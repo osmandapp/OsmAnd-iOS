@@ -88,7 +88,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void)onMapFrameRendered
 {
-    [_topPlacesProvider drawTopPlacesIfNeeded];
+  //  NSLog(@"[test] onMapFrameRendered");
+    [_topPlacesProvider drawTopPlacesIfNeeded:NO];
 }
 
 - (void)onMapFrameAnimatorsUpdated
@@ -126,6 +127,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         _wikiSymbolsProvider.reset();
         _showWikiOnMap = NO;
     }
+    [_topPlacesProvider resetLayer];
 }
 
 - (void) updateVisiblePoiFilter
@@ -495,13 +497,36 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return NO;
 }
 
-- (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+- (void)collectObjectsFromPoint:(MapSelectionResult *)result
+                unknownLocation:(BOOL)unknownLocation
+      excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    NSArray<OAPOI *> *amenities = [self getDisplayedResults:result.pointLatLon.coordinate.latitude lon:result.pointLatLon.coordinate.longitude];
-    for (OAPOI *amenity in amenities)
-    {
-        [result collect:amenity provider:self];
-    }
+    NSMutableArray<OAPOI *> *allAmenities = [NSMutableArray array];
+
+      NSArray<OAPOI *> *amenities =
+          [self getDisplayedResults:result.pointLatLon.coordinate.latitude
+                                lon:result.pointLatLon.coordinate.longitude];
+
+      if (amenities.count > 0)
+      {
+          [allAmenities addObjectsFromArray:amenities];
+      }
+      else
+      {
+          NSArray<OAPOI *> *topPlaces =
+              [_topPlacesProvider getDisplayedResults:result.pointLatLon.coordinate.latitude
+                                                  lon:result.pointLatLon.coordinate.longitude];
+
+          if (topPlaces.count > 0)
+          {
+              [allAmenities addObjectsFromArray:topPlaces];
+          }
+      }
+
+      for (OAPOI *amenity in allAmenities)
+      {
+          [result collect:amenity provider:self];
+      }
 }
 
 - (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon
@@ -571,8 +596,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     if ([_topPlacesProvider topPlaces])
     {
         int64_t placeId = -1;
-        if ([object isKindOfClass:OAPOI.class])
-            placeId = ((OAPOI *)object).obfId;
+        if ([object isKindOfClass:OAPOI.class]) {
+            placeId = 0;//((OAPOI *)object).obfId;// FIXME:
+        }
         else if ([object isKindOfClass:BaseDetailsObject.class])
             placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
         

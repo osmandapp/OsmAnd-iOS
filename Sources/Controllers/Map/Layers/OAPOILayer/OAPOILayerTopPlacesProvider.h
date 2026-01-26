@@ -14,8 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly, nullable) NSDictionary<NSNumber *, OAPOI *> *topPlaces;
 
-- (void)drawTopPlacesIfNeeded;
+- (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc;
 - (void)updateLayer;
+- (void)resetLayer;
+
+- (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder NS_DESIGNATED_INITIALIZER;

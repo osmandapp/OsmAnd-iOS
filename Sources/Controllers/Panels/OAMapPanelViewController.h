@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) id activeTargetObj;
 @property (nonatomic, readonly) id activeViewControllerState;
 @property (nonatomic, readonly) BOOL activeTargetChildPushed;
+@property (strong, nonatomic) OATargetPointView *targetMenuView;
 
 @property (readonly) OAObservable *weatherToolbarStateChangeObservable;
 

@@ -18,6 +18,7 @@
 #import "QuadTree.h"
 #import "OANativeUtilities.h"
 #import "OAMapTopPlace.h"
+#import "OATargetPointView.h"
 
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -48,13 +49,16 @@ static const NSInteger kImageIconSizeDP = 45;
     NSOperationQueue *_popularPlacesQueue;
     
     POIImageLoader *_imageLoader;
-    dispatch_queue_t _markersQueue;
+    dispatch_queue_t _backgroundQueue;
     OAMapRendererView *_mapView;
     OAPOIFiltersHelper *_filtersHelper;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _mapMarkersCollection;
     
     int _topPlaceBaseOrder;
     OAMapViewController *_mapViewController;
+    EOAWikiDataSourceType _wikiDataSourceType;
+    CGFloat _textScale;
+   // OAWikipediaPlugin *_wikiPlugin;
 }
 
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder
@@ -69,131 +73,163 @@ static const NSInteger kImageIconSizeDP = 45;
 
 - (void)configure
 {
+   // _wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
     _mapView = (OAMapRendererView *)[OARootViewController instance].mapPanel.mapViewController.view;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _textScale = [self textScale];
+    _calculatedFilters = [_filtersHelper getSelectedPoiFilters];
+    _wikiDataSourceType = [[OAAppSettings sharedManager].wikiDataSourceType get];
+    _backgroundQueue = dispatch_queue_create("com.osmand.topplaces.background", DISPATCH_QUEUE_SERIAL);
     _popularPlacesQueue = [NSOperationQueue new];
     _popularPlacesQueue.maxConcurrentOperationCount = 1;
     _popularPlacesQueue.qualityOfService = NSQualityOfServiceUserInitiated;
-    _markersQueue = dispatch_queue_create("com.osmand.markers.update", DISPATCH_QUEUE_SERIAL);
+   
 }
 
 // MARK: - Public
 
-- (NSDictionary<NSNumber *, OAPOI *> *)topPlaces {
+- (BOOL)dataChanged
+{
+//    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *)[OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
+//    if (_wikiPlugin != wikiPlugin)
+//    {
+//        _wikiPlugin = wikiPlugin;
+//        return YES;
+//    }
+//    
+    NSSet<OAPOIUIFilter *> *calculatedFilters = [_filtersHelper getSelectedPoiFilters];
+    if (![_calculatedFilters isEqualToSet:calculatedFilters])
+    {
+        _calculatedFilters = calculatedFilters;
+        return YES;
+    }
+    
+    EOAWikiDataSourceType wikiType = [[OAAppSettings sharedManager].wikiDataSourceType get];
+    if (_wikiDataSourceType != wikiType)
+    {
+        _wikiDataSourceType = wikiType;
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (NSDictionary<NSNumber *, OAPOI *> *)topPlaces
+{
     return _topPlaces ? [_topPlaces copy] : nil;
 }
 
 - (void)updateLayer
 {
-    if (![[OAAppSettings sharedManager].wikiShowImagePreviews get])
-    {
-        [self clearMapMarkersCollections];
-        [self cancelLoadingImages];
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updatePopularPlaces];
-        });
-    }
+    dispatch_async(_backgroundQueue, ^{
+        if ([self dataChanged])
+        {
+            [self clearMapMarkersCollections];
+            [self cancelLoadingImages];
+            _topPlaceData = nil;
+            [self drawTopPlacesIfNeeded:YES];
+            //
+            // [self updatePopularPlaces];
+            //[_mapView invalidateFrame];
+        } else {
+            //   CGFloat textScale = [self textScale];
+            __block CGFloat textScale = 1.0;
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                textScale = [self textScale];
+            });
+            if (_textScale != textScale)
+            {
+                _textScale = textScale;
+                [self updatePopularPlaces];
+            }
+            NSLog(@"");
+        }
+    });
 }
 
-- (void)drawTopPlacesIfNeeded
+- (void)resetLayer
 {
-    //NSLog(@"[test] onMapFrameRendered");
+    dispatch_async(_backgroundQueue, ^{
+        [self clearMapMarkersCollections];
+    });
+}
+
+- (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc
+{
     if (![[OAAppSettings sharedManager].wikiShowImagePreviews get])
     {
         return;
     }
-    const auto screenBbox = _mapView.getVisibleBBox31;
-    float currentZoom = [_mapView zoom];
-    
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
-    QuadRect *currentBounds = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
-    
-    BOOL shouldRecalc = NO;
-    
-    if (_lastCalcBounds == nil)
-    {
-        shouldRecalc = YES;
-    } else
-    {
-        BOOL zoomChanged = fabs(currentZoom - _lastCalcZoom) > 0.1;
+    dispatch_async(_backgroundQueue, ^{
+        const auto screenBbox = _mapView.getVisibleBBox31;
+        float currentZoom = [_mapView zoom];
+        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
+        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
+        QuadRect *currentBounds = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+        BOOL shouldRecalc = NO;
         
-        double halfW = fabs(_lastCalcBounds.width) / 2.0;
-        double halfH = fabs(_lastCalcBounds.height) / 2.0;
-        
-        double prevCx = (_lastCalcBounds.left + _lastCalcBounds.right) / 2.0;
-        double prevCy = (_lastCalcBounds.top + _lastCalcBounds.bottom) / 2.0;
-        double curCx = (currentBounds.left + currentBounds.right) / 2.0;
-        double curCy = (currentBounds.top + currentBounds.bottom) / 2.0;
-        
-        double dx = fabs(curCx - prevCx);
-        double dy = fabs(curCy - prevCy);
-        
-        BOOL moved = (dx > halfW) || (dy > halfH);
-        
-        shouldRecalc = zoomChanged || moved;
-    }
-    
-    if (!shouldRecalc)
-    {
-        // [self updatePopularPlaces];
-        return;
-    }
-    //    NSLog(@"[test] [BoundsLog] CUR: L:%.6f, T:%.6f, R:%.6f, B:%.6f | W:%.6f, H:%.6f",
-    //          currentBounds.left, currentBounds.top, currentBounds.right, currentBounds.bottom,
-    //          currentBounds.width, currentBounds.height);
-    
-    // Update last bounds and cancel previous operations
-    _lastCalcBounds = [[QuadRect alloc] initWithRect:currentBounds];
-    _lastCalcZoom = currentZoom;
-    
-    [_popularPlacesQueue cancelAllOperations];
-    
-    __weak __typeof(self) weakSelf = self;
-    NSBlockOperation *op = [NSBlockOperation new];
-    __weak NSBlockOperation *weakOp = op;
-    
-    QuadRect *screenRect = [[QuadRect alloc] initWithRect:_lastCalcBounds];
-    [screenRect inset:-(screenRect.width / 2.0) dy:-(screenRect.height / 2.0)];
-    
-    [op addExecutionBlock:^{
-        if (weakOp.isCancelled)
+        if (_lastCalcBounds == nil)
         {
-            //  NSLog(@"[test] weakOp.isCancelled 0");
+            shouldRecalc = YES;
+        } else
+        {
+            BOOL zoomChanged = fabs(currentZoom - _lastCalcZoom) > 0.1;
+            
+            double halfW = fabs(_lastCalcBounds.width) / 2.0;
+            double halfH = fabs(_lastCalcBounds.height) / 2.0;
+            
+            double prevCx = (_lastCalcBounds.left + _lastCalcBounds.right) / 2.0;
+            double prevCy = (_lastCalcBounds.top + _lastCalcBounds.bottom) / 2.0;
+            double curCx = (currentBounds.left + currentBounds.right) / 2.0;
+            double curCy = (currentBounds.top + currentBounds.bottom) / 2.0;
+            
+            double dx = fabs(curCx - prevCx);
+            double dy = fabs(curCy - prevCy);
+            
+            BOOL moved = (dx > halfW) || (dy > halfH);
+            
+            shouldRecalc = zoomChanged || moved;
+        }
+        
+        if (!forceRecalc && !shouldRecalc)
+        {
+            // [self updatePopularPlaces];
             return;
         }
         
-        OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAPOI * __autoreleasing *object) {
-            return YES;
-        } cancelledFunc:^BOOL{
-            if (weakOp.isCancelled)
-            {
-                //  NSLog(@"[test] weakOp.isCancelled cancelledFunc");
-            }
-            return weakOp.isCancelled;
-        }];
-        _calculatedFilters = [_filtersHelper getSelectedPoiFilters];
-        NSDictionary *results = [weakSelf calculateResult:screenRect zoom:currentZoom matcher:matcher];
+        _lastCalcBounds = [[QuadRect alloc] initWithRect:currentBounds];
+        _lastCalcZoom = currentZoom;
         
-        if (weakOp.isCancelled)
-        {
-            // NSLog(@"[test] weakOp.isCancelled 1");
-            return;
-        }
+        [_popularPlacesQueue cancelAllOperations];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        __weak __typeof(self) weakSelf = self;
+        NSBlockOperation *op = [NSBlockOperation new];
+        __weak NSBlockOperation *weakOp = op;
+        
+        QuadRect *screenRect = [[QuadRect alloc] initWithRect:_lastCalcBounds];
+        [screenRect inset:-(screenRect.width / 2.0) dy:-(screenRect.height / 2.0)];
+        
+        [op addExecutionBlock:^{
             if (weakOp.isCancelled)
-            {
-                // NSLog(@"[test] weakOp.isCancelled 2");
                 return;
-            }
+            
+            OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAPOI * __autoreleasing *object) {
+                return YES;
+            } cancelledFunc:^BOOL{
+                return weakOp.isCancelled;
+            }];
+            
+            NSDictionary *results = [weakSelf calculateResult:screenRect zoom:currentZoom matcher:matcher];
+            
+            if (weakOp.isCancelled)
+                return;
+            
             [weakSelf updateTopPlaceData:results];
-        });
-    }];
-    
-    [_popularPlacesQueue addOperation:op];
+        }];
+        
+        [_popularPlacesQueue addOperation:op];
+    });
 }
 
 // MARK: - Private
@@ -209,25 +245,27 @@ static const NSInteger kImageIconSizeDP = 45;
 - (void)updateVisiblePlaces:(nullable NSArray<OAPOI *> *)places
                latLonBounds:(QuadRect *)latLonBounds
 {
-    if (!places)
-    {
-        _visiblePlaces = nil;
-        return;
-    }
-    
-    NSMutableArray<OAPOI *> *res = [NSMutableArray arrayWithCapacity:places.count];
-    
-    for (OAPOI *place in places)
-    {
-        CLLocation *location = [place getLocation];
-        double lon = location.coordinate.longitude;
-        double lat = location.coordinate.latitude;
+    dispatch_async(_backgroundQueue, ^{
+        if (!places)
+        {
+            _visiblePlaces = nil;
+            return;
+        }
         
-        if ([latLonBounds contains:lon top:lat right:lon bottom:lat])
-            [res addObject:place];
-    }
-    
-    _visiblePlaces = res;
+        NSMutableArray<OAPOI *> *res = [NSMutableArray arrayWithCapacity:places.count];
+        
+        for (OAPOI *place in places)
+        {
+            CLLocation *location = [place getLocation];
+            double lon = location.coordinate.longitude;
+            double lat = location.coordinate.latitude;
+            
+            if ([latLonBounds contains:lon top:lat right:lon bottom:lat])
+                [res addObject:place];
+        }
+        
+        _visiblePlaces = res;
+    });
 }
 
 - (void)updateTopPlaceData:(NSDictionary<NSString *, NSArray<OAPOI *> *> *)results
@@ -240,79 +278,99 @@ static const NSInteger kImageIconSizeDP = 45;
 // updatePopularPlaces -> Android: public void onPrepareBufferImage(Canvas canvas, RotatedTileBox tileBox, DrawSettings settings) {
 - (void)updatePopularPlaces
 {
-    NSLog(@"[test] updatePopularPlaces");
-    BOOL showTopPlacesPreviews = [[OAAppSettings sharedManager].wikiShowImagePreviews get];
-    BOOL showTopPlacesPreviewsChanged = _showTopPlacesPreviews != showTopPlacesPreviews;
-    _showTopPlacesPreviews = showTopPlacesPreviews;
-    
-    if (YES/*showTopPlacesPreviewsChanged || topPlacesBox == null || !topPlacesBox.containsTileBox(tileBox)*/)
-    {
-        const auto screenBbox = _mapView.getVisibleBBox31;
-        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
-        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
-        QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+    dispatch_async(_backgroundQueue, ^{
+        NSLog(@"[test] updatePopularPlaces");
+//        OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *)[OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
+//        if (!wikiPlugin)
+//            return;
         
-        NSArray<OAPOI *> *allPlaces = _topPlaceData[@"all"];
-        [self updateVisiblePlaces:_topPlaceData[@"displayed"] latLonBounds:screenRect];
+        NSSet<OAPOIUIFilter *> *calculatedFilters = [_filtersHelper getSelectedPoiFilters];
+        if (calculatedFilters.count == 0)
+            return;
         
-        //        BOOL intersects = [QuadRect intersects:_topPlacesBox b:screenRect];
-        //        if (!intersects) {
-        //        }
+        BOOL showTopPlacesPreviews = [[OAAppSettings sharedManager].wikiShowImagePreviews get];
+        BOOL showTopPlacesPreviewsChanged = _showTopPlacesPreviews != showTopPlacesPreviews;
+        _showTopPlacesPreviews = showTopPlacesPreviews;
         
-        //        BOOL notContains = (_topPlacesBox == nil) || ![_topPlacesBox contains:screenRect];
-        //        if (notContains) {
-        //            // аналог !topPlacesBox.containsTileBox(tileBox)
-        //        }
-        
-        if (showTopPlacesPreviews)
+        if (showTopPlacesPreviewsChanged || YES/*topPlacesBox == null || !topPlacesBox.containsTileBox(tileBox)*/)
         {
-            // TODO: copy
-            QuadRect *extendedBox = screenRect;
-            // int bigIconSize = kImageIconSizeDP * [self textScale];
-            //                            extendedBox.increasePixelDimensions(bigIconSize * 2, bigIconSize * 2);
-            _topPlacesBox = extendedBox;
-            [self updateTopPlaces:allPlaces latLonBounds:screenRect zoom:[_mapView zoom]];
-            //    [self updateTopPlacesCollection];
+            const auto screenBbox = _mapView.getVisibleBBox31;
+            const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
+            const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
+            QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+            
+            NSArray<OAPOI *> *allPlaces = _topPlaceData[@"all"];
+            [self updateVisiblePlaces:_topPlaceData[@"displayed"] latLonBounds:screenRect];
+            
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            if ([mapPanel isContextMenuVisible])
+            {
+                BaseDetailsObject *targetObj = mapPanel.targetMenuView.targetPoint.targetObj;
+                if (targetObj)
+                {
+//                    OAPOI *amenity = [self getSelectedTopPlace:targetObj];
+//                    if (amenity)
+//                    {
+//                     // TODO: public void updateSelectedTopPlace(@Nullable Pair<BaseDetailsObject, Amenity> selected
+//                    }
+                    
+                }
+                
+            }
+            
+            if (showTopPlacesPreviews)
+            {
+                // TODO: copy
+                QuadRect *extendedBox = screenRect;
+                _topPlacesBox = extendedBox;
+                [self updateTopPlaces:allPlaces latLonBounds:screenRect zoom:[_mapView zoom]];
+               // dispatch_async(dispatch_get_main_queue(), ^{
+                  //  [self updateTopPlacesCollection];
+               // });
+            }
+            else
+            {
+                [self clearMapMarkersCollections];
+                [self cancelLoadingImages];
+            }
         }
-        else
+    });
+}
+
+- (nullable OAPOI *)getSelectedTopPlace:(BaseDetailsObject *)detailsObject
+{
+    if (self.topPlaces.count > 0)
+    {
+        for (OAPOI *amenity in detailsObject.getAmenities)
         {
-            [self clearMapMarkersCollections];
-            [self cancelLoadingImages];
+            OAPOI *topPlace = self.topPlaces[@(amenity.obfId)];
+            if (topPlace)
+            {
+                return topPlace;
+            }
         }
     }
     
-    //    if (updated || showTopPlacesPreviewsChanged || topPlacesBox == null || !topPlacesBox.containsTileBox(tileBox)) {
-    //                List<Amenity> places = data.getResults();
-    //                List<Amenity> places1 = data.getDisplayedResults();
-    //                updateVisiblePlaces(data.getDisplayedResults(), tileBox.getLatLonBounds());
-    //                if (showTopPlacesPreviews && places != null) {
-    //                    RotatedTileBox extendedBox = tileBox.copy();
-    //                    int bigIconSize = getBigIconSize();
-    //                    extendedBox.increasePixelDimensions(bigIconSize * 2, bigIconSize * 2);
-    //                    topPlacesBox = extendedBox;
-    //                    updateTopPlaces(places, tileBox.getLatLonBounds(), zoom);
-    //                    updateTopPlacesCollection();
-    //                } else {
-    //                    clearMapMarkersCollections();
-    //                    cancelLoadingImages();
-    //                }
-    //            }
+    return nil;
 }
+
 
 - (void)updateTopPlaceImageForId:(NSNumber *)placeId
                            image:(UIImage *)image
 {
-    if (_topPlaces && _topPlacesImages)
-    {
-        OAPOI *poi = _topPlaces[placeId];
-        if (poi)
+    dispatch_async(_backgroundQueue, ^{
+        if (_topPlaces && _topPlacesImages)
         {
-            _topPlacesImages[placeId] = image;
-            //    dispatch_async(_markersQueue, ^{
-            [self updateTopPlacesCollection];
-            //    });
+            OAPOI *poi = _topPlaces[placeId];
+            if (poi)
+            {
+                _topPlacesImages[placeId] = image;
+               // dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateTopPlacesCollection];
+             //   });
+            }
         }
-    }
+    });
 }
 
 - (void)updateTopPlacesCollection
@@ -340,6 +398,7 @@ static const NSInteger kImageIconSizeDP = 45;
         
         for (OAPOI *place in places)
         {
+            // NOTE:
             // Resolve the ID issue: use the lower 32 bits or a hash.
             // If obfId fits into an int, use it; otherwise, hash it.
             long long fullId = place.obfId ?: place.getTravelEloNumber;
@@ -383,6 +442,7 @@ static const NSInteger kImageIconSizeDP = 45;
             NSData *data = UIImagePNGRepresentation(place.image);
             if (data)
             {
+                NSLog(@"[test] mapPlacesToUpdate");
                 OsmAnd::MapMarkerBuilder builder;
                 builder.setIsAccuracyCircleSupported(false)
                     .setMarkerId((int)place.placeId)
@@ -396,8 +456,9 @@ static const NSInteger kImageIconSizeDP = 45;
         }
         // TOP_PLACES_POI_SECTION
         _mapView.renderer->addSymbolsProvider(kFavoritesSymbolSection, _mapMarkersCollection);
+       // [_mapView invalidateFrame];
     }];
-
+ //   [_mapView invalidateFrame];
 }
 
 - (void)clearMapMarkersCollections
@@ -407,7 +468,7 @@ static const NSInteger kImageIconSizeDP = 45;
         {
             NSLog(@"[test] clearMapMarkersCollections");
             [_mapView removeKeyedSymbolsProvider:_mapMarkersCollection];
-            _mapMarkersCollection = nullptr;
+            _mapMarkersCollection.reset();
         }
     }];
 }
@@ -416,56 +477,36 @@ static const NSInteger kImageIconSizeDP = 45;
            latLonBounds:(QuadRect *)latLonBounds
                    zoom:(int)zoom
 {
-    NSArray<OAPOI *> *topPlacesList = nil;
-    
-    if (_topPlacesFilter != nil)
-    {
-        _topPlaces = [[self obtainTopPlacesToDisplay:places
-                                        latLonBounds:latLonBounds
-                                                zoom:zoom] mutableCopy];
-        _topPlacesImages = [NSMutableDictionary dictionary];
-        topPlacesList = [_topPlaces allValues];
-    }
-    
-    if (topPlacesList != nil)
-    {
-        if (topPlacesList.count > 0)
+    dispatch_async(_backgroundQueue, ^{
+        NSArray<OAPOI *> *topPlacesList = nil;
+        
+        if (_topPlacesFilter != nil)
         {
-            
-            if (!_imageLoader)
-                _imageLoader = [POIImageLoader new];
-            
-            __weak __typeof(self) weakSelf = self;
-            [_imageLoader fetchImages:places completion:^(NSNumber *placeId, UIImage *image) {
-                //  NSLog(@"Loaded image for placeId %@", placeId);
-                [weakSelf updateTopPlaceImageForId:placeId image:image];
-            }];
-            
-            /*
-             {(
-             "https://data.osmand.net/wikimedia/images-1280/6/67/\U0418\U043d\U0441\U0442\U0438\U0442\U0443\U0442_\U0447\U0435\U0440\U043d\U043e\U0439_\U043c\U0435\U0442\U0430\U043b\U043b\U0443\U0440\U0433\U0438\U0438_\U041d\U0410\U041d_\U0423\U043a\U0440\U0430\U0438\U043d\U044b.jpg?width=160",
-             "https://data.osmand.net/wikimedia/images-1280/a/ab/DNU_library.JPG?width=160",
-             "https://data.osmand.net/wikimedia/images-1280/0/05/\U0411\U043e\U0442\U0430\U043d\U0456\U0447\U043d\U0438\U0439_\U0441\U0430\U0434_\U0414\U041d\U0423_17.JPG?width=160",
-             "https://data.osmand.net/wikimedia/images-1280/1/1b/Gagarina_Prospekt10_(Dnepropetrovsk).jpg?width=160"
-             )}
-             
-             */
-            
-            //            NSMutableSet<NSString *> *imagesToLoad = [NSMutableSet set];
-            //
-            //            for (OAPOI *place in places) {
-            //                NSString *iconUrl = place.wikiIconUrl; // лениво загрузится, если нужно
-            //                if (iconUrl != nil && iconUrl.length > 0) {
-            //                    [imagesToLoad addObject:iconUrl];
-            //                }
-            //            }
-            //            NSLog(@"%@", imagesToLoad);
+            _topPlaces = [[self obtainTopPlacesToDisplay:places
+                                            latLonBounds:latLonBounds
+                                                    zoom:zoom] mutableCopy];
+            _topPlacesImages = [NSMutableDictionary dictionary];
+            topPlacesList = [_topPlaces allValues];
         }
-        else
+        
+        if (topPlacesList != nil)
         {
-            [self cancelLoadingImages];
+            if (topPlacesList.count > 0)
+            {
+                if (!_imageLoader)
+                    _imageLoader = [POIImageLoader new];
+                
+                __weak __typeof(self) weakSelf = self;
+                [_imageLoader fetchImages:places completion:^(NSNumber *placeId, UIImage *image) {
+                    [weakSelf updateTopPlaceImageForId:placeId image:image];
+                }];
+            }
+            else
+            {
+                [self cancelLoadingImages];
+            }
         }
-    }
+    });
 }
 
 - (nonnull NSDictionary<NSNumber *, OAPOI *> *)obtainTopPlacesToDisplay:(nonnull NSArray<OAPOI *> *)places
@@ -476,7 +517,7 @@ static const NSInteger kImageIconSizeDP = 45;
     
     long long tileSize31 = (1LL << (31 - zoom));
     double from31toPixelsScale = 256.0 / (double)tileSize31;
-    double estimatedIconSize = kImageIconSizeDP * [self textScale];
+    double estimatedIconSize = kImageIconSizeDP * _textScale;
     float iconSize31 = (float)(estimatedIconSize / from31toPixelsScale);
     
     int left   = [OASKMapUtils.shared get31TileNumberXLongitude:latLonBounds.left];
@@ -484,11 +525,10 @@ static const NSInteger kImageIconSizeDP = 45;
     int right  = [OASKMapUtils.shared get31TileNumberXLongitude:latLonBounds.right];
     int bottom = [OASKMapUtils.shared get31TileNumberYLatitude:latLonBounds.bottom];
     
-    QuadTree *boundIntersections =
-    [[self class] initBoundIntersections:left
-                                     top:top
-                                   right:right
-                                  bottom:bottom];
+    QuadTree *boundIntersections = [[self class] initBoundIntersections:left
+                                                                    top:top
+                                                                  right:right
+                                                                 bottom:bottom];
     
     int i = 0;
     for (OAPOI *place in places)
@@ -515,13 +555,6 @@ static const NSInteger kImageIconSizeDP = 45;
             res[@(place.obfId)] = place;
         }
         
-        //        if (res.count > kTopPlacesLimit)
-        //        {
-        //            break;
-        //        }
-        //        i++;
-        
-        // NOTE: android
         if (i++ > kTopPlacesLimit)
         {
             break;
@@ -798,19 +831,56 @@ static const NSInteger kImageIconSizeDP = 45;
     }
     else if (routeTrack)
     {
-        //        if ([travelRendererHelper.routeTracksProperty get])
-        //        {
-        //            return zoom >= kStartZoom && zoom <= kEndZoomRouteTrack;
-        //        }
-        //        else
-        //        {
         return zoom >= kStartZoomRouteTrack;
-        //     }
     }
     else
     {
         return zoom >= kStartZoom;
     }
+}
+
+// Added method replacement as requested
+- (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon
+{
+    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+    if (!_topPlaces || _topPlaces.count == 0)
+        return result;
+
+    CLLocation *tapLocation = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+    const CLLocationDistance kPoiSearchRadius = 50.0; // meters
+
+    // Collect candidates within radius with their distances
+    NSMutableArray<NSDictionary *> *candidates = [NSMutableArray array];
+    for (OAPOI *poi in _topPlaces.allValues)
+    {
+        CLLocation *poiLoc = [poi getLocation];
+        if (!poiLoc)
+            continue;
+        CLLocationDistance d = [tapLocation distanceFromLocation:poiLoc];
+        if (d <= kPoiSearchRadius)
+        {
+            [candidates addObject:@{ @"poi": poi, @"dist": @(d) }];
+        }
+    }
+
+    // Sort by distance ascending
+    [candidates sortUsingComparator:^NSComparisonResult(NSDictionary *a, NSDictionary *b) {
+        double da = [a[@"dist"] doubleValue];
+        double db = [b[@"dist"] doubleValue];
+        if (da < db) return NSOrderedAscending;
+        if (da > db) return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+
+    // Extract POIs up to a reasonable limit
+    for (NSDictionary *entry in candidates)
+    {
+        [result addObject:entry[@"poi"]];
+        if (result.count >= kTopPlacesLimit)
+            break;
+    }
+
+    return [result copy];
 }
 
 @end

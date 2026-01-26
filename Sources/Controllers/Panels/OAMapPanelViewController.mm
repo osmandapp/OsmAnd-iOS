@@ -142,7 +142,7 @@ typedef enum
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
 
-@property (strong, nonatomic) OATargetPointView* targetMenuView;
+
 @property (strong, nonatomic) OATargetMultiView* targetMultiMenuView;
 @property (strong, nonatomic) UIButton* shadowButton;
 
@@ -1537,7 +1537,6 @@ typedef enum
             OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
             trackItem.dataItem = dataItem;
-            trackItem.color;
         }
         else if ([targetPoint.targetObj isKindOfClass:[OASGpxFile class]])
         {

@@ -4015,3 +4015,5 @@
 "shared_string_dynamic" = "Dinámico";
 "background_opacity_description" = "Transparente, revela el contenido que hay debajo. Tonalizado, aumenta la opacidad y añade más contraste.";
 "shared_string_tinted" = "Tonalizado";
+"trip_recording_moving_time" = "Tiempo moviéndote";
+"trip_recording_moving_time_widget_description" = "Muestra el tiempo del movimiento actual registrado, o el tiempo para el último ascenso y descenso.";

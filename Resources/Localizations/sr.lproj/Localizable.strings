@@ -4008,3 +4008,5 @@
 "shared_string_dynamic" = "Динамично";
 "shared_string_tinted" = "Тонирано";
 "background_opacity_description" = "Провидно је транспарентније, откривајући садржај испод. Тонирано повећава непрозирност и додаје више контраста.";
+"trip_recording_moving_time" = "Време кретања";
+"trip_recording_moving_time_widget_description" = "Приказује тренутно забележено време кретања или време за последњи успон и спуст.";

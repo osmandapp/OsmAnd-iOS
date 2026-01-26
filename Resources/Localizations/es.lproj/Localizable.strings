@@ -2615,7 +2615,7 @@
 "routing_attr_allow_streams_name" = "Permitir arroyos y desagües";
 "rendering_attr_OSMMapperAssistantNote_description" = "Muestra etiquetas con información no obvia sobre algún elemento (note)";
 "rendering_value_omit_name" = "Omitir";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualización esquemática de los iconos en zooms bajos";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Una representación esquemática de iconos con niveles de zoom bajos para aquellos PDI que normalmente no se muestran";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "No salirse de la pista";
 "rendering_attr_horse_scale_dangerous_name" = "Peligroso";
 "rendering_attr_weatherCloudContours_name" = "Isolíneas de nubes";
@@ -3877,7 +3877,15 @@
 "key_assignment_add_action" = "Añadir acción";
 "key_assignment_add_key" = "Añadir clave";
 "key_name_pattern" = "Clave «%@»";
-"shared_string_max_speed" = "";
+"shared_string_max_speed" = "Velocidad máx.";
 "x" = "X (antes Twitter)";
 "application_profile_changed" = "Se cambió el perfil de la aplicación a «%@»";
 "no_activity_for_intent" = "Instale una aplicación que pueda efectuar esta acción.";
+"mpg" = "MPG";
+"slots" = "Ranuras";
+"shared_string_last_downhill" = "Último descenso";
+"shared_string_last_uphill" = "Último ascenso";
+"efficient_grid" = "Cuadrícula eficiente";
+"lang_crh" = "Tártaro de Crimea";
+"visualizing_button_grid" = "Cuadrícula de botones del mapa";
+"trip_recording_average_slope_widget_description" = "Muestra la pendiente promedio de la última sección cuesta abajo o cuesta arriba del viaje registrado actualmente.";

@@ -2528,7 +2528,7 @@
 "telegram_chats" = "Telegram csevegések";
 "shared_string_delete_immediately" = "Azonnali törlés";
 "skip_download" = "Letöltés kihagyása";
-"shared_string_move" = "Mozgatás";
+"shared_string_move" = "Áthelyezés";
 "shared_string_format" = "Formátum";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigálás nyomvonallal";
 "external_device_status_disconnect" = "Kapcsolat bontása";
@@ -3969,3 +3969,5 @@
 "shared_string_dynamic" = "Dinamikus";
 "shared_string_tinted" = "Színezett";
 "background_opacity_description" = "A „Tiszta” beállítás átlátszóbb, felfedve az alatta lévő tartalmat. A „Színezett” beállítás növeli az átlátszatlanságot és nagyobb kontrasztot ad.";
+"trip_recording_moving_time" = "Mozgásban töltött idő";
+"trip_recording_moving_time_widget_description" = "Megjeleníti a jelenleg rögzített mozgásban töltött időt, vagy az utolsó emelkedő és lejtő idejét.";

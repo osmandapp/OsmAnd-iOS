@@ -4010,3 +4010,5 @@
 "shared_string_dynamic" = "Динамічний";
 "shared_string_tinted" = "Тоноване";
 "background_opacity_description" = "Прозорий колір прозоріший, що дозволяє побачити вміст під ним. Тонований колір збільшує непрозорість і додає більше контрасту.";
+"trip_recording_moving_time" = "Час переїзду";
+"trip_recording_moving_time_widget_description" = "Показує поточний записаний час руху або час останнього підйому та спуску.";

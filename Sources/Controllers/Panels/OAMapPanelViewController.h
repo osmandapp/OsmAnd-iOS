@@ -210,6 +210,7 @@ NS_ASSUME_NONNULL_BEGIN
                leftInset:(float)leftInset
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
+ applyAspectRatioScaling:(BOOL)applyAspectRatioScaling
                 animated:(BOOL)animated;
 
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
@@ -255,8 +256,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Navigation
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle;
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle animated:(BOOL)animated;
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle applyAspectRatioScaling:(BOOL)applyAspectRatioScaling;
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle applyAspectRatioScaling:(BOOL)applyAspectRatioScaling animated:(BOOL)animated;
 
 - (void)buildRoute:(nullable CLLocation *)start
                 end:(nullable CLLocation *)end

@@ -3990,7 +3990,7 @@ static const NSInteger kDetailedMapZoom = 9;
             [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) 
                                                                       bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
                                                              changeElevationAngle:NO
-                                                                      updateScale:YES
+                                                          applyAspectRatioScaling:YES
                                                                          animated:NO];
     });
 }

@@ -344,24 +344,30 @@ static const int START_ZOOM = 10;
     [self collectOsmEdits:osmEdits result:result pixel:pixel radiusPixels:radiusPixels];
 }
 
-- (void)collectOsmEdits:(NSArray<OAOsmPoint *> *)osmEdits result:(MapSelectionResult *)result pixel:(CGPoint)pixel radiusPixels:(int)radiusPixels
+- (void)collectOsmEdits:(NSArray<OAOsmPoint *> *)osmEdits
+                 result:(MapSelectionResult *)result
+                  pixel:(CGPoint)pixel
+           radiusPixels:(int)radiusPixels
 {
     if (!NSArrayIsEmpty(osmEdits))
     {
-        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
-        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
-        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
-        [self collectOsmEditsFromScreenArea:osmEdits screenArea:touchPolygon31 result:result];
+        QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:pixel radius:radiusPixels];
+        if (touchPolygon31.isEmpty())
+            return;
+
+        [self collectOsmEditsFromScreenArea:osmEdits touchPolygon31:touchPolygon31 result:result];
     }
 }
 
-- (void) collectOsmEditsFromScreenArea:(NSArray<OAOsmPoint *> *)osmEdits screenArea:(OsmAnd::AreaI)screenArea result:(MapSelectionResult *)result
+- (void) collectOsmEditsFromScreenArea:(NSArray<OAOsmPoint *> *)osmEdits
+                        touchPolygon31:(QList<OsmAnd::PointI>)touchPolygon31
+                                result:(MapSelectionResult *)result
 {
     for (OAOsmPoint *osmEdit in osmEdits)
     {
         double lat = [osmEdit getLatitude];
         double lon = [osmEdit getLongitude];
-        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:screenArea];
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:lat lon:lon polygon31:touchPolygon31];
         if (shouldAdd)
             [result collect:osmEdit provider:self];
     }

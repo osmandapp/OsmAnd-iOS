@@ -241,13 +241,14 @@ static int MIN_POINTS_ZOOM = 17;
     if (!_mapillaryMapProvider || [self.mapViewController getMapZoom] < MIN_POINTS_ZOOM)
         return;
     
-    CGPoint pixel = result.point;
-    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:pixel];
+    CGPoint point = result.point;
+    OsmAnd::PointI center31 = [OANativeUtilities getPoint31From:point];
     const auto latLon = [OANativeUtilities getLanlonFromPoint31:center31];
 
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-    const auto touchPolygon31 = [self getMapillaryTouchPolygon:pixel radius:radius];
-    if (touchPolygon31 == OsmAnd::AreaI())
+ 
+    QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+    if (touchPolygon31.isEmpty())
         return;
     
     const auto zoom = self.mapView.zoomLevel;
@@ -277,8 +278,8 @@ static int MIN_POINTS_ZOOM = 17;
             double tileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
             double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
             auto pointLatLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(tileX, tileY));
-            
-            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:pointLatLon.latitude lon:pointLatLon.longitude polygon31:touchPolygon31];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:pointLatLon.latitude lon:pointLatLon.longitude polygon31:touchPolygon31];
+
             if (shouldAdd)
             {
                 OAMapillaryImage *newImage = [[OAMapillaryImage alloc] initWithLatitude:pointLatLon.latitude longitude:pointLatLon.longitude];
@@ -299,29 +300,6 @@ static int MIN_POINTS_ZOOM = 17;
             [result collect:closestImage provider:self];
         }
     }
-}
-
-- (OsmAnd::AreaI) getMapillaryTouchPolygon:(CGPoint)pixel radius:(int)radius
-{
-    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:pixel radius:radius];
-    if (touchPolygon31 == OsmAnd::AreaI())
-        return OsmAnd::AreaI();
-    
-    int32_t minX31 = INT32_MAX;
-    int32_t minY31 = INT32_MAX;
-    int32_t maxX31 = INT32_MIN;
-    int32_t maxY31 = INT32_MIN;
-    
-    QVector<OsmAnd::PointI> touchPolygonList = {touchPolygon31.topLeft, touchPolygon31.bottomRight};
-    for (auto point31 : touchPolygonList)
-    {
-        minX31 = min(minX31, point31.x);
-        minY31 = min(minY31, point31.y);
-        maxX31 = max(maxX31, point31.x);
-        maxY31 = max(maxY31, point31.y);
-    }
-    
-    return OsmAnd::AreaI(minY31, minX31, maxY31, maxX31);
 }
 
 - (BOOL)isSecondaryProvider

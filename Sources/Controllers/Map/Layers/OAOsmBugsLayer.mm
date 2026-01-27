@@ -191,12 +191,12 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     
     if (zoom >= START_ZOOM && !objects.isEmpty())
     {
-        CGPoint pixel = result.point;
-        int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        CGPoint point = result.point;
+        int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
         
-        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
-        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
-        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+        if (touchPolygon31.isEmpty())
+            return;
         
         for (const auto note : objects)
         {
@@ -205,7 +205,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
             
             double lat = note->getLatitude();
             double lon = note->getLongitude();
-            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:lat lon:lon polygon31:touchPolygon31];
             
             if (shouldAdd)
             {

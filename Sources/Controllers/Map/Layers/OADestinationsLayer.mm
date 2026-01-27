@@ -589,12 +589,13 @@
         return;
     
     [_amenities removeAllObjects];
-    CGPoint pixel = result.point;
+    
+    CGPoint point = result.point;
     int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
- 
-    CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
-    CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 4));
-    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+    
+    QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radiusPixels];
+    if (touchPolygon31.isEmpty())
+        return;
     
     OAAppSettings *settings = OAAppSettings.sharedManager;
     BOOL selectMarkerOnSingleTap = OAAppSettings.sharedManager.selectMarkerOnSingleTap;
@@ -603,7 +604,7 @@
     {
         if (!unknownLocation && selectMarkerOnSingleTap)
         {
-            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:marker.latitude lon:marker.longitude polygon31:touchPolygon31];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:marker.latitude lon:marker.longitude polygon31:touchPolygon31];
             if (shouldAdd)
             {
                 if (!unknownLocation && selectMarkerOnSingleTap)

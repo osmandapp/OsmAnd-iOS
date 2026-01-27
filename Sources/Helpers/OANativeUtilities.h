@@ -101,5 +101,9 @@
 + (BOOL)isPointInsidePolygonLat:(double)lat
                             lon:(double)lon
                       polygon31:(const QList<OsmAnd::PointI>&)polygon;
++ (QList<OsmAnd::PointI>)getPolygon31FromScreenAreaLeft:(float)leftPix
+            top:(float)topPix
+          right:(float)rightPix
+         bottom:(float)bottomPix;
 
 @end

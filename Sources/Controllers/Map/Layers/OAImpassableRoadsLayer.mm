@@ -166,7 +166,15 @@ static const int START_ZOOM = 10;
     {
         CGPoint point = result.point;
         int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-        QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+        
+        float left   = point.x - radius;
+        float top    = point.y - radius / 2.0f;
+        float right  = point.x + radius;
+        float bottom = point.y + radius * 3.0f;
+
+        QList<OsmAnd::PointI> touchPolygon31 =
+            [OANativeUtilities getPolygon31FromScreenAreaLeft:left top:top right:right bottom:bottom];
+
         if (touchPolygon31.isEmpty())
             return;
         

@@ -247,7 +247,7 @@ static int MIN_POINTS_ZOOM = 17;
 
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
  
-    QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+    QList<OsmAnd::PointI> touchPolygon31 = [self getMapillaryTouchPolygon:point radius:radius];
     if (touchPolygon31.isEmpty())
         return;
     
@@ -341,4 +341,19 @@ static int MIN_POINTS_ZOOM = 17;
     return 0;
 }
 
+- (QList<OsmAnd::PointI>) getMapillaryTouchPolygon:(CGPoint)pixel radius:(int)radius
+{
+    QList<OsmAnd::PointI> polygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:pixel radius:radius];
+    // Ensure the polygon is closed (first == last) if not already
+    if (!polygon31.isEmpty()) {
+        const OsmAnd::PointI first = polygon31.first();
+        const OsmAnd::PointI last = polygon31.last();
+        if (first != last) {
+            polygon31.append(first);
+        }
+    }
+    return polygon31;
+}
+
 @end
+

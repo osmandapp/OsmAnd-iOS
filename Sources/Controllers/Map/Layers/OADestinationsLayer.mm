@@ -591,9 +591,16 @@
     [_amenities removeAllObjects];
     
     CGPoint point = result.point;
-    int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
     
-    QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radiusPixels];
+    float left   = point.x - radius;
+    float top    = point.y - radius / 2.0f;
+    float right  = point.x + radius;
+    float bottom = point.y + radius * 4.0f;
+
+    QList<OsmAnd::PointI> touchPolygon31 =
+        [OANativeUtilities getPolygon31FromScreenAreaLeft:left top:top right:right bottom:bottom];
+    
     if (touchPolygon31.isEmpty())
         return;
     

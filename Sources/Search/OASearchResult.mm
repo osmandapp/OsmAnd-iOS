@@ -529,15 +529,6 @@
     return leftUnknownSearchWords;
 }
 
-/*- (double) getTypeWeight:(OASearchResult *)exactResult objectType:(EOAObjectType)objectType
-{
-    if (exactResult == nil && ![_requiredSearchPhrase isLikelyAddressSearch])
-    {
-        return 1;
-    }
-    return [OAObjectType getTypeWeight:objectType];
-}*/
-
 - (NSArray<NSString *> *)stripBracesNames
 {
     NSString *brace = @"(";

@@ -351,7 +351,14 @@ static const int START_ZOOM = 10;
 {
     if (!NSArrayIsEmpty(osmEdits))
     {
-        QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:pixel radius:radiusPixels];
+        float left   = pixel.x - radiusPixels;
+        float top    = pixel.y - radiusPixels / 3.0f;
+        float right  = pixel.x + radiusPixels;
+        float bottom = pixel.y + radiusPixels * 1.5f;
+
+        QList<OsmAnd::PointI> touchPolygon31 =
+            [OANativeUtilities getPolygon31FromScreenAreaLeft:left top:top right:right bottom:bottom];
+
         if (touchPolygon31.isEmpty())
             return;
 

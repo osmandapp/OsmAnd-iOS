@@ -73,7 +73,7 @@
         [p setIconNameIconName:_iconName];
         [p setBackgroundTypeBackType:DEFAULT_ICON_SHAPE_KEY];
         [p setAddressAddress:address];
-        NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
+        NSDictionary<NSString *, NSString *> *extensions = [poi toTagValue:AMENITY_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [[p getExtensionsToWrite] addEntriesFromDictionary:extensions];
         
         NSString *originName = poi.toStringEn;

@@ -23,6 +23,10 @@
 #import "OASRTMPlugin.h"
 #import "OAPluginsHelper.h"
 
+static const NSInteger kOrderRegionSizeRow = 1;
+static const NSInteger kOrderRegionUrlRow = 2;
+static const NSInteger kOrderRegionPopulationRow = 3;
+
 @interface OAMapDownloadController ()
 
 @end
@@ -205,7 +209,7 @@
     return _mapObject;
 }
 
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
 {
     OAWorldRegion *region = _mapObject.worldRegion;
     OAResourceItem *item = _mapObject.indexItem;
@@ -218,7 +222,7 @@
         if (item.sizePkg && item.sizePkg > 0)
             rowText = [NSString stringWithFormat:@"%@ - %@", rowText, [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
         
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:1 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderRegionSizeRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     if (region.wikiLink && region.wikiLink.length > 0)
     {
@@ -228,11 +232,11 @@
             url = [NSString stringWithFormat:@"https://%@.wikipedia.org/wiki/%@", items[0], [items[1] stringByReplacingOccurrencesOfString:@" " withString:@"_"]];
         else
             url = [NSString stringWithFormat:@"https://wikipedia.org/wiki/%@", [items[0] stringByReplacingOccurrencesOfString:@" " withString:@"_"]];
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:url textColor:UIColorFromRGB(kHyperlinkColor) isText:NO needLinks:YES order:2 typeName:@"" isPhoneNumber:NO isUrl:YES]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:nil text:url textColor:UIColorFromRGB(kHyperlinkColor) isText:NO needLinks:YES order:kOrderRegionUrlRow typeName:@"" isPhoneNumber:NO isUrl:YES]];
     }
     if (region.population && region.population.length > 0)
     {
-        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:OALocalizedString(@"population_num") text:[OAOsmAndFormatter getFormattedOsmTagValue:region.population] textColor:nil isText:YES needLinks:NO order:3 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:region.name icon:[OATargetInfoViewController getIcon:iconInfo] textPrefix:OALocalizedString(@"population_num") text:[OAOsmAndFormatter getFormattedOsmTagValue:region.population] textColor:nil isText:YES needLinks:NO order:kOrderRegionPopulationRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
 }
 

@@ -997,11 +997,11 @@ typedef enum {
     {
         CGPoint point = result.point;
         int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
-        if (touchPolygon31 == OsmAnd::AreaI())
+        QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+        if (touchPolygon31.isEmpty())
             return;
         
-        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:myLocation.coordinate.latitude lon:myLocation.coordinate.longitude polygon31:touchPolygon31];
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:myLocation.coordinate.latitude lon:myLocation.coordinate.longitude polygon31:touchPolygon31];
         if (shouldAdd)
             [result collect:myLocation provider:self];
     }

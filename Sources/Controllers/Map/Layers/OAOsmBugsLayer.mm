@@ -191,12 +191,19 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     
     if (zoom >= START_ZOOM && !objects.isEmpty())
     {
-        CGPoint pixel = result.point;
-        int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        CGPoint point = result.point;
+        int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
         
-        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 3));
-        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 1.5));
-        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+        float left   = point.x - radius;
+        float top    = point.y - radius / 3.0f;
+        float right  = point.x + radius;
+        float bottom = point.y + radius * 2.0f;
+
+        QList<OsmAnd::PointI> touchPolygon31 =
+            [OANativeUtilities getPolygon31FromScreenAreaLeft:left top:top right:right bottom:bottom];
+
+        if (touchPolygon31.isEmpty())
+            return;
         
         for (const auto note : objects)
         {
@@ -205,7 +212,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
             
             double lat = note->getLatitude();
             double lon = note->getLongitude();
-            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:lat lon:lon polygon31:touchPolygon31];
             
             if (shouldAdd)
             {

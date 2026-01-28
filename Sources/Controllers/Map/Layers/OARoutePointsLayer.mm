@@ -197,8 +197,8 @@
     {
         CGPoint point = result.point;
         int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
-        if (touchPolygon31 == OsmAnd::AreaI())
+        QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+        if (touchPolygon31.isEmpty())
             return;
         
         for (const auto& routePoint : _markersCollection->getMarkers())
@@ -206,7 +206,7 @@
             double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
             double lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
             
-            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:lat lon:lon polygon31:touchPolygon31];
             if (shouldAdd)
             {
                 OAMapMarkerWrapper *wrapper = [[OAMapMarkerWrapper alloc] init];

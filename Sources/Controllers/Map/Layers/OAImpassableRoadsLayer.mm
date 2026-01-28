@@ -164,18 +164,24 @@ static const int START_ZOOM = 10;
     
     if ([self.mapViewController getMapZoom] >= START_ZOOM && !excludeUntouchableObjects && !NSArrayIsEmpty(impassableRoads))
     {
-        int radiusPixels = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-        CGPoint pixel = result.point;
-        CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - (radiusPixels / 2));
-        CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + (radiusPixels * 3));
-        OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
-        if (touchPolygon31 == OsmAnd::AreaI())
+        CGPoint point = result.point;
+        int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+        
+        float left   = point.x - radius;
+        float top    = point.y - radius / 2.0f;
+        float right  = point.x + radius;
+        float bottom = point.y + radius * 3.0f;
+
+        QList<OsmAnd::PointI> touchPolygon31 =
+            [OANativeUtilities getPolygon31FromScreenAreaLeft:left top:top right:right bottom:bottom];
+
+        if (touchPolygon31.isEmpty())
             return;
         
         for (OAAvoidRoadInfo *road in impassableRoads)
         {
             CLLocation *latLon = [[OAAvoidSpecificRoads instance] getLocation:road.roadId];
-            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:latLon.coordinate.latitude lon:latLon.coordinate.longitude polygon31:touchPolygon31];
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude polygon31:touchPolygon31];
             if (shouldAdd)
                 [result collect:road provider:self];
         }

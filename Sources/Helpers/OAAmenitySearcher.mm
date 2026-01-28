@@ -1499,7 +1499,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                 {
                     [closedAmenities addObject:obfId];
                 }
-                else if (![closedAmenities containsObject:obfId] && ![openAmenities containsObject:obfId])
+                else if (![closedAmenities containsObject:obfId])
                 {
                     [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];

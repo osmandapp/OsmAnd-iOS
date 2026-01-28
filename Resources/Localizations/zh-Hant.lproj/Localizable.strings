@@ -3951,3 +3951,4 @@
 "deleted_maps_prompt" = "這些地圖不在受支援，而且已經用更小的區域所取代。請移除後下載新版本。";
 "unsupported_maps" = "不支援的地圖";
 "deleted_maps_alert_message" = "您確定要刪除 %d 地圖嗎？";
+"rendering_attr_spotSize_description" = "檢視附近大小";

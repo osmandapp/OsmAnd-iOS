@@ -73,7 +73,7 @@
 
 - (double) getSumPhraseMatchWeight:(OASearchResult *)exactResult
 {
-    double res = [self getTypeWeight:exactResult objectType:_objectType];
+    double res = [OAObjectType getTypeWeight:_objectType];
     if ([_requiredSearchPhrase getUnselectedPoiType])
     {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
@@ -133,7 +133,7 @@
         }
         // if all words from search phrase match (<) the search result words - we prioritize it higher
         if (matched)
-            res = [self getPhraseWeightForCompleteMatch:exactResult completeMatchRes:completeMatchRes];
+            res = [self getPhraseWeightForCompleteMatch:completeMatchRes];
         if ([_object isKindOfClass:OAPOI.class])
         {
             OAPOI * a = (OAPOI *) _object;
@@ -152,16 +152,35 @@
     return res;
 }
 
-- (double) getPhraseWeightForCompleteMatch:(OASearchResult *)exactResult completeMatchRes:(CheckWordsMatchCount *)completeMatchRes
+- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes
     {
-        double res = [self getTypeWeight:exactResult objectType:_objectType] * MAX_TYPES_BASE_10;
-        // if all words from search phrase == the search result words - we prioritize it even higher
+        double res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10; // range 10 - 40
+        BOOL closeDistance = false;
+        CLLocation * searchLocation = [[_requiredSearchPhrase getSettings] getOriginalLocation];
+        if (searchLocation != nil && self.location != nil)
+        {
+            double dist =  [OAMapUtils getDistance:searchLocation.coordinate second:self.location.coordinate];
+            if (dist <= NEAREST_METERS_LIMIT)
+            {
+                // will sort in groups by object type each ~2 km
+                int coef = (int)(((NEAREST_METERS_LIMIT - dist) / NEAREST_METERS_LIMIT) * 15);
+                res = [OAObjectType getTypeWeight:_objectType]  + MAX_TYPES_BASE_10 * 4 + coef;
+                closeDistance = true;
+                // range 41 - 59
+            }
+        }
         if (completeMatchRes.allWordsEqual)
         {
-            BOOL closeDistance = [_requiredSearchPhrase getLastTokenLocation] != nil && self.location != nil
-                                && [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:self.location.coordinate] <= NEAREST_METERS_LIMIT;
+            // if all words from search phrase == the search result words - we prioritize it even higher
             if (_objectType != EOAObjectTypePoi || closeDistance)
-                res = [self getTypeWeight:exactResult objectType:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
+            {
+                res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
+            }
+            if (closeDistance)
+            {
+                res += 1;
+            }
+            // range 60 - 91
         }
         return res;
     }
@@ -508,15 +527,6 @@
     }
     
     return leftUnknownSearchWords;
-}
-
-- (double) getTypeWeight:(OASearchResult *)exactResult objectType:(EOAObjectType)objectType
-{
-    if (exactResult == nil && ![_requiredSearchPhrase isLikelyAddressSearch])
-    {
-        return 1;
-    }
-    return [OAObjectType getTypeWeight:objectType];
 }
 
 - (NSArray<NSString *> *)stripBracesNames

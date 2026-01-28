@@ -121,7 +121,6 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 + (NSMutableArray<NSString *> *) stripBracesArray:(NSMutableArray<NSString *> *)names;
 + (NSString *) ALLDELIMITERS;
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
-- (BOOL) isLikelyAddressSearch;
 
 
 @end

@@ -56,6 +56,8 @@ static const int SEARCH_INDEX_ITEM_API_PRIORITY = 150;
 // NOTE: Android uses 150, but sometimes the values of ITEM_PRIORITY are mixed. (search: "den")
 static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 
+static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
+
 @implementation SearchIndexItemAPI
 
 - (BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
@@ -377,6 +379,10 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
 {
     for (OASGpxDataItem *dataItem in OAGPXDatabase.sharedDb.getDataItems)
     {
+        // Exclude temporary GPX tracks from search.
+        if ([self isTemporaryGpxItem:dataItem])
+            continue;
+        
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
         sr.objectType = EOAObjectTypeGpxTrack;
         sr.localeName = [dataItem gpxFileName];
@@ -405,8 +411,12 @@ static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
     return SEARCH_TRACK_API_PRIORITY;
 }
 
-@end
+- (BOOL)isTemporaryGpxItem:(OASGpxDataItem *)dataItem
+{
+    return [dataItem.gpxFolderName hasPrefix:GPX_TEMP_FOLDER_NAME];
+}
 
+@end
 
 @implementation OASearchWptAPI
 {

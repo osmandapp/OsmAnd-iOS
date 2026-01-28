@@ -1100,3 +1100,4 @@
 "shared_string_other" = "Drugi";
 "rendering_attr_piste_difficulty_extreme_name" = "Ekstremno";
 "rendering_attr_piste_difficulty_freeride_name" = "Izvan uređenih staza";
+"routing_attr_freeride_policy_description" = "„Freeride” i „Off‑piste” su neslužbene rute i prolazi. Obično su neuređeni, neodržavani i neprovjeravani navečer. Ulazite na vlastitu odgovornost.";

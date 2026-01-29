@@ -39,7 +39,7 @@
 
 #define WIKI_LINK @".wikipedia.org/w"
 #define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
-#define OTHER_MAP_CATEGORY @"Other"
+
 
 static const NSInteger WAY_MODULO_REMAINDER = 1;
 
@@ -323,7 +323,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 }
 
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // new code launch order
     
@@ -888,7 +888,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
      */
 }
 
-- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
 //    processRoutePointAmenityTags(view);
     
@@ -903,11 +903,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 }
 
 //TODO: implement
-- (void)buildInternalRows:(NSMutableArray<OARowInfo *> *)rows
+- (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
-    NSArray<OARowInfo *> *buildedRows = [_amenityUIHelper buildInternal]; //row
+    NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal]; //row
     [rows addObjectsFromArray:buildedRows];
     
 //    amenityUIHelper = new AmenityUIHelper(mapActivity, getPreferredMapAppLang(), infoBundle);
@@ -925,7 +925,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 - (void)configureRowValue:(id)value
                       dic:(NSDictionary *)dic
              convertedKey:(NSString *)convertedKey
-                      row:(OARowInfo *)row
+                      row:(OAAmenityInfoRow *)row
 {
     if ([value isKindOfClass:[NSDictionary class]])
     {
@@ -970,7 +970,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return [filteredDict copy];
 }
 
-- (void)addRowIfNotExists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
+- (void)addRowIfNotExists:(OAAmenityInfoRow *)newRow toDestinationRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if (![rows containsObject:newRow])
         [rows addObject:newRow];

@@ -476,6 +476,25 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     return nil;
 }
 
+- (OAPOIType *) getAnyPoiTypeByKey:(NSString *)name
+{
+    for (NSInteger i = 0; i < _poiCategories.count; i++)
+    {
+        OAPOICategory *pc = _poiCategories[i];
+        OAPOIType *pt = [pc getPoiTypeByKeyName:name];
+        
+        if (pt != nil)
+        {
+            if ([name isEqualToString:@"attraction"] || [name isEqualToString:@"height"])
+                BOOL stop = YES;
+        }
+        
+        if (pt)
+            return pt;
+    }
+    return nil;
+}
+
 - (OAPOIBaseType *) getAnyPoiTypeByName:(NSString *)name
 {
     for (OAPOICategory *pc in _poiCategories)

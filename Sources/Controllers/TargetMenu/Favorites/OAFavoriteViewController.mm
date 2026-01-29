@@ -66,13 +66,13 @@ static const NSInteger kOrderFavGroupRow = 1;
         _originObject = [_favorite getAmenity];
 }
 
-- (void) buildTopInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [super buildTopInternal:rows];
     [self buildGroupFavouritesView:rows];
 }
 
-- (void) buildMenu:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self buildTopInternal:rows];
     
@@ -84,7 +84,7 @@ static const NSInteger kOrderFavGroupRow = 1;
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
         builder.location = CLLocationCoordinate2DMake([_favorite getLatitude], [_favorite getLongitude]);
-        NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
+        NSMutableArray<OAAmenityInfoRow *> *internalRows = [NSMutableArray array];
         [builder buildMenu:internalRows];
         [rows addObjectsFromArray:internalRows];
     }
@@ -96,17 +96,17 @@ static const NSInteger kOrderFavGroupRow = 1;
     [self setRows:rows];
 }
 
-- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *desc = [_favorite getDescription];
     if (desc && desc.length > 0)
     {
-        OARowInfo *descriptionRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:kOrderDescriptionRow typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *descriptionRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:kOrderDescriptionRow typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:descriptionRow];
     }
 }
 
-- (void) buildGroupFavouritesView:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildGroupFavouritesView:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     OAFavoriteGroup *favoriteGroup = _favoriteGroup;
     if (favoriteGroup && favoriteGroup.points.count > 0)
@@ -118,9 +118,8 @@ static const NSInteger kOrderFavGroupRow = 1;
         NSString *name = [self.favorite getCategoryDisplayName];
         NSString *description = OALocalizedString(@"context_menu_points_of_group");
 
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:description text:name textColor:color isText:NO needLinks:NO order:kOrderFavGroupRow typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:description text:name textColor:color isText:NO needLinks:NO order:kOrderFavGroupRow typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
         rowInfo.collapsed = YES;
-        rowInfo.collapsable = YES;
         rowInfo.height = 64;
         rowInfo.collapsableView = [self getCollapsableFavouritesView:self.favorite];
 

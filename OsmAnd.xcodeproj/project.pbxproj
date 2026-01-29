@@ -379,7 +379,7 @@
 		32309A742698D22F005751F5 /* ic_custom_direction_compass_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A702698D22E005751F5 /* ic_custom_direction_compass_day@3x.png */; };
 		32309A752698D22F005751F5 /* ic_custom_direction_compass_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A712698D22E005751F5 /* ic_custom_direction_compass_night@3x.png */; };
 		32309A762698D22F005751F5 /* ic_custom_direction_compass_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A722698D22E005751F5 /* ic_custom_direction_compass_day@2x.png */; };
-		3234101A28889D1B00E90FBA /* OARowInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3234101928889D1B00E90FBA /* OARowInfo.m */; };
+		3234101A28889D1B00E90FBA /* OAAmenityInfoRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 3234101928889D1B00E90FBA /* OAAmenityInfoRow.m */; };
 		3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3236428D2900370800E18413 /* OAFPSTextInfoWidget.mm */; };
 		32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32388EE126E6AF770021F829 /* OAQuickSearchResultTableViewCell.m */; };
 		32388EE326E6AFAF0021F829 /* OAQuickSearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32388EDF26E6AECF0021F829 /* OAQuickSearchResultTableViewCell.xib */; };
@@ -3894,8 +3894,8 @@
 		32309A712698D22E005751F5 /* ic_custom_direction_compass_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_compass_night@3x.png"; path = "Resources/Icons/ic_custom_direction_compass_night@3x.png"; sourceTree = "<group>"; };
 		32309A722698D22E005751F5 /* ic_custom_direction_compass_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_compass_day@2x.png"; path = "Resources/Icons/ic_custom_direction_compass_day@2x.png"; sourceTree = "<group>"; };
 		3233B36B29EEBA060056793F /* OATrackMenuHudViewControllerConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackMenuHudViewControllerConstants.h; sourceTree = "<group>"; };
-		3234101828889D0900E90FBA /* OARowInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARowInfo.h; sourceTree = "<group>"; };
-		3234101928889D1B00E90FBA /* OARowInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARowInfo.m; sourceTree = "<group>"; };
+		3234101828889D0900E90FBA /* OAAmenityInfoRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenityInfoRow.h; sourceTree = "<group>"; };
+		3234101928889D1B00E90FBA /* OAAmenityInfoRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAmenityInfoRow.m; sourceTree = "<group>"; };
 		3236428C290036FD00E18413 /* OAFPSTextInfoWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFPSTextInfoWidget.h; sourceTree = "<group>"; };
 		3236428D2900370800E18413 /* OAFPSTextInfoWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFPSTextInfoWidget.mm; sourceTree = "<group>"; };
 		32388EDF26E6AECF0021F829 /* OAQuickSearchResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchResultTableViewCell.xib; sourceTree = "<group>"; };
@@ -12638,8 +12638,8 @@
 				DA5A7EB226C563A400F274C7 /* OATargetMenuViewController.h */,
 				DA5A7DE726C563A300F274C7 /* OATargetMenuViewController.mm */,
 				DA5A7EBF26C563A400F274C7 /* OATargetMenuViewController.xib */,
-				3234101828889D0900E90FBA /* OARowInfo.h */,
-				3234101928889D1B00E90FBA /* OARowInfo.m */,
+				3234101828889D0900E90FBA /* OAAmenityInfoRow.h */,
+				3234101928889D1B00E90FBA /* OAAmenityInfoRow.m */,
 				DA5A7EAE26C563A400F274C7 /* Parking */,
 				DA5A7E5026C563A400F274C7 /* POI */,
 				DA5A7E5F26C563A400F274C7 /* PointEditing */,
@@ -17800,7 +17800,7 @@
 				46A35EF52C53F9510089B21C /* DirectoryObserver.swift in Sources */,
 				DA5A813126C563A700F274C7 /* OAWebClient.mm in Sources */,
 				DA5A833926C563A800F274C7 /* OAFoldersCell.m in Sources */,
-				3234101A28889D1B00E90FBA /* OARowInfo.m in Sources */,
+				3234101A28889D1B00E90FBA /* OAAmenityInfoRow.m in Sources */,
 				DAA61CB72A0102EC00AFF65D /* MapMarkerSideWidgetState.swift in Sources */,
 				FA4C57012D48E8C800438A5C /* NoInternetCardCell.swift in Sources */,
 				DA5A838826C563A800F274C7 /* OAPurchasesViewController.m in Sources */,

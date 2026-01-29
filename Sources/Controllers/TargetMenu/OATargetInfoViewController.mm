@@ -115,7 +115,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 @implementation OATargetInfoViewController
 {
-    NSMutableArray<OARowInfo *> *_rows;
+    NSMutableArray<OAAmenityInfoRow *> *_rows;
     CGFloat _contentHeight;
     UIColor *_contentColor;
     NSArray<OAPOI *> *_nearestWiki;
@@ -123,13 +123,13 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     BOOL _hasOsmWiki;
     CGFloat _calculatedWidth;
     
-    OARowInfo *_onlinePhotoCardsRowInfo;
-    OARowInfo *_mapillaryCardsRowInfo;
+    OAAmenityInfoRow *_onlinePhotoCardsRowInfo;
+    OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
 }
 
-- (void) setRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) setRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     _rows = rows;
 }
@@ -176,15 +176,15 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     return img;
 }
 
-- (void) buildTopInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self buildDescription:rows];
     NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
     NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
     if (localTransportRoutes.count > 0)
     {
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-        rowInfo.collapsable = YES;
+        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+//        rowInfo.collapsable = YES;
         rowInfo.collapsed = NO;
         rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = localTransportRoutes;
@@ -193,8 +193,8 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     if (nearbyTransportRoutes.count > 0)
     {
         NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-        rowInfo.collapsable = YES;
+        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+//        rowInfo.collapsable = YES;
         rowInfo.collapsed = NO;
         rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
@@ -202,27 +202,27 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     }
 }
 
-- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // implement in subclasses
 }
 
-- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // implement in subclasses
 }
 
-- (void) appdendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
+- (void) appdendDetailsButtonRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if ([self showDetailsButton])
     {
-        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderDetailsRow typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *collapseDetailsRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderDetailsRow typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
         [collapseDetailsRowCell setHeight:[self detailsButtonHeight]];
         [rows addObject:collapseDetailsRowCell];
     }
 }
 
-- (void) buildMenu:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     //TODO: clear code
     
@@ -265,7 +265,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     
     
     
-    [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
+    [_rows sortUsingComparator:^NSComparisonResult(OAAmenityInfoRow *row1, OAAmenityInfoRow *row2) {
         if (row1.order < row2.order)
             return NSOrderedAscending;
         else if (row1.order == row2.order)
@@ -328,7 +328,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         
         NSMutableArray *detailsArray = [self getWithinCollapsableContent:polygons];
         
-        OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
+        OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
                                         icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
                                   textPrefix:title
                                         text:rowSummary
@@ -341,7 +341,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
                                        isUrl:NO];
         
         [row setDetailsArray:detailsArray];
-        row.collapsable = NO;
+//        row.collapsable = NO;
         row.collapsed = YES;
         row.collapsableView = nil;
         [_rows addObject:row];
@@ -418,8 +418,8 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         if (nearest.count > 0)
         {
             UIImage *icon = isWiki ? [UIImage mapSvgImageNamed:@"mx_wiki_place"] : poi.icon;
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderPoiRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-            rowInfo.collapsable = YES;
+            OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderPoiRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+//            rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(isWiki ? _hasOsmWiki : YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
@@ -429,7 +429,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     }
 }
 
-- (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp
+- (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp
 {
     if (timestamp)
     {
@@ -437,27 +437,27 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         dateFormatter.dateStyle = NSDateFormatterMediumStyle;
         dateFormatter.timeStyle = NSDateFormatterShortStyle;
         NSString *formattedDate = [dateFormatter stringFromDate:timestamp];
-        OARowInfo *dateRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:kOrderDateRow typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *dateRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:kOrderDateRow typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:dateRowCell];
     }
 }
 
-- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment
+- (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment
 {
     if (comment.length > 0)
     {
-        OARowInfo *commentRow = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:kOrderCoommentRow typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *commentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:kOrderCoommentRow typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:commentRow];
     }
 }
 
-- (void)buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows
+- (void)buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if ([self needCoords])
     {
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderCoordinatesRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *coordinatesRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderCoordinatesRow typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
-        coordinatesRow.collapsable = YES;
+//        coordinatesRow.collapsable = YES;
         OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
         coordinatesRow.collapsableView = collapsableView;
         [rows addObject:coordinatesRow];
@@ -499,7 +499,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 {
     CGFloat regularTextWidth = width - kMarginLeft - kMarginRight;
     CGFloat collapsableTitleWidth = width - kMarginLeft - kCollapsableTitleMarginRight;
-    for (OARowInfo *row in _rows)
+    for (OAAmenityInfoRow *row in _rows)
     {
         CGFloat textWidth = row.collapsable ? collapsableTitleWidth : regularTextWidth;
         CGFloat rowHeight;
@@ -545,7 +545,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 - (void) calculateContentHeight
 {
     CGFloat h = 0;
-    for (OARowInfo *row in _rows)
+    for (OAAmenityInfoRow *row in _rows)
         h += row.height;
 
     _contentHeight = h;
@@ -785,7 +785,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 - (void)addOtherCards:(NSString *)imageTagContent
             mapillary:(NSString *)mapillaryTagContent
                 cards:(NSMutableArray<AbstractCard *> *)cards
-              rowInfo:(OARowInfo *)nearbyImagesRowInfo
+              rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
      onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
@@ -911,7 +911,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 }
 
 - (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards
-                rowInfo:(OARowInfo *)nearbyImagesRowInfo
+                rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
 {
     _otherCardsReady = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1006,12 +1006,12 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     BOOL hasPhoto = YES; //TODO: implement later. Move emmty row to bottom of context menu
     NSInteger order = hasPhoto ? kOrderPhotoRow : kOrderPhotoEmptyRow;
     
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:order typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:order typeName:@"" isPhoneNumber:NO isUrl:NO];
     
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
     cardView.delegate = self;
-    nearbyImagesRowInfo.collapsable = YES;
+//    nearbyImagesRowInfo.collapsable = YES;
     __weak __typeof(self) weakSelf = self;
     nearbyImagesRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
         if (!collapsed)
@@ -1036,7 +1036,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         BOOL hasPhoto = YES; //TODO: implement later. Move emmty row to bottom of context menu
         NSInteger order = hasPhoto ? kOrderMapillaryRow : kOrderMapillaryEmptyRow;
         
-        OARowInfo *mapillaryCardsRowInfo = [[OARowInfo alloc] initWithKey:nil
+        OAAmenityInfoRow *mapillaryCardsRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil
                                                                      icon:[UIImage imageNamed:@"ic_custom_photo_street"]
                                                                textPrefix:nil
                                                                      text:OALocalizedString(@"street_level_imagery")
@@ -1050,7 +1050,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         CollapsableCardsView *cardView = [CollapsableCardsView new];
         cardView.contentType = CollapsableCardsTypeMapillary;
         cardView.delegate = self;
-        mapillaryCardsRowInfo.collapsable = YES;
+//        mapillaryCardsRowInfo.collapsable = YES;
         __weak __typeof(self) weakSelf = self;
         mapillaryCardsRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
             if (!collapsed)
@@ -1066,7 +1066,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     }
 }
 
-- (void)clearContentForRowInfo:(OARowInfo *)rowInfo
+- (void)clearContentForRowInfo:(OAAmenityInfoRow *)rowInfo
 {
     CollapsableCardsView *cardsView = (CollapsableCardsView *)[rowInfo collapsableView];
     if (cardsView)
@@ -1076,7 +1076,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     }
 }
 
-- (void)showPOITagsDetails:(OARowInfo *)info
+- (void)showPOITagsDetails:(OAAmenityInfoRow *)info
 {
     POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:info.detailsArray];
     tagsDetailsController.tagTitle = info.textPrefix;
@@ -1093,7 +1093,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     
     if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
@@ -1294,7 +1294,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
     if ([info.typeName isEqualToString:kGroupRowType])
         return info.height + 16;
@@ -1308,7 +1308,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     if (info.collapsable)
         [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
     return info.height;
@@ -1318,7 +1318,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     if (info.delegate)
     {
         [info.delegate onRowClick:self rowInfo:info];
@@ -1440,7 +1440,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 {
     if (action == @selector(copy:))
     {
-        OARowInfo *info = _rows[indexPath.row];
+        OAAmenityInfoRow *info = _rows[indexPath.row];
         NSString *textToCopy;
         if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
             textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];

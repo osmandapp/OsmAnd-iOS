@@ -8,6 +8,8 @@
 
 #import "OATransportStopsBaseController.h"
 
+static NSString * OTHER_MAP_CATEGORY = @"Other";
+
 @class OAPOI, OARenderedObject, OAMapObject;
 
 @interface OAPOIViewController : OATransportStopsBaseController

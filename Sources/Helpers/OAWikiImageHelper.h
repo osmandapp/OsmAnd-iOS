@@ -29,14 +29,14 @@ static NSString * const OSMAND_API_ENDPOINT = @"https://osmand.net/api/wiki_plac
 static const NSInteger DEPT_CAT_LIMIT = 1;
 static const BOOL USE_OSMAND_WIKI_API = YES;
 
-@class OARowInfo;
+@class OAAmenityInfoRow;
 @class AbstractCard;
 
 @interface OAWikiImageHelper : NSObject
 
 + (OAWikiImageHelper *)sharedInstance;
 
-- (void)sendNearbyWikiImagesRequest:(OARowInfo *)nearbyImagesRowInfo
+- (void)sendNearbyWikiImagesRequest:(OAAmenityInfoRow *)nearbyImagesRowInfo
                           targetObj:(id)targetObj
                             session:(nullable NSURLSession *)session
            addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete

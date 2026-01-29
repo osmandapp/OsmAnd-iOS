@@ -217,7 +217,7 @@ static OATransportRouteToolbarViewController *toolbarController;
     return -1;
 }
 
-- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     const auto& stops = _transportRoute.route->forwardStops;
     int currentStop = [_transportRoute getStopIndex];
@@ -228,7 +228,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         startPosition = (currentStop == -1 ? 0 : currentStop);
         if (currentStop > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), @(currentStop).stringValue] text:OALocalizedString(@"recording_context_menu_show") textColor:nil isText:YES needLinks:NO order:kOrderPreviousStopsCountRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), @(currentStop).stringValue] text:OALocalizedString(@"recording_context_menu_show") textColor:nil isText:YES needLinks:NO order:kOrderPreviousStopsCountRow typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.delegate = self;
             [rows addObject:rowInfo];
         }
@@ -240,7 +240,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         if (name.length == 0)
             name = [self.class getStopType:_transportRoute];
         
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:@"ic_custom_location_marker"] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:@"ic_custom_location_marker"] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
         rowInfo.delegate = self;
         [rows addObject:rowInfo];
     }
@@ -303,7 +303,7 @@ static OATransportRouteToolbarViewController *toolbarController;
 
 #pragma mark - OARowInfoDelegate
 
-- (void)onRowClick:(OATargetMenuViewController *)sender rowInfo:(OARowInfo *)rowInfo
+- (void)onRowClick:(OATargetMenuViewController *)sender rowInfo:(OAAmenityInfoRow *)rowInfo
 {
     if ([rowInfo.key isEqualToString:@"button"])
     {

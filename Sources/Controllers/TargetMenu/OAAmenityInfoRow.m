@@ -1,15 +1,15 @@
 //
-//  OARowInfo.m
+//  OAAmenityInfoRow.m
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 20.07.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OARowInfo.h"
+#import "OAAmenityInfoRow.h"
 #import "OACollapsableView.h"
 
-@implementation OARowInfo
+@implementation OAAmenityInfoRow
 
 - (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(NSInteger)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
 {
@@ -39,14 +39,45 @@
     if (self)
     {
         self.collapsableView = collapsable;
-        self.collapsable = collapsable != nil;
     }
     return self;
 }
 
+- (instancetype) initWithKey:(NSString *)key icon:(nullable UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text hiddenUrl:(NSString *)hiddenUrl collapsableView:(nullable OACollapsableView *)collapsableView textColor:(nullable UIColor *)textColor isWiki:(BOOL)isWiki isText:(BOOL)isText needLinks:(BOOL)needLinks isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl order:(NSInteger)order name:(NSString *)name matchWidthDivider:(BOOL)matchWidthDivider textLinesLimit:(int)textLinesLimit
+{
+    self = [super init];
+    if (self)
+    {
+        _key = key;
+        _icon = icon;
+        _icon = [_icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _textPrefix = textPrefix;
+        _text = text;
+        _hiddenUrl = hiddenUrl;
+        _collapsableView = collapsableView;
+        _textColor = textColor;
+        _isWiki = isWiki;
+        _isText = isText;
+        _needLinks = needLinks;
+        _isPhoneNumber = isPhoneNumber;
+        _isUrl = isUrl;
+        _order = order;
+        _typeName = name;
+        _matchWidthDivider = matchWidthDivider;
+        _textLinesLimit = textLinesLimit;
+        _detailsArray = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+- (BOOL) collapsable
+{
+    return _collapsableView;
+}
+
 - (int) height
 {
-    if (_collapsable && _collapsableView && !_collapsed)
+    if ([self collapsable] && _collapsableView && !_collapsed)
         return _height + _collapsableView.frame.size.height;
     else
         return _height;
@@ -82,7 +113,7 @@
     
     if ([object isKindOfClass:self.class])
     {
-        OARowInfo *item = (OARowInfo *) object;
+        OAAmenityInfoRow *item = (OAAmenityInfoRow *) object;
         return [_text isEqualToString:item.text];
     }
     return NO;

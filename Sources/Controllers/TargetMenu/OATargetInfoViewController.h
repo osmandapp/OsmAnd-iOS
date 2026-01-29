@@ -7,7 +7,7 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OARowInfo.h"
+#import "OAAmenityInfoRow.h"
 
 #define kCollapseDetailsRowType @"kCollapseDetailsRowType"
 #define kDescriptionRowType @"kDescriptionRowType"
@@ -19,18 +19,18 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (nonatomic) NSArray<OARowInfo *> *additionalRows;
+@property (nonatomic) NSArray<OAAmenityInfoRow *> *additionalRows;
 
 - (BOOL) needCoords;
-- (void) buildTopInternal:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildMenu:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp;
-- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment;
-- (void) buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp;
+- (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment;
+- (void) buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) rebuildRows;
-- (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) setRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 + (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size;

@@ -149,18 +149,18 @@ static const NSInteger kOrderInternalRow = 0;
     return NO;
 }
 
-- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *prefLang = [OAUtilities preferredLang];
     
-    NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
+    NSMutableArray<OAAmenityInfoRow *> *descriptions = [NSMutableArray array];
     OAPOIType *type = [[OAPOIHelper sharedInstance] getPoiTypeByName:[_osmPoint.getSubType lowerCase]];
     if (type
         && ![type isKindOfClass:[OAPOILocationType class]]
         && ![type isKindOfClass:[OAPOIMyLocationType class]])
     {
         UIImage *icon = [type icon];
-        [rows addObject:[[OARowInfo alloc] initWithKey:type.name icon:icon textPrefix:nil text:[_osmPoint getSubType] textColor:nil isText:NO needLinks:NO order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:type.name icon:icon textPrefix:nil text:[_osmPoint getSubType] textColor:nil isText:NO needLinks:NO order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     [_osmPoint.getTags enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
@@ -191,14 +191,14 @@ static const NSInteger kOrderInternalRow = 0;
         
         if (!skip)
         {
-            [descriptions addObject:[[OARowInfo alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:[NSString stringWithFormat:@"%@=%@", key, value] textColor:nil isText:YES needLinks:YES order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
+            [descriptions addObject:[[OAAmenityInfoRow alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:[NSString stringWithFormat:@"%@=%@", key, value] textColor:nil isText:YES needLinks:YES order:kOrderInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO]];
 
         }
     }];
     
     NSString *langSuffix = [NSString stringWithFormat:@":%@", prefLang];
-    OARowInfo *descInPrefLang = nil;
-    for (OARowInfo *desc in descriptions)
+    OAAmenityInfoRow *descInPrefLang = nil;
+    for (OAAmenityInfoRow *desc in descriptions)
     {
         if (desc.key.length > langSuffix.length
             && [[desc.key substringFromIndex:desc.key.length - langSuffix.length] isEqualToString:langSuffix])
@@ -208,7 +208,7 @@ static const NSInteger kOrderInternalRow = 0;
         }
     }
     
-    [descriptions sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
+    [descriptions sortUsingComparator:^NSComparisonResult(OAAmenityInfoRow *row1, OAAmenityInfoRow *row2) {
         if (row1.order < row2.order)
         {
             return NSOrderedAscending;
@@ -230,7 +230,7 @@ static const NSInteger kOrderInternalRow = 0;
     }
     
     int i = 10000;
-    for (OARowInfo *desc in descriptions)
+    for (OAAmenityInfoRow *desc in descriptions)
     {
         desc.order = i++;
         [rows addObject:desc];

@@ -93,7 +93,7 @@
     return ETopToolbarTypeFloating;
 }
 
-- (void) buildInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     OAPOI *poi = self.transportStop.poi;
     if (poi)

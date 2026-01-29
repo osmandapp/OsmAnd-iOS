@@ -41,7 +41,7 @@
 "shared_string_topbar" = "Asawen";
 "add_home" = "Agejdan";
 "route_descr_destination" = "Taniɣert";
-"shared_string_download" = "Sider";
+"shared_string_download" = "Sader";
 "map_widget_average_speed" = "Arured alemmas";
 "days_2_4" = "Ussan";
 "shared_string_on" = "Yermed";
@@ -100,7 +100,7 @@
 "get_discount_second_part" = "\"di  %@\"";
 "shared_string_in_name" = "\"di  %@\"";
 "driving_region_canada" = "Kanada";
-"shared_string_download_map" = "Sider";
+"shared_string_download_map" = "Sader-d tamkarḍa";
 "shared_string_go" = "Ddu";
 "coords_search" = "Asemmezdi n unadi";
 "rendering_category_details" = "Talqayt";
@@ -557,7 +557,7 @@
 "shared_string_all_languages" = "Akk tutlayin";
 "navigate_point_olc" = "Ldi adeg…";
 "gpxup_public" = "Azayez";
-"welmode_download_maps" = "Sider";
+"welmode_download_maps" = "Sader-d timkerḍiwin";
 "shared_string_time_span" = "Akud";
 "gpx_split_interval_none_descr" = "Fren iɣewwaṛen n unegzum i tebɣiḍ: s wakud neɣ s umeccaq.";
 "icon_group_education" = "Asegmi";
@@ -708,7 +708,7 @@
 "shared_string_selected" = "Yettwafren";
 "route_stops_before" = "%@ n uneḥbus uqbel";
 "select_postcode" = "Ffren angal n unadi";
-"download_all" = "Sider meṛṛa";
+"download_all" = "Sader-iten-d akk";
 "add_group" = "Rnu agraw";
 "max_speed" = "Arured afellay";
 "sett_generic_ext_input" = "Anasiw";
@@ -760,7 +760,7 @@
 "weather_update_disabled" = "Yensa";
 "visibility" = "Tametwalant";
 "shared_string_open_track" = "ḍfeṛ";
-"download_file" = "Sidered afaylu";
+"download_file" = "Sader-d afaylu";
 "shared_string_markers" = "Ticṛaḍ";
 "shared_string_view" = "Sken";
 "shared_string_deleted" = "Ittwakkes";

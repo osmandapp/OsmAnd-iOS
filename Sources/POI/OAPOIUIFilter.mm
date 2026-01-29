@@ -387,8 +387,13 @@
     double rightLongitude = MIN(lon + (distance / baseDistX), 180);
     return [self searchAmenitiesInternal:lat lon:lon topLatitude:topLatitude bottomLatitude:bottomLatitude leftLongitude:leftLongitude rightLongitude:rightLongitude zoom:-1 matcher:matcher];
 }
-
-- (NSArray<OAPOI *> *) searchAmenities:(double)top left:(double)left bottom:(double)bottom right:(double)right zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher
+- (NSArray<OAPOI *> *) searchAmenities:(double)top
+                                 left:(double)left
+                               bottom:(double)bottom
+                                right:(double)right
+                                 zoom:(int)zoom
+                              matcher:(OAResultMatcher<OAPOI *> *)matcher
+                         filterUnique:(BOOL)filterUnique
 {
     NSMutableArray<OAPOI *> *results = [NSMutableArray array];
     NSArray<OAPOI *> *tempResults = currentSearchResult;
@@ -422,8 +427,23 @@
         }];
     }
     
+    if (filterUnique)
+        resultList = [[OAAmenitySearcher filterUniqueAmenitiesByOsmIdOrWikidata:[resultList copy]] mutableCopy];
+    
     return [resultList copy];
 }
+
+- (NSArray<OAPOI *> *)getCurrentSearchResult:(BOOL)filterUnique
+{
+    if (currentSearchResult.count == 0)
+        return @[];
+
+    if (!filterUnique)
+        return [currentSearchResult copy];
+    
+    return [OAAmenitySearcher filterUniqueAmenitiesByOsmIdOrWikidata:currentSearchResult];
+}
+
 
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius
 {

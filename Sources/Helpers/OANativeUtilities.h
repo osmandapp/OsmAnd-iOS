@@ -85,13 +85,25 @@
 + (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget;
 
 + (OsmAnd::PointI) getPoint31From:(CGPoint)screenPoint;
-+ (OsmAnd::AreaI) getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radiusPixels;
 + (OsmAnd::AreaI) getPolygon31FromScreenArea:(CGPoint)topLeft bottomRight:(CGPoint)bottomRight;
-+ (BOOL) isPointInsidePolygon:(double)lat lon:(double)lon polygon31:(OsmAnd::AreaI)polygon31;
-+ (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31;
-+ (BOOL)isSegmentCrossingArea:(OsmAnd::PointI)start31 end31:(OsmAnd::PointI)end31 area31:(OsmAnd::AreaI)area31;
++ (BOOL)isSegmentCrossingPolygon:(OsmAnd::PointI)start31
+                           end31:(OsmAnd::PointI)end31
+                       polygon31:(QList<OsmAnd::PointI>)polygon31;
 
 + (BOOL) containsLatLon:(CLLocation *)location;
 + (BOOL) containsLatLon:(double)lat lon:(double)lon;
++ (int)rayIntersectXWithPrevX:(int)prevX
+                        prevY:(int)prevY
+                            x:(int)x
+                            y:(int)y
+                      middleY:(int)middleY;
++ (QList<OsmAnd::PointI>)getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radius;
++ (BOOL)isPointInsidePolygonLat:(double)lat
+                            lon:(double)lon
+                      polygon31:(const QList<OsmAnd::PointI>&)polygon;
++ (QList<OsmAnd::PointI>)getPolygon31FromScreenAreaLeft:(float)leftPix
+            top:(float)topPix
+          right:(float)rightPix
+         bottom:(float)bottomPix;
 
 @end

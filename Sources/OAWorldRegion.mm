@@ -21,6 +21,7 @@
 #import "Weather/OAWeatherHelper.h"
 #import "OsmAndApp.h"
 #import "OAMapUtils+cpp.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/WorldRegion.h>
@@ -229,7 +230,7 @@
         OsmAnd::PointI p31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
         int t = 0;
         for (int i = 1; i < points.count(); i++) {
-            int fx = [self.class ray_intersect_x:points.at(i).x y:points.at(i).y middleY:p31.y prevX:points.at(i - 1).x prevY:points.at(i - 1).y];
+            int fx = [OANativeUtilities rayIntersectXWithPrevX:points.at(i - 1).x prevY:points.at(i - 1).y x:points.at(i).x y:points.at(i).y middleY:p31.y];
             if (INT_MIN != fx && p31.x >= fx)
                 t++;
         }
@@ -275,39 +276,6 @@
 - (QVector<OsmAnd::PointI>) getPoints31
 {
     return _worldRegion->polygon;
-}
-
-+ (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY
-{
-    // prev node above line
-    // x,y node below line
-    if (prevY > y)
-    {
-        int tx = x;
-        int ty = y;
-        x = prevX;
-        y = prevY;
-        prevX = tx;
-        prevY = ty;
-    }
-    if (y == middleY || prevY == middleY)
-        middleY -= 1;
-
-    if (prevY > middleY || y < middleY)
-    {
-        return INT_MIN;
-    }
-    else
-    {
-        if (y == prevY)
-        {
-            // the node on the boundary !!!
-            return x;
-        }
-        // that tested on all cases (left/right)
-        double rx = x + ((double) middleY - y) * ((double) x - prevX) / (((double) y - prevY));
-        return (int) rx;
-    }
 }
 
 @synthesize regionId = _regionId;

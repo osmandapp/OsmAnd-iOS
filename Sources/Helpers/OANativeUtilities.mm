@@ -396,38 +396,44 @@
     return point31;
 }
 
-+ (OsmAnd::AreaI) getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radiusPixels
++ (BOOL)isSegmentCrossingPolygon:(OsmAnd::PointI)start31
+                           end31:(OsmAnd::PointI)end31
+                       polygon31:(QList<OsmAnd::PointI>)polygon31
 {
-    CGPoint topLeft = CGPointMake(pixel.x - radiusPixels, pixel.y - radiusPixels);
-    CGPoint bottomRight = CGPointMake(pixel.x + radiusPixels, pixel.y + radiusPixels);
-    return [self.class getPolygon31FromScreenArea:topLeft bottomRight:bottomRight];
+    if (polygon31.size() < 2)
+        return NO;
+
+    for (int i = 1; i < polygon31.size(); i++)
+    {
+        const OsmAnd::PointI polygonLineStart31 = polygon31.at(i - 1);
+        const OsmAnd::PointI polygonLineEnd31 = polygon31.at(i);
+        if ([self areSegmentsCrossingFrom:polygonLineStart31 to:polygonLineEnd31 start:start31 end:end31])
+        {
+            return YES;
+        }
+    }
+
+    return NO;
 }
 
-+ (OsmAnd::AreaI) getPolygon31FromScreenArea:(CGPoint)topLeft bottomRight:(CGPoint)bottomRight;
++ (BOOL)isSegmentCrossingPolygonStart:(OsmAnd::PointI)start31
+                                   end:(OsmAnd::PointI)end31
+                              polygon31:(const QList<OsmAnd::PointI>&)polygon31
 {
-    OsmAnd::PointI topLeft31 = [self.class getPoint31From:topLeft];
-    OsmAnd::PointI bottomRight31 = [self.class getPoint31From:bottomRight];
-    return OsmAnd::AreaI(topLeft31, bottomRight31);
-}
+    if (polygon31.size() < 2)
+        return NO;
 
-+ (BOOL) isPointInsidePolygon:(double)lat lon:(double)lon polygon31:(OsmAnd::AreaI)polygon31
-{
-    OsmAnd::PointI point31 = [self.class getPoint31FromLatLon:lat lon:lon];
-    return [self.class isPointInsidePolygon:point31 polygon31:polygon31];
-}
+    for (int i = 1; i < polygon31.size(); i++)
+    {
+        const OsmAnd::PointI polygonLineStart31 = polygon31.at(i - 1);
+        const OsmAnd::PointI polygonLineEnd31 = polygon31.at(i);
+        if ([self areSegmentsCrossingFrom:polygonLineStart31 to:polygonLineEnd31 start:start31 end:end31])
+        {
+            return YES;
+        }
+    }
 
-+ (BOOL) isPointInsidePolygon:(OsmAnd::PointI)point31 polygon31:(OsmAnd::AreaI)polygon31
-{
-    //Android: MapAlgorithms.ray_intersect_x()
-    return polygon31.contains(point31);
-}
-
-+ (BOOL)isSegmentCrossingArea:(OsmAnd::PointI)start31 end31:(OsmAnd::PointI)end31 area31:(OsmAnd::AreaI)area31
-{
-    OsmAnd::PointI areaLineStart31 = area31.topLeft;
-    OsmAnd::PointI areaLineEnd31 = area31.bottomRight;
-    
-    return [OANativeUtilities areSegmentsCrossingFrom:areaLineStart31 to:areaLineEnd31 start:start31 end:end31];
+    return NO;
 }
 
 + (BOOL)areSegmentsCrossingFrom:(OsmAnd::PointI)a31 to:(OsmAnd::PointI)b31 start:(OsmAnd::PointI)c31 end:(OsmAnd::PointI)d31
@@ -474,10 +480,131 @@
 + (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget
 {
     OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
-    OsmAnd::PointI target31 = [self.class getPoint31FromLatLon:latitude lon:longitude];
+    OsmAnd::PointI target31 = [self getPoint31FromLatLon:latitude lon:longitude];
     if (applyNewTarget)
         [mapRenderer setTarget31:target31];
     return target31;
+}
+
++ (OsmAnd::PointI)get31FromElevatedPixelX:(float)x y:(float)y
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    if (!mapRenderer)
+        return OsmAnd::PointI();
+    
+    OsmAnd::PointI screenPoint(static_cast<int32_t>(qRound(x)), static_cast<int32_t>(qRound(y)));
+    OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
+    
+    if ([mapRenderer getLocationFromElevatedPoint:screenPoint location31:&elevatedPoint])
+        return elevatedPoint;
+    
+    return OsmAnd::PointI();
+}
+
++ (QList<OsmAnd::PointI>)getPolygon31FromPixelAndRadius:(CGPoint)pixel radius:(float)radius
+{
+    const float leftPix = pixel.x - radius;
+    const float topPix = pixel.y - radius;
+    const float rightPix = pixel.x + radius;
+    const float bottomPix = pixel.y + radius;
+
+    return [self getPolygon31FromScreenAreaLeft:leftPix top:topPix right:rightPix bottom:bottomPix];
+}
+
++ (QList<OsmAnd::PointI>)getPolygon31FromScreenAreaLeft:(float)leftPix
+            top:(float)topPix
+          right:(float)rightPix
+         bottom:(float)bottomPix
+{
+    QList<OsmAnd::PointI> polygon31;
+    polygon31.reserve(5);
+
+    const OsmAnd::PointI p0 = [self.class get31FromElevatedPixelX:leftPix y:topPix];
+    const OsmAnd::PointI p1 = [self.class get31FromElevatedPixelX:rightPix y:topPix];
+    const OsmAnd::PointI p2 = [self.class get31FromElevatedPixelX:rightPix y:bottomPix];
+    const OsmAnd::PointI p3 = [self.class get31FromElevatedPixelX:leftPix y:bottomPix];
+
+    if (p0 == OsmAnd::PointI() || p1 == OsmAnd::PointI() || p2 == OsmAnd::PointI() || p3 == OsmAnd::PointI())
+        return polygon31; // empty indicates failure
+
+    polygon31.append(p0);
+    polygon31.append(p1);
+    polygon31.append(p2);
+    polygon31.append(p3);
+    polygon31.append(p0); // close polygon
+
+    return polygon31;
+}
+
++ (int)rayIntersectXWithPrevX:(int)prevX
+                        prevY:(int)prevY
+                            x:(int)x
+                            y:(int)y
+                      middleY:(int)middleY {
+    
+    // Swap points if prev node is below the current node to ensure consistent direction
+    if (prevY > y)
+    {
+        int tx = x;
+        int ty = y;
+        x = prevX;
+        y = prevY;
+        prevX = tx;
+        prevY = ty;
+    }
+
+    // Adjust middleY if it lands exactly on a vertex to avoid edge-case ambiguities
+    if (y == middleY || prevY == middleY)
+        middleY -= 1;
+
+    // Check if the ray at middleY actually intersects the segment
+    if (prevY > middleY || y < middleY)
+    {
+        return INT_MIN;
+    }
+    else
+    {
+        if (y == prevY)
+        {
+            // Segment is horizontal and on the boundary
+            return x;
+        }
+        
+        // Calculate the x-coordinate of the intersection using linear interpolation
+        // Formula: x = x1 + (y - y1) * (x2 - x1) / (y2 - y1)
+        double rx = (double)x + ((double)middleY - y) * ((double)x - prevX) / ((double)y - prevY);
+        
+        return (int)rx;
+    }
+}
+
++ (BOOL)isPointInsidePolygonLat:(double)lat
+                            lon:(double)lon
+                      polygon31:(const QList<OsmAnd::PointI>&)polygon
+{
+    if (polygon.size() < 2)
+        return NO;
+    
+    const int32_t x31 = OsmAnd::Utilities::get31TileNumberX(lon);
+    const int32_t y31 = OsmAnd::Utilities::get31TileNumberY(lat);
+    OsmAnd::PointI point31(x31, y31);
+
+    int intersections = 0;
+    const int px = point31.x;
+    const int py = point31.y;
+
+    for (int i = 1; i < polygon.size(); i++)
+    {
+        const OsmAnd::PointI prev = polygon.at(i - 1);
+        const OsmAnd::PointI curr = polygon.at(i);
+
+        int intersectedX = [self rayIntersectXWithPrevX:prev.x prevY:prev.y x:curr.x y:curr.y middleY:py];
+        if (intersectedX != INT_MIN && px >= intersectedX) {
+            intersections++;
+        }
+    }
+
+    return (intersections % 2) == 1;
 }
 
 @end

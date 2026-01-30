@@ -10,7 +10,7 @@
 
 @implementation OAMapTopPlace
 
-- (instancetype)initWithPlaceId:(NSInteger)placeId
+- (instancetype)initWithPlaceId:(int32_t)placeId
                        position:(const OsmAnd::PointI &)position
                           image:(UIImage *)image
                   alreadyExists:(BOOL)alreadyExists {

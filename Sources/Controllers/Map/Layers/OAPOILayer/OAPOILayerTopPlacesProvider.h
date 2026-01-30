@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateLayer;
 - (void)resetLayer;
 
+- (void)updateSelectedTopPlace:(OAPOI *)topPlace;
+- (void)resetSelectedTopPlace;
+
 - (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon;
 
 - (instancetype)init NS_UNAVAILABLE;

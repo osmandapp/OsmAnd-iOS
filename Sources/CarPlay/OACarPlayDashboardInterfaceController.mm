@@ -36,6 +36,8 @@
 #import "OACurrentStreetName.h"
 #import "OAVoiceRouter.h"
 #import "OAAnnounceTimeDistances.h"
+#import "OAFavoritesHelper.h"
+#import "OACarPlayCategoryResultListController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define unitsKm OALocalizedString(@"km")
@@ -259,6 +261,87 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     if (notification.object == [[OAMapButtonsHelper sharedInstance] getMap3DButtonState].visibilityPref)
         [self onMap3dModeUpdated];
+}
+
+- (void)showDestinationReachedMenu
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    CPListItem *parkLocation = [[CPListItem alloc] initWithText:OALocalizedString(@"context_menu_item_add_parking_point") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking_location"]];
+    parkLocation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
+        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            [weakSelf saveParkingAtCurrentLocationWithCompletion:completion];
+        }];
+    };
+    
+    CPListItem *findParking = [[CPListItem alloc] initWithText:OALocalizedString(@"find_parking") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking"]];
+    findParking.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
+        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            [weakSelf openFindParkingWithCompletion:completion];
+        }];
+    };
+    
+    CPListItem *recalcRoute = [[CPListItem alloc] initWithText:OALocalizedString(@"recalculate_route") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_navigation"]];
+    recalcRoute.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
+        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            [[OARootViewController instance].mapPanel.mapActions recalculateRoute];
+            if (completion)
+                completion();
+        }];
+    };
+    
+    CPListItem *finishNavigation = [[CPListItem alloc] initWithText:OALocalizedString(@"finish_navigation") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_finish_flag"]];
+    finishNavigation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
+        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            [weakSelf stopNavigation];
+            if (completion)
+                completion();
+        }];
+    };
+    
+    CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"arrived_at_destination") sections:@[[[CPListSection alloc] initWithItems:@[parkLocation, findParking, recalcRoute, finishNavigation]]]];
+    [self.interfaceController pushTemplate:listTemplate animated:YES completion:nil];
+}
+
+- (void)saveParkingAtCurrentLocationWithCompletion:(dispatch_block_t)completion
+{
+    CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getEnabledPlugin:[OAParkingPositionPlugin class]];
+    if (location && plugin)
+    {
+        [plugin setParkingPosition:location.coordinate.latitude longitude:location.coordinate.longitude];
+        [plugin setParkingType:NO];
+        [plugin setParkingStartTime:NSDate.date.timeIntervalSince1970 * 1000];
+        [[OARootViewController instance].mapPanel refreshMap];
+        [OAFavoritesHelper setParkingPoint:location.coordinate.latitude lon:location.coordinate.longitude address:nil pickupDate:nil addToCalendar:NO];
+    }
+    
+    if (completion)
+        completion();
+}
+
+- (void)openFindParkingWithCompletion:(dispatch_block_t)completion
+{
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    OAPOIUIFilter *parkingFilter = [helper getFilterById:[NSString stringWithFormat:@"%@parking", STD_PREFIX]];
+    if (parkingFilter)
+    {
+        [self stopNavigation];
+        OASearchUICore *searchCore = [[OAQuickSearchHelper instance] getCore];
+        [searchCore resetPhrase];
+        OASearchPhrase *phrase = [searchCore getPhrase];
+        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+        sr.localeName = parkingFilter.name;
+        sr.object = parkingFilter;
+        sr.priority = SEARCH_AMENITY_TYPE_PRIORITY;
+        sr.priorityDistance = 0;
+        sr.objectType = EOAObjectTypePoiType;
+        OACarPlayCategoryResultListController *resultController = [[OACarPlayCategoryResultListController alloc] initWithInterfaceController:self.interfaceController searchResult:sr];
+        [resultController present];
+    }
+    
+    if (completion)
+        completion();
 }
 
 - (CPMapButton *) createMapButton:(EOACarPlayButtonType)type
@@ -523,6 +606,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self exitNavigationMode];
+        [self showDestinationReachedMenu];
     });
 }
 

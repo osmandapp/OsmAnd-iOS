@@ -246,6 +246,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
 
             let showClear = !currentValue.isEmpty && currentValue != defaultValue
             cell.clearButtonVisibility(showClear)
+            cell.clearButton.removeTarget(nil, action: nil, for: .allEvents)
+            cell.clearButton.tag = indexPath.section << 10 | indexPath.row
+            cell.clearButton.addTarget(self, action: #selector(onClearURLButtonPressed(_:)), for: .touchUpInside)
             cell.clearButtonArea.removeTarget(nil, action: nil, for: .allEvents)
             cell.clearButtonArea.tag = indexPath.section << 10 | indexPath.row
             cell.clearButtonArea.addTarget(self, action: #selector(onClearURLButtonPressed(_:)), for: .touchUpInside)

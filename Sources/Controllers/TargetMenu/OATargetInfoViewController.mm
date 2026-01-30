@@ -92,16 +92,30 @@ static const CGFloat kBackButtonOffsetLeftFromFrame = 6.0;
 
 static const CGFloat kTextMaxHeight = 150.0;
 
+static const NSInteger kOrderPhotoRow = -102;
+static const NSInteger kOrderMapillaryRow = -101;
+static const NSInteger kOrderWithinRow = -100;
+static const NSInteger kOrderTopInternalRow = 0;
+static const NSInteger kOrderDescriptionRow = 0;
+static const NSInteger kOrderInternalRow = 0;
+static const NSInteger kOrderDetailsRow = 0;
+static const NSInteger kOrderDateRow = 3;
+static const NSInteger kOrderCoommentRow = 4;
+static const NSInteger kOrderPoiRow = 1000;
+static const NSInteger kOrderCoordinatesRow = 20000;
+static const NSInteger kOrderPhotoEmptyRow = 30001;
+static const NSInteger kOrderMapillaryEmptyRow = 30002;
+
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (nonatomic) BOOL wikiCardsReady;
-@property (nonatomic, strong) NSURLSession *onlineAndMapillarySession;
+@property (nonatomic, strong) NSURLSession *onlineAndMapillarySession; //TODO: move to plugin?
 
 @end
 
 @implementation OATargetInfoViewController
 {
-    NSMutableArray<OARowInfo *> *_rows;
+    NSMutableArray<OAAmenityInfoRow *> *_rows;
     CGFloat _contentHeight;
     UIColor *_contentColor;
     NSArray<OAPOI *> *_nearestWiki;
@@ -109,13 +123,13 @@ static const CGFloat kTextMaxHeight = 150.0;
     BOOL _hasOsmWiki;
     CGFloat _calculatedWidth;
     
-    OARowInfo *_onlinePhotoCardsRowInfo;
-    OARowInfo *_mapillaryCardsRowInfo;
+    OAAmenityInfoRow *_onlinePhotoCardsRowInfo;
+    OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
 }
 
-- (void) setRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) setRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     _rows = rows;
 }
@@ -162,15 +176,15 @@ static const CGFloat kTextMaxHeight = 150.0;
     return img;
 }
 
-- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self buildDescription:rows];
     NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
     NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
     if (localTransportRoutes.count > 0)
     {
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-        rowInfo.collapsable = YES;
+        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+//        rowInfo.collapsable = YES;
         rowInfo.collapsed = NO;
         rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = localTransportRoutes;
@@ -179,8 +193,8 @@ static const CGFloat kTextMaxHeight = 150.0;
     if (nearbyTransportRoutes.count > 0)
     {
         NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-        rowInfo.collapsable = YES;
+        OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+//        rowInfo.collapsable = YES;
         rowInfo.collapsed = NO;
         rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
@@ -188,50 +202,70 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
 }
 
-- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // implement in subclasses
 }
 
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // implement in subclasses
 }
 
-- (void) appendDetailsButtonRow:(NSMutableArray<OARowInfo *> *)rows
+- (void) appdendDetailsButtonRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if ([self showDetailsButton])
     {
-        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *collapseDetailsRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderDetailsRow typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
         [collapseDetailsRowCell setHeight:[self detailsButtonHeight]];
         [rows addObject:collapseDetailsRowCell];
     }
 }
 
-- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
+    //TODO: clear code
+    
     _rows = rows;
 
-    [self buildTopRows:_rows];
+//    [self buildTopInternal:_rows];
+//    
+//    
+//    //        if (showTitleIfTruncated) {
+//    //            buildTitleRow(view);
+//    //        }
+//    
+//    // ?? don't exist in android
+//    [self appdendDetailsButtonRow:_rows];
+//    
+//    
+//    
+//    [self buildWithinRow];
+//    [self buildNearestRows];
+//    
+//    //        if (needBuildPlainMenuItems()) {
+//    //            buildPlainMenuItems(view);
+    //        }
     
-    [self appendDetailsButtonRow:_rows];
+    [self buildInternal:_rows];
     
-    [self buildWithinRow];
+//    [self buildPluginRows];
+//
+//    // ?? don't exist in android
+//    if (self.additionalRows)
+//    {
+//        [_rows addObjectsFromArray:self.additionalRows];
+//    }
+//
+//    [self buildCoordinateRows:rows];
+//    [self buildPhotosRow];
+//    
+    // ?? don't exist in android. move to buildPluginRows()
+//    [self addMapillaryCardsRowInfoIfNeeded];
     
-    [self buildRows:_rows];
-
-    if (self.additionalRows)
-    {
-        [_rows addObjectsFromArray:self.additionalRows];
-    }
     
-    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
-        [self buildRowsPoi:YES];
-
-    if ([self showNearestPoi])
-        [self buildRowsPoi:NO];
-
-    [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
+    
+    [_rows sortUsingComparator:^NSComparisonResult(OAAmenityInfoRow *row1, OAAmenityInfoRow *row2) {
         if (row1.order < row2.order)
             return NSOrderedAscending;
         else if (row1.order == row2.order)
@@ -239,12 +273,10 @@ static const CGFloat kTextMaxHeight = 150.0;
         else
             return NSOrderedDescending;
     }];
-
-    [self buildCoordinateRows:rows];
-    [self buildNearbyImagesRow];
-    [self buildMapillaryCardsRowInfoIfNeeded];
-    [self handleOnlineAndMapillaryLoadingIfNeeded];
     
+    
+//    [self startLoadingImages];
+
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
 }
@@ -296,20 +328,20 @@ static const CGFloat kTextMaxHeight = 150.0;
         
         NSMutableArray *detailsArray = [self getWithinCollapsableContent:polygons];
         
-        OARowInfo *row = [[OARowInfo alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
+        OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
                                         icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
                                   textPrefix:title
                                         text:rowSummary
                                    textColor:nil
                                       isText:YES
                                    needLinks:YES
-                                       order:-1
+                                       order:kOrderWithinRow
                                     typeName:WITHIN_POLYGONS_ROW_KEY
                                isPhoneNumber:NO
                                        isUrl:NO];
         
         [row setDetailsArray:detailsArray];
-        row.collapsable = NO;
+//        row.collapsable = NO;
         row.collapsed = YES;
         row.collapsableView = nil;
         [_rows addObject:row];
@@ -386,18 +418,18 @@ static const CGFloat kTextMaxHeight = 150.0;
         if (nearest.count > 0)
         {
             UIImage *icon = isWiki ? [UIImage mapSvgImageNamed:@"mx_wiki_place"] : poi.icon;
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-            rowInfo.collapsable = YES;
+            OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderPoiRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+//            rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(isWiki ? _hasOsmWiki : YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
-            rowInfo.order = 1000;
+            rowInfo.order = kOrderPoiRow;
             [_rows addObject:rowInfo];
         }
     }
 }
 
-- (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp
+- (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp
 {
     if (timestamp)
     {
@@ -405,38 +437,69 @@ static const CGFloat kTextMaxHeight = 150.0;
         dateFormatter.dateStyle = NSDateFormatterMediumStyle;
         dateFormatter.timeStyle = NSDateFormatterShortStyle;
         NSString *formattedDate = [dateFormatter stringFromDate:timestamp];
-        OARowInfo *dateRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:3 typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *dateRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:kOrderDateRow typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:dateRowCell];
     }
 }
 
-- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment
+- (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment
 {
     if (comment.length > 0)
     {
-        OARowInfo *commentRow = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:4 typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *commentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:kOrderCoommentRow typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:commentRow];
     }
 }
 
-- (void)buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows
+- (void)buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if ([self needCoords])
     {
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *coordinatesRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderCoordinatesRow typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
-        coordinatesRow.collapsable = YES;
+//        coordinatesRow.collapsable = YES;
         OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
         coordinatesRow.collapsableView = collapsableView;
         [rows addObject:coordinatesRow];
     }
 }
 
+- (void)buildNearestRows
+{
+    [self buildNearestWikiRow];
+    [self buildNearestPoiRow];
+    [self buildRouteRows];
+}
+
+- (void)buildNearestWikiRow
+{
+    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
+        [self buildRowsPoi:YES];
+}
+
+- (void)buildNearestPoiRow
+{
+    if ([self showNearestPoi])
+        [self buildRowsPoi:NO];
+}
+
+- (void)buildRouteRows
+{
+    // TODO: implement
+}
+
+- (void)buildPluginRows
+{
+    // TODO: implement
+    
+    [self addMapillaryCardsRowInfoIfNeeded];
+}
+
 - (void) calculateRowsHeight:(CGFloat)width
 {
     CGFloat regularTextWidth = width - kMarginLeft - kMarginRight;
     CGFloat collapsableTitleWidth = width - kMarginLeft - kCollapsableTitleMarginRight;
-    for (OARowInfo *row in _rows)
+    for (OAAmenityInfoRow *row in _rows)
     {
         CGFloat textWidth = row.collapsable ? collapsableTitleWidth : regularTextWidth;
         CGFloat rowHeight;
@@ -482,7 +545,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 - (void) calculateContentHeight
 {
     CGFloat h = 0;
-    for (OARowInfo *row in _rows)
+    for (OAAmenityInfoRow *row in _rows)
         h += row.height;
 
     _contentHeight = h;
@@ -503,7 +566,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
     _calculatedWidth = 0;
-    [self buildRowsInternal:[NSMutableArray array]];
+    [self buildMenu:[NSMutableArray array]];
 }
 
 - (void) didReceiveMemoryWarning
@@ -555,7 +618,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 - (void) rebuildRows
 {
-    [self buildRowsInternal:[NSMutableArray array]];
+    [self buildMenu:[NSMutableArray array]];
 }
 
 - (void)processNearestWiki:(OAPOI *)poi
@@ -722,7 +785,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 - (void)addOtherCards:(NSString *)imageTagContent
             mapillary:(NSString *)mapillaryTagContent
                 cards:(NSMutableArray<AbstractCard *> *)cards
-              rowInfo:(OARowInfo *)nearbyImagesRowInfo
+              rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
      onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
@@ -733,10 +796,11 @@ static const CGFloat kTextMaxHeight = 150.0;
                            self.location.longitude,
                            [OAIAPHelper isPaidVersion] ? @"paid" : @"free"];
 
-    if (preferredLang.length > 0)
+    if (!NSStringIsEmpty(preferredLang))
         urlString = [urlString stringByAppendingFormat:@"&lang=%@", preferredLang];
     if (myLocation)
         urlString = [urlString stringByAppendingFormat:@"&mloc=%f,%f", myLocation.coordinate.latitude, myLocation.coordinate.longitude];
+
     if (imageTagContent)
         urlString = [urlString stringByAppendingFormat:@"&osm_image=%@", imageTagContent];
     if (mapillaryTagContent)
@@ -847,7 +911,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 }
 
 - (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards
-                rowInfo:(OARowInfo *)nearbyImagesRowInfo
+                rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
 {
     _otherCardsReady = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -937,14 +1001,17 @@ static const CGFloat kTextMaxHeight = 150.0;
     [cards setArray:uniqueOrderedSet.array];
 }
 
-- (void)buildNearbyImagesRow
+- (void)buildPhotosRow
 {
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-
+    BOOL hasPhoto = YES; //TODO: implement later. Move emmty row to bottom of context menu
+    NSInteger order = hasPhoto ? kOrderPhotoRow : kOrderPhotoEmptyRow;
+    
+    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:order typeName:@"" isPhoneNumber:NO isUrl:NO];
+    
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
     cardView.delegate = self;
-    nearbyImagesRowInfo.collapsable = YES;
+//    nearbyImagesRowInfo.collapsable = YES;
     __weak __typeof(self) weakSelf = self;
     nearbyImagesRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
         if (!collapsed)
@@ -957,28 +1024,33 @@ static const CGFloat kTextMaxHeight = 150.0;
 
     [self clearContentForRowInfo:_onlinePhotoCardsRowInfo];
     _onlinePhotoCardsRowInfo = nearbyImagesRowInfo;
+    
+    [self startLoadingImages];
 }
 
-- (void)buildMapillaryCardsRowInfoIfNeeded
+- (void)addMapillaryCardsRowInfoIfNeeded
 {
     OAMapillaryPlugin *plugin = (OAMapillaryPlugin *) [OAPluginsHelper getPlugin:OAMapillaryPlugin.class];
     if ([plugin isEnabled])
     {
-        OARowInfo *mapillaryCardsRowInfo = [[OARowInfo alloc] initWithKey:nil
+        BOOL hasPhoto = YES; //TODO: implement later. Move emmty row to bottom of context menu
+        NSInteger order = hasPhoto ? kOrderMapillaryRow : kOrderMapillaryEmptyRow;
+        
+        OAAmenityInfoRow *mapillaryCardsRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil
                                                                      icon:[UIImage imageNamed:@"ic_custom_photo_street"]
                                                                textPrefix:nil
                                                                      text:OALocalizedString(@"street_level_imagery")
                                                                 textColor:nil
                                                                    isText:NO
                                                                 needLinks:NO
-                                                                    order:0
+                                                                    order:order
                                                                  typeName:@""
                                                             isPhoneNumber:NO isUrl:NO];
 
         CollapsableCardsView *cardView = [CollapsableCardsView new];
         cardView.contentType = CollapsableCardsTypeMapillary;
         cardView.delegate = self;
-        mapillaryCardsRowInfo.collapsable = YES;
+//        mapillaryCardsRowInfo.collapsable = YES;
         __weak __typeof(self) weakSelf = self;
         mapillaryCardsRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
             if (!collapsed)
@@ -994,7 +1066,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
 }
 
-- (void)clearContentForRowInfo:(OARowInfo *)rowInfo
+- (void)clearContentForRowInfo:(OAAmenityInfoRow *)rowInfo
 {
     CollapsableCardsView *cardsView = (CollapsableCardsView *)[rowInfo collapsableView];
     if (cardsView)
@@ -1004,7 +1076,7 @@ static const CGFloat kTextMaxHeight = 150.0;
     }
 }
 
-- (void)showPOITagsDetails:(OARowInfo *)info
+- (void)showPOITagsDetails:(OAAmenityInfoRow *)info
 {
     POITagsDetailsViewController *tagsDetailsController = [[POITagsDetailsViewController alloc] initWithTags:info.detailsArray];
     tagsDetailsController.tagTitle = info.textPrefix;
@@ -1021,7 +1093,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     
     if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
@@ -1222,7 +1294,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
     if ([info.typeName isEqualToString:kGroupRowType])
         return info.height + 16;
@@ -1236,7 +1308,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     if (info.collapsable)
         [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
     return info.height;
@@ -1246,7 +1318,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    OARowInfo *info = _rows[indexPath.row];
+    OAAmenityInfoRow *info = _rows[indexPath.row];
     if (info.delegate)
     {
         [info.delegate onRowClick:self rowInfo:info];
@@ -1368,7 +1440,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 {
     if (action == @selector(copy:))
     {
-        OARowInfo *info = _rows[indexPath.row];
+        OAAmenityInfoRow *info = _rows[indexPath.row];
         NSString *textToCopy;
         if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
             textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];

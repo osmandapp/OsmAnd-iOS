@@ -44,7 +44,7 @@
              lat:(double)lat
              lon:(double)lon
  isPoiAdditional:(BOOL)isPoiAdditional
-         textRow:(OARowInfo *)textRow
+         textRow:(OAAmenityInfoRow *)textRow
 {
     _poiTypes = poiTypes;
     _amenity = amenity;

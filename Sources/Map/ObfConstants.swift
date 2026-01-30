@@ -11,15 +11,15 @@ import Foundation
 @objcMembers
 final class ObfConstants: NSObject {
     
-    static let SHIFT_MULTIPOLYGON_IDS: Int64 = 43
-    static let SHIFT_NON_SPLIT_EXISTING_IDS: Int64 = 41
-    static let SHIFT_PROPAGATED_NODE_IDS: Int64 = 50
-    static let SHIFT_PROPAGATED_NODES_BITS: Int64 = 11
-    static let MAX_ID_PROPAGATED_NODES: Int64 = (1 << SHIFT_PROPAGATED_NODES_BITS) - 1     // 2047
-    static let RELATION_BIT: Int64 = 1 << (SHIFT_MULTIPOLYGON_IDS - 1)                     // 1L << 42
-    static let PROPAGATE_NODE_BIT: Int64 = 1 << (SHIFT_PROPAGATED_NODE_IDS - 1)            // 1L << 41
-    static let SPLIT_BIT: Int64 = 1 << (SHIFT_NON_SPLIT_EXISTING_IDS - 1)                  // 1L << 40
-    static let DUPLICATE_SPLIT: Int64 = 5                                                  // According IndexPoiCreator DUPLICATE_SPLIT
+    static let SHIFT_MULTIPOLYGON_IDS: UInt64 = 43
+    static let SHIFT_NON_SPLIT_EXISTING_IDS: UInt64 = 41
+    static let SHIFT_PROPAGATED_NODE_IDS: UInt64 = 50
+    static let SHIFT_PROPAGATED_NODES_BITS: UInt64 = 11
+    static let MAX_ID_PROPAGATED_NODES: UInt64 = (1 << SHIFT_PROPAGATED_NODES_BITS) - 1     // 2047
+    static let RELATION_BIT: UInt64 = 1 << (SHIFT_MULTIPOLYGON_IDS - 1)                     // 1L << 42
+    static let PROPAGATE_NODE_BIT: UInt64 = 1 << (SHIFT_PROPAGATED_NODE_IDS - 1)            // 1L << 41
+    static let SPLIT_BIT: UInt64 = 1 << (SHIFT_NON_SPLIT_EXISTING_IDS - 1)                  // 1L << 40
+    static let DUPLICATE_SPLIT: UInt64 = 5                                                  // According IndexPoiCreator DUPLICATE_SPLIT
     
     static private let SHIFT_ID = 6
     static private let AMENITY_ID_RIGHT_SHIFT = 1
@@ -35,7 +35,7 @@ final class ObfConstants: NSObject {
         return "https://www.openstreetmap.org/\(type)/\(osmId)"
     }
     
-    static func createMapObjectIdFromOsmId(_ osmId: Int64, type: String?) -> Int64 {
+    static func createMapObjectIdFromOsmId(_ osmId: UInt64, type: String?) -> UInt64 {
         guard let type else { return osmId }
         
         switch type {
@@ -50,10 +50,10 @@ final class ObfConstants: NSObject {
         }
     }
     
-    static func getOsmObjectId(_ object: OAMapObject) -> Int64 {
-        var originalId: Int64 = -1
+    static func getOsmObjectId(_ object: OAMapObject) -> UInt64 {
+        var originalId: UInt64 = 0
         var obfId = object.obfId
-        if obfId != -1 {
+        if obfId > 0 {
             if object is OARenderedObject {
                 obfId >>= 1
             }
@@ -74,7 +74,7 @@ final class ObfConstants: NSObject {
     
     static func getOsmEntityType(_ object: OAMapObject) -> String? {
         if isOsmUrlAvailable(object) {
-            let obfId = object.obfId
+            let obfId = UInt64(object.obfId)
             let originalId = obfId >> 1
             if object is OARenderedObject && isIdFromPropagatedNode(originalId) {
                 return WAY
@@ -96,26 +96,26 @@ final class ObfConstants: NSObject {
         return object.obfId > 0
     }
     
-    static func getOsmId(_ obfId: Int64) -> Int64 {
+    static func getOsmId(_ obfId: UInt64) -> UInt64 {
         // According methods assignIdForMultipolygon and genId in IndexPoiCreator
         let clearBits = RELATION_BIT | SPLIT_BIT
         let midifiedId = isShiftedID(obfId) ? (obfId & ~clearBits) >> DUPLICATE_SPLIT : obfId
         return midifiedId >> Self.SHIFT_ID
     }
     
-    static func isShiftedID(_ obfId: Int64) -> Bool {
+    static func isShiftedID(_ obfId: UInt64) -> Bool {
         isIdFromRelation(obfId) || isIdFromSplit(obfId)
     }
     
-    static func isIdFromRelation(_ obfId: Int64) -> Bool {
+    static func isIdFromRelation(_ obfId: UInt64) -> Bool {
         obfId > 0 && (obfId & Self.RELATION_BIT) == Self.RELATION_BIT
     }
     
-    static func isIdFromPropagatedNode(_ obfId: Int64) -> Bool {
+    static func isIdFromPropagatedNode(_ obfId: UInt64) -> Bool {
         obfId > 0 && (obfId & Self.PROPAGATE_NODE_BIT) == Self.PROPAGATE_NODE_BIT
     }
     
-    static func isIdFromSplit(_ obfId: Int64) -> Bool {
+    static func isIdFromSplit(_ obfId: UInt64) -> Bool {
         obfId > 0 && (obfId & Self.SPLIT_BIT) == Self.SPLIT_BIT
     }
     

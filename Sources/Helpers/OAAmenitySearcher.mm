@@ -93,7 +93,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         {
             OARenderedObject *renderedObject = (OARenderedObject *)mapObject;
             _latLon = [renderedObject getLocation];
-            if (_latLon == nil || (_latLon.coordinate.latitude == 0 && _latLon.coordinate.longitude == 0))
+            if (_latLon == nil || !CLLocationCoordinate2DIsValid(_latLon.coordinate))
             {
                 _latLon = renderedObject.labelLatLon;
             }
@@ -241,7 +241,37 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
 - (NSArray<OAPOI *> *)searchAmenitiesWithFilter:(OASearchPoiTypeFilter *)filter searchLatLon:(CLLocation *)searchLatLon radius:(NSInteger)radius includeTravel:(BOOL)includeTravel
 {
-    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:(int)radius includeTravel:includeTravel matcher:nil publish:nil];
+    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:radius includeTravel:includeTravel matcher:nil publish:nil];
+}
+
+- (nullable BaseDetailsObject *)searchDetailedObject:(id)object
+{
+    OAAmenitySearcherRequest *request;
+    if ([object isKindOfClass:OAMapObject.class])
+    {
+        request = [[OAAmenitySearcherRequest alloc] initWithMapObject:object];
+    }
+    else if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *detailsObject = object;
+        if ([detailsObject isObjectFull])
+        {
+            [self completeGeometry:detailsObject object:detailsObject.objects[0]];
+            return detailsObject;
+        }
+        if (!NSArrayIsEmpty(detailsObject.objects))
+        {
+            return detailsObject = [self searchDetailedObject:detailsObject.objects[0]];
+        }
+    }
+    BaseDetailsObject *detailsObject;
+    if (request)
+    {
+        detailsObject = [self searchDetailedObjectWithRequest:request];
+    }
+    
+    [self completeGeometry:detailsObject object:object];
+    return detailsObject;
 }
 
 - (NSMutableArray<OAPOI *> *)filterAmenities:(NSArray<OAPOI *> *)amenities request:(OAAmenitySearcherRequest*) request
@@ -284,40 +314,6 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     }
 
     return filtered;
-}
-
-- (nullable BaseDetailsObject *)searchDetailedObject:(id)object
-{
-    OAAmenitySearcherRequest *request = nil;
-    if ([object isKindOfClass:[OAAmenitySearcherRequest class]])
-    {
-        return [self searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)object];
-    }
-    else if ([object isKindOfClass:[OAMapObject class]])
-    {
-        request = [[OAAmenitySearcherRequest alloc] initWithMapObject:(OAMapObject *)object];
-    }
-    else if ([object isKindOfClass:[BaseDetailsObject class]])
-    {
-        BaseDetailsObject *detailsObject = (BaseDetailsObject *)object;
-        if (detailsObject.isObjectFull)
-        {
-            [self completeGeometry:detailsObject object:detailsObject.objects.firstObject];
-            return detailsObject;
-        }
-        if (!NSArrayIsEmpty(detailsObject.objects))
-        {
-            id obj = detailsObject.objects.firstObject;
-            return [self searchDetailedObject:obj];
-        }
-    }
-
-    BaseDetailsObject *detailsObject = nil;
-    if (request != nil)
-        detailsObject = [self searchDetailedObject:request];
-    
-    [self completeGeometry:detailsObject object:object];
-    return detailsObject;
 }
 
 - (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
@@ -726,7 +722,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         if (nameB)
             nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
         
-        return [nameA compare:nameB] == NSOrderedDescending;
+        return [nameA compare:nameB] == NSOrderedAscending;
     });
     
     for (const auto& file : obfFiles)
@@ -1095,7 +1091,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     return nil;
 }
 
-+ (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon
++ (OAPOI *) findPOIByOsmId:(uint64_t)osmId lat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -1425,6 +1421,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
 + (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(OATopIndexFilter *)additionalFilter bbox31:(OsmAnd::AreaI )bbox31 currentLocation:(OsmAnd::PointI)currentLocation includeTravel:(BOOL)includeTravel matcher:(OAResultMatcher<OAPOI *> *)matcher publish:(BOOL(^)(OAPOI *poi))publish
 {
+    NSMutableSet<NSNumber *> *openAmenities = [NSMutableSet new];
     NSMutableSet<NSNumber *> *closedAmenities = [NSMutableSet new];
     NSMutableArray<OAPOI *> *actualAmenities = [NSMutableArray array];
     NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
@@ -1478,6 +1475,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                                         if (![deduplicateTypeIdSet containsObject:typeIdKey] && accept)
                                         {
                                             [deduplicateTypeIdSet addObject:typeIdKey];
+    
                                             OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
                                             
@@ -1503,6 +1501,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                 }
                 else if (![closedAmenities containsObject:obfId])
                 {
+                    [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];
                 }
             }

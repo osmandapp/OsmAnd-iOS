@@ -75,6 +75,7 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         addWidgetInfo(.gpsInfo)
         addWidgetInfo(.currentTime)
         addWidgetInfo(.battery)
+        addWidgetInfo(.networkStatus)
         addWidgetInfo(.radiusRuler)
         addWidgetInfo(.timeToIntermediate)
         addWidgetInfo(.timeToDestination)

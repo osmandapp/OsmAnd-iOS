@@ -299,7 +299,7 @@ extension WidgetType {
         
     static let glideTarget = WidgetType(ordinal: 53, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target", group: .glide, defaultPanel: .rightPanel)
     static let glideAverage = WidgetType(ordinal: 54, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average", group: .glide, defaultPanel: .rightPanel)
-    
+
     // Vehicle Metrics
     static let OBDSpeed = WidgetType(ordinal: 55, id: "obd_speed", title: localizedString("obd_widget_vehicle_speed"), descr: localizedString("obd_speed_desc"), iconName: "widget_obd_speed", group: .vehicleMetrics, defaultPanel: .rightPanel)
     static let OBDRpm = WidgetType(ordinal: 56, id: "obd_rpm", title: localizedString("obd_widget_engine_speed"), descr: localizedString("obd_rpm_desc"), iconName: "widget_obd_engine_speed", group: .vehicleMetrics, defaultPanel: .rightPanel)
@@ -314,11 +314,13 @@ extension WidgetType {
     static let OBDCalculatedEngineLoad = WidgetType(ordinal: 65, id: "obd_calculated_engine_load", title: localizedString("obd_calculated_engine_load"), descr: localizedString("obd_calculated_engine_load_desc"), iconName: "widget_obd_engine_calculated_load", group: .vehicleMetrics, defaultPanel: .rightPanel)
     static let OBDThrottlePosition = WidgetType(ordinal: 66, id: "obd_throttle_position", title: localizedString("obd_throttle_position"), descr: localizedString("obd_throttle_position_desc"), iconName: "widget_obd_throttle_position", group: .vehicleMetrics, defaultPanel: .rightPanel)
     static let OBDFuelConsumption = WidgetType(ordinal: 67, id: "obd_fuel_consumption", title: localizedString("obd_fuel_consumption"), descr: localizedString("obd_fuel_consumption_desc"), iconName: "widget_obd_fuel_consumption", group: .vehicleMetrics, defaultPanel: .rightPanel)
-    
+
     static let tripRecordingAverageSlope = WidgetType(ordinal: 68, id: "trip_recording_average_slope", title: localizedString("average_slope"), descr: localizedString("trip_recording_average_slope_widget_description"), iconName: "widget_track_recording_average_slope_uphill", group: .tripRecording, defaultPanel: .rightPanel)
     static let tripRecordingMaxSpeed = WidgetType(ordinal: 69, id: "trip_recording_max_speed", title: localizedString("shared_string_max_speed"), descr: localizedString("trip_recording_max_speed_widget_description"), iconName: "widget_track_recording_max_speed", group: .tripRecording, defaultPanel: .rightPanel)
     static let tripRecordingMovingTime = WidgetType(ordinal: 70, id: "trip_recording_moving_time", title: localizedString("trip_recording_moving_time"), descr: localizedString("trip_recording_moving_time_widget_description"), iconName: "widget_track_recording_moving_time", group: .tripRecording, defaultPanel: .rightPanel)
-    
+
+    static let networkStatus = WidgetType(ordinal: 71, id: "network_status", title: localizedString("map_widget_network_status"), descr: localizedString("network_status_widget_desc"), iconName: "widget_network_status", defaultPanel: .rightPanel)
+
     static let values = [nextTurn,
                          smallNextTurn,
                          secondNextTurn,
@@ -403,6 +405,7 @@ extension WidgetType {
                          OBDFuelConsumption,
                          tripRecordingAverageSlope,
                          tripRecordingMaxSpeed,
-                         tripRecordingMovingTime
+                         tripRecordingMovingTime,
+                         networkStatus
     ]
 }

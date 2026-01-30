@@ -233,6 +233,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
              analysis:(OASGpxTrackAnalysis *)analysis
               segment:(nullable OASTrkSegment *)segment
      trackChartHelper:(TrackChartHelper *)trackChartHelper;
+- (void)contextMenuDidHide;
 
 @end
 

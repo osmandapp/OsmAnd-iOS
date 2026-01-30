@@ -2104,6 +2104,19 @@ static const NSInteger kDetailedMapZoom = 9;
     [self hidePolygonHighlight];
 }
 
+- (void)contextMenuDidHide
+{
+    for (OAMapLayer *layer in self.mapLayers.getLayers)
+    {
+        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)] &&
+            [layer respondsToSelector:@selector(contextMenuDidHide)])
+        {
+            id<OAContextMenuProvider> provider = (id<OAContextMenuProvider>)layer;
+            [provider contextMenuDidHide];
+        }
+    }
+}
+
 - (void) highlightRegion:(OAWorldRegion *)region
 {
     [_mapLayers.downloadedRegionsLayer highlightRegion:region];

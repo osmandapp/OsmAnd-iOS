@@ -9,7 +9,7 @@
 "shared_string_show_all" = "Εμφάνιση όλων";
 "traffic_warning_border_control" = "Συνοριακός έλεγχος";
 "intermediate_items_sort_by_distance" = "Ταξινόμηση πόρτα-πόρτα";
-"shared_string_dismiss" = "Απόρριψη";
+"shared_string_dismiss" = "Παράβλεψη";
 "poi_remove_title" = "Διαγραφή ΣΕ";
 "driving_region_canada" = "Καναδάς";
 "layer_map_appearance" = "Διαμόρφωση οθόνης";
@@ -58,7 +58,7 @@
 "poi_filter_parking" = "Στάθμευση";
 "shared_string_none" = "Κανένα";
 "quick_action_map_style" = "Στυλ χάρτη";
-"cancel_route" = "Απόρριψη διαδρομής;";
+"cancel_route" = "Παράβλεψη διαδρομής;";
 "poi_filter_closest_poi" = "Πλησιέστερα ΣΕ";
 "shared_string_milliradians" = "Χιλιοστά ακτινίων";
 "traffic_warning_stop" = "Πινακίδα stop";
@@ -2557,7 +2557,7 @@
 "routing_attr_difficulty_preference_advanced_name" = "Προηγμένη";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Μόνο αν είναι απαραίτητο";
 "local_backup_empty_file" = "Το αρχείο αντίγραφου ασφαλείας δεν περιέχει κάποιο στοιχείο για να επαναφερθεί.";
-"cloud_changes_will_be_dismissed" = "Οι αλλαγές στο cloud θα ακυρωθούν";
+"cloud_changes_will_be_dismissed" = "Οι αλλαγές στο cloud θα παραβλεφθούν";
 "complete_purchase" = "Ολοκλήρωση αγοράς";
 "auto_update" = "Αυτόματη ενημέρωση";
 "last_sync" = "Τελ. συγχρονισμός";
@@ -2606,7 +2606,7 @@
 "rendering_attr_horse_scale_critical_name" = "Κρίσιμο";
 "weather_offline_forecast_only" = "Μόνο πρόγνωση εκτός σύνδεσης";
 "set_up_backup" = "Διαμόρφωση αντίγραφου ασφαλείας";
-"local_changes_will_be_dismissed" = "Οι τοπικές αλλαγές θα ακυρωθούν";
+"local_changes_will_be_dismissed" = "Οι τοπικές αλλαγές θα παραβλεφθούν";
 "backup_delete_from_cloud" = "Διαγραφή από το cloud";
 "with_offline_maps" = "Με χάρτες εκτός σύνδεσης";
 "routing_attr_avoid_highway_description" = "Αποφυγή αυτοκινητόδρομων";

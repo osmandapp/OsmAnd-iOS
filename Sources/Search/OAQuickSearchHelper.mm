@@ -380,7 +380,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     for (OASGpxDataItem *dataItem in OAGPXDatabase.sharedDb.getDataItems)
     {
         // Exclude temporary GPX tracks from search.
-        if ([self isTemporaryGpxItem:dataItem])
+        if ([self shouldIgnoreGpxItem:dataItem])
             continue;
         
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
@@ -409,6 +409,11 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         return -1;
     
     return SEARCH_TRACK_API_PRIORITY;
+}
+
+- (BOOL)shouldIgnoreGpxItem:(OASGpxDataItem *)dataItem
+{
+    return [self isTemporaryGpxItem:dataItem];
 }
 
 - (BOOL)isTemporaryGpxItem:(OASGpxDataItem *)dataItem

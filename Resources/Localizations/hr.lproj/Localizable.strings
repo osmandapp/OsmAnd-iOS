@@ -1103,7 +1103,7 @@
 "routing_attr_freeride_policy_description" = "„Freeride” i „Off‑piste” su neslužbene rute i prolazi. Obično su neuređeni, neodržavani i neprovjeravani navečer. Ulazite na vlastitu odgovornost.";
 "lang_mi" = "Maori";
 "copy_link" = "Kopiraj poveznicu";
-"wikivoyage_travel_guide_descr" = "Vodi vas do najzanimljivijih mjesta na planetu, unutar OsmAnd‑a, bez potrebe za internetskom vezom.";
+"wikivoyage_travel_guide_descr" = "Vodi do najzanimljivijih mjesta na planetu, unutar OsmAnd, bez veze s internetom.";
 "in_app_purchase" = "Kupnja putem aplikacije";
 "in_app_purchase_desc_ex" = "Nakon kupnje bit će vam trajno dostupno.";
 "wikipedia_offline" = "Wikipedia (offline način)";

@@ -11,11 +11,11 @@ import Kingfisher
 @objcMembers
 final class POIImageLoader: NSObject, @unchecked Sendable {
     
-    /// Dictionary of current image download tasks (key = URL)
-    private(set) var loadingImages: [String: DownloadTask] = [:]
-    
     /// Serial queue for thread-safe access to loadingImages
     private let queue = DispatchQueue(label: "com.osmand.poiImageLoader")
+    
+    /// Dictionary of current image download tasks (key = URL)
+    private var loadingImages: [String: DownloadTask] = [:]
     
     override init() {
         super.init()
@@ -70,7 +70,6 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                 let options: KingfisherOptionsInfo = [
                     .processor(processor),
                     .scaleFactor(UIScreen.main.scale),
-                    //.cacheOriginalImage,
                     .cacheSerializer(FormatIndicatedCacheSerializer.png)
                 ]
                 
@@ -80,62 +79,24 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     options: options,
                     progressBlock: nil
                 ) { [weak self] result in
-                  //  DispatchQueue.main.async {
-                        guard let self else { return }
-                        
-                        self.queue.async {
-                            self.loadingImages.removeValue(forKey: urlStr)
-                        }
-                        
-                        switch result {
-                        case .success(let value):
-                            completion?(placeId, value.image)
-                        case .failure(let error):
-                            NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
-                        }
-                    //}
+                    guard let self else { return }
+                    
+                    self.queue.async {
+                        self.loadingImages.removeValue(forKey: urlStr)
+                    }
+                    
+                    switch result {
+                    case .success(let value):
+                        completion?(placeId, value.image)
+                    case .failure(let error):
+                        NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
+                    }
                 }
                 
                 self.loadingImages[urlStr] = task
             }
         }
     }
-    
-    func imageWithSelection(_ image: UIImage,
-                            metrics: IconMetrics) -> UIImage {
-        let format = UIGraphicsImageRendererFormat.default()
-        format.opaque = false
-        format.scale = image.scale
-        
-        return UIGraphicsImageRenderer(size: image.size, format: format).image { context in
-            
-            let ctx = context.cgContext
-            
-            image.draw(at: .zero)
-            
-            ctx.setShadow(offset: .zero, blur: 0, color: nil)
-            ctx.setStrokeColor(UIColor.systemPurple.cgColor)
-            
-            let purpleLineWidth = 2 * metrics.textScale
-            ctx.setLineWidth(purpleLineWidth)
-            
-            //            let outset = purpleLineWidth / 2
-            //            let purpleRect = metrics.imageRectInShadow
-            //                .insetBy(dx: -outset, dy: -outset)
-            
-            ctx.strokeEllipse(in: metrics.imageRectInShadow)
-        }
-    }
-    
-    // let finalImage = self.imageWithPurpleSelection(value.image, metrics: metrics)
-    //                            let hasAlpha = value.image.cgImage?.alphaInfo
-    //                            switch hasAlpha {
-    //                            case .some(.first), .some(.last), .some(.premultipliedFirst), .some(.premultipliedLast):
-    //                                NSLog("[POIImageLoader] loaded image has alpha")
-    //                            default:
-    //                                NSLog("[POIImageLoader] loaded image NO alpha")
-    //                            }
-    //                            completion?(placeId,  self.imageWithSelection(value.image, metrics: metrics))
 }
 
 struct IconMetrics {
@@ -242,6 +203,36 @@ struct OSMCircularShadowProcessor: ImageProcessor {
             }
         case .data:
             return (DefaultImageProcessor.default |> self).process(item: item, options: options)
+        }
+    }
+}
+
+@objcMembers
+final class POITopPlaceImageDecorator: NSObject {
+    
+    static func selectedImage(for image: UIImage) -> UIImage {
+        let metrics = IconMetrics(textScale: OAAppSettings.sharedManager().textSize.get())
+        return imageWithSelection(image, metrics: metrics)
+    }
+    
+    static private func imageWithSelection(_ image: UIImage,
+                                           metrics: IconMetrics) -> UIImage {
+        let format = UIGraphicsImageRendererFormat.default()
+        format.opaque = false
+        format.scale = image.scale
+        
+        return UIGraphicsImageRenderer(size: image.size, format: format).image { context in
+            
+            let ctx = context.cgContext
+            
+            image.draw(at: .zero)
+            
+            ctx.setShadow(offset: .zero, blur: 0, color: nil)
+            ctx.setStrokeColor(UIColor.systemPurple.cgColor)
+            
+            let purpleLineWidth = 2 * metrics.textScale
+            ctx.setLineWidth(purpleLineWidth)
+            ctx.strokeEllipse(in: metrics.imageRectInShadow)
         }
     }
 }

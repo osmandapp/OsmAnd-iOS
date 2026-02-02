@@ -1023,4 +1023,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return result;
 }
 
+- (NSString *)getOsmandPoiKey
+{
+    return [self getAdditionalInfo][@"osmand_poi_key"];;
+}
+
 @end

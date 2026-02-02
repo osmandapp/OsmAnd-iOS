@@ -1357,8 +1357,7 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
     
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAContextMenuLayer *contextLayer = mapPanel.mapViewController.mapLayers.contextMenuLayer;
+    OAContextMenuLayer *contextLayer = self.mapViewController.mapLayers.contextMenuLayer;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
@@ -2203,6 +2202,11 @@ typedef enum
     [_mapViewController hideContextPinMarker];
 }
 
+- (void)contextMenuDidHide
+{
+    [_mapViewController contextMenuDidHide];
+}
+
 - (void) targetHide
 {
     [_mapViewController hideContextPinMarker];
@@ -2572,8 +2576,10 @@ typedef enum
     if (_targetMenuView.needsManualContextMode)
         [self restoreFromContextMenuMode];
     
+    [self contextMenuDidHide];
+    
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
-        
+        // FIXME:
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -4304,11 +4310,10 @@ typedef enum
         [_mapViewController removeFromParentViewController];
         [_mapViewController.view removeFromSuperview];
         
-        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
         
-        [mapPanel addChildViewController:_mapViewController];
-        [mapPanel.view insertSubview:_mapViewController.view atIndex:0];
-        _mapViewController.view.frame = mapPanel.view.frame;
+        [self addChildViewController:_mapViewController];
+        [self.view insertSubview:_mapViewController.view atIndex:0];
+        _mapViewController.view.frame = self.view.frame;
         _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
             [_mapViewController.mapView resumeRendering];

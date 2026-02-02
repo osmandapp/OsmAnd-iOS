@@ -74,7 +74,7 @@
     
     id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
     
-    NSArray<OAMapLayer *> *_pointLayers;
+   // NSArray<OAMapLayer *> *_pointLayers;
     
     CGPoint _cachedTargetPoint;
     
@@ -488,7 +488,8 @@
     
     if (objectSelectionThreshold < 0)
     {
-        selectedObjects = objectsAvailableForSelection;
+        // FIXME:
+       // selectedObjects = objectsAvailableForSelection;
     }
     
     if (selectedObjects.count == 1)

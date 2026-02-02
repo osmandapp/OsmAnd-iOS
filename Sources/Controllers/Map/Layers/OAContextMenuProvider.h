@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 @optional
 - (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
+- (void)contextMenuDidHide;
 
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;

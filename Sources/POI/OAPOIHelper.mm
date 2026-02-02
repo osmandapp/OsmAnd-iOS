@@ -929,4 +929,32 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     }
 }
 
+
++ (nullable NSString *)getIconNameForAmenity:(nonnull OAPOI *)amenity {
+//    NSString *osmandPoiKey = [amenity getOsmandPoiKey];
+//    if (osmandPoiKey.length > 0) {
+//        OAPOIType *poiType = [amenity.type.category getPoiTypeByKeyName:osmandPoiKey];
+////        OAHTPoiType *poiType = [[ctx poiTypes] getPoiTypeByKey:osmandPoiKey];
+//        if (poiType != nil) {
+//            return [self getIconNameForPoiType:poiType];
+//        }
+//    }
+//    
+//    // 2. Работа с subType (разбивка multivalued строки)
+//    NSString *subType = amenity.subType;
+//    if (subType != nil && subType.length > 0) {
+//        // Разбиваем строку по ";"
+//        NSArray<NSString *> *subtypes = [subType componentsSeparatedByString:@";"];
+//        if (subtypes.count > 0) {
+//            // Берем первый элемент: subtypes[0]
+//            OAHTPoiType *poiType = [[amenity type] getPoiTypeByKeyName:subtypes[0]];
+//            if (poiType != nil) {
+//                return [self getIconNameForPoiType:poiType];
+//            }
+//        }
+//    }
+    
+    return nil;
+}
+
 @end

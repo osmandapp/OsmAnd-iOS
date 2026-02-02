@@ -88,16 +88,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void)onMapFrameRendered
 {
-  //  NSLog(@"[test] onMapFrameRendered");
     [_topPlacesProvider drawTopPlacesIfNeeded:NO];
-}
-
-- (void)onMapFrameAnimatorsUpdated
-{
-   // NSLog(@"[test] onMapFrameAnimatorsUpdated");
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self updatePopularPlaces];
-//    });
 }
 
 - (void)initLayer
@@ -494,6 +485,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             return YES;
         }
     }
+    [_topPlacesProvider updateSelectedTopPlace:amenity];
     return NO;
 }
 
@@ -518,15 +510,18 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                                                   lon:result.pointLatLon.coordinate.longitude];
 
           if (topPlaces.count > 0)
-          {
               [allAmenities addObjectsFromArray:topPlaces];
-          }
       }
 
       for (OAPOI *amenity in allAmenities)
       {
           [result collect:amenity provider:self];
       }
+}
+
+- (void)contextMenuDidHide
+{
+    [_topPlacesProvider resetSelectedTopPlace];
 }
 
 - (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon
@@ -585,24 +580,27 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (int64_t) getSelectionPointOrder:(id)selectedObject
 {
-    if ([self isTopPlace:selectedObject])
+    if ([self isTopPlace:selectedObject]) {
         return [self getTopPlaceBaseOrder];
-    else
+    } else {
+      //  [_topPlacesProvider resetSelectedTopPlace];
         return 0;
+    }
 }
 
 - (BOOL) isTopPlace:(id)object
 {
-    if ([_topPlacesProvider topPlaces])
+    NSDictionary<NSNumber *, OAPOI *> *topPlaces = [_topPlacesProvider topPlaces];
+    if (topPlaces)
     {
         int64_t placeId = -1;
         if ([object isKindOfClass:OAPOI.class]) {
-            placeId = 0;//((OAPOI *)object).obfId;// FIXME:
+            placeId = ((OAPOI *)object).obfId;// FIXME:
         }
         else if ([object isKindOfClass:BaseDetailsObject.class])
             placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
         
-        return placeId != -1 && [_topPlacesProvider topPlaces][@(placeId)];
+        return placeId != -1 && topPlaces[@(placeId)];
     }
     
     return NO;
@@ -615,7 +613,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (LatLon) parsePoiLatLon:(QString)value
 {
-    OASKGeoParsedPoint * p = [OASKMapUtils.shared decodeShortLinkStringS:value.toNSString()];
+    OASKGeoParsedPoint *p = [OASKMapUtils.shared decodeShortLinkStringS:value.toNSString()];
     return LatLon(p.getLatitude, p.getLongitude);
 }
 

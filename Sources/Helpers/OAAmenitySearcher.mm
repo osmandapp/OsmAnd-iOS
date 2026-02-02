@@ -1447,6 +1447,50 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                  publish:publish];
 }
 
++ (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities
+{
+    if (amenities.count < 2)
+        return amenities;
+
+    NSUInteger size = amenities.count;
+    NSMutableSet<NSNumber *> *seenObfIds = [NSMutableSet setWithCapacity:size];
+    NSMutableSet<NSString *> *seenWikidata = [NSMutableSet setWithCapacity:size];
+    NSMutableArray<OAPOI *> *result = [NSMutableArray arrayWithCapacity:size];
+
+    for (OAPOI *amenity in amenities)
+    {
+        if ([amenity isRouteTrack])
+        {
+            [result addObject:amenity];
+            continue;
+        }
+
+        long long obfId = amenity.obfId;
+        NSNumber *obfIdKey = (obfId > 0) ? @(obfId) : nil;
+
+        NSString *wikidata = [amenity getWikidata];
+        if (wikidata.length == 0)
+            wikidata = nil;
+
+        BOOL duplicateByObfId =
+            (obfIdKey != nil && [seenObfIds containsObject:obfIdKey]);
+
+        BOOL duplicateByWikidata =
+            (wikidata != nil && [seenWikidata containsObject:wikidata]);
+
+        if (obfIdKey != nil)
+            [seenObfIds addObject:obfIdKey];
+        
+        if (wikidata != nil)
+            [seenWikidata addObject:wikidata];
+
+        if (!duplicateByObfId && !duplicateByWikidata)
+            [result addObject:amenity];
+    }
+
+    return result;
+}
+
 + (NSString *) getAmenityTypeIdKey:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
 {
     OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];

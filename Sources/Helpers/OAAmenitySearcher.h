@@ -61,6 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
                         includeTravel:(BOOL)includeTravel
                               matcher:(OAResultMatcher<OAPOI *> *)matcher
                               publish:(BOOL(^)(OAPOI *poi))publish;
+
++ (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities;
+
 @end
 
 

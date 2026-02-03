@@ -3840,7 +3840,7 @@
 "lang_mi" = "Maori";
 "average_slope" = "Pendenza media";
 "trip_recording_average_slope_widget_description" = "Mostra la pendenza media per l'ultima sezione in discesa o in salida del viaggio attualmente registrato.";
-"shared_string_max_speed" = "Velocità max.";
+"shared_string_max_speed" = "Velocità massima";
 "trip_recording_max_speed_widget_description" = "Mostra la velocità massima per il viaggio attualmente registrato. Toccare per passare dalla velocità massima complessiva alla velocità massima dell'ultima salita o discesa.";
 "shared_string_last_uphill" = "Ultima salita";
 "shared_string_last_downhill" = "Ultima discesa";
@@ -3871,7 +3871,7 @@
 "assigned_keys" = "Tasti assegnati";
 "shared_string_inches" = "pollici";
 "inch" = "in";
-"metric_lbs" = "lbs";
+"metric_lbs" = "libbre";
 "nm_h" = "kn";
 "no_activity_for_intent" = "Installa un'app in grado di eseguire questa azione.";
 "shared_string_create" = "Crea";

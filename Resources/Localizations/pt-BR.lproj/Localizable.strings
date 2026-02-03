@@ -4005,3 +4005,7 @@
 "shared_string_dynamic" = "Dinâmico";
 "shared_string_tinted" = "Colorido";
 "background_opacity_description" = "Transparente é mais transparente, revelando o conteúdo por baixo. Colorido aumenta a opacidade e adiciona mais contraste.";
+"trip_recording_moving_time" = "Tempo em movimento";
+"trip_recording_moving_time_widget_description" = "Mostra o tempo de movimento atualmente registrado ou o tempo da última subida e descida.";
+"shared_background" = "Contexto";
+"shared_string_pt" = "pt";

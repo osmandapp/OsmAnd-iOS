@@ -3185,7 +3185,7 @@
 "shared_string_setup_route" = "Встановити маршрутизацію";
 "help_article_widgets_info_widgets_name" = "Інформаційні віджети";
 "help_article_navigation_routing_horse_routing_name" = "Кінні маршрути";
-"help_article_navigation_routing_ski_routing_name" = "Гірськолижні схили та маршрути";
+"help_article_navigation_routing_ski_routing_name" = "Гірськолижні траси та маршрути";
 "help_article_widgets_name" = "Віджети мапи";
 "help_article_personal_name" = "Мої дані";
 "help_article_purchases_android_name" = "Придбання Android";
@@ -3917,7 +3917,7 @@
 "rendering_attr_tidalFlatStyle_description" = "Стиль припливних відмілин";
 "rendering_attr_spotSize_name" = "Розмір точкового зондування";
 "rendering_attr_hideFerries_description" = "Приховати поромні маршрути";
-"rendering_attr_showSkiSlopes_description" = "Показати спрощені гірськолижні схили";
+"rendering_attr_showSkiSlopes_description" = "Показати спрощені гірськолижні траси";
 "rendering_attr_spotSize_description" = "Розмір точкового зондування";
 "rendering_attr_watercolor_name" = "Колір води";
 "rendering_attr_hideAreas_name" = "Глибинні області";
@@ -3928,7 +3928,7 @@
 "rendering_attr_watercolor_description" = "Колір води";
 "rendering_attr_hideContours_description" = "Приховати контури глибини";
 "rendering_attr_spotDistance_description" = "Дальність зондування точки";
-"rendering_attr_showSkiSlopes_name" = "Показати гірськолижні схили";
+"rendering_attr_showSkiSlopes_name" = "Показати гірськолижні траси";
 "rendering_attr_hideMinorContours_description" = "Приховати незначні контури глибини";
 "rendering_attr_hideLightSectors_name" = "Світлові сектори";
 "rendering_attr_hideLightSectorSources_description" = "Приховати джерела світла в секторах";

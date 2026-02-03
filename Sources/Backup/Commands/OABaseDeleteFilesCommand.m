@@ -14,8 +14,6 @@
 #import "OABackupError.h"
 #import "OAOperationLog.h"
 
-static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
-
 @interface OADeleteRemoteFileTask : NSOperation
 
 @property (nonatomic, readonly) OARemoteFile *remoteFile;
@@ -77,8 +75,8 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     BOOL _byVersion;
     __weak id<OAOnDeleteFilesListener> _listener;
     NSArray<OADeleteRemoteFileTask *> *_tasks;
-    NSArray<OADeleteRemoteFileTask *> *_allTasks;
     NSMutableSet *_itemsProgress;
+    NSObject *_itemsProgressLock;
     OABackupHelper *_backupHelper;
     NSOperationQueue *_executor;
     NSArray *_filesToDelete;
@@ -92,6 +90,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         _backupHelper = OABackupHelper.sharedInstance;
         _tasks = @[];
         _itemsProgress = [NSMutableSet set];
+        _itemsProgressLock = [NSObject new];
     }
     return self;
 }
@@ -105,6 +104,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         _listener = listener;
         _backupHelper = OABackupHelper.sharedInstance;
         _itemsProgress = [NSMutableSet set];
+        _itemsProgressLock = [NSObject new];
     }
     return self;
 }
@@ -148,28 +148,22 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         r.url = _byVersion ? OABackupHelper.DELETE_FILE_VERSION_URL : OABackupHelper.DELETE_FILE_URL;
         r.params = parameters;
         r.post = YES;
-        OADeleteRemoteFileTask *t = [[OADeleteRemoteFileTask alloc] initWithRequest:r remoteFile:remoteFile byVersion:_byVersion];
-        [t addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
-        [tasks addObject:t];
+        OADeleteRemoteFileTask *task = [[OADeleteRemoteFileTask alloc] initWithRequest:r remoteFile:remoteFile byVersion:_byVersion];
+        __weak __typeof(self) weakSelf = self;
+        __weak OADeleteRemoteFileTask *weakTask = task;
+        task.completionBlock = ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            OADeleteRemoteFileTask *strongTask = weakTask;
+            if (!strongSelf || !strongTask)
+                return;
+            
+            [strongSelf publishProgress:strongTask];
+        };
+        [tasks addObject:task];
     }
-    _allTasks = tasks;
+    _tasks = [tasks copy];
     _executor = [[NSOperationQueue alloc] init];
-    [_executor addObserver:self forKeyPath:@"operations" options:0 context:&kQueueOperationsChanged];
     [_executor addOperations:tasks waitUntilFinished:YES];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
-{
-    if (object == _executor && [keyPath isEqualToString:@"operations"] && context == &kQueueOperationsChanged) {
-        if ([_executor.operations count] == 0)
-        {
-            _tasks = _allTasks;
-        }
-    }
-    else if ([keyPath isEqualToString:@"isFinished"])
-    {
-        [self publishProgress:object];
-    }
 }
 
 - (void) onPreExecute
@@ -184,23 +178,24 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     return _backupHelper.backupListeners.getDeleteFilesListeners;
 }
 
-- (void)publishProgress:(id)object
+- (void)publishProgress:(id)task
 {
+    if (![task isKindOfClass:[OADeleteRemoteFileTask class]])
+        return;
+    
+    OARemoteFile *remoteFile = ((OADeleteRemoteFileTask *)task).remoteFile;
+    if (!remoteFile)
+        return;
+
+    NSUInteger count = 0;
+    @synchronized (_itemsProgressLock) {
+        [_itemsProgress addObject:remoteFile];
+        count = _itemsProgress.count;
+    }
+
     for (id<OAOnDeleteFilesListener> listener in [self getListeners])
     {
-        if ([object isKindOfClass:OADeleteRemoteFileTask.class])
-        {
-            OARemoteFile *remoteFile = ((OADeleteRemoteFileTask *) object).remoteFile;
-            if (remoteFile != nil)
-            {
-                [_itemsProgress addObject:remoteFile];
-                [listener onFileDeleteProgress:remoteFile progress:_itemsProgress.count];
-            }
-            else
-            {
-                NSLog(@"Error: remoteFile is nil, cannot add to _itemsProgress.");
-            }
-        }
+        [listener onFileDeleteProgress:remoteFile progress:count];
     }
 }
 
@@ -246,31 +241,6 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     __strong id<OAOnDeleteFilesListener> listener = _listener;
     if (listener)
         [_backupHelper.backupListeners removeDeleteFilesListener:listener];
-}
-
-- (void)dealloc
-{
-    @try
-    {
-        if (_executor)
-            [_executor removeObserver:self forKeyPath:@"operations" context:&kQueueOperationsChanged];
-    }
-    @catch (NSException *exception)
-    {
-        NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from _executor: %@", exception.reason);
-    }
-    
-    for (OADeleteRemoteFileTask *task in _allTasks)
-    {
-        @try
-        {
-            [task removeObserver:self forKeyPath:@"isFinished" context:nil];
-        }
-        @catch (NSException *exception)
-        {
-            NSLog(@"[OABaseDeleteFilesCommand] -> Dealloc KVO Error: Failed to remove observer from task: %@", exception.reason);
-        }
-    }
 }
 
 @end

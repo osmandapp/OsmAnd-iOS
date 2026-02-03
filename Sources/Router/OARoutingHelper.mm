@@ -69,7 +69,7 @@ static const CLLocationSpeed kCarDisconnectPauseSpeedMetersPerSecond = 1.0;
     BOOL _isFollowingMode;
     BOOL _isRoutePlanningMode;
     BOOL _isPauseNavigation;
-    BOOL _isPausedOnCarDisconnect;
+    BOOL _isPausedDueToCarPlayDisconnect;
     
     OAGPXRouteParamsBuilder *_currentGPXRoute;
     
@@ -179,11 +179,11 @@ static BOOL _isDeviatedFromRoute = false;
     return _isPauseNavigation;
 }
 
-- (void)onCarNavigationStart
+- (void)onCarPlayNavigationSessionRestored
 {
-    if (_isPausedOnCarDisconnect && [self isPauseNavigation])
+    if (_isPausedDueToCarPlayDisconnect && _isPauseNavigation)
     {
-        _isPausedOnCarDisconnect = NO;
+        _isPausedDueToCarPlayDisconnect = NO;
         [self resumeNavigation];
     }
 }
@@ -204,7 +204,7 @@ static BOOL _isDeviatedFromRoute = false;
                 if (currentLocation && currentLocation.speed >= 0 && currentLocation.speed < kCarDisconnectPauseSpeedMetersPerSecond)
                 {
                     [self pauseNavigation];
-                    _isPausedOnCarDisconnect = YES;
+                    _isPausedDueToCarPlayDisconnect = YES;
                 }
             }
         }
@@ -231,7 +231,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) setFollowingMode:(BOOL)follow
 {
-    _isPausedOnCarDisconnect = NO;
+    _isPausedDueToCarPlayDisconnect = NO;
     _isFollowingMode = follow;
     _isPauseNavigation = false;
     if (!follow)

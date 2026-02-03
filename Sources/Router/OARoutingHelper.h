@@ -112,7 +112,7 @@ struct RouteSegmentResult;
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
-- (void)onCarNavigationStart;
+- (void)onCarPlayNavigationSessionRestored;
 - (void)onCarNavigationSessionChanged;
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;

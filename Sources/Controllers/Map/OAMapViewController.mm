@@ -3984,13 +3984,13 @@ static const NSInteger kDetailedMapZoom = 9;
         }
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [_mapLayers.routeMapLayer refreshRoute];
         if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) 
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
                                                                       bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
                                                              changeElevationAngle:NO
-                                                          applyAspectRatioScaling:YES
+                                                                      presizeZoom:YES
                                                                          animated:NO];
     });
 }

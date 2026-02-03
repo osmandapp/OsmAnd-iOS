@@ -90,6 +90,24 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                         completion?(placeId, value.image)
                     case .failure(let error):
                         NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
+                        if let placeholder = place.icon() {
+//                            let placeholderProcessor = VectorPlaceholderInCircleProcessor(
+//                                circleSize: metrics.imageTargetSize,
+//                                iconSize: CGSize(width: 40, height: 40),
+//                                borderColor: .white,
+//                                borderWidth: metrics.border,
+//                                cornerRadius: metrics.imageArea / 2,
+//                                shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
+//                                shadowBlur: 6 * metrics.textScale,
+//                                shadowColor: UIColor.black.withAlphaComponent(0.2),
+//                                backgroundColor: .clear, // или .white если нужен фон
+//                                tintColor: .systemGray
+//                            )
+//                            if let vectorPlaceholder = placeholderProcessor.process(item: .image(placeholder), options: KingfisherParsedOptionsInfo(options)) {
+//                                let processedPlaceholder = processor.process(item: .image(vectorPlaceholder), options: KingfisherParsedOptionsInfo(options))
+                                completion?(placeId, placeholder)
+//                                .    }
+                        }
                     }
                 }
                 
@@ -207,6 +225,7 @@ struct OSMCircularShadowProcessor: ImageProcessor {
     }
 }
 
+
 @objcMembers
 final class POITopPlaceImageDecorator: NSObject {
     
@@ -236,3 +255,134 @@ final class POITopPlaceImageDecorator: NSObject {
         }
     }
 }
+
+//struct VectorPlaceholderInCircleProcessor: ImageProcessor {
+//    let circleSize: CGSize              // Размер окружности (как metrics.imageTargetSize)
+//    let iconSize: CGSize                // Размер иконки внутри (40x40)
+//    let borderColor: UIColor
+//    let borderWidth: CGFloat
+//    let cornerRadius: CGFloat
+//    let shadowOffset: CGSize
+//    let shadowBlur: CGFloat
+//    let shadowColor: UIColor
+//    let backgroundColor: UIColor
+//    let tintColor: UIColor
+//
+//    var identifier: String {
+//        "com.osmand.VectorPlaceholderInCircleProcessor-\(circleSize.width)x\(circleSize.height)-\(iconSize.width)x\(iconSize.height)"
+//    }
+//
+//    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> UIImage? {
+//        guard case .image(let image) = item else { return nil }
+//
+//        let renderer = UIGraphicsImageRenderer(size: circleSize)
+//        let finalImage = renderer.image { ctx in
+//            let context = ctx.cgContext
+//
+//            // 1. Нарисовать круг с обводкой и фоном
+//            let rect = CGRect(origin: .zero, size: circleSize)
+//            let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
+//            context.setFillColor(backgroundColor.cgColor)
+//            context.setStrokeColor(borderColor.cgColor)
+//            context.setLineWidth(borderWidth)
+//            context.addPath(path.cgPath)
+//            context.drawPath(using: .fillStroke)
+//
+//            // 2. Тень
+//            context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor.cgColor)
+//
+//            // 3. Нарисовать иконку по центру, без растягивания
+//            let iconRect = CGRect(
+//                x: (circleSize.width - iconSize.width) / 2,
+//                y: (circleSize.height - iconSize.height) / 2,
+//                width: iconSize.width,
+//                height: iconSize.height
+//            )
+//
+//            let tintedIcon = image.withTintColor(tintColor, renderingMode: .alwaysTemplate)
+//            tintedIcon.draw(in: iconRect)
+//        }
+//
+//        return finalImage
+//    }
+//}
+//
+//
+//
+//
+//
+//struct VectorPlaceholderProcessor: ImageProcessor {
+//    let size: CGSize
+//    let backgroundColor: UIColor
+//    let borderColor: UIColor
+//    let borderWidth: CGFloat
+//    let cornerRadius: CGFloat
+//    let shadowOffset: CGSize
+//    let shadowBlur: CGFloat
+//    let shadowColor: UIColor
+//    let tintColor: UIColor
+//
+//    var identifier: String {
+//        "com.osmand.VectorPlaceholderProcessor-\(size.width)x\(size.height)-\(tintColor.description)"
+//    }
+//
+//    init(
+//        size: CGSize = CGSize(width: 40, height: 40),
+//        backgroundColor: UIColor = .white,
+//        borderColor: UIColor = .white,
+//        borderWidth: CGFloat = 1.0,
+//        cornerRadius: CGFloat = 20,
+//        shadowOffset: CGSize = CGSize(width: 0, height: 2),
+//        shadowBlur: CGFloat = 6,
+//        shadowColor: UIColor = UIColor.black.withAlphaComponent(0.2),
+//        tintColor: UIColor = .systemGray
+//    ) {
+//        self.size = size
+//        self.backgroundColor = backgroundColor
+//        self.borderColor = borderColor
+//        self.borderWidth = borderWidth
+//        self.cornerRadius = cornerRadius
+//        self.shadowOffset = shadowOffset
+//        self.shadowBlur = shadowBlur
+//        self.shadowColor = shadowColor
+//        self.tintColor = tintColor
+//    }
+//
+//    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> UIImage? {
+//        switch item {
+//        case .image(let image):
+//            // Рендерим векторную иконку в нужный размер
+//            let renderer = UIGraphicsImageRenderer(size: size)
+//            let finalImage = renderer.image { ctx in
+//                let context = ctx.cgContext
+//                
+//                // 1. Белый фон с обводкой и скруглением
+//                let rect = CGRect(origin: .zero, size: size)
+//                context.setFillColor(backgroundColor.cgColor)
+//                context.setStrokeColor(borderColor.cgColor)
+//                context.setLineWidth(borderWidth)
+//                let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
+//                context.addPath(path.cgPath)
+//                context.drawPath(using: .fillStroke)
+//                
+//                // 2. Тень
+//                context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor.cgColor)
+//                
+//                // 3. Нарисовать иконку по центру
+//                let iconRect = CGRect(
+//                    x: 0,
+//                    y: 0,
+//                    width: size.width,
+//                    height: size.height
+//                )
+//                let tintedIcon = image.withTintColor(tintColor, renderingMode: .alwaysTemplate)
+//                tintedIcon.draw(in: iconRect)
+//            }
+//            
+//            return finalImage
+//            
+//        case .data(_):
+//            return nil
+//        }
+//    }
+//}

@@ -79,6 +79,15 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             if (!type)
                 continue;
             
+            QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
+            QString osmandPoiKey = decodedValues.value("osmand_poi_key");
+            if (!osmandPoiKey.isEmpty())
+            {
+                NSString *key = osmandPoiKey.toNSString();
+                if (key.length > 0)
+                    type = [[OAPOIHelper sharedInstance] getPoiTypeByKey:key];
+            }
+    
             auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name) + QString("_%1").arg(textScaleFactor, 0, 'f', 2);
             sk_sp<SkImage> bitmap;
             bool isNew = false;

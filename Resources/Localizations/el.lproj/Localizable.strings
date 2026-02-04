@@ -43,7 +43,7 @@
 "translit_names" = "Μεταγραμμάτιση ονομάτων";
 "animate_routing_route_not_calculated" = "Παρακαλώ υπολογίστε την διαδρομή πρώτα";
 "shared_string_io_error" = "Σφάλμα Εισ/Εξ";
-"map_widget_right" = "Δεξιός πίνακας";
+"map_widget_right" = "Δεξιό πλαίσιο";
 "text_size" = "Μέγεθος κειμένου";
 "shared_string_off" = "Ανενεργό";
 "shared_string_my_places" = "Τα μέρη μου";
@@ -307,7 +307,7 @@
 "traffic_warning_hazard" = "Κίνδυνος";
 "shared_string_target_points" = "Προορισμοί";
 "search_categories" = "Κατηγορίες";
-"map_widget_left" = "Αριστερός πίνακας";
+"map_widget_left" = "Αριστερό πλαίσιο";
 "show_notes" = "Εμφάνιση σημειώσεων OSM";
 "recording_context_menu_show" = "Εμφάνιση";
 "no_underlay" = "Χωρίς υπόστρωμα";
@@ -1991,9 +1991,9 @@
 "exit_number" = "Αριθμός εξόδου";
 "modified_file" = "Τροποποιημένο αρχείο";
 "shared_string_not_set" = "Δεν έχει οριστεί";
-"top_widgets_panel" = "Πάνω πίνακας";
+"top_widgets_panel" = "Πάνω πλαίσιο";
 "fav_select" = "Παρακαλώ επιλέξτε αγαπημένα";
-"bottom_widgets_panel" = "Κάτω πίνακας";
+"bottom_widgets_panel" = "Κάτω πλαίσιο";
 "shared_string_setup_route" = "Διαμορφώστε μια διαδρομή";
 "my_favorites" = "Τα αγαπημένα μου";
 "fav_remove_q" = "Διαγραφή αγαπημένου;";
@@ -3660,3 +3660,5 @@
 "simplified_track_description" = "Μόνο η γραμμή της διαδρομής θα αποθηκευτεί, τα σημεία διαδρομής θα διαγραφούν.";
 "image_cache_online_photo_high_res" = "Κρυφή μνήμη διαδικτυακών φωτογραφιών υψηλής ανάλυσης";
 "image_cache_online_photo_mapillary_default_cache" = "Προεπιλεγμένη κρυφή μνήμη διαδικτυακών φωτογραφιών/Mapillary";
+"weather_forecast_is_outdated" = "Ξεπερασμένη πρόγνωση.";
+"missing_or_outdated_maps_title" = "Ελλιπείς ή ξεπερασμένοι χάρτες";

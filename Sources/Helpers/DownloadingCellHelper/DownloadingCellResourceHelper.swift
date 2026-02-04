@@ -125,13 +125,16 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     func isDisabled(_ resourceId: String) -> Bool {
         guard let resourceItem = getResource(resourceId), let iapHelper = OAIAPHelper.sharedInstance() else { return false }
-        let type = resourceItem.resourceType()
-        if !iapHelper.wiki.isActive() && type == .wikiMapRegion {
-            return true
-        } else if !iapHelper.srtm.isActive() && (type == .srtmMapRegion || type == .hillshadeRegion || type == .slopeRegion) {
-            return true
+        switch resourceItem.resourceType() {
+        case .wikiMapRegion:
+            return !iapHelper.wiki.isPurchased()
+        case .weatherForecast:
+            return !iapHelper.weather.isPurchased()
+        case .srtmMapRegion, .hillshadeRegion, .slopeRegion, .heightmapRegionLegacy, .geoTiffRegion:
+            return !iapHelper.srtm.isPurchased()
+        default:
+            return false
         }
-        return false
     }
     
     private func getDownloadTask(_ resourceId: String) -> OADownloadTask? {
@@ -163,8 +166,18 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
-                cell?.titleLabel.textColor = .textColorSecondary
                 cell?.rightIconVisibility(false)
+                if !isInstalled(resourceId) {
+                    cell?.selectionStyle = .none
+                    cell?.rightButtonVisibility(show: true)
+                    cell?.configurePurchasePlanButton()
+                } else {
+                    cell?.selectionStyle = .default
+                    cell?.rightButtonVisibility(show: false)
+                }
+            } else {
+                cell?.selectionStyle = .default
+                cell?.rightButtonVisibility(show: false)
             }
             return cell
         }

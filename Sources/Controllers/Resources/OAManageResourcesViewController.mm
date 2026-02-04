@@ -1908,13 +1908,25 @@ static BOOL _repositoryUpdated = NO;
     if ([senderItem isKindOfClass:OAMultipleResourceItem.class])
     {
         OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) senderItem;
-        if ((multipleItem.resourceType == OsmAndResourceType::SrtmMapRegion || multipleItem.resourceType == OsmAndResourceType::HeightmapRegionLegacy || multipleItem.resourceType == OsmAndResourceType::GeoTiffRegion) && ![_iapHelper.srtm isActive])
+        if (multipleItem.resourceType == OsmAndResourceType::SrtmMapRegion && ![_iapHelper.srtm isPurchased])
         {
-            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
+            [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.srtm navController:self.navigationController];
+            return;
         }
-        else if (multipleItem.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
+        else if ((multipleItem.resourceType == OsmAndResourceType::HeightmapRegionLegacy || multipleItem.resourceType == OsmAndResourceType::GeoTiffRegion) && ![_iapHelper.srtm isPurchased])
         {
-            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:self.navigationController];
+            return;
+        }
+        else if (multipleItem.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isPurchased])
+        {
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.WIKIPEDIA navController:self.navigationController];
+            return;
+        }
+        else if (multipleItem.resourceType == OsmAndResourceType::WeatherForecast && ![_iapHelper.weather isPurchased])
+        {
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.WEATHER navController:self.navigationController];
+            return;
         }
         else
         {

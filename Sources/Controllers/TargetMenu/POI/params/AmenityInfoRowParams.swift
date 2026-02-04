@@ -55,7 +55,7 @@ final class AmenityInfoRowParams: NSObject {
         var key: String?
         //var icon: UIImage? //TODO: delete?
         var iconName: String?
-        var textPrefix = ""
+        var textPrefix: String? = ""
         var text: String?
         var hiddenUrl: String?
         var collapsableView: OACollapsableView?
@@ -74,13 +74,13 @@ final class AmenityInfoRowParams: NSObject {
             self.key = key
         }
         
-        func setTextPrefixIfNotPresent(_ textPrefix: String) {
+        func setTextPrefixIfNotPresent(_ textPrefix: String?) {
             if !hasTextPrefix() {
                 self.textPrefix = textPrefix
             }
         }
         
-        func setTextIfNotPresent(_ text: String) {
+        func setTextIfNotPresent(_ text: String?) {
             if !hasText() {
                 self.text = text
             }
@@ -94,7 +94,10 @@ final class AmenityInfoRowParams: NSObject {
         }
         
         func hasTextPrefix() -> Bool {
-            !textPrefix.isEmpty
+            if let textPrefix, !textPrefix.isEmpty {
+                return true
+            }
+            return false
         }
         
         func hasText() -> Bool {

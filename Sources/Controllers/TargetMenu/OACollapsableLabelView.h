@@ -14,4 +14,6 @@
 
 @property (nonatomic, readonly) OALabel *label;
 
+- (void) setText:(NSString *)text;
+
 @end

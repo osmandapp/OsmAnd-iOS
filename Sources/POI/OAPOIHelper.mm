@@ -482,13 +482,6 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     {
         OAPOICategory *pc = _poiCategories[i];
         OAPOIType *pt = [pc getPoiTypeByKeyName:name];
-        
-        if (pt != nil)
-        {
-            if ([name isEqualToString:@"attraction"] || [name isEqualToString:@"height"])
-                BOOL stop = YES;
-        }
-        
         if (pt)
             return pt;
     }

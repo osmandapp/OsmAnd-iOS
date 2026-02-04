@@ -33,7 +33,7 @@ final class PoiAdditionalUiRules: NSObject {
         openingHours.customIconName = "ic_action_time"
         openingHours.customTextPrefix = localizedString("opening_hours")
         openingHours.isNeedLinks = false
-        //        behavior = OpeningHoursRowBehavior
+        openingHours.behavior = OpeningHoursRowBehavior()
         rules.append(openingHours)
         rulesByKey[OPENING_HOURS_TAG] = openingHours
 
@@ -132,24 +132,24 @@ final class PoiAdditionalUiRules: NSObject {
         let height = PoiAdditionalUiRule(key: HEIGHT_TAG)
         height.customTextPrefix = localizedString("shared_string_height")
         height.isNeedLinks = false
-//        behavior = MetricRowBehaviour
+        height.behavior = MetricRowBehaviour()
         rules.append(height)
         rulesByKey[HEIGHT_TAG] = height
         
         let width = PoiAdditionalUiRule(key: WIDTH_TAG)
         width.customTextPrefix = localizedString("shared_string_width")
         width.isNeedLinks = false
-//        behavior = MetricRowBehaviour
+        width.behavior = MetricRowBehaviour()
         rules.append(width)
         rulesByKey[WIDTH_TAG] = width
         
         let depth = PoiAdditionalUiRule(key: "depth")
-//        behavior = MetricRowBehaviour
+        depth.behavior = MetricRowBehaviour()
         rules.append(depth)
         rulesByKey["depth"] = depth
         
         let seamarkHeight = PoiAdditionalUiRule(key: "seamark_height")
-//        behavior = MetricRowBehaviour
+        seamarkHeight.behavior = MetricRowBehaviour()
         rules.append(seamarkHeight)
         rulesByKey["seamark_height"] = seamarkHeight
         

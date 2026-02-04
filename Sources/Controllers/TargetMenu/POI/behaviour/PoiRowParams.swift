@@ -12,7 +12,7 @@ final class PoiRowParams: NSObject {
 //    val app: OsmandApplication,
 //    val context: Context,
     
-    var builder: AmenityInfoRowParams.Builder   //TODO: check is this link or copy?
+    var builder: AmenityInfoRowParams.Builder 
 //    var menuBuilder: MenuBuilder
     var poiType: OAPOIType?
     var rule: PoiAdditionalUiRule

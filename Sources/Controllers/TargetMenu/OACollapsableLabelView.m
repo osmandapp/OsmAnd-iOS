@@ -62,6 +62,11 @@
     [pb setString:_label.text];
 }
 
+- (void) setText:(NSString *)text
+{
+    _label.text = text;
+}
+
 #pragma mark - OACustomButtonDelegate
 
 - (void)onLabelTapped:(NSInteger)tag

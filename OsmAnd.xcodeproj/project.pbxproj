@@ -350,6 +350,9 @@
 		3219705E25FA0DCE00C3FED6 /* bg_point_octagon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */; };
 		3219705F25FA0DCE00C3FED6 /* bg_point_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */; };
 		3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */; };
+		321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */; };
+		321C838A2F335A780028FCCC /* OAOpenedHoursParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321C83892F335A740028FCCC /* OAOpenedHoursParser.mm */; };
+		321C838C2F337D910028FCCC /* MetricRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */; };
 		321E95252823B5C10040312C /* OASimulationNavigationSettingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */; };
 		32210DB1298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAD298929AF005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png */; };
 		32210DB2298929B0005D16CB /* ic_custom_map_pin_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAE298929AF005D16CB /* ic_custom_map_pin_outlined@2x.png */; };
@@ -3863,6 +3866,10 @@
 		3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon@3x.png"; path = "Resources/Icons/bg_point_octagon@3x.png"; sourceTree = "<group>"; };
 		3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle@3x.png"; path = "Resources/Icons/bg_point_circle@3x.png"; sourceTree = "<group>"; };
 		3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesUtils.swift; sourceTree = "<group>"; };
+		321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursRowBehavior.swift; sourceTree = "<group>"; };
+		321C83882F335A150028FCCC /* OAOpenedHoursParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenedHoursParser.h; sourceTree = "<group>"; };
+		321C83892F335A740028FCCC /* OAOpenedHoursParser.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenedHoursParser.mm; sourceTree = "<group>"; };
+		321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricRowBehaviour.swift; sourceTree = "<group>"; };
 		321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimulationNavigationSettingViewController.h; sourceTree = "<group>"; };
 		321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASimulationNavigationSettingViewController.mm; sourceTree = "<group>"; };
 		32210DAD298929AF005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_custom_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
@@ -8435,6 +8442,8 @@
 			children = (
 				3260870B2F324DB00038A34B /* IPoiAdditionalRowBehavior.swift */,
 				3260870F2F3250470038A34B /* DefaultPoiAdditionalRowBehaviour.swift */,
+				321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */,
+				321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */,
 				3260870D2F324DE00038A34B /* PoiRowParams.swift */,
 			);
 			path = behaviour;
@@ -13828,6 +13837,8 @@
 				DA5A809B26C563A500F274C7 /* OAOcbfHelper.m */,
 				DAD5B4CD288E80EC009CF611 /* OAOperationLog.h */,
 				DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */,
+				321C83882F335A150028FCCC /* OAOpenedHoursParser.h */,
+				321C83892F335A740028FCCC /* OAOpenedHoursParser.mm */,
 				05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */,
 				05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */,
 				323084D726E933EE00D6FC67 /* OAOsmAndFormatter.h */,
@@ -18220,6 +18231,7 @@
 				DA5A84DE26C563A900F274C7 /* OAMapSettingsLanguageScreen.mm in Sources */,
 				DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */,
 				4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */,
+				321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,
 				DA5A81C926C563A700F274C7 /* OAPointIContainer.mm in Sources */,
@@ -18354,6 +18366,7 @@
 				FA7341142BBC1C2000CBF7EC /* OARequiredMapsResourceViewController.mm in Sources */,
 				DA5A820E26C563A700F274C7 /* OARearrangeProfilesViewController.m in Sources */,
 				DA5A823626C563A700F274C7 /* OAExportItemsViewController.mm in Sources */,
+				321C838A2F335A780028FCCC /* OAOpenedHoursParser.mm in Sources */,
 				FAA650552ADD42C50020DCEA /* BLEManager.swift in Sources */,
 				C5C472F42ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift in Sources */,
 				DA5A84E726C563A900F274C7 /* OAWaypointsPOIScreen.mm in Sources */,
@@ -18379,6 +18392,7 @@
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,
 				DA5A82EB26C563A800F274C7 /* OAPublicTransportRouteCell.mm in Sources */,
 				C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */,
+				321C838C2F337D910028FCCC /* MetricRowBehaviour.swift in Sources */,
 				DA5A855E26C563A900F274C7 /* OATransportRouteCalculationParams.mm in Sources */,
 				DA5A855926C563A900F274C7 /* OAMapillaryImage.mm in Sources */,
 				DA5A839D26C563A800F274C7 /* OAMapPanelViewController.mm in Sources */,

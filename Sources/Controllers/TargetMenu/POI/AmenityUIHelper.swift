@@ -232,7 +232,7 @@ final class AmenityUIHelper: NSObject {
     
     static func getSocialMediaUrl(key: String, value: String) -> String? {
         // Remove leading and closing slashes
-        var value = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        let value = value.trimmingCharacters(in: .whitespacesAndNewlines)
         if value.isEmpty {
             return nil
         }
@@ -278,7 +278,6 @@ final class AmenityUIHelper: NSObject {
         return false
     }
     
-    // private AmenityInfoRow createPoiAdditionalInfoRow(@NonNull Context context,
     private func createPoiAdditionalInfoRow(key: String, value: String, collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {
         guard !isKeyToSkip(key: key) else { return nil }
         
@@ -308,20 +307,6 @@ final class AmenityUIHelper: NSObject {
             }
         }
         
-        
-
-        
-//        //TODO: delete after test
-        var info = OAAmenityInfoRow(key: key, icon: UIImage.templateImageNamed("ic_custom_info"), textPrefix: nil, text: value, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 0, name: value, matchWidthDivider: false, textLinesLimit: 1)
-//        public boolean isDescription() { return isText && iconId == R.drawable.ic_action_info_dark; }
-//        lastBuiltRowIsDescription = true
-        
-        return info
-
-        
-        
-        //TODO: use new code
-        /*
         let rowParamsBuilder = AmenityInfoRowParams.Builder(key: key)
         rowParamsBuilder.collapsableView = collapsableView
         
@@ -356,13 +341,14 @@ final class AmenityUIHelper: NSObject {
         lastBuiltRowIsDescription = rowParamsBuilder.isDescription()
         rowParamsBuilder.matchWidthDivider = !rowParamsBuilder.isDescription() && rowParamsBuilder.isWiki
         
-        let result = rowParamsBuilder.build()
+        // TODO: implement? return AmenityInfoRowParams.Builder dto directly?
         //return rowParamsBuilder.build()
-
         
-        return nil
-        // TODO: implement !!!
-         */
+        let param = rowParamsBuilder.build()
+        let result = OAAmenityInfoRow(key: param.key, icon: UIImage.templateImageNamed(param.iconName), textPrefix: param.textPrefix, text: param.text, hiddenUrl: param.hiddenUrl, collapsableView: param.collapsableView, textColor: param.textColor, isWiki: param.isWiki, isText: param.isText, needLinks: param.needLinks, isPhoneNumber: param.isPhoneNumber, isUrl: param.isUrl, order: param.order, name: param.name, matchWidthDivider: param.matchWidthDivider, textLinesLimit: Int32(param.textLinesLimit))
+        result.collapsed = true
+        
+        return result
     }
     
     private func createLocalizedAmenityInfoRow(key: String, value: Any) -> OAAmenityInfoRow? {
@@ -387,12 +373,8 @@ final class AmenityUIHelper: NSObject {
     }
     
     private func fetchPoiAdditionalType(key: String, value: String) -> OAPOIType? {
-//        poiType = helper.getPoiType(byKey: key)
         poiType = helper.getAnyPoiType(byKey: key)
-        
         var pt: OAPOIBaseType? = helper.getAnyPoiAdditionalType(byKey: key)
-        
-//        var pt: OAPOIBaseType? = poiCategory?.getPoiType(byKeyName: key)
         if pt == nil && !value.isEmpty && value.length < 50 {
             pt = helper.getAnyPoiAdditionalType(byKey: key + "_" + value)
         }

@@ -3072,7 +3072,7 @@
 "cloud_email_already_registered" = "Aquesta adreça de correu electrònic ja està registrada.";
 "cloud_email_not_registered" = "Aquesta adreça de correu electrònic no està registrada a OsmAnd Cloud";
 "osmand_cloud_login_descr" = "Introduïu l'adreça de correu electrònic amb la qual us vau registrar. S'hi enviarà una contrasenya única.";
-"osmand_cloud_create_account_descr" = "Introduïu la vostra adreça electrònica, s'hi enviarà un codi de verificació,\ni s'hi vincularan totes les vostres dades.";
+"osmand_cloud_create_account_descr" = "Introduïu la vostra adreça electrònica: s'hi enviarà un codi de verificació\ni totes les vostres dades hi restaran vinculades.";
 "backup_into_file" = "Fes una còpia de seguretat com a fitxer";
 "local_backup" = "Còpia local";
 "osmand_cloud_authorize_descr" = "No perdis mai les teves dades. Fes una còpia de seguretat i restaura tota la informació fàcilment.";
@@ -3256,3 +3256,4 @@
 "help_article_navigation_car_play_name" = "CarPlay";
 "help_article_troubleshooting_general_name" = "General";
 "monitoring_control_start" = "Enregistrament";
+"mpg" = "MPG";

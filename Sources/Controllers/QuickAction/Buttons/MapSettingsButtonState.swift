@@ -7,8 +7,12 @@
 //
 
 @objcMembers
-final class MapSettingsButtonState: MapButtonState {
+final class MapSettingsButtonState: SwitchVisibilityMapButtonState {
     static let hudId = "map.view.layers"
+    
+    lazy var visibilityPref: OACommonBoolean = settings.registerBooleanPreference("\(id)_state", defValue: true).makeProfile()
+    
+    private let settings = OAAppSettings.sharedManager()
     
     init() {
         super.init(withId: Self.hudId)
@@ -18,7 +22,24 @@ final class MapSettingsButtonState: MapButtonState {
         localizedString("configure_map")
     }
     
+    override func defaultIconName() -> String {
+        let mode = settings.applicationMode.get()
+        return mode.getIconName()
+    }
+    
+    override func buttonDescription() -> String {
+        localizedString("configure_map_description")
+    }
+    
+    override func isEnabled() -> Bool {
+        visibilityPref.get()
+    }
+    
     @discardableResult override func setupButtonPosition(_ position: ButtonPositionSize) -> ButtonPositionSize {
         setupButtonPosition(position, posH: ButtonPositionSize.companion.POS_LEFT, posV: ButtonPositionSize.companion.POS_TOP, xMove: false, yMove: true)
+    }
+    
+    override func storedVisibilityPref() -> OACommonBoolean {
+        visibilityPref
     }
 }

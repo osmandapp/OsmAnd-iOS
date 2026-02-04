@@ -2995,9 +2995,17 @@ static const double d180PI = 180.0 / M_PI_2;
     return [NSString stringWithFormat:separateWithSpace ? OALocalizedString(@"ltr_or_rtl_combine_via_space") : @"%@%@", value, unit];
 }
 
-+ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom
++ (NSString *)buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom label:(NSString *)label
 {
-    return [NSString stringWithFormat:@"geo:%.5f,%.5f?z=%i", latitude, longitude, zoom];
+    NSString *base = [NSString stringWithFormat:@"geo:%.5f,%.5f?z=%i", latitude, longitude, zoom];
+    NSString *cleanLabel = [label stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (cleanLabel.length == 0)
+        return base;
+    
+    NSString *escapedLabel = [cleanLabel escapeUrl];
+    escapedLabel = [escapedLabel stringByReplacingOccurrencesOfString:@"%20" withString:@"+"];
+    NSString *query = [NSString stringWithFormat:@"%.5f,%.5f(%@)", latitude, longitude, escapedLabel];
+    return [base stringByAppendingFormat:@"&q=%@", query];
 }
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view

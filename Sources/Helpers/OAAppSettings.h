@@ -872,6 +872,56 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @end
 
+@interface OACommonTripRecordingMaxSpeedMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(NSInteger)defValue;
+- (NSInteger)get;
+- (NSInteger)get:(OAApplicationMode *)mode;
+- (void)set:(NSInteger)type;
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonTripRecordingElevationMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(NSInteger)defValue;
+- (NSInteger)get;
+- (NSInteger)get:(OAApplicationMode *)mode;
+- (void)set:(NSInteger)type;
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonTripRecordingAverageSlopeMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(NSInteger)defValue;
+- (NSInteger)get;
+- (NSInteger)get:(OAApplicationMode *)mode;
+- (void)set:(NSInteger)type;
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonTripRecordingDistanceMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(NSInteger)defValue;
+- (NSInteger)get;
+- (NSInteger)get:(OAApplicationMode *)mode;
+- (void)set:(NSInteger)type;
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonTripRecordingMovingTimeMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(NSInteger)defValue;
+- (NSInteger)get;
+- (NSInteger)get:(OAApplicationMode *)mode;
+- (void)set:(NSInteger)type;
+- (void)set:(NSInteger)type mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonDistanceByTapTextSizeConstant : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceByTapTextSizeConstant)defValue;
@@ -1296,6 +1346,13 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
 
 - (OACommonWidgetZoomLevelType *)registerWidgetZoomLevelTypePreference:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
+
+- (OACommonTripRecordingMaxSpeedMode *)registerMaxSpeedModePreference:(NSString *)key defValue:(NSInteger)defValue;
+- (OACommonTripRecordingElevationMode *)registerTripRecordingElevationModePreference:(NSString *)key defValue:(NSInteger)defValue;
+- (OACommonTripRecordingAverageSlopeMode *)registerAverageSlopeModePreference:(NSString *)key defValue:(NSInteger)defValue;
+- (OACommonTripRecordingDistanceMode *)registerTripRecordingDistanceModePreference:(NSString *)key defValue:(NSInteger)defValue;
+- (OACommonTripRecordingMovingTimeMode *)registerTripRecordingMovingTimeModePreference:(NSString *)key defValue:(NSInteger)defValue;
+
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
 - (OACommonWidgetDefaultView *)registerWidgetDefaultViewPreference:(NSString *)key defValue:(int)defValue;

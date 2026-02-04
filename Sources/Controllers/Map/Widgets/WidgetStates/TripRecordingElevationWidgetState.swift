@@ -41,7 +41,7 @@ final class TripRecordingElevationWidgetState: OAWidgetState {
     static let prefUphillWidgetModeId = "uphill_widget_mode"
     
     private let widgetType: WidgetType
-    private let elevationModePreference: OACommonInteger
+    private let elevationModePreference: OACommonTripRecordingElevationMode
     private let isUphillType: Bool
     
     init(isUphillType: Bool, customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) {
@@ -59,14 +59,14 @@ final class TripRecordingElevationWidgetState: OAWidgetState {
     }
     
     override func changeToNextState() {
-        elevationModePreference.set(Int32(getElevationMode().next().rawValue))
+        elevationModePreference.set(getElevationMode().next().rawValue)
     }
     
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(elevationModePreference.get(appMode), mode: appMode)
     }
     
-    func getElevationModePreference() -> OACommonInteger {
+    func getElevationModePreference() -> OACommonTripRecordingElevationMode {
         elevationModePreference
     }
     
@@ -78,14 +78,14 @@ final class TripRecordingElevationWidgetState: OAWidgetState {
         getElevationMode().iconName(isUphill: isUphillType)
     }
     
-    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonInteger {
+    private static func registerPreference(customId: String?, widgetParams: [String: Any]? = nil) -> OACommonTripRecordingElevationMode {
         var prefId = Self.prefUphillWidgetModeId
         if let customId, !customId.isEmpty {
             prefId += customId
         }
         
-        let pref = OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(TripRecordingElevationMode.total.rawValue)).makeProfile()
-        if let string = widgetParams?[Self.prefUphillWidgetModeId] as? String, let intVal = Int32(string) {
+        let pref = OAAppSettings.sharedManager().registerTripRecordingElevationModePreference(prefId, defValue: TripRecordingElevationMode.total.rawValue).makeProfile()
+        if let string = widgetParams?[Self.prefUphillWidgetModeId] as? String, let intVal = Int(string) {
             pref.set(intVal)
         }
         

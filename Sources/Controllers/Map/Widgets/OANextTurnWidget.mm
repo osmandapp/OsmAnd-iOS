@@ -347,6 +347,7 @@
                 [_shieldStackView.subviews[i] removeFromSuperview];
         }
         
+        NSMutableArray<RoadShield *> *addedShields = [NSMutableArray new];
         for (NSInteger i = 0; i < maxShields; i++)
         {
             RoadShield *shield = shields[i];
@@ -368,102 +369,19 @@
                     [shieldImageView.trailingAnchor constraintEqualToAnchor:shieldView.trailingAnchor],
                     [shieldImageView.centerYAnchor constraintEqualToAnchor:shieldView.centerYAnchor]
                 ]];
-                isShieldSet |= [self setRoadShield:shieldImageView shield:shield];
+                isShieldSet |= [OATopTextView setRoadShield:shieldImageView shield:shield addedShields:addedShields];
                 NSLayoutConstraint *widthConstraint = [shieldImageView.widthAnchor constraintEqualToConstant:[self getWidthFor:shieldImageView.image]];
                 widthConstraint.active = YES;
             }
             else
             {
-                isShieldSet |= [self setRoadShield:view shield:shield];
+                isShieldSet |= [OATopTextView setRoadShield:view shield:shield addedShields:addedShields];
                 _shieldWidthConstraint.constant = [self getWidthFor:view.image];
             }
         }
     }
     [_shieldStackView setHidden:!isShieldSet];
     [self checkShieldOverflow];
-}
-
-- (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield
-{
-    const auto& object = shield.rdo;
-    const auto& tps = object->types;
-    NSString *nameTag = shield.tag;
-    NSString *name = shield.value;
-    NSMutableString *additional = [shield.additional mutableCopy];
-    OAMapPresentationEnvironment *mapPres = OARootViewController.instance.mapPanel.mapViewController.mapPresentationEnv;
-    const auto& env = mapPres.mapPresentationEnvironment;
-    if (!env)
-        return NO;
-    OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
-    env->applyTo(textEvaluator);
-    OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());
-    
-    for (int i : tps) {
-        const auto& tp = object->region->quickGetEncodingRule(i);
-        if (tp.getTag() == "highway" || tp.getTag() == "route")
-        {
-            textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, 13);
-            textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MAXZOOM, 13);
-            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QString::fromStdString(tp.getTag()));
-            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QString::fromStdString(tp.getValue()));
-        }
-        else
-        {
-            [additional appendFormat:@"%s=%s;", tp.getTag().c_str(), tp.getValue().c_str()];
-        }
-    }
-    
-    textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_TEXT_LENGTH, (unsigned int) name.length);
-    textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_NAME_TAG, QString::fromNSString(nameTag));
-    auto mapObj = std::make_shared<OsmAnd::MapObject>();
-    auto additionals = std::make_shared<OsmAnd::MapObject::AttributeMapping>();
-    uint32_t idx = 0;
-    for (NSString *str : [additional componentsSeparatedByString:@";"])
-    {
-        NSArray<NSString *> *tagValue = [str componentsSeparatedByString:@"="];
-        if (tagValue.count == 2)
-        {
-            mapObj->additionalAttributeIds.push_back(idx);
-            additionals->registerMapping(idx++, QString::fromNSString(tagValue.firstObject), QString::fromNSString(tagValue.lastObject));
-        }
-    }
-    mapObj->attributeMapping = additionals;
-    
-    textEvaluator.evaluate(mapObj, OsmAnd::MapStyleRulesetType::Text, &evaluationResult);
-    
-    OsmAnd::TextRasterizer::Style textStyle;
-    textStyle.setBold(true);
-    
-    QString shieldName;
-    evaluationResult.getStringValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SHIELD, shieldName);
-    if (!shieldName.isNull() && !shieldName.isEmpty())
-    {
-        sk_sp<const SkImage> shield;
-        env->obtainShaderOrShield(shieldName, 1.0f, shield);
-
-        if (shield)
-            textStyle.setBackgroundImage(shield);
-    }
-    
-    int textColor = -1;
-    evaluationResult.getIntegerValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_COLOR, textColor);
-    if (textColor != -1)
-        textStyle.setColor(OsmAnd::ColorARGB(textColor));
-    
-    float textSize = -1;
-    evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, textSize);
-    if (textSize != -1)
-        textStyle.setSize(textSize);
-    
-    
-    const auto textImage = _textRasterizer->rasterize(QString::fromNSString(name), textStyle);
-    if (textImage)
-    {
-        view.image = [OANativeUtilities skImageToUIImage:textImage];
-        return YES;
-    }
-
-    return NO;
 }
 
 - (void)setVerticalTurnDrawable:(OATurnDrawable *)turnDrawable gone:(BOOL)gone

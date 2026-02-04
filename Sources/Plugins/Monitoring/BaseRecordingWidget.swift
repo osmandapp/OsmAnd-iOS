@@ -68,6 +68,18 @@ class BaseRecordingWidget: OASimpleWidget {
         return currentTrack.getAnalysis(fileTimestamp: 0)
     }
     
+    func getResolvedTitleForList() -> String {
+        let baseTitle = widgetType?.title ?? ""
+        guard let modeKey = resolvedModeTitleKeyForList() else { return baseTitle }
+        let modeTitle = localizedString(modeKey)
+        let format = localizedString("ltr_or_rtl_combine_via_colon")
+        return String(format: format, baseTitle, modeTitle)
+    }
+    
+    func resolvedModeTitleKeyForList() -> String? {
+        nil
+    }
+    
     private func updateSlopeInfo(oldInfo: SlopeInfo?, newInfo: SlopeInfo?) -> SlopeInfo? {
         guard let oldInfo else { return newInfo }
         guard let newInfo else { return oldInfo }

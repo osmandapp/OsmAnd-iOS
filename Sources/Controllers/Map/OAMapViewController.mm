@@ -4002,6 +4002,8 @@ static const NSInteger kDetailedMapZoom = 9;
         if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
             [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) 
                                                                       bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+                                                             changeElevationAngle:NO
+                                                          applyAspectRatioScaling:YES
                                                                          animated:NO];
     });
 }

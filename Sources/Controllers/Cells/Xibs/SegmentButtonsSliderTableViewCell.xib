@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,11 +17,23 @@
                 <rect key="frame" x="0.0" y="0.0" width="417" height="211"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yz3-cW-eZi">
+                        <rect key="frame" x="20" y="12.999999999999998" width="319.66666666666669" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" name="textColorPrimary"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eut-uc-mgZ">
+                        <rect key="frame" x="355.66666666666669" y="12.999999999999998" width="41.333333333333314" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" name="textColorSecondary"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lT0-1Z-JXT">
-                        <rect key="frame" x="20" y="13" width="377" height="185"/>
+                        <rect key="frame" x="20" y="56.333333333333329" width="377" height="141.66666666666669"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9A-V4-jkS">
-                                <rect key="frame" x="0.0" y="71.666666666666671" width="42" height="42"/>
+                                <rect key="frame" x="0.0" y="50" width="42" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="42" id="0tn-Sv-guH"/>
                                     <constraint firstAttribute="width" secondItem="H9A-V4-jkS" secondAttribute="height" multiplier="1:1" id="Qp4-Cu-33j"/>
@@ -31,7 +43,7 @@
                                 <state key="normal" image="ic_custom_map_zoom_out.png"/>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="SpO-FA-Pbb" customClass="OASegmentedSlider">
-                                <rect key="frame" x="50" y="78.666666666666671" width="277" height="28"/>
+                                <rect key="frame" x="50" y="57" width="277" height="28"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="DMX-Dj-dif"/>
@@ -43,7 +55,7 @@
                                 </userDefinedRuntimeAttributes>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xT5-Sy-wKz">
-                                <rect key="frame" x="335" y="71.666666666666671" width="42" height="42"/>
+                                <rect key="frame" x="335" y="50" width="42" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="42" id="7br-UO-Fxo"/>
                                     <constraint firstAttribute="width" secondItem="xT5-Sy-wKz" secondAttribute="height" multiplier="1:1" id="NNc-Vv-tFX"/>
@@ -57,16 +69,23 @@
                     </stackView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="yz3-cW-eZi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="CYU-SQ-eV6"/>
                     <constraint firstAttribute="trailingMargin" secondItem="lT0-1Z-JXT" secondAttribute="trailing" id="FFR-nO-7gJ"/>
-                    <constraint firstItem="lT0-1Z-JXT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="M28-fg-kAJ"/>
+                    <constraint firstItem="yz3-cW-eZi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="J3U-7z-wss"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Eut-uc-mgZ" secondAttribute="trailing" id="JbA-dg-Osk"/>
+                    <constraint firstItem="lT0-1Z-JXT" firstAttribute="top" secondItem="yz3-cW-eZi" secondAttribute="bottom" constant="23" id="WrV-Tf-ugq"/>
                     <constraint firstAttribute="bottom" secondItem="lT0-1Z-JXT" secondAttribute="bottom" constant="13" id="YWj-Kq-BYj"/>
+                    <constraint firstItem="Eut-uc-mgZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="pj7-jq-6Nq"/>
                     <constraint firstItem="lT0-1Z-JXT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="rAy-7L-YJ3"/>
+                    <constraint firstItem="Eut-uc-mgZ" firstAttribute="leading" secondItem="yz3-cW-eZi" secondAttribute="trailing" constant="16" id="uxY-xA-eEi"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="minusButton" destination="H9A-V4-jkS" id="55Q-QJ-pyi"/>
                 <outlet property="plusButton" destination="xT5-Sy-wKz" id="lHe-uG-Cac"/>
                 <outlet property="sliderView" destination="SpO-FA-Pbb" id="wgZ-33-QJv"/>
+                <outlet property="topLeftLabel" destination="yz3-cW-eZi" id="J0T-Lk-Z8u"/>
+                <outlet property="topRightLabel" destination="Eut-uc-mgZ" id="mU1-rL-y6w"/>
             </connections>
             <point key="canvasLocation" x="212.97709923664121" y="162.32394366197184"/>
         </tableViewCell>
@@ -76,6 +95,12 @@
         <image name="ic_custom_map_zoom_out.png" width="30" height="30"/>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

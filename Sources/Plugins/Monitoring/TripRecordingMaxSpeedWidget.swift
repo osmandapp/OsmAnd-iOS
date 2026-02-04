@@ -92,6 +92,10 @@ final class TripRecordingMaxSpeedWidget: BaseRecordingWidget {
         lastMaxSpeed = 0
     }
     
+    override func resolvedModeTitleKeyForList() -> String? {
+        currentMode().titleKey
+    }
+    
     private func getMaxSpeed() -> Double {
         let mode = currentMode()
         if mode == .total {

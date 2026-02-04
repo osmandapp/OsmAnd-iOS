@@ -272,8 +272,8 @@ static const int START_ZOOM = 6;
     
     CGPoint point = result.point;
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
-    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
-    if (touchPolygon31 == OsmAnd::AreaI())
+    QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+    if (touchPolygon31.isEmpty())
         return;
     
     for (OAFavoriteItem *favouritePoint in favouritePoints)
@@ -283,7 +283,8 @@ static const int START_ZOOM = 6;
         
         double lat = [favouritePoint getLatitude];
         double lon = [favouritePoint getLongitude];
-        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+
+        BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:lat lon:lon polygon31:touchPolygon31];
         
         if (shouldAdd)
             [result collect:favouritePoint provider:self];

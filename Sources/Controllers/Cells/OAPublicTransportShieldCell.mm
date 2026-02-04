@@ -318,8 +318,10 @@ static UIFont *_shieldFont;
             }
         }
         const auto& r = s->route;
-        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(false).c_str()];
-        [titles addObject:title];
+        NSString *title = OAStringFromUTF8Nullable(r->getAdjustedRouteRef(false).c_str());
+        if (title)
+            [titles addObject:title];
+       
         if (route->segments.end() - it == 1)
         {
             walkingSegment = [OATransportRoutingHelper.sharedInstance getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:s] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nil]];

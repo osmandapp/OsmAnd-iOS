@@ -454,7 +454,7 @@ static inline double normalizeDouble(double v)
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
 
-+ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
++ (NSString *)buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom label:(NSString *)label;
 
 + (void)showToast:(nullable NSString *)title details:(nullable NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
 + (void)showToast:(nullable NSString *)title details:(nullable NSString *)details duration:(NSTimeInterval)duration verticalOffset:(CGFloat)verticalOffset inView:(UIView *)view;

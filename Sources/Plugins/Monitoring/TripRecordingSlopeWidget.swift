@@ -83,8 +83,12 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
         currentMode().iconName
     }
     
+    override func resolvedModeTitleKeyForList() -> String? {
+        currentMode().titleKey
+    }
+    
     private func getSlope() -> Int {
-        let lastSlope = getLastSlope(isUphill: widgetState?.getAverageSlopeModePreference().get() == Int32(AverageSlopeMode.lastUphill.rawValue))
+        let lastSlope = getLastSlope(isUphill: (widgetState?.getAverageSlopeModePreference().get() ?? AverageSlopeMode.lastUphill.rawValue) == AverageSlopeMode.lastUphill.rawValue)
         if let lastSlope {
             return Int(lastSlope.elevDiff / lastSlope.distance * 100.0)
         } else {

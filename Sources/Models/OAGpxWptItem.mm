@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "OAFavoritesHelper.h"
 #import "OAPOI.h"
+#import "OADefaultFavorite.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -71,9 +72,9 @@
     [self.point setColorColor:color];
 }
 
-- (void) acquireColor
+- (void)acquireColor
 {
-    self.color = UIColorFromARGB(self.point.getColor);
+    self.color = self.point.getColor == 0 ? [OADefaultFavorite getDefaultColor] : UIColorFromARGB(self.point.getColor);
 }
 
 - (BOOL) isEqual:(id)o

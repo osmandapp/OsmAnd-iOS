@@ -211,10 +211,15 @@
 		15CD7EA725B1C1A700BCB36A /* ic_small_time_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */; };
 		15CD7EAD25B1C1B900BCB36A /* ic_small_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */; };
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
+		2702BC612EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */; };
+		2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */; };
+		2709E3B22EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */; };
 		2717D3B52DBBA2F800B7BD22 /* ShapesAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */; };
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
 		271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */; };
+		27291B612EE81169005D0B0A /* PreviewImageViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */; };
+		27291B622EE81169005D0B0A /* PreviewImageViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */; };
 		274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */; };
 		274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167482E4DF5840051DD4B /* TopTextViewState.swift */; };
 		274781F62DB92E3800EAE008 /* ColorsAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */; };
@@ -224,6 +229,7 @@
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
 		275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */; };
+		276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */; };
 		2778FE372EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */; };
 		2778FE392EB242CD00B18E11 /* BaseSettingsParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */; };
 		277987A52E7947E700607516 /* AddKeyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277987A42E7947E700607516 /* AddKeyViewController.swift */; };
@@ -247,6 +253,7 @@
 		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
 		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
+		27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
 		27C6D5B12E7AE36600695D5B /* KeyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */; };
@@ -271,6 +278,8 @@
 		27D33B5B2E745F6D00AD4F70 /* MapScrollDownAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */; };
 		27D33B5F2E74622A00AD4F70 /* OpenWeatherAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */; };
 		27D33B612E7473A900AD4F70 /* RouteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D33B602E7473A900AD4F70 /* RouteAction.swift */; };
+		27DC2A8A2EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */; };
+		27DC2A8E2EE6CA160051B247 /* DefaultMapButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */; };
 		27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */; };
 		27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316862E716901007172DA /* PreviousAppProfileAction.swift */; };
 		27E316892E716901007172DA /* NextAppProfileAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E316852E716901007172DA /* NextAppProfileAction.swift */; };
@@ -280,12 +289,14 @@
 		27E8D9EC2ED461E900F98462 /* NumberFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */; };
 		27E8D9F12ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */; };
 		27E8D9F22ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */; };
+		27EAAFB62EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27EAAFB52EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift */; };
 		27F050912DD38E310058075F /* RouteInfoDisplayPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */; };
 		27F050922DD38E310058075F /* RouteInfoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508F2DD38E310058075F /* RouteInfoWidget.swift */; };
 		27F050932DD38E310058075F /* RouteInfoDisplayValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */; };
 		27F050952DD38E400058075F /* RouteInfoWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050942DD38E400058075F /* RouteInfoWidgetState.swift */; };
 		27F050992DD4B6080058075F /* RouteInfoCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050982DD4B6060058075F /* RouteInfoCalculator.swift */; };
 		27F0509F2DD4DEB30058075F /* RouteInfoWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */; };
+		27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */; };
 		27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
@@ -1431,6 +1442,8 @@
 		C54260202AA0D2A000E76C00 /* ic_custom_visibility@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C542601E2AA0D29F00E76C00 /* ic_custom_visibility@3x.png */; };
 		C54260232AA0F90700E76C00 /* ic_custom_3d_relief@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54260212AA0F90700E76C00 /* ic_custom_3d_relief@2x.png */; };
 		C54260242AA0F90700E76C00 /* ic_custom_3d_relief@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54260222AA0F90700E76C00 /* ic_custom_3d_relief@3x.png */; };
+		C5455E5C2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5455E5B2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift */; };
+		C5455E5E2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5455E5D2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift */; };
 		C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */; };
 		C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */; };
 		C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */; };
@@ -3667,10 +3680,15 @@
 		15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@3x.png"; path = "Resources/Icons/ic_small_waypoints@3x.png"; sourceTree = "<group>"; };
 		15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@2x.png"; path = "Resources/Icons/ic_small_waypoints@2x.png"; sourceTree = "<group>"; };
 		2503BB823D105783DC4982C8 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
+		2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBottomValuesSliderTableViewCell.swift; sourceTree = "<group>"; };
+		2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopBottomValuesSliderTableViewCell.xib; sourceTree = "<group>"; };
+		2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceIconCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesAppearanceCategory.swift; sourceTree = "<group>"; };
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
 		271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceByTapViewController.swift; sourceTree = "<group>"; };
+		27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewImageViewTableViewCell.swift; sourceTree = "<group>"; };
+		27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreviewImageViewTableViewCell.xib; sourceTree = "<group>"; };
 		274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseWidgetView+Extension.swift"; sourceTree = "<group>"; };
 		274167482E4DF5840051DD4B /* TopTextViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTextViewState.swift; sourceTree = "<group>"; };
 		274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsAppearanceCategory.swift; sourceTree = "<group>"; };
@@ -3680,6 +3698,7 @@
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
 		275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceUpdateSize.swift; sourceTree = "<group>"; };
+		276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonAppearanceViewController.swift; sourceTree = "<group>"; };
 		2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsParametersViewController.swift; sourceTree = "<group>"; };
 		2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseSettingsParametersViewController.xib; sourceTree = "<group>"; };
 		277987A42E7947E700607516 /* AddKeyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddKeyViewController.swift; sourceTree = "<group>"; };
@@ -3703,6 +3722,7 @@
 		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
 		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
+		27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundOpacityType.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
 		27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KeyTableViewCell.xib; sourceTree = "<group>"; };
@@ -3727,6 +3747,8 @@
 		27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollDownAction.swift; sourceTree = "<group>"; };
 		27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherAction.swift; sourceTree = "<group>"; };
 		27D33B602E7473A900AD4F70 /* RouteAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteAction.swift; sourceTree = "<group>"; };
+		27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVisibilityMapButtonState.swift; sourceTree = "<group>"; };
+		27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMapButtonViewController.swift; sourceTree = "<group>"; };
 		27E316842E716901007172DA /* BaseSwitchAppModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSwitchAppModeAction.swift; sourceTree = "<group>"; };
 		27E316852E716901007172DA /* NextAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextAppProfileAction.swift; sourceTree = "<group>"; };
 		27E316862E716901007172DA /* PreviousAppProfileAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousAppProfileAction.swift; sourceTree = "<group>"; };
@@ -3737,12 +3759,14 @@
 		27E8D9EB2ED461E600F98462 /* NumberFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+Extension.swift"; sourceTree = "<group>"; };
 		27E8D9EF2ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentButtonsSliderTableViewCell.swift; sourceTree = "<group>"; };
 		27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentButtonsSliderTableViewCell.xib; sourceTree = "<group>"; };
+		27EAAFB52EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAppearanceIconCollectionHandler.swift; sourceTree = "<group>"; };
 		27F0508D2DD38E310058075F /* RouteInfoDisplayPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayPriority.swift; sourceTree = "<group>"; };
 		27F0508E2DD38E310058075F /* RouteInfoDisplayValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoDisplayValue.swift; sourceTree = "<group>"; };
 		27F0508F2DD38E310058075F /* RouteInfoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidget.swift; sourceTree = "<group>"; };
 		27F050942DD38E400058075F /* RouteInfoWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidgetState.swift; sourceTree = "<group>"; };
 		27F050982DD4B6060058075F /* RouteInfoCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoCalculator.swift; sourceTree = "<group>"; };
 		27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoWidget.xib; sourceTree = "<group>"; };
+		27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAppearanceParams.swift; sourceTree = "<group>"; };
 		27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceIconSizeViewController.swift; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
@@ -5175,6 +5199,8 @@
 		C542601E2AA0D29F00E76C00 /* ic_custom_visibility@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_visibility@3x.png"; path = "Resources/Icons/ic_custom_visibility@3x.png"; sourceTree = "<group>"; };
 		C54260212AA0F90700E76C00 /* ic_custom_3d_relief@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief@2x.png"; path = "Resources/Icons/ic_custom_3d_relief@2x.png"; sourceTree = "<group>"; };
 		C54260222AA0F90700E76C00 /* ic_custom_3d_relief@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief@3x.png"; path = "Resources/Icons/ic_custom_3d_relief@3x.png"; sourceTree = "<group>"; };
+		C5455E5B2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMovingTimeWidgetState.swift; sourceTree = "<group>"; };
+		C5455E5D2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingMovingTimeWidget.swift; sourceTree = "<group>"; };
 		C546C0022AC242D600377EDE /* OAOsmUploadPOIViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmUploadPOIViewController.h; sourceTree = "<group>"; };
 		C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadPOIViewController.m; sourceTree = "<group>"; };
 		C546C0052AC2438F00377EDE /* OAOsmNoteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNoteViewController.h; sourceTree = "<group>"; };
@@ -9951,6 +9977,8 @@
 				322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */,
 				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
 				32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */,
+				27EAAFB52EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift */,
+				2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */,
 				2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */,
 				32F3A6AB2D5E1A41008AE4CA /* IconsAppearanceCategory.swift */,
 				274781F52DB92E3100EAE008 /* ColorsAppearanceCategory.swift */,
@@ -9969,7 +9997,10 @@
 				46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */,
 				464BF4AA2C051909000D6908 /* Map3DButtonState.swift */,
 				464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */,
+				27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */,
 				468D9C6B2C00FE0600ED368A /* MapButtonState.swift */,
+				27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */,
+				27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */,
 				468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */,
 				C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */,
 				C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */,
@@ -11159,6 +11190,7 @@
 				C5C472EB2ED1810C00682CAB /* BaseRecordingWidget.swift */,
 				C5C472E72ED17F5A00682CAB /* TripRecordingSlopeWidget.swift */,
 				C5C472F12ED4BC6700682CAB /* TripRecordingMaxSpeedWidget.swift */,
+				C5455E5D2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift */,
 			);
 			path = Monitoring;
 			sourceTree = "<group>";
@@ -12173,6 +12205,7 @@
 				32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */,
 				C50E32852CA6879500EEC41F /* OADatePickerTableViewCell.swift */,
 				C52776A62CA7FAB600A8F98A /* OARangeSliderFilterTableViewCell.swift */,
+				2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */,
 				C5A466BB2D2E69B6008E0C87 /* ImageHeaderCell.swift */,
 				B247455427E6470900C18C3F /* OATwoFilledButtonsTableViewCell.h */,
 				B247455527E6470900C18C3F /* OATwoFilledButtonsTableViewCell.m */,
@@ -12193,6 +12226,7 @@
 				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
 				277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */,
 				27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */,
+				27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -12203,6 +12237,8 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */,
+				27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */,
 				27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */,
 				27C6D5AF2E7AE36600695D5B /* KeyTableViewCell.xib */,
 				277987AB2E79A7A700607516 /* KeyAssignmentTableViewCell.xib */,
@@ -13144,6 +13180,7 @@
 				C5C472ED2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift */,
 				C5C472EF2ED4B5A200682CAB /* TripRecordingMaxSpeedWidgetState.swift */,
 				C5C472F32ED5ACD200682CAB /* TripRecordingDistanceWidgetState.swift */,
+				C5455E5B2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift */,
 				C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */,
 			);
 			path = WidgetStates;
@@ -14037,6 +14074,8 @@
 				DAABE4EA2A16483300569F71 /* ConfigureScreenViewController.swift */,
 				462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */,
 				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
+				27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */,
+				276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */,
 				32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */,
 				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
 				271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */,
@@ -15636,6 +15675,7 @@
 				8454DA1E1B2F16D700E5A5C5 /* ic_coordinates@2x.png in Resources */,
 				DA8AD07C291D3A850092385B /* ic_custom_cloud_download_outline@3x.png in Resources */,
 				DA5A82C726C563A800F274C7 /* NoImagesCell.xib in Resources */,
+				2702BC612EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib in Resources */,
 				DA2EC67229FBBE0300ECEB37 /* ic_action_target@3x.png in Resources */,
 				DA2EC78129FBBE0400ECEB37 /* ic_action_bearing@2x.png in Resources */,
 				DA2EC7DB29FFB76A00ECEB37 /* ic_navbar_screen_side_left@2x.png in Resources */,
@@ -16150,6 +16190,7 @@
 				DA540D94229E63270069201E /* ic_custom_plus@3x.png in Resources */,
 				323BD8E72628850400D255ED /* ic_bg_point_comment_top@2x.png in Resources */,
 				DA25FA5A23FFFC90009CDEAD /* ic_custom_change_object_position@3x.png in Resources */,
+				27291B622EE81169005D0B0A /* PreviewImageViewTableViewCell.xib in Resources */,
 				DA5A829126C563A700F274C7 /* OAFolderCardsCell.xib in Resources */,
 				DA84E84D21D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png in Resources */,
 				0A0EAC0126E619210044E82C /* ic_custom_magnifier@2x.png in Resources */,
@@ -17061,6 +17102,7 @@
 				DA5A845E26C563A900F274C7 /* OARoutePointsLayer.mm in Sources */,
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
 				327A19862A98D57800F4A027 /* TravelJsonParser.swift in Sources */,
+				C5455E5E2F0E5421004FB3ED /* TripRecordingMovingTimeWidget.swift in Sources */,
 				DA5A815426C563A700F274C7 /* OACarPlayMapViewController.mm in Sources */,
 				27D33B3F2E7432DD00AD4F70 /* OpenNavigationViewAction.swift in Sources */,
 				C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */,
@@ -17070,6 +17112,7 @@
 				C50E32842CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift in Sources */,
 				C5C472EE2ED38A7B00682CAB /* TripRecordingSlopeWidgetState.swift in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
+				27DC2A8A2EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift in Sources */,
 				32FEF47F2D071FD7005E8B55 /* OAMapObject.mm in Sources */,
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
 				FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */,
@@ -17261,6 +17304,7 @@
 				DA5A813426C563A700F274C7 /* OAOpenStreetMapPoint.m in Sources */,
 				DA5A82FD26C563A800F274C7 /* OAProgressTitleCell.m in Sources */,
 				DA5A845126C563A900F274C7 /* OAMyPositionLayer.mm in Sources */,
+				C5455E5C2F0E492D004FB3ED /* TripRecordingMovingTimeWidgetState.swift in Sources */,
 				FA39D2972E819B030095DF8E /* ErrorHelper.swift in Sources */,
 				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
 				320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */,
@@ -17304,6 +17348,7 @@
 				323F04BE2C6532EF0058DD78 /* BaseRouteQuickAction.swift in Sources */,
 				DA5A824A26C563A700F274C7 /* OADefaultSpeedViewController.mm in Sources */,
 				DA5A846126C563A900F274C7 /* OAContextMenuLayer.mm in Sources */,
+				27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */,
 				DA5A813E26C563A700F274C7 /* OANode.m in Sources */,
 				05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */,
 				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,
@@ -17527,6 +17572,7 @@
 				27C6D5BB2E81666300695D5B /* KeyEventCommand.swift in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
+				27EAAFB62EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift in Sources */,
 				C5BC8DD52E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift in Sources */,
 				DA5A84F826C563A900F274C7 /* OAMapStyleSettings.mm in Sources */,
 				DA5A840926C563A800F274C7 /* OAMapDownloadController.mm in Sources */,
@@ -17675,6 +17721,7 @@
 				327B4AB0288F310700AF71AF /* OAFavoriteViewController.mm in Sources */,
 				DA8DC39A2A0D0876006C116B /* MarkerWidgetsHelper.swift in Sources */,
 				321E95252823B5C10040312C /* OASimulationNavigationSettingViewController.mm in Sources */,
+				2709E3B22EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift in Sources */,
 				DA5A824226C563A700F274C7 /* OAMainSettingsViewController.m in Sources */,
 				32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */,
 				DA5A834A26C563A800F274C7 /* OAWaypointHeaderCell.m in Sources */,
@@ -17902,6 +17949,7 @@
 				DABC7F2227B65FD6005C76E2 /* OARoutingHelperUtils.mm in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
 				DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */,
+				2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */,
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
 				32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */,
 				461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */,
@@ -17982,8 +18030,10 @@
 				DA5A815F26C563A700F274C7 /* OALiveMonitoringHelper.m in Sources */,
 				DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
 				46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */,
+				27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */,
 				46D5E41A2D31A3F000428227 /* BackupUtils.swift in Sources */,
 				FA5DD0F82F20CD29002F3F79 /* OAPoiUIFilterDataProviderWrapper.m in Sources */,
+				276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */,
 				DA5A839A26C563A800F274C7 /* OALocalResourceInfoCell.m in Sources */,
 				DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */,
 				DA5A815C26C563A700F274C7 /* OAPlugin.mm in Sources */,
@@ -18028,6 +18078,7 @@
 				FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */,
 				FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */,
 				C5C472E82ED17F5A00682CAB /* TripRecordingSlopeWidget.swift in Sources */,
+				27291B612EE81169005D0B0A /* PreviewImageViewTableViewCell.swift in Sources */,
 				DAA61CC42A03983A00AFF65D /* CenterWidgetInfo.swift in Sources */,
 				DA5A815326C563A700F274C7 /* OACarPlayDashboardInterfaceController.mm in Sources */,
 				DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */,
@@ -18366,6 +18417,7 @@
 				32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */,
 				CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.m in Sources */,
 				CA4EDD68D7B26540651A56EB /* OATitleDescriptionBigIconCell.mm in Sources */,
+				27DC2A8E2EE6CA160051B247 /* DefaultMapButtonViewController.swift in Sources */,
 				274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */,
 				CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */,
 				3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */,

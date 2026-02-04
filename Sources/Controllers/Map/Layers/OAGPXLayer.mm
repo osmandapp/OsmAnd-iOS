@@ -1631,10 +1631,10 @@ colorizationScheme:(int)colorizationScheme
 - (void)getTracksFromPoint:(CLLocationCoordinate2D)point result:(MapSelectionResult *)result
 {
     int r = [self getScaledTouchRadius:[self getDefaultRadiusPoi]];
-    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:result.point radius:r];
+    QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:result.point radius:r];
     if (touchPolygon31.isEmpty())
         return;
-    
+
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
     if (currentTrackGpxFile)
@@ -1697,27 +1697,27 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (NSArray<OASWptPt *> *)findLineInPolygon31:(OsmAnd::AreaI)polygon31 points:(NSArray<OASWptPt *> *)points
+- (NSArray<OASWptPt *> *)findLineInPolygon31:(QList<OsmAnd::PointI>)polygon31 points:(NSArray<OASWptPt *> *)points
 {
     if (points.count < 2)
         return nil;
 
     OASWptPt *firstPoint = points.firstObject;
-    OsmAnd::PointI previousPoint31 = [OANativeUtilities getPoint31FromLatLon:firstPoint.lat lon:firstPoint.lon];
 
-    if ([OANativeUtilities isPointInsidePolygon:previousPoint31 polygon31:polygon31])
+    if ([OANativeUtilities isPointInsidePolygonLat:firstPoint.lat lon:firstPoint.lon polygon31:polygon31])
     {
         OASWptPt *secondPoint = points[1];
         return @[firstPoint, secondPoint];
     }
+    OsmAnd::PointI previousPoint31 = [OANativeUtilities getPoint31FromLatLon:firstPoint.lat lon:firstPoint.lon];
 
     for (NSInteger i = 1; i < points.count; i++)
     {
         OASWptPt *currentPoint = points[i];
         OsmAnd::PointI currentPoint31 = [OANativeUtilities getPoint31FromLatLon:currentPoint.lat lon:currentPoint.lon];
 
-        BOOL lineInside = [OANativeUtilities isPointInsidePolygon:currentPoint31 polygon31:polygon31]
-        || [OANativeUtilities isSegmentCrossingArea:previousPoint31 end31:currentPoint31 area31:polygon31];
+        BOOL lineInside = [OANativeUtilities isPointInsidePolygonLat:currentPoint.lat lon:currentPoint.lon polygon31:polygon31]
+        || [OANativeUtilities isSegmentCrossingPolygon:previousPoint31 end31:currentPoint31 polygon31:polygon31];
 
         if (lineInside)
         {
@@ -1948,8 +1948,8 @@ colorizationScheme:(int)colorizationScheme
     CGPoint point = result.point;
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
     
-    OsmAnd::AreaI touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
-    if (touchPolygon31 == OsmAnd::AreaI())
+    QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+    if (touchPolygon31.isEmpty())
         return;
     
     NSArray<OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
@@ -1963,7 +1963,8 @@ colorizationScheme:(int)colorizationScheme
             
             double lat = [waypoint lat];
             double lon = [waypoint lon];
-            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygon:lat lon:lon polygon31:touchPolygon31];
+
+            BOOL shouldAdd = [OANativeUtilities isPointInsidePolygonLat:lat lon:lon polygon31:touchPolygon31];
             if (shouldAdd)
                 [result collect:waypoint provider:self];
         }

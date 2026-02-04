@@ -251,9 +251,9 @@ final class DeepLinkParser: NSObject {
         for item in items {
             let key = item.name.lowercased()
             if key == "name" {
-                nameParam = item.value
+                nameParam = normalizeQueryValue(item.value)
             } else if key == "type" {
-                typeParam = item.value
+                typeParam = normalizeQueryValue(item.value)
             }
         }
         
@@ -278,15 +278,15 @@ final class DeepLinkParser: NSObject {
         for item in items {
             switch item.name.lowercased() {
             case "name":
-                name = item.value
+                name = normalizeQueryValue(item.value)
             case "type":
-                type = item.value
+                type = normalizeQueryValue(item.value)
             case "wikidataid":
-                wikiDataId = item.value
+                wikiDataId = normalizeQueryValue(item.value)
             case "osmid":
-                osmId = item.value
+                osmId = normalizeQueryValue(item.value)
             case "pin":
-                latLonParam = item.value
+                latLonParam = normalizeQueryValue(item.value)
             default:
                 break
             }
@@ -297,7 +297,7 @@ final class DeepLinkParser: NSObject {
         guard CLLocationCoordinate2DIsValid(latLon.coordinate) else { return false }
         let pinLat = latLon.coordinate.latitude
         let pinLon = latLon.coordinate.longitude
-        let zoom = rootViewController.mapPanel.mapViewController.getMapZoom()
+        let zoom = extractZoom(from: url, fallback: rootViewController.mapPanel.mapViewController.getMapZoom())
         guard let amenity = searchBaseDetailsObject(pinLat: pinLat, pinLon: pinLon, name: name, poiType: type, wikiDataId: wikiDataId, osmId: osmId) else { return false }
         let synthetic = amenity.syntheticAmenity
         guard let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic) else { return false }
@@ -316,9 +316,9 @@ final class DeepLinkParser: NSObject {
         for item in items {
             switch item.name.lowercased() {
             case "name":
-                name = item.value
+                name = normalizeQueryValue(item.value)
             case "pin":
-                latLonParam = item.value
+                latLonParam = normalizeQueryValue(item.value)
             default:
                 break
             }
@@ -329,7 +329,7 @@ final class DeepLinkParser: NSObject {
         guard CLLocationCoordinate2DIsValid(latLon.coordinate) else { return false }
         let lat = latLon.coordinate.latitude
         let lon = latLon.coordinate.longitude
-        let zoom = rootViewController.mapPanel.mapViewController.getMapZoom()
+        let zoom = extractZoom(from: url, fallback: rootViewController.mapPanel.mapViewController.getMapZoom())
         return OADeepLinkBridge.openFavouriteOrMoveMap(withLat: lat, lon: lon, zoom: Int32(zoom), name: name)
     }
     
@@ -370,6 +370,13 @@ final class DeepLinkParser: NSObject {
         return OAAmenitySearcher.sharedInstance().searchDetailedObject(with: request)
     }
     
+    private func normalizeQueryValue(_ rawValue: String?) -> String? {
+        guard let rawValue, !rawValue.isEmpty else { return nil }
+        let normalized = (rawValue.replacingOccurrences(of: "+", with: " ").removingPercentEncoding ?? rawValue).trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalized.isEmpty else { return nil }
+        return normalized
+    }
+    
     private func parseIntermediatePoints(_ parameter: String?) -> [CLLocation]? {
         guard let parameter, !parameter.isEmpty else { return nil }
         let params = parameter.components(separatedBy: CharacterSet(charactersIn: ",;"))
@@ -404,5 +411,15 @@ final class DeepLinkParser: NSObject {
     
     private func moveMapToLat(_ lat: Double, lon: Double, zoom: Int, title: String?, rootViewController: OARootViewController) {
         OADeepLinkBridge.moveMap(toLat: lat, lon: lon, zoom: Int32(zoom), title: title, rootViewController: rootViewController)
+    }
+    
+    private func extractZoom(from url: URL, fallback: Float) -> Float {
+        guard let fragment = URLComponents(url: url, resolvingAgainstBaseURL: true)?.fragment else { return fallback }
+        let parts = fragment.split(separator: "/", omittingEmptySubsequences: true)
+        if let first = parts.first, let zoom = Float(first) {
+            return zoom
+        }
+        
+        return fallback
     }
 }

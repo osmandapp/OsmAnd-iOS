@@ -2828,3 +2828,13 @@
 "x" = "X (tidligere Twitter)";
 "reconnect" = "Koble til på nytt";
 "quick_action_showhide_coordinates_grid_descr" = "Slå av/på synligheten til koordinatnettet på kartet.";
+"intermediate_first" = "Mellomliggende først";
+"destination_first" = "Bestemmelsessted først";
+"display_priority" = "Visningsprioritet";
+"open_in_browser" = "Åpne i nettleser";
+"change_zoom_action_descr" = "Endre kartzoom.";
+"search_action_descr" = "Åpner Søk.";
+"navigation_action_descr" = "Åpner Navigering.";
+"rendering_attr_hideFerries_name" = "Fergeruter";
+"rendering_attr_hideFerries_description" = "Skjul fergeruter";
+"day_short" = "D";

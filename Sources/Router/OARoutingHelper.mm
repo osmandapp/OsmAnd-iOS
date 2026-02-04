@@ -47,6 +47,9 @@
 static NSInteger GPS_TOLERANCE = DEFAULT_GPS_TOLERANCE;
 static double ARRIVAL_DISTANCE_FACTOR = 1;
 
+static const NSInteger kCarDisconnectStopNavigationDistanceMeters = 100;
+static const CLLocationSpeed kCarDisconnectPauseSpeedMetersPerSecond = 1.0;
+
 @interface OARoutingHelper()
 
 @property (nonatomic) OARouteCalculationResult *route;
@@ -66,6 +69,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
     BOOL _isFollowingMode;
     BOOL _isRoutePlanningMode;
     BOOL _isPauseNavigation;
+    BOOL _isPausedDueToCarPlayDisconnect;
     
     OAGPXRouteParamsBuilder *_currentGPXRoute;
     
@@ -159,7 +163,7 @@ static BOOL _isDeviatedFromRoute = false;
     return _recalcHelper.lastRouteCalcErrorShort;
 }
 
-- (void) setPauseNaviation:(BOOL) b
+- (void) setPauseNavigation:(BOOL) b
 {
     _isPauseNavigation = b;
     if (b)
@@ -175,8 +179,59 @@ static BOOL _isDeviatedFromRoute = false;
     return _isPauseNavigation;
 }
 
+- (void)resumeNavigationAfterCarPlayReconnect
+{
+    if (_isPausedDueToCarPlayDisconnect && _isPauseNavigation)
+    {
+        _isPausedDueToCarPlayDisconnect = NO;
+        [self resumeNavigation];
+    }
+}
+
+- (void)onCarPlayConnectionStateChanged
+{
+    if (UIApplication.sharedApplication.isCarPlayConnected)
+    {
+        if ([self isFollowingMode])
+        {
+            if ([self getLeftDistance] < kCarDisconnectStopNavigationDistanceMeters)
+            {
+                [_app stopNavigation];
+            }
+            else
+            {
+                CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
+                if (currentLocation && currentLocation.speed >= 0 && currentLocation.speed < kCarDisconnectPauseSpeedMetersPerSecond)
+                {
+                    [self pauseNavigation];
+                    _isPausedDueToCarPlayDisconnect = YES;
+                }
+            }
+        }
+    }
+}
+
+- (void) resumeNavigation
+{
+    [self setRoutePlanningMode:NO];
+    [self setFollowingMode:YES];
+    [self setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:NO];
+    [[OAMapViewTrackingUtilities instance] switchToRoutePlanningMode];
+    [[OARootViewController instance].mapPanel refreshMap];
+}
+
+- (void) pauseNavigation
+{
+    [self setRoutePlanningMode:YES];
+    [self setFollowingMode:NO];
+    [self setPauseNavigation:YES];
+    [[OAMapViewTrackingUtilities instance] switchToRoutePlanningMode];
+    [[OARootViewController instance].mapPanel refreshMap];
+}
+
 - (void) setFollowingMode:(BOOL)follow
 {
+    _isPausedDueToCarPlayDisconnect = NO;
     _isFollowingMode = follow;
     _isPauseNavigation = false;
     if (!follow)

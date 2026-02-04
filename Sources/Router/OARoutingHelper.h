@@ -58,7 +58,7 @@ struct RouteSegmentResult;
 - (BOOL) isFollowingMode;
 - (NSString *) getLastRouteCalcError;
 - (NSString *) getLastRouteCalcErrorShort;
-- (void) setPauseNaviation:(BOOL) b;
+- (void) setPauseNavigation:(BOOL) b;
 - (BOOL) isPauseNavigation;
 - (void) setFollowingMode:(BOOL)follow;
 - (BOOL) isRoutePlanningMode;
@@ -112,6 +112,8 @@ struct RouteSegmentResult;
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
+- (void)resumeNavigationAfterCarPlayReconnect;
+- (void)onCarPlayConnectionStateChanged;
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
 

@@ -179,14 +179,9 @@
 
 - (void)onVerticalExaggerationScaleChanged
 {
-    __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.mapViewController runWithRenderSync:^{
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf)
-                [strongSelf.mapView setElevationScaleFactor:strongSelf.app.data.verticalExaggerationScale];
-        }];
-    });
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
+    }];
 }
 
 - (OsmAnd::ZoomLevel)getMinZoom

@@ -677,6 +677,9 @@
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "You have arrived.";
+"context_menu_item_add_parking_point" = "Mark as parking location";
+"find_parking" = "Find parking";
+"finish_navigation" = "Finish navigation";
 "route_your_destination_is_on_left" = "Your destination is on the left";
 "route_your_destination_is_on_right" = "Your destination is on the right";
 "route_your_destination_is_on_ahead" = "Your destination is straight ahead";

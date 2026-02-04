@@ -248,6 +248,22 @@
     [self setGPXRouteParamsWithDocument:gpxFile path:gpxFile.path];
 }
 
+- (void)recalculateRoute
+{
+    [_settings.useIntermediatePointsNavigation set:YES];
+    OAApplicationMode *mode = [self getRouteMode];
+    [_routingHelper setAppMode:mode];
+    [_settings.followTheRoute set:NO];
+    [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
+    [_routingHelper setFollowingMode:NO];
+    [_routingHelper setRoutePlanningMode:YES];
+    OATargetPointsHelper *pointsHelper = [OATargetPointsHelper sharedInstance];
+    [pointsHelper setStartPoint:nil updateRoute:NO name:nil];
+    [pointsHelper updateRouteAndRefresh:YES];
+    [_trackingUtils switchToRoutePlanningMode];
+    [[OARootViewController instance].mapPanel refreshMap];
+}
+
 - (OAApplicationMode *) getRouteMode
 {
     OAApplicationMode *selected = _settings.applicationMode.get;

@@ -2566,7 +2566,7 @@ static const NSInteger kDetailedMapZoom = 9;
                     _mapPresentationEnvironment->setSettings(newSettings);
             }
         
-            _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+            _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider, true, false, true));
             [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
 
             _obfMapSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,

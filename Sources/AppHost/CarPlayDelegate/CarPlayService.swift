@@ -29,7 +29,7 @@ final class CarPlayService: NSObject {
         saveAppMapAppearanceModeIfNeeded()
         saveCarPlayMapAppearanceIfNeeded()
         initSessionConfiguration()
-        OARoutingHelper.sharedInstance().onCarPlayNavigationSessionRestored()
+        OARoutingHelper.sharedInstance().resumeNavigationAfterCarPlayReconnect()
     }
     
     func disconnectScene() {
@@ -37,7 +37,7 @@ final class CarPlayService: NSObject {
         restoreOriginalMapAppearanceModeIfNeeded()
         appMapAppearanceMode = nil
         carPlayMapAppearanceMode = nil
-        OARoutingHelper.sharedInstance().onCarNavigationSessionChanged()
+        OARoutingHelper.sharedInstance().onCarPlayConnectionStateChanged()
         navigationModeProvider.restoreOnDisconnect()
     }
 

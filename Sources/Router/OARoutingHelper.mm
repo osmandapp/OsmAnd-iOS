@@ -179,7 +179,7 @@ static BOOL _isDeviatedFromRoute = false;
     return _isPauseNavigation;
 }
 
-- (void)onCarPlayNavigationSessionRestored
+- (void)resumeNavigationAfterCarPlayReconnect
 {
     if (_isPausedDueToCarPlayDisconnect && _isPauseNavigation)
     {
@@ -188,7 +188,7 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (void)onCarNavigationSessionChanged
+- (void)onCarPlayConnectionStateChanged
 {
     if (UIApplication.sharedApplication.isCarPlayConnected)
     {

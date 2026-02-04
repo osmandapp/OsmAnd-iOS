@@ -353,6 +353,10 @@
 		321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */; };
 		321C838A2F335A780028FCCC /* OAOpenedHoursParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321C83892F335A740028FCCC /* OAOpenedHoursParser.mm */; };
 		321C838C2F337D910028FCCC /* MetricRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */; };
+		321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838D2F33BBD50028FCCC /* CapacityRowBehaviour.swift */; };
+		321C83902F33BE090028FCCC /* CuisineRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838F2F33BE070028FCCC /* CuisineRowBehavior.swift */; };
+		321C83922F33BFA00028FCCC /* DistanceRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C83912F33BFA00028FCCC /* DistanceRowBehaviour.swift */; };
+		321C83942F33C1A30028FCCC /* EleRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C83932F33C1A10028FCCC /* EleRowBehaviour.swift */; };
 		321E95252823B5C10040312C /* OASimulationNavigationSettingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */; };
 		32210DB1298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAD298929AF005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png */; };
 		32210DB2298929B0005D16CB /* ic_custom_map_pin_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAE298929AF005D16CB /* ic_custom_map_pin_outlined@2x.png */; };
@@ -3870,6 +3874,10 @@
 		321C83882F335A150028FCCC /* OAOpenedHoursParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenedHoursParser.h; sourceTree = "<group>"; };
 		321C83892F335A740028FCCC /* OAOpenedHoursParser.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenedHoursParser.mm; sourceTree = "<group>"; };
 		321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricRowBehaviour.swift; sourceTree = "<group>"; };
+		321C838D2F33BBD50028FCCC /* CapacityRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapacityRowBehaviour.swift; sourceTree = "<group>"; };
+		321C838F2F33BE070028FCCC /* CuisineRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuisineRowBehavior.swift; sourceTree = "<group>"; };
+		321C83912F33BFA00028FCCC /* DistanceRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceRowBehaviour.swift; sourceTree = "<group>"; };
+		321C83932F33C1A10028FCCC /* EleRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EleRowBehaviour.swift; sourceTree = "<group>"; };
 		321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimulationNavigationSettingViewController.h; sourceTree = "<group>"; };
 		321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASimulationNavigationSettingViewController.mm; sourceTree = "<group>"; };
 		32210DAD298929AF005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_custom_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
@@ -8441,8 +8449,12 @@
 			isa = PBXGroup;
 			children = (
 				3260870B2F324DB00038A34B /* IPoiAdditionalRowBehavior.swift */,
+				321C838D2F33BBD50028FCCC /* CapacityRowBehaviour.swift */,
+				321C838F2F33BE070028FCCC /* CuisineRowBehavior.swift */,
 				3260870F2F3250470038A34B /* DefaultPoiAdditionalRowBehaviour.swift */,
+				321C83912F33BFA00028FCCC /* DistanceRowBehaviour.swift */,
 				321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */,
+				321C83932F33C1A10028FCCC /* EleRowBehaviour.swift */,
 				321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */,
 				3260870D2F324DE00038A34B /* PoiRowParams.swift */,
 			);
@@ -17031,6 +17043,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */,
 				C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,
 				DA5A830926C563A800F274C7 /* OAIconBackgroundCollectionViewCell.m in Sources */,
@@ -17276,6 +17289,7 @@
 				DA5A81A626C563A700F274C7 /* OASearchCoreAPI.mm in Sources */,
 				DA5A855126C563A900F274C7 /* NSData+CRC32.m in Sources */,
 				27D33B4F2E744F0D00AD4F70 /* MapZoomOutAction.swift in Sources */,
+				321C83902F33BE090028FCCC /* CuisineRowBehavior.swift in Sources */,
 				DA5A835B26C563A800F274C7 /* OAInAppCell.m in Sources */,
 				DA5A846826C563A900F274C7 /* OAMapActions.mm in Sources */,
 				DA4ABEE52876DA5D00B996EF /* OAExportSettingsCategory.m in Sources */,
@@ -17314,6 +17328,7 @@
 				FAF068332C3BC6840054BBEA /* WeatherContoursButton.swift in Sources */,
 				2778FE372EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift in Sources */,
 				DA5A83C926C563A800F274C7 /* OAEditPointViewController.mm in Sources */,
+				321C83922F33BFA00028FCCC /* DistanceRowBehaviour.swift in Sources */,
 				DA5A84AD26C563A900F274C7 /* OARootViewController.m in Sources */,
 				DA5A81BC26C563A700F274C7 /* OAPOIMyLocationType.m in Sources */,
 				DA5A845B26C563A900F274C7 /* OADestinationsLayer.mm in Sources */,
@@ -17799,6 +17814,7 @@
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				322C59792C90836C0087AB2F /* OAColorPickerViewController.swift in Sources */,
 				46C841332C32F31B00E284B0 /* OAContourLinesAction.m in Sources */,
+				321C83942F33C1A30028FCCC /* EleRowBehaviour.swift in Sources */,
 				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,
 				46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */,
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,

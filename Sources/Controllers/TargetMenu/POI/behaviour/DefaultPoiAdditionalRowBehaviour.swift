@@ -9,9 +9,6 @@
 class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
     
     func applyCustomRules(params: PoiRowParams) {
-        
-        //TODO: check it changes original variable! ([in-out])
-        
         if let iconName = params.rule.customIconName {
             params.builder.iconName = iconName
         }
@@ -24,9 +21,6 @@ class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
     }
     
     func applyCommonRules(params: PoiRowParams) {
-        
-        //TODO: check it changes original variable! ([in-out])
-        
         var isUrl = params.rule.isUrl || WikiAlgorithms.isUrl(params.value)
         if let hiddenUrl = AmenityUIHelper.getSocialMediaUrl(key: params.key, value: params.value) {
             if !params.builder.hasHiddenUrl() && !isUrl && params.builder.isNeedLinks() {

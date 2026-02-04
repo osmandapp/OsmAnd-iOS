@@ -9,6 +9,8 @@
 final class OpeningHoursRowBehavior: DefaultPoiAdditionalRowBehaviour {
     
     override func applyCustomRules(params: PoiRowParams) {
+        super.applyCustomRules(params: params)
+        
         var value = params.value
         var formattedValue = value.replacingOccurrences(of: "; ", with: "\n")
         formattedValue = value.replacingOccurrences(of: ",", with: ", ")

@@ -18,6 +18,8 @@ final class MetricRowBehaviour: DefaultPoiAdditionalRowBehaviour {
     }()
     
     override func applyCustomRules(params: PoiRowParams) {
+        super.applyCustomRules(params: params)
+        
         let metricSystem = OAAppSettings.sharedManager().metricSystem.get()
         
         if let valueAsDouble = Double(params.value), valueAsDouble > 0 {

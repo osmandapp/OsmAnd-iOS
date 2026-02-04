@@ -41,7 +41,10 @@ class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
         
         if !params.builder.hasIcon() { // if icon wasn't predefined
             
-            var iconName = getIconName(key: params.poiType?.iconName())
+            //TODO: debug it
+//            var iconName = getIconName(key: params.poiType?.iconName())
+            var iconName = getIconName(key: params.poiType?.iconKeyName())
+            
             if iconName == nil {
                 let category = params.poiType?.getOsmTag().replacingOccurrences(of: ":", with: "_")
                 if let category, !category.isEmpty {
@@ -100,8 +103,15 @@ class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
     }
     
     func getIconName(key: String?) -> String? {
+        
+        //TODO: debug it. invalid icon "mx_height"
+        
         guard let key else { return nil }
-        let iconName = "mx_\(key)"
+        var iconName = key
+        
+        if !iconName.hasPrefix("mx_") {
+            iconName = "mx_\(key)"
+        }
         return UIImage(named: iconName) != nil ? iconName : nil
     }
     

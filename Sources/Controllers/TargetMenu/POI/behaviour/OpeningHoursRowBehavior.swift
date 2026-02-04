@@ -15,6 +15,8 @@ final class OpeningHoursRowBehavior: DefaultPoiAdditionalRowBehaviour {
         var formattedValue = value.replacingOccurrences(of: "; ", with: "\n")
         formattedValue = value.replacingOccurrences(of: ",", with: ", ")
         
+        //TODO: extract to correct class
+        // menuBuilder.getCollapsableTextView(app, true, formattedValue)
         let collapsableView = OACollapsableLabelView(frame: CGRect(x: 0, y: 0, width: 320, height: 100))
         collapsableView.setText(formattedValue)
         params.builder.collapsableView = collapsableView

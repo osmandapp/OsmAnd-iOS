@@ -66,7 +66,7 @@ final class PoiAdditionalUiRules: NSObject {
         let cuisine = PoiAdditionalUiRule(key: CUISINE_TAG)
         cuisine.customIconName = "ic_cuisine"
         cuisine.customTextPrefix = localizedString("poi_cuisine")
-//        behavior = CuisineRowBehavior
+        cuisine.behavior = CuisineRowBehavior()
         rules.append(cuisine)
         rulesByKey[CUISINE_TAG] = cuisine
         
@@ -83,7 +83,7 @@ final class PoiAdditionalUiRules: NSObject {
         wiki.isWikipedia = true
         wiki.checkBaseKey = false
         wiki.checkKeyOnContains = true
-//        behavior = WikipediaRowBehavior
+        wiki.behavior = WikipediaRowBehavior()
         rules.append(wiki)
         rulesByKey[WIKIPEDIA_TAG] = wiki
         
@@ -115,7 +115,7 @@ final class PoiAdditionalUiRules: NSObject {
         
         let population = PoiAdditionalUiRule(key: POPULATION_TAG)
         population.isNeedLinks = false
-//        behavior = PopulationRowBehaviour
+        population.behavior = PopulationRowBehaviour()
         rules.append(population)
         rulesByKey[POPULATION_TAG] = population
         
@@ -156,47 +156,44 @@ final class PoiAdditionalUiRules: NSObject {
         let distance = PoiAdditionalUiRule(key: DISTANCE_TAG)
         distance.customTextPrefix = localizedString("shared_string_distance")
         distance.isNeedLinks = false
-//        behavior = DistanceRowBehaviour
+        distance.behavior = DistanceRowBehaviour()
         rules.append(distance)
         rulesByKey[DISTANCE_TAG] = distance
         
         let capacity = PoiAdditionalUiRule(key: "capacity")
-//        behavior = LiquidCapacityRowBehaviour
+        capacity.behavior = LiquidCapacityRowBehaviour()
         rules.append(capacity)
         rulesByKey["capacity"] = capacity
         
         let maxweight = PoiAdditionalUiRule(key: "maxweight")
-//        behavior = MaxWeightRowBehaviour
+        maxweight.behavior = MaxWeightRowBehaviour()
         rules.append(maxweight)
         rulesByKey["maxweight"] = maxweight
         
         let students = PoiAdditionalUiRule(key: "students")
-//        behavior = CapacityRowBehaviour
+        students.behavior = CapacityRowBehaviour()
         rules.append(students)
         rulesByKey["students"] = students
         
         let spots = PoiAdditionalUiRule(key: "spots")
-//        behavior = CapacityRowBehaviour
+        spots.behavior = CapacityRowBehaviour()
         rules.append(spots)
         rulesByKey["spots"] = spots
         
         let seats = PoiAdditionalUiRule(key: "seats")
-//        behavior = CapacityRowBehaviour
+        seats.behavior = CapacityRowBehaviour()
         rules.append(seats)
         rulesByKey["seats"] = seats
         
         let usMapsRecreationArea = PoiAdditionalUiRule(key: "us_maps_recreation_area")
-//        behavior = UsMapsRecreationAreaRowBehaviour
+        usMapsRecreationArea.behavior = UsMapsRecreationAreaRowBehaviour()
         rules.append(usMapsRecreationArea)
         rulesByKey["us_maps_recreation_area"] = usMapsRecreationArea
         
         let ele = PoiAdditionalUiRule(key: "ele")
-//        behavior = EleRowBehaviour
+        ele.behavior = EleRowBehaviour()
         rules.append(ele)
         rulesByKey["ele"] = ele
-        
-        
-        //TODO: implement behavior
     }
     
     func findRule(key: String) -> PoiAdditionalUiRule {

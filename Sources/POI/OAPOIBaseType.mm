@@ -66,6 +66,23 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
     return [NSString stringWithFormat:@"mx_%@", optionalIcon ? : self.name];
 }
 
+- (NSString *)iconKeyName
+{
+    NSString *iconName = [self iconName];
+    NSString *keyName = self.name;
+    return [self formatKeyName:iconName ? iconName : keyName];
+}
+
+- (NSString *)formatKeyName:(NSString *)keyName
+{
+    NSString *kn = keyName;
+    if ([kn hasPrefix:@"osmand_"])
+        kn = [kn stringByReplacingOccurrencesOfString:@"osmand_" withString:@""];
+    
+    kn = [kn stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+    return kn;
+}
+
 -(BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[OAPOIBaseType class]]) {

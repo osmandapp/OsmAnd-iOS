@@ -27,9 +27,9 @@ final class MetricRowBehaviour: DefaultPoiAdditionalRowBehaviour {
             
             switch metricSystem {
             case .MILES_AND_FEET, .NAUTICAL_MILES_AND_FEET:
-                formattedValue = (formatter.string(from: NSNumber(value:valueAsDouble * FEET_IN_ONE_METER)) ?? "") + " " + localizedString("foot")
+                formattedValue = (formatter.string(from: NSNumber(value: valueAsDouble * FEET_IN_ONE_METER)) ?? "") + " " + localizedString("foot")
             case .MILES_AND_YARDS:
-                formattedValue = (formatter.string(from: NSNumber(value:valueAsDouble * YARDS_IN_ONE_METER)) ?? "") + " " + localizedString("yard")
+                formattedValue = (formatter.string(from: NSNumber(value: valueAsDouble * YARDS_IN_ONE_METER)) ?? "") + " " + localizedString("yard")
             default:
                 formattedValue = "\(params.value) " + localizedString("m")
             }

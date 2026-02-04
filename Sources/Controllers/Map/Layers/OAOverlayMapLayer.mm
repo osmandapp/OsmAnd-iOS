@@ -125,15 +125,13 @@
 
 - (void) onOverlayLayerAlphaChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mapViewController runWithRenderSync:^{
-            OsmAnd::MapLayerConfiguration config;
-            BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
-            float alpha = isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
-            config.setOpacityFactor(alpha);
-            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-        }];
-    });
+    [self.mapViewController runWithRenderSync:^{
+        OsmAnd::MapLayerConfiguration config;
+        BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
+        float alpha = isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
+        config.setOpacityFactor(alpha);
+        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+    }];
 }
 
 - (void) updateOverlayLayer

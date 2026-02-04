@@ -467,6 +467,12 @@
 		325DAE6E2DFFF941002CB022 /* OANetworkRouteSelectionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */; };
 		325FDBAC2E8E9854006E7C07 /* AmenityUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */; };
 		325FDBAE2E8E9AED006E7C07 /* AdditionalInfoBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */; };
+		326087072F323A040038A34B /* AmenityInfoRowParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326087062F3239FD0038A34B /* AmenityInfoRowParams.swift */; };
+		326087092F324B290038A34B /* PoiAdditionalUiRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326087082F324B270038A34B /* PoiAdditionalUiRule.swift */; };
+		3260870C2F324DB20038A34B /* IPoiAdditionalRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3260870B2F324DB00038A34B /* IPoiAdditionalRowBehavior.swift */; };
+		3260870E2F324DE20038A34B /* PoiRowParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3260870D2F324DE00038A34B /* PoiRowParams.swift */; };
+		326087102F3250550038A34B /* DefaultPoiAdditionalRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3260870F2F3250470038A34B /* DefaultPoiAdditionalRowBehaviour.swift */; };
+		326087132F3251B00038A34B /* PoiAdditionalUiRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326087122F3251AE0038A34B /* PoiAdditionalUiRules.swift */; };
 		3266C96326B150D6007A9187 /* ic_custom_openplacereview_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3266C95F26B150D5007A9187 /* ic_custom_openplacereview_logo@3x.png */; };
 		3266C96426B150D6007A9187 /* ic_custom_openplacereview_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3266C96026B150D5007A9187 /* ic_custom_openplacereview_logo@2x.png */; };
 		32672A0A2AAF3D0200D46608 /* GpxTravelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32672A092AAF3D0100D46608 /* GpxTravelCell.swift */; };
@@ -3996,6 +4002,12 @@
 		325DAE6D2DFFF93F002CB022 /* OANetworkRouteSelectionLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANetworkRouteSelectionLayer.mm; sourceTree = "<group>"; };
 		325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityUIHelper.swift; sourceTree = "<group>"; };
 		325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalInfoBundle.swift; sourceTree = "<group>"; };
+		326087062F3239FD0038A34B /* AmenityInfoRowParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityInfoRowParams.swift; sourceTree = "<group>"; };
+		326087082F324B270038A34B /* PoiAdditionalUiRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalUiRule.swift; sourceTree = "<group>"; };
+		3260870B2F324DB00038A34B /* IPoiAdditionalRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPoiAdditionalRowBehavior.swift; sourceTree = "<group>"; };
+		3260870D2F324DE00038A34B /* PoiRowParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiRowParams.swift; sourceTree = "<group>"; };
+		3260870F2F3250470038A34B /* DefaultPoiAdditionalRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultPoiAdditionalRowBehaviour.swift; sourceTree = "<group>"; };
+		326087122F3251AE0038A34B /* PoiAdditionalUiRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalUiRules.swift; sourceTree = "<group>"; };
 		3266C95F26B150D5007A9187 /* ic_custom_openplacereview_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openplacereview_logo@3x.png"; path = "Resources/Icons/ic_custom_openplacereview_logo@3x.png"; sourceTree = "<group>"; };
 		3266C96026B150D5007A9187 /* ic_custom_openplacereview_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openplacereview_logo@2x.png"; path = "Resources/Icons/ic_custom_openplacereview_logo@2x.png"; sourceTree = "<group>"; };
 		32672A082AAF374600D46608 /* GpxTravelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GpxTravelCell.xib; sourceTree = "<group>"; };
@@ -8418,6 +8430,26 @@
 			path = AsyncTask;
 			sourceTree = "<group>";
 		};
+		3260870A2F324DA00038A34B /* behaviour */ = {
+			isa = PBXGroup;
+			children = (
+				3260870B2F324DB00038A34B /* IPoiAdditionalRowBehavior.swift */,
+				3260870F2F3250470038A34B /* DefaultPoiAdditionalRowBehaviour.swift */,
+				3260870D2F324DE00038A34B /* PoiRowParams.swift */,
+			);
+			path = behaviour;
+			sourceTree = "<group>";
+		};
+		326087112F3251890038A34B /* params */ = {
+			isa = PBXGroup;
+			children = (
+				326087082F324B270038A34B /* PoiAdditionalUiRule.swift */,
+				326087122F3251AE0038A34B /* PoiAdditionalUiRules.swift */,
+				326087062F3239FD0038A34B /* AmenityInfoRowParams.swift */,
+			);
+			path = params;
+			sourceTree = "<group>";
+		};
 		327D68A62A8F9BD30076D1E0 /* explore */ = {
 			isa = PBXGroup;
 			children = (
@@ -12784,6 +12816,8 @@
 		DA5A7E5026C563A400F274C7 /* POI */ = {
 			isa = PBXGroup;
 			children = (
+				326087112F3251890038A34B /* params */,
+				3260870A2F324DA00038A34B /* behaviour */,
 				325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */,
 				325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */,
 				329E790C2E8FF69900B4BC6D /* MergeLocalizedTagsAlgorithm.swift */,
@@ -17355,6 +17389,7 @@
 				DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
 				27D33B5B2E745F6D00AD4F70 /* MapScrollDownAction.swift in Sources */,
+				3260870E2F324DE20038A34B /* PoiRowParams.swift in Sources */,
 				DA5A813226C563A700F274C7 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
 				46AB58A729C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m in Sources */,
 				C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */,
@@ -17724,6 +17759,7 @@
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
 				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,
 				FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */,
+				3260870C2F324DB20038A34B /* IPoiAdditionalRowBehavior.swift in Sources */,
 				C5C472F62ED5B49300682CAB /* TripRecordingDistanceWidget.swift in Sources */,
 				DA5A82E726C563A800F274C7 /* OAGPXRecTableViewCell.m in Sources */,
 				462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */,
@@ -17731,6 +17767,7 @@
 				46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */,
 				467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */,
 				DA5A82E326C563A800F274C7 /* OATargetInfoCollapsableCoordinatesViewCell.m in Sources */,
+				326087092F324B290038A34B /* PoiAdditionalUiRule.swift in Sources */,
 				DA4ABF212876DA6800B996EF /* OAMarkersSettingsItem.mm in Sources */,
 				DA9A2C3726FF0F4D00BEC681 /* OAColoringType.mm in Sources */,
 				DA5A81FD26C563A700F274C7 /* OAFeatureCardRow.m in Sources */,
@@ -17862,6 +17899,7 @@
 				DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */,
 				FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */,
 				DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */,
+				326087132F3251B00038A34B /* PoiAdditionalUiRules.swift in Sources */,
 				27D33B512E7454EA00AD4F70 /* BaseMapScrollAction.swift in Sources */,
 				32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */,
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,
@@ -17898,6 +17936,7 @@
 				FA9217122D5277310074E958 /* DateFormatter+Extension.swift in Sources */,
 				DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */,
 				C51766642E9FB91500F2B085 /* ShowHideCloudAction.swift in Sources */,
+				326087102F3250550038A34B /* DefaultPoiAdditionalRowBehaviour.swift in Sources */,
 				DA5A83CF26C563A800F274C7 /* OATransportStopViewController.mm in Sources */,
 				DA5A839026C563A800F274C7 /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				DA5A83C626C563A800F274C7 /* OAActionConfigurationViewController.mm in Sources */,
@@ -17997,6 +18036,7 @@
 				FAA1CEAF2B174F9F00760545 /* OptionDeviceTableViewCell.swift in Sources */,
 				27F050992DD4B6080058075F /* RouteInfoCalculator.swift in Sources */,
 				FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */,
+				326087072F323A040038A34B /* AmenityInfoRowParams.swift in Sources */,
 				323F04BC2C652B470058DD78 /* ShowHideMtbRoutesAction.swift in Sources */,
 				DA5A81C726C563A700F274C7 /* OAObservable.m in Sources */,
 				DA4ABF152876DA6800B996EF /* OAOsmEditsSettingsItem.mm in Sources */,

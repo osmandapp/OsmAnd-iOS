@@ -8,6 +8,9 @@
 
 @objcMembers
 final class AmenityUIHelper: NSObject {
+    
+    static let defaultAmenityIconName = "ic_custom_info_outlined"
+    
     private static let CUISINE_INFO_ID = COLLAPSABLE_PREFIX + "cuisine"
     private static let DISH_INFO_ID = COLLAPSABLE_PREFIX + "dish"
     private static let US_MAPS_RECREATION_AREA = "us_maps_recreation_area"
@@ -227,6 +230,54 @@ final class AmenityUIHelper: NSObject {
         // TODO: implement
     }
     
+    static func getSocialMediaUrl(key: String, value: String) -> String? {
+        // Remove leading and closing slashes
+        var value = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        if value.isEmpty {
+            return nil
+        }
+
+        var sb = value
+        if sb.first == "/" {
+            sb.removeFirst()
+        }
+        if sb.last == "/" {
+            sb.removeLast()
+        }
+
+        // It cannot be username
+        if isWebUrlLike(sb) {
+            return "https://\(value)"
+        }
+
+        var urls: [String: String] = [:]
+        urls["facebook"] = "https://facebook.com/%@"
+        urls["vk"] = "https://vk.com/%@"
+        urls["instagram"] = "https://instagram.com/%@"
+        urls["twitter"] = "https://x.com/%@"
+        urls["ok"] = "https://ok.ru/%@"
+        urls["telegram"] = "https://t.me/%@"
+        urls["flickr"] = "https://flickr.com/%@"
+        urls["wikidata"] = WikiAlgorithms.wikidataBaseUrl + "%@"
+
+        if let url = urls[key] {
+            return String(format: url, value)
+        }
+        return nil
+    }
+    
+    private static func isWebUrlLike(_ value: String) -> Bool {
+        // java: PatternsCompat.AUTOLINK_WEB_URL()
+        if let url = URL(string: value), url.scheme != nil {
+            return true
+        }
+        if let url = URL(string: "https://\(value)"),
+           let host = url.host, !host.isEmpty {
+            return true
+        }
+        return false
+    }
+    
     // private AmenityInfoRow createPoiAdditionalInfoRow(@NonNull Context context,
     private func createPoiAdditionalInfoRow(key: String, value: String, collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {
         guard !isKeyToSkip(key: key) else { return nil }
@@ -242,53 +293,76 @@ final class AmenityUIHelper: NSObject {
         }
         
         // filter poi additional categories on this step, they will be processed separately
-        if let pType, pType.isText {
+        if let pType, !pType.isText {
             if let categoryName = pType.poiAdditionalCategory, !categoryName.isEmpty {
                 
-                // TODO: implement
-                // poiAdditionalCategories.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(pType);
+                // computeIfAbsent()
+                var list = poiAdditionalCategories[categoryName]
+                if list == nil {
+                    list = []
+                    poiAdditionalCategories[categoryName] = list
+                }
+                list?.append(pType)
+    
                 return nil
             }
         }
+        
+        
 
         
 //        //TODO: delete after test
         var info = OAAmenityInfoRow(key: key, icon: UIImage.templateImageNamed("ic_custom_info"), textPrefix: nil, text: value, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 0, name: value, matchWidthDivider: false, textLinesLimit: 1)
+//        public boolean isDescription() { return isText && iconId == R.drawable.ic_action_info_dark; }
+//        lastBuiltRowIsDescription = true
+        
         return info
-//
-//        //TODO: use new code
-//        let info = OAAmenityInfoRow()
-//        info.key = key
-//        info.collapsableView = collapsableView
-//
+
+        
+        
+        //TODO: use new code
+        /*
+        let rowParamsBuilder = AmenityInfoRowParams.Builder(key: key)
+        rowParamsBuilder.collapsableView = collapsableView
+        
         if let pType {
-            
-            //TODO: implement
-           
-//            var info = OAAmenityInfoRow(key: key, icon: UIImage.templateImageNamed("ic_custom_info"), textPrefix: nil, text: value, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 0, name: value, matchWidthDivider: false, textLinesLimit: 1)
-//            return info
-            
+            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: value, subtype: subtype)
         } else if let poiType {
             let category = poiType.category.name
             if category == OTHER_MAP_CATEGORY {
                 return nil // the "Others" value is already displayed as a title
             }
-            //TODO: implement
-            //collectedPoiTypes.computeIfAbsent(category, s -> new ArrayList<>()).add(poiType);
-            
+            if let category {
+                // computeIfAbsent()
+                var list = collectedPoiTypes[category]
+                if list == nil {
+                    list = []
+                    collectedPoiTypes[category] = list
+                }
+                list?.append(poiType)
+            }
         } else if showDefaultTags {
-            //pType = new PoiType(poiTypes, poiCategory, null, key, poiCategory.getIconKeyName());
+            // pType = new PoiType(poiTypes, poiCategory, null, key, poiCategory.getIconKeyName());
             pType = OAPOIType(name: key, category: poiCategory)
             pType?.isText = true
-            //TODO: implement
+            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
+            let translation = OAPOIHelper.sharedInstance().getTranslation(value) ?? ""
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype)
         } else {
             return nil // skip non-translatable NON-poiType tags
         }
         
-//        var info = OAAmenityInfoRow()
+        lastBuiltRowIsDescription = rowParamsBuilder.isDescription()
+        rowParamsBuilder.matchWidthDivider = !rowParamsBuilder.isDescription() && rowParamsBuilder.isWiki
+        
+        let result = rowParamsBuilder.build()
+        //return rowParamsBuilder.build()
+
         
         return nil
         // TODO: implement !!!
+         */
     }
     
     private func createLocalizedAmenityInfoRow(key: String, value: Any) -> OAAmenityInfoRow? {

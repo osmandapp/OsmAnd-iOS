@@ -1893,6 +1893,10 @@
 "osm_upload_gpx_tags_footer" = "Enter tags separated by comma.";
 "visibility" = "Visibility";
 
+"poi_mobile" = "Mobile";
+"poi_cuisine" = "Cuisine";
+"poi_brand" = "Brand";
+
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";

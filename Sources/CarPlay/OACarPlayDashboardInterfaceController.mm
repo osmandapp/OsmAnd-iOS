@@ -301,26 +301,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"arrived_at_destination") sections:@[[[CPListSection alloc] initWithItems:@[parkLocation, findParking, recalcRoute, finishNavigation]]]];
     
-    if (!self.interfaceController.topTemplate)
-    {
-        if (!_mapTemplate)
-        {
-            _mapTemplate = [CPMapTemplate new];
-            _mapTemplate.mapDelegate = self;
-            [self enterBrowsingState];
-        }
-
-        [self.interfaceController setRootTemplate:_mapTemplate animated:NO completion:^(BOOL completed, NSError *error) {
-            if (!weakSelf.interfaceController)
-                return;
-    
-            [weakSelf.interfaceController pushTemplate:listTemplate animated:YES completion:nil];
-        }];
-
-        return;
-    }
-
-    [self.interfaceController pushTemplate:listTemplate animated:YES completion:nil];
+    [self.interfaceController pushTemplate:listTemplate animated:YES completion:^(BOOL completed, NSError * _Nullable error) {}];
 }
 
 - (void)saveParkingAtCurrentLocationWithCompletion:(dispatch_block_t)completion

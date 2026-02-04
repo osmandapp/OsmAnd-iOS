@@ -2837,3 +2837,4 @@
 "navigation_action_descr" = "Åpner Navigering.";
 "rendering_attr_hideFerries_name" = "Fergeruter";
 "rendering_attr_hideFerries_description" = "Skjul fergeruter";
+"day_short" = "D";

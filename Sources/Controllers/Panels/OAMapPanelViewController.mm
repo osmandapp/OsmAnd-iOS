@@ -126,6 +126,7 @@
 static float kDefaultZoomOnShow = 16.0;
 static int kMaxRoadDistanceInMeters = 1000;
 static float kMaxZoom = 22.0f;
+static const float kVisibleBBoxPadding = 40.0;
 
 static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
@@ -628,9 +629,17 @@ typedef enum
         double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude,
                                                        mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
         
-        double safeAreaTopInset = self.view.safeAreaInsets.top;
-        double resH = distanceH / (mapSize.width - 3 * kCorrectionMinLeftSpace);
-        double resV = distanceV / (mapSize.height - mapSize.height / 5 - safeAreaTopInset - topInset - kCorrectionMinBottomSpaceBBox);
+        double safeAreaTopInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.top;
+        double safeAreaBottomInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.bottom;
+        double safeAreaLeftInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.bottom : self.view.safeAreaInsets.left;
+        double safeAreaRightInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.top : self.view.safeAreaInsets.right;
+        
+        OsmAnd::PointF topLeftPoint = [OANativeUtilities getPixelFromLatLon:mapBounds.topLeft.latitude lon:mapBounds.topLeft.longitude];
+        OsmAnd::PointF bottomRightPoint = [OANativeUtilities getPixelFromLatLon:mapBounds.bottomRight.latitude lon:mapBounds.bottomRight.longitude];
+        double adjustedInset = (mapSize.height - (bottomRightPoint.y - topLeftPoint.y)) / 2 - kVisibleBBoxPadding;
+        double visiblePadding = leftInset > 0 ? adjustedInset : kVisibleBBoxPadding;
+        double resH = distanceH / (mapSize.width - safeAreaLeftInset - safeAreaRightInset - 2 * kVisibleBBoxPadding);
+        double resV = distanceV / (mapSize.height - visiblePadding - safeAreaTopInset - safeAreaBottomInset - topInset);
         
         double targetResolution = MAX(resH, resV);
 
@@ -3851,7 +3860,7 @@ typedef enum
         {
             OsmAnd::PointF topLeftPoint = [OANativeUtilities getPixelFromLatLon:bounds.topLeft.latitude lon:bounds.topLeft.longitude];
             OsmAnd::PointF bottomRightPoint = [OANativeUtilities getPixelFromLatLon:bounds.bottomRight.latitude lon:bounds.bottomRight.longitude];
-            float centeredDistance = (screenBBox.width - (bottomRightPoint.x - topLeftPoint.x)) / 2 - kCorrectionMinLeftSpace;
+            float centeredDistance = (screenBBox.width - (bottomRightPoint.x - topLeftPoint.x)) / 2 - kVisibleBBoxPadding;
             adjustedLeftInset = centeredDistance > 0 ? centeredDistance : 0;
         }
         [_mapViewController correctPosition:targetPoint31

@@ -234,6 +234,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
               segment:(nullable OASTrkSegment *)segment
      trackChartHelper:(TrackChartHelper *)trackChartHelper;
 
+- (void)displayCalculatedRouteIfNeeded;
+
 @end
 
 NS_ASSUME_NONNULL_END

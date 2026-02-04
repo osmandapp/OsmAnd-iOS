@@ -244,6 +244,10 @@ static const NSInteger kDetailedMapZoom = 9;
     BOOL _rotationAnd3DViewDisabled;
     // Stores the tilt angle of the map that the user made with a UIPanGestureRecognizer gesture (moving 2 fingers)
     float _map3DModeElevationAngle;
+    
+    OARoutingHelper *_helper;
+    OABBox _routeBBox;
+    BOOL _newRoute;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -450,8 +454,9 @@ static const NSInteger kDetailedMapZoom = 9;
 
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
-    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-    [helper addListener:self];
+    _helper = [OARoutingHelper sharedInstance];
+    [_helper addListener:self];
+    _newRoute = NO;
 }
 
 - (void) deinit
@@ -3946,25 +3951,24 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
     OATransportRoutingHelper *transportHelper = OATransportRoutingHelper.sharedInstance;
-    NSString *error = helper.isPublicTransportMode ? [transportHelper getLastRouteCalcError] : [helper getLastRouteCalcError];
+    NSString *error = _helper.isPublicTransportMode ? [transportHelper getLastRouteCalcError] : [_helper getLastRouteCalcError];
     OABBox routeBBox;
     routeBBox.top = DBL_MAX;
     routeBBox.bottom = DBL_MAX;
     routeBBox.left = DBL_MAX;
     routeBBox.right = DBL_MAX;
-    if ([helper isRouteCalculated] && !error && !helper.isPublicTransportMode)
+    if ([_helper isRouteCalculated] && !error && !_helper.isPublicTransportMode)
     {
-        routeBBox = [helper getBBox];
+        routeBBox = [_helper getBBox];
     }
-    else if (helper.isPublicTransportMode && transportHelper.getRoutes.size() > 0)
+    else if (_helper.isPublicTransportMode && transportHelper.getRoutes.size() > 0)
     {
         routeBBox = [transportHelper getBBox];
     }
     else
     {
-        if (!helper.isPublicTransportMode)
+        if (!_helper.isPublicTransportMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (UIApplication.sharedApplication.isCarPlayConnected)
@@ -3984,15 +3988,22 @@ static const NSInteger kDetailedMapZoom = 9;
         }
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [_mapLayers.routeMapLayer refreshRoute];
-        if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
-                                                                      bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
-                                                             changeElevationAngle:NO
-                                                                      presizeZoom:YES
-                                                                         animated:NO];
-    });
+    [_mapLayers.routeMapLayer refreshRoute];
+    _newRoute = newRoute;
+    _routeBBox = routeBBox;
+}
+
+- (void)displayCalculatedRouteIfNeeded
+{
+    if (_newRoute && [_helper isRoutePlanningMode] && _routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
+    {
+        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(_routeBBox.top, _routeBBox.left)
+                                                                  bottomRight:CLLocationCoordinate2DMake(_routeBBox.bottom, _routeBBox.right)
+                                                         changeElevationAngle:NO
+                                                                  presizeZoom:YES
+                                                                     animated:NO];
+        _newRoute = NO;
+    }
 }
 
 - (void) routeWasUpdated

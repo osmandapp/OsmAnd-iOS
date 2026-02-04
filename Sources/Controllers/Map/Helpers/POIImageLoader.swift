@@ -52,61 +52,77 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                 let placeId = NSNumber(value: place.obfId)
                 
                 // MARK: - Metrics
-                let metrics = IconMetrics(
-                    textScale: OAAppSettings.sharedManager().textSize.get()
-                )
+                let metrics = IconMetrics(textScale: OAAppSettings.sharedManager().textSize.get())
                 
                 // MARK: - Kingfisher processor
-                let processor =
-                ResizingImageProcessor(referenceSize: metrics.imageTargetSize, mode: .aspectFill)
-                |> CroppingImageProcessor(size: metrics.imageTargetSize, anchor: .init(x: 0.5, y: 0.5))
-                |> RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
-                |> BorderImageProcessor(border: .init(color: .white, lineWidth: metrics.border, radius: .heightFraction(0.5)))
-                |> OSMCircularShadowProcessor(shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
-                                              shadowBlur: 6 * metrics.textScale,
-                                              shadowColor: UIColor.black.withAlphaComponent(0.2),
-                                              shadowPadding: 8 * metrics.textScale)
+                let processor = self.makeIconProcessor(metrics: metrics)
+                
+                let retryStrategy = TooManyRequestsRetryStrategy(
+                    maxRetryCount: 5,
+                    retryInterval: .custom { attempt in
+                        let base: TimeInterval = 1.0
+                        let backoff = base * Double(attempt + 1)
+                        return Double.random(in: backoff...(backoff * 2)) // jitter
+                    }
+                )
                 
                 let options: KingfisherOptionsInfo = [
                     .processor(processor),
                     .scaleFactor(UIScreen.main.scale),
-                    .cacheSerializer(FormatIndicatedCacheSerializer.png)
+                    .cacheSerializer(FormatIndicatedCacheSerializer.png),
+                    .cacheOriginalImage,
+                    .retryStrategy(retryStrategy)
                 ]
                 
                 // MARK: - Load image
                 let task = KingfisherManager.shared.retrieveImage(
                     with: url,
                     options: options,
-                    progressBlock: nil
                 ) { [weak self] result in
                     guard let self else { return }
-                    
-                    self.queue.async {
-                        self.loadingImages.removeValue(forKey: urlStr)
-                    }
                     
                     switch result {
                     case .success(let value):
                         completion?(placeId, value.image)
                     case .failure(let error):
                         NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
-                        if let placeholder = place.icon() {
-//                            let placeholderProcessor = VectorPlaceholderInCircleProcessor(
-//                                circleSize: metrics.imageTargetSize,
-//                                iconSize: CGSize(width: 40, height: 40),
-//                                borderColor: .white,
-//                                borderWidth: metrics.border,
-//                                cornerRadius: metrics.imageArea / 2,
-//                                shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
-//                                shadowBlur: 6 * metrics.textScale,
-//                                shadowColor: UIColor.black.withAlphaComponent(0.2),
-//                                backgroundColor: .clear, // или .white если нужен фон
-//                                tintColor: .systemGray
-//                            )
-//                            if let vectorPlaceholder = placeholderProcessor.process(item: .image(placeholder), options: KingfisherParsedOptionsInfo(options)) {
-//                                let processedPlaceholder = processor.process(item: .image(vectorPlaceholder), options: KingfisherParsedOptionsInfo(options))
-                                completion?(placeId, placeholder)
-//                                .    }
+                        
+                        guard let placeholderImage = place.type?.icon(),
+                              let cacheKey = placeholderCacheKey(place: place, metrics: metrics) else {
+                            self.queue.async {
+                                self.loadingImages.removeValue(forKey: urlStr)
+                            }
+                            return
+                        }
+                        
+                        ImageCache.default.retrieveImage(forKey: cacheKey) { [weak self] result in
+                            guard let self else { return }
+                            
+                            self.queue.async {
+                                guard self.loadingImages[urlStr] != nil else { return }
+                                
+                                if case .success(let value) = result, let cachedImage = value.image {
+                                    self.loadingImages.removeValue(forKey: urlStr)
+                                    DispatchQueue.main.async { completion?(placeId, cachedImage) }
+                                    return
+                                }
+                                
+                                DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                                    guard let self else { return }
+                                    
+                                    let image = self.createProcessedPlaceholder(with: placeholderImage, metrics: metrics, option: KingfisherParsedOptionsInfo(options))
+                                    
+                                    self.queue.async {
+                                        guard self.loadingImages[urlStr] != nil else { return }
+                                        self.loadingImages.removeValue(forKey: urlStr)
+                                        
+                                        if let image {
+                                            ImageCache.default.store(image, forKey: cacheKey)
+                                            DispatchQueue.main.async { completion?(placeId, image) }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -114,6 +130,77 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                 self.loadingImages[urlStr] = task
             }
         }
+    }
+    
+    private func makeIconProcessor(metrics: IconMetrics) -> ImageProcessor {
+        let processor = ResizingImageProcessor(referenceSize: metrics.imageTargetSize, mode: .aspectFill)
+        |> CroppingImageProcessor(size: metrics.imageTargetSize, anchor: .init(x: 0.5, y: 0.5))
+        |> RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
+        |> BorderImageProcessor(border: .init(
+            color: UIColor.popularPlaceBgDefault.currentMapThemeColor,
+            lineWidth: metrics.border,
+            radius: .heightFraction(0.5)))
+        |> OSMCircularShadowProcessor(
+            shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
+            shadowBlur: 6 * metrics.textScale,
+            shadowColor: UIColor.black.withAlphaComponent(0.2),
+            shadowPadding: 8 * metrics.textScale)
+        return processor
+    }
+    
+    private func placeholderCacheKey(place: OAPOI,
+                                     metrics: IconMetrics) -> String? {
+        guard let iconName = place.type?.iconName() else { return nil }
+        
+        return [
+            "poi_placeholder",
+            iconName,
+            "scale_\(metrics.textScale)",
+            "icon_\(UIColor.popularPlacePlaceholderBg.currentMapThemeColor.hashValue)"
+        ].joined(separator: "_")
+    }
+    
+    func createProcessedPlaceholder(with image: UIImage, metrics: IconMetrics, option: KingfisherParsedOptionsInfo) -> UIImage? {
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = option.scaleFactor
+        format.opaque = false
+        
+        let renderer = UIGraphicsImageRenderer(size: metrics.imageTargetSize, format: format)
+        
+        let baseImage = renderer.image { context in
+            UIColor.popularPlacePlaceholderBg.currentMapThemeColor.setFill()
+            context.fill(CGRect(origin: .zero, size: metrics.imageTargetSize))
+        }
+        
+        let tintedImage = image.withRenderingMode(.alwaysTemplate)
+        
+        let combinedImage = renderer.image { _ in
+            baseImage.draw(at: .zero)
+            
+            let padding: CGFloat = 15 * metrics.textScale
+            let size = metrics.imageArea - padding
+            let origin = CGPoint(
+                x: (metrics.imageTargetSize.width - size) / 2,
+                y: (metrics.imageTargetSize.height - size) / 2
+            )
+            
+            UIColor.popularPlacePlaceholderIcon.currentMapThemeColor.setFill()
+            tintedImage.draw(in: CGRect(origin: origin, size: CGSize(width: size, height: size)))
+        }
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
+            |> BorderImageProcessor(border: .init(
+                color: UIColor.popularPlaceBgDefault.currentMapThemeColor,
+                lineWidth: metrics.border,
+                radius: .heightFraction(0.5)))
+            |> OSMCircularShadowProcessor(
+                shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
+                shadowBlur: 6 * metrics.textScale,
+                shadowColor: UIColor.black.withAlphaComponent(0.2),
+                shadowPadding: 8 * metrics.textScale
+            )
+        
+        return processor.process(item: .image(combinedImage), options: option)
     }
 }
 
@@ -139,6 +226,10 @@ struct IconMetrics {
     }
     
     var imageTargetSize: CGSize {
+        CGSize(width: imageArea, height: imageArea)
+    }
+    
+    var placeholderTargetSize: CGSize {
         CGSize(width: imageArea, height: imageArea)
     }
     
@@ -225,7 +316,6 @@ struct OSMCircularShadowProcessor: ImageProcessor {
     }
 }
 
-
 @objcMembers
 final class POITopPlaceImageDecorator: NSObject {
     
@@ -245,9 +335,8 @@ final class POITopPlaceImageDecorator: NSObject {
             let ctx = context.cgContext
             
             image.draw(at: .zero)
-            
             ctx.setShadow(offset: .zero, blur: 0, color: nil)
-            ctx.setStrokeColor(UIColor.systemPurple.cgColor)
+            ctx.setStrokeColor(UIColor.popularPlaceSelectedStroke.currentMapThemeColor.cgColor)
             
             let purpleLineWidth = 2 * metrics.textScale
             ctx.setLineWidth(purpleLineWidth)
@@ -256,133 +345,59 @@ final class POITopPlaceImageDecorator: NSObject {
     }
 }
 
-//struct VectorPlaceholderInCircleProcessor: ImageProcessor {
-//    let circleSize: CGSize              // Размер окружности (как metrics.imageTargetSize)
-//    let iconSize: CGSize                // Размер иконки внутри (40x40)
-//    let borderColor: UIColor
-//    let borderWidth: CGFloat
-//    let cornerRadius: CGFloat
-//    let shadowOffset: CGSize
-//    let shadowBlur: CGFloat
-//    let shadowColor: UIColor
-//    let backgroundColor: UIColor
-//    let tintColor: UIColor
-//
-//    var identifier: String {
-//        "com.osmand.VectorPlaceholderInCircleProcessor-\(circleSize.width)x\(circleSize.height)-\(iconSize.width)x\(iconSize.height)"
-//    }
-//
-//    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> UIImage? {
-//        guard case .image(let image) = item else { return nil }
-//
-//        let renderer = UIGraphicsImageRenderer(size: circleSize)
-//        let finalImage = renderer.image { ctx in
-//            let context = ctx.cgContext
-//
-//            // 1. Нарисовать круг с обводкой и фоном
-//            let rect = CGRect(origin: .zero, size: circleSize)
-//            let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
-//            context.setFillColor(backgroundColor.cgColor)
-//            context.setStrokeColor(borderColor.cgColor)
-//            context.setLineWidth(borderWidth)
-//            context.addPath(path.cgPath)
-//            context.drawPath(using: .fillStroke)
-//
-//            // 2. Тень
-//            context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor.cgColor)
-//
-//            // 3. Нарисовать иконку по центру, без растягивания
-//            let iconRect = CGRect(
-//                x: (circleSize.width - iconSize.width) / 2,
-//                y: (circleSize.height - iconSize.height) / 2,
-//                width: iconSize.width,
-//                height: iconSize.height
-//            )
-//
-//            let tintedIcon = image.withTintColor(tintColor, renderingMode: .alwaysTemplate)
-//            tintedIcon.draw(in: iconRect)
-//        }
-//
-//        return finalImage
-//    }
-//}
-//
-//
-//
-//
-//
-//struct VectorPlaceholderProcessor: ImageProcessor {
-//    let size: CGSize
-//    let backgroundColor: UIColor
-//    let borderColor: UIColor
-//    let borderWidth: CGFloat
-//    let cornerRadius: CGFloat
-//    let shadowOffset: CGSize
-//    let shadowBlur: CGFloat
-//    let shadowColor: UIColor
-//    let tintColor: UIColor
-//
-//    var identifier: String {
-//        "com.osmand.VectorPlaceholderProcessor-\(size.width)x\(size.height)-\(tintColor.description)"
-//    }
-//
-//    init(
-//        size: CGSize = CGSize(width: 40, height: 40),
-//        backgroundColor: UIColor = .white,
-//        borderColor: UIColor = .white,
-//        borderWidth: CGFloat = 1.0,
-//        cornerRadius: CGFloat = 20,
-//        shadowOffset: CGSize = CGSize(width: 0, height: 2),
-//        shadowBlur: CGFloat = 6,
-//        shadowColor: UIColor = UIColor.black.withAlphaComponent(0.2),
-//        tintColor: UIColor = .systemGray
-//    ) {
-//        self.size = size
-//        self.backgroundColor = backgroundColor
-//        self.borderColor = borderColor
-//        self.borderWidth = borderWidth
-//        self.cornerRadius = cornerRadius
-//        self.shadowOffset = shadowOffset
-//        self.shadowBlur = shadowBlur
-//        self.shadowColor = shadowColor
-//        self.tintColor = tintColor
-//    }
-//
-//    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> UIImage? {
-//        switch item {
-//        case .image(let image):
-//            // Рендерим векторную иконку в нужный размер
-//            let renderer = UIGraphicsImageRenderer(size: size)
-//            let finalImage = renderer.image { ctx in
-//                let context = ctx.cgContext
-//                
-//                // 1. Белый фон с обводкой и скруглением
-//                let rect = CGRect(origin: .zero, size: size)
-//                context.setFillColor(backgroundColor.cgColor)
-//                context.setStrokeColor(borderColor.cgColor)
-//                context.setLineWidth(borderWidth)
-//                let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
-//                context.addPath(path.cgPath)
-//                context.drawPath(using: .fillStroke)
-//                
-//                // 2. Тень
-//                context.setShadow(offset: shadowOffset, blur: shadowBlur, color: shadowColor.cgColor)
-//                
-//                // 3. Нарисовать иконку по центру
-//                let iconRect = CGRect(
-//                    x: 0,
-//                    y: 0,
-//                    width: size.width,
-//                    height: size.height
-//                )
-//                let tintedIcon = image.withTintColor(tintColor, renderingMode: .alwaysTemplate)
-//                tintedIcon.draw(in: iconRect)
-//            }
-//            
-//            return finalImage
-//            
-//        case .data(_):
-//            return nil
-//        }
-//    }
-//}
+struct TooManyRequestsRetryStrategy: RetryStrategy {
+    
+    enum Interval: Sendable {
+        /// The current retry count is given as a parameter.
+        case custom(block: @Sendable (_ retriedCount: Int) -> TimeInterval)
+        
+        func timeInterval(for retriedCount: Int) -> TimeInterval {
+            let retryAfter: TimeInterval
+            switch self {
+            case .custom(let block):
+                retryAfter = block(retriedCount)
+            }
+            return retryAfter
+        }
+    }
+    
+    let maxRetryCount: Int
+    let retryInterval: Interval
+    
+    func retry(context: RetryContext, retryHandler: @escaping @Sendable (RetryDecision) -> Void) {
+        guard context.retriedCount < maxRetryCount else {
+            retryHandler(.stop)
+            return
+        }
+        
+        guard !context.error.isTaskCancelled else {
+            retryHandler(.stop)
+            return
+        }
+        
+        guard case let .responseError(reason) = context.error else {
+            retryHandler(.stop)
+            return
+        }
+        
+        switch reason {
+        case .invalidHTTPStatusCode(let response):
+            guard response.statusCode == 429 else {
+                retryHandler(.stop)
+                return
+            }
+            
+            let interval = retryInterval.timeInterval(for: context.retriedCount)
+            if interval <= 0 {
+                retryHandler(.retry(userInfo: nil))
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+                    retryHandler(.retry(userInfo: nil))
+                }
+            }
+            
+        default:
+            retryHandler(.stop)
+        }
+    }
+}

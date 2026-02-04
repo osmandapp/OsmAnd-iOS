@@ -87,7 +87,6 @@ static const NSInteger kImageIconSizeDP = 45;
     [self updateDisabledState];
 }
 
-
 // MARK: - Public
 
 - (NSDictionary<NSNumber *, OAPOI *> *)topPlaces
@@ -275,8 +274,8 @@ static const NSInteger kImageIconSizeDP = 45;
     for (NSDictionary *entry in candidates)
     {
         [result addObject:entry[@"poi"]];
-        if (result.count >= kTopPlacesLimit)
-            break;
+//        if (result.count >= kTopPlacesLimit)
+//            break;
     }
     
     return [result copy];

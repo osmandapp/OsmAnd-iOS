@@ -4017,3 +4017,6 @@
 "shared_string_tinted" = "Тонированный";
 "trip_recording_moving_time_widget_description" = "Показывает сколько времени идёт текущая запись движения или длительность последнего подъема и спуска с горы.";
 "trip_recording_moving_time" = "Время движения";
+"finish_navigation" = "Завершить навигацию";
+"context_menu_item_add_parking_point" = "Отметить как место для парковки";
+"find_parking" = "Найти парковку";

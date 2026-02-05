@@ -60,6 +60,7 @@
 - (void) updateRuler;
 
 - (void)updateWidgetsInfo;
+- (void)updateOffsetOfViewSizeWithWidgets;
 
 - (void)updateLayout;
 - (void)viewWillTransition:(CGSize)size;

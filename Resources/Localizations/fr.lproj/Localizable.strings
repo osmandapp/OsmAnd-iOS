@@ -4006,3 +4006,6 @@
 "shared_string_dynamic" = "Dynamique";
 "shared_string_tinted" = "Teintée";
 "background_opacity_description" = "La couleur claire est plus transparente et révèle le contenu sous-jacent. La couleur teintée augmente l'opacité et ajoute davantage de contraste.";
+"context_menu_item_add_parking_point" = "Marquer comme emplacement de stationnement";
+"find_parking" = "Trouver un parking";
+"finish_navigation" = "Terminer la navigation";

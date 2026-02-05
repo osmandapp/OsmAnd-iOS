@@ -2160,7 +2160,7 @@
 "animate_my_location_descr" = "Ομαλή μετάβαση τοποθεσίας στο χάρτη κατά την πλοήγηση";
 "backup_welcome_back" = "Καλώς ήρθατε πίσω!";
 "use_login_and_password" = "Χρήση ονόματος χρήστη και κωδικού";
-"backup_deleting_all_data" = "Διαγραφή όλων των δεδομένων…";
+"backup_deleting_all_data" = "Διαγράφονται όλα τα δεδομένα…";
 "driving_region_india" = "Ινδία";
 "auto_zoom_discrete" = "Διακριτό";
 "auto_zoom_smooth" = "Ομαλό";
@@ -3662,3 +3662,18 @@
 "image_cache_online_photo_mapillary_default_cache" = "Προεπιλεγμένη κρυφή μνήμη διαδικτυακών φωτογραφιών/Mapillary";
 "weather_forecast_is_outdated" = "Ξεπερασμένη πρόγνωση.";
 "missing_or_outdated_maps_title" = "Ελλιπείς ή ξεπερασμένοι χάρτες";
+"backup_delete_all_data_or_versions_descr" = "Διαγράψτε όλα τα δεδομένα στο OsmAnd Cloud ή μόνο το ιστορικό των εκδόσεων. Τα τοπικά δεδομένα δεν θα πειραχτούν.";
+"backup_delete_all_data_in_progress" = "Παρακαλούμε περιμένετε μέχρι το OsmAnd να διαγράψει όλα τα δεδομένα από το cloud. Όλα τα δεδομένα στη συσκευή δεν θα αγγιχτούν.";
+"backup_delete_all_data_finished" = "Διαγράφηκαν με επιτυχία όλα τα δεδομένα σας από το OsmAnd Cloud.";
+"backup_remove_old_versions_finished" = "Διαγράφηκαν με επιτυχία οι παλιές εκδόσεις από το OsmAnd Cloud.";
+"liter_single" = "Λίτρο";
+"imperial_gallon" = "Αυτοκρατορικό γαλόνι";
+"us_gallon" = "Αμερικάνικο γαλόνι";
+"kilometers" = "Χιλιόμετρα";
+"miles" = "Μίλια";
+"mpg" = "ΜΑΓ (Μίλια Ανά Γαλόνι)";
+"cloud_confirm_delete_type" = "Σίγουρα θέλετε να διαγράψετε το \"%@\" από το OsmAnd Cloud;";
+"cloud_contains_newer_changes" = "Η έκδοση του OsmAnd Cloud περιλαμβάνει νεότερες αλλαγές.";
+"deleted_maps_alert_message" = "Σίγουρα θέλετε να διαγράψετε %d χάρτες;";
+"cloud_no_online_backup_descr" = "Διαμορφώστε ένα αυτόματο αντίγραφο ασφαλείας ώστε να μην χρειάζεται να ανησυχείτε για χαμένα δεδομένα.";
+"cloud_conflict_descr" = "Οι τοπικές και cloud εκδόσεις περιλαμβάνουν αλλαγές από τον τελευταίο συγχρονισμό.";

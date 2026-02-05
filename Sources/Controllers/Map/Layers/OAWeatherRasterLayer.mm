@@ -22,6 +22,7 @@
 #import "OAAppData.h"
 #import "OAObservable.h"
 #import "OAOsmAndFormatter.h"
+#import "OARoutePlanningHudViewController.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -373,7 +374,9 @@
         if (!centerPixelChanged && !frameChanged && _cachedAnyWidgetVisible == anyWidgetVisible)
             return;
 
-        if (!anyWidgetVisible)
+        OABaseScrollableHudViewController *scrollableHudViewController = [OARootViewController instance].mapPanel.scrollableHudViewController;
+        BOOL isPlanRouteOpen = scrollableHudViewController && [scrollableHudViewController isKindOfClass:OARoutePlanningHudViewController.class];
+        if (!anyWidgetVisible || isPlanRouteOpen)
         {
             [self setMapCenterMarkerVisibility:NO];
         }

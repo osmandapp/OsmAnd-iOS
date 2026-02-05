@@ -31,6 +31,7 @@ static const NSInteger kStartZoom = 5;
 static const NSInteger kStartZoomRouteTrack = 11;
 static const NSInteger kEndZoomRouteTrack = 22;
 static const NSInteger kImageIconSizeDP = 45;
+static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 @implementation OAPOILayerTopPlacesProvider
 {
@@ -208,7 +209,7 @@ static const NSInteger kImageIconSizeDP = 45;
     });
 }
 
-- (void)updateSelectedTopPlace:(OAPOI *)topPlace
+- (void)updateSelectedTopPlaceIfNeeded:(OAPOI *)topPlace
 {
     [_mapViewController runWithRenderSync:^{
         if (_mapMarkersCollection == nullptr)
@@ -245,7 +246,6 @@ static const NSInteger kImageIconSizeDP = 45;
         return result;
     
     CLLocation *tapLocation = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-    const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     
     // Collect candidates within radius with their distances
     NSMutableArray<NSDictionary *> *candidates = [NSMutableArray array];
@@ -254,34 +254,27 @@ static const NSInteger kImageIconSizeDP = 45;
         CLLocation *poiLoc = [poi getLocation];
         if (!poiLoc)
             continue;
-        CLLocationDistance d = [tapLocation distanceFromLocation:poiLoc];
-        if (d <= kPoiSearchRadius)
-        {
-            [candidates addObject:@{ @"poi": poi, @"dist": @(d) }];
-        }
+        CLLocationDistance distance = [tapLocation distanceFromLocation:poiLoc];
+        if (distance <= kPoiSearchRadius)
+            [candidates addObject:@{ @"poi": poi, @"distance": @(distance) }];
     }
     
     // Sort by distance ascending
     [candidates sortUsingComparator:^NSComparisonResult(NSDictionary *a, NSDictionary *b) {
-        double da = [a[@"dist"] doubleValue];
-        double db = [b[@"dist"] doubleValue];
+        double da = [a[@"distance"] doubleValue];
+        double db = [b[@"distance"] doubleValue];
         if (da < db) return NSOrderedAscending;
         if (da > db) return NSOrderedDescending;
         return NSOrderedSame;
     }];
     
-    // Extract POIs up to a reasonable limit
     for (NSDictionary *entry in candidates)
-    {
         [result addObject:entry[@"poi"]];
-//        if (result.count >= kTopPlacesLimit)
-//            break;
-    }
     
     return [result copy];
 }
 
-- (void)resetSelectedTopPlace
+- (void)resetSelectedTopPlaceIfNeeded
 {
     [_mapViewController runWithRenderSync:^{
         if (_selectedTopPlace)
@@ -304,9 +297,11 @@ static const NSInteger kImageIconSizeDP = 45;
 
 - (void)removeMarkerWithId:(int32_t)markerId
 {
-    QList<std::shared_ptr<OsmAnd::MapMarker>> markers =
-        _mapMarkersCollection->getMarkers();
-
+    if (!_mapMarkersCollection)
+        return;
+    
+    QList<std::shared_ptr<OsmAnd::MapMarker>> markers = _mapMarkersCollection->getMarkers();
+    
     for (const std::shared_ptr<OsmAnd::MapMarker> &marker : markers)
     {
         if (marker->markerId == markerId)
@@ -473,6 +468,11 @@ static const NSInteger kImageIconSizeDP = 45;
         const auto screenBbox = _mapView.getVisibleBBox31;
         const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
         const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
+        
+        CLLocationCoordinate2D topLeftCoord = CLLocationCoordinate2DMake(topLeft.latitude, topLeft.longitude);
+        CLLocationCoordinate2D bottomRightCoord = CLLocationCoordinate2DMake(bottomRight.latitude, bottomRight.longitude);
+        if (!CLLocationCoordinate2DIsValid(topLeftCoord) || !CLLocationCoordinate2DIsValid(bottomRightCoord))
+            return;
         
         QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude
                                                           top:topLeft.latitude
@@ -680,7 +680,7 @@ static const NSInteger kImageIconSizeDP = 45;
                     _imageLoader = [POIImageLoader new];
                 
                 __weak __typeof(self) weakSelf = self;
-                [_imageLoader fetchImages:places completion:^(NSNumber *placeId, UIImage *image) {
+                [_imageLoader fetchImages:topPlacesList completion:^(NSNumber *placeId, UIImage *image) {
                     [weakSelf updateTopPlaceImageForId:placeId image:image];
                 }];
             }

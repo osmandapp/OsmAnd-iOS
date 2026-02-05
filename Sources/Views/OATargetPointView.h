@@ -122,6 +122,7 @@
 - (void) navigateFrom:(OATargetPoint *)targetPoint;
 
 - (void) targetResetCustomStatusBarStyle;
-- (void)contextMenuDidHide
+
+- (void)contextMenuDidHide;
 
 @end

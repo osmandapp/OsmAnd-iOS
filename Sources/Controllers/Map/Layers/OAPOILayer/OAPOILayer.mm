@@ -485,7 +485,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             return YES;
         }
     }
-    [_topPlacesProvider updateSelectedTopPlace:amenity];
+    
     return NO;
 }
 
@@ -519,9 +519,18 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
       }
 }
 
+- (void)contextMenuDidShow:(id)targetObj
+{
+    OAPOI *amenity = [self getAmenity:targetObj];
+    if (amenity)
+        [_topPlacesProvider updateSelectedTopPlaceIfNeeded:amenity];
+    else
+        [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
+}
+
 - (void)contextMenuDidHide
 {
-    [_topPlacesProvider resetSelectedTopPlace];
+    [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
 }
 
 - (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon
@@ -583,7 +592,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     if ([self isTopPlace:selectedObject]) {
         return [self getTopPlaceBaseOrder];
     } else {
-      //  [_topPlacesProvider resetSelectedTopPlace];
         return 0;
     }
 }

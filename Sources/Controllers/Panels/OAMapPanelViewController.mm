@@ -1482,6 +1482,7 @@ typedef enum
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
+        [_mapViewController contextMenuDidShow:targetPoint.targetObj];
         if (targetPoint.centerMap)
             [self goToTargetPointWithZoom:preferredZoom];
         
@@ -2580,7 +2581,6 @@ typedef enum
     [self contextMenuDidHide];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
-        // FIXME:
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)

@@ -45,9 +45,15 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
             }
             
             for place in places {
-                guard let urlStr = place.wikiIconUrl, !urlStr.isEmpty else { continue }
-                guard self.loadingImages[urlStr] == nil else { continue }
-                guard let url = URL(string: urlStr) else { continue }
+                guard let urlStr = place.wikiIconUrl, !urlStr.isEmpty else {
+                    continue
+                }
+                guard self.loadingImages[urlStr] == nil else {
+                    continue
+                }
+                guard let url = URL(string: urlStr) else {
+                    continue
+                }
                 
                 let placeId = NSNumber(value: place.obfId)
                 

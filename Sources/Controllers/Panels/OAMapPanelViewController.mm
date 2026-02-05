@@ -628,11 +628,12 @@ typedef enum
                                                        mapBounds.bottomRight.longitude, centerLat);
         double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude,
                                                        mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
-        
-        double safeAreaTopInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.left : self.view.safeAreaInsets.top;
-        double safeAreaBottomInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.right : self.view.safeAreaInsets.bottom;
-        double safeAreaLeftInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.bottom : self.view.safeAreaInsets.left;
-        double safeAreaRightInset = [self.targetMenuView isLandscape] ? self.view.safeAreaInsets.top : self.view.safeAreaInsets.right;
+        BOOL isLandscape = [self.targetMenuView isLandscape];
+        UIEdgeInsets safeAreaInsets = self.view.safeAreaInsets;
+        double safeAreaTopInset = isLandscape ? safeAreaInsets.left : safeAreaInsets.top;
+        double safeAreaBottomInset = isLandscape ? safeAreaInsets.right : safeAreaInsets.bottom;
+        double safeAreaLeftInset = isLandscape ? safeAreaInsets.bottom : safeAreaInsets.left;
+        double safeAreaRightInset = isLandscape ? safeAreaInsets.top : safeAreaInsets.right;
         
         OsmAnd::PointF topLeftPoint = [OANativeUtilities getPixelFromLatLon:mapBounds.topLeft.latitude lon:mapBounds.topLeft.longitude];
         OsmAnd::PointF bottomRightPoint = [OANativeUtilities getPixelFromLatLon:mapBounds.bottomRight.latitude lon:mapBounds.bottomRight.longitude];

@@ -245,7 +245,7 @@ static const NSInteger kDetailedMapZoom = 9;
     // Stores the tilt angle of the map that the user made with a UIPanGestureRecognizer gesture (moving 2 fingers)
     float _map3DModeElevationAngle;
     
-    OARoutingHelper *_helper;
+    OARoutingHelper *_routingHelper;
     OABBox _routeBBox;
     BOOL _newRoute;
 }
@@ -454,8 +454,8 @@ static const NSInteger kDetailedMapZoom = 9;
 
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
-    _helper = [OARoutingHelper sharedInstance];
-    [_helper addListener:self];
+    _routingHelper = [OARoutingHelper sharedInstance];
+    [_routingHelper addListener:self];
     _newRoute = NO;
 }
 
@@ -3952,23 +3952,23 @@ static const NSInteger kDetailedMapZoom = 9;
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
     OATransportRoutingHelper *transportHelper = OATransportRoutingHelper.sharedInstance;
-    NSString *error = _helper.isPublicTransportMode ? [transportHelper getLastRouteCalcError] : [_helper getLastRouteCalcError];
+    NSString *error = _routingHelper.isPublicTransportMode ? [transportHelper getLastRouteCalcError] : [_routingHelper getLastRouteCalcError];
     OABBox routeBBox;
     routeBBox.top = DBL_MAX;
     routeBBox.bottom = DBL_MAX;
     routeBBox.left = DBL_MAX;
     routeBBox.right = DBL_MAX;
-    if ([_helper isRouteCalculated] && !error && !_helper.isPublicTransportMode)
+    if ([_routingHelper isRouteCalculated] && !error && !_routingHelper.isPublicTransportMode)
     {
-        routeBBox = [_helper getBBox];
+        routeBBox = [_routingHelper getBBox];
     }
-    else if (_helper.isPublicTransportMode && transportHelper.getRoutes.size() > 0)
+    else if (_routingHelper.isPublicTransportMode && transportHelper.getRoutes.size() > 0)
     {
         routeBBox = [transportHelper getBBox];
     }
     else
     {
-        if (!_helper.isPublicTransportMode)
+        if (!_routingHelper.isPublicTransportMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (UIApplication.sharedApplication.isCarPlayConnected)
@@ -3997,7 +3997,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void)displayCalculatedRouteIfNeeded
 {
-    if (_newRoute && [_helper isRoutePlanningMode] && _routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
+    if (_newRoute && [_routingHelper isRoutePlanningMode] && _routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
     {
         [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(_routeBBox.top, _routeBBox.left)
                                                                   bottomRight:CLLocationCoordinate2DMake(_routeBBox.bottom, _routeBBox.right)

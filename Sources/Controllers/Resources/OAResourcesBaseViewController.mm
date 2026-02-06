@@ -359,16 +359,38 @@ static BOOL dataInvalidated = NO;
             if (item.resource && [item isFree])
                 return [self offerDownloadAndInstallOf:item];
             
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion) && ![_iapHelper.srtm isActive])
-                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
-            else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
-                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+            if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![_iapHelper.srtm isPurchased])
+            {
+                [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.srtm navController:self.navigationController];
+                return;
+            }
+            else if ((item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion) && ![_iapHelper.srtm isPurchased])
+            {
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:self.navigationController];
+                return;
+            }
+            else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isPurchased])
+            {
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.WIKIPEDIA navController:self.navigationController];
+                return;
+            }
+            else if (item.resourceType == OsmAndResourceType::WeatherForecast && ![_iapHelper.weather isPurchased])
+            {
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.WEATHER navController:self.navigationController];
+                return;
+            }
             else if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && ![OAIAPHelper isDepthContoursPurchased])
+            {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_DepthContours];
+            }
             else if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && ![OAPluginsHelper isEnabled:OANauticalMapsPlugin.class])
+            {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
+            }
             else if (item.resourceType == OsmAndResourceType::MapRegion && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()] && ![OAPluginsHelper isEnabled:OANauticalMapsPlugin.class])
+            {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
+            }
             else if ([item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && ![OAPluginsHelper isEnabled:OAWikipediaPlugin.class])
             {
                 if ([_iapHelper.wiki isPurchased])
@@ -377,7 +399,9 @@ static BOOL dataInvalidated = NO;
                     [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.wiki navController:self.navigationController];
             }
             else
+            {
                 [self offerDownloadAndInstallOf:item];
+            }
         }
         else if ([item_ isKindOfClass:OACustomResourceItem.class])
         {
@@ -581,6 +605,5 @@ static BOOL dataInvalidated = NO;
 {
     [self updateTableLayout];
 }
-
 
 @end

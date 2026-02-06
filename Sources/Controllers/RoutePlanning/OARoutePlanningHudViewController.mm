@@ -312,7 +312,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self addNewGpxData:[self getGpxFile:_fileName]];
     else if (_editingContext.isApproximationNeeded && self.isFollowTrackMode)
         [self enterApproximationMode];
-    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [_mapPanel.mapViewController.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
 }
 
@@ -329,7 +333,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [_mapPanel.hudViewController.mapInfoController updateOffsetOfViewSizeWithWidgets];
+    [_mapPanel.hudViewController.mapInfoController updateLayout];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

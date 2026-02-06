@@ -4017,3 +4017,6 @@
 "shared_string_tinted" = "Tonalizado";
 "trip_recording_moving_time" = "Tiempo moviéndote";
 "trip_recording_moving_time_widget_description" = "Muestra el tiempo del movimiento actual registrado, o el tiempo para el último ascenso y descenso.";
+"context_menu_item_add_parking_point" = "Marcar como estacionamiento";
+"find_parking" = "Encontrar estacionamiento";
+"finish_navigation" = "Finalizar navegación";

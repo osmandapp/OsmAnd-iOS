@@ -3280,7 +3280,7 @@
 "rendering_attr_showLNAMmarker_description" = "ENC-jelölők megjelenítése";
 "rendering_attr_hideContours_name" = "Mélységvonalak";
 "rendering_attr_hideAreas_description" = "Mélységi területek elrejtése";
-"rendering_attr_safetyContour_name" = "Biztonsági mélység kontúr";
+"rendering_attr_safetyContour_name" = "Biztonsági mélységkontúr";
 "rendering_attr_hideNoLNAM_name" = "OSM tengeri jelzések (néhány)";
 "rendering_attr_hideFairways_description" = "Hajózóutak elrejtése";
 "rendering_attr_shellsStyle_description" = "Stílus a tengerfenéken lévő kagylókhoz";
@@ -3291,7 +3291,7 @@
 "rendering_attr_hideLightSectors_description" = "Fényjelzős szektorok elrejtése";
 "rendering_attr_showLNAMmarker_name" = "ENC-jelölők";
 "rendering_attr_hideTidalFlats_name" = "Árapály-síkságok";
-"rendering_attr_safetyContour_description" = "Biztonsági mélység kontúr";
+"rendering_attr_safetyContour_description" = "Biztonsági mélységkontúr";
 "start_point" = "Indítás";
 "poi" = "Érdekes hely";
 "help_article_navigation_routing_brouter_name" = "BRouter";
@@ -3971,3 +3971,6 @@
 "background_opacity_description" = "A „Tiszta” beállítás átlátszóbb, felfedve az alatta lévő tartalmat. A „Színezett” beállítás növeli az átlátszatlanságot és nagyobb kontrasztot ad.";
 "trip_recording_moving_time" = "Mozgásban töltött idő";
 "trip_recording_moving_time_widget_description" = "Megjeleníti a jelenleg rögzített mozgásban töltött időt, vagy az utolsó emelkedő és lejtő idejét.";
+"context_menu_item_add_parking_point" = "Megjelölés parkolóhelyként";
+"find_parking" = "Parkoló keresése";
+"finish_navigation" = "Navigáció befejezése";

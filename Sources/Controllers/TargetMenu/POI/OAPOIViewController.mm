@@ -907,6 +907,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
     NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
+    _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal]; //row
     [rows addObjectsFromArray:buildedRows];
     

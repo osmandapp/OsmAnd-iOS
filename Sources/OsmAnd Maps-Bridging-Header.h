@@ -198,6 +198,7 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "OACloudAccountVerificationViewController.h"
 #import "OACollapsableLabelView.h"
+#import "OACollapsableNearestPoiTypeView.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

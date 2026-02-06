@@ -32,6 +32,8 @@ final class AmenityUIHelper: NSObject {
     private var lastBuiltRowIsDescription = false
     
     private var showDefaultTags = false // TODO: in parent class MenuBuilder
+
+    public var latLon: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0, 0)
     
     init(preferredLang: String, infoBundle: AdditionalInfoBundle) {
         self.preferredLang = preferredLang
@@ -158,9 +160,16 @@ final class AmenityUIHelper: NSObject {
                     }
                     
                     let cuisineOrDish = key == CUISINE_TAG || key == DISH_TAG
-                    let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: poiCategory)
+                    
+                    // TODO: here is a bug with poi type parsing
+                    // self.poiCategory should be == "tourism, but it is == "user_defined_other"
+                    // correct code:
+//                    let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: poiCategory)
+                    
+                    let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: pType.category)
                     
                     let row = OAAmenityInfoRow(key: poiAdditionalCategoryName ?? "", icon: icon, textPrefix: pType.poiAdditionalCategoryLocalized, text: sb, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(pType.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
+                    row.collapsed = collapsableView?.collapsed ?? true
                     infoRows.append(row)
                 }
             }
@@ -429,11 +438,10 @@ final class AmenityUIHelper: NSObject {
 //        return info
 //    }
     
-    // private CollapsableView getPoiTypeCollapsableView(Context context, boolean collapsed,
     private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, textRow: OAAmenityInfoRow?, type: OAPOICategory?) -> OACollapsableView? {
-        
-        // TODO: implement
-        return nil
+        let collapsableView = OACollapsableNearestPoiTypeView(defaultParameters: true)
+        collapsableView?.setData(categoryTypes, amenityPoiCategory: type, lat: latLon.latitude, lon: latLon.longitude, isPoiAdditional: poiAdditional, textRow: textRow)
+        return collapsableView
     }
     
     // public static Set<String> collectAvailableLocalesFromTags(@NonNull Collection<String> tags) {

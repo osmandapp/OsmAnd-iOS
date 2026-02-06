@@ -17,6 +17,8 @@ FOUNDATION_EXPORT CGFloat const kCollapsableTitleMarginRight;
 
 @property (nonatomic) BOOL collapsed;
 
+- (instancetype) initWithDefaultParameters:(BOOL)collapsed;
+
 - (void) adjustHeightForWidth:(CGFloat)width;
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated;
 - (void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated;

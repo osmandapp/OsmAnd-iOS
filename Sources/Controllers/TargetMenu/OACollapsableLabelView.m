@@ -37,6 +37,16 @@
     return self;
 }
 
+- (instancetype) initWithText:(NSString *)text collapsed:(BOOL)collapsed
+{
+    self = [self initWithDefaultParameters:collapsed];
+    if (self)
+    {
+        [self setText:text];
+    }
+    return self;
+}
+
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     CGFloat leftMargin = OAUtilities.isLandscape && !OAUtilities.isIPad ? 2 * kMarginLeft : kMarginLeft;

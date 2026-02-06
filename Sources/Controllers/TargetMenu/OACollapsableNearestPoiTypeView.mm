@@ -29,7 +29,7 @@
 @implementation OACollapsableNearestPoiTypeView
 {
     NSArray<OAPOIType *> *_poiTypes;
-    OAPOI *_amenity;
+    OAPOICategory *_amenityPoiCategory;
     NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
     double _latitude;
@@ -40,14 +40,14 @@
 }
 
 - (void) setData:(NSArray<OAPOIType *> *)poiTypes
-         amenity:(OAPOI *)amenity
+amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
              lat:(double)lat
              lon:(double)lon
  isPoiAdditional:(BOOL)isPoiAdditional
          textRow:(OAAmenityInfoRow *)textRow
 {
     _poiTypes = poiTypes;
-    _amenity = amenity;
+    _amenityPoiCategory = amenityPoiCategory;
     _latitude = lat;
     _longitude = lon;
     _isPoiAdditional = isPoiAdditional;
@@ -195,17 +195,17 @@
 
 - (void)onButtonTapped:(NSInteger)tag
 {
-    if (_poiTypes.count > tag && tag != _textRowButtonIndex && _amenity && _amenity.type && _amenity.type.category)
+    if (_poiTypes.count > tag && tag != _textRowButtonIndex && _amenityPoiCategory)
     {
         OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:
-                [NSString stringWithFormat:@"%@%@", STD_PREFIX, _amenity.type.category.name]];
+                [NSString stringWithFormat:@"%@%@", STD_PREFIX, _amenityPoiCategory.name]];
         if (filter)
         {
             OAPOIType *pt = _poiTypes[tag];
             [filter clearFilter];
             if (_isPoiAdditional)
             {
-                [filter setTypeToAccept:_amenity.type.category b:YES];
+                [filter setTypeToAccept:_amenityPoiCategory b:YES];
                 [filter updateTypesToAccept:pt];
                 [filter setFilterByName:[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@":"].lowerCase];
             }
@@ -213,7 +213,7 @@
             {
                 NSMutableSet<NSString *> *accept = [NSMutableSet new];
                 [accept addObject:pt.name];
-                [filter selectSubTypesToAccept:_amenity.type.category accept:accept];
+                [filter selectSubTypesToAccept:_amenityPoiCategory accept:accept];
             }
 
              [self showQuickSearch:filter];

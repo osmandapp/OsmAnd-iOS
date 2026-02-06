@@ -14,6 +14,8 @@
 
 @property (nonatomic, readonly) OALabel *label;
 
+- (instancetype) initWithText:(NSString *)text collapsed:(BOOL)collapsed;
+
 - (void) setText:(NSString *)text;
 
 @end

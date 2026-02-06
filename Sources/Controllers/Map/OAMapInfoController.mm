@@ -519,7 +519,8 @@
         _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = 0;
         _mapHudViewController.bottomWidgetsView.layer.masksToBounds = YES;
     }
-    
+
+
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;
     CGFloat bottomOffset = _mapHudViewController.bottomWidgetsViewHeightConstraint.constant;
@@ -533,7 +534,7 @@
         // map render in CarPlay shouldn't take into account topOffset and bottomOffset, which are used in the main app for (top/bottom widget, context menu, etc.). For _renderer->setMapTarget"
         [mapView setTopOffsetOfViewSize:topOffset bottomOffset:bottomOffset];
     }
-    
+
     if (hasRightWidgets)
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];

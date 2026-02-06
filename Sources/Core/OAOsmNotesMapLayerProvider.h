@@ -94,7 +94,7 @@ public:
     
     virtual OsmAnd::ZoomLevel getMinZoom() const override;
     virtual OsmAnd::ZoomLevel getMaxZoom() const override;
-    
+    virtual bool waitForLoading() const override;
     virtual bool supportsNaturalObtainData() const override;
     QByteArray extracted(const OsmAnd::Area<int> &tileBBox31);
     

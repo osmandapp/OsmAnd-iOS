@@ -119,7 +119,7 @@
         if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
         {
             if (typeStr.length > 0)
-                typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+                typeStr = [NSString stringWithFormat:@"%@ • %@", typeStr, _targetPoint.titleAddress];
             else
                 typeStr = _targetPoint.titleAddress;
         }

@@ -1246,7 +1246,12 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
             cell.iconView.image = info.icon;
             
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
-            cell.textView.textColor = info.textColor;
+            
+            if (info.isPhoneNumber || info.isUrl)
+                cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            else
+                cell.textView.textColor = info.textColor;
+            
             cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
             cell.accessoryType = info.detailsArray.count > 0 ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;

@@ -213,13 +213,16 @@ final class AmenityUIHelper: NSObject {
     
     func buildWikiDataRow() -> OAAmenityInfoRow? {
         if let value = additionalInfo.get(WIKIDATA_TAG) {
+            let url = Self.getSocialMediaUrl(key: WIKIDATA_TAG, value: value)
             if let pType = OAPOIHelper.sharedInstance().getAnyPoiAdditionalType(byKey: WIKIDATA_TAG) as? OAPOIType {
-                let rowInfo = OAAmenityInfoRow(key: WIKIDATA_TAG, icon: UIImage.templateImageNamed("ic_custom_wikipedia"), textPrefix: pType.nameLocalized, text: value, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(pType.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
+                let rowInfo = OAAmenityInfoRow(key: WIKIDATA_TAG, icon: UIImage.templateImageNamed("ic_custom_wikipedia"), textPrefix: pType.nameLocalized, text: value, hiddenUrl: url, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: true, order: Int(pType.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
                 return rowInfo
             }
         }
         return nil
     }
+    
+    //TODO: check do we need variable "matchWidthDivider" ?
     
     private func sortInfoRows(_ infoRows: inout [OAAmenityInfoRow]) {
         infoRows.sort { $0.order < $1.order }

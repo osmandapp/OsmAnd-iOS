@@ -374,9 +374,7 @@
         if (!centerPixelChanged && !frameChanged && _cachedAnyWidgetVisible == anyWidgetVisible)
             return;
 
-        OABaseScrollableHudViewController *scrollableHudViewController = [OARootViewController instance].mapPanel.scrollableHudViewController;
-        BOOL isPlanRouteOpen = scrollableHudViewController && [scrollableHudViewController isKindOfClass:OARoutePlanningHudViewController.class];
-        if (!anyWidgetVisible || isPlanRouteOpen)
+        if (!anyWidgetVisible || [OARootViewController instance].mapPanel.activeTargetType == OATargetRoutePlanning)
         {
             [self setMapCenterMarkerVisibility:NO];
         }

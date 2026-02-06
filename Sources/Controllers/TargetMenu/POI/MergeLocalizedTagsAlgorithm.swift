@@ -32,10 +32,11 @@ final class MergeLocalizedTagsAlgorithm: NSObject {
 
         let keysToUpdate = findKeysToUpdate(localizationsDict)
         for baseKey in keysToUpdate {
-            var localizations = localizationsDict[baseKey]
+            var localizations = dictionaryForKey(key: baseKey, dict: &localizationsDict)
             
             if let value = langDict[baseKey] {
-                localizations?[baseKey] = value
+                localizations[baseKey] = value
+                localizationsDict[baseKey] = localizations
             } else {
                 continue
             }
@@ -77,12 +78,14 @@ final class MergeLocalizedTagsAlgorithm: NSObject {
                 if let value = originalDict[convertedKey] {
                     var nameDict = dictionaryForKey(key: "name", dict: &localizationsDict)
                     nameDict[localeKey] = value
+                    localizationsDict["name"] = nameDict
                 }
             }
         } else {
             if let value = originalDict[key] {
                 var nameDict = dictionaryForKey(key: "name", dict: &localizationsDict)
                 nameDict[convertedKey] = value
+                localizationsDict["name"] = nameDict
             }
         }
     }
@@ -99,6 +102,7 @@ final class MergeLocalizedTagsAlgorithm: NSObject {
                 if let value = originalDict[key] {
                     var baseDict = dictionaryForKey(key: baseKey, dict: &localizationsDict)
                     baseDict[localeKey] = value
+                    localizationsDict[baseKey] = baseDict
                 }
             }
         } else {

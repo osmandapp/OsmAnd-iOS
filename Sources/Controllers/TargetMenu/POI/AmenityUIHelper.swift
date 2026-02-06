@@ -345,7 +345,10 @@ final class AmenityUIHelper: NSObject {
         //return rowParamsBuilder.build()
         
         let param = rowParamsBuilder.build()
-        let result = OAAmenityInfoRow(key: param.key, icon: UIImage.templateImageNamed(param.iconName), textPrefix: param.textPrefix, text: param.text, hiddenUrl: param.hiddenUrl, collapsableView: param.collapsableView, textColor: param.textColor, isWiki: param.isWiki, isText: param.isText, needLinks: param.needLinks, isPhoneNumber: param.isPhoneNumber, isUrl: param.isUrl, order: param.order, name: param.name, matchWidthDivider: param.matchWidthDivider, textLinesLimit: Int32(param.textLinesLimit))
+        let iconName = param.iconName ?? "ic_custom_info_outlined"
+        let icon = OAUtilities.getMxIcon(iconName) ?? UIImage.templateImageNamed(iconName)
+        
+        let result = OAAmenityInfoRow(key: param.key, icon: icon, textPrefix: param.textPrefix, text: param.text, hiddenUrl: param.hiddenUrl, collapsableView: param.collapsableView, textColor: param.textColor, isWiki: param.isWiki, isText: param.isText, needLinks: param.needLinks, isPhoneNumber: param.isPhoneNumber, isUrl: param.isUrl, order: param.order, name: param.name, matchWidthDivider: param.matchWidthDivider, textLinesLimit: Int32(param.textLinesLimit))
         result.collapsed = true
         
         return result
@@ -437,6 +440,7 @@ final class AmenityUIHelper: NSObject {
     // public static Pair<String, Locale> getDescriptionWithPreferredLang(@NonNull OsmandApplication app,
     
     private func getRowIcon(_ name: String) -> UIImage? {
-        OATargetInfoViewController.getIcon("mx_" + name, size: CGSize(width: 20, height: 20))
+        let iconName = name.hasPrefix("mx_") ? name : "mx_" + name
+        return OATargetInfoViewController.getIcon(iconName, size: CGSize(width: 20, height: 20))
     }
 }

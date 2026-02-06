@@ -112,7 +112,11 @@ class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
         if !iconName.hasPrefix("mx_") {
             iconName = "mx_\(key)"
         }
-        return UIImage(named: iconName) != nil ? iconName : nil
+        
+        if OAUtilities.getMxIcon(iconName) != nil || UIImage.templateImageNamed(iconName) != nil {
+            return iconName
+        }
+        return nil
     }
     
     func formatPrefix(prefix: String?, units: String) -> String {

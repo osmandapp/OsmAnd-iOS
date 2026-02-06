@@ -6,6 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
+
 final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
     private struct TileKey: Hashable {
         let zoom: Int
@@ -21,14 +23,14 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
     private static let maxTilesPerCache = maxTilesPerQuadRect * 2
     private static let loadAllTinyRect: Double = 0.5
     
-    //    private let dbHelper: PlacesDatabaseHelper
+    private let dbHelper: PlacesDatabaseHelper
     
-    //    private var loadingTasks: [TileKey: GetExplorePlacesImagesTask] = [:]
+    private var loadingTasks: [TileKey: GetExplorePlacesImagesTask] = [:]
     private var tilesCache: [TileKey: [OAPOI]] = [:]
     private var listeners: [ExplorePlacesListener] = []
 
     init() {
-        //  self.dbHelper = PlacesDatabaseHelper(app)
+          self.dbHelper = PlacesDatabaseHelper()
     }
 
     // MARK: - Listeners
@@ -204,86 +206,107 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 
         return filteredAmenities
     }
-//    
-//    @objc
-//    private func createAmenity(_ featureData: OsmandApiFeatureData) -> OAPOI? {
-//        let amenity = OAPOI()
-//        let properties = featureData.properties
-//
-//        // Additional info
-//        amenity.setAdditionalInfo(
-//            WIKIDATA,
-//            app.getString(
-//                R.string.wikidata_id_pattern,
-//                properties.id
-//            )
-//        )
-//
-//        // Names & description
-//        amenity.setName(properties.wikiTitle)
-//        amenity.setEnName(
-//            TransliterationHelper.transliterate(amenity.getName())
-//        )
-//        amenity.setDescription(properties.wikiDesc)
-//
-//        // Languages
-//        if !Algorithms.isEmpty(properties.wikiLangs) {
-//            let langs = Set(properties.wikiLangs.split(separator: ",").map(String.init))
-//            amenity.updateContentLocales(langs)
-//        }
-//
-//        // Photo
-//        if !Algorithms.isEmpty(properties.photoTitle) {
-//            let imageData = WikiHelper.shared.getImageData(properties.photoTitle)
-//            amenity.setWikiPhoto(imageData.imageHiResUrl)
-//            amenity.setWikiIconUrl(imageData.imageIconUrl)
-//            amenity.setWikiImageStubUrl(imageData.imageStubUrl)
-//        }
-//
-//        // Location (lat, lon)
-//        let coords = featureData.geometry.coordinates
-//        amenity.setLocation(coords[1], coords[0])
-//
-//        // Category & subtype
-//        var poiType = properties.poitype
-//        var subtype = properties.poisubtype
-//
-//        let wikiCategory = app.getPoiTypes().getPoiCategoryByName("osmwiki")
-//        var category: PoiCategory? =
-//            Algorithms.isEmpty(poiType) ? nil :
-//            app.getPoiTypes().getPoiCategoryByName(poiType)
-//
-//        if Algorithms.isEmpty(subtype) || category == nil {
-//            category = wikiCategory
-//            subtype = "wikiplace"
-//        }
-//
-//        guard let finalCategory = category else {
-//            return nil
-//        }
-//
-//        amenity.setType(finalCategory)
-//        amenity.setSubType(subtype)
-//
-//        // ID
-//        if properties.osmid > 0 {
-//            let entityType = Entity.EntityType.valueOf(properties.osmtype)
-//            let objectId = ObfConstants.createMapObjectIdFromCleanOsmId(
-//                properties.osmid,
-//                entityType
-//            )
-//            amenity.setId(objectId)
-//        } else {
-//            amenity.setId(-Int64(properties.id)!)
-//        }
-//
-//        // Elo
-//        amenity.setTravelEloNumber(
-//            properties.elo?.intValue ?? DEFAULT_ELO
-//        )
-//
-//        return amenity
-//    }
+    
+    @objc
+    private func createAmenity(_ featureData: WikiCoreHelper.OsmandApiFeatureData) -> OAPOI? {
+        let amenity = OAPOI()
+
+        guard let properties = featureData.properties else { return nil }
+        if let id = properties.id, !id.isEmpty {
+            amenity.setAdditionalInfo(WIKIDATA_TAG, value: "Q" + id)
+        }
+
+        amenity.name = properties.wikiTitle
+        if let name = amenity.name {
+            // FIXME:
+            // If transliteration helper exists, apply it; otherwise fall back
+            amenity.enName = name
+        }
+        if let desc = properties.wikiDesc {
+            amenity.setAdditionalInfo(DESCRIPTION_TAG, value: desc)
+        }
+        
+        /*
+         {"uk":"Наукова бібліотека Дніпровського Національного університету імені Олеся Гончара","mul":"Scientific Library of Oles Honchar Dnipro National University","en":"Scientific Library of Oles Honchar Dnipro National University"}
+         */
+
+        if let labelsJson = properties.labelsJson, !labelsJson.isEmpty {
+            if let data = labelsJson.data(using: .utf8) {
+                do {
+                    let any = try JSONSerialization.jsonObject(with: data, options: [])
+                    if let dict = any as? [String: String] {
+                        // Prefer localizedNames over names
+                        let mutable = amenity.localizedNames
+                        for (k, v) in dict { mutable[k] = v }
+                        amenity.localizedNames = mutable
+                    }
+                } catch {
+                    // Ignore malformed json to keep flow resilient
+                }
+            }
+        }
+
+        // Languages
+        if let wikiLangs = properties.wikiLangs, !wikiLangs.isEmpty {
+            let langs = Set(wikiLangs.split(separator: ",").map(String.init))
+            amenity.updateContentLocales(langs)
+        }
+
+        // Photo
+        if let photoTitle = properties.photoTitle, !photoTitle.isEmpty {
+            let imageData = WikiHelper.shared.getImageData(imageFileName: photoTitle)
+            amenity.setAdditionalInfo(WIKI_PHOTO_TAG, value: imageData.imageHiResUrl)
+            amenity.wikiIconUrl = imageData.imageIconUrl
+            amenity.wikiImageStubUrl = imageData.imageStubUrl
+        }
+
+        // Location (lat, lon)
+        if let geometry = featureData.geometry, let coords = geometry.coordinates {
+            let count = Int(truncatingIfNeeded: coords.size)
+            if count >= 2 {
+                let lon = coords.get(index: 0)
+                let lat = coords.get(index: 1)
+                if !lon.isNaN && !lat.isNaN {
+                    amenity.latitude = lat
+                    amenity.longitude = lon
+                }
+            }
+        }
+        let poitype = properties.poitype
+        var subtype = properties.poisubtype
+        let wikiCategory = OAPOIHelper.sharedInstance().getPoiCategory(byName: "osmwiki")
+        var category = poitype?.isEmpty == false
+            ? OAPOIHelper.sharedInstance().getPoiCategory(byName: poitype!)
+            : nil
+        
+        if (subtype?.isEmpty ?? true) || category == nil {
+            category = wikiCategory
+            subtype = "wikiplace"
+        }
+
+        guard let category else {
+            return nil
+        }
+        // FIXME:
+        // amenity.type = category as OAPOIType
+        amenity.subType = subtype
+
+        // IDs
+        if let osmId = properties.osmid?.int64Value, osmId > 0 {
+            amenity.obfId = osmId
+        } else if let id = properties.id, let parsed = Int64(id) {
+            amenity.obfId = -parsed
+        }
+
+        // Elo
+        if let elo = properties.elo?.int32Value {
+            amenity.setTravelEloNumber(elo)
+        } else {
+            amenity.setTravelEloNumber(DEFAULT_ELO)
+        }
+
+        return amenity
+    }
 
 
 
@@ -376,3 +399,4 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 ////        return loadingTasks.values.contains { $0.mapRect.contains(kRect) }
 //    }
 }
+

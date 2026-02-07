@@ -4309,7 +4309,6 @@ typedef enum
     NSLog(@"Route calculation finished");
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.hudViewController onRoutingProgressFinished];
-        [_mapViewController displayCalculatedRouteIfNeeded];
     });
 }
 

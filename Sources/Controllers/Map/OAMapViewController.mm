@@ -3988,9 +3988,7 @@ static const NSInteger kDetailedMapZoom = 9;
         }
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapLayers.routeMapLayer refreshRoute];
-    });
+    [_mapLayers.routeMapLayer refreshRoute];
     _newRoute = newRoute;
     _routeBBox = routeBBox;
 }

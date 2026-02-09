@@ -3316,6 +3316,7 @@
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
 		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
 		FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */; };
+		FA896E6F2F3600AD00580246 /* SharedLibNetworkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA896E6E2F3600AC00580246 /* SharedLibNetworkAPI.swift */; };
 		FA899F1E2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */; };
 		FA899F1F2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */; };
 		FA899F262DD4CC690022F736 /* OBDVehicleMetricsDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */; };
@@ -8058,6 +8059,7 @@
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
 		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
 		FA882EF12CDCFE98001F3814 /* LockScreenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenAction.swift; sourceTree = "<group>"; };
+		FA896E6E2F3600AC00580246 /* SharedLibNetworkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLibNetworkAPI.swift; sourceTree = "<group>"; };
 		FA899F1C2DD3449F0022F736 /* VehicleMetricsSearchViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VehicleMetricsSearchViewController.storyboard; sourceTree = "<group>"; };
 		FA899F1D2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricsSearchViewController.swift; sourceTree = "<group>"; };
 		FA899F252DD4CC690022F736 /* OBDVehicleMetricsDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBDVehicleMetricsDevice.swift; sourceTree = "<group>"; };
@@ -13690,6 +13692,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA896E6E2F3600AC00580246 /* SharedLibNetworkAPI.swift */,
 				FA1394AE2EB11C9600197297 /* HudGridOverlay */,
 				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
 				277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */,
@@ -17863,6 +17866,7 @@
 				DA5A837026C563A800F274C7 /* OARoutingTargetCell.m in Sources */,
 				DA5A84A726C563A900F274C7 /* OARouteExporter.mm in Sources */,
 				DA5A84CB26C563A900F274C7 /* OACopyProfileBottomSheetViewControler.mm in Sources */,
+				FA896E6F2F3600AD00580246 /* SharedLibNetworkAPI.swift in Sources */,
 				DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */,
 				DA679950299A7A4A00CC1509 /* OAFetchBackgroundDataOperation.m in Sources */,
 				4625AF902C2335870099EB89 /* TerrainMode.swift in Sources */,

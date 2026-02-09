@@ -15,8 +15,8 @@
 @property (nonatomic, readonly) double right;
 @property (nonatomic, readonly) double bottom;
 
-- (instancetype)initWithLeft:(double)left top:(double)top right:(double)right bottom:(double)bottom;
-- (instancetype)initWithRect:(QuadRect *)rect;
+- (nonnull instancetype)initWithLeft:(double)left top:(double)top right:(double)right bottom:(double)bottom;
+- (nonnull instancetype)initWithRect:(QuadRect *)rect;
 
 - (double)width;
 - (double)height;

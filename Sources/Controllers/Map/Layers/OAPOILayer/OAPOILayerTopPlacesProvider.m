@@ -931,12 +931,6 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     
     [OAPOIUIFilter combineStandardPoiFilters:poiUIFilters];
     
-    //    double top = 48.57478991092886;
-    //    double left = 34.9365234375;
-    //    double bottom = 48.341646172374595;
-    //    double right = 35.15625;
-    //    int zoomTest = 13;
-    
     for (OAPOIUIFilter *filter in poiUIFilters)
     {
         NSMutableArray<OAPOI *> *amenities = [[filter searchAmenities:latLonBounds.top

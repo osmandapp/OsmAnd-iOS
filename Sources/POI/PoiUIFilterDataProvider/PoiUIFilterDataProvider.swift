@@ -66,45 +66,47 @@ final class PoiUIFilterDataProvider: NSObject {
                                   leftLongitude: Double,
                                   rightLongitude: Double,
                                   matcher: OAResultMatcher<OAPOI>? = nil) -> [OAPOI] {
-        return []
-//        let rect = QuadRect(left: leftLongitude, top: topLatitude, right: rightLongitude, bottom: bottomLatitude)!
-//        var data = explorePlacesProvider.getDataCollection(rect, limit: 0)
-//        var loading = false
-//        var cancelled = false
-//        
-//        while explorePlacesProvider.isLoading() && !cancelled {
-//            // matcher?(data.first!)
-//            Thread.sleep(forTimeInterval: 0.1)
-//            loading = true
-//            cancelled = false
-//        }
-//        
-//        if cancelled {
-//            return []
-//        }
-//        
-//        if loading {
-//            data = explorePlacesProvider.getDataCollection(rect, limit: 0)
-//        }
-//        
-//        var result: [OAPOI] = matcher == nil ? data : []
-//        
-//        if let matcher {
-//            for a in data {
-//                if matcher(a) {
-//                    result.append(a)
-//                }
-//            }
-//        }
-//        
-//        let targetLocation = CLLocation(latitude: lat, longitude: lon)
-//        
-//        let sortedPOIs = result.sorted { poi1, poi2 in
-//            let loc1 = CLLocation(latitude: poi1.latitude, longitude: poi1.longitude)
-//            let loc2 = CLLocation(latitude: poi2.latitude, longitude: poi2.longitude)
-//            
-//            return loc1.distance(from: targetLocation) < loc2.distance(from: targetLocation)
-//        }
-//        return sortedPOIs
+        
+        if Thread.isMainThread {
+            fatalError("CRITICAL ERROR: searchAmenities (online) called on Main Thread!")
+        }
+        
+        let rect = QuadRect(left: leftLongitude, top: topLatitude, right: rightLongitude, bottom: bottomLatitude)
+        var data = explorePlacesProvider.getDataCollection(rect, limit: 0)
+        var loading = false
+        var isCancelled = false
+     //   let uiFilterResultMatcher = matcher as? PoiUIFilterResultMatcher
+        while explorePlacesProvider.isLoading() && !isCancelled {
+          //  uiFilterResultMatcher?.defferedResults()
+            Thread.sleep(forTimeInterval: 0.1)
+            loading = true
+            isCancelled = matcher?.isCancelled() ?? false
+        }
+        
+        if isCancelled {
+            return []
+        }
+        
+        if loading {
+            data = explorePlacesProvider.getDataCollection(rect, limit: 0)
+        }
+        
+        var result: [OAPOI] = matcher == nil ? data : []
+        
+        if let matcher {
+            for amenity in data where matcher.publish(amenity){
+                result.append(amenity)
+            }
+        }
+        
+        let targetLocation = CLLocation(latitude: lat, longitude: lon)
+        
+        let sortedPOIs = result.sorted { poi1, poi2 in
+            let loc1 = CLLocation(latitude: poi1.latitude, longitude: poi1.longitude)
+            let loc2 = CLLocation(latitude: poi2.latitude, longitude: poi2.longitude)
+            
+            return loc1.distance(from: targetLocation) < loc2.distance(from: targetLocation)
+        }
+        return sortedPOIs
     }
 }

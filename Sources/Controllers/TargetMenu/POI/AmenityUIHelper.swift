@@ -68,19 +68,11 @@ final class AmenityUIHelper: NSObject {
         var descriptions = [OAAmenityInfoRow]()
         var resultRows = [OAAmenityInfoRow]()
   
-        // TODO: restore original code after debug
-//        let filteredInfo = additionalInfo.getFilteredLocalizedInfo()
-//        for entry in filteredInfo {
-//            let key = entry.key
-//            let value = entry.value
-        
-        // TODO: delete test code after debug
-        let filteredInfo = additionalInfo.getFilteredLocalizedInfo() as NSDictionary
-        let keys = (filteredInfo.allKeys as? [String] ?? []).sorted()
-        for key in keys {
+        let filteredInfo = additionalInfo.getFilteredLocalizedInfo()
+        for entry in filteredInfo {
+            let key = entry.key
             let value = filteredInfo[key]
-            
-            
+    
             if let that = helper.getAnyPoiAdditionalType(byKey: key) as? OAPOIType {
                 if that.isHidden {
                     continue
@@ -141,8 +133,9 @@ final class AmenityUIHelper: NSObject {
                         }
                     }
                     
+                    guard let pType = categoryTypes.first else { continue }
+                    
                     var icon: UIImage?
-                    let pType = categoryTypes[0]   // TODO: fix crash here!
                     let poiAdditionalCategoryName = pType.poiAdditionalCategory
                     let poiAdditionalIconName = helper.getPoiAdditionalCategoryIcon(poiAdditionalCategoryName)
                     
@@ -194,6 +187,7 @@ final class AmenityUIHelper: NSObject {
                 if let poiCategory {
                     icon = getRowIcon(poiCategory.iconName())
                     let row = OAAmenityInfoRow(key: poiCategory.name, icon: icon, textPrefix: poiCategory.nameLocalized, text: sb, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: 40, name: poiCategory.name, matchWidthDivider: false, textLinesLimit: 1)
+                    row.collapsed = true
                     infoRows.append(row)
                 }
             }
@@ -234,12 +228,35 @@ final class AmenityUIHelper: NSObject {
     //TODO: check do we need variable "matchWidthDivider" ?
     
     private func sortInfoRows(_ infoRows: inout [OAAmenityInfoRow]) {
-        infoRows.sort { $0.order < $1.order }
+        infoRows.sort { (row1: OAAmenityInfoRow, row2: OAAmenityInfoRow) -> Bool in
+            if row1.order != row2.order {
+                return row1.order < row2.order
+            }
+            return row1.typeName.localizedCompare(row2.typeName) == .orderedAscending
+        }
     }
     
-    // private void sortDescriptionRows(@NonNull List<AmenityInfoRow> descriptions) {
     private func sortDescriptionRows(_ descriptions: inout [OAAmenityInfoRow]) {
-        // TODO: implement
+        let langSuffix = ":" + getPreferredMapAppLang()
+        var descInPrefLang: OAAmenityInfoRow?
+        for desc in descriptions {
+            if desc.key.length > langSuffix.length && desc.key.hasSuffix(langSuffix) {
+                descInPrefLang = desc
+                break
+            }
+        }
+        
+        if let descInPrefLang {
+            if let index = descriptions.firstIndex(of: descInPrefLang) {
+                descriptions.remove(at: index)
+                descriptions.insert(descInPrefLang, at: 0)
+            }
+        }
+    }
+    
+    func getPreferredMapAppLang() -> String {
+        let lang = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
+        return lang.isEmpty ? "en" : lang
     }
     
     static func getSocialMediaUrl(key: String, value: String) -> String? {
@@ -306,15 +323,7 @@ final class AmenityUIHelper: NSObject {
         // filter poi additional categories on this step, they will be processed separately
         if let pType, !pType.isText {
             if let categoryName = pType.poiAdditionalCategory, !categoryName.isEmpty {
-                
-                // computeIfAbsent()
-                var list = poiAdditionalCategories[categoryName]
-                if list == nil {
-                    list = []
-                    poiAdditionalCategories[categoryName] = list
-                }
-                list?.append(pType)
-    
+                poiAdditionalCategories = computeIfAbsent(dictionary: poiAdditionalCategories, key: categoryName, value: pType)
                 return nil
             }
         }
@@ -331,16 +340,9 @@ final class AmenityUIHelper: NSObject {
                 return nil // the "Others" value is already displayed as a title
             }
             if let category {
-                // computeIfAbsent()
-                var list = collectedPoiTypes[category]
-                if list == nil {
-                    list = []
-                    collectedPoiTypes[category] = list
-                }
-                list?.append(poiType)
+                collectedPoiTypes = computeIfAbsent(dictionary: collectedPoiTypes, key: category, value: poiType)
             }
         } else if showDefaultTags {
-            // pType = new PoiType(poiTypes, poiCategory, null, key, poiCategory.getIconKeyName());
             pType = OAPOIType(name: key, category: poiCategory)
             pType?.isText = true
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
@@ -354,7 +356,7 @@ final class AmenityUIHelper: NSObject {
         rowParamsBuilder.matchWidthDivider = !rowParamsBuilder.isDescription() && rowParamsBuilder.isWiki
         
         // TODO: implement? return AmenityInfoRowParams.Builder dto directly?
-        //return rowParamsBuilder.build()
+        // return rowParamsBuilder.build()
         
         let param = rowParamsBuilder.build()
         let iconName = param.iconName ?? "ic_custom_info_outlined"
@@ -366,17 +368,63 @@ final class AmenityUIHelper: NSObject {
         return result
     }
     
-    private func createLocalizedAmenityInfoRow(key: String, value: Any) -> OAAmenityInfoRow? {
-        
-        //TODO: delete after test
-        if let dict = value as? Dictionary<String, Any> {
-            let debugDict = key + ": " + String(describing: dict)
-            var info = OAAmenityInfoRow(key: debugDict, icon: UIImage.templateImageNamed("ic_custom_file_info"), textPrefix: nil, text: debugDict, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 999999999, name: debugDict, matchWidthDivider: false, textLinesLimit: 1)
-            return info
+    private func computeIfAbsent(dictionary: [String: [OAPOIType]], key: String, value: OAPOIType) -> [String: [OAPOIType]] {
+        var newDictionary = dictionary
+        if var list = dictionary[key] {
+            list.append(value)
+            newDictionary[key] = list
+        } else {
+            newDictionary[key] = [value]
         }
-        return nil
+        return newDictionary
+    }
+    
+    private func createLocalizedAmenityInfoRow(key: String, value: Any) -> OAAmenityInfoRow? {
+        guard let map = value as? Dictionary<String, Any> else { return nil }
+        guard let localizedAdditionalInfo = map["localizations"] as? Dictionary<String, String> else { return nil }
+        guard !localizedAdditionalInfo.isEmpty else { return nil }
         
-        // TODO: implement correct function !!!
+        let keys = Array(localizedAdditionalInfo.keys)
+        let availableLocales = Array(Self.collectAvailableLocalesFromTags(keys))
+        
+        var headerKey = key
+        if let prefferedLocale = getPreferredLocale(availableLocales) {
+            headerKey = key + ":" + prefferedLocale
+        }
+        var headerValue = localizedAdditionalInfo[headerKey]
+        if headerValue == nil {
+            headerKey = keys[0]
+            headerValue = localizedAdditionalInfo[headerKey]
+        }
+        
+        var collapsableView: OACollapsableView?
+        if !localizedAdditionalInfo.isEmpty {
+            var infoRows: [OAAmenityInfoRow] = []
+            for localizedEntry in localizedAdditionalInfo {
+                let localizedKey = localizedEntry.key
+                let localizedValue = localizedEntry.value
+                
+                if !localizedKey.isEmpty && !localizedValue.isEmpty && headerKey != localizedKey {
+                    if let infoRow = createPoiAdditionalInfoRow(key: localizedKey, value: localizedValue, collapsableView: nil) {
+                        infoRows.append(infoRow)
+                    }
+                }
+            }
+            
+            if infoRows.count > 1 {
+                sortInfoRows(&infoRows)
+            }
+            
+            var collapsableContent = ""
+            for infoRow in infoRows {
+                if !collapsableContent.isEmpty {
+                    collapsableContent += "\n\n"
+                }
+                collapsableContent += infoRow.textPrefix + ": " + infoRow.text
+            }
+            collapsableView = OACollapsableLabelView(text: collapsableContent, collapsed: true)
+        }
+        return createPoiAdditionalInfoRow(key: headerKey, value: headerValue ?? "", collapsableView: collapsableView)
     }
     
     private func isKeyToSkip(key: String) -> Bool {
@@ -444,9 +492,21 @@ final class AmenityUIHelper: NSObject {
         return collapsableView
     }
     
-    // public static Set<String> collectAvailableLocalesFromTags(@NonNull Collection<String> tags) {
+    static func collectAvailableLocalesFromTags(_ tags: [String]) -> Set<String> {
+        var result: Set<String> = []
+        for tag in tags {
+            let parts = tag.split(separator: ":")
+            let locale = parts.count > 1 ? String(parts[1]) : "en"
+            if !locale.isEmpty {
+                result.insert(locale)
+            }
+        }
+        return result
+    }
     
-    // private Locale getPreferredLocale(Collection<String> locales) {
+    private func getPreferredLocale(_ localeIds: [String]) -> String? {
+        LocaleHelper.getPreferredNameLocale(localeIds)
+    }
     
     // public static Pair<String, Locale> getDescriptionWithPreferredLang(@NonNull OsmandApplication app,
     

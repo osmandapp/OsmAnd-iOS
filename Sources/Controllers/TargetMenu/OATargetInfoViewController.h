@@ -21,6 +21,8 @@
 
 @property (nonatomic) NSArray<OAAmenityInfoRow *> *additionalRows;
 
+@property (nonatomic) BOOL showTitleIfTruncated;
+
 - (BOOL) needCoords;
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows;

@@ -6,6 +6,8 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
+// analog in android: MenuBuilder.java
+
 #import "OATargetInfoViewController.h"
 #import "OsmAndApp.h"
 #import "OANativeUtilities.h"
@@ -92,6 +94,8 @@ static const CGFloat kBackButtonOffsetLeftFromFrame = 6.0;
 
 static const CGFloat kTextMaxHeight = 150.0;
 
+static const NSInteger kTitleLimit = 60;
+
 static const NSInteger kOrderPhotoRow = -102;
 static const NSInteger kOrderMapillaryRow = -101;
 static const NSInteger kOrderWithinRow = -100;
@@ -99,12 +103,15 @@ static const NSInteger kOrderTopInternalRow = 0;
 static const NSInteger kOrderDescriptionRow = 0;
 static const NSInteger kOrderInternalRow = 0;
 static const NSInteger kOrderDetailsRow = 0;
+static const NSInteger kOrderTitleRow = 0;
 static const NSInteger kOrderDateRow = 3;
 static const NSInteger kOrderCoommentRow = 4;
 static const NSInteger kOrderPoiRow = 1000;
+static const NSInteger kOrderOsmRow = 19000;
 static const NSInteger kOrderCoordinatesRow = 20000;
 static const NSInteger kOrderPhotoEmptyRow = 30001;
 static const NSInteger kOrderMapillaryEmptyRow = 30002;
+
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -127,6 +134,16 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _showTitleIfTruncated = YES;
+    }
+    return self;
 }
 
 - (void) setRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -184,7 +201,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     if (localTransportRoutes.count > 0)
     {
         OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-//        rowInfo.collapsable = YES;
         rowInfo.collapsed = NO;
         rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = localTransportRoutes;
@@ -194,7 +210,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     {
         NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
         OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:kOrderTopInternalRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-//        rowInfo.collapsable = YES;
         rowInfo.collapsed = NO;
         rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
@@ -224,46 +239,33 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    //TODO: clear code
-    
     _rows = rows;
+    
+    // don't exist in android. and maybe already not used in ios.
+    [self appdendDetailsButtonRow:_rows];
 
-//    [self buildTopInternal:_rows];
-//    
-//    
-//    //        if (showTitleIfTruncated) {
-//    //            buildTitleRow(view);
-//    //        }
-//    
-//    // ?? don't exist in android
-//    [self appdendDetailsButtonRow:_rows];
-//    
-//    
-//    
-//    [self buildWithinRow];
-//    [self buildNearestRows];
-//    
-//    //        if (needBuildPlainMenuItems()) {
-//    //            buildPlainMenuItems(view);
-    //        }
+    [self buildTopInternal:_rows];
+
+    if (_showTitleIfTruncated)
+        [self buildTitleRow];
+    
+    [self buildWithinRow];
+    [self buildNearestRows];
+    
+    // don't exist in android
+    if (self.additionalRows)
+        [_rows addObjectsFromArray:self.additionalRows];
+    
+    //    if (needBuildPlainMenuItems()) {
+    //        buildPlainMenuItems(view);
+    //    }
     
     [self buildInternal:_rows];
     
-//    [self buildPluginRows];
-//
-//    // ?? don't exist in android
-//    if (self.additionalRows)
-//    {
-//        [_rows addObjectsFromArray:self.additionalRows];
-//    }
-//
-//    [self buildCoordinateRows:rows];
-//    [self buildPhotosRow];
-//    
-    // ?? don't exist in android. move to buildPluginRows()
-//    [self addMapillaryCardsRowInfoIfNeeded];
-    
-    
+    [self buildPluginRows];
+
+    [self buildCoordinateRows:rows];
+    [self buildPhotosRow];
     
     [_rows sortUsingComparator:^NSComparisonResult(OAAmenityInfoRow *row1, OAAmenityInfoRow *row2) {
         if (row1.order < row2.order)
@@ -273,9 +275,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         else
             return NSOrderedDescending;
     }];
-    
-    
-//    [self startLoadingImages];
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
@@ -292,6 +291,19 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         _onlineAndMapillarySession = nil;
         
         [self startLoadingImages];
+    }
+}
+
+- (void)buildTitleRow
+{
+    if (self.delegate)
+    {
+        NSString *title = [self.delegate getTargetTitle];
+        if (title.length > kTitleLimit)
+        {
+            OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:@"title" icon:[UIImage templateImageNamed:@"ic_description"] textPrefix:nil text:title textColor:nil isText:YES needLinks:NO order:kOrderTitleRow typeName:@"title" isPhoneNumber:NO isUrl:NO];
+            [_rows addObject:row];
+        }
     }
 }
 
@@ -341,7 +353,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
                                        isUrl:NO];
         
         [row setDetailsArray:detailsArray];
-//        row.collapsable = NO;
         row.collapsed = YES;
         row.collapsableView = nil;
         [_rows addObject:row];
@@ -419,7 +430,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         {
             UIImage *icon = isWiki ? [UIImage mapSvgImageNamed:@"mx_wiki_place"] : poi.icon;
             OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderPoiRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-//            rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(isWiki ? _hasOsmWiki : YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
@@ -457,7 +467,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     {
         OAAmenityInfoRow *coordinatesRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderCoordinatesRow typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
-//        coordinatesRow.collapsable = YES;
         OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
         coordinatesRow.collapsableView = collapsableView;
         [rows addObject:coordinatesRow];
@@ -490,8 +499,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void)buildPluginRows
 {
-    // TODO: implement
-    
+    [self addOsmRowInfoIfNeeded];
     [self addMapillaryCardsRowInfoIfNeeded];
 }
 
@@ -1011,7 +1019,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
     cardView.delegate = self;
-//    nearbyImagesRowInfo.collapsable = YES;
     __weak __typeof(self) weakSelf = self;
     nearbyImagesRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
         if (!collapsed)
@@ -1050,7 +1057,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         CollapsableCardsView *cardView = [CollapsableCardsView new];
         cardView.contentType = CollapsableCardsTypeMapillary;
         cardView.delegate = self;
-//        mapillaryCardsRowInfo.collapsable = YES;
         __weak __typeof(self) weakSelf = self;
         mapillaryCardsRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
             if (!collapsed)
@@ -1063,6 +1069,18 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
         [self clearContentForRowInfo:_mapillaryCardsRowInfo];
         _mapillaryCardsRowInfo = mapillaryCardsRowInfo;
+    }
+}
+
+- (void) addOsmRowInfoIfNeeded
+{
+    if ([OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
+    {
+        NSString *osmUrl = [ObfConstants getOsmUrlForId:self.getTargetObj];
+        if (!NSStringIsEmpty(osmUrl))
+        {
+            [_rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits"] textPrefix:nil text:osmUrl textColor:[UIColor colorNamed:ACColorNameTextColorActive] isText:YES needLinks:YES order:kOrderOsmRow typeName:nil isPhoneNumber:NO isUrl:YES]];
+        }
     }
 }
 

@@ -6,6 +6,8 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
+// analog in android: AmenityBuilder.java
+
 #import "OAPOIViewController.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
@@ -53,6 +55,8 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
     AmenityUIHelper *_amenityUIHelper;
     AdditionalInfoBundle *_infoBundle;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
+    
+    BOOL _customOnlinePhotosPosition;
 }
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"x", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
@@ -76,16 +80,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     {
         [self setup:poi];
         
-        
-        //TODO: implement. fill with real poi data
-//        extensions = amenity.getAmenityExtensions(app.getPoiTypes(), false);
-//        setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
-//        infoBundle = new AdditionalInfoBundle(app, extensions);
-        
         NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
-        
-        //setCustomOnlinePhotosPosition(extensions.containsKey(WIKIDATA));
-        
+        _customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
         _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
     }
     return self;
@@ -328,13 +324,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     // new code launch order
     
 //    processRoutePointAmenityTags(view);
-//    buildInternalRows(view);
     [self buildInternalRows:rows];
-//
-//    if (PluginsHelper.getActivePlugin(OsmEditingPlugin.class) != null) {
-//        amenityUIHelper.buildWikiDataRow(view);
-//    }
-//
+
 //    buildNearestRows((ViewGroup) view);
 //    buildAltNamesRow((ViewGroup) view);
 //    buildNamesRow((ViewGroup) view);
@@ -890,13 +881,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-//    processRoutePointAmenityTags(view);
-    
+    [self processRoutePointAmenityTags];
     [self buildInternalRows:rows];
     
-//    buildNearestRows((ViewGroup) view);
-//    buildAltNamesRow((ViewGroup) view);
-//    buildNamesRow((ViewGroup) view);
+    [self buildNearestRowsForAmenity];
+    [self buildAltNamesRow];
+    [self buildNamesRow];
+    
 //    if (!amenityUIHelper.isFirstRow()) {
 //        firstRow = amenityUIHelper.isFirstRow();
 //    }
@@ -912,9 +903,24 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     [rows addObjectsFromArray:buildedRows];
 }
 
-- (NSString *) getOsmUrl
+- (void)processRoutePointAmenityTags
 {
-    return [ObfConstants getOsmUrlForId:self.poi];
+    // TODO: implement
+}
+
+- (void)buildNearestRowsForAmenity
+{
+    // TODO: implement
+}
+
+- (void)buildAltNamesRow
+{
+    // TODO: implement
+}
+
+- (void)buildNamesRow
+{
+    // TODO: implement
 }
 
 - (void)configureRowValue:(id)value

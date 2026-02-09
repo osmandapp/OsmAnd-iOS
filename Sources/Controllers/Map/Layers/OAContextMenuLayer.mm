@@ -542,7 +542,6 @@
         if (provider)
         {
             OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
-            [targetPoint initAdderssIfNeeded];
             if (targetPoint)
             {
                 [filteredSelectedObjects addObject:selectedObject];

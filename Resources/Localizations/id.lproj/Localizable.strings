@@ -3821,3 +3821,6 @@
 "rendering_attr_watercolor_name" = "Warna air";
 "copy_link" = "Salin tautan";
 "lang_mi" = "Māori";
+"find_parking" = "Temukan parkiran";
+"finish_navigation" = "Selesaikan navigasi";
+"context_menu_item_add_parking_point" = "Tandai sebagai tempat parkir";

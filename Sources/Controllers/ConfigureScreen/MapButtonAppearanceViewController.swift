@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class MapButtonAppearanceViewController: OABaseButtonsViewController {
+final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController {
     private static let valueKey = "valueKey"
     private static let unitKey = "unitKey"
     private static let glassStyleKey = "glassStyleKey"
@@ -26,10 +26,18 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private var originalAppearanceParams: ButtonAppearanceParams?
     private var iconCollectionHandler: ButtonAppearanceIconCollectionHandler?
     private var opacityType: BackgroundOpacityType = .solid
+    private let previewImageHeight: CGFloat = 150
     
     private var hasAppearanceChanged: Bool {
         appearanceParams != originalAppearanceParams
     }
+    
+    private lazy var previewImageView: PreviewImageView? = {
+        guard let mapButtonState else { return nil }
+        let previewImageView: PreviewImageView = .fromNib()
+        previewImageView.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
+        return previewImageView
+    }()
     
     override func commonInit() {
         appMode = OAAppSettings.sharedManager().applicationMode.get()
@@ -42,6 +50,12 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         }
         setupIconHandler()
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateSubviewHeight(previewImageHeight)
+        updateSubview(true)
     }
     
     override func getTitle() -> String {
@@ -66,10 +80,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     
     override func onRightNavbarButtonPressed() {
         showResetToDefaultActionSheet()
-    }
-    
-    override func hideFirstHeader() -> Bool {
-        true
     }
     
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
@@ -98,7 +108,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     override func registerCells() {
-        addCell(PreviewImageViewTableViewCell.reuseIdentifier)
         addCell(SegmentButtonsSliderTableViewCell.reuseIdentifier)
         addCell(TopBottomValuesSliderTableViewCell.reuseIdentifier)
         addCell(OAIconsPaletteCell.reuseIdentifier)
@@ -107,9 +116,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     override func generateData() {
         guard let appearanceParams else { return }
         tableData.clearAllData()
-        let visibilitySection = tableData.createNewSection()
-        let imageHeaderRow = visibilitySection.createNewRow()
-        imageHeaderRow.cellType = PreviewImageViewTableViewCell.reuseIdentifier
         
         let iconSection = tableData.createNewSection()
         let iconRow = iconSection.createNewRow()
@@ -145,15 +151,8 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
-        guard let mapButtonState else { return nil }
         let item = tableData.item(for: indexPath)
-        if item.cellType == PreviewImageViewTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as? PreviewImageViewTableViewCell else {
-                return UITableViewCell()
-            }
-            cell.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
-            return cell
-        } else if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
+        if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell,
                   let value = item.obj(forKey: Self.valueKey) as? String,
                   let unit = item.obj(forKey: Self.unitKey) as? String else {
@@ -253,6 +252,14 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         return nil
     }
     
+    override func createSubview() -> UIView? {
+        previewImageView
+    }
+    
+    override func subviewMargin() -> UIEdgeInsets {
+        .zero
+    }
+    
     private func setupAppearanceParams() {
         guard let mapButtonState else { return }
         let savedIconName = mapButtonState.savedIconName()
@@ -308,6 +315,11 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         iconCollectionHandler?.setIconSize(size: 24)
         iconCollectionHandler?.setSpacing(spacing: 9)
         iconCollectionHandler?.setIconName(iconName)
+    }
+    
+    private func updatePreview() {
+        guard let mapButtonState else { return }
+        previewImageView?.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
     }
     
     private func showUnsavedChangesAlert() {
@@ -373,6 +385,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private func updateData() {
         reloadDataWith(animated: true, completion: nil)
         updateBottomButtons()
+        updatePreview()
     }
     
     @objc private func sliderChanged(sender: UISlider) {

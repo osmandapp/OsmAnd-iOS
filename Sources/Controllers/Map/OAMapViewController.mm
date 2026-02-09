@@ -2848,26 +2848,30 @@ static const NSInteger kDetailedMapZoom = 9;
     }
 }
 
-- (void) correctPosition:(Point31)targetPosition31
+- (void)correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
              centerBBox:(BOOL)centerBBox
+          alignPosition:(BOOL)alignPosition
                animated:(BOOL)animated
 {
     CGFloat leftTargetInset;
     CGFloat bottomTargetInset;
-    if (centerBBox)
+    if (alignPosition)
     {
-        leftTargetInset = kCorrectionMinLeftSpaceBBox;
-        bottomTargetInset = kCorrectionMinBottomSpaceBBox;
+        if (centerBBox)
+        {
+            leftTargetInset = kCorrectionMinLeftSpaceBBox;
+            bottomTargetInset = kCorrectionMinBottomSpaceBBox;
+        }
+        else
+        {
+            leftTargetInset = kCorrectionMinLeftSpace;
+            bottomTargetInset = kCorrectionMinBottomSpace;
+        }
     }
-    else
-    {
-        leftTargetInset = kCorrectionMinLeftSpace;
-        bottomTargetInset = kCorrectionMinBottomSpace;
-    }
-
+    
     CGPoint center;
     OsmAnd::PointI centerI = _mapView.target31;
     [_mapView convert:&centerI toScreen:&center checkOffScreen:YES];
@@ -2888,11 +2892,11 @@ static const NSInteger kDetailedMapZoom = 9;
     CGFloat minPointY = targetY;
 
     newPosition.y = center.y - (minPointY - targetPoint.y);
-    if (newPosition.y < originalCenter.y)
-        newPosition.y = originalCenter.y;
+    if (alignPosition && newPosition.y < originalCenter.y)
+       newPosition.y = originalCenter.y;
         
     newPosition.x = center.x + (-minPointX + targetPoint.x);
-    if (newPosition.x > originalCenter.x)
+    if (alignPosition && newPosition.x > originalCenter.x)
         newPosition.x = originalCenter.x;
     
     newPosition.x *= _mapView.contentScaleFactor;
@@ -3984,7 +3988,7 @@ static const NSInteger kDetailedMapZoom = 9;
         }
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [_mapLayers.routeMapLayer refreshRoute];
         if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
             [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)

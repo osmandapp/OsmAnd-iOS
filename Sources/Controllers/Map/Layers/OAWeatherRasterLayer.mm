@@ -22,6 +22,7 @@
 #import "OAAppData.h"
 #import "OAObservable.h"
 #import "OAOsmAndFormatter.h"
+#import "OARoutePlanningHudViewController.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -373,7 +374,7 @@
         if (!centerPixelChanged && !frameChanged && _cachedAnyWidgetVisible == anyWidgetVisible)
             return;
 
-        if (!anyWidgetVisible)
+        if (!anyWidgetVisible || [OARootViewController instance].mapPanel.activeTargetType == OATargetRoutePlanning)
         {
             [self setMapCenterMarkerVisibility:NO];
         }

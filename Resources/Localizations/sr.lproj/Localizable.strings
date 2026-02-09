@@ -4010,3 +4010,6 @@
 "background_opacity_description" = "Провидно је транспарентније, откривајући садржај испод. Тонирано повећава непрозирност и додаје више контраста.";
 "trip_recording_moving_time" = "Време кретања";
 "trip_recording_moving_time_widget_description" = "Приказује тренутно забележено време кретања или време за последњи успон и спуст.";
+"context_menu_item_add_parking_point" = "Означи као положај паркинга";
+"find_parking" = "Пронађи паркиралиште";
+"finish_navigation" = "Заврши навођење";

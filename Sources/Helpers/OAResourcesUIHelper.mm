@@ -1622,8 +1622,11 @@ includeHidden:(BOOL)includeHidden
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
+        if (![OAIAPHelper isOsmAndProAvailable])
+        {
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.WEATHER navController:[OARootViewController instance].navigationController];
             return;
+        }
 
         NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
 

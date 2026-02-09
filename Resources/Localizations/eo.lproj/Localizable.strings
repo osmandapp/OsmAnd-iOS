@@ -2437,7 +2437,7 @@
 "missing_maps_ignore" = "Uzi elŝutitajn mapojn";
 "weather_source_GFS_description" = "«Global Forecast System» de «National Centers for Environmental Prediction»";
 "data_source" = "Fonto de datumoj";
-"map_settings_weather_wind_animation" = "Movbildi venton";
+"map_settings_weather_wind_animation" = "Vento (movbilda)";
 "missing_maps_ignore_details" = "Ĉu jam elŝutitaj mapoj taŭgos por via kurso? Navigu per ili se vi ekkonis kun la regiono.";
 "osmand_depelopment_simulate_location_section" = "Simuli";
 "transport_hazmat_title" = "Transporto de danĝeraj materialoj";

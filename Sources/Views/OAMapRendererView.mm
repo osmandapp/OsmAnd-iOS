@@ -120,7 +120,11 @@
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2plus);
     const auto rendererConfig = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
+#if TARGET_IPHONE_SIMULATOR
+    rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Normal;
+#else
     rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
+#endif
     _renderer->setConfiguration(rendererConfig);
 
     OAObservable* stateObservable = _stateObservable;
@@ -678,10 +682,18 @@ forcedUpdate:(BOOL)forcedUpdate
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
     eaglLayer.opaque = YES;
+#if TARGET_IPHONE_SIMULATOR
+    //eaglLayer.contentsScale = 1.0;
     eaglLayer.drawableProperties = @{
-        kEAGLDrawablePropertyRetainedBacking: [NSNumber numberWithBool:YES],
+        kEAGLDrawablePropertyRetainedBacking: @NO,
+        kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGB565
+    };
+#else
+    eaglLayer.drawableProperties = @{
+        kEAGLDrawablePropertyRetainedBacking: @YES,
         kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8
     };
+#endif
 
     // Initialize OpenGLES
     for (auto glVersion : { kEAGLRenderingAPIOpenGLES3, kEAGLRenderingAPIOpenGLES2 })
@@ -864,8 +876,11 @@ forcedUpdate:(BOOL)forcedUpdate
     GLint maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
     GLint samples = MIN(4, maxSamples);
+#if TARGET_IPHONE_SIMULATOR
+    BOOL useMSAA = NO;
+#else
     BOOL useMSAA = (samples >= 2);
-
+#endif
     if (useMSAA)
     {
         glGenFramebuffers(1, &_msaaFramebuffer);
@@ -905,7 +920,11 @@ forcedUpdate:(BOOL)forcedUpdate
 
         glGenRenderbuffers(1, &_depthRenderBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+#if TARGET_IPHONE_SIMULATOR
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _viewSize.x, _viewSize.y);
+#else
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewSize.x, _viewSize.y);
+#endif
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
     }
 

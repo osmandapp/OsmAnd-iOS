@@ -126,6 +126,7 @@
 static float kDefaultZoomOnShow = 16.0;
 static int kMaxRoadDistanceInMeters = 1000;
 static float kMaxZoom = 22.0f;
+static const float kVisibleBBoxPaddingPercent = 20.0f;
 
 static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
@@ -611,26 +612,44 @@ typedef enum
     renderView.elevationAngle = newElevationAngle;
 }
 
-- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize applyAspectRatioScaling:(BOOL)applyAspectRatioScaling
+- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize presizeZoom:(BOOL)presizeZoom
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    if (mapBounds.topLeft.latitude == DBL_MAX)
+    if (mapBounds.topLeft.latitude == DBL_MAX || mapSize.width <= 0 || mapSize.height <= 0)
         return renderView.zoom;
 
-    float metersPerPixel = [_mapViewController calculateMapRuler];
+    CGFloat zoom;
+    if (presizeZoom)
+    {
+        double centerLat = (mapBounds.topLeft.latitude + mapBounds.bottomRight.latitude) / 2.0;
+        double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, centerLat,
+                                                       mapBounds.bottomRight.longitude, centerLat);
+        double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude,
+                                                       mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
+                
+        OsmAnd::PointF topLeftPoint = [OANativeUtilities getPixelFromLatLon:mapBounds.topLeft.latitude lon:mapBounds.topLeft.longitude];
+        OsmAnd::PointF bottomRightPoint = [OANativeUtilities getPixelFromLatLon:mapBounds.bottomRight.latitude lon:mapBounds.bottomRight.longitude];
+
+        double resH = distanceH / mapSize.width;
+        double resV = distanceV / mapSize.height;
+        
+        double targetResolution = MAX(resH, resV);
+        zoom = OsmAnd::Utilities::calcZoomForResolution(targetResolution, centerLat);
+    }
+    else
+    {
+        float metersPerPixel = [_mapViewController calculateMapRuler];
+        
+        double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
+        double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
+        
+        CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel);
+        CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel);
+        CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
+        
+        zoom = renderView.zoom - newZoom;
+    }
     
-    double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
-    double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
-    float scale = 1;
-    if (applyAspectRatioScaling)
-        scale = mapSize.width > mapSize.height && distanceV > distanceH ? mapSize.width / mapSize.height : DeviceScreenHeight / DeviceScreenWidth;
-    
-    CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel * scale);
-    CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel * scale);
-    CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
-    
-    CGFloat zoom = renderView.zoom - newZoom;
     if (isnan(zoom))
         zoom = renderView.zoom;
     if (zoom > kMaxZoom)
@@ -1754,6 +1773,61 @@ typedef enum
                       landscape ? DeviceScreenHeight : DeviceScreenHeight - [self.scrollableHudViewController getViewHeight]);
 }
 
+- (CGSize)safeScreenBBox:(CGSize)screenBBox
+{
+    return [self safeScreenBBox:screenBBox leftInset:0.0f rightInset:0.0f topInset:0.0f bottomInset:0.0f];
+}
+
+- (CGSize)safeScreenBBox:(CGSize)screenBBox
+               leftInset:(float)leftInset
+              rightInset:(float)rightInset
+                topInset:(float)topInset
+             bottomInset:(float)bottomInset
+{
+    float outLeftInset = 0.0;
+    float outBottomInset = 0.0;
+    return [self safeScreenBBox:screenBBox leftInset:leftInset rightInset:rightInset topInset:topInset bottomInset:bottomInset outLeftInset:outLeftInset outBottomInset:outBottomInset];
+}
+
+- (CGSize)safeScreenBBox:(CGSize)screenBBox
+               leftInset:(float)leftInset
+              rightInset:(float)rightInset
+                topInset:(float)topInset
+             bottomInset:(float)bottomInset
+            outLeftInset:(float &)outLeftInset
+          outBottomInset:(float &)outBottomInset
+{
+    // 1. Calculate the delta between the hardware Safe Area and the passed insets
+    UIEdgeInsets safeArea = self.view.safeAreaInsets;
+    double deltaLeft   = safeArea.left - leftInset;
+    double deltaRight  = safeArea.right - rightInset;
+    double deltaTop    = safeArea.top - topInset;
+    double deltaBottom = safeArea.bottom - bottomInset;
+
+    // 2. Calculate the intermediate box size to determine the padding
+    //    (Logic: We first shrink the box by the positive parts of the deltas)
+    double w = screenBBox.width  - MAX(0, deltaLeft) - MAX(0, deltaRight);
+    double h = screenBBox.height - MAX(0, deltaTop)  - MAX(0, deltaBottom);
+    
+    // 3. Calculate the padding based on the smallest dimension of the safe box
+    double minDimension = MIN(w, h);
+    double padding = minDimension * kVisibleBBoxPaddingPercent / 100.0;
+
+    // 4. Determine final insets
+    //    Logic: The inset is simply the Safe Area Delta OR the Padding, whichever is larger.
+    double finalLeft   = MAX(deltaLeft, padding);
+    double finalRight  = MAX(deltaRight, padding);
+    double finalTop    = MAX(deltaTop, padding);
+    double finalBottom = MAX(deltaBottom, padding);
+
+    // 5. Assign outputs
+    outLeftInset   = (float)finalLeft;
+    outBottomInset = (float)finalBottom;
+
+    return CGSizeMake(screenBBox.width - finalLeft - finalRight,
+                      screenBBox.height - finalTop - finalBottom);
+}
+
 - (void)goToTargetPointWithZoom:(float)zoom
 {
     OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
@@ -1769,7 +1843,7 @@ typedef enum
     bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
     
-    float currentZoom = MIN([self getZoomForBounds:bounds mapSize:[self getScreenBBox] applyAspectRatioScaling:NO], zoom);
+    float currentZoom = MIN([self getZoomForBounds:bounds mapSize:[self safeScreenBBox:[self getScreenBBox]] presizeZoom:NO], zoom);
     if (currentZoom != zoom && currentZoom < zoom - MAX_ZOOM_OUT_STEPS)
         currentZoom = zoom;
         
@@ -1942,7 +2016,7 @@ typedef enum
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) alignPosition:YES animated:animated];
 }
 
 #pragma mark - OATargetPointViewDelegate
@@ -3597,7 +3671,7 @@ typedef enum
                  leftInset:0.
                   topInset:0.
       changeElevationAngle:YES
-   applyAspectRatioScaling:NO
+               presizeZoom:NO
                   animated:NO];
 }
 
@@ -3660,7 +3734,7 @@ typedef enum
                bottomInset:bottomInset
                  leftInset:leftInset
       changeElevationAngle:YES
-   applyAspectRatioScaling:NO
+               presizeZoom:NO
                   animated:animated];
 }
 
@@ -3670,7 +3744,7 @@ typedef enum
              bottomInset:(float)bottomInset
                leftInset:(float)leftInset
     changeElevationAngle:(BOOL)changeElevationAngle
- applyAspectRatioScaling:(BOOL)applyAspectRatioScaling
+             presizeZoom:(BOOL)presizeZoom
                 animated:(BOOL)animated
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
@@ -3686,7 +3760,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:changeElevationAngle
-   applyAspectRatioScaling:applyAspectRatioScaling
+               presizeZoom:presizeZoom
                   animated:animated];
 }
 
@@ -3698,7 +3772,7 @@ typedef enum
                leftInset:(float)leftInset
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
- applyAspectRatioScaling:(BOOL)applyAspectRatioScaling
+             presizeZoom:(BOOL)presizeZoom
                 animated:(BOOL)animated
 {
     [self displayAreaOnMap:topLeft
@@ -3710,7 +3784,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:changeElevationAngle
-   applyAspectRatioScaling:applyAspectRatioScaling
+               presizeZoom:presizeZoom
                   animated:animated];
 }
 
@@ -3733,7 +3807,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:YES
-   applyAspectRatioScaling:NO
+               presizeZoom:NO
                   animated:animated];
 }
 
@@ -3746,7 +3820,7 @@ typedef enum
                leftInset:(float)leftInset
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
- applyAspectRatioScaling:(BOOL)applyAspectRatioScaling
+             presizeZoom:(BOOL)presizeZoom
                 animated:(BOOL)animated
 {
     OAGpxBounds bounds;
@@ -3755,9 +3829,10 @@ typedef enum
     bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
 
+    CGSize safeScreenBBox = [self safeScreenBBox:screenBBox leftInset:leftInset rightInset:0.0f topInset:topInset bottomInset:bottomInset];
     if (maxZoom > 0 && zoom <= 0)
-        zoom = MIN([self getZoomForBounds:bounds mapSize:screenBBox applyAspectRatioScaling:applyAspectRatioScaling], maxZoom);
-
+        zoom = MIN([self getZoomForBounds:bounds mapSize:safeScreenBBox presizeZoom:presizeZoom], maxZoom);
+        
     [self displayAreaOnMap:bounds
                       zoom:zoom
                 screenBBox:screenBBox
@@ -3765,7 +3840,7 @@ typedef enum
                  leftInset:leftInset
                   topInset:topInset
       changeElevationAngle:changeElevationAngle
-   applyAspectRatioScaling:applyAspectRatioScaling
+               presizeZoom:presizeZoom
                   animated:animated];
 }
 
@@ -3776,15 +3851,17 @@ typedef enum
                leftInset:(float)leftInset
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
- applyAspectRatioScaling:(BOOL)applyAspectRatioScaling
+             presizeZoom:(BOOL)presizeZoom
                 animated:(BOOL)animated
 {
     if (bounds.topLeft.latitude == DBL_MAX)
         return;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox applyAspectRatioScaling:applyAspectRatioScaling] : zoom);
+    float appliedLeftInset = 0.0f;
+    float appliedBottomInset = 0.0f;
+    CGSize safeScreenBBox = [self safeScreenBBox:screenBBox leftInset:leftInset rightInset:0.0f topInset:topInset bottomInset:bottomInset outLeftInset:appliedLeftInset outBottomInset:appliedBottomInset];
+    _targetZoom = (zoom <= 0 || presizeZoom ? [self getZoomForBounds:bounds mapSize:safeScreenBBox presizeZoom:presizeZoom] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     
     _targetLatitude = bounds.bottomRight.latitude;
@@ -3804,31 +3881,36 @@ typedef enum
     _mainMapZoom = _targetZoom;
     
     targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    if (bottomInset > 0)
-    {
-        [_mapViewController correctPosition:targetPoint31
-                           originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
-                                  leftInset:leftInset
-                                bottomInset:bottomInset
-                                 centerBBox:(_targetMode == EOATargetBBOX)
-                                   animated:animated];
-    }
-    else if (topInset > 0)
+    // TODO: This branch probably should be removed to have unified solution like in ELSE block
+    if (bottomInset <= 0 && topInset > 0)
     {
         [_mapViewController correctPosition:targetPoint31
                            originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
                                   leftInset:leftInset
                                 bottomInset:-topInset
                                  centerBBox:(_targetMode == EOATargetBBOX)
+                              alignPosition:NO
                                    animated:animated];
     }
     else
     {
+        float adjustedLeftInset = 0;
+        float adjustedBottomInset = 0;
+        if (presizeZoom)
+        {
+            OsmAnd::PointF topLeftPoint = [OANativeUtilities getPixelFromLatLon:bounds.topLeft.latitude lon:bounds.topLeft.longitude];
+            OsmAnd::PointF bottomRightPoint = [OANativeUtilities getPixelFromLatLon:bounds.bottomRight.latitude lon:bounds.bottomRight.longitude];
+            float centeredDistanceH = (safeScreenBBox.width - ABS(bottomRightPoint.x - topLeftPoint.x)) / 2;
+            adjustedLeftInset = (centeredDistanceH > 0 ? centeredDistanceH : 0) + appliedLeftInset;
+            float centeredDistanceV = (safeScreenBBox.height - ABS(bottomRightPoint.y - topLeftPoint.y)) / 2;
+            adjustedBottomInset = (centeredDistanceV > 0 ? centeredDistanceV : 0) + appliedBottomInset;
+        }
         [_mapViewController correctPosition:targetPoint31
                            originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
-                                  leftInset:leftInset > 0 ? leftInset : 0
-                                bottomInset:0
+                                  leftInset:leftInset + adjustedLeftInset
+                                bottomInset:bottomInset + adjustedBottomInset
                                  centerBBox:(_targetMode == EOATargetBBOX)
+                              alignPosition:NO
                                    animated:animated];
     }
 }
@@ -4073,18 +4155,18 @@ typedef enum
 
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
-    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:YES applyAspectRatioScaling:NO animated:YES];
+    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:YES presizeZoom:NO animated:YES];
 }
 
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle applyAspectRatioScaling:(BOOL)applyAspectRatioScaling
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle presizeZoom:(BOOL)presizeZoom
 {
-    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:changeElevationAngle applyAspectRatioScaling:applyAspectRatioScaling animated:YES];
+    [self displayCalculatedRouteOnMap:topLeft bottomRight:bottomRight changeElevationAngle:changeElevationAngle presizeZoom:presizeZoom animated:YES];
 }
 
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle applyAspectRatioScaling:(BOOL)applyAspectRatioScaling animated:(BOOL)animated
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle presizeZoom:(BOOL)presizeZoom animated:(BOOL)animated
 {
     BOOL landscape = [self.targetMenuView isLandscape];
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 changeElevationAngle:changeElevationAngle applyAspectRatioScaling:applyAspectRatioScaling animated:NO];
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + (presizeZoom ? 0 : 20.0) : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + (presizeZoom ? 0 : 20.0) : 0 changeElevationAngle:changeElevationAngle presizeZoom:presizeZoom animated:NO];
 }
 
 - (void)buildRoute:(CLLocation *)start

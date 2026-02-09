@@ -327,7 +327,7 @@ static inline double normalizeDouble(double v)
 + (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values;
 + (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values;
 
-+ (UIImage *) getMxIcon:(NSString *)name;
++ (nullable UIImage *) getMxIcon:(NSString *)name;
 + (nullable UIImage *) resizeImage:(nullable UIImage *)image newSize:(CGSize)newSize;
 + (BOOL) hasMapImage:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;

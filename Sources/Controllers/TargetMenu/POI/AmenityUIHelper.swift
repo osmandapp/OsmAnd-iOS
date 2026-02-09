@@ -31,9 +31,11 @@ final class AmenityUIHelper: NSObject {
     private var osmEditingEnabled = OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self)
     private var lastBuiltRowIsDescription = false
     
-    private var showDefaultTags = false // TODO: in parent class MenuBuilder
-
-    public var latLon: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0, 0)
+    var latLon: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0, 0)
+    
+    // values from parent class MenuBuilder - base ContextMenuVC class
+    var showDefaultTags = false
+    var matchWidthDivider = false // show separator to full screen with
     
     init(preferredLang: String, infoBundle: AdditionalInfoBundle) {
         self.preferredLang = preferredLang
@@ -216,14 +218,12 @@ final class AmenityUIHelper: NSObject {
         if let value = additionalInfo.get(WIKIDATA_TAG) {
             let url = Self.getSocialMediaUrl(key: WIKIDATA_TAG, value: value)
             if let pType = OAPOIHelper.sharedInstance().getAnyPoiAdditionalType(byKey: WIKIDATA_TAG) as? OAPOIType {
-                let rowInfo = OAAmenityInfoRow(key: WIKIDATA_TAG, icon: UIImage.templateImageNamed("ic_custom_wikipedia"), textPrefix: pType.nameLocalized, text: value, hiddenUrl: url, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: true, order: Int(pType.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
+                let rowInfo = OAAmenityInfoRow(key: WIKIDATA_TAG, icon: UIImage.templateImageNamed("ic_custom_wikipedia"), textPrefix: pType.nameLocalized, text: value, hiddenUrl: url, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: true, order: Int(pType.order), name: pType.name, matchWidthDivider: matchWidthDivider, textLinesLimit: 1)
                 return rowInfo
             }
         }
         return nil
     }
-    
-    //TODO: check do we need variable "matchWidthDivider" ?
     
     private func sortInfoRows(_ infoRows: inout [OAAmenityInfoRow]) {
         infoRows.sort { (row1: OAAmenityInfoRow, row2: OAAmenityInfoRow) -> Bool in

@@ -902,20 +902,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 //    }
 }
 
-//TODO: implement
 - (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
+    _amenityUIHelper.showDefaultTags = false; // amenityUIHelper.setShowDefault(this.showDefaultTags);
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal]; //row
     [rows addObjectsFromArray:buildedRows];
-    
-//    amenityUIHelper = new AmenityUIHelper(mapActivity, getPreferredMapAppLang(), infoBundle);
-//    amenityUIHelper.setLight(isLightContent());
-//    amenityUIHelper.setLatLon(getLatLon());
-//    amenityUIHelper.setCollapseExpandListener(getCollapseExpandListener());
-//    amenityUIHelper.buildInternal(view);
 }
 
 - (NSString *) getOsmUrl

@@ -205,7 +205,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
                 cell.topRightButtonVisibility(true)
                 cell.sliderValuesVisibility(opacityType == .solid)
                 cell.segmentValuesVisibility(opacityType == .liquidGlass)
-                cell.segmentedControl.setTitle(localizedString("shared_string_clear"), forSegmentAt: 0)
+                cell.segmentedControl.setTitle(localizedString("background_liquid_glass_clear_ios"), forSegmentAt: 0)
                 cell.segmentedControl.setTitle(localizedString("shared_string_tinted"), forSegmentAt: 1)
                 cell.segmentedControl.removeTarget(self, action: nil, for: .valueChanged)
                 cell.segmentedControl.addTarget(self, action: #selector(segmentChanged(sender:)), for: .valueChanged)

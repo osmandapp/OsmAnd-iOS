@@ -142,8 +142,10 @@ struct DrawPathData
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers->setPriority(_linesPriority);
 
-    _transportTransferIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_transfer"];
-    _transportShieldIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"];
+    CGFloat screenScale = UIScreen.mainScreen.scale;
+    CGFloat scale = screenScale < 2.0 ? screenScale / 2.0 : 1.0;
+    _transportTransferIcon = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromPngResource:@"map_public_transport_transfer"] scaleFactor:scale];
+    _transportShieldIcon = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"] scaleFactor:scale];
     
     _routeAttributes = nil;
     _walkAttributes = nil;

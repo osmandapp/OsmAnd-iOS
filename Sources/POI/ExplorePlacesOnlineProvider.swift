@@ -59,7 +59,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 
     // MARK: - Protocol Implementation: Data Collection
     func getDataCollection(_ rect: QuadRect) -> [OAPOI] {
-        return getDataCollection(rect, limit: Self.defaultLimitPoints)
+        getDataCollection(rect, limit: Self.defaultLimitPoints)
     }
     
     @discardableResult
@@ -196,9 +196,8 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         }
 
         amenity.name = props.wikiTitle
+        // NOTE: android use TransliterationHelper
         amenity.enName = amenity.name ?? ""
-        // FIXME:
-        //amenity.enName = OATransliterationHelper.sharedInstance().transliterate(amenity.name ?? "")
         
         if let desc = props.wikiDesc {
             amenity.setAdditionalInfo(DESCRIPTION_TAG, value: desc)
@@ -215,12 +214,17 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
             amenity.longitude = coords.get(index: 0)
             amenity.latitude = coords.get(index: 1)
         }
-
+        
         let wikiCat = OAPOIHelper.sharedInstance().getPoiCategory(byName: "osmwiki")
         let category = props.poitype.flatMap { OAPOIHelper.sharedInstance().getPoiCategory(byName: $0) } ?? wikiCat
         let subtype = props.poisubtype ?? "wikiplace"
-        // FIXME:
-       // amenity.type = category.getAnyType()
+
+        if let categoryName = category?.name {
+            amenity.type = OAPOIHelper.sharedInstance().getPoiType(byCategory: categoryName, name: subtype)
+        } 
+        if amenity.type == nil {
+            amenity.type = category?.poiTypes.first
+        }
         amenity.subType = subtype
 
         amenity.setTravelEloNumber(props.elo?.int32Value ?? DEFAULT_ELO)
@@ -230,7 +234,10 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
     private func loadTile(zoom: Int, tileX: Int, tileY: Int, languages: [String]) {
         let key = TileKey(zoom: zoom, tileX: tileX, tileY: tileY)
         lock.lock()
-        if loadingTasks[key] != nil { lock.unlock(); return }
+        if loadingTasks[key] != nil {
+            lock.unlock()
+            return
+        }
         lock.unlock()
 
         let mapUtils = KMapUtils.shared
@@ -288,10 +295,17 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 private class ExplorePlacesTaskListener: NSObject, GetExplorePlacesImagesTaskGetImageCardsListener {
     let start: () -> Void
     let finish: ([WikiCoreHelper.OsmandApiFeatureData]) -> Void
+    
     init(onStart: @escaping () -> Void, onFinish: @escaping ([WikiCoreHelper.OsmandApiFeatureData]) -> Void) {
         self.start = onStart
         self.finish = onFinish
     }
-    func onTaskStarted() { start() }
-    func onFinish(result: [WikiCoreHelper.OsmandApiFeatureData]) { finish(result) }
+    
+    func onTaskStarted() {
+        start()
+    }
+    
+    func onFinish(result: [WikiCoreHelper.OsmandApiFeatureData]) {
+        finish(result)
+    }
 }

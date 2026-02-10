@@ -276,9 +276,11 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 - (void)resetSelectedTopPlaceIfNeeded
 {
+    NSLog(@"[test] resetSelectedTopPlaceIfNeeded");
     [_mapViewController runWithRenderSync:^{
         if (_selectedTopPlace)
         {
+            NSLog(@"[test] resetSelectedTopPlaceIfNeeded 1");
             int32_t markerId = [self truncatedTopPlaceId:_selectedTopPlace];
             [self removeMarkerWithId:markerId];
             [self addTopPlaceMarker:_selectedTopPlace markerId:markerId isSelected:NO];
@@ -307,6 +309,7 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
         if (marker->markerId == markerId)
         {
             _mapMarkersCollection->removeMarker(marker);
+            NSLog(@"[test] removeMarker");
         }
     }
 }

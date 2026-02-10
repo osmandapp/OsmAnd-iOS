@@ -382,28 +382,14 @@
         _nativeFiles = [NSMutableSet set];
         _nativeRoutingLock = [[NSObject alloc] init];
         
-        auto resManager = [OsmAndApp instance].resourcesManager;
-        if (resManager)
-        {
-            resManager->localResourcesChangeObservable.attach(
-                reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
-                [self](const OsmAnd::ResourcesManager* const resourcesManager,
-                       const QList<QString>& added,
-                       const QList<QString>& removed,
-                       const QList<QString>& updated) {
-                    [self onLocalResourcesChanged];
-                });
-        }
-        else
-        {
-            NSLog(@"\n\n!!! [FATAL ERROR] OARouteProvider !!!\n"
-                  "ResourcesManager is NULL. Routing initialized too early or during teardown.\n"
-                  "This crash is intentional to prevent undefined behavior.\n\n");
-            
-            @throw [NSException exceptionWithName:@"OARouteProviderCoreException"
-                                           reason:@"ResourcesManager is NULL in OsmAndApp instance"
-                                         userInfo:nil];
-        }
+        [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(
+                                                                                     reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+                                                                                     [self](const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                                            const QList<QString>& added,
+                                                                                            const QList<QString>& removed,
+                                                                                            const QList<QString>& updated) {
+                                                                                                [self onLocalResourcesChanged];
+                                                                                            });
         _or = OsmAndApp.instance.worldRegion;
     }
     return self;

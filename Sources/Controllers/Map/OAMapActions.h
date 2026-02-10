@@ -30,6 +30,7 @@
 - (void)setGPXRouteParamsWithDocument:(OASGpxFile *)doc path:(NSString *)path;
 
 - (void)navigate:(OATargetPoint *)targetPoint;
+- (void)recalculateRoute;
 - (OAApplicationMode *)getRouteMode;
 
 @end

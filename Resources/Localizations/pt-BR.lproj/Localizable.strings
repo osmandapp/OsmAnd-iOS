@@ -4009,3 +4009,6 @@
 "trip_recording_moving_time_widget_description" = "Mostra o tempo de movimento atualmente registrado ou o tempo da última subida e descida.";
 "shared_background" = "Contexto";
 "shared_string_pt" = "pt";
+"context_menu_item_add_parking_point" = "Marcar estacionamento";
+"find_parking" = "Achar estacionamento";
+"finish_navigation" = "Finalizar a navegação";

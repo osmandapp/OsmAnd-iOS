@@ -135,6 +135,9 @@
                            location = "group:StringBundleReader.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:KLock.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:PlatformUtil.kt">
                         </FileRef>
                         <FileRef
@@ -144,6 +147,9 @@
                            location = "group:WikiImagesUtil.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:UrlEncoder.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:StringBundle.kt">
                         </FileRef>
                         <FileRef
@@ -151,6 +157,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:Logger.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SharedDateFormatter.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -169,6 +178,9 @@
                      <Group
                         location = "group:wiki"
                         name = "wiki">
+                        <FileRef
+                           location = "group:WikiCoreHelper.kt">
+                        </FileRef>
                         <FileRef
                            location = "group:WikiImage.kt">
                         </FileRef>
@@ -208,12 +220,97 @@
                            location = "group:StringExtensions.kt">
                         </FileRef>
                      </Group>
+                     <Group
+                        location = "group:units"
+                        name = "units">
+                        <FileRef
+                           location = "group:HeartRateUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SpeedConstants.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MeasurementSystem.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:WeightUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MeasurementUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TemperatureUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RotationUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:LengthUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PowerUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:NoUnit.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TimeUnits.kt">
+                        </FileRef>
+                     </Group>
                      <FileRef
                         location = "group:KException.kt">
                      </FileRef>
                      <Group
                         location = "group:gpx"
                         name = "gpx">
+                        <Group
+                           location = "group:organization"
+                           name = "organization">
+                           <Group
+                              location = "group:enums"
+                              name = "enums">
+                              <FileRef
+                                 location = "group:OrganizeByType.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:OrganizeByCategory.kt">
+                              </FileRef>
+                           </Group>
+                           <FileRef
+                              location = "group:OrganizeByParamsSerializer.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:OrganizeByRangeParams.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TracksOrganizer.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:OrganizeByParams.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:OrganizeTracksResourceMapper.kt">
+                           </FileRef>
+                           <Group
+                              location = "group:strategy"
+                              name = "strategy">
+                              <FileRef
+                                 location = "group:OrganizeByListStrategy.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:OrganizeByRangeStrategy.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:OrganizeByStrategy.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:OrganizeByDateStrategy.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                        <FileRef
+                           location = "group:TrackItemUtils.kt">
+                        </FileRef>
                         <Group
                            location = "group:filters"
                            name = "filters">
@@ -335,7 +432,13 @@
                            <FileRef
                               location = "group:Gpx3DVisualizationType.kt">
                            </FileRef>
+                           <FileRef
+                              location = "group:TracksSortScope.kt">
+                           </FileRef>
                         </Group>
+                        <FileRef
+                           location = "group:GpxElevationTransfer.kt">
+                        </FileRef>
                         <FileRef
                            location = "group:SmartFolderHelper.kt">
                         </FileRef>
@@ -422,6 +525,9 @@
                               location = "group:TracksGroup.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:OrganizedTracksGroup.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:TrackFolder.kt">
                            </FileRef>
                         </Group>
@@ -452,6 +558,9 @@
                            location = "group:SQLiteAPI.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:NetworkAPI.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KStringMatcherMode.kt">
                         </FileRef>
                         <FileRef
@@ -478,6 +587,16 @@
                         </FileRef>
                      </Group>
                      <Group
+                        location = "group:exploreplaces"
+                        name = "exploreplaces">
+                        <FileRef
+                           location = "group:PlacesDatabaseHelper.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GetExplorePlacesImagesTask.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
                         location = "group:data"
                         name = "data">
                         <FileRef
@@ -490,6 +609,9 @@
                            location = "group:BTDeviceInfo.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:Limits.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KQuadRect.kt">
                         </FileRef>
                      </Group>
@@ -498,6 +620,25 @@
                         name = "grid">
                         <FileRef
                            location = "group:ButtonPositionSize.kt">
+                        </FileRef>
+                     </Group>
+                  </Group>
+               </Group>
+            </Group>
+            <Group
+               location = "group:io"
+               name = "io">
+               <Group
+                  location = "group:github"
+                  name = "github">
+                  <Group
+                     location = "group:cosinekitty"
+                     name = "cosinekitty">
+                     <Group
+                        location = "group:astronomy"
+                        name = "astronomy">
+                        <FileRef
+                           location = "group:astronomy.kt">
                         </FileRef>
                      </Group>
                   </Group>
@@ -533,7 +674,16 @@
                            location = "group:SensorPointAnalyser.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:KLock.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:PlatformUtil.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:UrlEncoder.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SharedDateFormatter.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -588,6 +738,9 @@
                         name = "api">
                         <FileRef
                            location = "group:XmlFactoryAPI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:NetworkAPIImpl.kt">
                         </FileRef>
                         <FileRef
                            location = "group:XmlSerializerAPI.kt">

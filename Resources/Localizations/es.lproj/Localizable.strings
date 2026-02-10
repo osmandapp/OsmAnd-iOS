@@ -3889,3 +3889,8 @@
 "lang_crh" = "Tártaro de Crimea";
 "visualizing_button_grid" = "Cuadrícula de botones del mapa";
 "trip_recording_average_slope_widget_description" = "Muestra la pendiente promedio de la última sección cuesta abajo o cuesta arriba del viaje registrado actualmente.";
+"altitude_metrics_description" = "Establece la unidad mostrada para la altitud tanto en los widgets como en las estadísticas.";
+"show_track_on_map" = "Mostrar la pista en el mapa";
+"trip_recording_moving_time" = "Tiempo de movimiento";
+"trip_recording_moving_time_widget_description" = "Muestra el tiempo de movimiento registrado actualmente, o el tiempo de la última subida y bajada.";
+"liquid_glass" = "Cristal líquido";

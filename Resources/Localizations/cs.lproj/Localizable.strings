@@ -3989,3 +3989,6 @@
 "background_opacity_description" = "Čistá je průhlednější, díky čemuž je vidět obsah pod ní. Tónovaná sníží průhlednost a přidá kontrast.";
 "trip_recording_moving_time" = "Čas v pohybu";
 "trip_recording_moving_time_widget_description" = "Zobrazí aktuálně zaznamenaný čas v pohybu nebo čas posledního stoupání a klesání.";
+"context_menu_item_add_parking_point" = "Označit jako místo parkování";
+"find_parking" = "Najít parkování";
+"finish_navigation" = "Ukončit navigaci";

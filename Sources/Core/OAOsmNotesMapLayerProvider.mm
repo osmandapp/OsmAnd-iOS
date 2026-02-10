@@ -62,6 +62,11 @@ OsmAnd::ZoomLevel OAOsmNotesMapLayerProvider::getMaxZoom() const
     return OsmAnd::ZoomLevel31;
 }
 
+bool OAOsmNotesMapLayerProvider::waitForLoading() const
+{
+    return false;
+}
+
 bool OAOsmNotesMapLayerProvider::supportsNaturalObtainData() const
 {
     return true;

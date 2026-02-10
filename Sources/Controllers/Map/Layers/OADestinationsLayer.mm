@@ -411,12 +411,20 @@
         vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)outline
         mapMarker:(std::shared_ptr<OsmAnd::MapMarker>&)marker
 {
-    _linesCollection->removeLine(outline);
-    _linesCollection->removeLine(line);
+    if (_linesCollection)
+    {
+        if (outline)
+            _linesCollection->removeLine(outline);
+        
+        if (line)
+            _linesCollection->removeLine(line);
+    }
 
-    _distanceMarkersCollection->removeMarker(marker);
+    if (outline && marker)
+        outline->detachMarker(marker);
 
-    outline->detachMarker(marker);
+    if (_distanceMarkersCollection && marker)
+        _distanceMarkersCollection->removeMarker(marker);
 
     outline.reset();
     line.reset();

@@ -19,7 +19,7 @@ final class GpxUtils: NSObject {
         if gpxFile.isShowCurrentTrack() {
             return !OAAppSettings.sharedManager().currentTrackIsJoinSegments.get() && (gpxFile.tracks.count == 0 || isGeneralTrack)
         } else {
-            return isGeneralTrack && gpxDataItem.joinSegments
+            return isGeneralTrack && !gpxDataItem.joinSegments
         }
     }
 

@@ -55,8 +55,6 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
     AmenityUIHelper *_amenityUIHelper;
     AdditionalInfoBundle *_infoBundle;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
-    
-    BOOL _customOnlinePhotosPosition;
 }
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"x", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
@@ -81,7 +79,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         [self setup:poi];
         
         NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
-        _customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
+        self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
         _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
     }
     return self;
@@ -889,10 +887,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     [self buildNearestRowsForAmenity:rows];
     [self buildAltNamesRow:rows];
     [self buildNamesRow:rows];
-    
-//    if (!amenityUIHelper.isFirstRow()) {
-//        firstRow = amenityUIHelper.isFirstRow();
-//    }
 }
 
 - (void)buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -906,9 +900,9 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 //            infoBundle.setCustomHiddenExtensions(Collections.singletonList(DESCRIPTION));
 //        }
 //    }
-//    if (isCustomOnlinePhotosPosition()) {
-//        buildPhotosRow((ViewGroup) view, amenity);
-//    }
+    
+    if (self.customOnlinePhotosPosition)
+        [self buildPhotosRow];
 }
 
 - (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows

@@ -93,7 +93,7 @@ static const NSInteger kOrderFavGroupRow = 1;
         [self buildCoordinateRows:rows];
     }
 
-    [self setRows:rows];
+    [self setInfoRows:rows];
 }
 
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows

@@ -138,7 +138,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
         [self buildCoordinateRows:rows];
     }
 
-    [self setRows:rows];
+    [self setInfoRows:rows];
 }
 
 - (void) buildWaypointsView:(NSMutableArray<OAAmenityInfoRow *> *)rows

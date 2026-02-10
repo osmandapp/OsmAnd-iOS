@@ -2319,6 +2319,7 @@
 "nautical_maps" = "Nautical maps";
 "shared_string_travel_guides" = "Travel guides";
 "shared_string_travel" = "Travel";
+"travel_guides" = "Guides";
 "download_select_map_types" = "Other maps";
 
 "shared_string_wikivoyage" = "Wikivoyage";

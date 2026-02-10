@@ -837,16 +837,22 @@ final class TravelObfHelper : NSObject {
     }
     
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
-        var res = [String]()
+        Array(getArticleByLangs(articleId: articleId).keys)
+    }
+    
+    func getArticleByLangs(articleId: TravelArticleIdentifier) -> [String: TravelArticle] {
+        var res = [String: TravelArticle]()
         if let article = getArticleById(articleId: articleId, lang: "", readGpx: false, callback: nil) {
             if let articles = cachedArticles.getValue(forKey: article.generateIdentifier().hashValue) {
-                res.append(contentsOf: articles.keys)
+                for entry in articles {
+                    res[entry.key] = entry.value
+                }
             }
         } else {
             let articles = localDataHelper.getSavedArticles(file: articleId.file ?? "", routeId: articleId.routeId ?? "")
             for a in articles {
                 if let articleLang = a.lang {
-                    res.append(articleLang)
+                    res[articleLang] = a
                 }
             }
         }

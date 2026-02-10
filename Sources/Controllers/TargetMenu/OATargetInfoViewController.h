@@ -22,8 +22,9 @@
 @property (nonatomic) NSArray<OAAmenityInfoRow *> *additionalRows;
 
 @property (nonatomic) BOOL showTitleIfTruncated;
+@property (nonatomic) BOOL customOnlinePhotosPosition;
 
-- (BOOL) needCoords;
+- (BOOL) needBuildCoordinatesRow;
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildMainImage:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows;
@@ -31,9 +32,11 @@
 - (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp;
 - (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment;
+- (void) buildPhotosRow;
 - (void) buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) rebuildRows;
-- (void) setRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) setInfoRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) appendInfoRow:(OAAmenityInfoRow *)row;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 + (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size;

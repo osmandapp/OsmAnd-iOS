@@ -96,9 +96,10 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 static const NSInteger kTitleLimit = 60;
 
-static const NSInteger kOrderPhotoRow = -102;
-static const NSInteger kOrderMapillaryRow = -101;
-static const NSInteger kOrderWithinRow = -100;
+static const NSInteger kOrderPhotoRow = -103;
+static const NSInteger kOrderMapillaryRow = -102;
+static const NSInteger kOrderWithinRow = -101;
+static const NSInteger kOrderTravelGuides = -100;
 static const NSInteger kOrderTopInternalRow = 0;
 static const NSInteger kOrderDescriptionRow = 0;
 static const NSInteger kOrderInternalRow = 0;
@@ -147,12 +148,24 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     return self;
 }
 
-- (void) setRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
+- (void) setInfoRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     _rows = rows;
 }
 
-- (BOOL) needCoords
+- (void) appendInfoRow:(OAAmenityInfoRow *)row
+{
+    if (!_rows)
+        _rows = [NSMutableArray new];
+    
+    [_rows addObject:row];
+    
+    [self sortInfoRows];
+    _calculatedWidth = 0;
+    [self contentHeight:self.tableView.bounds.size.width];
+}
+
+- (BOOL) needBuildCoordinatesRow
 {
     return YES;
 }
@@ -272,9 +285,19 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     
     [self buildPluginRows];
 
-    [self buildCoordinateRows:rows];
-    [self buildPhotosRow];
+    if ([self needBuildCoordinatesRow])
+        [self buildCoordinateRows:rows];
     
+    if (!_customOnlinePhotosPosition)
+        [self buildPhotosRow];
+    
+    [self sortInfoRows];
+    _calculatedWidth = 0;
+    [self contentHeight:self.tableView.bounds.size.width];
+}
+
+- (void) sortInfoRows
+{
     [_rows sortUsingComparator:^NSComparisonResult(OAAmenityInfoRow *row1, OAAmenityInfoRow *row2) {
         if (row1.order < row2.order)
             return NSOrderedAscending;
@@ -283,9 +306,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         else
             return NSOrderedDescending;
     }];
-
-    _calculatedWidth = 0;
-    [self contentHeight:self.tableView.bounds.size.width];
 }
 
 - (void)handleOnlineAndMapillaryLoadingIfNeeded {
@@ -471,14 +491,11 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void)buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    if ([self needCoords])
-    {
-        OAAmenityInfoRow *coordinatesRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderCoordinatesRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-        coordinatesRow.collapsed = YES;
-        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
-        coordinatesRow.collapsableView = collapsableView;
-        [rows addObject:coordinatesRow];
-    }
+    OAAmenityInfoRow *coordinatesRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderCoordinatesRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+    coordinatesRow.collapsed = YES;
+    OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
+    coordinatesRow.collapsableView = collapsableView;
+    [rows addObject:coordinatesRow];
 }
 
 - (void)buildNearestRows

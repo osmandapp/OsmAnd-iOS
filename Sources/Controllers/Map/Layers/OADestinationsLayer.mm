@@ -431,26 +431,30 @@
     marker.reset();
 }
 
-- (void) drawLine:(OADestination *)destination fromLocation:(CLLocation *)currLoc
-        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)line
-        vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)outline
-        mapMarker:(std::shared_ptr<OsmAnd::MapMarker>&)marker
+- (void)drawLine:(OADestination *)destination
+    fromLocation:(CLLocation *)currLoc
+      vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)line
+      vectorLine:(std::shared_ptr<OsmAnd::VectorLine>&)outline
+       mapMarker:(std::shared_ptr<OsmAnd::MapMarker>&)marker
 {
+    if (!destination || !currLoc || !_distanceMarkersCollection || !_linesCollection)
+        return;
+    
     QVector<OsmAnd::PointI> points;
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currLoc.coordinate.latitude, currLoc.coordinate.longitude)));
-
+    
     double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     std::vector<double> outlinePattern;
     outlinePattern.push_back(75 / mapDensity);
     outlinePattern.push_back(55 / mapDensity);
-
+    
     double strokeWidth = [_destinationLayerWidget getStrokeWidth];
     std::vector<double> inlinePattern;
     inlinePattern.push_back(-strokeWidth / 2 / mapDensity);
     inlinePattern.push_back((75 - strokeWidth) / mapDensity);
     inlinePattern.push_back((55 + strokeWidth) / mapDensity);
-
+    
     const auto color = [destination.color toFColorARGB];
     const auto outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
     if (line == nullptr || outline == nullptr)
@@ -458,54 +462,61 @@
         OsmAnd::VectorLineBuilder outlineBuilder;
         outlineBuilder.setBaseOrder(self.baseOrder + 1);
         outline = outlineBuilder.buildAndAddToCollection(_linesCollection);
-
+        
         OsmAnd::VectorLineBuilder inlineBuilder;
         inlineBuilder.setBaseOrder(self.baseOrder);
         line = inlineBuilder.buildAndAddToCollection(_linesCollection);
     }
-
+    
     outline->setIsHidden(false);
     outline->setLineWidth(strokeWidth * 1.5);
     outline->setLineDash(outlinePattern);
     outline->setFillColor(outlineColor);
-
+    
     line->setIsHidden(false);
     line->setLineWidth(strokeWidth);
     line->setLineDash(inlinePattern);
     line->setFillColor(color);
-
+    
     if (_reconstructMarker)
     {
         // set empty points to trigger _hasUnappliedChanges
         outline->setPoints(QVector<OsmAnd::PointI>());
         _reconstructMarker = false;
     }
-
+    
     if (points != outline->getPoints())
     {
         outline->setPoints(points);
-        outline->detachMarker(marker);
-
         line->setPoints(points);
-
-        _distanceMarkersCollection->removeMarker(marker);
-
+        
+        if (marker)
+        {
+            outline->detachMarker(marker);
+            _distanceMarkersCollection->removeMarker(marker);
+            marker.reset();
+        }
+        
         const auto dist = OsmAnd::Utilities::distance(destination.longitude, destination.latitude,
-              currLoc.coordinate.longitude, currLoc.coordinate.latitude);
-        NSString *distance = [OAOsmAndFormatter getFormattedDistance:dist];
-
+                                                      currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+        NSString *distanceStr = [OAOsmAndFormatter getFormattedDistance:dist];
+        
         OsmAnd::MapMarkerBuilder distanceMarkerBuilder;
         distanceMarkerBuilder.setIsHidden(false);
         distanceMarkerBuilder.setBaseOrder(self.baseOrder - 1);
-        distanceMarkerBuilder.setCaption([distance UTF8String]);
+        distanceMarkerBuilder.setCaption([distanceStr UTF8String]);
         distanceMarkerBuilder.setCaptionStyle(self.captionStyle);
-
+        
         // We need to recreate marker each time as new caption needs new symbol
+        
         marker = distanceMarkerBuilder.buildAndAddToCollection(_distanceMarkersCollection);
-        marker->setOffsetFromLine(kLabelOffset);
-        marker->setUpdateAfterCreated(true);
-
-        outline->attachMarker(marker);
+        
+        if (marker)
+        {
+            marker->setOffsetFromLine(kLabelOffset);
+            marker->setUpdateAfterCreated(true);
+            outline->attachMarker(marker);
+        }
     }
 }
 

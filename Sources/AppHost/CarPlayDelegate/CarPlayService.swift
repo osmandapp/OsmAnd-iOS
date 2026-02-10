@@ -33,6 +33,9 @@ final class CarPlayService: NSObject {
     }
     
     func disconnectScene() {
+        guard OsmAndApp.swiftInstance().initialized else {
+            return
+        }
         sessionConfiguration = nil
         restoreOriginalMapAppearanceModeIfNeeded()
         appMapAppearanceMode = nil

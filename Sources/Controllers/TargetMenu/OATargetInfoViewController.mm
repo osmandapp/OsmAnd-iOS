@@ -106,7 +106,8 @@ static const NSInteger kOrderDetailsRow = 0;
 static const NSInteger kOrderTitleRow = 0;
 static const NSInteger kOrderDateRow = 3;
 static const NSInteger kOrderCoommentRow = 4;
-static const NSInteger kOrderPoiRow = 1000;
+static const NSInteger kOrderNearestRow = 1000;
+static const NSInteger kOrderNamesRow = 18000;
 static const NSInteger kOrderOsmRow = 19000;
 static const NSInteger kOrderCoordinatesRow = 20000;
 static const NSInteger kOrderPhotoEmptyRow = 30001;
@@ -195,7 +196,9 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
+    [self buildMainImage:rows];
     [self buildDescription:rows];
+    
     NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
     NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
     if (localTransportRoutes.count > 0)
@@ -215,6 +218,11 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
         [_rows addObject:rowInfo];
     }
+}
+
+- (void) buildMainImage:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    // implement in subclasses
 }
 
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -408,7 +416,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     return menuObjects.count == 0 ? @"" : [menuObjects componentsJoinedByString:@", "];
 }
 
-- (void)buildRowsPoi:(BOOL)isWiki
+- (void)buildNearestRow:(BOOL)isWiki
 {
     id targetObj = [self getTargetObj];
     if ([targetObj isKindOfClass:OAPOI.class])
@@ -429,11 +437,11 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         if (nearest.count > 0)
         {
             UIImage *icon = isWiki ? [UIImage mapSvgImageNamed:@"mx_wiki_place"] : poi.icon;
-            OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderPoiRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderNearestRow typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(isWiki ? _hasOsmWiki : YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
-            rowInfo.order = kOrderPoiRow;
+            rowInfo.order = kOrderNearestRow;
             [_rows addObject:rowInfo];
         }
     }
@@ -483,13 +491,13 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 - (void)buildNearestWikiRow
 {
     if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
-        [self buildRowsPoi:YES];
+        [self buildNearestRow:YES];
 }
 
 - (void)buildNearestPoiRow
 {
     if ([self showNearestPoi])
-        [self buildRowsPoi:NO];
+        [self buildNearestRow:NO];
 }
 
 - (void)buildRouteRows

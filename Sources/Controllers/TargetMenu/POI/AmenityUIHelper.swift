@@ -15,6 +15,9 @@ final class AmenityUIHelper: NSObject {
     private static let DISH_INFO_ID = COLLAPSABLE_PREFIX + "dish"
     private static let US_MAPS_RECREATION_AREA = "us_maps_recreation_area"
     
+    private static let NAMES_ROW_KEY = "names_row_key"
+    private static let ALT_NAMES_ROW_KEY = "alt_names_row_key"
+    
     private let helper: OAPOIHelper
     
     private var additionalInfo: AdditionalInfoBundle
@@ -440,6 +443,35 @@ final class AmenityUIHelper: NSObject {
             poiType = helper.getPoiType(byKey: key)
         }
         return pt != nil ? (pt as? OAPOIType) : nil
+    }
+    
+    func buildNamesRow(namesMap: [String: String], altName: Bool) -> OAAmenityInfoRow? {
+        if !namesMap.isEmpty {
+            let keys = Array(namesMap.keys)
+            var nameLocale = getPreferredLocale(keys)
+            if nameLocale == nil {
+                nameLocale = keys[0]
+            }
+            guard let nameLocale else { return nil }
+            guard let name = namesMap[nameLocale] else { return nil }
+            
+            let key = altName ? Self.ALT_NAMES_ROW_KEY : Self.NAMES_ROW_KEY
+            let hint = localizedString(altName ? "shared_string_alt_name" : "shared_string_name")
+            let text = String(format: localizedString("ltr_or_rtl_combine_via_colon"), hint, nameLocale)
+            let icon = UIImage.templateImageNamed("ic_custom_map_languge")
+            
+            let collapsableView = key.count > 1 ? getNamesCollapsableView() : nil
+            
+            let row = OAAmenityInfoRow(key: key, icon: icon, textPrefix: text, text: name, textColor: nil, isText: true, needLinks: true, collapsable: collapsableView, order: 18000, typeName: "names", isPhoneNumber: false, isUrl: false)
+            return row
+        }
+        return nil
+    }
+    
+    private func getNamesCollapsableView() -> OACollapsableView? {
+       
+        // TODO: implement
+        nil
     }
     
     private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, textRow: OAAmenityInfoRow?, type: OAPOICategory?) -> OACollapsableView? {

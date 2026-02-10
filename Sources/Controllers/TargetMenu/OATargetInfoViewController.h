@@ -25,6 +25,7 @@
 
 - (BOOL) needCoords;
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildMainImage:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows;

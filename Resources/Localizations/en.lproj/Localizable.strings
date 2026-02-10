@@ -980,6 +980,7 @@
 "shared_string_color" = "Color";
 "fav_colors" = "Colors";
 "shared_string_name" = "Name";
+"shared_string_alt_name" = "Alternative name";
 "fav_group" = "Group";
 "shared_string_groups" = "Groups";
 "favorite" = "Favorite";

@@ -319,6 +319,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 }
 
+// TODO: delete - not using anymore
+
 - (void) buildRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // new code launch order
@@ -881,15 +883,31 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    [self processRoutePointAmenityTags];
+    [self processRoutePointAmenityTags:rows];
     [self buildInternalRows:rows];
     
-    [self buildNearestRowsForAmenity];
-    [self buildAltNamesRow];
-    [self buildNamesRow];
+    [self buildNearestRowsForAmenity:rows];
+    [self buildAltNamesRow:rows];
+    [self buildNamesRow:rows];
     
 //    if (!amenityUIHelper.isFirstRow()) {
 //        firstRow = amenityUIHelper.isFirstRow();
+//    }
+}
+
+- (void)buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    // TODO: implement
+//    Map<String, Object> filteredInfo = infoBundle.getFilteredLocalizedInfo();
+//    if (!buildShortWikiDescription(view, filteredInfo, true)) {
+//        Pair<String, Locale> pair = AmenityUIHelper.getDescriptionWithPreferredLang(app, amenity, DESCRIPTION, filteredInfo);
+//        if (pair != null) {
+//            buildDescriptionRow(view, pair.first);
+//            infoBundle.setCustomHiddenExtensions(Collections.singletonList(DESCRIPTION));
+//        }
+//    }
+//    if (isCustomOnlinePhotosPosition()) {
+//        buildPhotosRow((ViewGroup) view, amenity);
 //    }
 }
 
@@ -903,24 +921,44 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     [rows addObjectsFromArray:buildedRows];
 }
 
-- (void)processRoutePointAmenityTags
+- (void)processRoutePointAmenityTags:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // TODO: implement
 }
 
-- (void)buildNearestRowsForAmenity
+- (void)buildNearestRowsForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // TODO: implement
 }
 
-- (void)buildAltNamesRow
+- (void)buildAltNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    // TODO: implement
+    if (_amenityUIHelper)
+    {
+        OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:[self.poi getAltNamesMap] altName:YES];
+        if (row)
+            [rows addObject:row];
+    }
 }
 
-- (void)buildNamesRow
+- (void)buildNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    // TODO: implement
+
+    if (_amenityUIHelper)
+    {
+        NSMutableDictionary<NSString *, NSString *> *names = [NSMutableDictionary new];
+        NSString *name = [self.poi name];
+        if (!NSStringIsEmpty(name))
+            names[@""] = name;
+        
+        
+        NSDictionary<NSString *, NSString *> *namesMap = [self.poi getNamesMap:YES];
+        [names addEntriesFromDictionary:namesMap];
+        
+        OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:names altName:NO];
+        if (row)
+            [rows addObject:row];
+    }
 }
 
 - (void)configureRowValue:(id)value
@@ -953,22 +991,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             [row setDetailsArray:array];
         }
     }
-}
-
-- (void) addLocalizedNamesTagsToInfo:(NSMutableDictionary<NSString *, NSString *> *)additionalInfo
-{
-    [[self filteredLocalizedNames] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
-        NSString *nameKey = [NSString stringWithFormat:@"name:%@", key];
-        if (key.length > 0 && ![key isEqualToString:[OAAppSettings sharedManager].settingPrefMapLanguage.get] && !additionalInfo[nameKey])
-            additionalInfo[nameKey] = name;
-    }];
-}
-
-- (NSDictionary *)filteredLocalizedNames
-{
-    NSMutableDictionary *filteredDict = [self.poi.localizedNames mutableCopy];
-    [filteredDict removeObjectForKey:@"brand"];
-    return [filteredDict copy];
 }
 
 - (void)addRowIfNotExists:(OAAmenityInfoRow *)newRow toDestinationRows:(NSMutableArray<OAAmenityInfoRow *> *)rows

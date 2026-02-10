@@ -1815,10 +1815,11 @@ typedef enum
 
     // 4. Determine final insets
     //    Logic: The inset is simply the Safe Area Delta OR the Padding, whichever is larger.
-    double finalLeft   = MAX(deltaLeft, padding);
-    double finalRight  = MAX(deltaRight, padding);
-    double finalTop    = MAX(deltaTop, padding);
-    double finalBottom = MAX(deltaBottom, padding);
+    double safePadding = padding / 2.0;
+    double finalLeft   = MAX(deltaLeft, deltaLeft > 0 ? deltaLeft + safePadding : padding);
+    double finalRight  = MAX(deltaRight, deltaRight > 0 ? deltaRight + safePadding : padding);
+    double finalTop    = MAX(deltaTop, deltaTop > 0 ? deltaTop + safePadding : padding);
+    double finalBottom = MAX(deltaBottom, deltaBottom > 0 ? deltaBottom + safePadding : padding);
 
     // 5. Assign outputs
     outLeftInset   = (float)finalLeft;

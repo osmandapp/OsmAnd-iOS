@@ -6,7 +6,9 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-@class OAPOI;
+#include <OsmAndCore/Utilities.h>
+
+@class OAPOI, MapSelectionResult;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateSelectedTopPlaceIfNeeded:(OAPOI *)topPlace;
 - (void)resetSelectedTopPlaceIfNeeded;
 
-- (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon;
+- (NSArray<OAPOI *> *)getDisplayedResultsFor:(const QList<OsmAnd::PointI>&)touchPolygon31;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder NS_DESIGNATED_INITIALIZER;

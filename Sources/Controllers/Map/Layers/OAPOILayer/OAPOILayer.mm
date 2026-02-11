@@ -505,12 +505,16 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
       }
       else
       {
-          NSArray<OAPOI *> *topPlaces =
-              [_topPlacesProvider getDisplayedResults:result.pointLatLon.coordinate.latitude
-                                                  lon:result.pointLatLon.coordinate.longitude];
+          CGPoint point = result.point;
+          int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+          QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+          if (!touchPolygon31.isEmpty())
+          {
+              NSArray<OAPOI *> *topPlaces = [_topPlacesProvider getDisplayedResultsFor:touchPolygon31];
 
-          if (topPlaces.count > 0)
-              [allAmenities addObjectsFromArray:topPlaces];
+              if (topPlaces.count > 0)
+                  [allAmenities addObjectsFromArray:topPlaces];
+          }
       }
 
       for (OAPOI *amenity in allAmenities)

@@ -72,9 +72,11 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     }
                 )
                 
+                let scale = UITraitCollection.current.displayScale
+                
                 let options: KingfisherOptionsInfo = [
                     .processor(processor),
-                    .scaleFactor(UIScreen.main.scale),
+                    .scaleFactor(scale),
                     .cacheSerializer(FormatIndicatedCacheSerializer.png),
                     .cacheOriginalImage,
                     .retryStrategy(retryStrategy)
@@ -93,7 +95,8 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     case .failure(let error):
                         NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
                         
-                        guard let placeholderImage = place.type?.icon(),
+                        guard let placeholderImageName = place.type?.iconName(),
+                              let placeholderImage = OASvgHelper.mapImageNamed(placeholderImageName, scale: Float(scale)),
                               let cacheKey = placeholderCacheKey(place: place, metrics: metrics) else {
                             self.queue.async {
                                 self.loadingImages.removeValue(forKey: urlStr)

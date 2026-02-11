@@ -17,6 +17,7 @@
     NSInteger _id;
     ButtonAppearanceParams *_appearanceParams;
     ButtonAppearanceParams *_customAppearanceParams;
+    CAShapeLayer *_borderLayer;
 }
 
 - (instancetype)init
@@ -195,8 +196,41 @@
 
 - (void)updateShadow
 {
+    if (!_borderLayer)
+    {
+        _borderLayer = [CAShapeLayer layer];
+        _borderLayer.fillColor = UIColor.clearColor.CGColor;
+        [self.layer addSublayer:_borderLayer];
+    }
+    self.layer.shadowOpacity = 0;
+    self.layer.shadowPath = nil;
+    
     UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.layer.cornerRadius];
-    self.layer.shadowPath = shadowPath.CGPath;
+    _borderLayer.shadowPath = shadowPath.CGPath;
+    _borderLayer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.35].CGColor;
+    _borderLayer.shadowOpacity = 1;
+    _borderLayer.shadowRadius = 12;
+    _borderLayer.shadowOffset = CGSizeMake(0, 2);
+    _borderLayer.cornerRadius = self.layer.cornerRadius;
+    
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    maskLayer.frame = self.bounds;
+    maskLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:_borderLayer.cornerRadius].CGPath;
+    
+    CGFloat shadowBorder = (_borderLayer.shadowRadius * 2);
+    CGFloat negativeShadowBorder = -shadowBorder;
+    CGFloat halfShadowBorder = shadowBorder / 2;
+    maskLayer.frame = CGRectInset(maskLayer.frame, negativeShadowBorder, negativeShadowBorder);
+    maskLayer.frame = CGRectOffset(maskLayer.frame, halfShadowBorder, halfShadowBorder);
+    maskLayer.fillRule = kCAFillRuleEvenOdd;
+    
+    CGMutablePathRef pathMasking = CGPathCreateMutable();
+    CGPathAddPath(pathMasking, nil, [UIBezierPath bezierPathWithRect:maskLayer.frame].CGPath);
+    CGAffineTransform catShiftBorder = CGAffineTransformMakeTranslation(halfShadowBorder, halfShadowBorder);
+    CGPathAddPath(pathMasking, nil, CGPathCreateCopyByTransformingPath(maskLayer.path, &catShiftBorder));
+    maskLayer.path = pathMasking;
+    
+    _borderLayer.mask = maskLayer;
 }
 
 - (void)updateSize

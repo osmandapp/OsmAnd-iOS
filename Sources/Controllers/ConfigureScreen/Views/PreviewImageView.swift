@@ -20,10 +20,6 @@ final class PreviewImageView: UIView {
     private let colorOnMapIconTintColorDark: UIColor = .mapButtonIconColorDefault.dark
     private let colorOnMapIconBackgroundColorActive: UIColor = .mapButtonBgColorActive
     private let defaultBorderWidthNight: CGFloat = 2
-    private let defaultShadowOpacity: Float = 1
-    private let defaultShadowRadius: CGFloat = 12
-    private let defaultShadowColor: CGColor = UIColor.black.withAlphaComponent(0.35).cgColor
-    private let defaultShadowOffset = CGSize(width: 0, height: 2)
     
     func configure(appearanceParams: ButtonAppearanceParams?, buttonState: MapButtonState) {
         previewImageButton.buttonState = buttonState
@@ -33,7 +29,6 @@ final class PreviewImageView: UIView {
         previewImageButton.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
         setupImageViewWith(buttonState: buttonState, appearanceParams: appearanceParams)
         setupButtonColorWith(buttonState: buttonState)
-        setupImageContainerShadow()
     }
     
     func rotateImage(_ angle: CGFloat) {
@@ -114,14 +109,5 @@ final class PreviewImageView: UIView {
             
             previewImageButton.updateColors(forPressedState: false)
         }
-    }
-    
-    private func setupImageContainerShadow() {
-        let shadowPath = UIBezierPath(roundedRect: previewImageButton.bounds, cornerRadius: previewImageButton.layer.cornerRadius)
-        previewImageButton.layer.shadowPath = shadowPath.cgPath
-        previewImageButton.layer.shadowColor = defaultShadowColor
-        previewImageButton.layer.shadowOpacity = defaultShadowOpacity
-        previewImageButton.layer.shadowRadius = defaultShadowRadius
-        previewImageButton.layer.shadowOffset = defaultShadowOffset
     }
 }

@@ -2838,3 +2838,6 @@
 "rendering_attr_hideFerries_name" = "Fergeruter";
 "rendering_attr_hideFerries_description" = "Skjul fergeruter";
 "day_short" = "D";
+"years_3" = "Tre år";
+"three_years_subscription" = "Tre års abonnement";
+"unit_of_temperature_description" = "Valgte enheter vil bli brukt på alle temperaturrelaterte data i den gjeldende profilen.";

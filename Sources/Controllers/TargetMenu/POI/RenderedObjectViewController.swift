@@ -9,7 +9,7 @@
 @objcMembers
 final class RenderedObjectViewController: OAPOIViewController {
 
-    private var renderedObject: OARenderedObject!
+    private var renderedObject: OARenderedObject?
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -22,52 +22,38 @@ final class RenderedObjectViewController: OAPOIViewController {
     init(renderedObject: OARenderedObject) {
         let poi = RenderedObjectHelper.getSyntheticAmenity(renderedObject: renderedObject)
         super.init(poi: poi)
-        self.renderedObject = renderedObject
+        self.renderedObject = renderedObject // set finally
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateUIAfterAmenitySearch()
+        updateMenuWithDetailedObject()
     }
 
-    private func updateUIAfterAmenitySearch() {
-        Task {
-            do {
-                if let foundAmenity = try await searchAmenity() {
-                    await MainActor.run {
-                        setup(foundAmenity)
-                        rebuildRows()
-                        tableView.reloadData()
-                    }
-                }
-            } catch {
-                print("searchAmenity() error: \(error)")
-            }
-        }
+    private func updateMenuWithDetailedObject() {
+        guard let ro = renderedObject else { return }
+        guard let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) else { return }
+        setup(details.syntheticAmenity)
+        rebuildRows()
+        tableView.reloadData()
     }
-    
-    private func searchAmenity() async throws -> OAPOI? {
-        guard let ro = renderedObject else {
-            return nil
-        }
-        if let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) {
-            return details.syntheticAmenity
-        }
-        return nil
-    }
-    
+
     override func getTypeStr() -> String? {
-        if renderedObject.isPolygon {
-            return RenderedObjectHelper.getTranslatedType(renderedObject: renderedObject)
+        // TODO RZR reuse detailed object and/or port fresh Java code
+        guard let ro = renderedObject else { return super.getTypeStr() }
+        if ro.isPolygon {
+            return RenderedObjectHelper.getTranslatedType(renderedObject: ro)
         }
         return super.getTypeStr()
     }
     
     override func getIcon() -> UIImage? {
-        return RenderedObjectHelper.getIcon(renderedObject: renderedObject)
+        guard let ro = renderedObject else { return super.getIcon() }
+        return RenderedObjectHelper.getIcon(renderedObject: ro)
     }
     
-    override func getOsmUrl() -> String! {
-        ObfConstants.getOsmUrlForId(renderedObject)
+    override func getOsmUrl() -> String {
+        guard let ro = renderedObject else { return super.getOsmUrl() }
+        return ObfConstants.getOsmUrlForId(ro)
     }
 }

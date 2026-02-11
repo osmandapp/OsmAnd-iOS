@@ -77,10 +77,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     if (self)
     {
         [self setup:poi];
-        
-        NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
-        self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
-        _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
     }
     return self;
 }
@@ -109,6 +105,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if (showTransportStops)
             [self processTransportStop];
     }
+
+    NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
+    self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
+    _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
 }
 
 - (void) viewDidLoad

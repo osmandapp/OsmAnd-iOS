@@ -527,10 +527,13 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 {
     NSLog(@"[test] contextMenuDidShow");
     OAPOI *amenity = [self getAmenity:targetObj];
-    if (amenity) {
+    if (amenity)
+    {
         NSLog(@"[test] contextMenuDidShow amenity");
         [_topPlacesProvider updateSelectedTopPlaceIfNeeded:amenity];
-    } else {
+    }
+    else
+    {
         NSLog(@"[test] contextMenuDidShow nil");
         [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
     }
@@ -615,7 +618,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             placeId = ((OAPOI *)object).obfId;// FIXME:
         }
         else if ([object isKindOfClass:BaseDetailsObject.class])
-            placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
+            placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId; // FIXME: 2 object.objects 48.51334 35.23563 (online)
         
         return placeId != -1 && topPlaces[@(placeId)];
     }

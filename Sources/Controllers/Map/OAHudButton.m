@@ -173,7 +173,8 @@
                 glass.tintColor = self.backgroundColor;
             UIVisualEffectView *glassView =
                 [[UIVisualEffectView alloc] initWithEffect:glass];
-            glassView.frame = self.bounds;
+            NSInteger size = [self getSize];
+            glassView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
             glassView.userInteractionEnabled = NO;
             glassView.layer.cornerRadius = [self getCornerRadius];
             glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
@@ -205,19 +206,22 @@
     self.layer.shadowOpacity = 0;
     self.layer.shadowPath = nil;
     
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.layer.cornerRadius];
+    NSInteger size = [self getSize];
+    NSInteger cornerRadius = [self getCornerRadius];
+    CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:cornerRadius];
     _borderLayer.shadowPath = shadowPath.CGPath;
     _borderLayer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.35].CGColor;
     _borderLayer.shadowOpacity = 1;
     _borderLayer.shadowRadius = 12;
     _borderLayer.shadowOffset = CGSizeMake(0, 2);
-    _borderLayer.cornerRadius = self.layer.cornerRadius;
+    _borderLayer.cornerRadius = cornerRadius;
     
     CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    maskLayer.frame = self.bounds;
+    maskLayer.frame = bounds;
     maskLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:_borderLayer.cornerRadius].CGPath;
     
-    CGFloat shadowBorder = (_borderLayer.shadowRadius * 2);
+    CGFloat shadowBorder = _borderLayer.shadowRadius * 2;
     CGFloat negativeShadowBorder = -shadowBorder;
     CGFloat halfShadowBorder = shadowBorder / 2;
     maskLayer.frame = CGRectInset(maskLayer.frame, negativeShadowBorder, negativeShadowBorder);

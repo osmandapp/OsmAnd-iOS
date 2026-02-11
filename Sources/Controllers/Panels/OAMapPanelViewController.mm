@@ -1816,10 +1816,11 @@ typedef enum
     // 4. Determine final insets
     //    Logic: The inset is simply the Safe Area Delta OR the Padding, whichever is larger.
     double safePadding = padding / 2.0;
+    BOOL landscape = OAUtilities.isLandscape;
     double finalLeft   = MAX(deltaLeft, deltaLeft > 0 ? deltaLeft + safePadding : padding);
     double finalRight  = MAX(deltaRight, deltaRight > 0 ? deltaRight + safePadding : padding);
-    double finalTop    = MAX(deltaTop, deltaTop > 0 ? deltaTop + safePadding : padding);
-    double finalBottom = MAX(deltaBottom, deltaBottom > 0 ? deltaBottom + safePadding : padding);
+    double finalTop    = MAX(deltaTop, deltaTop > 0 && !landscape ? deltaTop + safePadding * 2.0 : padding);
+    double finalBottom = MAX(deltaBottom, deltaBottom > 0 && !landscape ? deltaBottom + safePadding : padding);
 
     // 5. Assign outputs
     outLeftInset   = (float)finalLeft;
@@ -3902,9 +3903,9 @@ typedef enum
             OsmAnd::PointF topLeftPoint = [OANativeUtilities getPixelFromLatLon:bounds.topLeft.latitude lon:bounds.topLeft.longitude];
             OsmAnd::PointF bottomRightPoint = [OANativeUtilities getPixelFromLatLon:bounds.bottomRight.latitude lon:bounds.bottomRight.longitude];
             float centeredDistanceH = (safeScreenBBox.width - ABS(bottomRightPoint.x - topLeftPoint.x)) / 2;
-            adjustedLeftInset = (centeredDistanceH > 0 ? centeredDistanceH : 0) + appliedLeftInset;
+            adjustedLeftInset = centeredDistanceH + appliedLeftInset;
             float centeredDistanceV = (safeScreenBBox.height - ABS(bottomRightPoint.y - topLeftPoint.y)) / 2;
-            adjustedBottomInset = (centeredDistanceV > 0 ? centeredDistanceV : 0) + appliedBottomInset;
+            adjustedBottomInset = centeredDistanceV + appliedBottomInset;
         }
         [_mapViewController correctPosition:targetPoint31
                            originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]

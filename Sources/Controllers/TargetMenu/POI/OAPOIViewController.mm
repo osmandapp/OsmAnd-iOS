@@ -375,22 +375,44 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void)buildNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-
-    if (_amenityUIHelper)
+    if (!_amenityUIHelper)
+        return;
+    
+    NSMutableDictionary<NSString *, NSString *> *names = [NSMutableDictionary new];
+    NSString *primaryName = [self.poi name];
+    if (!NSStringIsEmpty(primaryName))
+        names[@""] = primaryName; // TODO: "" key represents the default OSM name, not country-specific.
+    
+    [names addEntriesFromDictionary:[self.poi getNamesMap:YES]];
+    OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:names altName:NO];
+    if (!row)
+        return;
+    
+    NSMutableArray<NSDictionary *> *detailsArray = [NSMutableArray new];
+    NSString *title = OALocalizedString(@"shared_string_name");
+    NSArray<NSString *> *sortedKeys = [[names allKeys] sortedArrayUsingSelector:@selector(localizedCompare:)];
+    for (NSString *lang in sortedKeys)
     {
-        NSMutableDictionary<NSString *, NSString *> *names = [NSMutableDictionary new];
-        NSString *name = [self.poi name];
-        if (!NSStringIsEmpty(name))
-            names[@""] = name;
+        NSString *value = names[lang];
+        if (NSStringIsEmpty(value))
+            continue;
         
-        
-        NSDictionary<NSString *, NSString *> *namesMap = [self.poi getNamesMap:YES];
-        [names addEntriesFromDictionary:namesMap];
-        
-        OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:names altName:NO];
-        if (row)
-            [rows addObject:row];
+        NSString *tagKey = lang.length > 0 ? [NSString stringWithFormat:@"name:%@", lang] : @"name";
+        [detailsArray addObject:@{
+            @"key": tagKey,
+            @"value": value,
+            @"localizedTitle": title
+        }];
     }
+    
+    if (detailsArray.count > 0)
+    {
+        row.detailsArray = detailsArray;
+        if (detailsArray.count > 1)
+            row.collapsed = YES;
+    }
+    
+    [rows addObject:row];
 }
 
 - (void)configureRowValue:(id)value

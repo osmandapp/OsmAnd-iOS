@@ -1438,7 +1438,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         }
         else
         {
-            [OAUtilities callUrl:info.text];
+            [OAUtilities callUrl:NSStringIsEmpty(info.hiddenUrl) ? info.text : info.hiddenUrl];
         }
     }
     else if (info.isText && info.moreText)

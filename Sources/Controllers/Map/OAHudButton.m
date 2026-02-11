@@ -168,7 +168,7 @@
         
         if (isGlass)
         {
-            UIGlassEffect *glass = [UIGlassEffect effectWithStyle:UIGlassEffectStyleClear];
+            UIGlassEffect *glass = [UIGlassEffect effectWithStyle:glassStyle];
             if (glassStyle == UIGlassEffectStyleRegular)
                 glass.tintColor = self.backgroundColor;
             UIVisualEffectView *glassView =

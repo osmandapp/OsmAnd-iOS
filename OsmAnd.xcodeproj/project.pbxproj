@@ -13045,7 +13045,9 @@
 				DA5A7EDA26C563A400F274C7 /* OAOsmEditsLayer.mm */,
 				DA5A7EF026C563A400F274C7 /* OAOverlayMapLayer.h */,
 				DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */,
-				FA5DD0FA2F222977002F3F79 /* OAPOILayer */,
+				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
+				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
+				FA5DD0FA2F222977002F3F79 /* OAPOILayerTopPlacesProvider */,
 				DA3FBFEC27D60DB000D25E86 /* OAPreviewRouteLineLayer.h */,
 				DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */,
 				DA5A7EF526C563A400F274C7 /* OARasterMapLayer.h */,
@@ -14410,15 +14412,13 @@
 			path = PoiUIFilterDataProvider;
 			sourceTree = "<group>";
 		};
-		FA5DD0FA2F222977002F3F79 /* OAPOILayer */ = {
+		FA5DD0FA2F222977002F3F79 /* OAPOILayerTopPlacesProvider */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
-				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
 				FA5DD0FB2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.h */,
 				FA5DD0FC2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m */,
 			);
-			path = OAPOILayer;
+			path = OAPOILayerTopPlacesProvider;
 			sourceTree = "<group>";
 		};
 		FA5FB6402DE06E1600ABECCF /* OBDConnector */ = {

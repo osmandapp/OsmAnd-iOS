@@ -993,38 +993,38 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         [rows addObject:newRow];
 }
 
-- (NSString *)getSocialMediaUrl:(NSString *)key value:(NSString *)value
-{
-    if (!value || value.length == 0)
-        return nil;
-    
-    // Remove leading and closing slashes
-    NSMutableString *sb = [NSMutableString stringWithString:[value trim]];
-    if ([sb characterAtIndex:0] == '/')
-        [sb deleteCharactersInRange:NSMakeRange(0, 1)];
-    NSInteger lastIdx = sb.length - 1;
-    if ([sb characterAtIndex:lastIdx] == '/')
-        [sb deleteCharactersInRange:NSMakeRange(lastIdx, 1)];
-
-    // It cannot be username
-    if ([sb isValidURL])
-        return [@"https://" stringByAppendingString:value];
-
-    NSMutableDictionary<NSString *, NSString *> *urls = [NSMutableDictionary dictionary];
-    urls[@"facebook"] = @"https://facebook.com/";
-    urls[@"vk"] = @"https://vk.com/";
-    urls[@"instagram"] = @"https://instagram.com/";
-    urls[@"twitter"] = @"https://x.com/";
-    urls[@"x"] = @"https://x.com/",
-    urls[@"ok"] = @"https://ok.ru/";
-    urls[@"telegram"] = @"https://t.me/";
-    urls[@"flickr"] = @"https://flickr.com/";
-
-    if ([urls.allKeys containsObject:[key lowercaseString]])
-        return [urls[key] stringByAppendingString:value];
-    else
-        return nil;
-}
+//- (NSString *)getSocialMediaUrl:(NSString *)key value:(NSString *)value
+//{
+//    if (!value || value.length == 0)
+//        return nil;
+//    
+//    // Remove leading and closing slashes
+//    NSMutableString *sb = [NSMutableString stringWithString:[value trim]];
+//    if ([sb characterAtIndex:0] == '/')
+//        [sb deleteCharactersInRange:NSMakeRange(0, 1)];
+//    NSInteger lastIdx = sb.length - 1;
+//    if ([sb characterAtIndex:lastIdx] == '/')
+//        [sb deleteCharactersInRange:NSMakeRange(lastIdx, 1)];
+//
+//    // It cannot be username
+//    if ([sb isValidURL])
+//        return [@"https://" stringByAppendingString:value];
+//
+//    NSMutableDictionary<NSString *, NSString *> *urls = [NSMutableDictionary dictionary];
+//    urls[@"facebook"] = @"https://facebook.com/";
+//    urls[@"vk"] = @"https://vk.com/";
+//    urls[@"instagram"] = @"https://instagram.com/";
+//    urls[@"twitter"] = @"https://x.com/";
+//    urls[@"x"] = @"https://x.com/",
+//    urls[@"ok"] = @"https://ok.ru/";
+//    urls[@"telegram"] = @"https://t.me/";
+//    urls[@"flickr"] = @"https://flickr.com/";
+//
+//    if ([urls.allKeys containsObject:[key lowercaseString]])
+//        return [urls[key] stringByAppendingString:value];
+//    else
+//        return nil;
+//}
 
 - (NSArray<NSString *> *)getFormattedPrefixAndText:(NSString *)key
                                             prefix:(NSString *)prefix

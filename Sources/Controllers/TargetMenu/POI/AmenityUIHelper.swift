@@ -277,7 +277,7 @@ final class AmenityUIHelper: NSObject {
 
         // It cannot be username
         if isWebUrlLike(sb) {
-            return "https://\(value)"
+            return "https://\(sb)"
         }
 
         var urls: [String: String] = [:]
@@ -298,14 +298,7 @@ final class AmenityUIHelper: NSObject {
     
     private static func isWebUrlLike(_ value: String) -> Bool {
         // java: PatternsCompat.AUTOLINK_WEB_URL()
-        if let url = URL(string: value), url.scheme != nil {
-            return true
-        }
-        if let url = URL(string: "https://\(value)"),
-           let host = url.host, !host.isEmpty {
-            return true
-        }
-        return false
+        OAUtilities.isValidURL(value)
     }
     
     private func createPoiAdditionalInfoRow(key: String, value: String, collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {

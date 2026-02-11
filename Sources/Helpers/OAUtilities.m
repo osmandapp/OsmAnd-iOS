@@ -1588,6 +1588,11 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return scheme && ([scheme.lowercaseString isEqualToString:kHttpScheme] || [scheme.lowercaseString isEqualToString:kHttpsScheme]);
 }
 
++ (BOOL) isValidURL:(NSString *)string
+{
+    return [string isValidURL];
+}
+
 + (BOOL) isOsmAndHost:(NSURL *)url
 {
     NSString *host = url.host;

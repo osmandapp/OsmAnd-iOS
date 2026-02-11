@@ -350,6 +350,7 @@ static inline double normalizeDouble(double v)
 + (BOOL) isOsmAndGoUrl:(NSURL *)url;
 + (BOOL) isOsmAndSite:(NSURL *)url;
 + (BOOL) isPathPrefix:(NSURL *)url pathPrefix:(NSString *)pathPrefix;
++ (BOOL) isValidURL:(NSString *)string;
 
 + (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
 

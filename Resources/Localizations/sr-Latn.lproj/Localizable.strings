@@ -1707,7 +1707,7 @@
 "skip_map_downloading" = "Preskoči preuzimanje mapa";
 "skip_map_downloading_desc_ios" = "Nemate instaliranu nijednu van mrežnu mapu. Možete da izaberete mapu sa liste ili da preuzmete mape kasnije preko Meni - Upravljanje datotekama mape";
 "wiki_around" = "U blizini popularna mesta";
-"search_categories" = "TOI kategorije";
+"search_categories" = "Kategorije";
 "items_selected" = "%d izabrano'";
 "how_to_open_wiki_title" = "Kako da otvoriš članke sa Vikipedije?";
 "download_wiki_data" = "Preuzmi podatke Vikipedije za %@";
@@ -1724,7 +1724,7 @@
 "poi_filter_by_name" = "Pretraga po imenu";
 "subcategories" = "Potkategorije";
 "shared_string_select_all" = "Odaberi sve";
-"create_custom_poi" = "TOI kategorije za pretragu";
+"create_custom_poi" = "Napravi prilagođeni filter";
 "selected_categories" = "Izabrane kategorije";
 "new_filter_desc" = "Molimo, upiši naziv za novi filter, koji će biti dodan u oznaku Kategorija.";
 "rearrange_categories" = "Preuredi kategorije";
@@ -2656,7 +2656,7 @@
 "announcement_time_prepare_long" = "Dugo pripremanje";
 "external_device_characteristic_cadence" = "Ritam";
 "apply_only_to_new_points" = "Primeni samo na nove tačke";
-"help_article_map_point_layers_on_map_name" = "TOI na mapi";
+"help_article_map_point_layers_on_map_name" = "Tačke na mapi";
 "weather_widget_group_desc" = "Skup vidžeta koji prikazuju razne podatke o vremenskim prilikama.";
 "map_widget_zoom_level_desc" = "Prikazuje trenutni nivo zuma.";
 "first_marker_widget_desc" = "Možeš podesiti widget da prikazuje rastojanje ili procenjeno preostalo vreme dolaska na prvoj oznaci mape.";
@@ -2690,7 +2690,7 @@
 "route_maneuvers_desc" = "Vidžet navođenja su omogućene tokom navođenja za prikaz podataka kao što su rastojanje, vreme dolaska ili preostalo vreme, sledeća skretanja, smer, trenutni naziv ulice, podaci o trakama, najveća dozvoljena brzina, upozorenja o približavanju, TOI, tačke puta.";
 "shared_string_symbol" = "Simbol";
 "history_preferences_descr" = "Možeš onemogućiti beleženje istorije pojedinačno za svaku vrstu istorije.";
-"user_points" = "Sopstvene TOI";
+"user_points" = "Sopstvene tačke";
 "quick_action_coordinates_widget_descr" = "Prekidač za prikaz ili sakrivanje vidžeta koordinata na mapi.";
 "activity_type_motorbike_name" = "Motocikl";
 "activity_type_running_name" = "Trčanje";
@@ -2735,7 +2735,7 @@
 "help_article_personal_storage_name" = "Skladište";
 "help_article_plan_route_name" = "Plan rute";
 "help_article_plan_route_coordinate_input_name" = "Unos koordinata";
-"help_article_plan_route_web_name" = "WEB planer rute";
+"help_article_plan_route_web_name" = "Web planer rute";
 "help_article_search_search_all_name" = "Pretraži sve";
 "help_article_search_search_coordinates_name" = "Traži koordinate";
 "help_article_search_search_poi_name" = "Traži TOI";
@@ -3779,7 +3779,7 @@
 "shared_string_hour" = "Sat";
 "shared_string_volume" = "Volumen";
 "vehicle_metrics_recording_description" = "Izaberite parametre koji će biti snimljeni u GPX fajlu.";
-"shared_string_other" = "GPS najave";
+"shared_string_other" = "Drugo";
 "shared_string_engine" = "Motor";
 "fastspring_one_time_payment_desc" = "Svojim kupovinama možete upravljati putem portala za upravljanje FastSpring računom.";
 "obd_fuel_type_methanol" = "Metanol";

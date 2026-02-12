@@ -239,6 +239,7 @@
     return NO;
 }
 
+// TODO refactor with % 2 == 1
 - (BOOL) contain:(double) lat lon:(double) lon
 {
     BOOL res = NO;
@@ -919,6 +920,7 @@
     BOOL isInnerPoint = [OAMapUtils isPointInsidePolygon:point polygon:[another getPoints31]];
     if (isInnerPoint)
     {
+        // TODO containsPoint()
         return [OAMapUtils isPointInsidePolygon:point polygon:[self getPoints31]];
     }
     else
@@ -951,6 +953,7 @@
     return false;
 }
 
+// TODO refactor to contain()
 - (BOOL)containsPoint:(CLLocation *)location
 {
     OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));

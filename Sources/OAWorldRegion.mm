@@ -916,12 +916,10 @@
         return NO;
 
     // Finally check inner point
-    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(another.regionCenter.latitude, another.regionCenter.longitude));
-    BOOL isInnerPoint = [OAMapUtils isPointInsidePolygon:point polygon:[another getPoints31]];
+    BOOL isInnerPoint = [another contain:another.regionCenter.latitude lon:another.regionCenter.longitude];
     if (isInnerPoint)
     {
-        // TODO containsPoint()
-        return [OAMapUtils isPointInsidePolygon:point polygon:[self getPoints31]];
+        return [self contain:another.regionCenter.latitude lon:another.regionCenter.longitude];
     }
     else
     {

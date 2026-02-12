@@ -241,21 +241,25 @@
 
 - (BOOL) contain:(double) lat lon:(double) lon
 {
-    BOOL res = NO;
-    if (_worldRegion != nullptr)
+    if (_worldRegion == nullptr)
+        return NO;
+
+    int intersections = 0;
+
+    if ([self polygonContains:lat lon:lon polygon:_worldRegion->polygon])
+        intersections++;
+
+    for (const auto &additional : _worldRegion->additionalPolygons)
     {
-        const auto &points = _worldRegion->polygon;
-        res |= [self polygonContains:lat lon:lon polygon:points];
-        if (res)
-            return res;
-        for (const auto &polygon : _worldRegion->additionalPolygons)
+        if ([self polygonContains:lat lon:lon polygon:additional])
         {
-            res |= [self polygonContains:lat lon:lon polygon:polygon];
-            if (res)
-                return res;
+            intersections++;
+            if ((intersections % 2) == 0)
+                break; // optimize
         }
     }
-    return res;
+
+    return (intersections % 2) == 1;
 }
 
 - (NSArray<OAPointIContainer *> *) getAllPolygons
@@ -915,11 +919,10 @@
         return NO;
 
     // Finally check inner point
-    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(another.regionCenter.latitude, another.regionCenter.longitude));
-    BOOL isInnerPoint = [OAMapUtils isPointInsidePolygon:point polygon:[another getPoints31]];
+    BOOL isInnerPoint = [another contain:another.regionCenter.latitude lon:another.regionCenter.longitude];
     if (isInnerPoint)
     {
-        return [OAMapUtils isPointInsidePolygon:point polygon:[self getPoints31]];
+        return [self contain:another.regionCenter.latitude lon:another.regionCenter.longitude];
     }
     else
     {
@@ -953,8 +956,7 @@
 
 - (BOOL)containsPoint:(CLLocation *)location
 {
-    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-    return !_worldRegion->polygon.isEmpty() && [OAMapUtils isPointInsidePolygon:point polygon:_worldRegion->polygon];
+    return [self contain:location.coordinate.latitude lon:location.coordinate.longitude];
 }
 
 @end

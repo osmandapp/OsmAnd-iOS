@@ -239,24 +239,27 @@
     return NO;
 }
 
-// TODO refactor with % 2 == 1
 - (BOOL) contain:(double) lat lon:(double) lon
 {
-    BOOL res = NO;
-    if (_worldRegion != nullptr)
+    if (_worldRegion == nullptr)
+        return NO;
+
+    int intersections = 0;
+
+    if ([self polygonContains:lat lon:lon polygon:_worldRegion->polygon])
+        intersections++;
+
+    for (const auto &additional : _worldRegion->additionalPolygons)
     {
-        const auto &points = _worldRegion->polygon;
-        res |= [self polygonContains:lat lon:lon polygon:points];
-        if (res)
-            return res;
-        for (const auto &polygon : _worldRegion->additionalPolygons)
+        if ([self polygonContains:lat lon:lon polygon:additional])
         {
-            res |= [self polygonContains:lat lon:lon polygon:polygon];
-            if (res)
-                return res;
+            intersections++;
+            if ((intersections % 2) == 0)
+                break; // optimize
         }
     }
-    return res;
+
+    return (intersections % 2) == 1;
 }
 
 - (NSArray<OAPointIContainer *> *) getAllPolygons

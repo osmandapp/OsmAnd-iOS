@@ -273,12 +273,12 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             nm = self.localizedNames[@"en"];
             if (!nm || nm.length == 0)
                 nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
-            return nm;
+            return nm && nm.length > 0 ? nm : self.name;
         }
         nm = self.localizedNames[lang];
         if (transliterate)
             nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(nm)).toNSString();
-        return nm;
+        return nm && nm.length > 0 ? nm : self.name;
     }
     return self.name;
 }

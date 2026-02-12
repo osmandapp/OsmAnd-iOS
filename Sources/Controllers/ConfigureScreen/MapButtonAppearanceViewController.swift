@@ -166,8 +166,6 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
                 cell.setupButtonsEnabling()
             }
             cell.sliderView.tag = (indexPath.section << 10) | indexPath.row
-            cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside, .touchUpOutside])
-            cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])
             cell.topLeftLabel.text = item.title
             cell.topLeftLabel.accessibilityLabel = cell.topLeftLabel.text
             cell.topRightLabel.text = String(format: localizedString("ltr_or_rtl_combine_via_space"), value, unit)
@@ -370,16 +368,24 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
     private func setAppearanceParameter(_ selectedIndex: Int, sender: UISlider) {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
-        setAppearanceParameter(selectedIndex, key: item.key)
-    }
-    
-    private func setAppearanceParameter(_ selectedIndex: Int, key: String?) {
-        if key == Self.cornerRadiusRowKey {
-            appearanceParams?.cornerRadius = Self.cornerRadiusArrayValues[selectedIndex]
-        } else if key == Self.sizeRowKey {
-            appearanceParams?.size = Self.sizeArrayValues[selectedIndex]
+        guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell else {
+            return
         }
-        updateData()
+        var value: Int32?
+        if item.key == Self.cornerRadiusRowKey {
+            appearanceParams?.cornerRadius = Self.cornerRadiusArrayValues[selectedIndex]
+            value = appearanceParams?.cornerRadius
+        } else if item.key == Self.sizeRowKey {
+            appearanceParams?.size = Self.sizeArrayValues[selectedIndex]
+            value = appearanceParams?.size
+        }
+        if let value {
+            cell.topRightLabel.text = String(format: localizedString("ltr_or_rtl_combine_via_space"), String(value), localizedString("shared_string_pt"))
+            cell.topRightLabel.accessibilityLabel = cell.topRightLabel.text
+        }
+        cell.setupButtonsEnabling()
+        updateBottomButtons()
+        updatePreview()
     }
     
     private func updateData() {
@@ -391,12 +397,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
     @objc private func sliderChanged(sender: UISlider) {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
-        if item.key == Self.cornerRadiusRowKey || item.key == Self.sizeRowKey {
-            guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell, let arrayValues = item.obj(forKey: Self.arrayValuesKey) as? [String] else { return }
-            let selectedIndex = Int(cell.sliderView.selectedMark)
-            guard selectedIndex >= 0, selectedIndex < arrayValues.count else { return }
-            setAppearanceParameter(selectedIndex, key: item.key)
-        } else if item.key == Self.backgroundOpacityRowKey {
+        if item.key == Self.backgroundOpacityRowKey {
             appearanceParams?.opacity = Double(sender.value)
             updateData()
         }
@@ -416,6 +417,10 @@ extension MapButtonAppearanceViewController: SegmentButtonsSliderTableViewCellDe
     }
     
     func onMinusTapped(_ selectedMark: Int, sender: UISlider) {
+        setAppearanceParameter(selectedMark, sender: sender)
+    }
+    
+    func onSliderValueChanged(_ selectedMark: Int, sender: UISlider) {
         setAppearanceParameter(selectedMark, sender: sender)
     }
 }

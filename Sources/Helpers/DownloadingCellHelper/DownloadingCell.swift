@@ -22,7 +22,7 @@ final class DownloadingCell: OARightIconTableViewCell {
         config.image = UIImage(systemName: arrow)
         config.imagePlacement = isRTL ? .leading : .trailing
         config.imagePadding = 6
-        config.baseForegroundColor = .textColorActive
+        config.baseForegroundColor = .buttonTextColorSecondary
         config.background.backgroundColor = .buttonBgColorTertiary
         rightButton.configuration = config
         rightButton.layer.cornerRadius = 6

@@ -44,5 +44,6 @@
 
 - (UIImage *)icon;
 - (NSString *)iconName;
+- (NSString *)iconKeyName;
 
 @end

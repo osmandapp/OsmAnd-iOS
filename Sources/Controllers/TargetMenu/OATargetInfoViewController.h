@@ -7,7 +7,7 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OARowInfo.h"
+#import "OAAmenityInfoRow.h"
 
 #define kCollapseDetailsRowType @"kCollapseDetailsRowType"
 #define kDescriptionRowType @"kDescriptionRowType"
@@ -19,18 +19,24 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (nonatomic) NSArray<OARowInfo *> *additionalRows;
+@property (nonatomic) NSArray<OAAmenityInfoRow *> *additionalRows;
 
-- (BOOL) needCoords;
-- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp;
-- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment;
-- (void) buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows;
+@property (nonatomic) BOOL showTitleIfTruncated;
+@property (nonatomic) BOOL customOnlinePhotosPosition;
+
+- (BOOL) needBuildCoordinatesRow;
+- (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildMainImage:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp;
+- (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment;
+- (void) buildPhotosRow;
+- (void) buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) rebuildRows;
-- (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) setInfoRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) appendInfoRow:(OAAmenityInfoRow *)row;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 + (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size;

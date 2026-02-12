@@ -15,6 +15,17 @@ CGFloat const kCollapsableTitleMarginRight = 95.0;
 
 @implementation OACollapsableView
 
+- (instancetype) initWithDefaultParameters:(BOOL)collapsed
+{
+    //Default values from our previous code
+    self = [self initWithFrame:CGRectMake(0, 0, 320, 100)];
+    if (self)
+    {
+        self.collapsed = collapsed;
+    }
+    return self;
+}
+
 - (void) adjustHeightForWidth:(CGFloat)width
 {
 }

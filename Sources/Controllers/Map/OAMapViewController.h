@@ -151,11 +151,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             animated:(BOOL)animated;
 - (void)cancelAllAnimations;
 
-- (void) correctPosition:(Point31)targetPosition31
+- (void)correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
              centerBBox:(BOOL)centerBBox
+          alignPosition:(BOOL)alignPosition
                animated:(BOOL)animated;
 
 - (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state

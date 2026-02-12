@@ -381,15 +381,15 @@
     {
         _nativeFiles = [NSMutableSet set];
         _nativeRoutingLock = [[NSObject alloc] init];
-        [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
-            [self]
-            (const OsmAnd::ResourcesManager* const resourcesManager,
-            const QList< QString >& added,
-            const QList< QString >& removed,
-            const QList< QString >& updated)
-            {
-                [self onLocalResourcesChanged];
-            });
+        
+        [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(
+                                                                                     reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+                                                                                     [self](const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                                            const QList<QString>& added,
+                                                                                            const QList<QString>& removed,
+                                                                                            const QList<QString>& updated) {
+                                                                                                [self onLocalResourcesChanged];
+                                                                                            });
         _or = OsmAndApp.instance.worldRegion;
     }
     return self;

@@ -62,6 +62,16 @@
     return NO;
 }
 
+- (BOOL)isLandscape
+{
+    return [OAUtilities isLandscapeIpadAware] || [OAUtilities isiOSAppOnMac];
+}
+
+- (NSString *)getCommonTypeStr
+{
+    return @"";
+}
+
 - (NSAttributedString *)getAttributedTypeStr
 {
     return nil;
@@ -119,7 +129,7 @@
     }
     _tableViews = [NSArray arrayWithArray:viewControllers];
     
-    if (!self.isLandscape)
+    if (![self isLandscape])
     {
         [OAUtilities setMaskTo:_pageController.view byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
@@ -240,7 +250,7 @@
 
 - (void)restoreFromFullScreen
 {
-    if (!self.isLandscape)
+    if (![self isLandscape])
     {
         [OAUtilities setMaskTo:_pageController.view byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
@@ -270,7 +280,7 @@
         pageFrame.size.width = self.contentView.frame.size.width - pageFrame.origin.x;
         _pageController.view.frame = pageFrame;
         
-        if (!self.isLandscape)
+        if (![self isLandscape])
         {
             [OAUtilities setMaskTo:_pageController.view byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
             [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];

@@ -3354,6 +3354,10 @@
 		FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
 		FAA8F9062CC28441008452CF /* TrackItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */; };
+		FAAAADD82F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAADD72F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift */; };
+		FAAAADDA2F3DD257008B8744 /* POITopPlaceImageDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAADD92F3DD257008B8744 /* POITopPlaceImageDecorator.swift */; };
+		FAAAADDC2F3DD27E008B8744 /* IconMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAADDB2F3DD27E008B8744 /* IconMetrics.swift */; };
+		FAAAADDE2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAADDD2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift */; };
 		FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */; };
 		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAB302A92DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */; };
@@ -8097,6 +8101,10 @@
 		FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DescriptionDeviceHeader.xib; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackItemExtension.swift; sourceTree = "<group>"; };
+		FAAAADD72F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooManyRequestsRetryStrategy.swift; sourceTree = "<group>"; };
+		FAAAADD92F3DD257008B8744 /* POITopPlaceImageDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POITopPlaceImageDecorator.swift; sourceTree = "<group>"; };
+		FAAAADDB2F3DD27E008B8744 /* IconMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconMetrics.swift; sourceTree = "<group>"; };
+		FAAAADDD2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMCircularShadowProcessor.swift; sourceTree = "<group>"; };
 		FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupMonitor.swift; sourceTree = "<group>"; };
 		FAAD725E2E1BEF5F000807A0 /* StartupLogging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartupLogging.h; sourceTree = "<group>"; };
 		FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
@@ -8503,7 +8511,7 @@
 		32C1C4EC2DD4C4F200A053D4 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				FABDBF352F165AD80092F3C1 /* POIImageLoader.swift */,
+				FAAAADD62F3DD1D8008B8744 /* POIImageLoader */,
 				328EE34B2E16AE64003CDB48 /* BaseDetailsObject.swift */,
 				328EE3492E169049003CDB48 /* ClickableWay.swift */,
 				328EE3512E171093003CDB48 /* ClickableWayAsyncTask.swift */,
@@ -14415,6 +14423,8 @@
 		FA5DD0FA2F222977002F3F79 /* OAPOILayerTopPlacesProvider */ = {
 			isa = PBXGroup;
 			children = (
+				FAAAADDB2F3DD27E008B8744 /* IconMetrics.swift */,
+				FAAAADD92F3DD257008B8744 /* POITopPlaceImageDecorator.swift */,
 				FA5DD0FB2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.h */,
 				FA5DD0FC2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m */,
 			);
@@ -14662,6 +14672,16 @@
 				FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */,
 			);
 			path = DescriptionDeviceHeader;
+			sourceTree = "<group>";
+		};
+		FAAAADD62F3DD1D8008B8744 /* POIImageLoader */ = {
+			isa = PBXGroup;
+			children = (
+				FAAAADDD2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift */,
+				FABDBF352F165AD80092F3C1 /* POIImageLoader.swift */,
+				FAAAADD72F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift */,
+			);
+			path = POIImageLoader;
 			sourceTree = "<group>";
 		};
 		FAAD725B2E1BBE6E000807A0 /* AppStartupMonitor */ = {
@@ -17125,6 +17145,7 @@
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */,
+				FAAAADDE2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
 				2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */,
 				328EE35A2E171BA4003CDB48 /* SelectedMapObject.swift in Sources */,
@@ -17691,6 +17712,7 @@
 				DA5A817426C563A700F274C7 /* OAGpxWptItem.mm in Sources */,
 				27C6D5B92E7D578C00695D5B /* KeyEventHandler.swift in Sources */,
 				FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */,
+				FAAAADDC2F3DD27E008B8744 /* IconMetrics.swift in Sources */,
 				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
@@ -17704,6 +17726,7 @@
 				DA775B8A27E6109F0081B9C1 /* OALocalFile.m in Sources */,
 				FAE446D62CD3C10900598BE3 /* UIScreen+Extension.swift in Sources */,
 				DA66796B27EDCABA00509932 /* OARegisterDeviceCommand.m in Sources */,
+				FAAAADD82F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift in Sources */,
 				FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */,
 				DA4ABF232876DA6800B996EF /* OACollectionSettingsItem.mm in Sources */,
 				2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */,
@@ -18442,6 +18465,7 @@
 				DA8DC3902A0CCFCB006C116B /* DistanceToDestinationWidget.swift in Sources */,
 				CA4ED6FF8F7B115D3C5DC810 /* OAWeatherForecastViewController.mm in Sources */,
 				CA4EDA76E3361F7FEB8D4A1E /* OAWeatherForecastDetailsViewController.mm in Sources */,
+				FAAAADDA2F3DD257008B8744 /* POITopPlaceImageDecorator.swift in Sources */,
 				CA4ED2FE0185FC36F0229614 /* OAWeatherFrequencySettingsViewController.mm in Sources */,
 				27D33B452E743DAF00AD4F70 /* NavigatePreviousScreenAction.swift in Sources */,
 				C563193E2EF0353E008854B3 /* DeepLinkParser.swift in Sources */,

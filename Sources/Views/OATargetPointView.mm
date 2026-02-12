@@ -2560,7 +2560,6 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) btnCancelPressed
 {
-   // [self.menuViewDelegate contextMenuDidHide];
     [self.menuViewDelegate targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
 }
 

@@ -10,7 +10,6 @@ import Kingfisher
 
 @objcMembers
 final class POIImageLoader: NSObject, @unchecked Sendable {
-    
     /// Serial queue for thread-safe access to loadingImages
     private let queue = DispatchQueue(label: "com.osmand.poiImageLoader")
     
@@ -83,10 +82,8 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                 ]
                 
                 // MARK: - Load image
-                let task = KingfisherManager.shared.retrieveImage(
-                    with: url,
-                    options: options,
-                ) { [weak self] result in
+                let task = KingfisherManager.shared.retrieveImage(with: url,
+                                                                  options: options) { [weak self] result in
                     guard let self else { return }
                     
                     switch result {
@@ -97,7 +94,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                         
                         guard let placeholderImageName = place.type?.iconName(),
                               let placeholderImage = OASvgHelper.mapImageNamed(placeholderImageName, scale: Float(scale)),
-                              let cacheKey = placeholderCacheKey(place: place, metrics: metrics) else {
+                              let cacheKey = placeholderCacheKey(placeholderImageName: placeholderImageName, metrics: metrics) else {
                             self.queue.async {
                                 self.loadingImages.removeValue(forKey: urlStr)
                             }
@@ -157,13 +154,11 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
         return processor
     }
     
-    private func placeholderCacheKey(place: OAPOI,
+    private func placeholderCacheKey(placeholderImageName: String,
                                      metrics: IconMetrics) -> String? {
-        guard let iconName = place.type?.iconName() else { return nil }
-        
         return [
             "poi_placeholder",
-            iconName,
+            placeholderImageName,
             "scale_\(metrics.textScale)",
             "icon_\(UIColor.popularPlacePlaceholderBg.currentMapThemeColor.hashValue)"
         ].joined(separator: "_")
@@ -198,215 +193,17 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
         }
         
         let processor = RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
-            |> BorderImageProcessor(border: .init(
-                color: UIColor.popularPlaceBgDefault.currentMapThemeColor,
-                lineWidth: metrics.border,
-                radius: .heightFraction(0.5)))
-            |> OSMCircularShadowProcessor(
-                shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
-                shadowBlur: 6 * metrics.textScale,
-                shadowColor: UIColor.black.withAlphaComponent(0.2),
-                shadowPadding: 8 * metrics.textScale
-            )
+        |> BorderImageProcessor(border: .init(
+            color: UIColor.popularPlaceBgDefault.currentMapThemeColor,
+            lineWidth: metrics.border,
+            radius: .heightFraction(0.5)))
+        |> OSMCircularShadowProcessor(
+            shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
+            shadowBlur: 6 * metrics.textScale,
+            shadowColor: UIColor.black.withAlphaComponent(0.2),
+            shadowPadding: 8 * metrics.textScale
+        )
         
         return processor.process(item: .image(combinedImage), options: option)
-    }
-}
-
-struct IconMetrics {
-    let textScale: CGFloat
-    
-    // MARK: - Design contract (textScale = 1)
-    private let baseImageArea: CGFloat = 50   // full image area, includes border
-    private let baseBorder: CGFloat    = 4    // drawn inside imageArea
-    private let baseShadow: CGFloat    = 66   // canvas with shadow
-    
-    // MARK: - Scaled values
-    var imageArea: CGFloat {
-        baseImageArea * textScale
-    }
-    
-    var border: CGFloat {
-        baseBorder * textScale
-    }
-    
-    var shadow: CGFloat {
-        baseShadow * textScale
-    }
-    
-    var imageTargetSize: CGSize {
-        CGSize(width: imageArea, height: imageArea)
-    }
-    
-    var placeholderTargetSize: CGSize {
-        CGSize(width: imageArea, height: imageArea)
-    }
-    
-    // MARK: - Geometry inside shadow canvas
-    
-    /// Top-left origin of imageArea inside shadow canvas
-    /// Centers imageArea (50x50) inside shadow canvas (66x66)
-    var imageOriginInShadow: CGPoint {
-        CGPoint(
-            x: (shadow - imageArea) / 2,
-            y: (shadow - imageArea) / 2
-        )
-    }
-    
-    /// Rect of visible icon (image + borders) inside shadow canvas
-    var imageRectInShadow: CGRect {
-        CGRect(
-            origin: imageOriginInShadow,
-            size: imageTargetSize
-        )
-    }
-}
-
-/// Processor that adds a circular shadow to an image
-struct OSMCircularShadowProcessor: ImageProcessor {
-    // Required by ImageProcessor
-    let identifier: String
-    
-    // Parameters
-    let shadowOffset: CGSize
-    let shadowBlur: CGFloat
-    let shadowColor: UIColor
-    let shadowPadding: CGFloat
-    
-    init(shadowOffset: CGSize,
-         shadowBlur: CGFloat,
-         shadowColor: UIColor,
-         shadowPadding: CGFloat) {
-        self.shadowOffset = shadowOffset
-        self.shadowBlur = shadowBlur
-        self.shadowColor = shadowColor
-        self.shadowPadding = shadowPadding
-        self.identifier =
-        "com.osmand.CircularShadowProcessor." +
-        "\(shadowOffset.width)x\(shadowOffset.height)." +
-        "\(shadowBlur)." +
-        "\(shadowPadding)." +
-        "\(shadowColor.hashValue)"
-    }
-    
-    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage? {
-        switch item {
-        case .image(let image):
-            let canvasSize = CGSize(
-                width: image.size.width + 2 * shadowPadding,
-                height: image.size.height + 2 * shadowPadding
-            )
-            
-            let format = UIGraphicsImageRendererFormat.default()
-            format.opaque = false
-            format.scale = image.scale
-            
-            let renderer = UIGraphicsImageRenderer(size: canvasSize, format: format)
-            return renderer.image { ctx in
-                let cgContext = ctx.cgContext
-                
-                let imageOrigin = CGPoint(x: shadowPadding, y: shadowPadding)
-                let imageRect = CGRect(origin: imageOrigin, size: image.size)
-                
-                cgContext.addEllipse(in: imageRect)
-                cgContext.setShadow(
-                    offset: shadowOffset,
-                    blur: shadowBlur,
-                    color: shadowColor.cgColor
-                )
-                cgContext.setFillColor(UIColor.white.cgColor)
-                cgContext.fillPath()
-                
-                image.draw(in: imageRect)
-            }
-        case .data:
-            return (DefaultImageProcessor.default |> self).process(item: item, options: options)
-        }
-    }
-}
-
-@objcMembers
-final class POITopPlaceImageDecorator: NSObject {
-    
-    static func selectedImage(for image: UIImage) -> UIImage {
-        let metrics = IconMetrics(textScale: OAAppSettings.sharedManager().textSize.get())
-        return imageWithSelection(image, metrics: metrics)
-    }
-    
-    static private func imageWithSelection(_ image: UIImage,
-                                           metrics: IconMetrics) -> UIImage {
-        let format = UIGraphicsImageRendererFormat.default()
-        format.opaque = false
-        format.scale = image.scale
-        
-        return UIGraphicsImageRenderer(size: image.size, format: format).image { context in
-            
-            let ctx = context.cgContext
-            
-            image.draw(at: .zero)
-            ctx.setShadow(offset: .zero, blur: 0, color: nil)
-            ctx.setStrokeColor(UIColor.popularPlaceSelectedStroke.currentMapThemeColor.cgColor)
-            
-            let purpleLineWidth = 2 * metrics.textScale
-            ctx.setLineWidth(purpleLineWidth)
-            ctx.strokeEllipse(in: metrics.imageRectInShadow)
-        }
-    }
-}
-
-struct TooManyRequestsRetryStrategy: RetryStrategy {
-    
-    enum Interval: Sendable {
-        /// The current retry count is given as a parameter.
-        case custom(block: @Sendable (_ retriedCount: Int) -> TimeInterval)
-        
-        func timeInterval(for retriedCount: Int) -> TimeInterval {
-            let retryAfter: TimeInterval
-            switch self {
-            case .custom(let block):
-                retryAfter = block(retriedCount)
-            }
-            return retryAfter
-        }
-    }
-    
-    let maxRetryCount: Int
-    let retryInterval: Interval
-    
-    func retry(context: RetryContext, retryHandler: @escaping @Sendable (RetryDecision) -> Void) {
-        guard context.retriedCount < maxRetryCount else {
-            retryHandler(.stop)
-            return
-        }
-        
-        guard !context.error.isTaskCancelled else {
-            retryHandler(.stop)
-            return
-        }
-        
-        guard case let .responseError(reason) = context.error else {
-            retryHandler(.stop)
-            return
-        }
-        
-        switch reason {
-        case .invalidHTTPStatusCode(let response):
-            guard response.statusCode == 429 else {
-                retryHandler(.stop)
-                return
-            }
-            
-            let interval = retryInterval.timeInterval(for: context.retriedCount)
-            if interval <= 0 {
-                retryHandler(.retry(userInfo: nil))
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-                    retryHandler(.retry(userInfo: nil))
-                }
-            }
-            
-        default:
-            retryHandler(.stop)
-        }
     }
 }

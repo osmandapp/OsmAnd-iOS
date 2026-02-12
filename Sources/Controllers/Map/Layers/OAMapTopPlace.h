@@ -9,7 +9,6 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/PointsAndAreas.h>
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAMapTopPlace : NSObject

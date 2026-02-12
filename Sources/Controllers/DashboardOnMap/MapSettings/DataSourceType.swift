@@ -27,7 +27,6 @@
 
 @objcMembers
 final class DataSourceTypeWrapper: NSObject {
-
     static func titleFor(type: DataSourceType) -> String {
         type.title
     }

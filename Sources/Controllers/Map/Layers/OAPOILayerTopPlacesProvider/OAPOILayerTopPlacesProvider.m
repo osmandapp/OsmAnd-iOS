@@ -200,7 +200,6 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
             return;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             NSArray<OAResourceSwiftItem *> *items = [OAResourcesUISwiftHelper findWikiMapRegionsAtCurrentMapLocation];
             
             BOOL resourcesChanged = [self hasWikipediaResourcesChanged:items];

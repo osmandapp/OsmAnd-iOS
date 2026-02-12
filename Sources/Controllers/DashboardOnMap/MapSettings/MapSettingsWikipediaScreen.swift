@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 private enum RowKey: String {
     case wikipediaSwitchRowKey
     case languagesRowKey

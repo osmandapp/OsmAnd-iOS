@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 @objc protocol WikipediaScreenDelegate: AnyObject {
     func updateWikipediaSettings()
 }

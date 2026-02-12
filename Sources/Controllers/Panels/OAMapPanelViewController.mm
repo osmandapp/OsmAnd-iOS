@@ -2652,8 +2652,6 @@ typedef enum
     if (_targetMenuView.needsManualContextMode)
         [self restoreFromContextMenuMode];
     
-   // [self contextMenuDidHide];
-    
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         if (_activeTargetType != OATargetNone)
         {

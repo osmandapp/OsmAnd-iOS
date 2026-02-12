@@ -1852,7 +1852,7 @@
 "navigate_point_easting" = "Østlig";
 "added_profiles_descr" = "Profiler tilføjet af udvidelse";
 "wiki_menu_download_descr" = "Yderligere kort er nødvendige for at se Wikipedia-interessepunkter på kortet.";
-"navigate_point_olc" = "Open Location Code (OLC)";
+"navigate_point_olc" = "Open Location Code";
 "contour_lines_hillshades_slope" = "Højdekurver, terrænskygger, hældning";
 "explore_wikipedia_offline" = "Udforsk Wikipedia offline.";
 "shared_string_turn_off" = "Sluk";

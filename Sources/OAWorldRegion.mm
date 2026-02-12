@@ -953,11 +953,9 @@
     return false;
 }
 
-// TODO refactor to contain()
 - (BOOL)containsPoint:(CLLocation *)location
 {
-    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-    return !_worldRegion->polygon.isEmpty() && [OAMapUtils isPointInsidePolygon:point polygon:_worldRegion->polygon];
+    return [self contain:location.coordinate.latitude lon:location.coordinate.longitude];
 }
 
 @end

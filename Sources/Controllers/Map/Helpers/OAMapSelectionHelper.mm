@@ -239,7 +239,7 @@ static int TILE_SIZE = 256;
                         auto onPathMapSymbol =
                             std::dynamic_pointer_cast<const OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
                         BOOL allowMapObjects = onPathMapSymbol == nullptr &&
-                            !OsmAnd::NetworkRouteKey::containsUnsupportedRouteTags([self toQHash:tags]);
+                            !OsmAnd::NetworkRouteKey::containsUnclickableRouteTags([self toQHash:tags]);
 
                         if (allowMapObjects)
                         {
@@ -269,16 +269,6 @@ static int TILE_SIZE = 256;
     
     OASKGeoParsedPoint *p = [OASKMapUtils.shared decodeShortLinkStringS:value];
     return [[CLLocation alloc] initWithLatitude:p.getLatitude longitude:p.getLongitude];
-}
-
-- (NSString *)getMapIconName:(OsmAnd::IMapRenderer::MapSymbolInformation)symbolInfo
-{
-    const auto rasterMapSymbol = [self getRasterMapSymbolWithSymbolInfo:symbolInfo];
-    if (rasterMapSymbol != nullptr && rasterMapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
-    {
-        return rasterMapSymbol->content.toNSString();
-    }
-    return nil;
 }
 
 - (const shared_ptr<const OsmAnd::BillboardRasterMapSymbol>)getRasterMapSymbolWithSymbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation)symbolInfo
@@ -394,19 +384,6 @@ static int TILE_SIZE = 256;
         return YES;
     }
     return NO;
-}
-
-- (void)addGeometry:(BaseDetailsObject *)detailObj obfMapObject:(shared_ptr<const OsmAnd::ObfMapObject>)obfMapObject
-{
-    if (detailObj && ![detailObj hasGeometry] && obfMapObject->points31.size() > 1)
-    {
-        const auto points31 = obfMapObject->points31;
-        for (int i = 0; i < points31.size(); i++)
-        {
-            [detailObj addX:@(points31[i].x)];
-            [detailObj addY:@(points31[i].y)];
-        }
-    }
 }
 
 - (BOOL)isUniqueGpxFileName:(NSMutableArray<SelectedMapObject *> *)selectedObjects gpxFileName:(NSString *)gpxFileName

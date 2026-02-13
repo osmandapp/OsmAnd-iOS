@@ -312,6 +312,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self addNewGpxData:[self getGpxFile:_fileName]];
     else if (_editingContext.isApproximationNeeded && self.isFollowTrackMode)
         [self enterApproximationMode];
+    
+    [_mapPanel.mapViewController.mapLayers.weatherLayerLow hideMapCenterMarker];
+    [_mapPanel.mapViewController.mapLayers.weatherLayerHigh hideMapCenterMarker];
 }
 
 - (void)viewWillAppear:(BOOL)animated

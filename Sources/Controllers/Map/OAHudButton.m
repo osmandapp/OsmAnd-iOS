@@ -217,22 +217,20 @@
     _borderLayer.shadowOffset = CGSizeMake(0, 2);
     _borderLayer.cornerRadius = cornerRadius;
     
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    maskLayer.frame = bounds;
-    maskLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:_borderLayer.cornerRadius].CGPath;
-    
     CGFloat shadowBorder = _borderLayer.shadowRadius * 2;
-    CGFloat negativeShadowBorder = -shadowBorder;
-    CGFloat halfShadowBorder = shadowBorder / 2;
-    maskLayer.frame = CGRectInset(maskLayer.frame, negativeShadowBorder, negativeShadowBorder);
-    maskLayer.frame = CGRectOffset(maskLayer.frame, halfShadowBorder, halfShadowBorder);
+    CGFloat inset = -shadowBorder;
+    CGFloat offset = shadowBorder / 2;
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    CGRect maskFrame = CGRectInset(bounds, inset, inset);
+    maskFrame = CGRectOffset(maskFrame, offset, offset);
+    maskLayer.frame = maskFrame;
     maskLayer.fillRule = kCAFillRuleEvenOdd;
     
-    CGMutablePathRef pathMasking = CGPathCreateMutable();
-    CGPathAddPath(pathMasking, nil, [UIBezierPath bezierPathWithRect:maskLayer.frame].CGPath);
-    CGAffineTransform catShiftBorder = CGAffineTransformMakeTranslation(halfShadowBorder, halfShadowBorder);
-    CGPathAddPath(pathMasking, nil, CGPathCreateCopyByTransformingPath(maskLayer.path, &catShiftBorder));
-    maskLayer.path = pathMasking;
+    UIBezierPath *combinedPath = [UIBezierPath bezierPathWithRect:maskLayer.frame];
+    CGRect innerRect = CGRectOffset(bounds, offset, offset);
+    UIBezierPath *innerRoundedPath = [UIBezierPath bezierPathWithRoundedRect:innerRect cornerRadius:_borderLayer.cornerRadius];
+    [combinedPath appendPath:innerRoundedPath];
+    maskLayer.path = combinedPath.CGPath;
     
     _borderLayer.mask = maskLayer;
 }

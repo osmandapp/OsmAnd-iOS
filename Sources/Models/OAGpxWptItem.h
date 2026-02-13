@@ -27,6 +27,7 @@
 @property (nonatomic) NSString *docPath;
 
 - (UIImage *) getCompositeIcon;
+- (UIImage *)compositeIconWithDefaultColor;
 
 - (NSString *) getAmenityOriginName;
 - (void) setAmenityOriginName:(NSString *)originName;

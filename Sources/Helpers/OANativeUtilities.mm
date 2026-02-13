@@ -102,7 +102,11 @@
     if (resourcePath == nil)
         return nullptr;
 
-    return [self.class skImageFromResourcePath:resourcePath];
+    sk_sp<SkImage> img = [self.class skImageFromResourcePath:resourcePath];
+    if (img && UIScreen.mainScreen.scale == 1.0)
+        img = [self getScaledSkImage:img scaleFactor:0.5f];
+    
+    return img;
 }
 
 + (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath

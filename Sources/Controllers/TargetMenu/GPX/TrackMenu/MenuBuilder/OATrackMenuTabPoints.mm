@@ -216,7 +216,7 @@
                 kCellType: [OAPointWithRegionTableViewCell getCellIdentifier],
                 kCellTitle: name,
                 kCellDesc: description,
-                kCellLeftIcon: !isRte ? [waypoint getCompositeIcon]
+                kCellLeftIcon: !isRte ? [waypoint compositeIconWithDefaultColor]
                         : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
                                                     color:[UIColor colorNamed:ACColorNameIconColorDisabled]],
                 kTableValues: @{
@@ -276,7 +276,7 @@
                     kTableKey: [NSString stringWithFormat:@"waypoint_%@", name],
                     kCellTitle: name,
                     kCellLeftIcon: ![sectionData.subjects.firstObject.values[@"is_rte"] boolValue]
-                            ? [waypoint getCompositeIcon]
+                            ? [waypoint compositeIconWithDefaultColor]
                             : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
                                                         color:UIColorFromRGB(color_footer_icon_gray)]
             }];

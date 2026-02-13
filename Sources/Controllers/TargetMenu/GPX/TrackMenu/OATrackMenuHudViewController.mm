@@ -2513,7 +2513,7 @@
             [cell.titleView setText:cellData.title];
 
             [cell.leftIconView setImage:cellData.leftIcon];
-            cell.leftIconView.tintColor = cellData.tintColor;
+            cell.leftIconView.tintColor = [cellData.tintColor toARGBNumber] == 0 ? [OADefaultFavorite getDefaultColor] : cellData.tintColor;
 
             [cell.optionsButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
                                 forState:UIControlStateNormal];

@@ -74,7 +74,7 @@
 
 - (void)acquireColor
 {
-    self.color = self.point.getColor == 0 ? [OADefaultFavorite getDefaultColor] : UIColorFromARGB(self.point.getColor);
+    self.color = UIColorFromARGB(self.point.getColor);
 }
 
 - (BOOL) isEqual:(id)o
@@ -116,6 +116,14 @@
     NSString *iconName = _point.getIconName ?: DEFAULT_ICON_NAME_KEY;
     NSString *backgroundIconName = _point.getBackgroundType ?: DEFAULT_ICON_SHAPE_KEY;
     return [OAFavoritesHelper getCompositeIcon:iconName backgroundIcon:backgroundIconName color:UIColorFromARGB([_point getColor])];
+}
+
+- (UIImage *)compositeIconWithDefaultColor
+{
+    NSString *iconName = _point.getIconName ?: DEFAULT_ICON_NAME_KEY;
+    NSString *backgroundIconName = _point.getBackgroundType ?: DEFAULT_ICON_SHAPE_KEY;
+    NSInteger color = [_point getColor];
+    return [OAFavoritesHelper getCompositeIcon:iconName backgroundIcon:backgroundIconName color:color == 0 ? [OADefaultFavorite getDefaultColor] : UIColorFromARGB(color)];
 }
 
 @end

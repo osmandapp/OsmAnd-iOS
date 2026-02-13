@@ -121,7 +121,7 @@
 
 - (void)updateContent
 {
-    ButtonAppearanceParams *params = [self getAppearanceParams];
+    ButtonAppearanceParams *params = [self appearanceParams];
     if (params != _appearanceParams)
         _appearanceParams = params;
     [self updateIcon];
@@ -157,7 +157,7 @@
 {
     if (@available(iOS 26.0, *))
     {
-        NSInteger glassStyle = [self getGlassStyle];
+        NSInteger glassStyle = [self glassStyle];
         BOOL isGlass = glassStyle == UIGlassEffectStyleRegular || glassStyle == UIGlassEffectStyleClear;
         
         for (UIView *subview in self.subviews)
@@ -173,26 +173,26 @@
                 glass.tintColor = self.backgroundColor;
             UIVisualEffectView *glassView =
                 [[UIVisualEffectView alloc] initWithEffect:glass];
-            NSInteger size = [self getSize];
+            NSInteger size = [self size];
             glassView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
             glassView.userInteractionEnabled = NO;
-            glassView.layer.cornerRadius = [self getCornerRadius];
+            glassView.layer.cornerRadius = [self appearanceCornerRadius];
             glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
             
             [self insertSubview:glassView atIndex:0];
         }
         
-        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:isGlass ? 0.5 : [self getOpacity]];
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:isGlass ? 0.5 : [self opacity]];
     }
     else
     {
-        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self getOpacity]];
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self opacity]];
     }
 }
 
 - (void)updateCornerRadius
 {
-    self.layer.cornerRadius = [self getCornerRadius];
+    self.layer.cornerRadius = [self appearanceCornerRadius];
 }
 
 - (void)updateShadow
@@ -206,8 +206,8 @@
     self.layer.shadowOpacity = 0;
     self.layer.shadowPath = nil;
     
-    NSInteger size = [self getSize];
-    NSInteger cornerRadius = [self getCornerRadius];
+    NSInteger size = [self size];
+    NSInteger cornerRadius = [self appearanceCornerRadius];
     CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
     UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:cornerRadius];
     _borderLayer.shadowPath = shadowPath.CGPath;
@@ -239,11 +239,11 @@
 
 - (void)updateSize
 {
-    CGFloat size = (CGFloat)[self getSize];
+    CGFloat size = (CGFloat)[self size];
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size, size);
 }
 
-- (NSInteger)getSize
+- (NSInteger)size
 {
     if (_customAppearanceParams)
     {
@@ -253,11 +253,11 @@
         return size;
     }
 
-    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self appearanceParams];
     return params.size;
 }
 
-- (CGFloat)getOpacity
+- (CGFloat)opacity
 {
     if (_customAppearanceParams)
     {
@@ -267,13 +267,13 @@
         return opacity;
     }
     
-    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self appearanceParams];
     return params.opacity;
 }
 
-- (NSInteger)getCornerRadius
+- (NSInteger)appearanceCornerRadius
 {
-    NSInteger circleRadius = [self getSize] / 2;
+    NSInteger circleRadius = [self size] / 2;
     if (_customAppearanceParams)
     {
         NSInteger cornerRadius = _customAppearanceParams.cornerRadius;
@@ -285,11 +285,11 @@
             
         return cornerRadius > circleRadius ? circleRadius : cornerRadius;
     }
-    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self appearanceParams];
     return params.cornerRadius > circleRadius ? circleRadius : params.cornerRadius;
 }
 
-- (NSInteger)getGlassStyle
+- (NSInteger)glassStyle
 {
     if (_customAppearanceParams)
     {
@@ -299,7 +299,7 @@
         return glassStyle;
     }
     
-    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self getAppearanceParams];
+    ButtonAppearanceParams *params = _appearanceParams ? _appearanceParams : [self appearanceParams];
     return params.glassStyle;
 }
 
@@ -331,7 +331,7 @@
     return _buttonState ? [_buttonState getDefaultPositionSize] : nil;
 }
 
-- (ButtonAppearanceParams *)getAppearanceParams
+- (ButtonAppearanceParams *)appearanceParams
 {
     if (_buttonState)
         return _useDefaultAppearance ? [_buttonState createDefaultAppearanceParams] : [_buttonState createAppearanceParams];

@@ -74,8 +74,6 @@
     
     id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
     
-   // NSArray<OAMapLayer *> *_pointLayers;
-    
     CGPoint _cachedTargetPoint;
     
     OAMapSelectionHelper *_mapSelectionHelper;

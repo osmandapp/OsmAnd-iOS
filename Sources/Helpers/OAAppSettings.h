@@ -1546,13 +1546,4 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @end
 
-//public final CommonPreference<Boolean> WIKI_SHOW_IMAGE_PREVIEWS = new BooleanPreference(this, "wiki_show_image_previews", true).makeGlobal();
-//public final CommonPreference<DataSourceType> WIKI_DATA_SOURCE_TYPE = new EnumStringPreference<>(this, "wiki_data_source_type", DataSourceType.ONLINE, DataSourceType.values()) {
-//    @Override
-//    public DataSourceType getProfileDefaultValue(@Nullable ApplicationMode mode) {
-//        boolean paidVersion = Version.isPaidVersion(getContext());
-//        return paidVersion ? DataSourceType.OFFLINE : DataSourceType.ONLINE;
-//    }
-//}.makeGlobal().makeShared();
-
 NS_ASSUME_NONNULL_END

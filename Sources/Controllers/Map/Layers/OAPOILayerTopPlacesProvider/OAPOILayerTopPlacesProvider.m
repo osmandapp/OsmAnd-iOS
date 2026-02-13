@@ -301,7 +301,6 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     return [result copy];
 }
 
-
 - (void)resetSelectedTopPlaceIfNeeded
 {
     NSLog(@"[test] resetSelectedTopPlaceIfNeeded");

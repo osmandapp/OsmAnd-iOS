@@ -72,12 +72,14 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                 )
                 
                 let scale = UITraitCollection.current.displayScale
+                let targetCache = ImageCache.popularPlacesWikipedia
                 
                 let options: KingfisherOptionsInfo = [
                     .processor(processor),
                     .scaleFactor(scale),
                     .cacheSerializer(FormatIndicatedCacheSerializer.png),
                     .cacheOriginalImage,
+                    .targetCache(targetCache),
                     .retryStrategy(retryStrategy)
                 ]
                 
@@ -101,7 +103,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                             return
                         }
                         
-                        ImageCache.default.retrieveImage(forKey: cacheKey) { [weak self] result in
+                        targetCache.retrieveImage(forKey: cacheKey) { [weak self] result in
                             guard let self else { return }
                             
                             self.queue.async {
@@ -123,7 +125,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                                         self.loadingImages.removeValue(forKey: urlStr)
                                         
                                         if let image {
-                                            ImageCache.default.store(image, forKey: cacheKey)
+                                            targetCache.store(image, forKey: cacheKey)
                                             DispatchQueue.main.async { completion?(placeId, image) }
                                         }
                                     }

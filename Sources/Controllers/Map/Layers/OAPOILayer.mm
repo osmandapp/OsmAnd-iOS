@@ -608,19 +608,31 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     }
 }
 
-- (BOOL) isTopPlace:(id)object
+- (BOOL)isTopPlace:(id)object
 {
     NSDictionary<NSNumber *, OAPOI *> *topPlaces = [_topPlacesProvider topPlaces];
-    if (topPlaces)
+    if (!topPlaces || !object)
+        return NO;
+    
+    if ([object isKindOfClass:OAPOI.class])
     {
-        int64_t placeId = -1;
-        if ([object isKindOfClass:OAPOI.class]) {
-            placeId = ((OAPOI *)object).obfId;// FIXME:
-        }
-        else if ([object isKindOfClass:BaseDetailsObject.class])
-            placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId; // FIXME: 2 object.objects 48.51334 35.23563 (online)
+        int64_t obfId = ((OAPOI *)object).obfId;
+        return topPlaces[@(obfId)] != nil;
+    }
+    
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *details = (BaseDetailsObject *)object;
         
-        return placeId != -1 && topPlaces[@(placeId)];
+        int64_t obfId = details.syntheticAmenity.obfId;
+        if (topPlaces[@(obfId)])
+            return YES;
+        
+        for (OAPOI *poi in details.objects)
+        {
+            if (topPlaces[@(poi.obfId)])
+                return YES;
+        }
     }
     
     return NO;

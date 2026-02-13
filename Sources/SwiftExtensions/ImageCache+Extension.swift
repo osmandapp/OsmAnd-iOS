@@ -31,4 +31,20 @@ extension ImageCache {
         cache.cleanExpiredDiskCache()
         return cache
     }()
+    
+    static let popularPlacesWikipedia: ImageCache = {
+        let cache = ImageCache(name: "popularPlacesWikipedia")
+        // 40 MB maximum in RAM
+        cache.memoryStorage.config.totalCostLimit = 40 * 1024 * 1024
+        // No more than 150 images stored simultaneously
+        cache.memoryStorage.config.countLimit = 150
+        // Keep images in memory for 60 seconds
+        cache.memoryStorage.config.expiration = .seconds(60)
+        
+        // 200 MB disk storage limit
+        cache.diskStorage.config.sizeLimit = 200 * 1024 * 1024
+        // Store on disk for 7 days
+        cache.diskStorage.config.expiration = .days(7)
+        return cache
+    }()
 }

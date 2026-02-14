@@ -10,6 +10,7 @@
 
 @protocol OASegmentedSliderDelegate <NSObject>
 
+- (void)onSliderValueChanged;
 - (void)onSliderFinishEditing;
 
 @end
@@ -19,6 +20,7 @@
 @property (weak, nonatomic) id<OASegmentedSliderDelegate> delegate;
 
 @property (nonatomic) NSInteger selectedMark;
+@property (nonatomic) NSInteger selectingMark;
 @property (nonatomic) CGFloat currentMarkX;
 @property (nonatomic) CGFloat maximumForCurrentMark;
 

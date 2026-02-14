@@ -371,14 +371,11 @@
     CGSize screenBBox = self.view.frame.size;
     [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft
                                                    bottomRight:bottomRight
-                                                          zoom:0.
                                                     screenBBox:screenBBox
                                                    bottomInset:0.
                                                      leftInset:0.
                                                       topInset:0.
-                                          changeElevationAngle:YES
-                                                   presizeZoom:NO
-                                                      animated:YES];
+                                          changeElevationAngle:YES];
 }
 
 - (BOOL)isLeftSideDriving
@@ -395,8 +392,13 @@
 
 - (void)exitNavigationMode
 {
-    [_mapVc setViewportForCarPlayScaleX:_cachedViewportX];
-    _isInNavigationMode = NO;
+    if (_isInNavigationMode)
+    {
+        if (_cachedViewportX != 0)
+            [_mapVc setViewportForCarPlayScaleX:_cachedViewportX];
+        
+        _isInNavigationMode = NO;
+    }
 }
 
 - (void)onLocationChanged

@@ -24,6 +24,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OASvgHelper.h"
 #import "OAAmenitySearcher.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -65,6 +66,7 @@
     OAPOIHelper *poiHelper;
     OAPOIFiltersHelper *filtersHelper;
     OsmAndAppInstance app;
+    PoiUIFilterDataProvider *_dataProvider;
 }
 
 @synthesize acceptedTypes, acceptedTypesOrigin, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult;
@@ -89,6 +91,7 @@
         _isActive = YES;
         isStandardFilter = YES;
         filterId = STD_PREFIX;
+        _dataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:self];
     }
     return self;
 }
@@ -272,6 +275,11 @@
     return [self.filterId isEqualToString:[NSString stringWithFormat:@"%@%@", STD_PREFIX, OSM_WIKI_CATEGORY]];
 }
 
+- (BOOL)isTopImagesFilter
+{
+    return [self isTopWikiFilter];
+}
+
 -(void)setSavedFilterByName:(NSString *)savedFilterByName
 {
     _savedFilterByName = savedFilterByName;
@@ -379,8 +387,13 @@
     double rightLongitude = MIN(lon + (distance / baseDistX), 180);
     return [self searchAmenitiesInternal:lat lon:lon topLatitude:topLatitude bottomLatitude:bottomLatitude leftLongitude:leftLongitude rightLongitude:rightLongitude zoom:-1 matcher:matcher];
 }
-
-- (NSArray<OAPOI *> *) searchAmenities:(double)top left:(double)left bottom:(double)bottom right:(double)right zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher
+- (NSArray<OAPOI *> *) searchAmenities:(double)top
+                                 left:(double)left
+                               bottom:(double)bottom
+                                right:(double)right
+                                 zoom:(int)zoom
+                              matcher:(OAResultMatcher<OAPOI *> *)matcher
+                         filterUnique:(BOOL)filterUnique
 {
     NSMutableArray<OAPOI *> *results = [NSMutableArray array];
     NSArray<OAPOI *> *tempResults = currentSearchResult;
@@ -398,17 +411,78 @@
     }
     NSArray<OAPOI *> *amenities = [self searchAmenitiesInternal:top / 2 + bottom / 2 lon:left / 2 + right / 2 topLatitude:top bottomLatitude:bottom leftLongitude:left rightLongitude:right zoom:zoom matcher:matcher];
     [results addObjectsFromArray:amenities];
-    return results;
+    
+    NSMutableArray<OAPOI *> *resultList = [results mutableCopy];
+
+    if ([self isTopWikiFilter])
+    {
+        [resultList sortUsingComparator:^NSComparisonResult(OAPOI *p1, OAPOI *p2) {
+            NSInteger elo1 = [p1 getTravelEloNumber];
+            NSInteger elo2 = [p2 getTravelEloNumber];
+            if (elo1 < elo2)
+                return NSOrderedDescending;
+            if (elo1 > elo2)
+                return NSOrderedAscending;
+            return NSOrderedSame;
+        }];
+    }
+    
+    if (filterUnique)
+        resultList = [[OAAmenitySearcher filterUniqueAmenitiesByOsmIdOrWikidata:[resultList copy]] mutableCopy];
+    
+    return [resultList copy];
 }
+
+- (NSArray<OAPOI *> *)getCurrentSearchResult:(BOOL)filterUnique
+{
+    if (currentSearchResult.count == 0)
+        return @[];
+
+    if (!filterUnique)
+        return [currentSearchResult copy];
+    
+    return [OAAmenitySearcher filterUniqueAmenitiesByOsmIdOrWikidata:currentSearchResult];
+}
+
 
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius
 {
     return [OAAmenitySearcher searchPOIsOnThePath:locs radius:poiSearchDeviationRadius filter:self matcher:[self wrapResultMatcher:nil]];
 }
 
-- (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher
+- (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat
+                                           lon:(double)lon
+                                   topLatitude:(double)topLatitude
+                                bottomLatitude:(double)bottomLatitude
+                                 leftLongitude:(double)leftLongitude
+                                rightLongitude:(double)rightLongitude
+                                          zoom:(int)zoom
+                                       matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    return [OAAmenitySearcher findPOIsByFilter:self topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:[self wrapResultMatcher:matcher]];
+    NSMutableArray<OAPOI *> *tempSearchResult = [[_dataProvider searchAmenitiesWithLat:lat
+                                                                                   lon:lon
+                                                                           topLatitude:topLatitude
+                                                                        bottomLatitude:bottomLatitude
+                                                                         leftLongitude:leftLongitude
+                                                                        rightLongitude:rightLongitude
+                                                                                  zoom:zoom
+                                                                               matcher:matcher] mutableCopy];
+    if ([self isTopWikiFilter])
+    {
+        [tempSearchResult sortUsingComparator:^NSComparisonResult(OAPOI *p1, OAPOI *p2) {
+            NSInteger elo1 = [p1 getTravelEloNumber];
+            NSInteger elo2 = [p2 getTravelEloNumber];
+
+            if (elo1 < elo2)
+                return NSOrderedDescending;
+            else if (elo1 > elo2)
+                return NSOrderedAscending;
+         
+            return NSOrderedSame;
+        }];
+    }
+    currentSearchResult = [tempSearchResult copy];
+    return currentSearchResult;
 }
 
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter

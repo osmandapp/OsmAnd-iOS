@@ -938,7 +938,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _hiding = YES;
-    
+    [self.menuViewDelegate contextMenuDidHide];
     [[OARootViewController instance].mapPanel.hudViewController updateControlsLayout:YES];
     
     _visibleTransportRoutes = nil;

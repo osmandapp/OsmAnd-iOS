@@ -142,7 +142,7 @@ typedef enum
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
 
-@property (strong, nonatomic) OATargetPointView* targetMenuView;
+
 @property (strong, nonatomic) OATargetMultiView* targetMultiMenuView;
 @property (strong, nonatomic) UIButton* shadowButton;
 
@@ -1359,8 +1359,7 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
     
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAContextMenuLayer *contextLayer = mapPanel.mapViewController.mapLayers.contextMenuLayer;
+    OAContextMenuLayer *contextLayer = self.mapViewController.mapLayers.contextMenuLayer;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
@@ -1482,6 +1481,7 @@ typedef enum
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
+        [_mapViewController contextMenuDidShow:targetPoint.targetObj];
         if (targetPoint.centerMap)
             [self goToTargetPointWithZoom:preferredZoom];
         
@@ -1539,7 +1539,6 @@ typedef enum
             OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
             trackItem.dataItem = dataItem;
-            trackItem.color;
         }
         else if ([targetPoint.targetObj isKindOfClass:[OASGpxFile class]])
         {
@@ -2263,6 +2262,11 @@ typedef enum
     [_mapViewController hideContextPinMarker];
 }
 
+- (void)contextMenuDidHide
+{
+    [_mapViewController contextMenuDidHide];
+}
+
 - (void) targetHide
 {
     [_mapViewController hideContextPinMarker];
@@ -2633,7 +2637,6 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
-        
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -4386,11 +4389,10 @@ typedef enum
         [_mapViewController removeFromParentViewController];
         [_mapViewController.view removeFromSuperview];
         
-        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
         
-        [mapPanel addChildViewController:_mapViewController];
-        [mapPanel.view insertSubview:_mapViewController.view atIndex:0];
-        _mapViewController.view.frame = mapPanel.view.frame;
+        [self addChildViewController:_mapViewController];
+        [self.view insertSubview:_mapViewController.view atIndex:0];
+        _mapViewController.view.frame = self.view.frame;
         _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
             [_mapViewController.mapView resumeRendering];

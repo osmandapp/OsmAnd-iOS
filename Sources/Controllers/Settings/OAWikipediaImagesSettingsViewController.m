@@ -7,7 +7,6 @@
 //
 
 #import "OAWikipediaImagesSettingsViewController.h"
-#import "OAWikipediaLanguagesViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"

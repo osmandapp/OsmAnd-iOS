@@ -98,6 +98,7 @@
 #import "OADeepLinkBridge.h"
 #import "OAUserInteractionPassThroughView.h"
 #import "OAClickableWayHelper.h"
+#import "OAPoiUIFilterDataProviderWrapper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -167,7 +168,6 @@
 #import "OADirectionAppearanceViewController.h"
 #import "OABaseEditorViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
-#import "OAWikipediaLanguagesViewController.h"
 #import "OAWebViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OAOsmUploadGPXViewConroller.h"
@@ -287,5 +287,9 @@
 #import "OAUnsupportedAction.h"
 #import "OAMapillaryImageCardWrapper.h"
 #import "OAOBDConnector.h"
+
+#import "QuadRect.h"
+#import "OAWikipediaPlugin.h"
+#import "OAAmenitySearcher.h"
 
 #pragma clang diagnostic pop

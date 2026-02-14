@@ -18,12 +18,15 @@ private struct CacheInfo {
 @objcMembers
 final class ImageCacheInfoViewController: UITableViewController {
     /// List of caches to display
-    private let caches: [CacheInfo] = [
-        CacheInfo(title: localizedString("image_cache_online_photo_high_res"), cache: .onlinePhotoHighResolutionDiskCache, onClear: nil),
-        CacheInfo(title: localizedString("image_cache_online_photo_mapillary_default_cache"), cache: .onlinePhotoAndMapillaryDefaultCache, onClear: {
-            URLSessionManager.removeAllCachedResponses(for: URLSessionConfigProvider.onlineAndMapillaryPhotosAPIKey)
-        })
-    ]
+    private lazy var caches: [CacheInfo] = {
+        [
+            CacheInfo(title: localizedString("image_cache_online_photo_high_res"), cache: .onlinePhotoHighResolutionDiskCache, onClear: nil),
+            CacheInfo(title: localizedString("image_cache_online_photo_mapillary_default_cache"), cache: .onlinePhotoAndMapillaryDefaultCache, onClear: {
+                URLSessionManager.removeAllCachedResponses(for: URLSessionConfigProvider.onlineAndMapillaryPhotosAPIKey)
+            }),
+            CacheInfo(title: popularPlacesCacheTitle(), cache: .popularPlacesWikipedia, onClear: nil)
+        ]
+    }()
     
     private let cellIdentifier = "cacheCell"
     
@@ -45,7 +48,7 @@ final class ImageCacheInfoViewController: UITableViewController {
         for (index, cacheInfo) in caches.enumerated() {
             cacheInfo.cache.calculateDiskStorageSize { [weak self] result in
                 DispatchQueue.main.async {
-                    guard let self = self else { return }
+                    guard let self else { return }
                     switch result {
                     case .success(let size):
                         self.cacheSizes[index] = self.formattedCacheSize(size)
@@ -60,6 +63,16 @@ final class ImageCacheInfoViewController: UITableViewController {
     
     private func formattedCacheSize(_ bytes: UInt) -> String {
         ByteCountFormatter.fileSizeFormatter.string(fromByteCount: Int64(bytes))
+    }
+    
+    private func popularPlacesCacheTitle() -> String {
+        let popularPlaces = localizedString("popular_places")
+        let wikipedia = "(\(localizedString("shared_string_wikipedia")))"
+        let cache = localizedString("shared_string_cache")
+
+        let combined = String(format: NSLocalizedString("ltr_or_rtl_combine_via_space", comment: ""), popularPlaces, wikipedia)
+
+        return "\(cache) \(combined)"
     }
     
     // MARK: - Alert for clearing cache

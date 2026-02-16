@@ -9,6 +9,7 @@
 protocol SegmentButtonsSliderTableViewCellDelegate: AnyObject {
     func onPlusTapped(_ selectedMark: Int, sender: UISlider)
     func onMinusTapped(_ selectedMark: Int, sender: UISlider)
+    func onSliderValueChanged(_ selectedMark: Int, sender: UISlider)
 }
 
 final class SegmentButtonsSliderTableViewCell: UITableViewCell {
@@ -33,8 +34,8 @@ final class SegmentButtonsSliderTableViewCell: UITableViewCell {
     }
     
     func setupButtonsEnabling() {
-        let isPlusButtonEnabled = sliderView.selectedMark < (sliderView.getMarksCount() - 1)
-        let isMinusButtonEnabled = sliderView.selectedMark > 0
+        let isPlusButtonEnabled = sliderView.selectingMark < (sliderView.getMarksCount() - 1)
+        let isMinusButtonEnabled = sliderView.selectingMark > 0
         plusButton.tintColor = isPlusButtonEnabled ? .iconColorActive : .iconColorDisabled
         plusButton.isEnabled = isPlusButtonEnabled
         minusButton.tintColor = isMinusButtonEnabled ? .iconColorActive : .iconColorDisabled
@@ -56,6 +57,10 @@ final class SegmentButtonsSliderTableViewCell: UITableViewCell {
 
 // MARK: - OASegmentedSliderDelegate
 extension SegmentButtonsSliderTableViewCell: OASegmentedSliderDelegate {
+    func onSliderValueChanged() {
+        delegate?.onSliderValueChanged(sliderView.selectingMark, sender: sliderView)
+    }
+    
     func onSliderFinishEditing() {
         setupButtonsEnabling()
     }

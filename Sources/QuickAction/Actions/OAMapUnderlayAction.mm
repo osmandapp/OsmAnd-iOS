@@ -93,7 +93,7 @@ static QuickActionType *TYPE;
                 break;
             }
         }
-        [self hidePolygons:YES];
+        [self hidePolygons:[_hidePolygonsParameter.value isEqualToString:@"true"]];
         app.data.underlayMapSource = newMapSource;
     }
     else

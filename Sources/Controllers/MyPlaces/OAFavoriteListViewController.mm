@@ -862,6 +862,11 @@ static UIViewController *parentController;
     return itemList;
 }
 
+- (void)searchVisibility:(BOOL)show
+{
+    self.tabBarController.navigationItem.searchController = show ? _searchController : nil;
+}
+
 - (void) startEditing
 {
     [self.favoriteTableView setEditing:YES animated:YES];
@@ -878,6 +883,7 @@ static UIViewController *parentController;
     self.tabBarController.navigationItem.hidesBackButton = YES;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.favoriteTableView reloadData];
+    [self searchVisibility:NO];
 }
 
 - (void) finishEditing
@@ -904,6 +910,7 @@ static UIViewController *parentController;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     [self.favoriteTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
+    [self searchVisibility:YES];
 }
 
 - (IBAction)editButtonClicked:(id)sender

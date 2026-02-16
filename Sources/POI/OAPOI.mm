@@ -609,6 +609,15 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return [self.type name];
 }
 
+- (NSString *)getMainSubtypeStr
+{
+    NSString *subtype = self.subType;
+    NSRange index = [subtype rangeOfString:@";"];
+    NSString *firstKey = index.location == NSNotFound ? subtype : [subtype substringToIndex:index.location];
+    OAPOIType *poiType = [self findPoiTypeWithKeyName:firstKey category:self.type.category];
+    return poiType != nil ? poiType.nameLocalized : [OAUtilities capitalizeFirstLetter:[[firstKey stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowercaseString]];
+}
+
 - (NSString *)getSubTypeStr
 {
     OAPOICategory *pc = self.type.category;
@@ -618,16 +627,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         NSArray<NSString *> * subs = [_subType componentsSeparatedByString:@";"];
         for (NSString * subType : subs)
         {
-            OAPOIType * pt = [pc getPoiTypeByKeyName:subType];
-            if (pt == nil)
-            {
-                // Try to get POI type from another category, but skip non-OSM-types
-                OAPOIBaseType *baseType = [OAPOIHelper.sharedInstance getAnyPoiTypeByName:subType];
-                if ([baseType isKindOfClass:[OAPOIType class]] && !baseType.nonEditableOsm)
-                {
-                    pt = (OAPOIType *)baseType;
-                }
-            }
+            OAPOIType * pt = [self findPoiTypeWithKeyName:subType category:pc];
             if (pt != nil)
             {
                 if (typeStr.length > 0)
@@ -643,6 +643,20 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         }
     }
     return typeStr;
+}
+
+- (OAPOIType *)findPoiTypeWithKeyName:(NSString *)keyName category:(OAPOICategory *)category
+{
+    OAPOIType *poiType = [category getPoiTypeByKeyName:keyName];
+    if (poiType == nil)
+    {
+        // Try to get POI type from another category, but skip non-OSM-types
+        OAPOIBaseType *abstractPoiType = [OAPOIHelper.sharedInstance getAnyPoiTypeByName:keyName];
+        if ([abstractPoiType isKindOfClass:[OAPOIType class]] && !abstractPoiType.nonEditableOsm)
+            poiType = (OAPOIType *)abstractPoiType;
+    }
+    
+    return poiType;
 }
 
 - (NSString *)getRouteActivityType

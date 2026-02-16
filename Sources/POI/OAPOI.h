@@ -148,6 +148,8 @@ static int DEFAULT_ELO = 900;
 
 - (NSString *) toStringEn;
 
+- (NSString *)getMainSubtypeStr;
+
 - (NSString *) getSubTypeStr;
 
 - (NSString *)getRouteActivityType;

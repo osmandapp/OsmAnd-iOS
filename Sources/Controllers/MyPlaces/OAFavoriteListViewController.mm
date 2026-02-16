@@ -439,7 +439,7 @@ static UIViewController *parentController;
     [self applySafeAreaMargins];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_edit"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
+    _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"pencil"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
     _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
@@ -874,7 +874,7 @@ static UIViewController *parentController;
         [self.tabBarController.tabBar setHidden:YES];
     }];
 
-    _editButton.image = [UIImage imageNamed:@"icon_edit_active"];
+    _editButton.image = [UIImage systemImageNamed:@"pencil"];
     self.tabBarController.navigationItem.hidesBackButton = YES;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.favoriteTableView reloadData];
@@ -893,7 +893,7 @@ static UIViewController *parentController;
         [self applySafeAreaMargins];
     }];
 
-    _editButton.image = [UIImage imageNamed:@"icon_edit"];
+    _editButton.image = [UIImage systemImageNamed:@"pencil"];
     self.tabBarController.navigationItem.hidesBackButton = NO;
 
     if (_directionButton.tag == 1)

@@ -143,6 +143,7 @@ static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
 static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const batterySavingModeKey = @"batterySavingMode";
+static NSString * const enableMsaaKey = @"enableMsaaKey";
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
 static NSString * const locationRadiusVisibilityKey = @"locationRadiusVisibility";
@@ -6544,6 +6545,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
         _batterySavingMode = [[[OACommonBoolean withKey:batterySavingModeKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_batterySavingMode forKey:@"battery_saving"];
+
+        _enableMsaa = [[[OACommonBoolean withKey:enableMsaaKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_enableMsaa forKey:@"enable_msaa"];
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];

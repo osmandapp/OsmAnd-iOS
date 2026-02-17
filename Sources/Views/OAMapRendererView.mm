@@ -53,6 +53,7 @@
     GLuint _msaaDepthRenderBuffer;
     CADisplayLink* _displayLink;
     BOOL _limitFrameRate;
+    BOOL _needsRecreateRenderBuffers;
 
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
@@ -850,6 +851,12 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setFogColor(fogColor);
 }
 
+- (void)requestRecreateRenderBuffers
+{
+    _needsRecreateRenderBuffers = YES;
+    [self invalidateFrame];
+}
+
 - (void) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
@@ -879,7 +886,11 @@ forcedUpdate:(BOOL)forcedUpdate
 #if TARGET_IPHONE_SIMULATOR
     BOOL useMSAA = NO;
 #else
-    BOOL useMSAA = (samples >= 2);
+    BOOL useMSAA = NO;
+    if (UIApplication.sharedApplication.isCarPlayConnected)
+        useMSAA = [[OAAppSettings sharedManager].enableMsaa get] && samples >= 2;
+    else
+        useMSAA = samples >= 2;
 #endif
     if (useMSAA)
     {
@@ -940,6 +951,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
     validateGL();
 }
+
 - (void) releaseRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Releasing render and frame buffers", self);
@@ -1017,6 +1029,12 @@ forcedUpdate:(BOOL)forcedUpdate
         [NSException raise:NSGenericException
                     format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return;
+    }
+
+    if (_needsRecreateRenderBuffers)
+    {
+        _needsRecreateRenderBuffers = NO;
+        [self releaseRenderAndFrameBuffers];
     }
 
     NSTimeInterval currentTime = CACurrentMediaTime();

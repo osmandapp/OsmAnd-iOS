@@ -106,7 +106,7 @@ struct CLLocationCoordinate2D;
 - (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (bool)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (void)removeAllSymbolsProviders;
-- (void)requestRecreateRenderBuffers;
+- (void)requestCheckMsaaState;
 
 - (BOOL) setMapLayerConfiguration:(int)layerIndex configuration:(OsmAnd::MapLayerConfiguration)configuration forcedUpdate:(BOOL)forcedUpdate;
 - (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings;

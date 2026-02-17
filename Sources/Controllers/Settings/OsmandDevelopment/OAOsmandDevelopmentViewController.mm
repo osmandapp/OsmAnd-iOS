@@ -256,7 +256,7 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
     else if ([item.key isEqualToString:kEnableMsaaKey])
     {
         [[OAAppSettings sharedManager].enableMsaa set:sender.isOn];
-        [OARootViewController.instance.mapPanel.mapViewController.mapView requestRecreateRenderBuffers];
+        [OARootViewController.instance.mapPanel.mapViewController.mapView requestCheckMsaaState];
     }
     else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
         [[OAAppSettings sharedManager].simulateOBDData set:sender.isOn];

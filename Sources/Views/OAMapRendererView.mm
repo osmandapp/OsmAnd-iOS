@@ -53,7 +53,7 @@
     GLuint _msaaDepthRenderBuffer;
     CADisplayLink* _displayLink;
     BOOL _limitFrameRate;
-    BOOL _needsRecreateRenderBuffers;
+    BOOL _needsCheckMsaaState;
 
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
@@ -114,6 +114,7 @@
     _msaaDepthRenderBuffer = 0;
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
+    _needsCheckMsaaState = NO;
 
     _viewportXScale = kViewportScale;
     _viewportYScale = kViewportScale;
@@ -851,9 +852,9 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setFogColor(fogColor);
 }
 
-- (void)requestRecreateRenderBuffers
+- (void)requestCheckMsaaState
 {
-    _needsRecreateRenderBuffers = YES;
+    _needsCheckMsaaState = YES;
     [self invalidateFrame];
 }
 
@@ -883,15 +884,7 @@ forcedUpdate:(BOOL)forcedUpdate
     GLint maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
     GLint samples = MIN(4, maxSamples);
-#if TARGET_IPHONE_SIMULATOR
-    BOOL useMSAA = NO;
-#else
-    BOOL useMSAA = NO;
-    if (UIApplication.sharedApplication.isCarPlayConnected)
-        useMSAA = [[OAAppSettings sharedManager].enableMsaa get] && samples >= 2;
-    else
-        useMSAA = samples >= 2;
-#endif
+    BOOL useMSAA = [self shouldUseMSAAWithSamples:samples];
     if (useMSAA)
     {
         glGenFramebuffers(1, &_msaaFramebuffer);
@@ -1022,6 +1015,18 @@ forcedUpdate:(BOOL)forcedUpdate
     return OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * viewportYScale / 2.0);
 }
 
+- (BOOL)shouldUseMSAAWithSamples:(GLint)samples
+{
+#if TARGET_IPHONE_SIMULATOR
+    return NO;
+#else
+    if (UIApplication.sharedApplication.isCarPlayConnected)
+        return [[OAAppSettings sharedManager].enableMsaa get] && samples >= 2;
+    
+    return samples >= 2;
+#endif
+}
+
 - (void)render:(CADisplayLink*)displayLink
 {
     if (![EAGLContext setCurrentContext:_glRenderContext])
@@ -1031,10 +1036,16 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     }
 
-    if (_needsRecreateRenderBuffers)
+    if (_needsCheckMsaaState)
     {
-        _needsRecreateRenderBuffers = NO;
-        [self releaseRenderAndFrameBuffers];
+        _needsCheckMsaaState = NO;
+        GLint maxSamples = 0;
+        glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+        GLint samples = MIN(4, maxSamples);
+        BOOL desiredMSAA = [self shouldUseMSAAWithSamples:samples];
+        BOOL actualMSAA = _msaaFramebuffer != 0;
+        if (desiredMSAA != actualMSAA)
+            [self releaseRenderAndFrameBuffers];
     }
 
     NSTimeInterval currentTime = CACurrentMediaTime();

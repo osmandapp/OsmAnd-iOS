@@ -506,7 +506,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
       else
       {
           CGPoint point = result.point;
-          int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+          int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * (TOUCH_RADIUS_MULTIPLIER * 2);
           QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
           if (!touchPolygon31.isEmpty())
           {

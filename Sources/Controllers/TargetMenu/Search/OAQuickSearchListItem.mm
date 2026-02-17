@@ -355,7 +355,7 @@
             NSString *result = @"";
             OAPOI *poi = (OAPOI *) searchResult.object;
             
-            NSString *typeName = [poi getSubTypeStr];
+            NSString *typeName = [poi getMainSubtypeStr];
             NSString *alternateName = searchResult.alternateName;
             NSString *city = poi.cityName;
             NSString *distance = @"";

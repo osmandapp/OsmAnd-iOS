@@ -873,11 +873,15 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     QString enName;
     for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(localizedNames)))
     {
-        if (!lang.isNull() && entry.key() == lang)
+        QString key = entry.key().trimmed().toLower();
+        if (key.startsWith(QStringLiteral("name:")))
+            key = key.mid(5);
+
+        if (!lang.isNull() && key == lang)
             nameLocalized = entry.value();
         
-        [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
-        if (!hasEnName && entry.key().toLower() == QStringLiteral("en"))
+        [names setObject:entry.value().toNSString() forKey:key.toNSString()];
+        if (!hasEnName && key == QStringLiteral("en"))
         {
             hasEnName = YES;
             enName = entry.value();

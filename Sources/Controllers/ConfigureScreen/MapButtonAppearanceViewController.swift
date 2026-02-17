@@ -7,7 +7,7 @@
 //
 
 @objcMembers
-final class MapButtonAppearanceViewController: OABaseButtonsViewController {
+final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController {
     private static let valueKey = "valueKey"
     private static let unitKey = "unitKey"
     private static let glassStyleKey = "glassStyleKey"
@@ -26,10 +26,18 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private var originalAppearanceParams: ButtonAppearanceParams?
     private var iconCollectionHandler: ButtonAppearanceIconCollectionHandler?
     private var opacityType: BackgroundOpacityType = .solid
+    private let previewImageHeight: CGFloat = 150
     
     private var hasAppearanceChanged: Bool {
         appearanceParams != originalAppearanceParams
     }
+    
+    private lazy var previewImageView: PreviewImageView? = {
+        guard let mapButtonState else { return nil }
+        let previewImageView: PreviewImageView = .fromNib()
+        previewImageView.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
+        return previewImageView
+    }()
     
     override func commonInit() {
         appMode = OAAppSettings.sharedManager().applicationMode.get()
@@ -42,6 +50,12 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         }
         setupIconHandler()
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateSubviewHeight(previewImageHeight)
+        updateSubview(true)
     }
     
     override func getTitle() -> String {
@@ -66,10 +80,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     
     override func onRightNavbarButtonPressed() {
         showResetToDefaultActionSheet()
-    }
-    
-    override func hideFirstHeader() -> Bool {
-        true
     }
     
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
@@ -98,7 +108,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     override func registerCells() {
-        addCell(PreviewImageViewTableViewCell.reuseIdentifier)
         addCell(SegmentButtonsSliderTableViewCell.reuseIdentifier)
         addCell(TopBottomValuesSliderTableViewCell.reuseIdentifier)
         addCell(OAIconsPaletteCell.reuseIdentifier)
@@ -107,9 +116,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     override func generateData() {
         guard let appearanceParams else { return }
         tableData.clearAllData()
-        let visibilitySection = tableData.createNewSection()
-        let imageHeaderRow = visibilitySection.createNewRow()
-        imageHeaderRow.cellType = PreviewImageViewTableViewCell.reuseIdentifier
         
         let iconSection = tableData.createNewSection()
         let iconRow = iconSection.createNewRow()
@@ -145,15 +151,8 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
-        guard let mapButtonState else { return nil }
         let item = tableData.item(for: indexPath)
-        if item.cellType == PreviewImageViewTableViewCell.reuseIdentifier {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PreviewImageViewTableViewCell.reuseIdentifier) as? PreviewImageViewTableViewCell else {
-                return UITableViewCell()
-            }
-            cell.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
-            return cell
-        } else if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
+        if item.cellType == SegmentButtonsSliderTableViewCell.reuseIdentifier {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SegmentButtonsSliderTableViewCell.reuseIdentifier) as? SegmentButtonsSliderTableViewCell,
                   let value = item.obj(forKey: Self.valueKey) as? String,
                   let unit = item.obj(forKey: Self.unitKey) as? String else {
@@ -167,8 +166,6 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
                 cell.setupButtonsEnabling()
             }
             cell.sliderView.tag = (indexPath.section << 10) | indexPath.row
-            cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside, .touchUpOutside])
-            cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])
             cell.topLeftLabel.text = item.title
             cell.topLeftLabel.accessibilityLabel = cell.topLeftLabel.text
             cell.topRightLabel.text = String(format: localizedString("ltr_or_rtl_combine_via_space"), value, unit)
@@ -205,7 +202,7 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
                 cell.topRightButtonVisibility(true)
                 cell.sliderValuesVisibility(opacityType == .solid)
                 cell.segmentValuesVisibility(opacityType == .liquidGlass)
-                cell.segmentedControl.setTitle(localizedString("shared_string_clear"), forSegmentAt: 0)
+                cell.segmentedControl.setTitle(localizedString("background_liquid_glass_clear_ios"), forSegmentAt: 0)
                 cell.segmentedControl.setTitle(localizedString("shared_string_tinted"), forSegmentAt: 1)
                 cell.segmentedControl.removeTarget(self, action: nil, for: .valueChanged)
                 cell.segmentedControl.addTarget(self, action: #selector(segmentChanged(sender:)), for: .valueChanged)
@@ -251,6 +248,14 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
             return cell
         }
         return nil
+    }
+    
+    override func createSubview() -> UIView? {
+        previewImageView
+    }
+    
+    override func subviewMargin() -> UIEdgeInsets {
+        .zero
     }
     
     private func setupAppearanceParams() {
@@ -310,6 +315,11 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
         iconCollectionHandler?.setIconName(iconName)
     }
     
+    private func updatePreview() {
+        guard let mapButtonState else { return }
+        previewImageView?.configure(appearanceParams: appearanceParams, buttonState: mapButtonState)
+    }
+    
     private func showUnsavedChangesAlert() {
         let alert: UIAlertController = UIAlertController(title: localizedString("unsaved_changes"),
                                                          message: localizedString("unsaved_changes_will_be_lost_discard"),
@@ -358,32 +368,36 @@ final class MapButtonAppearanceViewController: OABaseButtonsViewController {
     private func setAppearanceParameter(_ selectedIndex: Int, sender: UISlider) {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
-        setAppearanceParameter(selectedIndex, key: item.key)
-    }
-    
-    private func setAppearanceParameter(_ selectedIndex: Int, key: String?) {
-        if key == Self.cornerRadiusRowKey {
-            appearanceParams?.cornerRadius = Self.cornerRadiusArrayValues[selectedIndex]
-        } else if key == Self.sizeRowKey {
-            appearanceParams?.size = Self.sizeArrayValues[selectedIndex]
+        guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell else {
+            return
         }
-        updateData()
+        var value: Int32?
+        if item.key == Self.cornerRadiusRowKey {
+            appearanceParams?.cornerRadius = Self.cornerRadiusArrayValues[selectedIndex]
+            value = appearanceParams?.cornerRadius
+        } else if item.key == Self.sizeRowKey {
+            appearanceParams?.size = Self.sizeArrayValues[selectedIndex]
+            value = appearanceParams?.size
+        }
+        if let value {
+            cell.topRightLabel.text = String(format: localizedString("ltr_or_rtl_combine_via_space"), String(value), localizedString("shared_string_pt"))
+            cell.topRightLabel.accessibilityLabel = cell.topRightLabel.text
+        }
+        cell.setupButtonsEnabling()
+        updateBottomButtons()
+        updatePreview()
     }
     
     private func updateData() {
         reloadDataWith(animated: true, completion: nil)
         updateBottomButtons()
+        updatePreview()
     }
     
     @objc private func sliderChanged(sender: UISlider) {
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
-        if item.key == Self.cornerRadiusRowKey || item.key == Self.sizeRowKey {
-            guard let cell = tableView.cellForRow(at: indexPath) as? SegmentButtonsSliderTableViewCell, let arrayValues = item.obj(forKey: Self.arrayValuesKey) as? [String] else { return }
-            let selectedIndex = Int(cell.sliderView.selectedMark)
-            guard selectedIndex >= 0, selectedIndex < arrayValues.count else { return }
-            setAppearanceParameter(selectedIndex, key: item.key)
-        } else if item.key == Self.backgroundOpacityRowKey {
+        if item.key == Self.backgroundOpacityRowKey {
             appearanceParams?.opacity = Double(sender.value)
             updateData()
         }
@@ -403,6 +417,10 @@ extension MapButtonAppearanceViewController: SegmentButtonsSliderTableViewCellDe
     }
     
     func onMinusTapped(_ selectedMark: Int, sender: UISlider) {
+        setAppearanceParameter(selectedMark, sender: sender)
+    }
+    
+    func onSliderValueChanged(_ selectedMark: Int, sender: UISlider) {
         setAppearanceParameter(selectedMark, sender: sender)
     }
 }

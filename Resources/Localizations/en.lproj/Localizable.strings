@@ -2236,6 +2236,7 @@
 "shared_string_dynamic" = "Dynamic";
 
 "shared_string_tinted" = "Tinted";
+"background_liquid_glass_clear_ios" = "Clear";
 "background_opacity_description" = "Clear is more transparent, revealing the content beneath. Tinted increases opacity and adds more contrast.";
 
 "int_hour" = "h";

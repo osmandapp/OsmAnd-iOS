@@ -280,19 +280,25 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
 {
     if (lang != nil && lang.length > 0)
     {
-        NSString *nm;
         if ([lang isEqualToString:@"en"])
         {
-            nm = self.localizedNames[@"en"];
-            if (!nm || nm.length == 0)
-                nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
-            return nm;
+            NSString *enName = [self getEnName:transliterate];
+            return enName.length > 0 ? enName : self.name;
         }
-        nm = self.localizedNames[lang];
-        if (transliterate)
-            nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(nm)).toNSString();
-        return nm;
+        else
+        {
+            if (self.localizedNames != nil)
+            {
+                NSString *nm = self.localizedNames[lang];
+                if (nm.length > 0)
+                    return nm;
+                
+                if (transliterate)
+                    return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
+            }
+        }
     }
+    
     return self.name;
 }
 

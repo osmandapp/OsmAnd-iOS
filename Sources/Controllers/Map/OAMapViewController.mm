@@ -228,7 +228,9 @@ static const NSInteger kDetailedMapZoom = 9;
     float _startZoom;
 
     BOOL _targetChanged;
+    int _targetChangedFrameId;
     OsmAnd::PointI _targetPixel;
+    BOOL _pendingTargetRestore;
     OsmAnd::PointI _carPlayScreenPoint;
     NSMutableArray<OATouchLocation *> *_moveTouchLocations;
     NSMutableArray<OATouchLocation *> *_zoomTouchLocations;
@@ -549,6 +551,9 @@ static const NSInteger kDetailedMapZoom = 9;
 {
     if (_mapLayers)
         [_mapLayers onMapFrameRendered];
+    
+    if (_pendingTargetRestore)
+        [self restorePreviousTarget];
 }
 
 - (void) viewDidLoad
@@ -1037,11 +1042,13 @@ static const NSInteger kDetailedMapZoom = 9;
     	|| (!_movingByGesture && !_zoomingByGesture && _rotatingByGesture);
 }
 
-- (void) storeTargetPosition:(UIGestureRecognizer *)recognizer
+- (void) storeTargetPosition:(UIGestureRecognizer *)recognizer scheduleRestore:(BOOL)scheduleRestore
 {
     if (![self isTargetChanged])
     {
         _targetChanged = YES;
+        _targetChangedFrameId = _mapView.getFrameId;
+        _pendingTargetRestore = scheduleRestore;
 
         // Remember last target position before it is changed with map gesture
         _targetPixel = _mapView.getTargetScreenPosition;
@@ -1052,9 +1059,11 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) restorePreviousTarget
 {
-    if ([self isTargetChanged] && [self isLastMultiGesture])
+    if ([self isTargetChanged] && ([self isLastMultiGesture] || (_pendingTargetRestore && _mapView.getFrameId - _targetChangedFrameId > 5)))
     {
         _targetChanged = NO;
+        _targetChangedFrameId = 0;
+        _pendingTargetRestore = NO;
 
         // Restore previous target screen position after map gesture
         [_mapView resetMapTargetPixelCoordinates:_targetPixel];
@@ -1104,7 +1113,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
     if (recognizer.state == UIGestureRecognizerStateBegan && recognizer.numberOfTouches > 0)
     {
-        [self storeTargetPosition:recognizer];
+        [self storeTargetPosition:recognizer scheduleRestore:NO];
 
         if (_moveTouchLocations.count > 0)
         {
@@ -1209,7 +1218,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
     if (state == UIGestureRecognizerStateBegan && numberOfTouches > 0)
     {
-        [self storeTargetPosition:nil];
+        [self storeTargetPosition:nil scheduleRestore:NO];
 
         CGPoint touchPoint = CGPointMake(_targetPixel.x, _targetPixel.y);
         _carPlayScreenPoint = _targetPixel;
@@ -1303,7 +1312,7 @@ static const NSInteger kDetailedMapZoom = 9;
     // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
-        [self storeTargetPosition:recognizer];
+        [self storeTargetPosition:recognizer scheduleRestore:NO];
 
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
@@ -2848,30 +2857,26 @@ static const NSInteger kDetailedMapZoom = 9;
     }
 }
 
-- (void)correctPosition:(Point31)targetPosition31
+- (void) correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
              centerBBox:(BOOL)centerBBox
-          alignPosition:(BOOL)alignPosition
                animated:(BOOL)animated
-{
+{    
     CGFloat leftTargetInset;
     CGFloat bottomTargetInset;
-    if (alignPosition)
+    if (centerBBox)
     {
-        if (centerBBox)
-        {
-            leftTargetInset = kCorrectionMinLeftSpaceBBox;
-            bottomTargetInset = kCorrectionMinBottomSpaceBBox;
-        }
-        else
-        {
-            leftTargetInset = kCorrectionMinLeftSpace;
-            bottomTargetInset = kCorrectionMinBottomSpace;
-        }
+        leftTargetInset = kCorrectionMinLeftSpaceBBox;
+        bottomTargetInset = kCorrectionMinBottomSpaceBBox;
     }
-    
+    else
+    {
+        leftTargetInset = kCorrectionMinLeftSpace;
+        bottomTargetInset = kCorrectionMinBottomSpace;
+    }
+
     CGPoint center;
     OsmAnd::PointI centerI = _mapView.target31;
     [_mapView convert:&centerI toScreen:&center checkOffScreen:YES];
@@ -2892,11 +2897,11 @@ static const NSInteger kDetailedMapZoom = 9;
     CGFloat minPointY = targetY;
 
     newPosition.y = center.y - (minPointY - targetPoint.y);
-    if (alignPosition && newPosition.y < originalCenter.y)
-       newPosition.y = originalCenter.y;
+    if (newPosition.y < originalCenter.y)
+        newPosition.y = originalCenter.y;
         
     newPosition.x = center.x + (-minPointX + targetPoint.x);
-    if (alignPosition && newPosition.x > originalCenter.x)
+    if (newPosition.x > originalCenter.x)
         newPosition.x = originalCenter.x;
     
     newPosition.x *= _mapView.contentScaleFactor;
@@ -3995,7 +4000,6 @@ static const NSInteger kDetailedMapZoom = 9;
                 [OARootViewController.instance.mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
                                                                           bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
                                                                  changeElevationAngle:NO
-                                                                          presizeZoom:YES
                                                                              animated:NO];
         });
     });

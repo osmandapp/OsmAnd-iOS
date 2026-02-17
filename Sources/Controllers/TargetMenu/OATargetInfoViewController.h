@@ -9,11 +9,14 @@
 #import "OATargetMenuViewController.h"
 #import "OAAmenityInfoRow.h"
 
-#define kCollapseDetailsRowType @"kCollapseDetailsRowType"
-#define kDescriptionRowType @"kDescriptionRowType"
-#define kCommentRowType @"kCommentRowType"
-#define kTimestampRowType @"kTimestampRowType"
-#define kGroupRowType @"kGroupRowType"
+static NSString *kCollapseDetailsRowType = @"kCollapseDetailsRowType";
+static NSString *kDescriptionRowType = @"kDescriptionRowType";
+static NSString *kShortDescriptionRowType = @"kShortDescriptionRowType";
+static NSString *kShortDescriptionWikiRowType = @"kShortDescriptionWikiRowType";
+static NSString *kShortDescriptionTravelRowType = @"kShortDescriptionTravelRowType";
+static NSString *kCommentRowType = @"kCommentRowType";
+static NSString *kTimestampRowType = @"kTimestampRowType";
+static NSString *kGroupRowType = @"kGroupRowType";
 
 @interface OATargetInfoViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 

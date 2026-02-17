@@ -96,6 +96,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 
 static const NSInteger kTitleLimit = 60;
 
+static const NSInteger kOrderShortDescrRow = -10000;
 static const NSInteger kOrderPhotoRow = -103;
 static const NSInteger kOrderMapillaryRow = -102;
 static const NSInteger kOrderWithinRow = -101;
@@ -1191,6 +1192,38 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         }
         return cell;
     }
+    else if ([info.typeName isEqualToString:kShortDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionWikiRowType] || [info.typeName isEqualToString:kShortDescriptionTravelRowType])
+    {
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            
+            NSString *label = info.text;
+            
+            label = [NSString stringWithFormat:@"%@\n\n%@", label, info.textPrefix];
+            
+            cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textView.text = label;
+            
+            CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
+            
+            //TODO: implement
+            
+            CGFloat h = s.height + 10.0;
+            
+//            CGFloat h = MIN(188.0, s.height + 10.0);
+//            h = MAX(48.0, h);
+            
+            info.height = h;
+        }
+        return cell;
+    }
     
     if (!info.isHtml)
     {
@@ -1467,6 +1500,56 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
+    }
+    else if ([info.typeName isEqualToString:kShortDescriptionWikiRowType])
+    {
+        NSString *url = info.hiddenUrl;
+        if (NSStringIsEmpty(url))
+        {
+            if ([self isKindOfClass:OAPOIViewController.class])
+            {
+                if ([[self getTargetObj] isKindOfClass:OAPOI.class])
+                {
+                    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+                    if ([helper.wiki isPurchased])
+                    {
+                        OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithPoi:[self getTargetObj]];
+                        [OARootViewController.instance.mapPanel.navigationController pushViewController:wikiController animated:YES];
+                    }
+                    else
+                    {
+                        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+                    }
+                }
+            }
+        }
+        else
+        {
+            [OAUtilities callUrl:url];
+        }
+    }
+    else if ([info.typeName isEqualToString:kShortDescriptionTravelRowType])
+    {
+        NSString *routeId = info.hiddenUrl;
+        if (!NSStringIsEmpty(routeId) && [[self getTargetObj] isKindOfClass:OAPOI.class])
+        {
+            OAPOI *poi = [self getTargetObj];
+            NSDictionary<NSString *, CLLocation *> *routeIdMap = @{routeId : [poi getLocation]};
+            
+            SearchTravelArticlesTask *task = [[SearchTravelArticlesTask alloc] initWithRouteIds:routeIdMap callback:^(NSDictionary<NSString *,NSDictionary<NSString *,OATravelArticle *> *> * _Nonnull result) {
+                
+                //TODO: add fetching correct article if it needed
+                if (result.allValues.count > 0 && result.allValues[0].allValues.count >0)
+                {
+                    NSDictionary<NSString *,OATravelArticle *> *map = result.allValues[0];
+                    OATravelArticle *article = map.allValues[0];
+                    
+                    OATravelArticleDialogViewController *vc = [[OATravelArticleDialogViewController alloc] initWithArticleId:article.generateIdentifier lang:article.lang];
+                    [OARootViewController.instance.navigationController pushViewController:vc animated:YES];
+                }
+            }];
+            [task execute];
+        }
     }
     else if (info.detailsArray.count > 0)
     {

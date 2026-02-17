@@ -20,4 +20,6 @@ static NSString * OTHER_MAP_CATEGORY = @"Other";
 - (void) setup:(OAPOI *)poi;
 - (NSString *) getOsmUrl;
 
+- (BOOL)buildShortWikiDescription:(NSDictionary<NSString *, id> *)filteredInfo allowOnlineWiki:(BOOL)allowOnlineWiki rows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+
 @end

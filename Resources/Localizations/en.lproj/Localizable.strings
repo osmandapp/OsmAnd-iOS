@@ -2713,6 +2713,8 @@
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 "open_in_browser_wiki" = "Open article online";
 "context_menu_read_article" = "Read article";
+"context_menu_read_full_article" = "Read full article";
+"read_on" = "Read on %@";
 
 "custom_search" = "Custom search";
 "add_custom_category" = "Add custom category";

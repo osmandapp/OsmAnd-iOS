@@ -39,11 +39,12 @@
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
-#define WIKI_LINK @".wikipedia.org/w"
-#define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
-
+static const NSString *WIKIPEDIA_ORG_WIKI_URL_PART = @".wikipedia.org/wiki/";
+static const NSString *WIKI_LINK = @".wikipedia.org/w";
+static const NSString *US_MAPS_RECREATION_AREA = @"us_maps_recreation_area";
 
 static const NSInteger WAY_MODULO_REMAINDER = 1;
+static const NSInteger kOrderShortDescrRow = -10000;
 
 @interface OAPOIViewController ()
 
@@ -329,15 +330,19 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void)buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    // TODO: implement
-//    Map<String, Object> filteredInfo = infoBundle.getFilteredLocalizedInfo();
-//    if (!buildShortWikiDescription(view, filteredInfo, true)) {
-//        Pair<String, Locale> pair = AmenityUIHelper.getDescriptionWithPreferredLang(app, amenity, DESCRIPTION, filteredInfo);
-//        if (pair != null) {
-//            buildDescriptionRow(view, pair.first);
-//            infoBundle.setCustomHiddenExtensions(Collections.singletonList(DESCRIPTION));
-//        }
-//    }
+    NSDictionary<NSString *,id> *filteredInfo = [_infoBundle getFilteredLocalizedInfo];
+    if (![self buildShortWikiDescription:filteredInfo allowOnlineWiki:YES rows:rows])
+    {
+        NullablePair *pair = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:DESCRIPTION_TAG map:filteredInfo];
+        if (pair)
+        {
+            NSString *description = pair.first;
+            OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:nil textPrefix:nil text:description hiddenUrl:nil collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
+            info.typeName = kShortDescriptionRowType;
+            [rows addObject:info];
+            [_infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+        }
+    }
     
     if (self.customOnlinePhotosPosition)
         [self buildPhotosRow];
@@ -391,6 +396,83 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if (row)
             [rows addObject:row];
     }
+}
+
+- (BOOL)buildShortWikiDescription:(NSDictionary<NSString *, id> *)filteredInfo allowOnlineWiki:(BOOL)allowOnlineWiki rows:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    NSString *locale;
+    NSString *description;
+    NullablePair *pair = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:SHORT_DESCRIPTION_TAG map:filteredInfo];
+    if (pair)
+    {
+        if (pair.second && [pair.second isKindOfClass:NSString.class])
+            locale = pair.second;
+        
+        if (pair.first && [pair.first isKindOfClass:NSString.class])
+            description = pair.first;
+    }
+    
+    BOOL hasShortDescription = !NSStringIsEmpty(description);
+    if (hasShortDescription)
+    {
+        [_infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+    }
+    if (!hasShortDescription && allowOnlineWiki)
+    {
+        description = [self createWikipediaArticleList:filteredInfo];
+    }
+    
+    if (!NSStringIsEmpty(description))
+    {
+        NSString *labelText = [self getTrimmedDescription:description collapsed:YES];
+        UIImage *icon = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
+        
+        NSString *buttonText;
+        NSString *wikipediaUrl;
+        if (hasShortDescription)
+        {
+            buttonText = OALocalizedString(@"context_menu_read_full_article");
+        }
+        else
+        {
+            buttonText = [NSString stringWithFormat:OALocalizedString(@"read_on"), OALocalizedString(@"download_wikipedia_maps")];
+            
+            wikipediaUrl = [self.poi getAdditionalInfo:WIKIPEDIA_TAG];
+            if (!wikipediaUrl && locale != nil)
+            {
+                NSString *title = [[self.poi getName:locale] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                wikipediaUrl = [NSString stringWithFormat:@"https://%@%@%@", locale, WIKIPEDIA_ORG_WIKI_URL_PART, title];
+            }
+        }
+        
+        OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:icon textPrefix:buttonText text:labelText hiddenUrl:wikipediaUrl collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
+        info.typeName = kShortDescriptionWikiRowType;
+        
+        [rows addObject:info];
+    }
+    return hasShortDescription;
+}
+
+- (NSString *)getTrimmedDescription:(NSString *)description collapsed:(BOOL)collapsed
+{
+    NSString *text = description;
+    if (collapsed)
+    {
+        int length = min(200, ((int) description.length));
+        text = [description substringToIndex:length];
+        if (description.length > text.length)
+        {
+            text = [text stringByAppendingString:OALocalizedString(@"shared_string_ellipsis")];
+        }
+    }
+    return text;
+}
+
+- (NSString *)createWikipediaArticleList:(NSDictionary<NSString *, id> *)filteredInfo
+{
+    //TODO: implement
+    
+    return nil;
 }
 
 - (void)configureRowValue:(id)value

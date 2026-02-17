@@ -243,6 +243,7 @@
 #import "OACollapsableView.h"
 #import "OAMapRulerView.h"
 #import "OARouteInfoView.h"
+#import "OAButton.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

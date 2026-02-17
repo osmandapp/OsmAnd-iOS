@@ -83,7 +83,7 @@ final class AmenityUIHelper: NSObject {
                     continue
                 }
             }
-            if key.contains(WIKIPEDIA_TAG) || key.contains(CONTENT_TAG) || key.contains(SHORT_DESCRIPTION) || key.contains(WIKI_LANG) {
+            if key.contains(WIKIPEDIA_TAG) || key.contains(CONTENT_TAG) || key.contains(SHORT_DESCRIPTION_TAG) || key.contains(WIKI_LANG) {
                 continue
             }
             if subtype == ROUTE_ARTICLE && key.contains(DESCRIPTION_TAG) {
@@ -487,6 +487,33 @@ final class AmenityUIHelper: NSObject {
     
     private func getPreferredLocale(_ localeIds: [String]) -> String? {
         LocaleHelper.getPreferredNameLocale(localeIds)
+    }
+    
+    static func getDescriptionWithPreferredLang(amenity: OAPOI, key: String, map: [String: Any]) -> NullablePair? {
+        if let descriptions = map[key] as? [String: Any] {
+            if let localizations = descriptions["localizations"] as? [String: String] {
+                let locales = AmenityUIHelper.collectAvailableLocalesFromTags(Array(localizations.keys))
+                
+                let locale = LocaleHelper.getPreferredNameLocale(Array(locales))
+                var localeKey = key
+                if let locale {
+                    localeKey = "\(key):\(locale)"
+                }
+                
+                var description = localizations[localeKey]
+                if description == nil && locale != nil && locale == "en" {
+                    description = localizations[key]
+                }
+                
+                return description != nil ? NullablePair(description, locale) : nil
+            }
+        }
+        
+        if let description = amenity.getAdditionalInfo(key), !description.isEmpty {
+            return NullablePair(description, nil)
+        }
+
+        return nil
     }
     
     private func getRowIcon(_ name: String) -> UIImage? {

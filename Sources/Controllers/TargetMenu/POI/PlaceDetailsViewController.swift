@@ -35,7 +35,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     override func buildDescription(_ rows: NSMutableArray) {
         let wikiAmenities = getWikiAmenities()
-        let hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: false)
+        let hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: false, rows: rows)
         
         if !hasDescription {
             // TODO: implement
@@ -54,15 +54,13 @@ final class PlaceDetailsViewController: OAPOIViewController {
         
     }
     
-    private func buildDescription(amenities: [OAPOI], allowOnlineWiki: Bool) -> Bool {
-        if let detailsObject {
-            if buildDescription(amenity: detailsObject.syntheticAmenity, allowOnlineWiki: false) {
-                return true
-            }
+    private func buildDescription(amenities: [OAPOI], allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
+        if let detailsObject, buildDescription(amenity: detailsObject.syntheticAmenity, allowOnlineWiki: false, rows: rows) {
+            return true
         }
         
         for ameniry in amenities {
-            if buildDescription(amenity: ameniry, allowOnlineWiki: false) {
+            if buildDescription(amenity: ameniry, allowOnlineWiki: false, rows: rows) {
                 return true
             }
         }
@@ -70,9 +68,26 @@ final class PlaceDetailsViewController: OAPOIViewController {
         return false
     }
     
-    private func buildDescription(amenity: OAPOI, allowOnlineWiki: Bool) -> Bool {
-        // TODO: implement
+    private func buildDescription(amenity: OAPOI, allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
+        guard let extensions = amenity.getAmenityExtensions(false) else { return false}
+        let bundle = AdditionalInfoBundle(additionalInfo: extensions)
+        let filteredInfo = bundle.getFilteredLocalizedInfo()
         
+        if buildShortWikiDescription(filteredInfo, allowOnlineWiki: allowOnlineWiki, rows: rows) {
+            return true
+        }
+        
+        if let pair = AmenityUIHelper.getDescriptionWithPreferredLang(amenity: amenity, key: DESCRIPTION_TAG, map: filteredInfo) {
+            let text = pair.first as? String ?? ""
+            if let routeId = amenity.getRouteId(), !routeId.isEmpty {
+                let row = OAAmenityInfoRow(key: SHORT_DESCRIPTION_TAG, icon: nil, textPrefix: routeId, text: text, textColor: nil, isText: false, needLinks: false, order: -10000, typeName: kShortDescriptionTravelRowType, isPhoneNumber: false, isUrl: false)
+                rows.add(row)
+            } else {
+                let row = OAAmenityInfoRow(key: SHORT_DESCRIPTION_TAG, icon: nil, textPrefix: nil, text: text, textColor: nil, isText: false, needLinks: false, order: -10000, typeName: kShortDescriptionRowType, isPhoneNumber: false, isUrl: false)
+                rows.add(row)
+            }
+            return true
+        }
         return false
     }
     
@@ -104,33 +119,9 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     private func getGuidesCollapsableView(articles: [String: [String: TravelArticle]]) -> OACollapsableView? {
-        
-        var res = ""
-        
-        let appLang = OAUtilities.currentLang() ?? ""
-        let mapLang = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
-        
-        for articleMap in articles.values {
-            if let article = getArticle(articleMap: articleMap, appLang: appLang, mapLang: mapLang) {
-                
-                res += article.title ?? "" + "\n"
-            }
-        }
-        return OACollapsableLabelView(text: res, collapsed: true)
-        
-        // TODO: implement
-    }
-    
-    private func getArticle(articleMap: [String: TravelArticle], appLang: String, mapLang: String) -> TravelArticle? {
-        var article = articleMap[appLang]
-        if article == nil {
-            article = articleMap[mapLang]
-        }
-        if article == nil {
-            article = articleMap["en"]
-        }
-        
-        return article != nil ? article : articleMap.first?.value
+        let collapsavleView = OACollapsableTravelGuidesView(defaultParameters: true)
+        collapsavleView?.setData(articlesMap: articles)
+        return collapsavleView
     }
     
     private func getTravelIds() -> [String: CLLocation]? {

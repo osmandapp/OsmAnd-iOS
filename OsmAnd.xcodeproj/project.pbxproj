@@ -310,6 +310,7 @@
 		3205EC4026E807E80090B491 /* OAQuickSearchCoordinatesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3F26E8079E0090B491 /* OAQuickSearchCoordinatesViewController.xib */; };
 		32076B1229014678001A86AF /* ic_custom_fps@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B0C29014677001A86AF /* ic_custom_fps@2x.png */; };
 		32076B1429014678001A86AF /* ic_custom_fps@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B0E29014677001A86AF /* ic_custom_fps@3x.png */; };
+		320DF4122F4379A200F80CE3 /* OACollapsableTravelGuidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320DF4112F43799C00F80CE3 /* OACollapsableTravelGuidesView.swift */; };
 		320F71242A823E210071C0E7 /* TravelObfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71232A823E210071C0E7 /* TravelObfHelper.swift */; };
 		320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71262A823FB20071C0E7 /* PopularArticles.swift */; };
 		320F71292A8251730071C0E7 /* TravelArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71282A8251730071C0E7 /* TravelArticle.swift */; };
@@ -3800,6 +3801,7 @@
 		3205EC3F26E8079E0090B491 /* OAQuickSearchCoordinatesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinatesViewController.xib; sourceTree = "<group>"; };
 		32076B0C29014677001A86AF /* ic_custom_fps@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_fps@2x.png"; path = "Resources/Icons/ic_custom_fps@2x.png"; sourceTree = "<group>"; };
 		32076B0E29014677001A86AF /* ic_custom_fps@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_fps@3x.png"; path = "Resources/Icons/ic_custom_fps@3x.png"; sourceTree = "<group>"; };
+		320DF4112F43799C00F80CE3 /* OACollapsableTravelGuidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACollapsableTravelGuidesView.swift; sourceTree = "<group>"; };
 		320EADAA29A77A96002F9883 /* OAAmenityExtendedNameFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenityExtendedNameFilter.h; sourceTree = "<group>"; };
 		320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityExtendedNameFilter.mm; sourceTree = "<group>"; };
 		320F71232A823E210071C0E7 /* TravelObfHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelObfHelper.swift; sourceTree = "<group>"; };
@@ -12697,6 +12699,7 @@
 				DA5A7EB326C563A400F274C7 /* OACollapsableNearestPoiWikiView.mm */,
 				DA5A7E1C26C563A300F274C7 /* OACollapsableTransportStopRoutesView.h */,
 				DA5A7DF926C563A300F274C7 /* OACollapsableTransportStopRoutesView.mm */,
+				320DF4112F43799C00F80CE3 /* OACollapsableTravelGuidesView.swift */,
 				DA5A7EB726C563A400F274C7 /* OACollapsableWaypointsView.h */,
 				DA5A7E2426C563A400F274C7 /* OACollapsableWaypointsView.mm */,
 				DA5A7EB426C563A400F274C7 /* OAEditPointViewController.h */,
@@ -18239,6 +18242,7 @@
 				C5E3B59F2DDDC40800083695 /* SelectRouteActivityViewController.swift in Sources */,
 				DA5A848626C563A900F274C7 /* OAMapInfoController.mm in Sources */,
 				DA5A838E26C563A800F274C7 /* OAOsmAndLiveViewController.mm in Sources */,
+				320DF4122F4379A200F80CE3 /* OACollapsableTravelGuidesView.swift in Sources */,
 				DA5A83B726C563A800F274C7 /* OAFloatingButtonsHudViewController.mm in Sources */,
 				DA5A81D626C563A700F274C7 /* OACommandBuilder.mm in Sources */,
 				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */,

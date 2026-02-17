@@ -10,13 +10,9 @@
 final class LocaleHelper: NSObject {
         
     static func getPreferredNameLocale(_ localeIds: [String]) -> String? {
-        var preferredLocaleId = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
-        if preferredLocaleId.isEmpty {
-            preferredLocaleId = "en"
-        }
-        let availablePreferredLocale = getAvailablePreferredLocale(localeIds)
-        
-        return localeIds.contains(preferredLocaleId) ? preferredLocaleId : availablePreferredLocale
+        let available = getAvailablePreferredLocale(localeIds)
+        guard let preferred = OAUtilities.currentLang(), !preferred.isEmpty, localeIds.contains(preferred) else { return available }
+        return preferred
     }
          
     static func getAvailablePreferredLocale(_ availableLocales: [String]) -> String? {

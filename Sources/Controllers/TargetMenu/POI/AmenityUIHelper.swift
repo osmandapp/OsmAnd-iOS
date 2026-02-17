@@ -439,26 +439,16 @@ final class AmenityUIHelper: NSObject {
     }
     
     func buildNamesRow(namesMap: [String: String], altName: Bool) -> OAAmenityInfoRow? {
-        if !namesMap.isEmpty {
-            let keys = Array(namesMap.keys)
-            var nameLocale = getPreferredLocale(keys)
-            if nameLocale == nil {
-                nameLocale = keys[0]
-            }
-            guard let nameLocale else { return nil }
-            guard let name = namesMap[nameLocale] else { return nil }
-            
-            let key = altName ? Self.ALT_NAMES_ROW_KEY : Self.NAMES_ROW_KEY
-            let hint = localizedString(altName ? "shared_string_alt_name" : "shared_string_name")
-            let text = String(format: localizedString("ltr_or_rtl_combine_via_colon"), hint, nameLocale)
-            let icon = UIImage.templateImageNamed("ic_custom_map_languge")
-            
-            let collapsableView = key.count > 1 ? getNamesCollapsableView() : nil
-            
-            let row = OAAmenityInfoRow(key: key, icon: icon, textPrefix: text, text: name, textColor: nil, isText: true, needLinks: true, collapsable: collapsableView, order: 18000, typeName: "names", isPhoneNumber: false, isUrl: false)
-            return row
-        }
-        return nil
+        guard !namesMap.isEmpty else { return nil }
+        let keys = Array(namesMap.keys.filter { !$0.isEmpty })
+        let nameLocale = getPreferredLocale(keys) ?? keys.first
+        let name = (nameLocale.flatMap { namesMap[$0] }) ?? namesMap[""] ?? namesMap.first?.value
+        guard let name, !name.isEmpty else { return nil }
+        let key = altName ? Self.ALT_NAMES_ROW_KEY : Self.NAMES_ROW_KEY
+        let textPrefix = localizedString(altName ? "shared_string_alt_name" : "shared_string_name")
+        let icon = UIImage.templateImageNamed("ic_custom_map_languge")
+        let collapsableView = namesMap.count > 1 ? getNamesCollapsableView() : nil
+        return OAAmenityInfoRow(key: key, icon: icon, textPrefix: textPrefix, text: name, textColor: nil, isText: true, needLinks: true, collapsable: collapsableView, order: 18000, typeName: "names", isPhoneNumber: false, isUrl: false)
     }
     
     private func getNamesCollapsableView() -> OACollapsableView? {

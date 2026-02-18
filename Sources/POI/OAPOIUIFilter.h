@@ -20,7 +20,6 @@ static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
 static NSString* const BY_NAME_FILTER_ID = @"user_by_name";
 
 @class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory, OAAmenityExtendedNameFilter, OATopIndexFilter;
-//@class OAResultMatcher<ObjectType>, OATopIndexFilter;
 
 @interface OAAmenityNameFilter : NSObject
 

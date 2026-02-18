@@ -1,5 +1,5 @@
 //
-//  OSMCircularShadowProcessor.swift
+//  CircularShadowProcessor.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 12.02.2026.
@@ -9,7 +9,7 @@
 import Kingfisher
 
 // Processor that adds a circular shadow to an image
-struct OSMCircularShadowProcessor: ImageProcessor {
+struct CircularShadowProcessor: ImageProcessor {
     // Required by ImageProcessor
     let identifier: String
     

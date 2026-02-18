@@ -166,7 +166,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return NO;
 
     [self updateVisiblePoiFilter];
-    NSLog(@"[test] updateLayer");
     [_topPlacesProvider updateLayer];
     
     return YES;
@@ -525,23 +524,19 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void)contextMenuDidShow:(id)targetObj
 {
-    NSLog(@"[test] contextMenuDidShow");
     OAPOI *amenity = [self getAmenity:targetObj];
     if (amenity)
     {
-        NSLog(@"[test] contextMenuDidShow amenity");
         [_topPlacesProvider updateSelectedTopPlaceIfNeeded:amenity];
     }
     else
     {
-        NSLog(@"[test] contextMenuDidShow nil");
         [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
     }
 }
 
 - (void)contextMenuDidHide
 {
-    NSLog(@"[test] contextMenuDidHide");
     [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
 }
 

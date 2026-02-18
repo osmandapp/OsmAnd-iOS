@@ -16,10 +16,6 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     /// Dictionary of current image download tasks (key = URL)
     private var loadingImages: [String: DownloadTask] = [:]
     
-    override init() {
-        super.init()
-    }
-    
     /// Cancels all current image download tasks
     func cancelAll() {
         queue.async {
@@ -145,10 +141,10 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
         |> CroppingImageProcessor(size: metrics.imageTargetSize, anchor: .init(x: 0.5, y: 0.5))
         |> RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
         |> BorderImageProcessor(border: .init(
-            color: UIColor.popularPlaceBgDefault.currentMapThemeColor,
+            color: .popularPlaceBgDefault.currentMapThemeColor,
             lineWidth: metrics.border,
             radius: .heightFraction(0.5)))
-        |> OSMCircularShadowProcessor(
+        |> CircularShadowProcessor(
             shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
             shadowBlur: 6 * metrics.textScale,
             shadowColor: UIColor.black.withAlphaComponent(0.2),
@@ -196,10 +192,10 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
         
         let processor = RoundCornerImageProcessor(cornerRadius: metrics.imageArea / 2, backgroundColor: .clear)
         |> BorderImageProcessor(border: .init(
-            color: UIColor.popularPlaceBgDefault.currentMapThemeColor,
+            color: .popularPlaceBgDefault.currentMapThemeColor,
             lineWidth: metrics.border,
             radius: .heightFraction(0.5)))
-        |> OSMCircularShadowProcessor(
+        |> CircularShadowProcessor(
             shadowOffset: CGSize(width: 0, height: 2 * metrics.textScale),
             shadowBlur: 6 * metrics.textScale,
             shadowColor: UIColor.black.withAlphaComponent(0.2),

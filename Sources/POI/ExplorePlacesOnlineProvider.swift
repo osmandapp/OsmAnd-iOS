@@ -94,7 +94,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         let maxTileY = Int(mapUtils.getTileNumberY(zoom: zoom, latitude: rect.bottom))
         
         guard minTileX <= maxTileX, minTileY <= maxTileY else {
-            print("[ExplorePlacesOnlineProvider] -> Coordinate error: Invalid tile range")
+            NSLog("[ExplorePlacesOnlineProvider] -> Coordinate error: Invalid tile range")
             return []
         }
 
@@ -249,10 +249,8 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         )
         
         let listener = ExplorePlacesTaskListener {
-            NSLog("ExplorePlacesTaskListener - start")
         } onFinish: { [weak self] result in
             guard let self else { return }
-            NSLog("ExplorePlacesTaskListener - finish")
             if !result.isEmpty {
                 var map: [String: [WikiCoreHelper.OsmandApiFeatureData]] = [:]
                 for item in result {

@@ -20,7 +20,7 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
 
     init(renderedObject: OARenderedObject) {
-        let poi = RenderedObjectHelper.getSyntheticAmenity(renderedObject: renderedObject)
+        let poi = BaseDetailsObject.convertRenderedObjectToAmenity(renderedObject)
         super.init(poi: poi)
         self.renderedObject = renderedObject // set finally
     }

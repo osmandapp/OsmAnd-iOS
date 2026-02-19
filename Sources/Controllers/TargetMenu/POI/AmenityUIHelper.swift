@@ -447,14 +447,10 @@ final class AmenityUIHelper: NSObject {
         let key = altName ? Self.ALT_NAMES_ROW_KEY : Self.NAMES_ROW_KEY
         let textPrefix = localizedString(altName ? "shared_string_alt_name" : "shared_string_name")
         let icon = UIImage.templateImageNamed("ic_custom_map_languge")
-        let collapsableView = namesMap.count > 1 ? getNamesCollapsableView() : nil
-        return OAAmenityInfoRow(key: key, icon: icon, textPrefix: textPrefix, text: name, textColor: nil, isText: true, needLinks: true, collapsable: collapsableView, order: 18000, typeName: "names", isPhoneNumber: false, isUrl: false)
-    }
-    
-    private func getNamesCollapsableView() -> OACollapsableView? {
-       
-        // TODO: implement
-        nil
+        
+        // android here creates collapsable view with all translations. ios opens a new screen with translations instead.
+        // implementaion: OAPOIViewContoller.buildNamesRow() and OATargetInfoViewController.showPOITagsDetails()
+        return OAAmenityInfoRow(key: key, icon: icon, textPrefix: textPrefix, text: name, textColor: nil, isText: true, needLinks: true, collapsable: nil, order: 18000, typeName: "names", isPhoneNumber: false, isUrl: false)
     }
     
     private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, textRow: OAAmenityInfoRow?, type: OAPOICategory?) -> OACollapsableView? {

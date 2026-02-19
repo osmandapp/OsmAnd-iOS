@@ -24,10 +24,8 @@ final class EleRowBehaviour: DefaultPoiAdditionalRowBehaviour {
                 collapsibleVal = OAOsmAndFormatter.getFormattedAlt(distance, mc: .FEET)
             }
             
-            // TODO: implement
-//            val elevationData: MutableSet<String> = HashSet()
-//            elevationData.add(collapsibleVal)
-//            builder.setCollapsableView(menuBuilder.getDistanceCollapsableView(elevationData))
+            let collapsableView = OACollapsableLabelView(text: collapsibleVal, collapsed: true)
+            params.builder.collapsableView = collapsableView
         }
         
         params.builder.text = value

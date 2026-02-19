@@ -160,4 +160,10 @@
     return NO;
 }
 
+- (NSString *)description
+{
+    NSString *name = NSStringIsEmpty(self.name) ? @"nil" : self.name;
+    return [NSString stringWithFormat:@"%@ (%llu)", name, _obfId];
+}
+
 @end

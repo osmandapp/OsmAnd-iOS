@@ -40,9 +40,6 @@ class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
         // (if this parameters was not predefined)
         
         if !params.builder.hasIcon() { // if icon wasn't predefined
-            
-            //TODO: debug it
-//            var iconName = getIconName(key: params.poiType?.iconName())
             var iconName = getIconName(key: params.poiType?.iconKeyName())
             
             if iconName == nil {
@@ -103,9 +100,6 @@ class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
     }
     
     func getIconName(key: String?) -> String? {
-        
-        //TODO: debug it. invalid icon "mx_height"
-        
         guard let key else { return nil }
         var iconName = key
         

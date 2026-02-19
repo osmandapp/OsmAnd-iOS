@@ -361,7 +361,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         NSMutableArray<NSString *> *names = [NSMutableArray new];
         for (OARenderedObject *polygon in polygons)
         {
-            OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:polygon];
+            OAPOI *syntheticAmenity = [BaseDetailsObject convertRenderedObjectToAmenity:polygon];
             NSString *name = [OAUtilities capitalizeFirstLetter:[RenderedObjectHelper getFirstNonEmptyNameFor:syntheticAmenity withRenderedObject:polygon]];
             [names addObject:name];
         }
@@ -396,7 +396,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     for (int i = 0; i < renderedObjects.count; i++)
     {
         OARenderedObject *renderedObject = renderedObjects[i];
-        OAPOI *syntheticAmenity = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
+        OAPOI *syntheticAmenity = [BaseDetailsObject convertRenderedObjectToAmenity:renderedObject];
 
         NSString *key;
         NSString *translatedType = [RenderedObjectHelper getTranslatedTypeWithRenderedObject:renderedObject];

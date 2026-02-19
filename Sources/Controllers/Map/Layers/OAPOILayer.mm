@@ -465,7 +465,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         
         if (!poi)
-            poi = [RenderedObjectHelper getSyntheticAmenityWithRenderedObject:renderedObject];
+            poi = [BaseDetailsObject convertRenderedObjectToAmenity:renderedObject];
         if (poi)
         {
             if (!targetPoint || targetPoint.title.length == 0)

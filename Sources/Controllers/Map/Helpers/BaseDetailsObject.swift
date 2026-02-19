@@ -56,17 +56,21 @@ final class BaseDetailsObject: NSObject {
         self.addObject(object)
     }
 
-    convenience init(amenities: [OAPOI], lang: String) {
+    convenience init(mapObjects: [OAMapObject], lang: String) {
         let effectiveLang = lang.isEmpty ? "en" : lang
         self.init(lang: effectiveLang)
         self.lang = effectiveLang
 
-        for amenity in amenities {
-            self.addObject(amenity)
+        var containsAmenity = false
+        for mapObject in mapObjects {
+            self.addObject(mapObject)
+            if mapObject is OAPOI {
+                containsAmenity = true
+            }
         }
-
-        if self.objectCompleteness.rawValue < ObjectCompleteness.full.rawValue {
-            self.objectCompleteness = syntheticAmenity.type == nil ? .empty : .combined
+        
+        if !objects.isEmpty {
+            objectCompleteness = containsAmenity ? .full : .combined
         }
     }
 
@@ -260,7 +264,7 @@ final class BaseDetailsObject: NSObject {
         var contentLocales = Set<String>()
 
         for object in objects {
-            mergeObject(object, contentLocales: &contentLocales)
+            mergeObject(object, contentLocales: &contentLocales, isSingleObject: objects.count == 1)
         }
 
         if contentLocales.count > 0 {
@@ -278,12 +282,12 @@ final class BaseDetailsObject: NSObject {
         }
     }
 
-    private func mergeObject(_ object: Any, contentLocales: inout Set<String>) {
+    private func mergeObject(_ object: Any, contentLocales: inout Set<String>, isSingleObject: Bool) {
         if let amenity = object as? OAPOI {
-            processAmenity(amenity, contentLocales: &contentLocales)
+            processAmenity(amenity, contentLocales: &contentLocales, isSingleObject: isSingleObject)
         } else if let transportStop = object as? OATransportStop {
             if let amenity = transportStop.poi {
-                processAmenity(amenity, contentLocales: &contentLocales)
+                processAmenity(amenity, contentLocales: &contentLocales, isSingleObject: isSingleObject)
             } else {
                 processId(transportStop)
                 syntheticAmenity.copyNames(transportStop)
@@ -350,7 +354,7 @@ final class BaseDetailsObject: NSObject {
         amenity.subType = updated
     }
 
-    private func processAmenity(_ amenity: OAPOI, contentLocales: inout Set<String>) {
+    private func processAmenity(_ amenity: OAPOI, contentLocales: inout Set<String>, isSingleObject: Bool) {
         processId(amenity)
 
         if syntheticAmenity.latitude.isNaN && !amenity.latitude.isNaN {

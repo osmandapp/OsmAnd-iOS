@@ -92,6 +92,32 @@ final class ObfConstants: NSObject {
         return nil
     }
     
+    static func getPrintTags(_ renderedObject: OARenderedObject) -> String {
+        var s = ""
+        for entry in renderedObject.tags {
+            let key = entry.key as? String
+            let value = entry.value as? String
+            let keyEmpty = NSStringIsEmpty(key)
+            let valueEmpty = NSStringIsEmpty(value)
+            let bothPresent = !keyEmpty && !valueEmpty
+            let anyPresent = !keyEmpty || !valueEmpty
+            
+            if !keyEmpty {
+                s.append(key ?? "")
+            }
+            if bothPresent {
+                s.append(":")
+            }
+            if !valueEmpty {
+                s.append(value ?? "")
+            }
+            if !anyPresent {
+                s.append(" ")
+            }
+        }
+        return s.trimWhitespaces()
+    }
+    
     static func isOsmUrlAvailable(_ object: OAMapObject) -> Bool {
         return object.obfId > 0
     }

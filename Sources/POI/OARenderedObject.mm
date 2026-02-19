@@ -9,6 +9,7 @@
 #import "OARenderedObject.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/PointsAndAreas.h>
@@ -115,6 +116,21 @@
     }
     
     return names;
+}
+
+- (NSString *)description
+{
+    NSString *name = NSStringIsEmpty(self.name) ? @"nil" : self.name;
+    NSString *link = [ObfConstants getOsmUrlForId:self];
+    NSString *tags = [ObfConstants getPrintTags:self];
+    
+    NSString *s = name;
+    if (![s containsString:link])
+        s = [NSString stringWithFormat:@"%@ %@", s, link];
+    if (![s containsString:tags])
+        s = [NSString stringWithFormat:@"%@ %@", s, tags];
+    
+    return s;
 }
 
 @end

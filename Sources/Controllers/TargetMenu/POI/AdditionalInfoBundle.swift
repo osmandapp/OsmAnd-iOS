@@ -70,10 +70,7 @@ final class AdditionalInfoBundle: NSObject {
     
     func get(_ key: String) -> String? {
         if let additionalInfo {
-            let str = additionalInfo[key]
-            // TODO: implement if needed
-            // str = Amenity.unzipContent(str);
-            return str
+            return additionalInfo[key]
         }
         return nil
     }

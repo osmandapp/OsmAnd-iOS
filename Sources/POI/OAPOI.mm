@@ -1126,4 +1126,12 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     return result;
 }
 
+- (NSString *)description
+{
+    NSString *type = NSStringIsEmpty(_type.category.name) ? @"nil" : _type.category.name;
+    NSString *subtype = NSStringIsEmpty(_subType) ? @"nil" : _subType;
+    NSString *name = NSStringIsEmpty(_subType) ? @"nil" : self.name;
+    return [NSString stringWithFormat:@"%@:  %@  %@", type, subtype, name];
+}
+
 @end

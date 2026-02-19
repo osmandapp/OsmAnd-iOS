@@ -12,6 +12,9 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+static CGFloat const kShadowOpacity = 1;
+static CGFloat const kShadowRadius = 6;
+
 @implementation OAHudButton
 {
     NSInteger _id;
@@ -119,6 +122,19 @@
     [self updateContent];
 }
 
+- (BOOL)isGlass
+{
+    if (@available(iOS 26.0, *))
+    {
+        NSInteger glassStyle = [self glassStyle];
+        return glassStyle == UIGlassEffectStyleRegular || glassStyle == UIGlassEffectStyleClear;
+    }
+    else
+    {
+        return NO;
+    }
+}
+
 - (void)updateContent
 {
     ButtonAppearanceParams *params = [self appearanceParams];
@@ -157,8 +173,7 @@
 {
     if (@available(iOS 26.0, *))
     {
-        NSInteger glassStyle = [self glassStyle];
-        BOOL isGlass = glassStyle == UIGlassEffectStyleRegular || glassStyle == UIGlassEffectStyleClear;
+        BOOL isGlass = [self isGlass];
         
         for (UIView *subview in self.subviews)
         {
@@ -168,6 +183,7 @@
         
         if (isGlass)
         {
+            NSInteger glassStyle = [self glassStyle];
             UIGlassEffect *glass = [UIGlassEffect effectWithStyle:glassStyle];
             if (glassStyle == UIGlassEffectStyleRegular)
                 glass.tintColor = self.backgroundColor;
@@ -197,42 +213,63 @@
 
 - (void)updateShadow
 {
-    if (!_borderLayer)
-    {
-        _borderLayer = [CAShapeLayer layer];
-        _borderLayer.fillColor = UIColor.clearColor.CGColor;
-        [self.layer addSublayer:_borderLayer];
-    }
-    self.layer.shadowOpacity = 0;
-    self.layer.shadowPath = nil;
-    
     NSInteger size = [self size];
     NSInteger cornerRadius = [self appearanceCornerRadius];
     CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:cornerRadius];
-    _borderLayer.shadowPath = shadowPath.CGPath;
-    _borderLayer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.35].CGColor;
-    _borderLayer.shadowOpacity = 1;
-    _borderLayer.shadowRadius = 12;
-    _borderLayer.shadowOffset = CGSizeMake(0, 2);
-    _borderLayer.cornerRadius = cornerRadius;
+    CGPathRef cgShadowPath = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:cornerRadius].CGPath;
+    CGColorRef shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.35].CGColor;
+    CGSize shadowOffset = CGSizeMake(0, 2);
     
-    CGFloat shadowBorder = _borderLayer.shadowRadius * 2;
-    CGFloat inset = -shadowBorder;
-    CGFloat offset = shadowBorder / 2;
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    CGRect maskFrame = CGRectInset(bounds, inset, inset);
-    maskFrame = CGRectOffset(maskFrame, offset, offset);
-    maskLayer.frame = maskFrame;
-    maskLayer.fillRule = kCAFillRuleEvenOdd;
-    
-    UIBezierPath *combinedPath = [UIBezierPath bezierPathWithRect:maskLayer.frame];
-    CGRect innerRect = CGRectOffset(bounds, offset, offset);
-    UIBezierPath *innerRoundedPath = [UIBezierPath bezierPathWithRoundedRect:innerRect cornerRadius:_borderLayer.cornerRadius];
-    [combinedPath appendPath:innerRoundedPath];
-    maskLayer.path = combinedPath.CGPath;
-    
-    _borderLayer.mask = maskLayer;
+    if ([self isGlass])
+    {
+        if (_borderLayer)
+        {
+            [_borderLayer removeFromSuperlayer];
+            _borderLayer = nil;
+        }
+        
+        self.layer.shadowPath = cgShadowPath;
+        self.layer.shadowColor = shadowColor;
+        self.layer.shadowOpacity = kShadowOpacity;
+        self.layer.shadowRadius = kShadowRadius;
+        self.layer.shadowOffset = shadowOffset;
+        self.layer.cornerRadius = cornerRadius;
+    }
+    else
+    {
+        if (!_borderLayer)
+        {
+            _borderLayer = [CAShapeLayer layer];
+            _borderLayer.fillColor = UIColor.clearColor.CGColor;
+            [self.layer addSublayer:_borderLayer];
+        }
+        self.layer.shadowOpacity = 0;
+        self.layer.shadowPath = nil;
+        
+        _borderLayer.shadowPath = cgShadowPath;
+        _borderLayer.shadowColor = shadowColor;
+        _borderLayer.shadowOpacity = kShadowOpacity;
+        _borderLayer.shadowRadius = kShadowRadius;
+        _borderLayer.shadowOffset = shadowOffset;
+        _borderLayer.cornerRadius = cornerRadius;
+        
+        CGFloat shadowBorder = _borderLayer.shadowRadius * 2;
+        CGFloat inset = -shadowBorder;
+        CGFloat offset = shadowBorder / 2;
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        CGRect maskFrame = CGRectInset(bounds, inset, inset);
+        maskFrame = CGRectOffset(maskFrame, offset, offset);
+        maskLayer.frame = maskFrame;
+        maskLayer.fillRule = kCAFillRuleEvenOdd;
+        
+        UIBezierPath *combinedPath = [UIBezierPath bezierPathWithRect:maskLayer.frame];
+        CGRect innerRect = CGRectOffset(bounds, offset, offset);
+        UIBezierPath *innerRoundedPath = [UIBezierPath bezierPathWithRoundedRect:innerRect cornerRadius:_borderLayer.cornerRadius];
+        [combinedPath appendPath:innerRoundedPath];
+        maskLayer.path = combinedPath.CGPath;
+        
+        _borderLayer.mask = maskLayer;
+    }
 }
 
 - (void)updateSize

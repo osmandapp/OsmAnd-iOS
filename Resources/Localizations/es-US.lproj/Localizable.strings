@@ -664,7 +664,6 @@
 "shared_string_legend" = "Leyenda";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
 "add_online_source" = "Agregar repositorio en línea";
-"map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
 "map_settings_add_maps_desc" = "Puedes añadir nuevos mapas a través de un enlace o importando archivos SQLite.";
 "srtm_color_scheme" = "Esquema de color";

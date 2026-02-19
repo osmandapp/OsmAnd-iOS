@@ -1517,7 +1517,6 @@
 "context_menu_points_of_group" = "Grubun tüm noktaları";
 "map_settings_add_maps_desc" = "Bağlantı ile veya SQLite dosyalarını içe aktararak yeni haritalar ekleyebilirsiniz.";
 "map_settings_hide_polygons_desc" = "Bu seçenek sadece OsmAnd çevrim dışı vektör haritalarını etkilemektedir";
-"map_settings_hide_polygons" = "Poligonları gizle";
 "add_online_source" = "Çevrim içi kaynak ekle";
 "map_settings_show_slider_map" = "Kaydırıcıyı haritada göster";
 "app_mode_pedestrian" = "Yürüme";

@@ -661,7 +661,6 @@
 "shared_string_legend" = "Легенда";
 "map_settings_show_slider_map" = "Прикажи клизач на мапи";
 "add_online_source" = "Додај мрежни извор";
-"map_settings_hide_polygons" = "Сакриј полигоне";
 "map_settings_hide_polygons_desc" = "Ова опција утиче само на OsmAnd ванмрежне векторске мапе";
 "map_settings_add_maps_desc" = "Можете додати нове мапе преко везе или увозом SQLite датотека.";
 "srtm_color_scheme" = "Образац боја";

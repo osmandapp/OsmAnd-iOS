@@ -1513,7 +1513,6 @@
 "import_raster_map_failed" = "Importadura de sa mapa raster fallida";
 "map_settings_show_slider_map" = "Ammustra su cursore in sa mapa";
 "add_online_source" = "Annanghe una mitza in lìnia";
-"map_settings_hide_polygons" = "Cua sos polìgonos";
 "map_settings_hide_polygons_desc" = "Custa optzione influentzat sas mapas vetoriales non in lìnia de OsmAnd ebbia";
 "map_settings_add_maps_desc" = "Podes annànghere mapas noas pro mèdiu de unu ligàmene, o importende documentos SQLite.";
 "context_menu_points_of_group" = "Totu sos puntos de su grupu";

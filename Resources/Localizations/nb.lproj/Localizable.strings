@@ -1105,7 +1105,6 @@
 "map_settings_line_density" = "Linjetetthet";
 "map_settings_add_maps_desc" = "Du kan legge til kart via lenke, eller ved å importere SQLite-filer.";
 "map_settings_hide_polygons_desc" = "Dette valget har kun innvirkning på frakoblede vektorielle OsmAnd-kart";
-"map_settings_hide_polygons" = "Skjul polygoner";
 "add_online_source" = "Legg til nettbasert kilde";
 "map_settings_show_slider_map" = "Vis glidebryter på kartet";
 "map_settings_install_more" = "Installer mer…";

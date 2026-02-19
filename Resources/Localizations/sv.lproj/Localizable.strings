@@ -647,7 +647,6 @@
 "shared_string_legend" = "Teckenförklaring";
 "map_settings_show_slider_map" = "Visa reglage på kartan";
 "add_online_source" = "Lägg till onlinekälla";
-"map_settings_hide_polygons" = "Dölj polygoner";
 "map_settings_hide_polygons_desc" = "Detta val påverkar bara OsmAnds offline vektorkartor";
 "srtm_color_scheme" = "Färgschema";
 "map_settings_line_density" = "Linjetäthet (Ekvidistans)";

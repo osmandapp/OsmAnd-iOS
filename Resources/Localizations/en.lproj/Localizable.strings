@@ -1177,7 +1177,7 @@
 
 "map_settings_show_slider_map" = "Show slider on the map";
 "add_online_source" = "Add online source";
-"map_settings_hide_polygons" = "Hide polygons";
+"show_polygons" = "Show polygons";
 "show_map_symbols" = "Show map symbols";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";

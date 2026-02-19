@@ -1849,7 +1849,6 @@
 "available_groups" = "Elérhető csoportok";
 "add_group" = "Csoport hozzáadása";
 "name_and_descr" = "Név és leírás";
-"map_settings_hide_polygons" = "Poligonok elrejtése";
 "shared_string_weather" = "Időjárás";
 "map_settings_line_density_slowdown_warning" = "A nagy vonalsűrűség lassíthatja a térkép megjelenítését";
 "map_settings_weather_wind" = "Szél";

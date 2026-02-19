@@ -1314,7 +1314,6 @@
 "sett_deg180" = "180 degrés";
 "map_settings_add_maps_desc" = "Vous pouvez ajouter de nouvelles cartes via un lien, ou en important des fichiers SQLite.";
 "map_settings_hide_polygons_desc" = "Cette option s'applique uniquement aux cartes vectorielles hors-ligne OsmAnd";
-"map_settings_hide_polygons" = "Cacher les polygones";
 "add_online_source" = "Ajouter une source en ligne";
 "map_settings_install_maps" = "Choisissez des cartes à installer ou mettre à jour";
 "gpx_analyze" = "Analyser";

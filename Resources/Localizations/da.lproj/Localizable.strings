@@ -1487,7 +1487,6 @@
 "clear_tiles_warning" = "Hvis du anvender disse ændringer, ryddes de lagrede data for denne kortflisekilde";
 "map_settings_show_slider_map" = "Vis skyder på kortet";
 "add_online_source" = "Tilføj onlinekilde";
-"map_settings_hide_polygons" = "Skjul polygoner";
 "map_settings_hide_polygons_desc" = "Indstillingen påvirker kun Offline-vektorkort";
 "map_settings_add_maps_desc" = "Tilføj nye kort via link eller ved at importere SQLite-filer.";
 "app_mode_utv" = "Side om side";

@@ -1245,7 +1245,6 @@
 "map_settings_add_maps_slopes" = "வரைபடத்தில் சரிவுகளைக் காண கூடுதல் வரைபடங்கள் தேவை.";
 "shared_string_legend" = "புராணக்கதை";
 "map_settings_show_slider_map" = "வரைபடத்தில் ச்லைடரைக் காட்டு";
-"map_settings_hide_polygons" = "பலகோணங்களை மறைக்கவும்";
 "map_settings_add_maps_desc" = "இணைப்பு வழியாக அல்லது SQLite கோப்புகளை இறக்குமதி செய்வதன் மூலம் புதிய வரைபடங்களைச் சேர்க்கலாம்.";
 "map_settings_contour_zoom_level_descr" = "Wich விளிம்பு கோடுகள் காண்பிக்கப்படும் சூம் மட்டத்தைத் தேர்ந்தெடுக்கவும்";
 "press_again_to_change_the_map_orientation" = "வரைபட நோக்குநிலையை மாற்ற மீண்டும் தட்டவும்";

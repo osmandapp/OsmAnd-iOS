@@ -1523,7 +1523,6 @@
 "import_raster_map_failed" = "Innflutningur rastakorts mistókst";
 "map_settings_show_slider_map" = "Birta sleða á kortinu";
 "add_online_source" = "Bæta við gagnagjafa á netinu";
-"map_settings_hide_polygons" = "Fela marghyrninga";
 "map_settings_hide_polygons_desc" = "Þessi valkostur hefur bara áhrif á ónettengd OsmAnd-vektorkort";
 "map_settings_add_maps_desc" = "Þú getur bætt við nýjum kortum í gegnum tengil, eða með því að flytja inn SQLite-skrár.";
 "app_mode_utv" = "Hlið við hlið";

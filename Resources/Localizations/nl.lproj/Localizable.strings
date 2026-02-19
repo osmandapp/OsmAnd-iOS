@@ -3238,7 +3238,6 @@
 "map_settings_add_maps_hillshade" = "Additionele kaarten zijn nodig om Bergschaduw weer te geven op de kaart.";
 "map_settings_add_maps_slopes" = "Additionele kaarten zijn nodig om Pistes weer te geven op de kaart.";
 "map_settings_show_slider_map" = "Toon schuifje op de kaart";
-"map_settings_hide_polygons" = "Verberg polygonen";
 "map_settings_weather_temp_air" = "Luchttemperatuur";
 "map_settings_weather_temp_water" = "Watertemperatuur";
 "map_settings_clear_geo_cache" = "Geo tegels legen";

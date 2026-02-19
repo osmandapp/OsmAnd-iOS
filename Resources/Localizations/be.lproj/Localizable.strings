@@ -1371,7 +1371,6 @@
 "map_settings_line_density_slowdown_warning" = "Высокая шчыльнасць ліній можа запаволіць адмалёўку мапы";
 "map_settings_line_density" = "Шчыльнасць ліній";
 "map_settings_add_maps_desc" = "Вы можаце дадаць новыя мапы па спасылцы альбо імпартаваць новыя файлы SQLite.";
-"map_settings_hide_polygons" = "Схаваць палігоны";
 "map_settings_show_slider_map" = "Паказаць паўзунок на мапе";
 "map_settings_add_maps_slopes" = "Для прагляду схілаў патрабуюцца дадатковыя мапы";
 "map_settings_zoom_level_description" = "Вызначце мінімальны і максімальны ўзроўні маштабавання для адлюстравання пласта";

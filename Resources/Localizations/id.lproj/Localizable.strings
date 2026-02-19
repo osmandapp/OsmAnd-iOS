@@ -3483,7 +3483,6 @@
 "weather_temp_enable_descr" = "Aktifkan untuk melihat lapisan suhu di peta.";
 "map_settings_slopes_legend" = "Anda dapat membaca lebih lanjut tentang lereng di Wikipedia";
 "map_settings_show_slider_map" = "Tampilkan penggeser di peta";
-"map_settings_hide_polygons" = "Sembunyikan poligon";
 "map_settings_hide_polygons_desc" = "Opsi ini hanya memengaruhi peta vektor Offline OsmAnd";
 "weather_wind_enable_descr" = "Aktifkan untuk melihat lapisan angin di peta.";
 "weather_cloud_enable_descr" = "Aktifkan untuk melihat lapisan awan di peta.";

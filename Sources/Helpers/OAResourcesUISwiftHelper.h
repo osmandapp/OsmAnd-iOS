@@ -13,7 +13,7 @@
 
 @protocol OADownloadTask;
 
-@class OAWorldRegion, FFCircularProgressView, MBProgressHUD;
+@class OAWorldRegion, FFCircularProgressView, MBProgressHUD, OAMapSource;
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
@@ -76,6 +76,11 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 
 @end
 
+@interface OAMapSourceResourceSwiftItem: OAResourceSwiftItem
+
+- (OAMapSource *)mapSource;
+
+@end
 
 @interface OAResourcesUISwiftHelper : NSObject
 
@@ -131,6 +136,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (NSArray<OAResourceSwiftItem *> *)getUnsupportedResourcesWith:(OAWorldRegion *)region;
 
 + (NSString *)getCountryName:(OAResourceSwiftItem *)item;
+
++ (NSArray<OAMapSourceResourceSwiftItem *> *)sortedRasterMapSources:(BOOL)includeOffline;
 
 @end
 

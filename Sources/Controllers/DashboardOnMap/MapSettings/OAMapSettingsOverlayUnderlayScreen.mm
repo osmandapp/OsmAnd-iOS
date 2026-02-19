@@ -46,7 +46,7 @@
 
 #define kShowSlider @"kShowSlider"
 #define kShowLabels @"kShowLabels"
-#define kHidePoligons @"kHidePoligons"
+#define kShowPoligons @"kShowPoligons"
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -199,8 +199,8 @@ static NSInteger kButtonsSection;
     {
         [styleArray addObject:@{
             @"type" : kCellTypeSwitch,
-            @"title": OALocalizedString(@"map_settings_hide_polygons"),
-            @"tag" : kHidePoligons
+            @"title": OALocalizedString(@"show_polygons"),
+            @"tag" : kShowPoligons
         }];
     }
     [tableData addObject: styleArray];
@@ -423,7 +423,7 @@ static NSInteger kButtonsSection;
                 [cell.switchView setOn:_settings.keepMapLabelsVisible.get];
                 [cell.switchView addTarget:self action:@selector(onShowLabelsChanged:) forControlEvents:UIControlEventValueChanged];
             }
-            else if ([item[@"tag"] isEqualToString:kHidePoligons])
+            else if ([item[@"tag"] isEqualToString:kShowPoligons])
             {
                 [cell.switchView setOn:[_hidePolygonsParameter.value isEqualToString:@"true"]];
                 [cell.switchView addTarget:self action:@selector(onPolygonsChanged:) forControlEvents:UIControlEventValueChanged];
@@ -534,17 +534,14 @@ static NSInteger kButtonsSection;
     if (switchView)
     {
         _isEnabled = switchView.isOn;
+        [self setOpacitySliderVisibility:switchView.isOn];
         if (switchView.isOn)
         {
             if (_mapSettingType == EMapSettingOverlay)
-            {
                 _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
-            }
             else if (_mapSettingType == EMapSettingUnderlay)
-            {
-                [self hidePolygons:[_hidePolygonsParameter.value isEqualToString:@"true"]];
                 _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
-            }
+                
             [tblView beginUpdates];
             [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -553,14 +550,10 @@ static NSInteger kButtonsSection;
         else
         {
             if (_mapSettingType == EMapSettingOverlay)
-            {
                 _app.data.overlayMapSource = nil;
-            }
             else if (_mapSettingType == EMapSettingUnderlay)
-            {
-                [self hidePolygons:NO];
                 _app.data.underlayMapSource = nil;
-            }
+                
             [tblView beginUpdates];
             [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -633,7 +626,6 @@ static NSInteger kButtonsSection;
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
-        [self hidePolygons:YES];
         _app.data.underlayMapSource = itemMapSource;
         _app.data.lastUnderlayMapSource = itemMapSource;
     }

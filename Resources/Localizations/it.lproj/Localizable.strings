@@ -1528,7 +1528,6 @@
 "map_settings_line_density" = "Densità della linea";
 "map_settings_add_maps_desc" = "È possibile aggiungere nuove mappe tramite collegamento o importando i file SQLite.";
 "map_settings_hide_polygons_desc" = "Questa opzione ha effetto solo sulle mappe vettoriali offline di OsmAnd";
-"map_settings_hide_polygons" = "Nascondi i poligoni";
 "add_online_source" = "Aggiungi sorgente online";
 "map_settings_show_slider_map" = "Mostra il cursore sulla mappa";
 "shared_string_legend" = "Legenda";

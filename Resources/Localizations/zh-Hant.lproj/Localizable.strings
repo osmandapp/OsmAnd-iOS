@@ -2451,7 +2451,6 @@
 "map_settings_add_maps_slopes" = "需要額外的地圖才能在地圖上檢視斜坡。";
 "map_settings_slopes_description" = "斜坡使用不同的顏色來視覺化地形。";
 "map_settings_zoom_level_description" = "設定顯示圖層的最小和最大縮放等級";
-"map_settings_hide_polygons" = "隱藏多邊形";
 "map_settings_hide_polygons_desc" = "此選項僅影響 OsmAnd 離線向量地圖";
 "map_settings_line_density" = "線密度";
 "press_again_to_change_the_map_orientation" = "再次點選以更改地圖方向";

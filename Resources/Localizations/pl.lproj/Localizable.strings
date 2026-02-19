@@ -1479,7 +1479,6 @@
 "available_map_styles" = "Dostępne style map";
 "map_settings_add_maps_desc" = "Możesz dodać nowe mapy za pomocą linku lub importować pliki SQLite.";
 "map_settings_hide_polygons_desc" = "Ta opcja dotyczy tylko map wektorowych OsmAnd Offline";
-"map_settings_hide_polygons" = "Ukrywanie wielokątów";
 "add_online_source" = "Dodaj źródło online";
 "map_settings_show_slider_map" = "Pokaż suwak na mapie";
 "displayed_route_save" = "Zapisz w trasach OsmAnd";

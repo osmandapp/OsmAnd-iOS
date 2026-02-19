@@ -1490,7 +1490,6 @@
 "import_raster_map_failed" = "Rasterkarten-Import fehlgeschlagen";
 "map_settings_show_slider_map" = "Schieberegler auf der Karte anzeigen";
 "add_online_source" = "Online-Quelle hinzufügen";
-"map_settings_hide_polygons" = "Polygone ausblenden";
 "map_settings_hide_polygons_desc" = "Diese Option betrifft nur OsmAnd Offline-Vektorkarten";
 "map_settings_add_maps_desc" = "Sie können neue Karten über einen Link oder durch den Import von SQLite-Dateien hinzufügen.";
 "how_to_open_wiki_title" = "Wie öffnet man Wikipedia-Artikel?";

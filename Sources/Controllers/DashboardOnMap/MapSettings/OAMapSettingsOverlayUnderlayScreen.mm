@@ -425,7 +425,7 @@ static NSInteger kButtonsSection;
             }
             else if ([item[@"tag"] isEqualToString:kShowPoligons])
             {
-                [cell.switchView setOn:[_hidePolygonsParameter.value isEqualToString:@"true"]];
+                [cell.switchView setOn:[_hidePolygonsParameter.value isEqualToString:@"false"]];
                 [cell.switchView addTarget:self action:@selector(onPolygonsChanged:) forControlEvents:UIControlEventValueChanged];
             }
         }
@@ -573,7 +573,7 @@ static NSInteger kButtonsSection;
 {
      UISwitch *switchView = (UISwitch*)sender;
      if (switchView)
-         [self hidePolygons:switchView.isOn];
+         [self showPolygons:switchView.isOn];
 }
 
 - (void) onShowSwitchChanged:(id)sender
@@ -591,12 +591,12 @@ static NSInteger kButtonsSection;
     [_settings.keepMapLabelsVisible set:show];
 }
 
-- (void) hidePolygons:(BOOL)hide
+- (void)showPolygons:(BOOL)show
 {
-    NSString *newValue = hide ? @"true" : @"false";
+    NSString *newValue = show ? @"false" : @"true";
     if (![_hidePolygonsParameter.value isEqualToString:newValue])
     {
-        _hidePolygonsParameter.value = hide ? @"true" : @"false";
+        _hidePolygonsParameter.value = newValue;
         [_styleSettings save:_hidePolygonsParameter];
     }
 }

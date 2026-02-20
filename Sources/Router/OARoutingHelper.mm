@@ -348,10 +348,15 @@ static BOOL _isDeviatedFromRoute = false;
             NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
             for (id<OARouteInformationListener> l in _listeners)
             {
-                if (l && [l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
+                if (l)
+                {
+                    if ([l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
                     [l newRouteHasMissingOrOutdatedMaps:missingMaps mapsToUpdate:mapsToUpdate potentiallyUsedMaps:potentiallyUsedMaps];
+                }
                 else
+                {
                     [inactiveListeners addObject:l];
+                }
             }
             [_listeners removeObjectsInArray:inactiveListeners];
         }

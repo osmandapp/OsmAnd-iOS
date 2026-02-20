@@ -1939,7 +1939,7 @@
 "shared_string_all_languages" = "Všechny jazyky";
 "population_num" = "Počet obyvatel";
 "shared_string_turn_off" = "Vypnout";
-"navigate_point_olc" = "Open Location Code (OLC)";
+"navigate_point_olc" = "Open Location Code";
 "explore_wikipedia_offline" = "Prozkoumejte Wikipedii offline.";
 "navigate_point_easting" = "Souřadnice X";
 "navigate_point_northing" = "Souřadnice Y";
@@ -3992,3 +3992,4 @@
 "context_menu_item_add_parking_point" = "Označit jako místo parkování";
 "find_parking" = "Najít parkování";
 "finish_navigation" = "Ukončit navigaci";
+"background_liquid_glass_clear_ios" = "Čisté";

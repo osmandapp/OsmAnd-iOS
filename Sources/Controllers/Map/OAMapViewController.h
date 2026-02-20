@@ -156,8 +156,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
              centerBBox:(BOOL)centerBBox
-          alignPosition:(BOOL)alignPosition
                animated:(BOOL)animated;
+
+- (void) storeTargetPosition:(UIGestureRecognizer *)recognizer scheduleRestore:(BOOL)restoreOnRender;
+- (void) restorePreviousTarget;
 
 - (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state
                     numberOfTouches:(NSInteger)numberOfTouches

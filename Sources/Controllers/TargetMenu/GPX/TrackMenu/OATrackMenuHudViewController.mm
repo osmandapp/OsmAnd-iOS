@@ -871,16 +871,16 @@
                     [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
                     [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]
             );
+            auto leftInset =  [self isLandscape] ? [self getLandscapeViewWidth] : 0.;
+            auto bottomInset =  [self isLandscape] ? [self getViewHeight] : 0.;
             QuadRect *pointsRect = sectionData.values[@"quad_rect_value_points_area"];
             [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(pointsRect.top, pointsRect.left)
                                               bottomRight:CLLocationCoordinate2DMake(pointsRect.bottom, pointsRect.right)
-                                                     zoom:0.
                                                   maxZoom:18.
                                                screenBBox:screenBBox
-                                              bottomInset:0.
-                                                leftInset:0.
-                                                 topInset:0.
-                                                 animated:YES];
+                                              bottomInset:bottomInset
+                                                leftInset:leftInset
+                                                 topInset:0.];
             if (![self isAdjustedMapViewPort])
                 [self adjustViewPort:[self isLandscape]];
         }
@@ -2059,10 +2059,8 @@
 {
     [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                       bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
-                                             zoom:0
                                       bottomInset:([self isLandscape] ? 0. : [self getViewHeight])
-                                        leftInset:([self isLandscape] ? [self getLandscapeViewWidth] : 0.)
-                                         animated:YES];
+                                        leftInset:([self isLandscape] ? [self getLandscapeViewWidth] : 0.)];
 }
 
 - (void)adjustViewPort:(BOOL)landscape

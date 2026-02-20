@@ -130,12 +130,14 @@
     // then set gpx
     [self setGPXRouteParamsWithDocument:gpxFile path:path];
     // then update start and destination point
+
+    if (showDialog)
+        [[OARootViewController instance].mapPanel showRouteInfo:NO];
+
     [targets updateRouteAndRefresh:true];
     
     [_trackingUtils switchToRoutePlanningMode];
     [[OARootViewController instance].mapPanel refreshMap];
-    if (showDialog)
-        [[OARootViewController instance].mapPanel showRouteInfo:NO];
 
     if ([targets hasTooLongDistanceToNavigate])
         [OAUtilities showToast:OALocalizedString(@"route_is_too_long_v2") details:nil duration:10 inView:OARootViewController.instance.view];

@@ -3997,11 +3997,13 @@ static const NSInteger kDetailedMapZoom = 9;
         [OARootViewController.instance.mapPanel refreshMap];
         if (OARoutingHelper.sharedInstance.isPublicTransportMode)
             [_mapLayers.routeMapLayer refreshRoute];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
                 [OARootViewController.instance.mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
-                                                                          bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
-                                                                 changeElevationAngle:NO
-                                                                             animated:NO];
+                                                                        bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+                                                               changeElevationAngle:NO
+                                                                           animated:NO];
+        });
     });
 }
 

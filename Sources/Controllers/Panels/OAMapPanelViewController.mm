@@ -3829,7 +3829,7 @@ typedef enum
     if (bounds.topLeft.latitude == DBL_MAX)
         return;
         
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
         OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
         float appliedLeftInset = 0.0f;
@@ -4117,11 +4117,24 @@ typedef enum
 
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle animated:(BOOL)animated
 {
+    CGFloat bottomInset;
+    CGFloat leftInset;
     BOOL landscape = [self.targetMenuView isLandscape];
+    if ([_routeInfoView superview])
+    {
+        bottomInset = !landscape ? _routeInfoView.frame.size.height : 0.0;
+        leftInset = landscape ? _routeInfoView.frame.size.width : 0.0;
+    }
+    else
+    {
+        bottomInset = [OARootViewController.instance.mapPanel.hudViewController getHudBottomOffset];
+        leftInset = 0.0;
+    }
+    
     [self displayAreaOnMap:topLeft
                bottomRight:bottomRight
-               bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height : 0.
-                 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width : 0.
+               bottomInset:bottomInset
+                 leftInset:leftInset
       changeElevationAngle:changeElevationAngle];
 }
 

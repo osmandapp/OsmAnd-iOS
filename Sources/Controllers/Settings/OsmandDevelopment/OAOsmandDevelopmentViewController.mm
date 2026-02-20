@@ -127,8 +127,8 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
     [renderingSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellKeyKey : kEnableMsaaKey,
-        kCellTitleKey : OALocalizedString(@"enable_msaa"),
-        @"isOn" : @([[OAAppSettings sharedManager].enableMsaa get])
+        kCellTitleKey : OALocalizedString(@"enable_msaa_carplay"),
+        @"isOn" : @([[OAAppSettings sharedManager].enableMsaaForСarPlay get])
     }];
     [renderingSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
@@ -255,8 +255,9 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
     }
     else if ([item.key isEqualToString:kEnableMsaaKey])
     {
-        [[OAAppSettings sharedManager].enableMsaa set:sender.isOn];
-        [OARootViewController.instance.mapPanel.mapViewController.mapView requestCheckMsaaState];
+        [[OAAppSettings sharedManager].enableMsaaForСarPlay set:sender.isOn];
+        if (UIApplication.sharedApplication.isCarPlayConnected)
+            [OARootViewController.instance.mapPanel.mapViewController.mapView setMSAAEnabled:sender.isOn];
     }
     else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
         [[OAAppSettings sharedManager].simulateOBDData set:sender.isOn];

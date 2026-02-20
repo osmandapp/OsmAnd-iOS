@@ -106,7 +106,6 @@ struct CLLocationCoordinate2D;
 - (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (bool)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (void)removeAllSymbolsProviders;
-- (void)requestCheckMsaaState;
 
 - (BOOL) setMapLayerConfiguration:(int)layerIndex configuration:(OsmAnd::MapLayerConfiguration)configuration forcedUpdate:(BOOL)forcedUpdate;
 - (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings;
@@ -120,6 +119,7 @@ struct CLLocationCoordinate2D;
 - (void) setSymbolsOpacity:(float)opacityFactor;
 - (void) setDateTime:(int64_t)dateTime;
 - (void) setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration;
+- (void)setMSAAEnabled:(BOOL)enableMSAA;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;

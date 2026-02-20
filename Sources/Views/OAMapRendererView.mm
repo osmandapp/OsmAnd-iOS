@@ -53,7 +53,7 @@
     GLuint _msaaDepthRenderBuffer;
     CADisplayLink* _displayLink;
     BOOL _limitFrameRate;
-    BOOL _needsCheckMsaaState;
+    BOOL _msaaEnabled;
 
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
@@ -114,7 +114,6 @@
     _msaaDepthRenderBuffer = 0;
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
-    _needsCheckMsaaState = NO;
 
     _viewportXScale = kViewportScale;
     _viewportYScale = kViewportScale;
@@ -223,6 +222,11 @@
 forcedUpdate:(BOOL)forcedUpdate
 {
     _renderer->setElevationConfiguration(configuration, forcedUpdate);
+}
+
+- (void)setMSAAEnabled:(BOOL)enableMSAA
+{
+    _msaaEnabled = [self isMSAASupported] && enableMSAA;
 }
 
 - (int) maxMissingDataZoomShift
@@ -852,12 +856,6 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setFogColor(fogColor);
 }
 
-- (void)requestCheckMsaaState
-{
-    _needsCheckMsaaState = YES;
-    [self invalidateFrame];
-}
-
 - (void) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
@@ -884,7 +882,7 @@ forcedUpdate:(BOOL)forcedUpdate
     GLint maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
     GLint samples = MIN(4, maxSamples);
-    BOOL useMSAA = [self shouldUseMSAAWithSamples:samples];
+    BOOL useMSAA = _msaaEnabled;
     if (useMSAA)
     {
         glGenFramebuffers(1, &_msaaFramebuffer);
@@ -1015,18 +1013,6 @@ forcedUpdate:(BOOL)forcedUpdate
     return OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * viewportYScale / 2.0);
 }
 
-- (BOOL)shouldUseMSAAWithSamples:(GLint)samples
-{
-#if TARGET_IPHONE_SIMULATOR
-    return NO;
-#else
-    if (UIApplication.sharedApplication.isCarPlayConnected)
-        return [[OAAppSettings sharedManager].enableMsaa get] && samples >= 2;
-    
-    return samples >= 2;
-#endif
-}
-
 - (void)render:(CADisplayLink*)displayLink
 {
     if (![EAGLContext setCurrentContext:_glRenderContext])
@@ -1036,17 +1022,8 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     }
 
-    if (_needsCheckMsaaState)
-    {
-        _needsCheckMsaaState = NO;
-        GLint maxSamples = 0;
-        glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
-        GLint samples = MIN(4, maxSamples);
-        BOOL desiredMSAA = [self shouldUseMSAAWithSamples:samples];
-        BOOL actualMSAA = _msaaFramebuffer != 0;
-        if (desiredMSAA != actualMSAA)
-            [self releaseRenderAndFrameBuffers];
-    }
+    if ((_msaaEnabled && [self isMSAASupported]) != (_msaaFramebuffer != 0))
+        [self releaseRenderAndFrameBuffers];
 
     NSTimeInterval currentTime = CACurrentMediaTime();
     if (_lastUpdateTime == 0) {
@@ -1180,6 +1157,17 @@ forcedUpdate:(BOOL)forcedUpdate
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }
+}
+
+- (BOOL)isMSAASupported
+{
+#if TARGET_IPHONE_SIMULATOR
+    return NO;
+#else
+    GLint maxSamples = 0;
+    glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+    return MIN(4, maxSamples) >= 2;
+#endif
 }
 
 - (BOOL)isRenderingSuspended

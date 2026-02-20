@@ -36,11 +36,6 @@ static const int kRulerByTapSymbolSection = 1002;
 static const int kDystanceMarkersSymbolSection = 1003;
 static const int kPointMarkersSymbolSection = 1004;
 
-//public static final int POI_SYMBOL_SECTION = 1000;
-//public static final int TOP_PLACES_POI_SECTION = 1001;
-//public static final int SELECTED_POI_SECTION = 1002;
-//public static final int FAVORITES_SECTION = 1003;
-
 static const float kMinAllowedElevationAngle = 10.0f;
 
 #define _DECLARE_ENTRY(name)                                                                                                \

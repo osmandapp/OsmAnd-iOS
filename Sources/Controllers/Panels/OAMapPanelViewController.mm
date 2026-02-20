@@ -142,6 +142,7 @@ typedef enum
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
 
+@property (strong, nonatomic) OATargetPointView *targetMenuView;
 
 @property (strong, nonatomic) OATargetMultiView* targetMultiMenuView;
 @property (strong, nonatomic) UIButton* shadowButton;

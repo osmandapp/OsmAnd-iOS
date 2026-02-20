@@ -111,6 +111,7 @@
     pageControlFrame.size = [_pageControl sizeForNumberOfPages:MIN(_numberOfRoutes, kmaxNumberOfRoutes)];
     pageControlFrame.origin.y = _pageControlContainer.frame.size.height / 2 - pageControlFrame.size.height / 2;
     _pageControl.frame = pageControlFrame;
+    [_pageControl addTarget:self action:@selector(pageControlDidChange:) forControlEvents:UIControlEventValueChanged];
     
     CGRect pageControlContainerFrame = _pageControlContainer.frame;
     pageControlContainerFrame.size.width = _pageControl.frame.size.width;
@@ -136,6 +137,36 @@
     }
     
     [self refreshRouteLayer];
+}
+
+- (void)pageControlDidChange:(UIPageControl *)sender
+{
+    NSInteger newIndex = sender.currentPage;
+    if (newIndex == _currentRoute || newIndex >= _tableViews.count) {
+        return;
+    }
+    
+    UIPageViewControllerNavigationDirection direction = (newIndex > _currentRoute) ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
+    
+    _currentRoute = newIndex;
+    [_transportHelper setCurrentRoute:_currentRoute];
+    [self showCurrentRouteOnMap];
+    [self refreshRouteLayer];
+    
+    __weak OATrsansportRouteDetailsViewController *weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OATrsansportRouteDetailsViewController *strongSelf = weakSelf;
+            if (!strongSelf) return;
+            
+            [strongSelf->_pageController setViewControllers:@[strongSelf->_tableViews[strongSelf->_currentRoute]]
+                                                  direction:direction
+                                                   animated:YES
+                                                 completion:^(BOOL finished) {
+                if (finished && strongSelf.delegate) {
+                    [strongSelf.delegate contentChanged];
+                }
+            }];
+        });
 }
 
 - (void)setupPageController

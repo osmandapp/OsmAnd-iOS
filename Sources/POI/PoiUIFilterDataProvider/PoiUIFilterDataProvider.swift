@@ -75,9 +75,8 @@ final class PoiUIFilterDataProvider: NSObject {
         var data = explorePlacesProvider.getDataCollection(rect, limit: 0)
         var loading = false
         var isCancelled = false
-     //   let uiFilterResultMatcher = matcher as? PoiUIFilterResultMatcher
+
         while explorePlacesProvider.isLoading() && !isCancelled {
-          //  uiFilterResultMatcher?.defferedResults()
             Thread.sleep(forTimeInterval: 0.1)
             loading = true
             isCancelled = matcher?.isCancelled() ?? false
@@ -94,7 +93,7 @@ final class PoiUIFilterDataProvider: NSObject {
         var result: [OAPOI] = matcher == nil ? data : []
         
         if let matcher {
-            for amenity in data where matcher.publish(amenity){
+            for amenity in data where matcher.publish(amenity) {
                 result.append(amenity)
             }
         }

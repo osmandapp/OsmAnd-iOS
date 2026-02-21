@@ -46,6 +46,7 @@
 NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
 NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
 NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
+NSString *const kEnableMsaaKey = @"kEnableMsaaKey";
 NSString *const kVisualizingButtonGridKey = @"kVisualizingButtonGridKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
@@ -122,6 +123,12 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
         kCellKeyKey : kBatterySavingModeKey,
         kCellTitleKey : OALocalizedString(@"battery_saving_mode"),
         @"isOn" : @([[OAAppSettings sharedManager].batterySavingMode get])
+    }];
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kEnableMsaaKey,
+        kCellTitleKey : OALocalizedString(@"enable_msaa_carplay"),
+        @"isOn" : @([[OAAppSettings sharedManager].enableMsaaForСarPlay get])
     }];
     [renderingSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
@@ -245,7 +252,14 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
             [OARootViewController.instance.mapPanel.mapViewController.mapView limitFrameRefreshRate];
         else
             [OARootViewController.instance.mapPanel.mapViewController.mapView restoreFrameRefreshRate];
-    } else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
+    }
+    else if ([item.key isEqualToString:kEnableMsaaKey])
+    {
+        [[OAAppSettings sharedManager].enableMsaaForСarPlay set:sender.isOn];
+        if (UIApplication.sharedApplication.isCarPlayConnected)
+            [OARootViewController.instance.mapPanel.mapViewController.mapView setMSAAEnabled:sender.isOn];
+    }
+    else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
         [[OAAppSettings sharedManager].simulateOBDData set:sender.isOn];
         if (!sender.isOn)
             [[DeviceHelper shared] disconnectOBDSimulator];

@@ -114,7 +114,7 @@
     _msaaDepthRenderBuffer = 0;
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
-    _msaaEnabled = YES;
+    _msaaEnabled = NO;
 
     _viewportXScale = kViewportScale;
     _viewportYScale = kViewportScale;
@@ -856,7 +856,7 @@ forcedUpdate:(BOOL)forcedUpdate
 {
     if (_msaaEnabled == enableMSAA)
         return;
-
+    
     _msaaEnabled = enableMSAA;
     if (_framebuffer != 0)
         [self releaseRenderAndFrameBuffers];
@@ -952,6 +952,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
     validateGL();
 }
+
 - (void) releaseRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Releasing render and frame buffers", self);

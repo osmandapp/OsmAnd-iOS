@@ -1803,6 +1803,7 @@
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 "battery_saving_mode" = "Battery saving mode";
+"enable_msaa_carplay" = "Enable MSAA for CarPlay";
 "visualizing_button_grid" = "Map button grid";
 "efficient_grid" = "Efficient grid";
 "slots" = "Slots";

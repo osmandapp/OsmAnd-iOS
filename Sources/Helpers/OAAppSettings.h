@@ -1096,6 +1096,7 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonString *locationIcon;
 @property (nonatomic) OACommonBoolean *use3dIconsByDefault;
 @property (nonatomic) OACommonBoolean *batterySavingMode;
+@property (nonatomic) OACommonBoolean *enableMsaaForСarPlay;
 @property (nonatomic) OACommonInteger *appModeOrder;
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;

@@ -114,6 +114,7 @@
     _msaaDepthRenderBuffer = 0;
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
+    _msaaEnabled = NO;
 
     _viewportXScale = kViewportScale;
     _viewportYScale = kViewportScale;
@@ -222,11 +223,6 @@
 forcedUpdate:(BOOL)forcedUpdate
 {
     _renderer->setElevationConfiguration(configuration, forcedUpdate);
-}
-
-- (void)setMSAAEnabled:(BOOL)enableMSAA
-{
-    _msaaEnabled = [self isMSAASupported] && enableMSAA;
 }
 
 - (int) maxMissingDataZoomShift
@@ -856,6 +852,16 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setFogColor(fogColor);
 }
 
+- (void) setMSAAEnabled:(BOOL)enableMSAA
+{
+    if (_msaaEnabled == enableMSAA)
+        return;
+    
+    _msaaEnabled = enableMSAA;
+    if (_framebuffer != 0)
+        [self releaseRenderAndFrameBuffers];
+}
+
 - (void) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
@@ -882,7 +888,11 @@ forcedUpdate:(BOOL)forcedUpdate
     GLint maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
     GLint samples = MIN(4, maxSamples);
-    BOOL useMSAA = _msaaEnabled;
+#if TARGET_IPHONE_SIMULATOR
+    BOOL useMSAA = NO;
+#else
+    BOOL useMSAA = (_msaaEnabled && samples >= 2);
+#endif
     if (useMSAA)
     {
         glGenFramebuffers(1, &_msaaFramebuffer);
@@ -1022,9 +1032,6 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     }
 
-    if ((_msaaEnabled && [self isMSAASupported]) != (_msaaFramebuffer != 0))
-        [self releaseRenderAndFrameBuffers];
-
     NSTimeInterval currentTime = CACurrentMediaTime();
     if (_lastUpdateTime == 0) {
         _lastUpdateTime = currentTime;
@@ -1157,17 +1164,6 @@ forcedUpdate:(BOOL)forcedUpdate
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }
-}
-
-- (BOOL)isMSAASupported
-{
-#if TARGET_IPHONE_SIMULATOR
-    return NO;
-#else
-    GLint maxSamples = 0;
-    glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
-    return MIN(4, maxSamples) >= 2;
-#endif
 }
 
 - (BOOL)isRenderingSuspended

@@ -111,6 +111,7 @@
     pageControlFrame.size = [_pageControl sizeForNumberOfPages:MIN(_numberOfRoutes, kmaxNumberOfRoutes)];
     pageControlFrame.origin.y = _pageControlContainer.frame.size.height / 2 - pageControlFrame.size.height / 2;
     _pageControl.frame = pageControlFrame;
+    [_pageControl addTarget:self action:@selector(pageControlDidChange:) forControlEvents:UIControlEventValueChanged];
     
     CGRect pageControlContainerFrame = _pageControlContainer.frame;
     pageControlContainerFrame.size.width = _pageControl.frame.size.width;
@@ -136,6 +137,36 @@
     }
     
     [self refreshRouteLayer];
+}
+
+- (void)pageControlDidChange:(UIPageControl *)sender
+{
+    NSInteger newIndex = sender.currentPage;
+    if (newIndex == _currentRoute || newIndex >= _tableViews.count) {
+        return;
+    }
+    
+    UIPageViewControllerNavigationDirection direction = (newIndex > _currentRoute) ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
+    
+    _currentRoute = newIndex;
+    [_transportHelper setCurrentRoute:_currentRoute];
+    [self showCurrentRouteOnMap];
+    [self refreshRouteLayer];
+    
+    __weak OATrsansportRouteDetailsViewController *weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OATrsansportRouteDetailsViewController *strongSelf = weakSelf;
+            if (!strongSelf) return;
+            
+            [strongSelf->_pageController setViewControllers:@[strongSelf->_tableViews[strongSelf->_currentRoute]]
+                                                  direction:direction
+                                                   animated:YES
+                                                 completion:^(BOOL finished) {
+                if (finished && strongSelf.delegate) {
+                    [strongSelf.delegate contentChanged];
+                }
+            }];
+        });
 }
 
 - (void)setupPageController
@@ -268,6 +299,23 @@
     [self restoreFromFullScreen];
 }
 
+- (void)showCurrentRouteOnMap
+{
+    [self showRouteOnMap:[_transportHelper getBBox]];
+}
+
+- (void)showRouteOnMap:(OABBox)routeBBox
+{
+    BOOL landscape = [self isLandscape];
+    auto leftInset = landscape ? _pageController.view.frame.origin.x + _pageController.view.frame.size.width : 0.0;
+    auto bottomInset = landscape ? 0.0 : (self.delegate ? [self.delegate getVisibleHeight] : 0.0);
+    [OARootViewController.instance.mapPanel
+          displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
+               bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+               bottomInset:bottomInset
+                 leftInset:leftInset];
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -316,6 +364,7 @@
     _currentRoute = pageViewController.viewControllers.firstObject.view.tag;
     _pageControl.currentPage = _currentRoute;
     [_transportHelper setCurrentRoute:_currentRoute];
+    [self showCurrentRouteOnMap];
     [self refreshRouteLayer];
 }
 
@@ -338,6 +387,8 @@
 
 - (void) showSegmentOnMap:(NSArray<CLLocation *> *)locations
 {
+    [self.delegate requestHeaderOnlyMode];
+    
     if (!locations || locations.count == 0)
     {
         return;
@@ -345,7 +396,12 @@
     else if (locations.count == 1)
     {
         CLLocationCoordinate2D point = locations.firstObject.coordinate;
-        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:point bottomRight:point];
+        OABBox result;
+        result.bottom = point.latitude;
+        result.top = point.latitude;
+        result.left = point.longitude;
+        result.right = point.longitude;
+        [self showRouteOnMap:result];
     }
     else
     {
@@ -377,9 +433,8 @@
         result.left = left;
         result.right = right;
         
-        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(result.top, result.left) bottomRight:CLLocationCoordinate2DMake(result.bottom, result.right)];
+        [self showRouteOnMap:result];
     }
-    [self.delegate requestHeaderOnlyMode];
 }
 
 @end

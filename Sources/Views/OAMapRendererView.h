@@ -119,7 +119,6 @@ struct CLLocationCoordinate2D;
 - (void) setSymbolsOpacity:(float)opacityFactor;
 - (void) setDateTime:(int64_t)dateTime;
 - (void) setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration;
-- (void)setMSAAEnabled:(BOOL)enableMSAA;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;
@@ -141,6 +140,7 @@ struct CLLocationCoordinate2D;
 - (void) setSkyColor:(OsmAnd::FColorRGB)skyColor;
 
 - (void) setFogColor:(OsmAnd::FColorRGB)fogColor;
+- (void) setMSAAEnabled:(BOOL)enableMSAA;
 
 // Misc properties:
 @property(nonatomic, readonly) QVector<OsmAnd::TileId> visibleTiles;

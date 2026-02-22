@@ -692,7 +692,7 @@
 "selected_categories" = "الفئات المحددة";
 "new_filter_desc" = "رجاءا أدخل اسم لفلتر الفرز الجديد. ستتم اضافته ضمن لائحة \'الفئات الخاصة بك\'.";
 "shared_string_filters" = "تصفية";
-"edit_filter" = "تحرير الفلتر";
+"edit_filter" = "عدِّل التصفية";
 "edit_filter_save_as_menu_item" = "حفظ باسم";
 "delete_filter" = "حذف التصفية";
 "save_filter" = "حفظ التصفية";
@@ -3517,7 +3517,7 @@
 "avg_sensor_temperature" = "درجة الحرارة، متوسط";
 "shared_string_reset_all" = "إعادة ضبط الجميع للافتراضي";
 "shared_string_to" = "إلى";
-"discard_filter_changes_prompt" = "إعادة تعيين كافة الفلاتر؟";
+"discard_filter_changes_prompt" = "صفّر كل التصفيات؟";
 "revolutions_per_minute_unit" = "دورة بالدقيقة";
 "power_watts_unit" = "واط";
 "root_folder" = "المجلد الرئيسي";

@@ -22,6 +22,7 @@ final class MigrationManager: NSObject {
         case migrationHudButtonPositionsKey
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
+        case migrateUnderlayShowPolygons
     }
     
     private struct HudMigrationScenario {
@@ -103,6 +104,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue) {
                 migrateLocationIconSizeAndCourseIconSize()
                 defaults.set(true, forKey: MigrationKey.migrateLocationIconSizeAndCourseIconSize.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateUnderlayShowPolygons.rawValue) {
+                migrateUnderlayShowPolygons()
+                defaults.set(true, forKey: MigrationKey.migrateUnderlayShowPolygons.rawValue)
             }
         }
     }
@@ -743,6 +748,19 @@ final class MigrationManager: NSObject {
             let courseIconSize = settings.courseIconSize.get(appMode)
             if courseIconSize <= 0 {
                 settings.courseIconSize.resetToDefault()
+            }
+        }
+    }
+    
+    private func migrateUnderlayShowPolygons() {
+        for appMode in OAApplicationMode.allPossibleValues() {
+            let renderer = OAAppSettings.sharedManager().renderer.get(appMode)
+            if let mapStyleInfo = OARendererRegistry.getMapStyleInfo(renderer),
+               let styleName = mapStyleInfo["id"] as? String {
+                let styleSettings = OAMapStyleSettings(styleName: styleName, mapPresetName: appMode.variantKey)
+                if let hidePolygons = styleSettings?.getParameter("noPolygons") {
+                    OAAppSettings.sharedManager().showPolygonsWhenUnderlayIsOn.set(hidePolygons.value == "false", mode: appMode)
+                }
             }
         }
     }

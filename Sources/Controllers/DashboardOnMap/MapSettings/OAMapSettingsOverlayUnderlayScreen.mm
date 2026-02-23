@@ -77,7 +77,6 @@ static NSInteger kButtonsSection;
     BOOL _isEnabled;
     
     OAMapStyleSettings *_styleSettings;
-    OAMapStyleParameter *_hidePolygonsParameter;
     OAAutoObserverProxy *_sqlitedbResourcesChangedObserver;
     NSInteger _installMoreRowIndex;
 }
@@ -122,7 +121,6 @@ static NSInteger kButtonsSection;
 - (void)commonInit
 {
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
 
     _sqlitedbResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onSqlitedbResourcesChanged:) andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
     
@@ -426,7 +424,7 @@ static NSInteger kButtonsSection;
             }
             else if ([item[@"tag"] isEqualToString:kShowPoligons])
             {
-                [cell.switchView setOn:[_hidePolygonsParameter.value isEqualToString:@"false"]];
+                [cell.switchView setOn:_settings.showPolygonsWhenUnderlayIsOn.get];
                 [cell.switchView addTarget:self action:@selector(onPolygonsChanged:) forControlEvents:UIControlEventValueChanged];
             }
         }
@@ -594,12 +592,7 @@ static NSInteger kButtonsSection;
 
 - (void)showPolygons:(BOOL)show
 {
-    NSString *newValue = show ? @"false" : @"true";
-    if (![_hidePolygonsParameter.value isEqualToString:newValue])
-    {
-        _hidePolygonsParameter.value = newValue;
-        [_styleSettings save:_hidePolygonsParameter];
-    }
+    [_settings.showPolygonsWhenUnderlayIsOn set:show];
 }
 
 - (void) switchLayer:(NSInteger)number

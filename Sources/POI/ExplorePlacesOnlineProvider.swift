@@ -202,6 +202,17 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         if let desc = props.wikiDesc {
             amenity.setAdditionalInfo(DESCRIPTION_TAG, value: desc)
         }
+        
+        if let labelsJson = props.labelsJson, labelsJson.length > 2 {
+            OAMapObject.parseNamesJSON(labelsJson, object: amenity)
+        }
+        
+        if let wikiLangs = props.wikiLangs, !wikiLangs.isEmpty {
+            let langArray = wikiLangs.components(separatedBy: ",")
+            let langSet = Set(langArray)
+            
+            amenity.updateContentLocales(langSet)
+        }
 
         if let photo = props.photoTitle, !photo.isEmpty {
             let img = WikiHelper.shared.getImageData(imageFileName: photo)
@@ -251,21 +262,31 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         let listener = ExplorePlacesTaskListener {
         } onFinish: { [weak self] result in
             guard let self else { return }
+            self.lock.lock()
+            let currentlyLoading = !self.loadingTasks.isEmpty
+            self.lock.unlock()
+            self.notifyListeners(isPartial: currentlyLoading)
+
+            var map: [String: [WikiCoreHelper.OsmandApiFeatureData]] = [:]
             if !result.isEmpty {
-                var map: [String: [WikiCoreHelper.OsmandApiFeatureData]] = [:]
                 for item in result {
                     if let p = item.properties {
-                        let l = p.lang ?? p.wikiLang ?? "en"
+                        let l = (p.lang?.isEmpty == false ? p.lang : nil)
+                            ?? (p.wikiLang?.isEmpty == false ? p.wikiLang : nil)
+                            ?? "en"
                         map[l, default: []].append(item)
                     }
                 }
-                self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map)
             }
+
+            for lang in languages where map[lang] == nil {
+                map[lang] = []
+            }
+            self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map)
+
             self.lock.lock()
             self.loadingTasks.removeValue(forKey: key)
-            let loading = !self.loadingTasks.isEmpty
             self.lock.unlock()
-            self.notifyListeners(isPartial: loading)
         }
 
         let task = GetExplorePlacesImagesTask(mapRect: tRect, zoom: Int32(zoom), languages: languages, listener: listener)

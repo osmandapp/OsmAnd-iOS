@@ -3993,3 +3993,4 @@
 "find_parking" = "尋找停車場";
 "finish_navigation" = "完成導航";
 "background_liquid_glass_clear_ios" = "敞亮";
+"enable_msaa_carplay" = "在 CarPlay 上啟用 MSAA";

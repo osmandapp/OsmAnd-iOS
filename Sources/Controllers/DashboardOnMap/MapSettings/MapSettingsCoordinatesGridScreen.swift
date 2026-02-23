@@ -175,26 +175,25 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             cell.titleLabel.text = item.title
             cell.descriptionLabel.text = item.descr
             cell.leftIconView.image = item.icon
-            cell.rightButton.layer.cornerRadius = 10
-            cell.rightButton.backgroundColor = UIColor.contextMenuButtonBg
-            var config = UIButton.Configuration.filled()
-            config.baseBackgroundColor = UIColor.contextMenuButtonBg
-            config.baseForegroundColor = .textColorActive
-            config.cornerStyle = .capsule
-            config.contentInsets = NSDirectionalEdgeInsets(top: 3.1, leading: 4, bottom: 3.1, trailing: 4)
-            config.imagePadding = 4
-            config.imagePlacement = .trailing
-            cell.rightButton.configuration = config
-            cell.rightButton.setContentHuggingPriority(.required, for: .horizontal)
-            cell.rightButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+            let isRTL = cell.contentView.isDirectionRTL()
+            let arrow = isRTL ? "arrow.left" : "arrow.right"
+            var config = UIButton.Configuration.plain()
+            config.title = localizedString("shared_string_get")
+            config.image = UIImage(systemName: arrow)
+            config.imagePlacement = isRTL ? .leading : .trailing
+            config.imagePadding = 6
+            config.baseForegroundColor = .buttonTextColorSecondary
+            config.background.backgroundColor = .buttonBgColorTertiary
             if let buttonTitle = item.string(forKey: Constants.buttonTitleKey) {
-                cell.rightButton.setTitle(buttonTitle, for: .normal)
+                config.title = buttonTitle
                 cell.rightButton.accessibilityLabel = buttonTitle
             }
-            if let buttonIconName = item.string(forKey: Constants.buttonIconKey) {
-                cell.rightButton.setImage(UIImage.templateImageNamed(buttonIconName)?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
-                cell.rightButton.tintColor = UIColor.iconColorActive
-            }
+            cell.rightButton.configuration = config
+            cell.rightButton.layer.cornerRadius = 6
+            cell.rightButton.layer.masksToBounds = true
+            cell.rightButton.semanticContentAttribute = .forceLeftToRight
+            cell.rightButton.setContentHuggingPriority(.required, for: .horizontal)
+            cell.rightButton.setContentCompressionResistancePriority(.required, for: .horizontal)
             cell.rightButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.rightButton.tag = indexPath.section << 10 | indexPath.row
             cell.rightButton.addTarget(self, action: #selector(onCellButtonClicked(sender:)), for: .touchUpInside)

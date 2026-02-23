@@ -1061,16 +1061,7 @@
         BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
         cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
         NSString *title = OALocalizedString(@"shared_string_get");
-        BOOL isRTL = [cell.contentView isDirectionRTL];
-        NSString *arrowName = isRTL ? @"arrow.left" : @"arrow.right";
-        UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
-        config.title = title;
-        config.image = [UIImage systemImageNamed:arrowName];
-        config.imagePlacement = isRTL ? NSDirectionalRectEdgeLeading : NSDirectionalRectEdgeTrailing;
-        config.imagePadding = 6.0;
-        config.baseForegroundColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
-        config.background.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
-        cell.button.configuration = config;
+        [cell.button applyPurchasePlanButtonConfigurationWithTitle:title isRTL:[cell.contentView isDirectionRTL]];
         cell.button.layer.cornerRadius = 6;
         cell.button.layer.masksToBounds = YES;
         cell.button.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;

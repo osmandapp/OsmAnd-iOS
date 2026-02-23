@@ -175,20 +175,9 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             cell.titleLabel.text = item.title
             cell.descriptionLabel.text = item.descr
             cell.leftIconView.image = item.icon
-            let isRTL = cell.contentView.isDirectionRTL()
-            let arrow = isRTL ? "arrow.left" : "arrow.right"
-            var config = UIButton.Configuration.plain()
-            config.title = localizedString("shared_string_get")
-            config.image = UIImage(systemName: arrow)
-            config.imagePlacement = isRTL ? .leading : .trailing
-            config.imagePadding = 6
-            config.baseForegroundColor = .buttonTextColorSecondary
-            config.background.backgroundColor = .buttonBgColorTertiary
-            if let buttonTitle = item.string(forKey: Constants.buttonTitleKey) {
-                config.title = buttonTitle
-                cell.rightButton.accessibilityLabel = buttonTitle
-            }
-            cell.rightButton.configuration = config
+            let title = item.string(forKey: Constants.buttonTitleKey) ?? localizedString("shared_string_get")
+            cell.rightButton.configuration = .purchasePlanButtonConfiguration(title: title, isRTL: cell.contentView.isDirectionRTL())
+            cell.rightButton.accessibilityLabel = title
             cell.rightButton.layer.cornerRadius = 6
             cell.rightButton.layer.masksToBounds = true
             cell.rightButton.semanticContentAttribute = .forceLeftToRight

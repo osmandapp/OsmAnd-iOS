@@ -1451,6 +1451,7 @@
 		C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */; };
 		C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */; };
 		C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */; };
+		C547116A2F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */; };
 		C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5484DC62CD21F03004C5F27 /* FormattedValue.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
 		C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553A28C2D53CD33007C9444 /* AverageSpeedComputerService.swift */; };
@@ -5209,6 +5210,7 @@
 		C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmNoteViewController.mm; sourceTree = "<group>"; };
 		C546C0082AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadOsmPOINoteViewProgressController.h; sourceTree = "<group>"; };
 		C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadOsmPOINoteViewProgressController.m; sourceTree = "<group>"; };
+		C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButtonConfiguration+Extension.swift"; sourceTree = "<group>"; };
 		C5484DC62CD21F03004C5F27 /* FormattedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedValue.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
@@ -14108,6 +14110,7 @@
 				FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */,
 				FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */,
 				FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */,
+				C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */,
 				FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */,
 				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 				FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */,
@@ -17913,6 +17916,7 @@
 				FA882EF22CDCFE98001F3814 /* LockScreenAction.swift in Sources */,
 				DA5A82F426C563A800F274C7 /* OASearchMoreCell.m in Sources */,
 				DA5A81BA26C563A700F274C7 /* OAPOIHistoryType.mm in Sources */,
+				C547116A2F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift in Sources */,
 				FA9217102D525D600074E958 /* GalleryContextMenuProvider.swift in Sources */,
 				C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */,
 				46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */,

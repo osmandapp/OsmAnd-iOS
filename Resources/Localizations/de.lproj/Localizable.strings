@@ -4029,3 +4029,4 @@
 "shared_string_tinted" = "Getönt";
 "background_opacity_description" = "Klar ist transparenter und lässt den darunterliegenden Inhalt erkennen. Getönt erhöht die Deckkraft und sorgt für mehr Kontrast.";
 "background_liquid_glass_clear_ios" = "Klar";
+"enable_msaa_carplay" = "MSAA für CarPlay aktivieren";

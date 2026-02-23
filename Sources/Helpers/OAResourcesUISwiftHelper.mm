@@ -554,7 +554,7 @@
     NSMutableArray<OAMapSourceResourceSwiftItem *> *items = [NSMutableArray array];
     for (OAMapSourceResourceItem *item in [OAResourcesUIHelper getSortedRasterMapSources:includeOffline])
         [items addObject:[[OAMapSourceResourceSwiftItem alloc] initWithItem:item]];
-    return items;
+    return [items copy];
 }
 
 @end

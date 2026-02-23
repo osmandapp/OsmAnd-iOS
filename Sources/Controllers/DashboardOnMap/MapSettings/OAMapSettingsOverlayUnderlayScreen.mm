@@ -47,7 +47,7 @@
 #define kShowSlider @"kShowSlider"
 #define kShowLabels @"kShowLabels"
 
-static NSString *const kShowPoligons = @"kShowPoligons";
+static NSString * const kShowPoligons = @"kShowPoligons";
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 

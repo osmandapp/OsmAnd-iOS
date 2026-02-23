@@ -4021,3 +4021,4 @@
 "context_menu_item_add_parking_point" = "Отметить как место для парковки";
 "find_parking" = "Найти парковку";
 "background_liquid_glass_clear_ios" = "Прозрачный";
+"enable_msaa_carplay" = "Включить MSAA для CarPlay";

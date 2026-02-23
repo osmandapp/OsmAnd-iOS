@@ -487,7 +487,8 @@ static NSComparator _OACommonWordsComparator = nil;
     return self.cache1kmRect;
 }
 
-+ (QuadRect *) calculateBbox:(NSNumber *)radiusMeters location:(CLLocation *)location {
++ (QuadRect *) calculateBbox:(NSNumber *)radiusMeters location:(CLLocation *)location
+{
     OsmAnd::LatLon center(location.coordinate.latitude, location.coordinate.longitude);
     OsmAnd::LatLon nw = OsmAnd::Utilities::rhumbDestinationPoint(center, [radiusMeters doubleValue], 315.0);
     OsmAnd::LatLon se = OsmAnd::Utilities::rhumbDestinationPoint(center, [radiusMeters doubleValue], 135.0);

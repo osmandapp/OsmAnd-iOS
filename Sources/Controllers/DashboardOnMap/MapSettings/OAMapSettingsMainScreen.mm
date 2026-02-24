@@ -545,7 +545,7 @@
         [overlayUnderlaySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_weather"),
                 @"image": @"ic_custom_umbrella",
-                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"shared_string_weather"),
+                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"offline_weather_forecast"),
                 @"type": hasWeather ? OASwitchTableViewCell.reuseIdentifier : OAButtonTableViewCell.reuseIdentifier,
                 @"key": @"weather_layer"
         }];
@@ -1055,16 +1055,19 @@
     {
         OAButtonTableViewCell *cell = (OAButtonTableViewCell *)[tableView dequeueReusableCellWithIdentifier:OAButtonTableViewCell.reuseIdentifier forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.button.titleLabel.numberOfLines = 1;
-        cell.button.titleLabel.adjustsFontSizeToFitWidth = YES;
-        cell.button.titleLabel.lineBreakMode = NSLineBreakByClipping;
         cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
         cell.titleLabel.text = item[@"name"];
         cell.descriptionLabel.text = item[@"desc"];
         BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
         cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
-        [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
-        [cell.button setTitleColor:[[UIColor colorNamed:ACColorNameTextColorActive] colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
+        NSString *title = OALocalizedString(@"shared_string_get");
+        cell.button.configuration = [ButtonConfigurationHelper purchasePlanButtonConfigurationWithTitle:title];
+        cell.button.layer.cornerRadius = 6;
+        cell.button.layer.masksToBounds = YES;
+        cell.button.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+        [cell.button setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+        [cell.button setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+        cell.button.accessibilityLabel = title;
         cell.button.tag = indexPath.section << 10 | indexPath.row;
         [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.button addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];

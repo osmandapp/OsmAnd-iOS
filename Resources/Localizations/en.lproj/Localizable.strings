@@ -1193,6 +1193,7 @@
 "map_text" = "Map Rendering";
 
 "shared_string_weather" = "Weather";
+"offline_weather_forecast" = "Offline weather forecast";
 "map_settings_weather_temp" = "Temperature";
 "map_settings_weather_temp_air" = "Air temperature";
 "map_settings_weather_temp_water" = "Water temperature";

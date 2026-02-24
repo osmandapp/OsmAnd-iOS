@@ -593,6 +593,18 @@ static NSInteger kButtonsSection;
 - (void)showPolygons:(BOOL)show
 {
     [_settings.showPolygonsWhenUnderlayIsOn set:show];
+    [self hidePolygons:!show];
+}
+
+- (void)hidePolygons:(BOOL)hide
+{
+    OAMapStyleParameter *hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    NSString *newValue = hide ? @"true" : @"false";
+    if (![hidePolygonsParameter.value isEqualToString:newValue])
+    {
+        hidePolygonsParameter.value = newValue;
+        [_styleSettings save:hidePolygonsParameter];
+    }
 }
 
 - (void) switchLayer:(NSInteger)number

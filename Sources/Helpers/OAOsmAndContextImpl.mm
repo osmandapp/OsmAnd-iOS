@@ -90,6 +90,43 @@ static NSString * const kGpxImportDir = @"import";
         [(OACommonString *)pref set:value];
 }
 
+- (void)addEnumPreferenceListenerName:(nonnull NSString *)name listener:(nonnull id<OASKStateChangedListener>)listener {
+    _prefListeners[name] = listener;
+}
+
+- (void)addFloatPreferenceListenerName:(nonnull NSString *)name listener:(nonnull id<OASKStateChangedListener>)listener {
+    _prefListeners[name] = listener;
+}
+
+- (OASKotlinEnum * _Nullable)getEnumPreferenceName:(nonnull NSString *)name {
+    NSLog(@"[WARNING] OASettingsAPIImpl -> getEnumPreferenceName not impl");
+    return nil;
+}
+
+- (void)registerEnumPreferenceName:(nonnull NSString *)name defValue:(nonnull OASKotlinEnum *)defValue values:(nonnull OASKotlinArray<OASKotlinEnum *> *)values clazz:(nonnull id<OASKotlinKClass>)clazz global:(BOOL)global shared:(BOOL)shared {
+    NSLog(@"[WARNING] OASettingsAPIImpl -> registerEnumPreferenceName not impl");
+}
+
+- (void)setEnumPreferenceName:(nonnull NSString *)name value:(nonnull OASKotlinEnum *)value {
+    OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
+    if ([pref isKindOfClass:OACommonString.class])
+        [(OACommonString *)pref set:[value description]];
+    else
+        NSLog(@"[WARNING] OASettingsAPIImpl -> setEnumPreferenceName not impl");
+}
+
+- (void)setFloatPreferenceName:(nonnull NSString *)name value:(float)value {
+    OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
+    if ([pref isKindOfClass:OACommonDouble.class])
+        [(OACommonDouble *)pref set:value];
+    else
+        NSLog(@"[WARNING] OASettingsAPIImpl -> setEnumPreferenceName not impl");
+}
+
+- (void)registerPreferenceName:(nonnull NSString *)name defValue:(float)defValue global:(BOOL)global shared:(BOOL)shared { 
+    NSLog(@"[WARNING] OASettingsAPIImpl -> registerPreferenceName not impl");
+}
+
 @end
 
 

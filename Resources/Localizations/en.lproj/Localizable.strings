@@ -310,6 +310,7 @@
 "current_time_widget_desc" = "Shows the current time as taken from your device.";
 "battery_widget_desc" = "Shows the battery level of your device.";
 "battery_widget_level_privacy_ios_desc" = "Due to iOS privacy reasons, the widget can only display the battery level in 5% steps, such as 35%, 60%, or 85%";
+"network_status_widget_desc" = "Displays the current network connection quality by periodically sending a burst of requests and measuring latency, jitter, and packet loss.\n\nQuality levels:\n• Excellent — latency < 100 ms\n• Fair — latency 100–299 ms\n• Poor — latency ≥ 300 ms\n• Offline — no connection\n\nHigh jitter or packet loss may further downgrade the reported quality.";
 "gps_info_widget_desc" = "Shows the number of satellites currently visible and used.";
 "altitude_widget_desc" = "Shows the height above sea level of current geolocation.";
 "max_speed_widget_desc" = "Displays the speed limit for the currently driven road.";
@@ -430,6 +431,7 @@
 "map_widget_camera_distance" = "Camera elevation";
 "map_widget_zoom_level" = "Zoom level";
 "map_widget_target_distance" = "Distance from camera to target";
+"map_widget_network_status" = "Network status";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
@@ -1920,6 +1922,15 @@
 "mapil_usernames" = "Usernames";
 "mapillary_menu_title_pano" = "Display only 360° images";
 "mapil_select_user" = "Select user";
+
+// Network status widget
+"network_status_widget_offline" = "Offline";
+"network_status_widget_poor" = "Poor";
+"network_status_widget_fair" = "Fair";
+"network_status_widget_excellent" = "Excellent";
+"network_status_update_interval_desc" = "Specify the time interval for checking network latency.";
+"network_status_url" = "URL";
+"network_status_url_desc" = "URL used for latency measurement";
 
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates: current location";

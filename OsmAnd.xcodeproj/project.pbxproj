@@ -930,6 +930,7 @@
 		46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B62A8BBC2000A21850 /* CoordinatesBaseWidget.swift */; };
 		46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */; };
 		46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */; };
+		5A711AE72DCBDB390011F5F1 /* NetworkStatusWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A711AE62DCBDB390011F5F1 /* NetworkStatusWidget.swift */; };
 		780AB027242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
 		780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
 		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
@@ -4600,6 +4601,7 @@
 		46FB65B62A8BBC2000A21850 /* CoordinatesBaseWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesBaseWidget.swift; sourceTree = "<group>"; };
 		46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesMapCenterWidget.swift; sourceTree = "<group>"; };
 		46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidgetUtils.swift; sourceTree = "<group>"; };
+		5A711AE62DCBDB390011F5F1 /* NetworkStatusWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStatusWidget.swift; sourceTree = "<group>"; };
 		780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@2x.png"; path = "Resources/Icons/ic_custom_safari@2x.png"; sourceTree = "<group>"; };
 		780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@3x.png"; path = "Resources/Icons/ic_custom_safari@3x.png"; sourceTree = "<group>"; };
 		780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_empty_state_contour_lines@3x.png"; path = "Resources/Icons/img_empty_state_contour_lines@3x.png"; sourceTree = "<group>"; };
@@ -14026,6 +14028,7 @@
 		DA8DC38E2A0CCFB2006C116B /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				5A711AE62DCBDB390011F5F1 /* NetworkStatusWidget.swift */,
 				DAABE4E72A16102100569F71 /* AverageSpeedWidget.swift */,
 				DA7B18E42A1259160029967F /* BatteryWidget.swift */,
 				DA7B18DF2A1227A30029967F /* CurrentTimeWidget.swift */,
@@ -17137,6 +17140,7 @@
 				DA5A83C026C563A800F274C7 /* OAActionAddMapSourceViewController.mm in Sources */,
 				DA5A854C26C563A900F274C7 /* OAWikiArticleHelper.mm in Sources */,
 				DA5A848026C563A900F274C7 /* OATopTextView.mm in Sources */,
+				5A711AE72DCBDB390011F5F1 /* NetworkStatusWidget.swift in Sources */,
 				DA5A839626C563A800F274C7 /* OAPluginsViewController.mm in Sources */,
 				DA5A816226C563A700F274C7 /* OAAppearance.m in Sources */,
 				32C1C4ED2DD4C4F200A053D4 /* OAClickableWayHelper.mm in Sources */,

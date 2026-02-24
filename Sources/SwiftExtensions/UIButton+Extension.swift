@@ -22,9 +22,4 @@ extension UIButton {
             }
         }
     }
-
-    @objc(applyPurchasePlanButtonConfigurationWithTitle:)
-    func applyPurchasePlanButtonConfiguration(title: String) {
-        configuration = .purchasePlanButtonConfiguration(title: title)
-    }
 }

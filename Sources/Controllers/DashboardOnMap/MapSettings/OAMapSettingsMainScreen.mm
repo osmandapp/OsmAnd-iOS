@@ -1061,7 +1061,7 @@
         BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
         cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
         NSString *title = OALocalizedString(@"shared_string_get");
-        [cell.button applyPurchasePlanButtonConfigurationWithTitle:title];
+        cell.button.configuration = [ButtonConfigurationHelper purchasePlanButtonConfigurationWithTitle:title];
         cell.button.layer.cornerRadius = 6;
         cell.button.layer.masksToBounds = YES;
         cell.button.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;

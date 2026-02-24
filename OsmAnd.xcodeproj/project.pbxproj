@@ -1452,6 +1452,7 @@
 		C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */; };
 		C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */; };
 		C547116A2F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */; };
+		C547116F2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */; };
 		C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5484DC62CD21F03004C5F27 /* FormattedValue.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
 		C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553A28C2D53CD33007C9444 /* AverageSpeedComputerService.swift */; };
@@ -5211,6 +5212,7 @@
 		C546C0082AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadOsmPOINoteViewProgressController.h; sourceTree = "<group>"; };
 		C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadOsmPOINoteViewProgressController.m; sourceTree = "<group>"; };
 		C54711692F4C9DCD007DF8FC /* UIButtonConfiguration+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButtonConfiguration+Extension.swift"; sourceTree = "<group>"; };
+		C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfigurationHelper.swift; sourceTree = "<group>"; };
 		C5484DC62CD21F03004C5F27 /* FormattedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedValue.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
@@ -13701,6 +13703,7 @@
 				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
 				277BE07E2EAFACFB00C007E3 /* RouteParamVehicleHelper.swift */,
 				FA39D2962E819B030095DF8E /* ErrorHelper.swift */,
+				C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */,
 				FA82B9172E74197A00A250F1 /* ImageLoading */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
@@ -17142,6 +17145,7 @@
 				DA5A840626C563A800F274C7 /* OAPOIViewController.mm in Sources */,
 				DA5A850826C563A900F274C7 /* OATargetMultiView.mm in Sources */,
 				DA5A850226C563A900F274C7 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
+				C547116F2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift in Sources */,
 				DA8DC3962A0CE32E006C116B /* TimeToNavigationPointWidget.swift in Sources */,
 				DA5A813526C563A700F274C7 /* OAOsmBugsDBHelper.m in Sources */,
 				DA5A847926C563A900F274C7 /* OARulerWidget.mm in Sources */,

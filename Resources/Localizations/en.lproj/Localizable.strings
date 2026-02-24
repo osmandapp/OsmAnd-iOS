@@ -4472,3 +4472,10 @@
 "routing_attr_maxaxleload_name" = "Max axle load";
 "shared_string_release" = "Released";
 "reconnect" = "Reconnect";
+
+"shared_string_online_only" = "Online Only";
+"shared_string_offline_only" = "Offline Only";
+"show_image_previews"= "Show image previews";
+"popular_places"= "Popular places";
+"shared_string_wikipedia"= "Wikipedia";
+"poi_source" = "POI Source";

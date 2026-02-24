@@ -187,8 +187,8 @@
     if (!hasWiki || !_iapHelper.wiki.disabled)
     {
         [showSectionData addObject:@{
-                @"name": OALocalizedString(@"download_wikipedia_maps"),
-                @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
+                @"name": [(OAWikipediaPlugin *)[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] popularPlacesTitle],
+                @"image": @"ic_custom_popular_places",
                 hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
                 @"type": hasWiki ? OASwitchTableViewCell.reuseIdentifier : OAButtonTableViewCell.reuseIdentifier,
                 @"key": @"wikipedia_layer"

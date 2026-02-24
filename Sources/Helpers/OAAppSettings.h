@@ -844,7 +844,6 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
     EOAWidgetMapScale
 };
 
-
 @interface OACommonWidgetZoomLevelType : OACommonInteger
 
 + (instancetype)withKey:(NSString *)key defValue:(EOAWidgetZoomLevelType)defValue;
@@ -853,6 +852,23 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 - (EOAWidgetZoomLevelType)get:(OAApplicationMode *)mode;
 - (void)set:(EOAWidgetZoomLevelType)type;
 - (void)set:(EOAWidgetZoomLevelType)type mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
+{
+    EOAWikiDataSourceTypeOnline,
+    EOAWikiDataSourceTypeOffline
+};
+
+@interface OAWikiDataSourceType : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAWikiDataSourceType)defValue;
+
+- (EOAWikiDataSourceType)get;
+- (EOAWikiDataSourceType)get:(OAApplicationMode *)mode;
+- (void)set:(EOAWikiDataSourceType)type;
+- (void)set:(EOAWikiDataSourceType)type mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -1123,6 +1139,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (assign, nonatomic) BOOL firstMapIsDownloaded;
 
 @property (nonatomic) OACommonString *renderer;
+
+@property (nonatomic) OAWikiDataSourceType *wikiDataSourceType;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
@@ -1508,6 +1526,8 @@ typedef NS_ENUM(NSInteger, EOAWidgetZoomLevelType)
 @property (nonatomic) OACommonLong *userIosIdExpiredTime;
 @property (nonatomic) OACommonBoolean *useOldRouting;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
+
+@property (nonatomic) OACommonBoolean *wikiShowImagePreviews;
 
 // Developer plugin
 @property (nonatomic) OACommonBoolean *simulateOBDData;

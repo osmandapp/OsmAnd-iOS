@@ -174,6 +174,11 @@ static NSString * const kGpxImportDir = @"import";
     return [[OASKFile alloc] initWithFilePath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:kGpxRecDir]];
 }
 
+- (OASKFile *)getColorPaletteDir __attribute__((swift_name("getColorPaletteDir()")))
+{
+    return [[OASKFile alloc] initWithFilePath:OsmAndApp.instance.colorsPalettePath];
+}
+
 - (id<OASKStringMatcher>)getNameStringMatcherName:(NSString *)name mode:(OASKStringMatcherMode *)mode __attribute__((swift_name("getNameStringMatcher(name:mode:)")))
 {
     return [[OANameStringMatcherImpl alloc] initWithName:name mode:mode];

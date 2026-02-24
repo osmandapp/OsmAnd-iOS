@@ -30,6 +30,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable OAPOI *)parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
 + (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
++ (NSArray<OAPOI *> *)findPOI:(OASearchPoiTypeFilter *)searchFilter
+             additionalFilter:(OATopIndexFilter *)additionalFilter
+                       bbox31:(OsmAnd::AreaI)bbox31
+              currentLocation:(OsmAnd::PointI)currentLocation
+                includeTravel:(BOOL)includeTravel
+              skipAcceptCheck:(BOOL)skipAcceptCheck
+                      matcher:(OAResultMatcher<OAPOI *> *)matcher
+                      publish:(BOOL(^)(OAPOI *poi))publish;
 
 @end
 

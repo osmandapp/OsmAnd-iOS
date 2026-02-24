@@ -304,4 +304,16 @@
     return NO;
 }
 
+- (NSString *)popularPlacesTitle
+{
+    NSString *popularPlaces = OALocalizedString(@"popular_places");
+    NSString *wikipedia = [NSString stringWithFormat:@"(%@)",
+                           OALocalizedString(@"shared_string_wikipedia")];
+
+    return [NSString stringWithFormat:
+            OALocalizedString(@"ltr_or_rtl_combine_via_space"),
+            popularPlaces,
+            wikipedia];
+}
+
 @end

@@ -2113,6 +2113,32 @@ static const NSInteger kDetailedMapZoom = 9;
     [self hidePolygonHighlight];
 }
 
+- (void)contextMenuDidShow:(id)targetObj
+{
+    for (OAMapLayer *layer in self.mapLayers.getLayers)
+    {
+        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)] &&
+            [layer respondsToSelector:@selector(contextMenuDidShow:)])
+        {
+            id<OAContextMenuProvider> provider = (id<OAContextMenuProvider>)layer;
+            [provider contextMenuDidShow:targetObj];
+        }
+    }
+}
+
+- (void)contextMenuDidHide
+{
+    for (OAMapLayer *layer in self.mapLayers.getLayers)
+    {
+        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)] &&
+            [layer respondsToSelector:@selector(contextMenuDidHide)])
+        {
+            id<OAContextMenuProvider> provider = (id<OAContextMenuProvider>)layer;
+            [provider contextMenuDidHide];
+        }
+    }
+}
+
 - (void) highlightRegion:(OAWorldRegion *)region
 {
     [_mapLayers.downloadedRegionsLayer highlightRegion:region];
@@ -3995,12 +4021,14 @@ static const NSInteger kDetailedMapZoom = 9;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [OARootViewController.instance.mapPanel refreshMap];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (OARoutingHelper.sharedInstance.isPublicTransportMode)
+            [_mapLayers.routeMapLayer refreshRoute];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX && ![self isDisplayedInCarPlay])
                 [OARootViewController.instance.mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
-                                                                          bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
-                                                                 changeElevationAngle:NO
-                                                                             animated:NO];
+                                                                        bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+                                                               changeElevationAngle:NO
+                                                                           animated:NO];
         });
     });
 }

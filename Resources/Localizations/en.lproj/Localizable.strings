@@ -1193,6 +1193,7 @@
 "map_text" = "Map Rendering";
 
 "shared_string_weather" = "Weather";
+"offline_weather_forecast" = "Offline weather forecast";
 "map_settings_weather_temp" = "Temperature";
 "map_settings_weather_temp_air" = "Air temperature";
 "map_settings_weather_temp_water" = "Water temperature";
@@ -1803,6 +1804,7 @@
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 "battery_saving_mode" = "Battery saving mode";
+"enable_msaa_carplay" = "Enable MSAA for CarPlay";
 "visualizing_button_grid" = "Map button grid";
 "efficient_grid" = "Efficient grid";
 "slots" = "Slots";
@@ -4471,3 +4473,10 @@
 "routing_attr_maxaxleload_name" = "Max axle load";
 "shared_string_release" = "Released";
 "reconnect" = "Reconnect";
+
+"shared_string_online_only" = "Online Only";
+"shared_string_offline_only" = "Offline Only";
+"show_image_previews"= "Show image previews";
+"popular_places"= "Popular places";
+"shared_string_wikipedia"= "Wikipedia";
+"poi_source" = "POI Source";

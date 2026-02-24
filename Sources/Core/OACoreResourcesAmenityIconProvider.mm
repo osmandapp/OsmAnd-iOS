@@ -79,8 +79,7 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             if (!type)
                 continue;
             
-            QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
-            QString osmandPoiKey = decodedValues.value("osmand_poi_key");
+            const QString osmandPoiKey = amenity->getDecodedValue("osmand_poi_key");
             if (!osmandPoiKey.isEmpty())
             {
                 NSString *key = osmandPoiKey.toNSString();

@@ -9,7 +9,8 @@
 import UIKit
 
 extension UIButton.Configuration {
-    static func purchasePlanButtonConfiguration(title: String, isRTL: Bool) -> UIButton.Configuration {
+    static func purchasePlanButtonConfiguration(title: String) -> UIButton.Configuration {
+        let isRTL = UITraitCollection.current.layoutDirection == .rightToLeft
         let arrow = isRTL ? "arrow.left" : "arrow.right"
         var config = UIButton.Configuration.plain()
         config.title = title

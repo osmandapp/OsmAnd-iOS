@@ -176,7 +176,7 @@ final class MapSettingsCoordinatesGridScreen: NSObject, OAMapSettingsScreen {
             cell.descriptionLabel.text = item.descr
             cell.leftIconView.image = item.icon
             let title = item.string(forKey: Constants.buttonTitleKey) ?? localizedString("shared_string_get")
-            cell.rightButton.configuration = .purchasePlanButtonConfiguration(title: title, isRTL: cell.contentView.isDirectionRTL())
+            cell.rightButton.configuration = .purchasePlanButtonConfiguration(title: title)
             cell.rightButton.accessibilityLabel = title
             cell.rightButton.layer.cornerRadius = 6
             cell.rightButton.layer.masksToBounds = true

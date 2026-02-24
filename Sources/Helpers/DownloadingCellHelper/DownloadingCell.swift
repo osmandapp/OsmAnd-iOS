@@ -15,7 +15,7 @@ final class DownloadingCell: OARightIconTableViewCell {
     }
     
     func configurePurchasePlanButton() {
-        rightButton.configuration = .purchasePlanButtonConfiguration(title: localizedString("shared_string_get"), isRTL: isDirectionRTL())
+        rightButton.configuration = .purchasePlanButtonConfiguration(title: localizedString("shared_string_get"))
         rightButton.layer.cornerRadius = 6
         rightButton.layer.masksToBounds = true
         rightButton.semanticContentAttribute = .forceLeftToRight

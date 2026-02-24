@@ -23,8 +23,8 @@ extension UIButton {
         }
     }
 
-    @objc(applyPurchasePlanButtonConfigurationWithTitle:isRTL:)
-    func applyPurchasePlanButtonConfiguration(title: String, isRTL: Bool) {
-        configuration = .purchasePlanButtonConfiguration(title: title, isRTL: isRTL)
+    @objc(applyPurchasePlanButtonConfigurationWithTitle:)
+    func applyPurchasePlanButtonConfiguration(title: String) {
+        configuration = .purchasePlanButtonConfiguration(title: title)
     }
 }

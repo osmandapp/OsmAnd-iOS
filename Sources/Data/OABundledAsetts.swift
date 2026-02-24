@@ -115,6 +115,49 @@ final class BundledAssets: NSObject {
         return false
     }
     
+    func migrateLegacyTilesIfNeeded(documentsPath: String) -> Bool {
+        let key = "migration_legacy_tiles_sqlitedb_to_mapcreator_done"
+        let defaults = UserDefaults.standard
+        guard !defaults.bool(forKey: key) else { return false }
+        let fm = FileManager.default
+        let src = documentsPath.appendingPathComponent(RESOURCES_DIR)
+        let dest = documentsPath.appendingPathComponent(MAP_CREATOR_DIR)
+        var isSrcDir: ObjCBool = false
+        guard fm.fileExists(atPath: src, isDirectory: &isSrcDir), isSrcDir.boolValue else {
+            defaults.set(true, forKey: key)
+            return false
+        }
+        
+        guard let files = try? fm.contentsOfDirectory(atPath: src) else { return false }
+        try? fm.createDirectory(atPath: dest, withIntermediateDirectories: true, attributes: nil)
+        var isDestDir: ObjCBool = false
+        guard fm.fileExists(atPath: dest, isDirectory: &isDestDir), isDestDir.boolValue else { return false }
+        let excludedPrefixes = ["Hillshade ", "Slope ", "Heightmap_"]
+        let excludedSuffixes = ["hillshade.sqlite", "slope.sqlite", "heightmap.sqlite"]
+        var movedAny = false
+        var hadErrors = false
+        for file in files {
+            let lower = file.lowercased()
+            guard (file as NSString).pathExtension.caseInsensitiveCompare("sqlitedb") == .orderedSame, !excludedPrefixes.contains(where: file.hasPrefix), !excludedSuffixes.contains(where: lower.hasSuffix) else { continue }
+            let from = src.appendingPathComponent(file)
+            let to = dest.appendingPathComponent(file)
+            guard !fm.fileExists(atPath: to) else { continue }
+            do {
+                try fm.moveItem(atPath: from, toPath: to)
+                movedAny = true
+            } catch {
+                hadErrors = true
+                print("[MIGRATE] legacy tiles move failed '\(file)': \(error)")
+            }
+        }
+        
+        if !hadErrors {
+            defaults.set(true, forKey: key)
+        }
+        
+        return movedAny
+    }
+    
     func migrateMapNames(at path: String) {
         let fileManager = FileManager.default
         var isDirectory: ObjCBool = false // Use ObjCBool for bridging with Objective-C

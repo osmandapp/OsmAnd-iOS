@@ -621,6 +621,15 @@ NSString *const kXmlColon = @"_-_";
 
     BOOL rescan = [BundledAssets.shared migrateResourcesToDocumentsIfNeededWithDataPath:_dataPath documentsPath:_documentsPath
                 versionChanged: currentVersion != prevVersion || _firstLaunch];
+    if (!_firstLaunch)
+    {
+        if ([BundledAssets.shared migrateLegacyTilesIfNeededWithDocumentsPath:_documentsPath])
+        {
+            rescan = YES;
+            [[OAMapCreatorHelper sharedInstance] fetchSQLiteDBFiles:YES];
+        }
+    }
+
     if (rescan)
     {
         _resourcesManager->rescanUnmanagedStoragePaths(true);
@@ -877,7 +886,6 @@ NSString *const kXmlColon = @"_-_";
     NSLog(@"OsmAndApp initialize finish");
     return YES;
 }
-
 
 - (NSString *) generateIndexesUrl
 {

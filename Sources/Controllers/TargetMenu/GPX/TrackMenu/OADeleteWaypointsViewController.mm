@@ -504,19 +504,26 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
                                               style:UIAlertActionStyleDefault
                                             handler:nil]];
-
-    __weak __typeof(self) weakSelf = self;
+    
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action)
+                      {
+        
+        [self unregisterNotificationsAndObservers];
+        NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *toDelete = [self.selectedWaypointGroups copy];
+        for (NSString *groupName in toDelete)
         {
-            for (NSString *groupName in weakSelf.selectedWaypointGroups.keyEnumerator)
-                if (weakSelf.trackMenuDelegate)
-                    [weakSelf.trackMenuDelegate deleteWaypointsGroup:groupName
-                                                   selectedWaypoints:weakSelf.selectedWaypointGroups[groupName]];
-
-            [weakSelf dismissViewController];
+            if (self.trackMenuDelegate)
+            {
+                [self.trackMenuDelegate deleteWaypointsGroup:groupName
+                                           selectedWaypoints:toDelete[groupName]];
+            }
+            
         }
+        [self.selectedWaypointGroups removeAllObjects];
+        [self dismissViewController];
+    }
     ]];
     
     [self presentViewController:alert animated:YES completion:nil];

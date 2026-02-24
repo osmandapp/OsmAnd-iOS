@@ -1997,7 +1997,7 @@
 "use_login_and_password" = "使用使用者名稱與密碼";
 "quick_action_current_location_widget_descr" = "切換是否要在地圖上顯示或隱藏目前的位置。";
 "shared_string_cross_buy" = "跨平台購買";
-"shared_string_recorded" = "錄音檔";
+"shared_string_recorded" = "已錄製";
 "quick_action_contour_lines_descr" = "在地圖上顯示或隱藏等高線的按鈕。";
 "download_heightmap_maps" = "高度圖";
 "sign_in_with_open_street_map" = "使用 OpenStreetMap 登入";
@@ -3993,3 +3993,4 @@
 "find_parking" = "尋找停車場";
 "finish_navigation" = "完成導航";
 "background_liquid_glass_clear_ios" = "敞亮";
+"enable_msaa_carplay" = "在 CarPlay 上啟用 MSAA";

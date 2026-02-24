@@ -3975,3 +3975,4 @@
 "find_parking" = "Parkoló keresése";
 "finish_navigation" = "Navigáció befejezése";
 "background_liquid_glass_clear_ios" = "Tiszta";
+"enable_msaa_carplay" = "MSAA engedélyezése a CarPlay számára";

@@ -842,71 +842,62 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
                                        res:(NSArray<OAPOI *> *)res
 {
     NSMutableSet<OAPOI *> *displayedPoints = [NSMutableSet set];
-    
-    NSInteger i = 0;
-    for (OAPOI *amenity in res)
+
+    NSInteger minTileX = (NSInteger)[OASKMapUtils.shared getTileNumberXZoom:zoom longitude:latLonBounds.left];
+    NSInteger maxTileX = (NSInteger)[OASKMapUtils.shared getTileNumberXZoom:zoom longitude:latLonBounds.right];
+    NSInteger minTileY = (NSInteger)[OASKMapUtils.shared getTileNumberYZoom:zoom latitude:latLonBounds.top];
+    NSInteger maxTileY = (NSInteger)[OASKMapUtils.shared getTileNumberYZoom:zoom latitude:latLonBounds.bottom];
+
+    NSInteger width = maxTileX - minTileX + 1;
+    NSInteger height = maxTileY - minTileY + 1;
+
+    NSMutableArray<NSNumber *> *tileCounts = nil;
+    if (width > 0 && height > 0)
     {
-        if ([self shouldDraw:amenity zoom:zoom])
+        tileCounts = [NSMutableArray arrayWithCapacity:(NSUInteger)(width * height)];
+        for (NSInteger i = 0; i < width * height; i++)
         {
-            [displayedPoints addObject:amenity];
-            if (i++ > kTopPlacesLimit)
-                break;
+            [tileCounts addObject:@(0)];
         }
     }
-    
-    float minTileX = [OASKMapUtils.shared getTileNumberXZoom:zoom longitude:latLonBounds.left];
-    float maxTileX = [OASKMapUtils.shared getTileNumberXZoom:zoom longitude:latLonBounds.right];
-    float minTileY = [OASKMapUtils.shared getTileNumberYZoom:zoom latitude:latLonBounds.top];
-    float maxTileY = [OASKMapUtils.shared getTileNumberYZoom:zoom latitude:latLonBounds.bottom];
-    
-    for (NSInteger tileX = (NSInteger)minTileX; tileX <= (NSInteger)maxTileX; tileX++)
+
+    NSInteger topPlacesCounter = 0;
+    for (OAPOI *amenity in res)
     {
-        for (NSInteger tileY = (NSInteger)minTileY; tileY <= (NSInteger)maxTileY; tileY++)
+        if (![self shouldDraw:amenity zoom:zoom])
+            continue;
+
+        if (topPlacesCounter < kTopPlacesLimit)
         {
-            @autoreleasepool
+            [displayedPoints addObject:amenity];
+            topPlacesCounter++;
+        }
+
+        if (tileCounts)
+        {
+            CLLocation *location = [amenity getLocation];
+            if (!location)
+                continue;
+
+            double lon = location.coordinate.longitude;
+            double lat = location.coordinate.latitude;
+
+            NSInteger tileX = (NSInteger)[OASKMapUtils.shared getTileNumberXZoom:zoom longitude:lon];
+            NSInteger tileY = (NSInteger)[OASKMapUtils.shared getTileNumberYZoom:zoom latitude:lat];
+
+            if (tileX < minTileX || tileX > maxTileX || tileY < minTileY || tileY > maxTileY)
+                continue;
+
+            NSInteger index = (tileX - minTileX) + (tileY - minTileY) * width;
+            NSInteger currentCount = tileCounts[index].integerValue;
+            if (currentCount < kTilePointsLimit)
             {
-                double alignedTileX = [self alignTileWithZoom:zoom tile:tileX];
-                double alignedTileY = [self alignTileWithZoom:zoom tile:tileY];
-                
-                QuadRect *tileLatLonBounds = [[QuadRect alloc] initWithLeft:[OASKMapUtils.shared getLongitudeFromTileZoom:zoom x:alignedTileX]
-                                                                        top:[OASKMapUtils.shared getLatitudeFromTileZoom:zoom y:alignedTileY]
-                                                                      right:[OASKMapUtils.shared getLongitudeFromTileZoom:zoom x:(alignedTileX + 1.0)]
-                                                                     bottom:[OASKMapUtils.shared getLatitudeFromTileZoom:zoom y:(alignedTileY + 1.0)]];
-                
-                double alignedTileXMin = [self alignTileWithZoom:zoom tile:(tileX - 0.5)];
-                double alignedTileYMin = [self alignTileWithZoom:zoom tile:(tileY - 0.5)];
-                double alignedTileXMax = [self alignTileWithZoom:zoom tile:(tileX + 1.5)];
-                double alignedTileYMax = [self alignTileWithZoom:zoom tile:(tileY + 1.5)];
-                
-                QuadRect *extTileLatLonBounds = [[QuadRect alloc] initWithLeft:[OASKMapUtils.shared getLongitudeFromTileZoom:zoom x:alignedTileXMin]
-                                                                           top:[OASKMapUtils.shared getLatitudeFromTileZoom:zoom y:alignedTileYMin]
-                                                                         right:[OASKMapUtils.shared getLongitudeFromTileZoom:zoom x:alignedTileXMax]
-                                                                        bottom:[OASKMapUtils.shared getLatitudeFromTileZoom:zoom y:alignedTileYMax]];
-                i = 0;
-                for (OAPOI *amenity in res)
-                {
-                    if (![self shouldDraw:amenity zoom:zoom])
-                        continue;
-                    
-                    CLLocation *location = [amenity getLocation];
-                    double lon = location.coordinate.longitude;
-                    double lat = location.coordinate.latitude;
-                    
-                    if ([extTileLatLonBounds contains:lon top:lat right:lon bottom:lat])
-                    {
-                        if ([tileLatLonBounds contains:lon top:lat right:lon bottom:lat])
-                        {
-                            [displayedPoints addObject:amenity];
-                            
-                            if (++i == kTilePointsLimit)
-                                break;
-                        }
-                    }
-                }
+                [displayedPoints addObject:amenity];
+                tileCounts[index] = @(currentCount + 1);
             }
         }
     }
-    
+
     return displayedPoints;
 }
 
@@ -999,18 +990,6 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
         
         return NSOrderedSame;
     }];
-}
-
-- (double)alignTileWithZoom:(double)zoom tile:(double)tile
-{
-    if (tile < 0)
-        return 0.0;
-    
-    double powZoom = [OASKMapUtils.shared getPowZoomZoom:zoom];
-    if (tile >= powZoom)
-        return powZoom - 0.000001;
-    
-    return tile;
 }
 
 - (BOOL)shouldDraw:(OAPOI *)amenity

@@ -620,10 +620,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         [_mapPanel displayAreaOnMap:routeBBox.topLeft
                         bottomRight:routeBBox.bottomRight
-                               zoom:0
                         bottomInset:!landscape ? self.getViewHeight : 0
-                          leftInset:landscape ? self.tableView.frame.size.width : 0
-                           animated:YES];
+                          leftInset:landscape ? self.tableView.frame.size.width : 0];
     }
     _adjustMapPosition = YES;
 }

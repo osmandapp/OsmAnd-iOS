@@ -987,7 +987,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         UIButton *btn = (UIButton *) sender;
         [_transportHelper setCurrentRoute:btn.tag];
-        [OARootViewController.instance.mapPanel openTargetViewWithTransportRouteDetails:btn.tag showFullScreen:YES];
+        [OARootViewController.instance.mapPanel openTargetViewWithTransportRouteDetails:btn.tag showFullScreen:YES showRouteOnMap:YES];
     }
 }
 
@@ -997,7 +997,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         UIButton *btn = (UIButton *) sender;
         [_transportHelper setCurrentRoute:btn.tag];
-        [OARootViewController.instance.mapPanel openTargetViewWithTransportRouteDetails:btn.tag showFullScreen:NO];
+        [OARootViewController.instance.mapPanel openTargetViewWithTransportRouteDetails:btn.tag showFullScreen:NO showRouteOnMap:YES];
     }
 }
 
@@ -1870,6 +1870,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     if (selectionDone)
     {
+        if (_routingHelper.isPublicTransportMode)
+        {
+            [_transportHelper clearCurrentRoute:nil];
+            _hasEmptyTransportRoute = YES;
+        }
         [self updateData];
         [self.tableView reloadData];
         [self layoutSubviews];
@@ -2207,7 +2212,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                         routeBBox = _routingHelper.isPublicTransportMode? [_transportHelper getBBox] : [_routingHelper getBBox];
                         if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
                         {
-                            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) changeElevationAngle:NO presizeZoom:YES];
+                            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) changeElevationAngle:NO];
                         }
                     }
                 }

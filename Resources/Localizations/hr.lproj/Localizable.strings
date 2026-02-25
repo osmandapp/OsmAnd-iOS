@@ -37,7 +37,7 @@
 "max_speed" = "Maksimalna brzina";
 
 // Track recording settings
-"save_track_interval" = "Interval bilježenja";
+"save_track_interval" = "Interval bilježenja tijekom navigacije";
 "map_widget_transparent" = "Transparentna tema";
 "map_widget_next_turn" = "Skretanje";
 "map_widget_next_turn_small" = "Skretanje (umanjeni prikaz)";
@@ -396,7 +396,7 @@
 
 // OSM Editing actions
 "loading_poi_obj" = "Učitavanje POI…";
-"poi_remove_success" = "POI je uspješno izbrisan";
+"poi_remove_success" = "Izbrisano";
 "osm_edit_reopened_note" = "Reopened";
 "offline_edition" = "Offline uređivanje";
 "map_widget_top_text" = "Naziv ulice";
@@ -480,7 +480,7 @@
 "osmand_parking_plugin_description" = "Parking dodatak vam omogućava da sa lakoćom spremite lokaciju vašeg parkiranog automobila, i prikaz koliko vremena vam je još preostalo ukoliko je parking vremenski ograničen. Također možete pronaći vaš automobil na karti i widgetu. Dodaje podsjetnik u kalendar ukoliko želite obavijesti.";
 "plugin_ski_name" = "Skijaška karta";
 "record_plugin_name" = "Bilježenje putovanja";
-"osm_editing_plugin_name" = "OSM uređivanje";
+"osm_editing_plugin_name" = "OpenStreetMap uređivanje";
 "srtm_plugin_name" = "Topografija";
 "wikivoyage_travel_guide" = "Turistički vodiči";
 "get_unlimited_access" = "Neograničen pristup";
@@ -519,7 +519,7 @@
 "selected_categories" = "Odabrane kategorije";
 "new_filter_desc" = "Upišite naziv za novi filtar, on će biti dodan na karticu kategorije.";
 "login_account" = "Račun";
-"user_password" = "Vaša OSM lozinka";
+"user_password" = "Lozinka";
 "shared_string_filters" = "Filteri";
 "edit_filter" = "Uredi kategoriju";
 "edit_filter_save_as_menu_item" = "Spremi kao";
@@ -1111,3 +1111,9 @@
 "lang_vo" = "Volapuk";
 "shared_string_wikivoyage" = "Wikivoyage";
 "help_article_navigation_routing_brouter_name" = "BRouter";
+"shared_string_deleted" = "Izbrisano";
+"shared_string_added" = "Dodano";
+"nav_type_brouter" = "BRouter";
+"routing_attr_motor_type_diesel_name" = "Dizel";
+"obd_fuel_type_diesel" = "Dizel";
+"routing_attr_motor_type_petrol_name" = "Benzin";

@@ -13,7 +13,7 @@ import Foundation
 @objcMembers
 final class WikipediaCacheSizeViewController : OABaseNavbarViewController {
     
-    var delegate: OAWikipediaScreenDelegate?
+    var delegate: WikipediaScreenDelegate?
     var cacheHelper: WikiImageCacheHelper?
     
     override func getTitle() -> String! {

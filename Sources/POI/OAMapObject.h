@@ -39,6 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isNameLangTag:(NSString *)tag;
 
++ (void)parseNamesJSON:(NSString *)json
+                object:(OAMapObject *)object;
+
 @end
 
 NS_ASSUME_NONNULL_END

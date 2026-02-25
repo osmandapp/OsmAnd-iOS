@@ -104,7 +104,7 @@
 
     if (![OAUtilities isLandscapeIpadAware])
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    [_mapPanelViewController displayGpxOnMap:_currentGpx];
+
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 
@@ -138,6 +138,15 @@
         else
             weakSelf.contentView.layer.mask = nil;
     } completion:nil];
+}
+
+- (void)onMenuShown
+{
+    auto rect = _currentGpx.getRect;
+    [_mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
+                                  bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
+                                  bottomInset:([self isLandscape] ? 0. : self.delegate ? self.delegate.getVisibleHeight : 0.)
+                                    leftInset:([self isLandscape] ? self.view.frame.size.width : 0.)];
 }
 
 - (void)onMenuDismissed

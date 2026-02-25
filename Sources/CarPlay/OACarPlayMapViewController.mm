@@ -259,6 +259,7 @@
         _mapVc.view.frame = self.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
+        [_mapVc.mapView setMSAAEnabled:[[OAAppSettings sharedManager].enableMsaaForСarPlay get]];
         [_mapVc.mapView resumeRendering];
         [_mapVc.mapView limitFrameRefreshRate];
     }
@@ -286,6 +287,7 @@
             [_mapVc.mapView restoreFrameRefreshRate];
 
         [_mapVc setViewportScaleX:kViewportScale];
+        [_mapVc.mapView setMSAAEnabled:NO];
         [[OAMapViewTrackingUtilities instance] updateSettings];
     }
 }
@@ -371,14 +373,11 @@
     CGSize screenBBox = self.view.frame.size;
     [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft
                                                    bottomRight:bottomRight
-                                                          zoom:0.
                                                     screenBBox:screenBBox
                                                    bottomInset:0.
                                                      leftInset:0.
                                                       topInset:0.
-                                          changeElevationAngle:YES
-                                                   presizeZoom:NO
-                                                      animated:YES];
+                                          changeElevationAngle:YES];
 }
 
 - (BOOL)isLeftSideDriving
@@ -395,8 +394,13 @@
 
 - (void)exitNavigationMode
 {
-    [_mapVc setViewportForCarPlayScaleX:_cachedViewportX];
-    _isInNavigationMode = NO;
+    if (_isInNavigationMode)
+    {
+        if (_cachedViewportX != 0)
+            [_mapVc setViewportForCarPlayScaleX:_cachedViewportX];
+        
+        _isInNavigationMode = NO;
+    }
 }
 
 - (void)onLocationChanged

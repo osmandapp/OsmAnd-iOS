@@ -256,4 +256,6 @@ extension ProfileAppearanceIconSizeViewController: SegmentButtonsSliderTableView
     func onMinusTapped(_ selectedMark: Int, sender: UISlider) {
         setCurrentIconSize(selectedMark)
     }
+    
+    func onSliderValueChanged(_ selectedMark: Int, sender: UISlider) {}
 }

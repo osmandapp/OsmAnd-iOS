@@ -90,8 +90,8 @@
 // Rendering categories
 "rendering_category_hide" = "Ausblenden";
 "rendering_category_routes" = "Routen";
-"rendering_category_transport" = "ÖPNV-Linien";
-"rendering_category_others" = "Weitere Kartenmerkmale";
+"rendering_category_transport" = "Verkehrsmittel";
+"rendering_category_others" = "Andere Kartenmerkmale";
 // Rendering attributes
 "track_continue_rec_q" = "Soll die Aufzeichnung fortgesetzt werden?";
 "save_track_interval_globally" = "Aufzeichnungsintervall";
@@ -479,7 +479,7 @@
 "traffic_warning_calming" = "Verkehrsberuhigung";
 "traffic_warning_speed_camera" = "Blitzer";
 "traffic_warning" = "Verkehrswarnung";
-"driving_region_us" = "USA";
+"driving_region_us" = "Vereinigte Staaten";
 "driving_region_canada" = "Kanada";
 "driving_region_australia" = "Australien";
 "arrived_at_intermediate_point" = "Zwischenziel erreicht";
@@ -1355,7 +1355,7 @@
 "rendering_value_light_brown_name" = "Hellbraun";
 "routing_attr_piste_type_nordic_name" = "Skilanglauf und Nordischer Skisport";
 "routing_attr_prefer_motorway_description" = "Autobahnen bevorzugen";
-"rendering_attr_transportStops_name" = "ÖPNV-Haltestellen";
+"rendering_attr_transportStops_name" = "Verkehrsmittel-Haltestellen";
 "routing_attr_avoid_subway_description" = "Vermeidet U-Bahnen und leichten Schienenverkehr";
 "routing_attr_height_obstacles_name" = "Höhendaten berücksichtigen";
 "rendering_attr_pisteGrooming_name" = "Pistenpflege";
@@ -1531,11 +1531,11 @@
 "board_at" = "Einsteigen bei";
 "shared_string_walk" = "Gehen";
 "public_transport_warning_descr_blog" = "Mehr über die OsmAnd-Routenführung in unserem Blog.";
-"public_transport_warning_title" = "Die Navigation im öffentlichen Nahverkehr befindet sich derzeit im Beta-Test, rechnen Sie mit Fehlern und Ungenauigkeiten.";
+"public_transport_warning_title" = "Die Navigation mit öffentlichen Verkehrsmitteln befindet sich derzeit im Beta-Test, rechnen Sie mit Fehlern und Ungenauigkeiten.";
 "calc_pedestrian_route" = "Fußgängerroute berechnen";
 "public_transport_ped_route_title" = "Die Route zu Fuß beträgt ca. %@ und könnte schneller sein als mit öffentlichen Verkehrsmitteln";
 "product_desc_antarctica" = "Unbegrenzte Karten-Downloads für die Antarktis";
-"poi_filter_public_transport" = "ÖPNV";
+"poi_filter_public_transport" = "Öffentliche Verkehrsmittel";
 "transfers" = "Umstiege";
 "temporary_conditional_routing" = "Vorübergehende Einschränkungen berücksichtigen";
 "avoid_transport_type" = "Transportarten vermeiden";
@@ -1581,7 +1581,7 @@
 "shared_string_exit" = "Beenden";
 "base_profile_descr_aircraft" = "Flugzeug, Segelflugzeug";
 "base_profile_descr_boat" = "Schiff, Rudern, Segeln";
-"base_profile_descr_public_transport" = "ÖPNV-Arten";
+"base_profile_descr_public_transport" = "Arten öffentlicher Verkehrsmittel";
 "base_profile_descr_pedestrian" = "Gehen, Wandern, Laufen";
 "base_profile_descr_bicycle" = "Mountainbike, Moped, Pferd";
 "base_profile_descr_car" = "Auto, Lkw, Motorrad";
@@ -1609,7 +1609,7 @@
 "voice_anounces" = "Sprachansagen";
 "osmand_routing" = "OsmAnd-Routing";
 "settings_item_read_error" = "Konnte nicht von \'%@\' lesen.";
-"quick_action_transport_descr" = "Schaltfläche zum Ein- oder Ausblenden der öffentlichen Verkehrsmittel auf der Karte.";
+"quick_action_transport_descr" = "Schaltfläche zum Ein- oder Ausblenden öffentlicher Verkehrsmittel auf der Karte.";
 "after_tapping_done" = "Nachdem Sie auf Fertig tippen, gehen gelöschte Profile vollständig verloren.";
 "all_application_profiles" = "Alle Anwendungsprofile";
 "rearrange_profile_descr" = "Standard OsmAnd-Profile können nicht gelöscht werden, aber Sie können sie auf dem vorherigen Bildschirm deaktivieren oder sie an das Ende der Liste ziehen.";
@@ -1857,12 +1857,12 @@
 "select_segment" = "Segment auswählen";
 "select_track_to_follow" = "Track auswählen, welchem gefolgt werden soll";
 "icon_group_travel" = "Reisen";
-"icon_group_transport" = "Verkehr";
+"icon_group_transport" = "Verkehrsmittel";
 "icon_group_symbols" = "Symbole";
 "icon_group_special" = "Spezial";
 "icon_group_emergency" = "Notfall";
 "shared_string_octagon" = "Achteck";
-"transport" = "ÖPNV";
+"transport" = "Verkehrsmittel";
 
 // Shapes
 "shared_string_circle" = "Kreis";
@@ -1935,7 +1935,7 @@
 "gpxup_trackable" = "Nachverfolgbar";
 "gpxup_identifiable" = "Identifizierbar";
 "gpxup_public" = "Öffentlich";
-"shared_string_wifi_only" = "Nur bei WLAN";
+"shared_string_wifi_only" = "Nur über WLAN";
 "gpx_upload_trackable_visibility_descr" = "„Verfolgbar“ bedeutet, dass der Track nicht in öffentlichen Listen auftaucht, aber verarbeitete Trackpunkte mit Zeitstempeln (die nicht direkt mit Ihnen in Verbindung gebracht werden können) werden durch Downloads von der öffentlichen GPS-API angezeigt.";
 "restart" = "Neustart";
 "app_restart_required" = "App-Neustart erforderlich, um einige Einstellungen anzuwenden.";
@@ -2315,7 +2315,7 @@
 "private_access_routing_req" = "Ihr Ziel liegt in einem Gebiet mit Privatzugang. Betreten von Privatwegen für diese Reise zulassen?";
 "terrain_maps" = "Geländekarten";
 "not_available_with" = "Nicht verfügbar mit %@";
-"transport_hazmat_no_desc" = "Straßen und Tunnel können den Transport gefährlicher Güter einschränken.";
+"transport_hazmat_no_desc" = "Straßen und Tunnel können den Gefahrguttransport einschränken.";
 "annual_subscription" = "Jahresabonnement";
 "debugging_and_development" = "OsmAnd-Entwicklung";
 "purchases_feature_desc_terrain" = "Höhenlinien, graustufiges Relief und farbige Hangneigungskarten, zur Darstellung von Erhebungen und Niederungen.";
@@ -3289,10 +3289,10 @@
 "custom_map_button_name_present" = "Diese Schaltfläche ist bereits vorhanden";
 "shared_string_item" = "Element";
 "dangerous_goods" = "Gefahrgut";
-"avoid_pt_types_descr" = "Wählen Sie die öffentlichen Verkehrsmittel aus, die Sie für die Navigation vermeiden möchten:";
+"avoid_pt_types_descr" = "Wählen Sie die Arten öffentlicher Verkehrsmittel aus, die Sie für die Navigation vermeiden möchten:";
 "route_recalculation_dist_title" = "Mindestabstand für Neuberechnung der Route";
 "in_case_of_reverse_direction" = "Bei umgekehrter Richtung";
-"avoid_pt_types" = "Verkehrsmittel ausschließen …";
+"avoid_pt_types" = "Verkehrsmittelarten vermeiden …";
 "shared_string_class" = "Klasse";
 "dangerous_goods_description" = "Auf manchen Straßen und in Tunneln ist der Transport von Gefahrgut verboten.";
 "rendering_value_dark_orange_name" = "Dunkelorange";
@@ -4006,3 +4006,27 @@
 "ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n• Fähigkeit hinzugefügt Wegpunkte in einen ausgewählten Favoriten-Ordner zusammenzuführen\n• CarPlay: Problem mit nicht reagierender Karte auf dem Dashboard behoben und Unterstützung hinzugefügt für Parameter „Zeige immer dunkle Karte“\n";
 "image_cache_online_photo_high_res" = "Hochauflösende Zwischenspeicherung von Online-Fotos";
 "image_cache_online_photo_mapillary_default_cache" = "Automatische Zwischenspeicherung von Online-Fotos/Mapillary";
+"trip_recording_moving_time" = "Bewegungszeit";
+"trip_recording_moving_time_widget_description" = "Zeigt die aktuell aufgezeichnete Bewegungszeit oder die Zeit für den letzten Anstieg und Abstieg an.";
+"context_menu_item_add_parking_point" = "Als Parkposition markieren";
+"find_parking" = "Parkplatz suchen";
+"finish_navigation" = "Navigation beenden";
+"liquid_glass" = "Flüssigglas";
+"change_zoom_action_descr" = "Kartenvergrößerung ändern.";
+"search_action_descr" = "Öffnet die Suche.";
+"configure_map_description" = "Ändere den Kartenstil, die Ebenen oder andere Einstellungen.";
+"map_3d_mode_action_descr" = "Kartenneigung ändern.";
+"my_location_action_descr" = "Zentriert die Karte bei deinem aktuellen Standort.";
+"navigation_action_descr" = "Öffnet die Navigation.";
+"drawer_button_description" = "Öffnet das Hauptmenü.";
+"key_event_action_change_map_orientation" = "Kartenausrichtung ändern.";
+"shared_background" = "Hintergrund";
+"corner_radius" = "Eckenradius";
+"shared_string_pt" = "Pkt.";
+"shared_string_default" = "Standard";
+"dynamic_icon_type_summary" = "Symbol wechselt je nach Aktionsstatus.";
+"shared_string_dynamic" = "Dynamisch";
+"shared_string_tinted" = "Getönt";
+"background_opacity_description" = "Klar ist transparenter und lässt den darunterliegenden Inhalt erkennen. Getönt erhöht die Deckkraft und sorgt für mehr Kontrast.";
+"background_liquid_glass_clear_ios" = "Klar";
+"enable_msaa_carplay" = "MSAA für CarPlay aktivieren";

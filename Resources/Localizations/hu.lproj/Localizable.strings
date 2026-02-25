@@ -3976,3 +3976,10 @@
 "finish_navigation" = "Navigáció befejezése";
 "background_liquid_glass_clear_ios" = "Tiszta";
 "enable_msaa_carplay" = "MSAA engedélyezése a CarPlay számára";
+"offline_weather_forecast" = "Offline időjárás-előrejelzés";
+"shared_string_online_only" = "Csak online";
+"shared_string_offline_only" = "Csak offline";
+"show_image_previews" = "Képelőnézetek megjelenítése";
+"popular_places" = "Népszerű helyek";
+"shared_string_wikipedia" = "Wikipédia";
+"poi_source" = "POI-forrás";

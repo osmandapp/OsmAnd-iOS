@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 // Use to refresh button appearance
 - (void)setupNavbarButtons;
 
-- (UIColor *)blurBackgroundColor;
-- (BOOL)shouldBlurNavBar;
+- (UIColor *)blurBackgroundAppearanceColor;
+- (BOOL)shouldBlurAppearanceNavBar;
 
 @end

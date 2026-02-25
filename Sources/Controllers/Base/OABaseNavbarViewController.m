@@ -259,9 +259,9 @@
         blurAppearance.shadowImage = nil;
     }
     
-    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange || [self shouldBlurNavBar])
+    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange || [self shouldBlurAppearanceNavBar])
     {
-        blurAppearance.backgroundColor = [self blurBackgroundColor];
+        blurAppearance.backgroundColor = [self blurAppearanceBackgroundColor];
         if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
         {
             blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
@@ -279,12 +279,12 @@
     self.navigationItem.largeTitleDisplayMode = isLargeTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
 }
 
-- (UIColor *)blurBackgroundColor
+- (UIColor *)blurAppearanceBackgroundColor
 {
     return [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
 }
 
-- (BOOL)shouldBlurNavBar
+- (BOOL)shouldBlurAppearanceNavBar
 {
     return NO;
 }

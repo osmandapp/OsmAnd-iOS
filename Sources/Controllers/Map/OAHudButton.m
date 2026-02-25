@@ -171,6 +171,21 @@ static CGFloat const kShadowRadius = 6;
 
 - (void)updateBackground
 {
+    [self removeExistingVisualEffectViews];
+    
+    if ([self isGlass])
+    {
+        [self applyGlassView];
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.5];
+    }
+    else
+    {
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self opacity]];
+    }
+}
+
+- (void)removeExistingVisualEffectViews
+{
     if (@available(iOS 26.0, *))
     {
         for (UIView *subview in self.subviews)
@@ -179,8 +194,11 @@ static CGFloat const kShadowRadius = 6;
                 [subview removeFromSuperview];
         }
     }
-    
-    if ([self isGlass])
+}
+
+- (void)applyGlassView
+{
+    if (@available(iOS 26.0, *))
     {
         NSInteger glassStyle = [self glassStyle];
         UIGlassEffect *glass = [UIGlassEffect effectWithStyle:glassStyle];
@@ -194,12 +212,6 @@ static CGFloat const kShadowRadius = 6;
         glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
         
         [self insertSubview:glassView atIndex:0];
-        
-        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.5];
-    }
-    else
-    {
-        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self opacity]];
     }
 }
 

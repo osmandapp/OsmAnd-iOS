@@ -62,12 +62,12 @@
     }
 }
 
-- (UIColor *)blurBackgroundColor
+- (UIColor *)blurAppearanceBackgroundColor
 {
     return [UIColor colorNamed:ACColorNameViewBg];
 }
 
-- (BOOL)shouldBlurNavBar
+- (BOOL)shouldBlurAppearanceNavBar
 {
     return YES;
 }

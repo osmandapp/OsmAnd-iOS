@@ -3265,7 +3265,7 @@
 		FA4C57032D48E92F00438A5C /* NoInternetCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */; };
 		FA4C57052D491EB900438A5C /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C57042D491EB900438A5C /* CardsViewController.swift */; };
 		FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */; };
-		FA4FC4AB2F4F3F8F009ABB6E /* SmartFolderHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4FC4AA2F4F3F8F009ABB6E /* SmartFolderHelper.swift */; };
+		FA4FC4AB2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4FC4AA2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift */; };
 		FA5060B92D6DF807007638C8 /* TouchesPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5060B82D6DF807007638C8 /* TouchesPassView.swift */; };
 		FA52B0732D4D237D0001B693 /* CardsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA52B0722D4D237D0001B693 /* CardsFilter.swift */; };
 		FA54CE0F2EBB938E007F1F68 /* Locale+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA54CE0E2EBB938E007F1F68 /* Locale+Extension.swift */; };
@@ -8011,7 +8011,7 @@
 		FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoInternetCardCell.xib; sourceTree = "<group>"; };
 		FA4C57042D491EB900438A5C /* CardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewController.swift; sourceTree = "<group>"; };
 		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
-		FA4FC4AA2F4F3F8F009ABB6E /* SmartFolderHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartFolderHelper.swift; sourceTree = "<group>"; };
+		FA4FC4AA2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLibSmartFolderHelper.swift; sourceTree = "<group>"; };
 		FA5060B82D6DF807007638C8 /* TouchesPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchesPassView.swift; sourceTree = "<group>"; };
 		FA52B0722D4D237D0001B693 /* CardsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsFilter.swift; sourceTree = "<group>"; };
 		FA54CE0E2EBB938E007F1F68 /* Locale+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+Extension.swift"; sourceTree = "<group>"; };
@@ -13721,7 +13721,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				FA4FC4AA2F4F3F8F009ABB6E /* SmartFolderHelper.swift */,
+				FA4FC4AA2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift */,
 				FA896E6E2F3600AC00580246 /* SharedLibNetworkAPI.swift */,
 				FA1394AE2EB11C9600197297 /* HudGridOverlay */,
 				FA9FA5982E97D11400376C47 /* MapScrollHelper.swift */,
@@ -17348,7 +17348,7 @@
 				DA5A81AD26C563A700F274C7 /* OASearchPhrase.mm in Sources */,
 				FA5DD0FD2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m in Sources */,
 				32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */,
-				FA4FC4AB2F4F3F8F009ABB6E /* SmartFolderHelper.swift in Sources */,
+				FA4FC4AB2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift in Sources */,
 				DA5A81D526C563A700F274C7 /* OAVoiceCommandPending.mm in Sources */,
 				DA5A819826C563A700F274C7 /* OAShowHideFavoritesAction.m in Sources */,
 				46C841432C32F3DD00E284B0 /* OANavVoiceAction.m in Sources */,

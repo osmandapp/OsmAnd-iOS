@@ -1,5 +1,5 @@
 //
-//  SharedLibSmartFolderHelper.swift
+//  SmartFolderHelperBridge.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 25.02.2026.

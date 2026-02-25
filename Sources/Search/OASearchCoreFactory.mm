@@ -1260,7 +1260,7 @@
                 if (![@"no" isEqualToString:enTranslation]) // && !"yes".equals(enTranslation))
                 {
                     OAPoiTypeResult *ptr = [self checkPoiType:nm type:a];
-                    if (ptr != nil)
+                    if (ptr != nil && ptr.pt != nil && ptr.pt.top)
                         results[a.name] = ptr;
                 }
             }

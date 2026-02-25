@@ -110,8 +110,8 @@ static const double DISTANCE_SKIP = 10000;
     for (int i = 0; i < [targets count]; i++)
     {
         end = targets[i];
-        if ([OAMapUtils getDistance:prev.coordinate second:end.coordinate] < DISTANCE_SKIP) {
-            // skip point they too close
+        if (i > 0 && [OAMapUtils getDistance:prev.coordinate second:end.coordinate] < DISTANCE_SKIP) {
+            // skip intermediate points that are too close together
             continue;
         }
         

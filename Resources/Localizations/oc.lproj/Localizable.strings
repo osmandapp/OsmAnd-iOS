@@ -1594,7 +1594,6 @@
 "shared_string_clear_cache" = "Netejar l'antememòria";
 "add_favorite" = "Ajustar una preferéncia";
 "delete_point" = "Suprimir lo ponch";
-"map_settings_hide_polygons" = "Amagar lei poligòns";
 "delete_waypoints" = "Suprimir lei ponchs d\'etapa";
 "delete_group_confirm_short" = "Suprimir lo grop ?";
 "rendering_attr_streetLighting_name" = "Illumination dei carrieras";

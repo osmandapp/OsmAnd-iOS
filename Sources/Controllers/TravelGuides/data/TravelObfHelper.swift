@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OATravelObfHelper)
 @objcMembers
-final class TravelObfHelper : NSObject {
+final class TravelObfHelper: NSObject {
     
     static let shared = TravelObfHelper()
     
@@ -128,7 +128,7 @@ final class TravelObfHelper : NSObject {
     func searchGpx(latLon: CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx? {
         var foundAmenities = [OAFoundAmenity]()
         var searchRadius = ARTICLE_SEARCH_RADIUS
-        var travelGpx: TravelGpx? = nil
+        var travelGpx: TravelGpx?
         
         repeat {
             
@@ -167,7 +167,7 @@ final class TravelObfHelper : NSObject {
                 if lang == nil {
                     results.append(OAFoundAmenity(file: reader, amenity: poi))
                 }
-                if let lang, let namesMap = poi.getNamesMap(true), namesMap.keys.contains(lang) {
+                if let lang, poi.getNamesMap(true).keys.contains(lang) {
                     results.append(OAFoundAmenity(file: reader, amenity: poi))
                 }
             }
@@ -189,7 +189,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func cacheTravelArticles(file: String?, amenity: OAPOI, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        var article: TravelArticle? = nil
+        var article: TravelArticle?
         var articles: [String: TravelArticle]? = [:]
         guard let file else {return nil}
         if amenity.isRouteTrack() {
@@ -209,8 +209,8 @@ final class TravelObfHelper : NSObject {
     }
     
     func readRoutePoint(file: String, amenity: OAPOI) -> [String : TravelArticle] {
-        var articles: [String : TravelArticle] = [:]
-        var res = getTravelGpx(file:file, amenity: amenity)
+        var articles: [String: TravelArticle] = [:]
+        let res = getTravelGpx(file: file, amenity: amenity)
         articles[""] = res
         return articles
     }
@@ -218,8 +218,7 @@ final class TravelObfHelper : NSObject {
     func getTravelGpx(file: String?, amenity: OAPOI) -> TravelGpx {
         let travelGpx = TravelGpx(amenity: amenity)
         travelGpx.file = file
-        let title = amenity.name
-        
+        travelGpx.title = amenity.name
         travelGpx.lat = amenity.latitude
         travelGpx.lon = amenity.longitude
         travelGpx.descr = amenity.getTagContent(DESCRIPTION_TAG)
@@ -229,13 +228,13 @@ final class TravelObfHelper : NSObject {
         travelGpx.activityType = amenity.getTagContent(TravelGpx.ROUTE_ACTIVITY_TYPE)
         travelGpx.ref = amenity.getRef()
         
-        travelGpx.totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE)) ?? 0
-        travelGpx.diffElevationUp = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_UP)) ?? 0
-        travelGpx.diffElevationDown = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_DOWN)) ?? 0
-        travelGpx.maxElevation = Double(amenity.getTagContent(TravelGpx.MAX_ELEVATION)) ?? 0
-        travelGpx.minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION)) ?? 0
-        travelGpx.avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION)) ?? 0
-        
+        travelGpx.totalDistance = Float(amenity.getTagContent(TravelGpx.DISTANCE) ?? "") ?? 0
+        travelGpx.diffElevationUp = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_UP) ?? "") ?? 0
+        travelGpx.diffElevationDown = Double(amenity.getTagContent(TravelGpx.DIFF_ELEVATION_DOWN) ?? "") ?? 0
+        travelGpx.maxElevation = Double(amenity.getTagContent(TravelGpx.MAX_ELEVATION) ?? "") ?? 0
+        travelGpx.minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION) ?? "") ?? 0
+        travelGpx.avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION) ?? "") ?? 0
+
         if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_BBOX_RADIUS) {
             OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(TRAVEL_GPX_CONVERT_MULT_2))
         }
@@ -255,9 +254,9 @@ final class TravelObfHelper : NSObject {
         }
     }
     
-    func readArticles(file: String, amenity: OAPOI) -> [String : TravelArticle] {
-        var articles: [String : TravelArticle] = [:]
-        var langs = getLanguages(amenity: amenity)
+    func readArticles(file: String, amenity: OAPOI) -> [String: TravelArticle] {
+        var articles: [String: TravelArticle] = [:]
+        let langs = getLanguages(amenity: amenity)
         for lang in langs {
             articles[lang] = readArticle(file: file, amenity: amenity, lang: lang)
         }
@@ -265,8 +264,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func readArticle(file: String, amenity: OAPOI, lang: String) -> TravelArticle {
-        
-        var res = TravelArticle()
+        let res = TravelArticle()
         res.file = file
         var title = amenity.getName(lang, transliterate: false)
         if title == nil || (title ?? "").isEmpty {
@@ -300,7 +298,7 @@ final class TravelObfHelper : NSObject {
         let appLang = OAUtilities.currentLang() ?? ""
         
         var amenities = [OAPOI]()
-        var amenityMap = [String : [OAPOI]]()
+        var amenityMap = [String: [OAPOI]]()
         
         func publishCallback(amenity: OAPOI?) -> Bool {
             if let amenity {
@@ -410,12 +408,12 @@ final class TravelObfHelper : NSObject {
     }
     
     func getPopularArticles() -> [TravelArticle] {
-        return popularArticles.getArticles()
+        popularArticles.getArticles()
     }
     
-    func getNavigationMap(article: TravelArticle) -> [TravelSearchResult : [TravelSearchResult]] {
-        guard let lang = article.lang else {return [:]}
-        guard let title = article.title else {return [:]}
+    func getNavigationMap(article: TravelArticle) -> [TravelSearchResult: [TravelSearchResult]] {
+        guard let lang = article.lang else { return [:] }
+        guard let title = article.title else { return [:] }
         if lang.isEmpty || title.isEmpty {
             return [:]
         }
@@ -491,7 +489,7 @@ final class TravelObfHelper : NSObject {
     }
     
     func getParentArticleByTitle(title: String, lang: String, lat: Double, lon: Double) -> TravelArticle? {
-        var article: TravelArticle? = nil
+        var article: TravelArticle?
         var amenities = [OAPOI]()
         
         for reader in getReaders() {

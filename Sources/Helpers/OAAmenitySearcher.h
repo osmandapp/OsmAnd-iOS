@@ -52,6 +52,18 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon;
 + (NSArray<OAPOI *> *) findPOI:(OASearchPoiTypeFilter *)searchFilter additionalFilter:(nullable OATopIndexFilter *)additionalFilter lat:(double)lat lon:(double)lon radius:(int)radius includeTravel:(BOOL)includeTravel matcher:(nullable OAResultMatcher<OAPOI *> *)matcher publish:(nullable BOOL(^)(OAPOI *poi))publish;
 
++ (NSArray<OAPOI *> *)searchAmenities:(OASearchPoiTypeFilter *)searchFilter
+                     additionalFilter:(OATopIndexFilter *)additionalFilter
+                          topLatitude:(double)topLatitude
+                       bottomLatitude:(double)bottomLatitude
+                        leftLongitude:(double)leftLongitude
+                       rightLongitude:(double)rightLongitude
+                        includeTravel:(BOOL)includeTravel
+                              matcher:(OAResultMatcher<OAPOI *> *)matcher
+                              publish:(BOOL(^)(OAPOI *poi))publish;
+
++ (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities;
+
 @end
 
 

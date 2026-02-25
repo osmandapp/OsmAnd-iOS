@@ -140,6 +140,7 @@ struct CLLocationCoordinate2D;
 - (void) setSkyColor:(OsmAnd::FColorRGB)skyColor;
 
 - (void) setFogColor:(OsmAnd::FColorRGB)fogColor;
+- (void) setMSAAEnabled:(BOOL)enableMSAA;
 
 // Misc properties:
 @property(nonatomic, readonly) QVector<OsmAnd::TileId> visibleTiles;

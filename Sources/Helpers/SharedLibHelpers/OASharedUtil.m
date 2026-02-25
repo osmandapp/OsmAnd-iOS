@@ -11,13 +11,14 @@
 #import "OAXmlFactory.h"
 #import "OAOsmAndContextImpl.h"
 #import <OsmAndShared/OsmAndShared.h>
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OASharedUtil
 
 + (void)initSharedLib:(NSString *)documentsPath gpxPath:(NSString *)gpxPath
 {
     [OASPlatformUtil.shared initializeOsmAndContext:[[OAOsmAndContextImpl alloc] init]
-                                      xmlFactoryApi:[[OAXmlFactory alloc] init]];
+                                      xmlFactoryApi:[[OAXmlFactory alloc] init] networkAPI:[SharedLibNetworkAPI new]];
 }
 
 // Temporary test code

@@ -12,6 +12,9 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+static CGFloat const kShadowOpacity = 1;
+static CGFloat const kShadowRadius = 6;
+
 @implementation OAHudButton
 {
     NSInteger _id;
@@ -119,6 +122,19 @@
     [self updateContent];
 }
 
+- (BOOL)isGlass
+{
+    if (@available(iOS 26.0, *))
+    {
+        NSInteger glassStyle = [self glassStyle];
+        return glassStyle == UIGlassEffectStyleRegular || glassStyle == UIGlassEffectStyleClear;
+    }
+    else
+    {
+        return NO;
+    }
+}
+
 - (void)updateContent
 {
     ButtonAppearanceParams *params = [self appearanceParams];
@@ -155,38 +171,47 @@
 
 - (void)updateBackground
 {
+    [self removeExistingVisualEffectViews];
+    
+    if ([self isGlass])
+    {
+        [self applyGlassView];
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.5];
+    }
+    else
+    {
+        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self opacity]];
+    }
+}
+
+- (void)removeExistingVisualEffectViews
+{
     if (@available(iOS 26.0, *))
     {
-        NSInteger glassStyle = [self glassStyle];
-        BOOL isGlass = glassStyle == UIGlassEffectStyleRegular || glassStyle == UIGlassEffectStyleClear;
-        
         for (UIView *subview in self.subviews)
         {
             if ([subview isKindOfClass:UIVisualEffectView.class])
                 [subview removeFromSuperview];
         }
-        
-        if (isGlass)
-        {
-            UIGlassEffect *glass = [UIGlassEffect effectWithStyle:glassStyle];
-            if (glassStyle == UIGlassEffectStyleRegular)
-                glass.tintColor = self.backgroundColor;
-            UIVisualEffectView *glassView =
-                [[UIVisualEffectView alloc] initWithEffect:glass];
-            NSInteger size = [self size];
-            glassView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
-            glassView.userInteractionEnabled = NO;
-            glassView.layer.cornerRadius = [self appearanceCornerRadius];
-            glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
-            
-            [self insertSubview:glassView atIndex:0];
-        }
-        
-        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:isGlass ? 0.5 : [self opacity]];
     }
-    else
+}
+
+- (void)applyGlassView
+{
+    if (@available(iOS 26.0, *))
     {
-        self.backgroundColor = [self.backgroundColor colorWithAlphaComponent:[self opacity]];
+        NSInteger glassStyle = [self glassStyle];
+        UIGlassEffect *glass = [UIGlassEffect effectWithStyle:glassStyle];
+        if (glassStyle == UIGlassEffectStyleRegular)
+            glass.tintColor = self.backgroundColor;
+        UIVisualEffectView *glassView = [[UIVisualEffectView alloc] initWithEffect:glass];
+        NSInteger size = [self size];
+        glassView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
+        glassView.userInteractionEnabled = NO;
+        glassView.layer.cornerRadius = [self appearanceCornerRadius];
+        glassView.overrideUserInterfaceStyle = [OAAppSettings sharedManager].nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
+        
+        [self insertSubview:glassView atIndex:0];
     }
 }
 
@@ -197,6 +222,41 @@
 
 - (void)updateShadow
 {
+    NSInteger size = [self size];
+    NSInteger cornerRadius = [self appearanceCornerRadius];
+    CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
+    CGPathRef cgShadowPath = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:cornerRadius].CGPath;
+    CGColorRef shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.35].CGColor;
+    CGSize shadowOffset = CGSizeMake(0, 2);
+    
+    if ([self isGlass])
+    {
+        [self glassShadow:cgShadowPath shadowColor:shadowColor shadowOffset:shadowOffset cornerRadius:cornerRadius];
+    }
+    else
+    {
+        [self solidShadow:cgShadowPath shadowColor:shadowColor shadowOffset:shadowOffset cornerRadius:cornerRadius bounds:bounds];
+    }
+}
+
+- (void)glassShadow:(CGPathRef)cgShadowPath shadowColor:(CGColorRef)shadowColor shadowOffset:(CGSize)shadowOffset cornerRadius:(NSInteger)cornerRadius
+{
+    if (_borderLayer)
+    {
+        [_borderLayer removeFromSuperlayer];
+        _borderLayer = nil;
+    }
+    
+    self.layer.shadowPath = cgShadowPath;
+    self.layer.shadowColor = shadowColor;
+    self.layer.shadowOpacity = kShadowOpacity;
+    self.layer.shadowRadius = kShadowRadius;
+    self.layer.shadowOffset = shadowOffset;
+    self.layer.cornerRadius = cornerRadius;
+}
+
+- (void)solidShadow:(CGPathRef)cgShadowPath shadowColor:(CGColorRef)shadowColor shadowOffset:(CGSize)shadowOffset cornerRadius:(NSInteger)cornerRadius bounds:(CGRect)bounds
+{
     if (!_borderLayer)
     {
         _borderLayer = [CAShapeLayer layer];
@@ -206,15 +266,11 @@
     self.layer.shadowOpacity = 0;
     self.layer.shadowPath = nil;
     
-    NSInteger size = [self size];
-    NSInteger cornerRadius = [self appearanceCornerRadius];
-    CGRect bounds = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, size, size);
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:cornerRadius];
-    _borderLayer.shadowPath = shadowPath.CGPath;
-    _borderLayer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.35].CGColor;
-    _borderLayer.shadowOpacity = 1;
-    _borderLayer.shadowRadius = 12;
-    _borderLayer.shadowOffset = CGSizeMake(0, 2);
+    _borderLayer.shadowPath = cgShadowPath;
+    _borderLayer.shadowColor = shadowColor;
+    _borderLayer.shadowOpacity = kShadowOpacity;
+    _borderLayer.shadowRadius = kShadowRadius;
+    _borderLayer.shadowOffset = shadowOffset;
     _borderLayer.cornerRadius = cornerRadius;
     
     CGFloat shadowBorder = _borderLayer.shadowRadius * 2;

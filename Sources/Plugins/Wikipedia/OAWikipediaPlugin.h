@@ -31,5 +31,6 @@
 - (NSString *)getLanguagesSummary:(OAApplicationMode *)mode;
 - (NSString *)getWikiArticleLanguage:(NSSet<NSString *> *)availableArticleLangs preferredLanguage:(NSString *)preferredLanguage;
 - (void)resetToDefaults:(OAApplicationMode *)mode;
+- (NSString *)popularPlacesTitle;
 
 @end

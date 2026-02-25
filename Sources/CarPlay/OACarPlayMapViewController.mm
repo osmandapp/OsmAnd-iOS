@@ -259,6 +259,7 @@
         _mapVc.view.frame = self.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
+        [_mapVc.mapView setMSAAEnabled:[[OAAppSettings sharedManager].enableMsaaForСarPlay get]];
         [_mapVc.mapView resumeRendering];
         [_mapVc.mapView limitFrameRefreshRate];
     }
@@ -286,6 +287,7 @@
             [_mapVc.mapView restoreFrameRefreshRate];
 
         [_mapVc setViewportScaleX:kViewportScale];
+        [_mapVc.mapView setMSAAEnabled:NO];
         [[OAMapViewTrackingUtilities instance] updateSettings];
     }
 }

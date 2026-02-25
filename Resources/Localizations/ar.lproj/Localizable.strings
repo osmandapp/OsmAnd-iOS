@@ -692,7 +692,7 @@
 "selected_categories" = "الفئات المحددة";
 "new_filter_desc" = "رجاءا أدخل اسم لفلتر الفرز الجديد. ستتم اضافته ضمن لائحة \'الفئات الخاصة بك\'.";
 "shared_string_filters" = "تصفية";
-"edit_filter" = "تحرير الفلتر";
+"edit_filter" = "عدِّل التصفية";
 "edit_filter_save_as_menu_item" = "حفظ باسم";
 "delete_filter" = "حذف التصفية";
 "save_filter" = "حفظ التصفية";
@@ -1530,7 +1530,6 @@
 "import_raster_map_failed" = "فشل استيراد الخريطة النقطية";
 "map_settings_show_slider_map" = "إظهار شريط الشفافية على الخريطة";
 "add_online_source" = "إضافة مصدر عبر الإنترنت";
-"map_settings_hide_polygons" = "إخفاء المضلعات";
 "map_settings_hide_polygons_desc" = "يؤثر هذا الخيار على خرائط متجهات أوسماند دون اتصال فقط";
 "map_settings_add_maps_desc" = "يمكنك إضافة خرائط جديدة عبر الرابط، أو عن طريق استيراد ملفات SQLite.";
 "context_menu_points_of_group" = "جميع نقاط هذه المجموعة";
@@ -3517,7 +3516,7 @@
 "avg_sensor_temperature" = "درجة الحرارة، متوسط";
 "shared_string_reset_all" = "إعادة ضبط الجميع للافتراضي";
 "shared_string_to" = "إلى";
-"discard_filter_changes_prompt" = "إعادة تعيين كافة الفلاتر؟";
+"discard_filter_changes_prompt" = "صفّر كل التصفيات؟";
 "revolutions_per_minute_unit" = "دورة بالدقيقة";
 "power_watts_unit" = "واط";
 "root_folder" = "المجلد الرئيسي";

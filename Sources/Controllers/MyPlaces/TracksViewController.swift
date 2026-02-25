@@ -128,7 +128,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         rootVC = OARootViewController.instance()
         routingHelper = OARoutingHelper.sharedInstance()
         gpxDB = OAGPXDatabase.sharedDb()
-        smartFolderHelper = SmartFolderHelper.shared
+        smartFolderHelper = SharedLibSmartFolderHelper.shared
         
         dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short

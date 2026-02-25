@@ -15,16 +15,7 @@ final class DownloadingCell: OARightIconTableViewCell {
     }
     
     func configurePurchasePlanButton() {
-        let isRTL = isDirectionRTL()
-        let arrow = isRTL ? "arrow.left" : "arrow.right"
-        var config = UIButton.Configuration.plain()
-        config.title = localizedString("shared_string_get")
-        config.image = UIImage(systemName: arrow)
-        config.imagePlacement = isRTL ? .leading : .trailing
-        config.imagePadding = 6
-        config.baseForegroundColor = .buttonTextColorSecondary
-        config.background.backgroundColor = .buttonBgColorTertiary
-        rightButton.configuration = config
+        rightButton.configuration = .purchasePlanButtonConfiguration(title: localizedString("shared_string_get"))
         rightButton.layer.cornerRadius = 6
         rightButton.layer.masksToBounds = true
         rightButton.semanticContentAttribute = .forceLeftToRight

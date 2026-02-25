@@ -1113,3 +1113,7 @@
 "help_article_navigation_routing_brouter_name" = "BRouter";
 "shared_string_deleted" = "Izbrisano";
 "shared_string_added" = "Dodano";
+"nav_type_brouter" = "BRouter";
+"routing_attr_motor_type_diesel_name" = "Dizel";
+"obd_fuel_type_diesel" = "Dizel";
+"routing_attr_motor_type_petrol_name" = "Benzin";

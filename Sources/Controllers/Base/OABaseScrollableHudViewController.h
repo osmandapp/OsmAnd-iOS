@@ -69,4 +69,6 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 - (BOOL) shouldScrollInAllModes;
 - (BOOL) hasCustomHeaderFooter;
 
+- (BOOL)shouldIgnoreTopBottomOffsets;
+
 @end

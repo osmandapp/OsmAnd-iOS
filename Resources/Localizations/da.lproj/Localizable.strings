@@ -1487,7 +1487,6 @@
 "clear_tiles_warning" = "Hvis du anvender disse ændringer, ryddes de lagrede data for denne kortflisekilde";
 "map_settings_show_slider_map" = "Vis skyder på kortet";
 "add_online_source" = "Tilføj onlinekilde";
-"map_settings_hide_polygons" = "Skjul polygoner";
 "map_settings_hide_polygons_desc" = "Indstillingen påvirker kun Offline-vektorkort";
 "map_settings_add_maps_desc" = "Tilføj nye kort via link eller ved at importere SQLite-filer.";
 "app_mode_utv" = "Side om side";
@@ -4007,7 +4006,9 @@
 "background_opacity_description" = "Klar er mere gennemsigtig og afslører indholdet nedenunder. Tonet øger opaciteten og tilføjer mere kontrast.";
 "shared_string_pt" = "pt";
 "trip_recording_moving_time" = "Tid i bevægelse";
-"trip_recording_moving_time_widget_description" = "Viser den aktuelt registrerede tid i bevægelse eller tiden for den sidste op- og nedkørsel.";
+"trip_recording_moving_time_widget_description" = "Viser den aktuelt registrerede bevægelsestid eller tiden for den sidste op- og nedkørsel.";
 "context_menu_item_add_parking_point" = "Markér som parkeringsplads";
 "find_parking" = "Find parkering";
 "finish_navigation" = "Afslut navigation";
+"background_liquid_glass_clear_ios" = "Klar";
+"enable_msaa_carplay" = "Aktivér MSAA til CarPlay";

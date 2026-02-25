@@ -51,6 +51,7 @@ static NSString * const mapSettingShowBordersOfDownloadedMapsKey = @"mapSettingS
 static NSString * const mapSettingShowOfflineEditsKey = @"mapSettingShowOfflineEditsKey";
 static NSString * const mapSettingShowOnlineNotesKey = @"mapSettingShowOnlineNotesKey";
 static NSString * const mapSettingShowCoordinatesGridKey = @"mapSettingShowCoordinatesGridKey";
+static NSString * const showPolygonsWhenUnderlayIsOnKey = @"showPolygonsWhenUnderlayIsOnKey";
 static NSString * const coordinateGridFormatKey = @"coordinateGridFormatKey";
 static NSString * const coordinateGridMinZoomKey = @"coordinateGridMinZoomKey";
 static NSString * const coordinateGridMaxZoomKey = @"coordinateGridMaxZoomKey";
@@ -143,6 +144,7 @@ static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
 static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const batterySavingModeKey = @"batterySavingMode";
+static NSString * const enableMsaaForСarPlayKey = @"enableMsaaForСarPlayKey";
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
 static NSString * const locationRadiusVisibilityKey = @"locationRadiusVisibility";
@@ -4569,7 +4571,6 @@ static NSString *kLastUphill = @"LAST_UPHILL";
         obj.key = key;
         obj.defValue = (int)defValue;
     }
-    
     return obj;
 }
 
@@ -4607,7 +4608,7 @@ static NSString *kLastUphill = @"LAST_UPHILL";
 {
     NSNumber *value = [self valueFromString:strValue appMode:mode];
     if (value)
-        [super set:(int)value.integerValue mode:mode];
+        [super set:value.intValue mode:mode];
 }
 
 - (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
@@ -5552,6 +5553,105 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 @end
 
+@implementation OAWikiDataSourceType
+
+static NSString *kOnlineKey = @"ONLINE";
+static NSString *kOfflineKey = @"OFFLINE";
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWikiDataSourceType)defValue
+{
+    OAWikiDataSourceType *obj = [[OAWikiDataSourceType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (EOAWikiDataSourceType)get
+{
+    return [super get];
+}
+
+- (EOAWikiDataSourceType)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAWikiDataSourceType)type
+{
+    [super set:(int)type];
+}
+
+- (void)set:(EOAWikiDataSourceType)type mode:(OAApplicationMode *)mode
+{
+    [super set:(int)type mode:mode];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode {
+    BOOL paidVersion = [OAIAPHelper isPaidVersion];
+    return paidVersion ? @(0): @(1) ;
+}
+
+- (void)resetToDefault
+{
+    EOAWikiDataSourceType defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWikiDataSourceType)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:strValue appMode:mode];
+    if (value)
+        [super set:value.intValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *map;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        map = @{
+            kOnlineKey: @(EOAWikiDataSourceTypeOnline),
+            kOfflineKey: @(EOAWikiDataSourceTypeOffline)
+        };
+    });
+    return map[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    EOAWikiDataSourceType type = [self get:mode];
+    return [self toStringFromValue:@(type)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+    
+    EOAWikiDataSourceType type = [value integerValue];
+    
+    switch (type)
+    {
+        case EOAWikiDataSourceTypeOnline:
+            return kOnlineKey;
+        case EOAWikiDataSourceTypeOffline:
+            return kOfflineKey;
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -5724,6 +5824,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _mapSettingShowOfflineEdits = [OACommonBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _mapSettingShowCoordinatesGrid = [[OACommonBoolean withKey:mapSettingShowCoordinatesGridKey defValue:NO] makeProfile];
+        _showPolygonsWhenUnderlayIsOn = [[OACommonBoolean withKey:showPolygonsWhenUnderlayIsOnKey defValue:NO] makeProfile];
         _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:GridFormatDms] makeProfile];
         _coordinateGridMinZoom = [[OACommonInteger withKey:coordinateGridMinZoomKey defValue:0] makeProfile];
         _coordinateGridMaxZoom = [[OACommonInteger withKey:coordinateGridMaxZoomKey defValue:31] makeProfile];
@@ -5738,6 +5839,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         [_profilePreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
         [_profilePreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
         [_profilePreferences setObject:_mapSettingShowCoordinatesGrid forKey:@"show_coordinates_grid"];
+        [_profilePreferences setObject:_showPolygonsWhenUnderlayIsOn forKey:@"show_polygons_when_underlay_is_on"];
         [_profilePreferences setObject:_coordinateGridFormat forKey:@"coordinates_grid_format"];
         [_profilePreferences setObject:_coordinateGridMinZoom forKey:@"coordinate_grid_min_zoom"];
         [_profilePreferences setObject:_coordinateGridMaxZoom forKey:@"coordinate_grid_max_zoom"];
@@ -6545,6 +6647,9 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         _batterySavingMode = [[[OACommonBoolean withKey:batterySavingModeKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_batterySavingMode forKey:@"battery_saving"];
 
+        _enableMsaaForСarPlay = [[[OACommonBoolean withKey:enableMsaaForСarPlayKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_enableMsaaForСarPlay forKey:@"enable_msaa_car_play"];
+
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 
@@ -6652,6 +6757,12 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
         
         _simulateOBDData = [[[OACommonBoolean withKey:simulateOBDDataKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_simulateOBDData forKey:@"simulate_obd_data"];
+        
+        _wikiShowImagePreviews = [[OACommonBoolean withKey:@"wikiShowImagePreviews" defValue:YES] makeGlobal];
+        [_globalPreferences setObject:_wikiShowImagePreviews forKey:@"wiki_show_image_previews"];
+        
+        _wikiDataSourceType = [[[OAWikiDataSourceType withKey:@"wikiDataSourceType" defValue:EOAWikiDataSourceTypeOnline] makeGlobal] makeShared];
+        [_globalPreferences setObject:_wikiDataSourceType forKey:@"wiki_data_source_type"];
 
         [self fetchImpassableRoads];
 

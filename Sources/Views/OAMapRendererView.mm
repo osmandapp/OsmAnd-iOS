@@ -53,6 +53,7 @@
     GLuint _msaaDepthRenderBuffer;
     CADisplayLink* _displayLink;
     BOOL _limitFrameRate;
+    BOOL _msaaEnabled;
 
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
@@ -113,6 +114,7 @@
     _msaaDepthRenderBuffer = 0;
     _displayLink = nil;
     _lastImmediateTouchPoint = CGPointZero;
+    _msaaEnabled = NO;
 
     _viewportXScale = kViewportScale;
     _viewportYScale = kViewportScale;
@@ -850,6 +852,16 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setFogColor(fogColor);
 }
 
+- (void) setMSAAEnabled:(BOOL)enableMSAA
+{
+    if (_msaaEnabled == enableMSAA)
+        return;
+    
+    _msaaEnabled = enableMSAA;
+    if (_framebuffer != 0)
+        [self releaseRenderAndFrameBuffers];
+}
+
 - (void) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
@@ -879,7 +891,7 @@ forcedUpdate:(BOOL)forcedUpdate
 #if TARGET_IPHONE_SIMULATOR
     BOOL useMSAA = NO;
 #else
-    BOOL useMSAA = (samples >= 2);
+    BOOL useMSAA = (_msaaEnabled && samples >= 2);
 #endif
     if (useMSAA)
     {
@@ -940,6 +952,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
     validateGL();
 }
+
 - (void) releaseRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Releasing render and frame buffers", self);

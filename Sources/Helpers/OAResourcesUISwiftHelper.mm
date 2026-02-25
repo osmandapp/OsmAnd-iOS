@@ -229,6 +229,16 @@
 
 @end
 
+@implementation OAMapSourceResourceSwiftItem
+
+- (OAMapSource *)mapSource
+{
+    OAMapSourceResourceItem *res = (OAMapSourceResourceItem *)self.objcResourceItem;
+    return res.mapSource;
+}
+
+@end
+
 @implementation OAResourcesUISwiftHelper (Navigation)
 
 + (void)showLocalResourceInformationViewController:(OAResourceSwiftItem *)item
@@ -534,9 +544,30 @@
     return swiftResources;
 }
 
++ (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAtCurrentMapLocation
+{
+    CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
+    NSArray *items = [OAResourcesUIHelper findIndexItemsAt:coordinate type:OsmAndResourceType::WikiMapRegion includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
+    NSMutableArray<OAResourceSwiftItem *> *result = [NSMutableArray array];
+    for (id obj in items)
+    {
+        [result addObject:[[OAResourceSwiftItem alloc] initWithItem:obj]];
+    }
+    
+    return result;
+}
+
 + (NSString *)getCountryName:(OAResourceSwiftItem *)item
 {
     return [OAResourcesUIHelper getCountryName:item.objcResourceItem];
+}
+
++ (NSArray<OAMapSourceResourceSwiftItem *> *)sortedRasterMapSources:(BOOL)includeOffline
+{
+    NSMutableArray<OAMapSourceResourceSwiftItem *> *items = [NSMutableArray array];
+    for (OAMapSourceResourceItem *item in [OAResourcesUIHelper getSortedRasterMapSources:includeOffline])
+        [items addObject:[[OAMapSourceResourceSwiftItem alloc] initWithItem:item]];
+    return [items copy];
 }
 
 @end

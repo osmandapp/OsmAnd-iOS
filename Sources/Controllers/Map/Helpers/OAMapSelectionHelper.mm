@@ -70,7 +70,7 @@ static int TILE_SIZE = 256;
 - (MapSelectionResult *)collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
 {
     if (!_provider)
-        _provider = _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
+        _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
     
     MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:point];
     [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];

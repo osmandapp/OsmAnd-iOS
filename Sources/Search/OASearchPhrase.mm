@@ -489,16 +489,14 @@ static NSComparator _OACommonWordsComparator = nil;
 
 + (QuadRect *) calculateBbox:(NSNumber *)radiusMeters location:(CLLocation *)location
 {
-    float coeff = (float) ([radiusMeters doubleValue] / OsmAnd::Utilities::getTileDistanceWidth(ZOOM_TO_SEARCH_POI));
-    double tx = OsmAnd::Utilities::getTileNumberX(ZOOM_TO_SEARCH_POI, location.coordinate.longitude);
-    double ty = OsmAnd::Utilities::getTileNumberY(ZOOM_TO_SEARCH_POI, location.coordinate.latitude);
-    double topLeftX = MAX(0, tx - coeff);
-    double topLeftY = MAX(0, ty - coeff);
-    int max = (1 << ZOOM_TO_SEARCH_POI)  - 1;
-    double bottomRightX = MIN(max, tx + coeff);
-    double bottomRightY = MIN(max, ty + coeff);
-    double pw = OsmAnd::Utilities::getPowZoom(31 - ZOOM_TO_SEARCH_POI);
-    return [[QuadRect alloc] initWithLeft:topLeftX * pw top:topLeftY * pw right:bottomRightX * pw bottom:bottomRightY * pw];
+    OsmAnd::LatLon center(location.coordinate.latitude, location.coordinate.longitude);
+    OsmAnd::LatLon nw = OsmAnd::Utilities::rhumbDestinationPoint(center, [radiusMeters doubleValue], 315.0);
+    OsmAnd::LatLon se = OsmAnd::Utilities::rhumbDestinationPoint(center, [radiusMeters doubleValue], 135.0);
+    int left = OsmAnd::Utilities::get31TileNumberX(nw.longitude);
+    int top = OsmAnd::Utilities::get31TileNumberY(nw.latitude);
+    int right = OsmAnd::Utilities::get31TileNumberX(se.longitude);
+    int bottom = OsmAnd::Utilities::get31TileNumberY(se.latitude);
+    return [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
 }
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt

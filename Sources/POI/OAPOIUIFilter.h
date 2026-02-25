@@ -19,7 +19,7 @@ static NSString* const USER_PREFIX = @"user_";
 static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
 static NSString* const BY_NAME_FILTER_ID = @"user_by_name";
 
-@class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory, OAAmenityExtendedNameFilter;
+@class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory, OAAmenityExtendedNameFilter, OATopIndexFilter;
 
 @interface OAAmenityNameFilter : NSObject
 
@@ -59,7 +59,13 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (instancetype) initWithTopIndexFilter:(OATopIndexFilter *)filter acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 
 - (BOOL) isAutomaticallyIncreaseSearch;
-- (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (NSArray<OAPOI *> *)searchAmenities:(double)top
+                                 left:(double)left
+                               bottom:(double)bottom
+                                right:(double)right
+                                 zoom:(int)zoom
+                              matcher:(OAResultMatcher<OAPOI *> *)matcher
+                         filterUnique:(BOOL)filterUnique;
 
 + (NSComparator) getComparator;
 
@@ -79,7 +85,6 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (void) clearPreviousZoom;
 - (void) clearCurrentResults;
 - (NSArray<OAPOI *> *) initializeNewSearch:(double)lat lon:(double)lon firstTimeLimit:(int)firstTimeLimit  matcher:(OAResultMatcher<OAPOI *> *)matcher;
-- (NSArray<OAPOI *> *) searchAmenities:(double)top left:(double)left bottom:(double)bottom right:(double)right zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter;
 - (OAAmenityExtendedNameFilter *) getNameAmenityFilter:(NSString *)filter;
 - (NSString *) getNameToken24H;
@@ -108,6 +113,8 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (void) removeUnsavedFilterByName;
 - (BOOL) isWikiFilter;
 - (BOOL) isTopWikiFilter;
+- (BOOL)isTopImagesFilter;
 - (void) updateAcceptedTypeOrigins;
 - (void) setFilterByKey:(NSString *)key;
+- (NSArray<OAPOI *> *)getCurrentSearchResult:(BOOL)filterUnique;
 @end

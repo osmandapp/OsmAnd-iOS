@@ -104,7 +104,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onOutsideCellsTapped))
         tapGesture.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapGesture)
-        smartFolderHelper = SmartFolderHelper.shared
+        smartFolderHelper = SharedLibSmartFolderHelper.shared
     }
     
     override func viewWillAppear(_ animated: Bool) {

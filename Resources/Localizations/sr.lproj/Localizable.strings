@@ -4015,3 +4015,10 @@
 "finish_navigation" = "Заврши навођење";
 "background_liquid_glass_clear_ios" = "Очисти";
 "enable_msaa_carplay" = "Омогућите МСАА за КарПлеј";
+"offline_weather_forecast" = "Ванмрежна временска прогноза";
+"shared_string_online_only" = "Само мрежно";
+"shared_string_offline_only" = "Само ван мреже";
+"show_image_previews" = "Прикажи прегледе слика";
+"popular_places" = "Популарна места";
+"shared_string_wikipedia" = "Википедија";
+"poi_source" = "Извор ТОИ-а";

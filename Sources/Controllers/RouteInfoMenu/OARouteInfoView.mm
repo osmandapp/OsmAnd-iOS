@@ -1870,6 +1870,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     if (selectionDone)
     {
+        if (_routingHelper.isPublicTransportMode)
+        {
+            [_transportHelper clearCurrentRoute:nil];
+            _hasEmptyTransportRoute = YES;
+        }
         [self updateData];
         [self.tableView reloadData];
         [self layoutSubviews];

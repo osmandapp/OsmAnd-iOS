@@ -8,10 +8,10 @@
 
 #import "OABaseSettingsViewController.h"
 
-@protocol OAWikipediaScreenDelegate;
+@protocol WikipediaScreenDelegate;
 
 @interface OAWikipediaImagesSettingsViewController : OABaseSettingsViewController
 
-@property (nonatomic) id<OAWikipediaScreenDelegate> wikipediaDelegate;
+@property (nonatomic) id<WikipediaScreenDelegate> wikipediaDelegate;
 
 @end

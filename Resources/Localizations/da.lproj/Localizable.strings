@@ -4010,3 +4010,5 @@
 "context_menu_item_add_parking_point" = "Markér som parkeringsplads";
 "find_parking" = "Find parkering";
 "finish_navigation" = "Afslut navigation";
+"background_liquid_glass_clear_ios" = "Klar";
+"enable_msaa_carplay" = "Aktivér MSAA til CarPlay";

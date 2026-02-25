@@ -3973,3 +3973,5 @@
 "context_menu_item_add_parking_point" = "Megjelölés parkolóhelyként";
 "find_parking" = "Parkoló keresése";
 "finish_navigation" = "Navigáció befejezése";
+"background_liquid_glass_clear_ios" = "Tiszta";
+"enable_msaa_carplay" = "MSAA engedélyezése a CarPlay számára";

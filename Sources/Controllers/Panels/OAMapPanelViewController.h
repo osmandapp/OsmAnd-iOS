@@ -185,7 +185,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 - (void) openTargetViewWithNewGpxWptMovableTarget:(OASTrackItem *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;
-- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
+- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen showRouteOnMap:(BOOL)showRouteOnMap;
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
 
 - (BOOL) hasGpxActiveTargetType;
@@ -197,31 +197,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft
               bottomRight:(CLLocationCoordinate2D)bottomRight
-                     zoom:(float)zoom
               bottomInset:(float)bottomInset
-                leftInset:(float)leftInset
-                 animated:(BOOL)animated;
+                leftInset:(float)leftInset;
 
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
              bottomRight:(CLLocationCoordinate2D)bottomRight
-                    zoom:(float)zoom
               screenBBox:(CGSize)screenBBox
              bottomInset:(float)bottomInset
                leftInset:(float)leftInset
                 topInset:(float)topInset
-    changeElevationAngle:(BOOL)changeElevationAngle
-             presizeZoom:(BOOL)presizeZoom
-                animated:(BOOL)animated;
+    changeElevationAngle:(BOOL)changeElevationAngle;
 
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
              bottomRight:(CLLocationCoordinate2D)bottomRight
-                    zoom:(float)zoom
                  maxZoom:(float)maxZoom
               screenBBox:(CGSize)screenBBox
              bottomInset:(float)bottomInset
                leftInset:(float)leftInset
-                topInset:(float)topInset
-                animated:(BOOL)animated;
+                topInset:(float)topInset;
 
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
 - (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title;
@@ -256,8 +249,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Navigation
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle presizeZoom:(BOOL)presizeZoom;
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle presizeZoom:(BOOL)presizeZoom animated:(BOOL)animated;
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle;
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle animated:(BOOL)animated;
 
 - (void)buildRoute:(nullable CLLocation *)start
                 end:(nullable CLLocation *)end

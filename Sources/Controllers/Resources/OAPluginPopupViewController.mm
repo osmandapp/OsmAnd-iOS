@@ -573,10 +573,8 @@ static NSMutableArray *activePopups;
         {
             [[OARootViewController instance].mapPanel displayAreaOnMap:_worldRegion.bboxTopLeft
                                                            bottomRight:_worldRegion.bboxBottomRight
-                                                                  zoom:7.0
                                                            bottomInset:0
-                                                             leftInset:0
-                                                              animated:YES];
+                                                             leftInset:0];
         }
     }
     

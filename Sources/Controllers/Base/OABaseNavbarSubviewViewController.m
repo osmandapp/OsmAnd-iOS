@@ -137,10 +137,10 @@
         subview.translatesAutoresizingMaskIntoConstraints = NO;
         [containerView addSubview:subview];
         [NSLayoutConstraint activateConstraints:@[
-            [subview.topAnchor constraintEqualToAnchor:containerView.topAnchor constant:8],
-            [subview.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor constant:-8],
-            [subview.leadingAnchor constraintEqualToAnchor:containerView.leadingAnchor constant:[OAUtilities getLeftMargin] + 20],
-            [subview.trailingAnchor constraintEqualToAnchor:containerView.trailingAnchor constant:-[OAUtilities getLeftMargin] - 20],
+            [subview.topAnchor constraintEqualToAnchor:containerView.topAnchor constant:[self subviewMargin].top],
+            [subview.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor constant:[self subviewMargin].bottom],
+            [subview.leadingAnchor constraintEqualToAnchor:containerView.leadingAnchor constant:[self subviewMargin].left],
+            [subview.trailingAnchor constraintEqualToAnchor:containerView.trailingAnchor constant:[self subviewMargin].right],
             _subviewHeightConstraint,
         ]];
 
@@ -170,6 +170,11 @@
         [_containerView removeFromSuperview];
         _containerView = nil;
     }
+}
+
+- (UIEdgeInsets)subviewMargin
+{
+    return UIEdgeInsetsMake(8, [OAUtilities getLeftMargin] + 20, -8, -[OAUtilities getLeftMargin] - 20);
 }
 
 @end

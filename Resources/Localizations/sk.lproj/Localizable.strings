@@ -1095,7 +1095,7 @@
 "quick_action_switch_day_mode" = "Denný režim";
 "quick_action_edit_action" = "Upraviť akciu";
 "quick_action_map_styles" = "Štýly mapy";
-"vector_data" = "Vektorové OSM mapy";
+"vector_data" = "Vektorové off-line mapy";
 "quick_action_add_first_intermediate" = "Pridať prvý prechodný bod";
 "edit_tilesource_elliptic_tile" = "Eliptické Mercatove zobrazenie";
 "show_notes" = "Zobraziť OSM poznámky";

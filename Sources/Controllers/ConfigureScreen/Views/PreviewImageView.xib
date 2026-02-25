@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PreviewImageView" customModule="OsmAnd_Maps" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="562" height="150"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6m3-wA-l1h">
+                    <rect key="frame" x="0.0" y="0.0" width="562" height="150"/>
+                    <subviews>
+                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8sA-lh-bmS" customClass="OAHudButton">
+                            <rect key="frame" x="269" y="58" width="30" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" name="mapButtonBgColorDefault"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        </button>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GX9-hL-dei">
+                            <rect key="frame" x="269" y="60" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" name="mapStyleWaterColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="150" id="sS8-g0-GSS"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="6m3-wA-l1h" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="5Uq-4I-x18"/>
+                <constraint firstItem="6m3-wA-l1h" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="FqA-eU-cHd"/>
+                <constraint firstAttribute="bottom" secondItem="6m3-wA-l1h" secondAttribute="bottom" id="IVG-c2-Hqb"/>
+                <constraint firstAttribute="trailing" secondItem="6m3-wA-l1h" secondAttribute="trailing" id="kRV-CW-2hi"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="previewImageButton" destination="8sA-lh-bmS" id="5y2-sM-bUc"/>
+                <outlet property="previewImageView" destination="GX9-hL-dei" id="Txw-BU-OEa"/>
+            </connections>
+            <point key="canvasLocation" x="265.64885496183206" y="-105.63380281690141"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="mapButtonBgColorDefault">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="mapStyleWaterColor">
+            <color red="0.36100000143051147" green="0.76499998569488525" blue="0.89800000190734863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

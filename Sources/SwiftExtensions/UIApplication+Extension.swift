@@ -25,6 +25,13 @@ extension UIApplication {
 // MARK: - CarPlay
 extension UIApplication {
     
+    @objc var carPlayWindow: CPWindow? {
+        return connectedScenes
+            .compactMap { $0 as? CPTemplateApplicationScene }
+            .first?
+            .carWindow
+    }
+    
     /// Returns `true` if the app currently has any CarPlay-related scene connected.
     /// This includes both the main CarPlay app scene and the CarPlay Dashboard scene.
     ///

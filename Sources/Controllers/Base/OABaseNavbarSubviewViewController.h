@@ -13,5 +13,7 @@
 - (UIView *)createSubview;
 - (CGFloat)getOriginalNavbarHeight;
 - (void)updateSubviewHeight:(CGFloat)height;
+- (void)updateSubview:(BOOL)forceUpdate;
+- (UIEdgeInsets)subviewMargin;
 
 @end

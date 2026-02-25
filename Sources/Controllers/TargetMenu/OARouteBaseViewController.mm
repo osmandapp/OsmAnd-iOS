@@ -301,10 +301,8 @@
     BOOL landscape = [self isLandscapeIPadAware];
     [mapPanel displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
                    bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
-                          zoom:0
-                   bottomInset:!landscape && self.delegate ? self.delegate.getVisibleHeight + kMapMargin : 0
-                     leftInset:landscape ? self.contentView.frame.size.width + kMapMargin : 0
-                      animated:YES];
+                   bottomInset:!landscape && self.delegate ? self.delegate.getVisibleHeight : 0
+                     leftInset:landscape ? self.contentView.frame.size.width : 0];
 }
 
 - (void) adjustViewPort:(BOOL)landscape

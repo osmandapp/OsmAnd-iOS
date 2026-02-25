@@ -544,6 +544,19 @@
     return swiftResources;
 }
 
++ (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAtCurrentMapLocation
+{
+    CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
+    NSArray *items = [OAResourcesUIHelper findIndexItemsAt:coordinate type:OsmAndResourceType::WikiMapRegion includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
+    NSMutableArray<OAResourceSwiftItem *> *result = [NSMutableArray array];
+    for (id obj in items)
+    {
+        [result addObject:[[OAResourceSwiftItem alloc] initWithItem:obj]];
+    }
+    
+    return result;
+}
+
 + (NSString *)getCountryName:(OAResourceSwiftItem *)item
 {
     return [OAResourcesUIHelper getCountryName:item.objcResourceItem];

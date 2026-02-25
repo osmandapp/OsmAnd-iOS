@@ -30,7 +30,6 @@ static CGFloat kMarkWidth = 2;
     UIImpactFeedbackGenerator *_feedbackGenerator;
 
     NSInteger _numberOfMarks;
-    NSInteger _selectingMark;
     NSInteger _additionalMarksBetween;
     BOOL _isCustomSlider;
     BOOL _useExtraThumbOffset;
@@ -519,6 +518,8 @@ static CGFloat kMarkWidth = 2;
 
         if (_selectingMarkTitleBackground)
             [self layoutSelectingTitle];
+        
+        [self.delegate onSliderValueChanged];
     }
 }
 

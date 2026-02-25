@@ -14,16 +14,16 @@ import CoreLocation
 import UIKit
 
 @objcMembers
-class MapSelectionResult: NSObject {
+final class MapSelectionResult: NSObject {
     
-    private var lang: String
-    private(set) var point: CGPoint
     var pointLatLon: CLLocation?
     var objectLatLon: CLLocation?
     
-    private var poiProvider: OAContextMenuProvider
-    
+    private(set) var point: CGPoint
     private(set) var allObjects: Array<SelectedMapObject>
+    
+    private var lang: String
+    private var poiProvider: OAContextMenuProvider
     private var processedObjects: Array<SelectedMapObject>
     
     init(point: CGPoint) {
@@ -73,7 +73,7 @@ class MapSelectionResult: NSObject {
         var detailsObjects = Array<BaseDetailsObject>()
         for selectedObject in selectedObjects {
             let object = selectedObject.object
-            var overlapped = collectOverlappedObjects(object, detailsObjects: detailsObjects)
+            let overlapped = collectOverlappedObjects(object, detailsObjects: detailsObjects)
             
             let detailsObject: BaseDetailsObject
             if overlapped.count == 0 {
@@ -97,10 +97,10 @@ class MapSelectionResult: NSObject {
     }
     
     private func collectOverlappedObjects(_ object: Any, detailsObjects: [BaseDetailsObject]) -> [BaseDetailsObject] {
-        return detailsObjects.filter { $0.overlapsWith(object) }
+        detailsObjects.filter { $0.overlapsWith(object) }
     }
     
     func isEmpty() -> Bool {
-        allObjects.count == 0
+        allObjects.isEmpty
     }
 } 

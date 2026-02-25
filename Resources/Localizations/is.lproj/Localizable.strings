@@ -734,7 +734,7 @@
 "poi_overlay" = "Þekja merkisstaða";
 "save_current_track_descr" = "Vista núverandi feril sem GPX-skrá núna.";
 "shared_string_clear" = "Hreinsa";
-"save_track_to_gpx" = "Skrifa feril sjálfkrafa í GPX-skrá á meðan leiðsögn stendur";
+"save_track_to_gpx" = "Skrifa feril sjálfkrafa á meðan leiðsögn stendur";
 "save_track_to_gpx_descrp" = "Byrja skráningu ferils sjálfvirkt á meðan leiðsögn stendur og vista síðan ferillinn sjálfkrafa.";
 "shared_string_help" = "Hjálp";
 // Help
@@ -3887,3 +3887,6 @@
 "routing_attr_weightrating_name" = "Hámarksþyngd með fulla hleðslu";
 "routing_attr_maxaxleload_name" = "Hámarks öxulþungi";
 "lang_crh" = "Tataríska frá Krím (latnesk)";
+"trip_recording_moving_time" = "Tími á hreyfingu";
+"lang_mi" = "Maórí";
+"copy_link" = "Afrita tengil";

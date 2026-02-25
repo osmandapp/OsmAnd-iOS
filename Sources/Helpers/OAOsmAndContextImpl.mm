@@ -13,6 +13,7 @@
 #import "OASelectedGpxHelper.h"
 #import "OAGPXUIHelper.h"
 #import "OAPOI.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kGpxRecDir = @"rec";
 static NSString * const kGpxImportDir = @"import";
@@ -238,6 +239,11 @@ static NSString * const kGpxImportDir = @"import";
 - (id<OASGpxTrackAnalysisTrackPointsAnalyser> _Nullable)getTrackPointsAnalyser
 {
     return nil;
+}
+
+- (OASSmartFolderHelper *)getSmartFolderHelper
+{
+    return SharedLibSmartFolderHelper.shared;
 }
 
 - (OASSpeedConstants * _Nullable)getSpeedSystem __attribute__((swift_name("getSpeedSystem()")))

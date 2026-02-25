@@ -4007,7 +4007,7 @@
 "background_opacity_description" = "Klar er mere gennemsigtig og afslører indholdet nedenunder. Tonet øger opaciteten og tilføjer mere kontrast.";
 "shared_string_pt" = "pt";
 "trip_recording_moving_time" = "Tid i bevægelse";
-"trip_recording_moving_time_widget_description" = "Viser den aktuelt registrerede tid i bevægelse eller tiden for den sidste op- og nedkørsel.";
+"trip_recording_moving_time_widget_description" = "Viser den aktuelt registrerede bevægelsestid eller tiden for den sidste op- og nedkørsel.";
 "context_menu_item_add_parking_point" = "Markér som parkeringsplads";
 "find_parking" = "Find parkering";
 "finish_navigation" = "Afslut navigation";

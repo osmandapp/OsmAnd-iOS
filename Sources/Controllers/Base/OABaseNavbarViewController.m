@@ -259,14 +259,17 @@
         blurAppearance.shadowImage = nil;
     }
     
-    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
+    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange || [self shouldBlurAppearanceNavBar])
     {
-        blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-        blurAppearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
-        blurAppearance.titleTextAttributes = @{
-            NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-            NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
-        };
+        blurAppearance.backgroundColor = [self blurAppearanceBackgroundColor];
+        if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
+        {
+            blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+            blurAppearance.titleTextAttributes = @{
+                NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+                NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
+            };
+        }
     }
     
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
@@ -274,6 +277,16 @@
 
     self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
     self.navigationItem.largeTitleDisplayMode = isLargeTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
+}
+
+- (UIColor *)blurAppearanceBackgroundColor
+{
+    return [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+}
+
+- (BOOL)shouldBlurAppearanceNavBar
+{
+    return NO;
 }
 
 - (void)updateNavbar

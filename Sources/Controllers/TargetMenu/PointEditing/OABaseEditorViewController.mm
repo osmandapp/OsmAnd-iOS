@@ -140,6 +140,11 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
 }
 
+- (UIColor *)blurBackgroundColor
+{
+    return [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+}
+
 #pragma mark - Table data
 
 - (void)generateData

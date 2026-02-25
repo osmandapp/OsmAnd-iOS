@@ -161,6 +161,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
             let arrayValue = item.obj(forKey: Self.arrayValuesKey) as? [String] ?? []
             cell.delegate = self
             cell.sliderView.setNumberOfMarks(arrayValue.count)
+            cell.sliderView.maximumTrackTintColor = .sliderLineBg
             if let index = arrayValue.firstIndex(of: value) {
                 cell.sliderView.selectedMark = index
                 cell.setupButtonsEnabling()
@@ -181,7 +182,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
             cell.slider.removeTarget(self, action: nil, for: .valueChanged)
             cell.slider.addTarget(self, action: #selector(sliderChanged(sender:)), for: .valueChanged)
             cell.slider.tintColor = .menuButton
-            cell.slider.maximumTrackTintColor = .sliderGray
+            cell.slider.maximumTrackTintColor = .sliderLineBg
             cell.topLeftLabel.text = item.title
             
             if #available(iOS 26, *) {

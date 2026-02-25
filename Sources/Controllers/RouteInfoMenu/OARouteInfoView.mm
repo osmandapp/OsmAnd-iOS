@@ -1708,11 +1708,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (cell)
         {
             NSInteger routeIndex = [item[@"route_index"] integerValue];
-            if (_transportHelper.getRoutes.size() > 0)
-            {
-                cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
-                cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
-            }
+            cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
+            cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.detailsButton setTitle:OALocalizedString(@"shared_string_details") forState:UIControlStateNormal];
             cell.detailsButton.tag = routeIndex;
@@ -1742,10 +1739,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             NSInteger routeIndex = [item[@"route_index"] integerValue];
             const auto& routes = _transportHelper.getRoutes;
-            if (routes.size() > 0)
-            {
-                [cell setData:routes[routeIndex]];
-            }
+            [cell setData:routes[routeIndex]];
         }
         
         return cell;
@@ -1905,7 +1899,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:[OARouteProgressBarCell getCellIdentifier]])
         return 2.0;
-    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]] && _transportHelper.getRoutes.size() > 0)
+    else if ([item[@"cell"] isEqualToString:[OAPublicTransportShieldCell getCellIdentifier]])
         return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
     return UITableViewAutomaticDimension;
 }

@@ -125,4 +125,6 @@
 
 - (void) targetResetCustomStatusBarStyle;
 
+- (void)contextMenuDidHide;
+
 @end

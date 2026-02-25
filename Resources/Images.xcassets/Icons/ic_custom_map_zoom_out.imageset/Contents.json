@@ -1,18 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "ic_custom_map_zoom_out@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "ic_custom_map_zoom_out@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "ic_custom_map_zoom_out.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

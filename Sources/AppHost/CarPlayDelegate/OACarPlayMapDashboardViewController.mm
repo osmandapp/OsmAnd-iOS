@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
+#import "OAAppSettings.h"
 
 @interface OACarPlayMapDashboardViewController ()
 
@@ -41,7 +42,7 @@
         [self.view addSubview:_mapVc.view];
         _mapVc.view.frame = self.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
+        [_mapVc.mapView setMSAAEnabled:[[OAAppSettings sharedManager].enableMsaaForСarPlay get]];
         [_mapVc.mapView resumeRendering];
     }
 }
@@ -51,7 +52,7 @@
     if (_mapVc)
     {
         [_mapVc.mapView suspendRendering];
-        
+        [_mapVc.mapView setMSAAEnabled:NO];
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
         

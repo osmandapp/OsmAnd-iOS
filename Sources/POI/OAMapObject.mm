@@ -166,4 +166,32 @@
     return [NSString stringWithFormat:@"%@ (%llu)", name, _obfId];
 }
 
++ (void)parseNamesJSON:(NSString *)json
+                object:(OAMapObject *)object
+{
+    if (!json)
+        return;
+
+    NSData *data = [json dataUsingEncoding:NSUTF8StringEncoding];
+    if (!data)
+    {
+        NSLog(@"Error: Could not convert string to UTF-8 data");
+        return;
+    }
+
+    NSError *error = nil;
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data
+                                                            options:0
+                                                              error:&error];
+
+    if (error)
+    {
+        NSLog(@"Error parsing json: %@", error.localizedDescription);
+        return;
+    }
+
+    if ([jsonDict isKindOfClass:[NSDictionary class]])
+        object.localizedNames = [jsonDict mutableCopy];
+}
+
 @end

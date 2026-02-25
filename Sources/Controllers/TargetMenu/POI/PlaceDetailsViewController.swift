@@ -69,7 +69,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     private func buildDescription(amenity: OAPOI, allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
-        guard let extensions = amenity.getAmenityExtensions(false) else { return false}
+        let extensions = amenity.getAmenityExtensions(false)
         let bundle = AdditionalInfoBundle(additionalInfo: extensions)
         let filteredInfo = bundle.getFilteredLocalizedInfo()
         
@@ -157,7 +157,10 @@ final class PlaceDetailsViewController: OAPOIViewController {
         guard let detailsObjectAmenities = detailsObject?.getAmenities() else { return [] }
         
         for amenity in detailsObjectAmenities {
-            if amenity.type.category.isWiki() {
+            guard let type = amenity.type else {
+                continue
+            }
+            if type.category.isWiki() {
                 amenities.append(amenity)
             }
         }

@@ -35,6 +35,10 @@
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
 #import "OAPointDescription.h"
+#import "QuadTree.h"
+#import "OAMapTopPlace.h"
+#import "OANativeUtilities.h"
+#import "OAPOILayerTopPlacesProvider.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
@@ -48,6 +52,10 @@
 #include <OsmAndCore/NetworkRouteSelector.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/Map/IOnPathMapSymbol.h>
+#include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
+#include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/Map/MapMarker.h>
 
 #define kPoiSearchRadius 50 // AMENITY_SEARCH_RADIUS
 #define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
@@ -73,11 +81,15 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     NSString *_prefLang;
     
     OAPOIFiltersHelper *_filtersHelper;
-    
-    NSMutableDictionary<NSNumber *, OAPOI *> *_topPlaces;
+    OAPOILayerTopPlacesProvider *_topPlacesProvider;
     
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
+}
+
+- (void)onMapFrameRendered
+{
+    [_topPlacesProvider drawTopPlacesIfNeeded:NO];
 }
 
 - (void)initLayer
@@ -85,6 +97,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     [super initLayer];
 
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
+    _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
 }
 
 - (NSString *) layerId
@@ -106,7 +119,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         _wikiSymbolsProvider.reset();
         _showWikiOnMap = NO;
     }
-
+    [_topPlacesProvider resetLayer];
 }
 
 - (void) updateVisiblePoiFilter
@@ -154,6 +167,8 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return NO;
 
     [self updateVisiblePoiFilter];
+    [_topPlacesProvider updateLayer];
+    
     return YES;
 }
 
@@ -510,9 +525,114 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             return YES;
         }
     }
+    
     return NO;
 }
 
+//<<<<<<< HEAD
+//=======
+//- (void)collectObjectsFromPoint:(MapSelectionResult *)result
+//                unknownLocation:(BOOL)unknownLocation
+//      excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+//{
+//    NSMutableArray<OAPOI *> *allAmenities = [NSMutableArray array];
+//
+//      NSArray<OAPOI *> *amenities =
+//          [self getDisplayedResults:result.pointLatLon.coordinate.latitude
+//                                lon:result.pointLatLon.coordinate.longitude];
+//
+//      if (amenities.count > 0)
+//      {
+//          [allAmenities addObjectsFromArray:amenities];
+//      }
+//      else
+//      {
+//          CGPoint point = result.point;
+//          int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * (TOUCH_RADIUS_MULTIPLIER * 2);
+//          QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+//          if (!touchPolygon31.isEmpty())
+//          {
+//              NSArray<OAPOI *> *topPlaces = [_topPlacesProvider getDisplayedResultsFor:touchPolygon31];
+//
+//              if (topPlaces.count > 0)
+//                  [allAmenities addObjectsFromArray:topPlaces];
+//          }
+//      }
+//
+//      for (OAPOI *amenity in allAmenities)
+//      {
+//          [result collect:amenity provider:self];
+//      }
+//}
+
+- (void)contextMenuDidShow:(id)targetObj
+{
+    OAPOI *amenity = [self getAmenity:targetObj];
+    if (amenity)
+    {
+        [_topPlacesProvider updateSelectedTopPlaceIfNeeded:amenity];
+    }
+    else
+    {
+        [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
+    }
+}
+
+- (void)contextMenuDidHide
+{
+    [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
+}
+
+//- (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon
+//{
+//    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+//    if (!_amenitySymbolsProvider)
+//        return result;
+//    
+//    const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+//    OsmAnd::AreaI area31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
+//    const auto tileId = OsmAnd::Utilities::getTileId(point31, self.mapView.zoomLevel);
+//    
+//    OsmAnd::IMapTiledSymbolsProvider::Request request;
+//    request.tileId = tileId;
+//    request.zoom = self.mapView.zoomLevel;
+//    const auto& mapState = [self.mapView getMapState];
+//    request.mapState = mapState;
+//    request.visibleArea31 = area31;
+//    
+//    std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
+//    _amenitySymbolsProvider->obtainData(request, data, nullptr);
+//    
+//    std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider::Data> tiledData =
+//        std::static_pointer_cast<OsmAnd::IMapTiledSymbolsProvider::Data>(data);
+//    if (tiledData && !tiledData->symbolsGroups.isEmpty())
+//    {
+//        for (const auto group : tiledData->symbolsGroups)
+//        {
+//            if (!group->symbols.isEmpty())
+//            {
+//                for (const auto symbol : group->symbols)
+//                {
+//                    if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbol->groupPtr))
+//                    {
+//                        if (const auto cppAmenity = amenitySymbolGroup->amenity)
+//                        {
+//                            if (area31.contains(cppAmenity->position31))
+//                            {
+//                                OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
+//                                if (poi)
+//                                    [result addObject:poi];
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return [result copy];
+//}
+
+//>>>>>>> master
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
@@ -520,23 +640,43 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (int64_t) getSelectionPointOrder:(id)selectedObject
 {
-    if ([self isTopPlace:selectedObject])
+    if ([self isTopPlace:selectedObject]) {
         return [self getTopPlaceBaseOrder];
-    else
+    } else {
         return 0;
+    }
 }
 
-- (BOOL) isTopPlace:(id)object
+- (BOOL)isTopPlace:(id)object
 {
-    if (_topPlaces)
+    NSDictionary<NSNumber *, OAPOI *> *topPlaces = [_topPlacesProvider topPlaces];
+    if (!topPlaces || !object)
+        return NO;
+    
+    if ([object isKindOfClass:OAPOI.class])
     {
-        int64_t placeId = -1;
-        if ([object isKindOfClass:OAPOI.class])
-            placeId = ((OAPOI *)object).obfId;
-        else if ([object isKindOfClass:BaseDetailsObject.class])
-            placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
+        int64_t obfId = ((OAPOI *)object).obfId;
+        return topPlaces[@(obfId)] != nil;
+    }
+    
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *details = (BaseDetailsObject *)object;
+//        int64_t placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
+//        
+////<<<<<<< HEAD 14114303922
+//        return placeId > 0 && topPlaces[@(placeId)];
+//=======
+        int64_t obfId = details.syntheticAmenity.obfId;
+        if (topPlaces[@(obfId)])
+            return YES;
         
-        return placeId > 0 && _topPlaces[@(placeId)];
+        for (OAPOI *poi in details.objects)
+        {
+            if (topPlaces[@(poi.obfId)])
+                return YES;
+        }
+//>>>>>>> master
     }
     
     return NO;
@@ -549,7 +689,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (LatLon) parsePoiLatLon:(QString)value
 {
-    OASKGeoParsedPoint * p = [OASKMapUtils.shared decodeShortLinkStringS:value.toNSString()];
+    OASKGeoParsedPoint *p = [OASKMapUtils.shared decodeShortLinkStringS:value.toNSString()];
     return LatLon(p.getLatitude, p.getLongitude);
 }
 

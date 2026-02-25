@@ -142,7 +142,8 @@ typedef enum
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
 
-@property (strong, nonatomic) OATargetPointView* targetMenuView;
+@property (strong, nonatomic) OATargetPointView *targetMenuView;
+
 @property (strong, nonatomic) OATargetMultiView* targetMultiMenuView;
 @property (strong, nonatomic) UIButton* shadowButton;
 
@@ -1359,8 +1360,7 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
     
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAContextMenuLayer *contextLayer = mapPanel.mapViewController.mapLayers.contextMenuLayer;
+    OAContextMenuLayer *contextLayer = self.mapViewController.mapLayers.contextMenuLayer;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
@@ -1488,6 +1488,7 @@ typedef enum
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
+        [_mapViewController contextMenuDidShow:targetPoint.targetObj];
         if (targetPoint.centerMap)
             [self goToTargetPointWithZoom:preferredZoom];
         
@@ -1566,7 +1567,6 @@ typedef enum
             OASGpxDataItem *dataItem = (OASGpxDataItem *)targetPoint.targetObj;
             trackItem = [[OASTrackItem alloc] initWithFile:dataItem.file];
             trackItem.dataItem = dataItem;
-            trackItem.color;
         }
         else if ([targetPoint.targetObj isKindOfClass:[OASGpxFile class]])
         {
@@ -2017,6 +2017,7 @@ typedef enum
     if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen)
         || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated)
         || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph
+        || self.targetMenuView.targetPoint.type == OATargetTransportRouteDetails
         || self.targetMenuView.targetPoint.type == OATargetChangePosition)
         return;
     
@@ -2290,6 +2291,11 @@ typedef enum
     [_mapViewController hideContextPinMarker];
 }
 
+- (void)contextMenuDidHide
+{
+    [_mapViewController contextMenuDidHide];
+}
+
 - (void) targetHide
 {
     [_mapViewController hideContextPinMarker];
@@ -2397,6 +2403,11 @@ typedef enum
 }
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
+{
+    [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete afterComplete:nil];
+}
+
+- (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete afterComplete:(void (^)(void))afterComplete
 {
     [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
@@ -2555,6 +2566,8 @@ typedef enum
     [_hudViewController updateDependentButtonsVisibility];
     [self.targetMenuView show:YES onComplete:^{
         self.sidePanelController.recognizesPanGesture = NO;
+        if (afterComplete)
+            afterComplete();
     }];
 }
 
@@ -2662,7 +2675,6 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
-        
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -3193,7 +3205,7 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen
+- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen showRouteOnMap:(BOOL)showRouteOnMap
 {
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
@@ -3228,6 +3240,18 @@ typedef enum
         if (showFullScreeen)
             [_targetMenuView requestFullScreenMode];
         _activeTargetActive = YES;
+    } afterComplete:^{
+        if (showRouteOnMap)
+        {
+            auto routeBBox = OATransportRoutingHelper.sharedInstance.getBBox;
+            BOOL landscape = [_targetMenuView isLandscape];
+            auto leftInset = landscape ? _targetMenuView.frame.origin.x + self.targetMenuView.frame.size.width : 0.0;
+            auto bottomInset = landscape ? 0.0 : (showFullScreeen ? _targetMenuView.customController.additionalContentOffset : [_targetMenuView getVisibleHeight]);
+            [self displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
+                       bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)
+                       bottomInset:bottomInset
+                         leftInset:leftInset];
+        }
     }];
 }
 
@@ -3838,7 +3862,7 @@ typedef enum
     if (bounds.topLeft.latitude == DBL_MAX)
         return;
         
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
         OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
         float appliedLeftInset = 0.0f;
@@ -4126,11 +4150,24 @@ typedef enum
 
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle animated:(BOOL)animated
 {
+    CGFloat bottomInset;
+    CGFloat leftInset;
     BOOL landscape = [self.targetMenuView isLandscape];
+    if ([_routeInfoView superview])
+    {
+        bottomInset = !landscape ? _routeInfoView.frame.size.height : 0.0;
+        leftInset = landscape ? _routeInfoView.frame.size.width : 0.0;
+    }
+    else
+    {
+        bottomInset = [OARootViewController.instance.mapPanel.hudViewController getHudBottomOffset];
+        leftInset = 0.0;
+    }
+    
     [self displayAreaOnMap:topLeft
                bottomRight:bottomRight
-               bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height : 0.
-                 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width : 0.
+               bottomInset:bottomInset
+                 leftInset:leftInset
       changeElevationAngle:changeElevationAngle];
 }
 
@@ -4415,11 +4452,10 @@ typedef enum
         [_mapViewController removeFromParentViewController];
         [_mapViewController.view removeFromSuperview];
         
-        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
         
-        [mapPanel addChildViewController:_mapViewController];
-        [mapPanel.view insertSubview:_mapViewController.view atIndex:0];
-        _mapViewController.view.frame = mapPanel.view.frame;
+        [self addChildViewController:_mapViewController];
+        [self.view insertSubview:_mapViewController.view atIndex:0];
+        _mapViewController.view.frame = self.view.frame;
         _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateBackground)
             [_mapViewController.mapView resumeRendering];

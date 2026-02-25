@@ -1559,7 +1559,7 @@
 "download_map_dialog" = "下載地圖對話框";
 "navigate_point_northing" = "北行線";
 "added_profiles" = "已新增設定檔";
-"navigate_point_olc" = "開放地址識別碼（OLC）";
+"navigate_point_olc" = "開放位置編號（OLC）";
 "rendering_value_walkingRoutesOSMCNodes_description" = "根據其節點網路類型（國際、區域、當地）為路徑上色。";
 "some_articles_may_not_available_in_lang" = "某些維基百科的文章可能無法以您的語言提供。";
 "shared_string_wifi_only" = "只有在 Wi-Fi";
@@ -1997,7 +1997,7 @@
 "use_login_and_password" = "使用使用者名稱與密碼";
 "quick_action_current_location_widget_descr" = "切換是否要在地圖上顯示或隱藏目前的位置。";
 "shared_string_cross_buy" = "跨平台購買";
-"shared_string_recorded" = "錄音檔";
+"shared_string_recorded" = "已錄製";
 "quick_action_contour_lines_descr" = "在地圖上顯示或隱藏等高線的按鈕。";
 "download_heightmap_maps" = "高度圖";
 "sign_in_with_open_street_map" = "使用 OpenStreetMap 登入";
@@ -3722,7 +3722,7 @@
 "obd_engine_runtime" = "引擎運轉時間";
 "obd_fuel_type_bifuel_gasoline" = "雙燃料汽油";
 "obd_speed_desc" = "顯示來自車速感測器的車速。";
-"simulate_obd" = "模擬 OBD 資料";
+"simulate_obd" = "模擬 obd 資料";
 "obd_fuel_consumption_rate_liter_hour" = "燃料消耗率";
 "obd_fuel_type_hybrid_ethanol" = "混合動力乙醇";
 "average_temperature" = "平均溫度";
@@ -3992,3 +3992,5 @@
 "context_menu_item_add_parking_point" = "標記為停車位置";
 "find_parking" = "尋找停車場";
 "finish_navigation" = "完成導航";
+"background_liquid_glass_clear_ios" = "敞亮";
+"enable_msaa_carplay" = "在 CarPlay 上啟用 MSAA";

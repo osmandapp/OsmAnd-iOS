@@ -706,7 +706,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
             const auto left = OsmAnd::Utilities::get31LongitudeX(rect.left());
             const auto bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom());
             const auto right = OsmAnd::Utilities::get31LongitudeX(rect.right());
-            amenities = [[filter searchAmenities:top left:left bottom:bottom right:right zoom:-1 matcher:nil] mutableCopy];
+            amenities = [[filter searchAmenities:top left:left bottom:bottom right:right zoom:-1 matcher:nil filterUnique:NO] mutableCopy];
             radius *= kNearbyPoiSearchFactory;
         }
     

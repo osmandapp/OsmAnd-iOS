@@ -74,8 +74,6 @@
     
     id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
     
-    NSArray<OAMapLayer *> *_pointLayers;
-    
     CGPoint _cachedTargetPoint;
     
     OAMapSelectionHelper *_mapSelectionHelper;
@@ -440,7 +438,7 @@
 {
     MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
     CLLocation *pointLatLon = result.pointLatLon;
-    NSMutableArray<SelectedMapObject *> *selectedObjects = [result getProcessedObjects];
+    NSMutableArray<SelectedMapObject *> *selectedObjects = [[result getProcessedObjects] mutableCopy];
     
     int64_t objectSelectionThreshold = 0;
     for (SelectedMapObject *selectedObject in selectedObjects)
@@ -487,6 +485,7 @@
     
     if (objectSelectionThreshold < 0)
     {
+        // FIXME:
         selectedObjects = objectsAvailableForSelection;
     }
     

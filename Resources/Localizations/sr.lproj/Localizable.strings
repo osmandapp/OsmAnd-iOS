@@ -4013,3 +4013,5 @@
 "context_menu_item_add_parking_point" = "Означи као положај паркинга";
 "find_parking" = "Пронађи паркиралиште";
 "finish_navigation" = "Заврши навођење";
+"background_liquid_glass_clear_ios" = "Очисти";
+"enable_msaa_carplay" = "Омогућите МСАА за КарПлеј";

@@ -121,7 +121,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (NSString *) getTypeStr
 {
-    return [self.poi getSubTypeStr];
+    return [self.poi getMainSubtypeStr];
 }
 
 - (UIColor *) getAdditionalInfoColor

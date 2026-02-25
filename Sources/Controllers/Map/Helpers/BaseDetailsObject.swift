@@ -90,7 +90,7 @@ final class BaseDetailsObject: NSObject {
         objectCompleteness == .empty
     }
 
-
+    @discardableResult
     func addObject(_ object: Any) -> Bool {
         guard isSupportedObjectType(object) else { return false }
 
@@ -398,7 +398,7 @@ final class BaseDetailsObject: NSObject {
         }
 
         if let amenityContent = amenity.localizedContent, amenityContent.count > 0 {
-            let localizedContent = MutableOrderedDictionary<NSString, NSString>(dictionary: syntheticAmenity.localizedContent)
+            let localizedContent = MutableOrderedDictionary<NSString, NSString>(dictionary: syntheticAmenity.localizedContent!)
             localizedContent.addEntries(from: amenityContent as! [NSString : NSString])
             syntheticAmenity.localizedContent = localizedContent
         }
@@ -696,4 +696,3 @@ final class BaseDetailsObject: NSObject {
         }
     }
 }
-

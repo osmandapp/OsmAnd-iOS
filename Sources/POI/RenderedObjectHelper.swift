@@ -20,6 +20,84 @@ final class RenderedObjectHelper: NSObject {
             return syntheticAmenity.getSubTypeStr()
         }
     }
+//    // FIXME: mb unused 
+//    static func getSyntheticAmenity(renderedObject: OARenderedObject) -> OAPOI {
+//        let poi = OAPOI()
+//        poi.type = OAPOIHelper.sharedInstance().getDefaultOtherCategoryType()
+//        poi.subType = ""
+//        
+//        var pt: OAPOIType?
+//        var otherPt: OAPOIType?
+//        var subtype: String?
+//        let additionalInfo = MutableOrderedDictionary<NSString, NSString>()
+//        var localizedNames = [String: String]()
+//        
+//        for e in renderedObject.tags {
+//            guard let tag = e.key as? String, let value = e.value as? String else { continue }
+//            
+//            if tag == "name" {
+//                poi.name = value
+//                continue
+//            }
+//            if tag.hasPrefix("name:") {
+//                localizedNames[tag.substring(to: "name:".length)] = value
+//                continue
+//            }
+//            if tag == "amenity" {
+//                if let pt {
+//                    otherPt = pt
+//                }
+//                pt = OAPOIHelper.sharedInstance().getPoiType(byKey: value)
+//            } else {
+//                if let poiType = OAPOIHelper.sharedInstance().getPoiType(byKey: tag + "_" + value) {
+//                    otherPt = pt != nil ? poiType : otherPt
+//                    subtype = pt == nil ? value : subtype
+//                    pt = pt == nil ? poiType : pt
+//                }
+//            }
+//            if value.isEmpty && otherPt == nil {
+//                otherPt = OAPOIHelper.sharedInstance().getPoiType(byKey: tag)
+//            }
+//            if otherPt == nil {
+//                let poiType = OAPOIHelper.sharedInstance().getPoiType(byKey: value)
+//                if let poiType, poiType.getOsmTag() == tag {
+//                    otherPt = poiType
+//                }
+//            }
+//            if !value.isEmpty {
+//                let translate = OAPOIHelper.sharedInstance().getTranslation(tag + "_" + value)
+//                let translate2 = OAPOIHelper.sharedInstance().getTranslation(value)
+//                if let translate, let translate2 {
+//                    additionalInfo.setObject(translate2 as NSString, forKey: translate as NSString)
+//                } else {
+//                    additionalInfo.setObject(value as NSString, forKey: tag as NSString)
+//                }
+//            }
+//        }
+//        
+//        if let pt {
+//            poi.type = pt
+//        } else if let otherPt {
+//            poi.type = otherPt
+//        }
+//        if let subtype {
+//            poi.subType = subtype
+//        }
+//        
+//        poi.obfId = renderedObject.obfId
+//        poi.values = additionalInfo as MutableOrderedDictionary
+//        poi.localizedNames = NSMutableDictionary(dictionary: localizedNames) 
+//        poi.latitude = renderedObject.labelLatLon.coordinate.latitude
+//        poi.longitude = renderedObject.labelLatLon.coordinate.longitude
+//        poi.setXYPoints(renderedObject)
+//        poi.name = (poi.name?.isEmpty == false) ? poi.name : renderedObject.name
+//
+//        if poi.name == nil || poi.name!.isEmpty {
+//            poi.name = searchObjectNameByAmenityTags(for: poi)
+//        }
+//
+//        return poi
+//    }
 
     static func searchObjectNameByAmenityTags(for amenity: OAPOI) -> String? {
         guard let translator = OAPOIHelper.sharedInstance() else { return nil }

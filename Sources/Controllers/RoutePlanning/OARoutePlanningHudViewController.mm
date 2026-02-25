@@ -312,15 +312,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self addNewGpxData:[self getGpxFile:_fileName]];
     else if (_editingContext.isApproximationNeeded && self.isFollowTrackMode)
         [self enterApproximationMode];
-    
-    [_mapPanel.mapViewController.mapLayers.weatherLayerLow hideMapCenterMarker];
-    [_mapPanel.mapViewController.mapLayers.weatherLayerHigh hideMapCenterMarker];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [_mapPanel.mapViewController.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -331,12 +322,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 		[self enterApproximationMode];
 
     [_mapPanel targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    [_mapPanel.hudViewController.mapInfoController updateLayout];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -421,6 +406,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (BOOL) showStatusBarWhenFullScreen
 {
     return NO;
+}
+
+- (BOOL)shouldIgnoreTopBottomOffsets
+{
+    return YES;
 }
 
 - (CGFloat)initialMenuHeight

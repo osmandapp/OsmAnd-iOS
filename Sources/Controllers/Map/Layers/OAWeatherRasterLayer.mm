@@ -374,13 +374,13 @@
         if (!centerPixelChanged && !frameChanged && _cachedAnyWidgetVisible == anyWidgetVisible)
             return;
 
-        if (!anyWidgetVisible || [OARootViewController instance].mapPanel.activeTargetType == OATargetRoutePlanning)
+        if (!anyWidgetVisible)
         {
-            [self hideMapCenterMarker];
+            [self setMapCenterMarkerVisibility:NO];
         }
         else if (anyWidgetVisible)
         {
-            [self hideMapCenterMarker];
+            [self setMapCenterMarkerVisibility:NO];
             [self setMapCenterMarkerVisibility:YES];
         }
 
@@ -432,11 +432,6 @@
             }
         }
     }
-}
-
-- (void)hideMapCenterMarker
-{
-    [self setMapCenterMarkerVisibility:NO];
 }
 
 @end

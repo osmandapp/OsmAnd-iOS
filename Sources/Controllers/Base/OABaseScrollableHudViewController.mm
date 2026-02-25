@@ -11,6 +11,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -28,6 +29,7 @@
 @implementation OABaseScrollableHudViewController
 {
     OAAppSettings *_settings;
+    OAMapPanelViewController *_mapPanel;
     
     UIPanGestureRecognizer *_panGesture;
     
@@ -83,6 +85,7 @@
     }
     _currentState = [self hasInitialState] ? EOADraggableMenuStateInitial : EOADraggableMenuStateExpanded;
     _menuHudMode = EOAScrollableMenuHudBaseMode;
+    _mapPanel = [OARootViewController instance].mapPanel;
 
     _sliderView.layer.cornerRadius = 3.;
     _statusBarBackgroundView.hidden = ![self hasCustomStatusBar];
@@ -96,6 +99,15 @@
         [weakSelf layoutSubviews];
     }];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    if ([self shouldIgnoreTopBottomOffsets])
+        [_mapPanel.mapViewController.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if ([self shouldIgnoreTopBottomOffsets])
+        [_mapPanel.hudViewController.mapInfoController updateLayout];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -107,6 +119,11 @@
         return UIStatusBarStyleDarkContent;
     else
         return UIStatusBarStyleDefault;
+}
+
+- (BOOL)shouldIgnoreTopBottomOffsets
+{
+    return NO;
 }
 
 - (void)applyCornerRadius:(BOOL)enable
@@ -154,21 +171,21 @@
     [self updateLayoutCurrentState];
     
     [self adjustFrame];
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    _mapPanel = [OARootViewController instance].mapPanel;
     if (isLandscape)
     {
-        if (mapPanel.mapViewController.mapPositionX != 1)
+        if (_mapPanel.mapViewController.mapPositionX != 1)
         {
-            mapPanel.mapViewController.mapPositionX = 1;
-            [mapPanel refreshMap];
+            _mapPanel.mapViewController.mapPositionX = 1;
+            [_mapPanel refreshMap];
         }
     }
     else
     {
-        if (mapPanel.mapViewController.mapPositionX != 0)
+        if (_mapPanel.mapViewController.mapPositionX != 0)
         {
-            mapPanel.mapViewController.mapPositionX = 0;
-            [mapPanel refreshMap];
+            _mapPanel.mapViewController.mapPositionX = 0;
+            [_mapPanel refreshMap];
         }
     }
 
@@ -473,7 +490,7 @@
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _isHiding = YES;
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    _mapPanel = [OARootViewController instance].mapPanel;
 
     CGRect frame = _scrollableView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -481,7 +498,7 @@
     if (animated)
     {
         [UIView animateWithDuration:0.3 animations:^{
-            [mapPanel hideScrollableHudViewController];
+            [_mapPanel hideScrollableHudViewController];
             _scrollableView.frame = frame;
         } completion:^(BOOL finished) {
             [self dismissViewControllerAnimated:NO completion:onComplete];
@@ -489,7 +506,7 @@
     }
     else
     {
-        [mapPanel hideScrollableHudViewController];
+        [_mapPanel hideScrollableHudViewController];
         _scrollableView.frame = frame;
         [self dismissViewControllerAnimated:YES completion:onComplete];
     }

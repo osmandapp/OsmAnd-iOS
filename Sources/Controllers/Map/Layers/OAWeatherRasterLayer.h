@@ -28,7 +28,6 @@ static int64_t DAY_IN_MILLISECONDS = 24 * HOUR_IN_MILLISECONDS;
 - (void) updateDate:(NSDate *)date;
 - (void) updateWeatherLayer;
 - (void) updateWeatherLayerAlpha;
-- (void)hideMapCenterMarker;
 
 - (void) setDateTime:(int64_t)dateTime goForward:(BOOL)goForward resetPeriod:(BOOL)resetPeriod;
 

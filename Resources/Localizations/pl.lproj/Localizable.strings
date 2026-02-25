@@ -1610,7 +1610,7 @@
 "specify_number_of_dir_indicators" = "Wybierz liczbę wskaźników kierunków, to wpływa na wszystkie ustawienia poniżej.";
 "active_markers" = "Aktywne znaczniki";
 "direction_lines" = "Linie kierunków";
-"edit_profile_screen_options_subtitle" = "Wybiera opcje ekranu";
+"edit_profile_screen_options_subtitle" = "Wybierz opcje ekranu dla profilu";
 "shared_string_min_speed" = "Minimalna prędkość";
 // Dirrection appearance
 "shared_string_one" = "Jeden";

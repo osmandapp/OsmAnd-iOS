@@ -352,8 +352,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                 return m1 ? NSOrderedAscending : NSOrderedDescending;
             }];
         }
-        return [[BaseDetailsObject alloc] initWithAmenities:filtered
-                                                       lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
+        return [[BaseDetailsObject alloc] initWithMapObjects:filtered lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
     }
 
     return nil;

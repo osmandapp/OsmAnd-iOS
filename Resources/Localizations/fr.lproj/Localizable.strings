@@ -3987,7 +3987,7 @@
 "quick_action_air_pressure_layer" = "Un bouton permettant d'afficher ou de masquer la couche de pression atmosphérique sur la carte.";
 "quick_action_temperature_layer" = "Un bouton permettant d'afficher ou de masquer la couche de température sur la carte.";
 "lang_mi" = "Māori";
-"trip_recording_moving_time_widget_description" = "Affiche le temps de déplacement actuellement enregistré, ou le temps de la dernière montée et de la dernière descente.";
+"trip_recording_moving_time_widget_description" = "Affiche la durée de déplacement actuellement enregistrée ou la durée de la dernière ascension et descente.";
 "liquid_glass" = "Verre liquide";
 "change_zoom_action_descr" = "Modifier le zoom de la carte.";
 "search_action_descr" = "Ouvre la recherche.";
@@ -4002,7 +4002,7 @@
 "shared_string_pt" = "pt";
 "shared_string_default" = "Par défaut";
 "dynamic_icon_type_summary" = "L'icône change en fonction de l'état de l'action.";
-"trip_recording_moving_time" = "Temps de déplacement";
+"trip_recording_moving_time" = "Durée de déplacement";
 "shared_string_dynamic" = "Dynamique";
 "shared_string_tinted" = "Teintée";
 "background_opacity_description" = "La couleur claire est plus transparente et révèle le contenu sous-jacent. La couleur teintée augmente l'opacité et ajoute davantage de contraste.";
@@ -4017,4 +4017,4 @@
 "show_image_previews" = "Afficher les aperçus des images";
 "popular_places" = "Lieux populaires";
 "shared_string_wikipedia" = "Wikipédia";
-"poi_source" = "Source POI";
+"poi_source" = "Source des POI";

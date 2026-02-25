@@ -3456,7 +3456,7 @@
 "shared_string_buy_for" = "за";
 "shared_string_of" = "од";
 "shared_string_start_date" = "Почетни датум";
-"shared_string_maximum" = "Највише";
+"shared_string_maximum" = "Максимум";
 "rec_interval_minimum" = "Минимум";
 "gpx_distance_points" = "Растојање (тачке)";
 "tts_title" = "ТТС";

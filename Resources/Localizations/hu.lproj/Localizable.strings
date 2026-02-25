@@ -3060,7 +3060,7 @@
 "vehicle_metrics_obd_ii" = "Járműmetrika (OBD-II)";
 "obd_fuel_consumption_rate_scanner" = "Fogyasztás (OBD)";
 "obd_rpm_desc" = "Megjeleníti a jármű fordulatszámmérőjével mért értéket az OBD-érzékelőn keresztül";
-"obd_how_to_connect" = "Hogyan működik:";
+"obd_how_to_connect" = "Útmutató a kapcsolódáshoz:";
 "obd_fuel_left_km" = "Megtehető táv (km)";
 "obd_fuel_consumption_desc" = "Megjeleníti motor üzemanyag-felhasználásának számított mértékét a maradék üzemanyag, a tank mérete és a GPS által meghatározott megtett távolság alapján.";
 "current_temperature" = "Jelenlegi hőmérséklet";
@@ -3969,8 +3969,8 @@
 "shared_string_dynamic" = "Dinamikus";
 "shared_string_tinted" = "Színezett";
 "background_opacity_description" = "A „Tiszta” beállítás átlátszóbb, felfedve az alatta lévő tartalmat. A „Színezett” beállítás növeli az átlátszatlanságot és nagyobb kontrasztot ad.";
-"trip_recording_moving_time" = "Mozgásban töltött idő";
-"trip_recording_moving_time_widget_description" = "Megjeleníti a jelenleg rögzített mozgásban töltött időt, vagy az utolsó emelkedő és lejtő idejét.";
+"trip_recording_moving_time" = "Mozgással töltött idő";
+"trip_recording_moving_time_widget_description" = "Megjeleníti a jelenleg rögzített mozgással töltött időt, vagy az utolsó emelkedő és lejtő idejét.";
 "context_menu_item_add_parking_point" = "Megjelölés parkolóhelyként";
 "find_parking" = "Parkoló keresése";
 "finish_navigation" = "Navigáció befejezése";

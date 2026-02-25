@@ -1241,7 +1241,6 @@
 "map_settings_overunder" = "오버레이/언더레이";
 "map_settings_over" = "오버레이";
 "map_settings_avail_lay" = "사용 가능한 레이어";
-"map_settings_hide_polygons" = "다각형 숨기기";
 "public_transport_warning_descr_blog" = "블로그에서 OsmAnd 라우팅에 대해 자세히 알아보세요.";
 "map_settings_slopes_legend" = "Wikipedia에서 슬로프에 대한 자세한 내용을 읽을 수 있습니다.";
 "shared_string_turn_off" = "끄기";

@@ -1530,7 +1530,6 @@
 "import_raster_map_failed" = "فشل استيراد الخريطة النقطية";
 "map_settings_show_slider_map" = "إظهار شريط الشفافية على الخريطة";
 "add_online_source" = "إضافة مصدر عبر الإنترنت";
-"map_settings_hide_polygons" = "إخفاء المضلعات";
 "map_settings_hide_polygons_desc" = "يؤثر هذا الخيار على خرائط متجهات أوسماند دون اتصال فقط";
 "map_settings_add_maps_desc" = "يمكنك إضافة خرائط جديدة عبر الرابط، أو عن طريق استيراد ملفات SQLite.";
 "context_menu_points_of_group" = "جميع نقاط هذه المجموعة";

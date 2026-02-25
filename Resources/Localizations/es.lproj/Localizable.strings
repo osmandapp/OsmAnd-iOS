@@ -1762,7 +1762,6 @@
 "map_settings_layer_transparency" = "Transparencia de la capa";
 "map_settings_hillshade_description" = "Los mapas de las colinas utilizan tonos oscuros para mostrar laderas, picos y planicies.";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
-"map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_contour_zoom_level_descr" = "Elige el nivel de zoom, desde el cual se mostrarán las curvas de nivel";
 "map_settings_available_srtm_maps_descr" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
 "map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las Pendientes en el mapa.";

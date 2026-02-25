@@ -1490,7 +1490,6 @@
 "map_settings_line_density" = "Hustota čar";
 "map_settings_add_maps_desc" = "Nové mapy můžete přidat prostřednictvím odkazu, nebo importováním SQLite souborů.";
 "map_settings_hide_polygons_desc" = "Tato možnost ovlivní pouze offline vektorové mapy OsmAnd";
-"map_settings_hide_polygons" = "Skrýt polygony";
 "map_settings_show_slider_map" = "Zobrazit posuvník na mapě";
 "map_settings_add_maps_slopes" = "K zobrazení svahů jsou potřeba další mapy.";
 "map_settings_add_maps_hillshade" = "K zobrazení stínování kopců jsou potřeba další mapy.";

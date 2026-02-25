@@ -1503,7 +1503,6 @@
 "import_raster_map_failed" = "Ha fallat la importació del mapa de bits";
 "map_settings_show_slider_map" = "Mostra arrossegador al mapa";
 "add_online_source" = "Afegeix orígen en connexió";
-"map_settings_hide_polygons" = "Amaga polígons";
 "map_settings_hide_polygons_desc" = "Aquesta opció només afecta els mapes vectorials d'OsmAnd en local";
 "map_settings_add_maps_desc" = "Podeu afegir nous mapes mitjançant un enllaç o important arxius SQLite.";
 "context_menu_points_of_group" = "Tots els punts del grup";

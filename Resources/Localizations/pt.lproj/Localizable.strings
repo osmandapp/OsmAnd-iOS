@@ -1821,7 +1821,6 @@
 "map_settings_line_density" = "Densidade da linha";
 "map_settings_add_maps_desc" = "Pode adicionar novos mapas com links, ou importando ficheiros SQLite.";
 "map_settings_hide_polygons_desc" = "Esta opção afeta apenas os mapas vetoriais offline do OsmAnd";
-"map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_show_slider_map" = "Mostrar controlo deslizante no mapa";
 "map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo.";
 "map_settings_zoom_level_description" = "Defina os níveis de ampliação mínimos e máximos em que a camada será mostrada";

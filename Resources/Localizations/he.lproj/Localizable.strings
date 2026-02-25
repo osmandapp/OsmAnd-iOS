@@ -515,7 +515,6 @@
 "shared_string_legend" = "מקרא";
 "map_settings_show_slider_map" = "הצגת מחוון על המפה";
 "add_online_source" = "הוספת מקור מקוון";
-"map_settings_hide_polygons" = "הסתרת מצולעים";
 "map_settings_hide_polygons_desc" = "אפשרות זו משפיעה על המפות הווקטוריות הבלתי־מקוונות של OsmAnd";
 "map_settings_add_maps_desc" = "אפשר להוסיף מפות חדשות דרך קישור, או על ידי ייבוא קובצי SQLite.";
 "srtm_color_scheme" = "ערכת צבעים";

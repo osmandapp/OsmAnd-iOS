@@ -1633,7 +1633,6 @@
 "settings_app_theme" = "Rakenduse teema";
 "map_settings_available_srtm_maps_descr" = "Kõrgusreljeefi kuvamiseks on vaja täiendavaid kaarte";
 "map_settings_line_density" = "Joone tihedus";
-"map_settings_hide_polygons" = "Peida hulknurgad";
 "add_online_source" = "Võrguallika lisamine";
 "map_settings_show_slider_map" = "Näita kaardil liugurit";
 "shared_string_legend" = "Tingmärgid";

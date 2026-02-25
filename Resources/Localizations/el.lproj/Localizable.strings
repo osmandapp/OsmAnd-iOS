@@ -2063,7 +2063,6 @@
 "map_settings_add_maps_desc" = "Μπορείτε να προσθέσετε νέους χάρτες μέσω συνδέσμου ή εισάγοντας αρχεία SQLite.";
 "walking_route_osmc_description" = "Χρωματίζονται οι διαδρομές ανάλογα με το δικό του τοπικό χρώμα (αν υπάρχει στο OpenStreetMap) και τον τύπο (διεθνές, περιφερειακό, τοπικό).";
 "rendering_attr_natureReserves_name" = "Καταφύγιο άγριας ζωής και Προστατευόμενες περιοχές";
-"map_settings_hide_polygons" = "Απόκρυψη πολύγωνων";
 "map_settings_show_slider_map" = "Εμφάνιση ρυθμιστικού στον χάρτη";
 "map_settings_hide_polygons_desc" = "Αυτή η επιλογή επηρεάζει μόνο τους διανυσματικούς χάρτες εκτός σύνδεσης του OsmAnd";
 "show_map_symbols" = "Εμφάνιση συμβόλων χάρτη";

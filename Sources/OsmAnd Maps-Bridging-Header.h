@@ -98,6 +98,7 @@
 #import "OADeepLinkBridge.h"
 #import "OAUserInteractionPassThroughView.h"
 #import "OAClickableWayHelper.h"
+#import "OAMapSource.h"
 #import "OAPoiUIFilterDataProviderWrapper.h"
 
 // Widgets

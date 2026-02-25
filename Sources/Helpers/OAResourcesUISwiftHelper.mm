@@ -229,6 +229,16 @@
 
 @end
 
+@implementation OAMapSourceResourceSwiftItem
+
+- (OAMapSource *)mapSource
+{
+    OAMapSourceResourceItem *res = (OAMapSourceResourceItem *)self.objcResourceItem;
+    return res.mapSource;
+}
+
+@end
+
 @implementation OAResourcesUISwiftHelper (Navigation)
 
 + (void)showLocalResourceInformationViewController:(OAResourceSwiftItem *)item
@@ -550,6 +560,14 @@
 + (NSString *)getCountryName:(OAResourceSwiftItem *)item
 {
     return [OAResourcesUIHelper getCountryName:item.objcResourceItem];
+}
+
++ (NSArray<OAMapSourceResourceSwiftItem *> *)sortedRasterMapSources:(BOOL)includeOffline
+{
+    NSMutableArray<OAMapSourceResourceSwiftItem *> *items = [NSMutableArray array];
+    for (OAMapSourceResourceItem *item in [OAResourcesUIHelper getSortedRasterMapSources:includeOffline])
+        [items addObject:[[OAMapSourceResourceSwiftItem alloc] initWithItem:item]];
+    return [items copy];
 }
 
 @end

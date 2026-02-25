@@ -25,6 +25,12 @@
 
 - (NSString *)getListKey;
 
+- (NSString *)disabledItem;
+- (NSString *)selectedItem;
+- (NSString *)nextSelectedItem;
+
+- (NSString *)nextFromSource:(NSArray<NSArray<NSString *> *> *)sources defValue:(NSString *)defValue;
+
 //protected abstract View.OnClickListener getOnAddBtnClickListener(MapActivity activity, final Adapter adapter);
 
 @end

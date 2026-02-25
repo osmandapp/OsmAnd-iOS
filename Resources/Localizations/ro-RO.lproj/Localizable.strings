@@ -1212,7 +1212,6 @@
 "map_settings_line_density" = "Densitatea liniei";
 "map_settings_add_maps_desc" = "Puteți adăuga noi hărți prin intermediul unui link sau prin importul de fișiere SQLite.";
 "map_settings_hide_polygons_desc" = "Această opțiune afectează doar hărțile vectoriale OsmAnd Offline";
-"map_settings_hide_polygons" = "Ascundeți poligoanele";
 "map_settings_show_slider_map" = "Afișați cursorul pe hartă";
 "shared_string_legend" = "Legenda";
 "map_settings_add_maps_slopes" = "Sunt necesare hărți suplimentare pentru a vizualiza pantele pe hartă.";

@@ -1532,7 +1532,6 @@
 "import_raster_map_failed" = "Помилка імпорту растрової мапи";
 "map_settings_show_slider_map" = "Показати повзунок на мапі";
 "add_online_source" = "Додати онлайн джерело";
-"map_settings_hide_polygons" = "Сховати багатокутники";
 "map_settings_hide_polygons_desc" = "Цей параметр впливає тільки на безмережеві векторні мапи";
 "map_settings_add_maps_desc" = "Ви можете додавати нові мапи за посиланням чи імпортом файлів SQLite.";
 "context_menu_points_of_group" = "Всі пункти групи";

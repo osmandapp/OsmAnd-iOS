@@ -1552,7 +1552,6 @@
 "res_confirmation_delete" = "Вы уверены, что хотите удалить %@?";
 "available_map_sources" = "Доступные источники карт";
 "available_map_styles" = "Доступные стили карт";
-"map_settings_hide_polygons" = "Скрыть полигоны";
 "add_online_source" = "Добавить онлайн-источник";
 "gpx_analyze" = "Анализировать";
 "osmand_parking_warning" = "Предупреждение";

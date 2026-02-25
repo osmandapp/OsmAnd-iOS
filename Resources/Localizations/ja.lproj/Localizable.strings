@@ -1482,7 +1482,6 @@
 "srtm_color_scheme" = "配色";
 "map_settings_add_maps_desc" = "新しいマップの利用にはリンクの指定、またはSQLiteファイルのインポートが利用できます。";
 "map_settings_hide_polygons_desc" = "このオプションはOsmAndがオフライン時に使用するベクターマップにのみ影響します";
-"map_settings_hide_polygons" = "ポリゴンを非表示";
 "add_online_source" = "オンラインソースを追加";
 "map_settings_show_slider_map" = "マップにスライダーを表示";
 "map_transparency" = "ベースマップ透明度";

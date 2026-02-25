@@ -30,7 +30,6 @@
 #import "OANavStartStopAction.h"
 #import "OANavResumePauseAction.h"
 #import "OAMapOverlayAction.h"
-#import "OAMapUnderlayAction.h"
 #import "OASwitchProfileAction.h"
 #import "OANavRemoveNextDestination.h"
 #import "OAShowHideMapillaryAction.h"
@@ -363,7 +362,7 @@ static QuickActionType *TYPE_INTERFACE;
     [allTypes addObject:TerrainColorSchemeAction.getQuickActionType];
     [allTypes addObject:OAMapSourceAction.getQuickActionType];
     [allTypes addObject:OAMapOverlayAction.getQuickActionType];
-    [allTypes addObject:OAMapUnderlayAction.getQuickActionType];
+    [allTypes addObject:[MapUnderlayAction getQuickActionType]];
     [allTypes addObject:OAShowHideMapillaryAction.getQuickActionType];
     [allTypes addObject:OAShowHideTransportLinesAction.getQuickActionType];
     [allTypes addObject:[ShowHideCycleRoutesAction getQuickActionType]];

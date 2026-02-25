@@ -668,7 +668,6 @@
 "shared_string_legend" = "Legenda";
 "map_settings_show_slider_map" = "Prikaži klizač na mapi";
 "add_online_source" = "Dodaj internet izvor";
-"map_settings_hide_polygons" = "Sakrij poligone";
 "map_settings_hide_polygons_desc" = "Ova opcija utiče samo na OsmAnd vanmrežne vektorske mape";
 "map_settings_add_maps_desc" = "Možete dodati nove mape preko veze ili uvozom ?Q???? datoteka.";
 "srtm_color_scheme" = "Kolor šema";

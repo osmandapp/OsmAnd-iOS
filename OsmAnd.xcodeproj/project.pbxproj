@@ -298,6 +298,7 @@
 		27F050952DD38E400058075F /* RouteInfoWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050942DD38E400058075F /* RouteInfoWidgetState.swift */; };
 		27F050992DD4B6080058075F /* RouteInfoCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050982DD4B6060058075F /* RouteInfoCalculator.swift */; };
 		27F0509F2DD4DEB30058075F /* RouteInfoWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */; };
+		27FA9F572F45B9040064B5BE /* MapUnderlayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FA9F562F45B9040064B5BE /* MapUnderlayAction.swift */; };
 		27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */; };
 		27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
@@ -2088,7 +2089,6 @@
 		DA5A818326C563A700F274C7 /* OASwitchableAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79E526C563A000F274C7 /* OASwitchableAction.m */; };
 		DA5A818526C563A700F274C7 /* OAShowHideOSMBugAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79E926C563A000F274C7 /* OAShowHideOSMBugAction.m */; };
 		DA5A818826C563A700F274C7 /* OANavAutoZoomMapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79F626C563A000F274C7 /* OANavAutoZoomMapAction.m */; };
-		DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79F926C563A000F274C7 /* OAMapUnderlayAction.mm */; };
 		DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79FA26C563A000F274C7 /* OAShowHideLocalOSMChanges.m */; };
 		DA5A818C26C563A700F274C7 /* OAQuickAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79FB26C563A000F274C7 /* OAQuickAction.m */; };
 		DA5A818E26C563A700F274C7 /* OANewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A0326C563A000F274C7 /* OANewAction.m */; };
@@ -3778,6 +3778,7 @@
 		27F050942DD38E400058075F /* RouteInfoWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidgetState.swift; sourceTree = "<group>"; };
 		27F050982DD4B6060058075F /* RouteInfoCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoCalculator.swift; sourceTree = "<group>"; };
 		27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoWidget.xib; sourceTree = "<group>"; };
+		27FA9F562F45B9040064B5BE /* MapUnderlayAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapUnderlayAction.swift; sourceTree = "<group>"; };
 		27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAppearanceParams.swift; sourceTree = "<group>"; };
 		27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceIconSizeViewController.swift; sourceTree = "<group>"; };
 		2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArabicNormalizer.h; sourceTree = "<group>"; };
@@ -6159,7 +6160,6 @@
 		DA5A79E026C563A000F274C7 /* OAQuickAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickAction.h; sourceTree = "<group>"; };
 		DA5A79E126C563A000F274C7 /* OAShowHideLocalOSMChanges.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideLocalOSMChanges.h; sourceTree = "<group>"; };
 		DA5A79E226C563A000F274C7 /* OATerrainAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATerrainAction.m; sourceTree = "<group>"; };
-		DA5A79E326C563A000F274C7 /* OAMapUnderlayAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapUnderlayAction.h; sourceTree = "<group>"; };
 		DA5A79E426C563A000F274C7 /* OAMapStyleAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapStyleAction.mm; sourceTree = "<group>"; };
 		DA5A79E526C563A000F274C7 /* OASwitchableAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASwitchableAction.m; sourceTree = "<group>"; };
 		DA5A79E626C563A000F274C7 /* OAShowHidePoiAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHidePoiAction.h; sourceTree = "<group>"; };
@@ -6177,7 +6177,6 @@
 		DA5A79F526C563A000F274C7 /* OASwitchProfileAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASwitchProfileAction.h; sourceTree = "<group>"; };
 		DA5A79F626C563A000F274C7 /* OANavAutoZoomMapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavAutoZoomMapAction.m; sourceTree = "<group>"; };
 		DA5A79F826C563A000F274C7 /* OAShowHideFavoritesAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideFavoritesAction.h; sourceTree = "<group>"; };
-		DA5A79F926C563A000F274C7 /* OAMapUnderlayAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapUnderlayAction.mm; sourceTree = "<group>"; };
 		DA5A79FA26C563A000F274C7 /* OAShowHideLocalOSMChanges.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHideLocalOSMChanges.m; sourceTree = "<group>"; };
 		DA5A79FB26C563A000F274C7 /* OAQuickAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickAction.m; sourceTree = "<group>"; };
 		DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideTransportLinesAction.h; sourceTree = "<group>"; };
@@ -11401,8 +11400,7 @@
 				DA5A79DB26C563A000F274C7 /* OAMapSourceAction.mm */,
 				DA5A7A1D26C563A000F274C7 /* OAMapStyleAction.h */,
 				DA5A79E426C563A000F274C7 /* OAMapStyleAction.mm */,
-				DA5A79E326C563A000F274C7 /* OAMapUnderlayAction.h */,
-				DA5A79F926C563A000F274C7 /* OAMapUnderlayAction.mm */,
+				27FA9F562F45B9040064B5BE /* MapUnderlayAction.swift */,
 				DA5A79F226C563A000F274C7 /* OAMarkerAction.h */,
 				DA5A79DC26C563A000F274C7 /* OAMarkerAction.mm */,
 				DA5A79ED26C563A000F274C7 /* OANavAddDestinationAction.h */,
@@ -17440,7 +17438,6 @@
 				05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */,
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
 				4656BD322C48468200B69928 /* ColorsCollection.swift in Sources */,
-				DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
 				DA9F841C29CC96EF00127DAE /* OAShapeLayer.m in Sources */,
 				46CBC9722B96126C005CC244 /* GlideBaseWidget.swift in Sources */,
@@ -18398,6 +18395,7 @@
 				DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */,
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,
 				3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */,
+				27FA9F572F45B9040064B5BE /* MapUnderlayAction.swift in Sources */,
 				FA82B9192E74199200A250F1 /* ImageDownloadRequestModifier.swift in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
 				32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */,

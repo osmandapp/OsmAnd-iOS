@@ -1372,15 +1372,13 @@
 
 - (void)underlayChanged:(BOOL)isOn
 {
-    OAMapStyleParameter *hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    [_settings setUnderlayOpacitySliderVisibility:isOn];
     if (isOn)
     {
         BOOL hasLastMapSource = _app.data.lastUnderlayMapSource != nil;
         if (!hasLastMapSource)
             _app.data.lastUnderlayMapSource = [OAMapSource getOsmAndOnlineTilesMapSource];
 
-        hidePolygonsParameter.value = @"true";
-        [_styleSettings save:hidePolygonsParameter];
         _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
         if (!hasLastMapSource)
         {
@@ -1390,8 +1388,6 @@
     }
     else
     {
-        hidePolygonsParameter.value = @"false";
-        [_styleSettings save:hidePolygonsParameter];
         _app.data.underlayMapSource = nil;
     }
 }

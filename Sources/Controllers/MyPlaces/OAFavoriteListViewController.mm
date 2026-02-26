@@ -111,6 +111,8 @@ static const NSInteger _exportButtonIndex = 1;
     UIFont *_originalGroupFont;
     UIFont *_italicGroupFont;
     dispatch_queue_t _favoritesQueue;
+    
+    CGFloat _cachedTabbarHeight;
 }
 
 static UIViewController *parentController;
@@ -443,19 +445,30 @@ static UIViewController *parentController;
     _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
-    
-    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    _searchController.searchResultsUpdater = self;
-    _searchController.searchBar.delegate = self;
-    _searchController.obscuresBackgroundDuringPresentation = NO;
-    self.tabBarController.navigationItem.searchController = _searchController;
+    if (!_searchController)
+    {
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        _searchController.searchResultsUpdater = self;
+        _searchController.searchBar.delegate = self;
+        _searchController.obscuresBackgroundDuringPresentation = NO;
+        self.tabBarController.navigationItem.searchController = _searchController;
+        [self setupSearchController:NO filtered:NO];
+        if (!_cachedTabbarHeight)
+            [self cacheTabbarHeight];
+    }
     self.definesPresentationContext = YES;
-    [self setupSearchController:NO filtered:NO];
     [self addAccessibilityLabels];
     [self configurePaymentBanner];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_searchController && !self.tabBarController.navigationItem.searchController)
+        self.tabBarController.navigationItem.searchController = _searchController;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -872,6 +885,7 @@ static UIViewController *parentController;
     [self.favoriteTableView setEditing:YES animated:YES];
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     _editToolbarView.hidden = NO;
+    [self cacheTabbarHeight];
     [UIView animateWithDuration:.3 animations:^{
         self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
         [self applySafeAreaMargins];
@@ -892,11 +906,12 @@ static UIViewController *parentController;
     self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         [self.tabBarController.tabBar setHidden:NO];
-        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - self.tabBarController.tabBar.frame.size.height, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
+        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - _cachedTabbarHeight, DeviceScreenWidth, _cachedTabbarHeight);
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
         [self applySafeAreaMargins];
+        [self cacheTabbarHeight];
     }];
 
     _editButton.image = [UIImage systemImageNamed:@"pencil"];
@@ -911,6 +926,11 @@ static UIViewController *parentController;
     [self.favoriteTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
     [self searchVisibility:YES];
+}
+
+- (void)cacheTabbarHeight
+{
+    _cachedTabbarHeight = self.tabBarController.tabBar.frame.size.height;
 }
 
 - (IBAction)editButtonClicked:(id)sender

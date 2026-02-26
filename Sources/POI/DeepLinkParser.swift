@@ -8,11 +8,23 @@
 
 import Foundation
 
+private enum GoRoute: String {
+    case main = "main"
+    case lastReleaseNotes = "help/last-release-notes"
+    case helpWhatsNew = "help/whats-new"
+    case purchasesLearnMore = "purchases/learn-more"
+    case purchasesOsmAndPro = "purchases/osmand-pro"
+    case purchasesMapsPlus = "purchases/maps-plus"
+    case customButtonsAdd = "custom-buttons/add"
+    case externalSensorsRecording = "plugins/external-sensors/recording"
+}
+
 @objcMembers
 final class DeepLinkParser: NSObject {
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        handleIncomingFileURL(url, rootViewController: rootViewController)
+        handleIncomingGoURL(url, rootViewController: rootViewController)
+        || handleIncomingFileURL(url, rootViewController: rootViewController)
         || handleIncomingActionsURL(url, rootViewController: rootViewController)
         || handleIncomingNavigationURL(url, rootViewController: rootViewController)
         || handleIncomingSetPinOnMapURL(url, rootViewController: rootViewController)
@@ -20,6 +32,40 @@ final class DeepLinkParser: NSObject {
         || handleIncomingOpenLocationMenuURL(url, rootViewController: rootViewController)
         || handleIncomingTileSourceURL(url, rootViewController: rootViewController)
         || handleIncomingOsmAndCloudURL(url, rootViewController: rootViewController)
+    }
+    
+    private func handleIncomingGoURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: "/go") else { return false }
+        let path = url.path.split(separator: "/", omittingEmptySubsequences: true).map { $0.lowercased() }
+        let routeRaw = path.dropFirst().joined(separator: "/")
+        guard let route = GoRoute(rawValue: routeRaw) else {
+            NSLog("[DeepLinkParser] Unknown /go route: %@ (url=%@)", routeRaw, url.absoluteString)
+            return false
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            switch route {
+            case .main:
+                self.openMainScreen(rootViewController)
+            case .lastReleaseNotes:
+                self.openLastReleaseNotes(rootViewController)
+            case .helpWhatsNew:
+                self.openWhatsNew(rootViewController)
+            case .purchasesLearnMore:
+                self.openChoosePlan(rootViewController, feature: nil)
+            case .purchasesOsmAndPro:
+                self.openChoosePlan(rootViewController, feature: OAFeature.advanced_WIDGETS())
+            case .purchasesMapsPlus:
+                self.openChoosePlan(rootViewController, feature: OAFeature.monthly_MAP_UPDATES())
+            case .customButtonsAdd:
+                self.openCustomButtonsAddAction(rootViewController)
+            case .externalSensorsRecording:
+                self.openExternalSensorsRecording(rootViewController)
+            }
+        }
+        
+        return true
     }
     
     private func handleIncomingFileURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
@@ -421,5 +467,74 @@ final class DeepLinkParser: NSObject {
         }
         
         return fallback
+    }
+    
+    private func openMainScreen(_ root: OARootViewController) {
+        guard resetNavigation(root) != nil else { return }
+        root.mapPanel.closeRouteInfo()
+    }
+    
+    private func openLastReleaseNotes(_ root: OARootViewController) {
+        let sheet = OAWhatsNewBottomSheetViewController()
+        sheet.present(in: root)
+    }
+    
+    private func openWhatsNew(_ root: OARootViewController) {
+        guard let nav = resetNavigation(root) else { return }
+        let url = kDocsLatestVersion.localizedURLIfAvailable()
+        guard let webVC = OAWebViewController(urlAndTitle: url, title: localizedString("help_what_is_new")) else {
+            NSLog("[DeepLinkParser] Failed to create OAWebViewController (url=%@)", url)
+            return
+        }
+        
+        nav.pushViewController(webVC, animated: true)
+    }
+    
+    private func openChoosePlan(_ root: OARootViewController, feature: OAFeature?) {
+        guard let nav = resetNavigation(root) else { return }
+        if let feature {
+            OAChoosePlanHelper.showChoosePlanScreen(with: feature, navController: nav)
+        } else {
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.osmand_CLOUD(), navController: nav)
+        }
+    }
+    
+    private func openCustomButtonsAddAction(_ root: OARootViewController) {
+        guard let nav = resetNavigation(root) else { return }
+        let vc = CustomMapButtonsViewController()
+        nav.pushViewController(vc, animated: false)
+        DispatchQueue.main.async {
+            vc.onRightNavbarButtonPressed()
+        }
+    }
+    
+    private func openExternalSensorsRecording(_ root: OARootViewController) {
+        guard let nav = resetNavigation(root) else { return }
+        guard let product = OAIAPHelper.sharedInstance().product(kInAppId_Addon_External_Sensors) else {
+            OARootViewController.instance().requestProducts(withProgress: false, reload: false)
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.sensors(), navController: nav)
+            return
+        }
+        
+        if !product.isPurchased() {
+            OAChoosePlanHelper.showChoosePlanScreen(with: product, navController: nav)
+            return
+        }
+        
+        if product.disabled {
+            OAIAPHelper.sharedInstance().enableProduct(product.productIdentifier)
+        }
+        
+        DispatchQueue.main.async {
+            let controller = ExternalSettingsWriteToTrackSettingsViewController(applicationMode: OAAppSettings.sharedManager().applicationMode.get())
+            nav.pushViewController(controller, animated: false)
+        }
+    }
+    
+    private func resetNavigation(_ root: OARootViewController) -> UINavigationController? {
+        guard let nav = root.navigationController else { return nil }
+        nav.dismiss(animated: false)
+        nav.popToRootViewController(animated: false)
+        return nav
     }
 }

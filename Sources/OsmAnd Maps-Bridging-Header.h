@@ -195,6 +195,7 @@
 #import "OABottomSheetViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "OAWhatsNewBottomSheetViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

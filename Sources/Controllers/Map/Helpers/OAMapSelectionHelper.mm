@@ -185,7 +185,7 @@ static int TILE_SIZE = 256;
                 [requestAmenity setLatitude:result.objectLatLon.coordinate.latitude];
                 [requestAmenity setLongitude:result.objectLatLon.coordinate.longitude];
                 
-                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:names];
+                OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestAmenity names:[names copy]];
                 detailsObject = [amenitySearcher searchDetailedObjectWithRequest:request];
             }
             else
@@ -216,7 +216,7 @@ static int TILE_SIZE = 256;
                             }
                         }
 
-                        BOOL isSpecial = isOldOsmRoute || isNewOsmRoute || isTravelGpx || isClickableWay;
+                      //  BOOL isSpecial = isOldOsmRoute || isNewOsmRoute || isTravelGpx || isClickableWay;
 
                         if (isOldOsmRoute)
                         {

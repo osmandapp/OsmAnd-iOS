@@ -529,6 +529,40 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return NO;
 }
 
+- (void)collectObjectsFromPoint:(MapSelectionResult *)result
+                unknownLocation:(BOOL)unknownLocation
+      excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
+    NSMutableArray<OAPOI *> *allAmenities = [NSMutableArray array];
+
+      NSArray<OAPOI *> *amenities =
+          [self getDisplayedResults:result.pointLatLon.coordinate.latitude
+                                lon:result.pointLatLon.coordinate.longitude];
+
+      if (amenities.count > 0)
+      {
+          [allAmenities addObjectsFromArray:amenities];
+      }
+      else
+      {
+          CGPoint point = result.point;
+          int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * (TOUCH_RADIUS_MULTIPLIER * 2);
+          QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
+          if (!touchPolygon31.isEmpty())
+          {
+              NSArray<OAPOI *> *topPlaces = [_topPlacesProvider getDisplayedResultsFor:touchPolygon31];
+
+              if (topPlaces.count > 0)
+                  [allAmenities addObjectsFromArray:topPlaces];
+          }
+      }
+
+      for (OAPOI *amenity in allAmenities)
+      {
+          [result collect:amenity provider:self];
+      }
+}
+
 //<<<<<<< HEAD
 //=======
 //- (void)collectObjectsFromPoint:(MapSelectionResult *)result
@@ -569,13 +603,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 {
     OAPOI *amenity = [self getAmenity:targetObj];
     if (amenity)
-    {
         [_topPlacesProvider updateSelectedTopPlaceIfNeeded:amenity];
-    }
     else
-    {
         [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
-    }
 }
 
 - (void)contextMenuDidHide
@@ -640,11 +670,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (int64_t) getSelectionPointOrder:(id)selectedObject
 {
-    if ([self isTopPlace:selectedObject]) {
+    if ([self isTopPlace:selectedObject])
         return [self getTopPlaceBaseOrder];
-    } else {
+    else
         return 0;
-    }
 }
 
 - (BOOL)isTopPlace:(id)object
@@ -655,7 +684,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     if ([object isKindOfClass:OAPOI.class])
     {
-        int64_t obfId = ((OAPOI *)object).obfId;
+        uint64_t obfId = ((OAPOI *)object).obfId;
         return topPlaces[@(obfId)] != nil;
     }
     
@@ -667,15 +696,15 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 ////<<<<<<< HEAD 14114303922
 //        return placeId > 0 && topPlaces[@(placeId)];
 //=======
-        int64_t obfId = details.syntheticAmenity.obfId;
+        uint64_t obfId = details.syntheticAmenity.obfId;
         if (topPlaces[@(obfId)])
             return YES;
         
-        for (OAPOI *poi in details.objects)
-        {
-            if (topPlaces[@(poi.obfId)])
-                return YES;
-        }
+//        for (OAPOI *poi in details.objects)
+//        {
+//            if (topPlaces[@(poi.obfId)])
+//                return YES;
+//        }
 //>>>>>>> master
     }
     

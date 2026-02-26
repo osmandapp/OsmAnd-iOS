@@ -9,9 +9,7 @@
 // OsmAnd/src/net/osmand/plus/views/layers/MapSelectionResult.java
 // git revision 744c6b5831ca13767b936d62be8c78138b8dda08
 
-import Foundation
 import CoreLocation
-import UIKit
 
 @objcMembers
 final class MapSelectionResult: NSObject {
@@ -44,7 +42,7 @@ final class MapSelectionResult: NSObject {
         processedObjects
     }
     
-    func collect(_ object: Any, provider: Any) {
+    func collect(_ object: Any, provider: Any?) {
         allObjects.append(SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider))
     }
     
@@ -67,6 +65,10 @@ final class MapSelectionResult: NSObject {
             }
         }
         processedObjects.append(contentsOf: other)
+    }
+    
+    func isEmpty() -> Bool {
+        allObjects.isEmpty
     }
     
     private func processObjects(_ selectedObjects: Array<SelectedMapObject>, other: inout Array<SelectedMapObject>) -> Array<BaseDetailsObject> {
@@ -98,9 +100,5 @@ final class MapSelectionResult: NSObject {
     
     private func collectOverlappedObjects(_ object: Any, detailsObjects: [BaseDetailsObject]) -> [BaseDetailsObject] {
         detailsObjects.filter { $0.overlapsWith(object) }
-    }
-    
-    func isEmpty() -> Bool {
-        allObjects.isEmpty
     }
 } 

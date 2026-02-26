@@ -241,7 +241,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
 - (NSArray<OAPOI *> *)searchAmenitiesWithFilter:(OASearchPoiTypeFilter *)filter searchLatLon:(CLLocation *)searchLatLon radius:(NSInteger)radius includeTravel:(BOOL)includeTravel
 {
-    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:radius includeTravel:includeTravel matcher:nil publish:nil];
+    return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:(int)radius includeTravel:includeTravel matcher:nil publish:nil];
 }
 
 - (nullable BaseDetailsObject *)searchDetailedObject:(id)object

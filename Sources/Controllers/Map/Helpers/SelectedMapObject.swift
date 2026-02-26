@@ -6,11 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
-class SelectedMapObject: NSObject {
-    
+final class SelectedMapObject: NSObject {
     var object: Any
     private(set) var provider: OAContextMenuProvider?
     

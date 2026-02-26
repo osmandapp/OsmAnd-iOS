@@ -25,7 +25,7 @@ final class BaseDetailsObject: NSObject {
 
     var osmIds: Set<UInt64>
     var wikidataIds: Set<String>
-    var objects: Array<Any>
+    var objects: [Any]
     var lang: String
 
     private(set) var syntheticAmenity: OAPOI
@@ -37,7 +37,7 @@ final class BaseDetailsObject: NSObject {
         self.lang = "en"
         self.osmIds = Set<UInt64>()
         self.wikidataIds = Set<String>()
-        self.objects = Array()
+        self.objects = [Any]()
         self.syntheticAmenity = OAPOI()
         self.objectCompleteness = .empty
         self.searchResultResource = .detailed
@@ -139,7 +139,7 @@ final class BaseDetailsObject: NSObject {
         let osmId = getOsmId(object)
         let wikidata = getWikidata(object)
 
-        let osmIdEqual = osmId > 0 && osmIds.contains(UInt64(osmId))
+        let osmIdEqual = osmId > 0 && osmIds.contains(osmId)
 
         var wikidataEqual = false
         if let wikidata, !wikidata.isEmpty, wikidataIds.contains(wikidata) {
@@ -250,7 +250,7 @@ final class BaseDetailsObject: NSObject {
         let osmId = ObfConstants.getOsmObjectId(renderedObject)
         osmIds.insert(UInt64(osmId))
 
-        if let wikidata = renderedObject.tags[WIKIDATA_TAG] as? String  {
+        if let wikidata = renderedObject.tags[WIKIDATA_TAG] as? String {
             wikidataIds.insert(wikidata)
         }
 

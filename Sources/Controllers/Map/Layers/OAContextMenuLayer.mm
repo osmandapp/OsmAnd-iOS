@@ -486,7 +486,7 @@
     if (objectSelectionThreshold < 0)
     {
         // FIXME:
-        selectedObjects = objectsAvailableForSelection;
+        selectedObjects = [objectsAvailableForSelection mutableCopy];
     }
     
     if (selectedObjects.count == 1)

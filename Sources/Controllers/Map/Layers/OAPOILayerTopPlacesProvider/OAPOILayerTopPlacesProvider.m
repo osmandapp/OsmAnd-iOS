@@ -274,29 +274,69 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     }];
 }
 
-- (NSArray<OAPOI *> *)getDisplayedResultsFor:(const QList<OsmAnd::PointI>&)touchPolygon31
+- (void)contextMenuDidShow:(id)targetObj
 {
-    if (_topPlaces.count == 0)
-        return @[];
+    OAPOI *amenity = [self topPlaceAmenityFor:targetObj];
+    if (amenity)
+        [self updateSelectedTopPlaceIfNeeded:amenity];
+    else
+        [self resetSelectedTopPlaceIfNeeded];
+}
 
-    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+- (OAPOI *)topPlaceAmenityFor:(id)object
+{
+    if ([object isKindOfClass:SelectedMapObject.class])
+    {
+        SelectedMapObject *obj = object;
+        object = obj.object;
+    }
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        return (OAPOI *)object;
+    }
+    else if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *baseDetailsObject = object;
+        OAPOI *syntheticAmenity = baseDetailsObject.syntheticAmenity;
+        
+        uint64_t obfId = syntheticAmenity.obfId;
+        if (!_topPlaces[@(obfId)]) {
+            for (OAPOI *poi in baseDetailsObject.objects)
+            {
+                if ([poi isKindOfClass:[OAPOI class]])
+                {
+                    if (_topPlaces[@(poi.obfId)])
+                        return poi;
+                }
 
-    [_topPlaces enumerateKeysAndObjectsUsingBlock:^(__unused id key, OAPOI *poi, __unused BOOL *stop) {
-        CLLocation *location = [poi getLocation];
-        if (!location)
-            return;
-
-        CLLocationCoordinate2D coord = location.coordinate;
-
-        if ([OANativeUtilities isPointInsidePolygonLat:coord.latitude
-                                                   lon:coord.longitude
-                                             polygon31:touchPolygon31])
-        {
-            [result addObject:poi];
+            }
         }
-    }];
+        return syntheticAmenity;
+    }
+    return nil;
+}
 
-    return [result copy];
+- (NSArray<OAPOI *> *)displayedAmenities
+{
+    const auto screenBbox = _mapView.getVisibleBBox31;
+    float currentZoom = [_mapView zoom];
+    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
+    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
+    
+    CLLocationCoordinate2D topLeftCoord = CLLocationCoordinate2DMake(topLeft.latitude, topLeft.longitude);
+    CLLocationCoordinate2D bottomRightCoord = CLLocationCoordinate2DMake(bottomRight.latitude, bottomRight.longitude);
+    if (!CLLocationCoordinate2DIsValid(topLeftCoord) || !CLLocationCoordinate2DIsValid(bottomRightCoord))
+        return @[];
+    
+    QuadRect *currentBounds = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+    QuadRect *extendedBox = [[QuadRect alloc] initWithRect:currentBounds];
+    double lonDelta = [currentBounds width] * 0.1;
+    double latDelta = [currentBounds height] * 0.1;
+    [extendedBox inset:-lonDelta dy:-latDelta];
+    
+    NSDictionary *results = [self calculateResult:extendedBox zoom:currentZoom matcher:nil];
+    
+    return results[@"displayed"];
 }
 
 - (void)resetSelectedTopPlaceIfNeeded

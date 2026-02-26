@@ -150,7 +150,7 @@
         return;
         
     _cachedTargetPoint = targetPoint;
-    CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
+    CGFloat iconHalfHeight = _changePositionPin.frame.size.height / 2;
     CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
     CGFloat shiftX = iconHalfWidth;
     CGFloat shiftY = iconHalfHeight;
@@ -465,29 +465,20 @@
                 if ([provider isKindOfClass:OAMapLayer.class])
                 {
                     OAMapLayer *layer = provider;
-                    if ([layer pointsOrder] <= objectSelectionThreshold)
-                    {
+                    if ([layer pointOrder:selectedObject.object] <= objectSelectionThreshold)
                         [objectsAvailableForSelection addObject:selectedObject];
-                    }
                     else
-                    {
                         continue;
-                    }
                 }
             }
         }
         id<OAContextMenuProvider> provider = selectedObject.provider;
         if (provider && [provider runExclusiveAction:selectedObject.object unknownLocation:showUnknownLocation])
-        {
             return YES;
-        }
     }
     
     if (objectSelectionThreshold < 0)
-    {
-        // FIXME:
         selectedObjects = [objectsAvailableForSelection mutableCopy];
-    }
     
     if (selectedObjects.count == 1)
     {

@@ -533,79 +533,54 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                 unknownLocation:(BOOL)unknownLocation
       excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    NSMutableArray<OAPOI *> *allAmenities = [NSMutableArray array];
-
-      NSArray<OAPOI *> *amenities =
-          [self getDisplayedResults:result.pointLatLon.coordinate.latitude
-                                lon:result.pointLatLon.coordinate.longitude];
-
-      if (amenities.count > 0)
-      {
-          [allAmenities addObjectsFromArray:amenities];
-      }
-      else
-      {
-          CGPoint point = result.point;
-          int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * (TOUCH_RADIUS_MULTIPLIER * 2);
-          QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
-          if (!touchPolygon31.isEmpty())
-          {
-              NSArray<OAPOI *> *topPlaces = [_topPlacesProvider getDisplayedResultsFor:touchPolygon31];
-
-              if (topPlaces.count > 0)
-                  [allAmenities addObjectsFromArray:topPlaces];
-          }
-      }
-
-      for (OAPOI *amenity in allAmenities)
-      {
-          [result collect:amenity provider:self];
-      }
+    NSArray<OAPOI *> *objects = [_topPlacesProvider displayedAmenities];
+    if (objects.count == 0)
+        return;
+    
+    OAMapRendererView *mapView =
+    (OAMapRendererView *)[OARootViewController instance]
+        .mapPanel.mapViewController.view;
+    
+    if ([mapView zoom] < 5)
+        return;
+    
+    int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;
+    
+    QList<OsmAnd::PointI> touchPolygon31 =
+    [OANativeUtilities getPolygon31FromPixelAndRadius:result.point radius:radius];
+    
+    if (touchPolygon31.isEmpty())
+        return;
+    
+    NSDictionary<NSNumber *, OAPOI *> *topPlaces = _topPlacesProvider.topPlaces;
+    NSSet<OAPOI *> *topPlacesSet = topPlaces.count > 0 ? [NSSet setWithArray:topPlaces.allValues] : nil;
+    
+    for (OAPOI *amenity in objects)
+    {
+        CLLocation *location = [amenity getLocation];
+        if (!location)
+            continue;
+        
+        CLLocationCoordinate2D coord = location.coordinate;
+        
+        if (![OANativeUtilities isPointInsidePolygonLat:coord.latitude
+                                                    lon:coord.longitude
+                                              polygon31:touchPolygon31])
+            continue;
+        
+        if (topPlacesSet && [topPlacesSet containsObject:amenity])
+        {
+            [result collect:amenity provider:self];
+            break;
+        }
+        
+        [result collect:amenity provider:self];
+    }
 }
-
-//<<<<<<< HEAD
-//=======
-//- (void)collectObjectsFromPoint:(MapSelectionResult *)result
-//                unknownLocation:(BOOL)unknownLocation
-//      excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
-//{
-//    NSMutableArray<OAPOI *> *allAmenities = [NSMutableArray array];
-//
-//      NSArray<OAPOI *> *amenities =
-//          [self getDisplayedResults:result.pointLatLon.coordinate.latitude
-//                                lon:result.pointLatLon.coordinate.longitude];
-//
-//      if (amenities.count > 0)
-//      {
-//          [allAmenities addObjectsFromArray:amenities];
-//      }
-//      else
-//      {
-//          CGPoint point = result.point;
-//          int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * (TOUCH_RADIUS_MULTIPLIER * 2);
-//          QList<OsmAnd::PointI> touchPolygon31 = [OANativeUtilities getPolygon31FromPixelAndRadius:point radius:radius];
-//          if (!touchPolygon31.isEmpty())
-//          {
-//              NSArray<OAPOI *> *topPlaces = [_topPlacesProvider getDisplayedResultsFor:touchPolygon31];
-//
-//              if (topPlaces.count > 0)
-//                  [allAmenities addObjectsFromArray:topPlaces];
-//          }
-//      }
-//
-//      for (OAPOI *amenity in allAmenities)
-//      {
-//          [result collect:amenity provider:self];
-//      }
-//}
 
 - (void)contextMenuDidShow:(id)targetObj
 {
-    OAPOI *amenity = [self getAmenity:targetObj];
-    if (amenity)
-        [_topPlacesProvider updateSelectedTopPlaceIfNeeded:amenity];
-    else
-        [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
+    [_topPlacesProvider contextMenuDidShow:targetObj];
 }
 
 - (void)contextMenuDidHide
@@ -613,56 +588,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
 }
 
-//- (NSArray<OAPOI *> *)getDisplayedResults:(double)lat lon:(double)lon
-//{
-//    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
-//    if (!_amenitySymbolsProvider)
-//        return result;
-//    
-//    const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-//    OsmAnd::AreaI area31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
-//    const auto tileId = OsmAnd::Utilities::getTileId(point31, self.mapView.zoomLevel);
-//    
-//    OsmAnd::IMapTiledSymbolsProvider::Request request;
-//    request.tileId = tileId;
-//    request.zoom = self.mapView.zoomLevel;
-//    const auto& mapState = [self.mapView getMapState];
-//    request.mapState = mapState;
-//    request.visibleArea31 = area31;
-//    
-//    std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
-//    _amenitySymbolsProvider->obtainData(request, data, nullptr);
-//    
-//    std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider::Data> tiledData =
-//        std::static_pointer_cast<OsmAnd::IMapTiledSymbolsProvider::Data>(data);
-//    if (tiledData && !tiledData->symbolsGroups.isEmpty())
-//    {
-//        for (const auto group : tiledData->symbolsGroups)
-//        {
-//            if (!group->symbols.isEmpty())
-//            {
-//                for (const auto symbol : group->symbols)
-//                {
-//                    if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbol->groupPtr))
-//                    {
-//                        if (const auto cppAmenity = amenitySymbolGroup->amenity)
-//                        {
-//                            if (area31.contains(cppAmenity->position31))
-//                            {
-//                                OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:cppAmenity];
-//                                if (poi)
-//                                    [result addObject:poi];
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return [result copy];
-//}
-
-//>>>>>>> master
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
@@ -711,9 +636,16 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return NO;
 }
 
-- (int64_t) getTopPlaceBaseOrder
+- (int)getTopPlaceBaseOrder
 {
     return [self pointsOrder] - 100;
+}
+
+- (int)pointOrder:(id)object
+{
+    return [self isTopPlace:object]
+    ? [self getTopPlaceBaseOrder]
+    : [self pointsOrder];
 }
 
 - (LatLon) parsePoiLatLon:(QString)value

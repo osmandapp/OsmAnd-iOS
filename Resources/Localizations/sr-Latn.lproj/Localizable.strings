@@ -4012,3 +4012,10 @@
 "finish_navigation" = "Završi navođenje";
 "background_liquid_glass_clear_ios" = "Očisti";
 "enable_msaa_carplay" = "Omogućite MSAA za KarPlej";
+"offline_weather_forecast" = "Vanmrežna vremenska prognoza";
+"shared_string_online_only" = "Samo onlajn";
+"shared_string_offline_only" = "Samo oflajn";
+"show_image_previews" = "Prikaži preglede slika";
+"popular_places" = "Popularna mesta";
+"shared_string_wikipedia" = "Vikipedija";
+"poi_source" = "Izvor TOI";

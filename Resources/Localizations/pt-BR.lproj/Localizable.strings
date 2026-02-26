@@ -4004,7 +4004,7 @@
 "shared_string_dynamic" = "Dinâmico";
 "shared_string_tinted" = "Colorido";
 "background_opacity_description" = "Transparente é mais transparente, revelando o conteúdo por baixo. Colorido aumenta a opacidade e adiciona mais contraste.";
-"trip_recording_moving_time" = "Tempo em movimento";
+"trip_recording_moving_time" = "Hora da mudança";
 "trip_recording_moving_time_widget_description" = "Mostra o tempo de movimento atualmente registrado ou o tempo da última subida e descida.";
 "shared_background" = "Contexto";
 "shared_string_pt" = "pt";
@@ -4012,3 +4012,11 @@
 "find_parking" = "Achar estacionamento";
 "finish_navigation" = "Finalizar a navegação";
 "background_liquid_glass_clear_ios" = "Limpar";
+"offline_weather_forecast" = "Previsão do tempo off-line";
+"enable_msaa_carplay" = "Ativar MSAA para CarPlay";
+"shared_string_online_only" = "Somente on-line";
+"shared_string_offline_only" = "Somente off-line";
+"show_image_previews" = "Mostrar pré-visualizações de imagens";
+"popular_places" = "Lugares populares";
+"shared_string_wikipedia" = "Wikipédia";
+"poi_source" = "Fonte POI";

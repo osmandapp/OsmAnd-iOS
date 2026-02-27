@@ -50,6 +50,17 @@ final class ObfConstants: NSObject {
         }
     }
     
+    static func createMapObjectIdFromCleanOsmId(_ osmId: UInt64, type: EOAEntityType?) -> UInt64 {
+        guard let type else { return osmId }
+        switch type {
+        case .node:      return createMapObjectIdFromOsmId(osmId, type: NODE)
+        case .way:       return createMapObjectIdFromOsmId(osmId, type: WAY)
+        case .relation:  return createMapObjectIdFromOsmId(osmId, type: RELATION)
+        case .undefined, .wayBoundary: return osmId
+        @unknown default: return osmId
+        }
+    }
+    
     static func getOsmObjectId(_ object: OAMapObject) -> UInt64 {
         var originalId: UInt64 = 0
         var obfId = object.obfId

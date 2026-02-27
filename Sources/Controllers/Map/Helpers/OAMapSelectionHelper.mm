@@ -91,7 +91,6 @@ static int TILE_SIZE = 256;
 - (void)collectObjectsFromLayers:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects
 {
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
-
     
     NSArray<OAMapLayer *> *layers = [mapViewController.mapLayers getLayers];
     
@@ -134,6 +133,7 @@ static int TILE_SIZE = 256;
         int index = 0;
         for (const auto symbolInfo : symbols)
         {
+            NSLog(@"%d", index);
             index++;
             if (symbolInfo.mapSymbol->ignoreClick)
                 continue;

@@ -187,36 +187,48 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 
     private func createAmenity(_ featureData: WikiCoreHelper.OsmandApiFeatureData) -> OAPOI? {
         let amenity = OAPOI()
-        guard let props = featureData.properties else { return nil }
-
-        if let id = props.id, !id.isEmpty {
-            amenity.setAdditionalInfo(WIKIDATA_TAG, value: id.hasPrefix("Q") ? id : "Q" + id)
-            if let parsedId = Int64(id.replacingOccurrences(of: "Q", with: "")) {
-                // FIXME:
-                amenity.obfId = UInt64(-parsedId)
-            }
+        guard let properties = featureData.properties else { return nil }
+        
+        let id = properties.id
+        
+        /*
+         Long osmId = properties.getOsmid();
+         if (osmId != null && osmId > 0) {
+             amenity.setId(ObfConstants.createMapObjectIdFromCleanOsmId(osmId, EntityType.valueOf(properties.getOsmtype())));
+         } else if (id != null) {
+             amenity.setId(-Long.parseLong(id));
+         }
+         */
+        
+        if let osmId = properties.osmid?.uint64Value, osmId > 0 {
+            let osmType = properties.osmtype
+            let objectId = ObfConstants.createMapObjectIdFromCleanOsmId(osmId, type: EOAEntityType(rawValue: Int(osmType)))
+            amenity.obfId = objectId
+        } else if let id, let parsedId = UInt64(id) {
+            
+            amenity.obfId = parsedId
         }
 
-        amenity.name = props.wikiTitle
+        amenity.name = properties.wikiTitle
         // NOTE: android use TransliterationHelper
         amenity.enName = amenity.name ?? ""
         
-        if let desc = props.wikiDesc {
+        if let desc = properties.wikiDesc {
             amenity.setAdditionalInfo(DESCRIPTION_TAG, value: desc)
         }
         
-        if let labelsJson = props.labelsJson, labelsJson.length > 2 {
+        if let labelsJson = properties.labelsJson, labelsJson.length > 2 {
             OAMapObject.parseNamesJSON(labelsJson, object: amenity)
         }
         
-        if let wikiLangs = props.wikiLangs, !wikiLangs.isEmpty {
+        if let wikiLangs = properties.wikiLangs, !wikiLangs.isEmpty {
             let langArray = wikiLangs.components(separatedBy: ",")
             let langSet = Set(langArray)
             
             amenity.updateContentLocales(langSet)
         }
 
-        if let photo = props.photoTitle, !photo.isEmpty {
+        if let photo = properties.photoTitle, !photo.isEmpty {
             let img = WikiHelper.shared.getImageData(imageFileName: photo)
             amenity.setAdditionalInfo(WIKI_PHOTO_TAG, value: img.imageHiResUrl)
             amenity.wikiIconUrl = img.imageIconUrl
@@ -229,8 +241,8 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         }
         
         let wikiCat = OAPOIHelper.sharedInstance().getPoiCategory(byName: "osmwiki")
-        let category = props.poitype.flatMap { OAPOIHelper.sharedInstance().getPoiCategory(byName: $0) } ?? wikiCat
-        let subtype = props.poisubtype ?? "wikiplace"
+        let category = properties.poitype.flatMap { OAPOIHelper.sharedInstance().getPoiCategory(byName: $0) } ?? wikiCat
+        let subtype = properties.poisubtype ?? "wikiplace"
 
         if let categoryName = category?.name {
             amenity.type = OAPOIHelper.sharedInstance().getPoiType(byCategory: categoryName, name: subtype)
@@ -240,7 +252,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         }
         amenity.subType = subtype
 
-        amenity.setTravelEloNumber(props.elo?.int32Value ?? DEFAULT_ELO)
+        amenity.setTravelEloNumber(properties.elo?.int32Value ?? DEFAULT_ELO)
         return amenity
     }
 

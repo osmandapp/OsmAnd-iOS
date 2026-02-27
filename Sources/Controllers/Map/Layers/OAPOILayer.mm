@@ -616,11 +616,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     if ([object isKindOfClass:BaseDetailsObject.class])
     {
         BaseDetailsObject *details = (BaseDetailsObject *)object;
-//        int64_t placeId = ((BaseDetailsObject *)object).syntheticAmenity.obfId;
-//        
-////<<<<<<< HEAD 14114303922
-//        return placeId > 0 && topPlaces[@(placeId)];
-//=======
+
         uint64_t obfId = details.syntheticAmenity.obfId;
         if (topPlaces[@(obfId)])
             return YES;
@@ -630,7 +626,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 //            if (topPlaces[@(poi.obfId)])
 //                return YES;
 //        }
-//>>>>>>> master
     }
     
     return NO;

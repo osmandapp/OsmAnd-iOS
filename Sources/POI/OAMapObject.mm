@@ -25,6 +25,7 @@
         _x = [NSMutableArray new];
         _y = [NSMutableArray new];
         _localizedNames = [NSMutableDictionary new];
+        _obfId = OsmAnd::ObfObjectId::invalidId();
     }
     return self;
 }

@@ -122,6 +122,8 @@ final class BaseDetailsObject: NSObject {
             return amenity?.getWikidata()
         } else if let renderedObject = object as? OARenderedObject {
             return renderedObject.tags[WIKIDATA_TAG] as? String
+        } else if let detailsObject = object as? BaseDetailsObject {
+            return detailsObject.syntheticAmenity.getWikidata()
         }
         return nil
     }
@@ -131,6 +133,8 @@ final class BaseDetailsObject: NSObject {
             return amenity.getOsmId()
         } else if let mapObject = object as? OAMapObject {
             return ObfConstants.getOsmObjectId(mapObject)
+        } else if let detailsObject = object as? BaseDetailsObject {
+            return detailsObject.syntheticAmenity.getOsmId()
         }
         return 0
     }

@@ -932,9 +932,11 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
 - (uint64_t) getOsmId
 {
     uint64_t _osmId = self.obfId;
-    if (_osmId <= 0)
-        return 0;
-    
+    if (_osmId == OsmAnd::ObfObjectId::invalidId())
+    {
+        return -1;
+    }
+
     if ([ObfConstants isShiftedID:_osmId])
         return [ObfConstants getOsmId:_osmId];
     else

@@ -259,7 +259,7 @@ static int TILE_SIZE = 256;
             
             if (detailsObject && ![self isTransportStop:result.allObjects detail:detailsObject])
             {
-                [result collect:detailsObject provider:_provider];
+                [result collect:detailsObject provider:_provider toBegin:YES];
             }
         }
     }

@@ -35,7 +35,7 @@ final class DeepLinkParser: NSObject {
     }
     
     private func handleIncomingGoURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: "/go") else { return false }
+        guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: kOsmAndGoPathPrefix) else { return false }
         let path = url.path.split(separator: "/", omittingEmptySubsequences: true).map { $0.lowercased() }
         let routeRaw = path.dropFirst().joined(separator: "/")
         guard let route = GoRoute(rawValue: routeRaw) else {
@@ -470,18 +470,23 @@ final class DeepLinkParser: NSObject {
     }
     
     private func openMainScreen(_ root: OARootViewController) {
-        guard resetNavigation(root) != nil else { return }
+        resetNavigation(root)
         root.mapPanel.closeRouteInfo()
     }
     
     private func openLastReleaseNotes(_ root: OARootViewController) {
-        let sheet = OAWhatsNewBottomSheetViewController()
-        sheet.present(in: root)
+        guard !(root.presentedViewController is OAWhatsNewBottomSheetViewController) else { return }
+        OAWhatsNewBottomSheetViewController().present(in: root)
     }
     
     private func openWhatsNew(_ root: OARootViewController) {
-        guard let nav = resetNavigation(root) else { return }
+        guard let nav = root.navigationController else { return }
         let url = kDocsLatestVersion.localizedURLIfAvailable()
+        if let web = nav.visibleViewController as? OAWebViewController, let current = web.urlString?.lowercased(), current == url.lowercased() {
+            return
+        }
+        
+        guard let nav = resetNavigation(root) else { return }
         guard let webVC = OAWebViewController(urlAndTitle: url, title: localizedString("help_what_is_new")) else {
             NSLog("[DeepLinkParser] Failed to create OAWebViewController (url=%@)", url)
             return
@@ -491,15 +496,26 @@ final class DeepLinkParser: NSObject {
     }
     
     private func openChoosePlan(_ root: OARootViewController, feature: OAFeature?) {
-        guard let nav = resetNavigation(root) else { return }
-        if let feature {
-            OAChoosePlanHelper.showChoosePlanScreen(with: feature, navController: nav)
-        } else {
-            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.osmand_CLOUD(), navController: nav)
+        guard let nav = root.navigationController else { return }
+        let target = feature ?? OAFeature.osmand_CLOUD()
+        if let vc = nav.visibleViewController as? OAChoosePlanViewController, vc.selectedFeature.isEqual(target) {
+            return
         }
+        
+        guard let nav = resetNavigation(root) else { return }
+        OAChoosePlanHelper.showChoosePlanScreen(with: target, navController: nav)
     }
     
     private func openCustomButtonsAddAction(_ root: OARootViewController) {
+        guard let nav = root.navigationController else { return }
+        if let current = nav.visibleViewController as? CustomMapButtonsViewController {
+            DispatchQueue.main.async {
+                current.onRightNavbarButtonPressed()
+            }
+            
+            return
+        }
+        
         guard let nav = resetNavigation(root) else { return }
         let vc = CustomMapButtonsViewController()
         nav.pushViewController(vc, animated: false)
@@ -509,6 +525,7 @@ final class DeepLinkParser: NSObject {
     }
     
     private func openExternalSensorsRecording(_ root: OARootViewController) {
+        guard let nav = root.navigationController, !(nav.visibleViewController is ExternalSettingsWriteToTrackSettingsViewController) else { return }
         guard let nav = resetNavigation(root) else { return }
         guard let product = OAIAPHelper.sharedInstance().product(kInAppId_Addon_External_Sensors) else {
             OARootViewController.instance().requestProducts(withProgress: false, reload: false)
@@ -516,7 +533,7 @@ final class DeepLinkParser: NSObject {
             return
         }
         
-        if !product.isPurchased() {
+        guard product.isPurchased() else {
             OAChoosePlanHelper.showChoosePlanScreen(with: product, navController: nav)
             return
         }
@@ -525,13 +542,11 @@ final class DeepLinkParser: NSObject {
             OAIAPHelper.sharedInstance().enableProduct(product.productIdentifier)
         }
         
-        DispatchQueue.main.async {
-            let controller = ExternalSettingsWriteToTrackSettingsViewController(applicationMode: OAAppSettings.sharedManager().applicationMode.get())
-            nav.pushViewController(controller, animated: false)
-        }
+        let controller = ExternalSettingsWriteToTrackSettingsViewController(applicationMode: OAAppSettings.sharedManager().applicationMode.get())
+        nav.pushViewController(controller, animated: false)
     }
     
-    private func resetNavigation(_ root: OARootViewController) -> UINavigationController? {
+    @discardableResult private func resetNavigation(_ root: OARootViewController) -> UINavigationController? {
         guard let nav = root.navigationController else { return nil }
         nav.dismiss(animated: false)
         nav.popToRootViewController(animated: false)

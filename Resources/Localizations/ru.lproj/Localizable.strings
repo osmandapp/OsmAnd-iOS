@@ -618,7 +618,7 @@
 "map_widget_next_turn" = "Следующий поворот";
 "rotate_map_to" = "Ориентация карты";
 "rotate_map_compass_opt" = "По направлению компаса";
-"rotate_map_bearing_opt" = "по направлению движения";
+"rotate_map_bearing_opt" = "По направлению движения";
 "day_night_info_description" = "Восход: %@ \nЗакат: %@";
 "daynight_mode_auto" = "Восход/закат";
 "transport_nearby_routes_within" = "Ближайшие маршруты в пределах";
@@ -2997,7 +2997,7 @@
 "shared_string_duplicate" = "Дублировать";
 "first_marker_widget_desc" = "Вы можете настроить виджет так, чтобы он показывал расстояние или расчётное время прибытия до первого маркера карты.";
 "download_to_device" = "Скачать на устройство";
-"map_orientation_portrait" = "Портрет";
+"map_orientation_portrait" = "Книжная";
 "restore_from_trash" = "Восстановить из корзины";
 "activity_type_motorbike_name" = "Мотоцикл";
 "help_article_navigation_routing_straight_line_routing_name" = "Прямая линия (воздушное судно)";

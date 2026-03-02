@@ -3988,7 +3988,7 @@
 "ble_scanner" = "BLE-Scanner";
 "reconnect" = "Erneut verbinden";
 "slots" = "Slots";
-"copy_link" = "Link kopieren";
+"copy_link" = "Verknüpfung kopieren";
 "visualizing_button_grid" = "Raster der Karten-Schaltflächen";
 "lang_mi" = "Maori";
 "wind_animation_layer" = "Windanimationsebene";

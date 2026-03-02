@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) mapSettingsButtonClick:(id)sender mode:(nullable OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
-- (void) showRouteInfo:(BOOL)fullMenu;
+- (void)showRouteInfo:(BOOL)fullScreen;
 - (void) closeRouteInfo;
 - (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(nullable void (^)(void))onComplete;
 - (void) updateRouteInfo;

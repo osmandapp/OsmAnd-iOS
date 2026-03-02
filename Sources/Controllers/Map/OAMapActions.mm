@@ -67,7 +67,7 @@
                                 fromName:fromName
           useIntermediatePointsByDefault:YES
                               showDialog:YES
-                                fullMenu:YES];
+                              fullScreen:YES];
 }
 
 - (void)enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile
@@ -75,9 +75,9 @@
                               fromName:(OAPointDescription *)fromName
         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
                             showDialog:(BOOL)showDialog
-                              fullMenu:(BOOL)fullMenu
+                            fullScreen:(BOOL)fullScreen
 {
-    [self enterRoutePlanningModeGivenGpx:[self getGpxFileByTrackItem:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog fullMenu:fullMenu];
+    [self enterRoutePlanningModeGivenGpx:[self getGpxFileByTrackItem:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog fullScreen:fullScreen];
 }
 
 - (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
@@ -86,9 +86,9 @@
                               fromName:(OAPointDescription *)fromName
         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
                             showDialog:(BOOL)showDialog
-                              fullMenu:(BOOL)fullMenu
+                            fullScreen:(BOOL)fullScreen
 {
-    [self enterRoutePlanningModeGivenGpx:gpxFile appMode:nil path:path from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog fullMenu:fullMenu];
+    [self enterRoutePlanningModeGivenGpx:gpxFile appMode:nil path:path from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog fullScreen:fullScreen];
 }
 
 - (void) enterRoutePlanningModeGivenGpx:(OASTrackItem *)trackItem useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
@@ -138,7 +138,7 @@
                                 fromName:fromName
           useIntermediatePointsByDefault:useIntermediatePointsByDefault
                               showDialog:showDialog
-                                fullMenu:NO];
+                              fullScreen:NO];
 }
 
 - (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
@@ -148,7 +148,7 @@
                               fromName:(OAPointDescription *)fromName
         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
                             showDialog:(BOOL)showDialog
-                              fullMenu:(BOOL)fullMenu
+                            fullScreen:(BOOL)fullScreen
 {
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
@@ -173,7 +173,7 @@
     // then update start and destination point
 
     if (showDialog)
-        [[OARootViewController instance].mapPanel showRouteInfo:fullMenu];
+        [[OARootViewController instance].mapPanel showRouteInfo:fullScreen];
 
     [targets updateRouteAndRefresh:true];
     

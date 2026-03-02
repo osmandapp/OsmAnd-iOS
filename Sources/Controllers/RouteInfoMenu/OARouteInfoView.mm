@@ -1092,7 +1092,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] updateRoute:YES intermediate:-1 historyName:[start getPointDescription]];
         }
 
-        [self show:NO fullMenu:NO onComplete:nil];
+        [self show:NO fullScreen:NO onComplete:nil];
     }
 }
 
@@ -1116,7 +1116,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
 }
 
-- (void)show:(BOOL)animated fullMenu:(BOOL)fullMenu onComplete:(void (^)(void))onComplete
+- (void)show:(BOOL)animated fullScreen:(BOOL)fullScreen onComplete:(void (^)(void))onComplete
 {
     [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandNavigationScreenOpen];
 
@@ -1124,7 +1124,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _optionsMenuSelected = NO;
     [_appModeView setupModeButtons];
     [_tableView setContentOffset:CGPointZero];
-    _currentState = fullMenu ? EOARouteInfoMenuStateFullScreen : _currentState;
+    _currentState = fullScreen ? EOARouteInfoMenuStateFullScreen : _currentState;
     [_tableView setScrollEnabled:YES];
     _historyItemsLimit = kHistoryItemLimitDefault;
     
@@ -1272,7 +1272,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) updateMenu
 {
     if ([self superview])
-        [self show:NO fullMenu:YES onComplete:nil];
+        [self show:NO fullScreen:YES onComplete:nil];
 }
 
 - (OASGpxTrackAnalysis *) getTrackAnalysis

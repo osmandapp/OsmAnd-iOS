@@ -283,7 +283,8 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
     NSMutableArray<OAPOI *> *filtered = [NSMutableArray array];
 
-    if (osmId > 0 || wikidata != nil)
+    // if (osmId > 0 || wikidata != null)
+    if ((osmId > 0 && [OAMapObject getInvalidObfId]) || wikidata != nil)
     {
         filtered = [[self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata] mutableCopy];
     }
@@ -419,7 +420,8 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 - (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataForAmenity:(OAPOI *)amenity limit:(int)limit
 {
     const auto osmId = [ObfConstants getOsmObjectId:amenity];
-    const BOOL checkId = osmId > 0;
+    //boolean checkId = osmId > 0;
+    const BOOL checkId = osmId > 0 && [OAMapObject getInvalidObfId];
 
     NSString *wikidata = [amenity getWikidata];;
     const BOOL checkWikidata = !NSStringIsEmpty(wikidata);
@@ -512,12 +514,11 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
     for (OAPOI *amenity in amenities)
     {
-        if (amenity.obfId != 0)
+        if ([amenity isValidObfId])
         {
             NSString *wiki = [amenity getWikidata];
             BOOL wikiEqual = (wiki && [wiki isEqualToString:wikidata]);
-            int64_t amenityOsmId = [amenity getOsmId];
-            BOOL idEqual = (amenityOsmId > 0 && amenityOsmId == osmId);
+            BOOL idEqual = ([amenity isValidOsmId] && [amenity getOsmId] == osmId);
 
             if ((idEqual || wikiEqual) && ![amenity isClosed])
             {
@@ -1462,7 +1463,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         }
 
         long long obfId = amenity.obfId;
-        NSNumber *obfIdKey = (obfId > 0) ? @(obfId) : nil;
+        NSNumber *obfIdKey = [amenity isValidObfId] ? @(obfId) : nil;
 
         NSString *wikidata = [amenity getWikidata];
         if (wikidata.length == 0)

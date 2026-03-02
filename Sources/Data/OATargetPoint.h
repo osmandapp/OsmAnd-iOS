@@ -97,5 +97,5 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 
 - (void)initAdderssIfNeeded;
 - (void)initDetailsObjectIfNeeded:(id)object;
-
+- (BOOL)isValidObfId;
 @end

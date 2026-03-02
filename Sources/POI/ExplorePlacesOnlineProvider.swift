@@ -200,7 +200,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
          }
          */
         
-        if let osmId = properties.osmid?.uint64Value, osmId > 0 {
+        if let osmId = properties.osmid?.uint64Value, osmId > 0, osmId != OAMapObject.getInvalidObfId() {
             let osmType = properties.osmtype
             let objectId = ObfConstants.createMapObjectIdFromCleanOsmId(osmId, type: EOAEntityType(rawValue: Int(osmType)))
             amenity.obfId = objectId

@@ -372,7 +372,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         {
             OAPOI *that = (OAPOI *)sr.object;
             uint64_t osmId = [that getOsmId];
-            NSNumber * osmIdObj = osmId == 0 ? nil : @(osmId);
+            NSNumber *osmIdObj = (osmId == [OAMapObject getInvalidObfId] || osmId <= 0) ? nil : @(osmId);
             NSString *wikidata = [that getWikidata];
 
             if (that.isRouteTrack)

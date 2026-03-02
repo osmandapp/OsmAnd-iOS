@@ -716,7 +716,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
         if (name.length == 0)
         {
             int64_t osmId = [self getOsmId];
-            if (osmId > 0)
+            if (osmId > 0 && osmId != [OAMapObject getInvalidObfId])
                 name = [NSString stringWithFormat:@"%lld", osmId];
         }
     }
@@ -932,15 +932,20 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
 - (uint64_t) getOsmId
 {
     uint64_t _osmId = self.obfId;
-    if (_osmId == OsmAnd::ObfObjectId::invalidId())
+    if (_osmId == [OAMapObject getInvalidObfId])
     {
-        return -1;
+        return [OAMapObject getInvalidObfId];
     }
 
     if ([ObfConstants isShiftedID:_osmId])
         return [ObfConstants getOsmId:_osmId];
     else
         return _osmId >> AMENITY_ID_RIGHT_SHIFT;
+}
+
+- (BOOL) isValidOsmId
+{
+    return [self getOsmId] != [OAMapObject getInvalidObfId];
 }
 
 - (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes

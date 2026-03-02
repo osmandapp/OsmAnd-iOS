@@ -184,6 +184,7 @@ static int DEFAULT_ELO = 900;
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 
 - (uint64_t) getOsmId;
+- (BOOL) isValidOsmId;
 
 - (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes;
 - (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags;

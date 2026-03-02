@@ -25,7 +25,7 @@
         _x = [NSMutableArray new];
         _y = [NSMutableArray new];
         _localizedNames = [NSMutableDictionary new];
-        _obfId = OsmAnd::ObfObjectId::invalidId();
+        _obfId = [self.class getInvalidObfId];
     }
     return self;
 }
@@ -193,6 +193,16 @@
 
     if ([jsonDict isKindOfClass:[NSDictionary class]])
         object.localizedNames = [jsonDict mutableCopy];
+}
+
+- (BOOL) isValidObfId
+{
+    return self.obfId != [self.class getInvalidObfId];
+}
+
++ (uint64_t) getInvalidObfId
+{
+    return OsmAnd::ObfObjectId::invalidId();
 }
 
 @end

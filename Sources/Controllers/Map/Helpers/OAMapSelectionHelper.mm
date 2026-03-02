@@ -342,7 +342,7 @@ static int TILE_SIZE = 256;
         [names addObject:tags[OATravelGpx.TRAVEL_MAP_TO_POI_TAG]]; // additional attribute for TravelGpx points (route_id)
     }
     
-    uint64_t obfId = -1;
+    uint64_t obfId = [OAMapObject getInvalidObfId];
     if (const auto& mapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(obfMapObject))
     {
         obfId = mapObject->id.id;

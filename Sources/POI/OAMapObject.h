@@ -38,6 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)copyNames:(OAMapObject *)s copyName:(BOOL)copyName copyEnName:(BOOL)copyEnName overwrite:(BOOL)overwrite;
 - (void)copyNames:(OAMapObject *)s;
 
+
+- (BOOL) isValidObfId;
++ (uint64_t) getInvalidObfId;
+
 + (BOOL)isNameLangTag:(NSString *)tag;
 
 + (void)parseNamesJSON:(NSString *)json

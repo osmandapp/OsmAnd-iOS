@@ -103,7 +103,7 @@ final class BaseDetailsObject: NSObject {
             let osmId = getOsmId(object)
             let wikidata = getWikidata(object)
 
-            if osmId > 0 {
+            if osmId > 0 && osmId != OAMapObject.getInvalidObfId(){
                 osmIds.insert(UInt64(osmId))
             }
             if let wikidata, !wikidata.isEmpty {
@@ -136,14 +136,14 @@ final class BaseDetailsObject: NSObject {
         } else if let detailsObject = object as? BaseDetailsObject {
             return detailsObject.syntheticAmenity.getOsmId()
         }
-        return 0
+        return OAMapObject.getInvalidObfId()
     }
 
     func overlapsWith(_ object: Any) -> Bool {
         let osmId = getOsmId(object)
         let wikidata = getWikidata(object)
 
-        let osmIdEqual = osmId > 0 && osmIds.contains(osmId)
+        let osmIdEqual = osmId > 0 && osmId != OAMapObject.getInvalidObfId() && osmIds.contains(osmId)
 
         var wikidataEqual = false
         if let wikidata, !wikidata.isEmpty, wikidataIds.contains(wikidata) {
@@ -305,7 +305,7 @@ final class BaseDetailsObject: NSObject {
                 let osmId = ObfConstants.getOsmObjectId(renderedObject)
                 let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
 
-                if syntheticAmenity.obfId <= 0 && objectId > 0 {
+                if !syntheticAmenity.isValidObfId() && objectId > 0 {
                     syntheticAmenity.obfId = objectId
                 }
             }
@@ -330,7 +330,7 @@ final class BaseDetailsObject: NSObject {
 
     private func processId(_ object: OAMapObject?) {
         guard let object else { return }
-        if (syntheticAmenity.obfId >= 0) && ObfConstants.isOsmUrlAvailable(object) {
+        if !syntheticAmenity.isValidObfId() && ObfConstants.isOsmUrlAvailable(object) {
             syntheticAmenity.obfId = object.obfId
         }
     }

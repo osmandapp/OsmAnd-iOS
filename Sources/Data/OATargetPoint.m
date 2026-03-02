@@ -20,6 +20,16 @@
     OAPointDescription *_pd;
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _obfId = [OAMapObject getInvalidObfId];
+    }
+    return self;
+}
+
 - (void)initAdderssIfNeeded
 {
     if (self.addressFound)
@@ -111,6 +121,11 @@
         }
     }
     return _pd;
+}
+
+- (BOOL) isValidObfId
+{
+    return self.obfId != [self.class getInvalidObfId];
 }
 
 - (BOOL) isEqual:(id)o

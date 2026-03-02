@@ -249,7 +249,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     // implement in subclasses
 }
 
-- (void) appdendDetailsButtonRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
+- (void) appendDetailsButtonRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if ([self showDetailsButton])
     {
@@ -264,7 +264,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     _rows = rows;
     
     // don't exist in android. and maybe already not used in ios.
-    [self appdendDetailsButtonRow:_rows];
+    [self appendDetailsButtonRow:_rows];
 
     [self buildTopInternal:_rows];
 
@@ -278,19 +278,17 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     if (self.additionalRows)
         [_rows addObjectsFromArray:self.additionalRows];
     
-    //    if (needBuildPlainMenuItems()) {
-    //        buildPlainMenuItems(view);
-    //    }
-    
     [self buildInternal:_rows];
     
     [self buildPluginRows];
-
+    
     if ([self needBuildCoordinatesRow])
         [self buildCoordinateRows:rows];
     
     if (!_customOnlinePhotosPosition)
         [self buildPhotosRow];
+    
+    [self handleOnlineAndMapillaryLoadingIfNeeded];
     
     [self sortInfoRows];
     _calculatedWidth = 0;
@@ -1057,8 +1055,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
     [self clearContentForRowInfo:_onlinePhotoCardsRowInfo];
     _onlinePhotoCardsRowInfo = nearbyImagesRowInfo;
-    
-    [self startLoadingImages];
 }
 
 - (void)addMapillaryCardsRowInfoIfNeeded
@@ -1625,6 +1621,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         [onlinePhotoCardsView setCards:@[noInternetCard]];
         if (mapillaryCardsView)
         {
+            mapillaryCardsView.isLoading = NO;
             [mapillaryCardsView setCards:@[noInternetCard]];
         }
     };

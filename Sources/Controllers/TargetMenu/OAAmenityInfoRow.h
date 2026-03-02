@@ -51,10 +51,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) id<OARowInfoDelegate> delegate;
 
 //TODO: delete? and use new init() ?
-- (instancetype) initWithKey:(nullable NSString *)key icon:(nullable UIImage *)icon textPrefix:(nullable NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(NSInteger)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+- (instancetype) initWithKey:(nullable NSString *)key icon:(nullable UIImage *)icon textPrefix:(nullable NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(NSInteger)order typeName:(nullable NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
 
 //TODO: just delete?
-- (instancetype) initWithKey:(NSString *)key icon:(nullable UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks collapsable:(nullable OACollapsableView *)collapsable order:(NSInteger)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+- (instancetype) initWithKey:(NSString *)key icon:(nullable UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks collapsable:(nullable OACollapsableView *)collapsable order:(NSInteger)order typeName:(nullable NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
 
 //TODO: test new version?
 - (instancetype) initWithKey:(NSString * _Nullable)key icon:(UIImage * _Nullable)icon textPrefix:(NSString * _Nullable)textPrefix text:(NSString * _Nullable)text hiddenUrl:(NSString * _Nullable)hiddenUrl collapsableView:(OACollapsableView * _Nullable)collapsableView textColor:(UIColor * _Nullable)textColor isWiki:(BOOL)isWiki isText:(BOOL)isText needLinks:(BOOL)needLinks isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl order:(NSInteger)order name:(NSString * _Nullable)name matchWidthDivider:(BOOL)matchWidthDivider textLinesLimit:(int)textLinesLimit;

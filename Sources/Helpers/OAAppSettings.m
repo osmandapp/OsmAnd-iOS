@@ -7048,6 +7048,13 @@ static NSString *kOfflineKey = @"OFFLINE";
     return stored;
 }
 
+- (BOOL)shouldHidePolygons
+{
+    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    OAMapStyleParameter *hidePolygonsParameter = [styleSettings getParameter:NO_POLYGONS];
+    return [hidePolygonsParameter.value isEqualToString:@"true"] || ([OsmAndApp instance].data.underlayMapSource && ![_showPolygonsWhenUnderlayIsOn get]);
+}
+
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode
 {
     NSArray<NSMapTable<NSString *, OACommonPreference *> *> *preferencesCollections = @[

@@ -1362,6 +1362,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue;
 - (EOATemperatureConstant)getTemperatureUnit;
 
+- (BOOL)shouldHidePolygons;
+
 // Direction Appearance
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;

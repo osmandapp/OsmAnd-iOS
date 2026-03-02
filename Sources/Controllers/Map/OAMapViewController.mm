@@ -2580,6 +2580,11 @@ static const NSInteger kDetailedMapZoom = 9;
                         newSettings[QString::fromNSString(param.name)] = QStringLiteral("false");
                         continue;
                     }
+                    if ([param.name isEqualToString:NO_POLYGONS])
+                    {
+                        newSettings[QString::fromNSString(param.name)] = [settings shouldHidePolygons] ? QStringLiteral("true") : QStringLiteral("false");
+                        continue;
+                    }
                     if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
                         newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
                 }

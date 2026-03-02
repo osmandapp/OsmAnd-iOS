@@ -17,6 +17,7 @@
 #define kOsmAndHost @"osmand.net"
 #define kOsmAndGoPathPrefix @"/go"
 #define kOsmAndMapPathPrefix @"/map"
+#define kOsmAndAppPathPrefix @"/app"
 
 //#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-9-released"
 #define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios/"

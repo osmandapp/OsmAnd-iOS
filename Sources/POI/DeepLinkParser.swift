@@ -8,15 +8,15 @@
 
 import Foundation
 
-private enum GoRoute: String {
-    case main = "main"
+private enum DeepLinkAppRoute: String {
+    case main = ""
     case lastReleaseNotes = "help/last-release-notes"
     case helpWhatsNew = "help/whats-new"
-    case purchasesLearnMore = "purchases/learn-more"
+    case purchases = "purchases"
     case purchasesOsmAndPro = "purchases/osmand-pro"
     case purchasesMapsPlus = "purchases/maps-plus"
-    case customButtonsAdd = "custom-buttons/add"
-    case externalSensorsRecording = "plugins/external-sensors/recording"
+    case quickActionsLockScreenAdd = "quick-actions/lock-screen/add"
+    case tripRecordingExternalSensors = "trip-recording/external-sensors"
 }
 
 @objcMembers
@@ -35,11 +35,11 @@ final class DeepLinkParser: NSObject {
     }
     
     private func handleIncomingGoURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: kOsmAndGoPathPrefix) else { return false }
+        guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: kOsmAndAppPathPrefix) else { return false }
         let path = url.path.split(separator: "/", omittingEmptySubsequences: true).map { $0.lowercased() }
         let routeRaw = path.dropFirst().joined(separator: "/")
-        guard let route = GoRoute(rawValue: routeRaw) else {
-            NSLog("[DeepLinkParser] Unknown /go route: %@ (url=%@)", routeRaw, url.absoluteString)
+        guard let route = DeepLinkAppRoute(rawValue: routeRaw) else {
+            NSLog("[DeepLinkParser] Unknown /app route: %@ (url=%@)", routeRaw, url.absoluteString)
             return false
         }
         
@@ -52,15 +52,15 @@ final class DeepLinkParser: NSObject {
                 self.openLastReleaseNotes(rootViewController)
             case .helpWhatsNew:
                 self.openWhatsNew(rootViewController)
-            case .purchasesLearnMore:
+            case .purchases:
                 self.openChoosePlan(rootViewController, feature: nil)
             case .purchasesOsmAndPro:
                 self.openChoosePlan(rootViewController, feature: OAFeature.advanced_WIDGETS())
             case .purchasesMapsPlus:
                 self.openChoosePlan(rootViewController, feature: OAFeature.monthly_MAP_UPDATES())
-            case .customButtonsAdd:
+            case .quickActionsLockScreenAdd:
                 self.openCustomButtonsAddAction(rootViewController)
-            case .externalSensorsRecording:
+            case .tripRecordingExternalSensors:
                 self.openExternalSensorsRecording(rootViewController)
             }
         }

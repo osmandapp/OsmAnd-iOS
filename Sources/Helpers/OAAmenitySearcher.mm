@@ -1437,7 +1437,6 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                   bbox31:bbox31
          currentLocation:center31
            includeTravel:includeTravel
-         skipAcceptCheck:YES
                  matcher:matcher
                  publish:publish];
 }
@@ -1495,30 +1494,12 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         return [NSString stringWithFormat:@"%@", @(amenity->id.id)];
 }
 
-+ (NSArray<OAPOI *> *)findPOI:(OASearchPoiTypeFilter *)searchFilter
-              additionalFilter:(OATopIndexFilter *)additionalFilter
-                        bbox31:(OsmAnd::AreaI )bbox31
-               currentLocation:(OsmAnd::PointI)currentLocation
-                 includeTravel:(BOOL)includeTravel
-                       matcher:(OAResultMatcher<OAPOI *> *)matcher
-                       publish:(BOOL(^)(OAPOI *poi))publish
-{
-    return [[self class] findPOI:searchFilter
-                additionalFilter:additionalFilter
-                          bbox31:bbox31
-                 currentLocation:currentLocation
-                   includeTravel:includeTravel
-                 skipAcceptCheck:NO
-                         matcher:matcher
-                         publish:publish];
-}
 
 + (NSArray<OAPOI *> *)findPOI:(OASearchPoiTypeFilter *)searchFilter
               additionalFilter:(OATopIndexFilter *)additionalFilter
                         bbox31:(OsmAnd::AreaI )bbox31
                currentLocation:(OsmAnd::PointI)currentLocation
                  includeTravel:(BOOL)includeTravel
-               skipAcceptCheck:(BOOL)skipAcceptCheck
                        matcher:(OAResultMatcher<OAPOI *> *)matcher
                        publish:(BOOL(^)(OAPOI *poi))publish
 {
@@ -1565,12 +1546,12 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
 
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
-                                              [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done, skipAcceptCheck](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                              [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
 
                                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:am];
-                                        BOOL accept = skipAcceptCheck ? YES : [filter accept:type.category subcategory:type.name];
+                                        BOOL accept = [filter accept:type.category subcategory:type.name];
                                         NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:am];
 
                                         if (![deduplicateTypeIdSet containsObject:typeIdKey] && accept)

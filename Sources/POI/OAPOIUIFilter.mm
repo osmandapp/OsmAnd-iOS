@@ -1221,7 +1221,7 @@
     if ([[acceptedTypes keyEnumerator].allObjects containsObject:type])
     {
         NSMutableSet<NSString *> *acceptedTypesSet = [acceptedTypes objectForKey:type];
-        if (!acceptedTypesSet || [acceptedTypesSet containsObject:subcategory])
+        if ([acceptedTypesSet count] == 0 || [acceptedTypesSet containsObject:subcategory])
             return YES;
     }
     if ([[acceptedTypesOrigin keyEnumerator].allObjects containsObject:type])

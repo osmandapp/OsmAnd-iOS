@@ -35,7 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
                        bbox31:(OsmAnd::AreaI)bbox31
               currentLocation:(OsmAnd::PointI)currentLocation
                 includeTravel:(BOOL)includeTravel
-              skipAcceptCheck:(BOOL)skipAcceptCheck
                       matcher:(OAResultMatcher<OAPOI *> *)matcher
                       publish:(BOOL(^)(OAPOI *poi))publish;
 

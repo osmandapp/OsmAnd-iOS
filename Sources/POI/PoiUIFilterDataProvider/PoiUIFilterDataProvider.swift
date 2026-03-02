@@ -53,7 +53,7 @@ final class PoiUIFilterDataProvider: NSObject {
                 bottomLatitude: bottomLatitude,
                 leftLongitude: leftLongitude,
                 rightLongitude: rightLongitude,
-                includeTravel: false,
+                includeTravel: true,
                 matcher: matcher,
                 publish: nil)
         }

@@ -105,7 +105,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
                 let title = localizedString("travel_guides")
                 let collapsableView = self.getGuidesCollapsableView(articles: articles)
                 
-                let row = OAAmenityInfoRow(key: "travel", icon: icon, textPrefix: "", text: title, textColor: nil, isText: true, needLinks: true, collapsable: collapsableView, order: -100, typeName: "travel", isPhoneNumber: false, isUrl: false)
+                let row = OAAmenityInfoRow(key: "travel", icon: icon, textPrefix: "", text: title, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: -100, name: "travel", matchWidthDivider: self.matchWidthDivider, textLinesLimit: 1)
                 row.collapsed = true
                 
                 self.append(row)

@@ -450,7 +450,8 @@ final class AmenityUIHelper: NSObject {
         
         // android here creates collapsable view with all translations. ios opens a new screen with translations instead.
         // implementaion: OAPOIViewContoller.buildNamesRow() and OATargetInfoViewController.showPOITagsDetails()
-        return OAAmenityInfoRow(key: key, icon: icon, textPrefix: textPrefix, text: name, textColor: nil, isText: true, needLinks: true, collapsable: nil, order: 18000, typeName: "names", isPhoneNumber: false, isUrl: false)
+
+        return OAAmenityInfoRow(key: key, icon: icon, textPrefix: textPrefix, text: name, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 18000, name: "names", matchWidthDivider: matchWidthDivider, textLinesLimit: 1)
     }
     
     private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, textRow: OAAmenityInfoRow?, type: OAPOICategory?) -> OACollapsableView? {

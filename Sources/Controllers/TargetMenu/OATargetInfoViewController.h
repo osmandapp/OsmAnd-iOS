@@ -24,8 +24,10 @@ static NSString *kGroupRowType = @"kGroupRowType";
 
 @property (nonatomic) NSArray<OAAmenityInfoRow *> *additionalRows;
 
+@property (nonatomic) BOOL showDefaultTags;
 @property (nonatomic) BOOL showTitleIfTruncated;
 @property (nonatomic) BOOL customOnlinePhotosPosition;
+@property (nonatomic) BOOL matchWidthDivider; // show separator to full screen with
 
 - (BOOL) needBuildCoordinatesRow;
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;

@@ -6,7 +6,7 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-// analog in android: AmenityBuilder.java
+// analog in android: AmenityMenuBuilder.java
 
 #import "OAPOIViewController.h"
 #import "OsmAndApp.h"
@@ -353,7 +353,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
-    _amenityUIHelper.showDefaultTags = false; // amenityUIHelper.setShowDefault(this.showDefaultTags);
+    // TODO: check
+    _amenityUIHelper.showDefaultTags = self.showDefaultTags;
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal]; //row
     [rows addObjectsFromArray:buildedRows];
 }
@@ -386,7 +387,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     NSMutableDictionary<NSString *, NSString *> *names = [NSMutableDictionary new];
     NSString *primaryName = [self.poi name];
     if (!NSStringIsEmpty(primaryName))
-        names[@""] = primaryName; // TODO: "" key represents the default OSM name, not country-specific.
+        names[@""] = primaryName; // @"" key represents the default OSM name, not country-specific.
     
     [names addEntriesFromDictionary:[self.poi getNamesMap:YES]];
     OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:names altName:NO];

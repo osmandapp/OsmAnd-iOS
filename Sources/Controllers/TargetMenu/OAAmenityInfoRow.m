@@ -33,16 +33,6 @@
     return self;
 }
 
-- (instancetype) initWithKey:(NSString *)key icon:(nullable UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(nullable UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks collapsable:(nullable OACollapsableView *)collapsable order:(NSInteger)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
-{
-    self = [self initWithKey:key icon:icon textPrefix:textPrefix text:text textColor:textColor isText:isText needLinks:needLinks order:order typeName:typeName isPhoneNumber:isPhoneNumber isUrl:isUrl];
-    if (self)
-    {
-        self.collapsableView = collapsable;
-    }
-    return self;
-}
-
 - (instancetype) initWithKey:(NSString *)key icon:(nullable UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text hiddenUrl:(NSString *)hiddenUrl collapsableView:(nullable OACollapsableView *)collapsableView textColor:(nullable UIColor *)textColor isWiki:(BOOL)isWiki isText:(BOOL)isText needLinks:(BOOL)needLinks isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl order:(NSInteger)order name:(NSString *)name matchWidthDivider:(BOOL)matchWidthDivider textLinesLimit:(int)textLinesLimit
 {
     self = [super init];

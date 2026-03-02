@@ -119,7 +119,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (nonatomic) BOOL wikiCardsReady;
-@property (nonatomic, strong) NSURLSession *onlineAndMapillarySession; //TODO: move to plugin?
+@property (nonatomic, strong) NSURLSession *onlineAndMapillarySession;
 
 @end
 
@@ -161,6 +161,11 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     
     [_rows addObject:row];
     
+    [self updateInfoRows];
+}
+
+- (void) updateInfoRows
+{
     [self sortInfoRows];
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
@@ -236,17 +241,17 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void) buildMainImage:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    // implement in subclasses
+    [NSException exceptionWithName:@"Not implented Error" reason:@"OATargetInfoViewController buildMainImage is not implemented" userInfo:nil];
 }
 
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    // implement in subclasses
+    [NSException exceptionWithName:@"Not implented Error" reason:@"OATargetInfoViewController buildDescription is not implemented" userInfo:nil];
 }
 
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    // implement in subclasses
+    [NSException exceptionWithName:@"Not implented Error" reason:@"OATargetInfoViewController buildInternal is not implemented" userInfo:nil];
 }
 
 - (void) appendDetailsButtonRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -293,6 +298,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     [self sortInfoRows];
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
+    [self updateInfoRows];
 }
 
 - (void) sortInfoRows
@@ -519,6 +525,33 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 - (void)buildRouteRows
 {
     // TODO: implement
+    BOOL stop = YES;
+    
+//    if (amenity == null) {
+//        return;
+//    }
+//    WeakReference<ViewGroup> viewGroupRef = new WeakReference<>(viewGroup);
+//    int position = viewGroup.getChildCount();
+//    if (amenity.getAdditionalInfo(Amenity.ROUTE_MEMBERS_IDS) != null) {
+//
+//        buildRouteRow(amenities -> {
+//            String title = app.getString(R.string.route_members);
+//            buildRouteRow(amenities, viewGroupRef, position, ROUTE_MEMBERS_ROW_KEY, title);
+//        }, SearchType.MEMBERS);
+//    }
+//
+//    if (amenity.getAdditionalInfo(Amenity.ROUTE_ID) != null) {
+//
+//        buildRouteRow(amenities -> {
+//            String title = app.getString(R.string.route_part_of);
+//            buildRouteRow(amenities, viewGroupRef, position, ROUTE_PART_OF_ROW_KEY, title);
+//        }, SearchType.PART_OF);
+//
+//        buildRouteRow(amenities -> {
+//            String title = app.getString(R.string.multipoligon_related);
+//            buildRouteRow(amenities, viewGroupRef, position, ROUTE_RELATED_ROUTES_ROW_KEY, title);
+//        }, SearchType.RELATED);
+//    }
 }
 
 - (void)buildPluginRows
@@ -983,6 +1016,8 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 {
     if (_otherCardsReady && _wikiCardsReady)
     {
+        CardsFilter *filter = [[CardsFilter alloc] initWithCards:cards];
+        
         if (cards.count > 1)
             [self reorderCards:cards];
         
@@ -992,7 +1027,12 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
             collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
+            
             [collapsableView setCards:cards];
+            
+            BOOL hasPhoto = !filter.cardsIsEmpty && !filter.hasOnlyMapillaryPhotosContent;
+            NSInteger order = hasPhoto ? kOrderPhotoRow : kOrderPhotoEmptyRow;
+            _onlinePhotoCardsRowInfo.order = order;
         }
         if (_mapillaryCardsRowInfo)
         {
@@ -1000,7 +1040,13 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
             collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
+            
+            BOOL hasPhoto = !filter.cardsIsEmpty && !filter.hasOnlyOnlinePhotosContent;
+            NSInteger order = hasPhoto ? kOrderMapillaryRow : kOrderMapillaryEmptyRow;
+            _mapillaryCardsRowInfo.order = order;
         }
+        
+        [self updateInfoRows];
     }
 }
 
@@ -1035,10 +1081,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void)buildPhotosRow
 {
-    BOOL hasPhoto = YES; //TODO: implement later. Move emmty row to bottom of context menu
-    NSInteger order = hasPhoto ? kOrderPhotoRow : kOrderPhotoEmptyRow;
-    
-    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:order typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoEmptyRow typeName:@"" isPhoneNumber:NO isUrl:NO];
     
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
@@ -1062,9 +1105,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     OAMapillaryPlugin *plugin = (OAMapillaryPlugin *) [OAPluginsHelper getPlugin:OAMapillaryPlugin.class];
     if ([plugin isEnabled])
     {
-        BOOL hasPhoto = YES; //TODO: implement later. Move emmty row to bottom of context menu
-        NSInteger order = hasPhoto ? kOrderMapillaryRow : kOrderMapillaryEmptyRow;
-        
         OAAmenityInfoRow *mapillaryCardsRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil
                                                                      icon:[UIImage imageNamed:@"ic_custom_photo_street"]
                                                                textPrefix:nil
@@ -1072,7 +1112,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
                                                                 textColor:nil
                                                                    isText:NO
                                                                 needLinks:NO
-                                                                    order:order
+                                                                    order:kOrderMapillaryEmptyRow
                                                                  typeName:@""
                                                             isPhoneNumber:NO isUrl:NO];
 
@@ -1208,14 +1248,8 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
-            
-            //TODO: implement
-            
-            CGFloat h = s.height + 10.0;
-            
-//            CGFloat h = MIN(188.0, s.height + 10.0);
-//            h = MAX(48.0, h);
-            
+            CGFloat h = MIN(188.0, s.height + 10.0);
+            h = MAX(48.0, h);
             info.height = h;
         }
         return cell;

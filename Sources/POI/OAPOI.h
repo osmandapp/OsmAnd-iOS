@@ -88,7 +88,7 @@ static int DEFAULT_ELO = 900;
 
 @interface OAPOI : OAMapObject
 
-@property (nonatomic, nullable) OAPOIType *type;
+@property (nonatomic, nullable) OAPOIType *type;    //TODO: test. in android here is category:  private PoiCategory type;
 @property (nonatomic, nullable) NSString *subType;
 @property (nonatomic, assign) BOOL hasOpeningHours;
 @property (nonatomic) NSString *openingHours;

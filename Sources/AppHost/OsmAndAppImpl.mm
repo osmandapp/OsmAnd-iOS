@@ -621,13 +621,10 @@ NSString *const kXmlColon = @"_-_";
 
     BOOL rescan = [BundledAssets.shared migrateResourcesToDocumentsIfNeededWithDataPath:_dataPath documentsPath:_documentsPath
                 versionChanged: currentVersion != prevVersion || _firstLaunch];
-    if (!_firstLaunch)
+    if (!_firstLaunch && [BundledAssets.shared migrateLegacyTilesIfNeededWithDocumentsPath:_documentsPath])
     {
-        if ([BundledAssets.shared migrateLegacyTilesIfNeededWithDocumentsPath:_documentsPath])
-        {
-            rescan = YES;
-            [[OAMapCreatorHelper sharedInstance] fetchSQLiteDBFiles:YES];
-        }
+        rescan = YES;
+        [[OAMapCreatorHelper sharedInstance] fetchSQLiteDBFiles:YES];
     }
 
     if (rescan)

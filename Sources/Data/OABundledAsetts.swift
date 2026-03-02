@@ -147,7 +147,7 @@ final class BundledAssets: NSObject {
                 movedAny = true
             } catch {
                 hadErrors = true
-                print("[MIGRATE] legacy tiles move failed '\(file)': \(error)")
+                NSLog("[MIGRATE] legacy tiles move failed '\(file)': \(error)")
             }
         }
         

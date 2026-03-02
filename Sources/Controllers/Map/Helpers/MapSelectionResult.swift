@@ -42,16 +42,8 @@ final class MapSelectionResult: NSObject {
         processedObjects
     }
 
-    func collect(_ object: Any, provider: Any?, toBegin: Bool = false) {
-        if toBegin {
-            allObjects.insert(SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider), at: 0)
-        } else {
-            allObjects.append(SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider))
-        }
-    }
-
     func collect(_ object: Any, provider: Any?) {
-        collect(object, provider:provider, toBegin:false)
+        allObjects.append(SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider))
     }
 
     func groupByOsmIdAndWikidataId() {

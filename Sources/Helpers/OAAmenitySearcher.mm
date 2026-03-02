@@ -707,6 +707,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
 + (QList< std::shared_ptr<const OsmAnd::ObfFile> >) getAmenityRepositories:(BOOL)includeTravel
 {
+    QList<std::shared_ptr<const OsmAnd::ObfFile> > travelMaps;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > baseMaps;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > result;
     
@@ -727,20 +728,21 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     for (const auto& file : obfFiles)
     {
         NSString *path = file->filePath.toNSString();
-        if ([path hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])
+        if ([path hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT] && includeTravel)
         {
-            // android has here TravelRendererHelper.getFileVisibilityProperty()
-            //if (!includeTravel || !app.getTravelRendererHelper().getFileVisibilityProperty(fileName).get()) {
-            if (!includeTravel)
-                continue;
+            travelMaps.append(file);
         }
-        
-        if ([self isWorldMap:path])
+        else if ([self isWorldMap:path])
+        {
             baseMaps.append(file);
+        }
         else
+        {
             result.append(file);
+        }
     }
     result.append(baseMaps);
+    result.append(travelMaps);
     return result;
 }
 

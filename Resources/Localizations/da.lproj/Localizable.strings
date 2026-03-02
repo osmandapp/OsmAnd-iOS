@@ -1487,7 +1487,6 @@
 "clear_tiles_warning" = "Hvis du anvender disse ændringer, ryddes de lagrede data for denne kortflisekilde";
 "map_settings_show_slider_map" = "Vis skyder på kortet";
 "add_online_source" = "Tilføj onlinekilde";
-"map_settings_hide_polygons" = "Skjul polygoner";
 "map_settings_hide_polygons_desc" = "Indstillingen påvirker kun Offline-vektorkort";
 "map_settings_add_maps_desc" = "Tilføj nye kort via link eller ved at importere SQLite-filer.";
 "app_mode_utv" = "Side om side";
@@ -4013,3 +4012,11 @@
 "finish_navigation" = "Afslut navigation";
 "background_liquid_glass_clear_ios" = "Klar";
 "enable_msaa_carplay" = "Aktivér MSAA til CarPlay";
+"offline_weather_forecast" = "Offline vejrudsigt";
+"shared_string_online_only" = "Kun online";
+"shared_string_offline_only" = "Kun offline";
+"show_image_previews" = "Vis forhåndsvisninger af billeder";
+"popular_places" = "Populære steder";
+"shared_string_wikipedia" = "Wikipedia";
+"poi_source" = "IP-kilde";
+"show_polygons" = "Vis polygoner";

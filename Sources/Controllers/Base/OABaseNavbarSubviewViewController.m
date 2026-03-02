@@ -62,6 +62,16 @@
     }
 }
 
+- (UIColor *)blurAppearanceBackgroundColor
+{
+    return [UIColor colorNamed:ACColorNameViewBg];
+}
+
+- (BOOL)shouldBlurAppearanceNavBar
+{
+    return YES;
+}
+
 - (UIView *)createSubview
 {
     return nil;

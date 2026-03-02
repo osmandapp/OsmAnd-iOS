@@ -374,7 +374,7 @@
         if (!centerPixelChanged && !frameChanged && _cachedAnyWidgetVisible == anyWidgetVisible)
             return;
 
-        if (!anyWidgetVisible || [OARootViewController instance].mapPanel.activeTargetType == OATargetRoutePlanning)
+        if (!anyWidgetVisible)
         {
             [self setMapCenterMarkerVisibility:NO];
         }

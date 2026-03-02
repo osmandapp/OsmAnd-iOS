@@ -314,12 +314,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self enterApproximationMode];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [_mapPanel.mapViewController.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
@@ -328,12 +322,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 		[self enterApproximationMode];
 
     [_mapPanel targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    [_mapPanel.hudViewController.mapInfoController updateLayout];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -418,6 +406,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (BOOL) showStatusBarWhenFullScreen
 {
     return NO;
+}
+
+- (BOOL)shouldIgnoreTopBottomOffsets
+{
+    return YES;
 }
 
 - (CGFloat)initialMenuHeight

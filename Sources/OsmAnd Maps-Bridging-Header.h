@@ -101,6 +101,7 @@
 #import "OAUserInteractionPassThroughView.h"
 #import "OAClickableWayHelper.h"
 #import "OAOpenedHoursParser.h"
+#import "OAMapSource.h"
 #import "OAPoiUIFilterDataProviderWrapper.h"
 
 // Widgets

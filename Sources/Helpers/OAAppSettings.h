@@ -1009,6 +1009,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OACommonBoolean *mapSettingShowOnlineNotes;
 @property (nonatomic) OACommonBoolean *mapSettingShowCoordinatesGrid;
+@property (nonatomic) OACommonBoolean *showPolygonsWhenUnderlayIsOn;
 @property (nonatomic) OACommonGridFormat *coordinateGridFormat;
 @property (nonatomic) OACommonInteger *coordinateGridMinZoom;
 @property (nonatomic) OACommonInteger *coordinateGridMaxZoom;

@@ -519,6 +519,7 @@ static CGFloat kMarkWidth = 2;
         if (_selectingMarkTitleBackground)
             [self layoutSelectingTitle];
         
+        [self normalizeSliderValue];
         [self.delegate onSliderValueChanged];
     }
 }
@@ -558,6 +559,16 @@ static CGFloat kMarkWidth = 2;
         
         [self.delegate onSliderFinishEditing];
     }
+}
+
+// The method fixes slider line narrowing when the thumb hits line edges
+- (void)normalizeSliderValue
+{
+    float epsilon = 0.001;
+    if (self.value < epsilon)
+        self.value = epsilon;
+    if (self.value >= 1.0)
+        self.value = 1.0 - epsilon;
 }
 
 - (NSInteger)getIndex

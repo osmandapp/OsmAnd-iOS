@@ -2451,7 +2451,6 @@
 "map_settings_add_maps_slopes" = "需要額外的地圖才能在地圖上檢視斜坡。";
 "map_settings_slopes_description" = "斜坡使用不同的顏色來視覺化地形。";
 "map_settings_zoom_level_description" = "設定顯示圖層的最小和最大縮放等級";
-"map_settings_hide_polygons" = "隱藏多邊形";
 "map_settings_hide_polygons_desc" = "此選項僅影響 OsmAnd 離線向量地圖";
 "map_settings_line_density" = "線密度";
 "press_again_to_change_the_map_orientation" = "再次點選以更改地圖方向";
@@ -3915,7 +3914,7 @@
 "shared_string_last_downhill" = "最後下坡";
 "show_track_on_map" = "在地圖上顯示軌跡";
 "trip_recording_moving_time" = "移動時間";
-"trip_recording_moving_time_widget_description" = "顯示目記錄到的移動時間，或是最後上坡與下坡的時間。";
+"trip_recording_moving_time_widget_description" = "顯示目前記錄的移動時間，或最近一次上坡與下坡的時間。";
 "liquid_glass" = "液態玻璃";
 "copy_link" = "複製連結";
 "icon_size" = "圖示大小";

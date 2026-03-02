@@ -1105,7 +1105,6 @@
 "map_settings_line_density" = "Linjetetthet";
 "map_settings_add_maps_desc" = "Du kan legge til kart via lenke, eller ved å importere SQLite-filer.";
 "map_settings_hide_polygons_desc" = "Dette valget har kun innvirkning på frakoblede vektorielle OsmAnd-kart";
-"map_settings_hide_polygons" = "Skjul polygoner";
 "add_online_source" = "Legg til nettbasert kilde";
 "map_settings_show_slider_map" = "Vis glidebryter på kartet";
 "map_settings_install_more" = "Installer mer…";
@@ -1114,7 +1113,7 @@
 "stats_select_graph_data" = "Velg diagramdata";
 "displayed_route_save" = "Lagre i OsmAnd-turer";
 "gpx_analyze" = "Analyser";
-"shared_string_maximum" = "Maks.";
+"shared_string_maximum" = "Maksimum";
 "shared_string_clear_cache" = "Tøm hurtiglager";
 "transfers" = "overføringer";
 "temporary_conditional_routing" = "Ta hensyn til midlertidige begrensninger";
@@ -2841,3 +2840,5 @@
 "years_3" = "Tre år";
 "three_years_subscription" = "Tre års abonnement";
 "unit_of_temperature_description" = "Valgte enheter vil bli brukt på alle temperaturrelaterte data i den gjeldende profilen.";
+"trip_recording_moving_time_widget_description" = "Viser den gjeldende registrerte tid i bevegelse eller tiden for den siste oppover- og nedoverbakken.";
+"trip_recording_moving_time" = "Tid i bevegelse";

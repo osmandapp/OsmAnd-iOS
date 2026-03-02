@@ -668,7 +668,6 @@
 "shared_string_legend" = "Legenda";
 "map_settings_show_slider_map" = "Prikaži klizač na mapi";
 "add_online_source" = "Dodaj internet izvor";
-"map_settings_hide_polygons" = "Sakrij poligone";
 "map_settings_hide_polygons_desc" = "Ova opcija utiče samo na OsmAnd vanmrežne vektorske mape";
 "map_settings_add_maps_desc" = "Možete dodati nove mape preko veze ili uvozom ?Q???? datoteka.";
 "srtm_color_scheme" = "Kolor šema";
@@ -4013,3 +4012,11 @@
 "finish_navigation" = "Završi navođenje";
 "background_liquid_glass_clear_ios" = "Očisti";
 "enable_msaa_carplay" = "Omogućite MSAA za KarPlej";
+"offline_weather_forecast" = "Vanmrežna vremenska prognoza";
+"shared_string_online_only" = "Samo onlajn";
+"shared_string_offline_only" = "Samo oflajn";
+"show_image_previews" = "Prikaži preglede slika";
+"popular_places" = "Popularna mesta";
+"shared_string_wikipedia" = "Vikipedija";
+"poi_source" = "Izvor TOI";
+"show_polygons" = "Prikazuj mnogouglove";

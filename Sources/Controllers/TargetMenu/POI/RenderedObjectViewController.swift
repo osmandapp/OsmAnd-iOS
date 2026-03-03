@@ -55,6 +55,14 @@ final class RenderedObjectViewController: OAPOIViewController {
         guard let ro = renderedObject else { return }
         guard let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) else { return }
         setup(details.syntheticAmenity)
+
+//        if let mapPanel = OARootViewController.instance()?.mapPanel, let targetPoint = mapPanel.getCurrentTargetPoint() {
+//           // let targetObj = targetPoint.targetObj
+////            targetPoint.targetObj = details.syntheticAmenit
+////            targetPoint.type = OATargetBaseDetailsObject
+//            mapPanel.updateContextMenu(targetPoint)
+//        }
+        
         rebuildRows()
         tableView.reloadData()
     }

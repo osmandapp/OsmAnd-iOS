@@ -609,25 +609,25 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     if ([object isKindOfClass:OAPOI.class])
     {
-        uint64_t obfId = ((OAPOI *)object).obfId;
+        int64_t obfId = ((OAPOI *)object).getSignedId;
         return topPlaces[@(obfId)] != nil;
     }
     
     if ([object isKindOfClass:BaseDetailsObject.class])
     {
         BaseDetailsObject *details = (BaseDetailsObject *)object;
-        
-        uint64_t obfId = details.syntheticAmenity.obfId;
-        if (topPlaces[@(obfId)])
-            return YES;
-        
-        
-//        for (OAPOI *poi in details.objects)
-//        {
-//            if (topPlaces[@(poi.obfId)])
-//                return YES;
-//        }
-
+        for (id item in details.objects)
+        {
+            if ([item isKindOfClass:[OAMapObject class]])
+            {
+                OAMapObject *mapObject = (OAMapObject *)item;
+                int64_t obfId = [mapObject getSignedId];
+                if (topPlaces[@(obfId)])
+                {
+                    return YES;
+                }
+            }
+        }
     }
     
     return NO;

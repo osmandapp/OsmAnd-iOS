@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)copyNames:(NSString *)otherName otherEnName:(NSString *)otherEnName otherNames:(NSDictionary<NSString *, NSString *> *)otherNames;
 - (void)copyNames:(OAMapObject *)s copyName:(BOOL)copyName copyEnName:(BOOL)copyEnName overwrite:(BOOL)overwrite;
 - (void)copyNames:(OAMapObject *)s;
+- (int64_t) getSignedId;
 
 
 - (BOOL) isValidObfId;

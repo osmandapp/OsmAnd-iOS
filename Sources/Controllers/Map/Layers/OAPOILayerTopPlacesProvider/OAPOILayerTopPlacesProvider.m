@@ -236,11 +236,11 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
         if (_selectedTopPlace
             && topPlace
-            && _selectedTopPlace.obfId == topPlace.obfId)
+            && [_selectedTopPlace getSignedId] == [topPlace getSignedId])
             return;
 
         void (^selectNewTopPlace)(void) = ^{
-            if (!topPlace || !_topPlaces[@(topPlace.obfId)])
+            if (!topPlace || !_topPlaces[@([topPlace getSignedId])])
                 return;
 
             _selectedTopPlace = topPlace;
@@ -296,8 +296,23 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     }
     else if ([object isKindOfClass:BaseDetailsObject.class])
     {
-        BaseDetailsObject *details = (BaseDetailsObject *)object;
-        return details.syntheticAmenity;
+        BaseDetailsObject *baseDetailsObject = object;
+        OAPOI *syntheticAmenity = baseDetailsObject.syntheticAmenity;
+        
+        int64_t obfId = syntheticAmenity.getSignedId;
+        if (!_topPlaces[@(obfId)]) {
+            for (id item in baseDetailsObject.objects)
+            {
+                if ([item isKindOfClass:[OAPOI class]])
+                {
+                    OAPOI *poi = (OAPOI *)item;
+                    obfId = [poi getSignedId];
+                    if (_topPlaces[@(obfId)])
+                        return poi;
+                }
+            }
+        }
+        return syntheticAmenity;
     }
     return nil;
 }
@@ -386,7 +401,7 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     }
     else
     {
-        image = _topPlacesImages[@(place.obfId)];
+        image = _topPlacesImages[@([place getSignedId])];
         if (!image)
             return;
     }
@@ -467,11 +482,11 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     if (_topPlacesImages == nil)
         return nil;
     
-    UIImage *baseImage = _topPlacesImages[@(place.obfId)];
+    UIImage *baseImage = _topPlacesImages[@([place getSignedId])];
     if (baseImage == nil)
         return nil;
     
-    if (_selectedTopPlace.obfId == place.obfId)
+    if ([_selectedTopPlace getSignedId] == [place getSignedId])
     {
         if (_selectedTopPlaceImage) {
             return _selectedTopPlaceImage;
@@ -767,7 +782,7 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
                                  width:iconSize31
                                 height:iconSize31])
         {
-            res[@(place.obfId)] = place;
+            res[@([place getSignedId])] = place;
             counter++;
         }
         
@@ -1009,9 +1024,9 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
             return NSOrderedAscending;
         
         // 2. ID ASC
-        if (a1.obfId < a2.obfId)
+        if ([a1 getSignedId] < [a2 getSignedId])
             return NSOrderedAscending;
-        if (a1.obfId > a2.obfId)
+        if ([a1 getSignedId] > [a2 getSignedId])
             return NSOrderedDescending;
         
         return NSOrderedSame;

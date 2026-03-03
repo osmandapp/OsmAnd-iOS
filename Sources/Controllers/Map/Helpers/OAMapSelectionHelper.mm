@@ -133,7 +133,6 @@ static int TILE_SIZE = 256;
         int index = 0;
         for (const auto symbolInfo : symbols)
         {
-            NSLog(@"%d", index);
             index++;
             if (symbolInfo.mapSymbol->ignoreClick)
                 continue;
@@ -158,8 +157,6 @@ static int TILE_SIZE = 256;
                 }
                 
                 auto* groupPtr = symbolInfo.mapSymbol->groupPtr;
-                NSLog(@"groupPtr type: %s", typeid(*groupPtr).name()); // N6OsmAnd22AmenitySymbolsProvider19AmenitySymbolsGroupE || N6OsmAnd9MapMarker12SymbolsGroupE
-                
                 if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
                 {
                     cppAmenity = amenitySymbolGroup->amenity;

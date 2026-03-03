@@ -121,6 +121,11 @@
     [self copyNames:s copyName:YES copyEnName:YES overwrite:NO];
 }
 
+- (int64_t) getSignedId
+{
+    return static_cast<int64_t>(self.obfId);
+}
+
 - (QVector< OsmAnd::LatLon >) getPolygon
 {
     QVector<OsmAnd::LatLon> res;

@@ -102,7 +102,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
                       (abs(Double(maxTileX - minTileX)) <= Self.loadAllTinyRect)
 
         var filteredAmenities: [OAPOI] = []
-        var uniqueIds = Set<UInt64>()
+        var uniqueIds = Set<Int64>()
         let languages = getPreferredLangs()
 
         for tx in minTileX...maxTileX {
@@ -156,12 +156,11 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
     }
 
     // MARK: - Private Helpers
-    private func filterAmenity(_ amenity: OAPOI, _ rect: QuadRect, _ result: inout [OAPOI], _ uniqueIds: inout Set<UInt64>, _ loadAll: Bool) {
+    private func filterAmenity(_ amenity: OAPOI, _ rect: QuadRect, _ result: inout [OAPOI], _ uniqueIds: inout Set<Int64>, _ loadAll: Bool) {
         let lat = amenity.latitude
         let lon = amenity.longitude
-        // FIXME: obfId
         if (rect.contains(lon, top: lat, right: lon, bottom: lat) || loadAll),
-           uniqueIds.insert(amenity.obfId).inserted {
+           uniqueIds.insert(amenity.getSignedId()).inserted {
             result.append(amenity)
         }
     }

@@ -296,22 +296,8 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     }
     else if ([object isKindOfClass:BaseDetailsObject.class])
     {
-        BaseDetailsObject *baseDetailsObject = object;
-        OAPOI *syntheticAmenity = baseDetailsObject.syntheticAmenity;
-        
-        uint64_t obfId = syntheticAmenity.obfId;
-        if (!_topPlaces[@(obfId)]) {
-            for (OAPOI *poi in baseDetailsObject.objects)
-            {
-                if ([poi isKindOfClass:[OAPOI class]])
-                {
-                    if (_topPlaces[@(poi.obfId)])
-                        return poi;
-                }
-
-            }
-        }
-        return syntheticAmenity;
+        BaseDetailsObject *details = (BaseDetailsObject *)object;
+        return details.syntheticAmenity;
     }
     return nil;
 }

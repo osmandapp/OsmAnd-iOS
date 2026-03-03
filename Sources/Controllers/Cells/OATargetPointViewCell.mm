@@ -116,7 +116,7 @@
     else if (_targetPoint.ctrlTypeStr)
     {
         NSString *typeStr = _targetPoint.ctrlTypeStr;
-        [_targetPoint initAdderssIfNeeded];
+        [_targetPoint initAddressIfNeeded];
         if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
         {
             if (typeStr.length > 0)

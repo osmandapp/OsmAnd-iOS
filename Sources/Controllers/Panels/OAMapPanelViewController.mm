@@ -1359,8 +1359,6 @@ typedef enum
 
     if (self.isNewContextMenuDisabled)
         return;
-    
-    OAContextMenuLayer *contextLayer = self.mapViewController.mapLayers.contextMenuLayer;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
@@ -1478,7 +1476,7 @@ typedef enum
     {
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)
-        {
+        {// FIXME:
             targetPoint.type = OATargetBaseDetailsObject;
             targetPoint.targetObj = detailsObject;
         }
@@ -1488,7 +1486,7 @@ typedef enum
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
-        [_mapViewController contextMenuDidShow:targetPoint.targetObj];
+        [_mapViewController contextMenuDidShow:selectedObject.object];
         if (targetPoint.centerMap)
             [self goToTargetPointWithZoom:preferredZoom];
         
@@ -1596,8 +1594,8 @@ typedef enum
         OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
         
         NSArray<NSNumber *> *area31 = targetPoint.values[@"area"];
-        OsmAnd::LatLon topLeft = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[0].integerValue, area31[1].integerValue)];
-        OsmAnd::LatLon bottomRight = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[2].integerValue, area31[3].integerValue)];
+        OsmAnd::LatLon topLeft = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[0].intValue, area31[1].intValue)];
+        OsmAnd::LatLon bottomRight = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[2].intValue, area31[3].intValue)];
         OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
         [networkRouteSelectionLayer showMenuAction:@[targetPoint.targetObj, rect]];
     }

@@ -30,7 +30,7 @@
     return self;
 }
 
-- (void)initAdderssIfNeeded
+- (void)initAddressIfNeeded
 {
     if (self.addressFound)
         return;

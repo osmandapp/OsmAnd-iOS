@@ -24,7 +24,7 @@
     {
         OATargetPoint *targetPoint = [[OARootViewController instance].mapPanel.mapViewController.mapLayers.favoritesLayer getTargetPoint:point];
         targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
-        [targetPoint initAdderssIfNeeded];
+        [targetPoint initAddressIfNeeded];
         targetPoint.centerMap = YES;
         [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:zoom];
     }

@@ -37,11 +37,15 @@ static NSString *kGroupRowType = @"kGroupRowType";
 - (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp;
 - (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment;
-- (void) buildPhotosRow;
+- (void) buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) rebuildRows;
 - (void) setInfoRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) appendInfoRow:(OAAmenityInfoRow *)row;
+- (void) buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows listener:(id)listener;
+- (void) buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void)buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows listener:(id)listener;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 + (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size;

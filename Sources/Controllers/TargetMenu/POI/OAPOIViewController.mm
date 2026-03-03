@@ -34,6 +34,7 @@
 #import "OAPluginsHelper.h"
 #import "OACollapsableLabelView.h"
 #import "OARenderedObject.h"
+#import "OAOSMSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
@@ -162,6 +163,16 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 - (BOOL) showRegionNameOnDownloadButton
 {
     return YES;
+}
+
+// override
+- (void) buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+}
+
+// override
+- (void) buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
 }
 
 - (NSDictionary *)groupAdditionalInfo:(NSDictionary *)originalDict
@@ -345,7 +356,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
     
     if (self.customOnlinePhotosPosition)
-        [self buildPhotosRow];
+        [self buildPhotosRow:rows];
 }
 
 - (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -353,7 +364,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
-    // TODO: check
     _amenityUIHelper.showDefaultTags = self.showDefaultTags;
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal]; //row
     [rows addObjectsFromArray:buildedRows];
@@ -366,7 +376,21 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void)buildNearestRowsForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    // TODO: implement
+    [self buildNearestWikiForAmenity:rows];
+    if ([self.poi.type.category.name isEqualToString:[OAOSMSettings getOSMKey:ADMINISTRATIVE]])
+    {
+        [self buildNearestPoiRowForAmenity:rows];
+    }
+}
+
+- (void)buildNearestWikiForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    [super buildNearestWikiRow:rows listener:nil];
+}
+
+- (void)buildNearestPoiRowForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    [self buildNearestPoiRow:rows listener:nil];
 }
 
 - (void)buildAltNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows

@@ -45,7 +45,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         }
         
         if customOnlinePhotosPosition {
-            buildPhotosRow()
+            buildPhotosRow(rows)
         }
 //        if (isCustomOnlinePhotosPosition()) {
 //            buildPhotosRow((ViewGroup) view, amenity);
@@ -91,8 +91,8 @@ final class PlaceDetailsViewController: OAPOIViewController {
         return false
     }
     
-    override func buildPhotosRow() {
-        super.buildPhotosRow()
+    override func buildPhotosRow(_ rows: NSMutableArray) {
+        super.buildPhotosRow(rows)
         buildGuidesRow()
     }
     

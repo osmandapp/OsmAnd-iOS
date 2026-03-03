@@ -3143,3 +3143,6 @@
 "copy_link" = "Kopírovať odkaz";
 "lang_mi" = "Maorčina";
 "shared_string_interval" = "Interval";
+"trip_recording_moving_time_widget_description" = "Zobrazuje zaznamenávaný čas pohybu, alebo čas pre posledný stúpajúci alebo klesajúci úsek.";
+"trip_recording_moving_time" = "Čas pohybu";
+"shared_string_maximum" = "Maximum";

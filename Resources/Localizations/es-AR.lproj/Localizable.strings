@@ -4019,3 +4019,13 @@
 "context_menu_item_add_parking_point" = "Marcar como estacionamiento";
 "find_parking" = "Encontrar estacionamiento";
 "finish_navigation" = "Finalizar navegación";
+"show_polygons" = "Mostrar polígonos";
+"offline_weather_forecast" = "Previsión meteorológica sin conexión";
+"enable_msaa_carplay" = "Activar MSAA para CarPlay";
+"background_liquid_glass_clear_ios" = "Limpiar";
+"shared_string_online_only" = "Sólo al conectarse";
+"shared_string_offline_only" = "Sólo desconectado";
+"show_image_previews" = "Mostrar vistas previas de las imágenes";
+"popular_places" = "Lugares populares";
+"shared_string_wikipedia" = "Wikipedia";
+"poi_source" = "Origen del PDI";

@@ -273,8 +273,9 @@
 
 - (OASWptPt *) addCenterPoint:(BOOL)addPointBefore
 {
-    const auto center = self.mapViewController.mapView.target31;
-    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center);
+    const auto center = [self.mapViewController.mapView getCenterPixel];
+    const auto elevated31 = [OANativeUtilities get31FromElevatedPixel:center];
+    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(elevated31);
     
     OASWptPt *pt = [[OASWptPt alloc] init];
     pt.lat = latLon.latitude;

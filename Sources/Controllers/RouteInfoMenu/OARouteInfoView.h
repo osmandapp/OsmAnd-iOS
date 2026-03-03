@@ -23,7 +23,7 @@
 + (BOOL) isVisible;
 - (BOOL)isFullScreen;
 
-- (void) show:(BOOL)animated fullMenu:(BOOL)fullMenu onComplete:(void (^)(void))onComplete;
+- (void)show:(BOOL)animated fullScreen:(BOOL)fullScreen onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 - (void) switchStartAndFinish;
 

@@ -1334,7 +1334,7 @@
 "rendering_value_pink_name" = "Розовый";
 "routing_attr_short_way_description" = "Оптимизированный более короткий маршрут (экономия топлива/энергии)";
 "rendering_attr_highway_class_track_grade1_name" = "Класс 1";
-"routing_attr_allow_private_description" = "Разрешить доступ в частные зоны (например с проездом через шлагбаум или КПП).";
+"routing_attr_allow_private_description" = "Разрешить доступ в частные зоны (например с проездом через шлагбаум).";
 "rendering_attr_transportStops_name" = "Остановки транспорта";
 "rendering_attr_showSurfaceGrade_name" = "Качество дорог";
 "rendering_attr_contourLines_name" = "Показывать изолинии";
@@ -2325,8 +2325,8 @@
 "toggle_precipitation" = "Показать/скрыть - Слой осадков";
 "plugin_popup_weather_title" = "Включить плагин \"Погода\"";
 "weather_pressure_inches_of_mercury" = "Дюймы ртутного столба";
-"routing_attr_avoid_low_emission_zone_name" = "Избегать зоны с жесткими эко нормативами (LEZ)";
-"routing_attr_avoid_low_emission_zone_description" = "Исключить зоны с жесткими эко нормативами (LEZ)";
+"routing_attr_avoid_low_emission_zone_name" = "Избегать зоны с жесткими эко нормативами";
+"routing_attr_avoid_low_emission_zone_description" = "Исключить зоны с жесткими эко нормативами";
 "weather_temperature_celsius" = "Градусы Цельсия";
 "weather_pressure_hectopascals" = "Гектопаскали";
 "q_clear_weather_cache" = "Вы хотите очистить кеш погоды?";
@@ -2371,7 +2371,7 @@
 "wikipedia_and_wikivoyage_offline" = "Локальные Википедия и Викигид";
 "osm_live_banner_desc" = "Получите неограниченное количество скачиваний карт, а также еженедельные, ежедневные и даже почасовые обновления.";
 "routing_attr_allow_private_for_truck_name" = "Частные зоны (грузовик)";
-"routing_attr_allow_private_for_truck_description" = "Разрешить доступ в частные зоны (например с проездом через шлагбаум или КПП).";
+"routing_attr_allow_private_for_truck_description" = "Разрешить доступ в частные зоны (например с проездом через шлагбаум).";
 "terrain_maps" = "Карты рельефа";
 "annual_subscription" = "Годовая подписка";
 "copy_coordinates" = "Копировать координаты";
@@ -3433,7 +3433,7 @@
 "obd_widget_engine_speed" = "Обороты двигателя";
 "obd_fuel_left_distance_desc" = "Расстояние, на которое хватит топлива по датчику OBD";
 "connect_obd_instructions_title" = "OsmAnd поддерживает Bluetooth-подключение к сканерам OBD-II.";
-"obd_searching_text_description" = "Пожалуйста, держите устройство поближе к сканеру. Убедитесь, что двигатель ТС работает.";
+"obd_searching_text_description" = "Пожалуйста, держите устройство поближе к сканеру. Убедитесь, что двигатель транспортного средства работает.";
 "shared_string_instant" = "Мгновенное значение";
 "obd_fuel_type_hybrid_regenerative" = "Гибрид: регенеративный";
 "shared_string_other" = "Прочее";

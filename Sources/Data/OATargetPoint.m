@@ -64,19 +64,19 @@
     _addressFound = isAddressFound;
 }
 
-- (void) initDetailsObjectIfNeeded:(id)object
-{
-    // Android has this code here: MapContextMenu.init(...)
-    
-    if (![object isKindOfClass:OARenderedObject.class])
-    {
-        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:object]; // TODO double call?
-        if (detailsObject)
-        {
-            _detailsObj = detailsObject;
-        }
-    }
-}
+//- (void) initDetailsObjectIfNeeded:(id)object
+//{
+//    // Android has this code here: MapContextMenu.init(...)
+//    
+//    if (![object isKindOfClass:OARenderedObject.class])
+//    {
+//        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:object]; // TODO double call?
+//        if (detailsObject)
+//        {
+//            _detailsObj = detailsObject;
+//        }
+//    }
+//}
 
 - (OAPointDescription *) pointDescription
 {

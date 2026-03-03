@@ -32,14 +32,6 @@ final class RenderedObjectViewController: OAPOIViewController {
         updateMenuWithDetailedObject()
     }
 
-    private func updateMenuWithDetailedObject() {
-        guard let ro = renderedObject else { return }
-        guard let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) else { return }
-        setup(details.syntheticAmenity)
-        rebuildRows()
-        tableView.reloadData()
-    }
-
     override func getTypeStr() -> String? {
         // TODO RZR reuse detailed object and/or port fresh Java code
         guard let ro = renderedObject else { return super.getTypeStr() }
@@ -57,5 +49,13 @@ final class RenderedObjectViewController: OAPOIViewController {
     override func getOsmUrl() -> String {
         guard let ro = renderedObject else { return super.getOsmUrl() }
         return ObfConstants.getOsmUrlForId(ro)
+    }
+    
+    private func updateMenuWithDetailedObject() {
+        guard let ro = renderedObject else { return }
+        guard let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) else { return }
+        setup(details.syntheticAmenity)
+        rebuildRows()
+        tableView.reloadData()
     }
 }

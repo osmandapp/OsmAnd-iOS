@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) id targetObj;
-@property (nonatomic) BaseDetailsObject *detailsObj;// remove !!!
+//@property (nonatomic) BaseDetailsObject *detailsObj;// remove !!!
 
 @property (nonatomic) BOOL toolbarNeeded;
 @property (nonatomic) NSInteger segmentIndex;
@@ -96,6 +96,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString* symbolGroupId;
 
 - (void)initAddressIfNeeded;
-- (void)initDetailsObjectIfNeeded:(id)object;
+//- (void)initDetailsObjectIfNeeded:(id)object;
 - (BOOL)isValidObfId;
 @end

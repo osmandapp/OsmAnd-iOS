@@ -1477,6 +1477,12 @@ typedef enum
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)
         {// FIXME:
+          //  targetPoint.title = detailsObject.syntheticAmenity.name;
+//            OAPOI *syntheticAmenity = detailsObject.syntheticAmenity;
+//            targetPoint.title = syntheticAmenity.nameLocalized ? syntheticAmenity.nameLocalized : syntheticAmenity.name;
+//            targetPoint.icon = [syntheticAmenity.type icon];
+//            targetPoint.values = syntheticAmenity.values;
+            
             targetPoint.type = OATargetBaseDetailsObject;
             targetPoint.targetObj = detailsObject;
         }

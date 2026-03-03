@@ -579,7 +579,7 @@
         {
             targetPoint.location = latLon.coordinate;
             [targetPoint initAddressIfNeeded];
-            [targetPoint initDetailsObjectIfNeeded:selectedObject.object];
+           // [targetPoint initDetailsObjectIfNeeded:selectedObject.object];
             
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
         }

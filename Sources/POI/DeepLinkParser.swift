@@ -38,8 +38,7 @@ final class DeepLinkParser: NSObject {
         if url.host == kNavigateActionHost {
             guard let targetPoint = OADeepLinkBridge.unknownTargetPoint(withLat: lat, lon: lon, rootViewController: rootViewController) else { return false }
             if let title, !title.isEmpty {
-//                targetPoint.title = title
-                targetPoint.title = "DeepLing parser title"
+                targetPoint.title = title
             }
             
             rootViewController.mapPanel.navigate(targetPoint)

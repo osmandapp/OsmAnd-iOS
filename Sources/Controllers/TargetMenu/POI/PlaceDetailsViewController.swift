@@ -6,6 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// analog in android: PlaceDetailsMenuBuilder.java
+
 @objcMembers
 final class PlaceDetailsViewController: OAPOIViewController {
     
@@ -35,23 +37,21 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     override func buildDescription(_ rows: NSMutableArray) {
         let wikiAmenities = getWikiAmenities()
-        let hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: false, rows: rows)
+        var hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: false, rows: rows)
         
         if !hasDescription {
-            // TODO: implement
+            let filteredInfo = infoBundle.getFilteredLocalizedInfo()
+            buildShortWikiDescription(filteredInfo, allowOnlineWiki: true, rows: rows)
+            
+            hasDescription = buildDescription(amenities: getTravelAmenities(), allowOnlineWiki: false, rows: rows)
         }
         if hasDescription {
-            // TODO: implement
+            infoBundle.setCustomHiddenExtensions([DESCRIPTION_TAG])
         }
         
         if customOnlinePhotosPosition {
             buildPhotosRow(rows)
         }
-//        if (isCustomOnlinePhotosPosition()) {
-//            buildPhotosRow((ViewGroup) view, amenity);
-//        }
-        // TODO: implement
-        
     }
     
     private func buildDescription(amenities: [OAPOI], allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {

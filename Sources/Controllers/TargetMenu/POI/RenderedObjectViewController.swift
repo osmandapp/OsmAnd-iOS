@@ -6,6 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// analog in android: RenderedObjectMenuBuilder.java
+
 @objcMembers
 final class RenderedObjectViewController: OAPOIViewController {
 

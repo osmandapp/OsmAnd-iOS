@@ -55,7 +55,6 @@ static const NSInteger kOrderShortDescrRow = -10000;
 {
     OAPOIHelper *_poiHelper;
     AmenityUIHelper *_amenityUIHelper;
-    AdditionalInfoBundle *_infoBundle;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
@@ -110,7 +109,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
     NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
     self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
-    _infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
+    self.infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
 }
 
 - (void) viewDidLoad
@@ -341,7 +340,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void)buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    NSDictionary<NSString *,id> *filteredInfo = [_infoBundle getFilteredLocalizedInfo];
+    NSDictionary<NSString *,id> *filteredInfo = [self.infoBundle getFilteredLocalizedInfo];
     if (![self buildShortWikiDescription:filteredInfo allowOnlineWiki:YES rows:rows])
     {
         NullablePair *pair = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:DESCRIPTION_TAG map:filteredInfo];
@@ -351,7 +350,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:nil textPrefix:nil text:description hiddenUrl:nil collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
             info.typeName = kShortDescriptionRowType;
             [rows addObject:info];
-            [_infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+            [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
         }
     }
     
@@ -362,7 +361,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 - (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
-    _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:_infoBundle];
+    _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:self.infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
     _amenityUIHelper.showDefaultTags = self.showDefaultTags;
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal]; //row
@@ -462,7 +461,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     BOOL hasShortDescription = !NSStringIsEmpty(description);
     if (hasShortDescription)
     {
-        [_infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+        [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
     }
     if (!hasShortDescription && allowOnlineWiki)
     {

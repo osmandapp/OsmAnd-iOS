@@ -77,7 +77,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) id targetObj;
-@property (nonatomic) BaseDetailsObject *detailsObj;// remove !!!
 
 @property (nonatomic) BOOL toolbarNeeded;
 @property (nonatomic) NSInteger segmentIndex;

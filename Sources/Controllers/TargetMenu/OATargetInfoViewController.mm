@@ -168,6 +168,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 {
     [self sortInfoRows];
     _calculatedWidth = 0;
+    [self.tableView reloadData];
     [self contentHeight:self.tableView.bounds.size.width];
 }
 

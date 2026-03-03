@@ -17,6 +17,7 @@
 #import "OARendererRegistry.h"
 #import "OASelectedGPXHelper.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAMapCreatorHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAFileSettingsItemFileSubtype
@@ -85,7 +86,7 @@
         case EOAFileSettingsItemFileSubtypeObfMap:
             return RESOURCES_DIR;       //android: MAPS_PATH
         case EOAFileSettingsItemFileSubtypeTilesMap:
-            return RESOURCES_DIR;       //android: TILES_INDEX_DIR
+            return MAP_CREATOR_DIR;       //android: TILES_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeRoadMap:
             return RESOURCES_DIR;       //android: ROADS_INDEX_DIR
         case EOAFileSettingsItemFileSubtypeGpx:
@@ -357,12 +358,17 @@
 {
     switch (self.subtype)
     {
-        case EOAFileSettingsItemFileSubtypeGpx: {
+        case EOAFileSettingsItemFileSubtypeGpx:
+        {
             OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
-         
             OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath];
             if (![gpxDbHelper hasGpxDataItemFile:file])
                 [gpxDbHelper addItem:[[OASGpxDataItem alloc] initWithFile:file]];
+            break;
+        }
+        case EOAFileSettingsItemFileSubtypeTilesMap:
+        {
+            [[OAMapCreatorHelper sharedInstance] fetchSQLiteDBFiles:YES];
             break;
         }
         case EOAFileSettingsItemFileSubtypeRenderingStyle:
@@ -370,7 +376,6 @@
         case EOAFileSettingsItemFileSubtypeRoadMap:
         case EOAFileSettingsItemFileSubtypeWikiMap:
         case EOAFileSettingsItemFileSubtypeSrtmMap:
-        case EOAFileSettingsItemFileSubtypeTilesMap:
         case EOAFileSettingsItemFileSubtypeColorPalette:
         {
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths(true);

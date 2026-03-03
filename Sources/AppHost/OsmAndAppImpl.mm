@@ -619,6 +619,12 @@
 
     BOOL rescan = [BundledAssets.shared migrateResourcesToDocumentsIfNeededWithDataPath:_dataPath documentsPath:_documentsPath
                 versionChanged: currentVersion != prevVersion || _firstLaunch];
+    if (!_firstLaunch && [BundledAssets.shared migrateLegacyTilesIfNeededWithDocumentsPath:_documentsPath])
+    {
+        rescan = YES;
+        [[OAMapCreatorHelper sharedInstance] fetchSQLiteDBFiles:YES];
+    }
+
     if (rescan)
     {
         _resourcesManager->rescanUnmanagedStoragePaths(true);
@@ -875,7 +881,6 @@
     NSLog(@"OsmAndApp initialize finish");
     return YES;
 }
-
 
 - (NSString *) generateIndexesUrl
 {

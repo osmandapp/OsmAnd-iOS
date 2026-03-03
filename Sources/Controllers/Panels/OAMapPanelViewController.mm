@@ -1053,7 +1053,7 @@ typedef enum
     [self showRouteInfo:YES];
 }
 
-- (void) showRouteInfo:(BOOL)fullMenu
+- (void)showRouteInfo:(BOOL)fullScreen
 {
     [OAAnalyticsHelper logEvent:@"route_info_open"];
 
@@ -1064,16 +1064,16 @@ typedef enum
     if (self.targetMenuView.superview)
     {
         [self hideTargetPointMenu:.2 onComplete:^{
-            [self showRouteInfoInternal:fullMenu];
+            [self showRouteInfoInternal:fullScreen];
         }];
     }
     else
     {
-        [self showRouteInfoInternal:fullMenu];
+        [self showRouteInfoInternal:fullScreen];
     }
 }
 
-- (void) showRouteInfoInternal:(BOOL)fullMenu
+- (void)showRouteInfoInternal:(BOOL)fullScreen
 {
     CGRect frame = self.routeInfoView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
@@ -1087,7 +1087,7 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [_hudViewController updateDependentButtonsVisibility];
-    [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
+    [self.routeInfoView show:YES fullScreen:fullScreen onComplete:^{
         self.sidePanelController.recognizesPanGesture = NO;
     }];
     

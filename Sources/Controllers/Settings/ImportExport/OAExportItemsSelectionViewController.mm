@@ -566,8 +566,9 @@
             UIColor *selectedColor = item[@"color"];
             selectedColor = selectedColor ? selectedColor : [UIColor colorNamed:ACColorNameIconColorActive];
             cell.leftIconView.tintColor = selected ? selectedColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
-            cell.descriptionLabel.text = item[@"descr"];
-            [cell descriptionVisibility:cell.descriptionLabel.text || cell.descriptionLabel.text.length != 0];
+            NSString *descr = item[@"descr"];
+            [cell descriptionVisibility:descr.length > 0];
+            cell.descriptionLabel.text = descr;
         }
         return cell;
     }

@@ -60,13 +60,35 @@
     return self;
 }
 
-- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName
+- (void)enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName
 {
     [self enterRoutePlanningModeGivenGpx:nil
                                     from:from
                                 fromName:fromName
           useIntermediatePointsByDefault:YES
-                              showDialog:YES];
+                              showDialog:YES
+                              fullScreen:YES];
+}
+
+- (void)enterRoutePlanningModeGivenGpx:(OASTrackItem *)gpxFile
+                                  from:(CLLocation *)from
+                              fromName:(OAPointDescription *)fromName
+        useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                            showDialog:(BOOL)showDialog
+                            fullScreen:(BOOL)fullScreen
+{
+    [self enterRoutePlanningModeGivenGpx:[self getGpxFileByTrackItem:gpxFile] path:gpxFile.gpxFilePath from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog fullScreen:fullScreen];
+}
+
+- (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
+                                  path:(NSString *)path
+                                  from:(CLLocation *)from
+                              fromName:(OAPointDescription *)fromName
+        useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                            showDialog:(BOOL)showDialog
+                            fullScreen:(BOOL)fullScreen
+{
+    [self enterRoutePlanningModeGivenGpx:gpxFile appMode:nil path:path from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:showDialog fullScreen:fullScreen];
 }
 
 - (void) enterRoutePlanningModeGivenGpx:(OASTrackItem *)trackItem useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
@@ -101,13 +123,32 @@
     return nil;
 }
 
-- (void) enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
-                                appMode:(OAApplicationMode *)appMode
-                                   path:(NSString *)path
-                                   from:(CLLocation *)from
-                               fromName:(OAPointDescription *)fromName
-         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
-                             showDialog:(BOOL)showDialog
+- (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
+                               appMode:(OAApplicationMode *)appMode
+                                  path:(NSString *)path
+                                  from:(CLLocation *)from
+                              fromName:(OAPointDescription *)fromName
+        useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                            showDialog:(BOOL)showDialog
+{
+    [self enterRoutePlanningModeGivenGpx:gpxFile
+                                 appMode:appMode
+                                    path:path
+                                    from:from
+                                fromName:fromName
+          useIntermediatePointsByDefault:useIntermediatePointsByDefault
+                              showDialog:showDialog
+                              fullScreen:NO];
+}
+
+- (void)enterRoutePlanningModeGivenGpx:(OASGpxFile *)gpxFile
+                               appMode:(OAApplicationMode *)appMode
+                                  path:(NSString *)path
+                                  from:(CLLocation *)from
+                              fromName:(OAPointDescription *)fromName
+        useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault
+                            showDialog:(BOOL)showDialog
+                            fullScreen:(BOOL)fullScreen
 {
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
@@ -132,7 +173,7 @@
     // then update start and destination point
 
     if (showDialog)
-        [[OARootViewController instance].mapPanel showRouteInfo:NO];
+        [[OARootViewController instance].mapPanel showRouteInfo:fullScreen];
 
     [targets updateRouteAndRefresh:true];
     

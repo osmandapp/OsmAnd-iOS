@@ -97,9 +97,10 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
             {
                 _latLon = renderedObject.labelLatLon;
             }
-            if (!NSDictionaryIsEmpty(renderedObject.localizedNames))
+            NSMutableArray<NSString *> *originalNames = [renderedObject getOriginalNames];
+            if (!NSArrayIsEmpty(originalNames))
             {
-                [_names addObjectsFromArray:(NSArray *)renderedObject.localizedNames.allValues];
+                [_names addObjectsFromArray:originalNames];
             }
             NSString *value = renderedObject.tags[WIKIDATA_TAG];
             if (value)

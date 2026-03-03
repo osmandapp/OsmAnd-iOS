@@ -951,7 +951,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
 - (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
-    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *categories = [NSMutableDictionary new]; //Map<String, List<PoiType>>
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *categories = [NSMutableDictionary new];
     
     if (self.name)
         result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:POI_NAME] : POI_NAME] = self.name;

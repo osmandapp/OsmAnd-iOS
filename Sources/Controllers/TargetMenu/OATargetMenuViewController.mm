@@ -165,22 +165,16 @@
 
         case OATargetPOI:
         {
-            // todo refactor @nggrach !!!
-            if (selectedObject)
+            controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            if (selectedObject && [selectedObject isKindOfClass:BaseDetailsObject.class])
             {
-                if ([selectedObject isKindOfClass:BaseDetailsObject.class])
+                BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
+                if (detailsObject)
                 {
-                    BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
-                    if (detailsObject)
-                    {
-                        controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
-                    }
+                    controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
                 }
             }
-            else
-            {
-                controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
-            }
+  
             break;
         }
 

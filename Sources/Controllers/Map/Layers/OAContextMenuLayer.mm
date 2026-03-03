@@ -6,6 +6,8 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
+// analog in android ContextMenuLayer.java
+
 #import "OAContextMenuLayer.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"

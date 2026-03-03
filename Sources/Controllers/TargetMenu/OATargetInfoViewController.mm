@@ -572,7 +572,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 - (void)buildRouteRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // TODO: implement
-    BOOL stop = YES;
     
 //    if (amenity == null) {
 //        return;

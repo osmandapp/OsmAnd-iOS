@@ -518,6 +518,34 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
     //TODO: implement
     
+//    Object value = filteredInfo.get(WIKIPEDIA);
+//    if (value != null) {
+//        if (value instanceof String url) {
+//            if (url.contains(WIKIPEDIA_ORG_WIKI_URL_PART)) {
+//                return url.substring(url.lastIndexOf(WIKIPEDIA_ORG_WIKI_URL_PART) + WIKIPEDIA_ORG_WIKI_URL_PART.length());
+//            }
+//        } else {
+//            Map<String, Object> map = (Map<String, Object>) value;
+//            Map<String, String> localizations = (Map<String, String>) map.get("localizations");
+//            if (Algorithms.isEmpty(localizations)) {
+//                return null;
+//            }
+//            Collection<String> availableLocales = AmenityUIHelper.collectAvailableLocalesFromTags(localizations.keySet());
+//            StringJoiner joiner = new StringJoiner(", ");
+//            for (String key : availableLocales) {
+//                String localizedKey = WIKIPEDIA + ":" + key;
+//                String localizedValue = localizations.get(localizedKey);
+//                if (!Algorithms.isEmpty(localizedValue)) {
+//                    String name = app.getString(R.string.wikipedia_names_pattern, localizedValue, key);
+//                    joiner.add(name);
+//                }
+//            }
+//            return joiner.toString();
+//        }
+//    }
+//    return null;
+}
+    
     return nil;
 }
 

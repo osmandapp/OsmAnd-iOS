@@ -6,6 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+// analog in android AmenityUIHelper.java
+
 @objcMembers
 final class AmenityUIHelper: NSObject {
     

@@ -23,7 +23,7 @@ private enum DeepLinkAppRoute: String {
 final class DeepLinkParser: NSObject {
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        handleIncomingGoURL(url, rootViewController: rootViewController)
+        handleIncomingAppURL(url, rootViewController: rootViewController)
         || handleIncomingFileURL(url, rootViewController: rootViewController)
         || handleIncomingActionsURL(url, rootViewController: rootViewController)
         || handleIncomingNavigationURL(url, rootViewController: rootViewController)
@@ -34,7 +34,7 @@ final class DeepLinkParser: NSObject {
         || handleIncomingOsmAndCloudURL(url, rootViewController: rootViewController)
     }
     
-    private func handleIncomingGoURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+    private func handleIncomingAppURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
         guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: kOsmAndAppPathPrefix) else { return false }
         let path = url.path.split(separator: "/", omittingEmptySubsequences: true).map { $0.lowercased() }
         let routeRaw = path.dropFirst().joined(separator: "/")
@@ -43,26 +43,24 @@ final class DeepLinkParser: NSObject {
             return false
         }
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            switch route {
-            case .main:
-                self.openMainScreen(rootViewController)
-            case .lastReleaseNotes:
-                self.openLastReleaseNotes(rootViewController)
-            case .helpWhatsNew:
-                self.openWhatsNew(rootViewController)
-            case .purchases:
-                self.openChoosePlan(rootViewController, feature: nil)
-            case .purchasesOsmAndPro:
-                self.openChoosePlan(rootViewController, feature: OAFeature.advanced_WIDGETS())
-            case .purchasesMapsPlus:
-                self.openChoosePlan(rootViewController, feature: OAFeature.monthly_MAP_UPDATES())
-            case .quickActionsLockScreenAdd:
-                self.openCustomButtonsAddAction(rootViewController)
-            case .tripRecordingExternalSensors:
-                self.openExternalSensorsRecording(rootViewController)
-            }
+        let router = DeepLinkAppRouter(rootViewController: rootViewController)
+        switch route {
+        case .main:
+            router.openMainScreen()
+        case .lastReleaseNotes:
+            router.openLastReleaseNotes()
+        case .helpWhatsNew:
+            router.openWhatsNew()
+        case .purchases:
+            router.openChoosePlan(feature: nil)
+        case .purchasesOsmAndPro:
+            router.openChoosePlan(feature: OAFeature.advanced_WIDGETS())
+        case .purchasesMapsPlus:
+            router.openChoosePlan(feature: OAFeature.monthly_MAP_UPDATES())
+        case .quickActionsLockScreenAdd:
+            router.openCustomButtonsAddAction()
+        case .tripRecordingExternalSensors:
+            router.openExternalSensorsRecording()
         }
         
         return true
@@ -467,89 +465,5 @@ final class DeepLinkParser: NSObject {
         }
         
         return fallback
-    }
-    
-    private func openMainScreen(_ root: OARootViewController) {
-        resetNavigation(root)
-        root.mapPanel.closeRouteInfo()
-    }
-    
-    private func openLastReleaseNotes(_ root: OARootViewController) {
-        guard !(root.presentedViewController is OAWhatsNewBottomSheetViewController) else { return }
-        OAWhatsNewBottomSheetViewController().present(in: root)
-    }
-    
-    private func openWhatsNew(_ root: OARootViewController) {
-        guard let nav = root.navigationController else { return }
-        let url = kDocsLatestVersion.localizedURLIfAvailable()
-        if let web = nav.visibleViewController as? OAWebViewController, let current = web.urlString?.lowercased(), current == url.lowercased() {
-            return
-        }
-        
-        guard let nav = resetNavigation(root) else { return }
-        guard let webVC = OAWebViewController(urlAndTitle: url, title: localizedString("help_what_is_new")) else {
-            NSLog("[DeepLinkParser] Failed to create OAWebViewController (url=%@)", url)
-            return
-        }
-        
-        nav.pushViewController(webVC, animated: true)
-    }
-    
-    private func openChoosePlan(_ root: OARootViewController, feature: OAFeature?) {
-        guard let nav = root.navigationController else { return }
-        let target = feature ?? OAFeature.osmand_CLOUD()
-        if let vc = nav.visibleViewController as? OAChoosePlanViewController, vc.selectedFeature.isEqual(target) {
-            return
-        }
-        
-        guard let nav = resetNavigation(root) else { return }
-        OAChoosePlanHelper.showChoosePlanScreen(with: target, navController: nav)
-    }
-    
-    private func openCustomButtonsAddAction(_ root: OARootViewController) {
-        guard let nav = root.navigationController else { return }
-        if let current = nav.visibleViewController as? CustomMapButtonsViewController {
-            DispatchQueue.main.async {
-                current.onRightNavbarButtonPressed()
-            }
-            
-            return
-        }
-        
-        guard let nav = resetNavigation(root) else { return }
-        let vc = CustomMapButtonsViewController()
-        nav.pushViewController(vc, animated: false)
-        DispatchQueue.main.async {
-            vc.onRightNavbarButtonPressed()
-        }
-    }
-    
-    private func openExternalSensorsRecording(_ root: OARootViewController) {
-        guard let nav = root.navigationController, !(nav.visibleViewController is ExternalSettingsWriteToTrackSettingsViewController) else { return }
-        guard let nav = resetNavigation(root) else { return }
-        guard let product = OAIAPHelper.sharedInstance().product(kInAppId_Addon_External_Sensors) else {
-            OARootViewController.instance().requestProducts(withProgress: false, reload: false)
-            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.sensors(), navController: nav)
-            return
-        }
-        
-        guard product.isPurchased() else {
-            OAChoosePlanHelper.showChoosePlanScreen(with: product, navController: nav)
-            return
-        }
-        
-        if product.disabled {
-            OAIAPHelper.sharedInstance().enableProduct(product.productIdentifier)
-        }
-        
-        let controller = ExternalSettingsWriteToTrackSettingsViewController(applicationMode: OAAppSettings.sharedManager().applicationMode.get())
-        nav.pushViewController(controller, animated: false)
-    }
-    
-    @discardableResult private func resetNavigation(_ root: OARootViewController) -> UINavigationController? {
-        guard let nav = root.navigationController else { return nil }
-        nav.dismiss(animated: false)
-        nav.popToRootViewController(animated: false)
-        return nav
     }
 }

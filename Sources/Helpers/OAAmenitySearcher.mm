@@ -285,7 +285,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     NSMutableArray<OAPOI *> *filtered = [NSMutableArray array];
 
     // if (osmId > 0 || wikidata != null)
-    if ((osmId > 0 && [OAMapObject getInvalidObfId]) || wikidata != nil)
+    if ((osmId > 0 && osmId != [OAMapObject getInvalidObfId]) || wikidata != nil)
     {
         filtered = [[self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata] mutableCopy];
     }
@@ -422,7 +422,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 {
     const auto osmId = [ObfConstants getOsmObjectId:amenity];
     //boolean checkId = osmId > 0;
-    const BOOL checkId = osmId > 0 && [OAMapObject getInvalidObfId];
+    const BOOL checkId = osmId > 0 && osmId != [OAMapObject getInvalidObfId];
 
     NSString *wikidata = [amenity getWikidata];;
     const BOOL checkWikidata = !NSStringIsEmpty(wikidata);

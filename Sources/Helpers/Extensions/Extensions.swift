@@ -47,6 +47,11 @@ extension UIImage {
         
         return rotatedImage
     }
+    
+    func resizedMenuImage() -> UIImage? {
+        let navBarImageSize: CGFloat = 24
+        return OAUtilities.resize(self, newSize: CGSize(width: navBarImageSize, height: navBarImageSize))
+    }
 }
 
 extension NSMutableAttributedString {

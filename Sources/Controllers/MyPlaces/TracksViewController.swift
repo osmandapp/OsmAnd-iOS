@@ -586,7 +586,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
-        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: .navBarTextColorPrimary, action: nil, target: self, menu: menu) {
+        var navBarButton: UIBarButtonItem?
+        let navBarButtonImage = UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke")
+        if #available(iOS 26.0, *) {
+            navBarButton = UIBarButtonItem(image: navBarButtonImage, style: .plain, target: self, action: nil)
+            navBarButton?.menu = menu
+        } else {
+            navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: navBarButtonImage, color: .navBarTextColorPrimary, action: nil, target: self, menu: menu)
+        }
+        if let navBarButton {
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
             navigationItem.setRightBarButtonItems([navBarButton], animated: false)
         }

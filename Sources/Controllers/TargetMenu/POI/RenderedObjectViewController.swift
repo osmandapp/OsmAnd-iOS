@@ -12,6 +12,7 @@
 final class RenderedObjectViewController: OAPOIViewController {
 
     private var renderedObject: OARenderedObject?
+    private var detailedObject: BaseDetailsObject?
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -28,32 +29,36 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         updateMenuWithDetailedObject()
+        super.viewDidLoad()
     }
 
     override func getTypeStr() -> String? {
-        // TODO RZR reuse detailed object and/or port fresh Java code
-        guard let ro = renderedObject else { return super.getTypeStr() }
-        if ro.isPolygon {
-            return RenderedObjectHelper.getTranslatedType(renderedObject: ro)
+        // TODO: RZR reuse detailed object and/or port fresh Java code
+        guard let renderedObject else { return super.getTypeStr() }
+        if renderedObject.isPolygon {
+            return RenderedObjectHelper.getTranslatedType(renderedObject: renderedObject)
         }
         return super.getTypeStr()
     }
     
     override func getIcon() -> UIImage? {
-        guard let ro = renderedObject else { return super.getIcon() }
-        return RenderedObjectHelper.getIcon(renderedObject: ro)
+        guard let renderedObject else { return super.getIcon() }
+        guard detailedObject == nil else {
+            return detailedObject?.syntheticAmenity.icon()
+        }
+        return RenderedObjectHelper.getIcon(renderedObject: renderedObject)
     }
     
     override func getOsmUrl() -> String {
-        guard let ro = renderedObject else { return super.getOsmUrl() }
-        return ObfConstants.getOsmUrlForId(ro)
+        guard let renderedObject else { return super.getOsmUrl() }
+        return ObfConstants.getOsmUrlForId(renderedObject)
     }
     
     private func updateMenuWithDetailedObject() {
-        guard let ro = renderedObject else { return }
-        guard let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(ro) else { return }
+        guard let renderedObject else { return }
+        guard let details = OAAmenitySearcher.sharedInstance().searchDetailedObject(renderedObject) else { return }
+        detailedObject = details
         let amenity = details.syntheticAmenity
         setup(amenity)
         updateTargetPoint(with: amenity)

@@ -61,7 +61,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     }
     
     override func hideFirstHeader() -> Bool {
-        true
+        isYAxisMode ? true : false
     }
     
     override func shouldShowSubviewSeparator() -> Bool {

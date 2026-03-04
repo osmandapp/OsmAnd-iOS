@@ -794,6 +794,9 @@
     newTable.backgroundColor = oldTable.backgroundColor;
     newTable.separatorStyle = oldTable.separatorStyle;
     newTable.separatorColor = oldTable.separatorColor;
+    newTable.contentInsetAdjustmentBehavior = oldTable.contentInsetAdjustmentBehavior;
+    newTable.contentInset = oldTable.contentInset;
+    newTable.contentOffset = oldTable.contentOffset;
     UIView *container = oldTable.superview;
     [container insertSubview:newTable aboveSubview:oldTable];
     [NSLayoutConstraint activateConstraints:@[
@@ -803,6 +806,7 @@
         [newTable.bottomAnchor constraintEqualToAnchor:container.bottomAnchor]
     ]];
     
+    [container layoutIfNeeded];
     self.tableView = newTable;
     [oldTable removeFromSuperview];
 }

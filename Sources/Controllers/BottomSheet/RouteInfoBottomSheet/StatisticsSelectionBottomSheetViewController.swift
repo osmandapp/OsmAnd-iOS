@@ -17,6 +17,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     private var types: [NSNumber]
     private var analysis: GpxTrackAnalysis
     private var segmentedControl: UISegmentedControl?
+    private var isYAxisMode = true
+    
     weak var delegate: OAStatisticsSelectionDelegate?
     
     init(types: [NSNumber], analysis: GpxTrackAnalysis) {
@@ -32,9 +34,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.setEditing(true, animated: false)
-        tableView.allowsMultipleSelectionDuringEditing = true
-        applyInitialSelectionIfNeeded()
+        applyTableMode()
+        syncCheckmarksFromData()
     }
     
     override func getTitle() -> String {
@@ -50,9 +51,12 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     }
     
     override func createSubview() -> UIView? {
-        segmentedControl = UISegmentedControl(items: [localizedString("y_axis"), localizedString("x_axis")])
-        segmentedControl?.selectedSegmentIndex = 0
-        segmentedControl?.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        if segmentedControl == nil {
+            segmentedControl = UISegmentedControl(items: [localizedString("y_axis"), localizedString("x_axis")])
+            segmentedControl?.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        }
+        
+        segmentedControl?.selectedSegmentIndex = isYAxisMode ? 0 : 1
         return segmentedControl
     }
     
@@ -64,8 +68,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         false
     }
     
-    override func getTableHeaderDescription() -> String {
-        localizedString("y_axis_description")
+    override func getTableHeaderDescription() -> String? {
+        isYAxisMode ? localizedString("y_axis_description") : nil
     }
     
     override func getTableStyle() -> UITableView.Style {
@@ -96,26 +100,29 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             return hasTag
         }
         
-        let baseSets: [[NSNumber]] = [[NSNumber(value: GPXDataSetType.altitude.rawValue)], [NSNumber(value: GPXDataSetType.slope.rawValue)], [NSNumber(value: GPXDataSetType.speed.rawValue)]]
-        let available = NSMutableArray(array: baseSets)
-        OAPluginsHelper.getAvailableGPXDataSetTypes(analysis, availableTypes: available)
-        var seen = Set<GPXDataSetType>()
-        let availableSingles: [GPXDataSetType] = available.compactMap { item in
-            guard let set = item as? [NSNumber], set.count == 1, let raw = set.first?.intValue, let type = GPXDataSetType(rawValue: raw), seen.insert(type).inserted else { return nil }
-            return type
-        }
-        
-        for spec in sections {
-            let visible = availableSingles.filter { spec.allowed.contains($0) && hasData($0) }
-            guard !visible.isEmpty else { continue }
-            let section = tableData.createNewSection()
-            section.headerText = spec.header ?? ""
-            for type in visible {
-                let row = section.createNewRow()
-                row.cellType = OASimpleTableViewCell.reuseIdentifier
-                row.title = OAGPXDataSetType.getTitle(type.rawValue)
-                row.iconName = OAGPXDataSetType.getIconName(type.rawValue)
-                row.setObj(NSNumber(value: type.rawValue), forKey: "type")
+        if isYAxisMode {
+            let baseSets: [[NSNumber]] = [[NSNumber(value: GPXDataSetType.altitude.rawValue)], [NSNumber(value: GPXDataSetType.slope.rawValue)], [NSNumber(value: GPXDataSetType.speed.rawValue)]]
+            let available = NSMutableArray(array: baseSets)
+            OAPluginsHelper.getAvailableGPXDataSetTypes(analysis, availableTypes: available)
+            var seen = Set<GPXDataSetType>()
+            let availableSingles: [GPXDataSetType] = available.compactMap { item in
+                guard let set = item as? [NSNumber], set.count == 1, let raw = set.first?.intValue, let type = GPXDataSetType(rawValue: raw), seen.insert(type).inserted else { return nil }
+                return type
+            }
+            
+            for spec in sections {
+                let visible = availableSingles.filter { spec.allowed.contains($0) && hasData($0) }
+                guard !visible.isEmpty else { continue }
+                let section = tableData.createNewSection()
+                section.headerText = spec.header ?? ""
+                for type in visible {
+                    let row = section.createNewRow()
+                    row.cellType = OASimpleTableViewCell.reuseIdentifier
+                    row.title = OAGPXDataSetType.getTitle(type.rawValue)
+                    row.iconName = OAGPXDataSetType.getIconName(type.rawValue)
+                    row.setObj(NSNumber(value: type.rawValue), forKey: "type")
+                    row.setObj(NSNumber(value: types.contains { $0.intValue == type.rawValue }), forKey: "selected")
+                }
             }
         }
     }
@@ -129,27 +136,24 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
         cell.titleLabel.text = item.title
         cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-        let isSelected = tableView.indexPathsForSelectedRows?.contains(indexPath) == true
+        let isSelected = item.bool(forKey: "selected")
         cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
         cell.titleLabel.textColor = isSelected ? .textColorPrimary : .textColorTertiary
         return cell
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        guard isYAxisMode else { return nil }
         let selectedCount = tableView.indexPathsForSelectedRows?.count ?? 0
-        if selectedCount >= 2 {
-            return nil
-        }
-        
-        return indexPath
+        return selectedCount >= 2 ? nil : indexPath
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
-        updateAppearance(for: indexPath)
+        toggleSelection(at: indexPath, isSelected: true)
     }
     
     override func onRowDeselected(_ indexPath: IndexPath) {
-        updateAppearance(for: indexPath)
+        toggleSelection(at: indexPath, isSelected: false)
     }
     
     @objc private func onClosePressed() {
@@ -157,39 +161,76 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     }
     
     @objc private func onDonePressed() {
-        let selected = tableView.indexPathsForSelectedRows ?? []
-        let picked: [NSNumber] = selected.compactMap { indexPath in
-            let item = tableData.item(for: indexPath)
-            return item.obj(forKey: "type") as? NSNumber
-        }
-        
-        let limited = Array(picked.prefix(2))
-        self.types = limited
-        delegate?.onTypesSelected(limited)
+        let result = Array(types.prefix(2))
+        guard !result.isEmpty else { return }
+        delegate?.onTypesSelected(result)
         dismiss(animated: true)
     }
     
     @objc private func segmentChanged(_ control: UISegmentedControl) {
+        isYAxisMode = control.selectedSegmentIndex == 0
+        applyTableMode()
+        updateUIAnimated { [weak self] _ in
+            guard let self else { return }
+            self.clearAllSelections()
+            self.syncCheckmarksFromData()
+        }
     }
     
-    private func applyInitialSelectionIfNeeded() {
-        let selectedRaw = Set(types.map { $0.intValue })
-        for section in 0..<tableData.sectionCount() {
-            for row in 0..<tableData.rowCount(section) {
-                let indexPath = IndexPath(row: Int(row), section: Int(section))
-                let item = tableData.item(for: indexPath)
-                guard let raw = (item.obj(forKey: "type") as? NSNumber)?.intValue else { continue }
-                if selectedRaw.contains(raw) {
-                    tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-                }
+    private func applyTableMode() {
+        if tableView.isEditing != isYAxisMode {
+            tableView.setEditing(isYAxisMode, animated: false)
+        }
+        
+        tableView.allowsMultipleSelectionDuringEditing = isYAxisMode
+        if !isYAxisMode {
+            tableView.indexPathsForSelectedRows?.forEach {
+                tableView.deselectRow(at: $0, animated: false)
             }
         }
     }
     
-    private func updateAppearance(for indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? OASimpleTableViewCell else { return }
-        let isSelected = tableView.indexPathsForSelectedRows?.contains(indexPath) == true
-        cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
-        cell.titleLabel.textColor = isSelected ? .textColorPrimary : .textColorTertiary
+    private func toggleSelection(at indexPath: IndexPath, isSelected: Bool) {
+        guard isYAxisMode else { return }
+        let item = tableData.item(for: indexPath)
+        guard let type = item.obj(forKey: "type") as? NSNumber else { return }
+        let raw = type.intValue
+        if isSelected {
+            if !types.contains(where: { $0.intValue == raw }) {
+                types.append(type)
+            }
+        } else {
+            types.removeAll { $0.intValue == raw }
+        }
+        
+        item.setObj(NSNumber(value: isSelected), forKey: "selected")
+        tableView.reloadRows(at: [indexPath], with: .none)
+        syncCheckmarksFromData()
+    }
+    
+    private func clearAllSelections() {
+        (tableView.indexPathsForSelectedRows ?? []).forEach {
+            tableView.deselectRow(at: $0, animated: false)
+        }
+    }
+    
+    private func syncCheckmarksFromData() {
+        guard isYAxisMode else { return }
+        for section in 0..<tableData.sectionCount() {
+            for row in 0..<tableData.rowCount(section) {
+                let indexPath = IndexPath(row: Int(row), section: Int(section))
+                let item = tableData.item(for: indexPath)
+                let shouldSelect = item.bool(forKey: "selected")
+                if shouldSelect {
+                    if tableView.indexPathsForSelectedRows?.contains(indexPath) != true {
+                        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+                    }
+                } else {
+                    if tableView.indexPathsForSelectedRows?.contains(indexPath) == true {
+                        tableView.deselectRow(at: indexPath, animated: false)
+                    }
+                }
+            }
+        }
     }
 }

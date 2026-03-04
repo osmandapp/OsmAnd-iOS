@@ -51,6 +51,7 @@
 #define FavoriteTableGroup _(FavoriteTableGroup)
 
 static const NSInteger _exportButtonIndex = 1;
+static CGFloat const kActionImageSize = 24.0;
 
 @interface FavoriteTableGroup : NSObject
     @property BOOL isOpen;
@@ -1146,9 +1147,10 @@ static UIViewController *parentController;
         NSInteger section = indexPath.section;
         BOOL isVisible = groupData.favoriteGroup.isVisible;
         NSString *showHideCaption = isVisible ? OALocalizedString(@"shared_string_hide_from_map") : OALocalizedString(@"shared_string_show_on_map");
-        NSString *showHideImage = isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined";
+        UIImage *showHideImage = [OAUtilities resizeImage:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined"]
+                                                  newSize:CGSizeMake(kActionImageSize, kActionImageSize)];
         UIAction *showHideAction = [UIAction actionWithTitle:showHideCaption
-                                                       image:[UIImage imageNamed:showHideImage]
+                                                       image:showHideImage
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
             [OAFavoritesHelper updateGroup:groupData.favoriteGroup visible:!isVisible saveImmediately:YES];
@@ -1156,8 +1158,10 @@ static UIViewController *parentController;
         }];
         showHideAction.accessibilityLabel = showHideCaption;
         
+        UIImage *renameImage = [OAUtilities resizeImage:[UIImage imageNamed:@"ic_custom_edit"]
+                                                newSize:CGSizeMake(kActionImageSize, kActionImageSize)];
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
-                                                     image:[UIImage imageNamed:@"ic_custom_edit"]
+                                                     image:renameImage
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
             [self openRenameAlertWith:groupData.favoriteGroup];

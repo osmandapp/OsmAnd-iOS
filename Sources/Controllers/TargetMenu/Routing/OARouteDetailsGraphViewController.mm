@@ -27,7 +27,6 @@
 #import "OAMapRendererView.h"
 #import "OARouteInfoLegendItemView.h"
 #import "OARouteStatisticsModeCell.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAGPXDatabase.h"
 #import "OASelectedGPXHelper.h"
 #import "GeneratedAssetSymbols.h"
@@ -367,9 +366,20 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types analysis:self.analysis];
+    StatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[StatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types analysis:self.analysis];
     statsModeBottomSheet.delegate = self;
-    [statsModeBottomSheet show];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:statsModeBottomSheet];
+    nav.modalPresentationStyle = UIModalPresentationPageSheet;
+    UISheetPresentationController *sheet = nav.sheetPresentationController;
+    sheet.detents = @[
+        UISheetPresentationControllerDetent.mediumDetent,
+        UISheetPresentationControllerDetent.largeDetent
+    ];
+    sheet.selectedDetentIdentifier = UISheetPresentationControllerDetentIdentifierMedium;
+    sheet.prefersGrabberVisible = YES;
+    sheet.preferredCornerRadius = 20.0;
+    sheet.prefersScrollingExpandsWhenScrolledToEdge = NO;
+    [OARootViewController.instance.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
 - (void) onChartGesture:(UIGestureRecognizer *)recognizer

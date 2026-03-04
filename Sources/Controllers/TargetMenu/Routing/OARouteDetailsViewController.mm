@@ -11,7 +11,6 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
@@ -803,9 +802,20 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types analysis:self.analysis];
+    StatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[StatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types analysis:self.analysis];
     statsModeBottomSheet.delegate = self;
-    [statsModeBottomSheet show];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:statsModeBottomSheet];
+    nav.modalPresentationStyle = UIModalPresentationPageSheet;
+    UISheetPresentationController *sheet = nav.sheetPresentationController;
+    sheet.detents = @[
+        UISheetPresentationControllerDetent.mediumDetent,
+        UISheetPresentationControllerDetent.largeDetent
+    ];
+    sheet.selectedDetentIdentifier = UISheetPresentationControllerDetentIdentifierMedium;
+    sheet.prefersGrabberVisible = YES;
+    sheet.preferredCornerRadius = 20.0;
+    sheet.prefersScrollingExpandsWhenScrolledToEdge = NO;
+    [OARootViewController.instance.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
 - (IBAction)buttonCancelPressed:(id)sender

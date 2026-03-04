@@ -471,7 +471,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         navigationController?.navigationBar.standardAppearance = blurAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
+        if #available(iOS 26.0, *) {
+            navigationController?.navigationBar.tintColor = .label
+        } else {
+            navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
+        }
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     

@@ -156,7 +156,6 @@ static int TILE_SIZE = 256;
                     }
                 }
                 
-                auto* groupPtr = symbolInfo.mapSymbol->groupPtr;
                 if (const auto amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
                 {
                     cppAmenity = amenitySymbolGroup->amenity;

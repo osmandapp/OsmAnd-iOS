@@ -1624,6 +1624,13 @@ typedef enum
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 
+- (void)updateTargetPoint:(OATargetPoint *)targetPoint
+{
+    //[self applyTargetPoint:targetPoint];
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self.targetMenuView applyTargetObjectChanges];
+}
+
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
 {
     // show context marker on map
@@ -2782,10 +2789,10 @@ typedef enum
 
 - (OATargetPoint *) getCurrentTargetPoint
 {
-    if (_targetMenuView.superview)
+  //  if (_targetMenuView.superview)
         return _targetMenuView.targetPoint;
-    else
-        return nil;
+//    else
+//        return nil;
 }
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item

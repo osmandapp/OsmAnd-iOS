@@ -625,7 +625,12 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
 - (UIColor *)getNavbarButtonsTintColor
 {
-    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? [UIColor colorNamed:ACColorNameNavBarTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive];
+    UIColor *navbarSchemeOrangeColor;
+    if (@available(iOS 26.0, *))
+        navbarSchemeOrangeColor = UIColor.labelColor;
+    else
+        navbarSchemeOrangeColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? navbarSchemeOrangeColor : [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 - (UIColor *)getTitleColor

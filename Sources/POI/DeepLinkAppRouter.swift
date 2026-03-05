@@ -76,7 +76,7 @@ final class DeepLinkAppRouter: NSObject {
         guard let nav = root.navigationController, !(nav.visibleViewController is ExternalSettingsWriteToTrackSettingsViewController) else { return }
         guard let nav = dismissAndPopToRoot() else { return }
         guard let product = OAIAPHelper.sharedInstance().product(kInAppId_Addon_External_Sensors) else {
-            OARootViewController.instance().requestProducts(withProgress: false, reload: false)
+            root.requestProducts(withProgress: false, reload: false)
             OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.sensors(), navController: nav)
             return
         }

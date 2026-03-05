@@ -32,6 +32,10 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
+static const NSInteger kOrderDescriptionRow = 0;
+static const NSInteger kOrderWptPointRow = 1;
+static const NSInteger kOrderWptPointLinkRow = 2;
+
 @implementation OAGPXWptViewController
 {
     OsmAndAppInstance _app;
@@ -52,7 +56,7 @@
         }
         self.wpt = wpt;
         NSDictionary<NSString *, NSString *> *extensions = [self.wpt.point getExtensionsToRead];
-        NSString *key = [PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG];
+        NSString *key = [AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG];
         NSString *openingHoursExt = extensions[key];
         _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt ? openingHoursExt.UTF8String : "");
         [self acquireOriginObject];
@@ -72,25 +76,25 @@
         _originObject = [_wpt getAmenity];
 }
 
-- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    [super buildTopRows:rows];
+    [super buildTopInternal:rows];
     [self buildWaypointsView:rows];
 }
 
-- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *desc = [self getItemDesc];
     if (desc && desc.length > 0)
     {
-        OARowInfo *descriptionRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:0 typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *descriptionRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:kOrderDescriptionRow typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:descriptionRow];
     }
 }
 
-- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    [self buildTopRows:rows];
+    [self buildTopInternal:rows];
     
     if ([self getTimestamp] && [[self getTimestamp] timeIntervalSince1970] > 0)
     {
@@ -103,14 +107,14 @@
     
     if (self.wpt.point.link && self.wpt.point.link.href && self.wpt.point.link.href.length > 0)
     {
-        [rows addObject:[[OARowInfo alloc] initWithKey:nil
+        [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil
                                                   icon:[OATargetInfoViewController getIcon:@"mx_website"]
                                             textPrefix:nil
                                                   text:self.wpt.point.link.href
                                              textColor:UIColorFromRGB(kHyperlinkColor)
                                                 isText:NO
                                              needLinks:YES
-                                                 order:2
+                                                 order:kOrderWptPointLinkRow
                                               typeName:@""
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
@@ -121,12 +125,12 @@
     //wpt.ele
     //wpt.hdop
     
-    if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
+    if ([_originObject isKindOfClass:OAPOI.class])
     {
-        OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
+        OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI:_originObject];
         builder.location = CLLocationCoordinate2DMake(_wpt.point.lat, _wpt.point.lon);
-        NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
-        [builder buildRowsInternal:internalRows];
+        NSMutableArray<OAAmenityInfoRow *> *internalRows = [NSMutableArray array];
+        [builder buildMenu:internalRows];
         [rows addObjectsFromArray:internalRows];
     }
     else
@@ -134,19 +138,18 @@
         [self buildCoordinateRows:rows];
     }
 
-    [self setRows:rows];
+    [self setInfoRows:rows];
 }
 
-- (void) buildWaypointsView:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildWaypointsView:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *name = OALocalizedString(@"context_menu_points_of_group");
     NSString *gpxName = self.wpt.docPath == nil ? OALocalizedString(@"shared_string_currently_recording_track") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
     UIColor *color = [self getItemColor];
     UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
     
-    OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:name text:gpxName textColor:color isText:NO needLinks:NO order:1 typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
+    OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:name text:gpxName textColor:color isText:NO needLinks:NO order:kOrderWptPointRow typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
     rowInfo.collapsed = YES;
-    rowInfo.collapsable = YES;
     rowInfo.height = 64;
     rowInfo.collapsableView = [self getCollapsableWaypointsView:_wpt];
     

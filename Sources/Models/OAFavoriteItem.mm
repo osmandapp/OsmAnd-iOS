@@ -528,7 +528,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         for (const auto& extension : OsmAnd::rangeOf(extensionsToRead))
             extensions[extension.key().toNSString()] = extension.value().toNSString();
 
-        _amenity = [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
+        _amenity = [OAPOI fromTagValue:extensions privatePrefix:AMENITY_PREFIX osmPrefix:OSM_PREFIX_KEY];
         return _amenity;
     }
     return nil;
@@ -538,7 +538,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (amenity)
     {
-        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX_KEY];
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:AMENITY_PREFIX osmPrefix:OSM_PREFIX_KEY];
         [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
             self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
         }];

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAPointDescription;
+@class OAPointDescription, BaseDetailsObject;
 
 typedef NS_ENUM(NSInteger, OATargetPointType)
 {
@@ -57,7 +57,9 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetWeatherToolbar,
     OATargetTerrainParametersSettings,
     OATargetMapModeParametersSettings,
-    OATargetProfileAppearanceIconSizeSettings
+    OATargetProfileAppearanceIconSizeSettings,
+    OATargetBaseDetailsObject,
+    OATargetRenderedObject
 };
 
 @interface OATargetPoint : NSObject
@@ -88,10 +90,11 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic, readonly) OAPointDescription *pointDescription;
 
 @property (nonatomic) int symbolId;
-@property (nonatomic) unsigned long long obfId;
+@property (nonatomic) uint64_t obfId;
 @property (nonatomic) NSInteger sortIndex;
 @property (nonatomic) NSString* symbolGroupId;
 
-- (void)initAdderssIfNeeded;
-
+- (void)initAddressIfNeeded;
+//- (void)initDetailsObjectIfNeeded:(id)object;
+- (BOOL)isValidObfId;
 @end

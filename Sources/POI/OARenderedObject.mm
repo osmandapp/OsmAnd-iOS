@@ -9,6 +9,7 @@
 #import "OARenderedObject.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/PointsAndAreas.h>
@@ -99,6 +100,37 @@
 - (long) estimatedArea
 {
     return abs(_bboxRight - _bboxLeft) * abs(_bboxTop - _bboxBottom);
+}
+
+- (NSMutableArray<NSString *> *) getOriginalNames
+{
+    NSMutableArray<NSString *> *names = [NSMutableArray new];
+    if (!NSStringIsEmpty(self.name))
+        [names addObject:self.name];
+    
+    for (NSString *key in self.localizedNames.allKeys)
+    {
+        NSString *value = self.localizedNames[key];
+        if (!NSStringIsEmpty(value))
+            [names addObject:value];
+    }
+    
+    return names;
+}
+
+- (NSString *)description
+{
+    NSString *name = NSStringIsEmpty(self.name) ? @"nil" : self.name;
+    NSString *link = [ObfConstants getOsmUrlForId:self];
+    NSString *tags = [ObfConstants getPrintTags:self];
+    
+    NSString *s = name;
+    if (![s containsString:link])
+        s = [NSString stringWithFormat:@"%@ %@", s, link];
+    if (![s containsString:tags])
+        s = [NSString stringWithFormat:@"%@ %@", s, tags];
+    
+    return s;
 }
 
 @end

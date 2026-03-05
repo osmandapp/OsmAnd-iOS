@@ -20,11 +20,19 @@
 {
     self = [super init];
     if (self) {
+        _latitude = NAN;
+        _longitude = NAN;
         _x = [NSMutableArray new];
         _y = [NSMutableArray new];
         _localizedNames = [NSMutableDictionary new];
+        _obfId = [self.class getInvalidObfId];
     }
     return self;
+}
+
+- (BOOL) hasLocation
+{
+    return !isnan(_latitude) && !isnan(_longitude);
 }
 
 - (CLLocation *) getLocation
@@ -113,6 +121,11 @@
     [self copyNames:s copyName:YES copyEnName:YES overwrite:NO];
 }
 
+- (int64_t) getSignedId
+{
+    return static_cast<int64_t>(self.obfId);
+}
+
 - (QVector< OsmAnd::LatLon >) getPolygon
 {
     QVector<OsmAnd::LatLon> res;
@@ -153,6 +166,12 @@
     return NO;
 }
 
+- (NSString *)description
+{
+    NSString *name = NSStringIsEmpty(self.name) ? @"nil" : self.name;
+    return [NSString stringWithFormat:@"%@ (%llu)", name, _obfId];
+}
+
 + (void)parseNamesJSON:(NSString *)json
                 object:(OAMapObject *)object
 {
@@ -179,6 +198,16 @@
 
     if ([jsonDict isKindOfClass:[NSDictionary class]])
         object.localizedNames = [jsonDict mutableCopy];
+}
+
+- (BOOL) isValidObfId
+{
+    return self.obfId != [self.class getInvalidObfId];
+}
+
++ (uint64_t) getInvalidObfId
+{
+    return OsmAnd::ObfObjectId::invalidId();
 }
 
 @end

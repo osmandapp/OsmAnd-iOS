@@ -983,6 +983,7 @@
 "shared_string_color" = "Color";
 "fav_colors" = "Colors";
 "shared_string_name" = "Name";
+"shared_string_alt_name" = "Alternative name";
 "fav_group" = "Group";
 "shared_string_groups" = "Groups";
 "favorite" = "Favorite";
@@ -1898,6 +1899,10 @@
 "osm_upload_gpx_tags_footer" = "Enter tags separated by comma.";
 "visibility" = "Visibility";
 
+"poi_mobile" = "Mobile";
+"poi_cuisine" = "Cuisine";
+"poi_brand" = "Brand";
+
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
@@ -2317,6 +2322,7 @@
 "nautical_maps" = "Nautical maps";
 "shared_string_travel_guides" = "Travel guides";
 "shared_string_travel" = "Travel";
+"travel_guides" = "Guides";
 "download_select_map_types" = "Other maps";
 
 "shared_string_wikivoyage" = "Wikivoyage";
@@ -2710,6 +2716,8 @@
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 "open_in_browser_wiki" = "Open article online";
 "context_menu_read_article" = "Read article";
+"context_menu_read_full_article" = "Read full article";
+"read_on" = "Read on %@";
 
 "custom_search" = "Custom search";
 "add_custom_category" = "Add custom category";

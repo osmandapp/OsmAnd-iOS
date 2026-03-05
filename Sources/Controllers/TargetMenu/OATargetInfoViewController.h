@@ -7,30 +7,50 @@
 //
 
 #import "OATargetMenuViewController.h"
-#import "OARowInfo.h"
+#import "OAAmenityInfoRow.h"
 
-#define kCollapseDetailsRowType @"kCollapseDetailsRowType"
-#define kDescriptionRowType @"kDescriptionRowType"
-#define kCommentRowType @"kCommentRowType"
-#define kTimestampRowType @"kTimestampRowType"
-#define kGroupRowType @"kGroupRowType"
+static NSString *kCollapseDetailsRowType = @"kCollapseDetailsRowType";
+static NSString *kDescriptionRowType = @"kDescriptionRowType";
+static NSString *kShortDescriptionRowType = @"kShortDescriptionRowType";
+static NSString *kShortDescriptionWikiRowType = @"kShortDescriptionWikiRowType";
+static NSString *kShortDescriptionTravelRowType = @"kShortDescriptionTravelRowType";
+static NSString *kCommentRowType = @"kCommentRowType";
+static NSString *kTimestampRowType = @"kTimestampRowType";
+static NSString *kGroupRowType = @"kGroupRowType";
+
+
+@class AdditionalInfoBundle;
+
 
 @interface OATargetInfoViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (nonatomic) NSArray<OARowInfo *> *additionalRows;
+@property (nonatomic) NSArray<OAAmenityInfoRow *> *additionalRows;
+@property (nonatomic) AdditionalInfoBundle *infoBundle;
 
-- (BOOL) needCoords;
-- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows;
-- (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp;
-- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment;
-- (void) buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows;
+@property (nonatomic) BOOL showDefaultTags;
+@property (nonatomic) BOOL showTitleIfTruncated;
+@property (nonatomic) BOOL customOnlinePhotosPosition;
+@property (nonatomic) BOOL matchWidthDivider; // show separator to full screen width
+
+- (BOOL) needBuildCoordinatesRow;
+- (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildMainImage:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp;
+- (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment;
+- (void) buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) rebuildRows;
-- (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) setInfoRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) appendInfoRow:(OAAmenityInfoRow *)row;
+- (void) buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows listener:(id)listener;
+- (void) buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void)buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows listener:(id)listener;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 + (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size;

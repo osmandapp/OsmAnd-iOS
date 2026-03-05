@@ -67,9 +67,9 @@ final class PoiUIFilterDataProvider: NSObject {
                                   rightLongitude: Double,
                                   matcher: OAResultMatcher<OAPOI>? = nil) -> [OAPOI] {
         
-        if Thread.isMainThread {
-            fatalError("CRITICAL ERROR: searchAmenities (online) called on Main Thread!")
-        }
+//        if Thread.isMainThread {
+//            fatalError("CRITICAL ERROR: searchAmenities (online) called on Main Thread!")
+//        }
         
         let rect = QuadRect(left: leftLongitude, top: topLatitude, right: rightLongitude, bottom: bottomLatitude)
         var data = explorePlacesProvider.getDataCollection(rect, limit: 0)

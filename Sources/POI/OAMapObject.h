@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAMapObject : NSObject
 
-@property (nonatomic) long long obfId;
+@property (nonatomic) uint64_t obfId;
 
 @property (nonatomic, nullable) NSString *name;
 @property (nonatomic) NSString *enName;
@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (CLLocation *) getLocation;
 
+- (BOOL)hasLocation;
 - (void)addLocation:(int)x y:(int)y;
 - (void)setName:(NSString * _Nullable)lang name:(NSString * _Nonnull)name;
 
@@ -36,6 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)copyNames:(NSString *)otherName otherEnName:(NSString *)otherEnName otherNames:(NSDictionary<NSString *, NSString *> *)otherNames;
 - (void)copyNames:(OAMapObject *)s copyName:(BOOL)copyName copyEnName:(BOOL)copyEnName overwrite:(BOOL)overwrite;
 - (void)copyNames:(OAMapObject *)s;
+- (int64_t) getSignedId;
+
+
+- (BOOL) isValidObfId;
++ (uint64_t) getInvalidObfId;
 
 + (BOOL)isNameLangTag:(NSString *)tag;
 

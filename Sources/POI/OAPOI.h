@@ -12,13 +12,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString * const POI_NAME;
 extern NSString * const URL_TAG;
 extern NSString * const WEBSITE_TAG;
 extern NSString * const PHONE_TAG;
 extern NSString * const MOBILE_TAG;
+extern NSString * const BRAND_TAG;
+extern NSString * const OPERATOR_TAG;
 extern NSString * const DESCRIPTION_TAG;
 extern NSString * const ROUTE_TAG;
 extern NSString * const OPENING_HOURS_TAG;
+extern NSString * const POPULATION_TAG;
+extern NSString * const WIDTH_TAG;
+extern NSString * const HEIGHT_TAG;
+extern NSString * const DISTANCE_TAG;
 extern NSString * const SERVICE_TIMES_TAG;
 extern NSString * const COLLECTION_TIMES_TAG;
 extern NSString * const CONTENT_TAG;
@@ -57,6 +64,13 @@ extern NSString * const ROUTE_TRACK_POINT;
 extern NSString * const ROUTE_BBOX_RADIUS;
 extern NSString * const ROUTE_MEMBERS_IDS;
 extern NSString * const TRAVEL_EVO_TAG;
+extern NSString * const COLLAPSABLE_PREFIX;
+extern NSString * const SHORT_DESCRIPTION_TAG;
+extern NSString * const SEPARATOR;
+extern NSString * const ALT_NAME_WITH_LANG_PREFIX;
+extern NSString * const WIKI_PHOTO;
+extern NSString * const WIKIDATA_TAG;
+extern NSString * const WIKIMEDIA_COMMONS_TAG;
 
 static int DEFAULT_ELO = 900;
 
@@ -74,7 +88,7 @@ static int DEFAULT_ELO = 900;
 
 @interface OAPOI : OAMapObject
 
-@property (nonatomic, nullable) OAPOIType *type;
+@property (nonatomic, nullable) OAPOIType *type;    //TODO: test. in android here is category:  private PoiCategory type;
 @property (nonatomic, nullable) NSString *subType;
 @property (nonatomic, assign) BOOL hasOpeningHours;
 @property (nonatomic) NSString *openingHours;
@@ -87,7 +101,7 @@ static int DEFAULT_ELO = 900;
 @property (nonatomic, assign) double direction;
 
 @property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *values;
-@property (nonatomic) MutableOrderedDictionary<NSString *, NSString *> *localizedContent;
+@property (nonatomic, nullable) MutableOrderedDictionary<NSString *, NSString *> *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
 @property (nonatomic, nullable) NSString *mapIconName;
@@ -145,7 +159,7 @@ static int DEFAULT_ELO = 900;
 - (NSString *)getSite;
 - (NSString *)getColor;
 - (NSString *)getRef;
-- (NSString *)getRouteId;
+- (nullable NSString *)getRouteId;
 - (nullable NSString *)getWikidata;
 
 - (NSString *)getTravelElo;
@@ -169,9 +183,11 @@ static int DEFAULT_ELO = 900;
 
 - (void) setXYPoints:(OARenderedObject *)renderedObject;
 
-- (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags;
+- (uint64_t) getOsmId;
+- (BOOL) isValidOsmId;
 
-- (int64_t) getOsmId;
+- (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes;
+- (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags;
 
 - (BOOL) strictEquals:(id)object;
 

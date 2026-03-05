@@ -38,6 +38,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
     if (self) {
         // force load subregions in map files (if needed)
         // heigh data will be load for selected map file only in loadRouteDataObjects()
+        _osmId = [OAMapObject getInvalidObfId];
         const auto& localResources = OsmAndApp.instance.resourcesManager->getSortedLocalResources();
         for (const auto& resource : localResources)
         {

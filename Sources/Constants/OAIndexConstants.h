@@ -118,4 +118,6 @@ static NSString * const MODEL_NAME_PREFIX = @"model_";
 
 static NSString * const ONLINE_TILES_DIR = @"OsmAnd (online tiles)";
 
+static NSString * const XML_COLON = @"_-_";
+
 #endif /* OAIndexConstants_h */

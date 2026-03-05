@@ -95,9 +95,12 @@
 #import "UITableViewCell+getTableView.h"
 #import "UINavigationController+keyCommands.h"
 #import "OAWeatherHelperBridge.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OAOsmEditingPlugin.h"
 #import "OADeepLinkBridge.h"
 #import "OAUserInteractionPassThroughView.h"
 #import "OAClickableWayHelper.h"
+#import "OAOpenedHoursParser.h"
 #import "OAMapSource.h"
 #import "OAPoiUIFilterDataProviderWrapper.h"
 
@@ -195,6 +198,8 @@
 #import "OABottomSheetViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "OACollapsableLabelView.h"
+#import "OACollapsableNearestPoiTypeView.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -239,6 +244,7 @@
 #import "OACollapsableView.h"
 #import "OAMapRulerView.h"
 #import "OARouteInfoView.h"
+#import "OAButton.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

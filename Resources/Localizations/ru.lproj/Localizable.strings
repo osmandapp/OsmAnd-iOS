@@ -3409,7 +3409,7 @@
 "obd_widget_vehicle_speed" = "Скорость";
 "obd_fuel_type_methanol" = "Метанол";
 "percent_hour" = "%/ч";
-"obd_battery_voltage_desc" = "Виджет показывает уровень напряжения аккумуляторной батареи ТС";
+"obd_battery_voltage_desc" = "Виджет показывает уровень напряжения аккумуляторной батареи транспортного средства";
 "remaining_fuel" = "Остаток топлива";
 "obd_engine_runtime_desc" = "Виджет показывает как долго двигатель работает с момента запуска.";
 "obd_fuel_type_hydrogen" = "Водород";

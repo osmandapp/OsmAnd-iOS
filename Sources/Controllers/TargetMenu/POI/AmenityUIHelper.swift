@@ -305,11 +305,11 @@ final class AmenityUIHelper: NSObject {
     
     private func createPoiAdditionalInfoRow(key: String, value: String, collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {
         guard !isKeyToSkip(key: key) else { return nil }
-        
-        var pType = fetchPoiAdditionalType(key: key, value: value)
+        let cleanValue = value.replacingNbsp()
+        var pType = fetchPoiAdditionalType(key: key, value: cleanValue)
         if pType == nil {
             let altKey = key.replacingOccurrences(of: ":", with: "_")
-            pType = fetchPoiAdditionalType(key: altKey, value: value)
+            pType = fetchPoiAdditionalType(key: altKey, value: cleanValue)
         }
         
         if let pType, pType.filterOnly {
@@ -329,7 +329,7 @@ final class AmenityUIHelper: NSObject {
         
         if let pType {
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: value, subtype: subtype)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
         } else if let poiType {
             let category = poiType.category.name
             if category == OTHER_MAP_CATEGORY {
@@ -342,7 +342,7 @@ final class AmenityUIHelper: NSObject {
             pType = OAPOIType(name: key, category: poiCategory)
             pType?.isText = true
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-            let translation = OAPOIHelper.sharedInstance().getTranslation(value) ?? ""
+            let translation = OAPOIHelper.sharedInstance().getTranslation(cleanValue) ?? ""
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype)
         } else {
             return nil // skip non-translatable NON-poiType tags
@@ -508,5 +508,12 @@ final class AmenityUIHelper: NSObject {
     private func getRowIcon(_ name: String) -> UIImage? {
         let iconName = name.hasPrefix("mx_") ? name : "mx_" + name
         return OATargetInfoViewController.getIcon(iconName, size: CGSize(width: 20, height: 20))
+    }
+}
+
+private extension String {
+    func replacingNbsp() -> String {
+        replacingOccurrences(of: "&nbsp;", with: " ")
+            .replacingOccurrences(of: "\u{00a0}", with: " ")
     }
 }

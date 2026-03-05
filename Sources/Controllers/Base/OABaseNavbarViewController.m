@@ -20,6 +20,8 @@
 #define kRightIconLargeTitleLarge 40.
 #define kDefaultBarButtonSize 44.
 
+static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
+
 @implementation OABaseNavbarViewController
 {
     BOOL _isHeaderBlurred;
@@ -485,14 +487,22 @@
     NSArray<UIBarButtonItem *> *rightNavbarButtons = [self getRightNavbarButtons];
     if (rightNavbarButtons && rightNavbarButtons.count > 0)
     {
+        CGFloat barButtonSize = [self.class defaultBarButtonIconSize];
         NSMutableArray<UIBarButtonItem *> *rightNavbarButtonsWithSpaces = [NSMutableArray array];
         if (rightNavbarButtons.count > 1)
         {
             freeSpaceForNavbarButton -= (rightNavbarButtons.count - 1) * 8.;
             freeSpaceForNavbarButton /= rightNavbarButtons.count;
         }
-        if (freeSpaceForNavbarButton < kDefaultBarButtonSize)
-            freeSpaceForNavbarButton = kDefaultBarButtonSize;
+        if (freeSpaceForNavbarButton < barButtonSize)
+            freeSpaceForNavbarButton = barButtonSize;
+        
+        UIControlContentHorizontalAlignment buttonAlignment;
+        if (@available(iOS 26.0, *))
+            buttonAlignment = UIControlContentHorizontalAlignmentCenter;
+        else
+            buttonAlignment = UIControlContentHorizontalAlignmentTrailing;
+        
         for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
         {
             UIBarButtonItem *buttonItem = rightNavbarButtons[i];
@@ -500,12 +510,12 @@
             UIButton *button = buttonItem.customView;
             if (button)
             {
-                CGFloat buttonWidth = kDefaultBarButtonSize;
+                CGFloat buttonWidth = barButtonSize;
                 NSString *buttonTitle = [button titleForState:UIControlStateNormal];
                 if (buttonTitle && buttonTitle.length > 0)
                     buttonWidth = [OAUtilities calculateTextBounds:buttonTitle width:freeSpaceForNavbarButton font:button.titleLabel.font].width;
                 [button.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
-                button.contentHorizontalAlignment = i == 0 ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentCenter;
+                button.contentHorizontalAlignment = i == 0 ? buttonAlignment : UIControlContentHorizontalAlignmentCenter;
                 button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;
             }
         }
@@ -548,7 +558,7 @@
                                       target:(id)target
                                         menu:(UIMenu *)menu
 {
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonSize, 30.)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., [self defaultBarButtonIconSize], 30.)];
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;
     button.titleLabel.adjustsFontForContentSizeCategory = YES;
@@ -570,6 +580,14 @@
     if (title)
         rightNavbarButton.accessibilityLabel = title;
     return rightNavbarButton;
+}
+
++ (CGFloat)defaultBarButtonIconSize
+{
+    if (@available(iOS 26.0, *))
+        return kDefaultBarButtonSizeiOS26;
+    else
+        return kDefaultBarButtonSize;
 }
 
 - (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled

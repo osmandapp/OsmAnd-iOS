@@ -74,18 +74,14 @@ static const NSInteger kOrderFavGroupRow = 1;
 
 - (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    [self buildTopInternal:rows];
-    
     if (_favorite && [_favorite.getTimestamp timeIntervalSince1970] > 0)
     {
         [self buildDateRow:rows timestamp:[_favorite getTimestamp]];
     }
-    if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
+    if ([_originObject isKindOfClass:OAPOI.class])
     {
-        OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
-        builder.location = CLLocationCoordinate2DMake([_favorite getLatitude], [_favorite getLongitude]);
         NSMutableArray<OAAmenityInfoRow *> *internalRows = [NSMutableArray array];
-        [builder buildMenu:internalRows];
+        [super buildMenu:internalRows];
         [rows addObjectsFromArray:internalRows];
     }
     else

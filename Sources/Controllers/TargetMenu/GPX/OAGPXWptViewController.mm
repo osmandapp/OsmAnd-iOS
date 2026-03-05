@@ -125,9 +125,9 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     //wpt.ele
     //wpt.hdop
     
-    if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
+    if ([_originObject isKindOfClass:OAPOI.class])
     {
-        OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
+        OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI:_originObject];
         builder.location = CLLocationCoordinate2DMake(_wpt.point.lat, _wpt.point.lon);
         NSMutableArray<OAAmenityInfoRow *> *internalRows = [NSMutableArray array];
         [builder buildMenu:internalRows];

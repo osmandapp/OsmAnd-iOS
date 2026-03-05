@@ -67,6 +67,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var sortModeForSearch: TracksSortMode = .lastModified
     private var searchController = UISearchController()
     private var lastUpdate: TimeInterval?
+    private var cachedTabbarHeight: CGFloat = 0
     private var isSearchActive = false
     private var isNameFiltered = false
     private var isFiltersInitialized = false
@@ -812,6 +813,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tabBarController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
+        if let tabBarHeight = tabBarController?.tabBar.frame.size.height, cachedTabbarHeight == 0 {
+            cachedTabbarHeight = tabBarHeight
+        }
+        if let tabBarFrame = tabBarController?.tabBar.frame {
+            tabBarController?.tabBar.frame = CGRect(origin: tabBarFrame.origin,
+                                                    size: CGSize(width: tabBarFrame.width, height: cachedTabbarHeight))
+        }
     }
     
     private func updateSearchController() {

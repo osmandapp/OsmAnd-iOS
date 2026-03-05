@@ -180,6 +180,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if isRootFolder && rootFolder.getTrackItems().isEmpty && rootFolder.getSubFolders().isEmpty {
             configureFolders()
         }
+        if !isRootFolder {
+            view.backgroundColor = tableView.backgroundColor
+        }
         
         sortMode = getTracksSortMode()
         sortModeForSearch = getSearchTracksSortMode()

@@ -10,8 +10,30 @@ import UIKit
 import DGCharts
 import OsmAndShared
 
-@objc enum GPXDataSetType: Int {
-    case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW
+@objc enum GpxDataSetTypeGroup: Int {
+    case general
+    case externalSensors
+    case vehicleMetrics
+    
+    private var titleId: String? {
+        switch self {
+        case .general:
+            return nil
+        case .externalSensors:
+            return "external_sensor_widgets"
+        case .vehicleMetrics:
+            return "vehicle_metrics_chart_category"
+        }
+    }
+    
+    func getName() -> String? {
+        guard let titleId else { return nil }
+        return localizedString(titleId)
+    }
+}
+
+@objc enum GPXDataSetType: Int, CaseIterable {
+    case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW, intakeTemperature, ambientTemperature, coolantTemperature, engineOilTemperature, engineSpeed, engineRuntime, engineLoad, fuelPressure, fuelConsumption, remainingFuel, batteryLevel, vehicleSpeed, throttlePosition
 
     func getTitle() -> String {
         OAGPXDataSetType.getTitle(rawValue)
@@ -23,6 +45,10 @@ import OsmAndShared
 
     func getDatakey() -> String {
         OAGPXDataSetType.getDataKey(rawValue)
+    }
+    
+    func getTypeGroup() -> GpxDataSetTypeGroup {
+        GpxDataSetTypeGroup(rawValue: OAGPXDataSetType.getTypeGroup(rawValue)) ?? .general
     }
 
     func getTextColor() -> UIColor {

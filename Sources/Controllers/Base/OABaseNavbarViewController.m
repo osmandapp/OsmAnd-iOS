@@ -241,7 +241,9 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
     BOOL isLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle;
 
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    if (!isLargeTitle || !(@available(iOS 26.0, *))) { // TODO: change after special iOS 26 checking method created
+    // TODO: change after special iOS 26 checking method created
+    if (!isLargeTitle || !(@available(iOS 26.0, *)))
+    {
         [appearance configureWithOpaqueBackground];
         appearance.backgroundColor = [self getNavbarBackgroundColor];
     }

@@ -1175,6 +1175,13 @@
 "map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map.";
 "shared_string_legend" = "Legend";
 
+"graph_axis" = "Graph axis";
+"y_axis" = "Y-axis";
+ "x_axis" = "X-axis";
+"y_axis_description" = "Select up to two options for Y-Axis.";
+"external_sensor_widgets" = "External sensors";
+"vehicle_metrics_chart_category" = "Vehicle metrics";
+
 "map_settings_show_slider_map" = "Show slider on the map";
 "add_online_source" = "Add online source";
 "show_polygons" = "Show polygons";

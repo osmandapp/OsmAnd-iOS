@@ -350,6 +350,20 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
     }
 }
 
+- (void)reloadDataWithDelayIfNeeded:(NSTimeInterval)delay animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
+{
+    if (@available(iOS 26.0, *))
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self reloadDataWithAnimated:animated completion:completion];
+        });
+    }
+    else
+    {
+        [self reloadDataWithAnimated:animated completion:completion];
+    }
+}
+
 - (void)updateRightIconLargeTitle
 {
     if (_rightIconLargeTitle)

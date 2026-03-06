@@ -159,7 +159,15 @@
 
         case OATargetBaseDetailsObject:
         {
-            controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj];
+            BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
+            if (detailsObject)
+            {
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+            }
+            else
+            {
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj];
+            }
             break;
         }
 
@@ -173,6 +181,10 @@
                 {
                     controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
                 }
+                else
+                {
+                    controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+                }
             }
   
             break;
@@ -180,7 +192,15 @@
 
         case OATargetRenderedObject:
         {
-            controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
+            if (detailsObject)
+            {
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+            }
+            else
+            {
+                controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            }
             break;
         }
 

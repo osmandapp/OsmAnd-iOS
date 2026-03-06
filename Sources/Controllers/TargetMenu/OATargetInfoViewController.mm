@@ -216,7 +216,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    [self buildMainImage:rows];
     [self buildDescription:rows];
     
     NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
@@ -238,11 +237,6 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
         ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
         [rows addObject:rowInfo];
     }
-}
-
-- (void) buildMainImage:(NSMutableArray<OAAmenityInfoRow *> *)rows
-{
-    [NSException exceptionWithName:@"Not implented Error" reason:@"OATargetInfoViewController buildMainImage is not implemented" userInfo:nil];
 }
 
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows

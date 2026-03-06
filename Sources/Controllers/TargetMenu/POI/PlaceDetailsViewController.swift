@@ -27,6 +27,11 @@ final class PlaceDetailsViewController: OAPOIViewController {
         setObject(detailsObject)
     }
     
+    override func viewDidLoad() {
+        updateMenuWithDetailedObject()
+        super.viewDidLoad()
+    }
+    
     override func setObject(_ object: Any) {
         if let detailsObj = object as? BaseDetailsObject {
             poi = detailsObj.syntheticAmenity
@@ -59,10 +64,8 @@ final class PlaceDetailsViewController: OAPOIViewController {
             return true
         }
         
-        for ameniry in amenities {
-            if buildDescription(amenity: ameniry, allowOnlineWiki: false, rows: rows) {
-                return true
-            }
+        for amenity in amenities where buildDescription(amenity: amenity, allowOnlineWiki: false, rows: rows) {
+            return true
         }
         
         return false
@@ -119,9 +122,9 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     private func getGuidesCollapsableView(articles: [String: [String: TravelArticle]]) -> OACollapsableView? {
-        let collapsavleView = OACollapsableTravelGuidesView(defaultParameters: true)
-        collapsavleView?.setData(articlesMap: articles)
-        return collapsavleView
+        let collapsableView = OACollapsableTravelGuidesView(defaultParameters: true)
+        collapsableView?.setData(articlesMap: articles)
+        return collapsableView
     }
     
     private func getTravelIds() -> [String: CLLocation]? {
@@ -171,11 +174,26 @@ final class PlaceDetailsViewController: OAPOIViewController {
         var amenities = [OAPOI]()
         guard let detailsObjectAmenities = detailsObject?.getAmenities() else { return [] }
         
-        for amenity in detailsObjectAmenities {
-            if amenity.isRoutePoint() {
-                amenities.append(amenity)
-            }
+        for amenity in detailsObjectAmenities where amenity.isRoutePoint() {
+            amenities.append(amenity)
         }
         return amenities
+    }
+    
+    private func updateMenuWithDetailedObject() {
+        guard let detailsObject else { return }
+        let amenity = detailsObject.syntheticAmenity
+        setup(amenity)
+        updateTargetPoint(with: amenity)
+    }
+    
+    private func updateTargetPoint(with amenity: OAPOI) {
+        guard let mapPanel = OARootViewController.instance()?.mapPanel,
+              let targetPoint = mapPanel.getCurrentTargetPoint() else { return }
+
+        targetPoint.title = amenity.nameLocalized ?? amenity.name
+        targetPoint.icon = amenity.type?.icon()
+
+        mapPanel.update(targetPoint)
     }
 }

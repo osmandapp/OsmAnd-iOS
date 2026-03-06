@@ -1620,7 +1620,6 @@ typedef enum
 
 - (void)updateTargetPoint:(OATargetPoint *)targetPoint
 {
-    //[self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
 }
 

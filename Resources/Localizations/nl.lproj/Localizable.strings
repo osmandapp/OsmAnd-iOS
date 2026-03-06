@@ -3779,3 +3779,5 @@
 "average_slope" = "Gemiddelde helling";
 "liter_single" = "Liter";
 "us_gallon" = "US gallon";
+"trip_recording_moving_time_widget_description" = "Toont de momenteel opgenomen bewegingstijd of de tijd voor de laatste beklimming en afdaling.";
+"trip_recording_moving_time" = "Bewegingstijd";

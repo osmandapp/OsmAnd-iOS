@@ -82,14 +82,6 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     
     override func generateData() {
         tableData.clearAllData()
-        
-        struct SectionSpec {
-            let header: String?
-            let allowed: Set<GPXDataSetType>
-        }
-        
-        let sections: [SectionSpec] = [.init(header: nil, allowed: [.altitude, .slope, .speed]), .init(header: localizedString("external_sensor_widgets"), allowed: [.sensorSpeed, .sensorHeartRate, .sensorBikePower, .sensorBikeCadence, .sensorTemperatureA, .sensorTemperatureW])]
-        
         func hasData(_ type: GPXDataSetType) -> Bool {
             guard let tag = OAGPXDataSetType.getDataKey(type.rawValue), !tag.isEmpty else { return false }
             let hasTag = analysis.hasData(tag: tag)
@@ -110,11 +102,14 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                 return type
             }
             
-            for spec in sections {
-                let visible = availableSingles.filter { spec.allowed.contains($0) && hasData($0) }
+            let order: [GpxDataSetTypeGroup] = [.general, .externalSensors, .vehicleMetrics]
+            let grouped = Dictionary(grouping: availableSingles) { $0.getTypeGroup() }
+            for group in order {
+                guard let items = grouped[group] else { continue }
+                let visible = items.filter { hasData($0) }
                 guard !visible.isEmpty else { continue }
                 let section = tableData.createNewSection()
-                section.headerText = spec.header ?? ""
+                section.headerText = group.getName() ?? ""
                 for type in visible {
                     let row = section.createNewRow()
                     row.cellType = OASimpleTableViewCell.reuseIdentifier

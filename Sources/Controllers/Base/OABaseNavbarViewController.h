@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)updateUIAnimated:(void (^)(BOOL finished))completion;
 - (void)updateWithoutData;
 - (void)reloadDataWithAnimated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
+- (void)reloadDataWithDelayIfNeeded:(NSTimeInterval)delay animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
                                     iconName:(NSString *)iconName

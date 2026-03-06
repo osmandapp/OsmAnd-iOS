@@ -67,6 +67,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var sortModeForSearch: TracksSortMode = .lastModified
     private var searchController = UISearchController()
     private var lastUpdate: TimeInterval?
+    private var cachedTabbarHeight: CGFloat = 0
     private var isSearchActive = false
     private var isNameFiltered = false
     private var isFiltersInitialized = false
@@ -178,6 +179,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         if isRootFolder && rootFolder.getTrackItems().isEmpty && rootFolder.getSubFolders().isEmpty {
             configureFolders()
+        }
+        if !isRootFolder {
+            view.backgroundColor = tableView.backgroundColor
         }
         
         sortMode = getTracksSortMode()
@@ -471,7 +475,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         navigationController?.navigationBar.standardAppearance = blurAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
+        if #available(iOS 26.0, *) {
+            navigationController?.navigationBar.tintColor = .label
+        } else {
+            navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
+        }
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
@@ -514,13 +522,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         var menuActions: [UIMenuElement] = []
         if !tableView.isEditing {
             if isSmartFolder {
-                let selectSmartFolderAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined) { [weak self] _ in
+                let selectSmartFolderAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarSelectButtonClicked()
                 }
-                let refreshSmartFolderAction = UIAction(title: localizedString("shared_string_refresh"), image: .icCustomUpdate) { [weak self] _ in
+                let refreshSmartFolderAction = UIAction(title: localizedString("shared_string_refresh"), image: .icCustomUpdate.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarRefreshSmartFolderButtonClicked()
                 }
-                let editFilterSmartFolderAction = UIAction(title: localizedString("edit_filter"), image: .icCustomParameters) { [weak self] _ in
+                let editFilterSmartFolderAction = UIAction(title: localizedString("edit_filter"), image: .icCustomParameters.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarEditFilterSmartFolderButtonClicked()
                 }
                 let selectSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectSmartFolderAction])
@@ -528,15 +536,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 let editFilterSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [editFilterSmartFolderAction])
                 menuActions.append(contentsOf: [selectSmartFolderActionWithDivider, refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider])
             } else {
-                let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined) { [weak self] _ in
+                let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarSelectButtonClicked()
                 }
-                let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
+                let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarAddFolderButtonClicked()
                 }
                 var addSmartFolderAction: UIAction?
                 if isRootFolder {
-                    addSmartFolderAction = UIAction(title: localizedString("add_smart_folder"), image: .icCustomFolderSmartOutlined) { [weak self] _ in
+                    addSmartFolderAction = UIAction(title: localizedString("add_smart_folder"), image: .icCustomFolderSmartOutlined.resizedMenuImage()) { [weak self] _ in
                         self?.onNavbarAddSmartFolderButtonClicked()
                     }
                 }
@@ -544,7 +552,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 if let smartAction = addSmartFolderAction {
                     folderActions.append(smartAction)
                 }
-                let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
+                let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarImportButtonClicked()
                 }
                 let sortSubfoldersActions = createSortMenu(isSortingSubfolders: true)
@@ -556,25 +564,25 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
             }
         } else {
-            let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomMapPinOutlined) { [weak self] _ in
+            let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomMapPinOutlined.resizedMenuImage()) { [weak self] _ in
                 self?.onNavbarShowOnMapButtonClicked()
             }
-            let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined) { [weak self] _ in
+            let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined.resizedMenuImage()) { [weak self] _ in
                 self?.onNavbarExportButtonClicked()
             }
-            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
+            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined.resizedMenuImage()) { [weak self] _ in
                 self?.onNavbarUploadToOsmButtonClicked()
             }
-            let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
+            let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined.resizedMenuImage()) { [weak self] _ in
                 self?.onNavbarMoveButtonClicked()
             }
-            let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
+            let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined.resizedMenuImage()) { [weak self] _ in
                 self?.onNavbarChangeAppearanceButtonClicked()
             }
-            let changeActivityAction = UIAction(title: localizedString("change_activity"), image: .icCustomActivityOutlined) { [weak self] _ in
+            let changeActivityAction = UIAction(title: localizedString("change_activity"), image: .icCustomActivityOutlined.resizedMenuImage()) { [weak self] _ in
                 self?.onNavbarChangeActivityButtonClicked()
             }
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage(), attributes: .destructive) { [weak self] _ in
                 self?.onNavbarDeleteButtonClicked()
             }
             
@@ -586,7 +594,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
-        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: .navBarTextColorPrimary, action: nil, target: self, menu: menu) {
+        var navBarButton: UIBarButtonItem?
+        let navBarButtonImage = UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke")
+        if #available(iOS 26.0, *) {
+            navBarButton = UIBarButtonItem(image: navBarButtonImage, style: .plain, target: self, action: nil)
+            navBarButton?.menu = menu
+        } else {
+            navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: navBarButtonImage, color: .navBarTextColorPrimary, action: nil, target: self, menu: menu)
+        }
+        if let navBarButton {
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
             navigationItem.setRightBarButtonItems([navBarButton], animated: false)
         }
@@ -800,6 +816,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tabBarController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
+        if let tabBarHeight = tabBarController?.tabBar.frame.size.height, cachedTabbarHeight == 0 {
+            cachedTabbarHeight = tabBarHeight
+        }
+        if let tabBarFrame = tabBarController?.tabBar.frame {
+            tabBarController?.tabBar.frame = CGRect(origin: tabBarFrame.origin,
+                                                    size: CGSize(width: tabBarFrame.width, height: cachedTabbarHeight))
+        }
     }
     
     private func updateSearchController() {
@@ -2451,13 +2474,13 @@ extension TracksViewController {
             createAction(for: .shorterDurationFirst, isSortingSubfolders: isSortingSubfolders)
         ])
         
-        return UIMenu(title: isSortingSubfolders ? localizedString("sort_subfolders_tracks") : "", image: isSortingSubfolders ? .icCustomSortSubfolder : nil, children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+        return UIMenu(title: isSortingSubfolders ? localizedString("sort_subfolders_tracks") : "", image: isSortingSubfolders ? .icCustomSortSubfolder.resizedMenuImage() : nil, children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
     }
     
     private func createAction(for sortType: TracksSortMode, isSortingSubfolders: Bool) -> UIAction {
         let isCurrentSortType = isSearchActive || isSelectionModeInSearch ? sortType == sortModeForSearch : sortType == sortMode
         let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
-        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
+        return UIAction(title: sortType.title, image: sortType.image?.resizedMenuImage(), state: actionState) { [weak self] _ in
             guard let self else { return }
             if self.isSearchActive || self.isSelectionModeInSearch {
                 self.setSearchTracksSortMode(sortType)

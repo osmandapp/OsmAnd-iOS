@@ -26,6 +26,9 @@
 #define kSeparatorHeight .5
 #define kNavigationBarHeight 56.
 
+static CGFloat const kDefaultBarButtonWidth = 44.0;
+static CGFloat const kDefaultBarButtonHeight = 30.0;
+
 @interface OAChoosePlanViewController () <UIScrollViewDelegate, OAFeatureCardViewDelegate, OAFeatureCardRowDelegate, OAChoosePlanDelegate, SFSafariViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *viewNavigationBar;
@@ -62,6 +65,9 @@
     UIView *_backgroundAboveScrollViewContainer;
     NSArray<OAFeatureCardRow *> *_includedRows;
     NSArray<OAFeatureCardRow *> *_notIncludedRows;
+    NSString *_cachedTitle;
+    
+    CGFloat _extraNavigationBarHeight;
 }
 
 - (instancetype) initWithFeature:(OAFeature *)feature;
@@ -115,7 +121,19 @@
     self.scrollView.delegate = self;
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 
-    self.labelNavigationTitle.text = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
+    _cachedTitle = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
+    if (@available(iOS 26.0, *))
+    {
+        [self.viewNavigationBar setHidden:YES];
+        if ([self.navigationController isNavigationBarHidden])
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+        self.title = nil;
+        [self setupNavbarButtons];
+    }
+    else
+    {
+        self.labelNavigationTitle.text = _cachedTitle;
+    }
     self.labelNavigationTitle.hidden = YES;
     self.viewNavigationSeparator.hidden = YES;
 
@@ -254,6 +272,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
 
     [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
+    [self updateAppearance];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -296,17 +315,17 @@
     }
     
     CGFloat navigationBarHeight;
-    CGFloat extraNavigationBarHeight = 0.;
+    _extraNavigationBarHeight = 0.;
     if (_type == EOAChooseSubscription)
-        extraNavigationBarHeight = [OAUtilities getTopMargin];
+        _extraNavigationBarHeight = [OAUtilities getTopMargin];
 
-    navigationBarHeight = kNavigationBarHeight + extraNavigationBarHeight;
+    navigationBarHeight = kNavigationBarHeight + _extraNavigationBarHeight;
 
     self.viewNavigationBar.frame = CGRectMake(0., 0., self.view.frame.size.width, navigationBarHeight);
     [self.view bringSubviewToFront:self.viewNavigationBar];
 
     self.scrollView.contentInset = UIEdgeInsetsMake(
-            navigationBarHeight - extraNavigationBarHeight,
+            navigationBarHeight,
             0.,
             [OAUtilities getBottomMargin] + 52.,
             0.
@@ -468,6 +487,59 @@
     );
 }
 
+- (void)setupNavbarButtons
+{
+    UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonWidth, kDefaultBarButtonHeight)];
+    leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
+    [leftButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    [leftButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [leftButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+    [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+    leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    [self.navigationItem setLeftBarButtonItem:leftNavbarButton animated:YES];
+    
+    UIImage *rightNavbarButtonCustomIcon = [UIImage templateImageNamed:_type == EOAChoosePlan ? @"ic_custom_reset" : @"ic_navbar_help"];
+    UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonWidth, kDefaultBarButtonHeight)];
+    [rightButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    [rightButton setImage:rightNavbarButtonCustomIcon forState:UIControlStateNormal];
+    [rightButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+    [rightButton addTarget:self action:@selector(helpButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *rightNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
+    [self.navigationItem setRightBarButtonItem:rightNavbarButton animated:YES];
+}
+
+- (void)updateAppearance
+{
+    if (@available(iOS 26.0, *))
+    {
+        if (_isHeaderBlurred)
+        {
+            UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+            [appearance configureWithOpaqueBackground];
+            appearance.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+            appearance.titleTextAttributes = @{
+                NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+                NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+            };
+            self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+            self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        }
+        else
+        {
+            self.navigationController.navigationBar.scrollEdgeAppearance = nil;
+            self.navigationController.navigationBar.tintColor = UIColor.clearColor;
+        }
+    }
+}
+
+- (void)setupNavbarTitle
+{
+    self.title = _isHeaderBlurred ? _cachedTitle : nil;
+}
+
 - (void)setupButton:(UIButton *)button
 {
     if ([self.scrollView isDirectionRTL])
@@ -567,10 +639,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGFloat y = scrollView.contentOffset.y;
-    if (_type == EOAChooseSubscription)
-        y += [OAUtilities getTopMargin];
-
+    CGFloat y = scrollView.contentOffset.y + _extraNavigationBarHeight;
     CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
     backgroundFrame.origin.y = y < 0. ? y : -y;
     backgroundFrame.size.height = y < 0. ? ABS(y) : 0.;
@@ -591,6 +660,9 @@
         self.viewNavigationSeparator.hidden = YES;
         _isHeaderBlurred = NO;
     }
+    if (@available(iOS 26.0, *))
+        [self setupNavbarTitle];
+    [self updateAppearance];
 }
 
 #pragma mark - OAFeatureCardRowDelegate
@@ -645,7 +717,11 @@
 - (void)onFeatureSelected:(OAFeature *)feature
 {
     _selectedFeature = feature;
-    self.labelNavigationTitle.text = [_selectedFeature getListTitle];
+    _cachedTitle = [_selectedFeature getListTitle];
+    if (@available(iOS 26.0, *))
+        [self setupNavbarTitle];
+    else
+        self.labelNavigationTitle.text = _cachedTitle;
     [self updateScrollViewContainerSize];
 }
 

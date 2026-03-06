@@ -347,7 +347,7 @@ static BOOL _repositoryUpdated = NO;
         _doneButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_done") style:UIBarButtonItemStylePlain target:self action:@selector(onDoneClicked:)];
         [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_doneButton animated:YES];
     }
-    _updateButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_update"] style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateBtnClicked:)];
+    _updateButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"arrow.triangle.2.circlepath"] style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateBtnClicked:)];
     if (!hideUpdateButton)
         [self.navigationController.navigationBar.topItem setRightBarButtonItem:_updateButton animated:YES];
     [self setupSearchControllerWithFilter:NO];

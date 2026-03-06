@@ -23,6 +23,7 @@
     [super layoutSubviews];
     [self.contentView layoutIfNeeded];
 
+    self.buttonView.titleLabel.numberOfLines = 1;
     CGFloat horizontalInset = 12.;
     CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
         width:self.buttonView.frame.size.width - horizontalInset * 2 - self.buttonView.imageView.frame.size.width].width;

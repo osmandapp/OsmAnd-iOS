@@ -30,6 +30,8 @@ static NSString * const SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES = @"alpineHikingS
 static NSString * const SHOW_MTB_SCALE_UPHILL = @"showMtbScaleUphill";
 static NSString * const SHOW_MTB_SCALE_IMBA_TRAILS = @"showMtbScaleIMBATrails";
 
+static NSString * const NO_POLYGONS = @"noPolygons";
+
 static NSString * const TRANSPORT_CATEGORY = @"transport";
 static NSString * const TRANSPORT_STOPS_ATTR = @"transportStops";
 static NSString * const BUS_ROUTES_ATTR = @"showBusRoutes";

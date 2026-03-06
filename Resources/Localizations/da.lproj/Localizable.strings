@@ -3946,8 +3946,8 @@
 "rendering_attr_safetyContour_description" = "Sikkerhedsdybdekontur";
 "ble_scanner" = "BLE-scanner";
 "lang_crh" = "Krimtatarisk (latin)";
-"visualizing_button_grid" = "Kortknap net";
-"efficient_grid" = "Effektivt net";
+"visualizing_button_grid" = "Kortknap gitter";
+"efficient_grid" = "Effektivt gitter";
 "slots" = "Pladser";
 "button_frames" = "Knaprammer";
 "max_weight_at_full_load_description" = "Angiv dit køretøjs maksimale vægt ved fuld last for at undgå veje og broer med vægtbegrænsninger.";

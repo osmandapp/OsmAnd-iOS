@@ -550,4 +550,42 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [downloadTask resume];
 }
 
++ (id<OASGpxTrackAnalysisTrackPointsAnalyser> _Nullable)getTrackPointsAnalyser
+{
+    NSMutableArray<id<OASGpxTrackAnalysisTrackPointsAnalyser>> *trackPointsAnalysers = [NSMutableArray array];
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        id<OASGpxTrackAnalysisTrackPointsAnalyser> analyser = [plugin getTrackPointsAnalyser];
+        if (analyser != nil)
+            [trackPointsAnalysers addObject:analyser];
+    }
+    
+    if (![self isEnabled:OAExternalSensorsPlugin.class])
+    {
+        OAPlugin *plugin = [self getPlugin:OAExternalSensorsPlugin.class];
+        if (plugin != nil)
+        {
+            id<OASGpxTrackAnalysisTrackPointsAnalyser> analyser = [plugin getTrackPointsAnalyser];
+            if (analyser != nil)
+                [trackPointsAnalysers addObject:analyser];
+        }
+    }
+    
+    if (![self isEnabled:VehicleMetricsPlugin.class])
+    {
+        OAPlugin *plugin = [self getPlugin:VehicleMetricsPlugin.class];
+        if (plugin != nil)
+        {
+            id<OASGpxTrackAnalysisTrackPointsAnalyser> analyser = [plugin getTrackPointsAnalyser];
+            if (analyser != nil)
+                [trackPointsAnalysers addObject:analyser];
+        }
+    }
+    
+    if (trackPointsAnalysers.count == 0)
+        return nil;
+    
+    return [[CompositeTrackPointsAnalyser alloc] initWithAnalysers:trackPointsAnalysers];
+}
+
 @end

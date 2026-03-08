@@ -390,6 +390,11 @@ public static final void onRequestPermissionsResult(int requestCode, String[] pe
 {
 }
 
+- (id<OASGpxTrackAnalysisTrackPointsAnalyser> _Nullable)getTrackPointsAnalyser
+{
+    return nil;
+}
+
 - (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {

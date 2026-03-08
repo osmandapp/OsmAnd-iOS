@@ -12,6 +12,11 @@ import UIKit
     func onTypesSelected(_ types: [NSNumber])
 }
 
+private enum RowKey: String {
+    case type
+    case selected
+}
+
 @objcMembers
 final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewViewController {
     private var types: [NSNumber]
@@ -115,8 +120,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                     row.cellType = OASimpleTableViewCell.reuseIdentifier
                     row.title = OAGPXDataSetType.getTitle(type.rawValue)
                     row.iconName = OAGPXDataSetType.getIconName(type.rawValue)
-                    row.setObj(NSNumber(value: type.rawValue), forKey: "type")
-                    row.setObj(NSNumber(value: types.contains { $0.intValue == type.rawValue }), forKey: "selected")
+                    row.setObj(NSNumber(value: type.rawValue), forKey: RowKey.type.rawValue)
+                    row.setObj(NSNumber(value: types.contains { $0.intValue == type.rawValue }), forKey: RowKey.selected.rawValue)
                 }
             }
         }
@@ -131,7 +136,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
         cell.titleLabel.text = item.title
         cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-        let isSelected = item.bool(forKey: "selected")
+        let isSelected = item.bool(forKey: RowKey.selected.rawValue)
         cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
         cell.titleLabel.textColor = isSelected ? .textColorPrimary : .textColorTertiary
         return cell
@@ -188,7 +193,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     private func toggleSelection(at indexPath: IndexPath, isSelected: Bool) {
         guard isYAxisMode else { return }
         let item = tableData.item(for: indexPath)
-        guard let type = item.obj(forKey: "type") as? NSNumber else { return }
+        guard let type = item.obj(forKey: RowKey.type.rawValue) as? NSNumber else { return }
         let raw = type.intValue
         if isSelected {
             if !types.contains(where: { $0.intValue == raw }) {
@@ -198,7 +203,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             types.removeAll { $0.intValue == raw }
         }
         
-        item.setObj(NSNumber(value: isSelected), forKey: "selected")
+        item.setObj(NSNumber(value: isSelected), forKey: RowKey.selected.rawValue)
         tableView.reloadRows(at: [indexPath], with: .none)
         syncCheckmarksFromData()
     }
@@ -215,7 +220,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             for row in 0..<tableData.rowCount(section) {
                 let indexPath = IndexPath(row: Int(row), section: Int(section))
                 let item = tableData.item(for: indexPath)
-                let shouldSelect = item.bool(forKey: "selected")
+                let shouldSelect = item.bool(forKey: RowKey.selected.rawValue)
                 if shouldSelect {
                     if tableView.indexPathsForSelectedRows?.contains(indexPath) != true {
                         tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)

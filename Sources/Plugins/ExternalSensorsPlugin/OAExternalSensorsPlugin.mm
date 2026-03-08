@@ -275,6 +275,11 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
     return nil;
 }
 
+- (id<OASGpxTrackAnalysisTrackPointsAnalyser>)getTrackPointsAnalyser
+{
+    return (id<OASGpxTrackAnalysisTrackPointsAnalyser>)[OASSensorPointAnalyser shared];
+}
+
 - (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {

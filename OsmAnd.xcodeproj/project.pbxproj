@@ -1490,6 +1490,7 @@
 		C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */; };
 		C5817F1F2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5817F1E2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift */; };
 		C5817F212F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5817F202F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift */; };
+		C5817F232F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5817F222F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
 		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
 		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
@@ -5353,6 +5354,7 @@
 		C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWeatherLayersAction.swift; sourceTree = "<group>"; };
 		C5817F1E2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricAttributesUtils.swift; sourceTree = "<group>"; };
 		C5817F202F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleTrackPointsAnalyser.swift; sourceTree = "<group>"; };
+		C5817F222F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackPointsAnalyser.swift; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
 		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
 		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
@@ -11155,6 +11157,7 @@
 				DA5A798826C563A000F274C7 /* OAPlugin.mm */,
 				05CC79572BB99EC700BAC638 /* OAPluginsHelper.h */,
 				05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */,
+				C5817F222F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift */,
 				DA5A797D26C563A000F274C7 /* OsmEditing */,
 				DA5A799126C563A000F274C7 /* Parking */,
 				DA5A798026C563A000F274C7 /* SkiMapsPlugin */,
@@ -18031,6 +18034,7 @@
 				464EA9BD2C4948A30034D8C9 /* PaletteGradientColor.swift in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
 				C5A466BC2D2E69B6008E0C87 /* ImageHeaderCell.swift in Sources */,
+				C5817F232F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift in Sources */,
 				DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */,
 				DA5A846026C563A900F274C7 /* OARasterMapLayer.mm in Sources */,
 				DA5A812A26C563A700F274C7 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,

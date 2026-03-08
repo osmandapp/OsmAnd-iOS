@@ -2502,3 +2502,5 @@
 "shared_string_last_downhill" = "Zadnji spust";
 "obd_alt_battery_voltage" = "Napetost priključka";
 "liter_single" = "Liter";
+"trip_recording_moving_time_widget_description" = "Prikaže trenutno zabeleženi čas gibanja ali čas zadnjega vzpona in spusta.";
+"trip_recording_moving_time" = "Čas premikanja";

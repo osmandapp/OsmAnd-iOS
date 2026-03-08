@@ -8,11 +8,23 @@
 
 import Foundation
 
+private enum DeepLinkAppRoute: String {
+    case main = ""
+    case lastReleaseNotes = "help/last-release-notes"
+    case helpWhatsNew = "help/whats-new"
+    case purchases = "purchases"
+    case purchasesOsmAndPro = "purchases/osmand-pro"
+    case purchasesMapsPlus = "purchases/maps-plus"
+    case quickActionsLockScreenAdd = "quick-actions/lock-screen/add"
+    case tripRecordingExternalSensors = "trip-recording/external-sensors"
+}
+
 @objcMembers
 final class DeepLinkParser: NSObject {
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        handleIncomingFileURL(url, rootViewController: rootViewController)
+        handleIncomingAppURL(url, rootViewController: rootViewController)
+        || handleIncomingFileURL(url, rootViewController: rootViewController)
         || handleIncomingActionsURL(url, rootViewController: rootViewController)
         || handleIncomingNavigationURL(url, rootViewController: rootViewController)
         || handleIncomingSetPinOnMapURL(url, rootViewController: rootViewController)
@@ -20,6 +32,38 @@ final class DeepLinkParser: NSObject {
         || handleIncomingOpenLocationMenuURL(url, rootViewController: rootViewController)
         || handleIncomingTileSourceURL(url, rootViewController: rootViewController)
         || handleIncomingOsmAndCloudURL(url, rootViewController: rootViewController)
+    }
+    
+    private func handleIncomingAppURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: kOsmAndAppPathPrefix) else { return false }
+        let path = url.path.split(separator: "/", omittingEmptySubsequences: true).map { $0.lowercased() }
+        let routeRaw = path.dropFirst().joined(separator: "/")
+        guard let route = DeepLinkAppRoute(rawValue: routeRaw) else {
+            NSLog("[DeepLinkParser] Unknown /app route: %@ (url=%@)", routeRaw, url.absoluteString)
+            return false
+        }
+        
+        let router = DeepLinkAppRouter(rootViewController: rootViewController)
+        switch route {
+        case .main:
+            router.openMainScreen()
+        case .lastReleaseNotes:
+            router.openLastReleaseNotes()
+        case .helpWhatsNew:
+            router.openWhatsNew()
+        case .purchases:
+            router.openChoosePlan(feature: nil)
+        case .purchasesOsmAndPro:
+            router.openChoosePlan(feature: OAFeature.advanced_WIDGETS())
+        case .purchasesMapsPlus:
+            router.openChoosePlan(feature: OAFeature.monthly_MAP_UPDATES())
+        case .quickActionsLockScreenAdd:
+            router.openCustomButtonsAddAction()
+        case .tripRecordingExternalSensors:
+            router.openExternalSensorsRecording()
+        }
+        
+        return true
     }
     
     private func handleIncomingFileURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {

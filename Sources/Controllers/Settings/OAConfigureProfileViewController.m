@@ -155,16 +155,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     return NO;
 }
 
-- (UIImage *)getRightIconLargeTitle
-{
-    return [UIImage templateImageNamed:[_appMode getIconName]];
-}
-
-- (UIColor *)getRightIconTintColorLargeTitle
-{
-    return [_appMode getProfileColor];
-}
-
 - (EOABaseNavbarStyle)getNavbarStyle
 {
     return EOABaseNavbarStyleLargeTitle;

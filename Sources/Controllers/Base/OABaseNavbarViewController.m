@@ -368,6 +368,25 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
     }
 }
 
+- (void)reloadRowsWithDelayIfNeeded:(NSTimeInterval)delay atIndexPaths:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
+{
+    if (@available(iOS 26.0, *))
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self reloadRowsAtIndexPath:indexPath withRowAnimation:rowAnimation];
+        });
+    }
+    else
+    {
+        [self reloadRowsAtIndexPath:indexPath withRowAnimation:rowAnimation];
+    }
+}
+
+- (void)reloadRowsAtIndexPath:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
+{
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
+}
+
 - (void)updateRightIconLargeTitle
 {
     if (_rightIconLargeTitle)

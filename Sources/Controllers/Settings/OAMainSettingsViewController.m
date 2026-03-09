@@ -468,7 +468,7 @@
         [self generateData];
         if (_lastSwitchedAppModeRow != -1)
         {
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_lastSwitchedAppModeRow inSection:_applicationProfilesSection]] withRowAnimation:UITableViewRowAnimationFade];
+            [self reloadRowsWithDelayIfNeeded:0.25 atIndexPaths:[NSIndexPath indexPathForRow:_lastSwitchedAppModeRow inSection:_applicationProfilesSection] withRowAnimation:UITableViewRowAnimationFade];
             _lastSwitchedAppModeRow = -1;
         }
         else

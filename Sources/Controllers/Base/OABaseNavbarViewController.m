@@ -729,7 +729,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
+    return ![OAUtilities isIOS26];
 }
 
 - (UIImage *)getCenterIconAboveTitle

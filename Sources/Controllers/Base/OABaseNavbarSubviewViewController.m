@@ -84,7 +84,7 @@
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return _subviewHeight == 0;
+    return _subviewHeight == 0 && ![OAUtilities isIOS26];
 }
 
 - (CGFloat)getNavbarHeight

@@ -124,7 +124,7 @@
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return _screenType == EOAOsmNoteViewConrollerModeCreate ? NO : YES;
+    return _screenType == EOAOsmNoteViewConrollerModeCreate || [OAUtilities isIOS26] ? NO : YES;
 }
 
 #pragma mark - Table data

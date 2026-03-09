@@ -152,7 +152,7 @@
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude ? NO : !_openFromMap;
+    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude || [OAUtilities isIOS26] ? NO : !_openFromMap;
 }
 
 - (BOOL)useCustomTableViewHeader

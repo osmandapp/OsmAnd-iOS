@@ -104,7 +104,13 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             }
         }
         if (showTransportStops)
-            [self processTransportStop];
+        {
+            self.transportStop = [self findNearestTransportStopForAmenity:self.poi];
+            if (self.transportStop)
+            {
+                [self processTransportStop];
+            }
+        }
     }
 
     NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];

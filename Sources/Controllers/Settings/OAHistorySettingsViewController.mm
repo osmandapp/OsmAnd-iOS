@@ -135,7 +135,6 @@
     return _isLogHistoryOn && self.tableView.editing ? OALocalizedString(@"shared_string_cancel") : nil;
 }
 
-
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     if (_isLogHistoryOn)
@@ -145,6 +144,8 @@
             title = [self isAllSelected] ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
         else if ([self sectionsCount] > 1)
             title = OALocalizedString(@"shared_string_edit");
+        else
+            return nil;
         return @[[self createRightNavbarButton:title
                                       iconName:nil
                                         action:@selector(onRightNavbarButtonPressed)
@@ -609,8 +610,7 @@
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void)
                     {
-                        [self generateData];
-                        [self.tableView reloadData];
+                        [self reloadDataWithDelayIfNeeded:0.25 animated:NO completion:nil];
                         [self updateNavbar];
                     }
     completion:nil];

@@ -24,6 +24,7 @@
 
 #define kSupportEmail @"support@osmand.net"
 static NSString * const kContactEmail = @"mailto:support@osmand.net";
+static NSString * const kOsmAndAppPathPrefix = @"/app";
 
 static NSString * const kPopularArticlesAndTelegramChats = @"https://osmand.net/help-structure.json";
 static NSString * const kDocsPlugins = @"https://docs.osmand.net/docs/user/plugins/";

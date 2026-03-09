@@ -200,6 +200,8 @@
 #import "OACloudAccountVerificationViewController.h"
 #import "OACollapsableLabelView.h"
 #import "OACollapsableNearestPoiTypeView.h"
+#import "OAWhatsNewBottomSheetViewController.h"
+#import "OAChoosePlanViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

@@ -370,7 +370,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
 - (void)reloadRowsWithDelayIfNeeded:(NSTimeInterval)delay atIndexPaths:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
 {
-    if (@available(iOS 26.0, *))
+    if ([OAUtilities isIOS26])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self reloadRowsAtIndexPath:indexPath withRowAnimation:rowAnimation];

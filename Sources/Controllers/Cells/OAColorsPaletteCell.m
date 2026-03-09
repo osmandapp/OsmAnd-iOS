@@ -34,7 +34,7 @@
 - (void) setupViews
 {
     self.separatorInset = UIEdgeInsetsZero;
-    self.separatorHeight.constant = 1.0 / [UIScreen mainScreen].scale;
+    self.separatorHeight.constant = 1.0;
     self.topTitleOffset.constant = 20;
     self.bottomTitleOffset.constant = 8;
     [self.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];

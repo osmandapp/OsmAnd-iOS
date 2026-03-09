@@ -77,7 +77,7 @@ final class MapUnderlayAction: OASwitchableAction {
         return next(fromSource: sources, defValue: noUnderlay)
     }
     
-    override func fillParams(_ model: [AnyHashable : Any]) -> Bool {
+    override func fillParams(_ model: [AnyHashable: Any]) -> Bool {
         var params = getParams()
         var sources: [[Any]] = []
         for value in model.values {
@@ -122,17 +122,16 @@ final class MapUnderlayAction: OASwitchableAction {
         let hasUnderlay = param != noUnderlay
         OAAppSettings.sharedManager().setUnderlayOpacitySliderVisibility(hasUnderlay)
         if hasUnderlay {
-            var newMapSource: OAMapSource? = nil
-            for resource in onlineMapSources {
-                if resource.mapSource().name == param {
-                    newMapSource = resource.mapSource()
-                    break
-                }
+            var newMapSource: OAMapSource?
+            for resource in onlineMapSources where resource.mapSource().name == param {
+                newMapSource = resource.mapSource()
+                break
             }
             app?.data.underlayMapSource = newMapSource
         } else {
             app?.data.underlayMapSource = nil
         }
+        OsmAndApp.swiftInstance().mapSettingsChangeObservable.notifyEvent()
     }
     
     override func getUIModel() -> OrderedDictionary<AnyObject, AnyObject> {

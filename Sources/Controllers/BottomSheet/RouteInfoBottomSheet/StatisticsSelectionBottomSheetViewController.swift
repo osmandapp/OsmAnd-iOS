@@ -15,6 +15,19 @@ import UIKit
 private enum RowKey: String {
     case type
     case selected
+    case isCustomLeftSeparatorInset
+}
+
+private enum VehicleMetricsSubgroup: Int, CaseIterable {
+    case temperature
+    case engine
+    case fuel
+    case other
+}
+
+private struct VehicleMetricsMeta {
+    let subgroup: VehicleMetricsSubgroup
+    let itemOrder: Int
 }
 
 @objcMembers
@@ -111,8 +124,35 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             let grouped = Dictionary(grouping: availableSingles) { $0.getTypeGroup() }
             for group in order {
                 guard let items = grouped[group] else { continue }
-                let visible = items.filter { hasData($0) }
+                var visible = items.filter(hasData)
                 guard !visible.isEmpty else { continue }
+                var lastTypesInVehicleSubgroups = Set<GPXDataSetType>()
+                if group == .vehicleMetrics {
+                    visible.sort { lhs, rhs in
+                        let lhsMeta = vehicleMetricsMeta(for: lhs)
+                        let rhsMeta = vehicleMetricsMeta(for: rhs)
+                        let lhsSubgroup = lhsMeta?.subgroup.rawValue ?? Int.max
+                        let rhsSubgroup = rhsMeta?.subgroup.rawValue ?? Int.max
+                        if lhsSubgroup != rhsSubgroup {
+                            return lhsSubgroup < rhsSubgroup
+                        }
+                        
+                        let lhsOrder = lhsMeta?.itemOrder ?? Int.max
+                        let rhsOrder = rhsMeta?.itemOrder ?? Int.max
+                        if lhsOrder != rhsOrder {
+                            return lhsOrder < rhsOrder
+                        }
+                        
+                        return lhs.rawValue < rhs.rawValue
+                    }
+                    
+                    let groupedBySubgroup = Dictionary(grouping: visible) { vehicleMetricsMeta(for: $0)?.subgroup.rawValue }
+                    for subgroup in VehicleMetricsSubgroup.allCases {
+                        guard let subgroupItems = groupedBySubgroup[subgroup.rawValue], let last = subgroupItems.last else { continue }
+                        lastTypesInVehicleSubgroups.insert(last)
+                    }
+                }
+                
                 let section = tableData.createNewSection()
                 section.headerText = group.getName() ?? ""
                 for type in visible {
@@ -122,6 +162,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                     row.iconName = OAGPXDataSetType.getIconName(type.rawValue)
                     row.setObj(NSNumber(value: type.rawValue), forKey: RowKey.type.rawValue)
                     row.setObj(NSNumber(value: types.contains { $0.intValue == type.rawValue }), forKey: RowKey.selected.rawValue)
+                    row.setObj(NSNumber(value: lastTypesInVehicleSubgroups.contains(type)), forKey: RowKey.isCustomLeftSeparatorInset.rawValue)
                 }
             }
         }
@@ -139,6 +180,14 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         let isSelected = item.bool(forKey: RowKey.selected.rawValue)
         cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
         cell.titleLabel.textColor = isSelected ? .textColorPrimary : .textColorTertiary
+        let isCustomLeftSeparatorInset = item.bool(forKey: RowKey.isCustomLeftSeparatorInset.rawValue)
+        cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
+        if isCustomLeftSeparatorInset {
+            cell.separatorInset = .zero
+        } else {
+            cell.updateSeparatorInset()
+        }
+        
         return cell
     }
     
@@ -231,6 +280,39 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                     }
                 }
             }
+        }
+    }
+    
+    private func vehicleMetricsMeta(for type: GPXDataSetType) -> VehicleMetricsMeta? {
+        switch type {
+        case .intakeTemperature:
+            return VehicleMetricsMeta(subgroup: .temperature, itemOrder: 0)
+        case .ambientTemperature:
+            return VehicleMetricsMeta(subgroup: .temperature, itemOrder: 1)
+        case .coolantTemperature:
+            return VehicleMetricsMeta(subgroup: .temperature, itemOrder: 2)
+        case .engineOilTemperature:
+            return VehicleMetricsMeta(subgroup: .temperature, itemOrder: 3)
+        case .engineSpeed:
+            return VehicleMetricsMeta(subgroup: .engine, itemOrder: 0)
+        case .engineRuntime:
+            return VehicleMetricsMeta(subgroup: .engine, itemOrder: 1)
+        case .engineLoad:
+            return VehicleMetricsMeta(subgroup: .engine, itemOrder: 2)
+        case .fuelPressure:
+            return VehicleMetricsMeta(subgroup: .fuel, itemOrder: 0)
+        case .fuelConsumption:
+            return VehicleMetricsMeta(subgroup: .fuel, itemOrder: 1)
+        case .remainingFuel:
+            return VehicleMetricsMeta(subgroup: .fuel, itemOrder: 2)
+        case .batteryLevel:
+            return VehicleMetricsMeta(subgroup: .other, itemOrder: 0)
+        case .vehicleSpeed:
+            return VehicleMetricsMeta(subgroup: .other, itemOrder: 1)
+        case .throttlePosition:
+            return VehicleMetricsMeta(subgroup: .other, itemOrder: 2)
+        default:
+            return nil
         }
     }
 }

@@ -2305,6 +2305,9 @@
                                         [OAObjectType withType:EOAObjectTypePartialLocation]]];
     if (self)
     {
+        // TODO: implement
+        //this.httpRedirectRequester = requester;
+        
         _amenitiesAPI = amenitiesAPI;
     }
     return self;
@@ -2409,7 +2412,7 @@
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = l;
-            sp.localeName = [NSString stringWithFormat:@"%.5f, %.5f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
+            sp.localeName = [self formatLocation:sp.location];
             sp.objectType = EOAObjectTypeLocation;
             sp.wordsSpan = lw;
             [resultMatcher publish:sp];
@@ -2536,7 +2539,47 @@
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    return false;
+    NSString *lines = [[phrase getUnknownSearchPhrase] stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+    
+    OASKGeoParsedPoint *pnt = nil;
+    for (NSString *text in [lines componentsSeparatedByString:@"\n"])
+    {
+        pnt = [OASKGeoPointParserUtil.shared parseUriString:text];
+        
+        //if (pnt == null && httpRedirectRequester != null && GeoPointParserUtil.isGooGlUrl(text)) {
+        if (!pnt && NO && [OASKGeoPointParserUtil.shared isGooGlUrlUrl:text])
+        {
+            // TODO: implement
+            
+            //text = httpRedirectRequester.apply(text);
+            //if (text != null) {
+            //    pnt = GeoPointParserUtil.parse(text);
+            //}
+        }
+        if (pnt)
+        {
+            break;
+        }
+    }
+    
+    if (pnt && [pnt isGeoPoint] && [phrase isSearchTypeAllowed:EOAObjectTypeLocation])
+    {
+        OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
+        sp.priority = 0;
+        sp.object = pnt;
+        sp.wordsSpan = lines;
+        sp.impreciseCoordinates = [pnt hasImpreciseCoordinates];
+        sp.location = [[CLLocation alloc] initWithLatitude:[pnt getLatitude] longitude:[pnt getLongitude]];
+        sp.localeName = [self formatLocation:sp.location];
+        if ([pnt getZoom] > 0)
+        {
+            sp.preferredZoom = [pnt getZoom];
+        }
+        sp.objectType = EOAObjectTypeLocation;
+        [resultMatcher publish:sp];
+        return YES;
+    }
+    return NO;
 }
 
 - (int) getSearchPriority:(OASearchPhrase *)p
@@ -2566,6 +2609,11 @@
 - (BOOL) isSearchDone:(OASearchPhrase *)phrase
 {
     return _cachedParsedCode != nil;
+}
+
+- (NSString *)formatLocation:(CLLocation *)location
+{
+    return [NSString stringWithFormat:@"%.5f, %.5f", (float) location.coordinate.latitude, (float) location.coordinate.longitude];
 }
 
 @end

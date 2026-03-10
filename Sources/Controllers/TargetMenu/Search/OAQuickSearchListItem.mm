@@ -379,7 +379,10 @@
         }
         case EOAObjectTypeLocation:
         {
-            CLLocation *location = (CLLocation *) searchResult.object;
+            CLLocation *location = searchResult.location;
+            if ([searchResult.object isKindOfClass:CLLocation.class])
+                location = (CLLocation *) searchResult.object;
+            
             if (!searchResult.localeRelatedObjectName)
             {
                 OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:location.coordinate.latitude lon:location.coordinate.longitude];

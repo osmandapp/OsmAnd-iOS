@@ -102,6 +102,9 @@
                            location = "group:KGeoParsedPoint.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:GeoPointParserUtil.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KStringMatcher.kt">
                         </FileRef>
                         <FileRef

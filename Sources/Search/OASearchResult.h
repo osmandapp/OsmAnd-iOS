@@ -53,6 +53,7 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 @property (nonatomic) double priorityDistance;
 @property (nonatomic) NSMutableSet<NSString *> *otherWordsMatch;
 @property (nonatomic) BOOL unknownPhraseMatches;
+@property (nonatomic) BOOL impreciseCoordinates;
 @property (nonatomic) double unknownPhraseMatchWeight;
 
 @property (nonatomic) CLLocation *location;

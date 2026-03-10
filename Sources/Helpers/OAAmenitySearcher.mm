@@ -886,7 +886,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         [names setObject:type.nameLocalizedEN forKey:@"en"];
     }
     poi.localizedNames = names;
-    
+    poi.regionName = amenity->regionName.toNSString();
     return poi;
 }
 

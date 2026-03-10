@@ -382,19 +382,16 @@ final class BaseDetailsObject: NSObject {
             syntheticAmenity.regionName = regionName
         }
 
-        // Android also reads here tagGroups.
-        //Map<Integer, List<TagValuePair>> groups = amenity.getTagGroups();
-        //if (syntheticAmenity.getTagGroups() == null && groups != null) {
-        //    syntheticAmenity.setTagGroups(new HashMap<>(groups));
-        //}
-
         let travelElo = amenity.getTravelEloNumber()
         if syntheticAmenity.getTravelEloNumber() == DEFAULT_ELO && travelElo != DEFAULT_ELO {
             syntheticAmenity.setTravelEloNumber(travelElo)
         }
 
         syntheticAmenity.copyNames(amenity)
-        syntheticAmenity.copyAdditionalInfo(amenity, overwrite: false)
+        let shouldCopyAdditionalInfo = BaseDetailsObject.getResourceType(amenity) != EOASearchResultResource.travel || BaseDetailsObject.getLangForTravel(amenity) == self.lang
+        if isSingleObject || shouldCopyAdditionalInfo {
+            syntheticAmenity.copyAdditionalInfo(amenity, overwrite: false)
+        }
         processPolygonCoordinates(x: amenity.x, y: amenity.y)
 
         if syntheticAmenity.localizedContent == nil {

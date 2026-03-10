@@ -2418,7 +2418,7 @@
 "with_offline_maps" = "Mit Offline-Karten";
 "other_countries" = "Andere Länder";
 "weather_remove_forecasts_description" = "Sind Sie sicher, dass Sie die Vorhersage für folgende Länder entfernen möchten: %d.";
-"weather_remove_forecast_description" = "Sind Sie sicher, dass Sie die Vorhersage für %@ entfernen wollen?";
+"weather_remove_forecast_description" = "Sind Sie sich sicher, dass Sie die Vorhersage für %@ entfernen wollen";
 "weather_miss_forecasts" = "Sie haben keine Offline-Prognosen";
 "weather_miss_forecasts_description" = "Die Offline-Vorhersage ist pro Land verfügbar. Zeitraum bis zu 7 Tagen. Sie müssen die gewünschten Länder auswählen.";
 "weather_updates_automatically" = "OsmAnd lädt Updates automatisch herunter, während es läuft.";

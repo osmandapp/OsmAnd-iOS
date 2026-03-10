@@ -26,8 +26,8 @@
 #define kSeparatorHeight .5
 #define kNavigationBarHeight 56.
 
-static CGFloat const kDefaultBarButtonWidth = 44.0;
-static CGFloat const kDefaultBarButtonHeight = 30.0;
+static const CGFloat kDefaultBarButtonWidth = 44.0;
+static const CGFloat kDefaultBarButtonHeight = 30.0;
 
 @interface OAChoosePlanViewController () <UIScrollViewDelegate, OAFeatureCardViewDelegate, OAFeatureCardRowDelegate, OAChoosePlanDelegate, SFSafariViewControllerDelegate>
 
@@ -129,7 +129,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
         if ([self.navigationController isNavigationBarHidden])
             [self.navigationController setNavigationBarHidden:NO animated:YES];
         self.title = nil;
-        [self setupNavbarButtons];
+        [self setupNavbarButtonsForIOS26];
     }
     else
     {
@@ -488,7 +488,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
     );
 }
 
-- (void)setupNavbarButtons
+- (void)setupNavbarButtonsForIOS26
 {
     UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonWidth, kDefaultBarButtonHeight)];
     leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
@@ -536,7 +536,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
     }
 }
 
-- (void)setupNavbarTitle
+- (void)setupNavbarTitleForIOS26
 {
     self.title = _isHeaderBlurred ? _cachedTitle : nil;
 }
@@ -662,7 +662,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
         _isHeaderBlurred = NO;
     }
     if ([OAUtilities isIOS26])
-        [self setupNavbarTitle];
+        [self setupNavbarTitleForIOS26];
     [self updateAppearance];
 }
 
@@ -720,7 +720,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
     _selectedFeature = feature;
     _cachedTitle = [_selectedFeature getListTitle];
     if ([OAUtilities isIOS26])
-        [self setupNavbarTitle];
+        [self setupNavbarTitleForIOS26];
     else
         self.labelNavigationTitle.text = _cachedTitle;
     [self updateScrollViewContainerSize];

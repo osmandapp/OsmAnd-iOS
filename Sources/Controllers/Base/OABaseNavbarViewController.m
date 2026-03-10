@@ -20,7 +20,7 @@
 #define kRightIconLargeTitleLarge 40.
 #define kDefaultBarButtonSize 44.
 
-static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
+static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
 
 @implementation OABaseNavbarViewController
 {

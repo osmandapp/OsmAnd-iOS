@@ -130,10 +130,9 @@ static int TILE_SIZE = 256;
         
         const auto& symbols = [rendererView getSymbolsIn:area strict:NO];
         OAAmenitySearcher *amenitySearcher = [[OAAmenitySearcher alloc] init];
-        int index = 0;
+
         for (const auto symbolInfo : symbols)
         {
-            index++;
             if (symbolInfo.mapSymbol->ignoreClick)
                 continue;
             

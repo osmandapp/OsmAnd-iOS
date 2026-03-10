@@ -17,7 +17,7 @@ final class PoiAdditionalUiRule: NSObject {
     var isPhoneNumber: Bool = false
     var checkBaseKey: Bool = true
     var checkKeyOnContains: Bool = false
-    var behavior: IPoiAdditionalRowBehavior? = DefaultPoiAdditionalRowBehaviour()
+    var behavior: PoiAdditionalRowBehavior? = DefaultPoiAdditionalRowBehaviour()
     
     init(key: String) {
         self.key = key

@@ -93,7 +93,7 @@ final class MergeLocalizedTagsAlgorithm: NSObject {
     private func processAdditionalTypeWithKey(key: String, convertedKey: String, originalDict: [String: Any], localizationsDict: inout [String: [String: Any]], resultDict: inout [String: Any]) {
         let poiType = OAPOIHelper.sharedInstance().getAnyPoiAdditionalType(byKey: convertedKey)
         
-        if poiType?.lang != nil, key.contains(":") {
+        if poiType.lang != nil, key.contains(":") {
             let components = key.components(separatedBy: ":")
             if components.count == 2 {
                 let baseKey = components[0]

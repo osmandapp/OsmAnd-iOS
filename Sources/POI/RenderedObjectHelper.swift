@@ -100,7 +100,7 @@ final class RenderedObjectHelper: NSObject {
 //    }
 
     static func searchObjectNameByAmenityTags(for amenity: OAPOI) -> String? {
-        guard let translator = OAPOIHelper.sharedInstance() else { return nil }
+        let translator = OAPOIHelper.sharedInstance()
 
         var translation = translator.getTranslation(amenity.subType)
 

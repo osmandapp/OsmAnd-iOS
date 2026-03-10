@@ -11,9 +11,11 @@ final class CapacityRowBehaviour: DefaultPoiAdditionalRowBehaviour {
     override func applyCommonRules(params: PoiRowParams) {
         super.applyCommonRules(params: params)
         
-        if let valueAsNumber = Int(params.value) {
-            let prefix = params.builder.textPrefix
-            params.builder.textPrefix = formatPrefix(prefix: prefix, units: localizedString("shared_string_capacity"))
-        }
+        guard Int(params.value) != nil else { return }
+        
+        let prefix = params.builder.textPrefix
+        params.builder.textPrefix = formatPrefix(prefix: prefix,
+                                                 units: localizedString("shared_string_capacity")
+        )
     }
 }

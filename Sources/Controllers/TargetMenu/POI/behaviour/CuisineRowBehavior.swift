@@ -11,20 +11,15 @@ final class CuisineRowBehavior: DefaultPoiAdditionalRowBehaviour {
     override func applyCustomRules(params: PoiRowParams) {
         super.applyCustomRules(params: params)
         
-        var sb = ""
-        let cuisines = params.value.components(separatedBy: ";")
+        let helper = OAPOIHelper.sharedInstance()
         
-        for name in cuisines {
-            if let translation = OAPOIHelper.sharedInstance().getTranslation("cuisine_" + name) {
-                if !sb.isEmpty {
-                    sb += ", "
-                    sb += translation.lowercased()
-                } else {
-                    sb += translation
-                }
-            }
-        }
+        let cuisines = params.value
+            .split(separator: ";")
+            .compactMap { helper.getTranslation("cuisine_\($0)") }
         
-        params.builder.text = sb
+        params.builder.text = cuisines
+            .enumerated()
+            .map { $0 == 0 ? $1 : $1.lowercased() }
+            .joined(separator: ", ")
     }
 }

@@ -400,10 +400,13 @@ final class BaseDetailsObject: NSObject {
         if syntheticAmenity.localizedContent == nil {
             syntheticAmenity.localizedContent = MutableOrderedDictionary<NSString, NSString>()
         }
-
-        if let amenityContent = amenity.localizedContent, amenityContent.count > 0 {
-            let localizedContent = MutableOrderedDictionary<NSString, NSString>(dictionary: syntheticAmenity.localizedContent!)
-            localizedContent.addEntries(from: amenityContent as! [NSString : NSString])
+        
+        if let amenityContent = amenity.localizedContent as? [NSString: NSString], !amenityContent.isEmpty {
+            let localizedContent = MutableOrderedDictionary<NSString, NSString>(
+                dictionary: syntheticAmenity.localizedContent ?? [:]
+            )
+            
+            localizedContent.addEntries(from: amenityContent)
             syntheticAmenity.localizedContent = localizedContent
         }
 
@@ -570,11 +573,11 @@ final class BaseDetailsObject: NSObject {
     }
 
     static func convertRenderedObjectToAmenity(_ renderedObject: OARenderedObject) -> OAPOI {
-        let am = OAPOI()
+        let amenity = OAPOI()
 
         let mapPoiTypes = OAPOIHelper.sharedInstance()
-        am.type = mapPoiTypes?.getDefaultOtherCategoryType()
-        am.subType = ""
+        amenity.type = mapPoiTypes.getDefaultOtherCategoryType()
+        amenity.subType = ""
 
         var pt: OAPOIType?
         var otherPt: OAPOIType?
@@ -582,17 +585,17 @@ final class BaseDetailsObject: NSObject {
 
         let additionalInfo = NSMutableDictionary()
 
-        guard let tags = renderedObject.tags as? [String: String] else { return am }
+        guard let tags = renderedObject.tags as? [String: String] else { return amenity }
 
         for (tag, value) in tags {
             if tag == "name" {
-                am.name = value
+                amenity.name = value
                 continue
             }
 
             if tag.hasPrefix("name:") {
                 let langSuffix = String(tag.dropFirst("name:".count))
-                am.setName(langSuffix, name: value)
+                amenity.setName(langSuffix, name: value)
                 continue
             }
 
@@ -600,39 +603,39 @@ final class BaseDetailsObject: NSObject {
                 if pt != nil {
                     otherPt = pt
                 }
-                pt = mapPoiTypes?.getPoiType(byKey: value)
+                pt = mapPoiTypes.getPoiType(byKey: value)
             } else {
-                var poiType = mapPoiTypes?.getPoiType(byKey: "\(tag)_\(value)")
+                var poiType = mapPoiTypes.getPoiType(byKey: "\(tag)_\(value)")
                 if poiType == nil {
-                    poiType = mapPoiTypes?.getPoiType(byKey: tag)
+                    poiType = mapPoiTypes.getPoiType(byKey: tag)
                 }
 
-                if let foundType = poiType {
+                if let poiType {
                     if pt != nil {
-                        otherPt = foundType
+                        otherPt = poiType
                     } else {
-                        pt = foundType
+                        pt = poiType
                         subtype = value
                     }
                 }
             }
 
             if value.isEmpty && otherPt == nil {
-                otherPt = mapPoiTypes?.getPoiType(byKey: tag)
+                otherPt = mapPoiTypes.getPoiType(byKey: tag)
             }
 
             if otherPt == nil {
-                if let poiType = mapPoiTypes?.getPoiType(byKey: value), poiType.getOsmTag() == tag {
+                if let poiType = mapPoiTypes.getPoiType(byKey: value), poiType.getOsmTag() == tag {
                     otherPt = poiType
                 }
             }
 
             if !value.isEmpty {
-                let translate = mapPoiTypes?.getTranslation("\(tag)_\(value)")
-                let translate2 = mapPoiTypes?.getTranslation(value)
+                let translate = mapPoiTypes.getTranslation("\(tag)_\(value)")
+                let translate2 = mapPoiTypes.getTranslation(value)
 
-                if let t1 = translate, let t2 = translate2 {
-                    additionalInfo[t1] = t2
+                if let translate, let translate2 {
+                    additionalInfo[translate] = translate2
                 } else {
                     additionalInfo[tag] = value
                 }
@@ -640,29 +643,29 @@ final class BaseDetailsObject: NSObject {
         }
 
         if let primaryType = pt {
-            am.type = primaryType
+            amenity.type = primaryType
         } else if let secondaryType = otherPt {
-            am.type = secondaryType
-            am.subType = secondaryType.name
+            amenity.type = secondaryType
+            amenity.subType = secondaryType.name
         }
 
-        if let st = subtype {
-            am.subType = st
+        if let subtype {
+            amenity.subType = subtype
         }
 
         if let type = ObfConstants.getOsmEntityType(renderedObject) {
             let osmId = ObfConstants.getOsmObjectId(renderedObject)
             let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
-            am.obfId = objectId
+            amenity.obfId = objectId
         }
 
         if let finalInfo = additionalInfo as? [String: String] {
-            am.setAdditionalInfo(finalInfo)
+            amenity.setAdditionalInfo(finalInfo)
         }
-        am.x = renderedObject.x
-        am.y = renderedObject.y
+        amenity.x = renderedObject.x
+        amenity.y = renderedObject.y
 
-        return am
+        return amenity
     }
 
     static func getLangForTravel(_ object: Any) -> String {

@@ -1504,7 +1504,7 @@ typedef enum
         if (obj.x && obj.x.count > 0)
         {
             for (int i = 0; i < obj.x.count; i++)
-                points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+                points.push_back(OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue));
         }
 
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
@@ -2781,10 +2781,7 @@ typedef enum
 
 - (OATargetPoint *) getCurrentTargetPoint
 {
-  //  if (_targetMenuView.superview)
-        return _targetMenuView.targetPoint;
-//    else
-//        return nil;
+    return _targetMenuView.targetPoint;
 }
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item

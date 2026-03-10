@@ -243,11 +243,11 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         let category = properties.poitype.flatMap { OAPOIHelper.sharedInstance().getPoiCategory(byName: $0) } ?? wikiCat
         let subtype = properties.poisubtype ?? "wikiplace"
 
-        if let categoryName = category?.name {
+        if let categoryName = category.name {
             amenity.type = OAPOIHelper.sharedInstance().getPoiType(byCategory: categoryName, name: subtype)
         } 
         if amenity.type == nil {
-            amenity.type = category?.poiTypes.first
+            amenity.type = category.poiTypes.first
         }
         amenity.subType = subtype
 

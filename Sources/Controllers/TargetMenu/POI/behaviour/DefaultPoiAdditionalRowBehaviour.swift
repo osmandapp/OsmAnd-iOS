@@ -6,7 +6,7 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-class DefaultPoiAdditionalRowBehaviour: IPoiAdditionalRowBehavior {
+class DefaultPoiAdditionalRowBehaviour: PoiAdditionalRowBehavior {
     
     func applyCustomRules(params: PoiRowParams) {
         if let iconName = params.rule.customIconName {

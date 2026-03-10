@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OASearchPoiTypeFilter, OATopIndexFilter;
+@class OASearchPoiTypeFilter, OATopIndexFilter, OAResultMatcher<ObjectType>;
 
 
 @interface OAAmenitySearcher(cpp)
@@ -30,13 +30,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable OAPOI *)parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
 + (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity;
-+ (NSArray<OAPOI *> *)findPOI:(OASearchPoiTypeFilter *)searchFilter
-             additionalFilter:(OATopIndexFilter *)additionalFilter
-                       bbox31:(OsmAnd::AreaI)bbox31
-              currentLocation:(OsmAnd::PointI)currentLocation
-                includeTravel:(BOOL)includeTravel
-                      matcher:(OAResultMatcher<OAPOI *> *)matcher
-                      publish:(BOOL(^)(OAPOI *poi))publish;
 
 @end
 

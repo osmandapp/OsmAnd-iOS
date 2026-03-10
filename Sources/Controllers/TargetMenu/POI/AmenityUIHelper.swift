@@ -20,6 +20,12 @@ final class AmenityUIHelper: NSObject {
     private static let NAMES_ROW_KEY = "names_row_key"
     private static let ALT_NAMES_ROW_KEY = "alt_names_row_key"
     
+    var latLon: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0, 0)
+    
+    // values from parent class MenuBuilder - base ContextMenuVC class
+    var showDefaultTags = false
+    var matchWidthDivider = false // show separator to full screen with
+    
     private let helper: OAPOIHelper
     
     private var additionalInfo: AdditionalInfoBundle
@@ -35,12 +41,6 @@ final class AmenityUIHelper: NSObject {
     private var collectedPoiTypes = [String: [OAPOIType]]()
     private var osmEditingEnabled = OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self)
     private var lastBuiltRowIsDescription = false
-    
-    var latLon: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0, 0)
-    
-    // values from parent class MenuBuilder - base ContextMenuVC class
-    var showDefaultTags = false
-    var matchWidthDivider = false // show separator to full screen with
     
     init(preferredLang: String, infoBundle: AdditionalInfoBundle) {
         self.preferredLang = preferredLang

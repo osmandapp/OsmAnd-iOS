@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @class OAMapObject, BaseDetailsObject;
+@class OAResultMatcher<ObjectType>;
 
 @interface OAAmenitySearcherRequest : NSObject
 

@@ -21,4 +21,16 @@ extension UIButton.Configuration {
         config.background.backgroundColor = .buttonBgColorTertiary
         return config
     }
+    
+    static func proBannerButtonConfiguration(imageName: String) -> UIButton.Configuration {
+        var config = UIButton.Configuration.plain()
+        config.title = nil
+        config.image = nil
+        config.background.image = UIImage(named: imageName)
+        config.background.imageContentMode = .scaleAspectFill
+        config.background.cornerRadius = 8.0
+        config.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 35, bottom: 16, trailing: 35)
+        config.cornerStyle = .fixed
+        return config
+    }
 }

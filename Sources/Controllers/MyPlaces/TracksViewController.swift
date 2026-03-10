@@ -475,11 +475,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         navigationController?.navigationBar.standardAppearance = blurAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        if #available(iOS 26.0, *) {
-            navigationController?.navigationBar.tintColor = .label
-        } else {
-            navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
-        }
+        navigationController?.navigationBar.tintColor = OAUtilities.isIOS26() ? .label : .navBarTextColorPrimary
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
@@ -594,15 +590,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
-        var navBarButton: UIBarButtonItem?
-        let navBarButtonImage = UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke")
-        if #available(iOS 26.0, *) {
-            navBarButton = UIBarButtonItem(image: navBarButtonImage, style: .plain, target: self, action: nil)
-            navBarButton?.menu = menu
-        } else {
-            navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: navBarButtonImage, color: .navBarTextColorPrimary, action: nil, target: self, menu: menu)
-        }
-        if let navBarButton {
+        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke"), color: OAUtilities.isIOS26() ? .label : .navBarTextColorPrimary, action: nil, target: self, menu: menu) {
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
             navigationItem.setRightBarButtonItems([navBarButton], animated: false)
         }

@@ -242,7 +242,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     // TODO: change after special iOS 26 checking method created
-    if (!isLargeTitle || !(@available(iOS 26.0, *)))
+    if (!isLargeTitle || ![OAUtilities isIOS26])
     {
         [appearance configureWithOpaqueBackground];
         appearance.backgroundColor = [self getNavbarBackgroundColor];
@@ -356,7 +356,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
 - (void)reloadDataWithDelayIfNeeded:(NSTimeInterval)delay animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
-    if (@available(iOS 26.0, *))
+    if ([OAUtilities isIOS26])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self reloadDataWithAnimated:animated completion:completion];
@@ -534,12 +534,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
         if (freeSpaceForNavbarButton < barButtonSize)
             freeSpaceForNavbarButton = barButtonSize;
         
-        UIControlContentHorizontalAlignment buttonAlignment;
-        if (@available(iOS 26.0, *))
-            buttonAlignment = UIControlContentHorizontalAlignmentCenter;
-        else
-            buttonAlignment = UIControlContentHorizontalAlignmentTrailing;
-        
+        UIControlContentHorizontalAlignment buttonAlignment = [OAUtilities isIOS26] ? UIControlContentHorizontalAlignmentCenter : UIControlContentHorizontalAlignmentTrailing;
         for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
         {
             UIBarButtonItem *buttonItem = rightNavbarButtons[i];
@@ -621,10 +616,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
 + (CGFloat)defaultBarButtonIconSize
 {
-    if (@available(iOS 26.0, *))
-        return kDefaultBarButtonSizeiOS26;
-    else
-        return kDefaultBarButtonSize;
+    return [OAUtilities isIOS26] ? kDefaultBarButtonSizeiOS26 : kDefaultBarButtonSize;
 }
 
 - (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled
@@ -662,11 +654,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
 - (UIColor *)getNavbarButtonsTintColor
 {
-    UIColor *navbarSchemeOrangeColor;
-    if (@available(iOS 26.0, *))
-        navbarSchemeOrangeColor = UIColor.labelColor;
-    else
-        navbarSchemeOrangeColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
+    UIColor *navbarSchemeOrangeColor = [OAUtilities isIOS26] ? UIColor.labelColor : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? navbarSchemeOrangeColor : [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
@@ -729,7 +717,7 @@ static CGFloat const kDefaultBarButtonSizeiOS26 = 30.;
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return ![OAUtilities isIOS26];
+    return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange && ![OAUtilities isIOS26];
 }
 
 - (UIImage *)getCenterIconAboveTitle

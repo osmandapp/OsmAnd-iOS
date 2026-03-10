@@ -111,7 +111,7 @@
 
 - (BOOL) isValidObfId
 {
-    return self.obfId != [self.class getInvalidObfId];
+    return self.obfId != [OAMapObject getInvalidObfId];
 }
 
 - (BOOL) isEqual:(id)o

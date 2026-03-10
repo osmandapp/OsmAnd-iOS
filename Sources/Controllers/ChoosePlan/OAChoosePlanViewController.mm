@@ -123,7 +123,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 
     _cachedTitle = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
-    if (@available(iOS 26.0, *))
+    if ([OAUtilities isIOS26])
     {
         [self.viewNavigationBar setHidden:YES];
         if ([self.navigationController isNavigationBarHidden])
@@ -514,7 +514,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
 
 - (void)updateAppearance
 {
-    if (@available(iOS 26.0, *))
+    if ([OAUtilities isIOS26])
     {
         if (_isHeaderBlurred)
         {
@@ -661,7 +661,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
         self.viewNavigationSeparator.hidden = YES;
         _isHeaderBlurred = NO;
     }
-    if (@available(iOS 26.0, *))
+    if ([OAUtilities isIOS26])
         [self setupNavbarTitle];
     [self updateAppearance];
 }
@@ -719,7 +719,7 @@ static CGFloat const kDefaultBarButtonHeight = 30.0;
 {
     _selectedFeature = feature;
     _cachedTitle = [_selectedFeature getListTitle];
-    if (@available(iOS 26.0, *))
+    if ([OAUtilities isIOS26])
         [self setupNavbarTitle];
     else
         self.labelNavigationTitle.text = _cachedTitle;

@@ -84,18 +84,10 @@ static BOOL _purchasesUpdated;
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    UIBarButtonItem *rightButton;
-    if (@available(iOS 26.0, *))
-        rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_reset"]
-                                                       style:UIBarButtonItemStylePlain
-                                                      target:self
-                                                      action:@selector(onRightNavbarButtonPressed)];
-    else
-        rightButton = [self createRightNavbarButton:nil
-                                           iconName:@"ic_navbar_reset"
-                                             action:@selector(onRightNavbarButtonPressed)
-                                               menu:nil];
-    
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil
+                                                        iconName:@"ic_navbar_reset"
+                                                          action:@selector(onRightNavbarButtonPressed)
+                                                            menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"shared_string_restore");
     return @[rightButton];
 }

@@ -97,8 +97,11 @@
 {
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = self.tableView.backgroundColor;
+    if (![OAUtilities isIOS26])
+    {
+        [appearance configureWithOpaqueBackground];
+        appearance.backgroundColor = self.tableView.backgroundColor;
+    }
     appearance.shadowColor = self.tableView.backgroundColor;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],

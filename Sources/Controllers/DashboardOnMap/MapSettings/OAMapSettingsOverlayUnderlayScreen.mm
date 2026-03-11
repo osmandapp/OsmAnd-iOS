@@ -76,7 +76,6 @@ static NSInteger kButtonsSection;
     NSArray *_data;
     BOOL _isEnabled;
     
-    OAMapStyleSettings *_styleSettings;
     OAAutoObserverProxy *_sqlitedbResourcesChangedObserver;
     NSInteger _installMoreRowIndex;
 }
@@ -120,8 +119,6 @@ static NSInteger kButtonsSection;
 
 - (void)commonInit
 {
-    _styleSettings = [OAMapStyleSettings sharedInstance];
-
     _sqlitedbResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onSqlitedbResourcesChanged:) andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
     
     _onlineMapSources = [NSMutableArray array];
@@ -558,6 +555,7 @@ static NSInteger kButtonsSection;
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             [tblView endUpdates];
         }
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
 }
 
@@ -593,18 +591,7 @@ static NSInteger kButtonsSection;
 - (void)showPolygons:(BOOL)show
 {
     [_settings.showPolygonsWhenUnderlayIsOn set:show];
-    [self hidePolygons:!show];
-}
-
-- (void)hidePolygons:(BOOL)hide
-{
-    OAMapStyleParameter *hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
-    NSString *newValue = hide ? @"true" : @"false";
-    if (![hidePolygonsParameter.value isEqualToString:newValue])
-    {
-        hidePolygonsParameter.value = newValue;
-        [_styleSettings save:hidePolygonsParameter];
-    }
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) switchLayer:(NSInteger)number

@@ -578,7 +578,7 @@
 "gpx_export_failed" = "Није могуће сачувати креирану руту";
 "gpx_remove" = "Уклонити путању?";
 "shared_string_statistics" = "Статистика";
-"layer_route" = "Путања";
+"layer_route" = "Рута";
 "gpx_analyze" = "Анализирај";
 "gpx_route_time" = "Време руте";
 "gpx_uphldownhl" = "Узбрдо/низбрдо";
@@ -1914,7 +1914,7 @@
 "rendering_attr_publicTransportMode_name" = "Аутобус, тролејбус, шатл бус";
 "rendering_attr_hideNonVehicleHighways_name" = "Путеве који нису за моторна возила";
 "rendering_value_translucent_pink_name" = "Прозирна ружичаста";
-"rendering_attr_surface_ground_name" = "Земља";
+"rendering_attr_surface_ground_name" = "Тло";
 "routing_attr_height_obstacles_description" = "Планирано време путовања ће се одразити утицају успона. Поставке путање могу помоћи да се избегну стрме успоне:";
 "rendering_attr_currentTrackColor_description" = "Боја ГПИкс-а";
 "routing_attr_driving_style_speed_name" = "Краће путање";

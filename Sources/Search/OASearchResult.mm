@@ -29,6 +29,7 @@
 #include <commonOsmAndCore.h>
 #include <OsmAndCore/ICU.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/CollatorStringMatcher.h>
 
 #define MAX_TYPE_WEIGHT 10.0
 #define HYPHEN "-"
@@ -213,7 +214,10 @@
     }
     QStringList localResultNames;
     for (NSString *localResultName : localResultNamesArray)
-        localResultNames.append(QString::fromNSString(localResultName));
+    {
+        QString qs = QString::fromNSString(localResultName);
+        localResultNames.append(OsmAnd::CollatorStringMatcher::alignChars(qs));
+    }
 
     BOOL wordMatched;
     if (searchPhraseNames.isEmpty())

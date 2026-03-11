@@ -21,4 +21,12 @@ final class OATwoIconsButtonTableViewCell: OAButtonTableViewCell {
     func shouldUpdateMarginsForVisibleSecondLeftIcon() -> Bool {
         !secondLeftIconView.isHidden
     }
+    
+    func setSecondLeftIconSize(_ size: CGFloat) {
+        for constraint in secondLeftIconView.constraints {
+            if constraint.firstAttribute == .width || constraint.firstAttribute == .height {
+                constraint.constant = size
+            }
+        }
+    }
 }

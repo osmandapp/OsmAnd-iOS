@@ -45,6 +45,7 @@
     NSArray *_data;
 
     NSArray<NSNumber *> *_types;
+    GPXDataSetAxisType _selectedXAxisMode;
     
     BOOL _hasTranslated;
     double _highlightDrawX;
@@ -101,7 +102,7 @@
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
-                                      axisType:GPXDataSetAxisTypeDistance
+                                      axisType:_selectedXAxisMode
                                calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
 
     self.statisticsChart = routeStatsCell.chartView;
@@ -141,7 +142,13 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
-    _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
+    
+    if (!_types)
+        _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
+    
+    if (_selectedXAxisMode != GPXDataSetAxisTypeDistance && _selectedXAxisMode != GPXDataSetAxisTypeTime && _selectedXAxisMode != GPXDataSetAxisTypeTimeOfDay)
+        _selectedXAxisMode = GPXDataSetAxisTypeDistance;
+    
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -366,7 +373,7 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    StatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[StatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types analysis:self.analysis];
+    StatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[StatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types selectedXAxisMode:_selectedXAxisMode analysis:self.analysis];
     statsModeBottomSheet.delegate = self;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:statsModeBottomSheet];
     nav.modalPresentationStyle = UIModalPresentationPageSheet;
@@ -559,8 +566,9 @@
 
 #pragma mark - OAStatisticsSelectionDelegate
 
-- (void)onTypesSelected:(NSArray<NSNumber *> *)types
+- (void)onGraphModeChanged:(GPXDataSetAxisType)selectedXAxisMode types:(NSArray<NSNumber *> *)types
 {
+    _selectedXAxisMode = (GPXDataSetAxisType) selectedXAxisMode;
     _types = types;
     [self updateRouteStatisticsGraph];
 }
@@ -573,9 +581,10 @@
         ElevationChartCell *graphCell = _data[1];
 
         [self.trackChartHelper changeChartTypes:_types
-                                              chart:graphCell.chartView
-                                           analysis:self.analysis
-                                      statsModeCell:statsModeCell];
+                              selectedXAxisMode:_selectedXAxisMode
+                                          chart:graphCell.chartView
+                                       analysis:self.analysis
+                                  statsModeCell:statsModeCell];
     }
 }
 

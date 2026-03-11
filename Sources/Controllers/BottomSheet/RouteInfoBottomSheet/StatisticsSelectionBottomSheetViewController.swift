@@ -9,11 +9,12 @@
 import UIKit
 
 @objc protocol OAStatisticsSelectionDelegate: AnyObject {
-    func onTypesSelected(_ types: [NSNumber])
+    func onGraphModeChanged(_ selectedXAxisMode: GPXDataSetAxisType, types: [NSNumber])
 }
 
 private enum RowKey: String {
     case type
+    case axisType
     case selected
     case isCustomLeftSeparatorInset
 }
@@ -33,14 +34,16 @@ private struct VehicleMetricsMeta {
 @objcMembers
 final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewViewController {
     private var types: [NSNumber]
+    private var selectedXAxisMode: GPXDataSetAxisType
     private var analysis: GpxTrackAnalysis
     private var segmentedControl: UISegmentedControl?
     private var isYAxisMode = true
     
     weak var delegate: OAStatisticsSelectionDelegate?
     
-    init(types: [NSNumber], analysis: GpxTrackAnalysis) {
+    init(types: [NSNumber], selectedXAxisMode: GPXDataSetAxisType, analysis: GpxTrackAnalysis) {
         self.types = types
+        self.selectedXAxisMode = selectedXAxisMode
         self.analysis = analysis
         super.init()
     }
@@ -96,6 +99,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
+        addCell(OATwoIconsButtonTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -165,43 +169,72 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                     row.setObj(NSNumber(value: lastTypesInVehicleSubgroups.contains(type)), forKey: RowKey.isCustomLeftSeparatorInset.rawValue)
                 }
             }
+        } else {
+            let section = tableData.createNewSection()
+            let availableAxisTypes: [GPXDataSetAxisType] = analysis.isTimeSpecified() ? [.distance, .time, .timeOfDay] : [.distance]
+            for axisType in availableAxisTypes {
+                let row = section.createNewRow()
+                row.cellType = OATwoIconsButtonTableViewCell.reuseIdentifier
+                row.title = axisType.getName()
+                row.iconName = axisType.getImageName()
+                row.setObj(NSNumber(value: axisType.rawValue), forKey: RowKey.axisType.rawValue)
+                row.setObj(NSNumber(value: selectedXAxisMode == axisType), forKey: RowKey.selected.rawValue)
+            }
         }
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
-        guard item.cellType == OASimpleTableViewCell.reuseIdentifier else { return nil }
-        let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
-        cell.descriptionVisibility(false)
-        cell.selectedBackgroundView = UIView()
-        cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
-        cell.titleLabel.text = item.title
-        cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-        let isSelected = item.bool(forKey: RowKey.selected.rawValue)
-        cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
-        cell.titleLabel.textColor = isSelected ? .textColorPrimary : .textColorTertiary
-        let isCustomLeftSeparatorInset = item.bool(forKey: RowKey.isCustomLeftSeparatorInset.rawValue)
-        cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
-        if isCustomLeftSeparatorInset {
-            cell.separatorInset = .zero
-        } else {
-            cell.updateSeparatorInset()
+        if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+            cell.descriptionVisibility(false)
+            cell.selectedBackgroundView = UIView()
+            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.titleLabel.text = item.title
+            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            let isSelected = item.bool(forKey: RowKey.selected.rawValue)
+            cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
+            cell.titleLabel.textColor = isSelected ? .textColorPrimary : .textColorTertiary
+            let isCustomLeftSeparatorInset = item.bool(forKey: RowKey.isCustomLeftSeparatorInset.rawValue)
+            cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
+            if isCustomLeftSeparatorInset {
+                cell.separatorInset = .zero
+            } else {
+                cell.updateSeparatorInset()
+            }
+            return cell
+        } else if item.cellType == OATwoIconsButtonTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier, for: indexPath) as! OATwoIconsButtonTableViewCell
+            cell.descriptionVisibility(false)
+            cell.buttonVisibility(false)
+            cell.titleLabel.text = item.title
+            let isSelected = item.bool(forKey: RowKey.selected.rawValue)
+            cell.leftIconView.image = isSelected ? UIImage(named: "ic_checkmark_default") : nil
+            cell.secondLeftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
+            cell.setSecondLeftIconSize(30)
+            return cell
         }
         
-        return cell
+        return nil
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard isYAxisMode else { return nil }
+        guard isYAxisMode else { return indexPath }
         let selectedCount = tableView.indexPathsForSelectedRows?.count ?? 0
         return selectedCount >= 2 ? nil : indexPath
     }
     
     override func onRowSelected(_ indexPath: IndexPath) {
-        toggleSelection(at: indexPath, isSelected: true)
+        if isYAxisMode {
+            toggleSelection(at: indexPath, isSelected: true)
+        } else {
+            updateSelectedXAxisMode(at: indexPath)
+        }
     }
     
     override func onRowDeselected(_ indexPath: IndexPath) {
+        guard isYAxisMode else { return }
         toggleSelection(at: indexPath, isSelected: false)
     }
     
@@ -212,7 +245,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     @objc private func onDonePressed() {
         let result = Array(types.prefix(2))
         guard !result.isEmpty else { return }
-        delegate?.onTypesSelected(result)
+        delegate?.onGraphModeChanged(selectedXAxisMode, types: result)
         dismiss(animated: true)
     }
     
@@ -237,6 +270,14 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                 tableView.deselectRow(at: $0, animated: false)
             }
         }
+    }
+    
+    private func updateSelectedXAxisMode(at indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        guard let axisTypeNumber = item.obj(forKey: RowKey.axisType.rawValue) as? NSNumber, let axisType = GPXDataSetAxisType(rawValue: axisTypeNumber.intValue), selectedXAxisMode != axisType else { return }
+        selectedXAxisMode = axisType
+        generateData()
+        tableView.reloadData()
     }
     
     private func toggleSelection(at indexPath: IndexPath, isSelected: Bool) {

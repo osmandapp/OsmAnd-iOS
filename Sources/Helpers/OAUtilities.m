@@ -1588,7 +1588,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return scheme && ([scheme.lowercaseString isEqualToString:kHttpScheme] || [scheme.lowercaseString isEqualToString:kHttpsScheme]);
 }
 
-+ (BOOL) isValidURL:(NSString *)string
++ (BOOL)isValidURL:(NSString *)string
 {
     return [string isValidURL];
 }

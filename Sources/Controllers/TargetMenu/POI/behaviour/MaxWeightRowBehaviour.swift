@@ -11,8 +11,8 @@ final class MaxWeightRowBehaviour: DefaultPoiAdditionalRowBehaviour {
     override func applyCustomRules(params: PoiRowParams) {
         super.applyCustomRules(params: params)
         
-        if let valueAsNumber = Int(params.value) {
-            params.builder.text = params.value + " " + localizedString("metric_ton")
-        }
+        guard Int(params.value) != nil else { return }
+         
+        params.builder.text = "\(params.value) \(localizedString("metric_ton"))"
     }
 }

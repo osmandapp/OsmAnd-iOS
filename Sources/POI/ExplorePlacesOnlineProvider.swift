@@ -190,15 +190,6 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         
         let id = properties.id
         
-        /*
-         Long osmId = properties.getOsmid();
-         if (osmId != null && osmId > 0) {
-             amenity.setId(ObfConstants.createMapObjectIdFromCleanOsmId(osmId, EntityType.valueOf(properties.getOsmtype())));
-         } else if (id != null) {
-             amenity.setId(-Long.parseLong(id));
-         }
-         */
-        
         if let osmId = properties.osmid?.uint64Value, osmId > 0, osmId != OAMapObject.getInvalidObfId() {
             let osmType = properties.osmtype
             let objectId = ObfConstants.createMapObjectIdFromCleanOsmId(osmId, type: EOAEntityType(rawValue: Int(osmType)))

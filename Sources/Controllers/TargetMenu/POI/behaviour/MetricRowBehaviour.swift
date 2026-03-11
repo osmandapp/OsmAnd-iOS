@@ -7,7 +7,7 @@
 //
 
 final class MetricRowBehaviour: DefaultPoiAdditionalRowBehaviour {
-    
+
     private let formatter: NumberFormatter = {
         let f = NumberFormatter()
         f.numberStyle = .decimal
@@ -16,27 +16,32 @@ final class MetricRowBehaviour: DefaultPoiAdditionalRowBehaviour {
         f.roundingMode = .ceiling
         return f
     }()
-    
+
     override func applyCustomRules(params: PoiRowParams) {
         super.applyCustomRules(params: params)
+
+        guard let value = Double(params.value), value > 0 else {
+            params.builder.text = params.value
+            return
+        }
         
         let metricSystem = OAAppSettings.sharedManager().metricSystem.get()
-        
-        if let valueAsDouble = Double(params.value), valueAsDouble > 0 {
-            var formattedValue = ""
-            
-            switch metricSystem {
-            case .MILES_AND_FEET, .NAUTICAL_MILES_AND_FEET:
-                formattedValue = (formatter.string(from: NSNumber(value: valueAsDouble * FEET_IN_ONE_METER)) ?? "") + " " + localizedString("foot")
-            case .MILES_AND_YARDS:
-                formattedValue = (formatter.string(from: NSNumber(value: valueAsDouble * YARDS_IN_ONE_METER)) ?? "") + " " + localizedString("yard")
-            default:
-                formattedValue = "\(params.value) " + localizedString("m")
-            }
-            
-            params.builder.text = formattedValue
-        } else {
-            params.builder.text = params.value
+
+        let text: String
+
+        switch metricSystem {
+        case .MILES_AND_FEET, .NAUTICAL_MILES_AND_FEET:
+            let feet = value * FEET_IN_ONE_METER
+            text = "\(formatter.string(from: NSNumber(value: feet)) ?? "") \(localizedString("foot"))"
+
+        case .MILES_AND_YARDS:
+            let yards = value * YARDS_IN_ONE_METER
+            text = "\(formatter.string(from: NSNumber(value: yards)) ?? "") \(localizedString("yard"))"
+
+        default:
+            text = "\(params.value) \(localizedString("m"))"
         }
+
+        params.builder.text = text
     }
 }

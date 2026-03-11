@@ -130,8 +130,7 @@ final class ObfConstants: NSObject {
     }
     
     static func isOsmUrlAvailable(_ object: OAMapObject) -> Bool {
-        // TODO: test. in ios don't store negative values for objects without osm
-        return object.isValidObfId() && object.obfId > 0
+        object.isValidObfId() && object.obfId > 0
     }
     
     static func getOsmId(_ obfId: UInt64) -> UInt64 {
@@ -146,17 +145,14 @@ final class ObfConstants: NSObject {
     }
     
     static func isIdFromRelation(_ obfId: UInt64) -> Bool {
-        // TODO: test
         obfId > 0 && (obfId & Self.RELATION_BIT) == Self.RELATION_BIT
     }
     
     static func isIdFromPropagatedNode(_ obfId: UInt64) -> Bool {
-        // TODO: test
         obfId > 0 && (obfId & Self.PROPAGATE_NODE_BIT) == Self.PROPAGATE_NODE_BIT
     }
     
     static func isIdFromSplit(_ obfId: UInt64) -> Bool {
-        // TODO: test
         obfId > 0 && (obfId & Self.SPLIT_BIT) == Self.SPLIT_BIT
     }
     

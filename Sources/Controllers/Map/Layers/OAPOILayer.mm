@@ -57,11 +57,10 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/MapMarker.h>
 
-#define kPoiSearchRadius 50 // AMENITY_SEARCH_RADIUS
-#define kPoiSearchRadiusForRelation 500 // AMENITY_SEARCH_RADIUS_FOR_RELATION
-#define kTrackSearchDelta 40
-
-static const int START_ZOOM = 5;
+static const NSInteger kPoiSearchRadius = 50; // AMENITY_SEARCH_RADIUS
+static const NSInteger kPoiSearchRadiusForRelation = 500; // AMENITY_SEARCH_RADIUS_FOR_RELATION
+static const NSInteger kTrackSearchDelta = 40;
+static const NSInteger START_ZOOM = 5;
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
@@ -541,7 +540,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     (OAMapRendererView *)[OARootViewController instance]
         .mapPanel.mapViewController.view;
     
-    if ([mapView zoom] < 5)
+    if ([mapView zoom] < START_ZOOM)
         return;
     
     int radius = [self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER;

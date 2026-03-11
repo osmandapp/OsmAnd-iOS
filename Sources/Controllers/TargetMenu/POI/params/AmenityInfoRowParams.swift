@@ -9,7 +9,6 @@
 final class AmenityInfoRowParams: NSObject {
     
     var key: String?
-    //var icon: UIImage? //TODO: delete, not needed?
     var iconName: String?
     var textPrefix: String?
     var text: String?
@@ -49,11 +48,9 @@ final class AmenityInfoRowParams: NSObject {
         collapsableView != nil
     }
     
-    
     final class Builder: NSObject {
         
         var key: String?
-        //var icon: UIImage? //TODO: delete?
         var iconName: String?
         var textPrefix: String? = ""
         var text: String?

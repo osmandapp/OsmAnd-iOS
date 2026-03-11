@@ -151,12 +151,7 @@ final class MergeLocalizedTagsAlgorithm: NSObject {
     }
     
     private func isNameTag(_ tag: String) -> Bool {
-        for prefix in NAME_TAG_PREFIXES {
-            if tag.hasPrefix(prefix) {
-                return true
-            }
-        }
-        return false
+        NAME_TAG_PREFIXES.contains { tag.hasPrefix($0) }
     }
     
     private func convertKey(_ key: String) -> String {

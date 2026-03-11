@@ -26,7 +26,6 @@
 
 static const NSInteger kOrderInternalRow = 0;
 
-
 @interface OAOsmNotesOnlineTargetViewController () <OAOsmEditingBottomSheetDelegate>
 
 @end

@@ -7,25 +7,26 @@
 //
 
 final class PopulationRowBehaviour: DefaultPoiAdditionalRowBehaviour {
-   
+
+    private static let formatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.locale = Locale(identifier: "en_US")
+        f.numberStyle = .decimal
+        f.usesGroupingSeparator = true
+        f.groupingSeparator = " "
+        f.maximumFractionDigits = 0
+        return f
+    }()
+
     override func applyCustomRules(params: PoiRowParams) {
         super.applyCustomRules(params: params)
-        
-        var formatted = params.value
-        if let valueAsNumber = Int(params.value) {
-            
-            let formatter = NumberFormatter()
-            formatter.locale = Locale(identifier: "en_US")
-            formatter.numberStyle = .decimal
-            formatter.usesGroupingSeparator = true
-            formatter.groupingSeparator = " "
-            formatter.maximumFractionDigits = 0
 
-            if let result = formatter.string(from: NSNumber(value: valueAsNumber)) {
-                formatted = result
-            }
+        guard let value = Int(params.value),
+              let formatted = Self.formatter.string(from: NSNumber(value: value)) else {
+            params.builder.text = params.value
+            return
         }
-        
+
         params.builder.text = formatted
     }
 }

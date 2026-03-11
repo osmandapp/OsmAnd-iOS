@@ -39,7 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)copyNames:(OAMapObject *)s;
 - (int64_t) getSignedId;
 
-
 - (BOOL) isValidObfId;
 + (uint64_t) getInvalidObfId;
 

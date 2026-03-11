@@ -22,11 +22,11 @@ extension UIButton.Configuration {
         return config
     }
     
-    static func proBannerButtonConfiguration(imageName: String) -> UIButton.Configuration {
+    static func proBannerButtonConfiguration(image: UIImage?) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
         config.title = nil
         config.image = nil
-        config.background.image = UIImage(named: imageName)
+        config.background.image = image
         config.background.imageContentMode = .scaleAspectFill
         config.background.cornerRadius = 8.0
         config.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 35, bottom: 16, trailing: 35)

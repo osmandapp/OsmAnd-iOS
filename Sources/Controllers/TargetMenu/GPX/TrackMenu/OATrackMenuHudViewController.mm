@@ -453,6 +453,11 @@
     return _headerView;
 }
 
+- (CGFloat)getToolbarHeight
+{
+    return [OAUtilities isIOS26] && [OAUtilities getBottomMargin] == 0 ? 80. : [super getToolbarHeight];
+}
+
 - (CGFloat)initialMenuHeight
 {
     return [_headerView getInitialHeight:self.toolBarView.frame.size.height];

@@ -618,6 +618,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         _data = [NSDictionary dictionaryWithDictionary:dictionary];
         [self setupGoButton];
+        _currentState = EOARouteInfoMenuStateExpanded;
         return;
     }
     
@@ -1124,7 +1125,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _optionsMenuSelected = NO;
     [_appModeView setupModeButtons];
     [_tableView setContentOffset:CGPointZero];
-    _currentState = fullScreen ? EOARouteInfoMenuStateFullScreen : _currentState;
+    EOARouteInfoMenuState menuState = _currentState;
+    if (!fullScreen && _currentState == EOARouteInfoMenuStateFullScreen)
+        menuState = EOARouteInfoMenuStateExpanded;
+    _currentState = fullScreen ? EOARouteInfoMenuStateFullScreen : menuState;
     [_tableView setScrollEnabled:YES];
     _historyItemsLimit = kHistoryItemLimitDefault;
     

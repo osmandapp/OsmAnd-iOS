@@ -1658,7 +1658,7 @@ typedef enum
             }
 
             [self hideTargetPointMenu];
-            [self showRouteInfo:NO];
+            [self showRouteInfo:(_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection) && !_app.data.pointToNavigate];
             
             return NO;
         }

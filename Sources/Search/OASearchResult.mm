@@ -199,7 +199,8 @@
         if ([OAArabicNormalizer isSpecialArabic:searchPhraseName]) {
             searchPhraseName = [OAArabicNormalizer normalize:searchPhraseName] ?: searchPhraseName;
         }
-        searchPhraseNames.append(QString::fromNSString(searchPhraseName));
+        QString qs = QString::fromNSString(searchPhraseName);
+        searchPhraseNames.append(OsmAnd::CollatorStringMatcher::alignChars(qs));
     }
 
     NSMutableArray<NSString *> *localResultNamesArray;

@@ -287,11 +287,14 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
     routeStatsCell.chartView.delegate = self;
 
+    BOOL useHours = (self.analysis.timeSpan / 3600000) > 0;
     [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
                                         topOffset:20
                                      bottomOffset:4
                               useGesturesAndScale:YES
-                                    showXInMarker:NO];
+                                    showXInMarker:NO
+                                        startTime:self.analysis.startTime
+                                         useHours:useHours];
 
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView

@@ -80,6 +80,7 @@ final class TrackChartHelper: NSObject {
     }
 
     func changeChartTypes(_ types: [Int],
+                          selectedXAxisMode: GPXDataSetAxisType,
                           chart: ElevationChart,
                           analysis: GpxTrackAnalysis,
                           statsModeCell: OARouteStatisticsModeCell?) {
@@ -87,6 +88,7 @@ final class TrackChartHelper: NSObject {
         if types.count == 2 {
             if types.last == GPXDataSetType.speed.rawValue && !analysis.isSpeedSpecified() {
                 changeChartTypes([GPXDataSetType.altitude.rawValue],
+                                 selectedXAxisMode: selectedXAxisMode,
                                  chart: chart,
                                  analysis: analysis,
                                  statsModeCell: statsModeCell)
@@ -104,14 +106,15 @@ final class TrackChartHelper: NSObject {
             statsModeCell?.modeButton.setTitle(OAGPXDataSetType.getTitle(types.first ?? GPXDataSetType.none.rawValue),
                                                for: .normal)
         }
-
+        
+        statsModeCell?.rightLabel.text = selectedXAxisMode.getName()
         let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
         GpxUIHelper.refreshLineChart(
             chartView: chart,
             analysis: analysis,
             firstType: GPXDataSetType(rawValue: types.first!)!,
             secondType: secondType,
-            axisType: .distance,
+            axisType: selectedXAxisMode,
             calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx)
         )
     }

@@ -209,7 +209,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             cell.buttonVisibility(false)
             cell.titleLabel.text = item.title
             let isSelected = item.bool(forKey: RowKey.selected.rawValue)
-            cell.leftIconView.image = isSelected ? UIImage(named: "ic_checkmark_default") : nil
+            cell.leftIconView.image = isSelected ? UIImage.templateImageNamed("ic_checkmark_default") : nil
+            cell.leftIconView.tintColor = .iconColorActive
             cell.secondLeftIconView.image = UIImage.templateImageNamed(item.iconName)
             cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
             cell.setSecondLeftIconSize(30)

@@ -92,11 +92,14 @@
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.chartView.delegate = self;
 
+    BOOL useHours = (self.analysis.timeSpan / 3600000) > 0;
     [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
                                         topOffset:20
                                      bottomOffset:4
                               useGesturesAndScale:YES
-                                    showXInMarker:YES];
+                                    showXInMarker:YES
+                                        startTime:self.analysis.startTime
+                                         useHours:useHours];
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis

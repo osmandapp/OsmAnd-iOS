@@ -4010,3 +4010,13 @@
 "context_menu_item_add_parking_point" = "Markera som parkeringsplats";
 "find_parking" = "Hitta parkering";
 "finish_navigation" = "Avsluta navigering";
+"show_polygons" = "Visa polygoner";
+"offline_weather_forecast" = "Väderprognos offline";
+"enable_msaa_carplay" = "MSAA för CarPlay";
+"background_liquid_glass_clear_ios" = "Klart";
+"shared_string_online_only" = "Endast online";
+"shared_string_offline_only" = "Endast offline";
+"show_image_previews" = "Visa förhandsgranskningar för bilder";
+"popular_places" = "Populära platser";
+"shared_string_wikipedia" = "Wikipedia";
+"poi_source" = "POI-källa";

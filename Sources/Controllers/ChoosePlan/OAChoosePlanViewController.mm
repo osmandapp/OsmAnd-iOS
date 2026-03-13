@@ -50,7 +50,6 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     OAIAPHelper *_iapHelper;
 
     OAProduct *_product;
-    OAFeature *_selectedFeature;
     OAChoosePlanViewControllerType _type;
 
     BOOL _isHeaderBlurred;

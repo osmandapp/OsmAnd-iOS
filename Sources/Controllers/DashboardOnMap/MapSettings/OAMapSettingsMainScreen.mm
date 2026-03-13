@@ -1404,6 +1404,7 @@
     {
         _app.data.underlayMapSource = nil;
     }
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void)wikipediaChanged:(BOOL)isOn

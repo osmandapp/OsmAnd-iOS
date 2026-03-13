@@ -6647,7 +6647,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _batterySavingMode = [[[OACommonBoolean withKey:batterySavingModeKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_batterySavingMode forKey:@"battery_saving"];
 
-        _enableMsaaForСarPlay = [[[OACommonBoolean withKey:enableMsaaForСarPlayKey defValue:NO] makeGlobal] makeShared];
+        _enableMsaaForСarPlay = [[[OACommonBoolean withKey:enableMsaaForСarPlayKey defValue:YES] makeGlobal] makeShared];
         [_globalPreferences setObject:_enableMsaaForСarPlay forKey:@"enable_msaa_car_play"];
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
@@ -7046,6 +7046,13 @@ static NSString *kOfflineKey = @"OFFLINE";
     }
     
     return stored;
+}
+
+- (BOOL)shouldHidePolygons
+{
+    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    OAMapStyleParameter *hidePolygonsParameter = [styleSettings getParameter:NO_POLYGONS];
+    return [hidePolygonsParameter.value isEqualToString:@"true"] || ([OsmAndApp instance].data.underlayMapSource && ![_showPolygonsWhenUnderlayIsOn get]);
 }
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode

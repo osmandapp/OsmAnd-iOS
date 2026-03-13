@@ -3993,3 +3993,11 @@
 "finish_navigation" = "完成導航";
 "background_liquid_glass_clear_ios" = "敞亮";
 "enable_msaa_carplay" = "在 CarPlay 上啟用 MSAA";
+"show_polygons" = "顯示多邊形";
+"offline_weather_forecast" = "離線天氣預測";
+"shared_string_online_only" = "只有線上";
+"shared_string_offline_only" = "只有離線";
+"show_image_previews" = "顯示影像預覽";
+"popular_places" = "人口聚集地";
+"shared_string_wikipedia" = "維基百科";
+"poi_source" = "興趣點來源";

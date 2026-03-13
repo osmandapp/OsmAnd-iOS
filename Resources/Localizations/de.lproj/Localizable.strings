@@ -2418,7 +2418,7 @@
 "with_offline_maps" = "Mit Offline-Karten";
 "other_countries" = "Andere Länder";
 "weather_remove_forecasts_description" = "Sind Sie sicher, dass Sie die Vorhersage für folgende Länder entfernen möchten: %d.";
-"weather_remove_forecast_description" = "Sind Sie sicher, dass Sie die Vorhersage für %@ entfernen wollen?";
+"weather_remove_forecast_description" = "Sind Sie sich sicher, dass Sie die Vorhersage für %@ entfernen wollen";
 "weather_miss_forecasts" = "Sie haben keine Offline-Prognosen";
 "weather_miss_forecasts_description" = "Die Offline-Vorhersage ist pro Land verfügbar. Zeitraum bis zu 7 Tagen. Sie müssen die gewünschten Länder auswählen.";
 "weather_updates_automatically" = "OsmAnd lädt Updates automatisch herunter, während es läuft.";
@@ -3315,7 +3315,7 @@
 "height_legend_description" = "Höhenfarbkarten werden verwendet, um Relief darzustellen.";
 "app_profile" = "App-Profil";
 "cloud_layer" = "Wolkenebene";
-"download_srtm_maps" = "Konturlinie";
+"download_srtm_maps" = "Höhenlinien";
 "driving_region_india" = "Indien";
 "driving_region_uk" = "GB und andere";
 "key_event_category_map_interactions" = "Karten-Interaktionen";
@@ -4005,7 +4005,7 @@
 "ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n• Fähigkeit hinzugefügt Wegpunkte in einen ausgewählten Favoriten-Ordner zusammenzuführen\n• CarPlay: Problem mit nicht reagierender Karte auf dem Dashboard behoben und Unterstützung hinzugefügt für Parameter „Zeige immer dunkle Karte“\n";
 "image_cache_online_photo_high_res" = "Hochauflösende Zwischenspeicherung von Online-Fotos";
 "image_cache_online_photo_mapillary_default_cache" = "Automatische Zwischenspeicherung von Online-Fotos/Mapillary";
-"trip_recording_moving_time" = "Bewegungszeit";
+"trip_recording_moving_time" = "Zeit in Bewegung";
 "trip_recording_moving_time_widget_description" = "Zeigt die aktuell aufgezeichnete Bewegungszeit oder die Zeit für den letzten Anstieg und Abstieg an.";
 "context_menu_item_add_parking_point" = "Als Parkposition markieren";
 "find_parking" = "Parkplatz suchen";
@@ -4030,8 +4030,10 @@
 "background_liquid_glass_clear_ios" = "Klar";
 "enable_msaa_carplay" = "MSAA für CarPlay aktivieren";
 "shared_string_wikipedia" = "Wikipedia";
-"poi_source" = "POI Quelle";
-"show_polygons" = "Zeige Polygone";
-"offline_weather_forecast" = "Offline Wettervorhersage";
-"show_image_previews" = "Zeige Bildvorschau";
+"poi_source" = "POI-Quelle";
+"show_polygons" = "Polygone anzeigen";
+"offline_weather_forecast" = "Offline-Wettervorhersage";
+"show_image_previews" = "Bildvorschau anzeigen";
 "popular_places" = "Beliebte Orte";
+"shared_string_online_only" = "Nur online";
+"shared_string_offline_only" = "Nur offline";

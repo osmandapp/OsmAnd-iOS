@@ -1450,6 +1450,7 @@
 		C547116F2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */; };
 		C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5484DC62CD21F03004C5F27 /* FormattedValue.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
+		C55357392F56D76F00F7154E /* DeepLinkAppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */; };
 		C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553A28C2D53CD33007C9444 /* AverageSpeedComputerService.swift */; };
 		C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85129BA0844006794D5 /* OASunriseSunsetWidget.mm */; };
 		C558A29B29B1355A00E79DDB /* ic_custom_direction_manual_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29529B1355800E79DDB /* ic_custom_direction_manual_night@2x.png */; };
@@ -5215,6 +5216,7 @@
 		C5484DC62CD21F03004C5F27 /* FormattedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedValue.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
+		C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkAppRouter.swift; sourceTree = "<group>"; };
 		C553A28C2D53CD33007C9444 /* AverageSpeedComputerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageSpeedComputerService.swift; sourceTree = "<group>"; };
 		C556C85029BA0844006794D5 /* OASunriseSunsetWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidget.h; sourceTree = "<group>"; };
 		C556C85129BA0844006794D5 /* OASunriseSunsetWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASunriseSunsetWidget.mm; sourceTree = "<group>"; };
@@ -11604,6 +11606,7 @@
 				9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */,
 				C563193D2EF0353E008854B3 /* DeepLinkParser.swift */,
 				C56319452EF189EC008854B3 /* DeepLinkManager.swift */,
+				C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */,
 			);
 			path = POI;
 			sourceTree = "<group>";
@@ -17893,6 +17896,7 @@
 				DA5A837026C563A800F274C7 /* OARoutingTargetCell.m in Sources */,
 				DA5A84A726C563A900F274C7 /* OARouteExporter.mm in Sources */,
 				DA5A84CB26C563A900F274C7 /* OACopyProfileBottomSheetViewControler.mm in Sources */,
+				C55357392F56D76F00F7154E /* DeepLinkAppRouter.swift in Sources */,
 				FA896E6F2F3600AD00580246 /* SharedLibNetworkAPI.swift in Sources */,
 				DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */,
 				DA679950299A7A4A00CC1509 /* OAFetchBackgroundDataOperation.m in Sources */,

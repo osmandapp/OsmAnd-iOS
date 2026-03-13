@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithFeature:(OAFeature *)feature;
 - (instancetype) initWithProduct:(OAProduct *)product type:(OAChoosePlanViewControllerType)type;
 
+@property (nonatomic, readonly) OAFeature *selectedFeature;
 @property (nonatomic, weak) id<OAChoosePlanDelegate> delegate;
 
 @end

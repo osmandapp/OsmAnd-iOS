@@ -205,12 +205,7 @@
             [cell titleVisibility:YES];
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:NO];
-            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., 0, 0, 0.);
-            if ([OAUtilities isIOS26])
-                conf.cornerStyle = UIButtonConfigurationCornerStyleFixed;
-            cell.button.configuration = conf;
-            [cell.button setImage:[UIImage imageNamed:@"ic_payment_label_pro"] forState:UIControlStateNormal];
+            cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:@"ic_payment_label_pro"];
             [cell.button setTitle:@"" forState:UIControlStateNormal];
             cell.button.imageView.tintColor = [UIColor clearColor];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];

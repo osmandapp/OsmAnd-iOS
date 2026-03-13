@@ -195,7 +195,6 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
             let objectId = ObfConstants.createMapObjectIdFromCleanOsmId(osmId, type: EOAEntityType(rawValue: Int(osmType)))
             amenity.obfId = objectId
         } else if let id, let parsedId = UInt64(id) {
-            
             amenity.obfId = parsedId
         }
 

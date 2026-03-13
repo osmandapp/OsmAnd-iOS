@@ -85,7 +85,7 @@ final class ObfConstants: NSObject {
     
     static func getOsmEntityType(_ object: OAMapObject) -> String? {
         if isOsmUrlAvailable(object) {
-            let obfId = UInt64(object.obfId)
+            let obfId = object.obfId
             let originalId = obfId >> 1
             if object is OARenderedObject && isIdFromPropagatedNode(originalId) {
                 return WAY

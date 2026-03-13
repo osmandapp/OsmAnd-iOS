@@ -13,19 +13,55 @@ final class OACollapsableTravelGuidesView: OACollapsableView  {
     private var articlesAllLangsMap = [String: [String: TravelArticle]]()
     private var buttons = [OAButton]()
     private var articles = [TravelArticle]()
-    private var selectedButtinIndex = 0
-    
-    func setData(articlesMap: [String: [String: TravelArticle]]) {
-        self.articlesAllLangsMap = articlesMap
-        buildViews()
-    }
+    private var selectedButtonIndex = 0
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
-        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateButtonBorderColor()
         }
+    }
+    
+    override func adjustHeight(forWidth width: CGFloat) {
+        updateLayout(width: width)
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        true
+    }
+    
+    override func copy(_ sender: Any?) {
+        guard buttons.count > selectedButtonIndex else { return }
+        let button = buttons[selectedButtonIndex]
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = button.titleLabel?.text
+    }
+    
+    func setData(articlesMap: [String: [String: TravelArticle]]) {
+        articlesAllLangsMap = articlesMap
+        buildViews()
+    }
+    
+    
+    func updateLayout(width: CGFloat) {
+        var y: CGFloat = 0.0
+        var viewHeight: CGFloat = 0.0
+        var i = 0
+        for button in buttons {
+            if i > 0 {
+                y += kButtonHeight + 10.0
+                viewHeight += 10.0
+            }
+            
+            let height: CGFloat = kButtonHeight
+            button.frame = CGRect(x: kMarginLeft, y: y, width: width - kMarginLeft - kMarginRight, height: height)
+            viewHeight += button.frame.size.height
+            i += 1
+        }
+        
+        viewHeight += 8.0
+        frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: width, height: viewHeight)
     }
     
     private func buildViews() {
@@ -74,45 +110,10 @@ final class OACollapsableTravelGuidesView: OACollapsableView  {
         return btn
     }
     
-    func updateLayout(width: CGFloat) {
-        var y: CGFloat = 0.0
-        var viewHeight: CGFloat = 0.0
-        var i = 0
-        for button in buttons {
-            if i > 0 {
-                y += kButtonHeight + 10.0
-                viewHeight += 10.0
-            }
-            
-            let height: CGFloat = kButtonHeight
-            button.frame = CGRect(x: kMarginLeft, y: y, width: width - kMarginLeft - kMarginRight, height: height)
-            viewHeight += button.frame.size.height
-            i += 1
-        }
-        
-        viewHeight += 8.0
-        self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: width, height: viewHeight)
-    }
-    
     private func updateButtonBorderColor() {
         for button in buttons {
             button.layer.borderColor = UIColor.customSeparator.cgColor
         }
-    }
-    
-    override func adjustHeight(forWidth width: CGFloat) {
-        updateLayout(width: width)
-    }
-    
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-    
-    override func copy(_ sender: Any?) {
-        guard buttons.count > selectedButtinIndex else { return }
-        let button = buttons[selectedButtinIndex]
-        let pasteboard = UIPasteboard.general
-        pasteboard.string = button.titleLabel?.text
     }
 }
 
@@ -126,9 +127,9 @@ extension OACollapsableTravelGuidesView: OAButtonDelegate {
     }
     
     func onButtonLongPressed(_ tag: Int) {
-        selectedButtinIndex = tag
-        guard buttons.count > selectedButtinIndex else { return }
-        OAUtilities.showMenu(in: self, from: buttons[selectedButtinIndex])
+        selectedButtonIndex = tag
+        guard buttons.count > selectedButtonIndex else { return }
+        OAUtilities.showMenu(in: self, from: buttons[selectedButtonIndex])
     }
 }
 

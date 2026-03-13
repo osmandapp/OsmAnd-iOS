@@ -27,9 +27,7 @@
 #include <OsmAndCore/Data/TransportRoute.h>
 #include <OsmAndCore/Data/TransportStop.h>
 
-
 static const NSInteger kOrderPreviousStopsCountRow = -1;
-
 
 static OATransportRouteToolbarViewController *toolbarController;
 

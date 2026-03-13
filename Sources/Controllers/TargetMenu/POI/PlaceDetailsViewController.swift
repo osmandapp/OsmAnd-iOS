@@ -17,14 +17,14 @@ final class PlaceDetailsViewController: OAPOIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: "OAPOIViewController", bundle: nibBundleOrNil)
-    }
-    
     init(poi: OAPOI, detailsObject: BaseDetailsObject) {
         super.init(poi: detailsObject.syntheticAmenity)
         self.detailsObject = detailsObject
         setObject(detailsObject)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: "OAPOIViewController", bundle: nibBundleOrNil)
     }
     
     override func viewDidLoad() {
@@ -38,6 +38,11 @@ final class PlaceDetailsViewController: OAPOIViewController {
         } else {
             super.setObject(object)
         }
+    }
+    
+    override func buildPhotosRow(_ rows: NSMutableArray) {
+        super.buildPhotosRow(rows)
+        buildGuidesRow()
     }
     
     override func buildDescription(_ rows: NSMutableArray) {
@@ -93,12 +98,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         }
         return false
     }
-    
-    override func buildPhotosRow(_ rows: NSMutableArray) {
-        super.buildPhotosRow(rows)
-        buildGuidesRow()
-    }
-    
+
     private func buildGuidesRow() {
         guard let routeIds = getTravelIds(), !routeIds.isEmpty else { return }
         
@@ -139,7 +139,6 @@ final class PlaceDetailsViewController: OAPOIViewController {
         for amenity in detailsObject.getAmenities() {
             if let subtype = amenity.subType {
                 if subtype == ROUTE_ARTICLE_POINT || subtype == ROUTE_TRACK_POINT {
-                    
                     let routeId = amenity.getRouteId()
                     let wikidata = amenity.getWikidata()
                     

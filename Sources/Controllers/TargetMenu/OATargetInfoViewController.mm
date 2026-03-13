@@ -516,7 +516,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     }
 }
 
-- (void)buildGetWikipediaBanner:rows
+- (void)buildGetWikipediaBanner:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     // TODO: implement
 }

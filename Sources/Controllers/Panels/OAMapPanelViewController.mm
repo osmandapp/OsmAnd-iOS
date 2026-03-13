@@ -1495,7 +1495,7 @@ typedef enum
     }];
 }
 
-- (void) setSelectedObject:(OATargetPoint *)targetPoint
+- (void)setSelectedObject:(OATargetPoint *)targetPoint
 {
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {

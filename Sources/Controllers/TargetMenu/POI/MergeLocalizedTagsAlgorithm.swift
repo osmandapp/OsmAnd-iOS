@@ -9,12 +9,13 @@
 @objcMembers
 final class MergeLocalizedTagsAlgorithm: NSObject {
     
+    static let shared = MergeLocalizedTagsAlgorithm()
+    
     private let NAME_TAG_PREFIXES = ["name", "int_name", "nat_name", "reg_name", "loc_name",
     "old_name", "alt_name", "short_name", "official_name", "lock_name"]
     
     private override init() {}
     
-    static let shared = MergeLocalizedTagsAlgorithm()
     
     func execute(originalDict: [String: Any]) -> [String: Any] {
         executeImpl(originalDict)

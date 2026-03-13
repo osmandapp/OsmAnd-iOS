@@ -24,7 +24,6 @@
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "Localization.h"
-#import "OACollapsableNearestPoiTypeView.h"
 #import "OAOsmAndFormatter.h"
 #import "OAResourcesUIHelper.h"
 #import "OALabel.h"
@@ -40,7 +39,7 @@
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
-static const NSString *WIKIPEDIA_ORG_WIKI_URL_PART = @".wikipedia.org/wiki/";
+static NSString * const WIKIPEDIA_ORG_WIKI_URL_PART = @".wikipedia.org/wiki/";
 static const NSString *WIKI_LINK = @".wikipedia.org/w";
 static const NSString *US_MAPS_RECREATION_AREA = @"us_maps_recreation_area";
 
@@ -180,160 +179,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
 }
 
-- (NSDictionary *)groupAdditionalInfo:(NSDictionary *)originalDict
-              withCurrentLocalization:(NSString *)currentLocalization
-{
-    NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary *localizationsDict = [NSMutableDictionary dictionary];
-    
-    for (NSString *key in originalDict)
-    {
-        NSString *convertedKey = [self convertKey:key];
-        
-        if ([_poiHelper isNameTag:convertedKey])
-        {
-            [self processNameTagWithKey:key
-                              convertedKey:convertedKey
-                          originalDict:originalDict
-                      localizationsDict:localizationsDict];
-        }
-        else
-        {
-            [self processAdditionalTypeWithKey:key
-                                    convertedKey:convertedKey
-                                originalDict:originalDict
-                            localizationsDict:localizationsDict
-                                  resultDict:resultDict];
-        }
-    }
-    NSMutableArray *keysToUpdate = [NSMutableArray array];
-    for (NSString *baseKey in localizationsDict)
-    {
-        NSDictionary *localizations = localizationsDict[baseKey];
-        if (!localizations[baseKey])
-        {
-            [keysToUpdate addObject:baseKey];
-        }
-    }
-    
-    for (NSString *baseKey in keysToUpdate)
-    {
-        NSMutableDictionary *localizations = localizationsDict[baseKey];
-        localizations[baseKey] = originalDict[baseKey];
-        localizationsDict[baseKey] = localizations;
-    }
-    
-    NSMutableDictionary *finalDict = [self finalizeLocalizationDict:localizationsDict
-                                                       originalDict:originalDict
-                                            withCurrentLocalization:currentLocalization];
-    
-    [self addRemainingEntriesFrom:resultDict to:finalDict];
-    
-    return [finalDict copy];
-}
-
-- (NSString *)convertKey:(NSString *)key
-{
-    return [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
-}
-
-- (void)processNameTagWithKey:(NSString *)key
-                  convertedKey:(NSString *)convertedKey
-                  originalDict:(NSDictionary *)originalDict
-              localizationsDict:(NSMutableDictionary *)localizationsDict
-{
-    if ([key containsString:@":"])
-    {
-        NSArray *components = [convertedKey componentsSeparatedByString:@":"];
-        if (components.count == 2)
-        {
-            NSString *baseKey = components[0];
-            NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
-            
-            NSMutableDictionary *nameDict = [self dictionaryForKey:@"name" inDict:localizationsDict];
-            [nameDict setObject:originalDict[convertedKey] forKey:localeKey];
-        }
-    }
-    else
-    {
-        NSMutableDictionary *nameDict = [self dictionaryForKey:@"name" inDict:localizationsDict];
-        [nameDict setObject:originalDict[key] forKey:convertedKey];
-    }
-}
-
-- (void)processAdditionalTypeWithKey:(NSString *)key
-                          convertedKey:(NSString *)convertedKey
-                          originalDict:(NSDictionary *)originalDict
-                      localizationsDict:(NSMutableDictionary *)localizationsDict
-                            resultDict:(NSMutableDictionary *)resultDict
-{
-    OAPOIBaseType *poiType = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
-    
-    if (poiType.lang && [key containsString:@":"])
-    {
-        NSArray *components = [key componentsSeparatedByString:@":"];
-        if (components.count == 2)
-        {
-            NSString *baseKey = components[0];
-            NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
-            
-            NSMutableDictionary *baseDict = [self dictionaryForKey:baseKey inDict:localizationsDict];
-            [baseDict setObject:originalDict[key] forKey:localeKey];
-        }
-    }
-    else
-    {
-        [resultDict setObject:originalDict[key] forKey:key];
-    }
-}
-
-- (NSMutableDictionary *)dictionaryForKey:(NSString *)key inDict:(NSMutableDictionary *)dict
-{
-    NSMutableDictionary *subDict = dict[key];
-    if (!subDict)
-    {
-        subDict = [NSMutableDictionary dictionary];
-        dict[key] = subDict;
-    }
-    return subDict;
-}
-
-- (NSMutableDictionary *)finalizeLocalizationDict:(NSDictionary *)localizationsDict
-                                     originalDict:(NSDictionary *)originalDict
-                      withCurrentLocalization:(NSString *)currentLocalization
-{
-    NSMutableDictionary *finalDict = [NSMutableDictionary dictionary];
-    
-    for (NSString *baseKey in localizationsDict)
-    {
-        NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
-        NSDictionary *localizations = localizationsDict[baseKey];
-        
-        NSString *nameLocalizedKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
-        NSString *nameValue = localizations[nameLocalizedKey];
-        if (!nameValue)
-        {
-            nameValue = originalDict[baseKey] ?: [localizations allValues].firstObject;
-        }
-
-        entryDict[@"name"] = nameValue;
-        entryDict[@"localization"] = localizations;
-        [finalDict setObject:[entryDict copy] forKey:baseKey];
-    }
-    
-    return finalDict;
-}
-
-- (void)addRemainingEntriesFrom:(NSDictionary *)resultDict to:(NSMutableDictionary *)finalDict {
-    for (NSString *key in resultDict)
-    {
-        if (![finalDict objectForKey:key])
-        {
-            [finalDict setObject:resultDict[key] forKey:key];
-        }
-    }
-}
-
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self processRoutePointAmenityTags:rows];
@@ -370,7 +215,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:self.infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
     _amenityUIHelper.showDefaultTags = self.showDefaultTags;
-    NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal]; //row
+    NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal];
     [rows addObjectsFromArray:buildedRows];
 }
 
@@ -520,37 +365,46 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return text;
 }
 
-- (NSString *)createWikipediaArticleList:(NSDictionary<NSString *, id> *)filteredInfo
-{
-    //TODO: implement
-    
-//    Object value = filteredInfo.get(WIKIPEDIA);
-//    if (value != null) {
-//        if (value instanceof String url) {
-//            if (url.contains(WIKIPEDIA_ORG_WIKI_URL_PART)) {
-//                return url.substring(url.lastIndexOf(WIKIPEDIA_ORG_WIKI_URL_PART) + WIKIPEDIA_ORG_WIKI_URL_PART.length());
-//            }
-//        } else {
-//            Map<String, Object> map = (Map<String, Object>) value;
-//            Map<String, String> localizations = (Map<String, String>) map.get("localizations");
-//            if (Algorithms.isEmpty(localizations)) {
-//                return null;
-//            }
-//            Collection<String> availableLocales = AmenityUIHelper.collectAvailableLocalesFromTags(localizations.keySet());
-//            StringJoiner joiner = new StringJoiner(", ");
-//            for (String key : availableLocales) {
-//                String localizedKey = WIKIPEDIA + ":" + key;
-//                String localizedValue = localizations.get(localizedKey);
-//                if (!Algorithms.isEmpty(localizedValue)) {
-//                    String name = app.getString(R.string.wikipedia_names_pattern, localizedValue, key);
-//                    joiner.add(name);
-//                }
-//            }
-//            return joiner.toString();
-//        }
-//    }
-//    return null;
-    
+- (nullable NSString *)createWikipediaArticleList:(NSDictionary<NSString *, id> *)filteredInfo {
+    id value = filteredInfo[WIKIPEDIA_TAG];
+    if (!value)
+        return nil;
+
+    if ([value isKindOfClass:NSString.class])
+    {
+        NSString *url = (NSString *)value;
+        NSRange range = [url rangeOfString:WIKIPEDIA_ORG_WIKI_URL_PART options:NSBackwardsSearch];
+        if (range.location != NSNotFound)
+            return [url substringFromIndex:range.location + range.length];
+    }
+    else if ([value isKindOfClass:NSDictionary.class])
+    {
+        NSDictionary *map = (NSDictionary *)value;
+        NSDictionary<NSString *, NSString *> *localizations = map[@"localizations"];
+
+        if (localizations.count == 0)
+            return nil;
+
+        NSSet<NSString *> *availableLocales =
+            [AmenityUIHelper collectAvailableLocalesFromTags:localizations.allKeys];
+
+        NSMutableArray<NSString *> *parts = [NSMutableArray array];
+
+        for (NSString *key in availableLocales)
+        {
+            NSString *localizedKey = [NSString stringWithFormat:@"%@:%@", WIKIPEDIA_TAG, key];
+            NSString *localizedValue = localizations[localizedKey];
+
+            if (localizedValue.length > 0)
+            {
+                NSString *name = [NSString stringWithFormat:@"%@ (%@)", localizedValue, key];
+                [parts addObject:name];
+            }
+        }
+
+        return parts.count > 0 ? [parts componentsJoinedByString:@", "] : nil;
+    }
+
     return nil;
 }
 
@@ -590,6 +444,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
     if (![rows containsObject:newRow])
         [rows addObject:newRow];
+}
+
+- (NSString *)getOsmUrl
+{
+    return @"";
 }
 
 - (NSArray<NSString *> *)getFormattedPrefixAndText:(NSString *)key

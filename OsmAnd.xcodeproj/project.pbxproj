@@ -2690,7 +2690,6 @@
 		DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA226C563A500F274C7 /* OAFirstMapillaryBottomSheetViewController.mm */; };
 		DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA426C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.mm */; };
 		DA5A84B526C563A900F274C7 /* OAAddDestinationBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA726C563A500F274C7 /* OAAddDestinationBottomSheetViewController.mm */; };
-		DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA826C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm */; };
 		DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA926C563A500F274C7 /* OATrackSegmentsViewController.mm */; };
 		DA5A84B826C563A900F274C7 /* OAFollowTrackBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FAA26C563A500F274C7 /* OAFollowTrackBottomSheetViewController.mm */; };
 		DA5A84B926C563A900F274C7 /* OABottomSheetTwoButtonsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FAE26C563A500F274C7 /* OABottomSheetTwoButtonsViewController.mm */; };
@@ -7236,9 +7235,7 @@
 		DA5A7FA226C563A500F274C7 /* OAFirstMapillaryBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFirstMapillaryBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FA326C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAInstallMapillaryBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FA426C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAInstallMapillaryBottomSheetViewController.mm; sourceTree = "<group>"; };
-		DA5A7FA626C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStatisticsSelectionBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FA726C563A500F274C7 /* OAAddDestinationBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddDestinationBottomSheetViewController.mm; sourceTree = "<group>"; };
-		DA5A7FA826C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStatisticsSelectionBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FA926C563A500F274C7 /* OATrackSegmentsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackSegmentsViewController.mm; sourceTree = "<group>"; };
 		DA5A7FAA26C563A500F274C7 /* OAFollowTrackBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFollowTrackBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FAB26C563A500F274C7 /* OAAddDestinationBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddDestinationBottomSheetViewController.h; sourceTree = "<group>"; };
@@ -13396,9 +13393,7 @@
 		DA5A7FA526C563A500F274C7 /* RouteInfoBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7FA626C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.h */,
 				DA5A7FA726C563A500F274C7 /* OAAddDestinationBottomSheetViewController.mm */,
-				DA5A7FA826C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm */,
 				C5E92A482F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift */,
 				DA5A7FA926C563A500F274C7 /* OATrackSegmentsViewController.mm */,
 				DA5A7FAA26C563A500F274C7 /* OAFollowTrackBottomSheetViewController.mm */,
@@ -17546,7 +17541,6 @@
 				469F0C222C627E2A00874CC6 /* PaletteCollectionViewCell.swift in Sources */,
 				C56FAB5B29B227130096192F /* OATargetDistanceWidget.mm in Sources */,
 				DA5A82ED26C563A800F274C7 /* OAPointTableViewCell.m in Sources */,
-				DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
 				DA5A814D26C563A700F274C7 /* OASearchCategoriesListController.mm in Sources */,
 				DA5A81F726C563A700F274C7 /* OAChoosePlanViewController.mm in Sources */,
 				FAA6505A2ADD42C50020DCEA /* DeviceFactory.swift in Sources */,

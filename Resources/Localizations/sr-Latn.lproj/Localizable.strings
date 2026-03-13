@@ -1941,7 +1941,7 @@
 "rendering_attr_publicTransportMode_name" = "Autobus, trolejbus, taksi";
 "rendering_attr_hideNonVehicleHighways_name" = "Auteputevi koji nisu za vozila";
 "rendering_value_translucent_pink_name" = "Prozirna roze";
-"rendering_attr_surface_ground_name" = "Zemlja";
+"rendering_attr_surface_ground_name" = "Tlo";
 "routing_attr_height_obstacles_description" = "Planirano vreme putovanja će se odraziti na uticaj uzbrdica. Podešavanja rute mogu pomoći da se izbegnu strme uzbrdice:";
 "rendering_attr_currentTrackColor_description" = "GPX boja";
 "routing_attr_driving_style_speed_name" = "Kraće rute";

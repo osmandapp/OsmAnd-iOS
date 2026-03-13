@@ -396,8 +396,8 @@ static inline double normalizeDouble(double v)
 + (BOOL) isIPhone;
 + (BOOL) isIPad;
 + (BOOL)isIOS26;
-+ (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
-        navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight;
++ (void)adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
+        navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight statusBarHeight:(CGFloat)statusBarHeight;
 + (BOOL) isPortrait;
 + (BOOL) isLandscape;
 + (BOOL) isLandscape:(UIInterfaceOrientation)interfaceOrientation;

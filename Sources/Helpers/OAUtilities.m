@@ -2146,11 +2146,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return !isiOSAppOnMac && [self isIPad] && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
 }
 
-+ (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
-        navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight
++ (void)adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
+        navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight statusBarHeight:(CGFloat)statusBarHeight
 {
     CGRect navBarFrame = topView.frame;
-    CGFloat navBarHeight = [OAUtilities getStatusBarHeight];
+    CGFloat navBarHeight = statusBarHeight;
     navBarHeight = navBarHeight == inCallStatusBarHeight ? navBarHeight / 2 : navBarHeight;
     navBarFrame.size.height = navigationBarHeight + navBarHeight;
     navBarFrame.size.width = size.width;

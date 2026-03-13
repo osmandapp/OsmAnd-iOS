@@ -115,7 +115,6 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 static const NSInteger kOrderPhotoEmptyRow = 30001;
 static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
-
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (nonatomic) BOOL wikiCardsReady;
@@ -1178,10 +1177,14 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 {
     if ([OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
     {
-        NSString *osmUrl = [ObfConstants getOsmUrlForId:self.getTargetObj];
-        if (!NSStringIsEmpty(osmUrl))
+        id targetObj = self.getTargetObj;
+        if ([targetObj isKindOfClass:OAMapObject.class])
         {
-            [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits"] textPrefix:nil text:osmUrl textColor:[UIColor colorNamed:ACColorNameTextColorActive] isText:YES needLinks:YES order:kOrderOsmRow typeName:nil isPhoneNumber:NO isUrl:YES]];
+            NSString *osmUrl = [ObfConstants getOsmUrlForId:targetObj];
+            if (!NSStringIsEmpty(osmUrl))
+            {
+                [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits"] textPrefix:nil text:osmUrl textColor:[UIColor colorNamed:ACColorNameTextColorActive] isText:YES needLinks:YES order:kOrderOsmRow typeName:nil isPhoneNumber:NO isUrl:YES]];
+            }
         }
     }
 }

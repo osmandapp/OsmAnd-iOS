@@ -6,12 +6,10 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 final class TripRecordingMaxSpeedWidget: BaseRecordingWidget {
     private var widgetState: TripRecordingMaxSpeedWidgetState?
-    private var cachedMaxSpeed: Double = -1
+    private var cachedMaxSpeed: Float = -1
     private var lastMaxSpeed: Int = 0
     private var forceUpdate = false
     
@@ -96,11 +94,11 @@ final class TripRecordingMaxSpeedWidget: BaseRecordingWidget {
         currentMode().titleKey
     }
     
-    private func getMaxSpeed() -> Double {
+    private func getMaxSpeed() -> Float {
         let mode = currentMode()
         if mode == .total {
             if let analysis = getAnalysis() {
-                let rawMaxSpeed = Double(analysis.maxSpeed)
+                let rawMaxSpeed = analysis.maxSpeed
                 lastMaxSpeed = Int(rawMaxSpeed.rounded())
                 return rawMaxSpeed
             } else {
@@ -112,7 +110,7 @@ final class TripRecordingMaxSpeedWidget: BaseRecordingWidget {
         }
     }
     
-    private func getLastSlopeMaxSpeed(mode: MaxSpeedMode) -> Double {
+    private func getLastSlopeMaxSpeed(mode: MaxSpeedMode) -> Float {
         guard let lastSlope = getLastSlope(isUphill: mode == .lastUphill) else { return 0 }
         return lastSlope.maxSpeed
     }

@@ -14,4 +14,8 @@ final class ButtonConfigurationHelper: NSObject {
     static func purchasePlanButtonConfiguration(title: String) -> UIButton.Configuration {
         UIButton.Configuration.purchasePlanButtonConfiguration(title: title)
     }
+    
+    static func proBannerButtonConfiguration(imageName: String) -> UIButton.Configuration {
+        UIButton.Configuration.proBannerButtonConfiguration(image: UIImage(named: imageName))
+    }
 }

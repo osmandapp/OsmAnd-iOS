@@ -598,11 +598,12 @@
             cell.descriptionLabel.text = item.descr;
             [cell descriptionVisibility:item.descr && item.descr.length > 0];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.button.configuration = nil;
+            [cell.button setImage:nil forState:UIControlStateNormal];
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([item.key isEqualToString:@"lastBackup"])
             {
                 cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.button.configuration = nil;
                 BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
                 [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : ACImageNameIcCustomArrowDown].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
                 [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -618,10 +619,7 @@
                 else
                 {
                     cell.accessoryType = UITableViewCellAccessoryNone;
-                    UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-                    conf.contentInsets = NSDirectionalEdgeInsetsMake(0., 0, 0, 0.);
-                    cell.button.configuration = conf;
-                    [cell.button setImage:[UIImage imageNamed:@"ic_payment_label_pro"] forState:UIControlStateNormal];
+                    cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:@"ic_payment_label_pro"];
                     [cell.button addTarget:self action:@selector(onSubscriptionExpired) forControlEvents:UIControlEventTouchUpInside];
                 }
             }

@@ -959,8 +959,8 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     if (self.subType)
         result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:SUBTYPE] : SUBTYPE] = self.subType;
     
-    if (self.type && [self.type name])
-        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:TYPE] : TYPE] = [self.type name];
+    if (self.type && [self.type.category name])
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:TYPE] : TYPE] = [self.type.category name];
     
     if (self.openingHours)
         result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG] : OPENING_HOURS_TAG] = self.openingHours;

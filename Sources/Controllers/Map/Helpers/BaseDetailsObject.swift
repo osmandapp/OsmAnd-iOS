@@ -568,7 +568,7 @@ final class BaseDetailsObject: NSObject {
         syntheticAmenity.x.removeAllObjects()
         syntheticAmenity.y.removeAllObjects()
     }
-
+    
     static func convertRenderedObjectToAmenity(_ renderedObject: OARenderedObject) -> OAPOI {
         let amenity = OAPOI()
 
@@ -580,18 +580,19 @@ final class BaseDetailsObject: NSObject {
         var otherPt: OAPOIType?
         var subtype: String?
 
-        let additionalInfo = NSMutableDictionary()
+        var additionalInfo: [String: String] = [:]
 
-        guard let tags = renderedObject.tags as? [String: String] else { return amenity }
+        guard let tags = renderedObject.tags else { return amenity }
 
-        for (tag, value) in tags {
+        for case let (tag as String, value as String) in tags {
+
             if tag == "name" {
                 amenity.name = value
                 continue
             }
 
             if tag.hasPrefix("name:") {
-                let langSuffix = String(tag.dropFirst("name:".count))
+                let langSuffix = String(tag.dropFirst(5))
                 amenity.setName(langSuffix, name: value)
                 continue
             }
@@ -621,10 +622,10 @@ final class BaseDetailsObject: NSObject {
                 otherPt = mapPoiTypes.getPoiType(byKey: tag)
             }
 
-            if otherPt == nil {
-                if let poiType = mapPoiTypes.getPoiType(byKey: value), poiType.getOsmTag() == tag {
-                    otherPt = poiType
-                }
+            if otherPt == nil,
+               let poiType = mapPoiTypes.getPoiType(byKey: value),
+               poiType.getOsmTag() == tag {
+                otherPt = poiType
             }
 
             if !value.isEmpty {
@@ -639,11 +640,11 @@ final class BaseDetailsObject: NSObject {
             }
         }
 
-        if let primaryType = pt {
-            amenity.type = primaryType
-        } else if let secondaryType = otherPt {
-            amenity.type = secondaryType
-            amenity.subType = secondaryType.name
+        if let pt {
+            amenity.type = pt
+        } else if let otherPt {
+            amenity.type = otherPt
+            amenity.subType = otherPt.name
         }
 
         if let subtype {
@@ -656,9 +657,8 @@ final class BaseDetailsObject: NSObject {
             amenity.obfId = objectId
         }
 
-        if let finalInfo = additionalInfo as? [String: String] {
-            amenity.setAdditionalInfo(finalInfo)
-        }
+        amenity.setAdditionalInfo(additionalInfo)
+
         amenity.x = renderedObject.x
         amenity.y = renderedObject.y
 

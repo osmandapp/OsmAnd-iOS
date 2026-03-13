@@ -161,12 +161,7 @@ final class AmenityUIHelper: NSObject {
                     
                     let cuisineOrDish = key == CUISINE_TAG || key == DISH_TAG
                     
-                    // TODO: here is a bug with poi type parsing
-                    // self.poiCategory should be == "tourism, but it is == "user_defined_other"
-                    // correct code:
-//                    let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: poiCategory)
-                    
-                    let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: pType.category)
+                    let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: poiCategory)
                     
                     let row = OAAmenityInfoRow(key: poiAdditionalCategoryName ?? "", icon: icon, textPrefix: pType.poiAdditionalCategoryLocalized, text: sb, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(pType.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
                     row.collapsed = collapsableView?.collapsed ?? true

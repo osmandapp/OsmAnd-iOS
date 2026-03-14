@@ -443,7 +443,7 @@
     BOOL isLongTitle = freeSpaceForNavbarButton < 50.;
 
     _leftNavbarButton = nil;
-    UIBarButtonItem *systemLeftItem = [self getSystemLeftBarButtonItem];
+    UIBarButtonItem *systemLeftItem = [self systemLeftBarButtonItem];
     if (systemLeftItem)
     {
         _leftNavbarButton = systemLeftItem;
@@ -454,15 +454,16 @@
         if (leftButtonTitle || leftNavbarButtonCustomIcon)
         {
             UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
+            UIColor *buttonsTintColor = [self getNavbarButtonsTintColor];
             leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
             leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
             leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
             leftButton.titleLabel.numberOfLines = 1;
             leftButton.titleLabel.adjustsFontForContentSizeCategory = YES;
             leftButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            [leftButton setTintColor:[self getNavbarButtonsTintColor]];
-            [leftButton setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
-            [leftButton setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
+            [leftButton setTintColor:buttonsTintColor];
+            [leftButton setTitleColor:buttonsTintColor forState:UIControlStateNormal];
+            [leftButton setTitleColor:[buttonsTintColor colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
             [leftButton setTitle:isLongTitle ? nil : leftButtonTitle forState:UIControlStateNormal];
             if (isLongTitle && !leftNavbarButtonCustomIcon)
             {
@@ -492,7 +493,7 @@
         }
     }
     
-    NSArray<UIBarButtonItem *> *systemRightItems = [self getSystemRightBarButtonItems];
+    NSArray<UIBarButtonItem *> *systemRightItems = [self systemRightBarButtonItems];
     if (systemRightItems && systemRightItems.count > 0)
     {
         [self.navigationItem setRightBarButtonItems:systemRightItems animated:YES];
@@ -590,12 +591,12 @@
     return rightNavbarButton;
 }
 
-- (UIBarButtonItem *)getSystemLeftBarButtonItem
+- (UIBarButtonItem *)systemLeftBarButtonItem
 {
     return nil;
 }
 
-- (NSArray<UIBarButtonItem *> *)getSystemRightBarButtonItems
+- (NSArray<UIBarButtonItem *> *)systemRightBarButtonItems
 {
     return nil;
 }
@@ -778,7 +779,7 @@
 {
 }
 
-- (UITableViewStyle)getTableStyle
+- (UITableViewStyle)tableStyle
 {
     return self.tableView.style;
 }
@@ -786,10 +787,10 @@
 - (void)applyTableStyleIfNeeded
 {
     UITableView *oldTable = self.tableView;
-    if (!oldTable || oldTable.style == [self getTableStyle])
+    if (!oldTable || oldTable.style == [self tableStyle])
         return;
     
-    UITableView *newTable = [[UITableView alloc] initWithFrame:CGRectZero style:[self getTableStyle]];
+    UITableView *newTable = [[UITableView alloc] initWithFrame:CGRectZero style:[self tableStyle]];
     newTable.translatesAutoresizingMaskIntoConstraints = NO;
     newTable.backgroundColor = oldTable.backgroundColor;
     newTable.separatorStyle = oldTable.separatorStyle;

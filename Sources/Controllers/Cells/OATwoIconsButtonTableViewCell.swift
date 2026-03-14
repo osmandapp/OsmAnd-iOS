@@ -12,6 +12,8 @@ import Foundation
 final class OATwoIconsButtonTableViewCell: OAButtonTableViewCell {
     
     @IBOutlet weak var secondLeftIconView: UIImageView!
+    @IBOutlet private weak var secondLeftIconWidthConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var secondLeftIconHeightConstraint: NSLayoutConstraint!
     
     func secondLeftIconVisibility(show: Bool) {
         secondLeftIconView.isHidden = !show
@@ -22,11 +24,9 @@ final class OATwoIconsButtonTableViewCell: OAButtonTableViewCell {
         !secondLeftIconView.isHidden
     }
     
-    func setSecondLeftIconSize(_ size: CGFloat) {
-        for constraint in secondLeftIconView.constraints {
-            if constraint.firstAttribute == .width || constraint.firstAttribute == .height {
-                constraint.constant = size
-            }
-        }
+    func setSecondLeftIconSize(to size: CGFloat) {
+        guard secondLeftIconWidthConstraint.constant != size || secondLeftIconHeightConstraint.constant != size else { return }
+        secondLeftIconWidthConstraint.constant = size
+        secondLeftIconHeightConstraint.constant = size
     }
 }

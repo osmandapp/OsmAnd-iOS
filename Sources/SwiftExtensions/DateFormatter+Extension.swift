@@ -22,4 +22,11 @@ extension DateFormatter {
         formatter.timeStyle = .short
         return formatter
     }()
+    
+    static let gpxTimeOfDayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeZone = .current
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
 }

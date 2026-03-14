@@ -70,48 +70,48 @@
     switch (type)
     {
         case GPXDataSetTypeAltitude:
-            return @"ic_custom_altitude";
+            return ACImageNameIcCustomAltitude;
         case GPXDataSetTypeSpeed:
-            return @"ic_custom_speed";
+            return ACImageNameIcCustomSpeed;
         case GPXDataSetTypeSlope:
-            return @"ic_custom_slope";
+            return ACImageNameIcCustomSlope;
         case GPXDataSetTypeSensorSpeed:
-            return @"ic_custom_sensor_speed_outlined";
+            return ACImageNameIcCustomSensorSpeedOutlined;
         case GPXDataSetTypeSensorHeartRate:
-            return @"ic_custom_sensor_heart_rate_outlined";
+            return ACImageNameIcCustomSensorHeartRateOutlined;
         case GPXDataSetTypeSensorBikePower:
-            return @"ic_custom_sensor_bicycle_power_outlined";
+            return ACImageNameIcCustomSensorBicyclePowerOutlined;
         case GPXDataSetTypeSensorBikeCadence:
-            return @"ic_custom_sensor_cadence_outlined";
+            return ACImageNameIcCustomSensorCadenceOutlined;
         case GPXDataSetTypeSensorTemperatureA:
         case GPXDataSetTypeSensorTemperatureW:
-            return @"ic_custom_sensor_thermometer";
+            return ACImageNameIcCustomSensorThermometer;
         case GPXDataSetTypeIntakeTemperature:
-            return @"ic_custom_obd_temperature_intake";
+            return ACImageNameIcCustomObdTemperatureIntake;
         case GPXDataSetTypeAmbientTemperature:
-            return @"ic_custom_obd_temperature_outside";
+            return ACImageNameIcCustomObdTemperatureOutside;
         case GPXDataSetTypeCoolantTemperature:
-            return @"ic_custom_obd_temperature_coolant";
+            return ACImageNameIcCustomObdTemperatureCoolant;
         case GPXDataSetTypeEngineOilTemperature:
-            return @"ic_custom_obd_temperature_engine_oil";
+            return ACImageNameIcCustomObdTemperatureEngineOil;
         case GPXDataSetTypeEngineSpeed:
-            return @"ic_custom_obd_engine_speed";
+            return ACImageNameIcCustomObdEngineSpeed;
         case GPXDataSetTypeEngineRuntime:
-            return @"ic_custom_car_running_time";
+            return ACImageNameIcCustomCarRunningTime;
         case GPXDataSetTypeEngineLoad:
-            return @"ic_custom_car_info";
+            return ACImageNameIcCustomCarInfo;
         case GPXDataSetTypeFuelPressure:
-            return @"ic_custom_obd_fuel_pressure";
+            return ACImageNameIcCustomObdFuelPressure;
         case GPXDataSetTypeFuelConsumption:
-            return @"ic_custom_obd_fuel_consumption";
+            return ACImageNameIcCustomObdFuelConsumption;
         case GPXDataSetTypeRemainingFuel:
-            return @"ic_custom_obd_fuel_remaining";
+            return ACImageNameIcCustomObdFuelRemaining;
         case GPXDataSetTypeBatteryLevel:
-            return @"ic_custom_obd_battery_voltage";
+            return ACImageNameIcCustomObdBatteryVoltage;
         case GPXDataSetTypeVehicleSpeed:
-            return @"ic_custom_obd_speed";
+            return ACImageNameIcCustomObdSpeed;
         case GPXDataSetTypeThrottlePosition:
-            return @"ic_custom_obd_throttle_position";
+            return ACImageNameIcCustomObdThrottlePosition;
         default:
             return @"";
     }

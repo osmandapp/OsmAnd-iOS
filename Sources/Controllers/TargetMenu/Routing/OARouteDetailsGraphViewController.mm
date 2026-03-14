@@ -36,7 +36,7 @@
 
 #define kGraphOffset 200.0
 
-@interface OARouteDetailsGraphViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate>
+@interface OARouteDetailsGraphViewController () <OAStateChangedListener, ChartViewDelegate, StatisticsSelectionDelegate>
 
 @end
 

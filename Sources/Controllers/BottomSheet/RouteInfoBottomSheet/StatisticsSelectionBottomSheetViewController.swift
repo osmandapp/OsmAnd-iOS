@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc protocol OAStatisticsSelectionDelegate: AnyObject {
+@objc protocol StatisticsSelectionDelegate: AnyObject {
     func onGraphModeChanged(_ selectedXAxisMode: GPXDataSetAxisType, types: [NSNumber])
 }
 
@@ -39,7 +39,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     private var segmentedControl: UISegmentedControl?
     private var isYAxisMode = true
     
-    weak var delegate: OAStatisticsSelectionDelegate?
+    weak var delegate: StatisticsSelectionDelegate?
     
     init(types: [NSNumber], selectedXAxisMode: GPXDataSetAxisType, analysis: GpxTrackAnalysis) {
         self.types = types
@@ -63,11 +63,11 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         localizedString("graph_axis")
     }
     
-    override func getSystemLeftBarButtonItem() -> UIBarButtonItem? {
+    override func systemLeftBarButtonItem() -> UIBarButtonItem? {
         UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(onClosePressed))
     }
     
-    override func getSystemRightBarButtonItems() -> [UIBarButtonItem]? {
+    override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
         [UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onDonePressed))]
     }
     
@@ -93,7 +93,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         isYAxisMode ? localizedString("y_axis_description") : nil
     }
     
-    override func getTableStyle() -> UITableView.Style {
+    override func tableStyle() -> UITableView.Style {
         .insetGrouped
     }
     
@@ -104,16 +104,6 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     
     override func generateData() {
         tableData.clearAllData()
-        func hasData(_ type: GPXDataSetType) -> Bool {
-            guard let tag = OAGPXDataSetType.getDataKey(type.rawValue), !tag.isEmpty else { return false }
-            let hasTag = analysis.hasData(tag: tag)
-            if type == .speed || type == .sensorSpeed {
-                return hasTag && analysis.hasSpeedData()
-            }
-            
-            return hasTag
-        }
-        
         if isYAxisMode {
             let baseSets: [[NSNumber]] = [[NSNumber(value: GPXDataSetType.altitude.rawValue)], [NSNumber(value: GPXDataSetType.slope.rawValue)], [NSNumber(value: GPXDataSetType.speed.rawValue)]]
             let available = NSMutableArray(array: baseSets)
@@ -158,7 +148,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                 }
                 
                 let section = tableData.createNewSection()
-                section.headerText = group.getName() ?? ""
+                section.headerText = group.localizedName() ?? ""
                 for type in visible {
                     let row = section.createNewRow()
                     row.cellType = OASimpleTableViewCell.reuseIdentifier
@@ -185,8 +175,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
-        if item.cellType == OASimpleTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+        if item.cellType == OASimpleTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
             cell.descriptionVisibility(false)
             cell.selectedBackgroundView = UIView()
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
@@ -203,8 +192,9 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                 cell.updateSeparatorInset()
             }
             return cell
-        } else if item.cellType == OATwoIconsButtonTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier, for: indexPath) as! OATwoIconsButtonTableViewCell
+        }
+        
+        if item.cellType == OATwoIconsButtonTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier, for: indexPath) as? OATwoIconsButtonTableViewCell {
             cell.descriptionVisibility(false)
             cell.buttonVisibility(false)
             cell.titleLabel.text = item.title
@@ -213,7 +203,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             cell.leftIconView.tintColor = .iconColorActive
             cell.secondLeftIconView.image = UIImage.templateImageNamed(item.iconName)
             cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
-            cell.setSecondLeftIconSize(30)
+            cell.setSecondLeftIconSize(to: 30)
             return cell
         }
         
@@ -260,12 +250,22 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         }
     }
     
+    private func hasData(_ type: GPXDataSetType) -> Bool {
+        guard let tag = OAGPXDataSetType.getDataKey(type.rawValue), !tag.isEmpty else { return false }
+        let hasTag = analysis.hasData(tag: tag)
+        if type == .speed || type == .sensorSpeed {
+            return hasTag && analysis.hasSpeedData()
+        }
+        
+        return hasTag
+    }
+    
     private func applyTableMode() {
+        tableView.allowsMultipleSelectionDuringEditing = isYAxisMode
         if tableView.isEditing != isYAxisMode {
             tableView.setEditing(isYAxisMode, animated: false)
         }
         
-        tableView.allowsMultipleSelectionDuringEditing = isYAxisMode
         if !isYAxisMode {
             tableView.indexPathsForSelectedRows?.forEach {
                 tableView.deselectRow(at: $0, animated: false)
@@ -300,9 +300,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     }
     
     private func clearAllSelections() {
-        (tableView.indexPathsForSelectedRows ?? []).forEach {
-            tableView.deselectRow(at: $0, animated: false)
-        }
+        guard let selectedRows = tableView.indexPathsForSelectedRows else { return }
+        selectedRows.forEach { tableView.deselectRow(at: $0, animated: false) }
     }
     
     private func syncCheckmarksFromData() {

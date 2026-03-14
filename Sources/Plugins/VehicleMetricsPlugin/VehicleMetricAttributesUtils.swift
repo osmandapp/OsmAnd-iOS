@@ -35,7 +35,7 @@ final class VehicleMetricAttributesUtils: NSObject {
         yAxis.axisMinimum = 0
         let values = getPointAttributeValues(plugin: plugin, key: graphType.getDatakey(), widgetType: widgetType, pointAttributes: analysis.pointAttributes as! [PointAttributes], axisType: axisType, divX: Float(divX), mulY: Float(mulY), divY: Float(divY), calcWithoutGaps: calcWithoutGaps)
         let dataSet = GpxUIHelper.OrderedLineDataSet(entries: values, label: "", dataSetType: graphType, dataSetAxisType: axisType, leftAxis: !useRightAxis)
-        var format: String? = nil
+        var format: String?
         if dataSet.yMax < 3 {
             format = "%.1f"
         }
@@ -53,8 +53,7 @@ final class VehicleMetricAttributesUtils: NSObject {
     private static func getPointAttributeValues(plugin: VehicleMetricsPlugin, key: String, widgetType: OBDDataComputer.OBDTypeWidget?, pointAttributes: [PointAttributes], axisType: GPXDataSetAxisType, divX: Float, mulY: Float, divY: Float, calcWithoutGaps: Bool) -> [ChartDataEntry] {
         var values: [ChartDataEntry] = []
         var currentX: Float = 0
-        for i in pointAttributes.indices {
-            let attribute = pointAttributes[i]
+        for (i, attribute) in pointAttributes.enumerated() {
             let stepX: Float = axisType == .time || axisType == .timeOfDay ? attribute.timeDiff : attribute.distance
             if i == 0 || stepX > 0 {
                 if !(calcWithoutGaps && attribute.firstPoint) {
@@ -62,7 +61,8 @@ final class VehicleMetricAttributesUtils: NSObject {
                 }
                 
                 if attribute.hasValidValue(tag: key) {
-                    var value: Float = attribute.getAttributeValue(tag: key)!.floatValue
+                    guard let attributeValue = attribute.getAttributeValue(tag: key) else { continue }
+                    var value: Float = attributeValue.floatValue
                     let formattedValue = widgetType.flatMap {
                         plugin.getWidgetConvertedValue(type: $0, data: value)
                     }

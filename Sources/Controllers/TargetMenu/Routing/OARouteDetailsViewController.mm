@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 @end
 
 
-@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
+@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, StatisticsSelectionDelegate, OAEmissionHelperListener>
 
 @end
 

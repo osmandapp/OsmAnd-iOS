@@ -26,7 +26,7 @@ import OsmAndShared
         }
     }
     
-    func getName() -> String? {
+    func localizedName() -> String? {
         guard let titleId else { return nil }
         return localizedString(titleId)
     }
@@ -140,11 +140,7 @@ class GpxUIHelper: NSObject {
         }
         
         static func formatTimeOfDay(secondsSince1970: Double) -> String {
-            let date = Date(timeIntervalSince1970: secondsSince1970)
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm:ss"
-            dateFormatter.timeZone = .current
-            return dateFormatter.string(from: date)
+            DateFormatter.gpxTimeOfDayFormatter.string(from: Date(timeIntervalSince1970: secondsSince1970))
         }
     }
 

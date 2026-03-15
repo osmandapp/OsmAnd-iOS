@@ -2549,7 +2549,7 @@
             NSString *requestedText = _httpRedirectRequester(text);
             if (requestedText)
             {
-                pnt = [OASKGeoPointParserUtil.shared parseUriString:text];
+                pnt = [OASKGeoPointParserUtil.shared parseUriString:requestedText];
             }
         }
         if (pnt)

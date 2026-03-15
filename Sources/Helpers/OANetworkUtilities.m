@@ -330,10 +330,66 @@ authorizationHeader:(NSString *)authorizationHeader
     return success;
 }
 
-+ (NSString *) okHttpRedirectRequester:(NSString *)url
++ (NSString *)okHttpRedirectRequester:(NSString *)url
 {
-    //TODO: implement
-    return nil;
+    NSURL *baseURL = [NSURL URLWithString:url];
+    if (!baseURL)
+        return nil;
+
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:baseURL];
+    request.HTTPMethod = @"HEAD";
+    request.timeoutInterval = kTimeout;
+    [request setValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
+
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    config.timeoutIntervalForRequest = kTimeout;
+    config.timeoutIntervalForResource = kTimeout;
+
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSHTTPURLResponse *httpResponse = nil;
+    __block NSError *requestError = nil;
+
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config
+                                                          delegate:[OANoRedirectDelegate new]
+                                                     delegateQueue:nil];
+
+    [[session dataTaskWithRequest:request
+                completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        httpResponse = [response isKindOfClass:NSHTTPURLResponse.class] ? (NSHTTPURLResponse *) response : nil;
+        requestError = error;
+        dispatch_semaphore_signal(semaphore);
+    }] resume];
+
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    [session finishTasksAndInvalidate];
+
+    if (requestError) {
+        NSLog(@"ERROR: okHttpRedirectRequester() - Got error from %@ %@", url, requestError.localizedDescription);
+        return nil;
+    }
+
+    if (httpResponse.statusCode < 300 || httpResponse.statusCode >= 400) {
+        NSLog(@"ERROR: okHttpRedirectRequester() - Got no Redirect from %@", url);
+        return nil;
+    }
+
+    NSString *location = httpResponse.allHeaderFields[@"Location"];
+    if (NSStringIsEmpty(location)) {
+        NSLog(@"ERROR: okHttpRedirectRequester() - Got no Location from %@", url);
+        return nil;
+    }
+
+    return [[NSURL URLWithString:location relativeToURL:httpResponse.URL ?: baseURL] absoluteURL].absoluteString;
+}
+
+@end
+
+
+@implementation OANoRedirectDelegate
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task willPerformHTTPRedirection:(NSHTTPURLResponse *)response newRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLRequest * _Nullable))completionHandler
+{
+    completionHandler(nil);
 }
 
 @end

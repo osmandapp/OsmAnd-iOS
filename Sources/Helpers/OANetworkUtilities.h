@@ -64,4 +64,9 @@ authorizationHeader:(NSString *)authorizationHeader
 
 @end
 
+
+@interface OANoRedirectDelegate : NSObject <NSURLSessionTaskDelegate>
+
+@end
+
 NS_ASSUME_NONNULL_END

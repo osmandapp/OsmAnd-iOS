@@ -330,4 +330,10 @@ authorizationHeader:(NSString *)authorizationHeader
     return success;
 }
 
++ (NSString *) okHttpRedirectRequester:(NSString *)url
+{
+    //TODO: implement
+    return nil;
+}
+
 @end

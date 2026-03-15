@@ -2297,18 +2297,17 @@
     NSUInteger _olcPhraseHash;
     CLLocation *_olcPhraseLocation;
     OAParsedOpenLocationCode *_cachedParsedCode;
+    OAHttpRedirectRequester _httpRedirectRequester;
 }
 
-- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI requester:(OAHttpRedirectRequester)requester
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeLocation],
                                         [OAObjectType withType:EOAObjectTypePartialLocation]]];
     if (self)
     {
-        // TODO: implement
-        //this.httpRedirectRequester = requester;
-        
         _amenitiesAPI = amenitiesAPI;
+        _httpRedirectRequester = requester;
     }
     return self;
 }
@@ -2545,16 +2544,13 @@
     for (NSString *text in [lines componentsSeparatedByString:@"\n"])
     {
         pnt = [OASKGeoPointParserUtil.shared parseUriString:text];
-        
-        //if (pnt == null && httpRedirectRequester != null && GeoPointParserUtil.isGooGlUrl(text)) {
-        if (!pnt && NO && [OASKGeoPointParserUtil.shared isGooGlUrlUrl:text])
+        if (!pnt && _httpRedirectRequester && [OASKGeoPointParserUtil.shared isGooGlUrlUrl:text])
         {
-            // TODO: implement
-            
-            //text = httpRedirectRequester.apply(text);
-            //if (text != null) {
-            //    pnt = GeoPointParserUtil.parse(text);
-            //}
+            NSString *requestedText = _httpRedirectRequester(text);
+            if (requestedText)
+            {
+                pnt = [OASKGeoPointParserUtil.shared parseUriString:text];
+            }
         }
         if (pnt)
         {

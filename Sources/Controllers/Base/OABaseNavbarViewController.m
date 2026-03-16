@@ -16,10 +16,9 @@
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kRightIconLargeTitleSmall 34.
-#define kRightIconLargeTitleLarge 40.
-#define kDefaultBarButtonSize 44.
-
+static const CGFloat kRightIconLargeTitleSmall = 34.;
+static const CGFloat kRightIconLargeTitleLarge = 40.;
+static const CGFloat kDefaultBarButtonSize = 44.;
 static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
 
 @implementation OABaseNavbarViewController

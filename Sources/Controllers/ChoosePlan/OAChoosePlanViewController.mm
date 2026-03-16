@@ -66,8 +66,6 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     NSArray<OAFeatureCardRow *> *_includedRows;
     NSArray<OAFeatureCardRow *> *_notIncludedRows;
     NSString *_cachedTitle;
-    
-    CGFloat _extraNavigationBarHeight;
 }
 
 - (instancetype) initWithFeature:(OAFeature *)feature;
@@ -315,11 +313,11 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     }
     
     CGFloat navigationBarHeight;
-    _extraNavigationBarHeight = 0.;
+    CGFloat extraNavigationBarHeight = 0.;
     if (_type == EOAChooseSubscription)
-        _extraNavigationBarHeight = [OAUtilities getTopMargin];
+        extraNavigationBarHeight = [OAUtilities getTopMargin];
 
-    navigationBarHeight = kNavigationBarHeight + _extraNavigationBarHeight;
+    navigationBarHeight = kNavigationBarHeight + extraNavigationBarHeight;
 
     self.viewNavigationBar.frame = CGRectMake(0., 0., self.view.frame.size.width, navigationBarHeight);
     [self.view bringSubviewToFront:self.viewNavigationBar];
@@ -639,7 +637,10 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGFloat y = scrollView.contentOffset.y + _extraNavigationBarHeight;
+    CGFloat y = scrollView.contentOffset.y;
+    if (_type == EOAChooseSubscription)
+        y += [OAUtilities getTopMargin];
+    
     CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
     backgroundFrame.origin.y = y < 0. ? y : -y;
     backgroundFrame.size.height = y < 0. ? ABS(y) : 0.;

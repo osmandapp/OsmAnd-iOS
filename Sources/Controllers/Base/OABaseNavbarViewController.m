@@ -244,7 +244,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     if (!isLargeTitle || ![OAUtilities isIOS26])
     {
         [appearance configureWithOpaqueBackground];
-        appearance.backgroundColor = [self getNavbarBackgroundColor];
+        appearance.backgroundColor = [self navbarBackgroundColor];
     }
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
@@ -634,7 +634,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     return [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle || [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
 }
 
-- (UIColor *)getNavbarBackgroundColor
+- (UIColor *)navbarBackgroundColor
 {
     if ([self isAnyLargeTitle])
         return self.tableView.backgroundColor;

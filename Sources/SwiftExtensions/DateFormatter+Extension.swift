@@ -23,6 +23,7 @@ extension DateFormatter {
         return formatter
     }()
     
+    // Example: Unix timestamp 1710001508 -> "13:45:08"
     static let gpxTimeOfDayFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.timeZone = .current

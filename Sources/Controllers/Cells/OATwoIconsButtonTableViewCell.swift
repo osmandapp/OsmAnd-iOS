@@ -24,7 +24,7 @@ final class OATwoIconsButtonTableViewCell: OAButtonTableViewCell {
         !secondLeftIconView.isHidden
     }
     
-    func setSecondLeftIconSize(to size: CGFloat) {
+    func updateSecondLeftIconSize(_ size: CGFloat) {
         guard secondLeftIconWidthConstraint.constant != size || secondLeftIconHeightConstraint.constant != size else { return }
         secondLeftIconWidthConstraint.constant = size
         secondLeftIconHeightConstraint.constant = size

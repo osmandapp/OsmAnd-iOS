@@ -276,7 +276,7 @@
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
 
-    self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
+    self.navigationController.navigationBar.tintColor = [self navbarButtonsTintColor];
     self.navigationItem.largeTitleDisplayMode = isLargeTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
 }
 
@@ -454,7 +454,7 @@
         if (leftButtonTitle || leftNavbarButtonCustomIcon)
         {
             UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
-            UIColor *buttonsTintColor = [self getNavbarButtonsTintColor];
+            UIColor *buttonsTintColor = [self navbarButtonsTintColor];
             leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
             leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
             leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
@@ -557,7 +557,7 @@
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
-    return [self.class createRightNavbarButton:title icon:icon color:[self getNavbarButtonsTintColor] action:action target:self menu:menu];
+    return [self.class createRightNavbarButton:title icon:icon color:[self navbarButtonsTintColor] action:action target:self menu:menu];
 }
 
 + (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
@@ -607,8 +607,8 @@
     {
         UIButton *button = barButtonItem.customView;
         button.enabled = isEnabled;
-        button.tintColor = isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor;
-        [button setTitleColor:isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor forState:UIControlStateNormal];
+        button.tintColor = isEnabled ? [self navbarButtonsTintColor] : UIColor.lightGrayColor;
+        [button setTitleColor:isEnabled ? [self navbarButtonsTintColor] : UIColor.lightGrayColor forState:UIControlStateNormal];
     }
 }
 
@@ -634,7 +634,7 @@
     }
 }
 
-- (UIColor *)getNavbarButtonsTintColor
+- (UIColor *)navbarButtonsTintColor
 {
     return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? [UIColor colorNamed:ACColorNameNavBarTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive];
 }

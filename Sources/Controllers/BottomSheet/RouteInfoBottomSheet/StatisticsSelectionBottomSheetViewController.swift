@@ -203,7 +203,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             cell.leftIconView.tintColor = .iconColorActive
             cell.secondLeftIconView.image = UIImage.templateImageNamed(item.iconName)
             cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
-            cell.setSecondLeftIconSize(to: 30)
+            cell.updateSecondLeftIconSize(30)
             return cell
         }
         

@@ -352,9 +352,9 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     }
 }
 
-- (void)reloadDataWithDelayIfNeeded:(NSTimeInterval)delay animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
+- (void)reloadDataWithDelay:(NSTimeInterval)delay animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
-    if ([OAUtilities isIOS26])
+    if (delay > 0.)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self reloadDataWithAnimated:animated completion:completion];
@@ -366,9 +366,9 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     }
 }
 
-- (void)reloadRowsWithDelayIfNeeded:(NSTimeInterval)delay atIndexPaths:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
+- (void)reloadRowsWithDelay:(NSTimeInterval)delay atIndexPaths:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
 {
-    if ([OAUtilities isIOS26])
+    if (delay > 0.)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self reloadRowsAtIndexPath:indexPath withRowAnimation:rowAnimation];

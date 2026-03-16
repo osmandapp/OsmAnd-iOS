@@ -610,7 +610,7 @@
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void)
                     {
-                        [self reloadDataWithDelayIfNeeded:0.25 animated:NO completion:nil];
+                        [self reloadDataWithDelay:0.25 animated:NO completion:nil];
                         [self updateNavbar];
                     }
     completion:nil];

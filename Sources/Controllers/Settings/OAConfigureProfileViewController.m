@@ -572,7 +572,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onModeSwitchPressed:(UISwitch *)sender
 {
     [OAApplicationMode changeProfileAvailability:_appMode isSelected:sender.isOn];
-    [self reloadRowsWithDelayIfNeeded:0.25 atIndexPaths:[NSIndexPath indexPathForRow:0 inSection:0] withRowAnimation:UITableViewRowAnimationNone];
+    [self reloadRowsWithDelay:0.25 atIndexPaths:[NSIndexPath indexPathForRow:0 inSection:0] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) setCurrentModeActive:(EOADashboardScreenType)type

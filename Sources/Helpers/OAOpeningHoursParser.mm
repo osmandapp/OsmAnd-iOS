@@ -1,18 +1,18 @@
 //
-//  OAOpenedHoursParser.mm
+//  OAOpeningHoursParser.mm
 //  OsmAnd
 //
 //  Created by Max Kojin on 04/02/26.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-#import "OAOpenedHoursParser.h"
+#import "OAOpeningHoursParser.h"
 #import "OANativeUtilities.h"
 #import "OAColors.h"
 
 #include <openingHoursParser.h>
 
-@implementation OAOpenedHoursParser
+@implementation OAOpeningHoursParser
 {
     std::shared_ptr<OpeningHoursParser::OpeningHours> _parser;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;

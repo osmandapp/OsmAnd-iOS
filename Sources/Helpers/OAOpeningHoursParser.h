@@ -1,12 +1,12 @@
 //
-//  OAOpenedHoursParser.h
+//  OAOpeningHoursParser.h
 //  OsmAnd
 //
 //  Created by Max Kojin on 04/02/26.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-@interface OAOpenedHoursParser : NSObject
+@interface OAOpeningHoursParser : NSObject
 
 - (instancetype)initWithString:(NSString *)openingHours;
 

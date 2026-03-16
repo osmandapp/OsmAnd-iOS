@@ -100,7 +100,7 @@
 #import "OADeepLinkBridge.h"
 #import "OAUserInteractionPassThroughView.h"
 #import "OAClickableWayHelper.h"
-#import "OAOpenedHoursParser.h"
+#import "OAOpeningHoursParser.h"
 #import "OAMapSource.h"
 #import "OAPoiUIFilterDataProviderWrapper.h"
 

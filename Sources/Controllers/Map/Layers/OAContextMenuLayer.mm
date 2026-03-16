@@ -467,7 +467,7 @@
                 if ([provider isKindOfClass:OAMapLayer.class])
                 {
                     OAMapLayer *layer = provider;
-                    if ([layer pointOrder:selectedObject.object] <= objectSelectionThreshold)
+                    if ([layer pointsOrder:selectedObject.object] <= objectSelectionThreshold)
                         [objectsAvailableForSelection addObject:selectedObject];
                     else
                         continue;

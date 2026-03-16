@@ -18,7 +18,7 @@ final class OpeningHoursRowBehavior: DefaultPoiAdditionalRowBehaviour {
         let collapsableView = OACollapsableLabelView(text: formattedValue, collapsed: true)
         params.builder.collapsableView = collapsableView
         
-        if let openingHours = OAOpenedHoursParser(string: value) {
+        if let openingHours = OAOpeningHoursParser(string: value) {
             value = openingHours.toLocalString()
             params.builder.textColor = openingHours.getColor()
         }

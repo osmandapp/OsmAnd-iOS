@@ -637,7 +637,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     return [self pointsOrder] - 100;
 }
 
-- (int)pointOrder:(id)object
+- (int)pointsOrder:(id)object
 {
     return [self isTopPlace:object]
     ? [self getTopPlaceBaseOrder]

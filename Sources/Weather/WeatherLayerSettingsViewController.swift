@@ -132,7 +132,7 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         if data.key == Self.weatherLayerKey {
             if let band = data.obj(forKey: "band") as? OAWeatherBand {
                 band.setSelect(sw.isOn)
-                reloadData(withDelay: 0.25, animated: true, completion: nil)
+                reloadData(withDelay: OAUtilities.isIOS26() ? 0.25 : 0.0, animated: true, completion: nil)
                 onChangeSwitchLayerAction?()
             }
         }

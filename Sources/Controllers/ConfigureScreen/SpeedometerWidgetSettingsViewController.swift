@@ -199,7 +199,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         if data.key == Self.turnOnRowKey {
             settings.showSpeedometer.set(sw.isOn)
             updateSpeedometer()
-            reloadData(withDelay: 0.25, animated: true, completion: nil)
+            reloadData(withDelay: OAUtilities.isIOS26() ? 0.25 : 0.0, animated: true, completion: nil)
             delegate?.onWidgetStateChanged()
         }
         return false

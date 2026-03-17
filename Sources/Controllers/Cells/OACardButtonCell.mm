@@ -23,7 +23,6 @@
     [super layoutSubviews];
     [self.contentView layoutIfNeeded];
 
-    self.buttonView.titleLabel.numberOfLines = 1;
     CGFloat horizontalInset = 12.;
     CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
         width:self.buttonView.frame.size.width - horizontalInset * 2 - self.buttonView.imageView.frame.size.width].width;
@@ -38,6 +37,7 @@
     configuration.contentInsets = NSDirectionalEdgeInsetsMake(0., horizontalInset, 0., horizontalInset);
     configuration.imagePadding = imagePadding;
     self.buttonView.configuration = configuration;
+    self.buttonView.titleLabel.numberOfLines = 1;
 }
 
 - (void) updateConstraints

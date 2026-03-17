@@ -128,6 +128,7 @@ final class GpxAppearanceInfo: NSObject {
         let gpxAppearanceInfo = GpxAppearanceInfo()
 
         gpxAppearanceInfo.color = Int(UIColor.toNumber(from: ""))
+
         if let color = json[TAG_COLOR] {
             if let number = color as? NSNumber {
                 gpxAppearanceInfo.color = number.intValue

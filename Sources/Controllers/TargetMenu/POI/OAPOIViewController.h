@@ -8,13 +8,18 @@
 
 #import "OATransportStopsBaseController.h"
 
+static NSString * OTHER_MAP_CATEGORY = @"Other";
+
 @class OAPOI, OARenderedObject, OAMapObject;
 
 @interface OAPOIViewController : OATransportStopsBaseController
 
 - (id) initWithPOI:(OAPOI *)poi;
 
+- (void)setObject:(id)object;
 - (void) setup:(OAPOI *)poi;
 - (NSString *) getOsmUrl;
+
+- (BOOL)buildShortWikiDescription:(NSDictionary<NSString *, id> *)filteredInfo allowOnlineWiki:(BOOL)allowOnlineWiki rows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 
 @end

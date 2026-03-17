@@ -65,7 +65,7 @@
 - (OAEntity *)loadEntity:(OATargetPoint *)targetPoint
 {
     OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
-    long long objectId = targetPoint.obfId;
+    uint64_t objectId = targetPoint.obfId;
     BOOL isTransportStop = targetPoint.type == OATargetTransportStop;
     if (isTransportStop)
         objectId = ((OATransportStop *)targetPoint.targetObj).poi.obfId;
@@ -78,7 +78,7 @@
     OAPOIType *poiType = poi.type;
     BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
     
-    long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+    uint64_t entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
     BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
     
     OAEntity *entity;

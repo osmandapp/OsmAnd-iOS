@@ -17,3 +17,14 @@ struct Pair<T : Comparable, U : Comparable> : Hashable where T : Hashable, U : H
         self.second = second
     }
 }
+
+@objcMembers
+final class NullablePair: NSObject {
+    let first: Any?
+    let second: Any?
+
+    init(_ first: Any?, _ second: Any?) {
+        self.first = first
+        self.second = second
+    }
+}

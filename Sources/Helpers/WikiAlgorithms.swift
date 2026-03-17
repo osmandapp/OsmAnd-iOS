@@ -14,6 +14,7 @@ class WikiAlgorithms: NSObject {
     static let wikipedia = "wikipedia"
     static let wikipediaDomain = ".wikipedia.org/"
     static let wikiLink = wikipediaDomain + "wiki/"
+    static let wikidataBaseUrl = "https://www.wikidata.org/wiki/"
 
     static func getWikiUrl(text: String) -> String {
         return getWikiParams(key: "", value: text).1

@@ -6,7 +6,8 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-final class CardsFilter {
+@objcMembers
+final class CardsFilter: NSObject {
     private var cards: [AbstractCard]
     
     lazy var onlinePhotosSection: [AbstractCard] = {

@@ -51,5 +51,6 @@ static const float TOUCH_RADIUS_MULTIPLIER = 1.5;
 - (int) getDefaultRadiusPoi;
 
 - (BOOL) isVisible;
+- (int)pointsOrder:(id)object;
 
 @end

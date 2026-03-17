@@ -11,22 +11,22 @@
 #import "OALocationPoint.h"
 #import "OsmAndSharedWrapper.h"
 
-#define ICON_NAME_EXTENSION_KEY @"icon"
-#define BACKGROUND_TYPE_EXTENSION_KEY @"background"
-#define COLOR_NAME_EXTENSION_KEY @"color"
-#define ADDRESS_EXTENSION_KEY @"address"
-#define CALENDAR_EXTENSION @"calendar_event"
-#define PICKUP_DATE @"pickup_date"
-#define VISITED_TIME_EXTENSION @"visited_date"
-#define CREATION_TIME_EXTENSION @"creation_date"
-#define PICKUP_DATE_EXTENSION @"pickup_date"
-#define DEFAULT_ICON_NAME_KEY @"special_star"
-#define DEFAULT_ICON_SHAPE_KEY @"circle"
-#define PROFILE_TYPE_EXTENSION_KEY @"profile"
+static NSString * ICON_NAME_EXTENSION_KEY = @"icon";
+static NSString * BACKGROUND_TYPE_EXTENSION_KEY = @"background";
+static NSString * COLOR_NAME_EXTENSION_KEY = @"color";
+static NSString * ADDRESS_EXTENSION_KEY = @"address";
+static NSString * CALENDAR_EXTENSION = @"calendar_event";
+static NSString * PICKUP_DATE = @"pickup_date";
+static NSString * VISITED_TIME_EXTENSION = @"visited_date";
+static NSString * CREATION_TIME_EXTENSION = @"creation_date";
+static NSString * PICKUP_DATE_EXTENSION = @"pickup_date";
+static NSString * DEFAULT_ICON_NAME_KEY = @"special_star";
+static NSString * DEFAULT_ICON_SHAPE_KEY = @"circle";
+static NSString * PROFILE_TYPE_EXTENSION_KEY = @"profile";
 
-#define PRIVATE_PREFIX @"amenity_"
-#define AMENITY_ORIGIN_EXTENSION_KEY @"amenity_origin"
-#define OSM_PREFIX_KEY @"osm_tag_"
+static NSString * AMENITY_PREFIX = @"amenity_";
+static NSString * AMENITY_ORIGIN_EXTENSION_KEY = @"amenity_origin";
+static NSString * OSM_PREFIX_KEY = @"osm_tag_";
 
 static NSString * const kGapProfileTypeKey = @"gap";
 static NSString * const kTrkptIndexExtension = @"trkpt_idx";

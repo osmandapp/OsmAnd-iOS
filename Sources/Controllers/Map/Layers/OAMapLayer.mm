@@ -152,4 +152,9 @@
     _pointsOrder = pointsOrder;
 }
 
+- (int)pointsOrder:(id)object
+{
+    return self.pointsOrder;
+}
+
 @end

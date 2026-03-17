@@ -208,11 +208,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _routeStatsCell.heightConstraint.constant = 90;
     [_tableView registerNib:[UINib nibWithNibName:AttachRoadsBannerCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:AttachRoadsBannerCell.reuseIdentifier];
 
+    BOOL useHours = ([self getTrackAnalysis].timeSpan / 3600000) > 0;
     [GpxUIHelper setupElevationChartWithChartView:_routeStatsCell.chartView
                                         topOffset:10
                                      bottomOffset:4
                               useGesturesAndScale:NO
-                                    showXInMarker:NO];
+                                    showXInMarker:NO
+                                        startTime:[self getTrackAnalysis].startTime
+                                         useHours:useHours];
 
     self.sliderView.layer.cornerRadius = 2.;
     

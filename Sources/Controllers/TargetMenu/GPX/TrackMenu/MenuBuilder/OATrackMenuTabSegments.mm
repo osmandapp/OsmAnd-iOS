@@ -104,14 +104,16 @@
     cell.chartView.delegate = self;
     cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
 
-    [GpxUIHelper setupElevationChartWithChartView:cell.chartView showXInMarker:YES];
+    BOOL useHours = (analysis.timeSpan / 3600000) > 0;
+    [GpxUIHelper setupElevationChartWithChartView:cell.chartView showXInMarker:YES startTime:analysis.startTime useHours:useHours];
 
     if (_trackChartHelper)
     {
         [_trackChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
-                                          chart:cell.chartView
-                                       analysis:analysis
-                                  statsModeCell:nil];
+                          selectedXAxisMode:GPXDataSetAxisTypeDistance
+                                      chart:cell.chartView
+                                   analysis:analysis
+                              statsModeCell:nil];
     }
 
     OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
@@ -536,9 +538,10 @@
             if (cell)
             {
                 [_trackChartHelper changeChartTypes:sectionData.values[@"mode_value"]
-                                                  chart:cell.chartView
-                                               analysis:sectionData.values[@"analysis_value"]
-                                          statsModeCell:nil];
+                                  selectedXAxisMode:GPXDataSetAxisTypeDistance
+                                              chart:cell.chartView
+                                           analysis:sectionData.values[@"analysis_value"]
+                                      statsModeCell:nil];
             }
         }
     }

@@ -12,6 +12,8 @@ import Foundation
 final class OATwoIconsButtonTableViewCell: OAButtonTableViewCell {
     
     @IBOutlet weak var secondLeftIconView: UIImageView!
+    @IBOutlet private weak var secondLeftIconWidthConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var secondLeftIconHeightConstraint: NSLayoutConstraint!
     
     func secondLeftIconVisibility(show: Bool) {
         secondLeftIconView.isHidden = !show
@@ -20,5 +22,11 @@ final class OATwoIconsButtonTableViewCell: OAButtonTableViewCell {
     
     func shouldUpdateMarginsForVisibleSecondLeftIcon() -> Bool {
         !secondLeftIconView.isHidden
+    }
+    
+    func updateSecondLeftIconSize(_ size: CGFloat) {
+        guard secondLeftIconWidthConstraint.constant != size || secondLeftIconHeightConstraint.constant != size else { return }
+        secondLeftIconWidthConstraint.constant = size
+        secondLeftIconHeightConstraint.constant = size
     }
 }

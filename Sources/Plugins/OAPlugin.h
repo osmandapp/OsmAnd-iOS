@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class OAMapPanelViewController, OAMapInfoController, OAMapViewController, QuickActionType, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OABaseWidgetView, OAWidgetType, OASGpxTrackAnalysis, OASPointAttributes, OACommonPreference, OACommonString, OACommonBoolean;
 
 @protocol OAWidgetRegistrationDelegate;
-
+@protocol OASGpxTrackAnalysisTrackPointsAnalyser;
 @protocol OAPluginInstallListener <NSObject>
 
 - (void) onPluginInstall;
@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
 - (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters;
 - (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
+- (id<OASGpxTrackAnalysisTrackPointsAnalyser> _Nullable)getTrackPointsAnalyser;
 - (void)getAvailableGPXDataSetTypes:(OASGpxTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 

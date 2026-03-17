@@ -1513,6 +1513,9 @@
 		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
 		C58106742EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */; };
 		C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */; };
+		C5817F1F2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5817F1E2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift */; };
+		C5817F212F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5817F202F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift */; };
+		C5817F232F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5817F222F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
 		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
 		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
@@ -1578,6 +1581,7 @@
 		C5E202942A2102D800BFC32C /* ic_navbar_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5E202922A2102D700BFC32C /* ic_navbar_add@3x.png */; };
 		C5E202952A2102D800BFC32C /* ic_navbar_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5E202932A2102D800BFC32C /* ic_navbar_add@2x.png */; };
 		C5E3B59F2DDDC40800083695 /* SelectRouteActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B59E2DDDC40800083695 /* SelectRouteActivityViewController.swift */; };
+		C5E92A492F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E92A482F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift */; };
 		C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */; };
 		C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */; };
 		C9DC5FD49885FD738343EB13 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */; };
@@ -2710,7 +2714,6 @@
 		DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA226C563A500F274C7 /* OAFirstMapillaryBottomSheetViewController.mm */; };
 		DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA426C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.mm */; };
 		DA5A84B526C563A900F274C7 /* OAAddDestinationBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA726C563A500F274C7 /* OAAddDestinationBottomSheetViewController.mm */; };
-		DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA826C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm */; };
 		DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA926C563A500F274C7 /* OATrackSegmentsViewController.mm */; };
 		DA5A84B826C563A900F274C7 /* OAFollowTrackBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FAA26C563A500F274C7 /* OAFollowTrackBottomSheetViewController.mm */; };
 		DA5A84B926C563A900F274C7 /* OABottomSheetTwoButtonsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FAE26C563A500F274C7 /* OABottomSheetTwoButtonsViewController.mm */; };
@@ -5399,6 +5402,9 @@
 		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
 		C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWindAnimationAction.swift; sourceTree = "<group>"; };
 		C58106752EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWeatherLayersAction.swift; sourceTree = "<group>"; };
+		C5817F1E2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMetricAttributesUtils.swift; sourceTree = "<group>"; };
+		C5817F202F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleTrackPointsAnalyser.swift; sourceTree = "<group>"; };
+		C5817F222F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackPointsAnalyser.swift; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
 		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
 		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
@@ -5470,6 +5476,7 @@
 		C5E202922A2102D700BFC32C /* ic_navbar_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_add@3x.png"; path = "Resources/Icons/ic_navbar_add@3x.png"; sourceTree = "<group>"; };
 		C5E202932A2102D800BFC32C /* ic_navbar_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_add@2x.png"; path = "Resources/Icons/ic_navbar_add@2x.png"; sourceTree = "<group>"; };
 		C5E3B59E2DDDC40800083695 /* SelectRouteActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRouteActivityViewController.swift; sourceTree = "<group>"; };
+		C5E92A482F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSelectionBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterDevelopmentViewController.swift; sourceTree = "<group>"; };
 		C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayNavigationModeProvider.swift; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
@@ -7277,9 +7284,7 @@
 		DA5A7FA226C563A500F274C7 /* OAFirstMapillaryBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFirstMapillaryBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FA326C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAInstallMapillaryBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FA426C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAInstallMapillaryBottomSheetViewController.mm; sourceTree = "<group>"; };
-		DA5A7FA626C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStatisticsSelectionBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FA726C563A500F274C7 /* OAAddDestinationBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddDestinationBottomSheetViewController.mm; sourceTree = "<group>"; };
-		DA5A7FA826C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStatisticsSelectionBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FA926C563A500F274C7 /* OATrackSegmentsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackSegmentsViewController.mm; sourceTree = "<group>"; };
 		DA5A7FAA26C563A500F274C7 /* OAFollowTrackBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFollowTrackBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FAB26C563A500F274C7 /* OAAddDestinationBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddDestinationBottomSheetViewController.h; sourceTree = "<group>"; };
@@ -11232,6 +11237,7 @@
 				DA5A798826C563A000F274C7 /* OAPlugin.mm */,
 				05CC79572BB99EC700BAC638 /* OAPluginsHelper.h */,
 				05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */,
+				C5817F222F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift */,
 				DA5A797D26C563A000F274C7 /* OsmEditing */,
 				DA5A799126C563A000F274C7 /* Parking */,
 				DA5A798026C563A000F274C7 /* SkiMapsPlugin */,
@@ -13475,9 +13481,8 @@
 		DA5A7FA526C563A500F274C7 /* RouteInfoBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7FA626C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.h */,
 				DA5A7FA726C563A500F274C7 /* OAAddDestinationBottomSheetViewController.mm */,
-				DA5A7FA826C563A500F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm */,
+				C5E92A482F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift */,
 				DA5A7FA926C563A500F274C7 /* OATrackSegmentsViewController.mm */,
 				DA5A7FAA26C563A500F274C7 /* OAFollowTrackBottomSheetViewController.mm */,
 				DA5A7FAB26C563A500F274C7 /* OAAddDestinationBottomSheetViewController.h */,
@@ -14395,6 +14400,8 @@
 				C5C9BB902DF9A087003B7550 /* OBDTextWidget.swift */,
 				C5BC8DD42E02D1DC00CF0815 /* OBDFuelConsumptionWidget.swift */,
 				C5BC8DD62E0408D400CF0815 /* OBDRemainingFuelWidget.swift */,
+				C5817F1E2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift */,
+				C5817F202F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift */,
 			);
 			path = VehicleMetricsPlugin;
 			sourceTree = "<group>";
@@ -17633,7 +17640,6 @@
 				469F0C222C627E2A00874CC6 /* PaletteCollectionViewCell.swift in Sources */,
 				C56FAB5B29B227130096192F /* OATargetDistanceWidget.mm in Sources */,
 				DA5A82ED26C563A800F274C7 /* OAPointTableViewCell.m in Sources */,
-				DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
 				DA5A814D26C563A700F274C7 /* OASearchCategoriesListController.mm in Sources */,
 				DA5A81F726C563A700F274C7 /* OAChoosePlanViewController.mm in Sources */,
 				FAA6505A2ADD42C50020DCEA /* DeviceFactory.swift in Sources */,
@@ -18132,6 +18138,7 @@
 				464EA9BD2C4948A30034D8C9 /* PaletteGradientColor.swift in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
 				C5A466BC2D2E69B6008E0C87 /* ImageHeaderCell.swift in Sources */,
+				C5817F232F5D3C41002526E3 /* CompositeTrackPointsAnalyser.swift in Sources */,
 				DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */,
 				DA5A846026C563A900F274C7 /* OARasterMapLayer.mm in Sources */,
 				DA5A812A26C563A700F274C7 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
@@ -18387,6 +18394,7 @@
 				FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */,
 				DA5A847A26C563A900F274C7 /* OADestinationLineDelegate.m in Sources */,
 				DA7B18DE2A1222AE0029967F /* OACurrentSpeedWidget.mm in Sources */,
+				C5817F212F5B2CA6002526E3 /* VehicleTrackPointsAnalyser.swift in Sources */,
 				DA5A84AC26C563A900F274C7 /* OAOpenAddTrackViewController.mm in Sources */,
 				320F71302A862C660071C0E7 /* TravelLocalDataHelper.swift in Sources */,
 				32FEF4822D07317C005E8B55 /* OARenderedObject.mm in Sources */,
@@ -18398,6 +18406,7 @@
 				C50611182DB9678300E8F204 /* OACoordinatesGridSettings.mm in Sources */,
 				FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */,
 				81E0C9462D37DFCD00BC7D85 /* OABundledAsetts.swift in Sources */,
+				C5817F1F2F59DA5C002526E3 /* VehicleMetricAttributesUtils.swift in Sources */,
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
 				C57245D92CDF3B70004F1F19 /* TracksSortModeHelper.swift in Sources */,
@@ -18592,6 +18601,7 @@
 				274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */,
 				CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */,
 				3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */,
+				C5E92A492F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift in Sources */,
 				CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */,
 				CA4EDD247D185CBEF97908BE /* OAWeatherToolbarHandlers.mm in Sources */,
 				CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */,

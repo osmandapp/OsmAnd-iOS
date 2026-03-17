@@ -37,6 +37,7 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     private static let temperatureAverageFilterRowKey = "temperatureAverageFilter"
     private static let visibleOnMapFilterRowKey = "visibleOnMapFilter"
     private static let withWaypointsFilterRowKey = "withWaypointsFilter"
+    private static let withOBDIIFilterRowKey = "withOBDIIFilter"
     private static let selectedKey = "selected"
     private static let isValidFilterKey = "isValidFilterKey"
     
@@ -245,6 +246,11 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         withWaypointsRow.key = Self.withWaypointsFilterRowKey
         withWaypointsRow.title = localizedString("with_waypoints")
         withWaypointsRow.setObj((baseFilters.getFilterByType(.other) as? OtherTrackFilter)?.isParamSelected(param: .withWaypoints) ?? false, forKey: Self.selectedKey)
+        let withOBDIIDataRow = otherFilterSection.createNewRow()
+        withOBDIIDataRow.cellType = OASwitchTableViewCell.reuseIdentifier
+        withOBDIIDataRow.key = Self.withOBDIIFilterRowKey
+        withOBDIIDataRow.title = localizedString("has_vehicle_metrics")
+        withOBDIIDataRow.setObj((baseFilters.getFilterByType(.other) as? OtherTrackFilter)?.isParamSelected(param: .hasVehicleMetrics) ?? false, forKey: Self.selectedKey)
     }
 
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -365,10 +371,8 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
         guard let tableData, let sw = sender as? UISwitch else { return false }
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData.item(for: indexPath)
-        if data.key == Self.visibleOnMapFilterRowKey {
-            (baseFilters.getFilterByType(.other) as? OtherTrackFilter)?.setItemSelected(param: .visibleOnMap, selected: sw.isOn)
-        } else if data.key == Self.withWaypointsFilterRowKey {
-            (baseFilters.getFilterByType(.other) as? OtherTrackFilter)?.setItemSelected(param: .withWaypoints, selected: sw.isOn)
+        if let param = otherFilterParameter(for: data.key), let filter = baseFilters.getFilterByType(.other) as? OtherTrackFilter {
+            filter.setItemSelected(param: param, selected: sw.isOn)
         }
         
         baseFiltersResult = baseFilters.performFiltering()
@@ -378,6 +382,19 @@ final class TracksFiltersViewController: OABaseButtonsViewController {
     
     @objc private func onOutsideCellsTapped() {
         view.endEditing(true)
+    }
+    
+    private func otherFilterParameter(for key: String?) -> OtherTrackParam? {
+        switch key {
+        case Self.visibleOnMapFilterRowKey:
+            return .visibleOnMap
+        case Self.withWaypointsFilterRowKey:
+            return .withWaypoints
+        case Self.withOBDIIFilterRowKey:
+            return .hasVehicleMetrics
+        default:
+            return nil
+        }
     }
     
     private func addRangeFilterSections(sectionHeader: String, filters: [(key: String, type: TrackFilterType, title: String)]) {

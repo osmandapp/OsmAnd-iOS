@@ -1548,9 +1548,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (void) setLastStartPoint:(CLLocation *)location;
 - (void) setLastStartPoint:(double)lat lon:(double)lon;
 
-- (BOOL) isInternetConnectionAvailable;
-- (BOOL) isInternetConnectionAvailable:(BOOL)update;
-
 @end
 
 NS_ASSUME_NONNULL_END

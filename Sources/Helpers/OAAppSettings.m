@@ -7786,23 +7786,4 @@ static NSString *kOfflineKey = @"OFFLINE";
     [_lastStartLon set:lon];
 }
 
-// Check internet connection available every 15 seconds
-- (BOOL) isInternetConnectionAvailable
-{
-    return [self isInternetConnectionAvailable:NO];
-}
-- (BOOL) isInternetConnectionAvailable:(BOOL)update
-{
-    NSTimeInterval delta = [[NSDate now] timeIntervalSince1970] - _lastTimeInternetConnectionChecked;
-    if (delta < 0 || delta > 15 || update) {
-        _internetConnectionAvailable = [self isInternetConnected];
-    }
-    return _internetConnectionAvailable;
-}
-
-- (BOOL) isInternetConnected
-{
-    return AFNetworkReachabilityManager.sharedManager.isReachable;
-}
-
 @end

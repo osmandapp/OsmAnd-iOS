@@ -10,11 +10,13 @@
 #import "OAUtilities.h"
 #import "OAURLSessionProgress.h"
 
-#define kTimeout 60.0 * 5.0 // 5 minutes
-
-#define BOUNDARY @"CowMooCowMooCowCowCow"
-
 #define DEBUG_NETWORK_OPERATIONS 1  // 1 — on, 0 — off
+
+static const NSTimeInterval CONNECT_TIMEOUT = 30; // 30 sec
+static const NSTimeInterval READ_TIMEOUT = CONNECT_TIMEOUT * 2; // 60 sec
+static const NSTimeInterval CALL_TIMEOUT = CONNECT_TIMEOUT + READ_TIMEOUT; // 90 sec
+
+static const NSString *BOUNDARY = @"CowMooCowMooCowCowCow";
 
 @implementation OANetworkRequest
 
@@ -254,7 +256,7 @@ authorizationHeader:(NSString *)authorizationHeader
 
         NSURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
                                                         cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                                    timeoutInterval:kTimeout];
+                                                    timeoutInterval:CONNECT_TIMEOUT];
         
         NSError __block *error = nil;
         NSData __block *data = nil;
@@ -333,17 +335,18 @@ authorizationHeader:(NSString *)authorizationHeader
 + (NSString *)okHttpRedirectRequester:(NSString *)url
 {
     NSURL *baseURL = [NSURL URLWithString:url];
-    if (!baseURL)
+    if (!baseURL) {
         return nil;
+    }
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:baseURL];
     request.HTTPMethod = @"HEAD";
-    request.timeoutInterval = kTimeout;
-    [request setValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
+    request.timeoutInterval = READ_TIMEOUT;
+    [request setValue:@"Mozilla/5.0 (OsmAnd; iOS)" forHTTPHeaderField:@"User-Agent"];
 
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    config.timeoutIntervalForRequest = kTimeout;
-    config.timeoutIntervalForResource = kTimeout;
+    config.timeoutIntervalForRequest = READ_TIMEOUT;
+    config.timeoutIntervalForResource = CALL_TIMEOUT;
 
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     __block NSHTTPURLResponse *httpResponse = nil;
@@ -353,14 +356,30 @@ authorizationHeader:(NSString *)authorizationHeader
                                                           delegate:[OANoRedirectDelegate new]
                                                      delegateQueue:nil];
 
-    [[session dataTaskWithRequest:request
-                completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        httpResponse = [response isKindOfClass:NSHTTPURLResponse.class] ? (NSHTTPURLResponse *) response : nil;
+    NSURLSessionDataTask *task =
+    [session dataTaskWithRequest:request
+               completionHandler:^(NSData * _Nullable data,
+                                   NSURLResponse * _Nullable response,
+                                   NSError * _Nullable error) {
+        httpResponse = [response isKindOfClass:NSHTTPURLResponse.class] ? (NSHTTPURLResponse *)response : nil;
         requestError = error;
         dispatch_semaphore_signal(semaphore);
-    }] resume];
+    }];
 
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    [task resume];
+
+    long waitResult = dispatch_semaphore_wait(
+        semaphore,
+        dispatch_time(DISPATCH_TIME_NOW, (int64_t)(CALL_TIMEOUT * NSEC_PER_SEC))
+    );
+
+    if (waitResult != 0) {
+        [task cancel];
+        [session invalidateAndCancel];
+        NSLog(@"ERROR: okHttpRedirectRequester() - Call timeout from %@", url);
+        return nil;
+    }
+
     [session finishTasksAndInvalidate];
 
     if (requestError) {
@@ -368,7 +387,7 @@ authorizationHeader:(NSString *)authorizationHeader
         return nil;
     }
 
-    if (httpResponse.statusCode < 300 || httpResponse.statusCode >= 400) {
+    if (!httpResponse || httpResponse.statusCode < 300 || httpResponse.statusCode >= 400) {
         NSLog(@"ERROR: okHttpRedirectRequester() - Got no Redirect from %@", url);
         return nil;
     }

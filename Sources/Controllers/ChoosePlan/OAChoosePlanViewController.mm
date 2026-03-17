@@ -498,7 +498,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
     [self.navigationItem setLeftBarButtonItem:leftNavbarButton animated:YES];
     
-    UIImage *rightNavbarButtonCustomIcon = [UIImage templateImageNamed:_type == EOAChoosePlan ? @"ic_custom_reset" : @"ic_navbar_help"];
+    UIImage *rightNavbarButtonCustomIcon = [UIImage templateImageNamed:_type == EOAChoosePlan ? ACImageNameIcCustomReset : ACImageNameIcNavbarHelp];
     UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonWidth, kDefaultBarButtonHeight)];
     [rightButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     [rightButton setImage:rightNavbarButtonCustomIcon forState:UIControlStateNormal];

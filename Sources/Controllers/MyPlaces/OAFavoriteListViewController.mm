@@ -1147,7 +1147,7 @@ static UIViewController *parentController;
         NSInteger section = indexPath.section;
         BOOL isVisible = groupData.favoriteGroup.isVisible;
         NSString *showHideCaption = isVisible ? OALocalizedString(@"shared_string_hide_from_map") : OALocalizedString(@"shared_string_show_on_map");
-        UIImage *showHideImage = [OAUtilities resizeImage:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined"]
+        UIImage *showHideImage = [OAUtilities resizeImage:[UIImage imageNamed:isVisible ? ACImageNameIcCustomHideOutlined : ACImageNameIcCustomShowOutlined]
                                                   newSize:CGSizeMake(kActionImageSize, kActionImageSize)];
         UIAction *showHideAction = [UIAction actionWithTitle:showHideCaption
                                                        image:showHideImage

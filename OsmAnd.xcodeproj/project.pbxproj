@@ -649,8 +649,6 @@
 		461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */; };
 		461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */; };
 		461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */; };
-		461F451E283E36EB00796360 /* ic_navbar_help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451C283E36EB00796360 /* ic_navbar_help@2x.png */; };
-		461F451F283E36EB00796360 /* ic_navbar_help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451D283E36EB00796360 /* ic_navbar_help@3x.png */; };
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
 		461F4523283E370C00796360 /* ic_custom_arrow_down_short@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */; };
 		461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */ = {isa = PBXBuildFile; fileRef = 461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */; };
@@ -4269,8 +4267,6 @@
 		461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorCollectionHandler.m; sourceTree = "<group>"; };
 		461A3F0B29F6E826008EE079 /* OABaseCollectionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseCollectionHandler.h; sourceTree = "<group>"; };
 		461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseCollectionHandler.m; sourceTree = "<group>"; };
-		461F451C283E36EB00796360 /* ic_navbar_help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@2x.png"; path = "Resources/Icons/ic_navbar_help@2x.png"; sourceTree = "<group>"; };
-		461F451D283E36EB00796360 /* ic_navbar_help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@3x.png"; path = "Resources/Icons/ic_navbar_help@3x.png"; sourceTree = "<group>"; };
 		461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@3x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@3x.png"; sourceTree = "<group>"; };
 		461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@2x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@2x.png"; sourceTree = "<group>"; };
 		461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAnnounceTimeDistances.h; sourceTree = "<group>"; };
@@ -8980,8 +8976,6 @@
 				46B4A7D72841183D008AE194 /* ic_custom_label_sale@3x.png */,
 				461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */,
 				461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */,
-				461F451C283E36EB00796360 /* ic_navbar_help@2x.png */,
-				461F451D283E36EB00796360 /* ic_navbar_help@3x.png */,
 				46453B3E283524E4001F9A3A /* ic_custom_wikipedia_download_colored_big@2x.png */,
 				46453B38283524B6001F9A3A /* ic_custom_unlimited_downloads_colored_day_big@2x.png */,
 				46453B37283524B6001F9A3A /* ic_custom_unlimited_downloads_colored_day_big@3x.png */,
@@ -15813,7 +15807,6 @@
 				32309A6D2698D218005751F5 /* ic_custom_direction_north_night@3x.png in Resources */,
 				DA0D1636281BEEF500CEEF58 /* map_turn_sharp_right_dark@2x.png in Resources */,
 				8476E2B81F6C1EEC00EC274F /* map_intermediate_point@3x.png in Resources */,
-				461F451F283E36EB00796360 /* ic_navbar_help@3x.png in Resources */,
 				DA2EC69E29FBBE0300ECEB37 /* warnings_stop@2x.png in Resources */,
 				46E0263F27B6773F00E554DD /* ic_custom_terrain_flat@3x.png in Resources */,
 				DA68B3BC233B81DB00F5ACCC /* ic_custom_swap@2x.png in Resources */,
@@ -16657,7 +16650,6 @@
 				DA2EC70429FBBE0300ECEB37 /* ic_action_play_dark@3x.png in Resources */,
 				46453B0C28352407001F9A3A /* ic_custom_monthly_map_updates_colored_day_big@2x.png in Resources */,
 				8476E2821F6C1EEC00EC274F /* map_car_location_lost@3x.png in Resources */,
-				461F451E283E36EB00796360 /* ic_navbar_help@2x.png in Resources */,
 				46453ADD2835234B001F9A3A /* ic_custom_advanced_widgets_colored_day@3x.png in Resources */,
 				32B7DC382C762BCC00E5E8BD /* OAColorsPaletteCell.xib in Resources */,
 				46E0264027B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png in Resources */,

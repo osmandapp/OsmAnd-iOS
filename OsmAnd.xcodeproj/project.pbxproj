@@ -1506,6 +1506,7 @@
 		C589BC9F2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */; };
 		C589BCA12C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */; };
 		C58A6A492F68920800DCE4F6 /* MapSettingsBuildings3DScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58A6A482F68920800DCE4F6 /* MapSettingsBuildings3DScreen.swift */; };
+		C58A6A4D2F69632800DCE4F6 /* Buildings3DColorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58A6A4C2F69632800DCE4F6 /* Buildings3DColorType.swift */; };
 		C596D5832E8D634300D13D93 /* AutoZoom3DAngleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C596D5822E8D634300D13D93 /* AutoZoom3DAngleViewController.swift */; };
 		C5983E132EF93B51003F2639 /* MapSettingsWikipediaScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5983E122EF93B51003F2639 /* MapSettingsWikipediaScreen.swift */; };
 		C5983E1C2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5983E1B2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift */; };
@@ -5370,6 +5371,7 @@
 		C589BC9E2C610560002769F6 /* OATwoIconsButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATwoIconsButtonTableViewCell.swift; sourceTree = "<group>"; };
 		C589BCA02C6105F7002769F6 /* OATwoIconsButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoIconsButtonTableViewCell.xib; sourceTree = "<group>"; };
 		C58A6A482F68920800DCE4F6 /* MapSettingsBuildings3DScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsBuildings3DScreen.swift; sourceTree = "<group>"; };
+		C58A6A4C2F69632800DCE4F6 /* Buildings3DColorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buildings3DColorType.swift; sourceTree = "<group>"; };
 		C596D5822E8D634300D13D93 /* AutoZoom3DAngleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoZoom3DAngleViewController.swift; sourceTree = "<group>"; };
 		C5983E122EF93B51003F2639 /* MapSettingsWikipediaScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsWikipediaScreen.swift; sourceTree = "<group>"; };
 		C5983E1B2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaLanguagesViewController.swift; sourceTree = "<group>"; };
@@ -11205,6 +11207,7 @@
 				DA5A798A26C563A000F274C7 /* OASRTMPlugin.mm */,
 				DA5A798B26C563A000F274C7 /* OASRTMPlugin.h */,
 				4625AF8F2C2335870099EB89 /* TerrainMode.swift */,
+				C58A6A4C2F69632800DCE4F6 /* Buildings3DColorType.swift */,
 			);
 			path = SRTMPlugin;
 			sourceTree = "<group>";
@@ -17597,6 +17600,7 @@
 				FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
 				FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */,
+				C58A6A4D2F69632800DCE4F6 /* Buildings3DColorType.swift in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
 				DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */,
 				27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */,

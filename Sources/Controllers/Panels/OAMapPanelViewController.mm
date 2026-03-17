@@ -1688,7 +1688,8 @@ typedef enum
             }
 
             [self hideTargetPointMenu];
-            [self showRouteInfo:NO];
+            BOOL fullScreen = (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection) && !_app.data.pointToNavigate; // We need to show full screen only if there aren't enough points count to build the route
+            [self showRouteInfo:fullScreen];
             
             return NO;
         }

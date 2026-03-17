@@ -65,7 +65,6 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     UIView *_backgroundAboveScrollViewContainer;
     NSArray<OAFeatureCardRow *> *_includedRows;
     NSArray<OAFeatureCardRow *> *_notIncludedRows;
-    NSString *_cachedTitle;
 }
 
 - (instancetype) initWithFeature:(OAFeature *)feature;
@@ -119,18 +118,27 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     self.scrollView.delegate = self;
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 
-    _cachedTitle = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
+    NSString *title = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
     if ([OAUtilities isIOS26])
     {
         [self.viewNavigationBar setHidden:YES];
         if ([self.navigationController isNavigationBarHidden])
             [self.navigationController setNavigationBarHidden:NO animated:YES];
-        self.title = nil;
+        
+        UILabel *titleLabel = [[UILabel alloc] init];
+        titleLabel.text = title;
+        titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        titleLabel.textColor = UIColor.labelColor;
+        titleLabel.adjustsFontForContentSizeCategory = YES;
+        [titleLabel sizeToFit];
+        self.navigationItem.titleView = titleLabel;
+        [self.navigationItem.titleView setHidden:YES];
+        
         [self setupNavbarButtonsForIOS26];
     }
     else
     {
-        self.labelNavigationTitle.text = _cachedTitle;
+        self.labelNavigationTitle.text = title;
     }
     self.labelNavigationTitle.hidden = YES;
     self.viewNavigationSeparator.hidden = YES;
@@ -533,11 +541,6 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     }
 }
 
-- (void)setupNavbarTitleForIOS26
-{
-    self.title = _isHeaderBlurred ? _cachedTitle : nil;
-}
-
 - (void)setupButton:(UIButton *)button
 {
     if ([self.scrollView isDirectionRTL])
@@ -649,20 +652,32 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     if (!_isHeaderBlurred && y > 0.)
     {
         [self.viewNavigationBar addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
-        self.labelNavigationTitle.hidden = NO;
-        self.viewNavigationSeparator.hidden = NO;
+        if ([OAUtilities isIOS26])
+        {
+            [self.navigationItem.titleView setHidden:NO];
+        }
+        else
+        {
+            self.labelNavigationTitle.hidden = NO;
+            self.viewNavigationSeparator.hidden = NO;
+        }
         _isHeaderBlurred = YES;
     }
     else if (_isHeaderBlurred && y <= 0.)
     {
         [self.viewNavigationBar removeBlurEffect];
         self.viewNavigationBar.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        self.labelNavigationTitle.hidden = YES;
-        self.viewNavigationSeparator.hidden = YES;
+        if ([OAUtilities isIOS26])
+        {
+            [self.navigationItem.titleView setHidden:YES];
+        }
+        else
+        {
+            self.labelNavigationTitle.hidden = YES;
+            self.viewNavigationSeparator.hidden = YES;
+        }
         _isHeaderBlurred = NO;
     }
-    if ([OAUtilities isIOS26])
-        [self setupNavbarTitleForIOS26];
     [self updateAppearance];
 }
 
@@ -718,11 +733,17 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 - (void)onFeatureSelected:(OAFeature *)feature
 {
     _selectedFeature = feature;
-    _cachedTitle = [_selectedFeature getListTitle];
+    NSString *title = [_selectedFeature getListTitle];
     if ([OAUtilities isIOS26])
-        [self setupNavbarTitleForIOS26];
+    {
+        UILabel *titleLabel = (UILabel *)self.navigationItem.titleView;
+        titleLabel.text = title;
+        [titleLabel sizeToFit];
+    }
     else
-        self.labelNavigationTitle.text = _cachedTitle;
+    {
+        self.labelNavigationTitle.text = title;
+    }
     [self updateScrollViewContainerSize];
 }
 

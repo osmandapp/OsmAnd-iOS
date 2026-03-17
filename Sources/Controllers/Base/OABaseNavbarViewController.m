@@ -482,7 +482,7 @@
             
             NSString *accessibilityLabel = [self getCustomAccessibilityForLeftNavbarButton];
             if (!accessibilityLabel)
-                accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
+                accessibilityLabel = leftButtonTitle ?: OALocalizedString(@"shared_string_back");
             _leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
             _leftNavbarButton.accessibilityLabel = accessibilityLabel;
             [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];

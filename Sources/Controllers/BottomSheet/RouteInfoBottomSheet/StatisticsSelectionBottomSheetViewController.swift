@@ -82,7 +82,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     }
     
     override func hideFirstHeader() -> Bool {
-        isYAxisMode ? true : false
+        isYAxisMode
     }
     
     override func shouldShowSubviewSeparator() -> Bool {
@@ -229,27 +229,6 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         toggleSelection(at: indexPath, isSelected: false)
     }
     
-    @objc private func onClosePressed() {
-        dismiss(animated: true)
-    }
-    
-    @objc private func onDonePressed() {
-        let result = Array(types.prefix(2))
-        guard !result.isEmpty else { return }
-        delegate?.onGraphModeChanged(selectedXAxisMode, types: result)
-        dismiss(animated: true)
-    }
-    
-    @objc private func segmentChanged(_ control: UISegmentedControl) {
-        isYAxisMode = control.selectedSegmentIndex == 0
-        applyTableMode()
-        updateUIAnimated { [weak self] _ in
-            guard let self else { return }
-            self.clearAllSelections()
-            self.syncCheckmarksFromData()
-        }
-    }
-    
     private func hasData(_ type: GPXDataSetType) -> Bool {
         guard let tag = OAGPXDataSetType.getDataKey(type.rawValue), !tag.isEmpty else { return false }
         let hasTag = analysis.hasData(tag: tag)
@@ -354,6 +333,27 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             return VehicleMetricsMeta(subgroup: .other, itemOrder: 2)
         default:
             return nil
+        }
+    }
+    
+    @objc private func onClosePressed() {
+        dismiss(animated: true)
+    }
+    
+    @objc private func onDonePressed() {
+        let result = Array(types.prefix(2))
+        guard !result.isEmpty else { return }
+        delegate?.onGraphModeChanged(selectedXAxisMode, types: result)
+        dismiss(animated: true)
+    }
+    
+    @objc private func segmentChanged(_ control: UISegmentedControl) {
+        isYAxisMode = control.selectedSegmentIndex == 0
+        applyTableMode()
+        updateUIAnimated { [weak self] _ in
+            guard let self else { return }
+            self.clearAllSelections()
+            self.syncCheckmarksFromData()
         }
     }
 }

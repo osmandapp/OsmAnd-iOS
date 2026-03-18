@@ -1161,7 +1161,7 @@ static UIViewController *parentController;
         }];
         showHideAction.accessibilityLabel = showHideCaption;
         
-        UIImage *renameImage = [[UIImage imageNamed:@"ic_custom_edit"] resizedMenuImage];
+        UIImage *renameImage = [[UIImage imageNamed:ACImageNameIcCustomEdit] resizedMenuImage];
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
                                                      image:renameImage
                                                 identifier:nil

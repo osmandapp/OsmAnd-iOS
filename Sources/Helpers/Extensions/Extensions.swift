@@ -49,8 +49,8 @@ extension UIImage {
     }
     
     @objc func resizedMenuImage() -> UIImage? {
-        let navBarImageSize: CGFloat = UIFontMetrics.default.scaledValue(for: 24)
-        return OAUtilities.resize(self, newSize: CGSize(width: navBarImageSize, height: navBarImageSize))
+        let navBarImageSize: CGFloat = UIFontMetrics.default.scaledValue(for: ProcessInfo.processInfo.isMacCatalystApp ? 20 : 24)
+        return OAUtilities.resize(self, newSize: CGSize(width: navBarImageSize, height: navBarImageSize))?.withRenderingMode(.alwaysTemplate)
     }
 }
 

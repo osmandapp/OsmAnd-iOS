@@ -51,7 +51,6 @@
 #define FavoriteTableGroup _(FavoriteTableGroup)
 
 static const NSInteger _exportButtonIndex = 1;
-static const CGFloat kActionImageSize = 24.0;
 
 @interface FavoriteTableGroup : NSObject
     @property BOOL isOpen;

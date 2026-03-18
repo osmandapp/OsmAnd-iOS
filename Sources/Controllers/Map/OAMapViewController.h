@@ -158,7 +158,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
              centerBBox:(BOOL)centerBBox
                animated:(BOOL)animated;
 
-- (void) storeTargetPosition:(UIGestureRecognizer *)recognizer scheduleRestore:(BOOL)restoreOnRender;
+- (void) storeTargetPosition:(nullable UIGestureRecognizer *)recognizer scheduleRestore:(BOOL)restoreOnRender;
 - (void) restorePreviousTarget;
 
 - (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state

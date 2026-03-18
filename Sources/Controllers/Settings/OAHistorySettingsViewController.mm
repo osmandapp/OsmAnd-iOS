@@ -609,10 +609,15 @@
                       duration:.2
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void)
-                    {
-                        [self reloadDataWithDelay:[OAUtilities isIOS26] ? 0.25 : 0. animated:NO completion:nil];
-                        [self updateNavbar];
-                    }
+     {
+        NSTimeInterval delay;
+        if (@available(iOS 26.0, *))
+            delay = 0.25;
+        else
+            delay = 0.;
+        [self reloadDataWithDelay:delay animated:NO completion:nil];
+        [self updateNavbar];
+    }
     completion:nil];
 }
 

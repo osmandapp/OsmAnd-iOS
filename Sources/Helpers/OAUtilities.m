@@ -2416,14 +2416,6 @@ static const double d180PI = 180.0 / M_PI_2;
     return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
 }
 
-+ (BOOL)isIOS26
-{
-    if (@available(iOS 26.0, *))
-        return YES;
-    else
-        return NO;
-}
-
 + (BOOL) isColorBright:(UIColor *)color
 {
     CGFloat luminance = 0;

@@ -453,8 +453,11 @@ static UIViewController *parentController;
         _searchController.obscuresBackgroundDuringPresentation = NO;
         self.tabBarController.navigationItem.searchController = _searchController;
         [self setupSearchController:NO filtered:NO];
-        if (!_cachedTabbarHeight && [OAUtilities isIOS26])
-            [self cacheTabbarHeight];
+        if (@available(iOS 26.0, *))
+        {
+            if (!_cachedTabbarHeight)
+                [self cacheTabbarHeight];
+        }
     }
     self.definesPresentationContext = YES;
     [self addAccessibilityLabels];
@@ -885,7 +888,7 @@ static UIViewController *parentController;
     [self.favoriteTableView setEditing:YES animated:YES];
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     _editToolbarView.hidden = NO;
-    if ([OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
         [self cacheTabbarHeight];
     [UIView animateWithDuration:.3 animations:^{
         self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
@@ -898,7 +901,7 @@ static UIViewController *parentController;
     self.tabBarController.navigationItem.hidesBackButton = YES;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.favoriteTableView reloadData];
-    if ([OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
         [self searchVisibility:NO];
 }
 
@@ -908,13 +911,17 @@ static UIViewController *parentController;
     self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         [self.tabBarController.tabBar setHidden:NO];
-        CGFloat tabBarHeight = [OAUtilities isIOS26] ? _cachedTabbarHeight : self.tabBarController.tabBar.frame.size.height;
+        CGFloat tabBarHeight;
+        if (@available(iOS 26.0, *))
+            tabBarHeight = _cachedTabbarHeight;
+        else
+            tabBarHeight = self.tabBarController.tabBar.frame.size.height;
         self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - tabBarHeight, DeviceScreenWidth, tabBarHeight);
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
         [self applySafeAreaMargins];
-        if ([OAUtilities isIOS26])
+        if (@available(iOS 26.0, *))
             [self cacheTabbarHeight];
     }];
 
@@ -929,7 +936,7 @@ static UIViewController *parentController;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     [self.favoriteTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
-    if ([OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
         [self searchVisibility:YES];
 }
 

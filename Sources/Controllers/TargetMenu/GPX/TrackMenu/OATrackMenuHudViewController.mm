@@ -455,7 +455,10 @@
 
 - (CGFloat)getToolbarHeight
 {
-    return [OAUtilities isIOS26] && [OAUtilities getBottomMargin] == 0 ? 80. : [super getToolbarHeight];
+    if (@available(iOS 26.0, *))
+        return [OAUtilities getBottomMargin] == 0 ? 80. : [super getToolbarHeight];
+    else
+        return [super getToolbarHeight];
 }
 
 - (CGFloat)initialMenuHeight

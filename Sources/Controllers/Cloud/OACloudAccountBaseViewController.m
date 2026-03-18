@@ -97,7 +97,10 @@
 {
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    if (![OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
+    {
+    }
+    else
     {
         [appearance configureWithOpaqueBackground];
         appearance.backgroundColor = self.tableView.backgroundColor;

@@ -166,8 +166,16 @@ typedef NS_ENUM(NSInteger, EditingTab)
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kBackButtonSize, kBackButtonSize)];
-    backButton.contentHorizontalAlignment = [OAUtilities isIOS26] ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentLeading;
-    [backButton setTintColor:[OAUtilities isIOS26] ? UIColor.labelColor : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]];
+    if (@available(iOS 26.0, *))
+    {
+        backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
+        [backButton setTintColor:UIColor.labelColor];
+    }
+    else
+    {
+        backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+        [backButton setTintColor:[UIColor colorNamed:ACColorNameNavBarTextColorPrimary]];
+    }
     [backButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     [backButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
     [backButton addTarget:self action:@selector(onBackPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -210,7 +218,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 -(CGFloat) getNavBarHeight
 {
     CGFloat topOffset = 0.;
-    if ([OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
     {
         CGFloat segmentControlBottomInset = [self statusBarHeight] == 0 && [OAUtilities getTopMargin] == 0 ? (self.segmentContainerView.frame.size.height - _segmentControl.frame.size.height) / 2 : 0.;
         topOffset = segmentControlBottomInset == 0. ? [OAUtilities getTopMargin] - [self statusBarHeight] : segmentControlBottomInset;

@@ -475,7 +475,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         
         navigationController?.navigationBar.standardAppearance = blurAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = OAUtilities.isIOS26() ? .label : .navBarTextColorPrimary
+        if #available(iOS 26.0, *) {
+            navigationController?.navigationBar.tintColor = .label
+        } else {
+            navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
+        }
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
@@ -590,7 +594,13 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
-        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: .icNavbarOverflowMenuStroke, color: OAUtilities.isIOS26() ? .label : .navBarTextColorPrimary, action: nil, target: self, menu: menu) {
+        var color: UIColor
+        if #available(iOS 26.0, *) {
+            color = .label
+        } else {
+            color = .navBarTextColorPrimary
+        }
+        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: .icNavbarOverflowMenuStroke, color: color, action: nil, target: self, menu: menu) {
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
             navigationItem.setRightBarButtonItems([navBarButton], animated: false)
         }
@@ -804,7 +814,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tabBarController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
-        if OAUtilities.isIOS26() {
+        if #available(iOS 26.0, *) {
             if let tabBarHeight = tabBarController?.tabBar.frame.size.height, cachedTabbarHeight == 0 {
                 cachedTabbarHeight = tabBarHeight
             }

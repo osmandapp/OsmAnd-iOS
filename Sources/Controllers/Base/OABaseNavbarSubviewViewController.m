@@ -84,7 +84,10 @@
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return _subviewHeight == 0 && ![OAUtilities isIOS26];
+    if (@available(iOS 26.0, *))
+        return NO;
+    else
+        return _subviewHeight == 0;
 }
 
 - (BOOL)shouldShowSubviewSeparator

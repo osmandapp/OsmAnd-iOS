@@ -133,7 +133,13 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
         
         if data.key == Self.distanceByTapKey {
             settings.showDistanceRuler.set(sw.isOn)
-            reloadData(withDelay: OAUtilities.isIOS26() ? 0.25 : 0.0, animated: true, completion: nil)
+            var delay: TimeInterval
+            if #available(iOS 26.0, *) {
+                delay = 0.25
+            } else {
+                delay = 0.0
+            }
+            reloadData(withDelay: delay, animated: true, completion: nil)
             OARootViewController.instance().mapPanel.mapViewController.updateTapRulerLayer()
             delegate?.onSettingsChanged()
         }

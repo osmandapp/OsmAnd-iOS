@@ -468,7 +468,12 @@
         [self generateData];
         if (_lastSwitchedAppModeRow != -1)
         {
-            [self reloadRowsWithDelay:[OAUtilities isIOS26] ? 0.25 : 0. atIndexPaths:[NSIndexPath indexPathForRow:_lastSwitchedAppModeRow inSection:_applicationProfilesSection] withRowAnimation:UITableViewRowAnimationFade];
+            NSTimeInterval delay;
+            if (@available(iOS 26.0, *))
+                delay = 0.25;
+            else
+                delay = 0.;
+            [self reloadRowsWithDelay:delay atIndexPaths:[NSIndexPath indexPathForRow:_lastSwitchedAppModeRow inSection:_applicationProfilesSection] withRowAnimation:UITableViewRowAnimationFade];
             _lastSwitchedAppModeRow = -1;
         }
         else

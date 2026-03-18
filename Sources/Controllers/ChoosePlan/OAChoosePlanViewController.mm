@@ -119,7 +119,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 
     NSString *title = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
-    if ([OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
     {
         [self.viewNavigationBar setHidden:YES];
         if ([self.navigationController isNavigationBarHidden])
@@ -519,7 +519,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 
 - (void)updateAppearance
 {
-    if ([OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
     {
         if (_isHeaderBlurred)
         {
@@ -652,7 +652,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     if (!_isHeaderBlurred && y > 0.)
     {
         [self.viewNavigationBar addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
-        if ([OAUtilities isIOS26])
+        if (@available(iOS 26.0, *))
         {
             [self.navigationItem.titleView setHidden:NO];
         }
@@ -667,7 +667,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     {
         [self.viewNavigationBar removeBlurEffect];
         self.viewNavigationBar.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        if ([OAUtilities isIOS26])
+        if (@available(iOS 26.0, *))
         {
             [self.navigationItem.titleView setHidden:YES];
         }
@@ -734,7 +734,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 {
     _selectedFeature = feature;
     NSString *title = [_selectedFeature getListTitle];
-    if ([OAUtilities isIOS26])
+    if (@available(iOS 26.0, *))
     {
         UILabel *titleLabel = (UILabel *)self.navigationItem.titleView;
         titleLabel.text = title;

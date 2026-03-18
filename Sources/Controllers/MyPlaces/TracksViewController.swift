@@ -804,12 +804,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         tabBarController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
-        if let tabBarHeight = tabBarController?.tabBar.frame.size.height, cachedTabbarHeight == 0 {
-            cachedTabbarHeight = tabBarHeight
-        }
-        if let tabBarFrame = tabBarController?.tabBar.frame {
-            tabBarController?.tabBar.frame = CGRect(origin: tabBarFrame.origin,
-                                                    size: CGSize(width: tabBarFrame.width, height: cachedTabbarHeight))
+        if OAUtilities.isIOS26() {
+            if let tabBarHeight = tabBarController?.tabBar.frame.size.height, cachedTabbarHeight == 0 {
+                cachedTabbarHeight = tabBarHeight
+            }
+            if let tabBarFrame = tabBarController?.tabBar.frame {
+                tabBarController?.tabBar.frame = CGRect(origin: tabBarFrame.origin,
+                                                        size: CGSize(width: tabBarFrame.width, height: cachedTabbarHeight))
+            }
         }
     }
     

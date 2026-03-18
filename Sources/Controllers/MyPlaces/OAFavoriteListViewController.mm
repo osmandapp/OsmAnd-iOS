@@ -454,7 +454,7 @@ static UIViewController *parentController;
         _searchController.obscuresBackgroundDuringPresentation = NO;
         self.tabBarController.navigationItem.searchController = _searchController;
         [self setupSearchController:NO filtered:NO];
-        if (!_cachedTabbarHeight)
+        if (!_cachedTabbarHeight && [OAUtilities isIOS26])
             [self cacheTabbarHeight];
     }
     self.definesPresentationContext = YES;
@@ -886,7 +886,8 @@ static UIViewController *parentController;
     [self.favoriteTableView setEditing:YES animated:YES];
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     _editToolbarView.hidden = NO;
-    [self cacheTabbarHeight];
+    if ([OAUtilities isIOS26])
+        [self cacheTabbarHeight];
     [UIView animateWithDuration:.3 animations:^{
         self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
         [self applySafeAreaMargins];
@@ -898,7 +899,8 @@ static UIViewController *parentController;
     self.tabBarController.navigationItem.hidesBackButton = YES;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.favoriteTableView reloadData];
-    [self searchVisibility:NO];
+    if ([OAUtilities isIOS26])
+        [self searchVisibility:NO];
 }
 
 - (void) finishEditing
@@ -907,12 +909,14 @@ static UIViewController *parentController;
     self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         [self.tabBarController.tabBar setHidden:NO];
-        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - _cachedTabbarHeight, DeviceScreenWidth, _cachedTabbarHeight);
+        CGFloat tabBarHeight = [OAUtilities isIOS26] ? _cachedTabbarHeight : self.tabBarController.tabBar.frame.size.height;
+        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - tabBarHeight, DeviceScreenWidth, tabBarHeight);
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
         [self applySafeAreaMargins];
-        [self cacheTabbarHeight];
+        if ([OAUtilities isIOS26])
+            [self cacheTabbarHeight];
     }];
 
     _editButton.image = [UIImage systemImageNamed:@"pencil"];
@@ -926,7 +930,8 @@ static UIViewController *parentController;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     [self.favoriteTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
-    [self searchVisibility:YES];
+    if ([OAUtilities isIOS26])
+        [self searchVisibility:YES];
 }
 
 - (void)cacheTabbarHeight

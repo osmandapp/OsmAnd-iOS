@@ -1809,9 +1809,9 @@ typedef enum
              outTopInset:(float &)outTopInset
 {
     UIEdgeInsets safeArea = self.view.safeAreaInsets;
-    BOOL isCarPlayActive = UIApplication.sharedApplication.isCarPlayAppActive;
-    if (isCarPlayActive)
-        safeArea = UIApplication.sharedApplication.carPlayWindow.safeAreaInsets;
+    UIWindow *carPlayActiveWindow = UIApplication.sharedApplication.carPlayActiveWindow;
+    if (carPlayActiveWindow)
+        safeArea = carPlayActiveWindow.safeAreaInsets;
 
     double deltaLeft   = safeArea.left - leftInset;
     double deltaRight  = safeArea.right - rightInset;
@@ -1821,14 +1821,14 @@ typedef enum
     double padding = MAX(60.0, MIN(screenBBox.width, screenBBox.height) * 0.15);
     
     double safePadding = padding / 2.0;
-    BOOL landscape = OAUtilities.isLandscape || isCarPlayActive;
+    BOOL landscape = OAUtilities.isLandscape || carPlayActiveWindow;
     double finalLeft   = MAX(deltaLeft, deltaLeft > 0 ? deltaLeft + safePadding : padding);
     double finalRight  = MAX(deltaRight, deltaRight > 0 ? deltaRight + safePadding : padding);
     double finalTop    = MAX(deltaTop, deltaTop > 0 && !landscape ? deltaTop + safePadding : padding);
     double finalBottom = MAX(deltaBottom, deltaBottom > 0 && !landscape ? deltaBottom + safePadding : padding);
 
     outLeftInset = (float)finalLeft;
-    outTopInset  = (float)finalTop + (!isCarPlayActive ? (deltaTop > 0 ? 20.0 : 10.0) : 0.0);
+    outTopInset  = (float)finalTop + (!carPlayActiveWindow ? (deltaTop > 0 ? 20.0 : 10.0) : 0.0);
 
     return CGSizeMake(screenBBox.width - finalLeft - finalRight,
                       screenBBox.height - finalTop - finalBottom);

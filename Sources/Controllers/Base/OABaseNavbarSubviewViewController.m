@@ -87,6 +87,11 @@
     return _subviewHeight == 0 && ![OAUtilities isIOS26];
 }
 
+- (BOOL)shouldShowSubviewSeparator
+{
+    return YES;
+}
+
 - (CGFloat)getNavbarHeight
 {
     return [self getOriginalNavbarHeight] + (_containerView != nil ? _containerHeight : 0);
@@ -154,17 +159,23 @@
             _subviewHeightConstraint,
         ]];
 
-        _separatorView = [[UIView alloc] init];
-        _separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
-        _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
-        _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
-        [containerView addSubview:_separatorView];
-        [NSLayoutConstraint activateConstraints:@[
-            [_separatorView.leadingAnchor constraintEqualToAnchor:containerView.leadingAnchor],
-            [_separatorView.trailingAnchor constraintEqualToAnchor:containerView.trailingAnchor],
-            [_separatorView.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor],
-            [_separatorView.heightAnchor constraintEqualToConstant:0.5],
-        ]];
+        if ([self shouldShowSubviewSeparator])
+        {
+            _separatorView = [[UIView alloc] init];
+            _separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+            [containerView addSubview:_separatorView];
+            [NSLayoutConstraint activateConstraints:@[
+                [_separatorView.leadingAnchor constraintEqualToAnchor:containerView.leadingAnchor],
+                [_separatorView.trailingAnchor constraintEqualToAnchor:containerView.trailingAnchor],
+                [_separatorView.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor],
+                [_separatorView.heightAnchor constraintEqualToConstant:0.5],
+            ]];
+        }
+        else
+        {
+            _separatorView = nil;
+        }
 
         UIEdgeInsets contentInset = UIEdgeInsetsMake(_containerHeight, 0, 0, 0);
         self.tableView.contentInset = contentInset;

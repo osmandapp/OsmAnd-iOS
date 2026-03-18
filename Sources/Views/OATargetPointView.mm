@@ -659,16 +659,11 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
-- (void) updateUIOnInit
-{
-}
-
 - (void) doInit:(BOOL)showFull
 {
     _showFull = showFull;
     _showFullScreen = NO;
     [self clearCustomControllerIfNeeded];
-    [self updateUIOnInit];
 }
 
 - (void) doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen
@@ -676,7 +671,6 @@ static const NSInteger _buttonsCount = 4;
     _showFull = showFull;
     _showFullScreen = showFullScreen;
     [self clearCustomControllerIfNeeded];
-    [self updateUIOnInit];
 }
 
 - (BOOL) closeDenied
@@ -1629,7 +1623,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (self.activeTargetType == OATargetGPX)
-        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt) || (_targetPoint.type == OATargetWpt);
+        _buttonFavorite.enabled = _targetPoint.type != OATargetWpt || _targetPoint.type == OATargetWpt;
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     

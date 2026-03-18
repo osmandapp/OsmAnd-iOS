@@ -64,6 +64,44 @@ final class VehicleMetricsPlugin: OAPlugin {
         }
     }
     
+    override func getTrackPointsAnalyser() -> (any GpxTrackAnalysisTrackPointsAnalyser)? {
+        VehicleTrackPointsAnalyser()
+    }
+    
+    override func getAvailableGPXDataSetTypes(_ analysis: GpxTrackAnalysis, availableTypes: NSMutableArray) {
+        VehicleMetricAttributesUtils.getAvailableGPXDataSetTypes(analysis: analysis, out: availableTypes)
+    }
+    
+    override func getOrderedLineDataSet(chart: LineChartView, analysis: GpxTrackAnalysis, graphType: GPXDataSetType, axisType: GPXDataSetAxisType, calcWithoutGaps: Bool, useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
+        guard graphType.getTypeGroup() == .vehicleMetrics else { return nil }
+        return VehicleMetricAttributesUtils.createVehicleMetricsDataSet(plugin: self, chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
+    }
+    
+    func getWidgetConvertedValue(type: OBDDataComputer.OBDTypeWidget, data: Any?) -> Any? {
+        switch type {
+        case .speed:
+            return getConvertedSpeed(data.asFloat)
+        case .fuelLeftKm:
+            return getConvertedDistance(data.asFloat)
+        case .temperatureIntake, .engineOilTemperature, .temperatureAmbient, .temperatureCoolant:
+            return getConvertedTemperature(data: data.asFloat)
+        case .fuelLeftLiter:
+            return getFormattedVolume(data.asFloat)
+        case .fuelConsumptionRateLiterHour:
+            return getFormatVolumePerHour(literPerHour: data.asFloat)
+        case .fuelConsumptionRateLiterKm:
+            return getFormatVolumePerDistance(litersPer100km: data.asFloat)
+        case .engineRuntime:
+            return getFormattedTime(time: data.asInt)
+        case .fuelConsumptionRateSensor, .batteryVoltage, .adapterBatteryVoltage, .fuelType, .fuelConsumptionRatePercentHour, .fuelLeftPercent, .calculatedEngineLoad, .throttlePosition, .vin, .fuelPressure, .rpm:
+            return data
+        case .fuelConsumptionRateMPerLiter:
+            return getFormatDistancePerVolume(metersPerLiter: data.asFloat)
+        default:
+            return data
+        }
+    }
+    
     func getWidgetUnit(_ computerWidget: OBDDataComputer.OBDTypeWidget) -> String? {
         switch computerWidget {
         case .speed:

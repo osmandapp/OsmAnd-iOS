@@ -1320,7 +1320,7 @@
 "routing_attr_height_obstacles_description" = "הרכבת המסלול יכולה להימנע מעליות תלולות.";
 "rendering_attr_currentTrackColor_description" = "צבע GPX";
 "routing_attr_driving_style_speed_name" = "נתיבים קצרים יותר";
-"routing_attr_avoid_sett_description" = "נמנע מריצוף חלוקי נחל ואבנים משתלבות";
+"routing_attr_avoid_sett_description" = "הימנעות מריצוף אבנים משתלבות";
 "rendering_attr_hikingRoutesOSMC_description" = "עיבוד מסלולים לפי עקבות OSMC.";
 "rendering_value_car_name" = "מכונית";
 "routing_attr_avoid_unpaved_name" = "ללא כבישים בלתי סלולים";
@@ -2293,3 +2293,5 @@
 "add_to_favorites" = "הוספה למועדפים";
 "copy_link" = "העתקת קישור";
 "dowload_cloud_version" = "הורדת גרסת ענן";
+"reddit" = "רדיט";
+"x" = "X (לשעבר טוויטר)";

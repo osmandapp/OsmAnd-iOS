@@ -36,6 +36,19 @@ extension PointAttributes {
     static let sensorTagDistance = OSMAND_EXTENSIONS_PREFIX + "bike_distance_sensor"
     static let pointElevation = "ele" // point_elevation
     static let pointSpeed = "speed" // point_speed
+    static let obdIntakeTemperature = "vm_itemp"
+    static let obdAmbientTemperature = "vm_atemp"
+    static let obdCoolantTemperature = "vm_ctemp"
+    static let obdEngineOilTemperature = "vm_eotemp"
+    static let obdEngineSpeed = "vm_espeed"
+    static let obdEngineRuntime = "vm_runtime"
+    static let obdEngineLoad = "vm_eload"
+    static let obdFuelPressure = "vm_fpress"
+    static let obdFuelConsumption = "vm_fcons"
+    static let obdRemainingFuel = "vm_fuel"
+    static let obdBatteryLevel = "vm_bvol"
+    static let obdVehicleSpeed = "vm_vspeed"
+    static let obdThrottlePosition = "vm_tpos"
     
     static let GPXTPX_PREFIX = "gpxtpx:"
     static let OSMAND_EXTENSIONS_PREFIX = "osmand:"

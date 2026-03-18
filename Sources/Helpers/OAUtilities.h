@@ -327,7 +327,7 @@ static inline double normalizeDouble(double v)
 + (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values;
 + (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values;
 
-+ (UIImage *) getMxIcon:(NSString *)name;
++ (nullable UIImage *) getMxIcon:(NSString *)name;
 + (nullable UIImage *) resizeImage:(nullable UIImage *)image newSize:(CGSize)newSize;
 + (BOOL) hasMapImage:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;
@@ -350,6 +350,7 @@ static inline double normalizeDouble(double v)
 + (BOOL) isOsmAndGoUrl:(NSURL *)url;
 + (BOOL) isOsmAndSite:(NSURL *)url;
 + (BOOL) isPathPrefix:(NSURL *)url pathPrefix:(NSString *)pathPrefix;
++ (BOOL)isValidURL:(NSString *)string;
 
 + (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
 

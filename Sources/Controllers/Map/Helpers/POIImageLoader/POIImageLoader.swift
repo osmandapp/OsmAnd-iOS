@@ -50,8 +50,8 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     continue
                 }
                 
-                let placeId = NSNumber(value: place.obfId)
-                
+                let placeId = NSNumber(value: place.getSignedId())
+
                 // MARK: - Metrics
                 let metrics = IconMetrics(textScale: OAAppSettings.sharedManager().textSize.get())
                 

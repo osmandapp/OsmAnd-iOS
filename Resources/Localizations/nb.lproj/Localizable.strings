@@ -2241,7 +2241,7 @@
 "announcement_time_off_route" = "Ruteavvik";
 "ant_plus_pair_new_sensor" = "Tilknytt ny sensor";
 "external_device_characteristic_cadence" = "Kadens";
-"compass_click_desc" = "Hint: Trykk kompassknappen for å skifte kartorienteringsmodusen.";
+"compass_click_desc" = "Dobbeltrykk kompassknappen for å skifte kartorienteringsmodusen.";
 "map_widget_ant_bicycle_power_desc" = "Viser syklistens kraft, som brukes til å bevege sykkelen fremover";
 "trip_recording_uphill_widget_desc" = "Viser summen av alle stigninger for det gjeldende turopptaket.";
 "map_widget_distance_to_destination" = "Avstand til mål";

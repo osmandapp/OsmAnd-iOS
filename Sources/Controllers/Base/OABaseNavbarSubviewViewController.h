@@ -15,5 +15,6 @@
 - (void)updateSubviewHeight:(CGFloat)height;
 - (void)updateSubview:(BOOL)forceUpdate;
 - (UIEdgeInsets)subviewMargin;
+- (BOOL)shouldShowSubviewSeparator;
 
 @end

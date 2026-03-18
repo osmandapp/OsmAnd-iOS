@@ -983,6 +983,7 @@
 "shared_string_color" = "Color";
 "fav_colors" = "Colors";
 "shared_string_name" = "Name";
+"shared_string_alt_name" = "Alternative name";
 "fav_group" = "Group";
 "shared_string_groups" = "Groups";
 "favorite" = "Favorite";
@@ -1174,6 +1175,13 @@
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshades on the map.";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map.";
 "shared_string_legend" = "Legend";
+
+"graph_axis" = "Graph axis";
+"y_axis" = "Y-axis";
+ "x_axis" = "X-axis";
+"y_axis_description" = "Select up to two options for Y-Axis.";
+"external_sensor_widgets" = "External sensors";
+"vehicle_metrics_chart_category" = "Vehicle metrics";
 
 "map_settings_show_slider_map" = "Show slider on the map";
 "add_online_source" = "Add online source";
@@ -1898,6 +1906,10 @@
 "osm_upload_gpx_tags_footer" = "Enter tags separated by comma.";
 "visibility" = "Visibility";
 
+"poi_mobile" = "Mobile";
+"poi_cuisine" = "Cuisine";
+"poi_brand" = "Brand";
+
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
@@ -2317,6 +2329,7 @@
 "nautical_maps" = "Nautical maps";
 "shared_string_travel_guides" = "Travel guides";
 "shared_string_travel" = "Travel";
+"travel_guides" = "Guides";
 "download_select_map_types" = "Other maps";
 
 "shared_string_wikivoyage" = "Wikivoyage";
@@ -2534,6 +2547,7 @@
 "avg_sensor_temperature" = "Temperature, average";
 "shared_string_visible_on_map" = "Visible on map";
 "with_waypoints" = "With waypoints";
+"has_vehicle_metrics" = "With OBDII data";
 "shared_string_reset_all" = "Reset all";
 "shared_string_to" = "To";
 "discard_filter_changes_prompt" = "Reset all filters?";
@@ -2710,6 +2724,8 @@
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 "open_in_browser_wiki" = "Open article online";
 "context_menu_read_article" = "Read article";
+"context_menu_read_full_article" = "Read full article";
+"read_on" = "Read on %@";
 
 "custom_search" = "Custom search";
 "add_custom_category" = "Add custom category";

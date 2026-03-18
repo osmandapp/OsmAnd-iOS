@@ -6,6 +6,8 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
+// analog in android: AmenityMenuBuilder.java
+
 #import "OAPOIViewController.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
@@ -22,7 +24,6 @@
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "Localization.h"
-#import "OACollapsableNearestPoiTypeView.h"
 #import "OAOsmAndFormatter.h"
 #import "OAResourcesUIHelper.h"
 #import "OALabel.h"
@@ -32,16 +33,18 @@
 #import "OAPluginsHelper.h"
 #import "OACollapsableLabelView.h"
 #import "OARenderedObject.h"
+#import "OAOSMSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
-#define WIKI_LINK @".wikipedia.org/w"
-#define US_MAPS_RECREATION_AREA @"us_maps_recreation_area"
-#define OTHER_MAP_CATEGORY @"Other"
+static NSString * const WIKIPEDIA_ORG_WIKI_URL_PART = @".wikipedia.org/wiki/";
+static const NSString *WIKI_LINK = @".wikipedia.org/w";
+static const NSString *US_MAPS_RECREATION_AREA = @"us_maps_recreation_area";
 
 static const NSInteger WAY_MODULO_REMAINDER = 1;
+static const NSInteger kOrderShortDescrRow = -10000;
 
 @interface OAPOIViewController ()
 
@@ -50,6 +53,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 @implementation OAPOIViewController
 {
     OAPOIHelper *_poiHelper;
+    AmenityUIHelper *_amenityUIHelper;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
@@ -99,8 +103,18 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             }
         }
         if (showTransportStops)
-            [self processTransportStop];
+        {
+            self.transportStop = [self findNearestTransportStopForAmenity:self.poi];
+            if (self.transportStop)
+            {
+                [self processTransportStop];
+            }
+        }
     }
+
+    NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
+    self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
+    self.infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
 }
 
 - (void) viewDidLoad
@@ -155,707 +169,249 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return YES;
 }
 
-- (NSDictionary *)groupAdditionalInfo:(NSDictionary *)originalDict
-              withCurrentLocalization:(NSString *)currentLocalization
+// override
+- (void) buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary *localizationsDict = [NSMutableDictionary dictionary];
-    
-    for (NSString *key in originalDict)
-    {
-        NSString *convertedKey = [self convertKey:key];
-        
-        if ([_poiHelper isNameTag:convertedKey])
-        {
-            [self processNameTagWithKey:key
-                              convertedKey:convertedKey
-                          originalDict:originalDict
-                      localizationsDict:localizationsDict];
-        }
-        else
-        {
-            [self processAdditionalTypeWithKey:key
-                                    convertedKey:convertedKey
-                                originalDict:originalDict
-                            localizationsDict:localizationsDict
-                                  resultDict:resultDict];
-        }
-    }
-    NSMutableArray *keysToUpdate = [NSMutableArray array];
-    for (NSString *baseKey in localizationsDict)
-    {
-        NSDictionary *localizations = localizationsDict[baseKey];
-        if (!localizations[baseKey])
-        {
-            [keysToUpdate addObject:baseKey];
-        }
-    }
-    
-    for (NSString *baseKey in keysToUpdate)
-    {
-        NSMutableDictionary *localizations = localizationsDict[baseKey];
-        localizations[baseKey] = originalDict[baseKey];
-        localizationsDict[baseKey] = localizations;
-    }
-    
-    NSMutableDictionary *finalDict = [self finalizeLocalizationDict:localizationsDict
-                                                       originalDict:originalDict
-                                            withCurrentLocalization:currentLocalization];
-    
-    [self addRemainingEntriesFrom:resultDict to:finalDict];
-    
-    return [finalDict copy];
 }
 
-- (NSString *)convertKey:(NSString *)key
+// override
+- (void) buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    return [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
 }
 
-- (void)processNameTagWithKey:(NSString *)key
-                  convertedKey:(NSString *)convertedKey
-                  originalDict:(NSDictionary *)originalDict
-              localizationsDict:(NSMutableDictionary *)localizationsDict
+- (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    if ([key containsString:@":"])
+    [self processRoutePointAmenityTags:rows];
+    [self buildInternalRows:rows];
+    
+    [self buildNearestRowsForAmenity:rows];
+    [self buildAltNamesRow:rows];
+    [self buildNamesRow:rows];
+}
+
+- (void)buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    NSDictionary<NSString *,id> *filteredInfo = [self.infoBundle getFilteredLocalizedInfo];
+    if (![self buildShortWikiDescription:filteredInfo allowOnlineWiki:YES rows:rows])
     {
-        NSArray *components = [convertedKey componentsSeparatedByString:@":"];
-        if (components.count == 2)
+        NullablePair *pair = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:DESCRIPTION_TAG map:filteredInfo];
+        if (pair)
         {
-            NSString *baseKey = components[0];
-            NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
-            
-            NSMutableDictionary *nameDict = [self dictionaryForKey:@"name" inDict:localizationsDict];
-            [nameDict setObject:originalDict[convertedKey] forKey:localeKey];
+            NSString *description = pair.first;
+            OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:nil textPrefix:nil text:description hiddenUrl:nil collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
+            info.typeName = kShortDescriptionRowType;
+            [rows addObject:info];
+            [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
         }
     }
-    else
+    
+    if (self.customOnlinePhotosPosition)
+        [self buildPhotosRow:rows];
+}
+
+- (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
+    _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:self.infoBundle];
+    _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
+    _amenityUIHelper.showDefaultTags = self.showDefaultTags;
+    NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal];
+    [rows addObjectsFromArray:buildedRows];
+}
+
+- (void)processRoutePointAmenityTags:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    // TODO: implement
+}
+
+- (void)buildNearestRowsForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    [self buildNearestWikiForAmenity:rows];
+    if ([self.poi.type.category.name isEqualToString:[OAOSMSettings getOSMKey:ADMINISTRATIVE]])
     {
-        NSMutableDictionary *nameDict = [self dictionaryForKey:@"name" inDict:localizationsDict];
-        [nameDict setObject:originalDict[key] forKey:convertedKey];
+        [self buildNearestPoiRowForAmenity:rows];
     }
 }
 
-- (void)processAdditionalTypeWithKey:(NSString *)key
-                          convertedKey:(NSString *)convertedKey
-                          originalDict:(NSDictionary *)originalDict
-                      localizationsDict:(NSMutableDictionary *)localizationsDict
-                            resultDict:(NSMutableDictionary *)resultDict
+- (void)buildNearestWikiForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    OAPOIBaseType *poiType = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
-    
-    if (poiType.lang && [key containsString:@":"])
+    [super buildNearestWikiRow:rows listener:nil];
+}
+
+- (void)buildNearestPoiRowForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    [self buildNearestPoiRow:rows listener:nil];
+}
+
+- (void)buildAltNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    if (_amenityUIHelper)
     {
-        NSArray *components = [key componentsSeparatedByString:@":"];
-        if (components.count == 2)
-        {
-            NSString *baseKey = components[0];
-            NSString *localeKey = [NSString stringWithFormat:@"%@:%@", baseKey, components[1]];
-            
-            NSMutableDictionary *baseDict = [self dictionaryForKey:baseKey inDict:localizationsDict];
-            [baseDict setObject:originalDict[key] forKey:localeKey];
-        }
-    }
-    else
-    {
-        [resultDict setObject:originalDict[key] forKey:key];
+        OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:[self.poi getAltNamesMap] altName:YES];
+        if (row)
+            [rows addObject:row];
     }
 }
 
-- (NSMutableDictionary *)dictionaryForKey:(NSString *)key inDict:(NSMutableDictionary *)dict
+- (void)buildNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    NSMutableDictionary *subDict = dict[key];
-    if (!subDict)
+    if (!_amenityUIHelper)
+        return;
+    
+    NSMutableDictionary<NSString *, NSString *> *names = [NSMutableDictionary new];
+    NSString *primaryName = [self.poi name];
+    if (!NSStringIsEmpty(primaryName))
+        names[@""] = primaryName; // @"" key represents the default OSM name, not country-specific.
+    
+    [names addEntriesFromDictionary:[self.poi getNamesMap:YES]];
+    OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:names altName:NO];
+    if (!row)
+        return;
+    
+    NSMutableArray<NSDictionary *> *detailsArray = [NSMutableArray new];
+    NSString *title = OALocalizedString(@"shared_string_name");
+    NSArray<NSString *> *sortedKeys = [[names allKeys] sortedArrayUsingSelector:@selector(localizedCompare:)];
+    for (NSString *lang in sortedKeys)
     {
-        subDict = [NSMutableDictionary dictionary];
-        dict[key] = subDict;
-    }
-    return subDict;
-}
-
-- (NSMutableDictionary *)finalizeLocalizationDict:(NSDictionary *)localizationsDict
-                                     originalDict:(NSDictionary *)originalDict
-                      withCurrentLocalization:(NSString *)currentLocalization
-{
-    NSMutableDictionary *finalDict = [NSMutableDictionary dictionary];
-    
-    for (NSString *baseKey in localizationsDict)
-    {
-        NSMutableDictionary *entryDict = [NSMutableDictionary dictionary];
-        NSDictionary *localizations = localizationsDict[baseKey];
-        
-        NSString *nameLocalizedKey = [NSString stringWithFormat:@"%@:%@", baseKey, currentLocalization];
-        NSString *nameValue = localizations[nameLocalizedKey];
-        if (!nameValue)
-        {
-            nameValue = originalDict[baseKey] ?: [localizations allValues].firstObject;
-        }
-
-        entryDict[@"name"] = nameValue;
-        entryDict[@"localization"] = localizations;
-        [finalDict setObject:[entryDict copy] forKey:baseKey];
-    }
-    
-    return finalDict;
-}
-
-- (void)addRemainingEntriesFrom:(NSDictionary *)resultDict to:(NSMutableDictionary *)finalDict {
-    for (NSString *key in resultDict)
-    {
-        if (![finalDict objectForKey:key])
-        {
-            [finalDict setObject:resultDict[key] forKey:key];
-        }
-    }
-}
-
-- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
-{
-    BOOL hasWiki = NO;
-    NSString *preferredLang = [OAUtilities preferredLang];
-    NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
-    NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
-    NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
-    
-    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
-    OARowInfo *cuisineRow;
-    
-    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [NSMutableDictionary dictionary];
-    NSMutableDictionary<NSString *, NSString *> *additionalInfo = [[self.poi getAdditionalInfo] mutableCopy];
-
-    BOOL osmEditingEnabled = [OAPluginsHelper isEnabled:OAOsmEditingPlugin.class];
-    CGSize iconSize = {20, 20};
-    if (self.poi.localizedNames.count > 0)
-        [self addLocalizedNamesTagsToInfo:additionalInfo];
-    
-    NSDictionary *dic = [self groupAdditionalInfo:additionalInfo withCurrentLocalization:preferredLang];
-
-    for (NSString *key in dic.allKeys)
-    {
-        NSString *iconId;
-        UIImage *icon;
-        UIColor *textColor; 
-        NSString *vl = @"";
-    
-        id value = dic[key];
-        if ([value isKindOfClass:[NSDictionary class]]) {
-            vl = value[@"name"] ?: @"";
-            if (vl.length > 0 && ((NSDictionary *)value[@"localization"]).count == 1)
-                continue; // do not display lonesome collapsible name
-        } else {
-            vl = value;
-        }
-
-        NSString *convertedKey = [self convertKey:key];
-        
-        if ([convertedKey isEqualToString:@"image"]
-            || [convertedKey isEqualToString:MAPILLARY_TAG]
-            || [convertedKey isEqualToString:@"subway_region"]
-            || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
-            || [convertedKey hasPrefix:@"lang_yes"]
-            || [convertedKey hasPrefix:@"top_index_"]
-            || [GpxAppearanceInfo isGpxAppearanceTag:convertedKey])
+        NSString *value = names[lang];
+        if (NSStringIsEmpty(value))
             continue;
         
-        OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
-        if (poiType.isHidden)
-        {
-            continue;
-        }
-
-        NSString *textPrefix = @"";
-        OACollapsableView *collapsableView;
-        BOOL collapsable = NO;
-        BOOL isText = NO;
-        BOOL isDescription = NO;
-        BOOL needLinks = !([convertedKey isEqualToString:@"population"] || [convertedKey isEqualToString:@"height"] || [convertedKey isEqualToString:OPENING_HOURS_TAG]);
-        BOOL needIntFormatting = [convertedKey isEqualToString:@"population"];
-        BOOL isPhoneNumber = NO;
-        BOOL isUrl = NO;
-        BOOL isCuisine = NO;
-        int poiTypeOrder = 0;
-        NSString *poiTypeKeyName = @"";
-        NSString *categoryIconId;
-        UIImage *categoryIcon;
-
-        OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
-
-        if (!pt && vl && vl.length > 0 && vl.length < 50)
-            pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", convertedKey, vl]];
-        
-        if (poiType == nil && pt == nil)
-        {
-            poiType = [_poiHelper getPoiTypeByKey:key];
-        }
-
-        OAPOIType *pType = nil;
-        if (pt)
-        {
-            pType = (OAPOIType *) pt;
-            if (pType.filterOnly || pType.isHidden)
-                continue;
-
-            poiTypeOrder = pType.order;
-            poiTypeKeyName = pType.name;
-        }
-
-        if ([vl hasPrefix:@"http://"] || [vl hasPrefix:@"https://"] || [vl hasPrefix:@"HTTP://"] || [vl hasPrefix:@"HTTPS://"])
-        {
-            isUrl = YES;
-            textColor = [UIColor colorNamed:ACColorNameTextColorActive];
-        }
-        else if (needLinks)
-        {
-            NSString *socialMediaUrl = [self getSocialMediaUrl:convertedKey value:vl];
-            if (socialMediaUrl)
-            {
-                isUrl = YES;
-                textColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            }
-        }
-
-        if (pType && !pType.isText)
-        {
-            NSString *categoryName = pType.poiAdditionalCategory;
-            if (categoryName && categoryName.length > 0)
-            {
-                NSMutableArray<OAPOIType *> *poiAdditionalCategoryTypes = poiAdditionalCategories[categoryName];
-                if (!poiAdditionalCategoryTypes)
-                {
-                    poiAdditionalCategoryTypes = [NSMutableArray array];
-                    poiAdditionalCategories[categoryName] = poiAdditionalCategoryTypes;
-                }
-                [poiAdditionalCategoryTypes addObject:pType];
-                continue;
-            }
-        }
-
-        if ([self.poi.type.category isWiki])
-        {
-            if (!hasWiki)
-            {
-                NSString *articleLang = [OAPluginsHelper onGetMapObjectsLocale:self.poi preferredLocale:preferredLang];
-                NSString *lng = [self.poi getContentLanguage:@"content" lang:articleLang defLang:@"en"];
-                if (!lng || lng.length == 0)
-                    lng = @"en";
-
-                NSString *langSelected = lng;
-                NSString *content = [self.poi getDescription:langSelected];
-                vl = content != nil ? [OAWikiArticleHelper getPartialContent:content] : @"";
-                vl = vl == nil ? @"" : vl;
-                hasWiki = YES;
-                needLinks = NO;
-            }
-            else
-            {
-                continue;
-            }
-        }
-        else if ([convertedKey isEqualToString:COLLECTION_TIMES_TAG] || [convertedKey isEqualToString:SERVICE_TIMES_TAG])
-        {
-            iconId = @"ic_action_time";
-            needLinks = NO;
-        }
-        else if ([convertedKey isEqualToString:OPENING_HOURS_TAG])
-        {
-            iconId = @"ic_action_time";
-            collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            collapsableView.collapsed = YES;
-            ((OACollapsableLabelView *) collapsableView).label.text =
-                    [[additionalInfo[key] stringByReplacingOccurrencesOfString:@"; " withString:@"\n"]
-                                                        stringByReplacingOccurrencesOfString:@"," withString:@", "];
-            collapsable = YES;
-            auto rs = OpeningHoursParser::parseOpenedHours([additionalInfo[key] UTF8String]);
-            if (rs != nullptr)
-            {
-                vl = [NSString stringWithUTF8String:rs->toLocalString().c_str()];
-                BOOL opened = rs->isOpenedForTime([NSDate.date toTm]);
-                textColor = opened ? UIColorFromRGB(color_place_open) : UIColorFromRGB(color_place_closed);
-            }
-            vl = [vl stringByReplacingOccurrencesOfString:@"; " withString:@"\n"];
-            needLinks = NO;
-        }
-        else if ([kContactPhoneTags containsObject:convertedKey])
-        {
-            iconId = @"ic_phone_number";
-            textColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            isPhoneNumber = YES;
-        }
-        else if ([convertedKey isEqualToString:WEBSITE_TAG] || [convertedKey isEqualToString:URL_TAG] || [kContactUrlTags containsObject:convertedKey])
-        {
-            if ([kContactUrlTags containsObject:convertedKey])
-            {
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:convertedKey] size:iconSize];
-            }
-            iconId = @"ic_website";
-            textColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            isUrl = YES;
-        }
-        else if ([convertedKey isEqualToString:CUISINE_TAG])
-        {
-            isCuisine = YES;
-            iconId = @"ic_cuisine";
-            NSMutableString *sb = [NSMutableString string];
-            for (NSString *c in [vl componentsSeparatedByString:@";"])
-            {
-                if (sb.length > 0)
-                {
-                    [sb appendString:@", "];
-                    [sb appendString:[_poiHelper getPhraseByName:[[@"cuisine_" stringByAppendingString:c] lowercaseString]]];
-                }
-                else
-                {
-                    [sb appendString:[_poiHelper getPhraseByName:[@"cuisine_" stringByAppendingString:c]]];
-                }
-            }
-            textPrefix = [_poiHelper getPhraseByName:@"cuisine"];
-            vl = sb;
-        }
-        else if ([convertedKey containsString:ROUTE_TAG]
-                || [convertedKey isEqualToString:WIKIDATA_TAG]
-                || [convertedKey isEqualToString:WIKI_PHOTO_TAG]
-                || [convertedKey isEqualToString:WIKIMEDIA_COMMONS_TAG])
-        {
-            continue;
-        }
-        else
-        {
-            if ([convertedKey containsString:DESCRIPTION_TAG])
-            {
-                iconId = @"ic_description";
-            }
-            else if (isUrl && [vl containsString:WIKI_LINK])
-            {
-                iconId = @"ic_custom_wikipedia";
-            }
-            else if ([convertedKey isEqualToString:@"addr:housename"] || [convertedKey isEqualToString:@"whitewater:rapid_name"])
-            {
-                iconId = @"ic_custom_poi_name";
-            }
-            else if ([convertedKey isEqualToString:@"operator"] || [convertedKey isEqualToString:@"brand"])
-            {
-                iconId = @"ic_custom_poi_brand";
-            }
-            else if ([convertedKey isEqualToString:@"internet_access_fee_yes"])
-            {
-                iconId = @"ic_custom_internet_access_fee";
-            }
-            else
-            {
-                iconId = @"ic_operator";
-            }
-            if (pType)
-            {
-                NSString *category = [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"];
-                if (category && category.length > 0)
-                {
-                    categoryIconId = [NSString stringWithFormat:@"mx_%@", category];
-                    categoryIcon = [OATargetInfoViewController getIcon:categoryIconId size:iconSize];
-                    iconId = categoryIcon ? categoryIconId : iconId;
-                }
-                
-                poiTypeOrder = pType.order;
-                poiTypeKeyName = pType.name;
-                if (pType.parentType && [pType.parentType isKindOfClass:OAPOIType.class])
-                {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@", ((OAPOIType *) pType.parentType).tag, category, pType.value] size:iconSize];
-                }
-                if (!pType.isText)
-                {
-                    vl = pType.nameLocalized;
-                }
-                else
-                {
-                    isText = YES;
-                    isDescription = [iconId isEqualToString:@"ic_description"];
-                    textPrefix = pType.nameLocalized;
-                    if (needIntFormatting && [self isNumericValue:vl])
-                    {
-                        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-                        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-                        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                        NSInteger numberValue = [vl integerValue];
-                        vl = [numberFormatter stringFromNumber:@(numberValue)];
-                    }
-                }
-                if (!isDescription && !icon)
-                {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]] size:iconSize];
-                    if (isText && icon && ![kPrefixTags containsObject:convertedKey])
-                        textPrefix = @"";
-                }
-                if (!icon && isText && !iconId)
-                    iconId = @"ic_description";
-            }
-            else if (poiType)
-            {
-                NSString *catKey = poiType.category.name;
-                if ([catKey isEqualToString:OTHER_MAP_CATEGORY]) {
-                    continue; // the "Others" value is already displayed as a title
-                }
-                NSMutableArray<OAPOIType *> *list = collectedPoiTypes[catKey];
-                if (!list)
-                {
-                    list = [[NSMutableArray alloc] init];
-                    collectedPoiTypes[catKey] = list;
-                }
-                [list addObject:poiType];
-            }
-            else
-            {
-                NSString *translatedKey = [_poiHelper getTranslation:convertedKey];
-                if (translatedKey.length > 0)
-                    textPrefix = translatedKey;
-                else if (!pt && !pType && !poiType)
-                    continue; // do not display internal and/or non-translatable tags
-                else
-                    textPrefix = [OAUtilities capitalizeFirstLetter:convertedKey];
-                
-                if (!pt && !pType && !poiType)
-                    isText = YES;
-            }
-        }
-
-        NSArray<NSString *> *formattedPrefixAndText = [self getFormattedPrefixAndText:convertedKey prefix:textPrefix value:vl amenity:self.poi];
-        textPrefix = formattedPrefixAndText[0];
-        vl = formattedPrefixAndText[1];
-
-        if ([convertedKey isEqualToString:@"ele"] && [self isNumericValue:vl])
-        {
-            float distance = [vl floatValue];
-            vl = [OAOsmAndFormatter getFormattedAlt:distance];
-            NSString *collapsibleVal;
-            EOAltitudeMetricsConstant altitudeMetric = [[OAAppSettings sharedManager].altitudeMetric get];
-            if (altitudeMetric == FEET)
-                collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:METERS];
-            else
-                collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:FEET];
-
-            collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            collapsableView.collapsed = YES;
-            ((OACollapsableLabelView *) collapsableView).label.text = collapsibleVal;
-            collapsable = YES;
-        }
-
-        OARowInfo *row;
-        if (isDescription)
-        {
-            row = [[OARowInfo alloc] initWithKey:convertedKey
-                                           icon:[UIImage imageNamed:@"ic_description"]
-                                      textPrefix:textPrefix
-                                            text:vl
-                                       textColor:nil
-                                          isText:YES
-                                       needLinks:YES
-                                           order:0
-                                        typeName:@""
-                                   isPhoneNumber:NO
-                                           isUrl:NO];
-        }
-        else
-        {
-            UIImage *rowIcon;
-            if (icon)
-                rowIcon = icon;
-            else if ([iconId isEqualToString:categoryIconId] && categoryIcon)
-                rowIcon = categoryIcon;
-            else
-                rowIcon = [OATargetInfoViewController getIcon:iconId size:iconSize];
-
-            if (!rowIcon && NSStringIsEmpty(textPrefix) && NSStringIsEmpty(vl))
-                continue;
-            
-            row = [[OARowInfo alloc] initWithKey:convertedKey
-                                            icon:rowIcon
-                                      textPrefix:textPrefix
-                                            text:vl
-                                       textColor:textColor
-                                          isText:isText
-                                       needLinks:needLinks
-                                           order:poiTypeOrder
-                                        typeName:poiTypeKeyName
-                                   isPhoneNumber:isPhoneNumber
-                                           isUrl:isUrl];
-        }
-        [self configureRowValue:value dic:dic convertedKey:convertedKey row:row];
-        row.collapsable = collapsable;
-        row.collapsed = YES;
-        row.collapsableView = collapsableView;
-
-        if (isDescription)
-            [descriptions addObject:row];
-        else if (isCuisine)
-            cuisineRow = row;
-        else if (isUrl)
-            [self addRowIfNotExists:row toDestinationRows:urlRows];
-        else if (!poiType)
-            [infoRows addObject:row];
+        NSString *tagKey = lang.length > 0 ? [NSString stringWithFormat:@"name:%@", lang] : @"name";
+        [detailsArray addObject:@{
+            @"key": tagKey,
+            @"value": value,
+            @"localizedTitle": title
+        }];
     }
-
-    if (cuisineRow)
+    
+    if (detailsArray.count > 0)
     {
-        BOOL hasCuisineOrDish = poiAdditionalCategories[CUISINE_TAG] != nil || poiAdditionalCategories[DISH_TAG] != nil;
-        if (!hasCuisineOrDish)
-            [infoRows addObject:cuisineRow];
-    }
-
-    [poiAdditionalCategories enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull categoryName, NSArray<OAPOIType *> * _Nonnull categoryTypes, BOOL * _Nonnull stop) {
-        if (categoryTypes.count > 0)
-        {
-            UIImage *icon;
-            OAPOIType *pType = categoryTypes.firstObject;
-            NSString *poiAdditionalCategoryName = pType.poiAdditionalCategory;
-            NSString *poiAdditionalIconName = [_poiHelper getPoiAdditionalCategoryIcon:poiAdditionalCategoryName];
-            if (poiAdditionalIconName)
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalIconName] size:iconSize];
-            if (!icon)
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalCategoryName] size:iconSize];
-            if (!icon)
-                icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]] size:iconSize];
-            if (!icon)
-                icon = [UIImage imageNamed:@"ic_description"];
-
-            NSMutableString *sb = [NSMutableString new];
-            for (OAPOIType *pt in categoryTypes)
-            {
-                if (sb.length > 0)
-                    [sb appendString:@" • "];
-                [sb appendString:pt.nameLocalized];
-            }
-
-            BOOL cuisineOrDish = [categoryName isEqualToString:CUISINE_TAG] || [categoryName isEqualToString:DISH_TAG];
-            OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            collapsableView.collapsed = YES;
-            [collapsableView setData:categoryTypes
-                             amenity:self.poi
-                                 lat:self.poi.latitude
-                                 lon:self.poi.longitude
-                     isPoiAdditional:YES
-                             textRow:cuisineOrDish ? cuisineRow : nil];
-            OARowInfo *row = [[OARowInfo alloc] initWithKey:poiAdditionalCategoryName
-                                                       icon:icon
-                                                 textPrefix:pType.poiAdditionalCategoryLocalized
-                                                       text:sb
-                                                  textColor:nil
-                                                     isText:NO
-                                                  needLinks:NO
-                                                      order:pType.order
-                                                   typeName:pType.name
-                                              isPhoneNumber:NO
-                                                      isUrl:NO];
+        row.detailsArray = detailsArray;
+        if (detailsArray.count > 1)
             row.collapsed = YES;
-            row.collapsable = YES;
-            row.collapsableView = collapsableView;
-            [infoRows addObject:row];
-        }
-    }];
-
-    if (collectedPoiTypes.count > 0) {
-        for (NSString *key in collectedPoiTypes) {
-            NSMutableArray<OAPOIType *> *poiTypeList = collectedPoiTypes[key];
-            
-            OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            collapsableView.collapsed = YES;
-            [collapsableView setData:poiTypeList
-                             amenity:self.poi
-                                 lat:self.poi.latitude
-                                 lon:self.poi.longitude
-                     isPoiAdditional:NO
-                             textRow:nil];
-            
-            OAPOICategory *poiCategory = self.poi.type.category;
-            NSMutableString *sb = [NSMutableString new];
-            
-            for (OAPOIType *pt in poiTypeList) {
-                if (sb.length > 0) {
-                    [sb appendString:@" • "];
-                }
-                [sb appendString:pt.nameLocalized];
-                poiCategory = pt.category;
-            }
-            
-            UIImage *icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", poiCategory.name] size:iconSize];
-            
-            OARowInfo *row = [[OARowInfo alloc] initWithKey:poiCategory.name
-                                                       icon:icon
-                                                 textPrefix:poiCategory.nameLocalized
-                                                       text:sb
-                                                  textColor:nil
-                                                     isText:NO
-                                                  needLinks:NO
-                                                      order:40
-                                                   typeName:poiCategory.name
-                                              isPhoneNumber:NO
-                                                      isUrl:NO];
-            row.collapsed = YES;
-            row.collapsable = YES;
-            row.collapsableView = collapsableView;
-            [infoRows addObject:row];
-        }
     }
-
-    [infoRows addObjectsFromArray:urlRows];
-    [infoRows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
-        if (row1.order < row2.order)
-            return NSOrderedAscending;
-        else if (row1.order == row2.order)
-            return [row1.typeName localizedCompare:row2.typeName];
-        else
-            return NSOrderedDescending;
-    }];
-
-    for (OARowInfo *row in infoRows)
-    {
-        [rows addObject:row];
-    }
-
-    NSString *langSuffix = [@":" stringByAppendingString:preferredLang];
-    OARowInfo *descInPrefLang;
-    for (OARowInfo *desc in descriptions)
-    {
-        if (desc.key.length > langSuffix.length
-                && [[desc.key substringFromIndex:desc.key.length - langSuffix.length] isEqualToString:langSuffix])
-        {
-            descInPrefLang = desc;
-            break;
-        }
-    }
-    if (descInPrefLang)
-    {
-        [descriptions removeObject:descInPrefLang];
-        [descriptions insertObject:descInPrefLang atIndex:0];
-    }
-    for (OARowInfo *desc in descriptions)
-    {
-        [rows addObject:desc];
-    }
-
-    NSString *link = [self getOsmUrl];
-    if (link.length > 0)
-    {
-        [rows addObject:[[OARowInfo alloc] initWithKey:nil
-                                                  icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
-                                            textPrefix:nil
-                                                  text:link
-                                             textColor:[UIColor colorNamed:ACColorNameTextColorActive]
-                                                isText:YES
-                                             needLinks:YES
-                                                 order:10000
-                                              typeName:nil
-                                         isPhoneNumber:NO
-                                                 isUrl:YES]];
-    }
+    
+    [rows addObject:row];
 }
 
-- (NSString *) getOsmUrl
+- (BOOL)buildShortWikiDescription:(NSDictionary<NSString *, id> *)filteredInfo allowOnlineWiki:(BOOL)allowOnlineWiki rows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    return [ObfConstants getOsmUrlForId:self.poi];
+    NSString *locale;
+    NSString *description;
+    NullablePair *pair = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:SHORT_DESCRIPTION_TAG map:filteredInfo];
+    if (pair)
+    {
+        if (pair.second && [pair.second isKindOfClass:NSString.class])
+            locale = pair.second;
+        
+        if (pair.first && [pair.first isKindOfClass:NSString.class])
+            description = pair.first;
+    }
+    
+    BOOL hasShortDescription = !NSStringIsEmpty(description);
+    if (hasShortDescription)
+    {
+        [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+    }
+    if (!hasShortDescription && allowOnlineWiki)
+    {
+        description = [self createWikipediaArticleList:filteredInfo];
+    }
+    
+    if (!NSStringIsEmpty(description))
+    {
+        NSString *labelText = [self getTrimmedDescription:description collapsed:YES];
+        UIImage *icon = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
+        
+        NSString *buttonText;
+        NSString *wikipediaUrl;
+        if (hasShortDescription)
+        {
+            buttonText = OALocalizedString(@"context_menu_read_full_article");
+        }
+        else
+        {
+            buttonText = [NSString stringWithFormat:OALocalizedString(@"read_on"), OALocalizedString(@"download_wikipedia_maps")];
+            
+            wikipediaUrl = [self.poi getAdditionalInfo:WIKIPEDIA_TAG];
+            if (!wikipediaUrl && locale != nil)
+            {
+                NSString *title = [[self.poi getName:locale] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                wikipediaUrl = [NSString stringWithFormat:@"https://%@%@%@", locale, WIKIPEDIA_ORG_WIKI_URL_PART, title];
+            }
+        }
+        
+        OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:icon textPrefix:buttonText text:labelText hiddenUrl:wikipediaUrl collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
+        info.typeName = kShortDescriptionWikiRowType;
+        
+        [rows addObject:info];
+    }
+    return hasShortDescription;
+}
+
+- (NSString *)getTrimmedDescription:(NSString *)description collapsed:(BOOL)collapsed
+{
+    NSString *text = description;
+    if (collapsed)
+    {
+        int length = min(200, ((int) description.length));
+        text = [description substringToIndex:length];
+        if (description.length > text.length)
+        {
+            text = [text stringByAppendingString:OALocalizedString(@"shared_string_ellipsis")];
+        }
+    }
+    return text;
+}
+
+- (nullable NSString *)createWikipediaArticleList:(NSDictionary<NSString *, id> *)filteredInfo {
+    id value = filteredInfo[WIKIPEDIA_TAG];
+    if (!value)
+        return nil;
+
+    if ([value isKindOfClass:NSString.class])
+    {
+        NSString *url = (NSString *)value;
+        NSRange range = [url rangeOfString:WIKIPEDIA_ORG_WIKI_URL_PART options:NSBackwardsSearch];
+        if (range.location != NSNotFound)
+            return [url substringFromIndex:range.location + range.length];
+    }
+    else if ([value isKindOfClass:NSDictionary.class])
+    {
+        NSDictionary *map = (NSDictionary *)value;
+        NSDictionary<NSString *, NSString *> *localizations = map[@"localizations"];
+
+        if (localizations.count == 0)
+            return nil;
+
+        NSSet<NSString *> *availableLocales =
+            [AmenityUIHelper collectAvailableLocalesFromTags:localizations.allKeys];
+
+        NSMutableArray<NSString *> *parts = [NSMutableArray array];
+
+        for (NSString *key in availableLocales)
+        {
+            NSString *localizedKey = [NSString stringWithFormat:@"%@:%@", WIKIPEDIA_TAG, key];
+            NSString *localizedValue = localizations[localizedKey];
+
+            if (localizedValue.length > 0)
+            {
+                NSString *name = [NSString stringWithFormat:@"%@ (%@)", localizedValue, key];
+                [parts addObject:name];
+            }
+        }
+
+        return parts.count > 0 ? [parts componentsJoinedByString:@", "] : nil;
+    }
+
+    return nil;
 }
 
 - (void)configureRowValue:(id)value
                       dic:(NSDictionary *)dic
              convertedKey:(NSString *)convertedKey
-                      row:(OARowInfo *)row
+                      row:(OAAmenityInfoRow *)row
 {
     if ([value isKindOfClass:[NSDictionary class]])
     {
@@ -884,59 +440,15 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 }
 
-- (void) addLocalizedNamesTagsToInfo:(NSMutableDictionary<NSString *, NSString *> *)additionalInfo
-{
-    [[self filteredLocalizedNames] enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *name, BOOL *stop) {
-        NSString *nameKey = [NSString stringWithFormat:@"name:%@", key];
-        if (key.length > 0 && ![key isEqualToString:[OAAppSettings sharedManager].settingPrefMapLanguage.get] && !additionalInfo[nameKey])
-            additionalInfo[nameKey] = name;
-    }];
-}
-
-- (NSDictionary *)filteredLocalizedNames
-{
-    NSMutableDictionary *filteredDict = [self.poi.localizedNames mutableCopy];
-    [filteredDict removeObjectForKey:@"brand"];
-    return [filteredDict copy];
-}
-
-- (void)addRowIfNotExists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
+- (void)addRowIfNotExists:(OAAmenityInfoRow *)newRow toDestinationRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if (![rows containsObject:newRow])
         [rows addObject:newRow];
 }
 
-- (NSString *)getSocialMediaUrl:(NSString *)key value:(NSString *)value
+- (NSString *)getOsmUrl
 {
-    if (!value || value.length == 0)
-        return nil;
-    
-    // Remove leading and closing slashes
-    NSMutableString *sb = [NSMutableString stringWithString:[value trim]];
-    if ([sb characterAtIndex:0] == '/')
-        [sb deleteCharactersInRange:NSMakeRange(0, 1)];
-    NSInteger lastIdx = sb.length - 1;
-    if ([sb characterAtIndex:lastIdx] == '/')
-        [sb deleteCharactersInRange:NSMakeRange(lastIdx, 1)];
-
-    // It cannot be username
-    if ([sb isValidURL])
-        return [@"https://" stringByAppendingString:value];
-
-    NSMutableDictionary<NSString *, NSString *> *urls = [NSMutableDictionary dictionary];
-    urls[@"facebook"] = @"https://facebook.com/";
-    urls[@"vk"] = @"https://vk.com/";
-    urls[@"instagram"] = @"https://instagram.com/";
-    urls[@"twitter"] = @"https://x.com/";
-    urls[@"x"] = @"https://x.com/",
-    urls[@"ok"] = @"https://ok.ru/";
-    urls[@"telegram"] = @"https://t.me/";
-    urls[@"flickr"] = @"https://flickr.com/";
-
-    if ([urls.allKeys containsObject:[key lowercaseString]])
-        return [urls[key] stringByAppendingString:value];
-    else
-        return nil;
+    return @"";
 }
 
 - (NSArray<NSString *> *)getFormattedPrefixAndText:(NSString *)key

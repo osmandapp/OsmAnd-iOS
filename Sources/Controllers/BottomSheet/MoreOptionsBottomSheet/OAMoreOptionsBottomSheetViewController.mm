@@ -166,7 +166,7 @@
                 _editingAddon = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
                 if ([_editingAddon isEnabled])
                 {
-                    BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
+                    BOOL createNewPoi = (![_targetPoint isValidObfId] && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
                     [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"context_menu_item_create_poi") : _targetPoint.type == OATargetOsmEdit ?
                                       OALocalizedString(@"poi_context_menu_modify_osm_change") : OALocalizedString(@"poi_context_menu_modify"),
                                       @"key" : @"addon_edit_poi_modify",

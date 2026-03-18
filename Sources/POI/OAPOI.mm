@@ -29,9 +29,15 @@ NSString * const URL_TAG = @"url";
 NSString * const WEBSITE_TAG = @"website";
 NSString * const PHONE_TAG = @"phone";
 NSString * const MOBILE_TAG = @"mobile";
+NSString * const BRAND_TAG = @"brand";
+NSString * const OPERATOR_TAG = @"operator";
 NSString * const DESCRIPTION_TAG = @"description";
 NSString * const ROUTE_TAG = @"route";
 NSString * const OPENING_HOURS_TAG = @"opening_hours";
+NSString * const POPULATION_TAG = @"population";
+NSString * const WIDTH_TAG = @"width";
+NSString * const HEIGHT_TAG = @"height";
+NSString * const DISTANCE_TAG = @"distance";
 NSString * const SERVICE_TIMES_TAG = @"service_times";
 NSString * const COLLECTION_TIMES_TAG = @"collection_times";
 NSString * const CONTENT_TAG = @"content";
@@ -70,6 +76,8 @@ NSString * const ROUTE_TRACK_POINT = @"route_track_point";
 NSString * const ROUTE_BBOX_RADIUS = @"route_bbox_radius";
 NSString * const ROUTE_MEMBERS_IDS = @"route_members_ids";
 NSString * const TRAVEL_EVO_TAG = @"travel_elo";
+NSString * const SHORT_DESCRIPTION_TAG = @"short_description";
+NSString * const WIKI_PHOTO = @"wiki_photo";
 
 static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     COLOR_NAME_EXTENSION_KEY,
@@ -77,9 +85,14 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     BACKGROUND_TYPE_EXTENSION_KEY,
     PROFILE_TYPE_EXTENSION_KEY,
     ADDRESS_EXTENSION_KEY,
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, AMENITY_NAME],
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, TYPE],
-    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, SUBTYPE]
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, AMENITY_NAME],
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, TYPE],
+    [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, SUBTYPE]
+];
+
+static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
+    PHONE_TAG,
+    WEBSITE_TAG
 ];
 
 @implementation OAPOIRoutePoint
@@ -101,7 +114,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (UIImage *)icon
 {
     NSString *subwayRegion = [self getAdditionalInfo][@"subway_region"];
-	if (subwayRegion.length > 0)
+    if (subwayRegion.length > 0)
         return [UIImage svgImageNamed:[NSString stringWithFormat:@"map-icons-svg/c_mx_subway_%@", subwayRegion]];
     else if (_mapIconName && _mapIconName.length > 0 && ![_mapIconName containsString:@"_small"])
         return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
@@ -703,7 +716,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         if (name.length == 0)
         {
             int64_t osmId = [self getOsmId];
-            if (osmId > 0)
+            if (osmId > 0 && osmId != [OAMapObject getInvalidObfId])
                 name = [NSString stringWithFormat:@"%lld", osmId];
         }
     }
@@ -916,16 +929,127 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     self.y = renderedObject.y;
 }
 
-- (int64_t) getOsmId
+- (uint64_t) getOsmId
 {
-    int64_t _osmId = self.obfId;
-    if (_osmId == -1)
-        return -1;
-    
+    uint64_t _osmId = self.obfId;
+    if (_osmId == [OAMapObject getInvalidObfId])
+    {
+        return [OAMapObject getInvalidObfId];
+    }
+
     if ([ObfConstants isShiftedID:_osmId])
         return [ObfConstants getOsmId:_osmId];
     else
         return _osmId >> AMENITY_ID_RIGHT_SHIFT;
+}
+
+- (BOOL) isValidOsmId
+{
+    return [self getOsmId] != [OAMapObject getInvalidObfId];
+}
+
+- (NSDictionary<NSString *, NSString *> *) getAmenityExtensions:(BOOL)addPrefixes
+{
+    NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *categories = [NSMutableDictionary new];
+    
+    if (self.name)
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:POI_NAME] : POI_NAME] = self.name;
+    
+    if (self.subType)
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:SUBTYPE] : SUBTYPE] = self.subType;
+    
+    if (self.type && [self.type.category name])
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:TYPE] : TYPE] = [self.type.category name];
+    
+    if (self.openingHours)
+        result[addPrefixes ? [AMENITY_PREFIX stringByAppendingString:OPENING_HOURS_TAG] : OPENING_HOURS_TAG] = self.openingHours;
+    
+    if (!NSDictionaryIsEmpty(self.values))
+    {
+        NSDictionary<NSString *,NSString *> *additionalInfo = [self getAdditionalInfoAndCollectCategories:categories addPrefixes:addPrefixes];
+        [result addEntriesFromDictionary:additionalInfo];
+        
+        //join collected tags by category into one string
+        for (NSString *entryKey in categories)
+        {
+            NSString *key = [COLLAPSABLE_PREFIX stringByAppendingString:entryKey];
+            NSMutableArray<OAPOIType *> *categoryTypes = categories[entryKey];
+            
+            if (!NSArrayIsEmpty(categoryTypes))
+            {
+                NSString *builder = @"";
+                for (OAPOIType *poiType in categoryTypes)
+                {
+                    if (builder.length > 0)
+                        builder = [builder stringByAppendingString:SEPARATOR];
+                    
+                    builder = [builder stringByAppendingString:poiType.name];
+                }
+                result[key] = builder;
+            }
+        }
+    }
+    
+    return result;
+}
+
+- (NSDictionary<NSString *, NSString *> *) getAdditionalInfoAndCollectCategories:(NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *)categories addPrefixes:(BOOL)addPrefixes
+{
+    NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
+    
+    for (NSString *k in [self getAdditionalInfoKeys])
+    {
+        NSString *key = k; //mutable copy
+        NSString *value = [self getAdditionalInfo:key];
+        
+        OAPOIType *poiType = [self getPoiType:key value:value];
+        if (poiType && poiType.filterOnly)
+            continue;
+        
+        if (poiType && !poiType.isText)
+        {
+            if (categories)
+            {
+                NSString *category = poiType.poiAdditionalCategory;
+                if (!NSStringIsEmpty(category))
+                {
+                    NSMutableArray<OAPOIType *> *types = categories[category];
+                    if (!types)
+                    {
+                        types = [NSMutableArray new];
+                        categories[category] = types;
+                    }
+                    [types addObject:poiType];
+                    continue;
+                }
+            }
+        }
+        
+        //save all other values to separate lines
+        if ([key hasSuffix:OPENING_HOURS_TAG])
+            continue;
+        
+        if (![HIDING_EXTENSIONS_AMENITY_TAGS containsObject:key] && addPrefixes)
+            key = [OSM_PREFIX_KEY stringByAppendingString:key];
+        
+        result[key] = value;
+    }
+    return result;
+}
+
+- (OAPOIType *) getPoiType:(NSString *)key value:(NSString *)value
+{
+    OAPOIBaseType *abstractPoiType = [OAPOIHelper.sharedInstance getAnyPoiAdditionalTypeByKey:key];
+    if (!abstractPoiType)
+    {
+        abstractPoiType = [OAPOIHelper.sharedInstance getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", key, value]];
+    }
+    if ([abstractPoiType isKindOfClass:OAPOIType.class])
+    {
+        return (OAPOIType *) abstractPoiType;
+    }
+    return nil;
 }
 
 - (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags
@@ -1041,6 +1165,14 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     result = 31 * result + [@(self.latitude) hash];
     result = 31 * result + [@(self.longitude) hash];
     return result;
+}
+
+- (NSString *)description
+{
+    NSString *type = NSStringIsEmpty(_type.category.name) ? @"nil" : _type.category.name;
+    NSString *subtype = NSStringIsEmpty(_subType) ? @"nil" : _subType;
+    NSString *name = NSStringIsEmpty(_subType) ? @"nil" : self.name;
+    return [NSString stringWithFormat:@"%@:  %@  %@", type, subtype, name];
 }
 
 - (NSString *)getOsmandPoiKey

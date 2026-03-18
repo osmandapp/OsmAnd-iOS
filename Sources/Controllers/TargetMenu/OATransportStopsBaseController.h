@@ -17,6 +17,6 @@
 @property (nonatomic) OATransportStopType *stopType;
 
 - (void) processTransportStop;
-+ (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity;
+- (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity;
 
 @end

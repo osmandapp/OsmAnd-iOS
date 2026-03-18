@@ -34,6 +34,32 @@
             return OALocalizedString(@"map_settings_weather_temp_air");
         case GPXDataSetTypeSensorTemperatureW:
             return OALocalizedString(@"map_settings_weather_temp_water");
+        case GPXDataSetTypeIntakeTemperature:
+            return OALocalizedString(@"obd_air_intake_temp");
+        case GPXDataSetTypeAmbientTemperature:
+            return OALocalizedString(@"obd_ambient_air_temp");
+        case GPXDataSetTypeCoolantTemperature:
+            return OALocalizedString(@"obd_engine_coolant_temp");
+        case GPXDataSetTypeEngineOilTemperature:
+            return OALocalizedString(@"obd_engine_oil_temperature");
+        case GPXDataSetTypeEngineSpeed:
+            return OALocalizedString(@"obd_widget_engine_speed");
+        case GPXDataSetTypeEngineRuntime:
+            return OALocalizedString(@"obd_engine_runtime");
+        case GPXDataSetTypeEngineLoad:
+            return OALocalizedString(@"obd_calculated_engine_load");
+        case GPXDataSetTypeFuelPressure:
+            return OALocalizedString(@"obd_fuel_pressure");
+        case GPXDataSetTypeFuelConsumption:
+            return OALocalizedString(@"obd_fuel_consumption");
+        case GPXDataSetTypeRemainingFuel:
+            return OALocalizedString(@"remaining_fuel");
+        case GPXDataSetTypeBatteryLevel:
+            return OALocalizedString(@"obd_battery_voltage");
+        case GPXDataSetTypeVehicleSpeed:
+            return OALocalizedString(@"obd_widget_vehicle_speed");
+        case GPXDataSetTypeThrottlePosition:
+            return OALocalizedString(@"obd_throttle_position");
         default:
             return @"";
     }
@@ -44,22 +70,48 @@
     switch (type)
     {
         case GPXDataSetTypeAltitude:
-            return @"ic_custom_altitude";
+            return ACImageNameIcCustomAltitude;
         case GPXDataSetTypeSpeed:
-            return @"ic_action_speed";
+            return ACImageNameIcCustomSpeed;
         case GPXDataSetTypeSlope:
-            return ACImageNameIcCustomAscent;
+            return ACImageNameIcCustomSlope;
         case GPXDataSetTypeSensorSpeed:
-            return @"ic_custom_sensor_speed_outlined";
+            return ACImageNameIcCustomSensorSpeedOutlined;
         case GPXDataSetTypeSensorHeartRate:
-            return @"ic_custom_sensor_heart_rate_outlined";
+            return ACImageNameIcCustomSensorHeartRateOutlined;
         case GPXDataSetTypeSensorBikePower:
-            return @"ic_custom_sensor_bicycle_power_outlined";
+            return ACImageNameIcCustomSensorBicyclePowerOutlined;
         case GPXDataSetTypeSensorBikeCadence:
-            return @"ic_custom_sensor_cadence_outlined";
+            return ACImageNameIcCustomSensorCadenceOutlined;
         case GPXDataSetTypeSensorTemperatureA:
         case GPXDataSetTypeSensorTemperatureW:
-            return @"ic_custom_sensor_thermometer";
+            return ACImageNameIcCustomSensorThermometer;
+        case GPXDataSetTypeIntakeTemperature:
+            return ACImageNameIcCustomObdTemperatureIntake;
+        case GPXDataSetTypeAmbientTemperature:
+            return ACImageNameIcCustomObdTemperatureOutside;
+        case GPXDataSetTypeCoolantTemperature:
+            return ACImageNameIcCustomObdTemperatureCoolant;
+        case GPXDataSetTypeEngineOilTemperature:
+            return ACImageNameIcCustomObdTemperatureEngineOil;
+        case GPXDataSetTypeEngineSpeed:
+            return ACImageNameIcCustomObdEngineSpeed;
+        case GPXDataSetTypeEngineRuntime:
+            return ACImageNameIcCustomCarRunningTime;
+        case GPXDataSetTypeEngineLoad:
+            return ACImageNameIcCustomCarInfo;
+        case GPXDataSetTypeFuelPressure:
+            return ACImageNameIcCustomObdFuelPressure;
+        case GPXDataSetTypeFuelConsumption:
+            return ACImageNameIcCustomObdFuelConsumption;
+        case GPXDataSetTypeRemainingFuel:
+            return ACImageNameIcCustomObdFuelRemaining;
+        case GPXDataSetTypeBatteryLevel:
+            return ACImageNameIcCustomObdBatteryVoltage;
+        case GPXDataSetTypeVehicleSpeed:
+            return ACImageNameIcCustomObdSpeed;
+        case GPXDataSetTypeThrottlePosition:
+            return ACImageNameIcCustomObdThrottlePosition;
         default:
             return @"";
     }
@@ -87,8 +139,68 @@
             return OASPointAttributes.sensorTagTemperatureA;
         case GPXDataSetTypeSensorTemperatureW:
             return OASPointAttributes.sensorTagTemperatureW;
+        case GPXDataSetTypeIntakeTemperature:
+            return OASPointAttributes.obdIntakeTemperature;
+        case GPXDataSetTypeAmbientTemperature:
+            return OASPointAttributes.obdAmbientTemperature;
+        case GPXDataSetTypeCoolantTemperature:
+            return OASPointAttributes.obdCoolantTemperature;
+        case GPXDataSetTypeEngineOilTemperature:
+            return OASPointAttributes.obdEngineOilTemperature;
+        case GPXDataSetTypeEngineSpeed:
+            return OASPointAttributes.obdEngineSpeed;
+        case GPXDataSetTypeEngineRuntime:
+            return OASPointAttributes.obdEngineRuntime;
+        case GPXDataSetTypeEngineLoad:
+            return OASPointAttributes.obdEngineLoad;
+        case GPXDataSetTypeFuelPressure:
+            return OASPointAttributes.obdFuelPressure;
+        case GPXDataSetTypeFuelConsumption:
+            return OASPointAttributes.obdFuelConsumption;
+        case GPXDataSetTypeRemainingFuel:
+            return OASPointAttributes.obdRemainingFuel;
+        case GPXDataSetTypeBatteryLevel:
+            return OASPointAttributes.obdBatteryLevel;
+        case GPXDataSetTypeVehicleSpeed:
+            return OASPointAttributes.obdVehicleSpeed;
+        case GPXDataSetTypeThrottlePosition:
+            return OASPointAttributes.obdThrottlePosition;
         default:
             return @"";
+    }
+}
+
++ (NSInteger)getTypeGroup:(NSInteger)type
+{
+    switch (type)
+    {
+        case GPXDataSetTypeAltitude:
+        case GPXDataSetTypeSpeed:
+        case GPXDataSetTypeSlope:
+            return GpxDataSetTypeGroupGeneral;
+        case GPXDataSetTypeSensorSpeed:
+        case GPXDataSetTypeSensorHeartRate:
+        case GPXDataSetTypeSensorBikePower:
+        case GPXDataSetTypeSensorBikeCadence:
+        case GPXDataSetTypeSensorTemperatureA:
+        case GPXDataSetTypeSensorTemperatureW:
+            return GpxDataSetTypeGroupExternalSensors;
+        case GPXDataSetTypeIntakeTemperature:
+        case GPXDataSetTypeAmbientTemperature:
+        case GPXDataSetTypeCoolantTemperature:
+        case GPXDataSetTypeEngineOilTemperature:
+        case GPXDataSetTypeEngineSpeed:
+        case GPXDataSetTypeEngineRuntime:
+        case GPXDataSetTypeEngineLoad:
+        case GPXDataSetTypeFuelPressure:
+        case GPXDataSetTypeFuelConsumption:
+        case GPXDataSetTypeRemainingFuel:
+        case GPXDataSetTypeBatteryLevel:
+        case GPXDataSetTypeVehicleSpeed:
+        case GPXDataSetTypeThrottlePosition:
+            return GpxDataSetTypeGroupVehicleMetrics;
+        default:
+            return GpxDataSetTypeGroupGeneral;
     }
 }
 
@@ -113,6 +225,32 @@
         case GPXDataSetTypeSensorTemperatureA:
         case GPXDataSetTypeSensorTemperatureW:
             return [UIColor colorNamed:ACColorNameChartTextColorTemperature];
+        case GPXDataSetTypeIntakeTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorIntakeTemperature];
+        case GPXDataSetTypeAmbientTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorAmbientTemperature];
+        case GPXDataSetTypeCoolantTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorCoolantTemperature];
+        case GPXDataSetTypeEngineOilTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineOilTemperature];
+        case GPXDataSetTypeEngineSpeed:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineSpeed];
+        case GPXDataSetTypeEngineRuntime:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineRuntime];
+        case GPXDataSetTypeEngineLoad:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineLoad];
+        case GPXDataSetTypeFuelPressure:
+            return [UIColor colorNamed:ACColorNameChartLineColorFuelPressure];
+        case GPXDataSetTypeFuelConsumption:
+            return [UIColor colorNamed:ACColorNameChartLineColorFuelConsumption];
+        case GPXDataSetTypeRemainingFuel:
+            return [UIColor colorNamed:ACColorNameChartLineColorRemainingFuel];
+        case GPXDataSetTypeBatteryLevel:
+            return [UIColor colorNamed:ACColorNameChartLineColorBatteryLevel];
+        case GPXDataSetTypeVehicleSpeed:
+            return [UIColor colorNamed:ACColorNameChartLineColorVehicleSpeed];
+        case GPXDataSetTypeThrottlePosition:
+            return [UIColor colorNamed:ACColorNameChartLineColorThrottlePosition];
         default:
             return nil;
     }
@@ -139,6 +277,32 @@
         case GPXDataSetTypeSensorTemperatureA:
         case GPXDataSetTypeSensorTemperatureW:
             return [UIColor colorNamed:ACColorNameChartLineColorTemperature];
+        case GPXDataSetTypeIntakeTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorIntakeTemperature];
+        case GPXDataSetTypeAmbientTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorAmbientTemperature];
+        case GPXDataSetTypeCoolantTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorCoolantTemperature];
+        case GPXDataSetTypeEngineOilTemperature:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineOilTemperature];
+        case GPXDataSetTypeEngineSpeed:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineSpeed];
+        case GPXDataSetTypeEngineRuntime:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineRuntime];
+        case GPXDataSetTypeEngineLoad:
+            return [UIColor colorNamed:ACColorNameChartLineColorEngineLoad];
+        case GPXDataSetTypeFuelPressure:
+            return [UIColor colorNamed:ACColorNameChartLineColorFuelPressure];
+        case GPXDataSetTypeFuelConsumption:
+            return [UIColor colorNamed:ACColorNameChartLineColorFuelConsumption];
+        case GPXDataSetTypeRemainingFuel:
+            return [UIColor colorNamed:ACColorNameChartLineColorRemainingFuel];
+        case GPXDataSetTypeBatteryLevel:
+            return [UIColor colorNamed:ACColorNameChartLineColorBatteryLevel];
+        case GPXDataSetTypeVehicleSpeed:
+            return [UIColor colorNamed:ACColorNameChartLineColorVehicleSpeed];
+        case GPXDataSetTypeThrottlePosition:
+            return [UIColor colorNamed:ACColorNameChartLineColorThrottlePosition];
         default:
             return nil;
     }

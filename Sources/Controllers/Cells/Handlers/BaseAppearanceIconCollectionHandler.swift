@@ -98,7 +98,7 @@ class BaseAppearanceIconCollectionHandler: IconCollectionHandler {
     }
     
     func initPoiCategories() {
-        guard let poiCategories = OAPOIHelper.sharedInstance().poiCategories else { return }
+        let poiCategories = OAPOIHelper.sharedInstance().poiCategories
         for poiCategory in poiCategories {
             guard !["access_private", "osmwiki", "user_defined_other"].contains(poiCategory.name) else { continue }
             if var poiTypeList = poiCategory.poiTypes {

@@ -369,7 +369,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 
 - (OAEntity *)loadEntity:(OATargetPoint *)targetPoint
 {
-    unsigned long long objectId = targetPoint.obfId;
+    uint64_t objectId = targetPoint.obfId;
     BOOL isTransportStop = targetPoint.type == OATargetTransportStop;
     if (isTransportStop)
         objectId = ((OATransportStop *)targetPoint.targetObj).poi.obfId;

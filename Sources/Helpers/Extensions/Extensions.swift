@@ -48,8 +48,8 @@ extension UIImage {
         return rotatedImage
     }
     
-    func resizedMenuImage() -> UIImage? {
-        let navBarImageSize: CGFloat = 24
+    @objc func resizedMenuImage() -> UIImage? {
+        let navBarImageSize: CGFloat = UIFontMetrics.default.scaledValue(for: 24)
         return OAUtilities.resize(self, newSize: CGSize(width: navBarImageSize, height: navBarImageSize))
     }
 }

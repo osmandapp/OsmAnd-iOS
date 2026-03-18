@@ -1147,8 +1147,7 @@ static UIViewController *parentController;
         NSInteger section = indexPath.section;
         BOOL isVisible = groupData.favoriteGroup.isVisible;
         NSString *showHideCaption = isVisible ? OALocalizedString(@"shared_string_hide_from_map") : OALocalizedString(@"shared_string_show_on_map");
-        UIImage *showHideImage = [OAUtilities resizeImage:[UIImage imageNamed:isVisible ? ACImageNameIcCustomHideOutlined : ACImageNameIcCustomShowOutlined]
-                                                  newSize:CGSizeMake(kActionImageSize, kActionImageSize)];
+        UIImage *showHideImage = [[UIImage imageNamed:isVisible ? ACImageNameIcCustomHideOutlined : ACImageNameIcCustomShowOutlined] resizedMenuImage];
         UIAction *showHideAction = [UIAction actionWithTitle:showHideCaption
                                                        image:showHideImage
                                                   identifier:nil
@@ -1158,8 +1157,7 @@ static UIViewController *parentController;
         }];
         showHideAction.accessibilityLabel = showHideCaption;
         
-        UIImage *renameImage = [OAUtilities resizeImage:[UIImage imageNamed:@"ic_custom_edit"]
-                                                newSize:CGSizeMake(kActionImageSize, kActionImageSize)];
+        UIImage *renameImage = [[UIImage imageNamed:@"ic_custom_edit"] resizedMenuImage];
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
                                                      image:renameImage
                                                 identifier:nil

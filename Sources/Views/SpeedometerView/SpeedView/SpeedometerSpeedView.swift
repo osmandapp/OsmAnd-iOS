@@ -181,13 +181,13 @@ final class SpeedometerSpeedView: UIView {
         let valueUnitArray: NSMutableArray = []
         OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)
         if let result = getValueAndUnit(with: valueUnitArray) {
-            if let formattedValue = Float(result.value) {
+            let normalizedValue = result.value.replacingOccurrences(of: ",", with: ".")
+            if let formattedValue = Float(normalizedValue) {
                 cachedFormattedSpeed = formattedValue
             } else {
                 debugPrint("updateSpeedValueAndUnit -> Invalid number")
             }
-            
-            valueSpeedLabel.text = result.value
+            valueSpeedLabel.text = normalizedValue
             unitSpeedLabel.text = result.unit.uppercased()
         }
     }

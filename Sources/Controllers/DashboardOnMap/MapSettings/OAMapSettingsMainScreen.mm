@@ -499,6 +499,17 @@
                 @"key": @"terrain_layer"
         }];
     }
+    if (!_iapHelper.srtm.disabled)
+    {
+        [topographySectionData addObject:@{
+            @"name": OALocalizedString(@"enable_3d_objects"),
+            @"image": @"ic_custom_3d_buildings",
+            @"has_options": @YES,
+            @"type": OASwitchTableViewCell.reuseIdentifier,
+            @"key": @"3d_buildings"
+        }];
+    }
+
     BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
     if (useDepthContours)
     {
@@ -762,6 +773,8 @@
         return ![[_styleSettings getParameter:CONTOUR_LINES].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
         return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) isTerrainLayerEnabled];
+    else if ([key isEqualToString:@"3d_buildings"])
+        return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) is3dMapObjectsEnabled];
     else if ([key isEqualToString:@"overlay_layer"])
         return _app.data.overlayMapSource != nil;
     else if ([key isEqualToString:@"underlay_layer"])
@@ -1169,6 +1182,8 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenContourLines];
     else if ([item[@"key"] isEqualToString:@"terrain_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTerrain];
+    else if ([item[@"key"] isEqualToString:@"3d_buildings"])
+        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenBuildings3DVisibility];
     else if ([item[@"key"] isEqualToString:@"overlay_layer"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
     else if ([item[@"key"] isEqualToString:@"underlay_layer"])
@@ -1263,6 +1278,8 @@
         [self contourLinesChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"terrain_layer"])
         [self terrainChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"3d_buildings"])
+        [self mapObjects3dChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"overlay_layer"])
         [self overlayChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"underlay_layer"])
@@ -1330,6 +1347,11 @@
 - (void)terrainChanged:(BOOL)isOn
 {
     [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) setTerrainLayerEnabled:isOn];
+}
+
+- (void)mapObjects3dChanged:(BOOL)isOn
+{
+    [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) set3dMapObjectsEnabled:isOn];
 }
 
 - (void)nauticalDepthChanged:(BOOL)isOn

@@ -182,6 +182,10 @@
             if (!self.screenObj)
                 self.screenObj = [[MapSettingsCoordinatesGridScreen alloc] initWithTable:self.tableView viewController:self];
             break;
+        case EMapSettingsScreenBuildings3DVisibility:
+            if (!self.screenObj)
+                self.screenObj = [[MapSettingsBuildings3DScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
         default:
             break;
     }

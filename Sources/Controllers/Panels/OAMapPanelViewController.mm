@@ -958,6 +958,13 @@ typedef enum
     [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
+- (void)showBuildings3DScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenBuildings3DVisibility];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
+}
+
 - (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
 {
     if (event)

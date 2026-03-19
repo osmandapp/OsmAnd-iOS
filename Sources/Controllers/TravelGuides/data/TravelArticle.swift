@@ -205,12 +205,21 @@ final class TravelArticleIdentifier : NSObject {
     var routeSource: String?
     
     init(article: TravelArticle) {
-        file = article.file;
+        file = article.file
         lat = article.lat
         lon = article.lon
         title = article.title
         routeId = article.routeId
         routeSource = article.routeSource
+    }
+    
+    init(file: String?, lat: Double, lon: Double, title: String?, routeId: String?, routeSource: String?) {
+        self.file = file;
+        self.lat = lat
+        self.lon = lon
+        self.title = title
+        self.routeId = routeId
+        self.routeSource = routeSource
     }
     
     override var hash: Int {

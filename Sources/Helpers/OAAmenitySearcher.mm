@@ -93,13 +93,14 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         {
             OARenderedObject *renderedObject = (OARenderedObject *)mapObject;
             _latLon = [renderedObject getLocation];
-            if (_latLon == nil || (_latLon.coordinate.latitude == 0 && _latLon.coordinate.longitude == 0))
+            if (_latLon == nil || !CLLocationCoordinate2DIsValid(_latLon.coordinate))
             {
                 _latLon = renderedObject.labelLatLon;
             }
-            if (!NSDictionaryIsEmpty(renderedObject.localizedNames))
+            NSMutableArray<NSString *> *originalNames = [renderedObject getOriginalNames];
+            if (!NSArrayIsEmpty(originalNames))
             {
-                [_names addObjectsFromArray:(NSArray *)renderedObject.localizedNames.allValues];
+                [_names addObjectsFromArray:originalNames];
             }
             NSString *value = renderedObject.tags[WIKIDATA_TAG];
             if (value)
@@ -244,6 +245,36 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     return [OAAmenitySearcher findPOI:[OASearchPoiTypeFilter acceptAllPoiTypeFilter] additionalFilter:nil lat:searchLatLon.coordinate.latitude lon:searchLatLon.coordinate.longitude radius:(int)radius includeTravel:includeTravel matcher:nil publish:nil];
 }
 
+- (nullable BaseDetailsObject *)searchDetailedObject:(id)object
+{
+    OAAmenitySearcherRequest *request;
+    if ([object isKindOfClass:OAMapObject.class])
+    {
+        request = [[OAAmenitySearcherRequest alloc] initWithMapObject:object];
+    }
+    else if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *detailsObject = object;
+        if ([detailsObject isObjectFull])
+        {
+            [self completeGeometry:detailsObject object:detailsObject.objects[0]];
+            return detailsObject;
+        }
+        if (!NSArrayIsEmpty(detailsObject.objects))
+        {
+            return detailsObject = [self searchDetailedObject:detailsObject.objects[0]];
+        }
+    }
+    BaseDetailsObject *detailsObject;
+    if (request)
+    {
+        detailsObject = [self searchDetailedObjectWithRequest:request];
+    }
+    
+    [self completeGeometry:detailsObject object:object];
+    return detailsObject;
+}
+
 - (NSMutableArray<OAPOI *> *)filterAmenities:(NSArray<OAPOI *> *)amenities request:(OAAmenitySearcherRequest*) request
 {
     int64_t osmId = request.osmId;
@@ -253,7 +284,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
     NSMutableArray<OAPOI *> *filtered = [NSMutableArray array];
 
-    if (osmId > 0 || wikidata != nil)
+    if ((osmId > 0 && osmId != [OAMapObject getInvalidObfId]) || wikidata != nil)
     {
         filtered = [[self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata] mutableCopy];
     }
@@ -284,40 +315,6 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     }
 
     return filtered;
-}
-
-- (nullable BaseDetailsObject *)searchDetailedObject:(id)object
-{
-    OAAmenitySearcherRequest *request = nil;
-    if ([object isKindOfClass:[OAAmenitySearcherRequest class]])
-    {
-        return [self searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)object];
-    }
-    else if ([object isKindOfClass:[OAMapObject class]])
-    {
-        request = [[OAAmenitySearcherRequest alloc] initWithMapObject:(OAMapObject *)object];
-    }
-    else if ([object isKindOfClass:[BaseDetailsObject class]])
-    {
-        BaseDetailsObject *detailsObject = (BaseDetailsObject *)object;
-        if (detailsObject.isObjectFull)
-        {
-            [self completeGeometry:detailsObject object:detailsObject.objects.firstObject];
-            return detailsObject;
-        }
-        if (!NSArrayIsEmpty(detailsObject.objects))
-        {
-            id obj = detailsObject.objects.firstObject;
-            return [self searchDetailedObject:obj];
-        }
-    }
-
-    BaseDetailsObject *detailsObject = nil;
-    if (request != nil)
-        detailsObject = [self searchDetailedObject:request];
-    
-    [self completeGeometry:detailsObject object:object];
-    return detailsObject;
 }
 
 - (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
@@ -356,8 +353,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                 return m1 ? NSOrderedAscending : NSOrderedDescending;
             }];
         }
-        return [[BaseDetailsObject alloc] initWithAmenities:filtered
-                                                       lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
+        return [[BaseDetailsObject alloc] initWithMapObjects:filtered lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]];
     }
 
     return nil;
@@ -424,7 +420,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 - (QList<std::shared_ptr<const OsmAnd::BinaryMapObject>>) searchBinaryMapDataForAmenity:(OAPOI *)amenity limit:(int)limit
 {
     const auto osmId = [ObfConstants getOsmObjectId:amenity];
-    const BOOL checkId = osmId > 0;
+    const BOOL checkId = osmId > 0 && osmId != [OAMapObject getInvalidObfId];
 
     NSString *wikidata = [amenity getWikidata];;
     const BOOL checkWikidata = !NSStringIsEmpty(wikidata);
@@ -517,12 +513,11 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
     for (OAPOI *amenity in amenities)
     {
-        if (amenity.obfId != 0)
+        if ([amenity isValidObfId])
         {
             NSString *wiki = [amenity getWikidata];
             BOOL wikiEqual = (wiki && [wiki isEqualToString:wikidata]);
-            int64_t amenityOsmId = [amenity getOsmId];
-            BOOL idEqual = (amenityOsmId > 0 && amenityOsmId == osmId);
+            BOOL idEqual = ([amenity isValidOsmId] && [amenity getOsmId] == osmId);
 
             if ((idEqual || wikiEqual) && ![amenity isClosed])
             {
@@ -712,6 +707,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
 + (QList< std::shared_ptr<const OsmAnd::ObfFile> >) getAmenityRepositories:(BOOL)includeTravel
 {
+    QList<std::shared_ptr<const OsmAnd::ObfFile> > travelMaps;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > baseMaps;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > result;
     
@@ -726,26 +722,27 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         if (nameB)
             nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
         
-        return [nameA compare:nameB] == NSOrderedDescending;
+        return [nameA compare:nameB] == NSOrderedAscending;
     });
     
     for (const auto& file : obfFiles)
     {
         NSString *path = file->filePath.toNSString();
-        if ([path hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])
+        if ([path hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT] && includeTravel)
         {
-            // android has here TravelRendererHelper.getFileVisibilityProperty()
-            //if (!includeTravel || !app.getTravelRendererHelper().getFileVisibilityProperty(fileName).get()) {
-            if (!includeTravel)
-                continue;
+            travelMaps.append(file);
         }
-        
-        if ([self isWorldMap:path])
+        else if ([self isWorldMap:path])
+        {
             baseMaps.append(file);
+        }
         else
+        {
             result.append(file);
+        }
     }
     result.append(baseMaps);
+    result.append(travelMaps);
     return result;
 }
 
@@ -887,7 +884,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         [names setObject:type.nameLocalizedEN forKey:@"en"];
     }
     poi.localizedNames = names;
-    
+    poi.regionName = amenity->regionName.toNSString();
     return poi;
 }
 
@@ -1095,7 +1092,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     return nil;
 }
 
-+ (OAPOI *) findPOIByOsmId:(long long)osmId lat:(double)lat lon:(double)lon
++ (OAPOI *) findPOIByOsmId:(uint64_t)osmId lat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -1442,7 +1439,6 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                   bbox31:bbox31
          currentLocation:center31
            includeTravel:includeTravel
-         skipAcceptCheck:YES
                  matcher:matcher
                  publish:publish];
 }
@@ -1466,7 +1462,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         }
 
         long long obfId = amenity.obfId;
-        NSNumber *obfIdKey = (obfId > 0) ? @(obfId) : nil;
+        NSNumber *obfIdKey = [amenity isValidObfId] ? @(obfId) : nil;
 
         NSString *wikidata = [amenity getWikidata];
         if (wikidata.length == 0)
@@ -1500,33 +1496,16 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         return [NSString stringWithFormat:@"%@", @(amenity->id.id)];
 }
 
-+ (NSArray<OAPOI *> *)findPOI:(OASearchPoiTypeFilter *)searchFilter
-              additionalFilter:(OATopIndexFilter *)additionalFilter
-                        bbox31:(OsmAnd::AreaI )bbox31
-               currentLocation:(OsmAnd::PointI)currentLocation
-                 includeTravel:(BOOL)includeTravel
-                       matcher:(OAResultMatcher<OAPOI *> *)matcher
-                       publish:(BOOL(^)(OAPOI *poi))publish
-{
-    return [[self class] findPOI:searchFilter
-                additionalFilter:additionalFilter
-                          bbox31:bbox31
-                 currentLocation:currentLocation
-                   includeTravel:includeTravel
-                 skipAcceptCheck:NO
-                         matcher:matcher
-                         publish:publish];
-}
 
 + (NSArray<OAPOI *> *)findPOI:(OASearchPoiTypeFilter *)searchFilter
               additionalFilter:(OATopIndexFilter *)additionalFilter
                         bbox31:(OsmAnd::AreaI )bbox31
                currentLocation:(OsmAnd::PointI)currentLocation
                  includeTravel:(BOOL)includeTravel
-               skipAcceptCheck:(BOOL)skipAcceptCheck
                        matcher:(OAResultMatcher<OAPOI *> *)matcher
                        publish:(BOOL(^)(OAPOI *poi))publish
 {
+    NSMutableSet<NSNumber *> *openAmenities = [NSMutableSet new];
     NSMutableSet<NSNumber *> *closedAmenities = [NSMutableSet new];
     NSMutableArray<OAPOI *> *actualAmenities = [NSMutableArray array];
     NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
@@ -1569,17 +1548,18 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
 
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
-                                              [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done, skipAcceptCheck](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                              [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
 
                                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:am];
-                                        BOOL accept = skipAcceptCheck ? YES : [filter accept:type.category subcategory:type.name];
+                                        BOOL accept = [filter accept:type.category subcategory:type.name];
                                         NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:am];
 
                                         if (![deduplicateTypeIdSet containsObject:typeIdKey] && accept)
                                         {
                                             [deduplicateTypeIdSet addObject:typeIdKey];
+    
                                             OAPOI *poi = [OAAmenitySearcher parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, am->position31);
                                             
@@ -1605,6 +1585,7 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                 }
                 else if (![closedAmenities containsObject:obfId])
                 {
+                    [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];
                 }
             }

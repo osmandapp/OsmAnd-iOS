@@ -20,10 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateLayer;
 - (void)resetLayer;
 
-- (void)updateSelectedTopPlaceIfNeeded:(OAPOI *)topPlace;
 - (void)resetSelectedTopPlaceIfNeeded;
-
-- (NSArray<OAPOI *> *)getDisplayedResultsFor:(const QList<OsmAnd::PointI>&)touchPolygon31;
+- (NSArray<OAPOI *> *)displayedAmenities;
+- (void)contextMenuDidShow:(id)targetObj;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder NS_DESIGNATED_INITIALIZER;

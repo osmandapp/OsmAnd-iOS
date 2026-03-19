@@ -238,7 +238,7 @@ static NSString * const kGpxImportDir = @"import";
 
 - (id<OASGpxTrackAnalysisTrackPointsAnalyser> _Nullable)getTrackPointsAnalyser
 {
-    return nil;
+    return [OAPluginsHelper getTrackPointsAnalyser];
 }
 
 - (OASSmartFolderHelper *)getSmartFolderHelper

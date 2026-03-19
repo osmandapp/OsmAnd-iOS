@@ -66,6 +66,7 @@
 {
     [super viewDidLoad];
     
+    [self applyTableStyleIfNeeded];
     if (!self.refreshOnAppear)
         [self generateData];
     
@@ -275,7 +276,7 @@
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
 
-    self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
+    self.navigationController.navigationBar.tintColor = [self navbarButtonsTintColor];
     self.navigationItem.largeTitleDisplayMode = isLargeTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
 }
 
@@ -442,78 +443,96 @@
     BOOL isLongTitle = freeSpaceForNavbarButton < 50.;
 
     _leftNavbarButton = nil;
-    if (leftButtonTitle || leftNavbarButtonCustomIcon)
+    UIBarButtonItem *systemLeftItem = [self systemLeftBarButtonItem];
+    if (systemLeftItem)
     {
-        UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
-        leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
-        leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
-        leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        leftButton.titleLabel.numberOfLines = 1;
-        leftButton.titleLabel.adjustsFontForContentSizeCategory = YES;
-        leftButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-        [leftButton setTintColor:[self getNavbarButtonsTintColor]];
-        [leftButton setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
-        [leftButton setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
-        [leftButton setTitle:isLongTitle ? nil : leftButtonTitle forState:UIControlStateNormal];
-        if (isLongTitle && !leftNavbarButtonCustomIcon)
-        {
-            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
-            freeSpaceForNavbarButton = 30.;
-        }
-        [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
-        [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        leftButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
-        
-        _leftButtonLongTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftNavbarButtonLongtapPressed:)];
-        [leftButton addGestureRecognizer:_leftButtonLongTapRecognizer];
-        leftButton.userInteractionEnabled = YES;
-
-        NSString *accessibilityLabel = [self getCustomAccessibilityForLeftNavbarButton];
-        if (!accessibilityLabel)
-            accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
-        _leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
-        _leftNavbarButton.accessibilityLabel = accessibilityLabel;
-        [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];
+        _leftNavbarButton = systemLeftItem;
+        [self.navigationItem setLeftBarButtonItem:systemLeftItem animated:YES];
     }
     else
     {
-        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-    }
-
-    NSArray<UIBarButtonItem *> *rightNavbarButtons = [self getRightNavbarButtons];
-    if (rightNavbarButtons && rightNavbarButtons.count > 0)
-    {
-        NSMutableArray<UIBarButtonItem *> *rightNavbarButtonsWithSpaces = [NSMutableArray array];
-        if (rightNavbarButtons.count > 1)
+        if (leftButtonTitle || leftNavbarButtonCustomIcon)
         {
-            freeSpaceForNavbarButton -= (rightNavbarButtons.count - 1) * 8.;
-            freeSpaceForNavbarButton /= rightNavbarButtons.count;
-        }
-        if (freeSpaceForNavbarButton < kDefaultBarButtonSize)
-            freeSpaceForNavbarButton = kDefaultBarButtonSize;
-        for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
-        {
-            UIBarButtonItem *buttonItem = rightNavbarButtons[i];
-            [rightNavbarButtonsWithSpaces addObject:buttonItem];
-            UIButton *button = buttonItem.customView;
-            if (button)
+            UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
+            UIColor *buttonsTintColor = [self navbarButtonsTintColor];
+            leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+            leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
+            leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+            leftButton.titleLabel.numberOfLines = 1;
+            leftButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+            leftButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            [leftButton setTintColor:buttonsTintColor];
+            [leftButton setTitleColor:buttonsTintColor forState:UIControlStateNormal];
+            [leftButton setTitleColor:[buttonsTintColor colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
+            [leftButton setTitle:isLongTitle ? nil : leftButtonTitle forState:UIControlStateNormal];
+            if (isLongTitle && !leftNavbarButtonCustomIcon)
             {
-                CGFloat buttonWidth = kDefaultBarButtonSize;
-                NSString *buttonTitle = [button titleForState:UIControlStateNormal];
-                if (buttonTitle && buttonTitle.length > 0)
-                    buttonWidth = [OAUtilities calculateTextBounds:buttonTitle width:freeSpaceForNavbarButton font:button.titleLabel.font].width;
-                [button.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
-                button.contentHorizontalAlignment = i == 0 ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentCenter;
-                button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;
+                leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+                freeSpaceForNavbarButton = 30.;
             }
+            [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
+            [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+            leftButton.translatesAutoresizingMaskIntoConstraints = NO;
+            [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
+            
+            _leftButtonLongTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftNavbarButtonLongtapPressed:)];
+            [leftButton addGestureRecognizer:_leftButtonLongTapRecognizer];
+            leftButton.userInteractionEnabled = YES;
+            
+            NSString *accessibilityLabel = [self getCustomAccessibilityForLeftNavbarButton];
+            if (!accessibilityLabel)
+                accessibilityLabel = leftButtonTitle ?: OALocalizedString(@"shared_string_back");
+            _leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+            _leftNavbarButton.accessibilityLabel = accessibilityLabel;
+            [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];
         }
-        [self.navigationItem setRightBarButtonItems:rightNavbarButtonsWithSpaces animated:YES];
+        else
+        {
+            [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+        }
+    }
+    
+    NSArray<UIBarButtonItem *> *systemRightItems = [self systemRightBarButtonItems];
+    if (systemRightItems && systemRightItems.count > 0)
+    {
+        [self.navigationItem setRightBarButtonItems:systemRightItems animated:YES];
     }
     else
     {
-        [self.navigationItem setRightBarButtonItems:nil animated:YES];
+        NSArray<UIBarButtonItem *> *rightNavbarButtons = [self getRightNavbarButtons];
+        if (rightNavbarButtons && rightNavbarButtons.count > 0)
+        {
+            NSMutableArray<UIBarButtonItem *> *rightNavbarButtonsWithSpaces = [NSMutableArray array];
+            if (rightNavbarButtons.count > 1)
+            {
+                freeSpaceForNavbarButton -= (rightNavbarButtons.count - 1) * 8.;
+                freeSpaceForNavbarButton /= rightNavbarButtons.count;
+            }
+            if (freeSpaceForNavbarButton < kDefaultBarButtonSize)
+                freeSpaceForNavbarButton = kDefaultBarButtonSize;
+            for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
+            {
+                UIBarButtonItem *buttonItem = rightNavbarButtons[i];
+                [rightNavbarButtonsWithSpaces addObject:buttonItem];
+                UIButton *button = buttonItem.customView;
+                if (button)
+                {
+                    CGFloat buttonWidth = kDefaultBarButtonSize;
+                    NSString *buttonTitle = [button titleForState:UIControlStateNormal];
+                    if (buttonTitle && buttonTitle.length > 0)
+                        buttonWidth = [OAUtilities calculateTextBounds:buttonTitle width:freeSpaceForNavbarButton font:button.titleLabel.font].width;
+                    [button.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
+                    button.contentHorizontalAlignment = i == 0 ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentCenter;
+                    button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;
+                }
+            }
+            [self.navigationItem setRightBarButtonItems:rightNavbarButtonsWithSpaces animated:YES];
+        }
+        else
+        {
+            [self.navigationItem setRightBarButtonItems:nil animated:YES];
+        }
     }
 }
 
@@ -538,7 +557,7 @@
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
-    return [self.class createRightNavbarButton:title icon:icon color:[self getNavbarButtonsTintColor] action:action target:self menu:menu];
+    return [self.class createRightNavbarButton:title icon:icon color:[self navbarButtonsTintColor] action:action target:self menu:menu];
 }
 
 + (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
@@ -572,14 +591,24 @@
     return rightNavbarButton;
 }
 
+- (UIBarButtonItem *)systemLeftBarButtonItem
+{
+    return nil;
+}
+
+- (NSArray<UIBarButtonItem *> *)systemRightBarButtonItems
+{
+    return nil;
+}
+
 - (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled
 {
     if (barButtonItem.customView && [barButtonItem.customView isKindOfClass:UIButton.class])
     {
         UIButton *button = barButtonItem.customView;
         button.enabled = isEnabled;
-        button.tintColor = isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor;
-        [button setTitleColor:isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor forState:UIControlStateNormal];
+        button.tintColor = isEnabled ? [self navbarButtonsTintColor] : UIColor.lightGrayColor;
+        [button setTitleColor:isEnabled ? [self navbarButtonsTintColor] : UIColor.lightGrayColor forState:UIControlStateNormal];
     }
 }
 
@@ -605,7 +634,7 @@
     }
 }
 
-- (UIColor *)getNavbarButtonsTintColor
+- (UIColor *)navbarButtonsTintColor
 {
     return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? [UIColor colorNamed:ACColorNameNavBarTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive];
 }
@@ -748,6 +777,39 @@
 // cells will be automatically registerd in viewDidLoad:
 - (void)registerCells
 {
+}
+
+- (UITableViewStyle)tableStyle
+{
+    return self.tableView.style;
+}
+
+- (void)applyTableStyleIfNeeded
+{
+    UITableView *oldTable = self.tableView;
+    if (!oldTable || oldTable.style == [self tableStyle])
+        return;
+    
+    UITableView *newTable = [[UITableView alloc] initWithFrame:CGRectZero style:[self tableStyle]];
+    newTable.translatesAutoresizingMaskIntoConstraints = NO;
+    newTable.backgroundColor = oldTable.backgroundColor;
+    newTable.separatorStyle = oldTable.separatorStyle;
+    newTable.separatorColor = oldTable.separatorColor;
+    newTable.contentInsetAdjustmentBehavior = oldTable.contentInsetAdjustmentBehavior;
+    newTable.contentInset = oldTable.contentInset;
+    newTable.contentOffset = oldTable.contentOffset;
+    UIView *container = oldTable.superview;
+    [container insertSubview:newTable aboveSubview:oldTable];
+    [NSLayoutConstraint activateConstraints:@[
+        [newTable.leadingAnchor constraintEqualToAnchor:container.leadingAnchor],
+        [newTable.trailingAnchor constraintEqualToAnchor:container.trailingAnchor],
+        [newTable.topAnchor constraintEqualToAnchor:container.topAnchor],
+        [newTable.bottomAnchor constraintEqualToAnchor:container.bottomAnchor]
+    ]];
+    
+    [container layoutIfNeeded];
+    self.tableView = newTable;
+    [oldTable removeFromSuperview];
 }
 
 // do not override

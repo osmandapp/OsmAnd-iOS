@@ -793,7 +793,7 @@
 "update_now" = "Jetzt aktualisieren";
 "product_desc_sea_depth_contours" = "Meeresbodenkonturlinien und Seezeichen";
 "free_version_message" = "%@ Karten zum Herunterladen oder Aktualisieren.";
-"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Erweiterungen, Wikipedia, Wikivoyage und vieles mehr.";
+"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Kartenaktualisierung mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Erweiterungen, Wikipedia, Wikivoyage und vieles mehr.";
 "osm_live_subscription" = "OsmAnd-Live-Abonnement";
 "unlimited_downloads" = "Unbegrenzte Downloads";
 "contour_lines_hillshade_maps" = "Karten mit Höhenlinien und Relief";
@@ -2321,7 +2321,7 @@
 "explore_osmnad_plans_to_find_suitable" = "OsmAnd-Angebote entdecken, um das Passende für Sie zu finden.";
 "complete_purchase" = "Vollständiger Kauf";
 "purchases_feature_desc_nautical" = "Zugang zu Informationen über Wassertiefen erhalten";
-"purchases_feature_desc_monthly_map_updates" = "Erhalten Sie Zugang zu den regulären monatlichen Updates für Offline-Karten.";
+"purchases_feature_desc_monthly_map_updates" = "Erhalten Sie Zugang zu den gewöhnlichen monatlichen Aktualisierungen für Offline-Karten.";
 "redeem_promo_code" = "Aktionscode einlösen";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia und Wikivoyage offline";
 "purchases_feature_desc_unlimited_map_download" = "Erhalten Sie unbegrenzte Downloads für Offline-Karten aller Kontinente und Regionen.";
@@ -2335,8 +2335,8 @@
 "continue_with" = "Mit %@ fortfahren";
 "monthly_subscription" = "Monatliches Abo";
 "expired" = "Abgelaufen";
-"osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads und fügen wöchentliche, tägliche oder sogar stündliche Updates hinzu.";
-"purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Updates erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
+"osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads mit wöchentlicher, täglicher oder sogar stündlicher Aktualisierung hinzu.";
+"purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Aktualisierungen erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
 "purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von OsmAnd Pro: Routeneinfärbung und mehr.";
 "purchases_feature_desc_osmand_cloud" = "Holen Sie sich OsmAnd Cloud, um alle OsmAnd-Daten online zu speichern. Kein Datenverlust mehr nach einer Neuinstallation, alle Informationen problemlos sichern und wiederherstellen.";
 "osmand_development_plugin_description" = "Bietet Funktionen zum Testen und Debuggen von OsmAnd: Simulieren von Navigationsrouten, Überwachen der Bildschirmdarstellung, Prüfen der Leistung usw. Diese Erweiterung ist für die normale Nutzung der App nicht erforderlich.";
@@ -2454,7 +2454,7 @@
 "shared_string_logout" = "Abmelden";
 "backup_data" = "Daten sichern";
 "backup_delete_all_data" = "Alle meine Daten löschen";
-"backup_delete_old_data" = "Alte Versionen entfernen";
+"backup_delete_old_data" = "Alte Versionen löschen";
 "logout_from_osmand_cloud_decsr" = "Abmelden\? \nZum Sichern oder Wiederherstellen von Daten müssen Sie sich erneut anmelden.";
 "backup_delete_old_data_warning" = "Sie sind im Begriff, den Änderungsverlauf für die zuvor geladenen Daten zu löschen. \n \nDie aktuelle Version der Daten wird auf dem Server gespeichert, aber Sie können nicht zu den zuvor vorgenommenen Änderungen zurückkehren.";
 "delete_all_confirmation" = "Ja, alle löschen";
@@ -2477,7 +2477,7 @@
 "benefits_for_contributors" = "Vorteile für aktive OSM-Mitwirkende";
 "benefits_for_contributors_primary_descr" = "Aktive Mitwirkende an OpenStreetMap.org können Anspruch auf unbegrenzte stündliche Kartenaktualisierungen haben.";
 "contributions_may_calculate_with_delay" = "Das Berechnen der Beiträge kann mehrere Stunden dauern.";
-"map_updates_are_unavailable_yet" = "Kartenupdates sind noch nicht verfügbar :-(";
+"map_updates_are_unavailable_yet" = "Kartenaktualisierungen sind noch nicht verfügbar :-(";
 "last_two_month_total" = "Letzte zwei Monate insgesamt";
 "offline_edition_descr" = "Wenn die Offline-Bearbeitung aktiviert ist, werden Änderungen zunächst lokal gespeichert und auf Anforderung hochgeladen, anderenfalls werden Änderungen sofort hochgeladen.";
 "use_login_and_password" = "Benutzernamen und Passwort verwenden";
@@ -3974,7 +3974,7 @@
 "shared_string_pounds" = "Pfund";
 "max_weight_at_full_load_description" = "Geben Sie das maximale Gesamtgewicht Ihres Fahrzeugs bei voller Beladung an, um Straßen und Brücken mit Gewichtsbeschränkungen zu vermeiden.";
 "max_axle_load_description" = "Geben Sie die maximale Achslast Ihres Fahrzeugs an, um Straßen und Brücken mit Gewichtsbeschränkungen zu vermeiden.";
-"deleted_maps_prompt" = "Diese Karten werden nicht mehr unterstützt und wurden durch regionale Aufteilung ersetzt. Bitte entfernen und die neuen Karten herunterladen.";
+"deleted_maps_prompt" = "Diese Karten werden nicht mehr unterstützt und wurden durch regionale Aufteilung ersetzt. Bitte Karten löschen und die neuen Karten herunterladen.";
 "unsupported_maps" = "Nicht mehr verfügbare Karten";
 "copy_as_new_folder" = "Als neuen Ordner kopieren";
 "add_to_a_folder" = "Zu einem Ordner hinzufügen";
@@ -4005,8 +4005,8 @@
 "ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n• Fähigkeit hinzugefügt Wegpunkte in einen ausgewählten Favoriten-Ordner zusammenzuführen\n• CarPlay: Problem mit nicht reagierender Karte auf dem Dashboard behoben und Unterstützung hinzugefügt für Parameter „Zeige immer dunkle Karte“\n";
 "image_cache_online_photo_high_res" = "Hochauflösende Zwischenspeicherung von Online-Fotos";
 "image_cache_online_photo_mapillary_default_cache" = "Automatische Zwischenspeicherung von Online-Fotos/Mapillary";
-"trip_recording_moving_time" = "Zeit in Bewegung";
-"trip_recording_moving_time_widget_description" = "Zeigt die aktuell aufgezeichnete Bewegungszeit oder die Zeit für den letzten Anstieg und Abstieg an.";
+"trip_recording_moving_time" = "Bewegungszeit";
+"trip_recording_moving_time_widget_description" = "Zeigt die aktuell aufgezeichnete Zeit in Bewegung oder die Dauer des letzten Anstiegs und Abstiegs an.";
 "context_menu_item_add_parking_point" = "Als Parkposition markieren";
 "find_parking" = "Parkplatz suchen";
 "finish_navigation" = "Navigation beenden";

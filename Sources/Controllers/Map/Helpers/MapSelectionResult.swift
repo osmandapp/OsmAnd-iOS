@@ -9,21 +9,19 @@
 // OsmAnd/src/net/osmand/plus/views/layers/MapSelectionResult.java
 // git revision 744c6b5831ca13767b936d62be8c78138b8dda08
 
-import Foundation
 import CoreLocation
-import UIKit
 
 @objcMembers
-class MapSelectionResult: NSObject {
+final class MapSelectionResult: NSObject {
     
-    private var lang: String
-    private(set) var point: CGPoint
     var pointLatLon: CLLocation?
     var objectLatLon: CLLocation?
     
-    private var poiProvider: OAContextMenuProvider
-    
+    private(set) var point: CGPoint
     private(set) var allObjects: Array<SelectedMapObject>
+    
+    private var lang: String
+    private var poiProvider: OAContextMenuProvider
     private var processedObjects: Array<SelectedMapObject>
     
     init(point: CGPoint) {
@@ -43,11 +41,11 @@ class MapSelectionResult: NSObject {
     func getProcessedObjects() -> [SelectedMapObject] {
         processedObjects
     }
-    
-    func collect(_ object: Any, provider: Any) {
+
+    func collect(_ object: Any, provider: Any?) {
         allObjects.append(SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider))
     }
-    
+
     func groupByOsmIdAndWikidataId() {
         if allObjects.count == 1 {
             processedObjects.append(contentsOf: allObjects)
@@ -69,11 +67,15 @@ class MapSelectionResult: NSObject {
         processedObjects.append(contentsOf: other)
     }
     
+    func isEmpty() -> Bool {
+        allObjects.isEmpty
+    }
+    
     private func processObjects(_ selectedObjects: Array<SelectedMapObject>, other: inout Array<SelectedMapObject>) -> Array<BaseDetailsObject> {
         var detailsObjects = Array<BaseDetailsObject>()
         for selectedObject in selectedObjects {
             let object = selectedObject.object
-            var overlapped = collectOverlappedObjects(object, detailsObjects: detailsObjects)
+            let overlapped = collectOverlappedObjects(object, detailsObjects: detailsObjects)
             
             let detailsObject: BaseDetailsObject
             if overlapped.count == 0 {
@@ -97,10 +99,6 @@ class MapSelectionResult: NSObject {
     }
     
     private func collectOverlappedObjects(_ object: Any, detailsObjects: [BaseDetailsObject]) -> [BaseDetailsObject] {
-        return detailsObjects.filter { $0.overlapsWith(object) }
-    }
-    
-    func isEmpty() -> Bool {
-        allObjects.count == 0
+        detailsObjects.filter { $0.overlapsWith(object) }
     }
 } 

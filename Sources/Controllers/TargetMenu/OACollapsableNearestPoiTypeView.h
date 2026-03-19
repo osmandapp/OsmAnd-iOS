@@ -8,18 +8,18 @@
 
 #import "OACollapsableView.h"
 
-@class OAPOIType, OAPOI, OAPOIUIFilter;
-@class OARowInfo;
+@class OAPOIType, OAPOI, OAPOIUIFilter, OAPOICategory;
+@class OAAmenityInfoRow;
 
 @interface OACollapsableNearestPoiTypeView : OACollapsableView
 
 @property (nonatomic, readonly) BOOL hasItems;
 
 - (void) setData:(NSArray<OAPOIType *> *)poiTypes
-         amenity:(OAPOI *)amenity
+amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
              lat:(double)lat
              lon:(double)lon
  isPoiAdditional:(BOOL)isPoiAdditional
-         textRow:(OARowInfo *)textRow;
+         textRow:(OAAmenityInfoRow *)textRow;
 
 @end

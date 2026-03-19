@@ -11,7 +11,6 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAStateChangedListener.h"
@@ -80,7 +79,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 @end
 
 
-@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
+@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, StatisticsSelectionDelegate, OAEmissionHelperListener>
 
 @end
 
@@ -94,6 +93,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSMutableSet<NSNumber *> *_expandedSections;
     
     NSArray<NSNumber *> *_types;
+    GPXDataSetAxisType _selectedXAxisMode;
     
     BOOL _hasTranslated;
     double _highlightDrawX;
@@ -287,18 +287,21 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
     routeStatsCell.chartView.delegate = self;
 
+    BOOL useHours = (self.analysis.timeSpan / 3600000) > 0;
     [GpxUIHelper setupElevationChartWithChartView:routeStatsCell.chartView
                                         topOffset:20
                                      bottomOffset:4
                               useGesturesAndScale:YES
-                                    showXInMarker:NO];
+                                    showXInMarker:NO
+                                        startTime:self.analysis.startTime
+                                         useHours:useHours];
 
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
-                                      axisType:GPXDataSetAxisTypeDistance
+                                      axisType:_selectedXAxisMode
                                calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
@@ -396,7 +399,13 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysisFileTimestamp:0];
     }
-    _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
+    
+    if (!_types)
+        _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
+    
+    if (_selectedXAxisMode != GPXDataSetAxisTypeDistance && _selectedXAxisMode != GPXDataSetAxisTypeTime && _selectedXAxisMode != GPXDataSetAxisTypeTimeOfDay)
+        _selectedXAxisMode = GPXDataSetAxisTypeDistance;
+    
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -803,9 +812,20 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types analysis:self.analysis];
+    StatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[StatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types selectedXAxisMode:_selectedXAxisMode analysis:self.analysis];
     statsModeBottomSheet.delegate = self;
-    [statsModeBottomSheet show];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:statsModeBottomSheet];
+    nav.modalPresentationStyle = UIModalPresentationPageSheet;
+    UISheetPresentationController *sheet = nav.sheetPresentationController;
+    sheet.detents = @[
+        UISheetPresentationControllerDetent.mediumDetent,
+        UISheetPresentationControllerDetent.largeDetent
+    ];
+    sheet.selectedDetentIdentifier = UISheetPresentationControllerDetentIdentifierMedium;
+    sheet.prefersGrabberVisible = YES;
+    sheet.preferredCornerRadius = 20.0;
+    sheet.prefersScrollingExpandsWhenScrolledToEdge = NO;
+    [OARootViewController.instance.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
 - (IBAction)buttonCancelPressed:(id)sender
@@ -1016,8 +1036,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 #pragma mark - OAStatisticsSelectionDelegate
 
-- (void)onTypesSelected:(NSArray<NSNumber *> *)types
+- (void)onGraphModeChanged:(GPXDataSetAxisType)selectedXAxisMode types:(NSArray<NSNumber *> *)types
 {
+    _selectedXAxisMode = (GPXDataSetAxisType) selectedXAxisMode;
     _types = types;
     [self updateRouteStatisticsGraph];
 }
@@ -1030,9 +1051,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
         ElevationChartCell *graphCell = statsSection[1];
         [self.trackChartHelper changeChartTypes:_types
-                                              chart:graphCell.chartView
-                                           analysis:self.analysis
-                                        statsModeCell:statsModeCell];
+                              selectedXAxisMode:_selectedXAxisMode
+                                          chart:graphCell.chartView
+                                       analysis:self.analysis
+                                  statsModeCell:statsModeCell];
     }
 }
 

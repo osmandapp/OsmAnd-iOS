@@ -1366,8 +1366,6 @@ typedef enum
 
     if (self.isNewContextMenuDisabled)
         return;
-    
-    OAContextMenuLayer *contextLayer = self.mapViewController.mapLayers.contextMenuLayer;
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
@@ -1394,25 +1392,25 @@ typedef enum
         }
     }
     
+    if (validSelectedObjects && validSelectedObjects.count != validPoints.count)
+        validSelectedObjects = nil;
+    
     if (validPoints.count == 0)
     {
         return;
     }
     if (selectedObjects.count == 1)
     {
-        [contextLayer showContextMenu:touchPointLatLon object:selectedObjects[0]];
+        [self showContextMenu:validPoints[0] selectedObject:selectedObjects[0]];
     }
     else if (validPoints.count == 1)
     {
-        [self showContextMenu:validPoints[0]];
+        [self showContextMenu:validPoints[0] selectedObject:validSelectedObjects ? validSelectedObjects[0] : nil];
     }
     else
     {
         for (OATargetPoint *targetPoint in validPoints)
             [self applyTargetPointController:targetPoint];
-
-        if (validSelectedObjects && validSelectedObjects.count != validPoints.count)
-            validSelectedObjects = nil;
         
         [self showMultiContextMenu:touchPointLatLon points:validPoints selectedObjects:validSelectedObjects];
     }
@@ -1440,6 +1438,11 @@ typedef enum
 }
 
 - (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
+{
+    [self showContextMenu:targetPoint saveState:saveState preferredZoom:preferredZoom selectedObject:nil];
+}
+
+- (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom selectedObject:(SelectedMapObject *)selectedObject
 {
     if (_activeTargetType == OATargetGPX)
         [self hideScrollableHudViewController];
@@ -1474,6 +1477,33 @@ typedef enum
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
     
+    [_targetMenuView setSelectedObject:selectedObject.object];
+
+    if (targetPoint.type != OATargetRenderedObject)
+    {
+        BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
+        if (detailsObject)
+        {
+            targetPoint.type = OATargetBaseDetailsObject;
+            targetPoint.targetObj = detailsObject;
+        }
+    }
+
+    [self setSelectedObject:targetPoint];
+
+    [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
+        
+        [_mapViewController contextMenuDidShow:selectedObject.object];
+        if (targetPoint.centerMap)
+            [self goToTargetPointWithZoom:preferredZoom];
+        
+        if (_targetMenuView.needsManualContextMode)
+            [self enterContextMenuMode];
+    }];
+}
+
+- (void)setSelectedObject:(OATargetPoint *)targetPoint
+{
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
         QVector<OsmAnd::PointI> points;
@@ -1481,21 +1511,11 @@ typedef enum
         if (obj.x && obj.x.count > 0)
         {
             for (int i = 0; i < obj.x.count; i++)
-                points.push_back( OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue) );
+                points.push_back(OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue));
         }
-        
+
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
-
-    [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
-        
-        [_mapViewController contextMenuDidShow:targetPoint.targetObj];
-        if (targetPoint.centerMap)
-            [self goToTargetPointWithZoom:preferredZoom];
-        
-        if (_targetMenuView.needsManualContextMode)
-            [self enterContextMenuMode];
-    }];
 }
 
 - (void) setupNetworkGpxProgress
@@ -1539,6 +1559,11 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
+    [self showContextMenu:targetPoint selectedObject:nil];
+}
+
+- (void) showContextMenu:(OATargetPoint *)targetPoint selectedObject:(SelectedMapObject *)selectedObject
+{
     if (targetPoint.type == OATargetGPX)
     {
         OASTrackItem *trackItem;
@@ -1576,14 +1601,14 @@ typedef enum
         OANetworkRouteSelectionLayer *networkRouteSelectionLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.networkRouteSelectionLayer;
         
         NSArray<NSNumber *> *area31 = targetPoint.values[@"area"];
-        OsmAnd::LatLon topLeft = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[0].integerValue, area31[1].integerValue)];
-        OsmAnd::LatLon bottomRight = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[2].integerValue, area31[3].integerValue)];
+        OsmAnd::LatLon topLeft = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[0].intValue, area31[1].intValue)];
+        OsmAnd::LatLon bottomRight = [OANativeUtilities getLanlonFromPoint31:OsmAnd::PointI(area31[2].intValue, area31[3].intValue)];
         OASKQuadRect *rect = [[OASKQuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
         [networkRouteSelectionLayer showMenuAction:@[targetPoint.targetObj, rect]];
     }
     else
     {
-        [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
+        [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM selectedObject:selectedObject];
     }
 }
 
@@ -1598,6 +1623,11 @@ typedef enum
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
+}
+
+- (void)updateTargetPoint:(OATargetPoint *)targetPoint
+{
+    [_targetMenuView setTargetPoint:targetPoint];
 }
 
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
@@ -1665,7 +1695,8 @@ typedef enum
             }
 
             [self hideTargetPointMenu];
-            [self showRouteInfo:NO];
+            BOOL fullScreen = (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection) && !_app.data.pointToNavigate; // We need to show full screen only if there aren't enough points count to build the route
+            [self showRouteInfo:fullScreen];
             
             return NO;
         }
@@ -1785,9 +1816,9 @@ typedef enum
              outTopInset:(float &)outTopInset
 {
     UIEdgeInsets safeArea = self.view.safeAreaInsets;
-    BOOL isCarPlayActive = UIApplication.sharedApplication.isCarPlayAppActive;
-    if (isCarPlayActive)
-        safeArea = UIApplication.sharedApplication.carPlayWindow.safeAreaInsets;
+    UIWindow *carPlayActiveWindow = UIApplication.sharedApplication.carPlayActiveWindow;
+    if (carPlayActiveWindow)
+        safeArea = carPlayActiveWindow.safeAreaInsets;
 
     double deltaLeft   = safeArea.left - leftInset;
     double deltaRight  = safeArea.right - rightInset;
@@ -1797,14 +1828,14 @@ typedef enum
     double padding = MAX(60.0, MIN(screenBBox.width, screenBBox.height) * 0.15);
     
     double safePadding = padding / 2.0;
-    BOOL landscape = OAUtilities.isLandscape || isCarPlayActive;
+    BOOL landscape = OAUtilities.isLandscape || carPlayActiveWindow;
     double finalLeft   = MAX(deltaLeft, deltaLeft > 0 ? deltaLeft + safePadding : padding);
     double finalRight  = MAX(deltaRight, deltaRight > 0 ? deltaRight + safePadding : padding);
     double finalTop    = MAX(deltaTop, deltaTop > 0 && !landscape ? deltaTop + safePadding : padding);
     double finalBottom = MAX(deltaBottom, deltaBottom > 0 && !landscape ? deltaBottom + safePadding : padding);
 
     outLeftInset = (float)finalLeft;
-    outTopInset  = (float)finalTop + (!isCarPlayActive ? (deltaTop > 0 ? 20.0 : 10.0) : 0.0);
+    outTopInset  = (float)finalTop + (!carPlayActiveWindow ? (deltaTop > 0 ? 20.0 : 10.0) : 0.0);
 
     return CGSizeMake(screenBBox.width - finalLeft - finalRight,
                       screenBBox.height - finalTop - finalBottom);
@@ -2421,7 +2452,7 @@ typedef enum
     
     _mapStateSaved = saveMapState;
     
-    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
+    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint selectedObject:_targetMenuView.selectedObject activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
     {
@@ -2439,6 +2470,8 @@ typedef enum
         case OATargetTurn:
         case OATargetMyLocation:
         case OATargetLocation:
+        case OATargetRenderedObject:
+        case OATargetBaseDetailsObject:
         {
             if (controller)
                 [self.targetMenuView doInit:showFullMenu];
@@ -2756,10 +2789,7 @@ typedef enum
 
 - (OATargetPoint *) getCurrentTargetPoint
 {
-    if (_targetMenuView.superview)
-        return _targetMenuView.targetPoint;
-    else
-        return nil;
+    return _targetMenuView.targetPoint;
 }
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item

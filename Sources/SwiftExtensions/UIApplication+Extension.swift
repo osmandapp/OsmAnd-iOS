@@ -25,11 +25,41 @@ extension UIApplication {
 // MARK: - CarPlay
 extension UIApplication {
     
-    @objc var carPlayWindow: CPWindow? {
-        return connectedScenes
+    /// Returns the active CarPlay window, if available.
+    ///
+    ///   - If the CarPlay Dashboard is active, this returns `carPlayDashboardWindow`.
+    ///   - If a standard CarPlay app is active, this returns `carPlayAppWindow`.
+    ///   - Returns `nil` if no CarPlay scene is active.
+    @objc var carPlayActiveWindow: UIWindow? {
+        if isCarPlayDashboardActive {
+            return carPlayDashboardWindow
+        }
+        if isCarPlayAppActive {
+            return carPlayAppWindow
+        }
+        return nil
+    }
+    
+    /// Returns the main CarPlay app window from `CPTemplateApplicationScene`.
+    ///
+    /// This window can be used to access `safeAreaInsets` and other window-related properties.
+    /// Returns `nil` if CarPlay is not active or the scene cannot be found.
+    @objc var carPlayAppWindow: CPWindow? {
+        connectedScenes
             .compactMap { $0 as? CPTemplateApplicationScene }
             .first?
             .carWindow
+    }
+    
+    /// Returns the CarPlay Dashboard window from `CPTemplateApplicationDashboardScene`.
+    ///
+    /// This window can be used to access `safeAreaInsets` and other window-related properties.
+    /// Returns `nil` if the Dashboard is not active or the scene cannot be found.
+    @objc var carPlayDashboardWindow: UIWindow? {
+        connectedScenes
+            .compactMap { $0 as? CPTemplateApplicationDashboardScene }
+            .first?
+            .dashboardWindow
     }
     
     /// Returns `true` if the app currently has any CarPlay-related scene connected.

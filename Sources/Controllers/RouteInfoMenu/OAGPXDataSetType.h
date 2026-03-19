@@ -13,6 +13,7 @@
 + (NSString *)getTitle:(NSInteger)type;
 + (NSString *)getIconName:(NSInteger)type;
 + (NSString *)getDataKey:(NSInteger)type;
++ (NSInteger)getTypeGroup:(NSInteger)type;
 + (UIColor *)getTextColor:(NSInteger)type;
 + (UIColor *)getFillColor:(NSInteger)type;
 + (NSString *)getMainUnitY:(NSInteger)type;

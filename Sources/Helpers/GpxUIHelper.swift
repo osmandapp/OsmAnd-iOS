@@ -10,8 +10,30 @@ import UIKit
 import DGCharts
 import OsmAndShared
 
-@objc enum GPXDataSetType: Int {
-    case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW
+@objc enum GpxDataSetTypeGroup: Int {
+    case general
+    case externalSensors
+    case vehicleMetrics
+    
+    private var titleId: String? {
+        switch self {
+        case .general:
+            return nil
+        case .externalSensors:
+            return "external_sensor_widgets"
+        case .vehicleMetrics:
+            return "vehicle_metrics_chart_category"
+        }
+    }
+    
+    func localizedName() -> String? {
+        guard let titleId else { return nil }
+        return localizedString(titleId)
+    }
+}
+
+@objc enum GPXDataSetType: Int, CaseIterable {
+    case none, altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperatureA, sensorTemperatureW, intakeTemperature, ambientTemperature, coolantTemperature, engineOilTemperature, engineSpeed, engineRuntime, engineLoad, fuelPressure, fuelConsumption, remainingFuel, batteryLevel, vehicleSpeed, throttlePosition
 
     func getTitle() -> String {
         OAGPXDataSetType.getTitle(rawValue)
@@ -23,6 +45,10 @@ import OsmAndShared
 
     func getDatakey() -> String {
         OAGPXDataSetType.getDataKey(rawValue)
+    }
+    
+    func getTypeGroup() -> GpxDataSetTypeGroup {
+        GpxDataSetTypeGroup(rawValue: OAGPXDataSetType.getTypeGroup(rawValue)) ?? .general
     }
 
     func getTextColor() -> UIColor {
@@ -55,11 +81,11 @@ import OsmAndShared
     func getImageName() -> String {
         switch self {
         case .distance:
-            return ""
+            return "ic_custom_distance"
         case .time:
-            return ""
+            return "ic_custom_time_span"
         case .timeOfDay:
-            return ""
+            return "ic_custom_time_of_day"
         }
     }
 }
@@ -93,17 +119,9 @@ class GpxUIHelper: NSObject {
             CGFloat(dataProvider.chartYMin)
         }
     }
-
-    private class TimeFormatter: AxisValueFormatter {
-
-        private var useHours: Bool
-
-        init(useHours: Bool) {
-            self.useHours = useHours
-        }
-
-        func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-            let seconds = Int(value)
+    
+    private class GPXChartFormatHelper {
+        static func formatXAxisTime(seconds: Int, useHours: Bool) -> String {
             if useHours {
                 let hours = seconds / (60 * 60)
                 let minutes = (seconds / 60) % 60
@@ -120,6 +138,23 @@ class GpxUIHelper: NSObject {
                 return (minutes < 10 ? "0" + strMinutes : strMinutes) + ":" + (sec < 10 ? "0" + strSeconds : strSeconds)
             }
         }
+        
+        static func formatTimeOfDay(secondsSince1970: Double) -> String {
+            DateFormatter.gpxTimeOfDayFormatter.string(from: Date(timeIntervalSince1970: secondsSince1970))
+        }
+    }
+
+    private class TimeFormatter: AxisValueFormatter {
+
+        private var useHours: Bool
+
+        init(useHours: Bool) {
+            self.useHours = useHours
+        }
+
+        func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+            GPXChartFormatHelper.formatXAxisTime(seconds: Int(value), useHours: useHours)
+        }
     }
 
     private class TimeSpanFormatter: AxisValueFormatter {
@@ -131,11 +166,7 @@ class GpxUIHelper: NSObject {
 
         func stringForValue(_ value: Double, axis: AxisBase?) -> String {
             let seconds = Double(startTime / 1000) + value
-            let date = Date(timeIntervalSince1970: seconds)
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm:ss"
-            dateFormatter.timeZone = .current
-            return dateFormatter.string(from: date)
+            return GPXChartFormatHelper.formatTimeOfDay(secondsSince1970: seconds)
         }
     }
 
@@ -189,11 +220,13 @@ class GpxUIHelper: NSObject {
         
         private let widthOffset: CGFloat = 3.0
         private let heightOffset: CGFloat = 2.0
+        private var startTime: Int64 = 0
         private let textLayer = CATextLayer()
         private let outlineLayer = CALayer()
 
         private var text: NSAttributedString = NSAttributedString(string: "")
         private var showXAxisValue = false
+        private var useHours = false
 
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -201,9 +234,11 @@ class GpxUIHelper: NSObject {
             setupLayers()
         }
         
-        convenience init(frame: CGRect, showXAxisValue: Bool) {
+        convenience init(frame: CGRect, showXAxisValue: Bool, startTime: Int64, useHours: Bool) {
             self.init(frame: frame)
             self.showXAxisValue = showXAxisValue
+            self.startTime = startTime
+            self.useHours = useHours
         }
 
         required init?(coder: NSCoder) {
@@ -257,12 +292,21 @@ class GpxUIHelper: NSObject {
                 }
             }
             
-            if let dataSet = chartData?.dataSets.first as? OrderedLineDataSet,
-               showXAxisValue && dataSet.getDataSetAxisType() == .distance {
-                let meters = entry.x * dataSet.getDivX()
-                if let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(meters)) {
-                    res.append(NSAttributedString(string: (res.length > 0 ? ", " : "") + formattedDistance,
-                                                  attributes: [.foregroundColor: UIColor.textColorPrimary]))
+            if let dataSet = chartData?.dataSets.first as? OrderedLineDataSet, showXAxisValue {
+                let xAxisString: String?
+                switch dataSet.getDataSetAxisType() {
+                case .distance:
+                    let meters = entry.x * dataSet.getDivX()
+                    xAxisString = OAOsmAndFormatter.getFormattedDistance(Float(meters))
+                case .time:
+                    xAxisString = GPXChartFormatHelper.formatXAxisTime(seconds: Int(entry.x), useHours: useHours)
+                case .timeOfDay:
+                    let seconds = Double(startTime / 1000) + entry.x
+                    xAxisString = GPXChartFormatHelper.formatTimeOfDay(secondsSince1970: seconds)
+                }
+                
+                if let xAxisString, !xAxisString.isEmpty {
+                    res.append(NSAttributedString(string: (res.length > 0 ? ", " : "") + xAxisString, attributes: [.foregroundColor: UIColor.textColorPrimary]))
                 }
             }
             
@@ -421,8 +465,8 @@ class GpxUIHelper: NSObject {
         chart.legend.enabled = false
     }
 
-    static func setupElevationChart(chartView: ElevationChart, showXInMarker: Bool) {
-        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40), showXAxisValue: showXInMarker)
+    static func setupElevationChart(chartView: ElevationChart, showXInMarker: Bool, startTime: Int64, useHours: Bool) {
+        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40), showXAxisValue: showXInMarker, startTime: startTime, useHours: useHours)
         setupElevationChart(chartView: chartView,
                             markerView: marker,
                             topOffset: 24,
@@ -434,8 +478,10 @@ class GpxUIHelper: NSObject {
                                     topOffset: CGFloat,
                                     bottomOffset: CGFloat,
                                     useGesturesAndScale: Bool,
-                                    showXInMarker: Bool) {
-        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40), showXAxisValue: showXInMarker)
+                                    showXInMarker: Bool,
+                                    startTime: Int64,
+                                    useHours: Bool) {
+        let marker = GPXChartMarker(frame: CGRect(x: 0, y: 0, width: 80, height: 40), showXAxisValue: showXInMarker, startTime: startTime, useHours: useHours)
         setupElevationChart(chartView: chartView,
                             markerView: marker,
                             topOffset: topOffset,
@@ -860,9 +906,6 @@ class GpxUIHelper: NSObject {
                                               useRightAxis: Bool,
                                               drawFilled: Bool,
                                               calcWithoutGaps: Bool) -> OrderedLineDataSet? {
-        if axisType == GPXDataSetAxisType.time || axisType == GPXDataSetAxisType.timeOfDay {
-            return nil
-        }
         let useFeet: Bool = OAAltitudeMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().altitudeMetric.get())
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let totalDistance: Double = calcWithoutGaps

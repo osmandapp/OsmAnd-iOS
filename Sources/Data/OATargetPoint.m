@@ -12,13 +12,25 @@
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOI.h"
+#import "OARenderedObject.h"
+#import "OAAmenitySearcher.h"
 
 @implementation OATargetPoint
 {
     OAPointDescription *_pd;
 }
 
-- (void)initAdderssIfNeeded
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _obfId = [OAMapObject getInvalidObfId];
+    }
+    return self;
+}
+
+- (void)initAddressIfNeeded
 {
     if (self.addressFound)
         return;
@@ -95,6 +107,11 @@
         }
     }
     return _pd;
+}
+
+- (BOOL) isValidObfId
+{
+    return self.obfId != [OAMapObject getInvalidObfId];
 }
 
 - (BOOL) isEqual:(id)o

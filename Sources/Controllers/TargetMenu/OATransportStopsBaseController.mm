@@ -22,7 +22,8 @@
 #include <OsmAndCore/Data/TransportStopExit.h>
 
 static NSInteger const ROUNDING_ERROR = 3;
-static NSInteger const SHOW_STOPS_RADIUS_METERS = 150;
+static NSInteger const SHOW_STOPS_RADIUS_METERS_UI = 150;
+static NSInteger const SHOW_STOPS_RADIUS_METERS = SHOW_STOPS_RADIUS_METERS_UI * 6 / 5;
 static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
 static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
 
@@ -172,7 +173,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     return OsmAnd::LatLon(stopLat, stopLon);
 }
 
-+ (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity
+- (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity
 {
     OATransportStopAggregated *stopAggregated;
     BOOL isSubwayEntrance = [amenity.type.name isEqualToString:@"subway_entrance"] ||
@@ -236,7 +237,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     return nil;
 }
 
-+ (NSArray<OATransportStop *> *) findTransportStopsAt:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters
+- (NSArray<OATransportStop *> *) findTransportStopsAt:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters
 {
     NSMutableArray<OATransportStop *> *transportStops = [NSMutableArray array];
     
@@ -259,7 +260,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     return transportStops;
 }
 
-+ (OATransportStopAggregated *) processTransportStopsForAmenity:(NSArray<OATransportStop *> *)transportStops amenity:(OAPOI *)amenity
+- (OATransportStopAggregated *) processTransportStopsForAmenity:(NSArray<OATransportStop *> *)transportStops amenity:(OAPOI *)amenity
 {
     OATransportStopAggregated *stopAggregated = [[OATransportStopAggregated alloc] init];
     stopAggregated.amenity = amenity;

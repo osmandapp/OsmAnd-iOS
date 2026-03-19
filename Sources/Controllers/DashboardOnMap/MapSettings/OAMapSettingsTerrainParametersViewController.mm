@@ -124,7 +124,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
     _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].min : [_plugin getTerrainMinZoom];
     _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].max : [_plugin getTerrainMaxZoom];
-    _baseAlpha = [_terrainMode getTransparency] * 0.01;
+    _baseAlpha = _terrainType == EOATerrainSettingsTypeBuildingsVisibility ? [_plugin.buildings3dAlphaPref get] : [_terrainMode getTransparency] * 0.01;
 
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
@@ -306,6 +306,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             result = OALocalizedString(@"grid_color");
             break;
         case EOATerrainSettingsTypeBuildings3DColor:
+        case EOATerrainSettingsTypeBuildingsVisibility:
             result = OALocalizedString(@"enable_3d_objects");
             break;
     }
@@ -335,6 +336,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         case EOAGPXSettingsTypeWallHeight:
             result = OALocalizedString(@"wall_height_description");
             break;
+        case EOATerrainSettingsTypeBuildingsVisibility:
+            result = OALocalizedString(@"buildings_3d_visibility_description");
+            break;
     }
     return result;
 }
@@ -362,7 +366,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             kCellTitleKey : OALocalizedString(@"shared_string_height")
         }];
     }
-    else if (_terrainType == EOATerrainSettingsTypeVisibility)
+    else if (_terrainType == EOATerrainSettingsTypeVisibility || _terrainType == EOATerrainSettingsTypeBuildingsVisibility)
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"visibilitySlider",
@@ -542,7 +546,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         divider = 2.5;
     }
-    else if (_terrainType == EOATerrainSettingsTypeVisibility)
+    else if (_terrainType == EOATerrainSettingsTypeVisibility || _terrainType == EOATerrainSettingsTypeBuildingsVisibility)
     {
         divider = 3.0;
     }
@@ -578,6 +582,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     if (_terrainType == EOATerrainSettingsTypeVisibility && _baseAlpha != _currentAlpha)
         [_terrainMode setTransparency:_baseAlpha / 0.01];
+    else if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility && _baseAlpha != _currentAlpha)
+        [_plugin apply3DBuildingsAlpha:_baseAlpha];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
         [_terrainMode setZoomValuesWithMinZoom:(int32_t) _baseMinZoom maxZoom:(int32_t) _baseMaxZoom];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _baseVerticalExaggerationScale != _currentVerticalExaggerationScale)
@@ -627,15 +633,20 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (BOOL)resetVisibilityValues
 {
-    CGFloat defaultAlpha = ([_terrainMode isHillshade] ? hillshadeDefaultTrasparency : defaultTrasparency) * 0.01;
+    CGFloat defaultAlpha = _terrainType == EOATerrainSettingsTypeBuildingsVisibility ? [_plugin.buildings3dAlphaPref defValue] : ([_terrainMode isHillshade] ? hillshadeDefaultTrasparency : defaultTrasparency) * 0.01;
     if (_currentAlpha != defaultAlpha)
     {
         _currentAlpha = defaultAlpha;
-        [_terrainMode setTransparency:defaultAlpha / 0.01];
+        if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
+            [_plugin apply3DBuildingsAlpha:_currentAlpha];
+        else
+            [_terrainMode setTransparency:defaultAlpha / 0.01];
+        
         _isValueChange = _baseAlpha != _currentAlpha;
         [self updateApplyButton];
         return YES;
     }
+    
     return NO;
 }
 
@@ -803,7 +814,15 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCurrentVisibility
 {
-    [_terrainMode setTransparency:_currentAlpha / 0.01];
+    if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
+    {
+        [_plugin.buildings3dAlphaPref set:_currentAlpha];
+        [_plugin apply3DBuildingsAlpha:_currentAlpha];
+    }
+    else
+    {
+        [_terrainMode setTransparency:_currentAlpha / 0.01];
+    }
 }
 
 - (void)applyCurrentZoomLevels
@@ -932,7 +951,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (IBAction)resetButtonPressed:(UIButton *)sender
 {
     BOOL wasReset = NO;
-    if (_terrainType == EOATerrainSettingsTypeVisibility)
+    if (_terrainType == EOATerrainSettingsTypeVisibility || _terrainType == EOATerrainSettingsTypeBuildingsVisibility)
         wasReset = [self resetVisibilityValues];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels || _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
         wasReset = [self resetZoomLevels];
@@ -958,7 +977,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)onApplyButtonPressed
 {
-    if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01)
+    if ((_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01) || (_terrainType == EOATerrainSettingsTypeBuildingsVisibility && _currentAlpha != [_plugin.buildings3dAlphaPref get]))
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
         [self applyCurrentZoomLevels];
@@ -1023,7 +1042,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
 
     _currentAlpha = slider.value;
-    [_terrainMode setTransparency:_currentAlpha / 0.01];
+    if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
+        [_plugin apply3DBuildingsAlpha:_currentAlpha];
+    else
+        [_terrainMode setTransparency:_currentAlpha / 0.01];
     
     _isValueChange = _baseAlpha != _currentAlpha;
     [self updateApplyButton];
@@ -1265,9 +1287,21 @@ static const NSInteger kElevationMaxMeters = 2000;
         else
         {
             cell.updateValueCallback = nil;
-            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
-            cell.sliderView.value = transparency * 0.01;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
+            cell.sliderView.maximumValue = 1.0f;
+            if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
+            {
+                cell.sliderView.minimumValue = 0.1f;
+                NSInteger alphaPercent = (NSInteger) lround(_currentAlpha * 100.);
+                cell.sliderView.value = _currentAlpha;
+                cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", alphaPercent];
+            }
+            else
+            {
+                cell.sliderView.minimumValue = 0.0f;
+                NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
+                cell.sliderView.value = transparency * 0.01;
+                cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
+            }
         }
         
         [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];

@@ -491,7 +491,7 @@ static const NSInteger kElevationMaxMeters = 2000;
                     kCellKeyKey: @"buildings3DColorChooseColor",
                     kCellTypeKey: OAButtonTableViewCell.reuseIdentifier,
                     kCellTitleKey: OALocalizedString(@"choose_color"),
-                    kCellSecondaryIconName: @"ic_payment_label_pro",
+                    kCellSecondaryIconName: @"ic_payment_label_maps_plus",
                     @"tintTitle": [UIColor colorNamed:ACColorNameTextColorActive]
                 }];
                 _colorsCollectionIndexPath = nil;

@@ -138,7 +138,7 @@ final class SpeedometerSpeedView: UIView {
             return
         }
         
-        //  tolerance (km/h or mph)
+        // tolerance (km/h or mph)
         var tolerance = Float(OAAppSettings.sharedManager().speedLimitExceedKmh.get())
         if OASpeedConstant.imperial(OAAppSettings.sharedManager().speedSystem.get()) {
             tolerance /= 1.6
@@ -274,54 +274,55 @@ extension SpeedometerSpeedView {
         case left  // Animation starts from the left edge
     }
     
-    private class AnimationCompletionDelegate: NSObject, CAAnimationDelegate {
-        var completion: () -> Void
-        
-        init(completion: @escaping () -> Void) {
-            self.completion = completion
-        }
-        
-        func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-            if flag {
-                completion()
-            }
-        }
-    }
-    
     /// Animates the appearance of the red/yellow circle and the change of the text color.
     private func startSpeedometerSpeedAnimation(duration: TimeInterval = 1.0) {
         startCircleRevealAnimation(duration: duration)
         animateText(valueColor: currentSpeedometerState.valueColor, unitColor: currentSpeedometerState.unitsColor, duration: duration)
     }
     
-    private func stopSpeedometerSpeedAnimation(animated: Bool) {
-        guard let circleLayer else {
-            updateSpeedometerSpeedView(animated: animated)
-            isCircleRevealAnimationActive = false
+    func stopSpeedometerSpeedAnimation(animated: Bool) {
+        guard animated else {
+            circleLayer?.removeFromSuperlayer()
+            circleLayer = nil
+            updateSpeedometerSpeedView(animated: false)
             return
         }
-
-        let fadeOut = CABasicAnimation(keyPath: "opacity")
-        fadeOut.fromValue = circleLayer.presentation()?.opacity ?? circleLayer.opacity
-        fadeOut.toValue = 0.0
-        fadeOut.duration = 1.0
-        fadeOut.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        fadeOut.fillMode = .forwards
-        fadeOut.isRemovedOnCompletion = false
-
-        CATransaction.begin()
-        CATransaction.setCompletionBlock {
-            circleLayer.removeAllAnimations()
-            circleLayer.removeFromSuperlayer()
-            self.circleLayer = nil
-            self.updateSpeedometerSpeedView(animated: animated)
-            self.isCircleRevealAnimationActive = false
+        
+        guard let layerToAnimate = circleLayer else {
+            updateSpeedometerSpeedView(animated: true)
+            return
         }
-        circleLayer.add(fadeOut, forKey: "fadeOut")
+        
+        let (circleCenter, currentRadius) = calculateAnimationParameters()
+        
+        let fullPath = UIBezierPath(arcCenter: circleCenter, radius: currentRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: true).cgPath
+        
+        let hiddenPath = UIBezierPath(arcCenter: circleCenter, radius: 0, startAngle: 0, endAngle: 2 * .pi, clockwise: true).cgPath
+        
+        backgroundColor = SpeedometerState.normal.backgroundColor
+        
+        let pathAnimation = CABasicAnimation(keyPath: "path")
+        pathAnimation.fromValue = fullPath
+        pathAnimation.toValue = hiddenPath
+        pathAnimation.duration = 1.0
+        pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        pathAnimation.fillMode = .forwards
+        pathAnimation.isRemovedOnCompletion = false
+        
+        CATransaction.begin()
+        CATransaction.setCompletionBlock { [weak self] in
+            layerToAnimate.removeFromSuperlayer()
+            if self?.circleLayer == layerToAnimate {
+                self?.circleLayer = nil
+            }
+            self?.isCircleRevealAnimationActive = false
+        }
+        layerToAnimate.add(pathAnimation, forKey: "shrink")
         CATransaction.commit()
         
-        updateSpeedometerSpeedView(animated: animated)
-        isCircleRevealAnimationActive = false
+        animateText(valueColor: SpeedometerState.normal.valueColor,
+                    unitColor: SpeedometerState.normal.unitsColor,
+                    duration: 1.0)
     }
     
     private func updateSpeedometerSpeedView(animated: Bool = true) {
@@ -382,49 +383,35 @@ extension SpeedometerSpeedView {
     }
     
     private func startCircleRevealAnimation(duration: TimeInterval) {
+        circleLayer?.removeAllAnimations()
         circleLayer?.removeFromSuperlayer()
         
-        let newCircleLayer = CAShapeLayer()
-        newCircleLayer.fillColor = currentSpeedometerState.backgroundColor.cgColor
-        newCircleLayer.opacity = 0.0
-        contentView.layer.insertSublayer(newCircleLayer, at: 0)
-        self.circleLayer = newCircleLayer
+        isCircleRevealAnimationActive = true
+        
+        let newLayer = CAShapeLayer()
+        newLayer.fillColor = currentSpeedometerState.backgroundColor.cgColor
+        contentView.layer.insertSublayer(newLayer, at: 0)
+        self.circleLayer = newLayer
         
         let (startPoint, endRadius) = calculateAnimationParameters()
-        
         let initialPath = UIBezierPath(arcCenter: startPoint, radius: 0, startAngle: 0, endAngle: 2 * .pi, clockwise: true).cgPath
         let finalPath = UIBezierPath(arcCenter: startPoint, radius: endRadius, startAngle: 0, endAngle: 2 * .pi, clockwise: true).cgPath
         
-        newCircleLayer.path = initialPath
+        newLayer.path = finalPath
         
         let pathAnimation = CABasicAnimation(keyPath: "path")
         pathAnimation.fromValue = initialPath
         pathAnimation.toValue = finalPath
-        
-        let alphaAnimation = CABasicAnimation(keyPath: "opacity")
-        alphaAnimation.fromValue = 0.0
-        alphaAnimation.toValue = 1.0
-        
-        let animationGroup = CAAnimationGroup()
-        animationGroup.duration = duration
-        animationGroup.animations = [pathAnimation, alphaAnimation]
-        animationGroup.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        let animationDelegate = AnimationCompletionDelegate { [weak self] in
-            guard let self else { return }
-            circleLayer?.removeFromSuperlayer()
-            circleLayer = nil
-            isCircleRevealAnimationActive = false
-            backgroundColor = currentSpeedometerState.backgroundColor
-        }
+        pathAnimation.duration = duration
+        pathAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         
         CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        newCircleLayer.path = finalPath
-        newCircleLayer.opacity = 1.0
+        CATransaction.setCompletionBlock { [weak self] in
+            guard let self else { return }
+            backgroundColor = currentSpeedometerState.backgroundColor
+            isCircleRevealAnimationActive = false
+        }
+        newLayer.add(pathAnimation, forKey: "reveal")
         CATransaction.commit()
-        
-        animationGroup.delegate = animationDelegate
-        newCircleLayer.add(animationGroup, forKey: "revealAnimation")
-        isCircleRevealAnimationActive = true
     }
 }

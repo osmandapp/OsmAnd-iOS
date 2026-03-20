@@ -12,6 +12,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAMapSource.h"
 #import "OAAppData.h"
+#import "OAAppSettings.h"
 #import "OAObservable.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -449,6 +450,19 @@
         if (onComplete)
             onComplete();
     });
+}
+
+- (NSDictionary<NSString *, NSString *> *)get3DBuildingsRendererSettings
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary dictionary];
+    rendererSettings[@"show3DbuildingParts"] = [[settings getCustomRenderBooleanProperty:@"show3DbuildingParts" defaultValue:NO] get] ? @"true" : @"false";
+    rendererSettings[@"useDefaultBuildingColor"] = [[settings getCustomRenderBooleanProperty:@"useDefaultBuildingColor" defaultValue:NO] get] ? @"true" : @"false";
+    NSString *color = [[settings getCustomRenderProperty:@"base3DBuildingsColor" defaultValue:@""] get];
+    if (color.length > 0)
+        rendererSettings[@"base3DBuildingsColor"] = color;
+    
+    return rendererSettings;
 }
 
 - (NSMutableArray <NSString *> *)getMapStyleRenderKeys

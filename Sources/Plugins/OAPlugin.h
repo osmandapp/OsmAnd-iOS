@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, QuickActionType, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OABaseWidgetView, OAWidgetType, OASGpxTrackAnalysis, OASPointAttributes, OACommonPreference, OACommonString, OACommonBoolean;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, QuickActionType, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OABaseWidgetView, OAWidgetType, OASGpxTrackAnalysis, OASPointAttributes, OACommonPreference, OACommonString, OACommonBoolean, OACommonInteger, OACommonDouble;
 
 @protocol OAWidgetRegistrationDelegate;
 @protocol OASGpxTrackAnalysisTrackPointsAnalyser;
@@ -48,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<OACommonPreference *> *)getPreferences;
 - (OACommonBoolean *)registerBooleanPreference:(NSString *)prefId defValue:(BOOL)defValue;
 - (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(nullable NSString *)defValue;
+- (OACommonInteger *)registerIntPreference:(NSString *)prefId defValue:(NSInteger)defValue;
+- (OACommonDouble *)registerFloatPreference:(NSString *)prefId defValue:(double)defValue;
 
 - (BOOL)initPlugin;
 - (void)setEnabled:(BOOL)enabled;

@@ -2677,6 +2677,13 @@ static const NSInteger kDetailedMapZoom = 9;
         }
         [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
         [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
+        OASRTMPlugin *srtmPlugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+        if (srtmPlugin)
+        {
+            [_mapView set3DBuildingsAlpha:(float) [srtmPlugin.buildings3dAlphaPref get]];
+            [_mapView set3DBuildingsDetalization:(int) [srtmPlugin.buildings3dViewDistancePref get]];
+        }
+
         [self recreate3dObjectsProvider];
 
         [_mapLayers updateLayers];

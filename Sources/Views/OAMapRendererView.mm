@@ -209,9 +209,19 @@
     return _renderer->getState().elevationDataProvider;
 }
 
+- (std::shared_ptr<OsmAnd::IMapTiledDataProvider>)map3DObjectsProvider
+{
+    return _renderer->getState().map3DObjectsProvider;
+}
+
 - (void)setElevationDataProvider:(std::shared_ptr<OsmAnd::IMapElevationDataProvider>)elevationDataProvider
 {
     _renderer->setElevationDataProvider(elevationDataProvider);
+}
+
+- (void)setMap3DObjectsProvider:(std::shared_ptr<OsmAnd::IMapTiledDataProvider>)map3DObjectsProvider
+{
+    _renderer->setMap3DObjectsProvider(map3DObjectsProvider);
 }
 
 - (void)resetElevationDataProvider:(BOOL)forcedUpdate
@@ -219,10 +229,35 @@
     _renderer->resetElevationDataProvider(forcedUpdate);
 }
 
+- (void)resetMap3DObjectsProvider:(BOOL)forcedUpdate
+{
+    _renderer->resetMap3DObjectsProvider(forcedUpdate);
+}
+
 - (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
 forcedUpdate:(BOOL)forcedUpdate
 {
     _renderer->setElevationConfiguration(configuration, forcedUpdate);
+}
+
+- (void)set3DBuildingsAlpha:(float)alpha
+{
+    _renderer->set3DBuildingsAlpha(alpha);
+}
+
+- (float)get3DBuildingsAlpha
+{
+    return _renderer->get3DBuildingsAlpha();
+}
+
+- (void)set3DBuildingsDetalization:(int)detalization
+{
+    _renderer->set3DBuildingsDetalization(detalization);
+}
+
+- (int)get3DBuildingsDetalization
+{
+    return _renderer->get3DBuildingsDetalization();
 }
 
 - (int) maxMissingDataZoomShift

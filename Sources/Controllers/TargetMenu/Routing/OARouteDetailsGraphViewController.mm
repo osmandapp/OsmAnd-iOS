@@ -118,24 +118,16 @@
         [recognizer addTarget:self action:@selector(onChartGesture:)];
     }
 
-    BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
-    if (hasSlope)
-    {
-        nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
-        OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
-        modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")] forState:UIControlStateNormal];
-        [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [modeCell.iconButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        modeCell.rightLabel.text = OALocalizedString(@"shared_string_distance");
-        modeCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
-        
-        return @[modeCell, routeStatsCell];
-    }
-    else
-    {
-        return @[routeStatsCell];
-    }
+    nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
+    OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
+    modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")] forState:UIControlStateNormal];
+    [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [modeCell.iconButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    modeCell.rightLabel.text = OALocalizedString(@"shared_string_distance");
+    modeCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+    
+    return @[modeCell, routeStatsCell];
 }
 
 - (void) generateData

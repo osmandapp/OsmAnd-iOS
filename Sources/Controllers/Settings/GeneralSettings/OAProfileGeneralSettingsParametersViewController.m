@@ -152,7 +152,10 @@
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude ? NO : !_openFromMap;
+    if (@available(iOS 26.0, *))
+        return NO;
+    else
+        return _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsUnitsOfVolume || _settingsType == EOAProfileGeneralSettingsUnitsOfTemp || _settingsType == EOAProfileGeneralSettingsUnitsOfAltitude ? NO : !_openFromMap;
 }
 
 - (BOOL)useCustomTableViewHeader

@@ -131,7 +131,11 @@ static NSMutableArray *activePopups;
         f.size.height = self.okButton.frame.origin.y + self.okButton.frame.size.height + 15.0;
     else
         f.size.height = self.cancelButton.frame.origin.y + self.cancelButton.frame.size.height + 15.0;
-    f.size.height += [OAUtilities getBottomMargin];
+    
+    CGFloat additionalOffset = 0.0;
+    if (_pluginPopupType == OAPluginPopupTypeShowRegionOnMap)
+        additionalOffset = 50.0;
+    f.size.height += [OAUtilities getBottomMargin] + additionalOffset;
     self.view.frame = f;
 }
 

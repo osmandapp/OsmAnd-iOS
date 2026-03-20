@@ -12,6 +12,7 @@
 
 #define DEBUG_NETWORK_OPERATIONS 1  // 1 — on, 0 — off
 
+static const NSTimeInterval DOWNLOAD_FILE_TIMEOUT = 60.0 * 5.0; // 5 minutes
 static const NSTimeInterval CONNECT_TIMEOUT = 30; // 30 sec
 static const NSTimeInterval READ_TIMEOUT = CONNECT_TIMEOUT * 2; // 60 sec
 static const NSTimeInterval CALL_TIMEOUT = CONNECT_TIMEOUT + READ_TIMEOUT; // 90 sec
@@ -256,7 +257,7 @@ authorizationHeader:(NSString *)authorizationHeader
 
         NSURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
                                                         cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                                    timeoutInterval:CONNECT_TIMEOUT];
+                                                    timeoutInterval:DOWNLOAD_FILE_TIMEOUT];
         
         NSError __block *error = nil;
         NSData __block *data = nil;

@@ -4022,3 +4022,17 @@
 "shared_string_wikipedia" = "Википедија";
 "poi_source" = "Извор ТОИ-а";
 "show_polygons" = "Приказуј многоуглове";
+"shared_string_alt_name" = "Алтернативни назив";
+"graph_axis" = "Графичка оса";
+"y_axis" = "Y-оса";
+"x_axis" = "Х-оса";
+"y_axis_description" = "Изаберите до две могућности за осу У.";
+"external_sensor_widgets" = "Спољни сензори";
+"vehicle_metrics_chart_category" = "Метрика возила";
+"poi_mobile" = "Мобилни";
+"poi_cuisine" = "Кухиња";
+"poi_brand" = "Робна марка";
+"travel_guides" = "Водичи";
+"has_vehicle_metrics" = "Са подацима ДНВII";
+"context_menu_read_full_article" = "Прочитај цео чланак";
+"read_on" = "Читај на %@";

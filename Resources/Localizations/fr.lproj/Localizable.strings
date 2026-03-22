@@ -4028,7 +4028,7 @@
 "poi_mobile" = "Mobile";
 "poi_cuisine" = "Cuisine";
 "poi_brand" = "Marque";
-"travel_guides" = "Guides de Voyage";
+"travel_guides" = "Guides de voyage";
 "has_vehicle_metrics" = "À partir des données OBDII";
 "context_menu_read_full_article" = "Lire l'article complet";
 "read_on" = "Continuer la lecture %@";

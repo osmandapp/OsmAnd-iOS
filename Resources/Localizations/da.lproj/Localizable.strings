@@ -4020,3 +4020,17 @@
 "shared_string_wikipedia" = "Wikipedia";
 "poi_source" = "IP-kilde";
 "show_polygons" = "Vis polygoner";
+"shared_string_alt_name" = "Alternativt navn";
+"graph_axis" = "Grafakse";
+"y_axis" = "Y-akse";
+"x_axis" = "X-akse";
+"y_axis_description" = "Vælg op til to indstillinger for Y-aksen.";
+"external_sensor_widgets" = "Eksterne sensorer";
+"travel_guides" = "Guider";
+"has_vehicle_metrics" = "Med OBDII-data";
+"context_menu_read_full_article" = "Læs hele artiklen";
+"read_on" = "Læs på %@";
+"vehicle_metrics_chart_category" = "Køretøjsparametre";
+"poi_mobile" = "Mobil";
+"poi_cuisine" = "Køkken";
+"poi_brand" = "Varemærke";

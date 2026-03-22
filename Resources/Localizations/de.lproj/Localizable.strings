@@ -956,9 +956,9 @@
 "day_short" = "Tg.";
 "week_short" = "Wo.";
 "weeks_short" = "Wo.";
-"month_short" = "Mo.";
+"month_short" = "M";
 "months_short" = "Mon.";
-"year_short" = "J.";
+"year_short" = "J";
 "years_short" = "Jahre";
 "day" = "Tag";
 "days_2_4" = "Tage";
@@ -1763,7 +1763,7 @@
 "road_min_speed_descr" = "Legt die minimale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Erhöht die Priorität für Straßen mit empfohlenen Geschwindigkeiten unter der Mindestgeschwindigkeit.";
 "road_max_speed_descr" = "Legt die maximale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Verringert die Priorität für Straßen mit einer möglichen Geschwindigkeit, die höher als die Höchstgeschwindigkeit ist.";
 "road_speeds_descr" = "Diese Parameter können die Routenberechnung beeinflussen.";
-"ios_release_3_90" = "• Einführung der Funktion \"Eine Route planen\" zur Planung zukünftiger Strecken mit der Möglichkeit, Streckenabschnitte mit verschiedenen Navigationsarten zu erstellen\n• Option zum Aktivieren eines Kompasses über das Werkzeug \"Radiuslineal\" hinzugefügt\n• Option \"POI-Overlay-Bezeichnungen\" hinzugefügt, die es erlaubt, Namen für Favoriten, Track-Wegpunkte und Markierungen auf der Karte anzuzeigen\n• Neue Schnellaktionen für die Sichtbarkeit von Höhenlinien und Gelände auf der Karte, das Ändern eines Anwendungsprofils und das Löschen eines nächstgelegenen Zwischenpunkts hinzugefügt\n• Probleme mit fehlender Wikipedia-Suchkategorie behoben\n• Import von Einstellungen: Fehler behoben, Unterstützung für alle in OsmAnd verfügbaren Datentypen hinzugefügt\n• OpenStreetMap-Bearbeitung: Die Zeitauswahl und die Unmöglichkeit, den Changeset-Kommentar zu ändern, wurden korrigiert\n";
+"ios_release_3_90" = "• Einführung der Funktion \"Eine Route planen\" zur Planung zukünftiger Strecken mit der Möglichkeit, Streckenabschnitte mit verschiedenen Navigationsarten zu erstellen\n• Option zum Aktivieren eines Kompasses über das Werkzeug \"Radiuslineal\" hinzugefügt\n• Option \"POI-Overlay-Bezeichnungen\" hinzugefügt, die es erlaubt, Namen für Favoriten, Track-Wegpunkte und Markierungen auf der Karte anzuzeigen\n• Neue Schnellaktionen für die Sichtbarkeit von Höhenlinien und Gelände auf der Karte, das Ändern eines Anwendungsprofils und das Löschen eines nächstgelegenen Zwischenpunkts hinzugefügt\n• Probleme mit fehlender Wikipedia-Suchkategorie behoben\n• Import von Einstellungen: Fehler behoben, Unterstützung für alle in OsmAnd verfügbaren Datentypen hinzugefügt\n• OpenStreetMap-Bearbeitung: Die Zeitauswahl und die fehlende Möglichkeit, den Changeset-Kommentar zu ändern, wurden korrigiert\n";
 "ios_release_3_80" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen\n";
 
 
@@ -1925,7 +1925,7 @@
 "shared_string_enable" = "Aktivieren";
 "search_poi_types_descr" = "Kombinieren Sie POI-Typen aus verschiedenen Kategorien. Tippen Sie auf den Schalter, um alle auszuwählen, tippen Sie auf die linke Seite zur Kategorieauswahl.";
 "add_custom_category" = "Benutzerdefinierte Kategorie hinzufügen";
-"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten und Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien zugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Großbuchstaben-Erweiterungen behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
+"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten und Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien hinzugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Erweiterungen in Großbuchstaben behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
 "approximate_file_size" = "Ungefähre Dateigröße";
 "gpx_upload_private_visibility_descr" = "„Privat“ bedeutet, dass der Track nicht in öffentlichen Verzeichnissen auftaucht, aber seine Trackpunkte in nicht chronologischer Reihenfolge über die öffentliche GPS-API ohne Zeitstempel verfügbar sind.";
 "gpx_upload_identifiable_visibility_descr" = "„Identifizierbar“ bedeutet, dass der Track in Ihren GPS-Tracks und in öffentlichen GPS-Trackverzeichnissen angezeigt wird, d. h., andere Benutzer können den Track herunterladen und mit Ihrem Benutzernamen verknüpfen. Öffentliche, mit Zeitstempel versehene Trackpunkt-Daten von der GPS-API, die über die Trackpunkt-API bereitgestellt werden, verweisen auf Ihre ursprüngliche Trackseite.";
@@ -1994,7 +1994,7 @@
 "track_coloring_solid" = "Ausgefüllt";
 "gpx_selection_segment_title" = "Abschnitt";
 "gpx_join_gaps_descr" = "Lücken zwischen den Segmenten werden verbunden.";
-"ios_release_4_1" = "• Völlig neu gestaltete Interaktion mit Tracks: ein neues Menü mit Diagrammen, Statistiken, die Möglichkeit, das Aussehen zu ändern, die Einfärbung nach Geschwindigkeit, Höhe und Neigung und die Auswahl der Tracks auf der Karte\n• Neuer Bildschirm für die Suche nach Koordinaten in verschiedenen Formaten\n• Verbesserte Koordinatensuche im OLC Format\n• Neues benutzerfreundliches Menü zur Auswahl der Sprachen für die Anzeige von Wikipedia-Artikeln auf der Karte\n• Es wurde die Möglichkeit hinzugefügt, Karten aller Regionen eines Landes mit ein paar Klicks zu laden.\n• Höhenlinien in Feet (ft) hinzugefügt (Sie müssen zusätzliche Dateien herunterladen)\n• Möglichkeit hinzugefügt, Karten herunterzuladen, indem die gewünschte Region oder das gewünschte Land auf der Karte ausgewählt wird, sowie Hinzufügen eines Dialogfelds mit dem Vorschlag, eine fehlende Karte einer angezeigten Region zu laden\n• Neues Aussehen der Schaltflächen auf der Karte und zusätzliche Möglichkeit, den Kartenzoom durch Doppeltippen und Streichen zu ändern\n• Die Einstellungen für die Sichtbarkeit von Routen wurden im Bildschirm \"Karte konfigurieren\" nach oben verschoben und für eine bessere Flexibilität neu organisiert\n";
+"ios_release_4_1" = "• Völlig neu gestaltete Interaktion mit Tracks: ein neues Menü mit Diagrammen, Statistiken, die Möglichkeit, das Aussehen zu ändern, die Einfärbung nach Geschwindigkeit, Höhe und Neigung und die Auswahl der Tracks auf der Karte\n• Neuer Bildschirm für die Suche nach Koordinaten in verschiedenen Formaten\n• Verbesserte Koordinatensuche im OLC Format\n• Neues benutzerfreundliches Menü zur Auswahl der Sprachen für die Anzeige von Wikipedia-Artikeln auf der Karte\n• Möglichkeit hinzugefügt, Karten aller Regionen eines Landes mit ein paar Klicks zu laden.\n• Höhenlinien in Feet (ft) hinzugefügt (Sie müssen zusätzliche Dateien herunterladen)\n• Möglichkeit hinzugefügt, Karten herunterzuladen, indem die gewünschte Region oder das gewünschte Land auf der Karte ausgewählt wird, sowie Hinzufügen eines Dialogfelds mit dem Vorschlag, eine fehlende Karte einer angezeigten Region zu laden\n• Neues Aussehen der Schaltflächen auf der Karte und zusätzliche Möglichkeit, den Kartenzoom durch Doppeltippen und Streichen zu ändern\n• Die Einstellungen für die Sichtbarkeit von Routen wurden im Bildschirm \"Karte konfigurieren\" nach oben verschoben und für eine bessere Flexibilität neu organisiert\n";
 "attribute" = "Attribut";
 
 // Shared Strings
@@ -4037,3 +4037,14 @@
 "popular_places" = "Beliebte Orte";
 "shared_string_online_only" = "Nur online";
 "shared_string_offline_only" = "Nur offline";
+"shared_string_alt_name" = "Alternativer Name";
+"y_axis" = "Y-Achse";
+"x_axis" = "X-Achse";
+"external_sensor_widgets" = "Externer Sensor";
+"read_on" = "Lesen auf %@";
+"vehicle_metrics_chart_category" = "Fahrzeugdaten";
+"poi_cuisine" = "Küche";
+"poi_brand" = "Marke";
+"travel_guides" = "Touristenführer";
+"has_vehicle_metrics" = "Mit OBDII-Daten";
+"context_menu_read_full_article" = "Ganzen Artikel lesen";

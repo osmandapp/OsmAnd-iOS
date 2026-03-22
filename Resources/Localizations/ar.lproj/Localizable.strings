@@ -4019,3 +4019,17 @@
 "shared_string_wikipedia" = "ويكيبيديا";
 "poi_source" = "مصدر نقاط الاهتمام (POI)";
 "liquid_glass" = "الزجاج السائل";
+"shared_string_alt_name" = "اسم بديل";
+"graph_axis" = "محور الرسم البياني";
+"y_axis" = "محور-واي";
+"x_axis" = "محور-اكس";
+"y_axis_description" = "حدد ما يصل إلى خيارين لمحور Y.";
+"external_sensor_widgets" = "مجسات خارجية";
+"vehicle_metrics_chart_category" = "مقاييس المركبات";
+"poi_mobile" = "هاتف";
+"poi_cuisine" = "مطبخ";
+"poi_brand" = "علامة تجارية";
+"travel_guides" = "أدلة إرشادية";
+"has_vehicle_metrics" = "مع بيانات OBDII";
+"context_menu_read_full_article" = "اقرأ المقال كاملا";
+"read_on" = "تابع القراءة %@";

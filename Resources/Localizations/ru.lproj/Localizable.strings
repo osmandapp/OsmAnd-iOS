@@ -4029,3 +4029,17 @@
 "shared_string_wikipedia" = "Википедия";
 "poi_source" = "Источник POI";
 "show_polygons" = "Показывать полигоны";
+"shared_string_alt_name" = "Альтернативное название";
+"graph_axis" = "Ось графика";
+"y_axis" = "Ось Y";
+"x_axis" = "Ось X";
+"y_axis_description" = "Выберите до двух вариантов для оси Y.";
+"external_sensor_widgets" = "Внешние датчики";
+"vehicle_metrics_chart_category" = "Показатели транспортного средства";
+"poi_mobile" = "Мобильный";
+"poi_cuisine" = "Кухня";
+"poi_brand" = "Марка";
+"travel_guides" = "Справочники";
+"has_vehicle_metrics" = "С данными OBDII";
+"context_menu_read_full_article" = "Прочитать статью полностью";
+"read_on" = "Читайте дальше %@";

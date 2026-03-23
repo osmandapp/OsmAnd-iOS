@@ -4020,3 +4020,17 @@
 "popular_places" = "Populära platser";
 "shared_string_wikipedia" = "Wikipedia";
 "poi_source" = "POI-källa";
+"shared_string_alt_name" = "Alternativt namn";
+"graph_axis" = "Grafaxel";
+"y_axis" = "Y-axel";
+"x_axis" = "X-axel";
+"y_axis_description" = "Välj upp till två alternativ för Y-axeln.";
+"external_sensor_widgets" = "Externa sensorer";
+"vehicle_metrics_chart_category" = "Fordonets mätvärden";
+"poi_mobile" = "Mobil";
+"poi_cuisine" = "Kök";
+"poi_brand" = "Märke";
+"travel_guides" = "Guider";
+"has_vehicle_metrics" = "Med OBDII-data";
+"context_menu_read_full_article" = "Läs hela artikeln";
+"read_on" = "Läs på %@";

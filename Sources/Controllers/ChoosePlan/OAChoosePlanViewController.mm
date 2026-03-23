@@ -26,6 +26,9 @@
 #define kSeparatorHeight .5
 #define kNavigationBarHeight 56.
 
+static const CGFloat kDefaultBarButtonWidth = 44.0;
+static const CGFloat kDefaultBarButtonHeight = 30.0;
+
 @interface OAChoosePlanViewController () <UIScrollViewDelegate, OAFeatureCardViewDelegate, OAFeatureCardRowDelegate, OAChoosePlanDelegate, SFSafariViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *viewNavigationBar;
@@ -115,7 +118,28 @@
     self.scrollView.delegate = self;
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 
-    self.labelNavigationTitle.text = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
+    NSString *title = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
+    if (@available(iOS 26.0, *))
+    {
+        [self.viewNavigationBar setHidden:YES];
+        if ([self.navigationController isNavigationBarHidden])
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+        
+        UILabel *titleLabel = [[UILabel alloc] init];
+        titleLabel.text = title;
+        titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        titleLabel.textColor = UIColor.labelColor;
+        titleLabel.adjustsFontForContentSizeCategory = YES;
+        [titleLabel sizeToFit];
+        self.navigationItem.titleView = titleLabel;
+        [self.navigationItem.titleView setHidden:YES];
+        
+        [self setupNavbarButtonsForIOS26];
+    }
+    else
+    {
+        self.labelNavigationTitle.text = title;
+    }
     self.labelNavigationTitle.hidden = YES;
     self.viewNavigationSeparator.hidden = YES;
 
@@ -254,6 +278,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
 
     [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
+    [self updateAppearance];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -306,7 +331,7 @@
     [self.view bringSubviewToFront:self.viewNavigationBar];
 
     self.scrollView.contentInset = UIEdgeInsetsMake(
-            navigationBarHeight - extraNavigationBarHeight,
+            navigationBarHeight,
             0.,
             [OAUtilities getBottomMargin] + 52.,
             0.
@@ -468,6 +493,54 @@
     );
 }
 
+- (void)setupNavbarButtonsForIOS26
+{
+    UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonWidth, kDefaultBarButtonHeight)];
+    leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
+    [leftButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    [leftButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [leftButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+    [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+    leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    [self.navigationItem setLeftBarButtonItem:leftNavbarButton animated:YES];
+    
+    UIImage *rightNavbarButtonCustomIcon = [UIImage templateImageNamed:_type == EOAChoosePlan ? ACImageNameIcCustomReset : ACImageNameIcNavbarHelp];
+    UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonWidth, kDefaultBarButtonHeight)];
+    [rightButton setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    [rightButton setImage:rightNavbarButtonCustomIcon forState:UIControlStateNormal];
+    [rightButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+    [rightButton addTarget:self action:@selector(helpButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *rightNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
+    [self.navigationItem setRightBarButtonItem:rightNavbarButton animated:YES];
+}
+
+- (void)updateAppearance
+{
+    if (@available(iOS 26.0, *))
+    {
+        if (_isHeaderBlurred)
+        {
+            UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+            [appearance configureWithOpaqueBackground];
+            appearance.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+            appearance.titleTextAttributes = @{
+                NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+                NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+            };
+            self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+            self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        }
+        else
+        {
+            self.navigationController.navigationBar.scrollEdgeAppearance = nil;
+            self.navigationController.navigationBar.tintColor = UIColor.clearColor;
+        }
+    }
+}
+
 - (void)setupButton:(UIButton *)button
 {
     if ([self.scrollView isDirectionRTL])
@@ -570,7 +643,7 @@
     CGFloat y = scrollView.contentOffset.y;
     if (_type == EOAChooseSubscription)
         y += [OAUtilities getTopMargin];
-
+    
     CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
     backgroundFrame.origin.y = y < 0. ? y : -y;
     backgroundFrame.size.height = y < 0. ? ABS(y) : 0.;
@@ -579,18 +652,33 @@
     if (!_isHeaderBlurred && y > 0.)
     {
         [self.viewNavigationBar addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
-        self.labelNavigationTitle.hidden = NO;
-        self.viewNavigationSeparator.hidden = NO;
+        if (@available(iOS 26.0, *))
+        {
+            [self.navigationItem.titleView setHidden:NO];
+        }
+        else
+        {
+            self.labelNavigationTitle.hidden = NO;
+            self.viewNavigationSeparator.hidden = NO;
+        }
         _isHeaderBlurred = YES;
     }
     else if (_isHeaderBlurred && y <= 0.)
     {
         [self.viewNavigationBar removeBlurEffect];
         self.viewNavigationBar.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        self.labelNavigationTitle.hidden = YES;
-        self.viewNavigationSeparator.hidden = YES;
+        if (@available(iOS 26.0, *))
+        {
+            [self.navigationItem.titleView setHidden:YES];
+        }
+        else
+        {
+            self.labelNavigationTitle.hidden = YES;
+            self.viewNavigationSeparator.hidden = YES;
+        }
         _isHeaderBlurred = NO;
     }
+    [self updateAppearance];
 }
 
 #pragma mark - OAFeatureCardRowDelegate
@@ -645,7 +733,17 @@
 - (void)onFeatureSelected:(OAFeature *)feature
 {
     _selectedFeature = feature;
-    self.labelNavigationTitle.text = [_selectedFeature getListTitle];
+    NSString *title = [_selectedFeature getListTitle];
+    if (@available(iOS 26.0, *))
+    {
+        UILabel *titleLabel = (UILabel *)self.navigationItem.titleView;
+        titleLabel.text = title;
+        [titleLabel sizeToFit];
+    }
+    else
+    {
+        self.labelNavigationTitle.text = title;
+    }
     [self updateScrollViewContainerSize];
 }
 

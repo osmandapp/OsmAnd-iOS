@@ -78,7 +78,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         }
     }
     
-    override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         guard let tableData else { return nil }
         let item = tableData.item(for: indexPath)
         
@@ -199,7 +199,13 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         if data.key == Self.turnOnRowKey {
             settings.showSpeedometer.set(sw.isOn)
             updateSpeedometer()
-            reloadDataWith(animated: true, completion: nil)
+            var delay: TimeInterval
+            if #available(iOS 26.0, *) {
+                delay = 0.25
+            } else {
+                delay = 0.0
+            }
+            reloadData(withDelay: delay, animated: true, completion: nil)
             delegate?.onWidgetStateChanged()
         }
         return false

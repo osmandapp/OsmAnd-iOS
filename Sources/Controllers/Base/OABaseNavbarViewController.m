@@ -16,9 +16,10 @@
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kRightIconLargeTitleSmall 34.
-#define kRightIconLargeTitleLarge 40.
-#define kDefaultBarButtonSize 44.
+static const CGFloat kRightIconLargeTitleSmall = 34.;
+static const CGFloat kRightIconLargeTitleLarge = 40.;
+static const CGFloat kDefaultBarButtonSize = 44.;
+static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
 
 @implementation OABaseNavbarViewController
 {
@@ -240,8 +241,19 @@
     BOOL isLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle;
 
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = [self getNavbarBackgroundColor];
+    if (@available(iOS 26.0, *))
+    {
+        if (!isLargeTitle)
+        {
+            [appearance configureWithOpaqueBackground];
+            appearance.backgroundColor = [self navbarBackgroundColor];
+        }
+    }
+    else
+    {
+        [appearance configureWithOpaqueBackground];
+        appearance.backgroundColor = [self navbarBackgroundColor];
+    }
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle ? UIColor.clearColor : [self getTitleColor]
@@ -347,6 +359,39 @@
         if (completion)
             completion(YES);
     }
+}
+
+- (void)reloadDataWithDelay:(NSTimeInterval)delay animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
+{
+    if (delay > 0.)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self reloadDataWithAnimated:animated completion:completion];
+        });
+    }
+    else
+    {
+        [self reloadDataWithAnimated:animated completion:completion];
+    }
+}
+
+- (void)reloadRowsWithDelay:(NSTimeInterval)delay atIndexPaths:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
+{
+    if (delay > 0.)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self reloadRowsAtIndexPath:indexPath withRowAnimation:rowAnimation];
+        });
+    }
+    else
+    {
+        [self reloadRowsAtIndexPath:indexPath withRowAnimation:rowAnimation];
+    }
+}
+
+- (void)reloadRowsAtIndexPath:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)rowAnimation
+{
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:rowAnimation];
 }
 
 - (void)updateRightIconLargeTitle
@@ -503,14 +548,22 @@
         NSArray<UIBarButtonItem *> *rightNavbarButtons = [self getRightNavbarButtons];
         if (rightNavbarButtons && rightNavbarButtons.count > 0)
         {
+            CGFloat barButtonSize = [self.class defaultBarButtonIconSize];
             NSMutableArray<UIBarButtonItem *> *rightNavbarButtonsWithSpaces = [NSMutableArray array];
             if (rightNavbarButtons.count > 1)
             {
                 freeSpaceForNavbarButton -= (rightNavbarButtons.count - 1) * 8.;
                 freeSpaceForNavbarButton /= rightNavbarButtons.count;
             }
-            if (freeSpaceForNavbarButton < kDefaultBarButtonSize)
-                freeSpaceForNavbarButton = kDefaultBarButtonSize;
+            if (freeSpaceForNavbarButton < barButtonSize)
+                freeSpaceForNavbarButton = barButtonSize;
+            
+            UIControlContentHorizontalAlignment buttonAlignment;
+            if (@available(iOS 26.0, *))
+                buttonAlignment = UIControlContentHorizontalAlignmentCenter;
+            else
+                buttonAlignment = UIControlContentHorizontalAlignmentTrailing;
+            
             for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
             {
                 UIBarButtonItem *buttonItem = rightNavbarButtons[i];
@@ -518,12 +571,12 @@
                 UIButton *button = buttonItem.customView;
                 if (button)
                 {
-                    CGFloat buttonWidth = kDefaultBarButtonSize;
+                    CGFloat buttonWidth = barButtonSize;
                     NSString *buttonTitle = [button titleForState:UIControlStateNormal];
                     if (buttonTitle && buttonTitle.length > 0)
                         buttonWidth = [OAUtilities calculateTextBounds:buttonTitle width:freeSpaceForNavbarButton font:button.titleLabel.font].width;
                     [button.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
-                    button.contentHorizontalAlignment = i == 0 ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentCenter;
+                    button.contentHorizontalAlignment = i == 0 ? buttonAlignment : UIControlContentHorizontalAlignmentCenter;
                     button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;
                 }
             }
@@ -567,7 +620,7 @@
                                       target:(id)target
                                         menu:(UIMenu *)menu
 {
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonSize, 30.)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., [self defaultBarButtonIconSize], 30.)];
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;
     button.titleLabel.adjustsFontForContentSizeCategory = YES;
@@ -589,6 +642,14 @@
     if (title)
         rightNavbarButton.accessibilityLabel = title;
     return rightNavbarButton;
+}
+
++ (CGFloat)defaultBarButtonIconSize
+{
+    if (@available(iOS 26.0, *))
+        return kDefaultBarButtonSizeiOS26;
+    else
+        return kDefaultBarButtonSize;
 }
 
 - (UIBarButtonItem *)systemLeftBarButtonItem
@@ -617,7 +678,7 @@
     return [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle || [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
 }
 
-- (UIColor *)getNavbarBackgroundColor
+- (UIColor *)navbarBackgroundColor
 {
     if ([self isAnyLargeTitle])
         return self.tableView.backgroundColor;
@@ -636,7 +697,12 @@
 
 - (UIColor *)navbarButtonsTintColor
 {
-    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? [UIColor colorNamed:ACColorNameNavBarTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive];
+    UIColor *navbarSchemeOrangeColor;
+    if (@available(iOS 26.0, *))
+        navbarSchemeOrangeColor = UIColor.labelColor;
+    else
+        navbarSchemeOrangeColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? navbarSchemeOrangeColor : [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 - (UIColor *)getTitleColor
@@ -698,7 +764,10 @@
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
+    if (@available(iOS 26.0, *))
+        return NO;
+    else
+        return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
 }
 
 - (UIImage *)getCenterIconAboveTitle

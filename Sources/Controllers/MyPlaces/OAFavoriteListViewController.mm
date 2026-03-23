@@ -111,6 +111,8 @@ static const NSInteger _exportButtonIndex = 1;
     UIFont *_originalGroupFont;
     UIFont *_italicGroupFont;
     dispatch_queue_t _favoritesQueue;
+    
+    CGFloat _cachedTabbarHeight;
 }
 
 static UIViewController *parentController;
@@ -439,23 +441,37 @@ static UIViewController *parentController;
     [self applySafeAreaMargins];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_edit"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
+    _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"pencil"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
     _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
-    
-    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    _searchController.searchResultsUpdater = self;
-    _searchController.searchBar.delegate = self;
-    _searchController.obscuresBackgroundDuringPresentation = NO;
-    self.tabBarController.navigationItem.searchController = _searchController;
+    if (!_searchController)
+    {
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        _searchController.searchResultsUpdater = self;
+        _searchController.searchBar.delegate = self;
+        _searchController.obscuresBackgroundDuringPresentation = NO;
+        self.tabBarController.navigationItem.searchController = _searchController;
+        [self setupSearchController:NO filtered:NO];
+        if (@available(iOS 26.0, *))
+        {
+            if (!_cachedTabbarHeight)
+                [self cacheTabbarHeight];
+        }
+    }
     self.definesPresentationContext = YES;
-    [self setupSearchController:NO filtered:NO];
     [self addAccessibilityLabels];
     [self configurePaymentBanner];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_searchController && !self.tabBarController.navigationItem.searchController)
+        self.tabBarController.navigationItem.searchController = _searchController;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -862,11 +878,18 @@ static UIViewController *parentController;
     return itemList;
 }
 
+- (void)searchVisibility:(BOOL)show
+{
+    self.tabBarController.navigationItem.searchController = show ? _searchController : nil;
+}
+
 - (void) startEditing
 {
     [self.favoriteTableView setEditing:YES animated:YES];
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     _editToolbarView.hidden = NO;
+    if (@available(iOS 26.0, *))
+        [self cacheTabbarHeight];
     [UIView animateWithDuration:.3 animations:^{
         self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
         [self applySafeAreaMargins];
@@ -874,10 +897,12 @@ static UIViewController *parentController;
         [self.tabBarController.tabBar setHidden:YES];
     }];
 
-    _editButton.image = [UIImage imageNamed:@"icon_edit_active"];
+    _editButton.image = [UIImage systemImageNamed:@"pencil"];
     self.tabBarController.navigationItem.hidesBackButton = YES;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.favoriteTableView reloadData];
+    if (@available(iOS 26.0, *))
+        [self searchVisibility:NO];
 }
 
 - (void) finishEditing
@@ -886,14 +911,21 @@ static UIViewController *parentController;
     self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         [self.tabBarController.tabBar setHidden:NO];
-        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - self.tabBarController.tabBar.frame.size.height, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
+        CGFloat tabBarHeight;
+        if (@available(iOS 26.0, *))
+            tabBarHeight = _cachedTabbarHeight;
+        else
+            tabBarHeight = self.tabBarController.tabBar.frame.size.height;
+        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - tabBarHeight, DeviceScreenWidth, tabBarHeight);
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
         [self applySafeAreaMargins];
+        if (@available(iOS 26.0, *))
+            [self cacheTabbarHeight];
     }];
 
-    _editButton.image = [UIImage imageNamed:@"icon_edit"];
+    _editButton.image = [UIImage systemImageNamed:@"pencil"];
     self.tabBarController.navigationItem.hidesBackButton = NO;
 
     if (_directionButton.tag == 1)
@@ -904,6 +936,13 @@ static UIViewController *parentController;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     [self.favoriteTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
+    if (@available(iOS 26.0, *))
+        [self searchVisibility:YES];
+}
+
+- (void)cacheTabbarHeight
+{
+    _cachedTabbarHeight = self.tabBarController.tabBar.frame.size.height;
 }
 
 - (IBAction)editButtonClicked:(id)sender
@@ -1119,9 +1158,9 @@ static UIViewController *parentController;
         NSInteger section = indexPath.section;
         BOOL isVisible = groupData.favoriteGroup.isVisible;
         NSString *showHideCaption = isVisible ? OALocalizedString(@"shared_string_hide_from_map") : OALocalizedString(@"shared_string_show_on_map");
-        NSString *showHideImage = isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_show_outlined";
+        UIImage *showHideImage = [[UIImage imageNamed:isVisible ? ACImageNameIcCustomHideOutlined : ACImageNameIcCustomShowOutlined] resizedMenuImage];
         UIAction *showHideAction = [UIAction actionWithTitle:showHideCaption
-                                                       image:[UIImage imageNamed:showHideImage]
+                                                       image:showHideImage
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
             [OAFavoritesHelper updateGroup:groupData.favoriteGroup visible:!isVisible saveImmediately:YES];
@@ -1129,8 +1168,9 @@ static UIViewController *parentController;
         }];
         showHideAction.accessibilityLabel = showHideCaption;
         
+        UIImage *renameImage = [[UIImage imageNamed:ACImageNameIcCustomEdit] resizedMenuImage];
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
-                                                     image:[UIImage imageNamed:@"ic_custom_edit"]
+                                                     image:renameImage
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
             [self openRenameAlertWith:groupData.favoriteGroup];

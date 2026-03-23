@@ -513,6 +513,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     iconHandler.innerViewCornerRadius = -1
                 } else if collectionType == .bigIconItems {
                     iconHandler.setItemSize(size: 152)
+                    iconHandler.setIconBackgroundSize(size: 146)
                     iconHandler.setIconSize(size: 52)
                     iconHandler.roundedSquareCells = true
                     iconHandler.innerViewCornerRadius = 6

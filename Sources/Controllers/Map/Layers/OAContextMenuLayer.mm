@@ -577,7 +577,8 @@
             
         if (targetPoint)
         {
-            targetPoint.location = latLon.coordinate;
+            if (targetPoint.location.latitude == 0 && targetPoint.location.longitude == 0)
+                targetPoint.location = latLon.coordinate;
             [targetPoint initAddressIfNeeded];
             
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];

@@ -4029,3 +4029,17 @@
 "popular_places" = "Lugares populares";
 "shared_string_wikipedia" = "Wikipedia";
 "poi_source" = "Origen del PDI";
+"shared_string_alt_name" = "Nombre alternativo";
+"graph_axis" = "Eje de la gráfica";
+"y_axis" = "Eje Y";
+"x_axis" = "Eje X";
+"y_axis_description" = "Marcá hasta dos opciones para el eje Y.";
+"external_sensor_widgets" = "Sensores externos";
+"vehicle_metrics_chart_category" = "Estadísticas del vehículo";
+"poi_mobile" = "Móvil";
+"poi_cuisine" = "Cocina";
+"poi_brand" = "Marca";
+"travel_guides" = "Guías";
+"has_vehicle_metrics" = "Con datos de OBDII";
+"context_menu_read_full_article" = "Leer artículo completo";
+"read_on" = "Leer en %@";

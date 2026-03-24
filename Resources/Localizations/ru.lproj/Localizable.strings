@@ -1821,7 +1821,7 @@
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 
 // Route planning
-"plan_route" = "Проект маршрута";
+"plan_route" = "План маршрута";
 "listed_exist" = "Указанные %@ уже существуют в OsmAnd.";
 "keep_both_desc" = "Импортированные элементы будут добавлены с префиксом";
 "shared_string_max" = "Макс.";
@@ -2896,7 +2896,7 @@
 "upload_poi" = "Отправить POI";
 "map_widget_ant_bicycle_speed" = "Скорость велосипеда";
 "quick_action_map_center_widget_descr" = "Переключатель для отображения или скрытия виджета координат центра карты.";
-"help_article_plan_route_name" = "Проект маршрута";
+"help_article_plan_route_name" = "План маршрута";
 "external_device_forget_sensor_description" = "Датчик будет удален из списка. Вы сможете снова выполнить сопряжение этого датчика в любое время.";
 "map_markers_desc" = "Виджет показывает расстояние или расчётное время прибытия (ETA) для первых двух маркеров в списке маркеров карты.";
 "add_page" = "Добавить страницу";
@@ -4038,8 +4038,8 @@
 "vehicle_metrics_chart_category" = "Показатели транспортного средства";
 "poi_mobile" = "Мобильный";
 "poi_cuisine" = "Кухня";
-"poi_brand" = "Марка";
-"travel_guides" = "Справочники";
+"poi_brand" = "Бренд";
+"travel_guides" = "Путеводители";
 "has_vehicle_metrics" = "С данными OBDII";
 "context_menu_read_full_article" = "Прочитать статью полностью";
 "read_on" = "Читайте дальше %@";

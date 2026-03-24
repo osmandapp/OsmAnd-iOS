@@ -35,7 +35,6 @@
 @implementation OAGlobalSettingsViewController
 {
     OAAppSettings *_settings;
-    EOAGlobalSettingsScreen _settingsType;
     OATableDataModel *_data;
     NSArray<OAApplicationMode *> * _profileList;
     BOOL _isCarPlayDefaultProfile;

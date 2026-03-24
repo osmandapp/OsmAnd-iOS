@@ -12,6 +12,18 @@ private enum DeepLinkAppRoute: String {
     case main = ""
     case lastReleaseNotes = "help/last-release-notes"
     case helpWhatsNew = "help/whats-new"
+    case settings = "settings"
+    case cloud = "cloud"
+    case help = "help"
+    case planRoute = "plan-a-route"
+    case destinations = "destinations"
+    case destinationsDirectionAppearance = "destinations/direction-appearance"
+    case myPlacesFavorites = "my-places/favorites"
+    case myPlacesTracks = "my-places/tracks"
+    case myPlacesOsmEdits = "my-places/osm-edits"
+    case mapsAndResources = "maps-and-resources"
+    case mapsAndResourcesLocal = "maps-and-resources/local"
+    case mapsAndResourcesUpdates = "maps-and-resources/updates"
     case purchases = "purchases"
     case purchasesOsmAndPro = "purchases/osmand-pro"
     case purchasesMapsPlus = "purchases/maps-plus"
@@ -51,6 +63,30 @@ final class DeepLinkParser: NSObject {
             router.openLastReleaseNotes()
         case .helpWhatsNew:
             router.openWhatsNew()
+        case .settings:
+            router.openGlobalSettingsMain()
+        case .cloud:
+            router.openCloudScreen()
+        case .help:
+            router.openHelp()
+        case .planRoute:
+            router.openPlanRoute()
+        case .destinations:
+            router.openDestinations()
+        case .destinationsDirectionAppearance:
+            router.openDestinationsDirectionAppearance()
+        case .myPlacesFavorites:
+            router.openMyPlaces(tabClass: OAFavoriteListViewController.self)
+        case .myPlacesTracks:
+            router.openMyPlaces(tabClass: TracksViewController.self)
+        case .myPlacesOsmEdits:
+            router.openMyPlaces(tabClass: OAOsmEditsListViewController.self)
+        case .mapsAndResources:
+            router.openMapsAndResources()
+        case .mapsAndResourcesLocal:
+            router.openMapsAndResourcesLocal()
+        case .mapsAndResourcesUpdates:
+            router.openMapsAndResourcesUpdates()
         case .purchases:
             router.openChoosePlan(feature: nil)
         case .purchasesOsmAndPro:

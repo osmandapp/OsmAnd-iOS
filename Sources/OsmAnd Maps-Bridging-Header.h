@@ -202,6 +202,13 @@
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAChoosePlanViewController.h"
+#import "OAGlobalSettingsViewController.h"
+#import "OACloudIntroductionViewController.h"
+#import "OAHelpViewController.h"
+#import "InitialRoutePlanningBottomSheetViewController.h"
+#import "OAMyPlacesTabBarViewController.h"
+#import "OAFavoriteListViewController.h"
+#import "OAOsmEditsListViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

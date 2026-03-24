@@ -642,7 +642,7 @@
 "rotate_map_compass_opt" = "Kompassrichtung";
 "rotate_map_bearing_opt" = "Bewegungsrichtung";
 "rotate_map_north_opt" = "Norden ist oben";
-"driving_region_descr" = "Verkehrsregion wählen: USA, Europa, GB, Asien u. a.";
+"driving_region_descr" = "Verkehrsregion wählen: USA, Europa, Großbritannien, Asien und andere.";
 "shared_string_automatic" = "Automatisch";
 "map_widget_magnetic_bearing" = "Magnetische Peilung";
 "map_widget_bearing" = "Relative Peilung";
@@ -1270,7 +1270,7 @@
 "rendering_attr_surface_grass_name" = "Gras";
 "rendering_attr_contourColorScheme_description" = "Farbschema für Höhenlinien";
 "rendering_attr_piste_type_sled_name" = "Schlitten";
-"routing_attr_allow_skating_only_name" = "Nur Skating-Routen zulassen";
+"routing_attr_allow_skating_only_name" = "Nur Loipen für Skating-Stil zulassen";
 "routing_attr_weight_description" = "Gewicht des Fahrzeugs für Routenberechnung angeben.";
 "rendering_attr_highway_class_footway_name" = "Fußweg";
 "rendering_value_disabled_name" = "Deaktiviert";
@@ -1311,7 +1311,7 @@
 "routing_attr_piste_type_skitour_name" = "Skitouren";
 "rendering_value_bicycle_name" = "Fahrrad";
 "routing_attr_avoid_borders_name" = "Keine Grenzübergänge";
-"routing_attr_allow_skating_only_description" = "Nur für Freestyle oder Skating präparierte Routen, keine klassischen Loipen.";
+"routing_attr_allow_skating_only_description" = "Nur für Freestyle oder Skating präparierte Loipen, keine Loipen für klassischen Stil.";
 "rendering_attr_tramTrainRoutes_name" = "Straßenbahn- und Eisenbahnlinien";
 "rendering_attr_smoothness_bad_name" = "Schlecht";
 "rendering_attr_smoothness_excellent_name" = "Hervorragend";
@@ -1367,7 +1367,7 @@
 "routing_attr_allow_expert_description" = "Extrem schwere Routen, mit gefährlichen Hindernissen und schwieriger Umgebung.";
 "rendering_attr_trainLightrailRoutes_name" = "Stadtbahnlinien";
 "rendering_attr_contourWidth_description" = "Breite der Höhenlinien";
-"routing_attr_allow_classic_only_name" = "Nur klassische Routen zulassen";
+"routing_attr_allow_classic_only_name" = "Nur Loipen für klassischen Stil zulassen";
 "rendering_attr_piste_type_connection_name" = "Verbindung";
 "routing_attr_avoid_motorway_description" = "Vermeidet Autobahnen";
 "rendering_attr_surface_gravel_name" = "Schotter";
@@ -1428,7 +1428,7 @@
 "rendering_value_thick_name" = "Fett";
 "rendering_value_lightgreen_name" = "Hellgrün";
 "rendering_attr_appMode_description" = "Optimierung der Kartendarstellung für";
-"routing_attr_allow_private_description" = "Zugang zu Privatgrund erlauben.";
+"routing_attr_allow_private_description" = "Zugang zu Privatgrundstücken erlauben.";
 "rendering_value_medium_name" = "Mittel";
 "routing_attr_allow_advanced_description" = "Schwierige Routen, mit gefährlichen Hindernissen und steilen Abschnitten.";
 "rendering_attr_subwayMode_name" = "U-Bahn-Linien";
@@ -2245,7 +2245,7 @@
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
 "rendering_attr_showFunicularRoutes_name" = "Standseilbahnlinien";
 "rendering_attr_showLightRailRoutes_name" = "Stadtbahnlinien";
-"backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro-Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
+"backup_error_subscription_was_expired_descr" = "Ihr Abonnement „OsmAnd Pro“ ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
 "backup_error_user_is_already_registered" = "Diese E-Mail-Adresse wird in einem anderen Konto verwendet";
 "backup_error_subscription_was_expired" = "Abgelaufenes Abonnement";
 "backup_error_subscription_was_used" = "Abonnement oder Aktionsangebot wird von einem anderen Konto verwendet %@";
@@ -2329,7 +2329,7 @@
 "unlimited_map_downloads" = "Unbegrenzte Karten-Downloads";
 "restore_purchases" = "Käufe wiederherstellen";
 "osmand_maps_plus_tagline" = "Erweiterte Features erhalten";
-"osmand_pro_tagline" = "Alle Features erhalten";
+"osmand_pro_tagline" = "Alle Funktionen erhalten";
 "transport_hazmat_yes_desc" = "Wählen Sie die zutreffende Kategorie aus.";
 "purchases_feature_desc_combined_wiki" = "Erkunden Sie Wikipedia-Artikel auch unterwegs, ohne Internetverbindung. Offline-Daten sind nach Ländern aufgeteilt und in allen Sprachen verfügbar.";
 "continue_with" = "Mit %@ fortfahren";
@@ -2337,8 +2337,8 @@
 "expired" = "Abgelaufen";
 "osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads mit wöchentlicher, täglicher oder sogar stündlicher Aktualisierung hinzu.";
 "purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Aktualisierungen erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
-"purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von OsmAnd Pro: Routeneinfärbung und mehr.";
-"purchases_feature_desc_osmand_cloud" = "Holen Sie sich OsmAnd Cloud, um alle OsmAnd-Daten online zu speichern. Kein Datenverlust mehr nach einer Neuinstallation, alle Informationen problemlos sichern und wiederherstellen.";
+"purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von „OsmAnd Pro“: Routeneinfärbung und mehr.";
+"purchases_feature_desc_osmand_cloud" = "Holen Sie sich „OsmAnd Cloud“, um alle OsmAnd-Daten online zu speichern. Kein Datenverlust mehr nach einer Neuinstallation, alle Informationen problemlos sichern und wiederherstellen.";
 "osmand_development_plugin_description" = "Bietet Funktionen zum Testen und Debuggen von OsmAnd: Simulieren von Navigationsrouten, Überwachen der Bildschirmdarstellung, Prüfen der Leistung usw. Diese Erweiterung ist für die normale Nutzung der App nicht erforderlich.";
 "osmand_depelopment_simulate_location_section" = "Simulieren";
 "shared_string_paused" = "Pausiert";
@@ -3048,8 +3048,8 @@
 "shared_string_data_type" = "Datentyp";
 "help_article_map_map_context_menu_name" = "Kontextmenü der Karte";
 "help_article_map_track_context_menu_name" = "Kontextmenü der Tracks";
-"help_article_navigation_routing_direct_to_point_routing_name" = "Punkt-zu-Punkt-Routing (Boot)";
-"help_article_navigation_routing_horse_routing_name" = "Reitrouting";
+"help_article_navigation_routing_direct_to_point_routing_name" = "Punkt-zu-Punkt-Routenführung (Boot)";
+"help_article_navigation_routing_horse_routing_name" = "Routenführung für Reiter";
 "help_article_navigation_routing_moped_routing_name" = "Moped-Routenführung";
 "help_article_navigation_routing_online_routing_name" = "Online-Routenführung";
 "help_article_navigation_routing_osmand_routing_name" = "Über OsmAnd-Routenführung";
@@ -3172,7 +3172,7 @@
 "osmand_cloud_deletion_all_data_warning" = "Alle Daten von OsmAnd Cloud werden %@. Daten auf dem Gerät bleiben unangetastet.";
 "osmand_cloud_deletion_account_warning" = "Ihr Konto und alle Kontodaten werden %@";
 "osmand_cloud_deletion_secondary_devices_warning" = "Zweitgeräte werden von OsmAnd Cloud abgemeldet und verlieren den Zugriff auf kostenpflichtige Funktionen.";
-"osmand_cloud_deletion_subscriptions_warning" = "Dadurch wird Ihr OsmAnd Pro-Abonnement nicht gekündigt.";
+"osmand_cloud_deletion_subscriptions_warning" = "Dadurch wird Ihr Abonnement „OsmAnd Pro“ nicht gekündigt.";
 "osmand_cloud_deleted_account_descr" = "Das Konto und alle Daten wurden aus OsmAnd Cloud gelöscht.";
 "verify_account_deletion_descr" = "Wir müssen Ihr Konto verifizieren, bevor wir es löschen können. \n \nBitte geben Sie die E-Mail-Adresse ein, mit der Sie sich registriert haben. An diese Adresse wird ein Einmalpasswort für den nächsten Schritt gesendet.";
 "osmand_cloud_deleting_account_descr" = "In wenigen Augenblicken werden alle Ihre Daten und Ihr Konto aus OsmAnd Cloud gelöscht. \n \nAlle Daten auf dem Gerät bleiben unangetastet.";
@@ -3317,7 +3317,7 @@
 "cloud_layer" = "Wolkenebene";
 "download_srtm_maps" = "Höhenlinien";
 "driving_region_india" = "Indien";
-"driving_region_uk" = "GB und andere";
+"driving_region_uk" = "Großbritannien und ähnliche";
 "key_event_category_map_interactions" = "Karten-Interaktionen";
 "map_source" = "Kartenquelle";
 "precipitation_layer" = "Niederschlagsebene";

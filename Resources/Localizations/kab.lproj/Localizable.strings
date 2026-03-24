@@ -2,7 +2,7 @@
 "index_name_asia" = "Asya";
 "rendering_attr_surface_wood_name" = "Amadeɣ";
 "rendering_value_thick_name" = "Zzur";
-"shared_string_delete" = "Ekkes";
+"shared_string_delete" = "Kkes";
 "shared_string_help" = "Tallelt";
 "osmand_parking_time_left" = "id iguran";
 "index_name_africa" = "Tafriqt";
@@ -697,7 +697,7 @@
 "shared_string_capacity" = "Akettur";
 "shared_string_paused" = "Yettraǧu";
 "shared_string_undefined" = "D arbadu";
-"shared_string_delete_all" = "Kkes-it meṛṛa";
+"shared_string_delete_all" = "Kkes-iten akk";
 "data_settings" = "Isefka";
 "ltr_or_rtl_combine_via_slash" = "%@ di %@";
 "route_to" = "Ar:";

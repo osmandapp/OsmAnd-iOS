@@ -210,6 +210,8 @@
 #import "OAFavoriteListViewController.h"
 #import "OAOsmEditsListViewController.h"
 #import "OATripRecordingSettingsViewController.h"
+#import "OAPluginsViewController.h"
+#import "OAPluginDetailsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

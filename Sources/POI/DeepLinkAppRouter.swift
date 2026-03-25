@@ -70,6 +70,33 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(controller, animated: true)
     }
     
+    func openPlugins() {
+        guard let nav = root.navigationController else { return }
+        if nav.visibleViewController is OAPluginsViewController {
+            return
+        }
+        
+        guard let nav = dismissAndPopToRoot() else { return }
+        let controller = OAPluginsViewController()
+        nav.pushViewController(controller, animated: true)
+    }
+    
+    func openPlugin(product: OAProduct?) {
+        guard let nav = root.navigationController, let product else { return }
+        guard product.isPurchased() else {
+            guard let nav = dismissAndPopToRoot() else { return }
+            OAChoosePlanHelper.showChoosePlanScreen(with: product, navController: nav)
+            return
+        }
+        
+        if let current = nav.visibleViewController as? OAPluginDetailsViewController, current.product.productIdentifier == product.productIdentifier {
+            return
+        }
+        
+        guard let nav = dismissAndPopToRoot(), let controller = OAPluginDetailsViewController(product: product) else { return }
+        nav.pushViewController(controller, animated: true)
+    }
+    
     func openHelp() {
         guard let nav = root.navigationController else { return }
         if nav.visibleViewController is OAHelpViewController {

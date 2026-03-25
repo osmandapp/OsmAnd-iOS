@@ -14,6 +14,12 @@ private enum DeepLinkAppRoute: String {
     case helpWhatsNew = "help/whats-new"
     case settings = "settings"
     case cloud = "cloud"
+    case plugins = "plugins"
+    case pluginsTripRecording = "plugins/trip-recording"
+    case pluginsTopography = "plugins/topography"
+    case pluginsWeather = "plugins/weather"
+    case pluginsExternalSensors = "plugins/external-sensors"
+    case pluginsVehicleMetrics = "plugins/vehicle-metrics"
     case help = "help"
     case planRoute = "plan-a-route"
     case mapSettingsMain = "map-settings"
@@ -76,6 +82,18 @@ final class DeepLinkParser: NSObject {
             router.openGlobalSettingsMain()
         case .cloud:
             router.openCloudScreen()
+        case .plugins:
+            router.openPlugins()
+        case .pluginsTripRecording:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().trackRecording)
+        case .pluginsTopography:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().srtm)
+        case .pluginsWeather:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().weather)
+        case .pluginsExternalSensors:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().sensors)
+        case .pluginsVehicleMetrics:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().vehicleMetrics)
         case .help:
             router.openHelp()
         case .planRoute:

@@ -91,12 +91,17 @@
                                                             action:@selector(addActionPressed)
                                                               menu:nil];
         addButton.accessibilityLabel = OALocalizedString(@"shared_string_add");
+        if (@available(iOS 26.0, *))
+        {
+            addButton.style = UIBarButtonItemStyleProminent;
+            addButton.tintColor = [[UIColor colorNamed:ACColorNameNavBarTextColorPrimary] colorWithAlphaComponent:.3];
+        }
 
-        UIBarButtonItem *deleteButton = [self createRightNavbarButton:nil
-                                                           iconName:@"ic_custom_trash_outlined"
+        UIBarButtonItem *editButton = [self createRightNavbarButton:nil
+                                                     systemIconName:@"pencil"
                                                              action:@selector(editPressed)
                                                                menu:nil];
-        deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+        editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
 
         __weak __typeof(self) weakSelf = self;
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
@@ -187,9 +192,9 @@
 
         UIBarButtonItem *optionsButton = [self createRightNavbarButton:nil
                                                               iconName:@"ic_navbar_overflow_menu_stroke"
-                                                             action:@selector(editPressed)
-                                                               menu:menu];
-        return @[optionsButton, addButton, deleteButton];
+                                                                action:@selector(editPressed)
+                                                                  menu:menu];
+        return @[optionsButton, editButton, addButton];
     }
 }
 

@@ -37,6 +37,7 @@
     configuration.contentInsets = NSDirectionalEdgeInsetsMake(0., horizontalInset, 0., horizontalInset);
     configuration.imagePadding = imagePadding;
     self.buttonView.configuration = configuration;
+    self.buttonView.titleLabel.numberOfLines = 1;
 }
 
 - (void) updateConstraints

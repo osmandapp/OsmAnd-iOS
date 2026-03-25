@@ -2172,7 +2172,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "Začiatočník";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Neschádzať zo zjazdovky";
 "routing_attr_allow_streams_description" = "Povoliť potoky a odtokové kanály";
-"rendering_attr_natureReserves_name" = "Prírodné rezervácie";
+"rendering_attr_natureReserves_name" = "Prírodné rezervácie a chránené oblati";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Preferovať mimo zjazdovky";
 "rendering_attr_weatherTempContours_name" = "Teplotné vrstevnice (izotermy)";
 "rendering_attr_showTrainRoutes_name" = "Trasy vlakov";
@@ -2926,15 +2926,15 @@
 "osm_live_payment_renews_3_years" = "Obnovuje sa každé tri roky";
 "three_years_subscription" = "Trojročné predplatné";
 "sensor_data" = "Údaje zo senzorov";
-"routing_attr_allow_ferries_description" = "Povoliť navigáciu po trasách trajektov";
+"routing_attr_allow_ferries_description" = "Povoliť navigáciu použitím trajektov";
 "meridian_180" = "180. poludník";
 "detailed_track_guidance" = "Podrobné navádzanie stopou";
 "three_months_subscription" = "3-mesačné predplatné";
 "no_photos_available" = "Nie sú dostupné žiadne fotografie";
-"original_icon_description" = "Každý bod by si zachoval vlastnú ikonu.";
+"original_icon_description" = "Každý bod si zachová vlastnú ikonu.";
 "new_trip_segment" = "Nový úsek výletu";
 "unit_of_volume" = "Jednotka objemu";
-"save_favorite_default_appearance" = "Použiť zmeny na existujúce body v priečinku alebo iba na nové body?";
+"save_favorite_default_appearance" = "Použiť zmeny na všetky existujúce body v priečinku alebo iba na nové pridané body?";
 "shared_string_show_less" = "Zobraziť menej";
 "attach_roads_descr" = "Pripojte vašu stopu k cestám, aby ste získali podrobné informácie o trase, navigačné pokyny a informácie o ceste.";
 "intermediate_first" = "Najprv prechodný bod";
@@ -2944,7 +2944,7 @@
 "grid_color" = "Farba mriežky";
 "auto_25_chars_route_tr_kr" = "Odbočte doprava a držte sa vpravo";
 "auto_25_chars_route_tslr" = "Odbočte mierne doprava";
-"original_shape_description" = "Každý bod by si zachoval vlastný tvar.";
+"original_shape_description" = "Každý bod si zachová vlastný tvar.";
 "shared_string_unchanged" = "Nezmenené";
 "add_hidden_group_info" = "Pridaný bod môžete nájsť v \"%@\". Odkryte zvolenú skupinu pre jeho zobrazenie na mape.";
 "auto_25_chars_route_tl_kr" = "Odbočte doľava a držte sa vpravo";
@@ -2953,7 +2953,7 @@
 "equator" = "Rovník";
 "auto_25_chars_route_tr" = "Odbočte doprava";
 "auto_25_chars_route_tu_kr" = "Otočte sa naspäť a držte sa vpravo";
-"original_color_description" = "Každý bod by si zachoval vlastnú farbu.";
+"original_color_description" = "Každý bod si zachová vlastnú farbu.";
 "destination_first" = "Najprv cieľ";
 "fuel_tank_capacity_description" = "Zadajte objem nádrže pre správne sledovanie úrovne paliva a spotreby";
 "auto_25_chars_route_tl_kl" = "Odbočte doľava a držte sa vľavo";
@@ -2987,7 +2987,7 @@
 "change_activity" = "Zmeniť aktivitu";
 "online_photos" = "Online fotografie";
 "shared_string_items" = "Položky";
-"quick_action_showhide_coordinates_grid_descr" = "Akcia pre ovládanie viditeľnosti súradnicovej siete na mape.";
+"quick_action_showhide_coordinates_grid_descr" = "Prepnúť viditeľnosť súradnicovej siete na mape.";
 "terrain_map" = "Mapa terénu (3D)";
 "shared_string_default_view" = "Predvolené zobrazenie";
 "smart_folder_name_present" = "Takýto chytrý priečinok už existuje";

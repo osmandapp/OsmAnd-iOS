@@ -1235,6 +1235,20 @@
 
 - (void)onSwitchPressed:(id)sender
 {
+    if (@available(iOS 26.0, *))
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self applySwitchChange:sender];
+        });
+    }
+    else
+    {
+        [self applySwitchChange:sender];
+    }
+}
+
+- (void)applySwitchChange:(id)sender
+{
     UISwitch *switchView = (UISwitch *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
     NSDictionary *item = [self getItem:indexPath];

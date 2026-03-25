@@ -642,7 +642,7 @@
 "rotate_map_compass_opt" = "Kompassrichtung";
 "rotate_map_bearing_opt" = "Bewegungsrichtung";
 "rotate_map_north_opt" = "Norden ist oben";
-"driving_region_descr" = "Verkehrsregion wählen: USA, Europa, GB, Asien u. a.";
+"driving_region_descr" = "Verkehrsregion wählen: USA, Europa, Großbritannien, Asien und andere.";
 "shared_string_automatic" = "Automatisch";
 "map_widget_magnetic_bearing" = "Magnetische Peilung";
 "map_widget_bearing" = "Relative Peilung";
@@ -956,9 +956,9 @@
 "day_short" = "Tg.";
 "week_short" = "Wo.";
 "weeks_short" = "Wo.";
-"month_short" = "Mo.";
+"month_short" = "M";
 "months_short" = "Mon.";
-"year_short" = "J.";
+"year_short" = "J";
 "years_short" = "Jahre";
 "day" = "Tag";
 "days_2_4" = "Tage";
@@ -1270,7 +1270,7 @@
 "rendering_attr_surface_grass_name" = "Gras";
 "rendering_attr_contourColorScheme_description" = "Farbschema für Höhenlinien";
 "rendering_attr_piste_type_sled_name" = "Schlitten";
-"routing_attr_allow_skating_only_name" = "Nur Skating-Routen zulassen";
+"routing_attr_allow_skating_only_name" = "Nur Loipen für Skating-Stil zulassen";
 "routing_attr_weight_description" = "Gewicht des Fahrzeugs für Routenberechnung angeben.";
 "rendering_attr_highway_class_footway_name" = "Fußweg";
 "rendering_value_disabled_name" = "Deaktiviert";
@@ -1311,7 +1311,7 @@
 "routing_attr_piste_type_skitour_name" = "Skitouren";
 "rendering_value_bicycle_name" = "Fahrrad";
 "routing_attr_avoid_borders_name" = "Keine Grenzübergänge";
-"routing_attr_allow_skating_only_description" = "Nur für Freestyle oder Skating präparierte Routen, keine klassischen Loipen.";
+"routing_attr_allow_skating_only_description" = "Nur für Freestyle oder Skating präparierte Loipen, keine Loipen für klassischen Stil.";
 "rendering_attr_tramTrainRoutes_name" = "Straßenbahn- und Eisenbahnlinien";
 "rendering_attr_smoothness_bad_name" = "Schlecht";
 "rendering_attr_smoothness_excellent_name" = "Hervorragend";
@@ -1367,7 +1367,7 @@
 "routing_attr_allow_expert_description" = "Extrem schwere Routen, mit gefährlichen Hindernissen und schwieriger Umgebung.";
 "rendering_attr_trainLightrailRoutes_name" = "Stadtbahnlinien";
 "rendering_attr_contourWidth_description" = "Breite der Höhenlinien";
-"routing_attr_allow_classic_only_name" = "Nur klassische Routen zulassen";
+"routing_attr_allow_classic_only_name" = "Nur Loipen für klassischen Stil zulassen";
 "rendering_attr_piste_type_connection_name" = "Verbindung";
 "routing_attr_avoid_motorway_description" = "Vermeidet Autobahnen";
 "rendering_attr_surface_gravel_name" = "Schotter";
@@ -1428,7 +1428,7 @@
 "rendering_value_thick_name" = "Fett";
 "rendering_value_lightgreen_name" = "Hellgrün";
 "rendering_attr_appMode_description" = "Optimierung der Kartendarstellung für";
-"routing_attr_allow_private_description" = "Zugang zu Privatgrund erlauben.";
+"routing_attr_allow_private_description" = "Zugang zu Privatgrundstücken erlauben.";
 "rendering_value_medium_name" = "Mittel";
 "routing_attr_allow_advanced_description" = "Schwierige Routen, mit gefährlichen Hindernissen und steilen Abschnitten.";
 "rendering_attr_subwayMode_name" = "U-Bahn-Linien";
@@ -1763,7 +1763,7 @@
 "road_min_speed_descr" = "Legt die minimale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Erhöht die Priorität für Straßen mit empfohlenen Geschwindigkeiten unter der Mindestgeschwindigkeit.";
 "road_max_speed_descr" = "Legt die maximale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Verringert die Priorität für Straßen mit einer möglichen Geschwindigkeit, die höher als die Höchstgeschwindigkeit ist.";
 "road_speeds_descr" = "Diese Parameter können die Routenberechnung beeinflussen.";
-"ios_release_3_90" = "• Einführung der Funktion \"Eine Route planen\" zur Planung zukünftiger Strecken mit der Möglichkeit, Streckenabschnitte mit verschiedenen Navigationsarten zu erstellen\n• Option zum Aktivieren eines Kompasses über das Werkzeug \"Radiuslineal\" hinzugefügt\n• Option \"POI-Overlay-Bezeichnungen\" hinzugefügt, die es erlaubt, Namen für Favoriten, Track-Wegpunkte und Markierungen auf der Karte anzuzeigen\n• Neue Schnellaktionen für die Sichtbarkeit von Höhenlinien und Gelände auf der Karte, das Ändern eines Anwendungsprofils und das Löschen eines nächstgelegenen Zwischenpunkts hinzugefügt\n• Probleme mit fehlender Wikipedia-Suchkategorie behoben\n• Import von Einstellungen: Fehler behoben, Unterstützung für alle in OsmAnd verfügbaren Datentypen hinzugefügt\n• OpenStreetMap-Bearbeitung: Die Zeitauswahl und die Unmöglichkeit, den Changeset-Kommentar zu ändern, wurden korrigiert\n";
+"ios_release_3_90" = "• Einführung der Funktion \"Eine Route planen\" zur Planung zukünftiger Strecken mit der Möglichkeit, Streckenabschnitte mit verschiedenen Navigationsarten zu erstellen\n• Option zum Aktivieren eines Kompasses über das Werkzeug \"Radiuslineal\" hinzugefügt\n• Option \"POI-Overlay-Bezeichnungen\" hinzugefügt, die es erlaubt, Namen für Favoriten, Track-Wegpunkte und Markierungen auf der Karte anzuzeigen\n• Neue Schnellaktionen für die Sichtbarkeit von Höhenlinien und Gelände auf der Karte, das Ändern eines Anwendungsprofils und das Löschen eines nächstgelegenen Zwischenpunkts hinzugefügt\n• Probleme mit fehlender Wikipedia-Suchkategorie behoben\n• Import von Einstellungen: Fehler behoben, Unterstützung für alle in OsmAnd verfügbaren Datentypen hinzugefügt\n• OpenStreetMap-Bearbeitung: Die Zeitauswahl und die fehlende Möglichkeit, den Changeset-Kommentar zu ändern, wurden korrigiert\n";
 "ios_release_3_80" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen\n";
 
 
@@ -1925,7 +1925,7 @@
 "shared_string_enable" = "Aktivieren";
 "search_poi_types_descr" = "Kombinieren Sie POI-Typen aus verschiedenen Kategorien. Tippen Sie auf den Schalter, um alle auszuwählen, tippen Sie auf die linke Seite zur Kategorieauswahl.";
 "add_custom_category" = "Benutzerdefinierte Kategorie hinzufügen";
-"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten und Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien zugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Großbuchstaben-Erweiterungen behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
+"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten und Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien hinzugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Erweiterungen in Großbuchstaben behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
 "approximate_file_size" = "Ungefähre Dateigröße";
 "gpx_upload_private_visibility_descr" = "„Privat“ bedeutet, dass der Track nicht in öffentlichen Verzeichnissen auftaucht, aber seine Trackpunkte in nicht chronologischer Reihenfolge über die öffentliche GPS-API ohne Zeitstempel verfügbar sind.";
 "gpx_upload_identifiable_visibility_descr" = "„Identifizierbar“ bedeutet, dass der Track in Ihren GPS-Tracks und in öffentlichen GPS-Trackverzeichnissen angezeigt wird, d. h., andere Benutzer können den Track herunterladen und mit Ihrem Benutzernamen verknüpfen. Öffentliche, mit Zeitstempel versehene Trackpunkt-Daten von der GPS-API, die über die Trackpunkt-API bereitgestellt werden, verweisen auf Ihre ursprüngliche Trackseite.";
@@ -1994,7 +1994,7 @@
 "track_coloring_solid" = "Ausgefüllt";
 "gpx_selection_segment_title" = "Abschnitt";
 "gpx_join_gaps_descr" = "Lücken zwischen den Segmenten werden verbunden.";
-"ios_release_4_1" = "• Völlig neu gestaltete Interaktion mit Tracks: ein neues Menü mit Diagrammen, Statistiken, die Möglichkeit, das Aussehen zu ändern, die Einfärbung nach Geschwindigkeit, Höhe und Neigung und die Auswahl der Tracks auf der Karte\n• Neuer Bildschirm für die Suche nach Koordinaten in verschiedenen Formaten\n• Verbesserte Koordinatensuche im OLC Format\n• Neues benutzerfreundliches Menü zur Auswahl der Sprachen für die Anzeige von Wikipedia-Artikeln auf der Karte\n• Es wurde die Möglichkeit hinzugefügt, Karten aller Regionen eines Landes mit ein paar Klicks zu laden.\n• Höhenlinien in Feet (ft) hinzugefügt (Sie müssen zusätzliche Dateien herunterladen)\n• Möglichkeit hinzugefügt, Karten herunterzuladen, indem die gewünschte Region oder das gewünschte Land auf der Karte ausgewählt wird, sowie Hinzufügen eines Dialogfelds mit dem Vorschlag, eine fehlende Karte einer angezeigten Region zu laden\n• Neues Aussehen der Schaltflächen auf der Karte und zusätzliche Möglichkeit, den Kartenzoom durch Doppeltippen und Streichen zu ändern\n• Die Einstellungen für die Sichtbarkeit von Routen wurden im Bildschirm \"Karte konfigurieren\" nach oben verschoben und für eine bessere Flexibilität neu organisiert\n";
+"ios_release_4_1" = "• Völlig neu gestaltete Interaktion mit Tracks: ein neues Menü mit Diagrammen, Statistiken, die Möglichkeit, das Aussehen zu ändern, die Einfärbung nach Geschwindigkeit, Höhe und Neigung und die Auswahl der Tracks auf der Karte\n• Neuer Bildschirm für die Suche nach Koordinaten in verschiedenen Formaten\n• Verbesserte Koordinatensuche im OLC Format\n• Neues benutzerfreundliches Menü zur Auswahl der Sprachen für die Anzeige von Wikipedia-Artikeln auf der Karte\n• Möglichkeit hinzugefügt, Karten aller Regionen eines Landes mit ein paar Klicks zu laden.\n• Höhenlinien in Feet (ft) hinzugefügt (Sie müssen zusätzliche Dateien herunterladen)\n• Möglichkeit hinzugefügt, Karten herunterzuladen, indem die gewünschte Region oder das gewünschte Land auf der Karte ausgewählt wird, sowie Hinzufügen eines Dialogfelds mit dem Vorschlag, eine fehlende Karte einer angezeigten Region zu laden\n• Neues Aussehen der Schaltflächen auf der Karte und zusätzliche Möglichkeit, den Kartenzoom durch Doppeltippen und Streichen zu ändern\n• Die Einstellungen für die Sichtbarkeit von Routen wurden im Bildschirm \"Karte konfigurieren\" nach oben verschoben und für eine bessere Flexibilität neu organisiert\n";
 "attribute" = "Attribut";
 
 // Shared Strings
@@ -2245,7 +2245,7 @@
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
 "rendering_attr_showFunicularRoutes_name" = "Standseilbahnlinien";
 "rendering_attr_showLightRailRoutes_name" = "Stadtbahnlinien";
-"backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro-Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
+"backup_error_subscription_was_expired_descr" = "Ihr Abonnement „OsmAnd Pro“ ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
 "backup_error_user_is_already_registered" = "Diese E-Mail-Adresse wird in einem anderen Konto verwendet";
 "backup_error_subscription_was_expired" = "Abgelaufenes Abonnement";
 "backup_error_subscription_was_used" = "Abonnement oder Aktionsangebot wird von einem anderen Konto verwendet %@";
@@ -2329,7 +2329,7 @@
 "unlimited_map_downloads" = "Unbegrenzte Karten-Downloads";
 "restore_purchases" = "Käufe wiederherstellen";
 "osmand_maps_plus_tagline" = "Erweiterte Features erhalten";
-"osmand_pro_tagline" = "Alle Features erhalten";
+"osmand_pro_tagline" = "Alle Funktionen erhalten";
 "transport_hazmat_yes_desc" = "Wählen Sie die zutreffende Kategorie aus.";
 "purchases_feature_desc_combined_wiki" = "Erkunden Sie Wikipedia-Artikel auch unterwegs, ohne Internetverbindung. Offline-Daten sind nach Ländern aufgeteilt und in allen Sprachen verfügbar.";
 "continue_with" = "Mit %@ fortfahren";
@@ -2337,8 +2337,8 @@
 "expired" = "Abgelaufen";
 "osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads mit wöchentlicher, täglicher oder sogar stündlicher Aktualisierung hinzu.";
 "purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Aktualisierungen erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
-"purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von OsmAnd Pro: Routeneinfärbung und mehr.";
-"purchases_feature_desc_osmand_cloud" = "Holen Sie sich OsmAnd Cloud, um alle OsmAnd-Daten online zu speichern. Kein Datenverlust mehr nach einer Neuinstallation, alle Informationen problemlos sichern und wiederherstellen.";
+"purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von „OsmAnd Pro“: Routeneinfärbung und mehr.";
+"purchases_feature_desc_osmand_cloud" = "Holen Sie sich „OsmAnd Cloud“, um alle OsmAnd-Daten online zu speichern. Kein Datenverlust mehr nach einer Neuinstallation, alle Informationen problemlos sichern und wiederherstellen.";
 "osmand_development_plugin_description" = "Bietet Funktionen zum Testen und Debuggen von OsmAnd: Simulieren von Navigationsrouten, Überwachen der Bildschirmdarstellung, Prüfen der Leistung usw. Diese Erweiterung ist für die normale Nutzung der App nicht erforderlich.";
 "osmand_depelopment_simulate_location_section" = "Simulieren";
 "shared_string_paused" = "Pausiert";
@@ -3048,8 +3048,8 @@
 "shared_string_data_type" = "Datentyp";
 "help_article_map_map_context_menu_name" = "Kontextmenü der Karte";
 "help_article_map_track_context_menu_name" = "Kontextmenü der Tracks";
-"help_article_navigation_routing_direct_to_point_routing_name" = "Punkt-zu-Punkt-Routing (Boot)";
-"help_article_navigation_routing_horse_routing_name" = "Reitrouting";
+"help_article_navigation_routing_direct_to_point_routing_name" = "Punkt-zu-Punkt-Routenführung (Boot)";
+"help_article_navigation_routing_horse_routing_name" = "Routenführung für Reiter";
 "help_article_navigation_routing_moped_routing_name" = "Moped-Routenführung";
 "help_article_navigation_routing_online_routing_name" = "Online-Routenführung";
 "help_article_navigation_routing_osmand_routing_name" = "Über OsmAnd-Routenführung";
@@ -3172,7 +3172,7 @@
 "osmand_cloud_deletion_all_data_warning" = "Alle Daten von OsmAnd Cloud werden %@. Daten auf dem Gerät bleiben unangetastet.";
 "osmand_cloud_deletion_account_warning" = "Ihr Konto und alle Kontodaten werden %@";
 "osmand_cloud_deletion_secondary_devices_warning" = "Zweitgeräte werden von OsmAnd Cloud abgemeldet und verlieren den Zugriff auf kostenpflichtige Funktionen.";
-"osmand_cloud_deletion_subscriptions_warning" = "Dadurch wird Ihr OsmAnd Pro-Abonnement nicht gekündigt.";
+"osmand_cloud_deletion_subscriptions_warning" = "Dadurch wird Ihr Abonnement „OsmAnd Pro“ nicht gekündigt.";
 "osmand_cloud_deleted_account_descr" = "Das Konto und alle Daten wurden aus OsmAnd Cloud gelöscht.";
 "verify_account_deletion_descr" = "Wir müssen Ihr Konto verifizieren, bevor wir es löschen können. \n \nBitte geben Sie die E-Mail-Adresse ein, mit der Sie sich registriert haben. An diese Adresse wird ein Einmalpasswort für den nächsten Schritt gesendet.";
 "osmand_cloud_deleting_account_descr" = "In wenigen Augenblicken werden alle Ihre Daten und Ihr Konto aus OsmAnd Cloud gelöscht. \n \nAlle Daten auf dem Gerät bleiben unangetastet.";
@@ -3317,7 +3317,7 @@
 "cloud_layer" = "Wolkenebene";
 "download_srtm_maps" = "Höhenlinien";
 "driving_region_india" = "Indien";
-"driving_region_uk" = "GB und andere";
+"driving_region_uk" = "Großbritannien und ähnliche";
 "key_event_category_map_interactions" = "Karten-Interaktionen";
 "map_source" = "Kartenquelle";
 "precipitation_layer" = "Niederschlagsebene";
@@ -4003,8 +4003,8 @@
 "deleted_maps_alert_message" = "%d Karten löschen?";
 "ios_release_5_2" = "* Benutzerdefinierte Zuordnung von Tasten externer Eingabegeräte eingeführt, ermöglicht die Zuordnung einer beliebigen Schnellaktion zur Taste einer Tastatur oder eines Controllers\n• Neue Schnellaktionen zur Steuerung der App über ein externes Eingabegerät hinzugefügt\n• Sichtbarkeit von Widgets im transparenten Modus verbessert durch Hinzufügung von Textkonturen\n• Genaues Gitter zur Ausrichtung von Karten-Bedienfeldern hinzugefügt\n• Neuen Seekartendarstellung \"Seefahrt\" mit umfangreichen Einstellmöglichkeiten eingeführt\n• Straßen- und Stadtangaben zu Suchergebnissen hinzugefügt\n• Einstellmöglichkeit zur Vergrößerung der Textgröße des Abstandsmesswerkzeugs hinzugefügt\n• Auswahl der Einheit der Temperatur zu Allgemeine Einstellungen verschoben\n• Einheit der Höhe kann nun getrennt von Einheit der Länge eingestellt werden\n• Schnellaktion für Kartenausrichtung mit auswählbaren Kartenausrichtungsmodi hinzugefügt\t\n• Problem gelöst, das die Bewegung einiger Widgets verhinderte\n• Falsche Anzeige des Abstands im Widget \"Nächste Abzweigung\" behoben\n• Suche nach Marke (brand) verbessert durch Einbeziehung von mehr lokalen Marken\n• Allgemeine Stabilitäts- und Leistungsverbesserungen\n";
 "ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n• Fähigkeit hinzugefügt Wegpunkte in einen ausgewählten Favoriten-Ordner zusammenzuführen\n• CarPlay: Problem mit nicht reagierender Karte auf dem Dashboard behoben und Unterstützung hinzugefügt für Parameter „Zeige immer dunkle Karte“\n";
-"image_cache_online_photo_high_res" = "Hochauflösende Zwischenspeicherung von Online-Fotos";
-"image_cache_online_photo_mapillary_default_cache" = "Automatische Zwischenspeicherung von Online-Fotos/Mapillary";
+"image_cache_online_photo_high_res" = "Zwischenspeicher für hochauflösende Online-Fotos";
+"image_cache_online_photo_mapillary_default_cache" = "Standard-Zwischenspeicher für Online-Fotos/Mapillary";
 "trip_recording_moving_time" = "Bewegungszeit";
 "trip_recording_moving_time_widget_description" = "Zeigt die aktuell aufgezeichnete Zeit in Bewegung oder die Dauer des letzten Anstiegs und Abstiegs an.";
 "context_menu_item_add_parking_point" = "Als Parkposition markieren";
@@ -4037,3 +4037,14 @@
 "popular_places" = "Beliebte Orte";
 "shared_string_online_only" = "Nur online";
 "shared_string_offline_only" = "Nur offline";
+"shared_string_alt_name" = "Alternativer Name";
+"y_axis" = "Y-Achse";
+"x_axis" = "X-Achse";
+"external_sensor_widgets" = "Externer Sensor";
+"read_on" = "Lesen auf %@";
+"vehicle_metrics_chart_category" = "Fahrzeugdaten";
+"poi_cuisine" = "Küche";
+"poi_brand" = "Marke";
+"travel_guides" = "Touristenführer";
+"has_vehicle_metrics" = "Mit OBDII-Daten";
+"context_menu_read_full_article" = "Ganzen Artikel lesen";

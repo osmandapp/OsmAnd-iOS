@@ -105,7 +105,7 @@
 "shared_string_skip" = "Kihagyás";
 "intro_download" = "Térkép\nletöltése";
 "next_proceed" = "Következő";
-"intro_welcome" = "Üdvözli az\nOsmAnd";
+"intro_welcome" = "Üdvözöljük az\nOsmAnd alkalmazásban";
 "intro_promo" = "Globális kapcsolat nélküli térképek";
 "intro_placeholder" = "adja meg a régiója nevét";
 // Settings
@@ -1689,7 +1689,7 @@
 "backup_error_user_is_not_registered" = "Ezzel az e-mail-címmel nincs regisztrált felhasználó";
 "routing_attr_only_permitted_streets_description" = "Csak a kifejezetten engedélyezett utcák használata";
 "shared_string_width" = "Szélesség";
-"backup_welcome_back" = "Isten hozta újra!";
+"backup_welcome_back" = "Üdvözöljük újra!";
 "lang_de_casual" = "német (tegeződő)";
 "lang_la" = "latin";
 "lang_jv" = "jávai";
@@ -1852,7 +1852,7 @@
 "shared_string_weather" = "Időjárás";
 "map_settings_line_density_slowdown_warning" = "A nagy vonalsűrűség lassíthatja a térkép megjelenítését";
 "map_settings_weather_wind" = "Szél";
-"backup_and_restore" = "Biztonsági másolat és visszaállítás";
+"backup_and_restore" = "Biztonsági mentés és visszaállítás";
 "global_settings_descr" = "A teljes alkalmazást érinti.";
 "do_not_rotate" = "Ne forgassa";
 "units_of_speed" = "A sebesség mértékegységei";
@@ -2516,7 +2516,7 @@
 "about_osmAnd" = "Az OsmAnd névjegye";
 "shared_string_symbol" = "Szimbólum";
 "external_device_forget_sensor" = "Érzékelő elfelejtése";
-"free_favorites_backup_description" = "Regisztráljon az OsmAnd Cloudba, hogy ingyenesen biztonsági másolatot készíthessen a kedvencekről és a beállításokról.";
+"free_favorites_backup_description" = "Regisztráljon az OsmAnd Cloudba, hogy biztonsági mentést készíthessen ingyenesen a kedvencekről és a beállításokról.";
 "help_article_navigation_routing_ski_routing_name" = "Sípályák és útvonalak";
 "map_3d_mode_description" = "Érintse meg a térképet két ujjal, és mozgassa fel és le a térkép dőlésszögének beállításához.";
 "ant_plus_searching" = "Keresés";
@@ -2661,7 +2661,7 @@
 "verify_account_deletion_descr" = "A törlés előtt hitelesíteni kell a fiókját.\n\nAdja meg az e-mail-címet, amellyel regisztrált. A következő lépéshez egyszeri jelszót küld a rendszer.";
 "disable_vertex_hillshade_3d" = "Vertex domborzatárnyékolás letiltása 3D-ben";
 "angular_measeurement" = "Szögmérés mértékegysége";
-"free_favorites_backup" = "Kedvencek mentése ingyenesen";
+"free_favorites_backup" = "Kedvencek biztonsági mentése ingyenesen";
 "wiki_article_search_text" = "Megfelelő szócikk keresése";
 "longest_duration_first" = "Először a leghosszabb időtartam";
 "ant_plus_bluetooth_off" = "A Bluetooth ki van kapcsolva";
@@ -2958,7 +2958,7 @@
 "not_specified" = "Nem meghatározott";
 "screen_is_unlocked" = "Az érintőképernyő feloldva.";
 "lock_screen" = "Képernyő zárolása";
-"obd_plugin_name" = "Járműmetrika";
+"obd_plugin_name" = "Járműadatok";
 "reset_average_speed" = "Átlagsebesség nullázása";
 "avg_sensor_cadence" = "Pedálfordulat, átlag";
 "cloud_sync_progress" = "Szinkronizálás... %@";
@@ -3056,7 +3056,7 @@
 "obd_fuel_type_electric" = "Elektromos";
 "obd_engine_runtime" = "Motor üzemidő";
 "obd_fuel_left_distance_desc" = "Megjeleníti a fennmaradó üzemanyaggal megtehető távolságot az OBD-érzékelőn keresztül";
-"vehicle_metrics_obd_ii" = "Járműmetrika (OBD-II)";
+"vehicle_metrics_obd_ii" = "Járműadatok (OBD-II)";
 "obd_fuel_consumption_rate_scanner" = "Fogyasztás (OBD)";
 "obd_rpm_desc" = "Megjeleníti a jármű fordulatszámmérőjével mért értéket az OBD-érzékelőn keresztül";
 "obd_how_to_connect" = "Útmutató a kapcsolódáshoz:";
@@ -3133,7 +3133,7 @@
 "obd_fuel_type_bifuel_ethanol" = "Etanollal működő Bifuel";
 "connect_obd_instructions_title" = "Az OsmAnd támogatja a Bluetooth-kapcsolatot használó OBD-II olvasókat.";
 "obd_fuel_type_desc" = "Megjeleníti az üzemanyag típusát az OBD-érzékelőn keresztül";
-"obd_widget_group" = "Járműmetrika";
+"obd_widget_group" = "Járműadatok";
 "obd_fuel_level" = "Üzemanyag-hatékonyság (%)";
 "obd_ambient_air_temp_desc" = "Megjeleníti járművön kívüli hőmérsékletet.";
 "obd_fuel_type_bifuel_propane" = "Propánnal működő Bifuel";
@@ -3983,3 +3983,17 @@
 "shared_string_wikipedia" = "Wikipédia";
 "poi_source" = "POI-forrás";
 "show_polygons" = "Sokszögek kitöltése";
+"shared_string_alt_name" = "Alternatív név";
+"graph_axis" = "Grafikontengely";
+"y_axis" = "Y-tengely";
+"x_axis" = "X-tengely";
+"y_axis_description" = "Válasszon legfeljebb két opciót az Y-tengelyhez.";
+"external_sensor_widgets" = "Külső érzékelők";
+"vehicle_metrics_chart_category" = "Járműadatok";
+"poi_mobile" = "Mobiltelefon";
+"poi_cuisine" = "Konyha";
+"poi_brand" = "Márka";
+"travel_guides" = "Útikalauzok";
+"has_vehicle_metrics" = "OBDII-adatokkal";
+"context_menu_read_full_article" = "Teljes cikk elolvasása";
+"read_on" = "Olvassa el itt: %@";

@@ -100,6 +100,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         searchController?.searchBar.delegate = self
         searchController?.obscuresBackgroundDuringPresentation = false
         searchController?.searchBar.placeholder = localizedString("shared_string_search")
+        if #available(iOS 26.0, *) {
+            navigationItem.preferredSearchBarPlacement = .stacked
+        }
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
         updateSelectedRows()

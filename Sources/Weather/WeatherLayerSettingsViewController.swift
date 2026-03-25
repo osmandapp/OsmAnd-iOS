@@ -54,7 +54,7 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         generateWindAnimationSectionData()
     }
     
-    override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         guard let tableData else { return nil }
         let item = tableData.item(for: indexPath)
         
@@ -132,7 +132,13 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         if data.key == Self.weatherLayerKey {
             if let band = data.obj(forKey: "band") as? OAWeatherBand {
                 band.setSelect(sw.isOn)
-                reloadDataWith(animated: true, completion: nil)
+                var delay: TimeInterval
+                if #available(iOS 26.0, *) {
+                    delay = 0.25
+                } else {
+                    delay = 0.0
+                }
+                reloadData(withDelay: delay, animated: true, completion: nil)
                 onChangeSwitchLayerAction?()
             }
         }

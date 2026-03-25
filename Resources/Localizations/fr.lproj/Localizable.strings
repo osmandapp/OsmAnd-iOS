@@ -4018,3 +4018,17 @@
 "shared_string_wikipedia" = "Wikipédia";
 "poi_source" = "Source des POI";
 "show_polygons" = "Afficher les polygones";
+"shared_string_alt_name" = "Autre nom";
+"graph_axis" = "Axe du graphique";
+"y_axis" = "Ordonnées";
+"x_axis" = "Abscisses";
+"y_axis_description" = "Sélectionnez jusqu'à deux options d'ordonnées.";
+"external_sensor_widgets" = "Capteurs externes";
+"vehicle_metrics_chart_category" = "Caractéristiques techniques du véhicule";
+"poi_mobile" = "Mobile";
+"poi_cuisine" = "Cuisine";
+"poi_brand" = "Marque";
+"travel_guides" = "Guides de voyage";
+"has_vehicle_metrics" = "À partir des données OBDII";
+"context_menu_read_full_article" = "Lire l'article complet";
+"read_on" = "Continuer la lecture %@";

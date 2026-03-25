@@ -38,6 +38,7 @@
 
 #define AMENITY_TEXT_LENGTH 255
 
+static const CGFloat kBackButtonSize = 30.;
 
 typedef NS_ENUM(NSInteger, EditingTab)
 {
@@ -164,7 +165,21 @@ typedef NS_ENUM(NSInteger, EditingTab)
     self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kBackButtonSize, kBackButtonSize)];
+    if (@available(iOS 26.0, *))
+    {
+        backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
+        [backButton setTintColor:UIColor.labelColor];
+    }
+    else
+    {
+        backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+        [backButton setTintColor:[UIColor colorNamed:ACColorNameNavBarTextColorPrimary]];
+    }
+    [backButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [backButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+    [backButton addTarget:self action:@selector(onBackPressed) forControlEvents:UIControlEventTouchUpInside];
+    _backButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_backButton animated:YES];
     
     self.segmentContainerView.backgroundColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
@@ -202,7 +217,13 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 -(CGFloat) getNavBarHeight
 {
-    return navBarWithSegmentControl;
+    CGFloat topOffset = 0.;
+    if (@available(iOS 26.0, *))
+    {
+        CGFloat segmentControlBottomInset = [self statusBarHeight] == 0 && [OAUtilities getTopMargin] == 0 ? (self.segmentContainerView.frame.size.height - _segmentControl.frame.size.height) / 2 : 0.;
+        topOffset = segmentControlBottomInset == 0. ? [OAUtilities getTopMargin] - [self statusBarHeight] : segmentControlBottomInset;
+    }
+    return self.navigationController.navigationBar.frame.size.height + self.segmentContainerView.frame.size.height + topOffset;
 }
 
 -(void) applyLocalization

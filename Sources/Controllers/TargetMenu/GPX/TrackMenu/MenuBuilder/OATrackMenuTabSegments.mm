@@ -77,6 +77,7 @@
     {
         [self generateSegmentSectionData:generalSegment
                                 analysis:[TrackChartHelper getAnalysisFor:generalSegment joinSegments:self.trackMenuDelegate.isJoinSegments]
+                  overrideIsGeneralTrack:YES
                                    index:0];
     }
 
@@ -87,6 +88,7 @@
         {
             [self generateSegmentSectionData:segments[index]
                                     analysis:analysis
+                      overrideIsGeneralTrack:NO
                                        index:generalSegment ? index + 1 : index];
         }
     }
@@ -96,6 +98,7 @@
 
 - (void)generateSegmentSectionData:(OASTrkSegment *)segment
                           analysis:(OASGpxTrackAnalysis *)analysis
+            overrideIsGeneralTrack:(BOOL)overrideIsGeneralTrack
                              index:(NSInteger)index
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
@@ -113,6 +116,7 @@
                           selectedXAxisMode:GPXDataSetAxisTypeDistance
                                       chart:cell.chartView
                                    analysis:analysis
+                     overrideIsGeneralTrack:overrideIsGeneralTrack
                               statsModeCell:nil];
     }
 
@@ -121,7 +125,8 @@
             kTableValues: @{
                     @"segment_value": segment,
                     @"analysis_value": analysis,
-                    @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
+                    @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)],
+                    @"override_is_general_track": @(overrideIsGeneralTrack)
             }
     }];
     if (cell)
@@ -541,6 +546,7 @@
                                   selectedXAxisMode:GPXDataSetAxisTypeDistance
                                               chart:cell.chartView
                                            analysis:sectionData.values[@"analysis_value"]
+                             overrideIsGeneralTrack:sectionData.values[@"override_is_general_track"]
                                       statsModeCell:nil];
             }
         }
@@ -641,7 +647,8 @@
                 {
                     [self.trackMenuDelegate openAnalysis:analysis
                                                  segment:segment
-                                               withTypes:sectionData.values[@"mode_value"]];
+                                               withTypes:sectionData.values[@"mode_value"]
+                                  overrideIsGeneralTrack:sectionData.values[@"override_is_general_track"]];
                 }
                 else
                 {

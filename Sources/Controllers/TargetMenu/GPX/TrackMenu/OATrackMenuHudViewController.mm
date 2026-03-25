@@ -949,6 +949,33 @@
     }];
 }
 
+- (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
+             segment:(OASTrkSegment *)segment
+           withTypes:(NSArray<NSNumber *> *)types
+overrideIsGeneralTrack:(BOOL)overrideIsGeneralTrack
+{
+    if (!self.doc || !self.gpx || !analysis || !segment)
+        return;
+
+    _pushedNewScreen = YES;
+    __weak __typeof(self) weakSelf = self;
+    [self hide:YES duration:.2 onComplete:^{
+        OATrackMenuViewControllerState *state = [weakSelf getCurrentStateForAnalyze:types];
+        state.openedFromTrackMenu = YES;
+        OASGpxFile *gpxFile = weakSelf.doc;
+        if (!gpxFile)
+            weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:weakSelf.gpx.dataItem.file];
+        
+        [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
+                                                                   trackItem:weakSelf.gpx
+                                                                    analysis:analysis
+                                                                     segment:segment
+                                                            menuControlState:state
+                                                                     isRoute:NO
+                                                      overrideIsGeneralTrack:@(overrideIsGeneralTrack)];
+    }];
+}
+
 - (OARouteKey *)getRouteKey
 {
     return _routeKey;

@@ -78,11 +78,41 @@ final class TrackChartHelper: NSObject {
                                     splitSegments: splitSegments)
         return analysis
     }
+    
+    func changeChartTypes(_ types: [Int],
+                          selectedXAxisMode: GPXDataSetAxisType,
+                          chart: ElevationChart,
+                          analysis: GpxTrackAnalysis,
+                          statsModeCell: OARouteStatisticsModeCell?) {
+        let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
+        changeChartTypes(types,
+                         selectedXAxisMode: selectedXAxisMode,
+                         chart: chart,
+                         analysis: analysis,
+                         calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx),
+                         statsModeCell: statsModeCell)
+    }
+    
+    func changeChartTypes(_ types: [Int],
+                          selectedXAxisMode: GPXDataSetAxisType,
+                          chart: ElevationChart,
+                          analysis: GpxTrackAnalysis,
+                          overrideIsGeneralTrack: Bool,
+                          statsModeCell: OARouteStatisticsModeCell?) {
+        let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
+        changeChartTypes(types,
+                         selectedXAxisMode: selectedXAxisMode,
+                         chart: chart,
+                         analysis: analysis,
+                         calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, overrideIsGeneralTrack: overrideIsGeneralTrack, gpxDataItem: gpx),
+                         statsModeCell: statsModeCell)
+    }
 
     func changeChartTypes(_ types: [Int],
                           selectedXAxisMode: GPXDataSetAxisType,
                           chart: ElevationChart,
                           analysis: GpxTrackAnalysis,
+                          calcWithoutGaps: Bool,
                           statsModeCell: OARouteStatisticsModeCell?) {
         var secondType: GPXDataSetType = .none
         if types.count == 2 {
@@ -91,6 +121,7 @@ final class TrackChartHelper: NSObject {
                                  selectedXAxisMode: selectedXAxisMode,
                                  chart: chart,
                                  analysis: analysis,
+                                 calcWithoutGaps: calcWithoutGaps,
                                  statsModeCell: statsModeCell)
             } else {
                 if let statsModeCell {
@@ -108,14 +139,13 @@ final class TrackChartHelper: NSObject {
         }
         
         statsModeCell?.rightLabel.text = selectedXAxisMode.getName()
-        let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
         GpxUIHelper.refreshLineChart(
             chartView: chart,
             analysis: analysis,
             firstType: GPXDataSetType(rawValue: types.first!)!,
             secondType: secondType,
             axisType: selectedXAxisMode,
-            calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx)
+            calcWithoutGaps: calcWithoutGaps
         )
     }
 

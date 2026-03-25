@@ -179,6 +179,14 @@ NS_ASSUME_NONNULL_BEGIN
                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
                                     isRoute:(BOOL)isRoute;
 
+- (void)openTargetViewWithRouteDetailsGraph:(nullable OASGpxFile *)gpx
+                                  trackItem:(nullable OASTrackItem *)trackItem
+                                   analysis:(OASGpxTrackAnalysis *)analysis
+                                    segment:(OASTrkSegment *)segment
+                           menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                    isRoute:(BOOL)isRoute
+                     overrideIsGeneralTrack:(nullable NSNumber *)overrideIsGeneralTrack;
+
 - (void) openTargetViewFromTracksListWithRouteDetailsGraph:(NSString *)gpxFilepath
                                             isCurrentTrack:(BOOL)isCurrentTrack
                                                      state:(OATrackMenuViewControllerState *)state;

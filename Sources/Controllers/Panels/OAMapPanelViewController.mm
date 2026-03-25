@@ -3462,6 +3462,23 @@ typedef enum
                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
                                     isRoute:(BOOL)isRoute
 {
+    [self openTargetViewWithRouteDetailsGraph:gpx
+                                    trackItem:trackItem
+                                     analysis:analysis
+                                      segment:segment
+                             menuControlState:menuControlState
+                                      isRoute:isRoute
+                       overrideIsGeneralTrack:nil];
+}
+
+- (void)openTargetViewWithRouteDetailsGraph:(OASGpxFile *)gpx
+                                  trackItem:(OASTrackItem *)trackItem
+                                   analysis:(OASGpxTrackAnalysis *)analysis
+                                    segment:(OASTrkSegment *)segment
+                           menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                    isRoute:(BOOL)isRoute
+                     overrideIsGeneralTrack:(NSNumber *)overrideIsGeneralTrack
+{
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
@@ -3478,13 +3495,18 @@ typedef enum
 
     if (gpx && trackItem && analysis && segment)
     {
-        targetPoint.targetObj = @{
+        NSMutableDictionary *dict = [@{
             @"gpx": gpx,
             @"trackItem": trackItem,
             @"analysis": analysis,
             @"segment": segment,
             @"route": @(isRoute)
-        };
+        } mutableCopy];
+
+        if (overrideIsGeneralTrack)
+            dict[@"override_is_general_track"] = overrideIsGeneralTrack;
+        
+        targetPoint.targetObj = dict;
     }
     else
     {

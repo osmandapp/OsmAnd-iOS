@@ -22,6 +22,17 @@ final class GpxUtils: NSObject {
             return isGeneralTrack && !gpxDataItem.joinSegments
         }
     }
+    
+    static func calcWithoutGaps(_ gpxFile: GpxFile?, overrideIsGeneralTrack: Bool, gpxDataItem: GpxDataItem?) -> Bool {
+        guard let gpxFile, let gpxDataItem else { return false }
+        if gpxFile.isShowCurrentTrack() {
+            let isGeneralTrack = gpxFile.tracks.count > 0
+            && (gpxFile.tracks.firstObject as? Track)?.isGeneralTrack() ?? false
+            return !OAAppSettings.sharedManager().currentTrackIsJoinSegments.get() && (gpxFile.tracks.count == 0 || isGeneralTrack)
+        } else {
+            return overrideIsGeneralTrack && gpxDataItem.joinSegments
+        }
+    }
 
     static func getLocationAtPos(_ chart: LineChartView,
                                  gpxFile: GpxFile,

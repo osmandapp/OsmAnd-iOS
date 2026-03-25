@@ -3964,7 +3964,7 @@
 "map_3d_mode_action_descr" = "Cambiar la inclinación del mapa.";
 "key_event_action_change_map_orientation" = "Cambiar la orientación del mapa.";
 "nm_h" = "kn";
-"metric_lbs" = "libras";
+"metric_lbs" = "lbs";
 "inch" = "in";
 "shared_string_pt" = "pt";
 "background_liquid_glass_clear_ios" = "Transparente";
@@ -3973,7 +3973,7 @@
 "has_vehicle_metrics" = "Con datos OBDII";
 "auto_zoom_3d_angle" = "Ángulo 3D del zoom automático";
 "select_to_use_an_external_input_device" = "Para usar un dispositivo de entrada externo con OsmAnd, selecciona uno de la lista de abajo o añade uno nuevo";
-"no_assigned_keys_desc" = "Selecciona una acción y asígnale una tecla presionando el botón de 'Añadir'.";
+"no_assigned_keys_desc" = "Seleccione una acción y asígnele una tecla presionando el botón «Añadir».";
 "no_assigned_keys" = "Sin teclas asignadas";
 "new_key_assignment" = "Nueva asignación de tecla";
 "key_assignments" = "Asignaciones de tecla";
@@ -3988,11 +3988,11 @@
 "ios_release_5_2" = "• Se ha introducido una asignación de botón personalizable para controladores externos, permitiendo que cualquier Acción Rápida se pueda asignar a una tecla de un teclado o el botón de un mando\n• Se han añadido nuevas Acciones Rápidas para controlar la aplicación con un mando externo\n• Se ha mejorado la visibilidad de  los widgets en el modo transparencia añadiendo bordes al texto\n• Se ha añadido una cuadrícula de precisión para alinear botones del mapa\n• Se ha introducido un nuevo estilo de mapa náutico marítimo con amplia personalización\n• Se has añadido detalles de calle y ciudad a los resultados de búsqueda\n• Se ha añadido una opción para agrandar el tamaño del texto en la herramienta de medición de distancia\n• Se ha movido la selección de unidad de temperatura a:  ajustes generales\n• Las unidades de altitud ahora se pueden ajustar independientemente de las de distancia\n• Se ha añadido una Acción Rápida de orientación de mapa con modos de brújula seleccionables\n• Se ha arreglado un problema que impedía que algunos widgets pudiesen moverse\n• Se ha arreglado la distancia que se muestra al usuario en el widget de siguiente indicación\n• Se ha mejorado la búsqueda marca incluyendo más marcas locales\n• Se han hecho mejoras generales de estabilidad y rendimiento\n";
 "image_cache_online_photo_high_res" = "caché de la foto de alta resolución en línea";
 "image_cache_online_photo_mapillary_default_cache" = "Caché por defecto de la foto en línea/Mapillary";
-"rendering_attr_depthContoursDashed_description" = "Contornos de profundidad discontínuos";
+"rendering_attr_depthContoursDashed_description" = "Contornos de profundidad discontinuos";
 "rendering_attr_hideLightSectorSources_name" = "Fuentes de sectores de luz";
 "rendering_attr_fairwayStyle_description" = "Color de los canales";
-"rendering_attr_depthColorScheme_description" = "Esquema de color de profundidad";
-"rendering_attr_depthContoursDashed_name" = "Contornos de profundidad discontínuos";
+"rendering_attr_depthColorScheme_description" = "Esquema de colores de profundidad";
+"rendering_attr_depthContoursDashed_name" = "Contornos de profundidad discontinuos";
 "rendering_attr_fairwayStyle_name" = "Color del canal";
 "rendering_attr_tidalFlatStyle_description" = "Estilo de las llanuras de marea";
 "rendering_attr_spotSize_name" = "Tamaño de la medida de profundidad";

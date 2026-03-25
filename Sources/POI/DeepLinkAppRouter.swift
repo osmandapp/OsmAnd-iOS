@@ -91,6 +91,51 @@ final class DeepLinkAppRouter: NSObject {
         InitialRoutePlanningBottomSheetViewController().present(in: mapViewController)
     }
     
+    func openMapSettings(screen: EMapSettingsScreen) {
+        guard let mapPanel = root.mapPanel else { return }
+        let appData = OsmAndApp.swiftInstance()?.data
+        var reopenCurrentScreen = false
+        switch screen {
+        case .main, .mapType:
+            break
+        case .wikipedia:
+            guard let wikiProduct = OAIAPHelper.sharedInstance().wiki else { return }
+            guard wikiProduct.isPurchased() else {
+                openChoosePlan(feature: wikiProduct.feature)
+                return
+            }
+            if wikiProduct.disabled {
+                OAIAPHelper.sharedInstance().enableProduct(wikiProduct.productIdentifier)
+                reopenCurrentScreen = true
+            }
+            if !(appData?.wikipedia ?? false) {
+                (OAPluginsHelper.getPlugin(OAWikipediaPlugin.self) as? OAWikipediaPlugin)?.wikipediaChanged(true)
+                reopenCurrentScreen = true
+            }
+        case .overlay:
+            if appData?.overlayMapSource == nil {
+                appData?.lastOverlayMapSource = appData?.lastOverlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
+                appData?.overlayMapSource = appData?.lastOverlayMapSource
+                reopenCurrentScreen = true
+            }
+        case .underlay:
+            let settings = OAAppSettings.sharedManager()
+            if !settings.getUnderlayOpacitySliderVisibility() {
+                settings.setUnderlayOpacitySliderVisibility(true)
+                reopenCurrentScreen = true
+            }
+            if appData?.underlayMapSource == nil {
+                appData?.lastUnderlayMapSource = appData?.lastUnderlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
+                appData?.underlayMapSource = appData?.lastUnderlayMapSource
+                reopenCurrentScreen = true
+            }
+        default:
+            return
+        }
+        
+        openMapSettingsDashboard(screen: screen, mapPanel: mapPanel, reopenCurrentScreen: reopenCurrentScreen)
+    }
+    
     func openDestinations() {
         guard let nav = root.navigationController else { return }
         if nav.visibleViewController is DestinationsListViewController {
@@ -206,7 +251,23 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(controller, animated: false)
     }
     
+    private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController, reopenCurrentScreen: Bool) {
+        if let current = mapPanel.children.last as? OAMapSettingsViewController, current.settingsScreen == screen, !reopenCurrentScreen {
+            return
+        }
+        
+        dismissAndPopToRoot()
+        mapPanel.mapSettingsButtonClick("")
+        guard screen != .main else { return }
+        guard let current = mapPanel.children.last as? OAMapSettingsViewController, let parent = current.parent, let controller = OAMapSettingsViewController(settingsScreen: screen) else { return }
+        controller.show(parent, parentViewController: current, animated: true)
+    }
+    
     @discardableResult private func dismissAndPopToRoot() -> UINavigationController? {
+        if let mapPanel = root.mapPanel, mapPanel.isDashboardVisible() {
+            mapPanel.closeDashboard(withDuration: 0.0)
+        }
+        
         guard let nav = root.navigationController else { return nil }
         nav.dismiss(animated: false)
         nav.popToRootViewController(animated: false)

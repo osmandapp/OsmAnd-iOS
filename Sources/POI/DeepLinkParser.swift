@@ -16,6 +16,11 @@ private enum DeepLinkAppRoute: String {
     case cloud = "cloud"
     case help = "help"
     case planRoute = "plan-a-route"
+    case mapSettingsMain = "map-settings"
+    case mapSettingsMapType = "map-settings/map-type"
+    case mapSettingsWikipedia = "map-settings/wikipedia"
+    case mapSettingsOverlay = "map-settings/overlay"
+    case mapSettingsUnderlay = "map-settings/underlay"
     case destinations = "destinations"
     case destinationsDirectionAppearance = "destinations/direction-appearance"
     case myPlacesFavorites = "my-places/favorites"
@@ -71,6 +76,16 @@ final class DeepLinkParser: NSObject {
             router.openHelp()
         case .planRoute:
             router.openPlanRoute()
+        case .mapSettingsMain:
+            router.openMapSettings(screen: .main)
+        case .mapSettingsMapType:
+            router.openMapSettings(screen: .mapType)
+        case .mapSettingsWikipedia:
+            router.openMapSettings(screen: .wikipedia)
+        case .mapSettingsOverlay:
+            router.openMapSettings(screen: .overlay)
+        case .mapSettingsUnderlay:
+            router.openMapSettings(screen: .underlay)
         case .destinations:
             router.openDestinations()
         case .destinationsDirectionAppearance:

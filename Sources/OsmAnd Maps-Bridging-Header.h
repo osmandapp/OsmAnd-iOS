@@ -291,6 +291,7 @@
 #import "OAPoiUiFilterSettingsItem.h"
 #import "OAMapSettingsScreen.h"
 #import "OADashboardViewController.h"
+#import "OAMapSettingsViewController.h"
 
 // Quick actions
 #import "OAQuickAction.h"

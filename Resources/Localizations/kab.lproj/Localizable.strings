@@ -460,7 +460,7 @@
 "map_widget_appearance_rem" = "Iferdisen i d-iqqimen";
 "osm_notes" = "Tizmilin";
 "subscription_osmandlive_item" = "Ajerred - OsmAnd Srid";
-"navigation_profiles_item" = "Imuɣna n tunigin";
+"navigation_profiles_item" = "Imaɣnuten n tunigin";
 "shared_string_next" = "Ar zdat";
 "select_color" = "Fren ini";
 "new_profile" = "Nouveau profil";
@@ -486,7 +486,7 @@
 "map_look_descr" = "Arwes";
 "shared_string_importing" = "Akter";
 "routing_attr_piste_type_skitour_name" = "Uccuḍ deg udfel";
-"application_profiles" = "Imeɣna";
+"application_profiles" = "Imaɣnuten n usnas";
 "light_theme" = "Aceɛlal";
 "configure_profile" = "Sbadu amaɣnu";
 "shared_string_max" = "Afellay";
@@ -510,7 +510,7 @@
 "route_between_points" = "Abrid gar wagazen";
 "quick_action_map_source_title" = "Iɣbula";
 "recalculate_route_distance_promo" = "Abrid ad yettwasiḍen ticki ameccaq gar ubrid akked wadig-ik yugar azal i d-yettwammlen.";
-"shared_string_profiles" = "Imeɣna";
+"shared_string_profiles" = "Imaɣnuten";
 "reorder_profiles" = "Ẓreg amaɣnu";
 "keep_both" = "Ḥrez";
 "shared_string_import" = "Ssekcem";
@@ -827,3 +827,4 @@
 "map_settings_type" = "Anaw n tkarḍa";
 "map_settings_install_more" = "Sbedd ugar…";
 "ant_plus_open_settings" = "Ldi iɣewwaren";
+"help_article_personal_profiles_name" = "Imaɣnuten (Iɣewwaren)";

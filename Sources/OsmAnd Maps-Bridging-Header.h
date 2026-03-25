@@ -209,6 +209,7 @@
 #import "OAMyPlacesTabBarViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OAOsmEditsListViewController.h"
+#import "OATripRecordingSettingsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

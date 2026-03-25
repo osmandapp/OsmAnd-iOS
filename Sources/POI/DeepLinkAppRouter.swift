@@ -251,6 +251,16 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(controller, animated: false)
     }
     
+    func openTripRecordingSettings(appMode: OAApplicationMode) {
+        guard let nav = root.navigationController else { return }
+        if let current = nav.visibleViewController as? OATripRecordingSettingsViewController, current.settingsType == kTripRecordingSettingsScreenGeneral, current.appMode.stringKey == appMode.stringKey {
+            return
+        }
+        
+        guard let nav = dismissAndPopToRoot(), let controller = OATripRecordingSettingsViewController(settingsType: kTripRecordingSettingsScreenGeneral, applicationMode: appMode) else { return }
+        nav.pushViewController(controller, animated: true)
+    }
+    
     private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController, reopenCurrentScreen: Bool) {
         if let current = mapPanel.children.last as? OAMapSettingsViewController, current.settingsScreen == screen, !reopenCurrentScreen {
             return

@@ -33,6 +33,10 @@ private enum DeepLinkAppRoute: String {
     case purchasesOsmAndPro = "purchases/osmand-pro"
     case purchasesMapsPlus = "purchases/maps-plus"
     case quickActionsLockScreenAdd = "quick-actions/lock-screen/add"
+    case tripRecordingBrowse = "settings/profile-settings/trip-recording/browse"
+    case tripRecordingCar = "settings/profile-settings/trip-recording/car"
+    case tripRecordingBicycle = "settings/profile-settings/trip-recording/bicycle"
+    case tripRecordingWalking = "settings/profile-settings/trip-recording/walking"
     case tripRecordingExternalSensors = "trip-recording/external-sensors"
 }
 
@@ -110,6 +114,14 @@ final class DeepLinkParser: NSObject {
             router.openChoosePlan(feature: OAFeature.monthly_MAP_UPDATES())
         case .quickActionsLockScreenAdd:
             router.openCustomButtonsAddAction()
+        case .tripRecordingBrowse:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.default())
+        case .tripRecordingCar:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.car())
+        case .tripRecordingBicycle:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.bicycle())
+        case .tripRecordingWalking:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.pedestrian())
         case .tripRecordingExternalSensors:
             router.openExternalSensorsRecording()
         }

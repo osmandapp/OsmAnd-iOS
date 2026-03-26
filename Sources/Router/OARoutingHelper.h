@@ -115,6 +115,7 @@ struct RouteSegmentResult;
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
+- (void)stopRouteCalculation;
 - (void)resumeNavigationAfterCarPlayReconnect;
 - (void)onCarPlayConnectionStateChanged;
 

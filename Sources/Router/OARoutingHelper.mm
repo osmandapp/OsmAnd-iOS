@@ -1127,6 +1127,11 @@ static BOOL _isDeviatedFromRoute = false;
     [_recalcHelper startRouteCalculationThread:params paramsChanged:paramsChanged updateProgress:updateProgress];
 }
 
+- (void)stopRouteCalculation
+{
+    [_recalcHelper stopCalculation];
+}
+
 - (OASGpxFile *) generateGPXFileWithRoute:(NSString *)name
 {
     return [self generateGPXFileWithRoute:_route name:name];

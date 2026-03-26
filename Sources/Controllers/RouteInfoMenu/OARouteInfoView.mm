@@ -582,6 +582,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     _emission = nil;
     _routingInfoIndexPath = nil;
+    BOOL isRouteBeingCalculated = (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
+        || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]);
 
     int sectionIndex = 0;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -620,6 +622,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     if (_hasEmptyTransportRoute || [self hasMissingOrOutdatedMaps])
     {
+        if (isRouteBeingCalculated)
+        {
+            [section addObject:@{
+                @"cell" : [OARouteProgressBarCell getCellIdentifier]
+            }];
+        }
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         _data = [NSDictionary dictionaryWithDictionary:dictionary];
         [self setupGoButton];
@@ -627,7 +635,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return;
     }
     
-    if ((![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated]) || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
+    if (isRouteBeingCalculated)
     {
         [section addObject:@{
             @"cell" : [OARouteProgressBarCell getCellIdentifier]
@@ -2297,14 +2305,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) updateProgress:(int)progress
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_routingHelper hasCurrentMissingMaps])
+        BOOL hasCurrentMissingMaps = [_routingHelper hasCurrentMissingMaps];
+        if (hasCurrentMissingMaps)
         {
             [self catchCurrentMissingMaps];
-            return;
         }
         if (!_progressBarView)
         {
-            [self clearMissingMapsState];
+            if (!hasCurrentMissingMaps)
+            {
+                [self clearMissingMapsState];
+            }
             _hasEmptyTransportRoute = NO;
             [self updateData];
             [self.tableView reloadData];
@@ -2364,7 +2375,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         directionInfo = -1;
         _trackAnalysis = nil;
         _gpx = nil;
-        _progressBarView = nil;
         _missingMaps = result.missingMaps;
         _mapsToUpdate = result.mapsToUpdate;
         _potentiallyUsedMaps = result.potentiallyUsedMaps;

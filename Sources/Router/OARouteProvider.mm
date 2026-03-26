@@ -374,6 +374,53 @@
     OAWorldRegion *_or;
 }
 
+- (NSArray<OAWorldRegion *> *)convertMissingMapsRegions:(const std::vector<std::string>&)maps
+{
+    if (maps.empty())
+    {
+        return nil;
+    }
+    NSMutableArray<OAWorldRegion *> *regions = [NSMutableArray array];
+    for (const auto& map : maps)
+    {
+        OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:[NSString stringWithUTF8String:map.c_str()]];
+        if (worldRegion != nil)
+        {
+            [regions addObject:worldRegion];
+        }
+    }
+    return [regions copy];
+}
+
+- (NSArray<CLLocation *> *)convertMissingMapsPoints:(const std::vector<std::pair<double, double>>&)points
+{
+    if (points.empty())
+    {
+        return nil;
+    }
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithCapacity:points.size()];
+    for (const auto& point : points)
+    {
+        [locations addObject:[[CLLocation alloc] initWithLatitude:point.first longitude:point.second]];
+    }
+    return [locations copy];
+}
+
+- (void)attachMissingMapsCalculationResult:(std::shared_ptr<RouteCalculationProgress>)progress
+                                  toResult:(OARouteCalculationResult *)result
+{
+    if (progress == nullptr || progress->missingMapsCalculationResult == nullptr || result == nil)
+    {
+        return;
+    }
+    const auto& missingMapsResult = progress->missingMapsCalculationResult;
+    [result setMissingMaps:[self convertMissingMapsRegions:missingMapsResult->missingMaps]
+              mapsToUpdate:[self convertMissingMapsRegions:missingMapsResult->mapsToUpdate]
+                  usedMaps:[self convertMissingMapsRegions:missingMapsResult->usedMaps]
+                       ctx:missingMapsResult->missingMapsRoutingContext.lock()
+                    points:[self convertMissingMapsPoints:missingMapsResult->missingMapsPoints]];
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -901,12 +948,19 @@
             }
             if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:!oldRouting])
             {
-                OARouteCalculationResult *r = [[OARouteCalculationResult alloc] initWithErrorMessage:[_missingMapsCalculator getErrorMessage]];
-                r.missingMaps = _missingMapsCalculator.missingMaps;
-                r.mapsToUpdate = _missingMapsCalculator.mapsToUpdate;
-                r.potentiallyUsedMaps = _missingMapsCalculator.potentiallyUsedMaps;
+                NSString *missingMapsErrorMessage = ctx->progress != nullptr && ctx->progress->missingMapsCalculationResult != nullptr
+                    ? [NSString stringWithUTF8String:ctx->progress->missingMapsCalculationResult->getErrorMessage().c_str()]
+                    : [_missingMapsCalculator getErrorMessage];
+                if (router->CONTINUE_ON_MISSING_MAPS)
+                {
+                    NSLog(@"%@", missingMapsErrorMessage);
+                }
+                else
+                {
+                    [_missingMapsCalculator clearResult];
+                    return [[OARouteCalculationResult alloc] initWithErrorMessage:missingMapsErrorMessage];
+                }
                 [_missingMapsCalculator clearResult];
-                return r;
             }
         }
 
@@ -962,7 +1016,9 @@
                 return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Route can not be found from end point (%f km)", ctx->progress->distanceFromEnd / 1000]];
             }
             if (ctx->progress->isCancelled())
+            {
                 return [self interrupted];
+            }
             
             // something really strange better to see that message on the scren
             return [self emptyResult];
@@ -1064,6 +1120,7 @@
     router->setUseFastRecalculation(settings.useFastRecalculation);
 
     router->CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
+    router->CONTINUE_ON_MISSING_MAPS = !settings.stopOnMissingMaps;
 
     auto config = [app getRoutingConfigForMode:params.mode];
     auto generalRouter = [app getRouter:config mode:params.mode];
@@ -1172,15 +1229,7 @@
             inters = [NSArray arrayWithArray:params.intermediates];
 
         OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
-        NSMutableArray<CLLocation *> *points = [NSMutableArray array];
-        [points addObject:start];
-        [points addObjectsFromArray:inters];
-        [points addObject:end];
-        [result setMissingMaps:result.missingMaps
-                  mapsToUpdate:result.mapsToUpdate
-                      usedMaps:result.potentiallyUsedMaps
-                           ctx:env.ctx
-                        points:points];
+        [self attachMissingMapsCalculationResult:env.ctx->progress toResult:result];
 
         return result;
     }

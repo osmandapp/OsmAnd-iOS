@@ -69,6 +69,17 @@ static const double DISTANCE_SKIP = 10000;
     self.startPoint = start;
     
     NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
+    std::vector<std::pair<double, double>> missingMapsPoints;
+    missingMapsPoints.emplace_back(start.coordinate.latitude, start.coordinate.longitude);
+    for (CLLocation *target in targets)
+    {
+        missingMapsPoints.emplace_back(target.coordinate.latitude, target.coordinate.longitude);
+    }
+    std::shared_ptr<MissingMapsCalculationResult> calculationResult = nullptr;
+    if (ctx->progress != nullptr)
+    {
+        calculationResult = std::make_shared<MissingMapsCalculationResult>(ctx, missingMapsPoints);
+    }
     _lastKeyNames = [NSMutableArray new];
     NSMutableArray<MissingMapsCalculatorPoint *> *pointsToCheck = [NSMutableArray new];
     string profile = profileToString(ctx->config->router->getProfile());
@@ -150,6 +161,10 @@ static const double DISTANCE_SKIP = 10000;
                     {
                         missingMapsIntermediates = YES;
                     }
+                    if (calculationResult != nullptr)
+                    {
+                        calculationResult->addMissingMaps(r.UTF8String);
+                    }
                     [mapsToDownload addObject:r];
                     break;
                 }
@@ -213,10 +228,18 @@ static const double DISTANCE_SKIP = 10000;
                     {
                         mixedMapsIntermediates = YES;
                     }
+                    if (calculationResult != nullptr)
+                    {
+                        calculationResult->addMapToUpdate(region.UTF8String);
+                    }
                     [mapsToUpdate addObject:region];
                 }
                 else
                 {
+                    if (calculationResult != nullptr)
+                    {
+                        calculationResult->addUsedMaps(region.UTF8String);
+                    }
                     [usedMaps addObject:region];
                 }
             }
@@ -234,6 +257,10 @@ static const double DISTANCE_SKIP = 10000;
                 {
                     if ([p.hhEditions[i] longValue] == selectedEdition)
                     {
+                        if (calculationResult != nullptr)
+                        {
+                            calculationResult->addUsedMaps(p.regions[i].UTF8String);
+                        }
                         [usedMaps addObject:p.regions[i]];
                         break;
                     }
@@ -246,6 +273,7 @@ static const double DISTANCE_SKIP = 10000;
     {
         if (ctx->progress != nullptr)
         {
+            ctx->progress->missingMapsCalculationResult = nullptr;
             ctx->progress->resetFastRoutingStatus();
         }
         return NO;
@@ -268,6 +296,10 @@ static const double DISTANCE_SKIP = 10000;
         {
             ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_INTERMEDIATES);
         }
+    }
+    if (ctx->progress != nullptr)
+    {
+        ctx->progress->missingMapsCalculationResult = calculationResult;
     }
     self.missingMaps = [self convert:[mapsToDownload copy]];
     self.mapsToUpdate = [self convert:[mapsToUpdate copy]];

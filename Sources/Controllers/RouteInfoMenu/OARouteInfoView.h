@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAApplicationMode;
+
 @interface OARouteInfoView : UIView<UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
@@ -29,6 +31,7 @@
 
 - (void) addWaypoint;
 
+- (void)selectAppMode:(nullable OAApplicationMode *)appMode;
 - (void) update;
 - (void) updateMenu;
 

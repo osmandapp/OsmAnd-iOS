@@ -1053,6 +1053,12 @@ typedef enum
     [self showRouteInfo:YES];
 }
 
+- (void)showRouteInfo:(BOOL)fullScreen appMode:(OAApplicationMode *)appMode
+{
+    [self.routeInfoView selectAppMode:appMode];
+    [self showRouteInfo:fullScreen];
+}
+
 - (void)showRouteInfo:(BOOL)fullScreen
 {
     [OAAnalyticsHelper logEvent:@"route_info_open"];

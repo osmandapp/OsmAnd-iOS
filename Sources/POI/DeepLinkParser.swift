@@ -52,6 +52,9 @@ private enum DeepLinkAppRoute: String {
     case distanceByTapBicycle = "settings/profile-settings/configure-screen/distance-by-tap/bicycle"
     case distanceByTapWalking = "settings/profile-settings/configure-screen/distance-by-tap/walking"
     case speedometerCar = "settings/profile-settings/configure-screen/speedometer/car"
+    case navigationScreenCar = "navigation-screen/car"
+    case navigationScreenBicycle = "navigation-screen/bicycle"
+    case navigationScreenWalking = "navigation-screen/walking"
     case tripRecordingExternalSensors = "trip-recording/external-sensors"
 }
 
@@ -167,6 +170,12 @@ final class DeepLinkParser: NSObject {
             router.openDistanceByTapSettings(appMode: OAApplicationMode.pedestrian())
         case .speedometerCar:
             router.openSpeedometerSettings(appMode: OAApplicationMode.car())
+        case .navigationScreenCar:
+            router.openNavigationScreen(appMode: OAApplicationMode.car())
+        case .navigationScreenBicycle:
+            router.openNavigationScreen(appMode: OAApplicationMode.bicycle())
+        case .navigationScreenWalking:
+            router.openNavigationScreen(appMode: OAApplicationMode.pedestrian())
         case .tripRecordingExternalSensors:
             router.openExternalSensorsRecording()
         }

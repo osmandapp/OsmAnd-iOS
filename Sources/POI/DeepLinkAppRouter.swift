@@ -324,6 +324,16 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(controller, animated: true)
     }
     
+    func openNavigationScreen(appMode: OAApplicationMode) {
+        guard let mapPanel = root.mapPanel else { return }
+        if mapPanel.isRouteInfoVisible(), let currentAppMode = OARoutingHelper.sharedInstance()?.getAppMode(), currentAppMode.stringKey == appMode.stringKey {
+            return
+        }
+        
+        dismissAndPopToRoot()
+        mapPanel.showRouteInfo(true, appMode: appMode)
+    }
+    
     private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController, reopenCurrentScreen: Bool) {
         if let current = mapPanel.children.last as? OAMapSettingsViewController, current.settingsScreen == screen, !reopenCurrentScreen {
             return

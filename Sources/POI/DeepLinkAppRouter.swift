@@ -312,6 +312,18 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(controller, animated: true)
     }
     
+    func openSpeedometerSettings(appMode: OAApplicationMode) {
+        guard let nav = root.navigationController else { return }
+        if let current = nav.visibleViewController as? SpeedometerWidgetSettingsViewController, current.appMode.stringKey == appMode.stringKey {
+            return
+        }
+        
+        guard let nav = dismissAndPopToRoot() else { return }
+        let controller = SpeedometerWidgetSettingsViewController()
+        controller.appMode = appMode
+        nav.pushViewController(controller, animated: true)
+    }
+    
     private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController, reopenCurrentScreen: Bool) {
         if let current = mapPanel.children.last as? OAMapSettingsViewController, current.settingsScreen == screen, !reopenCurrentScreen {
             return

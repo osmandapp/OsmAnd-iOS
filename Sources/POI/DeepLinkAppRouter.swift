@@ -300,6 +300,18 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(controller, animated: true)
     }
     
+    func openDistanceByTapSettings(appMode: OAApplicationMode) {
+        guard let nav = root.navigationController else { return }
+        if let current = nav.visibleViewController as? DistanceByTapViewController, current.appMode.stringKey == appMode.stringKey {
+            return
+        }
+        
+        guard let nav = dismissAndPopToRoot() else { return }
+        let controller = DistanceByTapViewController()
+        controller.appMode = appMode
+        nav.pushViewController(controller, animated: true)
+    }
+    
     private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController, reopenCurrentScreen: Bool) {
         if let current = mapPanel.children.last as? OAMapSettingsViewController, current.settingsScreen == screen, !reopenCurrentScreen {
             return

@@ -129,6 +129,10 @@ static const double DISTANCE_SKIP = 10000;
     NSMutableSet<NSString *> *mapsToDownload = [NSMutableSet set];
     NSMutableSet<NSString *> *mapsToUpdate = [NSMutableSet set];
     NSMutableSet<NSNumber *> *presentTimestamps = nil;
+    BOOL mixedMapsAtStartOrEnd = NO;
+    BOOL missingMapsAtStartOrEnd = NO;
+    BOOL mixedMapsIntermediates = NO;
+    BOOL missingMapsIntermediates = NO;
     
     for (MissingMapsCalculatorPoint *p in pointsToCheck)
     {
@@ -138,6 +142,14 @@ static const double DISTANCE_SKIP = 10000;
             {
                 if (![self isRoadOnlyMap:r])
                 {
+                    if (p.isStartEnd)
+                    {
+                        missingMapsAtStartOrEnd = YES;
+                    }
+                    else
+                    {
+                        missingMapsIntermediates = YES;
+                    }
                     [mapsToDownload addObject:r];
                     break;
                 }
@@ -193,6 +205,14 @@ static const double DISTANCE_SKIP = 10000;
             {
                 if (!fresh)
                 {
+                    if (p.isStartEnd)
+                    {
+                        mixedMapsAtStartOrEnd = YES;
+                    }
+                    else
+                    {
+                        mixedMapsIntermediates = YES;
+                    }
                     [mapsToUpdate addObject:region];
                 }
                 else
@@ -224,7 +244,30 @@ static const double DISTANCE_SKIP = 10000;
     
     if ([mapsToDownload count] == 0 && [mapsToUpdate count] == 0)
     {
+        if (ctx->progress != nullptr)
+        {
+            ctx->progress->resetFastRoutingStatus();
+        }
         return NO;
+    }
+    if (ctx->progress != nullptr)
+    {
+        if (missingMapsAtStartOrEnd)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_AT_START_OR_END);
+        }
+        else if (mixedMapsAtStartOrEnd)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_AT_START_OR_END);
+        }
+        else if (missingMapsIntermediates)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_INTERMEDIATES);
+        }
+        else if (mixedMapsIntermediates)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_INTERMEDIATES);
+        }
     }
     self.missingMaps = [self convert:[mapsToDownload copy]];
     self.mapsToUpdate = [self convert:[mapsToUpdate copy]];

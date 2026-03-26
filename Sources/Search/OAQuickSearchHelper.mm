@@ -950,7 +950,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 
 - (nullable NSString *)httpRedirectRequester:(nonnull NSString *)url
 {
-    OASKUri *uri = [OASKGeoPointParserUtil.shared createUriUriString:url];
+    OASKGeoPointParserURI *uri = [OASKGeoPointParserUtil.shared createUriUriString:url];
     BOOL isInternetConnectionAvailable = AFNetworkReachabilityManager.sharedManager.isReachable;
     if (uri && isInternetConnectionAvailable)
     {

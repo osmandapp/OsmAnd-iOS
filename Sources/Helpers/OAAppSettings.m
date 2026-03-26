@@ -5666,9 +5666,6 @@ static NSString *kOfflineKey = @"OFFLINE";
     
     OACommonDouble *_lastStartLat;
     OACommonDouble *_lastStartLon;
-    
-    BOOL _internetConnectionAvailable;
-    NSTimeInterval _lastTimeInternetConnectionChecked;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;

@@ -106,7 +106,7 @@
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:_selectedXAxisMode
-                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx isGeneralTrack:YES]];
 
     self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
@@ -582,12 +582,13 @@
     {
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         ElevationChartCell *graphCell = _data[1];
-
+// FIXME:
         [self.trackChartHelper changeChartTypes:_types
                               selectedXAxisMode:_selectedXAxisMode
                                           chart:graphCell.chartView
                                        analysis:self.analysis
-                                  statsModeCell:statsModeCell];
+                                  statsModeCell:statsModeCell
+                                 isGeneralTrack:YES];
     }
 }
 

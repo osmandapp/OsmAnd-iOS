@@ -685,7 +685,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                                                  firstType:GPXDataSetTypeAltitude
                                                 secondType:GPXDataSetTypeSlope
                                                   axisType:GPXDataSetAxisTypeDistance
-                                           calcWithoutGaps:[GpxUtils calcWithoutGaps:_gpx gpxDataItem:gpx]];
+                                           calcWithoutGaps:[GpxUtils calcWithoutGaps:_gpx gpxDataItem:gpx isGeneralTrack:YES]];
                 _needChartUpdate = NO;
             }
         }

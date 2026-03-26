@@ -20,6 +20,7 @@ static const double kDISTANCE_SPLIT = 15000;
 static const double DISTANCE_SKIP = 10000;
 
 @interface MissingMapsCalculatorPoint : NSObject
+@property (nonatomic, assign) BOOL isStartEnd;
 @property (nonatomic, strong) NSMutableArray<NSString *> *regions;
 // 0 means routing data present but no HH data, nil means no data at all
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *hhEditions;
@@ -115,13 +116,13 @@ static const double DISTANCE_SKIP = 10000;
             continue;
         }
         
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:prev next:end];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:prev isStartEnd:i == 0 next:end];
         prev = end;
     }
     
     if (end != nil)
     {
-        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:end];
+        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:end isStartEnd:YES];
     }
     
     NSMutableSet<NSString *> *usedMaps = [NSMutableSet set];
@@ -245,18 +246,19 @@ static const double DISTANCE_SKIP = 10000;
     knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
 pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
           pnt:(CLLocation *)pnt
+   isStartEnd:(BOOL)isStartEnd
          next:(CLLocation *)next
 {
     double distance = [OAMapUtils getDistance:pnt.coordinate second:next.coordinate];
     if (distance < kDISTANCE_SPLIT)
     {
-        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:pnt];
+        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:pnt isStartEnd:isStartEnd];
     }
     else
     {
         CLLocation *mid = [OAMapUtils calculateMidPoint:pnt s2:next];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:pnt next:mid];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:mid next:next];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:pnt isStartEnd:isStartEnd next:mid];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:mid isStartEnd:NO next:next];
     }
 }
 
@@ -264,6 +266,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
        knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
    pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
            point:(CLLocation *)loc
+      isStartEnd:(BOOL)isStartEnd
 {
     NSMutableArray<NSString *> *regions = [NSMutableArray array];
     
@@ -294,10 +297,11 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
         NSInteger lengthComparisonResult = [@(o1.length) compare:@(o2.length)];
         return (NSComparisonResult)(-lengthComparisonResult);
     }];
-    if ((pointsToCheck.count == 0 || ![regions isEqualToArray:_lastKeyNames]) && !onlyJointMap)
+    if ((pointsToCheck.count == 0 || isStartEnd || ![regions isEqualToArray:_lastKeyNames]) && !onlyJointMap)
     {
         MissingMapsCalculatorPoint *pnt = [MissingMapsCalculatorPoint new];
         _lastKeyNames = regions;
+        pnt.isStartEnd = isStartEnd;
         pnt.regions = [[NSMutableArray alloc] initWithArray:regions];
         
         BOOL hasHHEdition = [self addMapEditions:knownMaps point:pnt];

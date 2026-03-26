@@ -1613,7 +1613,7 @@ typedef enum
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
     [mapVC showContextPinMarker:mapObject.latitude longitude:mapObject.longitude animated:NO];
     
-    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject location: nil];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
@@ -3145,7 +3145,7 @@ typedef enum
                 
                 [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
                 
-                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r];
+                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r location: nil];
                 if (targetPoint)
                 {
                     targetPoint.toolbarNeeded = pushed;

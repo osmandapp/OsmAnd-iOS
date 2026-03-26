@@ -8,6 +8,8 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
 @class OATargetPoint, OAPointDescription, MapSelectionResult, SelectedMapObject;
@@ -29,7 +31,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 @protocol OAContextMenuProvider<NSObject>
 
 @required
-- (OATargetPoint *) getTargetPoint:(id)obj;
+- (OATargetPoint *)getTargetPoint:(id)obj location:(nullable CLLocation *)location;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
 - (BOOL)isSecondaryProvider;
@@ -46,8 +48,6 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 - (void)contextMenuDidShow:(id)targetObj;
 - (void)contextMenuDidHide;
-
-- (OATargetPoint *)getTargetPoint:(id)obj touchPointLatLon:(CLLocation *)touchPointLatLon;
 
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;
@@ -69,3 +69,5 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 - (EOAPinHorizontalAlignment) getPointIconHorizontalAlignment;
 
 @end
+
+NS_ASSUME_NONNULL_END

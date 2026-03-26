@@ -221,7 +221,7 @@
     else if ([item[@"key"] isEqualToString:@"osm_edit_show_on_map"])
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:_point];
+        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:_point location:nil];
         newTarget.centerMap = YES;
         [mapPanel showContextMenu:newTarget];
         [self.vwController dismiss];

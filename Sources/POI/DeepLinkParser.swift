@@ -344,7 +344,7 @@ final class DeepLinkParser: NSObject {
         let zoom = extractZoom(from: url, fallback: rootViewController.mapPanel.mapViewController.getMapZoom())
         guard let amenity = searchBaseDetailsObject(pinLat: pinLat, pinLon: pinLon, name: name, poiType: type, wikiDataId: wikiDataId, osmId: osmId) else { return false }
         let synthetic = amenity.syntheticAmenity
-        guard let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic) else { return false }
+        let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic, location: nil)
         targetPoint.location = latLon.coordinate
         targetPoint.initAddressIfNeeded()
         targetPoint.centerMap = true

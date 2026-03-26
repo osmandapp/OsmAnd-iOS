@@ -320,7 +320,7 @@
         [note setAction:p.getAction];
         dispatch_async(dispatch_get_main_queue(), ^{
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-            OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
+            OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note location:nil];
             [mapPanel showContextMenu:newTarget];
         });
     });

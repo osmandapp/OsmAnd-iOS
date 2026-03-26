@@ -575,7 +575,7 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
 {
     if ([obj isKindOfClass:[OADestination class]])
     {

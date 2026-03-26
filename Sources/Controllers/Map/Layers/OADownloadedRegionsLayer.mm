@@ -386,7 +386,7 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
 {
     if ([obj isKindOfClass:[OADownloadMapObject class]])
     {

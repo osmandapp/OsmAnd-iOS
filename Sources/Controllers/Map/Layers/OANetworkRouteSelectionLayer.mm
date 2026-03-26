@@ -185,7 +185,7 @@
     return NO;
 }
 
-- (OATargetPoint *)getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
 {
     if ([obj isKindOfClass:NSArray.class])
     {

@@ -173,7 +173,7 @@ static const int START_ZOOM_ALL_TRANSPORT_STOPS = 12;
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
 {
     if ([obj isKindOfClass:[OATransportStop class]])
     {

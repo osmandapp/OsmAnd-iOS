@@ -349,14 +349,14 @@
     }
 }
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
 {
     OAMapViewController *mapViewController = self.mapViewController;
     for (OAMapLayer *layer in [mapViewController.mapLayers getLayers])
     {
         if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
-            OATargetPoint *targetPoint = [((id<OAContextMenuProvider>)layer) getTargetPoint:obj];
+            OATargetPoint *targetPoint = [((id<OAContextMenuProvider>)layer) getTargetPoint:obj location:location];
             if (targetPoint)
                 return targetPoint;
         }
@@ -528,7 +528,7 @@
         
         if (provider)
         {
-            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
+            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object location:nil];
             if (targetPoint)
             {
                 [filteredSelectedObjects addObject:selectedObject];
@@ -571,16 +571,9 @@
     {
         OATargetPoint *targetPoint;
         if (provider)
-        {
-            if ([provider isKindOfClass:OAGPXLayer.class])
-                targetPoint = [provider getTargetPoint:object touchPointLatLon:touchPointLatLon];
-            else
-                targetPoint = [provider getTargetPoint:object];
-        }
+            targetPoint = [provider getTargetPoint:object location:touchPointLatLon];
         else
-        {
-            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
-        }
+            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object location:touchPointLatLon];
             
         if (targetPoint)
         {

@@ -258,7 +258,7 @@ static const NSInteger kOrderRegionPopulationRow = 3;
     NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray array];
     for (OAResourceItem *item in _otherResources)
     {
-        [targetPoints addObject:[layer getTargetPoint:[[OADownloadMapObject alloc] initWithWorldRegion:_mapObject.worldRegion indexItem:item]]];
+        [targetPoints addObject:[layer getTargetPoint:[[OADownloadMapObject alloc] initWithWorldRegion:_mapObject.worldRegion indexItem:item] location: nil]];
     }
     [OARootViewController.instance.mapPanel showContextMenuWithPoints:targetPoints];
 }

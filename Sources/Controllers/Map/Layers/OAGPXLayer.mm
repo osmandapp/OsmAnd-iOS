@@ -1618,8 +1618,8 @@ colorizationScheme:(int)colorizationScheme
                                                           toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
                                                                                                 longitude:points.lastObject.position.longitude]];
             OATargetPoint *targetPoint = gpxDataItem
-            ? [self getTargetPoint:gpxDataItem]
-            : [self getTargetPoint:[OASavingTrackHelper sharedInstance].currentTrack];
+            ? [self getTargetPoint:gpxDataItem touchPointLatLon:nil]
+            : [self getTargetPoint:[OASavingTrackHelper sharedInstance].currentTrack touchPointLatLon:nil];
 
             targetPoint.location = selectedGpxPoint.coordinate;
             if (targetPoint && ![res containsObject:targetPoint])
@@ -1876,11 +1876,6 @@ colorizationScheme:(int)colorizationScheme
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
-{
-    return [self getTargetPoint:obj touchPointLatLon:nil];
-}
-
 - (OATargetPoint *)getTargetPoint:(id)obj touchPointLatLon:(CLLocation *)touchPointLatLon
 {
     if ([obj isKindOfClass:[OASGpxDataItem class]] || [obj isKindOfClass:[OASGpxFile class]])
@@ -1925,7 +1920,7 @@ colorizationScheme:(int)colorizationScheme
         wptItem.point = item;
         wptItem.groups = foundWptGroups;
         wptItem.docPath = foundWptDocPath;
-        return [self getTargetPoint:wptItem];
+        return [self getTargetPoint:wptItem touchPointLatLon:nil];
     }
     return nil;
 }

@@ -66,7 +66,7 @@
     return nil;
 }
 
-- (OATargetPoint *)getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
 {
     return nil;
 }

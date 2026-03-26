@@ -202,7 +202,7 @@ static const int START_ZOOM = 6;
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
 {
     if ([obj isKindOfClass:OAFavoriteItem.class])
     {

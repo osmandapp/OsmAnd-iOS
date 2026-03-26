@@ -7,6 +7,7 @@
 //
 
 #import "OARouteInfoView.h"
+#import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -135,6 +136,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSArray<OAWorldRegion *> * _missingMaps;
     NSArray<OAWorldRegion *> * _mapsToUpdate;
     NSArray<OAWorldRegion *> * _potentiallyUsedMaps;
+    NSInteger _lastFastRoutingComplicationOrdinal;
     BOOL _optionsMenuSelected;
 
     NSIndexPath *_routingInfoIndexPath;
@@ -2280,6 +2282,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         _hasEmptyTransportRoute = NO;
+        _lastFastRoutingComplicationOrdinal = -1;
         [self updateData];
         [self.tableView reloadData];
     });
@@ -2294,6 +2297,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) updateProgress:(int)progress
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_routingHelper hasCurrentMissingMaps])
+        {
+            [self catchCurrentMissingMaps];
+            return;
+        }
         if (!_progressBarView)
         {
             [self clearMissingMapsState];
@@ -2318,6 +2326,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     dispatch_async(dispatch_get_main_queue(), ^{
         [self clearMissingMapsState];
         _hasEmptyTransportRoute = NO;
+        _lastFastRoutingComplicationOrdinal = -1;
         if (!_progressBarView)
         {
             [self updateData];
@@ -2331,6 +2340,37 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (BOOL)hasMissingOrOutdatedMaps
 {
     return _missingMaps.count || _mapsToUpdate.count;
+}
+
+- (void)catchCurrentMissingMaps
+{
+    if (![_routingHelper hasCurrentMissingMaps])
+    {
+        _lastFastRoutingComplicationOrdinal = -1;
+        return;
+    }
+
+    NSInteger complicationOrdinal = [_routingHelper getCurrentFastRoutingComplicationOrdinal];
+    if (complicationOrdinal == _lastFastRoutingComplicationOrdinal)
+    {
+        return;
+    }
+    _lastFastRoutingComplicationOrdinal = complicationOrdinal;
+
+    OARouteCalculationResult *result = [[OARouteCalculationResult alloc] initWithErrorMessage:@""];
+    [_routingHelper attachCurrentMissingMapsToRouteCalculationResult:result];
+    if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
+    {
+        directionInfo = -1;
+        _trackAnalysis = nil;
+        _gpx = nil;
+        _progressBarView = nil;
+        _missingMaps = result.missingMaps;
+        _mapsToUpdate = result.mapsToUpdate;
+        _potentiallyUsedMaps = result.potentiallyUsedMaps;
+        _hasEmptyTransportRoute = NO;
+        [self updateMenu];
+    }
 }
 
 - (void)clearMissingMapsState

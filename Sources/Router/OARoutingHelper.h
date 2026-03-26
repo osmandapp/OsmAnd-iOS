@@ -106,6 +106,9 @@ struct RouteSegmentResult;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
 - (BOOL) isPublicTransportMode;
+- (BOOL)hasCurrentMissingMaps;
+- (NSInteger)getCurrentFastRoutingComplicationOrdinal;
+- (void)attachCurrentMissingMapsToRouteCalculationResult:(OARouteCalculationResult *)result;
 - (void) newRouteCalculated:(BOOL)newRoute;
 - (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMaps
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate

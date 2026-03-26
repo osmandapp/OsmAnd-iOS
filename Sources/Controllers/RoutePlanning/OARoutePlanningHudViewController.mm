@@ -534,20 +534,36 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)setupModeButton
 {
     UIImage *img;
-    if (_editingContext.appMode != OAApplicationMode.DEFAULT)
+    if ([self isTrackReadyToCalculate])
     {
-        img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _modeButton.tintColorDay = _editingContext.appMode.getProfileColor;
-        _modeButton.tintColorNight = _editingContext.appMode.getProfileColor;
+        if (_editingContext.appMode == OAApplicationMode.DEFAULT)
+        {
+            img = [UIImage templateImageNamed:@"ic_custom_straight_line"];
+            _modeButton.tintColorDay = [UIColor colorNamed:ACColorNameIconColorSelected];
+            _modeButton.tintColorNight = [UIColor colorNamed:ACColorNameIconColorSelected];
+        }
+        else
+        {
+            img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _modeButton.tintColorDay = _editingContext.appMode.getProfileColor;
+            _modeButton.tintColorNight = _editingContext.appMode.getProfileColor;
+        }
     }
     else
     {
-        img = [UIImage templateImageNamed:@"ic_custom_straight_line"];
+        img = [UIImage templateImageNamed:ACImageNameIcCustomQuestionmark];
         _modeButton.tintColorDay = [UIColor colorNamed:ACColorNameIconColorSelected];
         _modeButton.tintColorNight = [UIColor colorNamed:ACColorNameIconColorSelected];
     }
     [_modeButton setImage:img forState:UIControlStateNormal];
     [_modeButton updateColorsForPressedState:NO];
+}
+
+- (BOOL)isTrackReadyToCalculate
+{
+    return ![_editingContext shouldCheckApproximation]
+    || ![_editingContext isApproximationNeeded]
+    || [_editingContext isNewData];
 }
 
 - (void)cancelModes
@@ -943,7 +959,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)showSegmentRouteOptions
 {
-    if (_editingContext.isApproximationNeeded)
+    if (_editingContext.shouldCheckApproximation && _editingContext.isApproximationNeeded && _editingContext.hasTimestamps)
     {
         [self enterApproximationMode];
     }

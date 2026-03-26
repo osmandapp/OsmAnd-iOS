@@ -2687,6 +2687,7 @@ static const NSInteger kDetailedMapZoom = 9;
 
         //[self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
+        [_mapView setFlatEarth:![settings.sphericalMap get]];
     }
 }
 

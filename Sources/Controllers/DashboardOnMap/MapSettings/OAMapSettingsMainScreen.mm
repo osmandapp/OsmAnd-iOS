@@ -488,15 +488,19 @@
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"contour_lines_layer"
         }];
-    }
-    if (hasSRTM && !_iapHelper.srtm.disabled)
-    {
         [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
                 @"image": @"ic_custom_terrain",
                 @"has_options": @YES,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"terrain_layer"
+        }];
+        [topographySectionData addObject:@{
+                @"name": OALocalizedString(@"show_spherical_map"),
+                @"image": @"ic_custom_globe_view",
+                @"has_options": @YES,
+                @"type": OASwitchTableViewCell.reuseIdentifier,
+                @"key": @"spherical_map"
         }];
     }
     BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
@@ -762,6 +766,8 @@
         return ![[_styleSettings getParameter:CONTOUR_LINES].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
         return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) isTerrainLayerEnabled];
+    else if ([key isEqualToString:@"spherical_map"])
+        return [_settings.sphericalMap get];
     else if ([key isEqualToString:@"overlay_layer"])
         return _app.data.overlayMapSource != nil;
     else if ([key isEqualToString:@"underlay_layer"])
@@ -1277,6 +1283,8 @@
         [self contourLinesChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"terrain_layer"])
         [self terrainChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"spherical_map"])
+        [self sphericalMapChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"overlay_layer"])
         [self overlayChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"underlay_layer"])
@@ -1344,6 +1352,12 @@
 - (void)terrainChanged:(BOOL)isOn
 {
     [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) setTerrainLayerEnabled:isOn];
+}
+
+- (void)sphericalMapChanged:(BOOL)isOn
+{
+    [_settings.sphericalMap set:isOn];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void)nauticalDepthChanged:(BOOL)isOn

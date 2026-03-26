@@ -305,6 +305,11 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setDebugSettings(debugSettings);
 }
 
+- (void)setFlatEarth:(BOOL)flatEarth
+{
+    _renderer->setFlatEarth(flatEarth);
+}
+
 - (float)fieldOfView
 {
     return _renderer->getState().fieldOfView;

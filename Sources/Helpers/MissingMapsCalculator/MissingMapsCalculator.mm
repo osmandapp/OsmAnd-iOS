@@ -11,6 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
+#import "OARouteCalculationResult.h"
 #import "OAWorldRegion.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -66,8 +67,6 @@ static const double DISTANCE_SKIP = 10000;
                            targets:(NSArray<CLLocation *> *)targets
                    checkHHEditions:(BOOL)checkHHEditions
 {
-    self.startPoint = start;
-    
     NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
     std::vector<std::pair<double, double>> missingMapsPoints;
     missingMapsPoints.emplace_back(start.coordinate.latitude, start.coordinate.longitude);
@@ -301,20 +300,9 @@ static const double DISTANCE_SKIP = 10000;
     {
         ctx->progress->missingMapsCalculationResult = calculationResult;
     }
-    self.missingMaps = [self convert:[mapsToDownload copy]];
-    self.mapsToUpdate = [self convert:[mapsToUpdate copy]];
-    self.potentiallyUsedMaps = [self convert:[usedMaps copy]];
-    
     NSLog(@"Check missing maps %lu points %.2f sec", [pointsToCheck count], ([NSDate timeIntervalSinceReferenceDate] - tm));
     
     return YES;
-}
-
-- (void)clearResult
-{
-    self.missingMaps = @[];
-    self.mapsToUpdate = @[];
-    self.potentiallyUsedMaps = @[];
 }
 
 - (void)split:(std::shared_ptr<RoutingContext>)ctx
@@ -412,34 +400,53 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     }
 }
 
-- (NSArray<OAWorldRegion *> *)convert:(NSOrderedSet<NSString *> *)mapsToDownload
+- (NSArray<OAWorldRegion *> *)convert:(const std::vector<std::string>&)maps
 {
-    if (mapsToDownload.count == 0)
+    if (maps.empty())
     {
         return nil;
     }
     
     NSMutableArray<OAWorldRegion *> *worldRegions = [NSMutableArray array];
     
-    for (NSString *mapName in mapsToDownload)
+    for (const auto& map : maps)
     {
-        OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:mapName];
+        OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:[NSString stringWithUTF8String:map.c_str()]];
         if (worldRegion != nil)
         {
             [worldRegions addObject:worldRegion];
         }
     }
-    return [[self getSortedByDistanceRegions:worldRegions lat:self.startPoint.coordinate.latitude lon:self.startPoint.coordinate.longitude] copy];
+    return [worldRegions copy];
 }
 
-- (NSArray<OAWorldRegion *> *) getSortedByDistanceRegions:(NSArray<OAWorldRegion *> *)array lat:(double)lat lon:(double)lon
+- (NSArray<CLLocation *> *)convertPoints:(const std::vector<std::pair<double, double>>&)points
 {
-    return [array sortedArrayUsingComparator:^NSComparisonResult(OAWorldRegion *obj1, OAWorldRegion *obj2)
-            {
-        const auto distance1 = OsmAnd::Utilities::distance(lon, lat, obj1.regionCenter.longitude, obj1.regionCenter.latitude);
-        const auto distance2 = OsmAnd::Utilities::distance(lon, lat, obj2.regionCenter.longitude, obj2.regionCenter.latitude);
-        return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
-    }];
+    if (points.empty())
+    {
+        return nil;
+    }
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithCapacity:points.size()];
+    for (const auto& point : points)
+    {
+        [locations addObject:[[CLLocation alloc] initWithLatitude:point.first longitude:point.second]];
+    }
+    return [locations copy];
+}
+
+- (void)attachToRouteCalculationResult:(OARouteCalculationResult *)routeResult
+                              progress:(std::shared_ptr<RouteCalculationProgress>)progress
+{
+    if (progress == nullptr || progress->missingMapsCalculationResult == nullptr || routeResult == nil)
+    {
+        return;
+    }
+    const auto& calculationResult = progress->missingMapsCalculationResult;
+    [routeResult setMissingMaps:[self convert:calculationResult->missingMaps]
+                   mapsToUpdate:[self convert:calculationResult->mapsToUpdate]
+                       usedMaps:[self convert:calculationResult->usedMaps]
+                            ctx:calculationResult->missingMapsRoutingContext.lock()
+                         points:[self convertPoints:calculationResult->missingMapsPoints]];
 }
 
 - (BOOL)addMapEditions:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
@@ -473,29 +480,6 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     }
     
     return hhEditionPresent;
-}
-
-- (NSString *)getErrorMessage
-{
-    NSString *msg = @"";
-    
-    if (self.mapsToUpdate != nil)
-    {
-        msg = [NSString stringWithFormat:@"%@ need to be updated", self.mapsToUpdate];
-    }
-    
-    if (self.missingMaps != nil)
-    {
-        if ([msg length] > 0)
-        {
-            msg = [msg stringByAppendingString:@" and "];
-        }
-        msg = [NSString stringWithFormat:@"%@ need to be downloaded", self.missingMaps];
-    }
-    
-    msg = [NSString stringWithFormat:@"To calculate the route maps %@", msg];
-    
-    return msg;
 }
 
 - (BOOL) isRoadOnlyMap:(NSString *)regionName

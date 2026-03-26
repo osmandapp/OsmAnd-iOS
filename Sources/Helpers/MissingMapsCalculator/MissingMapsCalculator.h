@@ -13,21 +13,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OARouteCalculationResult;
+
 @interface MissingMapsCalculator : NSObject
-@property (nonatomic) NSArray<OAWorldRegion *> *potentiallyUsedMaps;
-@property (nonatomic) NSArray<OAWorldRegion *> * missingMaps;
-@property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
-
-@property (nonatomic) CLLocation *startPoint;
-
 - (instancetype)init;
 
 - (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
                              start:(CLLocation *)start
                            targets:(NSArray<CLLocation *> *)targets
                    checkHHEditions:(BOOL)checkHHEditions;
-- (void)clearResult;
-- (NSString *)getErrorMessage;
+- (void)attachToRouteCalculationResult:(OARouteCalculationResult *)routeResult
+                              progress:(std::shared_ptr<RouteCalculationProgress>)progress;
 
 @end
 

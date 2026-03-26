@@ -571,15 +571,19 @@
     {
         OATargetPoint *targetPoint;
         if (provider)
-            targetPoint = [provider getTargetPoint:object];
+        {
+            if ([provider isKindOfClass:OAGPXLayer.class])
+                targetPoint = [provider getTargetPoint:object touchPointLatLon:touchPointLatLon];
+            else
+                targetPoint = [provider getTargetPoint:object];
+        }
         else
+        {
             targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
+        }
             
         if (targetPoint)
         {
-            // Target points for gpx and routes are with zero coordinates of location, we need this code to set coordinates for their locations
-            if (targetPoint.location.latitude == 0 && targetPoint.location.longitude == 0)
-                targetPoint.location = latLon.coordinate;
             [targetPoint initAddressIfNeeded];
             
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];

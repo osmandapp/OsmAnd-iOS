@@ -47,6 +47,8 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 - (void)contextMenuDidShow:(id)targetObj;
 - (void)contextMenuDidHide;
 
+- (OATargetPoint *)getTargetPoint:(id)obj touchPointLatLon:(CLLocation *)touchPointLatLon;
+
 //- (BOOL) disableSingleTap;
 //- (BOOL) disableLongPressOnMap;
 //- (BOOL) isObjectClickable:(OATargetPoint *)o;

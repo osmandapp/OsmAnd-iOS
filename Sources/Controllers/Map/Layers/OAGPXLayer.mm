@@ -1878,6 +1878,11 @@ colorizationScheme:(int)colorizationScheme
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
+    return [self getTargetPoint:obj touchPointLatLon:nil];
+}
+
+- (OATargetPoint *)getTargetPoint:(id)obj touchPointLatLon:(CLLocation *)touchPointLatLon
+{
     if ([obj isKindOfClass:[OASGpxDataItem class]] || [obj isKindOfClass:[OASGpxFile class]])
     {
         OASGpxDataItem *item = (OASGpxDataItem *) obj;
@@ -1890,7 +1895,9 @@ colorizationScheme:(int)colorizationScheme
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         targetPoint.values = @{ @"opened_from_map": @YES };
-
+        if (touchPointLatLon)
+            targetPoint.location = touchPointLatLon.coordinate;
+        
         return targetPoint;
     }
     else if ([obj isKindOfClass:[OAGpxWptItem class]])

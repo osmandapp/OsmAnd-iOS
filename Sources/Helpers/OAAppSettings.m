@@ -6764,6 +6764,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         _wikiDataSourceType = [[[OAWikiDataSourceType withKey:@"wikiDataSourceType" defValue:EOAWikiDataSourceTypeOnline] makeGlobal] makeShared];
         [_globalPreferences setObject:_wikiDataSourceType forKey:@"wiki_data_source_type"];
 
+        _sphericalMap = [[OACommonBoolean withKey:@"sphericalMap" defValue:NO] makeProfile];
+        [_globalPreferences setObject:_sphericalMap forKey:@"spherical_map"];
+        
         [self fetchImpassableRoads];
 
         for (NSString *key in _profilePreferences.keyEnumerator)

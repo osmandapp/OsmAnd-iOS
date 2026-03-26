@@ -22,6 +22,10 @@ private enum DeepLinkAppRoute: String {
     case pluginsVehicleMetrics = "plugins/vehicle-metrics"
     case help = "help"
     case planRoute = "plan-a-route"
+    case configureScreenWidgetsLeft = "configure-screen/widgets/left"
+    case configureScreenWidgetsRight = "configure-screen/widgets/right"
+    case configureScreenWidgetsTop = "configure-screen/widgets/top"
+    case configureScreenWidgetsBottom = "configure-screen/widgets/bottom"
     case mapSettingsMain = "map-settings"
     case mapSettingsMapType = "map-settings/map-type"
     case mapSettingsWikipedia = "map-settings/wikipedia"
@@ -98,6 +102,14 @@ final class DeepLinkParser: NSObject {
             router.openHelp()
         case .planRoute:
             router.openPlanRoute()
+        case .configureScreenWidgetsLeft:
+            router.openWidgetsList(panel: .leftPanel)
+        case .configureScreenWidgetsRight:
+            router.openWidgetsList(panel: .rightPanel)
+        case .configureScreenWidgetsTop:
+            router.openWidgetsList(panel: .topPanel)
+        case .configureScreenWidgetsBottom:
+            router.openWidgetsList(panel: .bottomPanel)
         case .mapSettingsMain:
             router.openMapSettings(screen: .main)
         case .mapSettingsMapType:

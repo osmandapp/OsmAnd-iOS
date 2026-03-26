@@ -118,6 +118,18 @@ final class DeepLinkAppRouter: NSObject {
         InitialRoutePlanningBottomSheetViewController().present(in: mapViewController)
     }
     
+    func openWidgetsList(panel: WidgetsPanel) {
+        guard let nav = root.navigationController, let mapPanel = root.mapPanel else { return }
+        mapPanel.loadViewIfNeeded()
+        if let current = nav.visibleViewController as? WidgetsListViewController, current.widgetPanel == panel {
+            return
+        }
+        
+        guard let nav = dismissAndPopToRoot() else { return }
+        let controller = WidgetsListViewController(widgetPanel: panel)
+        nav.pushViewController(controller, animated: true)
+    }
+    
     func openMapSettings(screen: EMapSettingsScreen) {
         guard let mapPanel = root.mapPanel else { return }
         let appData = OsmAndApp.swiftInstance()?.data

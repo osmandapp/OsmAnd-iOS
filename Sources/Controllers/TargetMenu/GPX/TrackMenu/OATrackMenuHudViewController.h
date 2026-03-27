@@ -22,10 +22,6 @@
 - (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
              segment:(OASTrkSegment *)segment
             withTypes:(NSArray<NSNumber *> *)types;
-- (void)openAnalysis:(OASGpxTrackAnalysis *)analysis
-             segment:(OASTrkSegment *)segment
-           withTypes:(NSArray<NSNumber *> *)types
-overrideIsGeneralTrack:(BOOL)overrideIsGeneralTrack;
 - (OASGpxTrackAnalysis *)getGeneralAnalysis;
 
 - (OASTrkSegment *)getGeneralSegment;

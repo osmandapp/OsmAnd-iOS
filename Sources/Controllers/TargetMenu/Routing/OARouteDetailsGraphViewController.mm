@@ -58,7 +58,6 @@
     
     OAAutoObserverProxy *_gpxTracksRefreshedObserver;
     BOOL _tempGpx;
-    NSNumber *_overrideIsGeneralTrack;
 }
 
 - (instancetype)initWithGpxData:(NSDictionary *)data
@@ -73,7 +72,6 @@
             _gpxTracksRefreshedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(gpxTracksRefreshedHandler)
                                                                      andObserve:[OARootViewController instance].mapPanel.mapViewController.gpxTracksRefreshedObservable];
-            _overrideIsGeneralTrack = data[@"override_is_general_track"];
         }
     }
     return self;
@@ -103,19 +101,13 @@
                                         startTime:self.analysis.startTime
                                          useHours:useHours];
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    
-    BOOL withoutGaps;
-    if (_overrideIsGeneralTrack)
-        withoutGaps = [GpxUtils calcWithoutGaps:self.gpx overrideIsGeneralTrack:_overrideIsGeneralTrack gpxDataItem:gpx];
-    else
-        withoutGaps = [GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx];
 
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:_selectedXAxisMode
-                               calcWithoutGaps:withoutGaps];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx isGeneralTrack:self.segment.generalSegment]];
 
     self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
@@ -592,23 +584,12 @@
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         ElevationChartCell *graphCell = _data[1];
 
-        if (_overrideIsGeneralTrack)
-        {
-            [self.trackChartHelper changeChartTypes:_types
-                                  selectedXAxisMode:_selectedXAxisMode
-                                              chart:graphCell.chartView
-                                           analysis:self.analysis
-                             overrideIsGeneralTrack:[_overrideIsGeneralTrack boolValue]
-                                      statsModeCell:statsModeCell];
-        }
-        else
-        {
-            [self.trackChartHelper changeChartTypes:_types
-                                  selectedXAxisMode:_selectedXAxisMode
-                                              chart:graphCell.chartView
-                                           analysis:self.analysis
-                                      statsModeCell:statsModeCell];
-        }
+        [self.trackChartHelper changeChartTypes:_types
+                              selectedXAxisMode:_selectedXAxisMode
+                                          chart:graphCell.chartView
+                                       analysis:self.analysis
+                                  statsModeCell:statsModeCell
+                                 isGeneralTrack:self.segment.generalSegment];
     }
 }
 

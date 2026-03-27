@@ -77,8 +77,8 @@
     {
         [self generateSegmentSectionData:generalSegment
                                 analysis:[TrackChartHelper getAnalysisFor:generalSegment joinSegments:self.trackMenuDelegate.isJoinSegments]
-                  overrideIsGeneralTrack:YES
-                                   index:0];
+                                   index:0
+                          isGeneralTrack:YES];
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
@@ -88,8 +88,8 @@
         {
             [self generateSegmentSectionData:segments[index]
                                     analysis:analysis
-                      overrideIsGeneralTrack:NO
-                                       index:generalSegment ? index + 1 : index];
+                                       index:generalSegment ? index + 1 : index
+                              isGeneralTrack:NO];
         }
     }
 
@@ -98,8 +98,8 @@
 
 - (void)generateSegmentSectionData:(OASTrkSegment *)segment
                           analysis:(OASGpxTrackAnalysis *)analysis
-            overrideIsGeneralTrack:(BOOL)overrideIsGeneralTrack
                              index:(NSInteger)index
+                    isGeneralTrack:(BOOL)isGeneralTrack
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     ElevationChartCell *cell = (ElevationChartCell *) nib[0];
@@ -116,8 +116,8 @@
                           selectedXAxisMode:GPXDataSetAxisTypeDistance
                                       chart:cell.chartView
                                    analysis:analysis
-                     overrideIsGeneralTrack:overrideIsGeneralTrack
-                              statsModeCell:nil];
+                              statsModeCell:nil
+                             isGeneralTrack:isGeneralTrack];
     }
 
     OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
@@ -125,8 +125,7 @@
             kTableValues: @{
                     @"segment_value": segment,
                     @"analysis_value": analysis,
-                    @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)],
-                    @"override_is_general_track": @(overrideIsGeneralTrack)
+                    @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
             }
     }];
     if (cell)
@@ -542,12 +541,13 @@
             ElevationChartCell *cell = ((ElevationChartCell *) sectionData.values[@"cell_value"]);
             if (cell)
             {
+                OASTrkSegment *segment = sectionData.values[@"segment_value"];
                 [_trackChartHelper changeChartTypes:sectionData.values[@"mode_value"]
                                   selectedXAxisMode:GPXDataSetAxisTypeDistance
                                               chart:cell.chartView
                                            analysis:sectionData.values[@"analysis_value"]
-                             overrideIsGeneralTrack:sectionData.values[@"override_is_general_track"]
-                                      statsModeCell:nil];
+                                      statsModeCell:nil
+                                     isGeneralTrack:segment.generalSegment];
             }
         }
     }
@@ -647,8 +647,7 @@
                 {
                     [self.trackMenuDelegate openAnalysis:analysis
                                                  segment:segment
-                                               withTypes:sectionData.values[@"mode_value"]
-                                  overrideIsGeneralTrack:sectionData.values[@"override_is_general_track"]];
+                                               withTypes:sectionData.values[@"mode_value"]];
                 }
                 else
                 {

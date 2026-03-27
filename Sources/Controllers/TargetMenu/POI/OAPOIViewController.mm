@@ -174,11 +174,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
 }
 
-// override
-- (void) buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
-{
-}
-
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self processRoutePointAmenityTags:rows];

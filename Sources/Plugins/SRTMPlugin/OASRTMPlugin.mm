@@ -193,24 +193,17 @@ double const buildings3DAlphaDefValue = 0.5;
 
 - (void)apply3DBuildingsColor:(int)color
 {
-    UIColor *buildingsColor = UIColorFromARGB(color);
-    NSString *colorString = ([buildingsColor toARGBNumber] & 0xFF000000) == 0xFF000000 ? buildingsColor.toHexString.lowercaseString : buildingsColor.toHexARGBString.lowercaseString;
-    [_buildings3dColorPref set:colorString];
+    [_buildings3dColorPref set:[self hexStringFromColor:UIColorFromARGB(color)]];
     [self updateMapPresentationEnvironment];
 }
 
 - (NSInteger)get3DBuildingsColorStyle
 {
     NSInteger styleId = [_buildings3dColorStylePref get];
-    switch (styleId)
-    {
-        case Buildings3DColorTypeMapStyle:
-            return Buildings3DColorTypeMapStyle;
-        case Buildings3DColorTypeCustom:
-            return Buildings3DColorTypeCustom;
-        default:
-            return Buildings3DColorTypeMapStyle;
-    }
+    if (styleId == Buildings3DColorTypeMapStyle || styleId == Buildings3DColorTypeCustom)
+        return styleId;
+    
+    return Buildings3DColorTypeMapStyle;
 }
 
 - (int)getBuildings3dColor
@@ -263,6 +256,11 @@ double const buildings3DAlphaDefValue = 0.5;
 - (NSArray<QuickActionType *> *)getQuickActionTypes
 {
     return @[OAContourLinesAction.getQuickActionType, OATerrainAction.getQuickActionType];
+}
+
+- (NSString *)hexStringFromColor:(UIColor *)color
+{
+    return ([color toARGBNumber] & 0xFF000000) == 0xFF000000 ? color.toHexString.lowercaseString : color.toHexARGBString.lowercaseString;
 }
 
 - (void)updateMapPresentationEnvironment

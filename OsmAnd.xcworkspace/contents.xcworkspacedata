@@ -93,31 +93,67 @@
                         location = "group:util"
                         name = "util">
                         <FileRef
-                           location = "group:OsmAndFormatter.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:KAlgorithms.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:KGeoParsedPoint.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:KStringMatcher.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:KCollectionUtils.kt">
+                           location = "group:DbUtils.kt">
                         </FileRef>
                         <FileRef
                            location = "group:IProgress.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:KAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KCollectionUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KGeoParsedPoint.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KGeoPointParserSimpleS2.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KGeoPointParserUtil.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KLock.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KMapAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KMapUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KStringMatcher.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KUri.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:Localization.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:Logger.kt">
                         </FileRef>
                         <FileRef
                            location = "group:LoggerFactory.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:KMapUtils.kt">
+                           location = "group:MultiNameSerializer.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OsmAndFormatter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PlatformUtil.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SharedDateFormatter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringBundle.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringBundleReader.kt">
                         </FileRef>
                         <FileRef
                            location = "group:StringBundleWriter.kt">
@@ -129,37 +165,10 @@
                            location = "group:StringBundleXmlWriter.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:KMapAlgorithms.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:StringBundleReader.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:KLock.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:PlatformUtil.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:MultiNameSerializer.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:WikiImagesUtil.kt">
-                        </FileRef>
-                        <FileRef
                            location = "group:UrlEncoder.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:StringBundle.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:DbUtils.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:Logger.kt">
-                        </FileRef>
-                        <FileRef
-                           location = "group:SharedDateFormatter.kt">
+                           location = "group:WikiImagesUtil.kt">
                         </FileRef>
                      </Group>
                      <Group

@@ -10,6 +10,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OASearchCoreAPI.h"
+#import "OASearchUICore.h"
 
 static const int MAX_DEFAULT_SEARCH_RADIUS = 7;
 
@@ -120,7 +121,7 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 
 @interface OASearchLocationAndUrlAPI : OASearchBaseAPI
 
-- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI;
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI requester:(OAHttpRedirectRequester)requester;
 
 @end
 

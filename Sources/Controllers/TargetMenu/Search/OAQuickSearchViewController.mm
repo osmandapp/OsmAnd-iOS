@@ -1539,7 +1539,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
 
-    [self runCoreSearch:text updateResult:YES searchMore:NO];
+    [self runCoreSearch: text updateResult:YES searchMore:NO];
 }
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore

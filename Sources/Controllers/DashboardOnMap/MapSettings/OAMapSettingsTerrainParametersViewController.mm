@@ -57,7 +57,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 @property (nonatomic) OAColorItem *baseNightColorItem;
 @property (nonatomic) OAColorItem *currentNightColorItem;
 @property (nonatomic) BOOL isDefaultColorRestored;
-@property (nonatomic) BOOL isNightColorMode;
+@property (nonatomic) BOOL isNightCoordinatesGridColorMode;
 
 @end
 
@@ -87,8 +87,6 @@ static const NSInteger kElevationMaxMeters = 2000;
     
     NSInteger _baseGPXElevationMeters;
     NSInteger _currentGPXElevationMeters;
-    NSInteger _baseBuildings3DColorStyle;
-    NSInteger _currentBuildings3DColorStyle;
     
     NSIndexPath *_minValueIndexPath;
     NSIndexPath *_maxValueIndexPath;
@@ -124,7 +122,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
     _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].min : [_plugin getTerrainMinZoom];
     _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].max : [_plugin getTerrainMaxZoom];
-    _baseAlpha = _terrainType == EOATerrainSettingsTypeBuildingsVisibility ? [_plugin.buildings3dAlphaPref get] : [_terrainMode getTransparency] * 0.01;
+    _baseAlpha = [_terrainMode getTransparency] * 0.01;
 
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
@@ -154,37 +152,14 @@ static const NSInteger kElevationMaxMeters = 2000;
                                                      name:ColorsCollection.collectionUpdatedNotification
                                                    object:nil];
     }
-    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor || _terrainType == EOATerrainSettingsTypeBuildings3DColor)
+    else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
     {
         _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
         _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
-        _isNightColorMode = _settings.nightMode;
-        
-        if (_terrainType == EOATerrainSettingsTypeBuildings3DColor)
-        {
-            _baseBuildings3DColorStyle = [_plugin get3DBuildingsColorStyle];
-            _currentBuildings3DColorStyle = _baseBuildings3DColorStyle;
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
-        }
-        
-        int dayColorValue;
-        int nightColorValue;
-        if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
-        {
-            dayColorValue = [_coordinatesGridSettings getDayGridColor];
-            nightColorValue = [_coordinatesGridSettings getNightGridColor];
-        }
-        else
-        {
-            dayColorValue = [_plugin.buildings3dCustomDayColorPref get];
-            nightColorValue = [_plugin.buildings3dCustomNightColorPref get];
-        }
-        
-        OAColorItem *defaultColorItem = [_appearanceCollection getDefaultLineColorItem];
-        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:dayColorValue] ?: defaultColorItem;
-        _currentDayColorItem = _baseDayColorItem;
-        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:nightColorValue] ?: defaultColorItem;
+        _isNightCoordinatesGridColorMode = _settings.nightMode;
+        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+        _currentDayColorItem  = _baseDayColorItem;
+        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
         _currentNightColorItem = _baseNightColorItem;
     }
 
@@ -277,8 +252,6 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     [self.tableView registerNib:[UINib nibWithNibName:[OATitleSliderTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OATitleSliderTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OAValueTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAValueTableViewCell reuseIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell reuseIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:[OATitleDescriptionBigIconCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OATitleDescriptionBigIconCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OACustomPickerTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OASimpleTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OASimpleTableViewCell reuseIdentifier]];
@@ -319,10 +292,6 @@ static const NSInteger kElevationMaxMeters = 2000;
         case EOATerrainSettingsTypeCoordinatesGridColor:
             result = OALocalizedString(@"grid_color");
             break;
-        case EOATerrainSettingsTypeBuildings3DColor:
-        case EOATerrainSettingsTypeBuildingsVisibility:
-            result = OALocalizedString(@"enable_3d_objects");
-            break;
     }
     return result;
 }
@@ -335,7 +304,6 @@ static const NSInteger kElevationMaxMeters = 2000;
         case EOATerrainSettingsTypeVisibility:
         case EOATerrainSettingsTypePalette:
         case EOATerrainSettingsTypeCoordinatesGridColor:
-        case EOATerrainSettingsTypeBuildings3DColor:
             break;
         case EOATerrainSettingsTypeZoomLevels:
         case EOATerrainSettingsTypeCoordinatesGridZoomLevels:
@@ -349,9 +317,6 @@ static const NSInteger kElevationMaxMeters = 2000;
             break;
         case EOAGPXSettingsTypeWallHeight:
             result = OALocalizedString(@"wall_height_description");
-            break;
-        case EOATerrainSettingsTypeBuildingsVisibility:
-            result = OALocalizedString(@"buildings_3d_visibility_description");
             break;
     }
     return result;
@@ -380,7 +345,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             kCellTitleKey : OALocalizedString(@"shared_string_height")
         }];
     }
-    else if (_terrainType == EOATerrainSettingsTypeVisibility || _terrainType == EOATerrainSettingsTypeBuildingsVisibility)
+    else if (_terrainType == EOATerrainSettingsTypeVisibility)
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"visibilitySlider",
@@ -456,66 +421,6 @@ static const NSInteger kElevationMaxMeters = 2000;
             @"tintTitle": [UIColor colorNamed:ACColorNameTextColorActive]
         }];
     }
-    else if (_terrainType == EOATerrainSettingsTypeBuildings3DColor)
-    {
-        BOOL isPurchased = [self isBuildings3DColorPurchased];
-        BOOL hideBuildings3DColorTypeSeparator = _currentBuildings3DColorStyle == Buildings3DColorTypeCustom && isPurchased;
-        [topSection addRowFromDictionary:@{
-            kCellKeyKey: @"buildings3DColorType",
-            kCellTypeKey: OAButtonTableViewCell.reuseIdentifier,
-            kCellTitleKey: OALocalizedString(@"shared_string_color"),
-            @"tintTitle": [UIColor colorNamed:ACColorNameTextColorPrimary],
-            @"hideSeparator": @(hideBuildings3DColorTypeSeparator)
-        }];
-        if (_currentBuildings3DColorStyle == Buildings3DColorTypeMapStyle)
-        {
-            [topSection addRowFromDictionary:@{
-                kCellKeyKey: @"buildings3DMapStyleDescr",
-                kCellTypeKey: OASimpleTableViewCell.reuseIdentifier,
-                kCellTitleKey: [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"), [_settings.renderer get]]
-            }];
-            _colorsCollectionIndexPath = nil;
-        }
-        else
-        {
-            if (isPurchased)
-            {
-                [topSection addRowFromDictionary:@{
-                    kCellKeyKey: @"color_day_night",
-                    kCellTypeKey: SegmentTextTableViewCell.reuseIdentifier
-                }];
-                [topSection addRowFromDictionary:@{
-                    kCellKeyKey: @"buildings3DGridColors",
-                    kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier
-                }];
-                _colorsCollectionIndexPath = [NSIndexPath indexPathForRow:[topSection rowCount] - 1 inSection:[_data sectionCount] - 1];
-                [topSection addRowFromDictionary:@{
-                    kCellKeyKey: @"allColors",
-                    kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
-                    kCellTitleKey: OALocalizedString(@"shared_string_all_colors"),
-                    @"tintTitle": [UIColor colorNamed:ACColorNameTextColorActive]
-                }];
-            }
-            else
-            {
-                [topSection addRowFromDictionary:@{
-                    kCellKeyKey: @"buildings3DColorPurchaseBanner",
-                    kCellTypeKey: OATitleDescriptionBigIconCell.reuseIdentifier,
-                    kCellTitleKey: OALocalizedString(@"custom_color"),
-                    kCellDescrKey: OALocalizedString(@"free_custom_color_description"),
-                    kCellIconKey: [UIImage templateImageNamed:ACImageNameIcCustom3DBuildingColored]
-                }];
-                [topSection addRowFromDictionary:@{
-                    kCellKeyKey: @"buildings3DColorChooseColor",
-                    kCellTypeKey: OAButtonTableViewCell.reuseIdentifier,
-                    kCellTitleKey: OALocalizedString(@"choose_color"),
-                    kCellSecondaryIconName: ACImageNameIcPaymentLabelMapsPlus,
-                    @"tintTitle": [UIColor colorNamed:ACColorNameTextColorActive]
-                }];
-                _colorsCollectionIndexPath = nil;
-            }
-        }
-    }
 }
 
 - (void)generateValueForIndexPath:(NSIndexPath *)indexPath
@@ -560,7 +465,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         divider = 2.5;
     }
-    else if (_terrainType == EOATerrainSettingsTypeVisibility || _terrainType == EOATerrainSettingsTypeBuildingsVisibility)
+    else if (_terrainType == EOATerrainSettingsTypeVisibility)
     {
         divider = 3.0;
     }
@@ -596,8 +501,6 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     if (_terrainType == EOATerrainSettingsTypeVisibility && _baseAlpha != _currentAlpha)
         [_terrainMode setTransparency:_baseAlpha / 0.01];
-    else if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility && _baseAlpha != _currentAlpha)
-        [_plugin apply3DBuildingsAlpha:_baseAlpha];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
         [_terrainMode setZoomValuesWithMinZoom:(int32_t) _baseMinZoom maxZoom:(int32_t) _baseMaxZoom];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _baseVerticalExaggerationScale != _currentVerticalExaggerationScale)
@@ -606,8 +509,6 @@ static const NSInteger kElevationMaxMeters = 2000;
         [self setPaletteColorItem:_basePaletteColorItem];
     else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor && (_baseDayColorItem != _currentDayColorItem || _baseNightColorItem != _currentNightColorItem))
         [self setCoordinatesGridBaseColorItem];
-    else if (_terrainType == EOATerrainSettingsTypeBuildings3DColor)
-        [self setBuildings3DBaseColorItem];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration && _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale)
         [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
     else if (_terrainType == EOAGPXSettingsTypeWallHeight && _baseGPXElevationMeters != _currentGPXElevationMeters)
@@ -628,16 +529,9 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     __weak __typeof(self) weakSelf = self;
     [super hide:YES duration:duration onComplete:^{
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        if (strongSelf.terrainType == EOATerrainSettingsTypeCoordinatesGridColor || strongSelf.terrainType == EOATerrainSettingsTypeBuildings3DColor)
+        if (weakSelf.terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
             [[OADayNightHelper instance] resetTempMode];
-        if (strongSelf.terrainType == EOATerrainSettingsTypeBuildings3DColor)
-            [strongSelf->_plugin apply3DBuildingsColorStyle:[strongSelf->_plugin get3DBuildingsColorStyle]];
-        
-        [strongSelf.mapPanel hideScrollableHudViewController];
+        [weakSelf.mapPanel hideScrollableHudViewController];
         if (onComplete)
             onComplete();
     }];
@@ -647,20 +541,15 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (BOOL)resetVisibilityValues
 {
-    CGFloat defaultAlpha = _terrainType == EOATerrainSettingsTypeBuildingsVisibility ? [_plugin.buildings3dAlphaPref defValue] : ([_terrainMode isHillshade] ? hillshadeDefaultTrasparency : defaultTrasparency) * 0.01;
+    CGFloat defaultAlpha = ([_terrainMode isHillshade] ? hillshadeDefaultTrasparency : defaultTrasparency) * 0.01;
     if (_currentAlpha != defaultAlpha)
     {
         _currentAlpha = defaultAlpha;
-        if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
-            [_plugin apply3DBuildingsAlpha:_currentAlpha];
-        else
-            [_terrainMode setTransparency:defaultAlpha / 0.01];
-        
+        [_terrainMode setTransparency:defaultAlpha / 0.01];
         _isValueChange = _baseAlpha != _currentAlpha;
         [self updateApplyButton];
         return YES;
     }
-    
     return NO;
 }
 
@@ -720,7 +609,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     if (colorCell)
     {
         OAColorCollectionHandler *handler = (OAColorCollectionHandler *)[colorCell getCollectionHandler];
-        NSUInteger idx = [_sortedColorItems indexOfObject:_isNightColorMode ? _currentNightColorItem : _currentDayColorItem];
+        NSUInteger idx = [_sortedColorItems indexOfObject:_isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem];
         if (idx != NSNotFound)
         {
             NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger)idx inSection:0];
@@ -733,38 +622,9 @@ static const NSInteger kElevationMaxMeters = 2000;
     return YES;
 }
 
-- (BOOL)resetBuildings3DColor
-{
-    NSInteger defaultColorStyle = Buildings3DColorTypeMapStyle;
-    NSInteger defDay = _plugin.buildings3dCustomDayColorPref.defValue;
-    NSInteger defNight = _plugin.buildings3dCustomNightColorPref.defValue;
-    if (_currentDayColorItem.value == defDay && _currentNightColorItem.value == defNight && _currentBuildings3DColorStyle == defaultColorStyle)
-        return NO;
-    
-    _currentBuildings3DColorStyle = defaultColorStyle;
-    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:(int)defDay] ?: [_appearanceCollection getDefaultLineColorItem];
-    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:(int)defNight] ?: [_appearanceCollection getDefaultLineColorItem];
-    [self previewBuildings3DColor];
-    OACollectionSingleLineTableViewCell *colorCell = (OACollectionSingleLineTableViewCell *) [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
-    if (colorCell)
-    {
-        OAColorCollectionHandler *handler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        NSUInteger idx = [_sortedColorItems indexOfObject:_isNightColorMode ? _currentNightColorItem : _currentDayColorItem];
-        if (idx != NSNotFound)
-        {
-            NSIndexPath *path = [NSIndexPath indexPathForRow:(NSInteger) idx inSection:0];
-            [handler onItemSelected:path collectionView:colorCell.collectionView];
-        }
-    }
-    
-    _isValueChange = _baseDayColorItem != _currentDayColorItem || _baseNightColorItem != _currentNightColorItem || _baseBuildings3DColorStyle != _currentBuildings3DColorStyle;
-    [self updateApplyButton];
-    return YES;
-}
-
 - (void)refreshColorsCollection
 {
-    if ((_terrainType == EOATerrainSettingsTypeCoordinatesGridColor || _terrainType == EOATerrainSettingsTypeBuildings3DColor) && (_colorsCollectionIndexPath && _colorsCollectionIndexPath.section < [self.tableView numberOfSections] && _colorsCollectionIndexPath.row < [self.tableView numberOfRowsInSection:_colorsCollectionIndexPath.section]))
+    if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor && (_colorsCollectionIndexPath && _colorsCollectionIndexPath.section < [self.tableView numberOfSections] && _colorsCollectionIndexPath.row < [self.tableView numberOfRowsInSection:_colorsCollectionIndexPath.section]))
     {
         [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         OACollectionSingleLineTableViewCell *colorCell = (OACollectionSingleLineTableViewCell *) [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
@@ -828,15 +688,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCurrentVisibility
 {
-    if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
-    {
-        [_plugin.buildings3dAlphaPref set:_currentAlpha];
-        [_plugin apply3DBuildingsAlpha:_currentAlpha];
-    }
-    else
-    {
-        [_terrainMode setTransparency:_currentAlpha / 0.01];
-    }
+    [_terrainMode setTransparency:_currentAlpha / 0.01];
 }
 
 - (void)applyCurrentZoomLevels
@@ -861,50 +713,6 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     [_coordinatesGridSettings setGridColor:(int)_currentDayColorItem.value forAppMode:[_settings.applicationMode get] nightMode:NO];
     [_coordinatesGridSettings setGridColor:(int)_currentNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
-}
-
-- (BOOL)isBuildings3DColorPurchased
-{
-    return [OAIAPHelper isMapsPlusAvailable] || [OAIAPHelper isOsmAndProAvailable];
-}
-
-- (void)applyBuildings3DColor
-{
-    if (_currentBuildings3DColorStyle == Buildings3DColorTypeCustom && ![self isBuildings3DColorPurchased])
-    {
-        [self setBuildings3DBaseColorItem];
-        return;
-    }
-    
-    [_plugin.buildings3dCustomDayColorPref set:(int) _currentDayColorItem.value];
-    [_plugin.buildings3dCustomNightColorPref set:(int) _currentNightColorItem.value];
-    [_plugin apply3DBuildingsColorStyle:_currentBuildings3DColorStyle];
-}
-
-- (void)previewBuildings3DColor
-{
-    if (_currentBuildings3DColorStyle == Buildings3DColorTypeCustom && ![self isBuildings3DColorPurchased])
-    {
-        [_plugin.buildings3dCustomDayColorPref set:(int) _baseDayColorItem.value];
-        [_plugin.buildings3dCustomNightColorPref set:(int) _baseNightColorItem.value];
-        [_plugin.buildings3dColorStylePref set:(int) _baseBuildings3DColorStyle];
-        [_plugin apply3DBuildingsColorStyle:_baseBuildings3DColorStyle];
-        return;
-    }
-    
-    if (_currentBuildings3DColorStyle == Buildings3DColorTypeMapStyle)
-    {
-        [_plugin apply3DBuildingsColorStyle:Buildings3DColorTypeMapStyle];
-        return;
-    }
-    
-    [_plugin.buildings3dCustomDayColorPref set:(int) _currentDayColorItem.value];
-    [_plugin.buildings3dCustomNightColorPref set:(int) _currentNightColorItem.value];
-    if ([_plugin get3DBuildingsColorStyle] != Buildings3DColorTypeCustom)
-        [_plugin apply3DBuildingsColorStyle:Buildings3DColorTypeCustom];
-    
-    int color = _isNightColorMode ? (int) _currentNightColorItem.value : (int) _currentDayColorItem.value;
-    [_plugin apply3DBuildingsColor:color];
 }
 
 - (NSArray<NSString *> *)getPossibleZoomValues
@@ -942,14 +750,6 @@ static const NSInteger kElevationMaxMeters = 2000;
     [_coordinatesGridSettings setGridColor:(int)_baseNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
 }
 
-- (void)setBuildings3DBaseColorItem
-{
-    [_plugin.buildings3dCustomDayColorPref set:(int) _baseDayColorItem.value];
-    [_plugin.buildings3dCustomNightColorPref set:(int) _baseNightColorItem.value];
-    [_plugin.buildings3dColorStylePref set:(int) _baseBuildings3DColorStyle];
-    _currentBuildings3DColorStyle = _baseBuildings3DColorStyle;
-}
-
 - (void)setCoordinatesGridZoomValuesWithMinZoom:(NSInteger)baseMinZoom maxZoom:(NSInteger)baseMaxZoom
 {
     [_coordinatesGridSettings setZoomLevels:{ .min = baseMinZoom, .max = baseMaxZoom } forAppMode:[_settings.applicationMode get]];
@@ -965,7 +765,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (IBAction)resetButtonPressed:(UIButton *)sender
 {
     BOOL wasReset = NO;
-    if (_terrainType == EOATerrainSettingsTypeVisibility || _terrainType == EOATerrainSettingsTypeBuildingsVisibility)
+    if (_terrainType == EOATerrainSettingsTypeVisibility)
         wasReset = [self resetVisibilityValues];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels || _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels)
         wasReset = [self resetZoomLevels];
@@ -975,8 +775,6 @@ static const NSInteger kElevationMaxMeters = 2000;
         wasReset = [self resetPalette];
     else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
         wasReset = [self resetCoordinatesGridColor];
-    else if (_terrainType == EOATerrainSettingsTypeBuildings3DColor)
-        wasReset = [self resetBuildings3DColor];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
         wasReset = [self resetGPXVerticalExaggerationValues];
     else if (_terrainType == EOAGPXSettingsTypeWallHeight)
@@ -991,7 +789,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)onApplyButtonPressed
 {
-    if ((_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01) || (_terrainType == EOATerrainSettingsTypeBuildingsVisibility && _currentAlpha != [_plugin.buildings3dAlphaPref get]))
+    if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01)
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
         [self applyCurrentZoomLevels];
@@ -1003,8 +801,6 @@ static const NSInteger kElevationMaxMeters = 2000;
         [self applyPalette];
     else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
         [self applyCoordinatesGridColor];
-    else if (_terrainType == EOATerrainSettingsTypeBuildings3DColor)
-        [self applyBuildings3DColor];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration && _baseGPXVerticalExaggerationScale != _currentGPXVerticalExaggerationScale)
         [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
     else if (_terrainType == EOAGPXSettingsTypeWallHeight && _baseGPXElevationMeters != _currentGPXElevationMeters)
@@ -1056,10 +852,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
 
     _currentAlpha = slider.value;
-    if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
-        [_plugin apply3DBuildingsAlpha:_currentAlpha];
-    else
-        [_terrainMode setTransparency:_currentAlpha / 0.01];
+    [_terrainMode setTransparency:_currentAlpha / 0.01];
     
     _isValueChange = _baseAlpha != _currentAlpha;
     [self updateApplyButton];
@@ -1067,11 +860,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)segmentChanged:(NSInteger)index
 {
-    _isNightColorMode = index == 1;
-    [[OADayNightHelper instance] setTempMode:_isNightColorMode ? DayNightModeNight : DayNightModeDay];
-    if (_terrainType == EOATerrainSettingsTypeBuildings3DColor)
-        [self previewBuildings3DColor];
-    
+    _isNightCoordinatesGridColorMode = index == 1;
+    [[OADayNightHelper instance] setTempMode:_isNightCoordinatesGridColorMode ? DayNightModeNight : DayNightModeDay];
     [self refreshColorsCollection];
 }
 
@@ -1079,7 +869,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
     colorViewController.delegate = self;
-    OAColorItem *activeItem = _isNightColorMode ? _currentNightColorItem : _currentDayColorItem;
+    OAColorItem *activeItem = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
     colorViewController.selectedColor = [activeItem getColor];
     [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
 }
@@ -1098,11 +888,6 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         return [NSString stringWithFormat:@"%ld %@", (NSInteger)value, OALocalizedString(@"m")];
     }
-}
-
-- (void)showChoosePlanScreen
-{
-    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:[OARootViewController instance].navigationController];
 }
 
 - (void)onCollectionDeleted:(NSNotification *)notification
@@ -1301,21 +1086,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         else
         {
             cell.updateValueCallback = nil;
-            cell.sliderView.maximumValue = 1.0f;
-            if (_terrainType == EOATerrainSettingsTypeBuildingsVisibility)
-            {
-                cell.sliderView.minimumValue = 0.1f;
-                NSInteger alphaPercent = (NSInteger) lround(_currentAlpha * 100.);
-                cell.sliderView.value = _currentAlpha;
-                cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", alphaPercent];
-            }
-            else
-            {
-                cell.sliderView.minimumValue = 0.0f;
-                NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
-                cell.sliderView.value = transparency * 0.01;
-                cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
-            }
+            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
+            cell.sliderView.value = transparency * 0.01;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
         }
         
         [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1349,106 +1122,32 @@ static const NSInteger kElevationMaxMeters = 2000;
     else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
         BOOL isPaletteName = [item.key isEqualToString:@"paletteName"];
         BOOL isCoordinatesGridColor = [item.key isEqualToString:@"coordinatesGridColor"];
-        BOOL isBuildings3DMapStyle = [item.key isEqualToString:@"buildings3DMapStyleDescr"];
-        [cell leftIconVisibility:NO];
-        [cell descriptionVisibility:isBuildings3DMapStyle];
-        [cell titleVisibility:!isBuildings3DMapStyle];
-        cell.textStackView.hidden = cell.titleLabel.hidden && cell.descriptionLabel.hidden;
         [cell setCustomLeftSeparatorInset:isCoordinatesGridColor];
         cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
-        cell.selectionStyle = isPaletteName || isCoordinatesGridColor || isBuildings3DMapStyle ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
-        cell.titleLabel.text = isBuildings3DMapStyle ? nil : (isPaletteName ? [_currentPaletteColorItem toHumanString] : item.title);
+        cell.selectionStyle = isPaletteName || isCoordinatesGridColor ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+        cell.titleLabel.text = isPaletteName ? [_currentPaletteColorItem toHumanString] : item.title;
         cell.titleLabel.textColor = [item objForKey:@"tintTitle"] ?: UIColorFromRGB(color_extra_text_gray);
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
-        cell.descriptionLabel.text = isBuildings3DMapStyle ? item.title : nil;
-        return cell;
-    }
-    else if ([item.cellType isEqualToString:OAButtonTableViewCell.reuseIdentifier])
-    {
-        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:OAButtonTableViewCell.reuseIdentifier];
-        [cell titleVisibility:YES];
-        [cell descriptionVisibility:NO];
-        cell.textStackView.hidden = cell.titleLabel.hidden && cell.descriptionLabel.hidden;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.titleLabel.text = item.title;
-        cell.titleLabel.textColor = [item objForKey:@"tintTitle"];
-        [cell.button removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-        if ([item.key isEqualToString:@"buildings3DColorChooseColor"])
-        {
-            cell.separatorInset = UIEdgeInsetsZero;
-            [cell leftIconVisibility:NO];
-            cell.leftIconView.image = nil;
-            cell.leftIconView.tintColor = nil;
-            [cell.button setTitle:nil forState:UIControlStateNormal];
-            [cell.button setImage:nil forState:UIControlStateNormal];
-            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-            cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:item.secondaryIconName];
-            [cell.button setTitleColor:nil forState:UIControlStateHighlighted];
-            cell.button.tintColor = nil;
-            cell.button.menu = nil;
-            cell.button.showsMenuAsPrimaryAction = NO;
-            cell.button.changesSelectionAsPrimaryAction = NO;
-            [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else
-        {
-            [cell leftIconVisibility:NO];
-            [cell.button setImage:nil forState:UIControlStateNormal];
-            [cell.button setTitle:_currentBuildings3DColorStyle == Buildings3DColorTypeMapStyle ? OALocalizedString(@"quick_action_map_style") : OALocalizedString(@"shared_string_custom") forState:UIControlStateNormal];
-            UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
-            config.baseForegroundColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            config.contentInsets = NSDirectionalEdgeInsetsMake(3.1, 16.0, 3.1, 0.0);
-            cell.button.configuration = config;
-            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
-            cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            cell.button.menu = [self createBuildings3DColorTypeMenu];
-            cell.button.showsMenuAsPrimaryAction = YES;
-            cell.button.changesSelectionAsPrimaryAction = YES;
-            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-            [cell.button setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
-            [cell.button setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
-            [cell layoutIfNeeded];
-            if ([item boolForKey:@"hideSeparator"])
-            {
-                [cell setCustomLeftSeparatorInset:YES];
-                cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
-            }
-            else
-            {
-                [cell setCustomLeftSeparatorInset:NO];
-                [cell updateSeparatorInset];
-            }
-        }
-        return cell;
-    }
-    else if ([item.cellType isEqualToString:OATitleDescriptionBigIconCell.reuseIdentifier])
-    {
-        OATitleDescriptionBigIconCell *cell = [tableView dequeueReusableCellWithIdentifier:OATitleDescriptionBigIconCell.reuseIdentifier];
-        [cell showLeftIcon:NO];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.titleView.text = item.title;
-        cell.descriptionView.text = item.descr;
-        cell.rightIconView.image = item.icon;
-        cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-        cell.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         return cell;
     }
     else if ([item.cellType isEqualToString:OACollectionSingleLineTableViewCell.reuseIdentifier])
     {
         OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:OACollectionSingleLineTableViewCell.reuseIdentifier];
-        BOOL isCoordinatesBuildingsGridColors = [item.key isEqualToString:@"coordinatesGridColors"] || [item.key isEqualToString:@"buildings3DGridColors"];
-        [cell rightActionButtonVisibility:isCoordinatesBuildingsGridColors];
-        [cell.rightActionButton setImage:isCoordinatesBuildingsGridColors ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
-        cell.rightActionButton.tag = isCoordinatesBuildingsGridColors ? (indexPath.section << 10 | indexPath.row) : 0;
-        cell.rightActionButton.accessibilityLabel = isCoordinatesBuildingsGridColors ? OALocalizedString(@"shared_string_add_color") : nil;
+        BOOL isCoordinatesGridColors = [item.key isEqualToString:@"coordinatesGridColors"];
+        [cell rightActionButtonVisibility:isCoordinatesGridColors];
+        [cell.rightActionButton setImage:isCoordinatesGridColors ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isCoordinatesGridColors ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = isCoordinatesGridColors ? OALocalizedString(@"shared_string_add_color") : nil;
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-        if (isCoordinatesBuildingsGridColors)
+        if (isCoordinatesGridColors)
         {
             OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
-            OAColorItem *activeItem = _isNightColorMode ? _currentNightColorItem : _currentDayColorItem;
+            OAColorItem *activeItem = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
             NSInteger selectedIndex = [_sortedColorItems indexOfObject:activeItem];
             selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]];
             selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
@@ -1513,7 +1212,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         [cell setSegmentedControlBottomSpacing:8.0];
-        [cell configureSegmentedControlWithTitles:@[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] selectedSegmentIndex:_isNightColorMode ? 1 : 0 selectedTitles:nil];
+        [cell configureSegmentedControlWithTitles:@[OALocalizedString(@"day"), OALocalizedString(@"daynight_mode_night")] selectedSegmentIndex:_settings.nightMode ? 1 : 0 selectedTitles:nil];
         __weak __typeof(self) weakSelf = self;
         cell.didSelectSegmentIndex = ^(NSInteger idx) {
             [weakSelf segmentChanged:idx];
@@ -1521,34 +1220,6 @@ static const NSInteger kElevationMaxMeters = 2000;
         return cell;
     }
     return nil;
-}
-
-- (UIMenu *)createBuildings3DColorTypeMenu
-{
-    UIAction *mapStyleAction = [self createBuildings3DColorTypeActionWithTitle:OALocalizedString(@"quick_action_map_style") style:Buildings3DColorTypeMapStyle];
-    UIAction *customAction = [self createBuildings3DColorTypeActionWithTitle:OALocalizedString(@"shared_string_custom") style:Buildings3DColorTypeCustom];
-    
-    return [UIMenu menuWithChildren:@[mapStyleAction, customAction]];
-}
-
-- (UIAction *)createBuildings3DColorTypeActionWithTitle:(NSString *)title style:(NSInteger)style
-{
-    __weak __typeof(self) weakSelf = self;
-    UIAction *action = [UIAction actionWithTitle:title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull uiAction) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        strongSelf->_currentBuildings3DColorStyle = style;
-        [strongSelf previewBuildings3DColor];
-        strongSelf->_isValueChange = strongSelf->_baseDayColorItem != strongSelf->_currentDayColorItem || strongSelf->_baseNightColorItem != strongSelf->_currentNightColorItem || strongSelf->_baseBuildings3DColorStyle != strongSelf->_currentBuildings3DColorStyle;
-        [strongSelf updateApplyButton];
-        [strongSelf generateData];
-        [strongSelf.tableView reloadData];
-    }];
-    
-    action.state = _currentBuildings3DColorStyle == style ? UIMenuElementStateOn : UIMenuElementStateOff;
-    return action;
 }
 
 #pragma mark - UITableViewDelegate
@@ -1596,10 +1267,10 @@ static const NSInteger kElevationMaxMeters = 2000;
         {
             colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeTerrainPaletteItems items:_gradientColorsCollection selectedItem:_currentPaletteColorItem];
         }
-        else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor || _terrainType == EOATerrainSettingsTypeBuildings3DColor)
+        else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
         {
             NSArray<OAColorItem *> *allColors = [_appearanceCollection getAvailableColorsSortingByLastUsed];
-            OAColorItem *selected = _isNightColorMode ? _currentNightColorItem : _currentDayColorItem;
+            OAColorItem *selected = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
             colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:allColors selectedItem:selected];
             OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
             OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
@@ -1688,7 +1359,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
     {
         OAColorItem *picked = _sortedColorItems[indexPath.row];
-        if (_isNightColorMode)
+        if (_isNightCoordinatesGridColorMode)
         {
             _currentNightColorItem = picked;
             [_coordinatesGridSettings setGridColor:(int)_currentNightColorItem.value forAppMode:[_settings.applicationMode get] nightMode:YES];
@@ -1705,27 +1376,12 @@ static const NSInteger kElevationMaxMeters = 2000;
         _isValueChange = _currentDayColorItem != _baseDayColorItem || _currentNightColorItem != _baseNightColorItem;
         [self updateApplyButton];
     }
-    else if (_terrainType == EOATerrainSettingsTypeBuildings3DColor)
-    {
-        OAColorItem *picked = _sortedColorItems[indexPath.row];
-        if (_isNightColorMode)
-            _currentNightColorItem = picked;
-        else
-            _currentDayColorItem = picked;
-        
-        OACollectionSingleLineTableViewCell *cell = (OACollectionSingleLineTableViewCell *) [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
-        OAColorCollectionHandler *handler = (OAColorCollectionHandler *) [cell getCollectionHandler];
-        [handler setSelectedIndexPath:indexPath];
-        [self previewBuildings3DColor];
-        _isValueChange = _currentDayColorItem != _baseDayColorItem || _currentNightColorItem != _baseNightColorItem || _currentBuildings3DColorStyle != _baseBuildings3DColorStyle;
-        [self updateApplyButton];
-    }
 }
 
 - (void)reloadCollectionData
 {
-    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:_terrainType == EOATerrainSettingsTypeCoordinatesGridColor ? [_coordinatesGridSettings getDayGridColor] : [_plugin.buildings3dCustomDayColorPref get]] ?: [_appearanceCollection getDefaultLineColorItem];
-    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:_terrainType == EOATerrainSettingsTypeCoordinatesGridColor ? [_coordinatesGridSettings getNightGridColor] : [_plugin.buildings3dCustomNightColorPref get]] ?: [_appearanceCollection getDefaultLineColorItem];
+    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
 }
 
@@ -1806,26 +1462,6 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {
     [self addAndGetNewColorItem:viewController.selectedColor];
-}
-
-#pragma mark - OAIAPProductNotification
-
-- (void)productPurchased:(NSNotification *)notification
-{
-    __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf generateData];
-        [weakSelf.tableView reloadData];
-    });
-}
-
-- (void)productsRestored:(NSNotification *)notification
-{
-    __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf generateData];
-        [weakSelf.tableView reloadData];
-    });
 }
 
 @end

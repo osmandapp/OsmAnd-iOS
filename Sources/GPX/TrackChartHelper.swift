@@ -84,7 +84,7 @@ final class TrackChartHelper: NSObject {
                           chart: ElevationChart,
                           analysis: GpxTrackAnalysis,
                           statsModeCell: OARouteStatisticsModeCell?,
-                          isGeneralTrack: Bool) {
+                          overrideIsGeneralTrack: Bool) {
         var secondType: GPXDataSetType = .none
         if types.count == 2 {
             if types.last == GPXDataSetType.speed.rawValue && !analysis.isSpeedSpecified() {
@@ -93,7 +93,7 @@ final class TrackChartHelper: NSObject {
                                  chart: chart,
                                  analysis: analysis,
                                  statsModeCell: statsModeCell,
-                                 isGeneralTrack: isGeneralTrack)
+                                 overrideIsGeneralTrack: overrideIsGeneralTrack)
             } else {
                 if let statsModeCell {
                     statsModeCell.modeButton.setTitle(
@@ -117,7 +117,7 @@ final class TrackChartHelper: NSObject {
             firstType: GPXDataSetType(rawValue: types.first!)!,
             secondType: secondType,
             axisType: selectedXAxisMode,
-            calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx, isGeneralTrack: isGeneralTrack)
+            calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx, overrideIsGeneralTrack: overrideIsGeneralTrack)
         )
     }
 

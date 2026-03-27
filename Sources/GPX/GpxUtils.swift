@@ -12,12 +12,14 @@ import DGCharts
 @objcMembers
 final class GpxUtils: NSObject {
 
-    static func calcWithoutGaps(_ gpxFile: GpxFile?, gpxDataItem: GpxDataItem?, isGeneralTrack: Bool) -> Bool {
+    static func calcWithoutGaps(_ gpxFile: GpxFile?, gpxDataItem: GpxDataItem?, overrideIsGeneralTrack: Bool) -> Bool {
         guard let gpxFile, let gpxDataItem else { return false }
         if gpxFile.isShowCurrentTrack() {
-            return !OAAppSettings.sharedManager().currentTrackIsJoinSegments.get() && (gpxFile.tracks.count == 0 || isGeneralTrack)
+            let tracks = gpxFile.tracks as? [Track]
+            let tracksIsEmpty = tracks == nil || tracks?.isEmpty == true
+            return !OAAppSettings.sharedManager().currentTrackIsJoinSegments.get() && (tracksIsEmpty || tracks?.first?.isGeneralTrack() ?? false)
         } else {
-            return isGeneralTrack && gpxDataItem.joinSegments
+            return overrideIsGeneralTrack && gpxDataItem.joinSegments
         }
     }
 

@@ -78,7 +78,7 @@
         [self generateSegmentSectionData:generalSegment
                                 analysis:[TrackChartHelper getAnalysisFor:generalSegment joinSegments:self.trackMenuDelegate.isJoinSegments]
                                    index:0
-                          isGeneralTrack:YES];
+                  overrideIsGeneralTrack:YES];
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
@@ -89,7 +89,7 @@
             [self generateSegmentSectionData:segments[index]
                                     analysis:analysis
                                        index:generalSegment ? index + 1 : index
-                              isGeneralTrack:NO];
+                      overrideIsGeneralTrack:[segments[index] isGeneralSegment]];
         }
     }
 
@@ -99,7 +99,7 @@
 - (void)generateSegmentSectionData:(OASTrkSegment *)segment
                           analysis:(OASGpxTrackAnalysis *)analysis
                              index:(NSInteger)index
-                    isGeneralTrack:(BOOL)isGeneralTrack
+            overrideIsGeneralTrack:(BOOL)overrideIsGeneralTrack
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     ElevationChartCell *cell = (ElevationChartCell *) nib[0];
@@ -117,7 +117,7 @@
                                       chart:cell.chartView
                                    analysis:analysis
                               statsModeCell:nil
-                             isGeneralTrack:isGeneralTrack];
+                     overrideIsGeneralTrack:overrideIsGeneralTrack];
     }
 
     OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
@@ -547,7 +547,7 @@
                                               chart:cell.chartView
                                            analysis:sectionData.values[@"analysis_value"]
                                       statsModeCell:nil
-                                     isGeneralTrack:segment.generalSegment];
+                             overrideIsGeneralTrack:[segment isGeneralSegment]];
             }
         }
     }

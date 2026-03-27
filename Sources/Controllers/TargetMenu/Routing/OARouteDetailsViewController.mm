@@ -302,7 +302,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:_selectedXAxisMode
-                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx isGeneralTrack:YES]];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx overrideIsGeneralTrack:YES]];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
@@ -1055,7 +1055,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                           chart:graphCell.chartView
                                        analysis:self.analysis
                                   statsModeCell:statsModeCell
-                                 isGeneralTrack:YES];
+                         overrideIsGeneralTrack:YES];
     }
 }
 

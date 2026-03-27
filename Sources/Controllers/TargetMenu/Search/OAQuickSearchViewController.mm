@@ -1510,7 +1510,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) goToPoint:(OAPOI *)poi
 {
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi touchLocation:nil];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 

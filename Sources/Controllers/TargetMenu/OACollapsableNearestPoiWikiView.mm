@@ -307,7 +307,7 @@
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
     [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude animated:NO];
     
-    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi touchLocation:nil];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }

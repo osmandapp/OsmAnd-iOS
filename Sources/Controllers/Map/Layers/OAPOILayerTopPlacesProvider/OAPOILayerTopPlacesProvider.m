@@ -42,7 +42,6 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     DataSourceType _wikiDataSource;
     BOOL _showTopPlacesPreviews;
     OAPOIUIFilter *_topPlacesFilter;
-    NSSet<OAPOIUIFilter *> *_calculatedFilters;
     QuadRect *_topPlacesBox;
     QuadRect *_lastCalcBounds;
     float _lastCalcZoom;
@@ -80,8 +79,12 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     _mapView = (OAMapRendererView *)[OARootViewController instance].mapPanel.mapViewController.view;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     _textScale = [self textScale];
-    _calculatedFilters = [_filtersHelper getSelectedPoiFilters];
     _wikiDataSourceType = [[OAAppSettings sharedManager].wikiDataSourceType get];
+    NSSet<OAPOIUIFilter *> *poiUIFilters = [_filtersHelper getSelectedPoiFilters];
+    for (OAPOIUIFilter *filter in poiUIFilters)
+        if (filter.isTopImagesFilter)
+            _topPlacesFilter = filter;
+
     _backgroundQueue = dispatch_queue_create("com.osmand.topplaces.background", DISPATCH_QUEUE_SERIAL);
     _popularPlacesQueue = [NSOperationQueue new];
     _popularPlacesQueue.maxConcurrentOperationCount = 1;
@@ -363,7 +366,7 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 - (void)updateDisabledState
 {
-    _isDisabled = _calculatedFilters.count == 0 || ![[OAAppSettings sharedManager].wikiShowImagePreviews get];
+    _isDisabled = !_topPlacesFilter || ![[OAAppSettings sharedManager].wikiShowImagePreviews get];
 }
 
 - (BOOL)removeMarkerWithId:(int32_t)markerId
@@ -427,10 +430,15 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 - (BOOL)dataChanged
 {
-    NSSet<OAPOIUIFilter *> *calculatedFilters = [_filtersHelper getSelectedPoiFilters];
-    if (![_calculatedFilters isEqualToSet:calculatedFilters])
+    OAPOIUIFilter *topPlacesFilter = nil;
+    NSSet<OAPOIUIFilter *> *poiUIFilters = [_filtersHelper getSelectedPoiFilters];
+    for (OAPOIUIFilter *filter in poiUIFilters)
+        if (filter.isTopImagesFilter)
+            topPlacesFilter = filter;
+
+    if (_topPlacesFilter != topPlacesFilter)
     {
-        _calculatedFilters = calculatedFilters;
+        _topPlacesFilter = topPlacesFilter;
         [self updateDisabledState];
         return YES;
     }
@@ -786,7 +794,7 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
             counter++;
         }
         
-        if (counter++ >= kTopPlacesLimit)
+        if (counter >= kTopPlacesLimit)
             break;
     }
     
@@ -946,69 +954,32 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
                                                              zoom:(NSInteger)zoom
                                                           matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    NSMutableSet<OAPOIUIFilter *> *poiUIFilters = [_calculatedFilters mutableCopy];
-    if (poiUIFilters.count == 0)
-    {
-        _topPlacesFilter = nil;
+    OAPOIUIFilter *filter = _topPlacesFilter;
+    if (!filter)
         return @{ @"all": @[], @"displayed": @[] };
-    }
     
     NSInteger z = (NSInteger)floor(zoom + log([[OAAppSettings sharedManager].mapDensity get]) / log(2.0));
-    
-    NSMutableArray<OAPOI *> *res = [NSMutableArray array];
+
     NSMutableSet<NSString *> *uniqueRouteIds = [NSMutableSet set];
-    _topPlacesFilter = nil;
+    NSMutableArray<OAPOI *> *amenities = [NSMutableArray array];
+    amenities = [[filter searchAmenities:latLonBounds.top
+                                    left:latLonBounds.left
+                                  bottom:latLonBounds.bottom
+                                   right:latLonBounds.right
+                                    zoom:(int)z
+                                 matcher:matcher
+                            filterUnique:YES] mutableCopy];
+    if ([matcher isCancelled])
+        return @{ @"all": @[], @"displayed": @[] };
     
-    for (OAPOIUIFilter *filter in poiUIFilters)
-    {
-        if (filter.isTopImagesFilter)
-            _topPlacesFilter = filter;
-    }
-    
-    [OAPOIUIFilter combineStandardPoiFilters:poiUIFilters];
-    
-    for (OAPOIUIFilter *filter in poiUIFilters)
-    {
-        NSMutableArray<OAPOI *> *amenities = [[filter searchAmenities:latLonBounds.top
-                                                                 left:latLonBounds.left
-                                                               bottom:latLonBounds.bottom
-                                                                right:latLonBounds.right
-                                                                 zoom:(int)z
-                                                              matcher:matcher
-                                                         filterUnique:YES] mutableCopy];
-        if ([matcher isCancelled])
-            return @{ @"all": @[], @"displayed": @[] };
-        
-        if (filter.isTopWikiFilter)
-        {
-            [self sortByElo:amenities];
-            [res insertObjects:amenities atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, amenities.count)]];
-        }
-        else
-        {
-            for (OAPOI *amenity in amenities)
-            {
-                if (amenity.isRouteTrack)
-                {
-                    NSString *routeId = [amenity getRouteId];
-                    if (routeId != nil && [uniqueRouteIds containsObject:routeId])
-                        continue;
-                    
-                    if (routeId != nil)
-                        [uniqueRouteIds addObject:routeId];
-                }
-                [res addObject:amenity];
-            }
-        }
-    }
-    NSSet<OAPOI *> *displayedPoints = [self collectDisplayedPoints:latLonBounds zoom:zoom res:res];
+    [self sortByElo:amenities];
+
+    NSSet<OAPOI *> *displayedPoints = [self collectDisplayedPoints:latLonBounds zoom:zoom res:amenities];
 
     if ([matcher isCancelled])
-    {
         return @{ @"all": @[], @"displayed": @[] };
-    }
     
-    return @{ @"all": res, @"displayed": displayedPoints.allObjects };
+    return @{ @"all": amenities, @"displayed": displayedPoints.allObjects };
 }
 
 - (void)sortByElo:(NSMutableArray<OAPOI *> *)amenities {

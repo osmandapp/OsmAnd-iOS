@@ -17,7 +17,6 @@
 #import "OAAppSettings.h"
 #import "QuadTree.h"
 #import "OANativeUtilities.h"
-#import "OAMapTopPlace.h"
 #import "OATargetPointView.h"
 #import <CoreLocation/CoreLocation.h>
 
@@ -29,9 +28,10 @@ static const NSInteger kTopPlacesLimit = 20;
 static const NSInteger kTilePointsLimit = 25;
 static const NSInteger kStartZoom = 5;
 static const NSInteger kStartZoomRouteTrack = 11;
-static const NSInteger kEndZoomRouteTrack = 22;
 static const NSInteger kImageIconSizeDP = 45;
-static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
+static NSString * const kAllTopPlacesKey = @"all";
+static NSString * const kDisplayedTopPlacesKey = @"displayed";
+static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
 @implementation OAPOILayerTopPlacesProvider
 {
@@ -39,7 +39,6 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     NSMutableDictionary<NSNumber *, UIImage *> *_topPlacesImages;
     NSDictionary<NSString *, NSArray<OAPOI *> *> *_topPlaceData;
     NSMutableArray<OAPOI *> *_visiblePlaces;
-    DataSourceType _wikiDataSource;
     BOOL _showTopPlacesPreviews;
     OAPOIUIFilter *_topPlacesFilter;
     QuadRect *_topPlacesBox;
@@ -58,9 +57,10 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     EOAWikiDataSourceType _wikiDataSourceType;
     CGFloat _textScale;
     OAPOI *_selectedTopPlace;
-    UIImage *_selectedTopPlaceImage;
     BOOL _isDisabled;
     NSSet<NSString *> *_storedWikipediaResourceIds;
+    NSMutableDictionary<NSNumber *, NSString *> *_renderedMarkerStates;
+    NSUInteger _stateGeneration;
 }
 
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder
@@ -86,9 +86,11 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
             _topPlacesFilter = filter;
 
     _backgroundQueue = dispatch_queue_create("com.osmand.topplaces.background", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_set_specific(_backgroundQueue, kTopPlacesStateQueueKey, kTopPlacesStateQueueKey, NULL);
     _popularPlacesQueue = [NSOperationQueue new];
     _popularPlacesQueue.maxConcurrentOperationCount = 1;
     _popularPlacesQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+    _showTopPlacesPreviews = [[OAAppSettings sharedManager].wikiShowImagePreviews get];
     [self storeWikipediaResources:[OAResourcesUISwiftHelper findWikiMapRegionsAtCurrentMapLocation]];
     [self updateDisabledState];
 }
@@ -97,11 +99,18 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 - (NSDictionary<NSNumber *, OAPOI *> *)topPlaces
 {
-    return _topPlaces ? [_topPlaces copy] : nil;
+    __block NSDictionary<NSNumber *, OAPOI *> *snapshot = nil;
+    [self performStateSync:^{
+        snapshot = _topPlaces ? [_topPlaces copy] : nil;
+    }];
+    return snapshot;
 }
 
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc
 {
+    if (_isDisabled)
+        return;
+
     dispatch_async(_backgroundQueue, ^{
         if (_isDisabled)
             return;
@@ -158,6 +167,7 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
         _lastCalcZoom = currentZoom;
         
         [_popularPlacesQueue cancelAllOperations];
+        NSUInteger generation = ++_stateGeneration;
         
         __weak __typeof(self) weakSelf = self;
         NSBlockOperation *op = [NSBlockOperation new];
@@ -181,7 +191,7 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
             if (weakOp.isCancelled)
                 return;
             
-            [weakSelf updateTopPlaceData:results];
+            [weakSelf updateTopPlaceData:results generation:generation];
         }];
         
         [_popularPlacesQueue addOperation:op];
@@ -226,55 +236,28 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 - (void)resetLayer
 {
     dispatch_async(_backgroundQueue, ^{
-        [self clearMapMarkersCollections];
-        _topPlacesBox = nil;
+        [self resetTopPlacesState];
     });
 }
 
 - (void)updateSelectedTopPlaceIfNeeded:(OAPOI *)topPlace
 {
-    [_mapViewController runWithRenderSync:^{
-        if (_mapMarkersCollection == nullptr)
-            return;
-
-        if (_selectedTopPlace
-            && topPlace
-            && [_selectedTopPlace getSignedId] == [topPlace getSignedId])
-            return;
-
-        void (^selectNewTopPlace)(void) = ^{
-            if (!topPlace || !_topPlaces[@([topPlace getSignedId])])
-                return;
-
-            _selectedTopPlace = topPlace;
-
-            int32_t markerId = [self truncatedTopPlaceId:topPlace];
-            if ([self removeMarkerWithId:markerId])
-            {
-                [self addTopPlaceMarker:topPlace
-                               markerId:markerId
-                             isSelected:YES];
-            }
-        };
-
-        if (_selectedTopPlace)
+    dispatch_async(_backgroundQueue, ^{
+        if ((!_selectedTopPlace && !topPlace)
+            || (_selectedTopPlace
+                && topPlace
+                && [_selectedTopPlace getSignedId] == [topPlace getSignedId]))
         {
-            int32_t previousMarkerId = [self truncatedTopPlaceId:_selectedTopPlace];
-            if ([self removeMarkerWithId:previousMarkerId]) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)),
-                               dispatch_get_main_queue(), ^{
-                    [self addTopPlaceMarker:_selectedTopPlace
-                                   markerId:previousMarkerId
-                                 isSelected:NO];
-                    _selectedTopPlaceImage = nil;
-                    selectNewTopPlace();
-                });
-                return;
-            }
+            return;
         }
 
-        selectNewTopPlace();
-    }];
+        if (topPlace && _topPlaces[@([topPlace getSignedId])])
+            _selectedTopPlace = topPlace;
+        else
+            _selectedTopPlace = nil;
+
+        [self updateTopPlacesCollection];
+    });
 }
 
 - (void)contextMenuDidShow:(id)targetObj
@@ -288,6 +271,8 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 - (OAPOI *)topPlaceAmenityFor:(id)object
 {
+    NSDictionary<NSNumber *, OAPOI *> *topPlaces = [self topPlaces];
+
     if ([object isKindOfClass:SelectedMapObject.class])
     {
         SelectedMapObject *obj = object;
@@ -303,14 +288,14 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
         OAPOI *syntheticAmenity = baseDetailsObject.syntheticAmenity;
         
         int64_t obfId = syntheticAmenity.getSignedId;
-        if (!_topPlaces[@(obfId)]) {
+        if (!topPlaces[@(obfId)]) {
             for (id item in baseDetailsObject.objects)
             {
                 if ([item isKindOfClass:[OAPOI class]])
                 {
                     OAPOI *poi = (OAPOI *)item;
                     obfId = [poi getSignedId];
-                    if (_topPlaces[@(obfId)])
+                    if (topPlaces[@(obfId)])
                         return poi;
                 }
             }
@@ -322,44 +307,22 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 - (NSArray<OAPOI *> *)displayedAmenities
 {
-    const auto screenBbox = _mapView.getVisibleBBox31;
-    float currentZoom = [_mapView zoom];
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
-    
-    CLLocationCoordinate2D topLeftCoord = CLLocationCoordinate2DMake(topLeft.latitude, topLeft.longitude);
-    CLLocationCoordinate2D bottomRightCoord = CLLocationCoordinate2DMake(bottomRight.latitude, bottomRight.longitude);
-    if (!CLLocationCoordinate2DIsValid(topLeftCoord) || !CLLocationCoordinate2DIsValid(bottomRightCoord))
-        return @[];
-    
-    QuadRect *currentBounds = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
-    QuadRect *extendedBox = [[QuadRect alloc] initWithRect:currentBounds];
-    double lonDelta = [currentBounds width] * 0.1;
-    double latDelta = [currentBounds height] * 0.1;
-    [extendedBox inset:-lonDelta dy:-latDelta];
-    
-    NSDictionary *results = [self calculateResult:extendedBox zoom:currentZoom matcher:nil];
-    
-    return results[@"displayed"];
+    __block NSDictionary<NSString *, NSArray<OAPOI *> *> *topPlaceData = nil;
+    [self performStateSync:^{
+        topPlaceData = _topPlaceData;
+    }];
+    return topPlaceData ? topPlaceData[kDisplayedTopPlacesKey] : @[];
 }
 
 - (void)resetSelectedTopPlaceIfNeeded
 {
-    [_mapViewController runWithRenderSync:^{
+    dispatch_async(_backgroundQueue, ^{
         if (_selectedTopPlace)
         {
-            int32_t markerId = [self truncatedTopPlaceId:_selectedTopPlace];
-            BOOL removed = [self removeMarkerWithId:markerId];
-            if (removed)
-            {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self addTopPlaceMarker:_selectedTopPlace markerId:markerId isSelected:NO];
-                    _selectedTopPlace = nil;
-                    _selectedTopPlaceImage = nil;
-                });
-            }
+            _selectedTopPlace = nil;
+            [self updateTopPlacesCollection];
         }
-    }];
+    });
 }
 
 // MARK: - Private
@@ -369,50 +332,73 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     _isDisabled = !_topPlacesFilter || ![[OAAppSettings sharedManager].wikiShowImagePreviews get];
 }
 
-- (BOOL)removeMarkerWithId:(int32_t)markerId
+- (BOOL)isOnStateQueue
 {
-    if (!_mapMarkersCollection)
+    return dispatch_get_specific(kTopPlacesStateQueueKey) == kTopPlacesStateQueueKey;
+}
+
+- (void)performStateSync:(dispatch_block_t)block
+{
+    if ([self isOnStateQueue])
+        block();
+    else
+        dispatch_sync(_backgroundQueue, block);
+}
+
+- (nullable UIImage *)markerImageForPlace:(OAPOI *)place
+{
+    UIImage *baseImage = _topPlacesImages[@([place getSignedId])];
+    if (!baseImage)
+        return nil;
+
+    if (_selectedTopPlace && [_selectedTopPlace getSignedId] == [place getSignedId])
+        return [POITopPlaceImageDecorator selectedImageFor:baseImage];
+
+    return baseImage;
+}
+
+- (nullable NSString *)markerStateForPlace:(OAPOI *)place image:(UIImage *)image
+{
+    if (!image)
+        return nil;
+
+    BOOL isSelected = _selectedTopPlace && [_selectedTopPlace getSignedId] == [place getSignedId];
+    return [NSString stringWithFormat:@"%lld:%d:%p", [place getSignedId], isSelected, image];
+}
+
+- (BOOL)removeMarkerWithId:(int32_t)markerId
+       fromCollectionLocked:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
+{
+    if (!markersCollection)
         return NO;
-    
-    const auto markers = _mapMarkersCollection->getMarkers();
+
+    const auto markers = markersCollection->getMarkers();
     for (const auto &marker : markers)
     {
         if (marker->markerId != markerId)
             continue;
-        
-        BOOL removed = _mapMarkersCollection->removeMarker(marker);
+
+        BOOL removed = markersCollection->removeMarker(marker);
         if (removed)
-        {
             marker->setUpdateAfterCreated(true);
-        }
-        return YES;
+        return removed;
     }
-    
+
     return NO;
 }
 
-- (void)addTopPlaceMarker:(OAPOI *)place
+- (BOOL)addTopPlaceMarker:(OAPOI *)place
                  markerId:(int32_t)markerId
-               isSelected:(BOOL)isSelected
+                    image:(UIImage *)image
+       toCollectionLocked:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
 {
-    UIImage *image = nil;
-    if (isSelected)
-    {
-        image = [self topPlaceImage:place];
-        if (!image)
-            return;
-    }
-    else
-    {
-        image = _topPlacesImages[@([place getSignedId])];
-        if (!image)
-            return;
-    }
-    
+    if (!image)
+        return NO;
+
     NSData *data = UIImagePNGRepresentation(image);
     if (!data)
-        return;
-  
+        return NO;
+
     CLLocationCoordinate2D coordinate = place.getLocation.coordinate;
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
@@ -424,8 +410,9 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
 
     std::shared_ptr<OsmAnd::MapMarker> marker =
-        builder.buildAndAddToCollection(_mapMarkersCollection);
+        builder.buildAndAddToCollection(markersCollection);
     marker->setUpdateAfterCreated(true);
+    return YES;
 }
 
 - (BOOL)dataChanged
@@ -467,8 +454,13 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     [self cancelLoadingImages];
     [_popularPlacesQueue cancelAllOperations];
 
+    _stateGeneration++;
     _topPlaceData = nil;
     _topPlacesBox = nil;
+    _lastCalcBounds = nil;
+    _lastCalcZoom = 0.f;
+    _selectedTopPlace = nil;
+    _renderedMarkerStates = nil;
 }
 
 - (void)handleTextScaleChangeIfNeeded
@@ -482,28 +474,11 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 }
 
 - (NSArray<OAPOI *> *)visiblePlaces {
-    return [_visiblePlaces copy];
-}
-
-- (nullable UIImage *)topPlaceImage:(OAPOI *)place
-{
-    if (_topPlacesImages == nil)
-        return nil;
-    
-    UIImage *baseImage = _topPlacesImages[@([place getSignedId])];
-    if (baseImage == nil)
-        return nil;
-    
-    if ([_selectedTopPlace getSignedId] == [place getSignedId])
-    {
-        if (_selectedTopPlaceImage) {
-            return _selectedTopPlaceImage;
-        }
-        _selectedTopPlaceImage = [POITopPlaceImageDecorator selectedImageFor:baseImage];
-        return _selectedTopPlaceImage;
-    }
-    
-    return baseImage;
+    __block NSArray<OAPOI *> *snapshot = nil;
+    [self performStateSync:^{
+        snapshot = [_visiblePlaces copy];
+    }];
+    return snapshot;
 }
 
 - (void)updateVisiblePlaces:(nullable NSArray<OAPOI *> *)places
@@ -533,9 +508,15 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 }
 
 - (void)updateTopPlaceData:(NSDictionary<NSString *, NSArray<OAPOI *> *> *)results
+                 generation:(NSUInteger)generation
 {
-    _topPlaceData = results;
-    [self updatePopularPlaces];
+    dispatch_async(_backgroundQueue, ^{
+        if (_stateGeneration != generation)
+            return;
+
+        _topPlaceData = [results copy];
+        [self updatePopularPlaces];
+    });
 }
 
 - (void)updatePopularPlaces
@@ -564,8 +545,8 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
         
         if (_topPlacesBox == nil || ![_topPlacesBox contains:screenRect])
         {
-            NSArray<OAPOI *> *allPlaces = _topPlaceData[@"all"];
-            [self updateVisiblePlaces:_topPlaceData[@"displayed"] latLonBounds:screenRect];
+            NSArray<OAPOI *> *allPlaces = _topPlaceData[kAllTopPlacesKey];
+            [self updateVisiblePlaces:_topPlaceData[kDisplayedTopPlacesKey] latLonBounds:screenRect];
             
             if (allPlaces != nil)
             {
@@ -590,8 +571,12 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 
 - (void)updateTopPlaceImageForId:(NSNumber *)placeId
                            image:(UIImage *)image
+                      generation:(NSUInteger)generation
 {
     dispatch_async(_backgroundQueue, ^{
+        if (_stateGeneration != generation)
+            return;
+
         if (_topPlaces && _topPlacesImages)
         {
             OAPOI *poi = _topPlaces[placeId];
@@ -607,90 +592,74 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 - (void)updateTopPlacesCollection
 {
     [_mapViewController runWithRenderSync:^{
-        NSArray<OAPOI *> *places = _topPlaces ? [_topPlaces allValues] : nil;
+        NSMutableArray<OAPOI *> *places = _topPlaces ? [[_topPlaces allValues] mutableCopy] : nil;
+        [self sortByElo:places];
         if (!places || places.count == 0)
         {
             [self clearMapMarkersCollections];
             return;
         }
-        
+
         if (!_mapMarkersCollection)
-            _mapMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
-        
-        QList<std::shared_ptr<OsmAnd::MapMarker>> existingMarkers = _mapMarkersCollection->getMarkers();
-        
-        NSMutableDictionary<NSNumber *, NSValue *> *markersMap = [NSMutableDictionary dictionary];
-        for (const auto& marker : existingMarkers)
         {
-            markersMap[@(marker->markerId)] = [NSValue valueWithPointer:new std::shared_ptr<OsmAnd::MapMarker>(marker)];
+            _mapMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+            _renderedMarkerStates = [NSMutableDictionary dictionary];
+            _mapView.renderer->addSymbolsProvider(kFavoritesSymbolSection, _mapMarkersCollection);
         }
-        
-        NSMutableArray<OAMapTopPlace *> *mapPlacesToUpdate = [NSMutableArray array];
-        
+        else if (!_renderedMarkerStates)
+        {
+            _renderedMarkerStates = [NSMutableDictionary dictionary];
+        }
+
+        NSMutableDictionary<NSNumber *, NSString *> *desiredMarkerStates = [NSMutableDictionary dictionary];
+        NSInteger markerCount = 0;
         for (OAPOI *place in places)
         {
-            // NOTE:
-            // Resolve the ID issue: use the lower 32 bits or a hash.
-            // If obfId fits into an int, use it; otherwise, hash it.
-            int32_t truncatedId = [self truncatedTopPlaceId:place];
-            
-            BOOL alreadyExists = NO;
-            NSNumber *idKey = @(truncatedId);
-            
-            if (markersMap[idKey])
+            UIImage *topPlaceImage = [self markerImageForPlace:place];
+            if (!topPlaceImage)
+                continue;
+
+            int32_t markerId = [self truncatedTopPlaceId:place];
+            NSNumber *markerKey = @(markerId);
+            NSString *markerState = [self markerStateForPlace:place image:topPlaceImage];
+            if (!markerState)
+                continue;
+
+            desiredMarkerStates[markerKey] = markerState;
+            NSString *currentMarkerState = _renderedMarkerStates[markerKey];
+            if (![currentMarkerState isEqualToString:markerState])
             {
-                alreadyExists = YES;
-                [markersMap removeObjectForKey:idKey];
+                [self removeMarkerWithId:markerId fromCollectionLocked:_mapMarkersCollection];
+                if ([self addTopPlaceMarker:place
+                                   markerId:markerId
+                                      image:topPlaceImage
+                         toCollectionLocked:_mapMarkersCollection])
+                {
+                    _renderedMarkerStates[markerKey] = markerState;
+                }
+                else
+                {
+                    [_renderedMarkerStates removeObjectForKey:markerKey];
+                    [desiredMarkerStates removeObjectForKey:markerKey];
+                }
             }
-            
-            UIImage *topPlaceImage = [self topPlaceImage:place];
-            if (topPlaceImage)
-            {
-                OAMapTopPlace *mapTopPlace = [[OAMapTopPlace alloc] initWithPlaceId:truncatedId
-                                                                           position:[OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(place.getLocation.coordinate.latitude, place.getLocation.coordinate.longitude)]
-                                                                              image:topPlaceImage
-                                                                      alreadyExists:alreadyExists];
-                [mapPlacesToUpdate addObject:mapTopPlace];
-            }
-            
-            if (mapPlacesToUpdate.count >= kTopPlacesLimit)
+
+            markerCount++;
+            if (markerCount >= kTopPlacesLimit)
                 break;
         }
-        
-        for (NSNumber *key in markersMap)
+
+        for (NSNumber *markerKey in [_renderedMarkerStates allKeys])
         {
-            std::shared_ptr<OsmAnd::MapMarker>* markerPtr = (std::shared_ptr<OsmAnd::MapMarker>*)[markersMap[key] pointerValue];
-            _mapMarkersCollection->removeMarker(*markerPtr);
-            delete markerPtr;
-        }
-        
-        for (OAMapTopPlace *place in mapPlacesToUpdate)
-        {
-            if (place.alreadyExists)
+            if (desiredMarkerStates[markerKey])
                 continue;
-            
-            NSData *data = UIImagePNGRepresentation(place.image);
-            if (data)
-            {
-                OsmAnd::MapMarkerBuilder builder;
-                builder.setIsAccuracyCircleSupported(false)
-                    .setMarkerId(place.placeId)
-                    .setBaseOrder(_topPlaceBaseOrder)
-                    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromNSData:data]))
-                    .setPosition(place.position)
-                    .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-                    .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
-                std::shared_ptr<OsmAnd::MapMarker> marker =
-                    builder.buildAndAddToCollection(_mapMarkersCollection);
-                marker->setUpdateAfterCreated(true);
-            }
-            else
-            {
-                NSLog(@"[OAPOILayerTopPlacesProvider] UIImagePNGRepresentation is nil");
-            }
+
+            [self removeMarkerWithId:markerKey.intValue fromCollectionLocked:_mapMarkersCollection];
+            [_renderedMarkerStates removeObjectForKey:markerKey];
         }
-        // TOP_PLACES_POI_SECTION
-        _mapView.renderer->addSymbolsProvider(kFavoritesSymbolSection, _mapMarkersCollection);
+
+        if (_renderedMarkerStates.count == 0)
+            [self clearMapMarkersCollectionLocked];
     }];
 }
 
@@ -703,12 +672,18 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 - (void)clearMapMarkersCollections
 {
     [_mapViewController runWithRenderSync:^{
-        if (_mapMarkersCollection != nil)
-        {
-            [_mapView removeKeyedSymbolsProvider:_mapMarkersCollection];
-            _mapMarkersCollection.reset();
-        }
+        [self clearMapMarkersCollectionLocked];
     }];
+}
+
+- (void)clearMapMarkersCollectionLocked
+{
+    if (_mapMarkersCollection != nil)
+    {
+        [_mapView removeKeyedSymbolsProvider:_mapMarkersCollection];
+        _mapMarkersCollection.reset();
+    }
+    _renderedMarkerStates = nil;
 }
 
 - (void)updateTopPlaces:(NSArray<OAPOI *> *)places
@@ -716,32 +691,49 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
                    zoom:(int)zoom
 {
     dispatch_async(_backgroundQueue, ^{
-        NSArray<OAPOI *> *topPlacesList = nil;
-        
+        NSUInteger generation = ++_stateGeneration;
+        NSArray<OAPOI *> *topPlacesToLoad = nil;
+
         if (_topPlacesFilter != nil)
         {
+            NSDictionary<NSNumber *, UIImage *> *cachedImages = [_topPlacesImages copy] ?: @{};
             _topPlaces = [[self obtainTopPlacesToDisplay:places
                                             latLonBounds:latLonBounds
                                                     zoom:zoom] mutableCopy];
-            _topPlacesImages = [NSMutableDictionary dictionary];
-            topPlacesList = [_topPlaces allValues];
+
+            NSMutableDictionary<NSNumber *, UIImage *> *preservedImages = [NSMutableDictionary dictionary];
+            NSMutableArray<OAPOI *> *missingImagePlaces = [NSMutableArray array];
+            for (OAPOI *place in _topPlaces.allValues)
+            {
+                NSNumber *placeId = @([place getSignedId]);
+                UIImage *cachedImage = cachedImages[placeId];
+                if (cachedImage)
+                    preservedImages[placeId] = cachedImage;
+                else
+                    [missingImagePlaces addObject:place];
+            }
+            _topPlacesImages = preservedImages;
+            topPlacesToLoad = [missingImagePlaces copy];
+            [self updateTopPlacesCollection];
         }
-        
-        if (topPlacesList != nil)
+
+        if (topPlacesToLoad != nil)
         {
-            if (topPlacesList.count > 0)
+            if (topPlacesToLoad.count > 0)
             {
                 if (!_imageLoader)
                     _imageLoader = [POIImageLoader new];
-                
+                else
+                    [_imageLoader cancelAll];
+
                 __weak __typeof(self) weakSelf = self;
-                [_imageLoader fetchImages:topPlacesList completion:^(NSNumber *placeId, UIImage *image) {
-                    [weakSelf updateTopPlaceImageForId:placeId image:image];
+                [_imageLoader fetchImages:topPlacesToLoad completion:^(NSNumber *placeId, UIImage *image) {
+                    [weakSelf updateTopPlaceImageForId:placeId image:image generation:generation];
                 }];
             }
-            else
+            else if (_imageLoader)
             {
-                [self cancelLoadingImages];
+                [_imageLoader cancelAll];
             }
         }
     });
@@ -880,10 +872,11 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
     {
         [_imageLoader cancelAll];
         _imageLoader = nil;
-        _topPlaces = nil;
-        _topPlacesImages = nil;
-        _visiblePlaces = nil;
     }
+
+    _topPlaces = nil;
+    _topPlacesImages = nil;
+    _visiblePlaces = nil;
 }
 
 - (NSSet<OAPOI *> *)collectDisplayedPoints:(QuadRect *)latLonBounds
@@ -956,11 +949,10 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
 {
     OAPOIUIFilter *filter = _topPlacesFilter;
     if (!filter)
-        return @{ @"all": @[], @"displayed": @[] };
+        return @{ kAllTopPlacesKey: @[], kDisplayedTopPlacesKey: @[] };
     
     NSInteger z = (NSInteger)floor(zoom + log([[OAAppSettings sharedManager].mapDensity get]) / log(2.0));
 
-    NSMutableSet<NSString *> *uniqueRouteIds = [NSMutableSet set];
     NSMutableArray<OAPOI *> *amenities = [NSMutableArray array];
     amenities = [[filter searchAmenities:latLonBounds.top
                                     left:latLonBounds.left
@@ -970,16 +962,16 @@ static const CLLocationDistance kPoiSearchRadius = 50.0; // meters
                                  matcher:matcher
                             filterUnique:YES] mutableCopy];
     if ([matcher isCancelled])
-        return @{ @"all": @[], @"displayed": @[] };
+        return @{ kAllTopPlacesKey: @[], kDisplayedTopPlacesKey: @[] };
     
     [self sortByElo:amenities];
 
     NSSet<OAPOI *> *displayedPoints = [self collectDisplayedPoints:latLonBounds zoom:zoom res:amenities];
 
     if ([matcher isCancelled])
-        return @{ @"all": @[], @"displayed": @[] };
+        return @{ kAllTopPlacesKey: @[], kDisplayedTopPlacesKey: @[] };
     
-    return @{ @"all": amenities, @"displayed": displayedPoints.allObjects };
+    return @{ kAllTopPlacesKey: amenities, kDisplayedTopPlacesKey: displayedPoints.allObjects };
 }
 
 - (void)sortByElo:(NSMutableArray<OAPOI *> *)amenities {

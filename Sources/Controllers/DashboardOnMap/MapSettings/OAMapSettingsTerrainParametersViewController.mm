@@ -168,9 +168,23 @@ static const NSInteger kElevationMaxMeters = 2000;
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
         }
         
-        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:_terrainType == EOATerrainSettingsTypeCoordinatesGridColor ? [_coordinatesGridSettings getDayGridColor] : [_plugin.buildings3dCustomDayColorPref get]] ?: [_appearanceCollection getDefaultLineColorItem];
-        _currentDayColorItem  = _baseDayColorItem;
-        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:_terrainType == EOATerrainSettingsTypeCoordinatesGridColor ? [_coordinatesGridSettings getNightGridColor] : [_plugin.buildings3dCustomNightColorPref get]] ?: [_appearanceCollection getDefaultLineColorItem];
+        int dayColorValue;
+        int nightColorValue;
+        if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
+        {
+            dayColorValue = [_coordinatesGridSettings getDayGridColor];
+            nightColorValue = [_coordinatesGridSettings getNightGridColor];
+        }
+        else
+        {
+            dayColorValue = [_plugin.buildings3dCustomDayColorPref get];
+            nightColorValue = [_plugin.buildings3dCustomNightColorPref get];
+        }
+        
+        OAColorItem *defaultColorItem = [_appearanceCollection getDefaultLineColorItem];
+        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:dayColorValue] ?: defaultColorItem;
+        _currentDayColorItem = _baseDayColorItem;
+        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:nightColorValue] ?: defaultColorItem;
         _currentNightColorItem = _baseNightColorItem;
     }
 
@@ -489,13 +503,13 @@ static const NSInteger kElevationMaxMeters = 2000;
                     kCellTypeKey: OATitleDescriptionBigIconCell.reuseIdentifier,
                     kCellTitleKey: OALocalizedString(@"custom_color"),
                     kCellDescrKey: OALocalizedString(@"free_custom_color_description"),
-                    kCellIconKey: [UIImage templateImageNamed:@"ic_custom_3d_building_colored"]
+                    kCellIconKey: [UIImage templateImageNamed:ACImageNameIcCustom3DBuildingColored]
                 }];
                 [topSection addRowFromDictionary:@{
                     kCellKeyKey: @"buildings3DColorChooseColor",
                     kCellTypeKey: OAButtonTableViewCell.reuseIdentifier,
                     kCellTitleKey: OALocalizedString(@"choose_color"),
-                    kCellSecondaryIconName: @"ic_payment_label_maps_plus",
+                    kCellSecondaryIconName: ACImageNameIcPaymentLabelMapsPlus,
                     @"tintTitle": [UIColor colorNamed:ACColorNameTextColorActive]
                 }];
                 _colorsCollectionIndexPath = nil;
@@ -1511,36 +1525,30 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (UIMenu *)createBuildings3DColorTypeMenu
 {
-    __weak __typeof(self) weakSelf = self;
-    UIAction *mapStyleAction = [UIAction actionWithTitle:OALocalizedString(@"quick_action_map_style") image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        strongSelf->_currentBuildings3DColorStyle = Buildings3DColorTypeMapStyle;
-        [strongSelf previewBuildings3DColor];
-        strongSelf->_isValueChange = strongSelf->_baseDayColorItem != strongSelf->_currentDayColorItem || strongSelf->_baseNightColorItem != strongSelf->_currentNightColorItem || strongSelf->_baseBuildings3DColorStyle != strongSelf->_currentBuildings3DColorStyle;
-        [strongSelf updateApplyButton];
-        [strongSelf generateData];
-        [strongSelf.tableView reloadData];
-    }];
-    mapStyleAction.state = _currentBuildings3DColorStyle == Buildings3DColorTypeMapStyle ? UIMenuElementStateOn : UIMenuElementStateOff;
-    
-    UIAction *customAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_custom") image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        
-        strongSelf->_currentBuildings3DColorStyle = Buildings3DColorTypeCustom;
-        [strongSelf previewBuildings3DColor];
-        strongSelf->_isValueChange = strongSelf->_baseDayColorItem != strongSelf->_currentDayColorItem || strongSelf->_baseNightColorItem != strongSelf->_currentNightColorItem || strongSelf->_baseBuildings3DColorStyle != strongSelf->_currentBuildings3DColorStyle;
-        [strongSelf updateApplyButton];
-        [strongSelf generateData];
-        [strongSelf.tableView reloadData];
-    }];
-    customAction.state = _currentBuildings3DColorStyle == Buildings3DColorTypeCustom ? UIMenuElementStateOn : UIMenuElementStateOff;
+    UIAction *mapStyleAction = [self createBuildings3DColorTypeActionWithTitle:OALocalizedString(@"quick_action_map_style") style:Buildings3DColorTypeMapStyle];
+    UIAction *customAction = [self createBuildings3DColorTypeActionWithTitle:OALocalizedString(@"shared_string_custom") style:Buildings3DColorTypeCustom];
     
     return [UIMenu menuWithChildren:@[mapStyleAction, customAction]];
+}
+
+- (UIAction *)createBuildings3DColorTypeActionWithTitle:(NSString *)title style:(NSInteger)style
+{
+    __weak __typeof(self) weakSelf = self;
+    UIAction *action = [UIAction actionWithTitle:title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull uiAction) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        
+        strongSelf->_currentBuildings3DColorStyle = style;
+        [strongSelf previewBuildings3DColor];
+        strongSelf->_isValueChange = strongSelf->_baseDayColorItem != strongSelf->_currentDayColorItem || strongSelf->_baseNightColorItem != strongSelf->_currentNightColorItem || strongSelf->_baseBuildings3DColorStyle != strongSelf->_currentBuildings3DColorStyle;
+        [strongSelf updateApplyButton];
+        [strongSelf generateData];
+        [strongSelf.tableView reloadData];
+    }];
+    
+    action.state = _currentBuildings3DColorStyle == style ? UIMenuElementStateOn : UIMenuElementStateOff;
+    return action;
 }
 
 #pragma mark - UITableViewDelegate

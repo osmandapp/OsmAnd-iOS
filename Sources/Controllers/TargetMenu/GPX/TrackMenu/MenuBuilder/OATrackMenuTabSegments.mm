@@ -77,7 +77,8 @@
     {
         [self generateSegmentSectionData:generalSegment
                                 analysis:[TrackChartHelper getAnalysisFor:generalSegment joinSegments:self.trackMenuDelegate.isJoinSegments]
-                                   index:0];
+                                   index:0
+                  overrideIsGeneralTrack:YES];
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
@@ -87,7 +88,8 @@
         {
             [self generateSegmentSectionData:segments[index]
                                     analysis:analysis
-                                       index:generalSegment ? index + 1 : index];
+                                       index:generalSegment ? index + 1 : index
+                      overrideIsGeneralTrack:[segments[index] isGeneralSegment]];
         }
     }
 
@@ -97,6 +99,7 @@
 - (void)generateSegmentSectionData:(OASTrkSegment *)segment
                           analysis:(OASGpxTrackAnalysis *)analysis
                              index:(NSInteger)index
+            overrideIsGeneralTrack:(BOOL)overrideIsGeneralTrack
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:ElevationChartCell.reuseIdentifier owner:self options:nil];
     ElevationChartCell *cell = (ElevationChartCell *) nib[0];
@@ -113,7 +116,8 @@
                           selectedXAxisMode:GPXDataSetAxisTypeDistance
                                       chart:cell.chartView
                                    analysis:analysis
-                              statsModeCell:nil];
+                              statsModeCell:nil
+                     overrideIsGeneralTrack:overrideIsGeneralTrack];
     }
 
     OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
@@ -537,11 +541,13 @@
             ElevationChartCell *cell = ((ElevationChartCell *) sectionData.values[@"cell_value"]);
             if (cell)
             {
+                OASTrkSegment *segment = sectionData.values[@"segment_value"];
                 [_trackChartHelper changeChartTypes:sectionData.values[@"mode_value"]
                                   selectedXAxisMode:GPXDataSetAxisTypeDistance
                                               chart:cell.chartView
                                            analysis:sectionData.values[@"analysis_value"]
-                                      statsModeCell:nil];
+                                      statsModeCell:nil
+                             overrideIsGeneralTrack:[segment isGeneralSegment]];
             }
         }
     }

@@ -212,7 +212,7 @@ static int MIN_POINTS_ZOOM = 17;
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     if ([obj isKindOfClass:[OAMapillaryImage class]])
     {

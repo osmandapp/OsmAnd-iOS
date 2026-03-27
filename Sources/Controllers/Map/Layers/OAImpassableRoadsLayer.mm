@@ -134,7 +134,7 @@ static const int START_ZOOM = 10;
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     if ([obj isKindOfClass:[OAAvoidRoadInfo class]])
     {

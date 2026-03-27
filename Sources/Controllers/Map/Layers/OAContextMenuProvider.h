@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 @protocol OAContextMenuProvider<NSObject>
 
 @required
-- (OATargetPoint *)getTargetPoint:(id)obj location:(nullable CLLocation *)location;
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(nullable CLLocation *)touchLocation;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
 - (BOOL)isSecondaryProvider;

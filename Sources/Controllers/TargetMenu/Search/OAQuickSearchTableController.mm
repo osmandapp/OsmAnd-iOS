@@ -179,7 +179,7 @@
         return;
     
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi location:nil];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi touchLocation:nil];
     targetPoint.centerMap = YES;
     NSString *addr = [[OAReverseGeocoder instance] lookupAddressAtLat:poi.latitude lon:poi.longitude];
     targetPoint.addressFound = addr && addr.length > 0;

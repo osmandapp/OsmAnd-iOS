@@ -26,7 +26,7 @@
                                                                            @"key" : key,
                                                                            @"ca" : @(ca)
                                                                            }];
-    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.mapillaryLayer getTargetPoint:img location:nil];
+    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.mapillaryLayer getTargetPoint:img touchLocation:nil];
     newTarget.centerMap = YES;
     [mapPanel hideContextMenu];
     [mapPanel showContextMenu:newTarget];

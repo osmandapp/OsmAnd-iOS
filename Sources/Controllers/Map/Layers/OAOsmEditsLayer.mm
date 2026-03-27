@@ -310,7 +310,7 @@ static const int START_ZOOM = 10;
     return [UIImage mapSvgImageNamed:@"mx_special_information"];
 }
 
-- (OATargetPoint *)getTargetPoint:(id)obj location:(CLLocation *)location
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     if ([obj isKindOfClass:OAOsmPoint.class])
         return [self getTargetPointFromPoint:(OAOsmPoint *)obj];

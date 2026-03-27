@@ -1618,8 +1618,8 @@ colorizationScheme:(int)colorizationScheme
                                                           toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
                                                                                                 longitude:points.lastObject.position.longitude]];
             OATargetPoint *targetPoint = gpxDataItem
-            ? [self getTargetPoint:gpxDataItem touchPointLatLon:nil]
-            : [self getTargetPoint:[OASavingTrackHelper sharedInstance].currentTrack touchPointLatLon:nil];
+            ? [self getTargetPoint:gpxDataItem touchLocation:nil]
+            : [self getTargetPoint:[OASavingTrackHelper sharedInstance].currentTrack touchLocation:nil];
 
             targetPoint.location = selectedGpxPoint.coordinate;
             if (targetPoint && ![res containsObject:targetPoint])
@@ -1876,7 +1876,7 @@ colorizationScheme:(int)colorizationScheme
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *)getTargetPoint:(id)obj touchPointLatLon:(CLLocation *)touchPointLatLon
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     if ([obj isKindOfClass:[OASGpxDataItem class]] || [obj isKindOfClass:[OASGpxFile class]])
     {
@@ -1890,8 +1890,8 @@ colorizationScheme:(int)colorizationScheme
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         targetPoint.values = @{ @"opened_from_map": @YES };
-        if (touchPointLatLon)
-            targetPoint.location = touchPointLatLon.coordinate;
+        if (touchLocation)
+            targetPoint.location = touchLocation.coordinate;
         
         return targetPoint;
     }
@@ -1920,7 +1920,7 @@ colorizationScheme:(int)colorizationScheme
         wptItem.point = item;
         wptItem.groups = foundWptGroups;
         wptItem.docPath = foundWptDocPath;
-        return [self getTargetPoint:wptItem touchPointLatLon:nil];
+        return [self getTargetPoint:wptItem touchLocation:nil];
     }
     return nil;
 }

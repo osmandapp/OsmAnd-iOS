@@ -79,7 +79,7 @@
         OAMapViewController *mapController = mapPanel.mapViewController;
         [mapController.mapLayers.transportStopsLayer hideRoute];
         
-        OATargetPoint *targetPoint = [mapController.mapLayers.transportStopsLayer getTargetPoint:self.transportStop location:nil];
+        OATargetPoint *targetPoint = [mapController.mapLayers.transportStopsLayer getTargetPoint:self.transportStop touchLocation:nil];
         if (targetPoint)
         {
             targetPoint.centerMap = YES;

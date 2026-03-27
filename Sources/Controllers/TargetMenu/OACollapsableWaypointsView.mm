@@ -267,7 +267,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
                         OASWptPt *point = _data[tag];
                         item.point = point;
                         item.docPath = _docPath;
-                        OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.gpxMapLayer getTargetPoint:item location:nil];
+                        OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.gpxMapLayer getTargetPoint:item touchLocation:nil];
                         targetPoint.centerMap = YES;
                         [mapPanel showContextMenu:targetPoint];
                     }

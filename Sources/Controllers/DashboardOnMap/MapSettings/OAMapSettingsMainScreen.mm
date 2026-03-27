@@ -479,7 +479,7 @@
                 @"key": @"terrain_layer"
         }];
     }
-    if (!_iapHelper.srtm.disabled)
+    if (![_iapHelper.srtm disabled])
     {
         if (hasSRTM)
         {

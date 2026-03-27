@@ -118,6 +118,7 @@ struct CLLocationCoordinate2D;
 - (BOOL) setMapLayerConfiguration:(int)layerIndex configuration:(OsmAnd::MapLayerConfiguration)configuration forcedUpdate:(BOOL)forcedUpdate;
 - (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings;
 - (void) setMapDebugSettings:(std::shared_ptr<OsmAnd::MapRendererDebugSettings>) debugSettings;
+- (void)setFlatEarth:(BOOL)flatEarth;
 
 - (BOOL) isGpuWorkerPaused;
 - (BOOL) suspendGpuWorker;

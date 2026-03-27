@@ -1534,6 +1534,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @property (nonatomic) OACommonBoolean *wikiShowImagePreviews;
 
+@property (nonatomic) OACommonBoolean *sphericalMap;
+
 // Developer plugin
 @property (nonatomic) OACommonBoolean *simulateOBDData;
 

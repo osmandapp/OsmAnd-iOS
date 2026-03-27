@@ -2451,6 +2451,7 @@
 "wiki_article_search_text" = "Searching for the corresponding wiki article";
 
 "srtm_plugin_name" = "Topography";
+"show_spherical_map" = "Globe view";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
 "srtm_plugin_description" = "Terrain information, like contour lines, hillshade, slope, help you to visually assess the lay of the land, the relief, navigability, and more. The topographic information can on the map be represented by contour lines, relief shading and/or steepness coloring.\n\nThe underlying data originates from SRTM and ASTER.\n\nFurther reading at %@.";
 

@@ -488,15 +488,19 @@
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"contour_lines_layer"
         }];
-    }
-    if (hasSRTM && !_iapHelper.srtm.disabled)
-    {
         [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
                 @"image": @"ic_custom_terrain",
                 @"has_options": @YES,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"terrain_layer"
+        }];
+        [topographySectionData addObject:@{
+                @"name": OALocalizedString(@"show_spherical_map"),
+                @"image": @"ic_custom_globe_view",
+                @"has_options": @YES,
+                @"type": OASwitchTableViewCell.reuseIdentifier,
+                @"key": @"spherical_map"
         }];
     }
     if (!_iapHelper.srtm.disabled)
@@ -775,6 +779,8 @@
         return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) isTerrainLayerEnabled];
     else if ([key isEqualToString:@"3d_buildings"])
         return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) is3dMapObjectsEnabled];
+    else if ([key isEqualToString:@"spherical_map"])
+        return [_settings.sphericalMap get];
     else if ([key isEqualToString:@"overlay_layer"])
         return _app.data.overlayMapSource != nil;
     else if ([key isEqualToString:@"underlay_layer"])
@@ -1294,6 +1300,8 @@
         [self terrainChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"3d_buildings"])
         [self mapObjects3dChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"spherical_map"])
+        [self sphericalMapChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"overlay_layer"])
         [self overlayChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"underlay_layer"])
@@ -1366,6 +1374,12 @@
 - (void)mapObjects3dChanged:(BOOL)isOn
 {
     [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) set3dMapObjectsEnabled:isOn];
+}
+
+- (void)sphericalMapChanged:(BOOL)isOn
+{
+    [_settings.sphericalMap set:isOn];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void)nauticalDepthChanged:(BOOL)isOn

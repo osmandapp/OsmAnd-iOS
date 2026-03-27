@@ -750,10 +750,10 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     double estimatedIconSize = kImageIconSizeDP * _textScale;
     float iconSize31 = (float)(estimatedIconSize / from31toPixelsScale);
     
-    int left   = [OASKMapUtils.shared get31TileNumberXLongitude:latLonBounds.left];
-    int top    = [OASKMapUtils.shared get31TileNumberYLatitude:latLonBounds.top];
-    int right  = [OASKMapUtils.shared get31TileNumberXLongitude:latLonBounds.right];
-    int bottom = [OASKMapUtils.shared get31TileNumberYLatitude:latLonBounds.bottom];
+    int left   = OsmAnd::Utilities::get31TileNumberX(latLonBounds.left);
+    int top    = OsmAnd::Utilities::get31TileNumberY(latLonBounds.top);
+    int right  = OsmAnd::Utilities::get31TileNumberX(latLonBounds.right);
+    int bottom = OsmAnd::Utilities::get31TileNumberY(latLonBounds.bottom);
     
     QuadTree *boundIntersections = [[self class] initBoundIntersections:left
                                                                     top:top
@@ -773,8 +773,8 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
             continue;
         }
         
-        int x31 = [OASKMapUtils.shared get31TileNumberXLongitude:lon];
-        int y31 = [OASKMapUtils.shared get31TileNumberYLatitude:lat];
+        int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
+        int y31 = OsmAnd::Utilities::get31TileNumberY(lat);
         
         if (![[self class] intersectsD:boundIntersections
                                      x:x31

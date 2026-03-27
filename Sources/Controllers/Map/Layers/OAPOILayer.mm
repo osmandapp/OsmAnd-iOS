@@ -61,8 +61,24 @@ static const NSInteger kPoiSearchRadius = 50; // AMENITY_SEARCH_RADIUS
 static const NSInteger kPoiSearchRadiusForRelation = 500; // AMENITY_SEARCH_RADIUS_FOR_RELATION
 static const NSInteger kTrackSearchDelta = 40;
 static const NSInteger START_ZOOM = 5;
+static const NSTimeInterval kWikiSymbolsCacheWaitInterval = 0.05;
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
+
+static BOOL OABoundsContainCoordinate(QuadRect *bounds, CLLocationCoordinate2D coordinate)
+{
+    if (!bounds || !CLLocationCoordinate2DIsValid(coordinate))
+        return NO;
+
+    const BOOL latitudeInBounds = coordinate.latitude <= bounds.top && coordinate.latitude >= bounds.bottom;
+    if (!latitudeInBounds)
+        return NO;
+
+    if (bounds.left <= bounds.right)
+        return coordinate.longitude >= bounds.left && coordinate.longitude <= bounds.right;
+
+    return coordinate.longitude >= bounds.left || coordinate.longitude <= bounds.right;
+}
 
 @implementation OAPOILayer
 {
@@ -84,6 +100,10 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
+    BOOL _topPlacesEnabled;
+    CGFloat _topPlacesTextScale;
+    EOAWikiDataSourceType _topPlacesWikiDataSourceType;
+    NSSet<NSString *> *_topPlacesWikipediaResourceIds;
 }
 
 - (void)onMapFrameRendered
@@ -96,7 +116,13 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     [super initLayer];
 
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
+    _topPlacesTextScale = 1.f;
+    _topPlacesWikipediaResourceIds = [NSSet set];
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
+    __weak __typeof(self) weakSelf = self;
+    _topPlacesProvider.cachedAmenitiesProvider = ^NSArray<OAPOI *> * (QuadRect *latLonBounds, id matcher) {
+        return weakSelf ? [weakSelf cachedVisibleWikiAmenities:latLonBounds matcher:matcher] : @[];
+    };
 }
 
 - (NSString *) layerId
@@ -157,6 +183,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self showPoiOnMap:filters wikiOnMap:wikiFilter];
+        [self syncTopPlacesProviderStateWithWikiFilter:wikiFilter];
     });
 }
 
@@ -166,7 +193,6 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return NO;
 
     [self updateVisiblePoiFilter];
-    [_topPlacesProvider updateLayer];
     
     return YES;
 }
@@ -266,16 +292,19 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+            uint32_t cacheSize = 64;
             if (categoriesFilter.count() > 0)
             {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
+                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize));
             }
             else
             {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
+                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize));
             }
 
             [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
+            if (isWiki)
+                [_topPlacesProvider drawTopPlacesIfNeeded:YES];
         };
 
         if (_poiUiFilter)
@@ -289,6 +318,174 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
             _wikiUiNameFilter = nil;
 
     }];
+}
+
+- (NSArray<OAPOI *> *)cachedVisibleWikiAmenities:(QuadRect *)latLonBounds
+                                         matcher:(id)matcherObj
+{
+    OAResultMatcher<OAPOI *> *matcher = (OAResultMatcher<OAPOI *> *)matcherObj;
+    while (![matcher isCancelled])
+    {
+        __block BOOL showWikiOnMap = NO;
+        std::shared_ptr<OsmAnd::AmenitySymbolsProvider> wikiSymbolsProvider;
+        QVector<OsmAnd::TileId> visibleTiles;
+        OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
+        [self readVisibleWikiCacheStateShowWikiOnMap:&showWikiOnMap
+                                 wikiSymbolsProvider:&wikiSymbolsProvider
+                                        visibleTiles:&visibleTiles
+                                         visibleZoom:&visibleZoom];
+
+        if (!showWikiOnMap)
+            return @[];
+
+        if (!wikiSymbolsProvider || visibleTiles.isEmpty() || visibleZoom == OsmAnd::InvalidZoomLevel)
+        {
+            [NSThread sleepForTimeInterval:kWikiSymbolsCacheWaitInterval];
+            continue;
+        }
+
+        if (visibleZoom < wikiSymbolsProvider->getMinZoom()
+            || visibleZoom > wikiSymbolsProvider->getMaxZoom())
+            return @[];
+
+        if ([self areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
+            return [self cachedAmenitiesFromWikiSymbolsProvider:wikiSymbolsProvider
+                                                   visibleTiles:visibleTiles
+                                                           zoom:visibleZoom
+                                                  latLonBounds:latLonBounds
+                                                       matcher:matcher];
+
+        [NSThread sleepForTimeInterval:kWikiSymbolsCacheWaitInterval];
+    }
+
+    return nil;
+}
+
+- (void)readVisibleWikiCacheStateShowWikiOnMap:(BOOL *)showWikiOnMap
+                           wikiSymbolsProvider:(std::shared_ptr<OsmAnd::AmenitySymbolsProvider> *)wikiSymbolsProvider
+                                  visibleTiles:(QVector<OsmAnd::TileId> *)visibleTiles
+                                   visibleZoom:(OsmAnd::ZoomLevel *)visibleZoom
+{
+    __block BOOL localShowWikiOnMap = NO;
+    __block std::shared_ptr<OsmAnd::AmenitySymbolsProvider> localWikiSymbolsProvider;
+    __block QVector<OsmAnd::TileId> localVisibleTiles;
+    __block OsmAnd::ZoomLevel localVisibleZoom = OsmAnd::InvalidZoomLevel;
+    [self.mapViewController runWithRenderSync:^{
+        localShowWikiOnMap = _showWikiOnMap;
+        localWikiSymbolsProvider = _wikiSymbolsProvider;
+        if (localWikiSymbolsProvider)
+        {
+            localVisibleTiles = self.mapView.visibleTiles;
+            localVisibleZoom = self.mapView.zoomLevel;
+        }
+    }];
+
+    if (showWikiOnMap)
+        *showWikiOnMap = localShowWikiOnMap;
+    if (wikiSymbolsProvider)
+        *wikiSymbolsProvider = localWikiSymbolsProvider;
+    if (visibleTiles)
+        *visibleTiles = localVisibleTiles;
+    if (visibleZoom)
+        *visibleZoom = localVisibleZoom;
+}
+
+- (BOOL)areVisibleWikiTilesCached:(const QVector<OsmAnd::TileId> &)visibleTiles
+                             zoom:(OsmAnd::ZoomLevel)visibleZoom
+              wikiSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider> &)wikiSymbolsProvider
+{
+    for (const auto& tileId : visibleTiles)
+    {
+        if (!wikiSymbolsProvider->cache->contains(tileId, visibleZoom))
+            return NO;
+    }
+    return YES;
+}
+
+- (NSArray<OAPOI *> *)cachedAmenitiesFromWikiSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider> &)wikiSymbolsProvider
+                                                visibleTiles:(const QVector<OsmAnd::TileId> &)visibleTiles
+                                                        zoom:(OsmAnd::ZoomLevel)visibleZoom
+                                               latLonBounds:(QuadRect *)latLonBounds
+                                                    matcher:(OAResultMatcher<OAPOI *> *)matcher
+{
+    NSMutableArray<OAPOI *> *amenities = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *seenAmenityIds = [NSMutableSet set];
+    for (const auto& tileId : visibleTiles)
+    {
+        QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
+        if (!wikiSymbolsProvider->cache->obtainAmenities(tileId, visibleZoom, cachedAmenities))
+            continue;
+
+        for (const auto& amenity : cachedAmenities)
+        {
+            if ([matcher isCancelled])
+                return @[];
+
+            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
+            if (!poi)
+                continue;
+
+            CLLocation *location = [poi getLocation];
+            if (!location || !OABoundsContainCoordinate(latLonBounds, location.coordinate))
+                continue;
+
+            NSNumber *amenityId = @([poi getSignedId]);
+            if ([seenAmenityIds containsObject:amenityId])
+                continue;
+
+            [seenAmenityIds addObject:amenityId];
+            [amenities addObject:poi];
+        }
+    }
+
+    return amenities;
+}
+
+- (CGFloat)topPlacesTextScale
+{
+    return OAAppSettings.sharedManager.textSize.get * self.mapViewController.displayDensityFactor;
+}
+
+- (NSSet<NSString *> *)currentWikipediaResourceIds
+{
+    NSArray<OAResourceSwiftItem *> *items = [OAResourcesUISwiftHelper findWikiMapRegionsAtCurrentMapLocation];
+    NSArray<NSString *> *resourceIds = [items valueForKey:@"resourceId"];
+    return [NSSet setWithArray:resourceIds ?: @[]];
+}
+
+- (void)syncTopPlacesProviderStateWithWikiFilter:(OAPOIUIFilter *)wikiFilter
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL enabled = wikiFilter != nil && settings.wikiShowImagePreviews.get;
+    CGFloat textScale = [self topPlacesTextScale];
+    EOAWikiDataSourceType wikiType = settings.wikiDataSourceType.get;
+    NSSet<NSString *> *resourceIds = [self currentWikipediaResourceIds];
+
+    BOOL shouldReset = _topPlacesEnabled != enabled
+        || _topPlacesWikiDataSourceType != wikiType
+        || ![_topPlacesWikipediaResourceIds isEqualToSet:resourceIds];
+    BOOL shouldRefreshVisiblePlaces = fabs(_topPlacesTextScale - textScale) >= 0.0001f;
+
+    _topPlacesEnabled = enabled;
+    _topPlacesTextScale = textScale;
+    _topPlacesWikiDataSourceType = wikiType;
+    _topPlacesWikipediaResourceIds = resourceIds;
+
+    [_topPlacesProvider setTextScale:textScale];
+    [_topPlacesProvider setEnabled:enabled];
+
+    if (!enabled)
+        return;
+
+    if (shouldReset)
+    {
+        [_topPlacesProvider resetLayer];
+        [_topPlacesProvider drawTopPlacesIfNeeded:YES];
+    }
+    else if (shouldRefreshVisiblePlaces)
+    {
+        [_topPlacesProvider refreshVisiblePlaces];
+    }
 }
 
 - (BOOL) beginWithOrAfterSpace:(NSString *)str text:(NSString *)text

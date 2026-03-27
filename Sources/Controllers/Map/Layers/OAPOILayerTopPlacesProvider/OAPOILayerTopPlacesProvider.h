@@ -8,16 +8,21 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@class OAPOI, MapSelectionResult;
+@class OAPOI, MapSelectionResult, QuadRect;
+
+typedef NSArray<OAPOI *> * _Nullable (^OATopPlacesAmenitiesProvider)(QuadRect *latLonBounds, id matcher);
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAPOILayerTopPlacesProvider : NSObject
 
 @property (nonatomic, strong, readonly, nullable) NSDictionary<NSNumber *, OAPOI *> *topPlaces;
+@property (nonatomic, copy, nullable) OATopPlacesAmenitiesProvider cachedAmenitiesProvider;
 
+- (void)setEnabled:(BOOL)enabled;
+- (void)setTextScale:(CGFloat)textScale;
+- (void)refreshVisiblePlaces;
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc;
-- (void)updateLayer;
 - (void)resetLayer;
 
 - (void)resetSelectedTopPlaceIfNeeded;
@@ -30,4 +35,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

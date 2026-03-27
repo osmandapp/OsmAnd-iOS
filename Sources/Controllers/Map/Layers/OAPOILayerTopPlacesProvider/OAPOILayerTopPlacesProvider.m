@@ -8,13 +8,10 @@
 
 #import "OAPOILayerTopPlacesProvider.h"
 #import "OAPOI.h"
-#import "OAPOIUIFilter.h"
 #import "QuadRect.h"
-#import "OAPOIFiltersHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
-#import "OAAppSettings.h"
 #import "QuadTree.h"
 #import "OANativeUtilities.h"
 #import "OATargetPointView.h"
@@ -29,18 +26,15 @@ static const NSInteger kTilePointsLimit = 25;
 static const NSInteger kStartZoom = 5;
 static const NSInteger kStartZoomRouteTrack = 11;
 static const NSInteger kImageIconSizeDP = 45;
-static NSString * const kAllTopPlacesKey = @"all";
-static NSString * const kDisplayedTopPlacesKey = @"displayed";
 static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
 @implementation OAPOILayerTopPlacesProvider
 {
     NSMutableDictionary<NSNumber *, OAPOI *> *_topPlaces;
     NSMutableDictionary<NSNumber *, UIImage *> *_topPlacesImages;
-    NSDictionary<NSString *, NSArray<OAPOI *> *> *_topPlaceData;
-    NSMutableArray<OAPOI *> *_visiblePlaces;
-    BOOL _showTopPlacesPreviews;
-    OAPOIUIFilter *_topPlacesFilter;
+    NSArray<OAPOI *> *_allPlaces;
+    NSArray<OAPOI *> *_displayedPlaces;
+    NSSet<NSNumber *> *_loadingImagePlaceIds;
     QuadRect *_topPlacesBox;
     QuadRect *_lastCalcBounds;
     float _lastCalcZoom;
@@ -49,18 +43,16 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     POIImageLoader *_imageLoader;
     dispatch_queue_t _backgroundQueue;
     OAMapRendererView *_mapView;
-    OAPOIFiltersHelper *_filtersHelper;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _mapMarkersCollection;
     
     int _topPlaceBaseOrder;
     OAMapViewController *_mapViewController;
-    EOAWikiDataSourceType _wikiDataSourceType;
     CGFloat _textScale;
     OAPOI *_selectedTopPlace;
-    BOOL _isDisabled;
-    NSSet<NSString *> *_storedWikipediaResourceIds;
+    BOOL _enabled;
     NSMutableDictionary<NSNumber *, NSString *> *_renderedMarkerStates;
-    NSUInteger _stateGeneration;
+    NSUInteger _amenitiesGeneration;
+    NSUInteger _imagesGeneration;
 }
 
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder
@@ -75,24 +67,15 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
 - (void)configure
 {
-    _filtersHelper = [OAPOIFiltersHelper sharedInstance];
     _mapView = (OAMapRendererView *)[OARootViewController instance].mapPanel.mapViewController.view;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    _textScale = [self textScale];
-    _wikiDataSourceType = [[OAAppSettings sharedManager].wikiDataSourceType get];
-    NSSet<OAPOIUIFilter *> *poiUIFilters = [_filtersHelper getSelectedPoiFilters];
-    for (OAPOIUIFilter *filter in poiUIFilters)
-        if (filter.isTopImagesFilter)
-            _topPlacesFilter = filter;
-
+    _enabled = NO;
+    _textScale = 1.f;
     _backgroundQueue = dispatch_queue_create("com.osmand.topplaces.background", DISPATCH_QUEUE_SERIAL);
     dispatch_queue_set_specific(_backgroundQueue, kTopPlacesStateQueueKey, kTopPlacesStateQueueKey, NULL);
     _popularPlacesQueue = [NSOperationQueue new];
     _popularPlacesQueue.maxConcurrentOperationCount = 1;
     _popularPlacesQueue.qualityOfService = NSQualityOfServiceUserInitiated;
-    _showTopPlacesPreviews = [[OAAppSettings sharedManager].wikiShowImagePreviews get];
-    [self storeWikipediaResources:[OAResourcesUISwiftHelper findWikiMapRegionsAtCurrentMapLocation]];
-    [self updateDisabledState];
 }
 
 // MARK: - Public
@@ -108,128 +91,56 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc
 {
-    if (_isDisabled)
+    if (!_enabled)
         return;
 
     dispatch_async(_backgroundQueue, ^{
-        if (_isDisabled)
+        if (!_enabled)
             return;
-        
-        const auto screenBbox = _mapView.getVisibleBBox31;
-        float currentZoom = [_mapView zoom];
-        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
-        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
-        
-        CLLocationCoordinate2D topLeftCoord = CLLocationCoordinate2DMake(topLeft.latitude, topLeft.longitude);
-        CLLocationCoordinate2D bottomRightCoord = CLLocationCoordinate2DMake(bottomRight.latitude, bottomRight.longitude);
-        if (!CLLocationCoordinate2DIsValid(topLeftCoord) || !CLLocationCoordinate2DIsValid(bottomRightCoord))
+
+        QuadRect *visibleBounds = nil;
+        float zoom = 0.f;
+        if (![self captureVisibleBounds:&visibleBounds zoom:&zoom])
             return;
-        
-        QuadRect *currentBounds = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
-        BOOL shouldRecalc = NO;
-        
-        if (_lastCalcBounds == nil)
+
+        if (!forceRecalc && ![self shouldRecalculateForBounds:visibleBounds zoom:zoom])
         {
-            shouldRecalc = YES;
-        }
-        else
-        {
-            BOOL zoomChanged = fabs(currentZoom - _lastCalcZoom) > 0.5;
-            
-            double halfW = fabs(_lastCalcBounds.width) / 2.0;
-            double halfH = fabs(_lastCalcBounds.height) / 2.0;
-            
-            double prevCx = (_lastCalcBounds.left + _lastCalcBounds.right) / 2.0;
-            double prevCy = (_lastCalcBounds.top + _lastCalcBounds.bottom) / 2.0;
-            double curCx = (currentBounds.left + currentBounds.right) / 2.0;
-            double curCy = (currentBounds.top + currentBounds.bottom) / 2.0;
-            
-            double dx = fabs(curCx - prevCx);
-            double dy = fabs(curCy - prevCy);
-            
-            BOOL moved = (dx > halfW) || (dy > halfH);
-            
-            shouldRecalc = zoomChanged || moved;
-            
-            if (zoomChanged)
-            {
-                _topPlacesBox = nil;
-            }
-        }
-        
-        if (!forceRecalc && !shouldRecalc)
-        {
-            [self updatePopularPlaces];
+            [self refreshVisiblePlacesOnStateQueue];
             return;
         }
-        
-        _lastCalcBounds = [[QuadRect alloc] initWithRect:currentBounds];
-        _lastCalcZoom = currentZoom;
-        
+
+        if (_lastCalcBounds && fabs(zoom - _lastCalcZoom) > 0.5f)
+            _topPlacesBox = nil;
+
+        _lastCalcBounds = [[QuadRect alloc] initWithRect:visibleBounds];
+        _lastCalcZoom = zoom;
+
         [_popularPlacesQueue cancelAllOperations];
-        NSUInteger generation = ++_stateGeneration;
-        
+        NSUInteger generation = ++_amenitiesGeneration;
         __weak __typeof(self) weakSelf = self;
         NSBlockOperation *op = [NSBlockOperation new];
         __weak NSBlockOperation *weakOp = op;
-        
-        QuadRect *screenRect = [[QuadRect alloc] initWithRect:_lastCalcBounds];
-        [screenRect inset:-(screenRect.width / 2.0) dy:-(screenRect.height / 2.0)];
-        
+        QuadRect *searchBounds = [self expandedBoundsForVisibleBounds:visibleBounds];
+
         [op addExecutionBlock:^{
             if (weakOp.isCancelled)
                 return;
-            
+
             OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAPOI * __autoreleasing *object) {
                 return YES;
             } cancelledFunc:^BOOL{
                 return weakOp.isCancelled;
             }];
-            
-            NSDictionary *results = [weakSelf calculateResult:screenRect zoom:currentZoom matcher:matcher];
-            
-            if (weakOp.isCancelled)
-                return;
-            
-            [weakSelf updateTopPlaceData:results generation:generation];
-        }];
-        
-        [_popularPlacesQueue addOperation:op];
-    });
-}
 
-- (void)updateLayer
-{
-    dispatch_async(_backgroundQueue, ^{
-        if ([self dataChanged])
-        {
-            [self resetTopPlacesState];
-            [self drawTopPlacesIfNeeded:YES];
-            return;
-        }
-        
-        if (_isDisabled)
-            return;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray<OAResourceSwiftItem *> *items = [OAResourcesUISwiftHelper findWikiMapRegionsAtCurrentMapLocation];
-            
-            BOOL resourcesChanged = [self hasWikipediaResourcesChanged:items];
-            
-            if (resourcesChanged)
-            {
-                [self storeWikipediaResources:items];
-                
-                dispatch_async(_backgroundQueue, ^{
-                    [self resetTopPlacesState];
-                    [self drawTopPlacesIfNeeded:YES];
-                });
-            }
-            else
-            {
-                [self handleTextScaleChangeIfNeeded];
-            }
-        });
+            NSArray<OAPOI *> *amenities = [weakSelf calculateAmenities:searchBounds matcher:matcher];
+
+            if (weakOp.isCancelled || !amenities)
+                return;
+
+            [weakSelf applyAmenities:amenities generation:generation];
+        }];
+
+        [_popularPlacesQueue addOperation:op];
     });
 }
 
@@ -237,6 +148,41 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 {
     dispatch_async(_backgroundQueue, ^{
         [self resetTopPlacesState];
+    });
+}
+
+- (void)setEnabled:(BOOL)enabled
+{
+    dispatch_async(_backgroundQueue, ^{
+        if (_enabled == enabled)
+            return;
+
+        _enabled = enabled;
+        if (!_enabled)
+            [self resetTopPlacesState];
+    });
+}
+
+- (void)setTextScale:(CGFloat)textScale
+{
+    dispatch_async(_backgroundQueue, ^{
+        if (fabs(_textScale - textScale) < 0.0001f)
+            return;
+
+        _textScale = textScale;
+        if (_enabled)
+        {
+            _topPlacesBox = nil;
+            [self refreshVisiblePlacesOnStateQueue];
+        }
+    });
+}
+
+- (void)refreshVisiblePlaces
+{
+    dispatch_async(_backgroundQueue, ^{
+        if (_enabled)
+            [self refreshVisiblePlacesOnStateQueue];
     });
 }
 
@@ -307,11 +253,11 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
 - (NSArray<OAPOI *> *)displayedAmenities
 {
-    __block NSDictionary<NSString *, NSArray<OAPOI *> *> *topPlaceData = nil;
+    __block NSArray<OAPOI *> *displayedPlaces = nil;
     [self performStateSync:^{
-        topPlaceData = _topPlaceData;
+        displayedPlaces = _displayedPlaces;
     }];
-    return topPlaceData ? topPlaceData[kDisplayedTopPlacesKey] : @[];
+    return displayedPlaces ?: @[];
 }
 
 - (void)resetSelectedTopPlaceIfNeeded
@@ -327,11 +273,6 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
 // MARK: - Private
 
-- (void)updateDisabledState
-{
-    _isDisabled = !_topPlacesFilter || ![[OAAppSettings sharedManager].wikiShowImagePreviews get];
-}
-
 - (BOOL)isOnStateQueue
 {
     return dispatch_get_specific(kTopPlacesStateQueueKey) == kTopPlacesStateQueueKey;
@@ -343,6 +284,77 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
         block();
     else
         dispatch_sync(_backgroundQueue, block);
+}
+
+- (BOOL)captureVisibleBounds:(QuadRect * __autoreleasing *)visibleBounds
+                        zoom:(float *)zoom
+{
+    __block QuadRect *bounds = nil;
+    __block float currentZoom = 0.f;
+
+    [_mapViewController runWithRenderSync:^{
+        const auto screenBbox = _mapView.getVisibleBBox31;
+        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
+        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
+
+        CLLocationCoordinate2D topLeftCoord = CLLocationCoordinate2DMake(topLeft.latitude, topLeft.longitude);
+        CLLocationCoordinate2D bottomRightCoord = CLLocationCoordinate2DMake(bottomRight.latitude, bottomRight.longitude);
+        if (!CLLocationCoordinate2DIsValid(topLeftCoord) || !CLLocationCoordinate2DIsValid(bottomRightCoord))
+            return;
+
+        bounds = [[QuadRect alloc] initWithLeft:topLeft.longitude
+                                            top:topLeft.latitude
+                                          right:bottomRight.longitude
+                                         bottom:bottomRight.latitude];
+        currentZoom = [_mapView zoom];
+    }];
+
+    if (!bounds)
+        return NO;
+
+    if (visibleBounds)
+        *visibleBounds = bounds;
+    if (zoom)
+        *zoom = currentZoom;
+    return YES;
+}
+
+- (BOOL)shouldRecalculateForBounds:(QuadRect *)visibleBounds
+                              zoom:(float)zoom
+{
+    if (_lastCalcBounds == nil)
+        return YES;
+
+    BOOL zoomChanged = fabs(zoom - _lastCalcZoom) > 0.5f;
+    if (zoomChanged)
+        return YES;
+
+    double halfWidth = fabs(_lastCalcBounds.width) / 2.0;
+    double halfHeight = fabs(_lastCalcBounds.height) / 2.0;
+
+    double lastCenterX = (_lastCalcBounds.left + _lastCalcBounds.right) / 2.0;
+    double lastCenterY = (_lastCalcBounds.top + _lastCalcBounds.bottom) / 2.0;
+    double currentCenterX = (visibleBounds.left + visibleBounds.right) / 2.0;
+    double currentCenterY = (visibleBounds.top + visibleBounds.bottom) / 2.0;
+
+    return fabs(currentCenterX - lastCenterX) > halfWidth
+        || fabs(currentCenterY - lastCenterY) > halfHeight;
+}
+
+- (QuadRect *)expandedBoundsForVisibleBounds:(QuadRect *)visibleBounds
+{
+    QuadRect *expandedBounds = [[QuadRect alloc] initWithRect:visibleBounds];
+    [expandedBounds inset:-(expandedBounds.width / 2.0) dy:-(expandedBounds.height / 2.0)];
+    return expandedBounds;
+}
+
+- (QuadRect *)topPlacesBoxForVisibleBounds:(QuadRect *)visibleBounds
+{
+    QuadRect *topPlacesBox = [[QuadRect alloc] initWithRect:visibleBounds];
+    double lonDelta = visibleBounds.width * 0.1;
+    double latDelta = visibleBounds.height * 0.1;
+    [topPlacesBox inset:-lonDelta dy:-latDelta];
+    return topPlacesBox;
 }
 
 - (nullable UIImage *)markerImageForPlace:(OAPOI *)place
@@ -415,47 +427,17 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     return YES;
 }
 
-- (BOOL)dataChanged
-{
-    OAPOIUIFilter *topPlacesFilter = nil;
-    NSSet<OAPOIUIFilter *> *poiUIFilters = [_filtersHelper getSelectedPoiFilters];
-    for (OAPOIUIFilter *filter in poiUIFilters)
-        if (filter.isTopImagesFilter)
-            topPlacesFilter = filter;
-
-    if (_topPlacesFilter != topPlacesFilter)
-    {
-        _topPlacesFilter = topPlacesFilter;
-        [self updateDisabledState];
-        return YES;
-    }
-    
-    BOOL showTopPlacesPreviews = [[OAAppSettings sharedManager].wikiShowImagePreviews get];
-    if (_showTopPlacesPreviews != showTopPlacesPreviews)
-    {
-        _showTopPlacesPreviews = showTopPlacesPreviews;
-        [self updateDisabledState];
-        return YES;
-    }
-    
-    EOAWikiDataSourceType wikiType = [[OAAppSettings sharedManager].wikiDataSourceType get];
-    if (_wikiDataSourceType != wikiType)
-    {
-        _wikiDataSourceType = wikiType;
-        return YES;
-    }
-    
-    return NO;
-}
-
 - (void)resetTopPlacesState
 {
     [self clearMapMarkersCollections];
     [self cancelLoadingImages];
     [_popularPlacesQueue cancelAllOperations];
 
-    _stateGeneration++;
-    _topPlaceData = nil;
+    _amenitiesGeneration++;
+    _imagesGeneration++;
+    _allPlaces = nil;
+    _displayedPlaces = nil;
+    _loadingImagePlaceIds = nil;
     _topPlacesBox = nil;
     _lastCalcBounds = nil;
     _lastCalcZoom = 0.f;
@@ -463,110 +445,44 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     _renderedMarkerStates = nil;
 }
 
-- (void)handleTextScaleChangeIfNeeded
+- (void)applyAmenities:(NSArray<OAPOI *> *)amenities
+            generation:(NSUInteger)generation
 {
-    CGFloat textScale = [self textScale];
-    if (_textScale != textScale)
+    dispatch_async(_backgroundQueue, ^{
+        if (_amenitiesGeneration != generation)
+            return;
+
+        _allPlaces = [amenities copy];
+        _topPlacesBox = nil;
+        [self refreshVisiblePlacesOnStateQueue];
+    });
+}
+
+- (void)refreshVisiblePlacesOnStateQueue
+{
+    if (!_enabled)
+        return;
+
+    QuadRect *visibleBounds = nil;
+    float zoom = 0.f;
+    if (![self captureVisibleBounds:&visibleBounds zoom:&zoom])
+        return;
+
+    if (_allPlaces == nil)
     {
-        _textScale = textScale;
-        [self updatePopularPlaces];
+        _displayedPlaces = nil;
+        _topPlacesBox = nil;
+        [self clearMapMarkersCollections];
+        [self cancelLoadingImages];
+        return;
     }
-}
 
-- (NSArray<OAPOI *> *)visiblePlaces {
-    __block NSArray<OAPOI *> *snapshot = nil;
-    [self performStateSync:^{
-        snapshot = [_visiblePlaces copy];
-    }];
-    return snapshot;
-}
+    _displayedPlaces = [[self collectDisplayedPoints:visibleBounds zoom:zoom amenities:_allPlaces] copy];
+    if (_topPlacesBox && [_topPlacesBox contains:visibleBounds])
+        return;
 
-- (void)updateVisiblePlaces:(nullable NSArray<OAPOI *> *)places
-               latLonBounds:(QuadRect *)latLonBounds
-{
-    dispatch_async(_backgroundQueue, ^{
-        if (!places)
-        {
-            _visiblePlaces = nil;
-            return;
-        }
-        
-        NSMutableArray<OAPOI *> *res = [NSMutableArray arrayWithCapacity:places.count];
-        
-        for (OAPOI *place in places)
-        {
-            CLLocation *location = [place getLocation];
-            double lon = location.coordinate.longitude;
-            double lat = location.coordinate.latitude;
-            
-            if ([latLonBounds contains:lon top:lat right:lon bottom:lat])
-                [res addObject:place];
-        }
-        
-        _visiblePlaces = res;
-    });
-}
-
-- (void)updateTopPlaceData:(NSDictionary<NSString *, NSArray<OAPOI *> *> *)results
-                 generation:(NSUInteger)generation
-{
-    dispatch_async(_backgroundQueue, ^{
-        if (_stateGeneration != generation)
-            return;
-
-        _topPlaceData = [results copy];
-        [self updatePopularPlaces];
-    });
-}
-
-- (void)updatePopularPlaces
-{
-    dispatch_async(_backgroundQueue, ^{
-        if (_isDisabled)
-            return;
-        
-        NSSet<OAPOIUIFilter *> *calculatedFilters = [_filtersHelper getSelectedPoiFilters];
-        if (calculatedFilters.count == 0)
-            return;
-
-        const auto screenBbox = _mapView.getVisibleBBox31;
-        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
-        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
-        
-        CLLocationCoordinate2D topLeftCoord = CLLocationCoordinate2DMake(topLeft.latitude, topLeft.longitude);
-        CLLocationCoordinate2D bottomRightCoord = CLLocationCoordinate2DMake(bottomRight.latitude, bottomRight.longitude);
-        if (!CLLocationCoordinate2DIsValid(topLeftCoord) || !CLLocationCoordinate2DIsValid(bottomRightCoord))
-            return;
-        
-        QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude
-                                                          top:topLeft.latitude
-                                                        right:bottomRight.longitude
-                                                       bottom:bottomRight.latitude];
-        
-        if (_topPlacesBox == nil || ![_topPlacesBox contains:screenRect])
-        {
-            NSArray<OAPOI *> *allPlaces = _topPlaceData[kAllTopPlacesKey];
-            [self updateVisiblePlaces:_topPlaceData[kDisplayedTopPlacesKey] latLonBounds:screenRect];
-            
-            if (allPlaces != nil)
-            {
-                QuadRect *extendedBox = [[QuadRect alloc] initWithRect:screenRect];
-                double lonDelta = [screenRect width] * 0.1;
-                double latDelta = [screenRect height] * 0.1;
-                [extendedBox inset:-lonDelta dy:-latDelta];
-                
-                _topPlacesBox = extendedBox;
-                
-                [self updateTopPlaces:allPlaces latLonBounds:screenRect zoom:[_mapView zoom]];
-            }
-            else
-            {
-                [self clearMapMarkersCollections];
-                [self cancelLoadingImages];
-                _topPlacesBox = nil;
-            }
-        }
-    });
+    _topPlacesBox = [self topPlacesBoxForVisibleBounds:visibleBounds];
+    [self updateTopPlaces:_allPlaces latLonBounds:visibleBounds zoom:(int)zoom];
 }
 
 - (void)updateTopPlaceImageForId:(NSNumber *)placeId
@@ -574,7 +490,7 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
                       generation:(NSUInteger)generation
 {
     dispatch_async(_backgroundQueue, ^{
-        if (_stateGeneration != generation)
+        if (_imagesGeneration != generation)
             return;
 
         if (_topPlaces && _topPlacesImages)
@@ -596,7 +512,7 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
         [self sortByElo:places];
         if (!places || places.count == 0)
         {
-            [self clearMapMarkersCollections];
+            [self clearMapMarkersCollectionLocked];
             return;
         }
 
@@ -690,53 +606,57 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
            latLonBounds:(QuadRect *)latLonBounds
                    zoom:(int)zoom
 {
-    dispatch_async(_backgroundQueue, ^{
-        NSUInteger generation = ++_stateGeneration;
-        NSArray<OAPOI *> *topPlacesToLoad = nil;
+    NSMutableDictionary<NSNumber *, OAPOI *> *newTopPlaces = [[self obtainTopPlacesToDisplay:places
+                                                                                latLonBounds:latLonBounds
+                                                                                        zoom:zoom] mutableCopy];
+    NSSet<NSNumber *> *previousTopPlaceIds = _topPlaces ? [NSSet setWithArray:_topPlaces.allKeys] : [NSSet set];
+    NSSet<NSNumber *> *newTopPlaceIds = [NSSet setWithArray:newTopPlaces.allKeys];
+    BOOL topPlacesChanged = ![previousTopPlaceIds isEqualToSet:newTopPlaceIds];
+    NSUInteger generation = topPlacesChanged ? ++_imagesGeneration : _imagesGeneration;
+    NSDictionary<NSNumber *, UIImage *> *cachedImages = [_topPlacesImages copy] ?: @{};
+    _topPlaces = newTopPlaces;
 
-        if (_topPlacesFilter != nil)
+    NSMutableDictionary<NSNumber *, UIImage *> *preservedImages = [NSMutableDictionary dictionary];
+    NSMutableArray<OAPOI *> *missingImagePlaces = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *missingImagePlaceIds = [NSMutableSet set];
+    for (OAPOI *place in _topPlaces.allValues)
+    {
+        NSNumber *placeId = @([place getSignedId]);
+        UIImage *cachedImage = cachedImages[placeId];
+        if (cachedImage)
+            preservedImages[placeId] = cachedImage;
+        else
         {
-            NSDictionary<NSNumber *, UIImage *> *cachedImages = [_topPlacesImages copy] ?: @{};
-            _topPlaces = [[self obtainTopPlacesToDisplay:places
-                                            latLonBounds:latLonBounds
-                                                    zoom:zoom] mutableCopy];
-
-            NSMutableDictionary<NSNumber *, UIImage *> *preservedImages = [NSMutableDictionary dictionary];
-            NSMutableArray<OAPOI *> *missingImagePlaces = [NSMutableArray array];
-            for (OAPOI *place in _topPlaces.allValues)
-            {
-                NSNumber *placeId = @([place getSignedId]);
-                UIImage *cachedImage = cachedImages[placeId];
-                if (cachedImage)
-                    preservedImages[placeId] = cachedImage;
-                else
-                    [missingImagePlaces addObject:place];
-            }
-            _topPlacesImages = preservedImages;
-            topPlacesToLoad = [missingImagePlaces copy];
-            [self updateTopPlacesCollection];
+            [missingImagePlaces addObject:place];
+            [missingImagePlaceIds addObject:placeId];
         }
+    }
 
-        if (topPlacesToLoad != nil)
+    _topPlacesImages = preservedImages;
+    [self updateTopPlacesCollection];
+
+    if (missingImagePlaces.count > 0)
+    {
+        if (topPlacesChanged || ![_loadingImagePlaceIds isEqualToSet:missingImagePlaceIds])
         {
-            if (topPlacesToLoad.count > 0)
-            {
-                if (!_imageLoader)
-                    _imageLoader = [POIImageLoader new];
-                else
-                    [_imageLoader cancelAll];
+            _loadingImagePlaceIds = [missingImagePlaceIds copy];
 
-                __weak __typeof(self) weakSelf = self;
-                [_imageLoader fetchImages:topPlacesToLoad completion:^(NSNumber *placeId, UIImage *image) {
-                    [weakSelf updateTopPlaceImageForId:placeId image:image generation:generation];
-                }];
-            }
-            else if (_imageLoader)
-            {
+            if (!_imageLoader)
+                _imageLoader = [POIImageLoader new];
+            else
                 [_imageLoader cancelAll];
-            }
+
+            __weak __typeof(self) weakSelf = self;
+            [_imageLoader fetchImages:[missingImagePlaces copy] completion:^(NSNumber *placeId, UIImage *image) {
+                [weakSelf updateTopPlaceImageForId:placeId image:image generation:generation];
+            }];
         }
-    });
+    }
+    else if (_imageLoader)
+    {
+        _loadingImagePlaceIds = nil;
+        [_imageLoader cancelAll];
+    }
 }
 
 - (nonnull NSDictionary<NSNumber *, OAPOI *> *)obtainTopPlacesToDisplay:(nonnull NSArray<OAPOI *> *)places
@@ -767,11 +687,8 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
         double lon = place.longitude;
         
         if (![latLonBounds contains:lon top:lat right:lon bottom:lat]
-            || place.wikiIconUrl == nil
-            || place.wikiIconUrl.length == 0)
-        {
+            || place.wikiIconUrl == nil || place.wikiIconUrl.length == 0)
             continue;
-        }
         
         int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
         int y31 = OsmAnd::Utilities::get31TileNumberY(lat);
@@ -825,18 +742,13 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
             insert:(BOOL)insert
 {
     NSMutableArray<QuadRect *> *result = [NSMutableArray array];
-    
+
     QuadRect *rectCopy = [[QuadRect alloc] initWithRect:visibleRect];
-    
     [boundIntersections queryInBox:rectCopy result:result];
     
     for (QuadRect *rect in result)
-    {
         if ([QuadRect intersects:rect b:visibleRect])
-        {
             return YES;
-        }
-    }
     
     if (insert)
         [boundIntersections insert:rectCopy box:[[QuadRect alloc] initWithRect:visibleRect]];
@@ -861,11 +773,6 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     return rect;
 }
 
-- (CGFloat)textScale
-{
-    return [[OAAppSettings sharedManager].textSize get] * [OARootViewController.instance.mapPanel.mapViewController displayDensityFactor];
-}
-
 - (void)cancelLoadingImages
 {
     if (_imageLoader)
@@ -876,35 +783,16 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
     _topPlaces = nil;
     _topPlacesImages = nil;
-    _visiblePlaces = nil;
+    _loadingImagePlaceIds = nil;
 }
 
-- (NSSet<OAPOI *> *)collectDisplayedPoints:(QuadRect *)latLonBounds
-                                      zoom:(NSInteger)zoom
-                                       res:(NSArray<OAPOI *> *)res
+- (NSArray<OAPOI *> *)collectDisplayedPoints:(QuadRect *)latLonBounds
+                                        zoom:(NSInteger)zoom
+                                   amenities:(NSArray<OAPOI *> *)amenities
 {
-    NSMutableSet<OAPOI *> *displayedPoints = [NSMutableSet set];
-
-    NSInteger minTileX = (NSInteger)[OASKMapUtils.shared getTileNumberXZoom:zoom longitude:latLonBounds.left];
-    NSInteger maxTileX = (NSInteger)[OASKMapUtils.shared getTileNumberXZoom:zoom longitude:latLonBounds.right];
-    NSInteger minTileY = (NSInteger)[OASKMapUtils.shared getTileNumberYZoom:zoom latitude:latLonBounds.top];
-    NSInteger maxTileY = (NSInteger)[OASKMapUtils.shared getTileNumberYZoom:zoom latitude:latLonBounds.bottom];
-
-    NSInteger width = maxTileX - minTileX + 1;
-    NSInteger height = maxTileY - minTileY + 1;
-
-    NSMutableArray<NSNumber *> *tileCounts = nil;
-    if (width > 0 && height > 0)
-    {
-        tileCounts = [NSMutableArray arrayWithCapacity:(NSUInteger)(width * height)];
-        for (NSInteger i = 0; i < width * height; i++)
-        {
-            [tileCounts addObject:@(0)];
-        }
-    }
-
+    NSMutableOrderedSet<OAPOI *> *displayedPoints = [NSMutableOrderedSet orderedSet];
     NSInteger topPlacesCounter = 0;
-    for (OAPOI *amenity in res)
+    for (OAPOI *amenity in amenities)
     {
         if (![self shouldDraw:amenity zoom:zoom])
             continue;
@@ -914,64 +802,26 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
             [displayedPoints addObject:amenity];
             topPlacesCounter++;
         }
-
-        if (tileCounts)
-        {
-            CLLocation *location = [amenity getLocation];
-            if (!location)
-                continue;
-
-            double lon = location.coordinate.longitude;
-            double lat = location.coordinate.latitude;
-
-            NSInteger tileX = (NSInteger)[OASKMapUtils.shared getTileNumberXZoom:zoom longitude:lon];
-            NSInteger tileY = (NSInteger)[OASKMapUtils.shared getTileNumberYZoom:zoom latitude:lat];
-
-            if (tileX < minTileX || tileX > maxTileX || tileY < minTileY || tileY > maxTileY)
-                continue;
-
-            NSInteger index = (tileX - minTileX) + (tileY - minTileY) * width;
-            NSInteger currentCount = tileCounts[index].integerValue;
-            if (currentCount < kTilePointsLimit)
-            {
-                [displayedPoints addObject:amenity];
-                tileCounts[index] = @(currentCount + 1);
-            }
-        }
     }
-
-    return displayedPoints;
+    return displayedPoints.array;
 }
 
-- (NSDictionary<NSString *, NSArray<OAPOI *> *> *)calculateResult:(QuadRect *)latLonBounds
-                                                             zoom:(NSInteger)zoom
-                                                          matcher:(OAResultMatcher<OAPOI *> *)matcher
+- (NSArray<OAPOI *> *)calculateAmenities:(QuadRect *)latLonBounds
+                                 matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    OAPOIUIFilter *filter = _topPlacesFilter;
-    if (!filter)
-        return @{ kAllTopPlacesKey: @[], kDisplayedTopPlacesKey: @[] };
-    
-    NSInteger z = (NSInteger)floor(zoom + log([[OAAppSettings sharedManager].mapDensity get]) / log(2.0));
+    NSArray<OAPOI *> *cachedAmenities = self.cachedAmenitiesProvider ? self.cachedAmenitiesProvider(latLonBounds, matcher) : @[];
+    if (self.cachedAmenitiesProvider && !cachedAmenities)
+        return nil;
 
-    NSMutableArray<OAPOI *> *amenities = [NSMutableArray array];
-    amenities = [[filter searchAmenities:latLonBounds.top
-                                    left:latLonBounds.left
-                                  bottom:latLonBounds.bottom
-                                   right:latLonBounds.right
-                                    zoom:(int)z
-                                 matcher:matcher
-                            filterUnique:YES] mutableCopy];
+    NSMutableArray<OAPOI *> *amenities = cachedAmenities ? [cachedAmenities mutableCopy] : [NSMutableArray array];
     if ([matcher isCancelled])
-        return @{ kAllTopPlacesKey: @[], kDisplayedTopPlacesKey: @[] };
-    
+        return @[];
+
     [self sortByElo:amenities];
-
-    NSSet<OAPOI *> *displayedPoints = [self collectDisplayedPoints:latLonBounds zoom:zoom res:amenities];
-
     if ([matcher isCancelled])
-        return @{ kAllTopPlacesKey: @[], kDisplayedTopPlacesKey: @[] };
-    
-    return @{ kAllTopPlacesKey: amenities, kDisplayedTopPlacesKey: displayedPoints.allObjects };
+        return @[];
+
+    return amenities;
 }
 
 - (void)sortByElo:(NSMutableArray<OAPOI *> *)amenities {
@@ -999,36 +849,16 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 - (BOOL)shouldDraw:(OAPOI *)amenity
               zoom:(NSInteger)zoom
 {
-    BOOL routeArticle =
-    [ROUTE_ARTICLE_POINT isEqualToString:amenity.subType] ||
-    [ROUTE_ARTICLE isEqualToString:amenity.subType];
+    BOOL routeArticle = [ROUTE_ARTICLE_POINT isEqualToString:amenity.subType]
+        || [ROUTE_ARTICLE isEqualToString:amenity.subType];
     
     BOOL routeTrack = amenity.isRouteTrack;
-    
     if (routeArticle)
-    {
         return zoom >= kStartZoom;
-        
-    }
     else if (routeTrack)
-    {
         return zoom >= kStartZoomRouteTrack;
-    }
     else
-    {
         return zoom >= kStartZoom;
-    }
-}
-
-- (void)storeWikipediaResources:(NSArray<OAResourceSwiftItem *> *)items
-{
-    _storedWikipediaResourceIds = [NSSet setWithArray:[items valueForKey:@"resourceId"]];
-}
-
-- (BOOL)hasWikipediaResourcesChanged:(NSArray<OAResourceSwiftItem *> *)newItems
-{
-    NSSet *newIds = [NSSet setWithArray:[newItems valueForKey:@"resourceId"]];
-    return ![_storedWikipediaResourceIds isEqualToSet:newIds];
 }
 
 @end

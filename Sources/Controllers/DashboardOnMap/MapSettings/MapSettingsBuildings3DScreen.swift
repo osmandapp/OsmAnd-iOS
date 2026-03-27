@@ -9,12 +9,12 @@
 import UIKit
 
 private enum RowKey: String {
-    case showHide3dObjectsRowKey
-    case enabledRowKey
-    case colorRowKey
-    case visibilityRowKey
-    case detailRowKey
-    case viewDistanceRowKey
+    case showHide3dObjects
+    case enabled
+    case color
+    case visibility
+    case detail
+    case viewDistance
     case valuesOff
     case selectedValues
 }
@@ -57,44 +57,44 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         let switchSection = data.createNewSection()
         let showHide3dObjectsRow = switchSection.createNewRow()
         showHide3dObjectsRow.cellType = OASwitchTableViewCell.reuseIdentifier
-        showHide3dObjectsRow.key = RowKey.showHide3dObjectsRowKey.rawValue
+        showHide3dObjectsRow.key = RowKey.showHide3dObjects.rawValue
         showHide3dObjectsRow.title = localizedString(is3DObjectsEnabled ? "shared_string_enabled" : "rendering_value_disabled_name")
         showHide3dObjectsRow.icon = is3DObjectsEnabled ? .icCustomShow : .icCustomHide
         showHide3dObjectsRow.iconTintColor = is3DObjectsEnabled ? .iconColorSelected : .iconColorDisabled
-        showHide3dObjectsRow.setObj(is3DObjectsEnabled, forKey: RowKey.enabledRowKey.rawValue)
+        showHide3dObjectsRow.setObj(is3DObjectsEnabled, forKey: RowKey.enabled.rawValue)
         
         guard is3DObjectsEnabled, let srtmPlugin else { return }
         let appearanceSection = data.createNewSection()
         appearanceSection.headerText = localizedString("shared_string_appearance")
         let colorRow = appearanceSection.createNewRow()
         colorRow.cellType = OAValueTableViewCell.reuseIdentifier
-        colorRow.key = RowKey.colorRowKey.rawValue
+        colorRow.key = RowKey.color.rawValue
         colorRow.title = localizedString("shared_string_color")
         colorRow.icon = .icCustomAppearanceOutlined
         colorRow.iconTintColor = .iconColorDefault
         colorRow.descr = localizedString(Buildings3DColorType.getById(Int(srtmPlugin.buildings3dColorStylePref.get())).labelId)
         let visibilityRow = appearanceSection.createNewRow()
         visibilityRow.cellType = OAValueTableViewCell.reuseIdentifier
-        visibilityRow.key = RowKey.visibilityRowKey.rawValue
+        visibilityRow.key = RowKey.visibility.rawValue
         visibilityRow.title = localizedString("visibility")
         visibilityRow.icon = UIImage.templateImageNamed("ic_custom_visibility")
         visibilityRow.iconTintColor = .iconColorDefault
-        visibilityRow.descr = "\(Int((srtmPlugin.buildings3dAlphaPref.get() * 100).rounded()))%"
+        visibilityRow.descr = NumberFormatter.percentFormatter.string(from: srtmPlugin.buildings3dAlphaPref.get() as NSNumber)
         
         let performanceSection = data.createNewSection()
         performanceSection.headerText = localizedString("performance")
         let detailRow = performanceSection.createNewRow()
         detailRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
-        detailRow.key = RowKey.detailRowKey.rawValue
+        detailRow.key = RowKey.detail.rawValue
         detailRow.title = localizedString("level_of_details")
         detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOff, .icCustom3DBuildingsDetailHighOff], forKey: RowKey.valuesOff.rawValue)
-        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOn, .icCustom3DBuildingsDetailHighOn], forKey: RowKey.selectedValues.rawValue)
+        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), UIImage.icCustom3DBuildingsDetailHighOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.selectedValues.rawValue)
         let viewDistanceRow = performanceSection.createNewRow()
         viewDistanceRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
-        viewDistanceRow.key = RowKey.viewDistanceRowKey.rawValue
+        viewDistanceRow.key = RowKey.viewDistance.rawValue
         viewDistanceRow.title = localizedString("view_distance")
         viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOff, .icCustomViewDistanceFarOff], forKey: RowKey.valuesOff.rawValue)
-        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOn, .icCustomViewDistanceFarOn], forKey: RowKey.selectedValues.rawValue)
+        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), UIImage.icCustomViewDistanceFarOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.selectedValues.rawValue)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -116,7 +116,7 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
             cell.titleLabel.text = item.title
             cell.leftIconView.image = item.icon
             cell.leftIconView.tintColor = item.iconTintColor
-            cell.switchView.setOn(item.bool(forKey: RowKey.enabledRowKey.rawValue), animated: true)
+            cell.switchView.setOn(item.bool(forKey: RowKey.enabled.rawValue), animated: true)
             cell.switchView.tag = indexPath.section << 10 | indexPath.row
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             cell.switchView.addTarget(self, action: #selector(on3DObjectsSwitchChanged(_:)), for: .valueChanged)
@@ -135,12 +135,18 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
             cell.selectionStyle = .none
             cell.configureTitle(title: item.title)
             if let srtmPlugin, let icons = item.obj(forKey: RowKey.valuesOff.rawValue) as? [UIImage], let selectedIcons = item.obj(forKey: RowKey.selectedValues.rawValue) as? [UIImage] {
-                let isViewDistanceRow = item.key == RowKey.viewDistanceRowKey.rawValue
-                let selectedSegmentIndex = isViewDistanceRow ? (srtmPlugin.buildings3dViewDistancePref.get() == 2 ? 1 : 0) : (srtmPlugin.buildings3dDetailLevelPref.get() ? 1 : 0)
-                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: selectedSegmentIndex, selectedIcons: selectedIcons.map { $0.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal) })
+                let isViewDistanceRow = item.key == RowKey.viewDistance.rawValue
+                let selectedSegmentIndex: Int
+                if isViewDistanceRow {
+                    let isFarDistanceSelected = srtmPlugin.buildings3dViewDistancePref.get() == 2
+                    selectedSegmentIndex = isFarDistanceSelected ? 1 : 0
+                } else {
+                    selectedSegmentIndex = srtmPlugin.buildings3dDetailLevelPref.get() ? 1 : 0
+                }
+                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: selectedSegmentIndex, selectedIcons: selectedIcons)
             }
             cell.didSelectSegmentIndex = { [weak self] index in
-                let isViewDistanceRow = item.key == RowKey.viewDistanceRowKey.rawValue
+                let isViewDistanceRow = item.key == RowKey.viewDistance.rawValue
                 if isViewDistanceRow {
                     self?.applyBuildings3DViewDistance(index == 1 ? 2 : 1)
                 } else {
@@ -157,9 +163,9 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         let item = data.item(for: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         switch item.key {
-        case RowKey.colorRowKey.rawValue:
+        case RowKey.color.rawValue:
             showTerrainParametersScreen(type: .EOATerrainSettingsTypeBuildings3DColor)
-        case RowKey.visibilityRowKey.rawValue:
+        case RowKey.visibility.rawValue:
             showTerrainParametersScreen(type: .EOATerrainSettingsTypeBuildingsVisibility)
         default:
             break

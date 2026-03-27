@@ -495,22 +495,22 @@
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"terrain_layer"
         }];
+        if (!_iapHelper.srtm.disabled)
+        {
+            [topographySectionData addObject:@{
+                @"name": OALocalizedString(@"enable_3d_objects"),
+                @"image": @"ic_custom_3d_buildings",
+                @"has_options": @YES,
+                @"type": OASwitchTableViewCell.reuseIdentifier,
+                @"key": @"3d_buildings"
+            }];
+        }
         [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"show_spherical_map"),
                 @"image": @"ic_custom_globe_view",
                 @"has_options": @YES,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"spherical_map"
-        }];
-    }
-    if (!_iapHelper.srtm.disabled)
-    {
-        [topographySectionData addObject:@{
-            @"name": OALocalizedString(@"enable_3d_objects"),
-            @"image": @"ic_custom_3d_buildings",
-            @"has_options": @YES,
-            @"type": OASwitchTableViewCell.reuseIdentifier,
-            @"key": @"3d_buildings"
         }];
     }
 

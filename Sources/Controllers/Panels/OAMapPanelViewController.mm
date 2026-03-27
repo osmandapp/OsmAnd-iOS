@@ -413,7 +413,7 @@ typedef enum
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
         _activeTargetType = OATargetWeatherLayerSettings;
-    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class])
+    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class] || [controller isKindOfClass:MapSettingsBuildings3DParametersViewController.class])
         _activeTargetType = OATargetTerrainParametersSettings;
     else if ([controller isKindOfClass:MapSettingsMapModeParametersViewController.class])
         _activeTargetType = OATargetMapModeParametersSettings;

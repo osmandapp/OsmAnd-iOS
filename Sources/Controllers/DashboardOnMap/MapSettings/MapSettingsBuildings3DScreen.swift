@@ -164,9 +164,9 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         tableView.deselectRow(at: indexPath, animated: true)
         switch item.key {
         case RowKey.color.rawValue:
-            showTerrainParametersScreen(type: .EOATerrainSettingsTypeBuildings3DColor)
+            showBuildings3DParametersScreen(type: .color)
         case RowKey.visibility.rawValue:
-            showTerrainParametersScreen(type: .EOATerrainSettingsTypeBuildingsVisibility)
+            showBuildings3DParametersScreen(type: .visibility)
         default:
             break
         }
@@ -200,11 +200,11 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         srtmPlugin.apply3DBuildingsDetalization()
     }
     
-    private func showTerrainParametersScreen(type: EOATerrainSettingsType) {
-        let terrainParametersScreen = OAMapSettingsTerrainParametersViewController(settingsType: type)
-        terrainParametersScreen.delegate = self
+    private func showBuildings3DParametersScreen(type: Buildings3DSettingsType) {
+        let parametersScreen = MapSettingsBuildings3DParametersViewController(settingsType: type)
+        parametersScreen.delegate = self
         vwController?.hide(true, animated: true)
-        OARootViewController.instance()?.mapPanel.showScrollableHudViewController(terrainParametersScreen)
+        OARootViewController.instance()?.mapPanel.showScrollableHudViewController(parametersScreen)
     }
     
     @objc private func on3DObjectsSwitchChanged(_ sender: UISwitch) {
@@ -214,8 +214,8 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
     }
 }
 
-extension MapSettingsBuildings3DScreen: OATerrainParametersDelegate {
-    func onBackTerrainParameters() {
+extension MapSettingsBuildings3DScreen: Buildings3DParametersDelegate {
+    func onBackBuildings3DParameters() {
         OARootViewController.instance()?.mapPanel.showBuildings3DScreen()
     }
 }

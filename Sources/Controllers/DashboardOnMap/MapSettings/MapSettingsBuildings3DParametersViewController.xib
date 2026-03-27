@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MapSettingsBuildings3DParametersViewController" customModule="OsmAnd_Maps" customModuleProvider="target">
+            <connections>
+                <outlet property="backButton" destination="wnB-6e-Mvf" id="t9m-IA-uqS"/>
+                <outlet property="backButtonContainerView" destination="eKw-4z-Ryw" id="8F2-Z1-7wl"/>
+                <outlet property="backButtonLeadingConstraint" destination="woM-4F-NYT" id="5Dq-zH-80t"/>
+                <outlet property="contentContainer" destination="EWQ-rI-8ij" id="b4E-z1-r7N"/>
+                <outlet property="doneButtonContainerView" destination="hgA-LB-dsO" id="0Yo-g7-2mf"/>
+                <outlet property="resetButton" destination="jW9-cm-r7D" id="jQ0-rK-1kY"/>
+                <outlet property="resetButtonTrailingConstraint" destination="vIz-YM-udy" id="RhM-cW-RW6"/>
+                <outlet property="scrollableView" destination="ti9-c1-tfn" id="p2r-PO-IhD"/>
+                <outlet property="statusBarBackgroundView" destination="b6c-LM-fjU" id="Zf7-cA-tY2"/>
+                <outlet property="tableView" destination="ism-tw-8Ez" id="wSc-7x-BZb"/>
+                <outlet property="toolBarView" destination="KF1-zN-Zan" id="5Lt-Bz-5jg"/>
+                <outlet property="view" destination="8Ud-7S-kOz" id="Wf8-ie-5gP"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="8Ud-7S-kOz" userLabel="root" customClass="OAUserInteractionPassThroughView">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <userGuides>
+                <userLayoutGuide location="391" affinity="minY"/>
+            </userGuides>
+            <subviews>
+                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="ti9-c1-tfn">
+                    <rect key="frame" x="0.0" y="493" width="414" height="396"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KF1-zN-Zan">
+                            <rect key="frame" x="0.0" y="198" width="414" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b6c-LM-fjU">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" name="viewBg"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="EWQ-rI-8ij">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="406"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="18" sectionFooterHeight="-1" estimatedSectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="ism-tw-8Ez">
+                                    <rect key="frame" x="0.0" y="6" width="414" height="400"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" name="viewBg"/>
+                                    <color key="tintColor" name="iconColorActive"/>
+                                    <color key="separatorColor" name="customSeparator"/>
+                                </tableView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="22D-eG-AnG"/>
+                    <color key="backgroundColor" name="viewBg"/>
+                </view>
+                <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eKw-4z-Ryw" userLabel="Back Button Container">
+                    <rect key="frame" x="10" y="128" width="74" height="50"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wnB-6e-Mvf" userLabel="Back Button">
+                            <rect key="frame" x="0.0" y="0.0" width="74" height="50"/>
+                            <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                            <color key="tintColor" name="iconColorActive"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" name="iconColorActive"/>
+                            </state>
+                            <connections>
+                                <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="6hQ-pf-rdS"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                    <constraints>
+                        <constraint firstItem="wnB-6e-Mvf" firstAttribute="top" secondItem="eKw-4z-Ryw" secondAttribute="top" id="KPQ-Xi-Kbg"/>
+                        <constraint firstAttribute="trailing" secondItem="wnB-6e-Mvf" secondAttribute="trailing" id="Ohe-Ec-qEg"/>
+                        <constraint firstAttribute="height" constant="50" id="Oqm-hb-uBx"/>
+                        <constraint firstItem="wnB-6e-Mvf" firstAttribute="leading" secondItem="eKw-4z-Ryw" secondAttribute="leading" id="mgu-4Z-gdh"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="nSt-E1-PAX"/>
+                        <constraint firstAttribute="bottom" secondItem="wnB-6e-Mvf" secondAttribute="bottom" id="s0e-6I-eQ7"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <integer key="value" value="12"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hgA-LB-dsO" userLabel="Done Button Container">
+                    <rect key="frame" x="306" y="128" width="74" height="50"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jW9-cm-r7D" userLabel="Done Button">
+                            <rect key="frame" x="0.0" y="0.0" width="74" height="50"/>
+                            <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                            <color key="tintColor" name="iconColorActive"/>
+                            <state key="normal" image="ic_navbar_reset.png">
+                                <color key="titleColor" name="iconColorActive"/>
+                            </state>
+                            <connections>
+                                <action selector="resetButtonPressed:" destination="-1" eventType="touchUpInside" id="m5c-2n-5iT"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                    <constraints>
+                        <constraint firstItem="jW9-cm-r7D" firstAttribute="top" secondItem="hgA-LB-dsO" secondAttribute="top" id="H9O-FJ-WXx"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="PPC-XM-BE8"/>
+                        <constraint firstAttribute="trailing" secondItem="jW9-cm-r7D" secondAttribute="trailing" id="Yw3-Wu-Frh"/>
+                        <constraint firstItem="jW9-cm-r7D" firstAttribute="leading" secondItem="hgA-LB-dsO" secondAttribute="leading" id="hXz-vr-aV1"/>
+                        <constraint firstAttribute="height" constant="50" id="ksI-lM-XT9"/>
+                        <constraint firstAttribute="bottom" secondItem="jW9-cm-r7D" secondAttribute="bottom" id="voa-Gp-lBg"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <integer key="value" value="12"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="XSm-Je-cWd"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="eKw-4z-Ryw" firstAttribute="top" secondItem="XSm-Je-cWd" secondAttribute="top" constant="10" id="6VW-T8-I2v"/>
+                <constraint firstItem="hgA-LB-dsO" firstAttribute="top" secondItem="XSm-Je-cWd" secondAttribute="top" constant="10" id="lWg-7E-M4z"/>
+                <constraint firstItem="XSm-Je-cWd" firstAttribute="trailing" secondItem="hgA-LB-dsO" secondAttribute="trailing" constant="13" id="vIz-YM-udy"/>
+                <constraint firstItem="eKw-4z-Ryw" firstAttribute="leading" secondItem="XSm-Je-cWd" secondAttribute="leading" constant="10" id="woM-4F-NYT"/>
+            </constraints>
+            <point key="canvasLocation" x="-614.49275362318849" y="59.598214285714285"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_navbar_reset.png" width="28" height="28"/>
+        <namedColor name="buttonBgColorTertiary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBg">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

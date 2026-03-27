@@ -54,7 +54,7 @@
 "coords_format_descr" = "Formaat van geografische coördinaten.";
 "do_not_show_discount_desc" = "Onderdrukt het weergeven van app kortingen en berichten over speciale lokale evenementen.";
 "save_global_track_interval" = "Standaard logging-interval";
-"save_global_track_interval_descr" = "Specificeer het logging-interval voor de algemene track-opname (ingeschakeld via de track-widget op de kaart).";
+"save_global_track_interval_descr" = "Specificeer het registratie-interval voor de algemene trackregistratie (ingeschakeld via de 'Ritregistratie' widget op de kaart).";
 "rotate_map_to" = "Kaartoriëntatie";
 "rotate_map_to_bearing_descr" = "Selecteer de kaart-uitlijning.";
 "rotate_map_compass_opt" = "Volgens kompas";
@@ -321,7 +321,7 @@
 "shared_string_statistics" = "Statistieken";
 "map_widget_average_speed" = "Gemiddelde snelheid";
 "track_recording" = "Track-opnamen";
-"shared_string_currently_recording_track" = "GPX-track opname wordt gemaakt";
+"shared_string_currently_recording_track" = "Momenteel geregistreerde track";
 "track_stop_rec" = "Stop opname";
 "gpx_start_new_segment" = "Start nieuw segment";
 "save_current_track" = "Huidige GPX-track opslaan";
@@ -451,7 +451,7 @@
 "osmand_parking_plugin_description" = "Bewaart de locatie waar je auto geparkeerd staat en de resterende parkeertijd. \nDe parkeerlocatie en resterende parkeertijd staan op het OsmAnd dashboard en in een widget op de kaart. Er kan een alarmsignaal in de Android kalender geplaatst worden ter herinnering.";
 "plugin_ski_name" = "Ski kaartweergave";
 "plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale \'Winter en ski\' kaartstijl die lijkt op een besneeuwd winterlandschap. \n \nHet activeren van deze weergave verandert de kaartstijl in \'Winter en ski\', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de \'Kaart stijl\' onder \'Kaart instellen\'.";
-"record_plugin_name" = "Trip opnames";
+"record_plugin_name" = "Ritregistraties";
 "record_plugin_description" = "Neem je trips of trainingen op in GPX-formaat en analyseer de gegevens zoals snelheid, opgebouwde beklimmingen en afdalingen, stijgingsprofiel, etc. Opgenomen tracks kunnen worden gearchiveerd, gedeeld met vrienden, bewerkt en verwerkt worden in andere programma's. \n \nLees verder op %@.";
 "worldwide_maps" = "Wereldwijde kaarten";
 "purchases_feature_desc_wikipedia" = "Biedt alle plaatsgerelateerde Wikipedia-artikelen offline, zodat u meer te weten komt over de plaatsen die u tijdens uw reis bezoekt door eenvoudig te tikken op de kaart. Vergeet niet de Wikipedia-kaartbestanden voor de specifieke regio\'s te downloaden.";
@@ -723,7 +723,7 @@
 "use_osm_live_routing" = "OsmAnd Live navigatie";
 "favorite_home_category" = "Thuis";
 "osm_live_payment_month_cost_descr" = "%@ / maand";
-"auto_split_recording_title" = "Opname automatisch splitsen na een onderbreking";
+"auto_split_recording_title" = "Registraties automatisch splitsen na een onderbreking";
 "quick_action_map_source" = "Kaartbron wijzigen";
 "first_usage_item" = "Eerste gebruik";
 "quick_action_replace_destination" = "Bestemming vervangen";
@@ -1773,7 +1773,7 @@
 "routing_attr_motor_type_description" = "Selecteer het brandstofsoort van de motor, dit is nodig om de CO2-uitstoot te schatten.";
 "show_gpx" = "Tracks";
 "get_osmand_live" = "Neem OsmAnd Live en krijg alle mogelijkheden: Dagelijkse kaartupdates en onbeperkte downloads, alle betaalde en gratis plugins, Wikipedia, Wikivoyage en veel meer.";
-"save_heading_descr" = "Sla koers naar elk trackpunt op tijdens het opnemen.";
+"save_heading_descr" = "Sla de bewegingsrichting op bij elk trackpunt tijdens het registreren.";
 "backup_delete_all_data" = "Verwijder al mijn gegevens";
 "quick_action_current_location_widget_descr" = "Een schakel om de widget \'huidige locatie\' op de kaart te tonen of verbergen.";
 "routing_attr_avoid_tunnels_name" = "Tunnels vermijden";
@@ -1911,7 +1911,7 @@
 "routing_attr_difficulty_preference_no_preference_name" = "Geen voorkeur";
 "routing_attr_difficulty_preference_advanced_name" = "Gevorderde";
 "routing_attr_avoid_highway_description" = "Snelwegen vermijden";
-"save_track_to_gpx_descrp" = "Automatisch starten met opname van track tijdens navigeren, en achteraf automatisch opslaan.";
+"save_track_to_gpx_descrp" = "Start automatisch het registeren van een track tijdens het navigeren en sla deze daarna automatisch op.";
 "add_point_after" = "Punt erna toevoegen";
 "move_marker_bottom_sheet_title" = "Verplaats de kaart om de positie van de markering te wijzigen";
 "quick_action_add_marker_descr" = "Een toets om een Markeervlaggetje toe te voegen in het midden van het scherm.";
@@ -2013,7 +2013,7 @@
 "map_markers_bar" = "Kaartmarkeringenbalk";
 "map_widget_distance_to_destination" = "Afstand tot bestemming";
 "route_maneuvers_desc" = "Navigatie widgets worden ingeschakeld tijdens navigatie om informatie te tonen, zoals afstand, aankomst- of resterende tijd, volgende afslagen, richting, huidige straatnaam, rijstrook informatie, maximale snelheid, naderende waarschuwingen, bezienswaardigheden, opgeslagen tussenpunten.";
-"map_widget_trip_recording_duration" = "Tijdsduur";
+"map_widget_trip_recording_duration" = "Ritduur";
 "distance_circles" = "Afstandcirkels";
 "second_marker_widget_desc" = "U kunt de widget instellen om de afstand of de verwachte aankomsttijd te tonen, tot de tweede markering.";
 "distance_to_destination_widget_desc" = "De widget toont de afstand tot het laatste bestemmingspunt.";
@@ -2100,10 +2100,10 @@
 "av_notes_photo_widget_desc" = "Door te tikken op de widget kun je een foto maken.";
 "av_notes_video_widget_desc" = "Door te tikken op de widget kun je een video opnemen.";
 "av_notes_audio_widget_desc" = "Door te tikken op de widget kun je een audio-opname maken.";
-"trip_recording_downhill_widget_desc" = "Toont de som van alle afdalingen of de laatste afdaling van deze opgenomen rit.";
-"trip_recording_uphill_widget_desc" = "Toont de som van alle beklimmingen of de laatste klim van deze opgenomen rit.";
-"trip_recording_duration_widget_desc" = "Toont de tijdsduur van deze opgenomen rit.";
-"trip_recording_distance_widget_desc" = "Toont de afgelegde afstand van deze opgenomen rit.";
+"trip_recording_downhill_widget_desc" = "Toont de som van alle afdalingen of de laatste afdaling van de momenteel geregistreerde rit.";
+"trip_recording_uphill_widget_desc" = "Toont de som van alle beklimmingen of de laatste beklimming van de momenteel geregistreerde rit.";
+"trip_recording_duration_widget_desc" = "Toont de momenteel geregistreerde ritduur.";
+"trip_recording_distance_widget_desc" = "Toont de totale afstand van je momenteel geregistreerde rit, met modi om de afstand te zien van de laatste beklimming en afdaling.";
 "true_bearing_widget_desc" = "Hoek tussen het ware noorden en het doelpunt gezien van uw locatie.";
 "relative_bearing_widget_desc" = "Toont de hoek tussen de richting van uw voorwaartse beweging en het doelpunt.";
 "shared_string_license" = "Licentie";
@@ -2128,7 +2128,7 @@
 "routing_attr_hazmat_category_usa_8_name" = "Bijtende stoffen";
 "map_orientation_landscape" = "Landschap";
 "there_are_no_connected_sensors_of_this_type" = "Er zijn geen aangesloten sensoren van dit type";
-"write_data_from_sensor_to_track" = "Schrijf de gegevens van externe sensoren naar de GPX tijdens de trip opname.";
+"write_data_from_sensor_to_track" = "Schrijf de gegevens van externe sensoren naar de GPX tijdens de ritregistratie.";
 "ant_plus_searching_text" = "Sensoren zoeken";
 "press_again_to_change_the_map_orientation" = "Tik nogmaals om de kaartoriëntatie te wijzigen";
 "ant_plus_pair_new_sensor" = "Nieuwe sensor koppelen";
@@ -2148,7 +2148,7 @@
 "coordinates_widget_map_center" = "Coördinaten: midden van de kaart";
 "troubleshooting" = "Probleemoplosser";
 "ant_plus_bluetooth_off" = "Bluetooth is uitgeschakeld";
-"start_recording" = "Start opname";
+"start_recording" = "Start registratie";
 "map_widget_ant_bicycle_cadence" = "Toerental trappers";
 "external_device_characteristic_distance" = "Afstand";
 "no_widgets_here_yet" = "Nog geen widgets hier";
@@ -2491,7 +2491,7 @@
 "help_article_start_with_name" = "Beginnen met OsmAnd";
 "help_article_start_with_first_steps_name" = "Eerste stappen";
 "help_article_troubleshooting_general_name" = "Algemeen";
-"help_article_troubleshooting_track_recording_issues_name" = "Track-opnamen maken";
+"help_article_troubleshooting_track_recording_issues_name" = "Trackregistratie";
 "help_article_widgets_name" = "Kaartwidgets";
 "help_article_widgets_info_widgets_name" = "Informatieve widgets";
 "help_article_widgets_markers_name" = "Markeringswidgets";
@@ -2676,7 +2676,7 @@
 "years_3" = "Drie jaar";
 "sensor_data" = "Sensordata";
 "shared_string_engine" = "Motor";
-"vehicle_metrics_recording_description" = "Selecteer de parameters die opgenomen moeten worden in het GPX-bestand.";
+"vehicle_metrics_recording_description" = "Selecteer de parameters die geregistreerd moeten worden in het GPX-bestand.";
 "shared_string_volume" = "Volume";
 "labels_position" = "Positie van labels";
 "intermediate_first" = "Tussenstop eerst";
@@ -3779,5 +3779,7 @@
 "average_slope" = "Gemiddelde helling";
 "liter_single" = "Liter";
 "us_gallon" = "US gallon";
-"trip_recording_moving_time_widget_description" = "Toont de momenteel opgenomen bewegingstijd of de tijd voor de laatste beklimming en afdaling.";
+"trip_recording_moving_time_widget_description" = "Toont de momenteel geregistreerde bewegingstijd of de tijd voor de laatste beklimming en afdaling.";
 "trip_recording_moving_time" = "Bewegingstijd";
+"trip_recording_max_speed_widget_description" = "Toont de maximale snelheid van de momenteel geregistreerde rit. Tik om de wisselen tussen de algehele snelheid en de maximale snelheid van de laatste beklimming of afdaling.";
+"trip_recording_average_slope_widget_description" = "Toont de gemiddelde helling van het laatste afdaling- of beklimmingssegment van de momenteel geregistreerde rit.";

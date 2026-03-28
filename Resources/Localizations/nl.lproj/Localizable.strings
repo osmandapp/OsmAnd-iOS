@@ -53,7 +53,7 @@
 "coords_format" = "Coördinatenformaat";
 "coords_format_descr" = "Formaat van geografische coördinaten.";
 "do_not_show_discount_desc" = "Onderdrukt het weergeven van app kortingen en berichten over speciale lokale evenementen.";
-"save_global_track_interval" = "Standaard logging-interval";
+"save_global_track_interval" = "Algemeen registratie-interval";
 "save_global_track_interval_descr" = "Specificeer het registratie-interval voor de algemene trackregistratie (ingeschakeld via de 'Ritregistratie' widget op de kaart).";
 "rotate_map_to" = "Kaartoriëntatie";
 "rotate_map_to_bearing_descr" = "Selecteer de kaart-uitlijning.";
@@ -327,7 +327,7 @@
 "save_current_track" = "Huidige GPX-track opslaan";
 "track_continue_rec" = "Opname hervatten";
 "track_continue_rec_q" = "Wil je doorgaan met opnemen?";
-"save_track_interval_globally" = "Logging interval";
+"save_track_interval_globally" = "Registratie-interval";
 "track_start_rec" = "Track opname starten";
 "track_interval_remember" = "Onthoud mijn keuze";
 "track_clear" = "Huidige track leeg maken";
@@ -626,7 +626,7 @@
 "rendering_value_category_name" = "Categorie";
 "versions_item" = "Versies";
 "osm_edits_notes" = "AV-Notities";
-"save_track_interval" = "Logging-interval gedurende navigatie";
+"save_track_interval" = "Registratie-interval tijdens het navigeren";
 "search_nearby" = "Zoek dichtbij";
 "altitude_range" = "Hoogtebereik";
 "instalation_troubleshooting_item" = "Installeren en foutoplossen";
@@ -1916,7 +1916,7 @@
 "move_marker_bottom_sheet_title" = "Verplaats de kaart om de positie van de markering te wijzigen";
 "quick_action_add_marker_descr" = "Een toets om een Markeervlaggetje toe te voegen in het midden van het scherm.";
 "quick_action_auto_zoom" = "Autozoom kaart";
-"save_track_to_gpx" = "GPX-Track automatisch opnemen tijdens navigatie";
+"save_track_to_gpx" = "Start automatisch het registeren van een track tijdens het navigeren";
 "quick_action_navigation_voice_on" = "Stembegeleiding uit";
 "route_add_start_point" = "Vertrekpunt toevoegen";
 "auth_failed" = "Autorisatie mislukt";

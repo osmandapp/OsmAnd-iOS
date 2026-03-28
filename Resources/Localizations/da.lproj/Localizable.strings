@@ -3976,7 +3976,7 @@
 "unsupported_maps" = "Ikke-understøttede kort";
 "deleted_maps_alert_message" = "Er du sikker på, at du vil slette %d kort?";
 "inch" = "tom";
-"ios_release_5_3" = "• Tilføjet interaktiv animation til speedometer-modul\n• Tilføjet en mulighed for at ændre størrelsen på placeringsikonet\n• Nye moduler til registrering af ture: Maksimal hastighed og gennemsnitlig stigning; forbedrede moduler til op-/nedstigninger\n• Tilføjet understøttelse af dybe links til deling af specifikke interessepunkter\n• Rettet et problem, hvor ETA i navigationsmoduler ikke blev opdateret, mens man stod stille.\n• Forbedret forbindelse til parrede OBDII-adaptere\n• Tilføjet mulighed for at flette rutepunkter i en valgt favoritmappe\n• CarPlay: Rettet et problem med et kort, der ikke reagerede på Dashboard, og tilføjet support til parameteren \"Vis altid mørkt kort\"\n";
+"ios_release_5_3" = "• Understøttelse af 3D-bygninger\n• Visning af sfærisk kort\n• Speedometer: nye farveindstillinger for hastighedsoverskridelser og hastighedsoverskridelser\n• Tilpasbare kortknapper: størrelse, form og stil\n• Størrelsesjusterbart placeringsikon\n• Nye moduler: Maks. hastighed,gennemsnitlig stigning; forbedret op/nedkørsel\n• Sporanalysator: forbedret valg af akser og køretøjsdata\n• Saml rutepunkter i en mappe med favoritter\n• Del link til et hvilket som helst interessepunkt\n• CarPlay: Rettet kortet på Dashboard; tilføjet \"Vis altid mørkt kort\"\n• CarPlay: Mere strømlinet placeringsikon og dialogvindue efter navigation\n• Bedre forbindelse til parrede OBD-II-adaptere\n• Rettet: Navigationens forventede ankomsttid opdateres nu, når bilen står stille\n";
 "copy_link" = "Kopiér link";
 "wind_animation_layer" = "Vindanimationslag";
 "quick_action_wind_animation_layer" = "En skifter til at vise eller skjule vindanimationslaget på kortet.";
@@ -4034,3 +4034,4 @@
 "poi_mobile" = "Mobil";
 "poi_cuisine" = "Køkken";
 "poi_brand" = "Varemærke";
+"show_spherical_map" = "Klodevisning";

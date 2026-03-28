@@ -50,11 +50,16 @@ static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 static NSArray<NSString *> *_flatBackgroundIcons;
 static NSArray<NSString *> *_flatBackgroundContourIcons;
 static NSOperationQueue *_favQueue;
+static NSOperationQueue *_favCollectionQueue;
 
 + (void)initFavorites
 {
     _favQueue = [[NSOperationQueue alloc] init];
     _favQueue.maxConcurrentOperationCount = 1;
+    _favQueue.qualityOfService = NSQualityOfServiceUtility;
+    _favCollectionQueue = [[NSOperationQueue alloc] init];
+    _favCollectionQueue.maxConcurrentOperationCount = 1;
+    _favCollectionQueue.qualityOfService = NSQualityOfServiceUtility;
 
     [self initFavoritesCollection];
 
@@ -103,7 +108,9 @@ static NSOperationQueue *_favQueue;
                 [self]
                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
                 {
-            [_favoritesCollectionChangedObservable notifyEventWithKey:self];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_favoritesCollectionChangedObservable notifyEventWithKey:self];
+            });
         });
     _favoritesCollection->favoriteLocationChangeObservable
         .attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -111,8 +118,10 @@ static NSOperationQueue *_favQueue;
                 (const OsmAnd::IFavoriteLocationsCollection* const collection,
                  const std::shared_ptr<const OsmAnd::IFavoriteLocation>& favoriteLocation)
                 {
-            [_favoriteChangedObservable notifyEventWithKey:self
-                                                  andValue:favoriteLocation->getTitle().toNSString()];
+            NSString *title = favoriteLocation->getTitle().toNSString();
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_favoriteChangedObservable notifyEventWithKey:self andValue:title];
+            });
         });
 }
 
@@ -219,19 +228,33 @@ static NSOperationQueue *_favQueue;
 
 + (void) recalculateCachedFavPoints
 {
-    _favoritesCollection->clearFavoriteLocations();
     NSMutableArray *allPoints = [NSMutableArray array];
     for (OAFavoriteGroup *group in _favoriteGroups)
     {
         [allPoints addObjectsFromArray:group.points];
-        QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > favoriteLocations;
-        for (OAFavoriteItem *point in group.points)
-        {
-            favoriteLocations.append(point.favorite);
-        }
-        _favoritesCollection->addFavoriteLocations(favoriteLocations, group == _favoriteGroups.lastObject);
     }
+    
     _cachedFavoritePoints = [allPoints copy];
+    [self getFavoritesCollection];
+    NSArray<OAFavoriteGroup *> *groupsSnapshot = _favoriteGroups ?: @[];
+    [_favCollectionQueue addOperationWithBlock:^{
+        if (_favoritesCollection == nullptr)
+            return;
+        
+        _favoritesCollection->clearFavoriteLocations();
+        for (NSUInteger i = 0; i < groupsSnapshot.count; i++)
+        {
+            OAFavoriteGroup *group = groupsSnapshot[i];
+            QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> favoriteLocations;
+            for (OAFavoriteItem *point in group.points)
+            {
+                favoriteLocations.append(point.favorite);
+            }
+            
+            const BOOL notify = (i == groupsSnapshot.count - 1);
+            _favoritesCollection->addFavoriteLocations(favoriteLocations, notify);
+        }
+    }];
 }
 
 + (OAFavoriteItem *) getSpecialPoint:(OASpecialPointType *)specialType
@@ -344,7 +367,10 @@ static NSOperationQueue *_favQueue;
     if (res)
     {
         _cachedFavoritePoints = [mutablePoints copy];
-        _favoritesCollection->addFavoriteLocations(favoriteLocations, true);
+        auto locsPtr = std::make_shared<QList<std::shared_ptr<OsmAnd::IFavoriteLocation>>>(favoriteLocations);
+        [_favCollectionQueue addOperationWithBlock:^{
+            _favoritesCollection->addFavoriteLocations(*locsPtr, true);
+        }];
         [[OAAppSettings sharedManager] setShowFavorites:YES];
         if (sortAndSave)
         {
@@ -447,9 +473,15 @@ static NSOperationQueue *_favQueue;
 
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon description:(NSString *)description
 {
-    _favoritesCollection->removeFavoriteLocation(item.favorite);
+    auto fav = item.favorite;
     [item setLat:lat lon:lon];
-    _favoritesCollection->addFavoriteLocation(item.favorite);
+    auto fav2 = item.favorite;
+    
+    [_favCollectionQueue addOperationWithBlock:^{
+        _favoritesCollection->removeFavoriteLocation(fav);
+        _favoritesCollection->addFavoriteLocation(fav2);
+    }];
+    
     [item initAltitude];
     
     if (description)
@@ -940,7 +972,10 @@ static NSOperationQueue *_favQueue;
         [mutablePoints removeObjectIdenticalTo:favoriteToRemove];
     
     _cachedFavoritePoints = [mutablePoints copy];
-    _favoritesCollection->removeFavoriteLocations(favoriteLocations);
+    auto locsPtr = std::make_shared<QList<std::shared_ptr<OsmAnd::IFavoriteLocation>>>(favoriteLocations);
+    [_favCollectionQueue addOperationWithBlock:^{
+        _favoritesCollection->removeFavoriteLocations(*locsPtr);
+    }];
 }
 
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem

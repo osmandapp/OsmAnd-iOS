@@ -492,6 +492,22 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
         guard let navigationController = OARootViewController.instance().navigationController else { return }
         OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.terrain(), navController: navigationController)
     }
+    
+    @objc private func productPurchased(_: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.settingsType == .color else { return }
+            self.generateData()
+            self.tableView.reloadData()
+        }
+    }
+    
+    @objc private func productsRestored(_: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.settingsType == .color else { return }
+            self.generateData()
+            self.tableView.reloadData()
+        }
+    }
 }
 
 extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource {
@@ -751,23 +767,5 @@ extension MapSettingsBuildings3DParametersViewController: UIColorPickerViewContr
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         guard settingsType == .color else { return }
         _ = addAndGetNewColorItem(viewController.selectedColor)
-    }
-}
-
-private extension MapSettingsBuildings3DParametersViewController {
-    @objc func productPurchased(_: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self, self.settingsType == .color else { return }
-            self.generateData()
-            self.tableView.reloadData()
-        }
-    }
-    
-    @objc func productsRestored(_: Notification) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self, self.settingsType == .color else { return }
-            self.generateData()
-            self.tableView.reloadData()
-        }
     }
 }

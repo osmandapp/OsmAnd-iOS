@@ -793,16 +793,12 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     NSMutableOrderedSet<OAPOI *> *displayedPoints = [NSMutableOrderedSet orderedSet];
     NSInteger topPlacesCounter = 0;
     for (OAPOI *amenity in amenities)
-    {
-        if (![self shouldDraw:amenity zoom:zoom])
-            continue;
-
         if (topPlacesCounter < kTopPlacesLimit)
         {
             [displayedPoints addObject:amenity];
             topPlacesCounter++;
         }
-    }
+
     return displayedPoints.array;
 }
 
@@ -844,21 +840,6 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
         
         return NSOrderedSame;
     }];
-}
-
-- (BOOL)shouldDraw:(OAPOI *)amenity
-              zoom:(NSInteger)zoom
-{
-    BOOL routeArticle = [ROUTE_ARTICLE_POINT isEqualToString:amenity.subType]
-        || [ROUTE_ARTICLE isEqualToString:amenity.subType];
-    
-    BOOL routeTrack = amenity.isRouteTrack;
-    if (routeArticle)
-        return zoom >= kStartZoom;
-    else if (routeTrack)
-        return zoom >= kStartZoomRouteTrack;
-    else
-        return zoom >= kStartZoom;
 }
 
 @end

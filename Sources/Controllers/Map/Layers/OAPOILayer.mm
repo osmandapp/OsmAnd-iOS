@@ -56,12 +56,15 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/MapMarker.h>
+#include <cmath>
 
 static const NSInteger kPoiSearchRadius = 50; // AMENITY_SEARCH_RADIUS
 static const NSInteger kPoiSearchRadiusForRelation = 500; // AMENITY_SEARCH_RADIUS_FOR_RELATION
 static const NSInteger kTrackSearchDelta = 40;
 static const NSInteger START_ZOOM = 5;
 static const NSTimeInterval kWikiSymbolsCacheWaitInterval = 0.05;
+static const uint32_t kMinPoiCacheSize = 64;
+static const uint32_t kPoiVisibleTilesMargin = 2;
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
@@ -78,6 +81,17 @@ static BOOL OABoundsContainCoordinate(QuadRect *bounds, CLLocationCoordinate2D c
         return coordinate.longitude >= bounds.left && coordinate.longitude <= bounds.right;
 
     return coordinate.longitude >= bounds.left || coordinate.longitude <= bounds.right;
+}
+
+static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize)
+{
+    if (rasterTileSize == 0)
+        return kMinPoiCacheSize;
+
+    const double diagonal = std::hypot(viewSize.width, viewSize.height);
+    const double visibleTilesPerSide = std::ceil(diagonal / rasterTileSize) + kPoiVisibleTilesMargin;
+    const uint32_t cacheSize = (uint32_t)(visibleTilesPerSide * visibleTilesPerSide);
+    return std::max(kMinPoiCacheSize, cacheSize);
 }
 
 @implementation OAPOILayer
@@ -292,7 +306,8 @@ static BOOL OABoundsContainCoordinate(QuadRect *bounds, CLLocationCoordinate2D c
 
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-            uint32_t cacheSize = 64;
+            const CGSize mapViewSize = self.mapView.bounds.size;
+            const uint32_t cacheSize = OACalculatePoiCacheSize(mapViewSize, rasterTileSize);
             if (categoriesFilter.count() > 0)
             {
                 (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize));

@@ -7,16 +7,17 @@
 //
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Data/Amenity.h>
+#include <QList>
 
-@class OAPOI, MapSelectionResult, QuadRect;
+@class QuadRect;
 
-typedef NSArray<OAPOI *> * _Nullable (^OATopPlacesAmenitiesProvider)(QuadRect *latLonBounds, id matcher);
+typedef BOOL(^OATopPlacesAmenitiesProvider)(QuadRect *latLonBounds, id matcher, QList<std::shared_ptr<const OsmAnd::Amenity>> *amenities);
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAPOILayerTopPlacesProvider : NSObject
 
-@property (nonatomic, strong, readonly, nullable) NSDictionary<NSNumber *, OAPOI *> *topPlaces;
 @property (nonatomic, copy, nullable) OATopPlacesAmenitiesProvider cachedAmenitiesProvider;
 
 - (void)setEnabled:(BOOL)enabled;
@@ -25,9 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc;
 - (void)resetLayer;
 
-- (void)resetSelectedTopPlaceIfNeeded;
-- (NSArray<OAPOI *> *)displayedAmenities;
-- (void)contextMenuDidShow:(id)targetObj;
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)displayedAmenities;
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)topPlaces;
+- (void)updateSelectedTopPlaceId:(nullable NSNumber *)placeId;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder NS_DESIGNATED_INITIALIZER;

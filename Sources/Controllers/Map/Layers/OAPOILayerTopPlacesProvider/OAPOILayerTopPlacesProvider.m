@@ -7,7 +7,6 @@
 //
 
 #import "OAPOILayerTopPlacesProvider.h"
-#import "OAPOI.h"
 #import "QuadRect.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
@@ -15,25 +14,28 @@
 #import "QuadTree.h"
 #import "OANativeUtilities.h"
 #import "OATargetPointView.h"
+#import "OAAmenitySearcher+cpp.h"
 #import <CoreLocation/CoreLocation.h>
 
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <algorithm>
 
 static const NSInteger kTopPlacesLimit = 20;
-static const NSInteger kTilePointsLimit = 25;
 static const NSInteger kStartZoom = 5;
 static const NSInteger kStartZoomRouteTrack = 11;
 static const NSInteger kImageIconSizeDP = 45;
 static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
+static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 @implementation OAPOILayerTopPlacesProvider
 {
-    NSMutableDictionary<NSNumber *, OAPOI *> *_topPlaces;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> _topPlaces;
     NSMutableDictionary<NSNumber *, UIImage *> *_topPlacesImages;
-    NSArray<OAPOI *> *_allPlaces;
-    NSArray<OAPOI *> *_displayedPlaces;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> _allPlaces;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> _displayedPlaces;
+    NSSet<NSNumber *> *_topPlaceIds;
     NSSet<NSNumber *> *_loadingImagePlaceIds;
     QuadRect *_topPlacesBox;
     QuadRect *_lastCalcBounds;
@@ -48,7 +50,7 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     int _topPlaceBaseOrder;
     OAMapViewController *_mapViewController;
     CGFloat _textScale;
-    OAPOI *_selectedTopPlace;
+    NSNumber *_selectedTopPlaceId;
     BOOL _enabled;
     NSMutableDictionary<NSNumber *, NSString *> *_renderedMarkerStates;
     NSUInteger _amenitiesGeneration;
@@ -79,15 +81,6 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 }
 
 // MARK: - Public
-
-- (NSDictionary<NSNumber *, OAPOI *> *)topPlaces
-{
-    __block NSDictionary<NSNumber *, OAPOI *> *snapshot = nil;
-    [self performStateSync:^{
-        snapshot = _topPlaces ? [_topPlaces copy] : nil;
-    }];
-    return snapshot;
-}
 
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc
 {
@@ -126,15 +119,15 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
             if (weakOp.isCancelled)
                 return;
 
-            OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAPOI * __autoreleasing *object) {
+            OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(id __autoreleasing *object) {
                 return YES;
             } cancelledFunc:^BOOL{
                 return weakOp.isCancelled;
             }];
 
-            NSArray<OAPOI *> *amenities = [weakSelf calculateAmenities:searchBounds matcher:matcher];
+            QList<std::shared_ptr<const OsmAnd::Amenity>> amenities = [weakSelf calculateAmenities:searchBounds matcher:matcher];
 
-            if (weakOp.isCancelled || !amenities)
+            if (weakOp.isCancelled)
                 return;
 
             [weakSelf applyAmenities:amenities generation:generation];
@@ -186,89 +179,40 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     });
 }
 
-- (void)updateSelectedTopPlaceIfNeeded:(OAPOI *)topPlace
+- (void)updateSelectedTopPlaceId:(NSNumber *)placeId
 {
     dispatch_async(_backgroundQueue, ^{
-        if ((!_selectedTopPlace && !topPlace)
-            || (_selectedTopPlace
-                && topPlace
-                && [_selectedTopPlace getSignedId] == [topPlace getSignedId]))
+        if ((!_selectedTopPlaceId && !placeId)
+            || (_selectedTopPlaceId && placeId && [_selectedTopPlaceId isEqualToNumber:placeId]))
         {
             return;
         }
 
-        if (topPlace && _topPlaces[@([topPlace getSignedId])])
-            _selectedTopPlace = topPlace;
+        if (placeId && [_topPlaceIds containsObject:placeId])
+            _selectedTopPlaceId = placeId;
         else
-            _selectedTopPlace = nil;
+            _selectedTopPlaceId = nil;
 
         [self updateTopPlacesCollection];
     });
 }
 
-- (void)contextMenuDidShow:(id)targetObj
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)topPlaces
 {
-    OAPOI *amenity = [self topPlaceAmenityFor:targetObj];
-    if (amenity)
-        [self updateSelectedTopPlaceIfNeeded:amenity];
-    else
-        [self resetSelectedTopPlaceIfNeeded];
+    __block QList<std::shared_ptr<const OsmAnd::Amenity>> topPlaces;
+    [self performStateSync:^{
+        topPlaces = _topPlaces;
+    }];
+    return topPlaces;
 }
 
-- (OAPOI *)topPlaceAmenityFor:(id)object
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)displayedAmenities
 {
-    NSDictionary<NSNumber *, OAPOI *> *topPlaces = [self topPlaces];
-
-    if ([object isKindOfClass:SelectedMapObject.class])
-    {
-        SelectedMapObject *obj = object;
-        object = obj.object;
-    }
-    if ([object isKindOfClass:OAPOI.class])
-    {
-        return (OAPOI *)object;
-    }
-    else if ([object isKindOfClass:BaseDetailsObject.class])
-    {
-        BaseDetailsObject *baseDetailsObject = object;
-        OAPOI *syntheticAmenity = baseDetailsObject.syntheticAmenity;
-        
-        int64_t obfId = syntheticAmenity.getSignedId;
-        if (!topPlaces[@(obfId)]) {
-            for (id item in baseDetailsObject.objects)
-            {
-                if ([item isKindOfClass:[OAPOI class]])
-                {
-                    OAPOI *poi = (OAPOI *)item;
-                    obfId = [poi getSignedId];
-                    if (topPlaces[@(obfId)])
-                        return poi;
-                }
-            }
-        }
-        return syntheticAmenity;
-    }
-    return nil;
-}
-
-- (NSArray<OAPOI *> *)displayedAmenities
-{
-    __block NSArray<OAPOI *> *displayedPlaces = nil;
+    __block QList<std::shared_ptr<const OsmAnd::Amenity>> displayedPlaces;
     [self performStateSync:^{
         displayedPlaces = _displayedPlaces;
     }];
-    return displayedPlaces ?: @[];
-}
-
-- (void)resetSelectedTopPlaceIfNeeded
-{
-    dispatch_async(_backgroundQueue, ^{
-        if (_selectedTopPlace)
-        {
-            _selectedTopPlace = nil;
-            [self updateTopPlacesCollection];
-        }
-    });
+    return displayedPlaces;
 }
 
 // MARK: - Private
@@ -357,25 +301,76 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     return topPlacesBox;
 }
 
-- (nullable UIImage *)markerImageForPlace:(OAPOI *)place
+- (NSNumber *)placeIdForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
 {
-    UIImage *baseImage = _topPlacesImages[@([place getSignedId])];
+    return @((uint64_t)amenity->id);
+}
+
+- (BOOL)isSelectedAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    return _selectedTopPlaceId && [[self placeIdForAmenity:amenity] isEqualToNumber:_selectedTopPlaceId];
+}
+
+- (NSString *)wikiPhotoForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    const auto wikiPhoto = amenity->getDecodedValue(QString::fromNSString(kWikiPhotoTag));
+    return wikiPhoto.isEmpty() ? nil : wikiPhoto.toNSString();
+}
+
+- (NSString *)wikiIconUrlForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    NSString *wikiPhoto = [self wikiPhotoForAmenity:amenity];
+    if (wikiPhoto.length == 0)
+        return nil;
+
+    OASWikiImage *wikiImage = [[OASWikiHelper shared] getImageDataImageFileName:wikiPhoto];
+    if (wikiImage.imageIconUrl.length > 0)
+        return wikiImage.imageIconUrl;
+
+    return [wikiPhoto hasPrefix:@"http"] ? wikiPhoto : nil;
+}
+
+- (NSInteger)travelEloForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    return amenity->travelElo >= 0 ? amenity->travelElo : 0;
+}
+
+- (NSString *)placeholderIconNameForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
+    return [type iconName];
+}
+
+- (POIImageLoadRequest *)imageLoadRequestForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    NSString *wikiIconUrl = [self wikiIconUrlForAmenity:amenity];
+    if (wikiIconUrl.length == 0)
+        return nil;
+
+    return [[POIImageLoadRequest alloc] initWithPlaceId:[self placeIdForAmenity:amenity]
+                                                    url:wikiIconUrl
+                                   placeholderImageName:[self placeholderIconNameForAmenity:amenity]];
+}
+
+- (nullable UIImage *)markerImageForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+{
+    UIImage *baseImage = _topPlacesImages[[self placeIdForAmenity:amenity]];
     if (!baseImage)
         return nil;
 
-    if (_selectedTopPlace && [_selectedTopPlace getSignedId] == [place getSignedId])
+    if ([self isSelectedAmenity:amenity])
         return [POITopPlaceImageDecorator selectedImageFor:baseImage];
 
     return baseImage;
 }
 
-- (nullable NSString *)markerStateForPlace:(OAPOI *)place image:(UIImage *)image
+- (nullable NSString *)markerStateForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity image:(UIImage *)image
 {
     if (!image)
         return nil;
 
-    BOOL isSelected = _selectedTopPlace && [_selectedTopPlace getSignedId] == [place getSignedId];
-    return [NSString stringWithFormat:@"%lld:%d:%p", [place getSignedId], isSelected, image];
+    NSNumber *placeId = [self placeIdForAmenity:amenity];
+    return [NSString stringWithFormat:@"%@:%d:%p", placeId, [self isSelectedAmenity:amenity], image];
 }
 
 - (BOOL)removeMarkerWithId:(int32_t)markerId
@@ -399,7 +394,7 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     return NO;
 }
 
-- (BOOL)addTopPlaceMarker:(OAPOI *)place
+- (BOOL)addTopPlaceMarker:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
                  markerId:(int32_t)markerId
                     image:(UIImage *)image
        toCollectionLocked:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
@@ -411,13 +406,12 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     if (!data)
         return NO;
 
-    CLLocationCoordinate2D coordinate = place.getLocation.coordinate;
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
         .setMarkerId(markerId)
         .setBaseOrder(_topPlaceBaseOrder)
         .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromNSData:data]))
-        .setPosition([OANativeUtilities getPoint31FromLatLon:OsmAnd::LatLon(coordinate.latitude, coordinate.longitude)])
+        .setPosition(amenity->position31)
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
 
@@ -435,24 +429,27 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
     _amenitiesGeneration++;
     _imagesGeneration++;
-    _allPlaces = nil;
-    _displayedPlaces = nil;
+    _allPlaces.clear();
+    _displayedPlaces.clear();
+    _topPlaces.clear();
+    _topPlaceIds = nil;
     _loadingImagePlaceIds = nil;
     _topPlacesBox = nil;
     _lastCalcBounds = nil;
     _lastCalcZoom = 0.f;
-    _selectedTopPlace = nil;
+    _selectedTopPlaceId = nil;
     _renderedMarkerStates = nil;
 }
 
-- (void)applyAmenities:(NSArray<OAPOI *> *)amenities
+- (void)applyAmenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
             generation:(NSUInteger)generation
 {
+    const QList<std::shared_ptr<const OsmAnd::Amenity>> amenitiesCopy = amenities;
     dispatch_async(_backgroundQueue, ^{
         if (_amenitiesGeneration != generation)
             return;
 
-        _allPlaces = [amenities copy];
+        _allPlaces = amenitiesCopy;
         _topPlacesBox = nil;
         [self refreshVisiblePlacesOnStateQueue];
     });
@@ -468,16 +465,16 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     if (![self captureVisibleBounds:&visibleBounds zoom:&zoom])
         return;
 
-    if (_allPlaces == nil)
+    if (_allPlaces.isEmpty())
     {
-        _displayedPlaces = nil;
+        _displayedPlaces.clear();
         _topPlacesBox = nil;
         [self clearMapMarkersCollections];
         [self cancelLoadingImages];
         return;
     }
 
-    _displayedPlaces = [[self collectDisplayedPoints:visibleBounds zoom:zoom amenities:_allPlaces] copy];
+    _displayedPlaces = [self collectDisplayedPoints:visibleBounds zoom:zoom amenities:_allPlaces];
     if (_topPlacesBox && [_topPlacesBox contains:visibleBounds])
         return;
 
@@ -493,10 +490,9 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
         if (_imagesGeneration != generation)
             return;
 
-        if (_topPlaces && _topPlacesImages)
+        if (_topPlaceIds && _topPlacesImages)
         {
-            OAPOI *poi = _topPlaces[placeId];
-            if (poi)
+            if ([_topPlaceIds containsObject:placeId])
             {
                 _topPlacesImages[placeId] = image;
                 [self updateTopPlacesCollection];
@@ -508,9 +504,9 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 - (void)updateTopPlacesCollection
 {
     [_mapViewController runWithRenderSync:^{
-        NSMutableArray<OAPOI *> *places = _topPlaces ? [[_topPlaces allValues] mutableCopy] : nil;
-        [self sortByElo:places];
-        if (!places || places.count == 0)
+        QList<std::shared_ptr<const OsmAnd::Amenity>> places = _topPlaces;
+        [self sortByElo:&places];
+        if (places.isEmpty())
         {
             [self clearMapMarkersCollectionLocked];
             return;
@@ -529,15 +525,15 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 
         NSMutableDictionary<NSNumber *, NSString *> *desiredMarkerStates = [NSMutableDictionary dictionary];
         NSInteger markerCount = 0;
-        for (OAPOI *place in places)
+        for (const auto& place : places)
         {
-            UIImage *topPlaceImage = [self markerImageForPlace:place];
+            UIImage *topPlaceImage = [self markerImageForAmenity:place];
             if (!topPlaceImage)
                 continue;
 
             int32_t markerId = [self truncatedTopPlaceId:place];
             NSNumber *markerKey = @(markerId);
-            NSString *markerState = [self markerStateForPlace:place image:topPlaceImage];
+            NSString *markerState = [self markerStateForAmenity:place image:topPlaceImage];
             if (!markerState)
                 continue;
 
@@ -579,9 +575,11 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     }];
 }
 
-- (int32_t)truncatedTopPlaceId:(OAPOI *)topPlace
+- (int32_t)truncatedTopPlaceId:(const std::shared_ptr<const OsmAnd::Amenity> &)topPlace
 {
-    long long fullId = topPlace.obfId ?: topPlace.getTravelEloNumber;
+    long long fullId = (uint64_t)topPlace->id;
+    if (fullId == 0)
+        fullId = [self travelEloForAmenity:topPlace];
     return (int32_t)(fullId ^ (fullId >> 32));
 }
 
@@ -602,32 +600,37 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     _renderedMarkerStates = nil;
 }
 
-- (void)updateTopPlaces:(NSArray<OAPOI *> *)places
+- (void)updateTopPlaces:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)places
            latLonBounds:(QuadRect *)latLonBounds
                    zoom:(int)zoom
 {
-    NSMutableDictionary<NSNumber *, OAPOI *> *newTopPlaces = [[self obtainTopPlacesToDisplay:places
-                                                                                latLonBounds:latLonBounds
-                                                                                        zoom:zoom] mutableCopy];
-    NSSet<NSNumber *> *previousTopPlaceIds = _topPlaces ? [NSSet setWithArray:_topPlaces.allKeys] : [NSSet set];
-    NSSet<NSNumber *> *newTopPlaceIds = [NSSet setWithArray:newTopPlaces.allKeys];
+    QList<std::shared_ptr<const OsmAnd::Amenity>> newTopPlaces = [self obtainTopPlacesToDisplay:places
+                                                                                   latLonBounds:latLonBounds
+                                                                                           zoom:zoom];
+    NSSet<NSNumber *> *previousTopPlaceIds = _topPlaceIds ?: [NSSet set];
+    NSMutableSet<NSNumber *> *newTopPlaceIds = [NSMutableSet setWithCapacity:newTopPlaces.size()];
+    for (const auto& place : newTopPlaces)
+        [newTopPlaceIds addObject:[self placeIdForAmenity:place]];
     BOOL topPlacesChanged = ![previousTopPlaceIds isEqualToSet:newTopPlaceIds];
     NSUInteger generation = topPlacesChanged ? ++_imagesGeneration : _imagesGeneration;
     NSDictionary<NSNumber *, UIImage *> *cachedImages = [_topPlacesImages copy] ?: @{};
     _topPlaces = newTopPlaces;
+    _topPlaceIds = [newTopPlaceIds copy];
 
     NSMutableDictionary<NSNumber *, UIImage *> *preservedImages = [NSMutableDictionary dictionary];
-    NSMutableArray<OAPOI *> *missingImagePlaces = [NSMutableArray array];
+    NSMutableArray<POIImageLoadRequest *> *missingImagePlaces = [NSMutableArray array];
     NSMutableSet<NSNumber *> *missingImagePlaceIds = [NSMutableSet set];
-    for (OAPOI *place in _topPlaces.allValues)
+    for (const auto& place : _topPlaces)
     {
-        NSNumber *placeId = @([place getSignedId]);
+        NSNumber *placeId = [self placeIdForAmenity:place];
         UIImage *cachedImage = cachedImages[placeId];
         if (cachedImage)
             preservedImages[placeId] = cachedImage;
         else
         {
-            [missingImagePlaces addObject:place];
+            POIImageLoadRequest *request = [self imageLoadRequestForAmenity:place];
+            if (request)
+                [missingImagePlaces addObject:request];
             [missingImagePlaceIds addObject:placeId];
         }
     }
@@ -659,11 +662,11 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
     }
 }
 
-- (nonnull NSDictionary<NSNumber *, OAPOI *> *)obtainTopPlacesToDisplay:(nonnull NSArray<OAPOI *> *)places
-                                                           latLonBounds:(nonnull QuadRect *)latLonBounds
-                                                                   zoom:(int)zoom
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)obtainTopPlacesToDisplay:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)places
+                                                             latLonBounds:(nonnull QuadRect *)latLonBounds
+                                                                     zoom:(int)zoom
 {
-    NSMutableDictionary<NSNumber *, OAPOI *> *res = [NSMutableDictionary dictionary];
+    QList<std::shared_ptr<const OsmAnd::Amenity>> res;
     
     long long tileSize31 = (1LL << (31 - zoom));
     double from31toPixelsScale = 256.0 / (double)tileSize31;
@@ -681,17 +684,18 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
                                                                  bottom:bottom];
     
     int counter = 0;
-    for (OAPOI *place in places)
+    for (const auto& place : places)
     {
-        double lat = place.latitude;
-        double lon = place.longitude;
+        const auto latLon = OsmAnd::Utilities::convert31ToLatLon(place->position31);
+        double lat = latLon.latitude;
+        double lon = latLon.longitude;
         
         if (![latLonBounds contains:lon top:lat right:lon bottom:lat]
-            || place.wikiIconUrl == nil || place.wikiIconUrl.length == 0)
+            || [self wikiPhotoForAmenity:place].length == 0)
             continue;
         
-        int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
-        int y31 = OsmAnd::Utilities::get31TileNumberY(lat);
+        int x31 = place->position31.x;
+        int y31 = place->position31.y;
         
         if (![[self class] intersectsD:boundIntersections
                                      x:x31
@@ -699,7 +703,7 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
                                  width:iconSize31
                                 height:iconSize31])
         {
-            res[@([place getSignedId])] = place;
+            res.push_back(place);
             counter++;
         }
         
@@ -781,65 +785,74 @@ static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
         _imageLoader = nil;
     }
 
-    _topPlaces = nil;
     _topPlacesImages = nil;
     _loadingImagePlaceIds = nil;
 }
 
-- (NSArray<OAPOI *> *)collectDisplayedPoints:(QuadRect *)latLonBounds
-                                        zoom:(NSInteger)zoom
-                                   amenities:(NSArray<OAPOI *> *)amenities
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)collectDisplayedPoints:(QuadRect *)latLonBounds
+                                                                   zoom:(NSInteger)zoom
+                                                              amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
 {
-    NSMutableOrderedSet<OAPOI *> *displayedPoints = [NSMutableOrderedSet orderedSet];
+    QList<std::shared_ptr<const OsmAnd::Amenity>> displayedPoints;
     NSInteger topPlacesCounter = 0;
-    for (OAPOI *amenity in amenities)
+    for (const auto& amenity : amenities)
         if (topPlacesCounter < kTopPlacesLimit)
         {
-            [displayedPoints addObject:amenity];
+            displayedPoints.push_back(amenity);
             topPlacesCounter++;
         }
 
-    return displayedPoints.array;
+    return displayedPoints;
 }
 
-- (NSArray<OAPOI *> *)calculateAmenities:(QuadRect *)latLonBounds
-                                 matcher:(OAResultMatcher<OAPOI *> *)matcher
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)calculateAmenities:(QuadRect *)latLonBounds
+                                                            matcher:(OAResultMatcher *)matcher
 {
-    NSArray<OAPOI *> *cachedAmenities = self.cachedAmenitiesProvider ? self.cachedAmenitiesProvider(latLonBounds, matcher) : @[];
-    if (self.cachedAmenitiesProvider && !cachedAmenities)
-        return nil;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
+    if (![self cachedAmenitiesForBounds:latLonBounds matcher:matcher amenities:&cachedAmenities])
+        return QList<std::shared_ptr<const OsmAnd::Amenity>>();
 
-    NSMutableArray<OAPOI *> *amenities = cachedAmenities ? [cachedAmenities mutableCopy] : [NSMutableArray array];
-    if ([matcher isCancelled])
-        return @[];
+    if ([self isMatcherCancelled:matcher])
+        return QList<std::shared_ptr<const OsmAnd::Amenity>>();
 
-    [self sortByElo:amenities];
-    if ([matcher isCancelled])
-        return @[];
+    [self sortByElo:&cachedAmenities];
+    if ([self isMatcherCancelled:matcher])
+        return QList<std::shared_ptr<const OsmAnd::Amenity>>();
 
-    return amenities;
+    return cachedAmenities;
 }
 
-- (void)sortByElo:(NSMutableArray<OAPOI *> *)amenities {
-    [amenities sortUsingComparator:^NSComparisonResult(OAPOI *a1, OAPOI *a2) {
-        
-        NSInteger elo1 = a1.getTravelEloNumber;
-        NSInteger elo2 = a2.getTravelEloNumber;
-        
-        // 1. Elo DESC
-        if (elo1 < elo2)
-            return NSOrderedDescending;
-        if (elo1 > elo2)
-            return NSOrderedAscending;
-        
-        // 2. ID ASC
-        if ([a1 getSignedId] < [a2 getSignedId])
-            return NSOrderedAscending;
-        if ([a1 getSignedId] > [a2 getSignedId])
-            return NSOrderedDescending;
-        
-        return NSOrderedSame;
-    }];
+- (BOOL)cachedAmenitiesForBounds:(QuadRect *)latLonBounds
+                         matcher:(OAResultMatcher *)matcher
+                       amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
+{
+    if (!self.cachedAmenitiesProvider)
+    {
+        if (amenities)
+            amenities->clear();
+        return YES;
+    }
+
+    return self.cachedAmenitiesProvider(latLonBounds, matcher, amenities);
+}
+
+- (BOOL)isMatcherCancelled:(OAResultMatcher *)matcher
+{
+    return [matcher isCancelled];
+}
+
+- (void)sortByElo:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
+{
+    if (!amenities)
+        return;
+
+    std::sort(amenities->begin(), amenities->end(), [self](const auto& a1, const auto& a2) {
+        NSInteger elo1 = [self travelEloForAmenity:a1];
+        NSInteger elo2 = [self travelEloForAmenity:a2];
+        if (elo1 != elo2)
+            return elo1 > elo2;
+        return (uint64_t)a1->id < (uint64_t)a2->id;
+    });
 }
 
 @end

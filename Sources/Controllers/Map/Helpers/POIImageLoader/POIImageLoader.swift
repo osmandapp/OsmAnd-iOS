@@ -9,6 +9,19 @@
 import Kingfisher
 
 @objcMembers
+final class POIImageLoadRequest: NSObject {
+    let placeId: NSNumber
+    let url: String
+    let placeholderImageName: String?
+
+    init(placeId: NSNumber, url: String, placeholderImageName: String?) {
+        self.placeId = placeId
+        self.url = url
+        self.placeholderImageName = placeholderImageName
+    }
+}
+
+@objcMembers
 final class POIImageLoader: NSObject, @unchecked Sendable {
     /// Serial queue for thread-safe access to loadingImages
     private let queue = DispatchQueue(label: "com.osmand.poiImageLoader")
@@ -26,10 +39,10 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
         }
     }
     
-    func fetchImages(_ places: [OAPOI],
+    func fetchImages(_ places: [POIImageLoadRequest],
                      completion: ((NSNumber, UIImage) -> Void)? = nil) {
         let imagesToLoad = Set(
-            places.compactMap { $0.wikiIconUrl?.isEmpty == false ? $0.wikiIconUrl : nil }
+            places.compactMap { $0.url.isEmpty ? nil : $0.url }
         )
         
         queue.async {
@@ -40,7 +53,8 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
             }
             
             for place in places {
-                guard let urlStr = place.wikiIconUrl, !urlStr.isEmpty else {
+                let urlStr = place.url
+                guard !urlStr.isEmpty else {
                     continue
                 }
                 guard self.loadingImages[urlStr] == nil else {
@@ -50,7 +64,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     continue
                 }
                 
-                let placeId = NSNumber(value: place.getSignedId())
+                let placeId = place.placeId
 
                 // MARK: - Metrics
                 let metrics = IconMetrics(textScale: OAAppSettings.sharedManager().textSize.get())
@@ -78,7 +92,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     .targetCache(targetCache),
                     .retryStrategy(retryStrategy)
                 ]
-                
+                                
                 // MARK: - Load image
                 let task = KingfisherManager.shared.retrieveImage(with: url,
                                                                   options: options) { [weak self] result in
@@ -90,7 +104,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     case .failure(let error):
                         NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
                         
-                        guard let placeholderImageName = place.type?.iconName(),
+                        guard let placeholderImageName = place.placeholderImageName,
                               let placeholderImage = OASvgHelper.mapImageNamed(placeholderImageName, scale: Float(scale)),
                               let cacheKey = placeholderCacheKey(placeholderImageName: placeholderImageName, metrics: metrics) else {
                             self.queue.async {

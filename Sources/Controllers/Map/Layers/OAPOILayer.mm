@@ -134,8 +134,15 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
     _topPlacesWikipediaResourceIds = [NSSet set];
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
     __weak __typeof(self) weakSelf = self;
-    _topPlacesProvider.cachedAmenitiesProvider = ^NSArray<OAPOI *> * (QuadRect *latLonBounds, id matcher) {
-        return weakSelf ? [weakSelf cachedVisibleWikiAmenities:latLonBounds matcher:matcher] : @[];
+    _topPlacesProvider.cachedAmenitiesProvider = ^BOOL(QuadRect *latLonBounds, id matcher, QList<std::shared_ptr<const OsmAnd::Amenity>> *amenities) {
+        if (!weakSelf)
+        {
+            if (amenities)
+                amenities->clear();
+            return YES;
+        }
+
+        return [weakSelf cachedVisibleWikiAmenities:latLonBounds matcher:matcher amenities:amenities];
     };
 }
 
@@ -335,8 +342,9 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
     }];
 }
 
-- (NSArray<OAPOI *> *)cachedVisibleWikiAmenities:(QuadRect *)latLonBounds
-                                         matcher:(id)matcherObj
+- (BOOL)cachedVisibleWikiAmenities:(QuadRect *)latLonBounds
+                           matcher:(id)matcherObj
+                         amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
 {
     OAResultMatcher<OAPOI *> *matcher = (OAResultMatcher<OAPOI *> *)matcherObj;
     while (![matcher isCancelled])
@@ -351,7 +359,11 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
                                          visibleZoom:&visibleZoom];
 
         if (!showWikiOnMap)
-            return @[];
+        {
+            if (amenities)
+                amenities->clear();
+            return YES;
+        }
 
         if (!wikiSymbolsProvider || visibleTiles.isEmpty() || visibleZoom == OsmAnd::InvalidZoomLevel)
         {
@@ -361,19 +373,26 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
 
         if (visibleZoom < wikiSymbolsProvider->getMinZoom()
             || visibleZoom > wikiSymbolsProvider->getMaxZoom())
-            return @[];
+        {
+            if (amenities)
+                amenities->clear();
+            return YES;
+        }
 
         if ([self areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
             return [self cachedAmenitiesFromWikiSymbolsProvider:wikiSymbolsProvider
                                                    visibleTiles:visibleTiles
                                                            zoom:visibleZoom
                                                   latLonBounds:latLonBounds
+                                                      amenities:amenities
                                                        matcher:matcher];
 
         [NSThread sleepForTimeInterval:kWikiSymbolsCacheWaitInterval];
     }
 
-    return nil;
+    if (amenities)
+        amenities->clear();
+    return NO;
 }
 
 - (void)readVisibleWikiCacheStateShowWikiOnMap:(BOOL *)showWikiOnMap
@@ -417,14 +436,17 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
     return YES;
 }
 
-- (NSArray<OAPOI *> *)cachedAmenitiesFromWikiSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider> &)wikiSymbolsProvider
-                                                visibleTiles:(const QVector<OsmAnd::TileId> &)visibleTiles
-                                                        zoom:(OsmAnd::ZoomLevel)visibleZoom
-                                               latLonBounds:(QuadRect *)latLonBounds
-                                                    matcher:(OAResultMatcher<OAPOI *> *)matcher
+- (BOOL)cachedAmenitiesFromWikiSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider> &)wikiSymbolsProvider
+                                  visibleTiles:(const QVector<OsmAnd::TileId> &)visibleTiles
+                                          zoom:(OsmAnd::ZoomLevel)visibleZoom
+                                 latLonBounds:(QuadRect *)latLonBounds
+                                    amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
+                                      matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    NSMutableArray<OAPOI *> *amenities = [NSMutableArray array];
     NSMutableSet<NSNumber *> *seenAmenityIds = [NSMutableSet set];
+    if (amenities)
+        amenities->clear();
+
     for (const auto& tileId : visibleTiles)
     {
         QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
@@ -434,26 +456,28 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
         for (const auto& amenity : cachedAmenities)
         {
             if ([matcher isCancelled])
-                return @[];
+            {
+                if (amenities)
+                    amenities->clear();
+                return NO;
+            }
 
-            OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
-            if (!poi)
+            const auto latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
+            CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+            if (!OABoundsContainCoordinate(latLonBounds, coordinate))
                 continue;
 
-            CLLocation *location = [poi getLocation];
-            if (!location || !OABoundsContainCoordinate(latLonBounds, location.coordinate))
-                continue;
-
-            NSNumber *amenityId = @([poi getSignedId]);
+            NSNumber *amenityId = @((uint64_t)amenity->id);
             if ([seenAmenityIds containsObject:amenityId])
                 continue;
 
             [seenAmenityIds addObject:amenityId];
-            [amenities addObject:poi];
+            if (amenities)
+                amenities->push_back(amenity);
         }
     }
 
-    return amenities;
+    return YES;
 }
 
 - (CGFloat)topPlacesTextScale
@@ -744,8 +768,8 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
                 unknownLocation:(BOOL)unknownLocation
       excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    NSArray<OAPOI *> *objects = [_topPlacesProvider displayedAmenities];
-    if (objects.count == 0)
+    const auto objects = [_topPlacesProvider displayedAmenities];
+    if (objects.isEmpty())
         return;
     
     OAMapRendererView *mapView =
@@ -763,45 +787,87 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
     if (touchPolygon31.isEmpty())
         return;
     
-    NSDictionary<NSNumber *, OAPOI *> *topPlaces = _topPlacesProvider.topPlaces;
-    NSSet<OAPOI *> *topPlacesSet = topPlaces.count > 0 ? [NSSet setWithArray:topPlaces.allValues] : nil;
+    const auto topPlaces = [_topPlacesProvider topPlaces];
+    NSMutableSet<NSNumber *> *topPlaceIds = [NSMutableSet setWithCapacity:topPlaces.size()];
+    for (const auto& topPlace : topPlaces)
+        [topPlaceIds addObject:@((uint64_t)topPlace->id)];
     
-    for (OAPOI *amenity in objects)
+    for (const auto& amenity : objects)
     {
-        CLLocation *location = [amenity getLocation];
-        if (!location)
-            continue;
-        
-        CLLocationCoordinate2D coord = location.coordinate;
+        const auto latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
         
         if (![OANativeUtilities isPointInsidePolygonLat:coord.latitude
                                                     lon:coord.longitude
                                               polygon31:touchPolygon31])
             continue;
+
+        OAPOI *poi = [OAAmenitySearcher parsePOIByAmenity:amenity];
+        if (!poi)
+            continue;
         
-        if (topPlacesSet && [topPlacesSet containsObject:amenity])
+        if ([topPlaceIds containsObject:@((uint64_t)amenity->id)])
         {
-            [result collect:amenity provider:self];
+            [result collect:poi provider:self];
             break;
         }
         
-        [result collect:amenity provider:self];
+        [result collect:poi provider:self];
     }
 }
 
 - (void)contextMenuDidShow:(id)targetObj
 {
-    [_topPlacesProvider contextMenuDidShow:targetObj];
+    [_topPlacesProvider updateSelectedTopPlaceId:[self topPlaceIdFromObject:targetObj]];
 }
 
 - (void)contextMenuDidHide
 {
-    [_topPlacesProvider resetSelectedTopPlaceIfNeeded];
+    [_topPlacesProvider updateSelectedTopPlaceId:nil];
 }
 
 - (BOOL) runExclusiveAction:(id)obj unknownLocation:(BOOL)unknownLocation
 {
     return NO;
+}
+
+- (NSNumber *)topPlaceIdFromObject:(id)object
+{
+    const auto topPlaces = [_topPlacesProvider topPlaces];
+    NSMutableSet<NSNumber *> *topPlaceIds = [NSMutableSet setWithCapacity:topPlaces.size()];
+    for (const auto& topPlace : topPlaces)
+        [topPlaceIds addObject:@((uint64_t)topPlace->id)];
+
+    if ([object isKindOfClass:SelectedMapObject.class])
+        object = ((SelectedMapObject *)object).object;
+
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        OAPOI *poi = (OAPOI *)object;
+        NSNumber *placeId = @(poi.obfId);
+        return [topPlaceIds containsObject:placeId] ? placeId : nil;
+    }
+
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *baseDetailsObject = object;
+        NSNumber *syntheticPlaceId = @(baseDetailsObject.syntheticAmenity.obfId);
+        if ([topPlaceIds containsObject:syntheticPlaceId])
+            return syntheticPlaceId;
+
+        for (id item in baseDetailsObject.objects)
+        {
+            if (![item isKindOfClass:OAPOI.class])
+                continue;
+
+            OAPOI *poi = (OAPOI *)item;
+            NSNumber *placeId = @(poi.obfId);
+            if ([topPlaceIds containsObject:placeId])
+                return placeId;
+        }
+    }
+
+    return nil;
 }
 
 - (int64_t) getSelectionPointOrder:(id)selectedObject
@@ -814,34 +880,7 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
 
 - (BOOL)isTopPlace:(id)object
 {
-    NSDictionary<NSNumber *, OAPOI *> *topPlaces = [_topPlacesProvider topPlaces];
-    if (!topPlaces || !object)
-        return NO;
-    
-    if ([object isKindOfClass:OAPOI.class])
-    {
-        int64_t obfId = ((OAPOI *)object).getSignedId;
-        return topPlaces[@(obfId)] != nil;
-    }
-    
-    if ([object isKindOfClass:BaseDetailsObject.class])
-    {
-        BaseDetailsObject *details = (BaseDetailsObject *)object;
-        for (id item in details.objects)
-        {
-            if ([item isKindOfClass:[OAMapObject class]])
-            {
-                OAMapObject *mapObject = (OAMapObject *)item;
-                int64_t obfId = [mapObject getSignedId];
-                if (topPlaces[@(obfId)])
-                {
-                    return YES;
-                }
-            }
-        }
-    }
-    
-    return NO;
+    return [self topPlaceIdFromObject:object] != nil;
 }
 
 - (int)getTopPlaceBaseOrder

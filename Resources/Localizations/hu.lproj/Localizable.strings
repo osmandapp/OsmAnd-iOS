@@ -3939,7 +3939,7 @@
 "deleted_maps_prompt" = "Ezek a térképek már nem támogatottak, és kisebb régiók váltották fel őket. Távolítsa el őket, és töltse le az új verziókat.";
 "unsupported_maps" = "Nem támogatott térképek";
 "deleted_maps_alert_message" = "Biztosan törölni szeretné a %d térképet?";
-"ios_release_5_3" = "• Interaktív animáció a sebességmérő modulhoz\n• Beállítási lehetőség a helymeghatározó ikon méretének módosításához\n• Új utazásrögzítő modulok: legnagyobb sebesség és átlagos lejtés; továbbfejlesztett emelkedő-/lejtőmodulok\n• Mélyhivatkozások támogatása konkrét POI-k megosztásához\n• Javítva lett az a hiba, amely miatt a navigációs modulok ETA-ja nem frissült álló helyzetben\n• Továbbfejlesztett párosított OBDII adapterek csatlakozása\n• Beállítási lehetőség: az útpontok egy kiválasztott kedvencek mappába való egyesítéséhez\n• CarPlay: Javítva lett a műszerfalon nem reagáló térkép hibája, és hozzá lett adva a „Mindig sötét térkép megjelenítése” paraméter támogatása\n";
+"ios_release_5_3" = "• 3D-épületek támogatása\n• Földgömb alakú térképnézet\n• Sebességmérő: új színbeállítások a sebességtúllépés és a sebességtartás jelzéséhez\n• Testreszabható térképgombok: méret, forma és stílus\n• Átméretezhető helyszínikon\n• Új modulok: legnagyobb sebesség, átlagos emelkedés; továbbfejlesztett emelkedő/lejtő\n• Útvonalelemző: továbbfejlesztett tengelyválasztás és járműadatok\n• Útvonalpontok összevonása a kedvencek mappába\n• Hivatkozás megosztása bármely POI-hoz\n• CarPlay: javított műszerfal-térkép; hozzáadva az „Mindig sötét térkép megjelenítése” lehetőség\n• CarPlay: simább helyszínikon és navigáció utáni párbeszédablak\n• Javított kapcsolat a párosított OBD-II-adapterekhez\n• Javítva: a navigációs érkezési idő most már álló helyzetben is frissül\n";
 "copy_link" = "Hivatkozás másolása";
 "wind_animation_layer" = "Szélanimációs réteg";
 "quick_action_wind_animation_layer" = "A szélanimációs réteg megjelenítésére vagy elrejtésére szolgáló kapcsoló a térképen.";
@@ -3997,3 +3997,4 @@
 "has_vehicle_metrics" = "OBDII-adatokkal";
 "context_menu_read_full_article" = "Teljes cikk elolvasása";
 "read_on" = "Olvassa el itt: %@";
+"show_spherical_map" = "Földgömbnézet";

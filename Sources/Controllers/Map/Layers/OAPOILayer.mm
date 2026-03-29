@@ -313,8 +313,8 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
 
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-            const CGSize mapViewSize = self.mapView.bounds.size;
-            const uint32_t cacheSize = OACalculatePoiCacheSize(mapViewSize, rasterTileSize);
+            const CGSize screenSize = CGSizeMake([OAUtilities calculateScreenWidth], [OAUtilities calculateScreenHeight]);
+            const uint32_t cacheSize = OACalculatePoiCacheSize(screenSize, rasterTileSize);
             if (categoriesFilter.count() > 0)
             {
                 (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize));

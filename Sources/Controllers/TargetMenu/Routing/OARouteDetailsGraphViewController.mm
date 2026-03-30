@@ -101,12 +101,13 @@
                                         startTime:self.analysis.startTime
                                          useHours:useHours];
     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
                                       analysis:self.analysis
                                      firstType:GPXDataSetTypeAltitude
                                     secondType:GPXDataSetTypeSlope
                                       axisType:_selectedXAxisMode
-                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx]];
+                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx overrideIsGeneralTrack:[self.segment isGeneralSegment]]];
 
     self.statisticsChart = routeStatsCell.chartView;
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
@@ -587,7 +588,8 @@
                               selectedXAxisMode:_selectedXAxisMode
                                           chart:graphCell.chartView
                                        analysis:self.analysis
-                                  statsModeCell:statsModeCell];
+                                  statsModeCell:statsModeCell
+                         overrideIsGeneralTrack:[self.segment isGeneralSegment]];
     }
 }
 

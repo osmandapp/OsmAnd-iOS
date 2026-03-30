@@ -118,6 +118,8 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
     CGFloat _topPlacesTextScale;
     EOAWikiDataSourceType _topPlacesWikiDataSourceType;
     NSSet<NSString *> *_topPlacesWikipediaResourceIds;
+    
+    CGSize _screenSize;
 }
 
 - (void)onMapFrameRendered
@@ -128,6 +130,8 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
 - (void)initLayer
 {
     [super initLayer];
+
+    _screenSize = CGSizeMake([OAUtilities calculateScreenWidth], [OAUtilities calculateScreenHeight]);
 
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
     _topPlacesTextScale = 1.f;
@@ -313,8 +317,7 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
 
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-            const CGSize screenSize = CGSizeMake([OAUtilities calculateScreenWidth], [OAUtilities calculateScreenHeight]);
-            const uint32_t cacheSize = OACalculatePoiCacheSize(screenSize, rasterTileSize);
+            const uint32_t cacheSize = OACalculatePoiCacheSize(_screenSize, rasterTileSize);
             if (categoriesFilter.count() > 0)
             {
                 (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize));

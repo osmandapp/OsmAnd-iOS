@@ -295,7 +295,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     if (p)
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
+        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p touchLocation:nil];
         newTarget.centerMap = YES;
         [mapPanel showContextMenu:newTarget];
     }

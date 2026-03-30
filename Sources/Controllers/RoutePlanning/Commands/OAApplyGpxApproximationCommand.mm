@@ -48,7 +48,7 @@
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     _points = [NSArray arrayWithArray:ctx.getPoints];
     _roadSegmentData = ctx.roadSegmentData;
-    [self applyApproximation];
+    [self applyAllApproximations];
     [self refreshMap];
     return true;
 }
@@ -60,7 +60,7 @@
         OAApplyGpxApproximationCommand *approxCommand = (OAApplyGpxApproximationCommand *) command;
         _approximations = approxCommand.approximations;
         _mode = approxCommand.mode;
-        [self applyApproximation];
+        [self applyAllApproximations];
         [self refreshMap];
         return YES;
     }
@@ -85,11 +85,11 @@
 
 - (void) redo
 {
-    [self applyApproximation];
+    [self applyAllApproximations];
     [self refreshMap];
 }
 
-- (void) applyApproximation
+- (void)applyAllApproximations
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     ctx.appMode = _mode;
@@ -98,8 +98,14 @@
         OAGpxRouteApproximation *approximation = _approximations[i];
         NSArray<OASWptPt *> *segmentPoints = _segmentPointsList[i];
         NSArray<OASWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode];
-        if (newSegmentPoints != nil)
+        
+        if (newSegmentPoints != nil && newSegmentPoints.count > 0) {
+            int64_t initialTimestamp = segmentPoints.count == 0
+            ? 0
+            : [[segmentPoints firstObject] time];
+            [[newSegmentPoints firstObject] setTime:initialTimestamp];
             _segmentPointsList[i] = newSegmentPoints;
+        }
     }
 }
 

@@ -33,7 +33,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 @interface OAMeasurementEditingContext() <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
-
+@property (nonatomic, assign) BOOL checkApproximation;
 @end
 
 @implementation OAMeasurementEditingContext
@@ -80,6 +80,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         _afterSegments = [NSMutableArray new];
         
         _roadSegmentData = [NSMutableDictionary new];
+        self.checkApproximation = YES;
     }
     return self;
 }
@@ -100,6 +101,11 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return _beforeSegments.count > 0 && _beforeSegments.lastObject.points.count >= 2;
 }
 
+- (BOOL)shouldCheckApproximation
+{
+    return self.checkApproximation;
+}
+
 - (BOOL) isApproximationNeeded
 {
     BOOL hasDefaultPointsOnly = NO;
@@ -117,9 +123,21 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             }
         }
     }
-    return !newData && hasDefaultPointsOnly && self.getPoints.count > 2;
+    return !newData && self.getPoints.count > 2 && hasDefaultPointsOnly;
 }
 
+- (BOOL)hasTimestamps
+{
+    if (![self isNewData])
+    {
+        for (OASWptPt *point in self.getPoints)
+        {
+            if (point.time != 0)
+                return YES;
+        }
+    }
+    return NO;
+}
 
 - (BOOL) isNewData
 {
@@ -135,10 +153,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 {
     return _gpxData != nil && _gpxData.gpxFile != nil && _gpxData.gpxFile.tracks.count > 0;
 }
-
-//void setProgressListener(SnapToRoadProgressListener progressListener) {
-//    this.progressListener = progressListener;
-//}
 
 - (void) resetAppMode
 {

@@ -22,7 +22,7 @@
     OAFavoriteItem *point = [OAFavoritesHelper getVisibleFavByLat:lat lon:lon];
     if (point && ([name isEqualToString:[point getName]] || [point isSpecialPoint]))
     {
-        OATargetPoint *targetPoint = [[OARootViewController instance].mapPanel.mapViewController.mapLayers.favoritesLayer getTargetPoint:point];
+        OATargetPoint *targetPoint = [[OARootViewController instance].mapPanel.mapViewController.mapLayers.favoritesLayer getTargetPoint:point touchLocation:nil];
         targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
         [targetPoint initAddressIfNeeded];
         targetPoint.centerMap = YES;

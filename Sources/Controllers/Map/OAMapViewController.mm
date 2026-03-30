@@ -2490,6 +2490,7 @@ static const NSInteger kDetailedMapZoom = 9;
         if (mapSourceResource)
             resourceType = mapSourceResource->type;
 
+        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
         NSDictionary<NSString *, NSString *> *buildings3DRenderSettings = [[OAMapStyleSettings sharedInstance] get3DBuildingsRendererSettings];
         if (resourceType == OsmAndResourceType::MapStyle)
         {
@@ -2553,7 +2554,6 @@ static const NSInteger kDetailedMapZoom = 9;
                 // --- Apply Map Style Settings
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
                 NSArray *params = styleSettings.getAllParameters;
-                OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
                 BOOL useContours = [iapHelper.srtm isActive];
                 BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
                 for (OAMapStyleParameter *param in params)

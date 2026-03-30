@@ -3836,6 +3836,20 @@
 • The issue with cross-platform purchases has been resolved\n\
 • Fixed the issue of a black screen on CarPlay after startup\n";
 
+"ios_release_5_3" = "• 3D Buildings support\n
+• Spherical map view\n
+• Speedometer: new color modes for tolerance & speeding\n
+• Customizable map buttons: size, shape, & style\n
+• Resizable location icon\n
+• New widgets: Max Speed, Average Slope; improved Uphill/Downhill\n
+• Track Analyzer: improved axis selection & vehicle metrics\n
+• Merge waypoints into a Favorites folder\n
+• Share link to any POI\n
+• CarPlay: fixed Dashboard map; added \"Always show dark map\"\n
+• CarPlay: smoother location icon & post-navigation dialog\n
+• Improved connectivity for paired OBD-II adapters\n
+• Fixed: Navigation ETA now updates while stationary\n";
+
 "ios_release_5_2" = "• Introduced customizable button mapping for external controllers, allowing any Quick Action to be assigned to a keyboard or controller button\n
 • Added new Quick Actions for controlling the app with an external controller\n
 • Improved widget visibility in transparency mode by adding text outlines\n

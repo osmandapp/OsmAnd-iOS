@@ -479,7 +479,7 @@
                 @"key": @"terrain_layer"
         }];
     }
-    if (hasSRTM && !_iapHelper.srtm.disabled)
+    if (hasSRTM && ![_iapHelper.srtm disabled])
     {
         [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_topography"),
@@ -513,7 +513,6 @@
                 @"key": @"spherical_map"
         }];
     }
-
     BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
     if (useDepthContours)
     {

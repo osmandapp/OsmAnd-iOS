@@ -747,7 +747,9 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     [_apis addObject:streetsApi];
     OASearchStreetByCityAPI *cityApi = [[OASearchStreetByCityAPI alloc] initWithAPI:streetsApi];
     [_apis addObject:cityApi];
-    [_apis addObject:[[OASearchAddressByNameAPI alloc] initWithCityApi:cityApi streetsApi:streetsApi]];
+    OATownCitiesCache *townCitiesCache = [[OATownCitiesCache alloc] init];
+    [_apis addObject:[[OASearchAddressByNameAPI alloc] initWithCityApi:cityApi streetsApi:streetsApi longDistance:FALSE townCitiesCache:townCitiesCache]];
+    [_apis addObject:[[OASearchAddressByNameAPI alloc] initWithCityApi:cityApi streetsApi:streetsApi longDistance:TRUE townCitiesCache:townCitiesCache]];
 }
 
 - (void) clearCustomSearchPoiFilters

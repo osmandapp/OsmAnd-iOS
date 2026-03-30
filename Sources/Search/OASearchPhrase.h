@@ -101,8 +101,10 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (NSString *) getUnknownWordToSearch;
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt;
-- (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt;
+- (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt indexes:(NSArray<NSString *> *)indexes;
 - (NSArray<NSString *> *) getOfflineIndexes;
+- (NSArray<NSString *> *) getOfflineIndexesWithRect:(QuadRect *)rect dataType:(EOASearchPhraseDataType)dataType;
+- (NSArray<NSString *> *) getRadiusOfflineIndexesWithMinMeters:(int)minMeters maxMeters:(int)maxMeters dataType:(EOASearchPhraseDataType)dataType;
 
 - (void) selectFile:(NSString *)resourceId;
 - (void) sortFiles;
@@ -121,6 +123,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 + (NSMutableArray<NSString *> *) stripBracesArray:(NSMutableArray<NSString *> *)names;
 + (NSString *) ALLDELIMITERS;
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
+- (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel;
 
 
 @end

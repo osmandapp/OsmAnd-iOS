@@ -369,6 +369,62 @@
 
 @end
 
+@interface OATownCitiesCache ()
+{
+@public
+    // Ці поля будуть доступні іншим .mm файлам, які бачать цей блок
+    NSMutableSet<NSString *> *_townCitiesInit;
+    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
+    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _boundariesQR;
+}
+@end
+
+@implementation OATownCitiesCache
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _townCitiesInit = [NSMutableSet set];
+        _townCitiesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), 12u);
+        _boundariesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), 12u);
+    }
+    return self;
+}
+
+- (BOOL)contains:(NSString *)resId
+{
+    return [_townCitiesInit containsObject:resId];
+}
+
+- (void)add:(NSString *)resId
+{
+    [_townCitiesInit addObject:resId];
+}
+
+- (void)insertCityQR:(std::shared_ptr<const OsmAnd::StreetGroup>)city area:(const OsmAnd::AreaI&)area
+{
+    _townCitiesQR->insert(city, area);
+}
+
+- (void)insertBoundaryQR:(std::shared_ptr<const OsmAnd::StreetGroup>)boundary area:(const OsmAnd::AreaI&)area
+{
+    _boundariesQR->insert(boundary, area);
+}
+
+- (void)queryCities:(const OsmAnd::AreaI&)area result:(QList<std::shared_ptr<const OsmAnd::StreetGroup>>&)result
+{
+    _townCitiesQR->query(area, result);
+}
+
+- (void)queryBoundaries:(const OsmAnd::AreaI&)area result:(QList<std::shared_ptr<const OsmAnd::StreetGroup>>&)result
+{
+    _boundariesQR->query(area, result);
+}
+
+@end
+
 
 @interface OASearchAddressByNameAPI ()
 
@@ -378,18 +434,20 @@
 {
     int DEFAULT_ADDRESS_BBOX_RADIUS;
     int LIMIT;
+    int LONG_ADDRESS_BBOX_RADIUS;
 
-    NSMutableArray<NSString *> *_townCities;
-    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
-    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _boundariesQR;
-
+    OATownCitiesCache *_townCitiesCache;
     QList<std::shared_ptr<const OsmAnd::StreetGroup>> _resArray;
     QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
     OASearchStreetByCityAPI *_cityApi;
     OASearchBuildingAndIntersectionsByStreetAPI *_streetsApi;
+    BOOL _longDistance;
 }
 
-- (instancetype) initWithCityApi:(OASearchStreetByCityAPI *)cityApi streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi
+- (instancetype)initWithCityApi:(OASearchStreetByCityAPI *)cityApi
+                     streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi
+                   longDistance:(BOOL)longDistance
+                townCitiesCache:(OATownCitiesCache * _Nonnull)townCitiesCache
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeCity],
                                         [OAObjectType withType:EOAObjectTypeVillage],
@@ -400,15 +458,14 @@
                                         [OAObjectType withType:EOAObjectTypeStreetIntersection]]];
     if (self)
     {
-        DEFAULT_ADDRESS_BBOX_RADIUS = 100 * 1000;
+        DEFAULT_ADDRESS_BBOX_RADIUS = 40 * 1000;
+        LONG_ADDRESS_BBOX_RADIUS = 100 * 1000;
         LIMIT = 10000;
         
-        _townCities = [NSMutableArray array];
-        _townCitiesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), static_cast<uintmax_t>(12u));
-        _boundariesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), static_cast<uintmax_t>(12u));
-        
+        _townCitiesCache = townCitiesCache;
         _cityApi = cityApi;
         _streetsApi = streetsApi;
+        _longDistance = longDistance;
     }
     return self;
 }
@@ -420,7 +477,10 @@
 
     if ([p isLastWord:EOAObjectTypePoi] || [p isLastWord:EOAObjectTypePoiType])
         return -1;
-    
+    if (_longDistance)
+    {
+        return SEARCH_ADDRESS_BY_NAME_LONG_API_PRIORITY;
+    }
     if ([p isNoSelectedType])
         return SEARCH_ADDRESS_BY_NAME_API_PRIORITY;
     
@@ -465,13 +525,27 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
-    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
-    NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes:bbox dt:P_DATA_TYPE_ADDRESS];
+    QuadRect *bbox = nil;
+    NSArray<NSString *> *offlineIndexes = nil;
+    int longRadius = LONG_ADDRESS_BBOX_RADIUS * 5;
+    int defRadius = DEFAULT_ADDRESS_BBOX_RADIUS * 5;
+
+    if (_longDistance)
+    {
+        bbox = [phrase getRadiusBBox31ToSearch:longRadius];
+        offlineIndexes = [phrase getRadiusOfflineIndexesWithMinMeters:defRadius maxMeters:longRadius dataType:P_DATA_TYPE_ADDRESS];
+    }
+    else
+    {
+        bbox = [phrase getRadiusBBox31ToSearch:defRadius];
+        offlineIndexes = [phrase getRadiusOfflineIndexesWithMinMeters:0 maxMeters:defRadius dataType:P_DATA_TYPE_ADDRESS];
+    }
+
     for (NSString *resId in offlineIndexes)
     {
-        if (![_townCities containsObject:resId])
+        if (![_townCitiesCache contains:resId])
         {
-            [_townCities addObject:resId];
+            [_townCitiesCache add:resId];
             QString rId = QString::fromNSString(resId);
             const auto& r = app.resourcesManager->getLocalResource(rId);
             if (!r)
@@ -493,7 +567,7 @@
                     // city->bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
                     qr = OsmAnd::AreaI(city->bbox31.at(1), city->bbox31.at(0), city->bbox31.at(3), city->bbox31.at(2));
                 }
-                _townCitiesQR->insert(city, qr);
+                [_townCitiesCache insertCityQR:city area:qr];
             }
             
             QList< std::shared_ptr<const OsmAnd::StreetGroup> > l2;
@@ -508,7 +582,7 @@
                     // city->bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
                     qr = OsmAnd::AreaI(city->bbox31.at(1), city->bbox31.at(0), city->bbox31.at(3), city->bbox31.at(2));
                 }
-                _boundariesQR->insert(city, qr);
+                [_townCitiesCache insertBoundaryQR:city area:qr];
             }
         }
     }
@@ -517,7 +591,7 @@
         OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
         _resArray.clear();
         const OsmAnd::AreaI area(bbox.top, bbox.left, bbox.bottom, bbox.right);
-        _townCitiesQR->query(area, _resArray);
+        [_townCitiesCache queryCities:area result:_resArray];
         LogPrintf(OsmAnd::LogSeverityLevel::Debug,
         "Resulting cities '%d'",
                   _resArray.count());
@@ -737,7 +811,7 @@
                                               if (!closestCitiesRequested)
                                               {
                                                   const OsmAnd::AreaI villagesArea(villagesBbox.top, villagesBbox.left, villagesBbox.bottom, villagesBbox.right);
-                                                  _townCitiesQR->query(villagesArea, closestCities);
+                                                  [_townCitiesCache queryCities:villagesArea result:closestCities];
                                                   closestCitiesRequested = YES;
                                               }
                                               double minDist = -1;
@@ -809,7 +883,7 @@
                             _resArray.clear();
                             QuadRect * bbox = [OASearchPhrase calculateBbox:@(1000) location:res.location];
                             const OsmAnd::AreaI area(bbox.top, bbox.left, bbox.bottom, bbox.right);
-                            _boundariesQR->query(area, _resArray);
+                            [_townCitiesCache queryBoundaries:area result:_resArray];
                             for (std::shared_ptr<const OsmAnd::StreetGroup> & streetGroup : _resArray)
                             {
                                 OACity * boundary = [[OACity alloc] initWithCity:streetGroup];

@@ -479,7 +479,7 @@
                 @"key": @"terrain_layer"
         }];
     }
-    if (hasSRTM && !_iapHelper.srtm.disabled)
+    if (hasSRTM && ![_iapHelper.srtm disabled])
     {
         [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_topography"),
@@ -495,14 +495,14 @@
                 @"type": OASwitchTableViewCell.reuseIdentifier,
                 @"key": @"terrain_layer"
         }];
-        [topographySectionData addObject:@{
-                @"name": OALocalizedString(@"show_spherical_map"),
-                @"image": @"ic_custom_globe_view",
-                @"has_options": @YES,
-                @"type": OASwitchTableViewCell.reuseIdentifier,
-                @"key": @"spherical_map"
-        }];
     }
+    [topographySectionData addObject:@{
+            @"name": OALocalizedString(@"show_spherical_map"),
+            @"image": @"ic_custom_globe_view",
+            @"has_options": @YES,
+            @"type": OASwitchTableViewCell.reuseIdentifier,
+            @"key": @"spherical_map"
+    }];
     BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
     if (useDepthContours)
     {

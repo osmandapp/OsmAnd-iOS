@@ -2488,6 +2488,7 @@ static const NSInteger kDetailedMapZoom = 9;
         if (mapSourceResource)
             resourceType = mapSourceResource->type;
             
+        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
         if (resourceType == OsmAndResourceType::MapStyle)
         {
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
@@ -2552,7 +2553,6 @@ static const NSInteger kDetailedMapZoom = 9;
                 // --- Apply Map Style Settings
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
                 NSArray *params = styleSettings.getAllParameters;
-                OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
                 BOOL useContours = [iapHelper.srtm isActive];
                 BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
                 for (OAMapStyleParameter *param in params)

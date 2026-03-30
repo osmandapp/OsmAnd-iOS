@@ -17,6 +17,7 @@
 #include <OsmAndCore/Map/MapRendererState.h>
 #include <OsmAndCore/Map/IMapLayerProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
+#include <OsmAndCore/Map/IMapTiledDataProvider.h>
 #include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
 #include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRendererDebugSettings.h>
@@ -45,6 +46,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
     _DECLARE_ENTRY(MapLayers_Providers),
     _DECLARE_ENTRY(MapLayers_Configuration),
     _DECLARE_ENTRY(Elevation_DataProvider),
+    _DECLARE_ENTRY(Map3DObjects_Provider),
     _DECLARE_ENTRY(Elevation_Configuration),
     _DECLARE_ENTRY(Symbols_Providers),
     _DECLARE_ENTRY(WindowSize),
@@ -84,10 +86,16 @@ struct CLLocationCoordinate2D;
 - (void)setTextureFilteringQuality:(OsmAnd::TextureFilteringQuality)quality;
 
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
+@property(nonatomic) std::shared_ptr<OsmAnd::IMapTiledDataProvider> map3DObjectsProvider;
 
 - (void)resetElevationDataProvider:(BOOL)forcedUpdate;
+- (void)resetMap3DObjectsProvider:(BOOL)forcedUpdate;
 - (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
                      forcedUpdate:(BOOL)forcedUpdate;
+- (void)set3DBuildingsAlpha:(float)alpha;
+- (float)get3DBuildingsAlpha;
+- (void)set3DBuildingsDetalization:(int)detalization;
+- (int)get3DBuildingsDetalization;
 - (void)setElevationScaleFactor:(float)scaleFactor;
 - (float)getElevationScaleFactor;
 - (void)setMyLocationCircleColor:(OsmAnd::FColorARGB)color;
@@ -110,6 +118,7 @@ struct CLLocationCoordinate2D;
 - (BOOL) setMapLayerConfiguration:(int)layerIndex configuration:(OsmAnd::MapLayerConfiguration)configuration forcedUpdate:(BOOL)forcedUpdate;
 - (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings;
 - (void) setMapDebugSettings:(std::shared_ptr<OsmAnd::MapRendererDebugSettings>) debugSettings;
+- (void)setFlatEarth:(BOOL)flatEarth;
 
 - (BOOL) isGpuWorkerPaused;
 - (BOOL) suspendGpuWorker;

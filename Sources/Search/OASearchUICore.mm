@@ -738,7 +738,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 - (void) initApi
 {
     OASearchAmenityByNameAPI *amenitiesApi = [[OASearchAmenityByNameAPI alloc] init];
-    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] initWithAPI:amenitiesApi]];
+    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] initWithAPI:amenitiesApi requester:self.httpRedirectRequester]];
     OASearchAmenityTypesAPI *searchAmenityTypesAPI = [[OASearchAmenityTypesAPI alloc] init];
     [_apis addObject:searchAmenityTypesAPI];
     [_apis addObject:[[OASearchAmenityByTypeAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];

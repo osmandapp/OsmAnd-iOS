@@ -1,0 +1,20 @@
+--- a/Pods/AFNetworking/AFNetworking/AFHTTPSessionManager.m
++++ b/Pods/AFNetworking/AFNetworking/AFHTTPSessionManager.m
+@@ -31,7 +31,6 @@
+ 
+ #ifdef _SYSTEMCONFIGURATION_H
+ #import <netinet/in.h>
+-#import <netinet6/in6.h>
+ #import <arpa/inet.h>
+ #import <ifaddrs.h>
+ #import <netdb.h>
+--- a/Pods/AFNetworking/AFNetworking/AFNetworkReachabilityManager.m
++++ b/Pods/AFNetworking/AFNetworking/AFNetworkReachabilityManager.m
+@@ -23,7 +23,6 @@
+ #if !TARGET_OS_WATCH
+ 
+ #import <netinet/in.h>
+-#import <netinet6/in6.h>
+ #import <arpa/inet.h>
+ #import <ifaddrs.h>
+ #import <netdb.h>

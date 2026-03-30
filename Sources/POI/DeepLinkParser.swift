@@ -464,7 +464,7 @@ final class DeepLinkParser: NSObject {
             return true
         }
         let synthetic = amenity.syntheticAmenity
-        guard let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic) else { return false }
+        let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic, touch: nil)
         targetPoint.location = latLon.coordinate
         targetPoint.initAddressIfNeeded()
         targetPoint.centerMap = true

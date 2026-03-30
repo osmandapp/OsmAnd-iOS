@@ -96,6 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) showTravelGuides;
 - (void) showTerrainScreen;
 - (void) showCoordinatesGridScreen;
+- (void)showBuildings3DScreen;
 
 
 - (void) addWaypoint;

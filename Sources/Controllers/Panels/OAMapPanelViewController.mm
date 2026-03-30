@@ -413,7 +413,7 @@ typedef enum
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
         _activeTargetType = OATargetWeatherLayerSettings;
-    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class])
+    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class] || [controller isKindOfClass:MapSettingsBuildings3DParametersViewController.class])
         _activeTargetType = OATargetTerrainParametersSettings;
     else if ([controller isKindOfClass:MapSettingsMapModeParametersViewController.class])
         _activeTargetType = OATargetMapModeParametersSettings;
@@ -955,6 +955,13 @@ typedef enum
 {
     [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
     OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCoordinatesGrid];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
+}
+
+- (void)showBuildings3DScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenBuildings3DVisibility];
     [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
@@ -1619,7 +1626,7 @@ typedef enum
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
     [mapVC showContextPinMarker:mapObject.latitude longitude:mapObject.longitude animated:NO];
     
-    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject touchLocation:nil];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
@@ -3151,7 +3158,7 @@ typedef enum
                 
                 [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
                 
-                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r];
+                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r touchLocation:nil];
                 if (targetPoint)
                 {
                     targetPoint.toolbarNeeded = pushed;

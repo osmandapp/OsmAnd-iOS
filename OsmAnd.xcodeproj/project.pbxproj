@@ -1365,6 +1365,10 @@
 		97F6410929C475E7008F527B /* map_action_hill_climbing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410529C475E6008F527B /* map_action_hill_climbing@3x.png */; };
 		97F6410C29C475E7008F527B /* map_action_hill_climbing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */; };
 		9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */; };
+		A1B2C3D42F7A100100000001 /* OAPOIUIFilter+MapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3E52F7A100100000001 /* OAPOIUIFilter+MapLayer.mm */; };
+		A1B2C3D52F7A100100000001 /* OAAmenitySearcher+MapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3E72F7A100100000001 /* OAAmenitySearcher+MapLayer.mm */; };
+		A1B2C3D62F7A100100000001 /* OAPOIMapLayerData.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3E92F7A100100000001 /* OAPOIMapLayerData.mm */; };
+		A1B2C3D72F7A100100000001 /* OAPOITileProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3EB2F7A100100000001 /* OAPOITileProvider.mm */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
 		B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */; };
@@ -5101,6 +5105,14 @@
 		97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_hill_climbing@2x.png"; sourceTree = "<group>"; };
 		9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopIndexFilter.h; sourceTree = "<group>"; };
 		9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATopIndexFilter.mm; sourceTree = "<group>"; };
+		A1B2C3E42F7A100100000001 /* OAPOIUIFilter+MapLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAPOIUIFilter+MapLayer.h"; sourceTree = "<group>"; };
+		A1B2C3E52F7A100100000001 /* OAPOIUIFilter+MapLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "OAPOIUIFilter+MapLayer.mm"; sourceTree = "<group>"; };
+		A1B2C3E62F7A100100000001 /* OAAmenitySearcher+MapLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAAmenitySearcher+MapLayer.h"; sourceTree = "<group>"; };
+		A1B2C3E72F7A100100000001 /* OAAmenitySearcher+MapLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "OAAmenitySearcher+MapLayer.mm"; sourceTree = "<group>"; };
+		A1B2C3E82F7A100100000001 /* OAPOIMapLayerData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOIMapLayerData.h; sourceTree = "<group>"; };
+		A1B2C3E92F7A100100000001 /* OAPOIMapLayerData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIMapLayerData.mm; sourceTree = "<group>"; };
+		A1B2C3EA2F7A100100000001 /* OAPOITileProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOITileProvider.h; sourceTree = "<group>"; };
+		A1B2C3EB2F7A100100000001 /* OAPOITileProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOITileProvider.mm; sourceTree = "<group>"; };
 		ADA2D9C11AEC31EA6BB2AF2C /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
 		B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectionCollapsableCell.h; sourceTree = "<group>"; };
@@ -11677,6 +11689,8 @@
 				DA5A7A6426C563A000F274C7 /* OAPOIType.m */,
 				DA5A7A5A26C563A000F274C7 /* OAPOIUIFilter.h */,
 				DA5A7A5326C563A000F274C7 /* OAPOIUIFilter.mm */,
+				A1B2C3E42F7A100100000001 /* OAPOIUIFilter+MapLayer.h */,
+				A1B2C3E52F7A100100000001 /* OAPOIUIFilter+MapLayer.mm */,
 				DA5A7A6826C563A000F274C7 /* OASearchByNameFilter.h */,
 				DA5A7A6626C563A000F274C7 /* OASearchByNameFilter.mm */,
 				DA5A7A6526C563A000F274C7 /* OASearchPoiTypeFilter.h */,
@@ -13147,6 +13161,10 @@
 				DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */,
 				DA5A7EE826C563A400F274C7 /* OAPOILayer.h */,
 				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
+				A1B2C3E82F7A100100000001 /* OAPOIMapLayerData.h */,
+				A1B2C3E92F7A100100000001 /* OAPOIMapLayerData.mm */,
+				A1B2C3EA2F7A100100000001 /* OAPOITileProvider.h */,
+				A1B2C3EB2F7A100100000001 /* OAPOITileProvider.mm */,
 				FA5DD0FA2F222977002F3F79 /* OAPOILayerTopPlacesProvider */,
 				DA3FBFEC27D60DB000D25E86 /* OAPreviewRouteLineLayer.h */,
 				DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */,
@@ -13833,6 +13851,8 @@
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
 				32EB34472E462D58004F7C75 /* OAAmenitySearcher.h */,
 				32EB34482E462D68004F7C75 /* OAAmenitySearcher.mm */,
+				A1B2C3E62F7A100100000001 /* OAAmenitySearcher+MapLayer.h */,
+				A1B2C3E72F7A100100000001 /* OAAmenitySearcher+MapLayer.mm */,
 				32F6B3902E47A842007F3902 /* OAAmenitySearcher+cpp.h */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
 				DA5A80B226C563A600F274C7 /* OAAppSettings.m */,
@@ -17393,6 +17413,7 @@
 				32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */,
 				DA5A81CA26C563A700F274C7 /* OAAtomicInteger.m in Sources */,
 				DA5A81B326C563A700F274C7 /* OAPOIUIFilter.mm in Sources */,
+				A1B2C3D42F7A100100000001 /* OAPOIUIFilter+MapLayer.mm in Sources */,
 				46B8F5C22936C0D9001AA71A /* OAAngleStraightLineViewController.mm in Sources */,
 				DA5A84A326C563A900F274C7 /* OAAddPointCommand.mm in Sources */,
 				DA7B18E32A12392E0029967F /* OAMaxSpeedWidget.mm in Sources */,
@@ -17424,6 +17445,8 @@
 				DA5A84F626C563A900F274C7 /* OAMapLayersConfiguration.m in Sources */,
 				DA5A81AD26C563A700F274C7 /* OASearchPhrase.mm in Sources */,
 				FA5DD0FD2F222AE4002F3F79 /* OAPOILayerTopPlacesProvider.m in Sources */,
+				A1B2C3D62F7A100100000001 /* OAPOIMapLayerData.mm in Sources */,
+				A1B2C3D72F7A100100000001 /* OAPOITileProvider.mm in Sources */,
 				32EAF9FF2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m in Sources */,
 				FA4FC4AB2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift in Sources */,
 				DA5A81D526C563A700F274C7 /* OAVoiceCommandPending.mm in Sources */,
@@ -17902,6 +17925,7 @@
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				32EB34492E462D6A004F7C75 /* OAAmenitySearcher.mm in Sources */,
+				A1B2C3D52F7A100100000001 /* OAAmenitySearcher+MapLayer.mm in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				C5D3D2B22EE006A100664956 /* ShareLinkItem.swift in Sources */,
 				C5DF39B52DBB6CA800332496 /* OACoordinatesGridLayer.mm in Sources */,
@@ -18869,6 +18893,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -18952,6 +18977,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -19027,6 +19053,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -19098,6 +19125,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",

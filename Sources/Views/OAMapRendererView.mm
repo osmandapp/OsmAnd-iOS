@@ -891,7 +891,7 @@ forcedUpdate:(BOOL)forcedUpdate
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
 
     GLint maxSamples = 0;
-    glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
     GLint samples = MIN(4, maxSamples);
 #if TARGET_IPHONE_SIMULATOR
     BOOL useMSAA = NO;
@@ -906,14 +906,15 @@ forcedUpdate:(BOOL)forcedUpdate
         // MSAA Color
         glGenRenderbuffers(1, &_msaaColorRenderBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _msaaColorRenderBuffer);
-        glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_RGBA8, _viewSize.x, _viewSize.y);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_RGBA8, _viewSize.x, _viewSize.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _msaaColorRenderBuffer);
 
         // MSAA Depth
         glGenRenderbuffers(1, &_msaaDepthRenderBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _msaaDepthRenderBuffer);
-        glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH32F_STENCIL8, _viewSize.x, _viewSize.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         {
@@ -937,12 +938,9 @@ forcedUpdate:(BOOL)forcedUpdate
 
         glGenRenderbuffers(1, &_depthRenderBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-#if TARGET_IPHONE_SIMULATOR
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _viewSize.x, _viewSize.y);
-#else
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewSize.x, _viewSize.y);
-#endif
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH32F_STENCIL8, _viewSize.x, _viewSize.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
     }
 
     // Final Validation
@@ -1106,7 +1104,7 @@ forcedUpdate:(BOOL)forcedUpdate
         validateGL();
 
         // Clear buffer
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         validateGL();
 
         const auto debugSettings = _renderer->getDebugSettings();
@@ -1138,11 +1136,12 @@ forcedUpdate:(BOOL)forcedUpdate
             // Discard MSAA buffers after resolve
             const GLenum msaaDiscardAttachments[] = {
                 GL_COLOR_ATTACHMENT0,
-                GL_DEPTH_ATTACHMENT
+                GL_DEPTH_ATTACHMENT,
+                GL_STENCIL_ATTACHMENT
             };
             glBindFramebuffer(GL_READ_FRAMEBUFFER, _msaaFramebuffer);
             validateGL();
-            glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER, 2, msaaDiscardAttachments);
+            glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER, 3, msaaDiscardAttachments);
             validateGL();
             
             // Bind resolve framebuffer for discard
@@ -1153,11 +1152,12 @@ forcedUpdate:(BOOL)forcedUpdate
         // Erase depthbuffer, since not needed
         const GLenum buffersToDiscard[] =
         {
-            GL_DEPTH_ATTACHMENT
+            GL_DEPTH_ATTACHMENT,
+            GL_STENCIL_ATTACHMENT
         };
         glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
         validateGL();
-        glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, buffersToDiscard);
+        glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, buffersToDiscard);
         validateGL();
 
         // Present results

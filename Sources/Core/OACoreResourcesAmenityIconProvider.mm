@@ -67,9 +67,21 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
     @autoreleasepool
     {
         bool isSmallIcon = zoomLevel <= OsmAnd::ZoomLevel13;
-        
-        const auto& decodedCategories = amenity->getDecodedCategories();
-        for (const auto& decodedCategory : constOf(decodedCategories))
+
+        QList<OsmAnd::Amenity::DecodedCategory> decodedCategories = amenity->getDecodedCategories();
+        if (decodedCategories.isEmpty() && !amenity->type.isEmpty() && !amenity->subType.isEmpty())
+        {
+            const auto subtypes = amenity->subType.split(';', Qt::SkipEmptyParts);
+            for (const auto& subtype : OsmAnd::constOf(subtypes))
+            {
+                OsmAnd::Amenity::DecodedCategory decodedCategory;
+                decodedCategory.category = amenity->type;
+                decodedCategory.subcategory = subtype;
+                decodedCategories.push_back(decodedCategory);
+            }
+        }
+
+        for (const auto& decodedCategory : OsmAnd::constOf(decodedCategories))
         {
             NSString *category = decodedCategory.category.toNSString();
             NSString *subcategory = decodedCategory.subcategory.toNSString();
@@ -129,4 +141,3 @@ QString OACoreResourcesAmenityIconProvider::getCaption(
 {
     return showCaptions && zoomLevel > OsmAnd::ZoomLevel10 ? amenity->getName(lang, transliterate) : QString();
 }
-

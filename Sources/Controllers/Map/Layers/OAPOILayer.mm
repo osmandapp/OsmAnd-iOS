@@ -57,6 +57,7 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <cmath>
+#include <limits>
 
 static const NSInteger kPoiSearchRadius = 50; // AMENITY_SEARCH_RADIUS
 static const NSInteger kPoiSearchRadiusForRelation = 500; // AMENITY_SEARCH_RADIUS_FOR_RELATION
@@ -93,6 +94,89 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
     const uint32_t cacheSize = (uint32_t)(visibleTilesPerSide * visibleTilesPerSide);
     return std::max(kMinPoiCacheSize, cacheSize);
 }
+
+static std::shared_ptr<void> OARetainObjCObject(id object)
+{
+    return std::shared_ptr<void>(
+        (__bridge_retained void *)object,
+        [](void *retainedObject)
+        {
+            if (retainedObject)
+                CFRelease(retainedObject);
+        });
+}
+
+static uint64_t OAResolveSyntheticAmenityId(OAPOI *poi)
+{
+    const uint64_t rawId = poi.obfId;
+    const uint64_t invalidId = [OAMapObject getInvalidObfId];
+    if (rawId != 0 && rawId != invalidId && static_cast<int64_t>(rawId) > 0)
+        return rawId;
+
+    const uint64_t latHash = static_cast<uint64_t>(llround((poi.latitude + 90.0) * 1000000.0));
+    const uint64_t lonHash = static_cast<uint64_t>(llround((poi.longitude + 180.0) * 1000000.0));
+    const uint64_t nameHash = static_cast<uint64_t>(qHash(QString::fromNSString(poi.name ?: @"")));
+    uint64_t syntheticId = (latHash << 21) ^ lonHash ^ nameHash ^ static_cast<uint64_t>([poi getTravelEloNumber]);
+    syntheticId &= static_cast<uint64_t>(std::numeric_limits<int64_t>::max());
+    return syntheticId != 0 ? syntheticId : 1;
+}
+
+static std::shared_ptr<const OsmAnd::Amenity> OASyntheticAmenityFromPoi(OAPOI *poi)
+{
+    if (!poi || ![poi hasLocation])
+        return nullptr;
+
+    const QString categoryName = QString::fromNSString(poi.type.category.name ?: @"osmwiki");
+    const QString subTypeName = QString::fromNSString(
+        poi.subType.length > 0 ? poi.subType : (poi.type.name ?: @"wikiplace"));
+
+    auto amenity = std::make_shared<OsmAnd::Amenity>(std::shared_ptr<const OsmAnd::ObfPoiSectionInfo>());
+    amenity->id.id = OAResolveSyntheticAmenityId(poi);
+    amenity->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(poi.latitude, poi.longitude));
+    amenity->nativeName = QString::fromNSString(poi.name ?: @"");
+    amenity->type = categoryName;
+    amenity->subType = subTypeName;
+    amenity->regionName = QString::fromNSString(poi.regionName ?: @"");
+    amenity->travelElo = [poi getTravelEloNumber];
+
+    if (poi.localizedNames.count > 0)
+    {
+        for (NSString *key in poi.localizedNames)
+            amenity->localizedNames.insert(QString::fromNSString(key), QString::fromNSString(poi.localizedNames[key]));
+    }
+    if (!NSStringIsEmpty(poi.enName))
+        amenity->localizedNames.insert(QStringLiteral("en"), QString::fromNSString(poi.enName));
+
+    NSString *preferredLang = OAAppSettings.sharedManager.settingPrefMapLanguage.get;
+    if (!NSStringIsEmpty(preferredLang) && !NSStringIsEmpty(poi.nameLocalized) && !poi.localizedNames[preferredLang])
+        amenity->localizedNames.insert(QString::fromNSString(preferredLang), QString::fromNSString(poi.nameLocalized));
+
+    const auto subtypes = subTypeName.split(';', Qt::SkipEmptyParts);
+    for (const auto& subtype : OsmAnd::constOf(subtypes))
+    {
+        OsmAnd::Amenity::DecodedCategory decodedCategory;
+        decodedCategory.category = categoryName;
+        decodedCategory.subcategory = subtype;
+        amenity->decodedCategoriesOverride.push_back(decodedCategory);
+    }
+
+    NSDictionary<NSString *, NSString *> *additionalInfo = [poi getAdditionalInfo];
+    for (NSString *key in additionalInfo)
+        amenity->decodedValuesOverride.insert(QString::fromNSString(key), QString::fromNSString(additionalInfo[key]));
+
+    if (poi.type)
+        amenity->decodedValuesOverride.insert(QStringLiteral("osmand_poi_key"), QString::fromNSString([poi.type iconKeyName]));
+
+    return amenity;
+}
+
+@interface OAPOILayer ()
+
+- (BOOL)loadExternalWikiAmenitiesWithDataProvider:(PoiUIFilterDataProvider *)dataProvider
+                                          request:(const OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesRequest &)request
+                                        amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities;
+
+@end
 
 @implementation OAPOILayer
 {
@@ -285,18 +369,34 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
                         OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
 
                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
-                        QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
+                        QHash<QString, QString> decodedValues;
+                        bool decodedValuesResolved = false;
+                        const auto obtainDecodedValues =
+                                [&amenity, &decodedValues, &decodedValuesResolved]() -> const QHash<QString, QString>&
+                                {
+                                    if (!decodedValuesResolved)
+                                    {
+                                        decodedValues = amenity->getDecodedValuesHash();
+                                        decodedValuesResolved = true;
+                                    }
+                                    return decodedValues;
+                                };
                         
                         BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
                                 && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
-                        BOOL accepted = poiUiNameFilter && [poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
+                        BOOL accepted = poiUiNameFilter
+                                && [poiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type];
 
                         if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
                             return check ? accepted : false;
                         
-                        if ((check && accepted) || (isWiki ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
+                        if ((check && accepted)
+                            || (isWiki
+                                ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type]
+                                : accepted))
                         {
-                            BOOL isClosed = decodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
+                            const auto& amenityDecodedValues = obtainDecodedValues();
+                            BOOL isClosed = amenityDecodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
                             return !isClosed;
                         }
 
@@ -314,17 +414,42 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
             NSString *lang = settings.settingPrefMapLanguage.get;
             BOOL transliterate = settings.settingMapLanguageTranslit.get;
             float textSize = settings.textSize.get;
+            OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesProvider externalAmenitiesProvider = nullptr;
+            if (isWiki && [f isTopWikiFilter] && settings.wikiDataSourceType.get == EOAWikiDataSourceTypeOnline)
+            {
+                PoiUIFilterDataProvider *wikiDataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:f];
+                __weak __typeof(self) weakSelf = self;
+                const auto retainedWikiDataProvider = OARetainObjCObject(wikiDataProvider);
+                externalAmenitiesProvider =
+                    [weakSelf, retainedWikiDataProvider]
+                    (const OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesRequest& externalRequest,
+                     QList<std::shared_ptr<const OsmAnd::Amenity>>& outAmenities) -> bool
+                    {
+                        OAPOILayer *strongSelf = weakSelf;
+                        PoiUIFilterDataProvider *strongDataProvider =
+                            (__bridge PoiUIFilterDataProvider *)retainedWikiDataProvider.get();
+                        if (!strongSelf)
+                        {
+                            outAmenities.clear();
+                            return YES;
+                        }
+
+                        return [strongSelf loadExternalWikiAmenitiesWithDataProvider:strongDataProvider
+                                                                              request:externalRequest
+                                                                            amenities:&outAmenities];
+                    };
+            }
 
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
             const uint32_t cacheSize = OACalculatePoiCacheSize(_screenSize, rasterTileSize);
             if (categoriesFilter.count() > 0)
             {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize));
+                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
             }
             else
             {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize));
+                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
             }
 
             [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
@@ -343,6 +468,63 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
             _wikiUiNameFilter = nil;
 
     }];
+}
+
+- (BOOL)loadExternalWikiAmenitiesWithDataProvider:(PoiUIFilterDataProvider *)dataProvider
+                                          request:(const OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesRequest &)request
+                                        amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
+{
+    if (amenities)
+        amenities->clear();
+
+    if (!dataProvider)
+        return YES;
+
+    const auto isCancelled = request.isCancelled;
+    OAResultMatcher<OAPOI *> *matcher =
+        [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
+            Q_UNUSED(poi);
+            return !isCancelled || !isCancelled();
+        } cancelledFunc:^BOOL{
+            return isCancelled && isCancelled();
+        }];
+
+    const auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon(request.center31);
+    const double topLatitude = OsmAnd::Utilities::get31LatitudeY(request.visibleBBox31.top());
+    const double bottomLatitude = OsmAnd::Utilities::get31LatitudeY(request.visibleBBox31.bottom());
+    const double leftLongitude = OsmAnd::Utilities::get31LongitudeX(request.visibleBBox31.left());
+    const double rightLongitude = OsmAnd::Utilities::get31LongitudeX(request.visibleBBox31.right());
+
+    NSArray<OAPOI *> *pois = [dataProvider searchAmenitiesWithLat:centerLatLon.latitude
+                                                             lon:centerLatLon.longitude
+                                                     topLatitude:topLatitude
+                                                  bottomLatitude:bottomLatitude
+                                                   leftLongitude:leftLongitude
+                                                  rightLongitude:rightLongitude
+                                                            zoom:request.zoom
+                                                         matcher:matcher];
+    if (isCancelled && isCancelled())
+    {
+        if (amenities)
+            amenities->clear();
+        return NO;
+    }
+
+    for (OAPOI *poi in pois)
+    {
+        if (isCancelled && isCancelled())
+        {
+            if (amenities)
+                amenities->clear();
+            return NO;
+        }
+
+        const auto amenity = OASyntheticAmenityFromPoi(poi);
+        if (amenity && amenities)
+            amenities->push_back(amenity);
+    }
+
+    return YES;
 }
 
 - (BOOL)cachedVisibleWikiAmenities:(QuadRect *)latLonBounds

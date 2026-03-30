@@ -83,7 +83,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (NSMutableArray<NSString *> *) getPublicTransportTypes;
 
 - (NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedNames:(BOOL)skipNonEditable;
-- (nullable NSString *) getTranslation:(nullable NSString *)keyName;
+- (nullable NSString *)translation:(nullable NSString *)keyName
+                       withDefault:(BOOL)withDefault;
 
 + (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter;
 

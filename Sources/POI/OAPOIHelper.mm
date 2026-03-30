@@ -414,17 +414,25 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     return [self getSynonymsByName:type.name];
 }
 
-- (NSString *) getTranslation:(NSString *)keyName
+- (NSString *)translation:(NSString *)keyName
+              withDefault:(BOOL)withDefault
 {
     NSString *val = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", keyName]];
     if (val)
     {
         int i = [val indexOf:@";"];
-        if (i > 0) {
-            return [val substringToIndex:i];
-        }
-        return val;
+        NSString *result = (i > 0) ? [val substringToIndex:i] : val;
+        if (result.length > 0)
+            return result;
     }
+    
+    if (withDefault && keyName != nil)
+    {
+        NSString *name = [keyName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        return [OAUtilities capitalizeFirstLetter:name];
+    }
+    
+    
     return nil;
 }
 

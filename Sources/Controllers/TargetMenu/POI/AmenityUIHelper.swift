@@ -337,7 +337,7 @@ final class AmenityUIHelper: NSObject {
             pType = OAPOIType(name: key, category: poiCategory)
             pType?.isText = true
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-            let translation = OAPOIHelper.sharedInstance().getTranslation(cleanValue) ?? ""
+            let translation = OAPOIHelper.sharedInstance().translation(cleanValue, withDefault: false) ?? ""
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype)
         } else {
             return nil // skip non-translatable NON-poiType tags

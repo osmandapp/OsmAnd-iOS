@@ -151,10 +151,10 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
         switch settingsType {
         case .visibility where baseAlpha != currentAlpha:
             plugin?.apply3DBuildingsAlpha(baseAlpha)
-        case .visibility:
-            break
         case .color:
             setBuildings3DBaseColorItem()
+        default:
+            break
         }
         
         hide(true, duration: 0.2) { [weak self] in

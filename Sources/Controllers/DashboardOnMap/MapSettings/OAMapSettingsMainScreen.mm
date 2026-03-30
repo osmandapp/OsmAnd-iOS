@@ -479,33 +479,30 @@
                 @"key": @"terrain_layer"
         }];
     }
-    if (![_iapHelper.srtm disabled])
+    if (hasSRTM && ![_iapHelper.srtm disabled])
     {
-        if (hasSRTM)
-        {
-            [topographySectionData addObject:@{
-                    @"name": OALocalizedString(@"map_settings_topography"),
-                    @"image": @"ic_custom_contour_lines",
-                    @"has_options": @YES,
-                    @"type": OASwitchTableViewCell.reuseIdentifier,
-                    @"key": @"contour_lines_layer"
-            }];
-            [topographySectionData addObject:@{
-                    @"name": OALocalizedString(@"shared_string_terrain"),
-                    @"image": @"ic_custom_terrain",
-                    @"has_options": @YES,
-                    @"type": OASwitchTableViewCell.reuseIdentifier,
-                    @"key": @"terrain_layer"
-            }];
-        }
         [topographySectionData addObject:@{
-                @"name": OALocalizedString(@"show_spherical_map"),
-                @"image": @"ic_custom_globe_view",
+                @"name": OALocalizedString(@"map_settings_topography"),
+                @"image": @"ic_custom_contour_lines",
                 @"has_options": @YES,
                 @"type": OASwitchTableViewCell.reuseIdentifier,
-                @"key": @"spherical_map"
+                @"key": @"contour_lines_layer"
+        }];
+        [topographySectionData addObject:@{
+                @"name": OALocalizedString(@"shared_string_terrain"),
+                @"image": @"ic_custom_terrain",
+                @"has_options": @YES,
+                @"type": OASwitchTableViewCell.reuseIdentifier,
+                @"key": @"terrain_layer"
         }];
     }
+    [topographySectionData addObject:@{
+            @"name": OALocalizedString(@"show_spherical_map"),
+            @"image": @"ic_custom_globe_view",
+            @"has_options": @YES,
+            @"type": OASwitchTableViewCell.reuseIdentifier,
+            @"key": @"spherical_map"
+    }];
     BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
     if (useDepthContours)
     {

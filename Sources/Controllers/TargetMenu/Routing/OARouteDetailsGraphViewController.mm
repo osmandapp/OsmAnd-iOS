@@ -29,6 +29,7 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OAGPXDatabase.h"
 #import "OASelectedGPXHelper.h"
+#import "OAGPXLayer.h"
 #import "GeneratedAssetSymbols.h"
 #import <DGCharts/DGCharts-Swift.h>
 
@@ -344,9 +345,6 @@
 - (void)onMenuDismissed
 {
     [super onMenuDismissed];
-    
-    if (_tempGpx)
-        [[OARootViewController instance].mapPanel.mapViewController hideTempGpxTrack];
 }
 
 - (ETopToolbarType) topToolbarType

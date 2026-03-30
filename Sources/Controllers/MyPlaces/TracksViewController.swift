@@ -826,6 +826,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateSearchController() {
+        guard #unavailable(iOS 26.0) else { return }
         if isNameFiltered {
             searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
             searchController.searchBar.searchTextField.backgroundColor = .groupBg

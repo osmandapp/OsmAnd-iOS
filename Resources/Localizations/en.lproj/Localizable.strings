@@ -1167,6 +1167,14 @@
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
 "shared_string_terrain" = "Terrain";
+"enable_3d_objects" = "3D buildings";
+"free_custom_color_description" = "Customize 3D buildings with any color. Perfect for matching a map theme or improving contrast.";
+"buildings_3d_visibility_description" = "Adjust the opacity of 3D structures on the map.";
+"level_of_details" = "Level of detail";
+"performance" = "Performance";
+"view_distance" = "View distance";
+"custom_color" = "Custom color";
+"choose_color" = "Choose color";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";

@@ -20,7 +20,7 @@ import UIKit
 
 @objc protocol ColorCollectionViewControllerDelegate: AnyObject {
     func selectColorItem(_ colorItem: ColorItem)
-    func selectPaletteItem(_ paletteItem: PaletteColor)
+    @objc optional func selectPaletteItem(_ paletteItem: PaletteColor)
     @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> ColorItem
     func changeColorItem(_ colorItem: ColorItem, withColor color: UIColor)
     @discardableResult func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
@@ -552,7 +552,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         if item.key == "paletteColor" {
             if let palette = item.obj(forKey: "palette") as? PaletteColor {
                 selectedPaletteItem = palette
-                delegate?.selectPaletteItem(palette)
+                delegate?.selectPaletteItem?(palette)
             }
             dismissWith(animated: true)
         } else if (collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories) && inSearchMode {

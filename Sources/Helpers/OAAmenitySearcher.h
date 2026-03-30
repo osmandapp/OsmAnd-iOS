@@ -64,6 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
                               publish:(BOOL(^)(OAPOI *poi))publish;
 
 + (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities;
++ (NSArray<NSString *> *) getAmenityRepositoriesNames:(BOOL)includeTravel;
 
 @end
 

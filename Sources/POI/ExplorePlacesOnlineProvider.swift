@@ -166,22 +166,17 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
     }
 
     private func getPreferredLangs() -> [String] {
-        let preferred = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
-        var result: [String] = []
-        var seen = Set<String>()
-        
+        let preferredLang = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
+        let languages = NSMutableOrderedSet()
         if let plugin = OAPluginsHelper.getPlugin(OAWikipediaPlugin.self) as? OAWikipediaPlugin,
            plugin.hasCustomSettings() {
             let pluginLangs = plugin.getLanguagesToShow() ?? []
-            if pluginLangs.contains(preferred) {
-                if seen.insert(preferred).inserted { result.append(preferred) }
+            if pluginLangs.contains(preferredLang) {
+                languages.add(preferredLang)
             }
-            for lang in pluginLangs where seen.insert(lang).inserted {
-                result.append(lang)
-            }
+            languages.addObjects(from: pluginLangs)
         }
-        if result.isEmpty { result.append(preferred) }
-        return result
+        return languages.array.compactMap { $0 as? String }
     }
 
     private func createAmenity(_ featureData: WikiCoreHelper.OsmandApiFeatureData) -> OAPOI? {

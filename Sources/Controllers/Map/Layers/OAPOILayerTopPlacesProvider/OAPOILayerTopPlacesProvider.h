@@ -8,7 +8,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@class OAPOI, MapSelectionResult;
+@class OAPOI, MapSelectionResult, OAPOIMapLayerData;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc;
 - (void)updateLayer;
 - (void)resetLayer;
+- (void)setMapLayerData:(nullable OAPOIMapLayerData *)mapLayerData;
 
 - (void)resetSelectedTopPlaceIfNeeded;
 - (NSArray<OAPOI *> *)displayedAmenities;
@@ -30,4 +31,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

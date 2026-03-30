@@ -15,14 +15,16 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
+#import "OAPOIMapLayerData.h"
+#import "OAPOITileProvider.h"
 #import "OARenderedObject.h"
-#import "OAAmenityExtendedNameFilter.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 #import "OAAmenitySearcher.h"
 #import "OAAmenitySearcher+cpp.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
+#import "OAUtilities.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
@@ -31,6 +33,7 @@
 #import "OANetworkRouteDrawable.h"
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
+#import "OAMapStyleSettings.h"
 #import "OsmAndSharedWrapper.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
@@ -39,13 +42,12 @@
 #import "OAMapTopPlace.h"
 #import "OANativeUtilities.h"
 #import "OAPOILayerTopPlacesProvider.h"
+#import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
-#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/NetworkRouteContext.h>
@@ -67,23 +69,29 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 @implementation OAPOILayer
 {
     BOOL _showPoiOnMap;
-    BOOL _showWikiOnMap;
 
     OAPOIUIFilter *_poiUiFilter;
     OAPOIUIFilter *_wikiUiFilter;
-    OAAmenityExtendedNameFilter *_poiUiNameFilter;
-    OAAmenityExtendedNameFilter *_wikiUiNameFilter;
-    NSString *_poiCategoryName;
-    NSString *_poiFilterName;
-    NSString *_poiTypeName;
-    NSString *_poiKeyword;
-    NSString *_prefLang;
+    NSString *_filtersSignature;
+    NSString *_providerAppearanceSignature;
     
     OAPOIFiltersHelper *_filtersHelper;
     OAPOILayerTopPlacesProvider *_topPlacesProvider;
+    OAPOIMapLayerData *_mapLayerData;
     
-    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
-    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _wikiSymbolsProvider;
+    std::shared_ptr<OAPOITileProvider> _poiTileProvider;
+}
+
+- (void)clearPoiProvider
+{
+    if (_poiTileProvider)
+    {
+        [self.mapViewController runWithRenderSync:^{
+            [self.mapView removeTiledSymbolsProvider:_poiTileProvider];
+            _poiTileProvider.reset();
+        }];
+    }
+    _providerAppearanceSignature = nil;
 }
 
 - (void)onMapFrameRendered
@@ -97,6 +105,21 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
+    _mapLayerData = [[OAPOIMapLayerData alloc] initWithMapView:self.mapView mapViewController:self.mapViewController];
+    [_topPlacesProvider setMapLayerData:_mapLayerData];
+
+    __weak __typeof(self) weakSelf = self;
+    _mapLayerData.layerOnPostExecute = ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __typeof(self) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+            if (strongSelf->_mapLayerData.deferredResults)
+                [strongSelf clearPoiProvider];
+            [strongSelf.mapViewController refreshMap];
+            [strongSelf->_topPlacesProvider updateLayer];
+        });
+    };
 }
 
 - (NSString *) layerId
@@ -106,41 +129,95 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
 - (void) resetLayer
 {
-    if (_amenitySymbolsProvider)
-    {
-        [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-        _amenitySymbolsProvider.reset();
-        _showPoiOnMap = NO;
-    }
-    if (_wikiSymbolsProvider)
-    {
-        [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
-        _wikiSymbolsProvider.reset();
-        _showWikiOnMap = NO;
-    }
+    [self clearPoiProvider];
+    [_mapLayerData clearCache];
     [_topPlacesProvider resetLayer];
+}
+
+- (NSString *)buildFiltersSignature:(NSSet<OAPOIUIFilter *> *)filters wikiFilter:(OAPOIUIFilter *)wikiFilter
+{
+    NSMutableArray<NSString *> *parts = [NSMutableArray array];
+    NSArray<OAPOIUIFilter *> *sortedFilters = [filters.allObjects sortedArrayUsingComparator:^NSComparisonResult(OAPOIUIFilter *left, OAPOIUIFilter *right) {
+        return [left.filterId compare:right.filterId];
+    }];
+    for (OAPOIUIFilter *filter in sortedFilters)
+        [parts addObject:[NSString stringWithFormat:@"%@|%@", filter.filterId ?: @"", filter.filterByName ?: @""]];
+
+    if (wikiFilter)
+        [parts addObject:[NSString stringWithFormat:@"wiki:%@|%@", wikiFilter.filterId ?: @"", wikiFilter.filterByName ?: @""]];
+
+    return [parts componentsJoinedByString:@";"];
+}
+
+- (NSString *)providerAppearanceSignature
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    return [NSString stringWithFormat:@"%@|%@|%.2f",
+            settings.mapSettingShowPoiLabel.get ? @"1" : @"0",
+            settings.nightMode ? @"1" : @"0",
+            settings.textSize.get];
+}
+
+- (OsmAnd::TextRasterizer::Style)captionStyle
+{
+    const auto density = self.mapViewController.displayDensityFactor;
+    const auto textSize = [OAAppSettings sharedManager].textSize.get;
+    const auto nightMode = [OAAppSettings sharedManager].nightMode;
+
+    OsmAnd::TextRasterizer::Style style;
+    style.setWrapWidth(20)
+        .setBold(false)
+        .setItalic(false)
+        .setColor(OsmAnd::ColorARGB(nightMode ? color_widgettext_night_argb : color_widgettext_day_argb))
+        .setSize(textSize * 13.0f * density)
+        .setHaloColor(OsmAnd::ColorARGB(nightMode ? color_widgettext_shadow_night_argb : color_widgettext_shadow_day_argb))
+        .setHaloRadius(5);
+    return style;
+}
+
+- (void)updatePoiProvider
+{
+    BOOL hasFilters = _poiUiFilter != nil || _wikiUiFilter != nil;
+    NSString *appearanceSignature = [self providerAppearanceSignature];
+
+    if (!hasFilters)
+    {
+        [self clearPoiProvider];
+        _showPoiOnMap = NO;
+        return;
+    }
+
+    BOOL needsRebuild = !_poiTileProvider || ![_providerAppearanceSignature isEqualToString:appearanceSignature];
+    if (!needsRebuild)
+        return;
+
+    _providerAppearanceSignature = appearanceSignature;
+    const auto textVisible = [OAAppSettings sharedManager].mapSettingShowPoiLabel.get;
+    const auto density = self.mapViewController.displayDensityFactor;
+    const auto captionTopSpace = -4.0 * density;
+    const auto referenceTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+    const auto textScale = [OAAppSettings sharedManager].textSize.get;
+    const auto style = [self captionStyle];
+
+    [self.mapViewController runWithRenderSync:^{
+        if (_poiTileProvider)
+            [self.mapView removeTiledSymbolsProvider:_poiTileProvider];
+
+        _poiTileProvider = std::make_shared<OAPOITileProvider>(self.mapView,
+                                                               _mapLayerData,
+                                                               [self pointsOrder],
+                                                               textVisible,
+                                                               style,
+                                                               captionTopSpace,
+                                                               referenceTileSize,
+                                                               textScale);
+        [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:_poiTileProvider];
+    }];
 }
 
 - (void) updateVisiblePoiFilter
 {
-    if (_showPoiOnMap && _amenitySymbolsProvider)
-    {
-        [self.mapViewController runWithRenderSync:^{
-            [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-            _amenitySymbolsProvider.reset();
-        }];
-        _showPoiOnMap = NO;
-    }
-
-    if (_showWikiOnMap && _wikiSymbolsProvider)
-    {
-        [self.mapViewController runWithRenderSync:^{
-            [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
-            _wikiSymbolsProvider.reset();
-        }];
-        _showWikiOnMap = NO;
-    }
-
+    
     OAPOIUIFilter *wikiFilter = [_filtersHelper getTopWikiPoiFilter];
     NSMutableArray<OAPOIUIFilter *> *filtersToExclude = [NSMutableArray array];
     if (wikiFilter)
@@ -155,9 +232,24 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
     }
     [OAPOIUIFilter combineStandardPoiFilters:filters];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self showPoiOnMap:filters wikiOnMap:wikiFilter];
-    });
+    BOOL noValidByName = filters.count == 1
+            && [filters.allObjects.firstObject.name isEqualToString:OALocalizedString(@"poi_filter_by_name")]
+            && !filters.allObjects.firstObject.filterByName;
+
+    _wikiUiFilter = wikiFilter;
+    _poiUiFilter = noValidByName ? nil : [_filtersHelper combineSelectedFilters:filters];
+    if (noValidByName)
+        [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
+
+    NSString *signature = [self buildFiltersSignature:filters wikiFilter:wikiFilter];
+    if (![_filtersSignature isEqualToString:signature])
+    {
+        _filtersSignature = signature;
+        [_mapLayerData setPoiFilter:_poiUiFilter wikiFilter:_wikiUiFilter];
+        [_mapLayerData clearCache];
+        _providerAppearanceSignature = nil;
+    }
+    _showPoiOnMap = _poiUiFilter != nil || _wikiUiFilter != nil;
 }
 
 - (BOOL) updateLayer
@@ -166,129 +258,9 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return NO;
 
     [self updateVisiblePoiFilter];
+    [self updatePoiProvider];
     [_topPlacesProvider updateLayer];
-    
     return YES;
-}
-
-- (void) showPoiOnMap:(NSMutableSet<OAPOIUIFilter *> *)filters wikiOnMap:(OAPOIUIFilter *)wikiOnMap
-{
-    _showPoiOnMap = YES;
-    _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-
-    _wikiUiFilter = wikiOnMap;
-    _showWikiOnMap = wikiOnMap != nil;
-
-    BOOL noValidByName = filters.count == 1
-            && [filters.allObjects.firstObject.name isEqualToString:OALocalizedString(@"poi_filter_by_name")]
-            && !filters.allObjects.firstObject.filterByName;
-
-    _poiUiFilter = noValidByName ? nil : [_filtersHelper combineSelectedFilters:filters];
-    if (noValidByName)
-        [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doShowPoiUiFilterOnMap];
-    });
-}
-
-- (void) doShowPoiUiFilterOnMap
-{
-    if (!_poiUiFilter && !_wikiUiFilter)
-        return;
-
-    [self.mapViewController runWithRenderSync:^{
-
-        void (^_generate)(OAPOIUIFilter *) = ^(OAPOIUIFilter *f) {
-            BOOL isWiki = [f isWikiFilter];
-
-            auto categoriesFilter = QHash<QString, QStringList>();
-            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [f getAcceptedTypes];
-            for (OAPOICategory *category in types.keyEnumerator)
-            {
-                QStringList list = QStringList();
-                NSSet<NSString *> *subcategories = [types objectForKey:category];
-                if (subcategories != [OAPOIBaseType nullSet])
-                {
-                    for (NSString *sub in subcategories)
-                        list << QString::fromNSString(sub);
-                }
-                categoriesFilter.insert(QString::fromNSString(category.name), list);
-            }
-
-            if (isWiki)
-                _wikiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
-            else
-                _poiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
-
-            __weak OAAmenityExtendedNameFilter *weakWikiUiNameFilter = _wikiUiNameFilter;
-            __weak OAPOIUIFilter *weakWikiUiFilter = _wikiUiFilter;
-            __weak OAAmenityExtendedNameFilter *weakPoiUiNameFilter = _poiUiNameFilter;
-            __weak OAPOIUIFilter *weakPoiUiFilter = _poiUiFilter;
-            OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
-                    [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
-                    {
-                        OAAmenityExtendedNameFilter *wikiUiNameFilter = weakWikiUiNameFilter;
-                        OAPOIUIFilter *wikiUiFilter = weakWikiUiFilter;
-                        OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
-                        OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
-
-                        OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
-                        QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
-                        
-                        BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
-                                && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
-                        BOOL accepted = poiUiNameFilter && [poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
-
-                        if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
-                            return check ? accepted : false;
-                        
-                        if ((check && accepted) || (isWiki ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
-                        {
-                            BOOL isClosed = decodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
-                            return !isClosed;
-                        }
-
-                        return false;
-                    };
-
-            if (isWiki && _wikiSymbolsProvider)
-                [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
-            else if (!isWiki && _amenitySymbolsProvider)
-                [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-
-            OAAppSettings *settings = OAAppSettings.sharedManager;
-            BOOL nightMode = settings.nightMode;
-            BOOL showLabels = settings.mapSettingShowPoiLabel.get;
-            NSString *lang = settings.settingPrefMapLanguage.get;
-            BOOL transliterate = settings.settingMapLanguageTranslit.get;
-            float textSize = settings.textSize.get;
-
-            const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
-            const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-            if (categoriesFilter.count() > 0)
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
-            }
-            else
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder));
-            }
-
-            [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
-        };
-
-        if (_poiUiFilter)
-            _generate(_poiUiFilter);
-        else
-            _poiUiNameFilter = nil;
-
-        if (_wikiUiFilter)
-            _generate(_wikiUiFilter);
-        else
-            _wikiUiNameFilter = nil;
-
-    }];
 }
 
 - (BOOL) beginWithOrAfterSpace:(NSString *)str text:(NSString *)text
@@ -532,7 +504,7 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
                 unknownLocation:(BOOL)unknownLocation
       excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    NSArray<OAPOI *> *objects = [_topPlacesProvider displayedAmenities];
+    NSArray<OAPOIMapLayerItem *> *objects = _mapLayerData.displayedResults;
     if (objects.count == 0)
         return;
     
@@ -552,22 +524,20 @@ const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
         return;
     
     NSDictionary<NSNumber *, OAPOI *> *topPlaces = _topPlacesProvider.topPlaces;
-    NSSet<OAPOI *> *topPlacesSet = topPlaces.count > 0 ? [NSSet setWithArray:topPlaces.allValues] : nil;
     
-    for (OAPOI *amenity in objects)
+    for (OAPOIMapLayerItem *item in objects)
     {
-        CLLocation *location = [amenity getLocation];
-        if (!location)
-            continue;
-        
-        CLLocationCoordinate2D coord = location.coordinate;
-        
+        CLLocationCoordinate2D coord = item.coordinate;
         if (![OANativeUtilities isPointInsidePolygonLat:coord.latitude
                                                     lon:coord.longitude
                                               polygon31:touchPolygon31])
             continue;
-        
-        if (topPlacesSet && [topPlacesSet containsObject:amenity])
+
+        OAPOI *amenity = [_mapLayerData poiForItem:item];
+        if (!amenity)
+            continue;
+
+        if (topPlaces[@(item.signedId)])
         {
             [result collect:amenity provider:self];
             break;

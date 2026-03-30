@@ -116,7 +116,7 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
                 if (!skippedTiles.contains(tileId))
                     skippedTiles.insert(tileId);
                 else
-                    continue;
+                    continue;   
             }
             
             // TODO: Would be better to get just bitmap size here

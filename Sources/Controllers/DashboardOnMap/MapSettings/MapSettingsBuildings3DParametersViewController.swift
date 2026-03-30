@@ -88,10 +88,6 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -118,14 +114,16 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
         mapPanel.targetUpdateControlsLayout(true, customStatusBarStyle: statusBarStyle)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
         coordinator.animate(alongsideTransition: { [weak self] _ in
-            guard let self else { return }
-            if !self.isLandscape() {
-                self.goMinimized(false)
-            }
+            guard let self, !self.isLandscape() else { return }
+            self.goMinimized(false)
         })
     }
     
@@ -151,10 +149,10 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
     
     override func hide() {
         switch settingsType {
+        case .visibility where baseAlpha != currentAlpha:
+            plugin?.apply3DBuildingsAlpha(baseAlpha)
         case .visibility:
-            if baseAlpha != currentAlpha {
-                plugin?.apply3DBuildingsAlpha(baseAlpha)
-            }
+            break
         case .color:
             setBuildings3DBaseColorItem()
         }
@@ -538,7 +536,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
             cell.sliderView?.maximumValue = 1.0
             let sliderValue = Float(currentAlpha)
             cell.sliderView?.value = sliderValue
-            cell.valueLabel?.text = String(format: "%.0f%%", sliderValue * 100)
+            cell.valueLabel?.text = NumberFormatter.percentFormatter.string(from: sliderValue as NSNumber)
             cell.sliderView?.removeTarget(self, action: nil, for: .allEvents)
             cell.sliderView?.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
             return cell
@@ -553,7 +551,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
             cell.separatorInset = UIEdgeInsets(top: 0.0, left: .greatestFiniteMagnitude, bottom: 0.0, right: 0.0)
             cell.selectionStyle = isMapStyleDescriptionRow ? .none : .default
             cell.titleLabel.text = isMapStyleDescriptionRow ? nil : item.title
-            cell.titleLabel.textColor = item.obj(forKey: ItemKey.tintTitle.rawValue) as? UIColor ?? UIColor(rgb: color_extra_text_gray)
+            cell.titleLabel.textColor = item.obj(forKey: ItemKey.tintTitle.rawValue) as? UIColor ?? .textColorSecondary
             cell.titleLabel.font = .preferredFont(forTextStyle: .body)
             cell.descriptionLabel.text = isMapStyleDescriptionRow ? item.title : nil
             return cell
@@ -590,7 +588,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
                 var config = UIButton.Configuration.plain()
                 config.baseForegroundColor = .textColorActive
                 config.contentInsets = NSDirectionalEdgeInsets(top: 3.1, leading: 16.0, bottom: 3.1, trailing: 0.0)
-                config.title = currentBuildings3DColorStyle == Buildings3DColorType.mapStyle.rawValue ? localizedString("quick_action_map_style") : localizedString("shared_string_custom")
+                config.title = localizedString(currentBuildings3DColorStyle == Buildings3DColorType.mapStyle.rawValue ? "quick_action_map_style" : "shared_string_custom")
                 cell.button.configuration = config
                 cell.button.setTitleColor(.textColorActive, for: .highlighted)
                 cell.button.tintColor = .textColorActive
@@ -706,10 +704,6 @@ extension MapSettingsBuildings3DParametersViewController: ColorCollectionViewCon
         }
     }
     
-    func selectPaletteItem(_: PaletteColor) {
-        // Intentionally unused: palette mode is not supported in this controller.
-    }
-    
     func addAndGetNewColorItem(_ color: UIColor) -> ColorItem {
         guard settingsType == .color else { return ColorItem(hexColor: color.toHexString()) }
         guard let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return ColorItem(hexColor: color.toHexString()) }
@@ -758,10 +752,8 @@ extension MapSettingsBuildings3DParametersViewController: ColorCollectionViewCon
 
 extension MapSettingsBuildings3DParametersViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewController(_: UIColorPickerViewController, didSelect color: UIColor, continuously _: Bool) {
-        guard settingsType == .color else { return }
-        if OAUtilities.isiOSAppOnMac() {
-            _ = addAndGetNewColorItem(color)
-        }
+        guard settingsType == .color, OAUtilities.isiOSAppOnMac() else { return }
+        _ = addAndGetNewColorItem(color)
     }
     
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {

@@ -911,12 +911,7 @@ static UIViewController *parentController;
     self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         [self.tabBarController.tabBar setHidden:NO];
-        CGFloat tabBarHeight;
-        if (@available(iOS 26.0, *))
-            tabBarHeight = _cachedTabbarHeight;
-        else
-            tabBarHeight = self.tabBarController.tabBar.frame.size.height;
-        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - tabBarHeight, DeviceScreenWidth, tabBarHeight);
+        [self refreshTabBarSize];
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
@@ -938,6 +933,16 @@ static UIViewController *parentController;
     [_selectedItems removeAllObjects];
     if (@available(iOS 26.0, *))
         [self searchVisibility:YES];
+}
+
+- (void)refreshTabBarSize
+{
+    CGFloat tabBarHeight;
+    if (@available(iOS 26.0, *))
+        tabBarHeight = _cachedTabbarHeight;
+    else
+        tabBarHeight = self.tabBarController.tabBar.frame.size.height;
+    self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - tabBarHeight, DeviceScreenWidth, tabBarHeight);
 }
 
 - (void)cacheTabbarHeight
@@ -2152,6 +2157,7 @@ static UIViewController *parentController;
             UIEdgeInsets insets = [self.favoriteTableView contentInset];
             [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
             [self.favoriteTableView setScrollIndicatorInsets:self.favoriteTableView.contentInset];
+            [self refreshTabBarSize];
         } completion:nil];
 }
 

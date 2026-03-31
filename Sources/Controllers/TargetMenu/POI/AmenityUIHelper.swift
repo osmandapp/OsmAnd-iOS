@@ -91,9 +91,9 @@ final class AmenityUIHelper: NSObject {
             if subtype == ROUTE_ARTICLE && key.contains(DESCRIPTION_TAG) {
                 continue
             }
-            if key == POI_NAME {
+            if key == POI_NAME || kNameTagPrefixes.contains(key) {
                 continue // will be added in buildNamesRow
-            }
+            }            
             
             var infoRow: OAAmenityInfoRow?
             if let strValue = value as? String {
@@ -435,22 +435,13 @@ final class AmenityUIHelper: NSObject {
         return pt != nil ? (pt as? OAPOIType) : nil
     }
     
-    func buildNamesRow(namesMap: [String: String], altName: Bool) -> OAAmenityInfoRow? {
-        guard !namesMap.isEmpty else { return nil }
-        let keys = Array(namesMap.keys.filter { !$0.isEmpty })
-        let nameLocale = getPreferredLocale(keys) ?? keys.first
-        let name = (nameLocale.flatMap { namesMap[$0] }) ?? namesMap[""] ?? namesMap.first?.value
-        guard let name, !name.isEmpty else { return nil }
-        let key = altName ? Self.ALT_NAMES_ROW_KEY : Self.NAMES_ROW_KEY
-        let textPrefix = localizedString(altName ? "shared_string_alt_name" : "shared_string_name")
-        let icon = UIImage.templateImageNamed("ic_custom_map_languge")
-        
+    func buildNamesRow(name: String) -> OAAmenityInfoRow? {        
         // android here creates collapsable view with all translations. ios opens a new screen with translations instead.
         // implementaion: OAPOIViewContoller.buildNamesRow() and OATargetInfoViewController.showPOITagsDetails()
 
-        return OAAmenityInfoRow(key: key, icon: icon, textPrefix: textPrefix, text: name, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 18000, name: "names", matchWidthDivider: matchWidthDivider, textLinesLimit: 1)
+        return OAAmenityInfoRow(key: Self.NAMES_ROW_KEY, icon: UIImage.templateImageNamed("ic_custom_map_languge"), textPrefix:  localizedString("shared_string_name"), text: name, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 18000, name: "names", matchWidthDivider: matchWidthDivider, textLinesLimit: 1)
     }
-    
+
     private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, textRow: OAAmenityInfoRow?, type: OAPOICategory?) -> OACollapsableView? {
         let collapsableView = OACollapsableNearestPoiTypeView(defaultParameters: true)
         collapsableView?.setData(categoryTypes, amenityPoiCategory: type, lat: latLon.latitude, lon: latLon.longitude, isPoiAdditional: poiAdditional, textRow: textRow)

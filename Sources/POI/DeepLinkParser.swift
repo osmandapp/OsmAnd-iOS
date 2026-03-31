@@ -8,7 +8,7 @@
 
 import Foundation
 
-private enum DeepLinkStaticAppRoute: String {
+private enum DeepLinkAppRoute: String {
     case main = ""
     case lastReleaseNotes = "help/last-release-notes"
     case helpWhatsNew = "help/whats-new"
@@ -43,6 +43,10 @@ private enum DeepLinkStaticAppRoute: String {
     case purchasesOsmAndPro = "purchases/osmand-pro"
     case purchasesMapsPlus = "purchases/maps-plus"
     case quickActionsLockScreenAdd = "quick-actions/lock-screen/add"
+    case tripRecordingBrowse = "settings/profile-settings/trip-recording/browse"
+    case tripRecordingCar = "settings/profile-settings/trip-recording/car"
+    case tripRecordingBicycle = "settings/profile-settings/trip-recording/bicycle"
+    case tripRecordingWalking = "settings/profile-settings/trip-recording/walking"
     case distanceByTapBrowse = "settings/profile-settings/configure-screen/distance-by-tap/browse"
     case distanceByTapCar = "settings/profile-settings/configure-screen/distance-by-tap/car"
     case distanceByTapBicycle = "settings/profile-settings/configure-screen/distance-by-tap/bicycle"
@@ -52,27 +56,6 @@ private enum DeepLinkStaticAppRoute: String {
     case navigationScreenBicycle = "navigation-screen/bicycle"
     case navigationScreenWalking = "navigation-screen/walking"
     case tripRecordingExternalSensors = "trip-recording/external-sensors"
-}
-
-private enum DeepLinkAppRoute {
-    case tripRecording(OAApplicationMode)
-    case staticRoute(DeepLinkStaticAppRoute)
-    
-    init?(rawValue: String) {
-        switch rawValue {
-        case "settings/profile-settings/trip-recording/browse":
-            self = .tripRecording(.default())
-        case "settings/profile-settings/trip-recording/car":
-            self = .tripRecording(.car())
-        case "settings/profile-settings/trip-recording/bicycle":
-            self = .tripRecording(.bicycle())
-        case "settings/profile-settings/trip-recording/walking":
-            self = .tripRecording(.pedestrian())
-        default:
-            guard let route = DeepLinkStaticAppRoute(rawValue: rawValue) else { return nil }
-            self = .staticRoute(route)
-        }
-    }
 }
 
 @objcMembers
@@ -101,97 +84,100 @@ final class DeepLinkParser: NSObject {
         
         let router = DeepLinkAppRouter(rootViewController: rootViewController)
         switch route {
-        case .tripRecording(let mode):
-            router.openTripRecordingSettings(appMode: mode)
-        case .staticRoute(let route):
-            switch route {
-            case .main:
-                router.openMainScreen()
-            case .lastReleaseNotes:
-                router.openLastReleaseNotes()
-            case .helpWhatsNew:
-                router.openWhatsNew()
-            case .settings:
-                router.openGlobalSettingsMain()
-            case .cloud:
-                router.openCloudScreen()
-            case .plugins:
-                router.openPlugins()
-            case .pluginsTripRecording:
-                router.openPlugin(product: OAIAPHelper.sharedInstance().trackRecording)
-            case .pluginsTopography:
-                router.openPlugin(product: OAIAPHelper.sharedInstance().srtm)
-            case .pluginsWeather:
-                router.openPlugin(product: OAIAPHelper.sharedInstance().weather)
-            case .pluginsExternalSensors:
-                router.openPlugin(product: OAIAPHelper.sharedInstance().sensors)
-            case .pluginsVehicleMetrics:
-                router.openPlugin(product: OAIAPHelper.sharedInstance().vehicleMetrics)
-            case .help:
-                router.openHelp()
-            case .planRoute:
-                router.openPlanRoute()
-            case .configureScreenWidgetsLeft:
-                router.openWidgetsList(panel: .leftPanel)
-            case .configureScreenWidgetsRight:
-                router.openWidgetsList(panel: .rightPanel)
-            case .configureScreenWidgetsTop:
-                router.openWidgetsList(panel: .topPanel)
-            case .configureScreenWidgetsBottom:
-                router.openWidgetsList(panel: .bottomPanel)
-            case .mapSettingsMain:
-                router.openMapSettings(screen: .main)
-            case .mapSettingsMapType:
-                router.openMapSettings(screen: .mapType)
-            case .mapSettingsWikipedia:
-                router.openMapSettings(screen: .wikipedia)
-            case .mapSettingsOverlay:
-                router.openMapSettings(screen: .overlay)
-            case .mapSettingsUnderlay:
-                router.openMapSettings(screen: .underlay)
-            case .destinations:
-                router.openDestinations()
-            case .destinationsDirectionAppearance:
-                router.openDestinationsDirectionAppearance()
-            case .myPlacesFavorites:
-                router.openMyPlaces(tabClass: OAFavoriteListViewController.self)
-            case .myPlacesTracks:
-                router.openMyPlaces(tabClass: TracksViewController.self)
-            case .myPlacesOsmEdits:
-                router.openMyPlaces(tabClass: OAOsmEditsListViewController.self)
-            case .mapsAndResources:
-                router.openMapsAndResources()
-            case .mapsAndResourcesLocal:
-                router.openMapsAndResourcesLocal()
-            case .mapsAndResourcesUpdates:
-                router.openMapsAndResourcesUpdates()
-            case .purchases:
-                router.openChoosePlan(feature: nil)
-            case .purchasesOsmAndPro:
-                router.openChoosePlan(feature: OAFeature.advanced_WIDGETS())
-            case .purchasesMapsPlus:
-                router.openChoosePlan(feature: OAFeature.monthly_MAP_UPDATES())
-            case .quickActionsLockScreenAdd:
-                router.openCustomButtonsAddAction()
-            case .distanceByTapBrowse:
-                router.openDistanceByTapSettings(appMode: OAApplicationMode.default())
-            case .distanceByTapCar:
-                router.openDistanceByTapSettings(appMode: OAApplicationMode.car())
-            case .distanceByTapBicycle:
-                router.openDistanceByTapSettings(appMode: OAApplicationMode.bicycle())
-            case .distanceByTapWalking:
-                router.openDistanceByTapSettings(appMode: OAApplicationMode.pedestrian())
-            case .speedometerCar:
-                router.openSpeedometerSettings(appMode: OAApplicationMode.car())
-            case .navigationScreenCar:
-                router.openNavigationScreen(appMode: OAApplicationMode.car())
-            case .navigationScreenBicycle:
-                router.openNavigationScreen(appMode: OAApplicationMode.bicycle())
-            case .navigationScreenWalking:
-                router.openNavigationScreen(appMode: OAApplicationMode.pedestrian())
-            case .tripRecordingExternalSensors:
-                router.openExternalSensorsRecording()
-            }
+        case .main:
+            router.openMainScreen()
+        case .lastReleaseNotes:
+            router.openLastReleaseNotes()
+        case .helpWhatsNew:
+            router.openWhatsNew()
+        case .settings:
+            router.openGlobalSettingsMain()
+        case .cloud:
+            router.openCloudScreen()
+        case .plugins:
+            router.openPlugins()
+        case .pluginsTripRecording:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().trackRecording)
+        case .pluginsTopography:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().srtm)
+        case .pluginsWeather:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().weather)
+        case .pluginsExternalSensors:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().sensors)
+        case .pluginsVehicleMetrics:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().vehicleMetrics)
+        case .help:
+            router.openHelp()
+        case .planRoute:
+            router.openPlanRoute()
+        case .configureScreenWidgetsLeft:
+            router.openWidgetsList(panel: .leftPanel)
+        case .configureScreenWidgetsRight:
+            router.openWidgetsList(panel: .rightPanel)
+        case .configureScreenWidgetsTop:
+            router.openWidgetsList(panel: .topPanel)
+        case .configureScreenWidgetsBottom:
+            router.openWidgetsList(panel: .bottomPanel)
+        case .mapSettingsMain:
+            router.openMapSettings(screen: .main)
+        case .mapSettingsMapType:
+            router.openMapSettings(screen: .mapType)
+        case .mapSettingsWikipedia:
+            router.openMapSettings(screen: .wikipedia)
+        case .mapSettingsOverlay:
+            router.openMapSettings(screen: .overlay)
+        case .mapSettingsUnderlay:
+            router.openMapSettings(screen: .underlay)
+        case .destinations:
+            router.openDestinations()
+        case .destinationsDirectionAppearance:
+            router.openDestinationsDirectionAppearance()
+        case .myPlacesFavorites:
+            router.openMyPlaces(tabClass: OAFavoriteListViewController.self)
+        case .myPlacesTracks:
+            router.openMyPlaces(tabClass: TracksViewController.self)
+        case .myPlacesOsmEdits:
+            router.openMyPlaces(tabClass: OAOsmEditsListViewController.self)
+        case .mapsAndResources:
+            router.openMapsAndResources()
+        case .mapsAndResourcesLocal:
+            router.openMapsAndResourcesLocal()
+        case .mapsAndResourcesUpdates:
+            router.openMapsAndResourcesUpdates()
+        case .purchases:
+            router.openChoosePlan(feature: nil)
+        case .purchasesOsmAndPro:
+            router.openChoosePlan(feature: OAFeature.advanced_WIDGETS())
+        case .purchasesMapsPlus:
+            router.openChoosePlan(feature: OAFeature.monthly_MAP_UPDATES())
+        case .quickActionsLockScreenAdd:
+            router.openCustomButtonsAddAction()
+        case .tripRecordingBrowse:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.default())
+        case .tripRecordingCar:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.car())
+        case .tripRecordingBicycle:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.bicycle())
+        case .tripRecordingWalking:
+            router.openTripRecordingSettings(appMode: OAApplicationMode.pedestrian())
+        case .distanceByTapBrowse:
+            router.openDistanceByTapSettings(appMode: OAApplicationMode.default())
+        case .distanceByTapCar:
+            router.openDistanceByTapSettings(appMode: OAApplicationMode.car())
+        case .distanceByTapBicycle:
+            router.openDistanceByTapSettings(appMode: OAApplicationMode.bicycle())
+        case .distanceByTapWalking:
+            router.openDistanceByTapSettings(appMode: OAApplicationMode.pedestrian())
+        case .speedometerCar:
+            router.openSpeedometerSettings(appMode: OAApplicationMode.car())
+        case .navigationScreenCar:
+            router.openNavigationScreen(appMode: OAApplicationMode.car())
+        case .navigationScreenBicycle:
+            router.openNavigationScreen(appMode: OAApplicationMode.bicycle())
+        case .navigationScreenWalking:
+            router.openNavigationScreen(appMode: OAApplicationMode.pedestrian())
+        case .tripRecordingExternalSensors:
+            router.openExternalSensorsRecording()
         }
         
         return true

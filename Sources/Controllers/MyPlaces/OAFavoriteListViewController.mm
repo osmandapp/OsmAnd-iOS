@@ -603,6 +603,7 @@ static UIViewController *parentController;
 {
     if (@available(iOS 26.0, *))
     {
+        _searchController.searchBar.searchTextField.placeholder = OALocalizedString(@"search_activity");
     }
     else
     {

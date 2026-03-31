@@ -87,6 +87,7 @@
 {
     if (@available(iOS 26.0, *))
     {
+        _searchController.searchBar.searchTextField.placeholder = OALocalizedString(@"shared_string_search");
     }
     else
     {

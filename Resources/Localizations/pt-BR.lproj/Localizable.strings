@@ -3978,7 +3978,7 @@
 "unsupported_maps" = "Mapas não suportados";
 "deleted_maps_alert_message" = "Tem certeza de que deseja excluir %d mapas?";
 "copy_link" = "Copiar link";
-"ios_release_5_3" = "• Adicionada animação interativa para o widget Velocímetro.\n• Adicionada uma opção para redimensionar o ícone de localização.\n• Novos widgets de registro de viagem: Velocidade máxima e Inclinação média; widgets de subida/descida aprimorados.\n• Adicionado suporte a links diretos para compartilhar POIs específicos.\n• Corrigido um problema em que a ETA nos widgets de navegação não era atualizada quando o veículo estava parado\n• Conectividade aprimorada para adaptadores OBDII emparelhados\n• Adicionada a capacidade de mesclar pontos de referência em uma pasta de favoritos selecionada\n• CarPlay: corrigido um problema com um mapa que não respondia no painel e adicionado suporte para o parâmetro “Sempre mostrar mapa escuro”\n";
+"ios_release_5_3" = "• Suporte a edifícios em 3D\n• Visualização esférica do mapa\n• Velocímetro: novos modos de cor para tolerância e excesso de velocidade\n• Botões do mapa personalizáveis: tamanho, forma e estilo\n• Ícone de localização redimensionável\n• Novos widgets: Velocidade Máxima, Inclinação Média; melhorias em Subida/Descida\n• Analisador de Trajeto: melhorias na seleção de eixos e métricas do veículo\n• Agrupar pontos de referência em uma pasta de Favoritos\n• Compartilhar link para qualquer Ponto de Interesse\n• CarPlay: corrigido o mapa no painel; adicionado “Sempre mostrar mapa escuro”\n• CarPlay: ícone de localização mais suave e diálogo pós-navegação\n• Conectividade aprimorada para adaptadores OBD-II emparelhados\n• Corrigido: o tempo estimado de chegada (ETA) da navegação agora é atualizado quando o veículo está parado\n";
 "lang_mi" = "Maori";
 "wind_animation_layer" = "Camada de animação do vento";
 "quick_action_wind_animation_layer" = "Um botão para mostrar ou ocultar a camada de animação do vento no mapa.";
@@ -4021,3 +4021,18 @@
 "shared_string_wikipedia" = "Wikipédia";
 "poi_source" = "Fonte POI";
 "show_polygons" = "Mostrar polígonos de áreas";
+"shared_string_alt_name" = "Nome alternativo";
+"graph_axis" = "Eixo do gráfico";
+"y_axis" = "Eixo Y";
+"x_axis" = "Eixo X";
+"y_axis_description" = "Selecione até duas opções para o eixo Y.";
+"external_sensor_widgets" = "ANT+ widgets";
+"vehicle_metrics_chart_category" = "Métricas do veículo";
+"poi_mobile" = "Celular";
+"poi_cuisine" = "Cozinha";
+"poi_brand" = "Bandeira";
+"travel_guides" = "Guias";
+"show_spherical_map" = "Visão global";
+"has_vehicle_metrics" = "Com dados OBDII";
+"context_menu_read_full_article" = "Leia o artigo completo";
+"read_on" = "Ler no %@";

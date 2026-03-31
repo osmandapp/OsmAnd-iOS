@@ -100,7 +100,11 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     
                     switch result {
                     case .success(let value):
-                        completion?(placeId, value.image)
+                        self.queue.async {
+                            guard self.loadingImages[urlStr] != nil else { return }
+                            self.loadingImages.removeValue(forKey: urlStr)
+                            DispatchQueue.main.async { completion?(placeId, value.image) }
+                        }
                     case .failure(let error):
                         NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
                         

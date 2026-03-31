@@ -128,9 +128,14 @@ static std::shared_ptr<const OsmAnd::Amenity> OASyntheticAmenityFromPoi(OAPOI *p
     if (!poi || ![poi hasLocation])
         return nullptr;
 
-    const QString categoryName = QString::fromNSString(poi.type.category.name ?: @"osmwiki");
+    const BOOL hasCanonicalPoiType = poi.type != nil
+        && poi.type.category != nil
+        && !NSStringIsEmpty(poi.type.category.name)
+        && !NSStringIsEmpty(poi.type.name);
+    const QString categoryName = QString::fromNSString(
+        hasCanonicalPoiType ? poi.type.category.name : (poi.type.category.name ?: @"osmwiki"));
     const QString subTypeName = QString::fromNSString(
-        poi.subType.length > 0 ? poi.subType : (poi.type.name ?: @"wikiplace"));
+        hasCanonicalPoiType ? poi.type.name : (poi.subType.length > 0 ? poi.subType : (poi.type.name ?: @"wikiplace")));
 
     auto amenity = std::make_shared<OsmAnd::Amenity>(std::shared_ptr<const OsmAnd::ObfPoiSectionInfo>());
     amenity->id.id = OAResolveSyntheticAmenityId(poi);
@@ -153,21 +158,31 @@ static std::shared_ptr<const OsmAnd::Amenity> OASyntheticAmenityFromPoi(OAPOI *p
     if (!NSStringIsEmpty(preferredLang) && !NSStringIsEmpty(poi.nameLocalized) && !poi.localizedNames[preferredLang])
         amenity->localizedNames.insert(QString::fromNSString(preferredLang), QString::fromNSString(poi.nameLocalized));
 
-    const auto subtypes = subTypeName.split(';', Qt::SkipEmptyParts);
-    for (const auto& subtype : OsmAnd::constOf(subtypes))
+    if (hasCanonicalPoiType)
     {
         OsmAnd::Amenity::DecodedCategory decodedCategory;
         decodedCategory.category = categoryName;
-        decodedCategory.subcategory = subtype;
+        decodedCategory.subcategory = subTypeName;
         amenity->decodedCategoriesOverride.push_back(decodedCategory);
+    }
+    else
+    {
+        const auto subtypes = subTypeName.split(';', Qt::SkipEmptyParts);
+        for (const auto& subtype : OsmAnd::constOf(subtypes))
+        {
+            OsmAnd::Amenity::DecodedCategory decodedCategory;
+            decodedCategory.category = categoryName;
+            decodedCategory.subcategory = subtype;
+            amenity->decodedCategoriesOverride.push_back(decodedCategory);
+        }
     }
 
     NSDictionary<NSString *, NSString *> *additionalInfo = [poi getAdditionalInfo];
     for (NSString *key in additionalInfo)
         amenity->decodedValuesOverride.insert(QString::fromNSString(key), QString::fromNSString(additionalInfo[key]));
 
-    if (poi.type)
-        amenity->decodedValuesOverride.insert(QStringLiteral("osmand_poi_key"), QString::fromNSString([poi.type iconKeyName]));
+    if (poi.type && !NSStringIsEmpty(poi.type.name))
+        amenity->decodedValuesOverride.insert(QStringLiteral("osmand_poi_key"), QString::fromNSString(poi.type.name));
 
     return amenity;
 }
@@ -180,6 +195,55 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
     OATopWikiOnlineAmenitiesStateFailed
 };
 
+@interface OATopWikiOnlineAmenitiesRequest : NSObject
+{
+@public
+    uint64_t requestId;
+    OsmAnd::AreaI visibleBBox31;
+    OsmAnd::PointI center31;
+    OsmAnd::ZoomLevel zoom;
+    OATopWikiOnlineAmenitiesState state;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
+}
+
+- (instancetype)initWithRequestId:(uint64_t)requestId
+                    visibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
+                         center31:(const OsmAnd::PointI&)center31
+                             zoom:(OsmAnd::ZoomLevel)zoom;
+
+@end
+
+static BOOL OAIsValidVisibleState(const OsmAnd::AreaI& visibleBBox31, const OsmAnd::ZoomLevel zoom)
+{
+    return zoom != OsmAnd::InvalidZoomLevel && visibleBBox31.width() > 0 && visibleBBox31.height() > 0;
+}
+
+static BOOL OAIsRequestApplicableToVisibleState(
+    OATopWikiOnlineAmenitiesRequest *request,
+    const BOOL hasLatestVisibleState,
+    const OsmAnd::AreaI& latestVisibleBBox31,
+    const OsmAnd::ZoomLevel latestVisibleZoom)
+{
+    return request
+        && hasLatestVisibleState
+        && request->zoom == latestVisibleZoom
+        && request->visibleBBox31.width() > 0
+        && request->visibleBBox31.height() > 0
+        && request->visibleBBox31.contains(latestVisibleBBox31);
+}
+
+static BOOL OARequestIntersectsTileBBox(
+    OATopWikiOnlineAmenitiesRequest *request,
+    const OsmAnd::AreaI& tileBBox31,
+    const OsmAnd::ZoomLevel zoom)
+{
+    return request
+        && request->zoom == zoom
+        && request->visibleBBox31.width() > 0
+        && request->visibleBBox31.height() > 0
+        && request->visibleBBox31.intersects(tileBBox31);
+}
+
 @interface OATopWikiOnlineAmenitiesController : NSObject
 {
 @private
@@ -187,44 +251,64 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
     std::weak_ptr<OsmAnd::AmenitySymbolsProvider> _symbolsProvider;
     QMutex _stateMutex;
     QWaitCondition _stateWaitCondition;
-    uint64_t _generation;
+    uint64_t _nextRequestId;
     OsmAnd::AreaI _latestVisibleBBox31;
     OsmAnd::ZoomLevel _latestVisibleZoom;
     BOOL _hasLatestVisibleState;
-    OsmAnd::AreaI _requestVisibleBBox31;
-    OsmAnd::ZoomLevel _requestZoom;
-    OATopWikiOnlineAmenitiesState _requestState;
-    QList<std::shared_ptr<const OsmAnd::Amenity>> _requestAmenities;
+    OATopWikiOnlineAmenitiesRequest *_activeRequest;
+    BOOL _needsNewRequest;
     BOOL _invalidated;
+    dispatch_block_t _dataReadyHandler;
 }
 
 - (instancetype)initWithDataProvider:(PoiUIFilterDataProvider *)dataProvider;
 - (void)setSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider>&)symbolsProvider;
+- (void)setDataReadyHandler:(dispatch_block_t)dataReadyHandler;
 - (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31 zoom:(OsmAnd::ZoomLevel)zoom;
 - (void)invalidate;
 - (BOOL)obtainAmenitiesForTileId:(OsmAnd::TileId)tileId
                             zoom:(OsmAnd::ZoomLevel)zoom
                      isCancelled:(const std::function<bool()>&)isCancelled
                         response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse;
-- (BOOL)isGenerationCurrent:(uint64_t)generation;
-- (BOOL)waitForGeneration:(uint64_t *)generation
-                     tileId:(OsmAnd::TileId)tileId
-                     zoom:(OsmAnd::ZoomLevel)zoom
-              isCancelled:(const std::function<bool()>&)isCancelled
-                 response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse;
-- (void)dispatchLoadForGeneration:(uint64_t)generation
-                    visibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
-                         center31:(const OsmAnd::PointI&)center31
-                             zoom:(OsmAnd::ZoomLevel)zoom;
-- (void)completeLoadForGeneration:(uint64_t)generation
-                           loaded:(BOOL)loaded
-                        amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>>&)amenities;
+- (BOOL)isInvalidated;
+- (BOOL)isActiveApplicableRequestId:(uint64_t)requestId;
+- (BOOL)waitForRequest:(OATopWikiOnlineAmenitiesRequest * __strong *)request
+                tileId:(OsmAnd::TileId)tileId
+                  zoom:(OsmAnd::ZoomLevel)zoom
+           isCancelled:(const std::function<bool()>&)isCancelled
+              response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse;
+- (void)dispatchLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request;
+- (void)completeLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request
+                        loaded:(BOOL)loaded
+                     amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>>&)amenities;
 - (BOOL)loadAmenitiesForVisibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
                              center31:(const OsmAnd::PointI&)center31
                                  zoom:(OsmAnd::ZoomLevel)zoom
                           isCancelled:(const std::function<bool()>&)isCancelled
                             amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities;
 - (void)invalidateCurrentProviderTiles;
+
+@end
+
+@implementation OATopWikiOnlineAmenitiesRequest
+
+- (instancetype)initWithRequestId:(uint64_t)newRequestId
+                    visibleBBox31:(const OsmAnd::AreaI&)newVisibleBBox31
+                         center31:(const OsmAnd::PointI&)newCenter31
+                             zoom:(OsmAnd::ZoomLevel)newZoom
+{
+    self = [super init];
+    if (self)
+    {
+        requestId = newRequestId;
+        visibleBBox31 = newVisibleBBox31;
+        center31 = newCenter31;
+        zoom = newZoom;
+        state = OATopWikiOnlineAmenitiesStateLoading;
+        amenities.clear();
+    }
+    return self;
+}
 
 @end
 
@@ -236,11 +320,11 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
     if (self)
     {
         _dataProvider = dataProvider;
-        _generation = 0;
+        _nextRequestId = 1;
         _latestVisibleZoom = OsmAnd::InvalidZoomLevel;
-        _requestZoom = OsmAnd::InvalidZoomLevel;
-        _requestState = OATopWikiOnlineAmenitiesStateUndefined;
         _hasLatestVisibleState = NO;
+        _activeRequest = nil;
+        _needsNewRequest = NO;
         _invalidated = NO;
     }
     return self;
@@ -252,6 +336,12 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
     _symbolsProvider = symbolsProvider;
 }
 
+- (void)setDataReadyHandler:(dispatch_block_t)dataReadyHandler
+{
+    QMutexLocker scopedLocker(&_stateMutex);
+    _dataReadyHandler = [dataReadyHandler copy];
+}
+
 - (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31 zoom:(OsmAnd::ZoomLevel)zoom
 {
     BOOL shouldInvalidateTiles = NO;
@@ -259,26 +349,14 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
         QMutexLocker scopedLocker(&_stateMutex);
         _latestVisibleBBox31 = visibleBBox31;
         _latestVisibleZoom = zoom;
-        _hasLatestVisibleState =
-            zoom != OsmAnd::InvalidZoomLevel && visibleBBox31.width() > 0 && visibleBBox31.height() > 0;
+        _hasLatestVisibleState = OAIsValidVisibleState(visibleBBox31, zoom);
         if (_invalidated)
             return;
 
-        const BOOL shouldInvalidateRequest =
-            _generation > 0
-            && _requestZoom != OsmAnd::InvalidZoomLevel
-            && (!_hasLatestVisibleState
-                || zoom != _requestZoom
-                || !_requestVisibleBBox31.contains(visibleBBox31));
-        if (shouldInvalidateRequest)
-        {
-            ++_generation;
-            _requestVisibleBBox31 = OsmAnd::AreaI();
-            _requestZoom = OsmAnd::InvalidZoomLevel;
-            _requestState = OATopWikiOnlineAmenitiesStateUndefined;
-            _requestAmenities.clear();
-            shouldInvalidateTiles = YES;
-        }
+        const BOOL wasNeedingNewRequest = _needsNewRequest;
+        _needsNewRequest = _activeRequest
+            && !OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom);
+        shouldInvalidateTiles = _needsNewRequest && !wasNeedingNewRequest;
     }
 
     if (shouldInvalidateTiles)
@@ -296,14 +374,11 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
             return;
 
         _invalidated = YES;
-        ++_generation;
         _latestVisibleBBox31 = OsmAnd::AreaI();
         _latestVisibleZoom = OsmAnd::InvalidZoomLevel;
         _hasLatestVisibleState = NO;
-        _requestVisibleBBox31 = OsmAnd::AreaI();
-        _requestZoom = OsmAnd::InvalidZoomLevel;
-        _requestState = OATopWikiOnlineAmenitiesStateUndefined;
-        _requestAmenities.clear();
+        _activeRequest = nil;
+        _needsNewRequest = NO;
     }
 
     _stateWaitCondition.wakeAll();
@@ -318,9 +393,7 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
     outResponse.amenities.clear();
     outResponse.isOutdated = nullptr;
 
-    OsmAnd::AreaI requestVisibleBBox31;
-    OsmAnd::PointI requestCenter31;
-    uint64_t generation = 0;
+    OATopWikiOnlineAmenitiesRequest *request = nil;
     BOOL shouldStartLoad = NO;
     {
         QMutexLocker scopedLocker(&_stateMutex);
@@ -336,74 +409,78 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
             return YES;
         }
 
-        const BOOL canReuseRequest =
-            _generation > 0
-            && _requestZoom == _latestVisibleZoom
-            && _requestVisibleBBox31.contains(_latestVisibleBBox31);
-        if (!canReuseRequest)
+        if (_activeRequest
+            && !_needsNewRequest
+            && OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom))
         {
-            requestVisibleBBox31 = OAExpandVisibleBBox31(_latestVisibleBBox31);
-            if (requestVisibleBBox31.width() <= 0 || requestVisibleBBox31.height() <= 0)
+            request = _activeRequest;
+        }
+        else
+        {
+            const auto requestVisibleBBox31 = OAExpandVisibleBBox31(_latestVisibleBBox31);
+            if (!OAIsValidVisibleState(requestVisibleBBox31, _latestVisibleZoom))
             {
                 outResponse.isOutdated = []() -> bool { return true; };
                 return YES;
             }
 
-            generation = ++_generation;
-            requestCenter31 = _latestVisibleBBox31.center();
-            _requestVisibleBBox31 = requestVisibleBBox31;
-            _requestZoom = _latestVisibleZoom;
-            _requestState = OATopWikiOnlineAmenitiesStateLoading;
-            _requestAmenities.clear();
+            request = [[OATopWikiOnlineAmenitiesRequest alloc] initWithRequestId:_nextRequestId++
+                                                                   visibleBBox31:requestVisibleBBox31
+                                                                        center31:_latestVisibleBBox31.center()
+                                                                            zoom:_latestVisibleZoom];
+            _activeRequest = request;
+            _needsNewRequest = NO;
             shouldStartLoad = YES;
-        }
-        else
-        {
-            generation = _generation;
-            requestVisibleBBox31 = _requestVisibleBBox31;
         }
     }
 
     if (shouldStartLoad)
     {
         _stateWaitCondition.wakeAll();
-        [self invalidateCurrentProviderTiles];
-        [self dispatchLoadForGeneration:generation
-                          visibleBBox31:requestVisibleBBox31
-                               center31:requestCenter31
-                                   zoom:zoom];
+        [self dispatchLoadForRequest:request];
     }
 
-    if (![self waitForGeneration:&generation
-                            tileId:tileId
-                            zoom:zoom
-                     isCancelled:isCancelled
-                        response:outResponse])
+    if (![self waitForRequest:&request
+                       tileId:tileId
+                         zoom:zoom
+                  isCancelled:isCancelled
+                     response:outResponse])
     {
         return NO;
     }
 
     OATopWikiOnlineAmenitiesController *controller = self;
+    const uint64_t requestId = request ? request->requestId : 0;
     outResponse.isOutdated =
-        [controller, generation]() -> bool
+        [controller, requestId]() -> bool
         {
-            return ![controller isGenerationCurrent:generation];
+            return ![controller isActiveApplicableRequestId:requestId];
         };
 
     return YES;
 }
 
-- (BOOL)isGenerationCurrent:(uint64_t)generation
+- (BOOL)isInvalidated
 {
     QMutexLocker scopedLocker(&_stateMutex);
-    return !_invalidated && _generation == generation;
+    return _invalidated;
 }
 
-- (BOOL)waitForGeneration:(uint64_t *)generation
-                     tileId:(OsmAnd::TileId)tileId
-                     zoom:(OsmAnd::ZoomLevel)zoom
-              isCancelled:(const std::function<bool()>&)isCancelled
-                 response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse
+- (BOOL)isActiveApplicableRequestId:(uint64_t)requestId
+{
+    QMutexLocker scopedLocker(&_stateMutex);
+    return !_invalidated
+        && !_needsNewRequest
+        && _activeRequest
+        && _activeRequest->requestId == requestId
+        && OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom);
+}
+
+- (BOOL)waitForRequest:(OATopWikiOnlineAmenitiesRequest * __strong *)request
+                tileId:(OsmAnd::TileId)tileId
+                  zoom:(OsmAnd::ZoomLevel)zoom
+           isCancelled:(const std::function<bool()>&)isCancelled
+              response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse
 {
     const auto tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(tileId, zoom);
     QMutexLocker scopedLocker(&_stateMutex);
@@ -416,33 +493,29 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
             return YES;
         }
 
-        if (generation && _generation != *generation)
+        OATopWikiOnlineAmenitiesRequest *currentRequest = request ? *request : nil;
+        if (!currentRequest)
         {
-            if (!_hasLatestVisibleState || _latestVisibleZoom != zoom)
-            {
-                outResponse.amenities.clear();
-                outResponse.isOutdated = []() -> bool { return true; };
-                return YES;
-            }
+            outResponse.amenities.clear();
+            outResponse.isOutdated = []() -> bool { return true; };
+            return YES;
+        }
 
-            const auto latestExpandedVisibleBBox31 = OAExpandVisibleBBox31(_latestVisibleBBox31);
-            if (latestExpandedVisibleBBox31.width() <= 0
-                || latestExpandedVisibleBBox31.height() <= 0
-                || !latestExpandedVisibleBBox31.intersects(tileBBox31))
-            {
-                outResponse.amenities.clear();
-                outResponse.isOutdated = []() -> bool { return true; };
-                return YES;
-            }
-
-            *generation = _generation;
+        if (_activeRequest
+            && _activeRequest != currentRequest
+            && !_needsNewRequest
+            && OARequestIntersectsTileBBox(_activeRequest, tileBBox31, zoom))
+        {
+            currentRequest = _activeRequest;
+            if (request)
+                *request = currentRequest;
             continue;
         }
 
-        switch (_requestState)
+        switch (currentRequest->state)
         {
             case OATopWikiOnlineAmenitiesStateReady:
-                outResponse.amenities = _requestAmenities;
+                outResponse.amenities = currentRequest->amenities;
                 return YES;
             case OATopWikiOnlineAmenitiesStateFailed:
                 outResponse.amenities.clear();
@@ -459,55 +532,65 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
     }
 }
 
-- (void)dispatchLoadForGeneration:(uint64_t)generation
-                    visibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
-                         center31:(const OsmAnd::PointI&)center31
-                             zoom:(OsmAnd::ZoomLevel)zoom
+- (void)dispatchLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request
 {
     __weak OATopWikiOnlineAmenitiesController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OATopWikiOnlineAmenitiesController *strongSelf = weakSelf;
-        if (!strongSelf)
+        if (!strongSelf || !request)
             return;
 
         QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
-        const auto generationCancelled =
-            [weakSelf, generation]() -> bool
+        const auto requestCancelled =
+            [weakSelf]() -> bool
             {
                 OATopWikiOnlineAmenitiesController *controller = weakSelf;
-                return !controller || ![controller isGenerationCurrent:generation];
+                return !controller || [controller isInvalidated];
             };
-        const BOOL loaded = [strongSelf loadAmenitiesForVisibleBBox31:visibleBBox31
-                                                             center31:center31
-                                                                 zoom:zoom
-                                                          isCancelled:generationCancelled
+        const BOOL loaded = [strongSelf loadAmenitiesForVisibleBBox31:request->visibleBBox31
+                                                             center31:request->center31
+                                                                 zoom:request->zoom
+                                                          isCancelled:requestCancelled
                                                             amenities:&amenities];
-        [strongSelf completeLoadForGeneration:generation loaded:loaded amenities:amenities];
+        [strongSelf completeLoadForRequest:request loaded:loaded amenities:amenities];
     });
 }
 
-- (void)completeLoadForGeneration:(uint64_t)generation
-                           loaded:(BOOL)loaded
-                        amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>>&)amenities
+- (void)completeLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request
+                        loaded:(BOOL)loaded
+                     amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>>&)amenities
 {
+    dispatch_block_t dataReadyHandler = nil;
     {
         QMutexLocker scopedLocker(&_stateMutex);
-        if (_invalidated || _generation != generation)
+        if (!request)
             return;
 
         if (loaded)
         {
-            _requestState = OATopWikiOnlineAmenitiesStateReady;
-            _requestAmenities = amenities;
+            request->state = OATopWikiOnlineAmenitiesStateReady;
+            request->amenities = amenities;
         }
         else
         {
-            _requestState = OATopWikiOnlineAmenitiesStateFailed;
-            _requestAmenities.clear();
+            request->state = OATopWikiOnlineAmenitiesStateFailed;
+            request->amenities.clear();
+        }
+
+        if (loaded
+            && !_invalidated
+            && _activeRequest == request
+            && !_needsNewRequest
+            && OAIsRequestApplicableToVisibleState(request, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom))
+        {
+            dataReadyHandler = [_dataReadyHandler copy];
         }
     }
 
     _stateWaitCondition.wakeAll();
+
+    if (dataReadyHandler)
+        dataReadyHandler();
 }
 
 - (BOOL)loadAmenitiesForVisibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
@@ -871,6 +954,14 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
                 PoiUIFilterDataProvider *wikiDataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:f];
                 OATopWikiOnlineAmenitiesController *wikiOnlineAmenitiesController =
                     [[OATopWikiOnlineAmenitiesController alloc] initWithDataProvider:wikiDataProvider];
+                __weak __typeof(self) weakSelf = self;
+                [wikiOnlineAmenitiesController setDataReadyHandler:^{
+                    __typeof(self) strongSelf = weakSelf;
+                    if (!strongSelf)
+                        return;
+
+                    [strongSelf->_topPlacesProvider notifyAmenitiesChanged];
+                }];
                 [wikiOnlineAmenitiesController updateVisibleBBox31:[self.mapView getVisibleBBox31]
                                                              zoom:self.mapView.zoomLevel];
                 externalAmenitiesProvider =

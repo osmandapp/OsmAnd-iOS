@@ -137,6 +137,11 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     });
 }
 
+- (void)notifyAmenitiesChanged
+{
+    
+}
+
 - (void)resetLayer
 {
     dispatch_async(_backgroundQueue, ^{

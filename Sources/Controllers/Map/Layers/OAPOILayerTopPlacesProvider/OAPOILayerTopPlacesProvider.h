@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setTextScale:(CGFloat)textScale;
 - (void)refreshVisiblePlaces;
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc;
+- (void)notifyAmenitiesChanged;
 - (void)resetLayer;
 
 - (QList<std::shared_ptr<const OsmAnd::Amenity>>)displayedAmenities;

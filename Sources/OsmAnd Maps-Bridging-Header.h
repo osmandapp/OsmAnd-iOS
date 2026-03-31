@@ -212,6 +212,7 @@
 #import "OATripRecordingSettingsViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAPluginDetailsViewController.h"
+#import "OAMapSettingsOverlayUnderlayScreen.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

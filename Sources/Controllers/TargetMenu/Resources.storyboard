@@ -167,7 +167,7 @@
         <!--Updates-->
         <scene sceneID="bH0-Wi-w2f">
             <objects>
-                <viewController storyboardIdentifier="OAOutdatedResourcesViewController" title="Updates" id="w8S-Nb-zGN" customClass="OAOutdatedResourcesViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OutdatedResourcesViewController" title="Updates" id="w8S-Nb-zGN" customClass="OAOutdatedResourcesViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CML-Vt-67j" userLabel="root">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="657"/>
                         <autoresizingMask key="autoresizingMask"/>

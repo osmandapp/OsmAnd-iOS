@@ -100,8 +100,9 @@ final class DeepLinkAppRouter: NSObject {
     
     func openMapSettings(screen: EMapSettingsScreen) {
         guard let mapPanel = root.mapPanel else { return }
+        let current = mapPanel.children.last as? OAMapSettingsViewController
+        let currentScreen = current?.settingsScreen
         let appData = OsmAndApp.swiftInstance()?.data
-        var reopenCurrentScreen = false
         switch screen {
         case .wikipedia:
             guard let wikiProduct = OAIAPHelper.sharedInstance().wiki else { return }
@@ -109,36 +110,63 @@ final class DeepLinkAppRouter: NSObject {
                 openChoosePlan(feature: wikiProduct.feature)
                 return
             }
-            if wikiProduct.disabled {
+            let shouldEnableProduct = wikiProduct.disabled
+            let shouldEnableWikipedia = !(appData?.wikipedia ?? false)
+            let shouldRefreshScreen = shouldEnableProduct || shouldEnableWikipedia
+            if shouldEnableProduct {
                 OAIAPHelper.sharedInstance().enableProduct(wikiProduct.productIdentifier)
-                reopenCurrentScreen = true
             }
-            if !(appData?.wikipedia ?? false) {
+            if shouldEnableWikipedia {
                 (OAPluginsHelper.getPlugin(OAWikipediaPlugin.self) as? OAWikipediaPlugin)?.wikipediaChanged(true)
-                reopenCurrentScreen = true
+            }
+            if currentScreen == screen {
+                if shouldRefreshScreen {
+                    (current?.screenObj as? MapSettingsWikipediaScreen)?.updateResources()
+                }
+                return
             }
         case .overlay:
-            if appData?.overlayMapSource == nil {
-                appData?.lastOverlayMapSource = appData?.lastOverlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
-                appData?.overlayMapSource = appData?.lastOverlayMapSource
-                reopenCurrentScreen = true
+            if let appData {
+                let shouldEnableOverlay = appData.overlayMapSource == nil
+                if shouldEnableOverlay {
+                    appData.lastOverlayMapSource = appData.lastOverlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
+                    appData.overlayMapSource = appData.lastOverlayMapSource
+                }
+                if currentScreen == screen {
+                    if shouldEnableOverlay {
+                        (current?.screenObj as? OAMapSettingsOverlayUnderlayScreen)?.setupInitialState()
+                        current?.screenObj.setupView()
+                        current?.screenObj.tblView?.reloadData()
+                    }
+                    return
+                }
             }
         case .underlay:
-            let settings = OAAppSettings.sharedManager()
-            if !settings.getUnderlayOpacitySliderVisibility() {
-                settings.setUnderlayOpacitySliderVisibility(true)
-                reopenCurrentScreen = true
-            }
-            if appData?.underlayMapSource == nil {
-                appData?.lastUnderlayMapSource = appData?.lastUnderlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
-                appData?.underlayMapSource = appData?.lastUnderlayMapSource
-                reopenCurrentScreen = true
+            if let appData {
+                let settings = OAAppSettings.sharedManager()
+                let shouldShowSlider = !settings.getUnderlayOpacitySliderVisibility()
+                let shouldEnableUnderlay = appData.underlayMapSource == nil
+                if shouldShowSlider {
+                    settings.setUnderlayOpacitySliderVisibility(true)
+                }
+                if shouldEnableUnderlay {
+                    appData.lastUnderlayMapSource = appData.lastUnderlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
+                    appData.underlayMapSource = appData.lastUnderlayMapSource
+                }
+                if currentScreen == screen {
+                    if shouldShowSlider || shouldEnableUnderlay {
+                        (current?.screenObj as? OAMapSettingsOverlayUnderlayScreen)?.setupInitialState()
+                        current?.screenObj.setupView()
+                        current?.screenObj.tblView?.reloadData()
+                    }
+                    return
+                }
             }
         default:
             break
         }
         
-        openMapSettingsDashboard(screen: screen, mapPanel: mapPanel, reopenCurrentScreen: reopenCurrentScreen)
+        openMapSettingsDashboard(screen: screen, mapPanel: mapPanel)
     }
     
     func openDestinations() {
@@ -269,8 +297,8 @@ final class DeepLinkAppRouter: NSObject {
         mapPanel.showRouteInfo(true, appMode: appMode)
     }
     
-    private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController, reopenCurrentScreen: Bool) {
-        guard !(((mapPanel.children.last as? OAMapSettingsViewController)?.settingsScreen == screen) && !reopenCurrentScreen) else { return }
+    private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController) {
+        guard (mapPanel.children.last as? OAMapSettingsViewController)?.settingsScreen != screen else { return }
         dismissAndPopToRoot()
         mapPanel.mapSettingsButtonClick("")
         guard screen != .main else { return }
@@ -280,7 +308,7 @@ final class DeepLinkAppRouter: NSObject {
     
     @discardableResult private func dismissAndPopToRoot() -> UINavigationController? {
         if let mapPanel = root.mapPanel, mapPanel.isDashboardVisible() {
-            mapPanel.closeDashboard(withDuration: 0.0)
+            mapPanel.closeDashboard(withDuration: .zero)
         }
         
         guard let nav = root.navigationController else { return nil }

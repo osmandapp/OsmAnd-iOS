@@ -43,19 +43,31 @@ private enum DeepLinkAppRoute: String {
     case purchasesOsmAndPro = "purchases/osmand-pro"
     case purchasesMapsPlus = "purchases/maps-plus"
     case quickActionsLockScreenAdd = "quick-actions/lock-screen/add"
-    case tripRecordingBrowse = "settings/profile-settings/trip-recording/browse"
-    case tripRecordingCar = "settings/profile-settings/trip-recording/car"
-    case tripRecordingBicycle = "settings/profile-settings/trip-recording/bicycle"
-    case tripRecordingWalking = "settings/profile-settings/trip-recording/walking"
-    case distanceByTapBrowse = "settings/profile-settings/configure-screen/distance-by-tap/browse"
-    case distanceByTapCar = "settings/profile-settings/configure-screen/distance-by-tap/car"
-    case distanceByTapBicycle = "settings/profile-settings/configure-screen/distance-by-tap/bicycle"
-    case distanceByTapWalking = "settings/profile-settings/configure-screen/distance-by-tap/walking"
+    case tripRecordingAppMode = "settings/profile-settings/trip-recording/"
+    case distanceByTapAppMode = "settings/profile-settings/configure-screen/distance-by-tap/"
     case speedometerCar = "settings/profile-settings/configure-screen/speedometer/car"
-    case navigationScreenCar = "navigation-screen/car"
-    case navigationScreenBicycle = "navigation-screen/bicycle"
-    case navigationScreenWalking = "navigation-screen/walking"
+    case navigationScreenAppMode = "navigation-screen/"
     case tripRecordingExternalSensors = "trip-recording/external-sensors"
+}
+
+private enum DeepLinkAppModeKey: String {
+    case browse
+    case car
+    case bicycle
+    case walking
+    
+    func toAppMode(allowBrowse: Bool) -> OAApplicationMode? {
+        switch self {
+        case .browse:
+            return allowBrowse ? .default() : nil
+        case .car:
+            return .car()
+        case .bicycle:
+            return .bicycle()
+        case .walking:
+            return .pedestrian()
+        }
+    }
 }
 
 @objcMembers
@@ -77,12 +89,27 @@ final class DeepLinkParser: NSObject {
         guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: kOsmAndAppPathPrefix) else { return false }
         let path = url.path.split(separator: "/", omittingEmptySubsequences: true).map { $0.lowercased() }
         let routeRaw = path.dropFirst().joined(separator: "/")
+        let router = DeepLinkAppRouter(rootViewController: rootViewController)
+        if let route = DeepLinkAppRoute.parseAppModeRoute(routeRaw) {
+            switch route.route {
+            case .tripRecordingAppMode:
+                router.openTripRecordingSettings(appMode: route.appMode)
+            case .distanceByTapAppMode:
+                router.openDistanceByTapSettings(appMode: route.appMode)
+            case .navigationScreenAppMode:
+                router.openNavigationScreen(appMode: route.appMode)
+            default:
+                break
+            }
+            
+            return true
+        }
+        
         guard let route = DeepLinkAppRoute(rawValue: routeRaw) else {
             NSLog("[DeepLinkParser] Unknown /app route: %@ (url=%@)", routeRaw, url.absoluteString)
             return false
         }
         
-        let router = DeepLinkAppRouter(rootViewController: rootViewController)
         switch route {
         case .main:
             router.openMainScreen()
@@ -152,32 +179,12 @@ final class DeepLinkParser: NSObject {
             router.openChoosePlan(feature: OAFeature.monthly_MAP_UPDATES())
         case .quickActionsLockScreenAdd:
             router.openCustomButtonsAddAction()
-        case .tripRecordingBrowse:
-            router.openTripRecordingSettings(appMode: OAApplicationMode.default())
-        case .tripRecordingCar:
-            router.openTripRecordingSettings(appMode: OAApplicationMode.car())
-        case .tripRecordingBicycle:
-            router.openTripRecordingSettings(appMode: OAApplicationMode.bicycle())
-        case .tripRecordingWalking:
-            router.openTripRecordingSettings(appMode: OAApplicationMode.pedestrian())
-        case .distanceByTapBrowse:
-            router.openDistanceByTapSettings(appMode: OAApplicationMode.default())
-        case .distanceByTapCar:
-            router.openDistanceByTapSettings(appMode: OAApplicationMode.car())
-        case .distanceByTapBicycle:
-            router.openDistanceByTapSettings(appMode: OAApplicationMode.bicycle())
-        case .distanceByTapWalking:
-            router.openDistanceByTapSettings(appMode: OAApplicationMode.pedestrian())
         case .speedometerCar:
             router.openSpeedometerSettings(appMode: OAApplicationMode.car())
-        case .navigationScreenCar:
-            router.openNavigationScreen(appMode: OAApplicationMode.car())
-        case .navigationScreenBicycle:
-            router.openNavigationScreen(appMode: OAApplicationMode.bicycle())
-        case .navigationScreenWalking:
-            router.openNavigationScreen(appMode: OAApplicationMode.pedestrian())
         case .tripRecordingExternalSensors:
             router.openExternalSensorsRecording()
+        case .tripRecordingAppMode, .distanceByTapAppMode, .navigationScreenAppMode:
+            return false
         }
         
         return true
@@ -585,5 +592,27 @@ final class DeepLinkParser: NSObject {
         }
         
         return fallback
+    }
+}
+
+extension DeepLinkAppRoute {
+    static func parseAppModeRoute(_ rawValue: String) -> (route: DeepLinkAppRoute, appMode: OAApplicationMode)? {
+        if let appMode = parseAppMode(rawValue, prefix: DeepLinkAppRoute.tripRecordingAppMode.rawValue, allowBrowse: true) {
+            return (.tripRecordingAppMode, appMode)
+        }
+        if let appMode = parseAppMode(rawValue, prefix: DeepLinkAppRoute.distanceByTapAppMode.rawValue, allowBrowse: true) {
+            return (.distanceByTapAppMode, appMode)
+        }
+        if let appMode = parseAppMode(rawValue, prefix: DeepLinkAppRoute.navigationScreenAppMode.rawValue, allowBrowse: false) {
+            return (.navigationScreenAppMode, appMode)
+        }
+        
+        return nil
+    }
+    
+    private static func parseAppMode(_ rawValue: String, prefix: String, allowBrowse: Bool) -> OAApplicationMode? {
+        guard rawValue.hasPrefix(prefix) else { return nil }
+        let appModeKey = String(rawValue.dropFirst(prefix.count))
+        return DeepLinkAppModeKey(rawValue: appModeKey)?.toAppMode(allowBrowse: allowBrowse)
     }
 }

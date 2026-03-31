@@ -18,7 +18,7 @@
 #import "OAOutdatedResourcesViewController.h"
 
 static NSString * const kResourcesStoryboardName = @"Resources";
-static NSString * const kOutdatedResourcesStoryboardIdentifier = @"OAOutdatedResourcesViewController";
+static NSString * const kOutdatedResourcesStoryboardIdentifier = @"OutdatedResourcesViewController";
 static NSInteger const kLocalResourcesScope = 1;
 
 @implementation OADeepLinkBridge

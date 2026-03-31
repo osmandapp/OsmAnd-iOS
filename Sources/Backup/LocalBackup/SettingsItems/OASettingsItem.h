@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define APPROXIMATE_PREFERENCE_SIZE_BYTES 60
 
 FOUNDATION_EXPORT NSString * _Nonnull const kRoutingPreferencePrefix;
-
+FOUNDATION_EXPORT NSString * _Nonnull const kRendererPreferencePrefix;
 FOUNDATION_EXTERN NSString *const kSettingsItemErrorDomain;
 FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 

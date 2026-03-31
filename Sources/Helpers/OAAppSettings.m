@@ -5654,6 +5654,8 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 @implementation OAAppSettings
 {
+    NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRenderProps;
+    NSMapTable<NSString *, OACommonString *> *_customRenderProps;
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
     NSMapTable<NSString *, OACommonString *> *_customRoutingProps;
     NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
@@ -5688,6 +5690,8 @@ static NSString *kOfflineKey = @"OFFLINE";
     {
         _settingsLock = [[NSObject alloc] init];
         _dayNightHelper = [OADayNightHelper instance];
+        _customBooleanRenderProps = [NSMapTable strongToStrongObjectsMapTable];
+        _customRenderProps = [NSMapTable strongToStrongObjectsMapTable];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _customRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
@@ -7063,6 +7067,8 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSArray<NSMapTable<NSString *, OACommonPreference *> *> *preferencesCollections = @[
         _profilePreferences,
         _registeredPreferences,
+        _customBooleanRenderProps,
+        _customRenderProps,
         _customBooleanRoutingProps,
         _customRoutingProps
     ];
@@ -7499,6 +7505,38 @@ static NSString *kOfflineKey = @"OFFLINE";
             [_customRoutingProps setObject:value forKey:attrName];
         } else {
             value.defValue = defaultValue; // update with actual default value from routing.xml
+        }
+        return value;
+    }
+}
+
+- (OACommonBoolean *)getCustomRenderBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue
+{
+    @synchronized (_settingsLock)
+    {
+        OACommonBoolean *value = [_customBooleanRenderProps objectForKey:attrName];
+        if (!value)
+        {
+            value = [[OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", kRendererPreferencePrefix, attrName] defValue:defaultValue] makeProfile];
+            [_customBooleanRenderProps setObject:value forKey:attrName];
+        }
+        return value;
+    }
+}
+
+- (OACommonString *)getCustomRenderProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue
+{
+    @synchronized (_settingsLock)
+    {
+        OACommonString *value = [_customRenderProps objectForKey:attrName];
+        if (!value)
+        {
+            value = [[OACommonString withKey:[NSString stringWithFormat:@"%@%@", kRendererPreferencePrefix, attrName] defValue:defaultValue] makeProfile];
+            [_customRenderProps setObject:value forKey:attrName];
+        }
+        else
+        {
+            value.defValue = defaultValue;
         }
         return value;
     }

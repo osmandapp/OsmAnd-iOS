@@ -2748,7 +2748,7 @@
 "obd_fuel_type_methanol" = "metanolo";
 "obd_battery_voltage" = "Tensio de baterio";
 "obd_vehicle_info" = "Informoj pri veturilo";
-"purchase_feature_desc_vehicle_metrics_obd_ii" = "Spuru bazajn datumojn via veturilo per la protokolo OBD-II. Observu bazajn parametrojn: rapidon, rivoluan rapidon de motoro, konsumon de brulaĵo kaj pli.";
+"purchase_feature_desc_vehicle_metrics_obd_ii" = "Spuru bazajn datumojn de via veturilo per la protokolo OBD-II. Observu bazajn parametrojn: rapidon, rivoluan rapidon de motoro, konsumon de brulaĵo kaj pli.";
 "manage_storage" = "Administri datumojn";
 "lang_crh" = "Krime-tatara (latina)";
 "x" = "X (ekse Twitter)";

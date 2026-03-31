@@ -479,30 +479,37 @@
                 @"key": @"terrain_layer"
         }];
     }
-    if (hasSRTM && !_iapHelper.srtm.disabled)
+    if (hasSRTM && ![_iapHelper.srtm disabled])
     {
         [topographySectionData addObject:@{
-                @"name": OALocalizedString(@"map_settings_topography"),
-                @"image": @"ic_custom_contour_lines",
-                @"has_options": @YES,
-                @"type": OASwitchTableViewCell.reuseIdentifier,
-                @"key": @"contour_lines_layer"
+            @"name": OALocalizedString(@"map_settings_topography"),
+            @"image": @"ic_custom_contour_lines",
+            @"has_options": @YES,
+            @"type": OASwitchTableViewCell.reuseIdentifier,
+            @"key": @"contour_lines_layer"
         }];
         [topographySectionData addObject:@{
-                @"name": OALocalizedString(@"shared_string_terrain"),
-                @"image": @"ic_custom_terrain",
-                @"has_options": @YES,
-                @"type": OASwitchTableViewCell.reuseIdentifier,
-                @"key": @"terrain_layer"
-        }];
-        [topographySectionData addObject:@{
-                @"name": OALocalizedString(@"show_spherical_map"),
-                @"image": @"ic_custom_globe_view",
-                @"has_options": @YES,
-                @"type": OASwitchTableViewCell.reuseIdentifier,
-                @"key": @"spherical_map"
+            @"name": OALocalizedString(@"shared_string_terrain"),
+            @"image": @"ic_custom_terrain",
+            @"has_options": @YES,
+            @"type": OASwitchTableViewCell.reuseIdentifier,
+            @"key": @"terrain_layer"
         }];
     }
+    [topographySectionData addObject:@{
+        @"name": OALocalizedString(@"enable_3d_objects"),
+        @"image": @"ic_custom_3d_buildings",
+        @"has_options": @YES,
+        @"type": OASwitchTableViewCell.reuseIdentifier,
+        @"key": @"3d_buildings"
+    }];
+    [topographySectionData addObject:@{
+        @"name": OALocalizedString(@"show_spherical_map"),
+        @"image": @"ic_custom_globe_view",
+        @"has_options": @YES,
+        @"type": OASwitchTableViewCell.reuseIdentifier,
+        @"key": @"spherical_map"
+    }];
     BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
     if (useDepthContours)
     {
@@ -766,6 +773,8 @@
         return ![[_styleSettings getParameter:CONTOUR_LINES].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
         return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) isTerrainLayerEnabled];
+    else if ([key isEqualToString:@"3d_buildings"])
+        return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) is3dMapObjectsEnabled];
     else if ([key isEqualToString:@"spherical_map"])
         return [_settings.sphericalMap get];
     else if ([key isEqualToString:@"overlay_layer"])
@@ -1175,6 +1184,8 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenContourLines];
     else if ([item[@"key"] isEqualToString:@"terrain_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTerrain];
+    else if ([item[@"key"] isEqualToString:@"3d_buildings"])
+        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenBuildings3DVisibility];
     else if ([item[@"key"] isEqualToString:@"overlay_layer"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
     else if ([item[@"key"] isEqualToString:@"underlay_layer"])
@@ -1283,6 +1294,8 @@
         [self contourLinesChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"terrain_layer"])
         [self terrainChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"3d_buildings"])
+        [self mapObjects3dChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"spherical_map"])
         [self sphericalMapChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"overlay_layer"])
@@ -1352,6 +1365,11 @@
 - (void)terrainChanged:(BOOL)isOn
 {
     [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) setTerrainLayerEnabled:isOn];
+}
+
+- (void)mapObjects3dChanged:(BOOL)isOn
+{
+    [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) set3dMapObjectsEnabled:isOn];
 }
 
 - (void)sphericalMapChanged:(BOOL)isOn

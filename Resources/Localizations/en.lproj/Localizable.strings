@@ -1167,6 +1167,14 @@
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
 "shared_string_terrain" = "Terrain";
+"enable_3d_objects" = "3D buildings";
+"free_custom_color_description" = "Customize 3D buildings with any color. Perfect for matching a map theme or improving contrast.";
+"buildings_3d_visibility_description" = "Adjust the opacity of 3D structures on the map.";
+"level_of_details" = "Level of detail";
+"performance" = "Performance";
+"view_distance" = "View distance";
+"custom_color" = "Custom color";
+"choose_color" = "Choose color";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
@@ -3857,14 +3865,6 @@
 • Improved brand search by including more local brands\n
 • General stability and performance improvements\n";
 
-"ios_release_5_3" = "• Added interactive animation for the Speedometer widget\n
-• Added an option to resize the location position icon\n
-• New Trip Recording widgets: Max Speed and Average Slope; improved Uphill/Downhill widgets\n
-• Added deep linking support for sharing specific POIs\n
-• Fixed an issue where ETA in Navigation widgets did not update while stationary\n
-• Improved connectivity for paired OBDII adapters\n
-• Added the ability to merge waypoints into a selected favorites folder\n
-• CarPlay: Fixed an issue with an unresponsive map on the Dashboard and added support for the \"Always show dark map\" parameter\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";

@@ -1529,6 +1529,7 @@ typedef enum
     _gpxProgress.detailsLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
     _gpxProgress.detailsLabelColor = UIColor.blackColor;
     _gpxProgress.labelColor = UIColor.blackColor;
+    _gpxProgress.activityIndicatorColor = UIColor.blackColor;
     [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.blackColor];
     _gpxProgress.color = UIColor.whiteColor;
     [self.view addSubview:_gpxProgress];

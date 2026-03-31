@@ -166,6 +166,14 @@
     return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 }
 
+- (UIControlContentHorizontalAlignment)customIconForLeftNavbarButtonAlignment
+{
+    if (@available(iOS 26.0, *))
+        return UIControlContentHorizontalAlignmentTrailing;
+    else
+        return [super customIconForLeftNavbarButtonAlignment];
+}
+
 - (NSString *)getTableHeaderDescription
 {
     if (_action.getActionText)

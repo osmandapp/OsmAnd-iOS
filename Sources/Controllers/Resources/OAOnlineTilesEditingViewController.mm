@@ -217,6 +217,14 @@
     return [UIImage templateImageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection;
 }
 
+- (UIControlContentHorizontalAlignment)customIconForLeftNavbarButtonAlignment
+{
+    if (@available(iOS 26.0, *))
+        return UIControlContentHorizontalAlignmentTrailing;
+    else
+        return [super customIconForLeftNavbarButtonAlignment];
+}
+
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
     return EOABaseNavbarColorSchemeOrange;

@@ -500,7 +500,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
         {
             UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
             UIColor *buttonsTintColor = [self navbarButtonsTintColor];
-            leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+            leftButton.contentHorizontalAlignment = [self customIconForLeftNavbarButtonAlignment];
             leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
             leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
             leftButton.titleLabel.numberOfLines = 1;
@@ -740,6 +740,11 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
     return nil;
+}
+
+- (UIControlContentHorizontalAlignment)customIconForLeftNavbarButtonAlignment
+{
+    return UIControlContentHorizontalAlignmentLeading;
 }
 
 - (NSString *)getCustomAccessibilityForLeftNavbarButton

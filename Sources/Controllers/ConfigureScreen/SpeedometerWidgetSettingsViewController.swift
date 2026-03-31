@@ -123,13 +123,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             }
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self, let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
-                let widgetSizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
-                sizePref.set(widgetSizeStyle, mode: self.appMode)
-                if let speedometerView = self.speedometerView {
-                    speedometerView.configure()
-                    self.speedometerPreviewHeightConstraint?.constant = speedometerView.getCurrentSpeedViewMaxHeightWidth()
-                    self.updateSpeedometer()
-                }
+                self.handleSegmentChange(index: index, sizePref: sizePref)
             }
             return cell
         } else if item.cellType == Self.previewSpeedometerRowKey {
@@ -193,6 +187,16 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
     
     private func updateSpeedometer() {
         speedometerView?.refreshLayout()
+    }
+    
+    private func handleSegmentChange(index: Int, sizePref: OACommonWidgetSizeStyle) {
+        let widgetSizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
+        sizePref.set(widgetSizeStyle, mode: appMode)
+        if let speedometerView {
+            speedometerView.configure()
+            speedometerPreviewHeightConstraint?.constant = speedometerView.getCurrentSpeedViewMaxHeightWidth()
+            updateSpeedometer()
+        }
     }
     
     @objc private func onSwitchClick(_ sender: Any) -> Bool {

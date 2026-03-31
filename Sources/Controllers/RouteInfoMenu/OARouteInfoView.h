@@ -31,7 +31,7 @@
 
 - (void) addWaypoint;
 
-- (void)selectAppMode:(nullable OAApplicationMode *)appMode;
+- (void)selectAppMode:(OAApplicationMode *)appMode;
 - (void) update;
 - (void) updateMenu;
 

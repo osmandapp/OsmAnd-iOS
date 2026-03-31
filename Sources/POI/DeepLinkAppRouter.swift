@@ -30,10 +30,7 @@ final class DeepLinkAppRouter: NSObject {
     func openWhatsNew() {
         guard let nav = root.navigationController else { return }
         let url = kDocsLatestVersion.localizedURLIfAvailable()
-        if let web = nav.visibleViewController as? OAWebViewController, let current = web.urlString?.lowercased(), current == url.lowercased() {
-            return
-        }
-        
+        guard !((nav.visibleViewController as? OAWebViewController)?.urlString?.lowercased() == url.lowercased()) else { return }
         guard let nav = dismissAndPopToRoot() else { return }
         guard let webVC = OAWebViewController(urlAndTitle: url, title: localizedString("help_what_is_new")) else {
             NSLog("[DeepLinkAppRouter] Failed to create OAWebViewController (url=%@)", url)
@@ -45,10 +42,7 @@ final class DeepLinkAppRouter: NSObject {
     
     func openGlobalSettingsMain() {
         guard let nav = root.navigationController else { return }
-        if let current = nav.visibleViewController as? OAGlobalSettingsViewController, current.settingsType == EOAGlobalSettingsMain {
-            return
-        }
-        
+        guard (nav.visibleViewController as? OAGlobalSettingsViewController)?.settingsType != EOAGlobalSettingsMain else { return }
         guard let nav = dismissAndPopToRoot(), let controller = OAGlobalSettingsViewController(settingsType: EOAGlobalSettingsMain) else { return }
         nav.pushViewController(controller, animated: true)
     }
@@ -57,28 +51,16 @@ final class DeepLinkAppRouter: NSObject {
         guard let nav = root.navigationController else { return }
         let isRegistered = OABackupHelper.sharedInstance().isRegistered()
         let current = nav.visibleViewController
-        if isRegistered && current is OACloudBackupViewController {
-            return
-        }
-        
-        if !isRegistered && current is OACloudIntroductionViewController {
-            return
-        }
-        
+        guard !((isRegistered && current is OACloudBackupViewController) || (!isRegistered && current is OACloudIntroductionViewController)) else { return }
         guard let nav = dismissAndPopToRoot() else { return }
-        let controller: UIViewController = isRegistered ? OACloudBackupViewController() : OACloudIntroductionViewController()
-        nav.pushViewController(controller, animated: true)
+        nav.pushViewController(isRegistered ? OACloudBackupViewController() : OACloudIntroductionViewController(), animated: true)
     }
     
     func openPlugins() {
         guard let nav = root.navigationController else { return }
-        if nav.visibleViewController is OAPluginsViewController {
-            return
-        }
-        
+        guard !(nav.visibleViewController is OAPluginsViewController) else { return }
         guard let nav = dismissAndPopToRoot() else { return }
-        let controller = OAPluginsViewController()
-        nav.pushViewController(controller, animated: true)
+        nav.pushViewController(OAPluginsViewController(), animated: true)
     }
     
     func openPlugin(product: OAProduct?) {
@@ -89,31 +71,21 @@ final class DeepLinkAppRouter: NSObject {
             return
         }
         
-        if let current = nav.visibleViewController as? OAPluginDetailsViewController, current.product.productIdentifier == product.productIdentifier {
-            return
-        }
-        
+        guard (nav.visibleViewController as? OAPluginDetailsViewController)?.product.productIdentifier != product.productIdentifier else { return }
         guard let nav = dismissAndPopToRoot(), let controller = OAPluginDetailsViewController(product: product) else { return }
         nav.pushViewController(controller, animated: true)
     }
     
     func openHelp() {
         guard let nav = root.navigationController else { return }
-        if nav.visibleViewController is OAHelpViewController {
-            return
-        }
-        
+        guard !(nav.visibleViewController is OAHelpViewController) else { return }
         guard let nav = dismissAndPopToRoot() else { return }
-        let controller = OAHelpViewController()
-        nav.pushViewController(controller, animated: true)
+        nav.pushViewController(OAHelpViewController(), animated: true)
     }
     
     func openPlanRoute() {
         let mapViewController = root.mapPanel.mapViewController
-        if mapViewController.presentedViewController is InitialRoutePlanningBottomSheetViewController {
-            return
-        }
-        
+        guard !(mapViewController.presentedViewController is InitialRoutePlanningBottomSheetViewController) else { return }
         dismissAndPopToRoot()
         InitialRoutePlanningBottomSheetViewController().present(in: mapViewController)
     }
@@ -121,13 +93,9 @@ final class DeepLinkAppRouter: NSObject {
     func openWidgetsList(panel: WidgetsPanel) {
         guard let nav = root.navigationController, let mapPanel = root.mapPanel else { return }
         mapPanel.loadViewIfNeeded()
-        if let current = nav.visibleViewController as? WidgetsListViewController, current.widgetPanel == panel {
-            return
-        }
-        
+        guard (nav.visibleViewController as? WidgetsListViewController)?.widgetPanel != panel else { return }
         guard let nav = dismissAndPopToRoot() else { return }
-        let controller = WidgetsListViewController(widgetPanel: panel)
-        nav.pushViewController(controller, animated: true)
+        nav.pushViewController(WidgetsListViewController(widgetPanel: panel), animated: true)
     }
     
     func openMapSettings(screen: EMapSettingsScreen) {
@@ -135,8 +103,6 @@ final class DeepLinkAppRouter: NSObject {
         let appData = OsmAndApp.swiftInstance()?.data
         var reopenCurrentScreen = false
         switch screen {
-        case .main, .mapType:
-            break
         case .wikipedia:
             guard let wikiProduct = OAIAPHelper.sharedInstance().wiki else { return }
             guard wikiProduct.isPurchased() else {
@@ -169,7 +135,7 @@ final class DeepLinkAppRouter: NSObject {
                 reopenCurrentScreen = true
             }
         default:
-            return
+            break
         }
         
         openMapSettingsDashboard(screen: screen, mapPanel: mapPanel, reopenCurrentScreen: reopenCurrentScreen)
@@ -177,23 +143,16 @@ final class DeepLinkAppRouter: NSObject {
     
     func openDestinations() {
         guard let nav = root.navigationController else { return }
-        if nav.visibleViewController is DestinationsListViewController {
-            return
-        }
-        
+        guard !(nav.visibleViewController is DestinationsListViewController) else { return }
         guard let nav = dismissAndPopToRoot(), let controller = DestinationsListViewController() else { return }
         nav.pushViewController(controller, animated: true)
     }
     
     func openDestinationsDirectionAppearance() {
         guard let nav = root.navigationController else { return }
-        if nav.visibleViewController is OADirectionAppearanceViewController {
-            return
-        }
-        
+        guard !(nav.visibleViewController is OADirectionAppearanceViewController) else { return }
         guard let nav = dismissAndPopToRoot() else { return }
-        let controller = OADirectionAppearanceViewController()
-        nav.pushViewController(controller, animated: true)
+        nav.pushViewController(OADirectionAppearanceViewController(), animated: true)
     }
     
     func openMyPlaces(tabClass: UIViewController.Type) {
@@ -211,30 +170,21 @@ final class DeepLinkAppRouter: NSObject {
     
     func openMapsAndResources() {
         guard let nav = root.navigationController else { return }
-        if OADeepLinkBridge.isMapsAndResourcesController(nav.visibleViewController) {
-            return
-        }
-        
+        guard !OADeepLinkBridge.isMapsAndResourcesController(nav.visibleViewController) else { return }
         guard let nav = dismissAndPopToRoot(), let controller = OADeepLinkBridge.mapsAndResourcesViewController() else { return }
         nav.pushViewController(controller, animated: true)
     }
     
     func openMapsAndResourcesLocal() {
         guard let nav = root.navigationController else { return }
-        if OADeepLinkBridge.isMapsAndResourcesLocalController(nav.visibleViewController) {
-            return
-        }
-        
+        guard !OADeepLinkBridge.isMapsAndResourcesLocalController(nav.visibleViewController) else { return }
         guard let nav = dismissAndPopToRoot(), let controller = OADeepLinkBridge.mapsAndResourcesLocalViewController() else { return }
         nav.pushViewController(controller, animated: true)
     }
     
     func openMapsAndResourcesUpdates() {
         guard let nav = root.navigationController else { return }
-        if OADeepLinkBridge.isMapsAndResourcesUpdatesController(nav.visibleViewController) {
-            return
-        }
-        
+        guard !OADeepLinkBridge.isMapsAndResourcesUpdatesController(nav.visibleViewController) else { return }
         guard let nav = dismissAndPopToRoot(), let controller = OADeepLinkBridge.mapsAndResourcesUpdatesViewController() else { return }
         nav.pushViewController(controller, animated: true)
     }
@@ -242,17 +192,15 @@ final class DeepLinkAppRouter: NSObject {
     func openChoosePlan(feature: OAFeature?) {
         guard let nav = root.navigationController else { return }
         let target = feature ?? OAFeature.osmand_CLOUD()
-        if let vc = nav.visibleViewController as? OAChoosePlanViewController, vc.selectedFeature.isEqual(target) {
-            return
-        }
-        
+        guard !((nav.visibleViewController as? OAChoosePlanViewController)?.selectedFeature.isEqual(target) ?? false) else { return }
         guard let nav = dismissAndPopToRoot() else { return }
         OAChoosePlanHelper.showChoosePlanScreen(with: target, navController: nav)
     }
     
     func openCustomButtonsAddAction() {
         guard let nav = root.navigationController else { return }
-        if let current = nav.visibleViewController as? CustomMapButtonsViewController {
+        guard !(nav.visibleViewController is CustomMapButtonsViewController) else {
+            let current = nav.visibleViewController as! CustomMapButtonsViewController
             DispatchQueue.main.async {
                 current.onRightNavbarButtonPressed()
             }
@@ -286,26 +234,19 @@ final class DeepLinkAppRouter: NSObject {
             OAIAPHelper.sharedInstance().enableProduct(product.productIdentifier)
         }
         
-        let controller = ExternalSettingsWriteToTrackSettingsViewController(applicationMode: OAAppSettings.sharedManager().applicationMode.get())
-        nav.pushViewController(controller, animated: false)
+        nav.pushViewController(ExternalSettingsWriteToTrackSettingsViewController(applicationMode: OAAppSettings.sharedManager().applicationMode.get()), animated: false)
     }
     
     func openTripRecordingSettings(appMode: OAApplicationMode) {
         guard let nav = root.navigationController else { return }
-        if let current = nav.visibleViewController as? OATripRecordingSettingsViewController, current.settingsType == kTripRecordingSettingsScreenGeneral, current.appMode.stringKey == appMode.stringKey {
-            return
-        }
-        
+        guard !((nav.visibleViewController as? OATripRecordingSettingsViewController)?.settingsType == kTripRecordingSettingsScreenGeneral && (nav.visibleViewController as? OATripRecordingSettingsViewController)?.appMode.stringKey == appMode.stringKey) else { return }
         guard let nav = dismissAndPopToRoot(), let controller = OATripRecordingSettingsViewController(settingsType: kTripRecordingSettingsScreenGeneral, applicationMode: appMode) else { return }
         nav.pushViewController(controller, animated: true)
     }
     
     func openDistanceByTapSettings(appMode: OAApplicationMode) {
         guard let nav = root.navigationController else { return }
-        if let current = nav.visibleViewController as? DistanceByTapViewController, current.appMode.stringKey == appMode.stringKey {
-            return
-        }
-        
+        guard (nav.visibleViewController as? DistanceByTapViewController)?.appMode.stringKey != appMode.stringKey else { return }
         guard let nav = dismissAndPopToRoot() else { return }
         let controller = DistanceByTapViewController()
         controller.appMode = appMode
@@ -314,10 +255,7 @@ final class DeepLinkAppRouter: NSObject {
     
     func openSpeedometerSettings(appMode: OAApplicationMode) {
         guard let nav = root.navigationController else { return }
-        if let current = nav.visibleViewController as? SpeedometerWidgetSettingsViewController, current.appMode.stringKey == appMode.stringKey {
-            return
-        }
-        
+        guard (nav.visibleViewController as? SpeedometerWidgetSettingsViewController)?.appMode.stringKey != appMode.stringKey else { return }
         guard let nav = dismissAndPopToRoot() else { return }
         let controller = SpeedometerWidgetSettingsViewController()
         controller.appMode = appMode
@@ -326,19 +264,13 @@ final class DeepLinkAppRouter: NSObject {
     
     func openNavigationScreen(appMode: OAApplicationMode) {
         guard let mapPanel = root.mapPanel else { return }
-        if mapPanel.isRouteInfoVisible(), let currentAppMode = OARoutingHelper.sharedInstance()?.getAppMode(), currentAppMode.stringKey == appMode.stringKey {
-            return
-        }
-        
+        guard !(mapPanel.isRouteInfoVisible() && OARoutingHelper.sharedInstance()?.getAppMode().stringKey == appMode.stringKey) else { return }
         dismissAndPopToRoot()
         mapPanel.showRouteInfo(true, appMode: appMode)
     }
     
     private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController, reopenCurrentScreen: Bool) {
-        if let current = mapPanel.children.last as? OAMapSettingsViewController, current.settingsScreen == screen, !reopenCurrentScreen {
-            return
-        }
-        
+        guard !(((mapPanel.children.last as? OAMapSettingsViewController)?.settingsScreen == screen) && !reopenCurrentScreen) else { return }
         dismissAndPopToRoot()
         mapPanel.mapSettingsButtonClick("")
         guard screen != .main else { return }

@@ -556,7 +556,13 @@
     NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     UIEdgeInsets insets = [[self tableView] contentInset];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        self.buttonsBottomOffsetConstraint.constant = keyboardHeight - [OAUtilities getBottomMargin];
+        if (@available(iOS 26.0, *))
+        {
+        }
+        else
+        {
+            self.buttonsBottomOffsetConstraint.constant = keyboardHeight - [OAUtilities getBottomMargin];
+        }
         [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
         [[self view] layoutIfNeeded];
     } completion:nil];

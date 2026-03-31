@@ -159,13 +159,16 @@ extension UINavigationController {
 
 extension UINavigationController {
     
-    func setDefaultNavigationBarAppearance() {
+    func setDefaultNavigationBarAppearance(foregroundColor: UIColor = .textColorPrimary) {
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .viewBg
+        if #unavailable(iOS 26) {
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .viewBg
+        }
+        
         // swiftlint:disable all
         appearance.titleTextAttributes = [
-            .foregroundColor: UIColor.textColorPrimary,
+            .foregroundColor: foregroundColor,
             .font: UIFont.scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
         ]
         // swiftlint:enable all

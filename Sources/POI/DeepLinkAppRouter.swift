@@ -101,7 +101,6 @@ final class DeepLinkAppRouter: NSObject {
     func openMapSettings(screen: EMapSettingsScreen) {
         guard let mapPanel = root.mapPanel else { return }
         let current = mapPanel.children.last as? OAMapSettingsViewController
-        let currentScreen = current?.settingsScreen
         let appData = OsmAndApp.swiftInstance()?.data
         switch screen {
         case .wikipedia:
@@ -119,49 +118,48 @@ final class DeepLinkAppRouter: NSObject {
             if shouldEnableWikipedia {
                 (OAPluginsHelper.getPlugin(OAWikipediaPlugin.self) as? OAWikipediaPlugin)?.wikipediaChanged(true)
             }
-            if currentScreen == screen {
-                if shouldRefreshScreen {
-                    (current?.screenObj as? MapSettingsWikipediaScreen)?.updateResources()
-                }
-                return
+            guard let current, current.settingsScreen == screen else { break }
+            if shouldRefreshScreen {
+                (current.screenObj as? MapSettingsWikipediaScreen)?.updateResources()
             }
+            return
         case .overlay:
-            if let appData {
-                let shouldEnableOverlay = appData.overlayMapSource == nil
-                if shouldEnableOverlay {
-                    appData.lastOverlayMapSource = appData.lastOverlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
-                    appData.overlayMapSource = appData.lastOverlayMapSource
+            guard let appData else { break }
+            let shouldEnableOverlay = appData.overlayMapSource == nil
+            if shouldEnableOverlay {
+                if appData.lastOverlayMapSource == nil {
+                    appData.lastOverlayMapSource = OAMapSource.getOsmAndOnlineTiles()
                 }
-                if currentScreen == screen {
-                    if shouldEnableOverlay {
-                        (current?.screenObj as? OAMapSettingsOverlayUnderlayScreen)?.setupInitialState()
-                        current?.screenObj.setupView()
-                        current?.screenObj.tblView?.reloadData()
-                    }
-                    return
-                }
+                appData.overlayMapSource = appData.lastOverlayMapSource
             }
+            guard let current, current.settingsScreen == screen else { break }
+            if shouldEnableOverlay {
+                (current.screenObj as? OAMapSettingsOverlayUnderlayScreen)?.setupInitialState()
+                current.screenObj.setupView()
+                current.screenObj.tblView?.reloadData()
+            }
+            return
         case .underlay:
-            if let appData {
-                let settings = OAAppSettings.sharedManager()
-                let shouldShowSlider = !settings.getUnderlayOpacitySliderVisibility()
-                let shouldEnableUnderlay = appData.underlayMapSource == nil
-                if shouldShowSlider {
-                    settings.setUnderlayOpacitySliderVisibility(true)
-                }
-                if shouldEnableUnderlay {
-                    appData.lastUnderlayMapSource = appData.lastUnderlayMapSource ?? OAMapSource.getOsmAndOnlineTiles()
-                    appData.underlayMapSource = appData.lastUnderlayMapSource
-                }
-                if currentScreen == screen {
-                    if shouldShowSlider || shouldEnableUnderlay {
-                        (current?.screenObj as? OAMapSettingsOverlayUnderlayScreen)?.setupInitialState()
-                        current?.screenObj.setupView()
-                        current?.screenObj.tblView?.reloadData()
-                    }
-                    return
-                }
+            guard let appData else { break }
+            let settings = OAAppSettings.sharedManager()
+            let shouldShowSlider = !settings.getUnderlayOpacitySliderVisibility()
+            let shouldEnableUnderlay = appData.underlayMapSource == nil
+            if shouldShowSlider {
+                settings.setUnderlayOpacitySliderVisibility(true)
             }
+            if shouldEnableUnderlay {
+                if appData.lastUnderlayMapSource == nil {
+                    appData.lastUnderlayMapSource = OAMapSource.getOsmAndOnlineTiles()
+                }
+                appData.underlayMapSource = appData.lastUnderlayMapSource
+            }
+            guard let current, current.settingsScreen == screen else { break }
+            if shouldShowSlider || shouldEnableUnderlay {
+                (current.screenObj as? OAMapSettingsOverlayUnderlayScreen)?.setupInitialState()
+                current.screenObj.setupView()
+                current.screenObj.tblView?.reloadData()
+            }
+            return
         default:
             break
         }

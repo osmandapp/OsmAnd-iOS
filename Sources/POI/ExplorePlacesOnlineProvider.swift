@@ -214,7 +214,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 
         if let photo = properties.photoTitle, !photo.isEmpty {
             let img = WikiHelper.shared.getImageData(imageFileName: photo)
-            amenity.setAdditionalInfo(WIKI_PHOTO_TAG, value: img.imageHiResUrl)
+            amenity.setAdditionalInfo(WIKI_PHOTO_TAG, value: photo)
             amenity.wikiIconUrl = img.imageIconUrl
             amenity.wikiImageStubUrl = img.imageStubUrl
         }

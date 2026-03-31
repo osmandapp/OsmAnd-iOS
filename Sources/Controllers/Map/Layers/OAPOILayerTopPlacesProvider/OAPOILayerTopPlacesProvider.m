@@ -323,11 +323,14 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     if (wikiPhoto.length == 0)
         return nil;
 
+    if ([wikiPhoto hasPrefix:@"http://"] || [wikiPhoto hasPrefix:@"https://"])
+        return wikiPhoto;
+
     OASWikiImage *wikiImage = [[OASWikiHelper shared] getImageDataImageFileName:wikiPhoto];
     if (wikiImage.imageIconUrl.length > 0)
         return wikiImage.imageIconUrl;
 
-    return [wikiPhoto hasPrefix:@"http"] ? wikiPhoto : nil;
+    return nil;
 }
 
 - (NSInteger)travelEloForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity

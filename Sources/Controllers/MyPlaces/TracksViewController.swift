@@ -67,7 +67,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var sortModeForSearch: TracksSortMode = .lastModified
     private var searchController = UISearchController()
     private var lastUpdate: TimeInterval?
-    private var cachedTabbarHeight: CGFloat = 0
     private var isSearchActive = false
     private var isNameFiltered = false
     private var isFiltersInitialized = false
@@ -423,6 +422,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             tabBarController?.navigationItem.hidesBackButton = true
             navigationItem.hidesBackButton = true
             let cancelButton = UIButton(type: .system)
+            if #available(iOS 26.0, *) {
+                cancelButton.configuration = .plain()
+            }
             cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
             cancelButton.setImage(nil, for: .normal)
             cancelButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
@@ -811,37 +813,28 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
+        if #available(iOS 16.0, *) {
+            tabBarController?.navigationItem.preferredSearchBarPlacement = .stacked
+            navigationItem.preferredSearchBarPlacement = .stacked
+        }
         tabBarController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
-        if #available(iOS 26.0, *) {
-            if let tabBarHeight = tabBarController?.tabBar.frame.size.height, cachedTabbarHeight == 0 {
-                cachedTabbarHeight = tabBarHeight
-            }
-            if let tabBarFrame = tabBarController?.tabBar.frame {
-                tabBarController?.tabBar.frame = CGRect(origin: tabBarFrame.origin,
-                                                        size: CGSize(width: tabBarFrame.width, height: cachedTabbarHeight))
-            }
-        }
     }
     
     private func updateSearchController() {
-        if #available(iOS 26.0, *) {
-            searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
+        if isNameFiltered {
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
+            searchController.searchBar.searchTextField.backgroundColor = .groupBg
+            searchController.searchBar.searchTextField.leftView?.tintColor = .textColorTertiary
+        } else if isSearchActive {
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
+            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
         } else {
-            if isNameFiltered {
-                searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
-                searchController.searchBar.searchTextField.backgroundColor = .groupBg
-                searchController.searchBar.searchTextField.leftView?.tintColor = .textColorTertiary
-            } else if isSearchActive {
-                searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-                searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-                searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-            } else {
-                searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-                searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-                searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-            }
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
+            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
         }
     }
     

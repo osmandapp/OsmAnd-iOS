@@ -111,8 +111,6 @@ static const NSInteger _exportButtonIndex = 1;
     UIFont *_originalGroupFont;
     UIFont *_italicGroupFont;
     dispatch_queue_t _favoritesQueue;
-    
-    CGFloat _cachedTabbarHeight;
 }
 
 static UIViewController *parentController;
@@ -452,12 +450,9 @@ static UIViewController *parentController;
         _searchController.searchBar.delegate = self;
         _searchController.obscuresBackgroundDuringPresentation = NO;
         self.tabBarController.navigationItem.searchController = _searchController;
-        [self setupSearchController:NO filtered:NO];
         if (@available(iOS 26.0, *))
-        {
-            if (!_cachedTabbarHeight)
-                [self cacheTabbarHeight];
-        }
+            self.tabBarController.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
+        [self setupSearchController:NO filtered:NO];
     }
     self.definesPresentationContext = YES;
     [self addAccessibilityLabels];
@@ -601,31 +596,24 @@ static UIViewController *parentController;
 
 - (void) setupSearchController:(BOOL)isSearchActive filtered:(BOOL)isFiltered
 {
-    if (@available(iOS 26.0, *))
+    if (isSearchActive)
     {
-        _searchController.searchBar.searchTextField.placeholder = OALocalizedString(@"search_activity");
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    }
+    else if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
     else
     {
-        if (isSearchActive)
-        {
-            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-            _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-            _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        }
-        else if (isFiltered)
-        {
-            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
-            _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
-        }
-        else
-        {
-            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-            _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-            _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-            _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
-        }
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
 }
 
@@ -885,18 +873,11 @@ static UIViewController *parentController;
     return itemList;
 }
 
-- (void)searchVisibility:(BOOL)show
-{
-    self.tabBarController.navigationItem.searchController = show ? _searchController : nil;
-}
-
 - (void) startEditing
 {
     [self.favoriteTableView setEditing:YES animated:YES];
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     _editToolbarView.hidden = NO;
-    if (@available(iOS 26.0, *))
-        [self cacheTabbarHeight];
     [UIView animateWithDuration:.3 animations:^{
         self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
         [self applySafeAreaMargins];
@@ -908,8 +889,6 @@ static UIViewController *parentController;
     self.tabBarController.navigationItem.hidesBackButton = YES;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.favoriteTableView reloadData];
-    if (@available(iOS 26.0, *))
-        [self searchVisibility:NO];
 }
 
 - (void) finishEditing
@@ -918,13 +897,10 @@ static UIViewController *parentController;
     self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         [self.tabBarController.tabBar setHidden:NO];
-        [self refreshTabBarSize];
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
         [self applySafeAreaMargins];
-        if (@available(iOS 26.0, *))
-            [self cacheTabbarHeight];
     }];
 
     _editButton.image = [UIImage systemImageNamed:@"pencil"];
@@ -938,23 +914,6 @@ static UIViewController *parentController;
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     [self.favoriteTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
-    if (@available(iOS 26.0, *))
-        [self searchVisibility:YES];
-}
-
-- (void)refreshTabBarSize
-{
-    CGFloat tabBarHeight;
-    if (@available(iOS 26.0, *))
-        tabBarHeight = _cachedTabbarHeight;
-    else
-        tabBarHeight = self.tabBarController.tabBar.frame.size.height;
-    self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - tabBarHeight, DeviceScreenWidth, tabBarHeight);
-}
-
-- (void)cacheTabbarHeight
-{
-    _cachedTabbarHeight = self.tabBarController.tabBar.frame.size.height;
 }
 
 - (IBAction)editButtonClicked:(id)sender
@@ -2164,7 +2123,6 @@ static UIViewController *parentController;
             UIEdgeInsets insets = [self.favoriteTableView contentInset];
             [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
             [self.favoriteTableView setScrollIndicatorInsets:self.favoriteTableView.contentInset];
-            [self refreshTabBarSize];
         } completion:nil];
 }
 
@@ -2208,15 +2166,9 @@ static UIViewController *parentController;
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    if (@available(iOS 26.0, *))
-    {
-    }
-    else
-    {
-        searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-    }
+    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+    searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+    searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
 @end

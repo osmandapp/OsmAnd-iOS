@@ -768,4 +768,12 @@
     _animationDone = YES;
 }
 
+#pragma mark - OAContextMenuProvider
+
+- (void)contextMenuDidHide
+{
+    [self hideAnimatedPin];
+    [self hideContextPinMarker];
+}
+
 @end

@@ -12,19 +12,17 @@
 
 @class QuadRect;
 
-typedef BOOL(^OATopPlacesAmenitiesProvider)(QuadRect *latLonBounds, id matcher, QList<std::shared_ptr<const OsmAnd::Amenity>> *amenities);
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAPOILayerTopPlacesProvider : NSObject
 
-@property (nonatomic, copy, nullable) OATopPlacesAmenitiesProvider cachedAmenitiesProvider;
 
 - (void)setEnabled:(BOOL)enabled;
 - (void)setTextScale:(CGFloat)textScale;
 - (void)refreshVisiblePlaces;
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc;
-- (void)notifyAmenitiesChanged;
+- (void)notifyAmenitiesChanged:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities;
 - (void)resetLayer;
 
 - (QList<std::shared_ptr<const OsmAnd::Amenity>>)displayedAmenities;

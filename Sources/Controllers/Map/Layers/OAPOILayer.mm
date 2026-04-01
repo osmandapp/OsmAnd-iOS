@@ -258,12 +258,12 @@ static BOOL OARequestIntersectsTileBBox(
     OATopWikiOnlineAmenitiesRequest *_activeRequest;
     BOOL _needsNewRequest;
     BOOL _invalidated;
-    dispatch_block_t _dataReadyHandler;
+    void (^_dataReadyHandler)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&);
 }
 
 - (instancetype)initWithDataProvider:(PoiUIFilterDataProvider *)dataProvider;
 - (void)setSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider>&)symbolsProvider;
-- (void)setDataReadyHandler:(dispatch_block_t)dataReadyHandler;
+- (void)setDataReadyHandler:(void (^)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&))dataReadyHandler;
 - (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31 zoom:(OsmAnd::ZoomLevel)zoom;
 - (void)invalidate;
 - (BOOL)obtainAmenitiesForTileId:(OsmAnd::TileId)tileId
@@ -336,7 +336,7 @@ static BOOL OARequestIntersectsTileBBox(
     _symbolsProvider = symbolsProvider;
 }
 
-- (void)setDataReadyHandler:(dispatch_block_t)dataReadyHandler
+- (void)setDataReadyHandler:(void (^)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&))dataReadyHandler
 {
     QMutexLocker scopedLocker(&_stateMutex);
     _dataReadyHandler = [dataReadyHandler copy];
@@ -560,7 +560,7 @@ static BOOL OARequestIntersectsTileBBox(
                         loaded:(BOOL)loaded
                      amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>>&)amenities
 {
-    dispatch_block_t dataReadyHandler = nil;
+    void (^dataReadyHandler)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&) = nil;
     {
         QMutexLocker scopedLocker(&_stateMutex);
         if (!request)
@@ -590,7 +590,7 @@ static BOOL OARequestIntersectsTileBBox(
     _stateWaitCondition.wakeAll();
 
     if (dataReadyHandler)
-        dataReadyHandler();
+        dataReadyHandler(amenities);
 }
 
 - (BOOL)loadAmenitiesForVisibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
@@ -721,17 +721,6 @@ static BOOL OARequestIntersectsTileBBox(
     _topPlacesTextScale = 1.f;
     _topPlacesWikipediaResourceIds = [NSSet set];
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
-    __weak __typeof(self) weakSelf = self;
-    _topPlacesProvider.cachedAmenitiesProvider = ^BOOL(QuadRect *latLonBounds, id matcher, QList<std::shared_ptr<const OsmAnd::Amenity>> *amenities) {
-        if (!weakSelf)
-        {
-            if (amenities)
-                amenities->clear();
-            return YES;
-        }
-
-        return [weakSelf cachedVisibleWikiAmenities:latLonBounds matcher:matcher amenities:amenities];
-    };
 }
 
 - (NSString *) layerId
@@ -955,12 +944,12 @@ static BOOL OARequestIntersectsTileBBox(
                 OATopWikiOnlineAmenitiesController *wikiOnlineAmenitiesController =
                     [[OATopWikiOnlineAmenitiesController alloc] initWithDataProvider:wikiDataProvider];
                 __weak __typeof(self) weakSelf = self;
-                [wikiOnlineAmenitiesController setDataReadyHandler:^{
+                [wikiOnlineAmenitiesController setDataReadyHandler:^(const QList<std::shared_ptr<const OsmAnd::Amenity>>& amenities) {
                     __typeof(self) strongSelf = weakSelf;
                     if (!strongSelf)
                         return;
 
-                    [strongSelf->_topPlacesProvider notifyAmenitiesChanged];
+                    [strongSelf->_topPlacesProvider notifyAmenitiesChanged:amenities];
                 }];
                 [wikiOnlineAmenitiesController updateVisibleBBox31:[self.mapView getVisibleBBox31]
                                                              zoom:self.mapView.zoomLevel];
@@ -998,6 +987,60 @@ static BOOL OARequestIntersectsTileBBox(
             if (isWiki && _wikiOnlineAmenitiesController && _wikiSymbolsProvider)
                 [_wikiOnlineAmenitiesController setSymbolsProvider:_wikiSymbolsProvider];
 
+            if (isWiki && _wikiSymbolsProvider)
+            {
+                __weak __typeof(self) weakSelf = self;
+                _wikiSymbolsProvider->cache->setDataChangedHandler([weakSelf]() {
+                    __typeof(self) strongSelf = weakSelf;
+                    if (!strongSelf)
+                        return;
+
+                    BOOL showWikiOnMap = NO;
+                    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> wikiSymbolsProvider;
+                    QVector<OsmAnd::TileId> visibleTiles;
+                    OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
+                    [strongSelf readVisibleWikiCacheStateShowWikiOnMap:&showWikiOnMap
+                                                   wikiSymbolsProvider:&wikiSymbolsProvider
+                                                          visibleTiles:&visibleTiles
+                                                           visibleZoom:&visibleZoom];
+
+                    if (!showWikiOnMap)
+                        return;
+
+                    if (!wikiSymbolsProvider || visibleTiles.isEmpty() || visibleZoom == OsmAnd::InvalidZoomLevel)
+                        return;
+
+                    if (visibleZoom < wikiSymbolsProvider->getMinZoom()
+                        || visibleZoom > wikiSymbolsProvider->getMaxZoom())
+                        return;
+
+                    if ([strongSelf areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
+                    {
+                        QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
+                        NSMutableSet<NSNumber *> *seenAmenityIds = [NSMutableSet set];
+
+                        for (const auto& tileId : visibleTiles)
+                        {
+                            QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
+                            if (!wikiSymbolsProvider->cache->obtainAmenities(tileId, visibleZoom, cachedAmenities))
+                                continue;
+
+                            for (const auto& amenity : cachedAmenities)
+                            {
+                                NSNumber *amenityId = @((uint64_t)amenity->id);
+                                if ([seenAmenityIds containsObject:amenityId])
+                                    continue;
+
+                                [seenAmenityIds addObject:amenityId];
+                                amenities.push_back(amenity);
+                            }
+                        }
+
+                        [strongSelf->_topPlacesProvider notifyAmenitiesChanged:amenities];
+                    }
+                });
+            }
+
             [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
             if (isWiki)
                 [_topPlacesProvider drawTopPlacesIfNeeded:YES];
@@ -1014,58 +1057,6 @@ static BOOL OARequestIntersectsTileBBox(
             _wikiUiNameFilter = nil;
 
     }];
-}
-- (BOOL)cachedVisibleWikiAmenities:(QuadRect *)latLonBounds
-                           matcher:(id)matcherObj
-                         amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
-{
-    OAResultMatcher<OAPOI *> *matcher = (OAResultMatcher<OAPOI *> *)matcherObj;
-    while (![matcher isCancelled])
-    {
-        __block BOOL showWikiOnMap = NO;
-        std::shared_ptr<OsmAnd::AmenitySymbolsProvider> wikiSymbolsProvider;
-        QVector<OsmAnd::TileId> visibleTiles;
-        OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
-        [self readVisibleWikiCacheStateShowWikiOnMap:&showWikiOnMap
-                                 wikiSymbolsProvider:&wikiSymbolsProvider
-                                        visibleTiles:&visibleTiles
-                                         visibleZoom:&visibleZoom];
-
-        if (!showWikiOnMap)
-        {
-            if (amenities)
-                amenities->clear();
-            return YES;
-        }
-
-        if (!wikiSymbolsProvider || visibleTiles.isEmpty() || visibleZoom == OsmAnd::InvalidZoomLevel)
-        {
-            [NSThread sleepForTimeInterval:kWikiSymbolsCacheWaitInterval];
-            continue;
-        }
-
-        if (visibleZoom < wikiSymbolsProvider->getMinZoom()
-            || visibleZoom > wikiSymbolsProvider->getMaxZoom())
-        {
-            if (amenities)
-                amenities->clear();
-            return YES;
-        }
-
-        if ([self areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
-            return [self cachedAmenitiesFromWikiSymbolsProvider:wikiSymbolsProvider
-                                                   visibleTiles:visibleTiles
-                                                           zoom:visibleZoom
-                                                  latLonBounds:latLonBounds
-                                                      amenities:amenities
-                                                       matcher:matcher];
-
-        [NSThread sleepForTimeInterval:kWikiSymbolsCacheWaitInterval];
-    }
-
-    if (amenities)
-        amenities->clear();
-    return NO;
 }
 
 - (void)readVisibleWikiCacheStateShowWikiOnMap:(BOOL *)showWikiOnMap
@@ -1109,49 +1100,6 @@ static BOOL OARequestIntersectsTileBBox(
     return YES;
 }
 
-- (BOOL)cachedAmenitiesFromWikiSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider> &)wikiSymbolsProvider
-                                  visibleTiles:(const QVector<OsmAnd::TileId> &)visibleTiles
-                                          zoom:(OsmAnd::ZoomLevel)visibleZoom
-                                 latLonBounds:(QuadRect *)latLonBounds
-                                    amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
-                                      matcher:(OAResultMatcher<OAPOI *> *)matcher
-{
-    NSMutableSet<NSNumber *> *seenAmenityIds = [NSMutableSet set];
-    if (amenities)
-        amenities->clear();
-
-    for (const auto& tileId : visibleTiles)
-    {
-        QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
-        if (!wikiSymbolsProvider->cache->obtainAmenities(tileId, visibleZoom, cachedAmenities))
-            continue;
-
-        for (const auto& amenity : cachedAmenities)
-        {
-            if ([matcher isCancelled])
-            {
-                if (amenities)
-                    amenities->clear();
-                return NO;
-            }
-
-            const auto latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
-            CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-            if (!OABoundsContainCoordinate(latLonBounds, coordinate))
-                continue;
-
-            NSNumber *amenityId = @((uint64_t)amenity->id);
-            if ([seenAmenityIds containsObject:amenityId])
-                continue;
-
-            [seenAmenityIds addObject:amenityId];
-            if (amenities)
-                amenities->push_back(amenity);
-        }
-    }
-
-    return YES;
-}
 
 - (CGFloat)topPlacesTextScale
 {

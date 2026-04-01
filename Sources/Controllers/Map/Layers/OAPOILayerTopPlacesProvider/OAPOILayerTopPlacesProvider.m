@@ -40,7 +40,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     QuadRect *_topPlacesBox;
     QuadRect *_lastCalcBounds;
     float _lastCalcZoom;
-    NSOperationQueue *_popularPlacesQueue;
     
     POIImageLoader *_imageLoader;
     dispatch_queue_t _backgroundQueue;
@@ -75,9 +74,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _textScale = 1.f;
     _backgroundQueue = dispatch_queue_create("com.osmand.topplaces.background", DISPATCH_QUEUE_SERIAL);
     dispatch_queue_set_specific(_backgroundQueue, kTopPlacesStateQueueKey, kTopPlacesStateQueueKey, NULL);
-    _popularPlacesQueue = [NSOperationQueue new];
-    _popularPlacesQueue.maxConcurrentOperationCount = 1;
-    _popularPlacesQueue.qualityOfService = NSQualityOfServiceUserInitiated;
 }
 
 // MARK: - Public
@@ -91,55 +87,20 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         if (!_enabled)
             return;
 
-        QuadRect *visibleBounds = nil;
-        float zoom = 0.f;
-        if (![self captureVisibleBounds:&visibleBounds zoom:&zoom])
-            return;
-
-        if (!forceRecalc && ![self shouldRecalculateForBounds:visibleBounds zoom:zoom])
-        {
-            [self refreshVisiblePlacesOnStateQueue];
-            return;
-        }
-
-        if (_lastCalcBounds && fabs(zoom - _lastCalcZoom) > 0.5f)
-            _topPlacesBox = nil;
-
-        _lastCalcBounds = [[QuadRect alloc] initWithRect:visibleBounds];
-        _lastCalcZoom = zoom;
-
-        [_popularPlacesQueue cancelAllOperations];
-        NSUInteger generation = ++_amenitiesGeneration;
-        __weak __typeof(self) weakSelf = self;
-        NSBlockOperation *op = [NSBlockOperation new];
-        __weak NSBlockOperation *weakOp = op;
-        QuadRect *searchBounds = [self expandedBoundsForVisibleBounds:visibleBounds];
-
-        [op addExecutionBlock:^{
-            if (weakOp.isCancelled)
-                return;
-
-            OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(id __autoreleasing *object) {
-                return YES;
-            } cancelledFunc:^BOOL{
-                return weakOp.isCancelled;
-            }];
-
-            QList<std::shared_ptr<const OsmAnd::Amenity>> amenities = [weakSelf calculateAmenities:searchBounds matcher:matcher];
-
-            if (weakOp.isCancelled)
-                return;
-
-            [weakSelf applyAmenities:amenities generation:generation];
-        }];
-
-        [_popularPlacesQueue addOperation:op];
+        [self refreshVisiblePlacesOnStateQueue];
     });
 }
 
-- (void)notifyAmenitiesChanged
+- (void)notifyAmenitiesChanged:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
 {
-    
+    const QList<std::shared_ptr<const OsmAnd::Amenity>> amenitiesCopy = amenities;
+    dispatch_async(_backgroundQueue, ^{
+        self->_amenitiesGeneration++;
+        self->_allPlaces = amenitiesCopy;
+        [self sortByElo:&self->_allPlaces];
+        self->_topPlacesBox = nil;
+        [self refreshVisiblePlacesOnStateQueue];
+    });
 }
 
 - (void)resetLayer
@@ -266,35 +227,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     if (zoom)
         *zoom = currentZoom;
     return YES;
-}
-
-- (BOOL)shouldRecalculateForBounds:(QuadRect *)visibleBounds
-                              zoom:(float)zoom
-{
-    if (_lastCalcBounds == nil)
-        return YES;
-
-    BOOL zoomChanged = fabs(zoom - _lastCalcZoom) > 0.5f;
-    if (zoomChanged)
-        return YES;
-
-    double halfWidth = fabs(_lastCalcBounds.width) / 2.0;
-    double halfHeight = fabs(_lastCalcBounds.height) / 2.0;
-
-    double lastCenterX = (_lastCalcBounds.left + _lastCalcBounds.right) / 2.0;
-    double lastCenterY = (_lastCalcBounds.top + _lastCalcBounds.bottom) / 2.0;
-    double currentCenterX = (visibleBounds.left + visibleBounds.right) / 2.0;
-    double currentCenterY = (visibleBounds.top + visibleBounds.bottom) / 2.0;
-
-    return fabs(currentCenterX - lastCenterX) > halfWidth
-        || fabs(currentCenterY - lastCenterY) > halfHeight;
-}
-
-- (QuadRect *)expandedBoundsForVisibleBounds:(QuadRect *)visibleBounds
-{
-    QuadRect *expandedBounds = [[QuadRect alloc] initWithRect:visibleBounds];
-    [expandedBounds inset:-(expandedBounds.width / 2.0) dy:-(expandedBounds.height / 2.0)];
-    return expandedBounds;
 }
 
 - (QuadRect *)topPlacesBoxForVisibleBounds:(QuadRect *)visibleBounds
@@ -433,7 +365,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 {
     [self clearMapMarkersCollections];
     [self cancelLoadingImages];
-    [_popularPlacesQueue cancelAllOperations];
 
     _amenitiesGeneration++;
     _imagesGeneration++;
@@ -447,20 +378,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _lastCalcZoom = 0.f;
     _selectedTopPlaceId = nil;
     _renderedMarkerStates = nil;
-}
-
-- (void)applyAmenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
-            generation:(NSUInteger)generation
-{
-    const QList<std::shared_ptr<const OsmAnd::Amenity>> amenitiesCopy = amenities;
-    dispatch_async(_backgroundQueue, ^{
-        if (_amenitiesGeneration != generation)
-            return;
-
-        _allPlaces = amenitiesCopy;
-        _topPlacesBox = nil;
-        [self refreshVisiblePlacesOnStateQueue];
-    });
 }
 
 - (void)refreshVisiblePlacesOnStateQueue
@@ -811,42 +728,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         }
 
     return displayedPoints;
-}
-
-- (QList<std::shared_ptr<const OsmAnd::Amenity>>)calculateAmenities:(QuadRect *)latLonBounds
-                                                            matcher:(OAResultMatcher *)matcher
-{
-    QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
-    if (![self cachedAmenitiesForBounds:latLonBounds matcher:matcher amenities:&cachedAmenities])
-        return QList<std::shared_ptr<const OsmAnd::Amenity>>();
-
-    if ([self isMatcherCancelled:matcher])
-        return QList<std::shared_ptr<const OsmAnd::Amenity>>();
-
-    [self sortByElo:&cachedAmenities];
-    if ([self isMatcherCancelled:matcher])
-        return QList<std::shared_ptr<const OsmAnd::Amenity>>();
-
-    return cachedAmenities;
-}
-
-- (BOOL)cachedAmenitiesForBounds:(QuadRect *)latLonBounds
-                         matcher:(OAResultMatcher *)matcher
-                       amenities:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
-{
-    if (!self.cachedAmenitiesProvider)
-    {
-        if (amenities)
-            amenities->clear();
-        return YES;
-    }
-
-    return self.cachedAmenitiesProvider(latLonBounds, matcher, amenities);
-}
-
-- (BOOL)isMatcherCancelled:(OAResultMatcher *)matcher
-{
-    return [matcher isCancelled];
 }
 
 - (void)sortByElo:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities

@@ -181,9 +181,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            let isSelected = item.bool(forKey: RowKey.selected.rawValue)
-            cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
-            cell.titleLabel.textColor = isSelected ? .textColorPrimary : .textColorTertiary
+            applyYAxisColors(to: cell, item: item)
             let isCustomLeftSeparatorInset = item.bool(forKey: RowKey.isCustomLeftSeparatorInset.rawValue)
             cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
             if isCustomLeftSeparatorInset {
@@ -208,6 +206,12 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         }
         
         return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        guard isYAxisMode, let cell = cell as? OASimpleTableViewCell, item.cellType == OASimpleTableViewCell.reuseIdentifier else { return }
+        applyYAxisColors(to: cell, item: item)
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
@@ -274,8 +278,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         }
         
         item.setObj(NSNumber(value: isSelected), forKey: RowKey.selected.rawValue)
-        tableView.reloadRows(at: [indexPath], with: .none)
-        syncCheckmarksFromData()
+        guard let visibleRows = tableView.indexPathsForVisibleRows else { return }
+        tableView.reconfigureRows(at: visibleRows)
     }
     
     private func clearAllSelections() {
@@ -301,6 +305,17 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
                 }
             }
         }
+    }
+    
+    private func yAxisColors(isSelected: Bool, canSelect: Bool) -> (UIColor, UIColor) {
+        guard !isSelected else { return (.iconColorActive, .textColorPrimary) }
+        return canSelect ? (.iconColorDefault, .textColorPrimary) : (.iconColorDisabled, .textColorTertiary)
+    }
+    
+    private func applyYAxisColors(to cell: OASimpleTableViewCell, item: OATableRowData) {
+        let (iconColor, textColor) = yAxisColors(isSelected: item.bool(forKey: RowKey.selected.rawValue), canSelect: types.count < 2)
+        cell.leftIconView.tintColor = iconColor
+        cell.titleLabel.textColor = textColor
     }
     
     private func vehicleMetricsMeta(for type: GPXDataSetType) -> VehicleMetricsMeta? {

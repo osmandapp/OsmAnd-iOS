@@ -13,11 +13,13 @@ final class POIImageLoadRequest: NSObject {
     let placeId: NSNumber
     let url: String
     let placeholderImageName: String?
+    let textScale: CGFloat
 
-    init(placeId: NSNumber, url: String, placeholderImageName: String?) {
+    init(placeId: NSNumber, url: String, placeholderImageName: String?, textScale: CGFloat) {
         self.placeId = placeId
         self.url = url
         self.placeholderImageName = placeholderImageName
+        self.textScale = textScale
     }
 }
 
@@ -26,30 +28,28 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     /// Serial queue for thread-safe access to loadingImages
     private let queue = DispatchQueue(label: "com.osmand.poiImageLoader")
     
-    /// Dictionary of current image download tasks (key = URL)
-    private var loadingImages: [String: DownloadTask] = [:]
+    /// Dictionary of current image download tasks (key = placeId)
+    private var loadingTasks: [NSNumber: DownloadTask] = [:]
     
     /// Cancels all current image download tasks
     func cancelAll() {
         queue.async {
-            for task in self.loadingImages.values {
+            for task in self.loadingTasks.values {
                 task.cancel()
             }
-            self.loadingImages.removeAll()
+            self.loadingTasks.removeAll()
         }
     }
     
     func fetchImages(_ places: [POIImageLoadRequest],
                      completion: ((NSNumber, UIImage) -> Void)? = nil) {
-        let imagesToLoad = Set(
-            places.compactMap { $0.url.isEmpty ? nil : $0.url }
-        )
+        let requestedPlaceIds = Set(places.map { $0.placeId })
         
         queue.async {
             // Cancel obsolete tasks
-            for (url, task) in self.loadingImages where !imagesToLoad.contains(url) {
+            for (placeId, task) in self.loadingTasks where !requestedPlaceIds.contains(placeId) {
                 task.cancel()
-                self.loadingImages.removeValue(forKey: url)
+                self.loadingTasks.removeValue(forKey: placeId)
             }
             
             for place in places {
@@ -57,17 +57,18 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                 guard !urlStr.isEmpty else {
                     continue
                 }
-                guard self.loadingImages[urlStr] == nil else {
+                
+                let placeId = place.placeId
+                guard self.loadingTasks[placeId] == nil else {
                     continue
                 }
+                
                 guard let url = URL(string: urlStr) else {
                     continue
                 }
                 
-                let placeId = place.placeId
-
                 // MARK: - Metrics
-                let metrics = IconMetrics(textScale: OAAppSettings.sharedManager().textSize.get())
+                let metrics = IconMetrics(textScale: place.textScale)
                 
                 // MARK: - Kingfisher processor
                 let processor = self.makeIconProcessor(metrics: metrics)
@@ -101,18 +102,18 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     switch result {
                     case .success(let value):
                         self.queue.async {
-                            guard self.loadingImages[urlStr] != nil else { return }
-                            self.loadingImages.removeValue(forKey: urlStr)
-                            DispatchQueue.main.async { completion?(placeId, value.image) }
+                            guard self.loadingTasks[placeId] != nil else { return }
+                            self.loadingTasks.removeValue(forKey: placeId)
+                            completion?(placeId, value.image)
                         }
                     case .failure(let error):
                         NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
                         
                         guard let placeholderImageName = place.placeholderImageName,
                               let placeholderImage = OASvgHelper.mapImageNamed(placeholderImageName, scale: Float(scale)),
-                              let cacheKey = placeholderCacheKey(placeholderImageName: placeholderImageName, metrics: metrics) else {
+                              let cacheKey = self.placeholderCacheKey(placeholderImageName: placeholderImageName, metrics: metrics) else {
                             self.queue.async {
-                                self.loadingImages.removeValue(forKey: urlStr)
+                                self.loadingTasks.removeValue(forKey: placeId)
                             }
                             return
                         }
@@ -121,11 +122,11 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                             guard let self else { return }
                             
                             self.queue.async {
-                                guard self.loadingImages[urlStr] != nil else { return }
+                                guard self.loadingTasks[placeId] != nil else { return }
                                 
                                 if case .success(let value) = result, let cachedImage = value.image {
-                                    self.loadingImages.removeValue(forKey: urlStr)
-                                    DispatchQueue.main.async { completion?(placeId, cachedImage) }
+                                    self.loadingTasks.removeValue(forKey: placeId)
+                                    completion?(placeId, cachedImage)
                                     return
                                 }
                                 
@@ -135,12 +136,12 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                                     let image = self.createProcessedPlaceholder(with: placeholderImage, metrics: metrics, option: KingfisherParsedOptionsInfo(options))
                                     
                                     self.queue.async {
-                                        guard self.loadingImages[urlStr] != nil else { return }
-                                        self.loadingImages.removeValue(forKey: urlStr)
+                                        guard self.loadingTasks[placeId] != nil else { return }
+                                        self.loadingTasks.removeValue(forKey: placeId)
                                         
                                         if let image {
                                             targetCache.store(image, forKey: cacheKey)
-                                            DispatchQueue.main.async { completion?(placeId, image) }
+                                            completion?(placeId, image)
                                         }
                                     }
                                 }
@@ -149,7 +150,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                     }
                 }
                 
-                self.loadingImages[urlStr] = task
+                self.loadingTasks[placeId] = task
             }
         }
     }

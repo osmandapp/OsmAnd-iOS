@@ -992,58 +992,17 @@ static BOOL OARequestIntersectsTileBBox(
                 __weak __typeof(self) weakSelf = self;
                 _wikiSymbolsProvider->cache->setDataChangedHandler([weakSelf]() {
                     __typeof(self) strongSelf = weakSelf;
-                    if (!strongSelf)
-                        return;
-
-                    BOOL showWikiOnMap = NO;
-                    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> wikiSymbolsProvider;
-                    QVector<OsmAnd::TileId> visibleTiles;
-                    OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
-                    [strongSelf readVisibleWikiCacheStateShowWikiOnMap:&showWikiOnMap
-                                                   wikiSymbolsProvider:&wikiSymbolsProvider
-                                                          visibleTiles:&visibleTiles
-                                                           visibleZoom:&visibleZoom];
-
-                    if (!showWikiOnMap)
-                        return;
-
-                    if (!wikiSymbolsProvider || visibleTiles.isEmpty() || visibleZoom == OsmAnd::InvalidZoomLevel)
-                        return;
-
-                    if (visibleZoom < wikiSymbolsProvider->getMinZoom()
-                        || visibleZoom > wikiSymbolsProvider->getMaxZoom())
-                        return;
-
-                    if ([strongSelf areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
-                    {
-                        QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
-                        NSMutableSet<NSNumber *> *seenAmenityIds = [NSMutableSet set];
-
-                        for (const auto& tileId : visibleTiles)
-                        {
-                            QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
-                            if (!wikiSymbolsProvider->cache->obtainAmenities(tileId, visibleZoom, cachedAmenities))
-                                continue;
-
-                            for (const auto& amenity : cachedAmenities)
-                            {
-                                NSNumber *amenityId = @((uint64_t)amenity->id);
-                                if ([seenAmenityIds containsObject:amenityId])
-                                    continue;
-
-                                [seenAmenityIds addObject:amenityId];
-                                amenities.push_back(amenity);
-                            }
-                        }
-
-                        [strongSelf->_topPlacesProvider notifyAmenitiesChanged:amenities];
-                    }
+                    if (strongSelf)
+                        [strongSelf notifyTopPlacesProviderIfWikiTilesCached];
                 });
             }
 
             [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
             if (isWiki)
+            {
                 [_topPlacesProvider drawTopPlacesIfNeeded:YES];
+                [self notifyTopPlacesProviderIfWikiTilesCached];
+            }
         };
 
         if (_poiUiFilter)
@@ -1100,10 +1059,51 @@ static BOOL OARequestIntersectsTileBBox(
     return YES;
 }
 
-
-- (CGFloat)topPlacesTextScale
+- (void)notifyTopPlacesProviderIfWikiTilesCached
 {
-    return OAAppSettings.sharedManager.textSize.get * self.mapViewController.displayDensityFactor;
+    BOOL showWikiOnMap = NO;
+    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> wikiSymbolsProvider;
+    QVector<OsmAnd::TileId> visibleTiles;
+    OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
+    [self readVisibleWikiCacheStateShowWikiOnMap:&showWikiOnMap
+                                   wikiSymbolsProvider:&wikiSymbolsProvider
+                                          visibleTiles:&visibleTiles
+                                           visibleZoom:&visibleZoom];
+
+    if (!showWikiOnMap)
+        return;
+
+    if (!wikiSymbolsProvider || visibleTiles.isEmpty() || visibleZoom == OsmAnd::InvalidZoomLevel)
+        return;
+
+    if (visibleZoom < wikiSymbolsProvider->getMinZoom()
+        || visibleZoom > wikiSymbolsProvider->getMaxZoom())
+        return;
+
+    if ([self areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
+    {
+        QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
+        NSMutableSet<NSNumber *> *seenAmenityIds = [NSMutableSet set];
+
+        for (const auto& tileId : visibleTiles)
+        {
+            QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
+            if (!wikiSymbolsProvider->cache->obtainAmenities(tileId, visibleZoom, cachedAmenities))
+                continue;
+
+            for (const auto& amenity : cachedAmenities)
+            {
+                NSNumber *amenityId = @((uint64_t)amenity->id);
+                if ([seenAmenityIds containsObject:amenityId])
+                    continue;
+
+                [seenAmenityIds addObject:amenityId];
+                amenities.push_back(amenity);
+            }
+        }
+
+        [_topPlacesProvider notifyAmenitiesChanged:amenities];
+    }
 }
 
 - (NSSet<NSString *> *)currentWikipediaResourceIds
@@ -1117,7 +1117,7 @@ static BOOL OARequestIntersectsTileBBox(
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     BOOL enabled = wikiFilter != nil && settings.wikiShowImagePreviews.get;
-    CGFloat textScale = [self topPlacesTextScale];
+    CGFloat textScale = OAAppSettings.sharedManager.textSize.get;// * self.mapViewController.displayDensityFactor;
     EOAWikiDataSourceType wikiType = settings.wikiDataSourceType.get;
     NSSet<NSString *> *resourceIds = [self currentWikipediaResourceIds];
 
@@ -1141,6 +1141,7 @@ static BOOL OARequestIntersectsTileBBox(
     {
         [_topPlacesProvider resetLayer];
         [_topPlacesProvider drawTopPlacesIfNeeded:YES];
+        [self notifyTopPlacesProviderIfWikiTilesCached];
     }
     else if (shouldRefreshVisiblePlaces)
     {
@@ -1430,10 +1431,7 @@ static BOOL OARequestIntersectsTileBBox(
         if ([topPlaceIds containsObject:@((uint64_t)amenity->id)])
         {
             [result collect:poi provider:self];
-            break;
         }
-        
-        [result collect:poi provider:self];
     }
 }
 
@@ -1465,14 +1463,14 @@ static BOOL OARequestIntersectsTileBBox(
     if ([object isKindOfClass:OAPOI.class])
     {
         OAPOI *poi = (OAPOI *)object;
-        NSNumber *placeId = @(poi.obfId);
+        NSNumber *placeId = @(OAResolveSyntheticAmenityId(poi));
         return [topPlaceIds containsObject:placeId] ? placeId : nil;
     }
 
     if ([object isKindOfClass:BaseDetailsObject.class])
     {
         BaseDetailsObject *baseDetailsObject = object;
-        NSNumber *syntheticPlaceId = @(baseDetailsObject.syntheticAmenity.obfId);
+        NSNumber *syntheticPlaceId = @(OAResolveSyntheticAmenityId(baseDetailsObject.syntheticAmenity));
         if ([topPlaceIds containsObject:syntheticPlaceId])
             return syntheticPlaceId;
 
@@ -1482,7 +1480,7 @@ static BOOL OARequestIntersectsTileBBox(
                 continue;
 
             OAPOI *poi = (OAPOI *)item;
-            NSNumber *placeId = @(poi.obfId);
+            NSNumber *placeId = @(OAResolveSyntheticAmenityId(poi));
             if ([topPlaceIds containsObject:placeId])
                 return placeId;
         }

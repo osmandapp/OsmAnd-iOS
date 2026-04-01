@@ -289,7 +289,8 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
     return [[POIImageLoadRequest alloc] initWithPlaceId:[self placeIdForAmenity:amenity]
                                                     url:wikiIconUrl
-                                   placeholderImageName:[self placeholderIconNameForAmenity:amenity]];
+                                   placeholderImageName:[self placeholderIconNameForAmenity:amenity]
+                                              textScale:_textScale];
 }
 
 - (nullable UIImage *)markerImageForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
@@ -571,8 +572,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
             if (!_imageLoader)
                 _imageLoader = [POIImageLoader new];
-            else
-                [_imageLoader cancelAll];
 
             __weak __typeof(self) weakSelf = self;
             [_imageLoader fetchImages:[missingImagePlaces copy] completion:^(NSNumber *placeId, UIImage *image) {

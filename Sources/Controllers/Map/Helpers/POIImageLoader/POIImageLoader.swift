@@ -29,13 +29,13 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
     private let queue = DispatchQueue(label: "com.osmand.poiImageLoader")
     
     /// Dictionary of current image download tasks (key = placeId)
-    private var loadingTasks: [NSNumber: DownloadTask] = [:]
+    private var loadingTasks: [NSNumber: DownloadTask?] = [:]
     
     /// Cancels all current image download tasks
     func cancelAll() {
         queue.async {
             for task in self.loadingTasks.values {
-                task.cancel()
+                task?.cancel()
             }
             self.loadingTasks.removeAll()
         }
@@ -48,7 +48,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
         queue.async {
             // Cancel obsolete tasks
             for (placeId, task) in self.loadingTasks where !requestedPlaceIds.contains(placeId) {
-                task.cancel()
+                task?.cancel()
                 self.loadingTasks.removeValue(forKey: placeId)
             }
             

@@ -49,6 +49,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     int _topPlaceBaseOrder;
     OAMapViewController *_mapViewController;
     CGFloat _textScale;
+    CGFloat _displayDensityFactor;
     NSNumber *_selectedTopPlaceId;
     BOOL _enabled;
     NSMutableDictionary<NSNumber *, NSString *> *_renderedMarkerStates;
@@ -72,6 +73,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     _enabled = NO;
     _textScale = 1.f;
+    _displayDensityFactor = _mapViewController.mapView.displayDensityFactor;
     _backgroundQueue = dispatch_queue_create("com.osmand.topplaces.background", DISPATCH_QUEUE_SERIAL);
     dispatch_queue_set_specific(_backgroundQueue, kTopPlacesStateQueueKey, kTopPlacesStateQueueKey, NULL);
 }
@@ -125,10 +127,12 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 - (void)setTextScale:(CGFloat)textScale
 {
     dispatch_async(_backgroundQueue, ^{
-        if (fabs(_textScale - textScale) < 0.0001f)
+        CGFloat displayDensityFactor = _mapViewController.mapView.displayDensityFactor;
+        if (fabs(_textScale - textScale) < 0.0001f || fabs(_displayDensityFactor - displayDensityFactor) < 0.0001f)
             return;
 
         _textScale = textScale;
+        _displayDensityFactor = displayDensityFactor;
         if (_enabled)
         {
             _topPlacesBox = nil;
@@ -400,7 +404,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         return;
     }
 
-    _displayedPlaces = [self collectDisplayedPoints:visibleBounds zoom:zoom amenities:_allPlaces];
     if (_topPlacesBox && [_topPlacesBox contains:visibleBounds])
         return;
 
@@ -410,12 +413,8 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (void)updateTopPlaceImageForId:(NSNumber *)placeId
                            image:(UIImage *)image
-                      generation:(NSUInteger)generation
 {
     dispatch_async(_backgroundQueue, ^{
-        if (_imagesGeneration != generation)
-            return;
-
         if (_topPlaceIds && _topPlacesImages)
         {
             if ([_topPlaceIds containsObject:placeId])
@@ -435,6 +434,9 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         if (places.isEmpty())
         {
             [self clearMapMarkersCollectionLocked];
+            [self performStateSync:^{
+                _displayedPlaces.clear();
+            }];
             return;
         }
 
@@ -451,6 +453,8 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
         NSMutableDictionary<NSNumber *, NSString *> *desiredMarkerStates = [NSMutableDictionary dictionary];
         NSInteger markerCount = 0;
+        QList<std::shared_ptr<const OsmAnd::Amenity>> actualDisplayedPlaces;
+
         for (const auto& place : places)
         {
             UIImage *topPlaceImage = [self markerImageForAmenity:place];
@@ -474,12 +478,17 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
                          toCollectionLocked:_mapMarkersCollection])
                 {
                     _renderedMarkerStates[markerKey] = markerState;
+                    actualDisplayedPlaces.push_back(place);
                 }
                 else
                 {
                     [_renderedMarkerStates removeObjectForKey:markerKey];
                     [desiredMarkerStates removeObjectForKey:markerKey];
                 }
+            }
+            else
+            {
+                actualDisplayedPlaces.push_back(place);
             }
 
             markerCount++;
@@ -498,6 +507,10 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
         if (_renderedMarkerStates.count == 0)
             [self clearMapMarkersCollectionLocked];
+
+        [self performStateSync:^{
+            _displayedPlaces = actualDisplayedPlaces;
+        }];
     }];
 }
 
@@ -575,7 +588,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
             __weak __typeof(self) weakSelf = self;
             [_imageLoader fetchImages:[missingImagePlaces copy] completion:^(NSNumber *placeId, UIImage *image) {
-                [weakSelf updateTopPlaceImageForId:placeId image:image generation:generation];
+                [weakSelf updateTopPlaceImageForId:placeId image:image];
             }];
         }
     }
@@ -594,7 +607,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     
     long long tileSize31 = (1LL << (31 - zoom));
     double from31toPixelsScale = 256.0 / (double)tileSize31;
-    double estimatedIconSize = kImageIconSizeDP * _textScale;
+    double estimatedIconSize = kImageIconSizeDP * _textScale * _displayDensityFactor;
     float iconSize31 = (float)(estimatedIconSize / from31toPixelsScale);
     
     int left   = OsmAnd::Utilities::get31TileNumberX(latLonBounds.left);
@@ -713,21 +726,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _loadingImagePlaceIds = nil;
 }
 
-- (QList<std::shared_ptr<const OsmAnd::Amenity>>)collectDisplayedPoints:(QuadRect *)latLonBounds
-                                                                   zoom:(NSInteger)zoom
-                                                              amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
-{
-    QList<std::shared_ptr<const OsmAnd::Amenity>> displayedPoints;
-    NSInteger topPlacesCounter = 0;
-    for (const auto& amenity : amenities)
-        if (topPlacesCounter < kTopPlacesLimit)
-        {
-            displayedPoints.push_back(amenity);
-            topPlacesCounter++;
-        }
 
-    return displayedPoints;
-}
 
 - (void)sortByElo:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
 {

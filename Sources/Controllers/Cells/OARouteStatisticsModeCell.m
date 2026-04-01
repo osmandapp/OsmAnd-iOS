@@ -22,7 +22,7 @@
     self.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 
     self.modeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
-    self.rightLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.rightModeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

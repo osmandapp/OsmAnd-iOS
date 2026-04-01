@@ -41,10 +41,11 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     
     weak var delegate: StatisticsSelectionDelegate?
     
-    init(types: [NSNumber], selectedXAxisMode: GPXDataSetAxisType, analysis: GpxTrackAnalysis) {
+    init(types: [NSNumber], selectedXAxisMode: GPXDataSetAxisType, analysis: GpxTrackAnalysis, isYAxisMode: Bool = true) {
         self.types = types
         self.selectedXAxisMode = selectedXAxisMode
         self.analysis = analysis
+        self.isYAxisMode = isYAxisMode
         super.init()
     }
     

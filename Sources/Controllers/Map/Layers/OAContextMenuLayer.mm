@@ -763,8 +763,9 @@
 
 - (void) animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    _animationDone = YES;
     _contextPinMarker->setIsHidden(false);
+    _contextPinMarker->setUpdateAfterCreated(true);
+    _animationDone = YES;
 }
 
 @end

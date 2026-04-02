@@ -575,7 +575,7 @@ static NSComparator _OACommonWordsComparator = nil;
     return [self.settings getOfflineIndexes];
 }
 
-- (NSArray<NSString *> *)getRadiusOfflineIndexesWithMinMeters:(int)minMeters maxMeters:(int)maxMeters dataType:(EOASearchPhraseDataType)dataType
+- (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)minMeters maxMeters:(int)maxMeters dataType:(EOASearchPhraseDataType)dataType
 {
     NSArray<NSString *> *list;
     if (_regionPriorityProvider)

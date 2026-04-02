@@ -193,8 +193,8 @@
             // equalize unmatched results
             res = MAX_TYPES_BASE_10;
 
-            // fines for specific types
-            if ([self getResourceType] == EOASearchResultResourceBasemap)
+            bool basemap = _amenity != nil && _amenity->regionName == QStringLiteral("basemap");
+            if (basemap || [self getResourceType] == EOASearchResultResourceBasemap)
             {
                 res += 1;
             }

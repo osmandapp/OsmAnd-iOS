@@ -127,7 +127,7 @@
 "shared_string_maps" = "Tikarḍiwin";
 "quick_action_poi_list" = "Umuɣ";
 "index_name_europe" = "Turuft";
-"shared_string_show_on_map" = "\"Sken ɣef  tkarḍa\"";
+"shared_string_show_on_map" = "Sken-it-id ɣef tkarḍa";
 "shared_string_unexpected_error" = "Tuccḍa tarussint.";
 "rendering_attr_highway_class_state_road_name" = "Aɣrem";
 "search_address_street" = "Abrid";
@@ -149,7 +149,7 @@
 "shared_string_from" = "sɣur";
 "shared_string_type" = "Anaw";
 "speak_street_names" = "Ismawen n yiberdan (TTS)";
-"loading_poi_obj" = "Asali...";
+"loading_poi_obj" = "Aɛebbi n POI…";
 "quick_action_new_action" = "Rnu tigawt";
 "month" = "Ayyur";
 "search_poi_category_hint" = "Aru kra iw nadi ɣef kullec";
@@ -258,7 +258,7 @@
 "arrival_distance_factor_early" = "Zik";
 "shared_string_upload" = "Sali";
 "shared_string_filters" = "Imzizdigen";
-"configure_map" = "Swel…";
+"configure_map" = "Swel takarḍa";
 "rendering_attr_surface_stone_name" = "Ablaḍ";
 "save_filter" = "Imsizdeg";
 "route_tl" = "Bren ɣer tama tazelmaṭ t edfraḍ";
@@ -311,7 +311,7 @@
 "osn_add_dialog_title" = "rnu";
 "prefer_in_routing_title" = "Smenyif…";
 "app_mode_utv" = "Côte à côte";
-"buy" = "AƔ";
+"buy" = "Aɣ";
 "shared_string_actions" = "Tigawin";
 "next_proceed" = "Ɣer zdat";
 "no_inet_connection" = "Ulac tuqqna n Internet";
@@ -398,7 +398,7 @@
 "weeks_short" = "mls";
 "week_short" = "mls";
 "day_short" = "S";
-"user_password" = "Awal-ik uffir n OSM";
+"user_password" = "Awal n uɛeddi";
 "by_name" = "S yisem";
 "si_mi_meters" = "Amayel / Amitr";
 "si_km_m" = "Ikilumitren/imitren";
@@ -505,7 +505,7 @@
 "select_icon_profile_dialog_title" = "Fren tignit n usmel";
 "metric_ton" = "Am";
 "profile_alert_need_profile_name_title" = "Sekcem isem amaynut n umaɣnu";
-"profile_type_custom_string" = "Amaɣnu Gaia udmawan…";
+"profile_type_custom_string" = "Amaɣnu udmawan";
 "profile_alert_delete_title" = "Kkes amaɣnu";
 "route_between_points" = "Abrid gar wagazen";
 "quick_action_map_source_title" = "Iɣbula";
@@ -744,7 +744,7 @@
 "osm_editing_plugin_name" = "Taẓrigt OpenStreetMap";
 "add_point_before" = "Rnu tanqiḍt ɣer sdeffir";
 "shared_string_logout" = "Tuffɣa";
-"local_openstreetmap_uploading" = "Asali...";
+"local_openstreetmap_uploading" = "Asali…";
 "map_locale" = "Tutlayt n tkarḍa";
 "osm_editing_plugin_description" = "Ttekki deg OpenStreetMap (OSM) srid seg usnas OSMAnd. Amedya: rnu neɣ beddel agazen yelhan n OSM, rnu neɣ beddel tizmilin OSM sakin azen iberdan-ik GPX (aya ilaq umiḍan OSM). OpenStreetMap d tarbaɛt yeldin, tamaḍalant n tkarḍa tazayazt.";
 "add_point_after" = "Rnu tanqiḍt ɣer sdat";
@@ -869,3 +869,5 @@
 "explore_wikipedia_offline" = "Snirem Wikipidya s war tuqqna";
 "download_wikipedia_data" = "Sader-d isefka n Wikipidya";
 "no_photos_available" = "Ulac tiwlafin";
+"nm" = "nmi";
+"day_off_label" = "yemdel";

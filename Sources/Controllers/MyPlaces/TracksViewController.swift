@@ -825,22 +825,18 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateSearchController() {
-        if #available(iOS 26.0, *) {
-            searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
+        if isNameFiltered {
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
+            searchController.searchBar.searchTextField.backgroundColor = .groupBg
+            searchController.searchBar.searchTextField.leftView?.tintColor = .textColorTertiary
+        } else if isSearchActive {
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
+            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
         } else {
-            if isNameFiltered {
-                searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
-                searchController.searchBar.searchTextField.backgroundColor = .groupBg
-                searchController.searchBar.searchTextField.leftView?.tintColor = .textColorTertiary
-            } else if isSearchActive {
-                searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-                searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-                searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-            } else {
-                searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-                searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-                searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-            }
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
+            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
         }
     }
     

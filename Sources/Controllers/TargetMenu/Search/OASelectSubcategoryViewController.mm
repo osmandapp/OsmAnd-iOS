@@ -107,11 +107,6 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (UIControlContentHorizontalAlignment)customIconForLeftNavbarButtonAlignment
-{
-    return UIControlContentHorizontalAlignmentTrailing;
-}
-
 - (void)setupSearchControllerWithFilter:(BOOL)isFiltered
 {
     if (@available(iOS 26.0, *))

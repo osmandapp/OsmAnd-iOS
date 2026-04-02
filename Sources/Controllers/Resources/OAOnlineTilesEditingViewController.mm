@@ -214,15 +214,10 @@
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
-    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection;
-}
-
-- (UIControlContentHorizontalAlignment)customIconForLeftNavbarButtonAlignment
-{
     if (@available(iOS 26.0, *))
-        return UIControlContentHorizontalAlignmentTrailing;
+        return nil;
     else
-        return [super customIconForLeftNavbarButtonAlignment];
+        return [UIImage templateImageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection;
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme

@@ -163,15 +163,10 @@
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
-    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
-}
-
-- (UIControlContentHorizontalAlignment)customIconForLeftNavbarButtonAlignment
-{
     if (@available(iOS 26.0, *))
-        return UIControlContentHorizontalAlignmentTrailing;
+        return nil;
     else
-        return [super customIconForLeftNavbarButtonAlignment];
+        return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 }
 
 - (NSString *)getTableHeaderDescription

@@ -945,11 +945,12 @@ static BOOL OAIsRequestApplicableToVisibleState(
             if (isWiki && _wikiSymbolsProvider)
             {
                 __weak __typeof(self) weakSelf = self;
-                _wikiSymbolsProvider->cache->setDataChangedHandler([weakSelf]() {
-                    __typeof(self) strongSelf = weakSelf;
-                    if (strongSelf)
-                        [strongSelf notifyTopPlacesProviderIfWikiTilesCached];
-                });
+                _wikiSymbolsProvider->setDataObtainedHandler(
+                    [weakSelf](const OsmAnd::TileId, const OsmAnd::ZoomLevel) {
+                        __typeof(self) strongSelf = weakSelf;
+                        if (strongSelf)
+                            [strongSelf notifyTopPlacesProviderIfWikiTilesCached];
+                    });
             }
 
             [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];

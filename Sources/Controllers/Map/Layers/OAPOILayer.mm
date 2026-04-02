@@ -58,6 +58,7 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <QMutex>
 #include <QWaitCondition>
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
@@ -113,14 +114,22 @@ static uint64_t OAResolveSyntheticAmenityId(OAPOI *poi)
     return syntheticId != 0 ? syntheticId : 1;
 }
 
-static OsmAnd::AreaI OAExpandVisibleBBox31(const OsmAnd::AreaI& visibleBBox31)
+static OsmAnd::AreaI OAExpandVisibleBBox31ToTileBounds(const OsmAnd::AreaI& visibleBBox31,
+                                                       const OsmAnd::ZoomLevel zoom)
 {
-    if (visibleBBox31.width() <= 0 || visibleBBox31.height() <= 0)
+    if (zoom == OsmAnd::InvalidZoomLevel || visibleBBox31.width() <= 0 || visibleBBox31.height() <= 0)
         return OsmAnd::AreaI();
 
-    const auto halfWidth = qMax(1, visibleBBox31.width() / 2);
-    const auto halfHeight = qMax(1, visibleBBox31.height() / 2);
-    return visibleBBox31.getEnlargedBy(halfHeight, halfWidth, halfHeight, halfWidth);
+    const auto halfWidth = qMax(1, visibleBBox31.width() / 3);
+    const auto halfHeight = qMax(1, visibleBBox31.height() / 3);
+    const auto expandedBBox31 = visibleBBox31.getEnlargedBy(halfHeight, halfWidth, halfHeight, halfWidth);
+
+    const auto topLeftTileId = OsmAnd::Utilities::getTileId(expandedBBox31.topLeft, zoom);
+    const auto bottomRightTileId = OsmAnd::Utilities::getTileId(expandedBBox31.bottomRight, zoom);
+
+    auto result = OsmAnd::Utilities::tileBoundingBox31(topLeftTileId, zoom);
+    result.enlargeToInclude(OsmAnd::Utilities::tileBoundingBox31(bottomRightTileId, zoom));
+    return result;
 }
 
 static std::shared_ptr<const OsmAnd::Amenity> OASyntheticAmenityFromPoi(OAPOI *poi)
@@ -232,18 +241,6 @@ static BOOL OAIsRequestApplicableToVisibleState(
         && request->visibleBBox31.contains(latestVisibleBBox31);
 }
 
-static BOOL OARequestIntersectsTileBBox(
-    OATopWikiOnlineAmenitiesRequest *request,
-    const OsmAnd::AreaI& tileBBox31,
-    const OsmAnd::ZoomLevel zoom)
-{
-    return request
-        && request->zoom == zoom
-        && request->visibleBBox31.width() > 0
-        && request->visibleBBox31.height() > 0
-        && request->visibleBBox31.intersects(tileBBox31);
-}
-
 @interface OATopWikiOnlineAmenitiesController : NSObject
 {
 @private
@@ -271,10 +268,7 @@ static BOOL OARequestIntersectsTileBBox(
                      isCancelled:(const std::function<bool()>&)isCancelled
                         response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse;
 - (BOOL)isInvalidated;
-- (BOOL)isActiveApplicableRequestId:(uint64_t)requestId;
-- (BOOL)waitForRequest:(OATopWikiOnlineAmenitiesRequest * __strong *)request
-                tileId:(OsmAnd::TileId)tileId
-                  zoom:(OsmAnd::ZoomLevel)zoom
+- (BOOL)waitForRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request
            isCancelled:(const std::function<bool()>&)isCancelled
               response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse;
 - (void)dispatchLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request;
@@ -344,7 +338,7 @@ static BOOL OARequestIntersectsTileBBox(
 
 - (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31 zoom:(OsmAnd::ZoomLevel)zoom
 {
-    BOOL shouldInvalidateTiles = NO;
+    BOOL shouldWakeStateWaiters = NO;
     {
         QMutexLocker scopedLocker(&_stateMutex);
         _latestVisibleBBox31 = visibleBBox31;
@@ -353,17 +347,14 @@ static BOOL OARequestIntersectsTileBBox(
         if (_invalidated)
             return;
 
-        const BOOL wasNeedingNewRequest = _needsNewRequest;
-        _needsNewRequest = _activeRequest
+        const BOOL needsNewRequest = _activeRequest
             && !OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom);
-        shouldInvalidateTiles = _needsNewRequest && !wasNeedingNewRequest;
+        shouldWakeStateWaiters = needsNewRequest && !_needsNewRequest;
+        _needsNewRequest = needsNewRequest;
     }
 
-    if (shouldInvalidateTiles)
-    {
+    if (shouldWakeStateWaiters)
         _stateWaitCondition.wakeAll();
-        [self invalidateCurrentProviderTiles];
-    }
 }
 
 - (void)invalidate
@@ -390,39 +381,28 @@ static BOOL OARequestIntersectsTileBBox(
                      isCancelled:(const std::function<bool()>&)isCancelled
                         response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse
 {
+    Q_UNUSED(tileId);
     outResponse.amenities.clear();
-    outResponse.isOutdated = nullptr;
-
+    
     OATopWikiOnlineAmenitiesRequest *request = nil;
     BOOL shouldStartLoad = NO;
     {
         QMutexLocker scopedLocker(&_stateMutex);
         if (_invalidated)
-        {
-            outResponse.isOutdated = []() -> bool { return true; };
-            return YES;
-        }
+            return NO;
 
         if (!_hasLatestVisibleState || _latestVisibleZoom != zoom)
-        {
-            outResponse.isOutdated = []() -> bool { return true; };
-            return YES;
-        }
+            return NO;
 
-        if (_activeRequest
-            && !_needsNewRequest
-            && OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom))
+        if (OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom))
         {
             request = _activeRequest;
         }
         else
         {
-            const auto requestVisibleBBox31 = OAExpandVisibleBBox31(_latestVisibleBBox31);
+            const auto requestVisibleBBox31 = OAExpandVisibleBBox31ToTileBounds(_latestVisibleBBox31, zoom);
             if (!OAIsValidVisibleState(requestVisibleBBox31, _latestVisibleZoom))
-            {
-                outResponse.isOutdated = []() -> bool { return true; };
-                return YES;
-            }
+                return NO;
 
             request = [[OATopWikiOnlineAmenitiesRequest alloc] initWithRequestId:_nextRequestId++
                                                                    visibleBBox31:requestVisibleBBox31
@@ -440,24 +420,9 @@ static BOOL OARequestIntersectsTileBBox(
         [self dispatchLoadForRequest:request];
     }
 
-    if (![self waitForRequest:&request
-                       tileId:tileId
-                         zoom:zoom
-                  isCancelled:isCancelled
-                     response:outResponse])
-    {
-        return NO;
-    }
-
-    OATopWikiOnlineAmenitiesController *controller = self;
-    const uint64_t requestId = request ? request->requestId : 0;
-    outResponse.isOutdated =
-        [controller, requestId]() -> bool
-        {
-            return ![controller isActiveApplicableRequestId:requestId];
-        };
-
-    return YES;
+    return [self waitForRequest:request
+                    isCancelled:isCancelled
+                       response:outResponse];
 }
 
 - (BOOL)isInvalidated
@@ -466,56 +431,29 @@ static BOOL OARequestIntersectsTileBBox(
     return _invalidated;
 }
 
-- (BOOL)isActiveApplicableRequestId:(uint64_t)requestId
-{
-    QMutexLocker scopedLocker(&_stateMutex);
-    return !_invalidated
-        && !_needsNewRequest
-        && _activeRequest
-        && _activeRequest->requestId == requestId
-        && OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom);
-}
-
-- (BOOL)waitForRequest:(OATopWikiOnlineAmenitiesRequest * __strong *)request
-                tileId:(OsmAnd::TileId)tileId
-                  zoom:(OsmAnd::ZoomLevel)zoom
+- (BOOL)waitForRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request
            isCancelled:(const std::function<bool()>&)isCancelled
               response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse
 {
-    const auto tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(tileId, zoom);
     QMutexLocker scopedLocker(&_stateMutex);
     while (true)
     {
         if (_invalidated)
         {
             outResponse.amenities.clear();
-            outResponse.isOutdated = []() -> bool { return true; };
             return YES;
         }
 
-        OATopWikiOnlineAmenitiesRequest *currentRequest = request ? *request : nil;
-        if (!currentRequest)
+        if (!request)
         {
             outResponse.amenities.clear();
-            outResponse.isOutdated = []() -> bool { return true; };
             return YES;
         }
 
-        if (_activeRequest
-            && _activeRequest != currentRequest
-            && !_needsNewRequest
-            && OARequestIntersectsTileBBox(_activeRequest, tileBBox31, zoom))
-        {
-            currentRequest = _activeRequest;
-            if (request)
-                *request = currentRequest;
-            continue;
-        }
-
-        switch (currentRequest->state)
+        switch (request->state)
         {
             case OATopWikiOnlineAmenitiesStateReady:
-                outResponse.amenities = currentRequest->amenities;
+                outResponse.amenities = request->amenities;
                 return YES;
             case OATopWikiOnlineAmenitiesStateFailed:
                 outResponse.amenities.clear();
@@ -648,6 +586,26 @@ static BOOL OARequestIntersectsTileBBox(
             amenities->push_back(amenity);
     }
 
+    if (amenities)
+    {
+        std::stable_sort(amenities->begin(), amenities->end(),
+            [](const std::shared_ptr<const OsmAnd::Amenity>& left,
+               const std::shared_ptr<const OsmAnd::Amenity>& right) -> bool
+            {
+                const bool leftHasTravelElo = left && left->travelElo >= 0;
+                const bool rightHasTravelElo = right && right->travelElo >= 0;
+                if (leftHasTravelElo != rightHasTravelElo)
+                    return leftHasTravelElo;
+
+                if (leftHasTravelElo && rightHasTravelElo && left->travelElo != right->travelElo)
+                    return left->travelElo > right->travelElo;
+
+                return left && right
+                    ? static_cast<int64_t>(left->id.id) < static_cast<int64_t>(right->id.id)
+                    : static_cast<bool>(left);
+            });
+    }
+
     return YES;
 }
 
@@ -701,14 +659,10 @@ static BOOL OARequestIntersectsTileBBox(
     CGSize _screenSize;
 }
 
-- (void)onMapFrameRendered
-{
-    [_topPlacesProvider drawTopPlacesIfNeeded:NO];
-}
-
 - (void)onMapFrameAnimatorsUpdated
 {
     [self updateWikiOnlineAmenitiesControllerVisibleState];
+    [_topPlacesProvider drawTopPlacesIfNeeded:NO];
 }
 
 - (void)initLayer

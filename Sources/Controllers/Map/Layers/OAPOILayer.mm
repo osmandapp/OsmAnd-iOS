@@ -133,7 +133,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OASyntheticAmenityFromPoi(OAPOI *p
         && !NSStringIsEmpty(poi.type.category.name)
         && !NSStringIsEmpty(poi.type.name);
     const QString categoryName = QString::fromNSString(
-        hasCanonicalPoiType ? poi.type.category.name : (poi.type.category.name ?: @"osmwiki"));
+        hasCanonicalPoiType ? poi.type.category.name : (poi.type.category.name ?: OSM_WIKI_CATEGORY));
     const QString subTypeName = QString::fromNSString(
         hasCanonicalPoiType ? poi.type.name : (poi.subType.length > 0 ? poi.subType : (poi.type.name ?: @"wikiplace")));
 
@@ -966,6 +966,7 @@ static BOOL OARequestIntersectsTileBBox(
                                                                               response:outResponse];
                     };
                 _wikiOnlineAmenitiesController = wikiOnlineAmenitiesController;
+                categoriesFilter.remove(QString::fromNSString(OSM_WIKI_CATEGORY));
             }
             else if (isWiki)
             {
@@ -975,7 +976,7 @@ static BOOL OARequestIntersectsTileBBox(
             const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
             const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
             const uint32_t cacheSize = OACalculatePoiCacheSize(_screenSize, rasterTileSize);
-            if (categoriesFilter.count() > 0)
+            if (categoriesFilter.count() > 0 || _wikiOnlineAmenitiesController)
             {
                 (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
             }

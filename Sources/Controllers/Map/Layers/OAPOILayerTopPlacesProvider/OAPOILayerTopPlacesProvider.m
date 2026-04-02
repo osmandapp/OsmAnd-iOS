@@ -15,7 +15,6 @@
 #import "OANativeUtilities.h"
 #import "OATargetPointView.h"
 #import "OAAmenitySearcher+cpp.h"
-#import <CoreLocation/CoreLocation.h>
 
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -37,7 +36,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     QList<std::shared_ptr<const OsmAnd::Amenity>> _displayedPlaces;
     NSSet<NSNumber *> *_topPlaceIds;
     NSSet<NSNumber *> *_loadingImagePlaceIds;
-    QuadRect *_topPlacesBox;
+    OsmAnd::AreaI _topPlacesBox;
     QuadRect *_lastCalcBounds;
     float _lastCalcZoom;
     
@@ -100,7 +99,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         self->_amenitiesGeneration++;
         self->_allPlaces = amenitiesCopy;
         [self sortByElo:&self->_allPlaces];
-        self->_topPlacesBox = nil;
+        self->_topPlacesBox = OsmAnd::AreaI();
         [self refreshVisiblePlacesOnStateQueue];
     });
 }
@@ -135,7 +134,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         _displayDensityFactor = displayDensityFactor;
         if (_enabled)
         {
-            _topPlacesBox = nil;
+            _topPlacesBox = OsmAnd::AreaI();
             [self refreshVisiblePlacesOnStateQueue];
         }
     });
@@ -200,46 +199,48 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         dispatch_sync(_backgroundQueue, block);
 }
 
-- (BOOL)captureVisibleBounds:(QuadRect * __autoreleasing *)visibleBounds
+- (BOOL)captureVisibleBounds:(OsmAnd::AreaI *)visibleBBox31
                         zoom:(float *)zoom
 {
-    __block QuadRect *bounds = nil;
+    __block OsmAnd::AreaI bounds;
+    __block BOOL hasBounds = NO;
     __block float currentZoom = 0.f;
 
     [_mapViewController runWithRenderSync:^{
         const auto screenBbox = _mapView.getVisibleBBox31;
-        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
-        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
-
-        CLLocationCoordinate2D topLeftCoord = CLLocationCoordinate2DMake(topLeft.latitude, topLeft.longitude);
-        CLLocationCoordinate2D bottomRightCoord = CLLocationCoordinate2DMake(bottomRight.latitude, bottomRight.longitude);
-        if (!CLLocationCoordinate2DIsValid(topLeftCoord) || !CLLocationCoordinate2DIsValid(bottomRightCoord))
+        if (screenBbox.width() <= 0 || screenBbox.height() <= 0)
             return;
 
-        bounds = [[QuadRect alloc] initWithLeft:topLeft.longitude
-                                            top:topLeft.latitude
-                                          right:bottomRight.longitude
-                                         bottom:bottomRight.latitude];
+        bounds = screenBbox;
+        hasBounds = YES;
         currentZoom = [_mapView zoom];
     }];
 
-    if (!bounds)
+    if (!hasBounds)
         return NO;
 
-    if (visibleBounds)
-        *visibleBounds = bounds;
+    if (visibleBBox31)
+        *visibleBBox31 = bounds;
     if (zoom)
         *zoom = currentZoom;
     return YES;
 }
 
-- (QuadRect *)topPlacesBoxForVisibleBounds:(QuadRect *)visibleBounds
+- (float)getTopPlaceIconSize31:(int)zoom
 {
-    QuadRect *topPlacesBox = [[QuadRect alloc] initWithRect:visibleBounds];
-    double lonDelta = visibleBounds.width * 0.1;
-    double latDelta = visibleBounds.height * 0.1;
-    [topPlacesBox inset:-lonDelta dy:-latDelta];
-    return topPlacesBox;
+    long long tileSize31 = (1LL << (31 - zoom));
+    double from31toPixelsScale = 256.0 / (double)tileSize31;
+    double estimatedIconSize = kImageIconSizeDP * _textScale * _displayDensityFactor;
+    return (float)(estimatedIconSize / from31toPixelsScale);
+}
+
+- (OsmAnd::AreaI)topPlacesBoxForVisibleBounds:(const OsmAnd::AreaI&)visibleBBox31 zoom:(int)zoom
+{
+    if (visibleBBox31.width() <= 0 || visibleBBox31.height() <= 0)
+        return OsmAnd::AreaI();
+
+    float iconSize31 = [self getTopPlaceIconSize31:zoom];
+    return visibleBBox31.getEnlargedBy(iconSize31, iconSize31, iconSize31, iconSize31);
 }
 
 - (NSNumber *)placeIdForAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
@@ -378,7 +379,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _topPlaces.clear();
     _topPlaceIds = nil;
     _loadingImagePlaceIds = nil;
-    _topPlacesBox = nil;
+    _topPlacesBox = OsmAnd::AreaI();
     _lastCalcBounds = nil;
     _lastCalcZoom = 0.f;
     _selectedTopPlaceId = nil;
@@ -390,25 +391,27 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     if (!_enabled)
         return;
 
-    QuadRect *visibleBounds = nil;
+    OsmAnd::AreaI visibleBBox31;
     float zoom = 0.f;
-    if (![self captureVisibleBounds:&visibleBounds zoom:&zoom])
+    if (![self captureVisibleBounds:&visibleBBox31 zoom:&zoom])
         return;
 
     if (_allPlaces.isEmpty())
     {
         _displayedPlaces.clear();
-        _topPlacesBox = nil;
+        _topPlacesBox = OsmAnd::AreaI();
         [self clearMapMarkersCollections];
         [self cancelLoadingImages];
         return;
     }
 
-    if (_topPlacesBox && [_topPlacesBox contains:visibleBounds])
+    if (_topPlacesBox.width() > 0
+        && _topPlacesBox.height() > 0
+        && _topPlacesBox.contains(visibleBBox31))
         return;
 
-    _topPlacesBox = [self topPlacesBoxForVisibleBounds:visibleBounds];
-    [self updateTopPlaces:_allPlaces latLonBounds:visibleBounds zoom:(int)zoom];
+    _topPlacesBox = [self topPlacesBoxForVisibleBounds:visibleBBox31 zoom:(int)zoom];
+    [self updateTopPlaces:_allPlaces visibleBBox31:visibleBBox31 zoom:(int)zoom];
 }
 
 - (void)updateTopPlaceImageForId:(NSNumber *)placeId
@@ -540,11 +543,11 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 }
 
 - (void)updateTopPlaces:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)places
-           latLonBounds:(QuadRect *)latLonBounds
+          visibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
                    zoom:(int)zoom
 {
     QList<std::shared_ptr<const OsmAnd::Amenity>> newTopPlaces = [self obtainTopPlacesToDisplay:places
-                                                                                   latLonBounds:latLonBounds
+                                                                                  visibleBBox31:visibleBBox31
                                                                                            zoom:zoom];
     NSSet<NSNumber *> *previousTopPlaceIds = _topPlaceIds ?: [NSSet set];
     NSMutableSet<NSNumber *> *newTopPlaceIds = [NSMutableSet setWithCapacity:newTopPlaces.size()];
@@ -600,34 +603,22 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 }
 
 - (QList<std::shared_ptr<const OsmAnd::Amenity>>)obtainTopPlacesToDisplay:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)places
-                                                             latLonBounds:(nonnull QuadRect *)latLonBounds
+                                                            visibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
                                                                      zoom:(int)zoom
 {
     QList<std::shared_ptr<const OsmAnd::Amenity>> res;
+    if (visibleBBox31.width() <= 0 || visibleBBox31.height() <= 0)
+        return res;
     
-    long long tileSize31 = (1LL << (31 - zoom));
-    double from31toPixelsScale = 256.0 / (double)tileSize31;
-    double estimatedIconSize = kImageIconSizeDP * _textScale * _displayDensityFactor;
-    float iconSize31 = (float)(estimatedIconSize / from31toPixelsScale);
-    
-    int left   = OsmAnd::Utilities::get31TileNumberX(latLonBounds.left);
-    int top    = OsmAnd::Utilities::get31TileNumberY(latLonBounds.top);
-    int right  = OsmAnd::Utilities::get31TileNumberX(latLonBounds.right);
-    int bottom = OsmAnd::Utilities::get31TileNumberY(latLonBounds.bottom);
-    
-    QuadTree *boundIntersections = [[self class] initBoundIntersections:left
-                                                                    top:top
-                                                                  right:right
-                                                                 bottom:bottom];
-    
+    float iconSize31 = [self getTopPlaceIconSize31:zoom];
+    QuadTree *boundIntersections = [[self class] initBoundIntersections:visibleBBox31.left()
+                                                                    top:visibleBBox31.top()
+                                                                  right:visibleBBox31.right()
+                                                                 bottom:visibleBBox31.bottom()];
     int counter = 0;
     for (const auto& place : places)
     {
-        const auto latLon = OsmAnd::Utilities::convert31ToLatLon(place->position31);
-        double lat = latLon.latitude;
-        double lon = latLon.longitude;
-        
-        if (![latLonBounds contains:lon top:lat right:lon bottom:lat]
+        if (!visibleBBox31.contains(place->position31)
             || [self wikiPhotoForAmenity:place].length == 0)
             continue;
         

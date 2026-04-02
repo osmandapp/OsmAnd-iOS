@@ -147,8 +147,15 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     if (![self.navigationController isNavigationBarHidden])
     {
         //hide root navbar if open screen without navbar
-        if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
+        if (@available(iOS 26.0, *))
+        {
             [self.navigationController setNavigationBarHidden:YES animated:YES];
+        }
+        else
+        {
+            if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
+                [self.navigationController setNavigationBarHidden:YES animated:YES];
+        }
 
         //reset navbar to default appearance
         NSArray<UIViewController *> *viewControllers = self.navigationController.viewControllers;

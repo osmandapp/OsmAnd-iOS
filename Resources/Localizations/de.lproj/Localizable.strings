@@ -959,7 +959,7 @@
 "month_short" = "M";
 "months_short" = "Mon.";
 "year_short" = "J";
-"years_short" = "Jahre";
+"years_short" = "Jhr";
 "day" = "Tag";
 "days_2_4" = "Tage";
 "days_5" = "Tage";
@@ -3513,7 +3513,7 @@
 "lang_te" = "Telugu";
 "lang_tl" = "Tagalog";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"detailed_track_guidance" = "Detaillierte Spurführung";
+"detailed_track_guidance" = "Detaillierte Track Navigation";
 "shared_string_import" = "Importieren";
 "battery_widget_level_privacy_ios_desc" = "Aus Gründen des iOS-Datenschutzes kann das Widget den Akkustand nur in 5-Prozent-Schritten anzeigen, z. B. 35 %, 60 % oder 85 %";
 "osmand_live" = "OsmAnd Live";
@@ -4002,7 +4002,7 @@
 "quick_action_temperature_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Temperaturebene auf der Karte.";
 "deleted_maps_alert_message" = "%d Karten löschen?";
 "ios_release_5_2" = "* Benutzerdefinierte Zuordnung von Tasten externer Eingabegeräte eingeführt, ermöglicht die Zuordnung einer beliebigen Schnellaktion zur Taste einer Tastatur oder eines Controllers\n• Neue Schnellaktionen zur Steuerung der App über ein externes Eingabegerät hinzugefügt\n• Sichtbarkeit von Widgets im transparenten Modus verbessert durch Hinzufügung von Textkonturen\n• Genaues Gitter zur Ausrichtung von Karten-Bedienfeldern hinzugefügt\n• Neuen Seekartendarstellung \"Seefahrt\" mit umfangreichen Einstellmöglichkeiten eingeführt\n• Straßen- und Stadtangaben zu Suchergebnissen hinzugefügt\n• Einstellmöglichkeit zur Vergrößerung der Textgröße des Abstandsmesswerkzeugs hinzugefügt\n• Auswahl der Einheit der Temperatur zu Allgemeine Einstellungen verschoben\n• Einheit der Höhe kann nun getrennt von Einheit der Länge eingestellt werden\n• Schnellaktion für Kartenausrichtung mit auswählbaren Kartenausrichtungsmodi hinzugefügt\t\n• Problem gelöst, das die Bewegung einiger Widgets verhinderte\n• Falsche Anzeige des Abstands im Widget \"Nächste Abzweigung\" behoben\n• Suche nach Marke (brand) verbessert durch Einbeziehung von mehr lokalen Marken\n• Allgemeine Stabilitäts- und Leistungsverbesserungen\n";
-"ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n• Fähigkeit hinzugefügt Wegpunkte in einen ausgewählten Favoriten-Ordner zusammenzuführen\n• CarPlay: Problem mit nicht reagierender Karte auf dem Dashboard behoben und Unterstützung hinzugefügt für Parameter „Zeige immer dunkle Karte“\n";
+"ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n•\n";
 "image_cache_online_photo_high_res" = "Zwischenspeicher für hochauflösende Online-Fotos";
 "image_cache_online_photo_mapillary_default_cache" = "Standard-Zwischenspeicher für Online-Fotos/Mapillary";
 "trip_recording_moving_time" = "Bewegungszeit";
@@ -4048,3 +4048,7 @@
 "travel_guides" = "Touristenführer";
 "has_vehicle_metrics" = "Mit OBDII-Daten";
 "context_menu_read_full_article" = "Ganzen Artikel lesen";
+"graph_axis" = "Grafik-Achse";
+"poi_mobile" = "Handy";
+"show_spherical_map" = "Weltansicht";
+"y_axis_description" = "Wählen Sie bis zu zwei Optionen für die Y-Achse.";

@@ -373,7 +373,6 @@
 @interface OATownCitiesCache ()
 {
 @public
-    // Ці поля будуть доступні іншим .mm файлам, які бачать цей блок
     NSMutableSet<NSString *> *_townCitiesInit;
     std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
     std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _boundariesQR;

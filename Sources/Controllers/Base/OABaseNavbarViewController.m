@@ -147,15 +147,8 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     if (![self.navigationController isNavigationBarHidden])
     {
         //hide root navbar if open screen without navbar
-        if (@available(iOS 26.0, *))
-        {
+        if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
             [self.navigationController setNavigationBarHidden:YES animated:YES];
-        }
-        else
-        {
-            if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
-                [self.navigationController setNavigationBarHidden:YES animated:YES];
-        }
 
         //reset navbar to default appearance
         NSArray<UIViewController *> *viewControllers = self.navigationController.viewControllers;
@@ -508,7 +501,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
             UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
             if (@available(iOS 26.0, *))
             {
-                if (leftButtonTitle && leftButtonTitle.length > 0)
+                if (leftButtonTitle.length > 0)
                     leftButton.configuration = [UIButtonConfiguration plainButtonConfiguration];
             }
             UIColor *buttonsTintColor = [self navbarButtonsTintColor];
@@ -635,7 +628,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., [self defaultBarButtonIconSize], 30.)];
     if (@available(iOS 26.0, *))
     {
-        if (title && title.length > 0)
+        if (title.length > 0)
             button.configuration = [UIButtonConfiguration plainButtonConfiguration];
     }
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;

@@ -109,7 +109,7 @@ final class TrackChartHelper: NSObject {
                                                for: .normal)
         }
         
-        statsModeCell?.rightLabel.text = selectedXAxisMode.getName()
+        statsModeCell?.rightModeButton.setTitle(selectedXAxisMode.getName(), for: .normal)
         let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
         GpxUIHelper.refreshLineChart(
             chartView: chart,

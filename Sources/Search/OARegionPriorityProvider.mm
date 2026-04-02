@@ -62,9 +62,7 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
 {
     for (int i = 0; i * BBOX_STEP <= BBOX_MAX; i++)
     {
-        QuadRect *rect = [OASearchPhrase calculateBbox:@((i * BBOX_STEP + 50))
-                                               location:_searchLocation];
-
+        QuadRect *rect = [OASearchPhrase calculateBbox:@((i * BBOX_STEP + 50)) location:_searchLocation];
         BOOL contains = [phrase containsData:resId
                                         rect:rect
                             desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)
@@ -83,7 +81,6 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
     {
         return;
     }
-
     NSMutableDictionary *tmpPriority = [NSMutableDictionary dictionary];
     NSArray *sortedKeys = [[_priorityMap allKeys] sortedArrayUsingSelector:@selector(compare:)];
     for (NSNumber *priority in sortedKeys)

@@ -19199,8 +19199,17 @@
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-framework",
+					IOKit,
 					"-lOsmAndCore_static_standalone",
+					"-larchive_static",
+					"-licu4c_static",
 					"-lprotobuf_static",
+					"-lgdal_static",
+					"-lgif_static",
+					"-ljpeg_static",
+					"-lpng_static",
+					"-lz_static",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -19257,8 +19266,17 @@
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-framework",
+					IOKit,
 					"-lOsmAndCore_static_standalone",
+					"-larchive_static",
+					"-licu4c_static",
 					"-lprotobuf_static",
+					"-lgdal_static",
+					"-lgif_static",
+					"-ljpeg_static",
+					"-lpng_static",
+					"-lz_static",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

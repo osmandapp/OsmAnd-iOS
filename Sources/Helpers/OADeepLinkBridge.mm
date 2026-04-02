@@ -14,6 +14,12 @@
 #import "OAFavoriteItem.h"
 #import "OAMapLayers.h"
 #import "OANativeUtilities.h"
+#import "OAManageResourcesViewController.h"
+#import "OAOutdatedResourcesViewController.h"
+
+static NSString * const kResourcesStoryboardName = @"Resources";
+static NSString * const kOutdatedResourcesStoryboardIdentifier = @"OutdatedResourcesViewController";
+static NSInteger const kLocalResourcesScope = 1;
 
 @implementation OADeepLinkBridge
 
@@ -59,6 +65,44 @@
 {
     OAMapViewController *mapViewController = [rootViewController.mapPanel mapViewController];
     return [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+}
+
++ (BOOL)isMapsAndResourcesController:(UIViewController *)controller
+{
+    OAManageResourcesViewController *resourcesController = [controller isKindOfClass:OAManageResourcesViewController.class] ? (OAManageResourcesViewController *) controller : nil;
+    return resourcesController && [resourcesController currentScope] != kLocalResourcesScope;
+}
+
++ (BOOL)isMapsAndResourcesLocalController:(UIViewController *)controller
+{
+    OAManageResourcesViewController *resourcesController = [controller isKindOfClass:OAManageResourcesViewController.class] ? (OAManageResourcesViewController *) controller : nil;
+    return resourcesController && [resourcesController currentScope] == kLocalResourcesScope;
+}
+
++ (BOOL)isMapsAndResourcesUpdatesController:(UIViewController *)controller
+{
+    return [controller isKindOfClass:OAOutdatedResourcesViewController.class];
+}
+
++ (UIViewController *)mapsAndResourcesViewController
+{
+    return [[UIStoryboard storyboardWithName:kResourcesStoryboardName bundle:nil] instantiateInitialViewController];
+}
+
++ (UIViewController *)mapsAndResourcesLocalViewController
+{
+    UIViewController *controller = [self mapsAndResourcesViewController];
+    if (![controller isKindOfClass:OAManageResourcesViewController.class])
+        return nil;
+    
+    OAManageResourcesViewController *resourcesController = (OAManageResourcesViewController *) controller;
+    [resourcesController configureForLocalResources];
+    return resourcesController;
+}
+
++ (UIViewController *)mapsAndResourcesUpdatesViewController
+{
+    return [[UIStoryboard storyboardWithName:kResourcesStoryboardName bundle:nil] instantiateViewControllerWithIdentifier:kOutdatedResourcesStoryboardIdentifier];
 }
 
 @end

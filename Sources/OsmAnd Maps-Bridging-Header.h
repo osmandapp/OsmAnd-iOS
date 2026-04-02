@@ -202,6 +202,17 @@
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAChoosePlanViewController.h"
+#import "OAGlobalSettingsViewController.h"
+#import "OACloudIntroductionViewController.h"
+#import "OAHelpViewController.h"
+#import "InitialRoutePlanningBottomSheetViewController.h"
+#import "OAMyPlacesTabBarViewController.h"
+#import "OAFavoriteListViewController.h"
+#import "OAOsmEditsListViewController.h"
+#import "OATripRecordingSettingsViewController.h"
+#import "OAPluginsViewController.h"
+#import "OAPluginDetailsViewController.h"
+#import "OAMapSettingsOverlayUnderlayScreen.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -285,6 +296,7 @@
 #import "OAPoiUiFilterSettingsItem.h"
 #import "OAMapSettingsScreen.h"
 #import "OADashboardViewController.h"
+#import "OAMapSettingsViewController.h"
 
 // Quick actions
 #import "OAQuickAction.h"

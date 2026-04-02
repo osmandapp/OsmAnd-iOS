@@ -18,6 +18,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
     private static let previewSpeedometerRowKey = "previewSpeedometerRow"
     
     lazy var settings = OAAppSettings.sharedManager()
+    var appMode: OAApplicationMode!
     
     private var speedometerPreviewHeightConstraint: NSLayoutConstraint?
     private var speedometerView: SpeedometerView?
@@ -31,6 +32,10 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
     override func getNavbarStyle() -> EOABaseNavbarStyle {
         .largeTitle
     }
+
+    override func commonInit() {
+        appMode = settings.applicationMode.get()
+    }
     
     override func registerCells() {
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
@@ -40,7 +45,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
     }
     
     override func generateData() {
-        let showSpeedometer = settings.showSpeedometer.get()
+        let showSpeedometer = settings.showSpeedometer.get(appMode)
         tableData.clearAllData()
         let switchCellSection = tableData.createNewSection()
         switchCellSection.footerText = showSpeedometer ? "" : localizedString("speedometer_description")
@@ -72,7 +77,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             speedLimitWarningRow.cellType = OAValueTableViewCell.reuseIdentifier
             speedLimitWarningRow.key = Self.speedLimitWarningRowKey
             speedLimitWarningRow.title = localizedString("speed_limit_warning")
-            speedLimitWarningRow.descr = settings.showSpeedLimitWarning.toHumanString()
+            speedLimitWarningRow.descr = settings.showSpeedLimitWarning.toHumanString(appMode)
             speedLimitWarningRow.accessibilityLabel = speedLimitWarningRow.title
             speedLimitWarningRow.accessibilityValue = speedLimitWarningRow.descr
         }
@@ -110,7 +115,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: Self.valuesKey) as? [UIImage], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
-                let widgetSizeStyle = sizePref.get()
+                let widgetSizeStyle = sizePref.get(appMode)
                 cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }
             if let title = item.string(forKey: "title") {
@@ -118,13 +123,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
             }
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self, let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
-                let widgetSizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
-                sizePref.set(widgetSizeStyle, mode: settings.applicationMode.get())
-                if let speedometerView {
-                    speedometerView.configure()
-                    speedometerPreviewHeightConstraint?.constant = speedometerView.getCurrentSpeedViewMaxHeightWidth()
-                    updateSpeedometer()
-                }
+                self.handleSegmentChange(index: index, sizePref: sizePref)
             }
             return cell
         } else if item.cellType == Self.previewSpeedometerRowKey {
@@ -190,6 +189,16 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         speedometerView?.refreshLayout()
     }
     
+    private func handleSegmentChange(index: Int, sizePref: OACommonWidgetSizeStyle) {
+        let widgetSizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
+        sizePref.set(widgetSizeStyle, mode: appMode)
+        if let speedometerView {
+            speedometerView.configure()
+            speedometerPreviewHeightConstraint?.constant = speedometerView.getCurrentSpeedViewMaxHeightWidth()
+            updateSpeedometer()
+        }
+    }
+    
     @objc private func onSwitchClick(_ sender: Any) -> Bool {
         guard let tableData, let sw = sender as? UISwitch else { return false }
         
@@ -197,7 +206,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         let data = tableData.item(for: indexPath)
         
         if data.key == Self.turnOnRowKey {
-            settings.showSpeedometer.set(sw.isOn)
+            settings.showSpeedometer.set(sw.isOn, mode: appMode)
             updateSpeedometer()
             var delay: TimeInterval
             if #available(iOS 26.0, *) {

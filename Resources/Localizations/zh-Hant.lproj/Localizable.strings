@@ -3987,7 +3987,7 @@
 "rendering_attr_fairwayStyle_description" = "球道的色彩";
 "rendering_attr_depthColorScheme_description" = "等深線顏色尺度";
 "ios_release_5_2" = "* 替外部控制器引進為了畫地圖的客製化按鈕，允許快速動作指定至鍵盤或是控制器按鈕\n* 新增快速動作能夠用外部控制器控制 app \n* 透過新文字外框改進小工具的透明度模式的可見度\n* 新增精準網格來對濟地圖按鈕\n* 引進具備不少客製化選項，新的「海洋」航海地圖樣式\n* 搜尋結果新增城市與道路詳情\n* 在距離測量工具新增放大文字大小選項\n* 程動溫度單位選擇到一般設定\n* 海拔單位與距離單位能夠分開設定\n* 新增能夠選擇羅盤模式的地圖方位的快速動作\n* 解決一些小工具會被移動的問題\n* 解決下一個轉彎小工具的不正確距離顯示問題\n* 新增更多在地品牌來改進品牌搜尋功能\n* 一般穩定度與效能改進\n";
-"ios_release_5_3" = "* 新增速度儀小工具的互動動畫\n* 新增位置圖示調整大小的選項\n* 新旅程記錄小工具：最大速度與平均坡度；改進上坡/下坡小工具\n* 新增分享特定興趣點的深度連結功能\n* 解決靜止時導航小工具的 ETA 不會更新問題\n* 改進配對的 OBDII 轉接頭的連線問題\n* 新增合作航點到特定最愛資料夾的能力\n* CarPlay：解決儀錶板未回應地圖的問題，以及新增支援「總是顯示深色地圖」選項\n";
+"ios_release_5_3" = "* 支援 3D 建築\n* 球型地圖檢視\n* 速度儀：為了公差與速度顯示的新顏色模式\n* 客制化地圖按鈕：大小、形狀與樣式\n* 可調整大小的地點圖示\n* 新的小工具：最高速度、平均坡度，改進的上坡/下坡\n* 軌跡分析器：改進軸線選擇與車輛速度\n* 整合航點到最愛資料夾\n* 分享任何興趣點的連結\n* CarPlay：修正儀表板地圖；新增「總是顯示暗色地圖」\n* CarPlay：更順暢的地點圖示與導航完成對話框\n* 改進已配對的 OBD-II 轉接器的連線\n* 修正：靜止時的導航預估時間會更新\n";
 "context_menu_item_add_parking_point" = "標記為停車位置";
 "find_parking" = "尋找停車場";
 "finish_navigation" = "完成導航";
@@ -4001,3 +4001,18 @@
 "popular_places" = "人口聚集地";
 "shared_string_wikipedia" = "維基百科";
 "poi_source" = "興趣點來源";
+"shared_string_alt_name" = "別名";
+"graph_axis" = "圖譜軸線";
+"y_axis" = "Y 軸";
+"x_axis" = "X 軸";
+"y_axis_description" = "為 Y 軸選取兩個變項。";
+"external_sensor_widgets" = "外部感測器";
+"vehicle_metrics_chart_category" = "汽車數據";
+"poi_mobile" = "手機";
+"poi_cuisine" = "菜系";
+"poi_brand" = "品牌";
+"travel_guides" = "指標";
+"show_spherical_map" = "球型檢視";
+"has_vehicle_metrics" = "有 OBDII 資料";
+"context_menu_read_full_article" = "閱讀文章全文";
+"read_on" = "在 %@ 閱讀";

@@ -23,6 +23,10 @@
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
 
+@interface OAReverseGeocoder ()
+@property (nonatomic, strong) NSCache<NSString *, NSString *> *addressCache;
+@end
+
 @implementation OAReverseGeocoder
 
 + (OAReverseGeocoder *)instance
@@ -30,14 +34,49 @@
     static dispatch_once_t once;
     static OAReverseGeocoder * sharedInstance;
     dispatch_once(&once, ^{
-    
         sharedInstance = [[self alloc] init];
     });
     return sharedInstance;
 }
 
-- (NSString *) lookupAddressAtLat:(double)lat lon:(double)lon
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _addressCache = [[NSCache alloc] init];
+        _addressCache.countLimit = 100;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(clearCache)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:nil];
+    }
+    return self;
+}
+
+- (void)clearCache
 {
+    [self.addressCache removeAllObjects];
+}
+
+- (NSString *)lookupAddressAtLat:(double)lat
+                             lon:(double)lon
+                        objectId:(uint64_t)objectId
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
+    
+    NSString *cacheKey = nil;
+    
+    if (objectId != 0)
+    {
+        cacheKey = prefLang.length > 0
+            ? [NSString stringWithFormat:@"%llu_%@", objectId, prefLang]
+            : [NSString stringWithFormat:@"%llu", objectId];
+        NSString *cachedAddress = [self.addressCache objectForKey:cacheKey];
+        if (cachedAddress)
+            return cachedAddress;
+    }
+
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
@@ -50,9 +89,9 @@
     NSMutableString *geocodingResult = [NSMutableString string];
     if (object)
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        QString lang = QString::fromNSString(settings.settingPrefMapLanguage.get ? settings.settingPrefMapLanguage.get : @"");
+        QString lang = QString::fromNSString(prefLang);
         bool transliterate = settings.settingMapLanguageTranslit.get;
+        
         if (object->building)
         {
             QString bldName;
@@ -61,11 +100,16 @@
             else
                 bldName = object->building->getName(lang, transliterate);
             
-            [geocodingResult appendFormat:@"%@ %@, %@", object->street->getName(lang, transliterate).toNSString(), bldName.toNSString(), object->streetGroup->getName(lang, transliterate).toNSString()];
+            [geocodingResult appendFormat:@"%@ %@, %@",
+                object->street->getName(lang, transliterate).toNSString(),
+                bldName.toNSString(),
+                object->streetGroup->getName(lang, transliterate).toNSString()];
         }
         else if (object->street)
         {
-            [geocodingResult appendFormat:@"%@, %@", object->street->getName(lang, transliterate).toNSString(), object->streetGroup->getName(lang, transliterate).toNSString()];
+            [geocodingResult appendFormat:@"%@, %@",
+                object->street->getName(lang, transliterate).toNSString(),
+                object->streetGroup->getName(lang, transliterate).toNSString()];
         }
         else if (object->streetGroup)
         {
@@ -79,9 +123,17 @@
         }
     }
     
-    //[self testAddressSearch:@"про" lat:lat lon:lon];
+    NSString *finalAddress = [NSString stringWithString:geocodingResult];
     
-    return [NSString stringWithString:geocodingResult];
+    if (cacheKey)
+        [self.addressCache setObject:finalAddress forKey:cacheKey];
+    
+    return finalAddress;
+}
+
+- (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon
+{
+    return [self lookupAddressAtLat:lat lon:lon objectId:0];
 }
 
 - (void) testAddressSearch:(NSString *)query lat:(double)lat lon:(double)lon

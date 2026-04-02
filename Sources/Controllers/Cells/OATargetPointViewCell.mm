@@ -106,36 +106,73 @@
 
 - (void)updateDescriptionView
 {
-    NSString *descriptionStr = _targetPoint.titleAddress;
-    if (_targetPoint.ctrlAttrTypeStr)
+    OATargetPoint *targetPoint = self.targetPoint;
+    if (!targetPoint)
     {
-        [_descriptionView setAttributedText:_targetPoint.ctrlAttrTypeStr];
-        [_descriptionView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+        self.descriptionView.text = @"";
         return;
     }
-    else if (_targetPoint.ctrlTypeStr)
+
+    self.descriptionView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+
+    if (targetPoint.ctrlAttrTypeStr)
     {
-        NSString *typeStr = _targetPoint.ctrlTypeStr;
-        [_targetPoint initAddressIfNeeded];
-        if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
-        {
-            if (typeStr.length > 0)
-                typeStr = [NSString stringWithFormat:@"%@ • %@", typeStr, _targetPoint.titleAddress];
-            else
-                typeStr = _targetPoint.titleAddress;
-        }
-        descriptionStr = typeStr;
+        self.descriptionView.attributedText = targetPoint.ctrlAttrTypeStr;
+        return;
     }
-    else if (_targetPoint.type == OATargetNetworkGPX)
+
+    if (targetPoint.ctrlTypeStr)
     {
-        OARouteKey *key = (OARouteKey *)_targetPoint.targetObj;
-        if (key)
-        {
-            descriptionStr = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), key.getActivityTypeTitle];
-        }
+        NSString *baseType = targetPoint.ctrlTypeStr;
+        __weak __typeof(self) weakSelf = self;
+
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+            [targetPoint initAddressIfNeeded];
+
+            NSString *finalText = [weakSelf buildTypeDescriptionWithTarget:targetPoint
+                                                                  baseType:baseType];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf || strongSelf.targetPoint != targetPoint)
+                    return;
+                
+                strongSelf.descriptionView.text = finalText;
+            });
+        });
+        return;
     }
-    [_descriptionView setText:descriptionStr];
-    [_descriptionView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+
+    if (targetPoint.type == OATargetNetworkGPX)
+    {
+        OARouteKey *key = (OARouteKey *)targetPoint.targetObj;
+        NSString *activityTitle = key.getActivityTypeTitle;
+        
+        NSString *text = activityTitle
+            ? [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), activityTitle]
+            : OALocalizedString(@"layer_route");
+            
+        self.descriptionView.text = text;
+        return;
+    }
+
+    self.descriptionView.text = targetPoint.titleAddress ?: @"";
+}
+
+- (NSString *)buildTypeDescriptionWithTarget:(OATargetPoint *)targetPoint
+                                    baseType:(NSString *)baseType
+{
+    NSString *typeStr = baseType;
+
+    if (targetPoint.titleAddress.length > 0 && ![targetPoint.title hasPrefix:targetPoint.titleAddress])
+    {
+        if (typeStr.length > 0)
+            typeStr = [NSString stringWithFormat:@"%@ • %@", typeStr, targetPoint.titleAddress];
+        else
+            typeStr = targetPoint.titleAddress;
+    }
+
+    return typeStr;
 }
 
 @end

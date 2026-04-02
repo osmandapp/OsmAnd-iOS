@@ -22,7 +22,6 @@
 #import "OAAmenitySearcher.h"
 #import "OAAmenitySearcher+cpp.h"
 #import "OATargetPoint.h"
-#import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"

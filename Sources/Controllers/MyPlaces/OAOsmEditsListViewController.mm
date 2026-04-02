@@ -109,7 +109,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _searchController.obscuresBackgroundDuringPresentation = NO;
     self.tabBarController.navigationItem.searchController = _searchController;
     if (@available(iOS 26.0, *))
-        self.tabBarController.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
+    {
+        if (![OAUtilities isIPad])
+            self.tabBarController.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
+    }
     [self setupSearchController:NO filtered:NO];
     self.definesPresentationContext = YES;
     

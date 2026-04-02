@@ -813,7 +813,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
-        if #available(iOS 16.0, *) {
+        if #available(iOS 26.0, *) {
             if !OAUtilities.isIPad() {
                 tabBarController?.navigationItem.preferredSearchBarPlacement = .stacked
                 navigationItem.preferredSearchBarPlacement = .stacked

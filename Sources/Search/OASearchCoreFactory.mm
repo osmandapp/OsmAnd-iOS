@@ -435,6 +435,7 @@
     int DEFAULT_ADDRESS_BBOX_RADIUS;
     int LIMIT;
     int LONG_ADDRESS_BBOX_RADIUS;
+    int MAX_ADRESS_RESULTS_BY_REGIONS;
 
     OATownCitiesCache *_townCitiesCache;
     QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
@@ -460,7 +461,8 @@
         DEFAULT_ADDRESS_BBOX_RADIUS = 40 * 1000;
         LONG_ADDRESS_BBOX_RADIUS = 100 * 1000;
         LIMIT = 10000;
-        
+        MAX_ADRESS_RESULTS_BY_REGIONS = 1000;
+
         _townCitiesCache = townCitiesCache;
         _cityApi = cityApi;
         _streetsApi = streetsApi;
@@ -709,7 +711,9 @@
                 searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:maxRadius], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
             }
         }
-        
+
+        int lastRegionPriority = 0;
+        int lastResultCount = [resultMatcher getCount];
         for (NSString *resId in offlineIndexes)
         {
             currentResId = resId;
@@ -841,7 +845,7 @@
                                   },
                                   ctrl);
             
-            int lastRegionPriority = 0;
+            NSNumber * lastRegionPriority = 0;
             int lastResultCount = [resultMatcher getCount];
             for (OASearchResult *res in immediateResults)
             {
@@ -934,6 +938,13 @@
             
             if (![resultMatcher isCancelled])
                 [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+            NSNumber * regionPriority = [phrase getRegionPriority:resId];
+            int cnt = [resultMatcher getCount] - lastResultCount;
+            if (cnt > MAX_ADRESS_RESULTS_BY_REGIONS && regionPriority > lastRegionPriority)
+            {
+                break;
+            }
+            lastRegionPriority = regionPriority;
         }
     }
 }
@@ -952,6 +963,7 @@
     int BBOX_RADIUS_INSIDE;// to support city search for basemap
     int BBOX_RADIUS_POI_IN_CITY;
     int FIRST_WORD_MIN_LENGTH;
+    int MAX_POI_RESULTS_BY_REGIONS;
     OAPOIHelper *_types;
 }
 
@@ -965,6 +977,7 @@
         BBOX_RADIUS_INSIDE = 5600 * 1000;
         BBOX_RADIUS_POI_IN_CITY = 25 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
+        MAX_POI_RESULTS_BY_REGIONS = 1000;
         _types = [OAPOIHelper sharedInstance];
     }
     return self;
@@ -1026,7 +1039,9 @@
         offlineIndexes = @[phraseResId];
     else
         offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
-        
+
+    NSNumber * lastRegionPriority = 0;
+    int lastResultCount = [resultMatcher getCount];
     for (NSString *resId in offlineIndexes)
     {
         currentResId = resId;
@@ -1112,6 +1127,13 @@
 
         if (![resultMatcher isCancelled])
             [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+        NSNumber * regionPriority = [phrase getRegionPriority:resId];
+        int cnt = [resultMatcher getCount] - lastResultCount;
+        if (cnt > MAX_POI_RESULTS_BY_REGIONS && regionPriority > lastRegionPriority)
+        {
+            break;
+        }
+        lastRegionPriority = regionPriority;
     }
 
     return true;

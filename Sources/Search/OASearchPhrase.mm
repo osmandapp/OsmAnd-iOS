@@ -1160,4 +1160,13 @@ static NSComparator _OACommonWordsComparator = nil;
     return @"";
 }
 
+- (NSNumber *) getRegionPriority:(NSString *) resId
+{
+    if (_regionPriorityProvider != nil)
+    {
+        return @([_regionPriorityProvider getRegionWeight:resId]);
+    }
+    return 0;
+}
+
 @end

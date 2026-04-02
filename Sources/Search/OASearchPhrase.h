@@ -124,6 +124,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 + (NSString *) ALLDELIMITERS;
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
 - (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel;
+- (NSNumber *) getRegionPriority:(NSString *) resId;
 
 
 @end

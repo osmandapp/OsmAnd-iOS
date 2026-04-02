@@ -470,14 +470,8 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
 {
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
-    if (@available(iOS 26.0, *))
-    {
-    }
-    else
-    {
-        if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
-            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
-    }
+    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
+        leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
     CGFloat freeSpaceForNavbarButton = freeSpaceForTitle;
@@ -518,7 +512,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
                     leftButton.configuration = [UIButtonConfiguration plainButtonConfiguration];
             }
             UIColor *buttonsTintColor = [self navbarButtonsTintColor];
-            leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+            leftButton.contentHorizontalAlignment = leftNavbarButtonCustomIcon ? UIControlContentHorizontalAlignmentCenter : UIControlContentHorizontalAlignmentLeading;
             leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
             leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
             leftButton.titleLabel.numberOfLines = 1;

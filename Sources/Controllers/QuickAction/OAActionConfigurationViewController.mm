@@ -163,10 +163,7 @@
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
-    if (@available(iOS 26.0, *))
-        return nil;
-    else
-        return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 }
 
 - (NSString *)getTableHeaderDescription

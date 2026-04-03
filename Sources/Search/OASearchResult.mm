@@ -58,6 +58,7 @@
         self.preferredZoom = PREFERRED_DEFAULT_ZOOM;
         self.requiredSearchPhrase = sp;
         _unknownPhraseMatchWeight = 0;
+        _searchResultResource = EOASearchResultResourceUnknown;
     }
     return self;
 }
@@ -684,7 +685,12 @@
             }
         }
 
-        if (self.resourceId != nil)
+        bool basemap = _amenity != nil && _amenity->regionName == QStringLiteral("basemap");
+        if (basemap)
+        {
+            _searchResultResource = EOASearchResultResourceBasemap;
+        }
+        else if (self.resourceId != nil)
         {
             if ([self.resourceId containsString:@".travel"])
             {
@@ -702,6 +708,7 @@
 
 - (NSInteger) resourceWeight
 {
+    [self getResourceType];
     switch (self.searchResultResource)
     {
         case EOASearchResultResourceDetailed:

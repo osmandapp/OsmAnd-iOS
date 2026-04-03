@@ -71,7 +71,7 @@ final class PoiUIFilterDataProvider: NSObject {
         var loading = false
         var isCancelled = false
 
-        while explorePlacesProvider.isLoading() && !isCancelled {
+        while explorePlacesProvider.isLoading(rect: rect) && !isCancelled {
             Thread.sleep(forTimeInterval: 0.1)
             loading = true
             isCancelled = matcher?.isCancelled() ?? false

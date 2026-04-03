@@ -7,22 +7,27 @@
 //
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Data/Amenity.h>
+#include <QList>
 
-@class OAPOI, MapSelectionResult;
+@class QuadRect;
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAPOILayerTopPlacesProvider : NSObject
 
-@property (nonatomic, strong, readonly, nullable) NSDictionary<NSNumber *, OAPOI *> *topPlaces;
 
+- (void)setEnabled:(BOOL)enabled;
+- (void)setTextScale:(CGFloat)textScale;
+- (void)refreshVisiblePlaces;
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc;
-- (void)updateLayer;
+- (void)notifyAmenitiesChanged:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities;
 - (void)resetLayer;
 
-- (void)resetSelectedTopPlaceIfNeeded;
-- (NSArray<OAPOI *> *)displayedAmenities;
-- (void)contextMenuDidShow:(id)targetObj;
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)displayedAmenities;
+- (QList<std::shared_ptr<const OsmAnd::Amenity>>)topPlaces;
+- (void)updateSelectedTopPlaceId:(nullable NSNumber *)placeId;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithTopPlaceBaseOrder:(int)baseOrder NS_DESIGNATED_INITIALIZER;
@@ -30,4 +35,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

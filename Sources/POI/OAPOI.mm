@@ -1103,9 +1103,17 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
         NSString *wikiPhoto = [self wikiPhoto];
         if (wikiPhoto != nil && wikiPhoto.length > 0)
         {
-            OASWikiImage *wikiImage = [[OASWikiHelper shared] getImageDataImageFileName:wikiPhoto];
-            _wikiIconUrl = wikiImage.imageIconUrl;
-            _wikiImageStubUrl = wikiImage.imageStubUrl;
+            if ([wikiPhoto hasPrefix:@"http://"] || [wikiPhoto hasPrefix:@"https://"])
+            {
+                _wikiIconUrl = wikiPhoto;
+                _wikiImageStubUrl = wikiPhoto;
+            }
+            else
+            {
+                OASWikiImage *wikiImage = [[OASWikiHelper shared] getImageDataImageFileName:wikiPhoto];
+                _wikiIconUrl = wikiImage.imageIconUrl;
+                _wikiImageStubUrl = wikiImage.imageStubUrl;
+            }
         }
     }
     return _wikiIconUrl;

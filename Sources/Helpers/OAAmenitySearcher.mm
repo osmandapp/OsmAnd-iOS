@@ -804,9 +804,17 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 {
     OAPOIHelper *helper = [OAPOIHelper sharedInstance];
     OAPOIType *type = nil;
-    if (!amenity->categories.isEmpty() && ![[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
+    if (!amenity->subType.isEmpty() && ![[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
     {
-        const auto& catList = amenity->getDecodedCategories();
+        auto catList = amenity->getDecodedCategories();
+        if (catList.isEmpty() && !amenity->type.isEmpty())
+        {
+            OsmAnd::Amenity::DecodedCategory decodedCategory;
+            decodedCategory.category = amenity->type;
+            decodedCategory.subcategory = amenity->subType.split(';', Qt::SkipEmptyParts).value(0);
+            if (!decodedCategory.subcategory.isEmpty())
+                catList.push_back(decodedCategory);
+        }
         if (!catList.isEmpty())
         {
             NSString *category = catList.first().category.toNSString();

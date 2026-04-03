@@ -1,6 +1,7 @@
 //
-//  OpeningHoursParserTest.swift
 //  OsmAnd MapsTests
+//  OpeningHoursParserTest.swift
+//  Port from OpeningHoursParserTest.java
 //
 
 import XCTest
@@ -491,6 +492,78 @@ final class OpeningHoursParserTest: XCTestCase {
         configure(localeIdentifier: "ar", twelveHour: true)
         hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
         assertAssembled(hours, equals: "اثنين-جمعة 4:30-10:00 ص, 7:30 ص-11:00 م; سبت, أحد, PH 1:30-11:00 م", localized: true)
+    }
+
+    func testYearFormats() {
+        var hours = makeHours("2024 Jan-Dec")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2024 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2025 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024-2025 Jan 1-Dec 31")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2024 23:59", hours: hours, expected: true)
+        assertOpened("31.12.2025 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2026 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024,2025 Jan 1-Dec 31")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2024 23:59", hours: hours, expected: true)
+        assertOpened("31.12.2025 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2026 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2024 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2025 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024,2026")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2024 23:59", hours: hours, expected: true)
+        assertOpened("15.06.2025 12:00", hours: hours, expected: false)
+        assertOpened("01.01.2026 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2026 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2027 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024,2026 Jan 1-Dec 31")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2024 23:59", hours: hours, expected: true)
+        assertOpened("15.06.2025 12:00", hours: hours, expected: false)
+        assertOpened("01.01.2026 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2026 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2027 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024,2026-2027 Jan 1-Dec 31")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("15.06.2025 12:00", hours: hours, expected: false)
+        assertOpened("01.01.2026 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2027 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2028 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024-2025,2027-2028 Jan 1-Dec 31")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2025 23:59", hours: hours, expected: true)
+        assertOpened("15.06.2026 12:00", hours: hours, expected: false)
+        assertOpened("01.01.2027 00:00", hours: hours, expected: true)
+        assertOpened("31.12.2028 23:59", hours: hours, expected: true)
+        assertOpened("01.01.2029 00:00", hours: hours, expected: false)
+
+        hours = makeHours("2024,2026,2028 Jan 1-Dec 31")
+        assertOpened("31.12.2023 23:59", hours: hours, expected: false)
+        assertOpened("01.01.2024 00:00", hours: hours, expected: true)
+        assertOpened("15.06.2025 12:00", hours: hours, expected: false)
+        assertOpened("01.01.2026 00:00", hours: hours, expected: true)
+        assertOpened("15.06.2027 12:00", hours: hours, expected: false)
+        assertOpened("01.01.2028 00:00", hours: hours, expected: true)
+        assertOpened("01.01.2029 00:00", hours: hours, expected: false)
     }
 
     private func configure(localeIdentifier: String?, twelveHour: Bool) {

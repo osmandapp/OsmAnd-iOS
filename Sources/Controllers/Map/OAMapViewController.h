@@ -219,6 +219,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void) onApplicationDestroyed;
 
 - (void) recreateHeightmapProvider;
+- (void)recreate3dObjectsProvider;
 - (void) updateElevationConfiguration;
 
 - (void) updateTapRulerLayer;

@@ -24,7 +24,7 @@ class OABaseLoadAsyncTask: OAAsyncTask {
     // override
     override func onPreExecute() {
         if shouldShowProgress {
-            OARootViewController.instance().view.addSpinner(inCenterOfCurrentView: true)
+            OARootViewController.instance().mapPanel.showProgress()
         }
         super.onPreExecute()
     }
@@ -32,7 +32,7 @@ class OABaseLoadAsyncTask: OAAsyncTask {
     // override
     override func onPostExecute(result: Any?) {
         if shouldShowProgress {
-            OARootViewController.instance().view.removeSpinner()
+            OARootViewController.instance().mapPanel.hideProgress()
         }
         super.onPostExecute(result: result)
     }

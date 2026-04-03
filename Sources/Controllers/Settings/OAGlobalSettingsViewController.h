@@ -21,7 +21,8 @@ typedef enum
 
 @interface OAGlobalSettingsViewController : OABaseNavbarViewController
 
+@property (nonatomic, readonly) EOAGlobalSettingsScreen settingsType;
+
 - (instancetype) initWithSettingsType:(EOAGlobalSettingsScreen)settingsType;
 
 @end
-

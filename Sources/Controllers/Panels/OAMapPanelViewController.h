@@ -81,6 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
 - (void)showRouteInfo:(BOOL)fullScreen;
+- (void)showRouteInfo:(BOOL)fullScreen appMode:(OAApplicationMode *)appMode;
 - (void) closeRouteInfo;
 - (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(nullable void (^)(void))onComplete;
 - (void) updateRouteInfo;
@@ -95,6 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) showTravelGuides;
 - (void) showTerrainScreen;
 - (void) showCoordinatesGridScreen;
+- (void)showBuildings3DScreen;
 
 
 - (void) addWaypoint;

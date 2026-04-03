@@ -502,7 +502,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     if (_terrainType == EOATerrainSettingsTypeVisibility && _baseAlpha != _currentAlpha)
         [_terrainMode setTransparency:_baseAlpha / 0.01];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
-        [_terrainMode setZoomValuesWithMinZoom:_baseMinZoom maxZoom:_baseMaxZoom];
+        [_terrainMode setZoomValuesWithMinZoom:(int32_t) _baseMinZoom maxZoom:(int32_t) _baseMaxZoom];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _baseVerticalExaggerationScale != _currentVerticalExaggerationScale)
         _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
     else if (_terrainType == EOATerrainSettingsTypePalette && (_basePaletteColorItem != _currentPaletteColorItem || _isDefaultColorRestored))

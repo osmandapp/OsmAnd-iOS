@@ -278,6 +278,20 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return preference;
 }
 
+- (OACommonInteger *)registerIntPreference:(NSString *)prefId defValue:(NSInteger)defValue
+{
+    OACommonInteger *preference = [[OAAppSettings sharedManager] registerIntPreference:prefId defValue:(int) defValue];
+    [_pluginPreferences addObject:preference];
+    return preference;
+}
+
+- (OACommonDouble *)registerFloatPreference:(NSString *)prefId defValue:(double)defValue
+{
+    OACommonDouble *preference = [[OAAppSettings sharedManager] registerFloatPreference:prefId defValue:defValue];
+    [_pluginPreferences addObject:preference];
+    return preference;
+}
+
 /*
  * Return true in case if plugin should fill the map context menu with buildContextMenuRows method.
  */

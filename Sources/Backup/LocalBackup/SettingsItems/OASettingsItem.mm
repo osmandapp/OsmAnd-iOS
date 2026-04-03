@@ -12,7 +12,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 NSString *const kRoutingPreferencePrefix = @"prouting_";
-
+NSString * const kRendererPreferencePrefix = @"nrenderer_";
 NSString *const kSettingsItemErrorDomain = @"SettingsItem";
 NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
@@ -332,7 +332,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([key hasPrefix:@"nrenderer_"] || [key isEqualToString:@"displayed_transport_settings"])
+        if ([key hasPrefix:kRendererPreferencePrefix] || [key isEqualToString:@"displayed_transport_settings"])
             [rendererSettings setObject:obj forKey:key];
         else if ([key hasPrefix:kRoutingPreferencePrefix])
             [routingSettings setObject:obj forKey:key];

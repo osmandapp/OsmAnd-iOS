@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,13 +18,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="mAu-5P-wML">
-                        <rect key="frame" x="14" y="42" width="292" height="31"/>
+                        <rect key="frame" x="20" y="42" width="280" height="30"/>
                         <connections>
                             <action selector="sliderValueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="aHr-G8-V96"/>
                         </connections>
                     </slider>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aqW-Ho-d7M" userLabel="Title Label">
-                        <rect key="frame" x="16" y="13" width="210" height="22"/>
+                        <rect key="frame" x="20" y="13" width="202" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="98v-GB-G2m"/>
                         </constraints>
@@ -33,7 +33,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qiR-kP-SBg" userLabel="Percent Label">
-                        <rect key="frame" x="234" y="13" width="70" height="22"/>
+                        <rect key="frame" x="230" y="13" width="70" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="P3n-tz-6QF"/>
                             <constraint firstAttribute="height" constant="22" id="abz-px-OMy"/>
@@ -45,14 +45,14 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="qiR-kP-SBg" firstAttribute="leading" secondItem="aqW-Ho-d7M" secondAttribute="trailing" constant="8" id="5ch-nh-xOr"/>
-                    <constraint firstAttribute="trailing" secondItem="qiR-kP-SBg" secondAttribute="trailing" constant="16" id="AXx-BQ-JmK"/>
+                    <constraint firstAttribute="trailing" secondItem="qiR-kP-SBg" secondAttribute="trailing" constant="20" id="AXx-BQ-JmK"/>
                     <constraint firstItem="aqW-Ho-d7M" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="J23-dy-dih"/>
-                    <constraint firstItem="aqW-Ho-d7M" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="TbY-Qd-Oq1"/>
+                    <constraint firstItem="aqW-Ho-d7M" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="TbY-Qd-Oq1"/>
                     <constraint firstItem="qiR-kP-SBg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="V3H-dU-71g"/>
                     <constraint firstAttribute="bottom" secondItem="mAu-5P-wML" secondAttribute="bottom" constant="12" id="WWw-DH-zpt"/>
                     <constraint firstItem="mAu-5P-wML" firstAttribute="top" secondItem="aqW-Ho-d7M" secondAttribute="bottom" constant="7" id="XDV-P3-lII"/>
-                    <constraint firstAttribute="trailing" secondItem="mAu-5P-wML" secondAttribute="trailing" constant="16" id="oaF-hi-bSQ"/>
-                    <constraint firstItem="mAu-5P-wML" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="yXx-Mw-dcI"/>
+                    <constraint firstAttribute="trailing" secondItem="mAu-5P-wML" secondAttribute="trailing" constant="20" id="oaF-hi-bSQ"/>
+                    <constraint firstItem="mAu-5P-wML" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="yXx-Mw-dcI"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>

@@ -29,6 +29,7 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OAGPXDatabase.h"
 #import "OASelectedGPXHelper.h"
+#import "OAGPXLayer.h"
 #import "GeneratedAssetSymbols.h"
 #import <DGCharts/DGCharts-Swift.h>
 
@@ -128,7 +129,9 @@
         [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")] forState:UIControlStateNormal];
         [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [modeCell.iconButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        modeCell.rightLabel.text = OALocalizedString(@"shared_string_distance");
+        [modeCell.rightModeButton setTitle:OALocalizedString(@"shared_string_distance") forState:UIControlStateNormal];
+        [modeCell.rightModeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [modeCell.rightIconButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         modeCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         
         return @[modeCell, routeStatsCell];
@@ -168,6 +171,11 @@
 - (BOOL)hideButtons
 {
     return YES;
+}
+
+- (NSString *)getCommonTypeStr
+{
+    return @"";
 }
 
 - (NSAttributedString *)getAttributedTypeStr
@@ -345,9 +353,6 @@
 - (void)onMenuDismissed
 {
     [super onMenuDismissed];
-    
-    if (_tempGpx)
-        [[OARootViewController instance].mapPanel.mapViewController hideTempGpxTrack];
 }
 
 - (ETopToolbarType) topToolbarType
@@ -377,7 +382,14 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    StatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[StatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types selectedXAxisMode:_selectedXAxisMode analysis:self.analysis];
+    BOOL isYAxisMode = YES;
+    if (_data.count > 0)
+    {
+        OARouteStatisticsModeCell *statsModeCell = _data[0];
+        isYAxisMode = sender != statsModeCell.rightModeButton && sender != statsModeCell.rightIconButton;
+    }
+    
+    StatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[StatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types selectedXAxisMode:_selectedXAxisMode analysis:self.analysis isYAxisMode:isYAxisMode];
     statsModeBottomSheet.delegate = self;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:statsModeBottomSheet];
     nav.modalPresentationStyle = UIModalPresentationPageSheet;

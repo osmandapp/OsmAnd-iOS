@@ -1270,6 +1270,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     // not implemented
 }
 
+- (void)selectAppMode:(OAApplicationMode *)appMode
+{
+    _appModeView.selectedMode = appMode;
+    if (![[_routingHelper getAppMode] isEqual:appMode])
+        [self appModeChanged:appMode];
+}
+
 - (void) update
 {
     [self updateData];

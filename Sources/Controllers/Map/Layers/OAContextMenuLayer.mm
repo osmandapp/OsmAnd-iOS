@@ -392,6 +392,9 @@
 
 - (void)updateContextPin3DHighlight:(double)latitude longitude:(double)longitude target:(const OsmAnd::PointI &)target
 {
+    if (![self isContextPin3DHighlightEnabled])
+        return;
+
     const auto previous = _contextPinMarker->getPosition();
     const BOOL wasHidden = _contextPinMarker->isHidden();
     const BOOL changed = previous != target;
@@ -401,7 +404,7 @@
         [self remove3DObjectColorAtLatitude:previousLatLon.latitude longitude:previousLatLon.longitude];
     }
     
-    if ([self isContextPin3DHighlightEnabled] && (changed || wasHidden))
+    if (changed || wasHidden)
         [self add3DObjectColorAtLatitude:latitude longitude:longitude color:UIColorFromRGB(color_osmand_orange)];
 }
 

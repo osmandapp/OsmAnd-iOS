@@ -300,12 +300,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     for (NSString *prefix in kNameTagPrefixes)
     {
         for (NSString *tagKey in allTags.allKeys)
-        {
-            if ([tagKey isEqualToString:@"int_name"] && [prefix isEqualToString:@"int_name"])
-            {
-                NSLog(@"");
-            }
-            
+        {            
             if ([tagKey isEqualToString:prefix] ||
                 [tagKey hasPrefix:[prefix stringByAppendingString:@":"]])
             {

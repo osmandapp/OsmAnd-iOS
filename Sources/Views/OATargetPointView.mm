@@ -2781,7 +2781,6 @@ static const NSInteger _buttonsCount = 4;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [weakSelf.targetPoint initAddressIfNeeded];
-
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf updateTargetPointAddress];
         });
@@ -2798,5 +2797,3 @@ static const NSInteger _buttonsCount = 4;
 }
 
 @end
-
-

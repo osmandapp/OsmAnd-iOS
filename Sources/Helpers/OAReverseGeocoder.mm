@@ -39,9 +39,11 @@
     return sharedInstance;
 }
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _addressCache = [[NSCache alloc] init];
         _addressCache.countLimit = 100;
         

@@ -430,7 +430,6 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         return [OAUtilities capitalizeFirstLetter:name];
     }
     
-    
     return nil;
 }
 

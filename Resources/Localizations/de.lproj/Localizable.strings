@@ -4052,3 +4052,11 @@
 "poi_mobile" = "Handy";
 "show_spherical_map" = "Weltansicht";
 "y_axis_description" = "Wählen Sie bis zu zwei Optionen für die Y-Achse.";
+"enable_3d_objects" = "3D-Gebäude";
+"free_custom_color_description" = "3D-Gebäude können mit beliebigen Farben angepasst werden. Ideal, um sie an ein Kartendesign anzupassen oder den Kontrast zu verbessern.";
+"performance" = "Leistung";
+"view_distance" = "Entfernung anzeigen";
+"custom_color" = "Benutzerdefinierte Farbe";
+"choose_color" = "Farbe auswählen";
+"buildings_3d_visibility_description" = "Passe die Deckkraft der 3D-Strukturen auf der Karte an.";
+"level_of_details" = "Detailtiefe";

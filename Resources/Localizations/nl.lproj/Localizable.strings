@@ -2743,7 +2743,7 @@
 "original_shape_description" = "Elk punt behoudt de eigen vorm.";
 "preview_next_turn" = "Voorvertoning van de volgende afslag";
 "purchase_feature_desc_vehicle_metrics_obd_ii" = "Houd essentiële voertuiggegevens bij via het OBD-II-protocol. Monitor belangrijke statistieken zoals onder andere: snelheid, motortoerental (RPM), brandstofverbruik.";
-"vehicle_metrics_obd_ii" = "Voertuigstatistieken (OBD-II)";
+"vehicle_metrics_obd_ii" = "Voertuigdiagnostiek (OBD-II)";
 "shared_string_hour" = "Uur";
 "obd_engine_runtime_desc" = "Toont hoelang de motor al draait sinds het starten.";
 "obd_engine_runtime" = "Motordraaitijd";
@@ -2787,7 +2787,7 @@
 "obd_fuel_type_electric" = "Elektrisch";
 "obd_fuel_type_hydrogen" = "Waterstof";
 "obd_fuel_type_unknown" = "Type brandstof onbekend";
-"obd_widget_group" = "Voertuigmetingen";
+"obd_widget_group" = "Voertuigdiagnostiek";
 "shared_string_source" = "Bron";
 "type_of_activity" = "Soort activiteit";
 "change_activity" = "Verander activiteit";
@@ -2831,7 +2831,7 @@
 "obd_fuel_consumption_rate_desc" = "Toont het brandstofverbruik van het voertuig op basis van de OBD-gegevens en de locatie";
 "obd_fuel_left_liters" = "Resterende brandstof (liters)";
 "obd_fuel_type" = "Brandstofsoort";
-"obd_plugin_name" = "Voertuigmetingen";
+"obd_plugin_name" = "Voertuigdiagnostiek";
 "shared_string_interface" = "Interface";
 "obd_fuel_type_methanol" = "Methanol";
 "obd_fuel_type_ethanol" = "Ethanol";
@@ -3755,7 +3755,7 @@
 "loc_access_denied" = "Verboden toegang";
 "loc_access_denied_desc" = "Toegang tot de locatie service is niet toegestaan";
 "col_gray" = "Grijs";
-"travel_guides_beta" = "Reisgidsen (Beta)";
+"travel_guides_beta" = "Reisgidsen (Bèta)";
 "shared_string_remove_bookmark" = "Verwijder bladwijzer";
 "travel_guides_search_placeholder" = "Zoek naar land, stad of provincie";
 "travel_guides_no_file_error" = "Fout: Geen gegevens voor regio-bestand";
@@ -3783,3 +3783,4 @@
 "trip_recording_moving_time" = "Bewegingstijd";
 "trip_recording_max_speed_widget_description" = "Toont de maximale snelheid van de momenteel geregistreerde rit. Tik om de wisselen tussen de algehele snelheid en de maximale snelheid van de laatste beklimming of afdaling.";
 "trip_recording_average_slope_widget_description" = "Toont de gemiddelde helling van het laatste afdaling- of beklimmingssegment van de momenteel geregistreerde rit.";
+"vehicle_metrics_chart_category" = "Voertuigdiagnostiek";

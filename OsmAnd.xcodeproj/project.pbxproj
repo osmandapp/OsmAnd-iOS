@@ -1617,6 +1617,8 @@
 		CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
+		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
+		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
 		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
 		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
@@ -5543,6 +5545,9 @@
 		CA4EDFA46B3B672B32035B7F /* OASubscriptionCardView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionCardView.mm; sourceTree = "<group>"; };
 		CA4EDFFD2EBD6CFA86AF69F1 /* OADeleteOldFilesCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADeleteOldFilesCommand.h; sourceTree = "<group>"; };
 		CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
+		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
+		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
 		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
 		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
@@ -10239,6 +10244,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		7600F13F2F8010AC00DC552B /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */,
+				D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */,
+				D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		843394751FF4FA37006205A5 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -14071,6 +14086,7 @@
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
 				DA72AB8D2508F41000851313 /* Info.plist */,
+				7600F13F2F8010AC00DC552B /* Util */,
 			);
 			path = "OsmAnd MapsTests";
 			sourceTree = "<group>";
@@ -18625,6 +18641,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */,
+				D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */,
 				FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,

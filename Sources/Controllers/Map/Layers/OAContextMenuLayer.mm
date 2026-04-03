@@ -577,7 +577,8 @@
             
         if (targetPoint)
         {
-            [targetPoint initAddressIfNeeded];
+            targetPoint.location = latLon.coordinate;
+            targetPoint.shouldFetchAddress = YES;
             
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
         }
@@ -762,8 +763,17 @@
 
 - (void) animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    _animationDone = YES;
     _contextPinMarker->setIsHidden(false);
+    _contextPinMarker->setUpdateAfterCreated(true);
+    _animationDone = YES;
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (void)contextMenuDidHide
+{
+    [self hideAnimatedPin];
+    [self hideContextPinMarker];
 }
 
 @end

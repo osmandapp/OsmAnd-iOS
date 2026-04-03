@@ -417,7 +417,7 @@
                 {
                     controller.localMapIndexItem = item;
                     if (item && [controller isKindOfClass:OAPOIViewController.class])
-                        [((OAPOIViewController *)controller).delegate addresLabelUpdated];
+                        [((OAPOIViewController *)controller).delegate addressLabelUpdated];
                 }
             }
             [controller createMapDownloadControls];

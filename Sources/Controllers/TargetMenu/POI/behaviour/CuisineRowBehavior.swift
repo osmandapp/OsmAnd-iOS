@@ -15,7 +15,7 @@ final class CuisineRowBehavior: DefaultPoiAdditionalRowBehaviour {
         
         let cuisines = params.value
             .split(separator: ";")
-            .compactMap { helper.getTranslation("cuisine_\($0)") }
+            .compactMap { helper.translation("cuisine_\($0)", withDefault: true) }
         
         params.builder.text = cuisines
             .enumerated()

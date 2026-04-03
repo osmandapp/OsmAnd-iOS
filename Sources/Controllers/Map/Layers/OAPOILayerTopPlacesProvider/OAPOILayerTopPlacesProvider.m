@@ -127,7 +127,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 {
     dispatch_async(_backgroundQueue, ^{
         CGFloat displayDensityFactor = _mapViewController.mapView.displayDensityFactor;
-        if (fabs(_textScale - textScale) < 0.0001f || fabs(_displayDensityFactor - displayDensityFactor) < 0.0001f)
+        if (fabs(_textScale - textScale) < 0.0001f && fabs(_displayDensityFactor - displayDensityFactor) < 0.0001f)
             return;
 
         _textScale = textScale;

@@ -1208,18 +1208,18 @@ static BOOL OAIsRequestApplicableToVisibleState(
     return nil;
 }
 
-- (NSString *) getAmenityName:(OAPOI *)amemity
+- (NSString *) getAmenityName:(OAPOI *)amenity
 {
     NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-    if ([amemity.type.category isWiki])
+    if ([amenity.type.category isWiki])
     {
         if (!locale || NSStringIsEmpty(locale))
             locale = @"";
         
-        locale = [OAPluginsHelper onGetMapObjectsLocale:amemity preferredLocale:locale];
+        locale = [OAPluginsHelper onGetMapObjectsLocale:amenity preferredLocale:locale];
     }
     
-    return [amemity getName:locale transliterate:[OAAppSettings sharedManager].settingMapLanguageTranslit.get];
+    return [amenity getName:locale transliterate:[OAAppSettings sharedManager].settingMapLanguageTranslit.get];
 }
 
 #pragma mark - OAContextMenuProvider

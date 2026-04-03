@@ -366,13 +366,14 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     NSMutableDictionary<NSNumber *, NSNumber *> *osmIdMap = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, NSNumber *> *wikidataMap = [NSMutableDictionary dictionary];
 
+    NSMutableDictionary<NSNumber *, NSMutableArray<OASearchResult *> *> *copyDataMap = [NSMutableDictionary dictionary];
     for (OASearchResult *sr in input)
     {
         if ([sr.object isKindOfClass:OAPOI.class])
         {
             OAPOI *that = (OAPOI *)sr.object;
             uint64_t osmId = [that getOsmId];
-            NSNumber *osmIdObj = (osmId == [OAMapObject getInvalidObfId] || osmId <= 0) ? nil : @(osmId);
+            NSNumber *osmIdObj = (that.obfId == [OAMapObject getInvalidObfId] || (int64_t)that.obfId < 0) ? nil : @(osmId);
             NSString *wikidata = [that getWikidata];
 
             if (that.isRouteTrack)
@@ -405,7 +406,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             }
             else
             {
-                [self copyData:output[indexToUpdate] fromSearchResult:sr];
+                NSNumber *idxKey = @(indexToUpdate);
+                if (!copyDataMap[idxKey]) {
+                    copyDataMap[idxKey] = [NSMutableArray array];
+                }
+                [copyDataMap[idxKey] addObject:sr];
             }
 
             NSNumber *indexObj = @(indexToUpdate);
@@ -424,6 +429,40 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         }
     }
 
+    if (copyDataMap.count > 0)
+    {
+        NSString *lang = [[_phrase getSettings] getLang];
+        for (NSNumber *indexKey in copyDataMap)
+        {
+            NSMutableArray<OASearchResult *> *sr = copyDataMap[indexKey];
+            int indexToUpdate = [indexKey intValue];
+            OASearchResult *r = output[indexToUpdate];
+            [sr insertObject:r atIndex:0];
+            [sr sortUsingComparator:^NSComparisonResult(OASearchResult *s1, OASearchResult *s2) {
+                double w1 = [s1 resourceWeight];
+                double w2 = [s2 resourceWeight];
+
+                if (w1 != w2) {
+                    return w1 > w2 ? NSOrderedAscending : NSOrderedDescending;
+                }
+
+                if ([s1.object isKindOfClass:OAPOI.class] && [(OAPOI *)s1.object isRouteArticle] &&
+                    [s2.object isKindOfClass:OAPOI.class] && [(OAPOI *)s2.object isRouteArticle])
+                {
+                    NSString *l1 = [BaseDetailsObject getLangForTravel:(OAPOI *)s1.object];
+                    NSString *l2 = [BaseDetailsObject getLangForTravel:(OAPOI *)s2.object];
+                    if (![l1 isEqualToString:l2])
+                    {
+                        return [l1 isEqualToString:lang] ? NSOrderedAscending : NSOrderedDescending;
+                    }
+                }
+                return NSOrderedSame;
+            }];
+
+            output[indexToUpdate] = [self uniteData:sr];
+        }
+    }
+
     if (input.count != output.count)
     {
         [input removeAllObjects];
@@ -431,49 +470,54 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     }
 }
 
-- (void)copyData:(OASearchResult *)unique fromSearchResult:(OASearchResult *)iterated
+- (OASearchResult *) uniteData:(NSMutableArray<OASearchResult *> *)list
 {
+    OASearchResult *unique = list[0];
+    [list removeObjectAtIndex:0];
 
     BaseDetailsObject *base = [[BaseDetailsObject alloc] initWithObject:unique.object lang:[[_phrase getSettings] getLang]];
-    [base addObject:iterated.object];
-    
-    unique.object = [base syntheticAmenity];
-    if (iterated.otherNames != nil)
+    for (OASearchResult *iterated in list)
     {
-        if (![iterated.localeName isEqualToString:unique.localeName])
+        [base addObject:iterated.object];
+        unique.object = [base syntheticAmenity];
+        if (iterated.otherNames != nil)
         {
-            [iterated.otherNames addObject:iterated.localeName];
-        }
-        if (unique.otherNames == nil)
-        {
-            unique.otherNames = [NSMutableArray array];
-        }
-        else if (![unique.otherNames isKindOfClass:[NSMutableArray class]])
-        {
-            unique.otherNames = [unique.otherNames mutableCopy];
-        }
-        for (NSString *name in iterated.otherNames)
-        {
-            if (![unique.otherNames containsObject:name])
+            if (![iterated.localeName isEqualToString:unique.localeName])
             {
-                [unique.otherNames addObject:name];
+                [iterated.otherNames addObject:iterated.localeName];
+            }
+            if (unique.otherNames == nil)
+            {
+                unique.otherNames = [NSMutableArray array];
+            }
+            else if (![unique.otherNames isKindOfClass:[NSMutableArray class]])
+            {
+                unique.otherNames = [unique.otherNames mutableCopy];
+            }
+            for (NSString *name in iterated.otherNames)
+            {
+                if (![unique.otherNames containsObject:name])
+                {
+                    [(NSMutableArray *)unique.otherNames addObject:name];
+                }
             }
         }
-    }
-    
-    if (iterated.otherWordsMatch != nil)
-    {
-        if (unique.otherWordsMatch == nil)
+
+        if (iterated.otherWordsMatch != nil)
         {
-            unique.otherWordsMatch = [NSMutableSet set];
+            if (unique.otherWordsMatch == nil)
+            {
+                unique.otherWordsMatch = [NSMutableSet set];
+            }
+            [unique.otherWordsMatch addObjectsFromArray:[iterated.otherWordsMatch allObjects]];
         }
-        [unique.otherWordsMatch addObjectsFromArray:[iterated.otherWordsMatch allObjects]];
+
+        if (iterated.unknownPhraseMatchWeight > unique.unknownPhraseMatchWeight)
+        {
+            unique.unknownPhraseMatchWeight = iterated.unknownPhraseMatchWeight;
+        }
     }
-    
-    if (iterated.unknownPhraseMatchWeight > unique.unknownPhraseMatchWeight)
-    {
-        unique.unknownPhraseMatchWeight = iterated.unknownPhraseMatchWeight;
-    }
+    return unique;
 }
 
 - (NSArray<OASearchResult *> *) getCurrentSearchResults
@@ -738,7 +782,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 - (void) initApi
 {
     OASearchAmenityByNameAPI *amenitiesApi = [[OASearchAmenityByNameAPI alloc] init];
-    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] initWithAPI:amenitiesApi]];
+    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] initWithAPI:amenitiesApi requester:self.httpRedirectRequester]];
     OASearchAmenityTypesAPI *searchAmenityTypesAPI = [[OASearchAmenityTypesAPI alloc] init];
     [_apis addObject:searchAmenityTypesAPI];
     [_apis addObject:[[OASearchAmenityByTypeAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];
@@ -747,7 +791,9 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     [_apis addObject:streetsApi];
     OASearchStreetByCityAPI *cityApi = [[OASearchStreetByCityAPI alloc] initWithAPI:streetsApi];
     [_apis addObject:cityApi];
-    [_apis addObject:[[OASearchAddressByNameAPI alloc] initWithCityApi:cityApi streetsApi:streetsApi]];
+    OATownCitiesCache *townCitiesCache = [[OATownCitiesCache alloc] init];
+    [_apis addObject:[[OASearchAddressByNameAPI alloc] initWithCityApi:cityApi streetsApi:streetsApi longDistance:FALSE townCitiesCache:townCitiesCache]];
+    [_apis addObject:[[OASearchAddressByNameAPI alloc] initWithCityApi:cityApi streetsApi:streetsApi longDistance:TRUE townCitiesCache:townCitiesCache]];
 }
 
 - (void) clearCustomSearchPoiFilters

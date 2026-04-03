@@ -26,7 +26,7 @@ final class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     private var editingComplexWidget: MapWidgetInfo?
     
-    private var widgetPanel: WidgetsPanel! {
+    private(set) var widgetPanel: WidgetsPanel! {
         didSet {
             navigationItem.title = getTitle()
             updateUIAnimated(nil)

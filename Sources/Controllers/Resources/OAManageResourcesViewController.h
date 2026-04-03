@@ -17,4 +17,7 @@
 + (void) prepareData;
 + (BOOL) lackOfResources;
 
+- (NSInteger)currentScope;
+- (void)configureForLocalResources;
+
 @end

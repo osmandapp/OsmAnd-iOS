@@ -81,14 +81,12 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
 
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
-
-                currentAppearanceMode = DayNightMode(rawValue: Int32(index))
-                if currentAppearanceMode == nil && index == 3 { // todo: compatibility with Android, 3 - light sensor
-                    currentAppearanceMode = .appTheme
-                }
-                updateModeUI()
-                if let currentAppearanceMode {
-                    OADayNightHelper.instance().setTempMode(Int(currentAppearanceMode.rawValue))
+                if #available(iOS 26.0, *) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        self.updateAppearanceMode(with: index)
+                    }
+                } else {
+                    self.updateAppearanceMode(with: index)
                 }
             }
             return cell
@@ -107,6 +105,17 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
             return cell
         }
         return UITableViewCell()
+    }
+    
+    private func updateAppearanceMode(with index: Int) {
+        currentAppearanceMode = DayNightMode(rawValue: Int32(index))
+        if currentAppearanceMode == nil && index == 3 { // todo: compatibility with Android, 3 - light sensor
+            currentAppearanceMode = .appTheme
+        }
+        updateModeUI()
+        if let currentAppearanceMode {
+            OADayNightHelper.instance().setTempMode(Int(currentAppearanceMode.rawValue))
+        }
     }
     
     private func getImagesFromModes(_ selected: Bool) -> [UIImage] {

@@ -108,6 +108,7 @@
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/GeoTiffCollection.h>
+#include <OsmAndCore/Map/Map3DObjectsProvider.h>
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
@@ -2476,6 +2477,7 @@ static const NSInteger kDetailedMapZoom = 9;
         [_gpxFilesRec removeAllObjects];
         
         [self recreateHeightmapProvider];
+        [self recreate3dObjectsProvider];
         [self updateElevationConfiguration];
         
         // Determine what type of map-source is being activated
@@ -2487,7 +2489,9 @@ static const NSInteger kDetailedMapZoom = 9;
         NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[lastMapSource.resourceId];
         if (mapSourceResource)
             resourceType = mapSourceResource->type;
-            
+
+        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+        NSDictionary<NSString *, NSString *> *buildings3DRenderSettings = [[OAMapStyleSettings sharedInstance] get3DBuildingsRendererSettings];
         if (resourceType == OsmAndResourceType::MapStyle)
         {
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
@@ -2524,22 +2528,20 @@ static const NSInteger kDetailedMapZoom = 9;
                                                                            _mapPrimitiviser,
                                                                            rasterTileSize));
 
+            NSMutableDictionary<NSString *, NSString *> *newSettings = [NSMutableDictionary dictionary];
             // Configure with preset if such is set
             if (lastMapSource.variant != nil)
             {
                 OALog(@"Using '%@' variant of style '%@'", lastMapSource.variant, unresolvedMapStyle->name.toNSString());
-
-                QHash< QString, QString > newSettings;
-                
                 OAApplicationMode *am = settings.applicationMode.get;
                 NSString *appMode = am.stringKey;
-                newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
+                newSettings[@"appMode"] = appMode;
                 NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
-                newSettings[QString::fromLatin1("baseAppMode")] = QString([baseMode UTF8String]);
+                newSettings[@"baseAppMode"] = baseMode;
                                 
                 if (settings.nightMode)
                 {
-                    newSettings[QString::fromLatin1("nightMode")] = "true";
+                    newSettings[@"nightMode"] = @"true";
                     [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
                     [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];
                 }
@@ -2552,7 +2554,6 @@ static const NSInteger kDetailedMapZoom = 9;
                 // --- Apply Map Style Settings
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
                 NSArray *params = styleSettings.getAllParameters;
-                OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
                 BOOL useContours = [iapHelper.srtm isActive];
                 BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
                 for (OAMapStyleParameter *param in params)
@@ -2560,33 +2561,32 @@ static const NSInteger kDetailedMapZoom = 9;
                     if ([param.name isEqualToString:ELEVATION_UNITS_ATTR])
                     {
                         BOOL useFeet = [OAAltitudeMetricsConstant shouldUseFeet:[[OAAppSettings sharedManager].altitudeMetric get]];
-                        newSettings[QString::fromNSString(ELEVATION_UNITS_ATTR)] = useFeet
-                            ? QString::fromNSString(ELEVATION_UNITS_FEET_VALUE)
-                            : QString::fromNSString(ELEVATION_UNITS_METERS_VALUE);
+                        newSettings[ELEVATION_UNITS_ATTR] = useFeet ? ELEVATION_UNITS_FEET_VALUE : ELEVATION_UNITS_METERS_VALUE;
                         continue;
                     }
                     if ([param.name isEqualToString:CONTOUR_LINES] && !useContours)
                     {
-                        newSettings[QString::fromNSString(param.name)] = QStringLiteral("disabled");
+                        newSettings[param.name] = @"disabled";
                         continue;
                     }
                     if ([param.name isEqualToString:NAUTICAL_DEPTH_CONTOURS] && !useDepthContours)
                     {
-                        newSettings[QString::fromNSString(param.name)] = QStringLiteral("false");
+                        newSettings[param.name] = @"false";
                         continue;
                     }
                     if ([param.name isEqualToString:NO_POLYGONS])
                     {
-                        newSettings[QString::fromNSString(param.name)] = [settings shouldHidePolygons] ? QStringLiteral("true") : QStringLiteral("false");
+                        newSettings[param.name] = [settings shouldHidePolygons] ? @"true" : @"false";
                         continue;
                     }
                     if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
-                        newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
+                        newSettings[param.name] = param.value;
                 }
-                
-                if (!newSettings.isEmpty())
-                    _mapPresentationEnvironment->setSettings(newSettings);
             }
+
+            [newSettings addEntriesFromDictionary:buildings3DRenderSettings];
+            if (newSettings.count > 0)
+                _mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:newSettings]);
         
             _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider, true, false, true));
             [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
@@ -2662,6 +2662,8 @@ static const NSInteger kDetailedMapZoom = 9;
                                                                                      disabledPoiTypes));
             [self updateMapLocaleLanguage];
             _mapPresentationEnvironment->setLanguagePreference(langPreferences);
+            if (buildings3DRenderSettings.count > 0)
+                _mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:buildings3DRenderSettings]);
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
                                                                            _mapPrimitiviser,
@@ -2675,6 +2677,14 @@ static const NSInteger kDetailedMapZoom = 9;
         }
         [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
         [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
+        OASRTMPlugin *srtmPlugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+        if (srtmPlugin)
+        {
+            [_mapView set3DBuildingsAlpha:(float) [srtmPlugin.buildings3dAlphaPref get]];
+            [_mapView set3DBuildingsDetalization:(int) [srtmPlugin.buildings3dViewDistancePref get]];
+        }
+
+        [self recreate3dObjectsProvider];
 
         [_mapLayers updateLayers];
 
@@ -2714,6 +2724,20 @@ static const NSInteger kDetailedMapZoom = 9;
     _mapView.heightmapSupported = YES;
     [_mapView setElevationDataProvider:
         std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(_geoTiffCollection, _mapView.elevationDataTileSize)];
+}
+
+- (void)recreate3dObjectsProvider
+{
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+    if (!plugin || ![plugin is3dMapObjectsEnabled] || !_mapPrimitivesProvider)
+    {
+        [_mapView resetMap3DObjectsProvider:YES];
+        return;
+    }
+    
+    NSInteger buildings3DColorStyle = [plugin get3DBuildingsColorStyle];
+    int buildings3DCustomColor = [plugin getBuildings3dColor];
+    [_mapView setMap3DObjectsProvider:std::make_shared<OsmAnd::Map3DObjectsTiledProvider>(_mapPrimitivesProvider, _mapPresentationEnvironment, buildings3DColorStyle == Buildings3DColorTypeCustom, [UIColorFromARGB(buildings3DCustomColor) toFColorRGB])];
 }
 
 - (void) updateElevationConfiguration

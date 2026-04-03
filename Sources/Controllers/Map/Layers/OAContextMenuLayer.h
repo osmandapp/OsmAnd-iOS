@@ -35,7 +35,7 @@
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 
-- (OATargetPoint *) getTargetPoint:(id)obj;
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
 - (void) hideRegionHighlight;

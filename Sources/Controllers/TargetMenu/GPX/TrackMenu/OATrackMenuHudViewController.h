@@ -106,7 +106,7 @@
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
 @property (nonatomic, assign) EOATrackMenuHudSegmentsStatisticsTab selectedStatisticsTab;
-@property (nonatomic, assign) OARouteKey *routeKey;
+@property (nonatomic) OARouteKey *routeKey;
 @property (nonatomic, assign) NSArray<NSNumber *> *routeStatistics;
 @property (nonatomic) UIImage *trackIcon;
 @property (nonatomic) NSString *gpxFilePath;

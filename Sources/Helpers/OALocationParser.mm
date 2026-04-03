@@ -444,6 +444,28 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
         unichar ch = [lower characterAtIndex:0];
         if (ch == '(' && s.length > 1)
             ch = [lower characterAtIndex:1]; // (0.1234,5.6789)
+        NSInteger cntLetter = 0;
+        NSInteger cntDigits = 0;
+        for (NSUInteger i = 0; i < lower.length; i++)
+        {
+            unichar c = [lower characterAtIndex:i];
+            if ([[NSCharacterSet letterCharacterSet] characterIsMember:c])
+            {
+                if (c != 's' && c != 'n' && c != 'w' && c != 'e')
+                {
+                 cntLetter++;
+                }
+            }
+            if ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:c])
+            {
+                cntDigits++;
+            }
+        }
+        if (![s containsString:@"://"] && cntLetter > cntDigits)
+        {
+            // 5c Hazelmere road, nw6 6
+            return NO;
+        }
         if (ch == '-' || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:ch]
             || ch == 's' || ch == 'n' || [s containsString:@"://"])
             return YES;

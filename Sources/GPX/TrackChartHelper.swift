@@ -83,7 +83,8 @@ final class TrackChartHelper: NSObject {
                           selectedXAxisMode: GPXDataSetAxisType,
                           chart: ElevationChart,
                           analysis: GpxTrackAnalysis,
-                          statsModeCell: OARouteStatisticsModeCell?) {
+                          statsModeCell: OARouteStatisticsModeCell?,
+                          overrideIsGeneralTrack: Bool) {
         var secondType: GPXDataSetType = .none
         if types.count == 2 {
             if types.last == GPXDataSetType.speed.rawValue && !analysis.isSpeedSpecified() {
@@ -91,7 +92,8 @@ final class TrackChartHelper: NSObject {
                                  selectedXAxisMode: selectedXAxisMode,
                                  chart: chart,
                                  analysis: analysis,
-                                 statsModeCell: statsModeCell)
+                                 statsModeCell: statsModeCell,
+                                 overrideIsGeneralTrack: overrideIsGeneralTrack)
             } else {
                 if let statsModeCell {
                     statsModeCell.modeButton.setTitle(
@@ -107,7 +109,7 @@ final class TrackChartHelper: NSObject {
                                                for: .normal)
         }
         
-        statsModeCell?.rightLabel.text = selectedXAxisMode.getName()
+        statsModeCell?.rightModeButton.setTitle(selectedXAxisMode.getName(), for: .normal)
         let gpx = OAGPXDatabase.sharedDb().getGPXItem(OAUtilities.getGpxShortPath(gpxDoc?.path ?? ""))
         GpxUIHelper.refreshLineChart(
             chartView: chart,
@@ -115,7 +117,7 @@ final class TrackChartHelper: NSObject {
             firstType: GPXDataSetType(rawValue: types.first!)!,
             secondType: secondType,
             axisType: selectedXAxisMode,
-            calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx)
+            calcWithoutGaps: GpxUtils.calcWithoutGaps(gpxDoc, gpxDataItem: gpx, overrideIsGeneralTrack: overrideIsGeneralTrack)
         )
     }
 

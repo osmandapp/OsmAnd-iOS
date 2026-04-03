@@ -1510,7 +1510,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) goToPoint:(OAPOI *)poi
 {
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi touchLocation:nil];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 
@@ -1539,7 +1539,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
 
-    [self runCoreSearch:text updateResult:YES searchMore:NO];
+    [self runCoreSearch: text updateResult:YES searchMore:NO];
 }
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore

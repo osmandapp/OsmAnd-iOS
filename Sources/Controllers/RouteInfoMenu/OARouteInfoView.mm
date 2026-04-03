@@ -685,7 +685,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                                                  firstType:GPXDataSetTypeAltitude
                                                 secondType:GPXDataSetTypeSlope
                                                   axisType:GPXDataSetAxisTypeDistance
-                                           calcWithoutGaps:[GpxUtils calcWithoutGaps:_gpx gpxDataItem:gpx]];
+                                           calcWithoutGaps:[GpxUtils calcWithoutGaps:_gpx gpxDataItem:gpx overrideIsGeneralTrack:YES]];
                 _needChartUpdate = NO;
             }
         }
@@ -1268,6 +1268,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) addWaypoint
 {
     // not implemented
+}
+
+- (void)selectAppMode:(OAApplicationMode *)appMode
+{
+    _appModeView.selectedMode = appMode;
+    if (![[_routingHelper getAppMode] isEqual:appMode])
+        [self appModeChanged:appMode];
 }
 
 - (void) update

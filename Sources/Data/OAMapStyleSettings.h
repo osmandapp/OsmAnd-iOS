@@ -127,6 +127,8 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 - (void) resetMapStyleForAppMode:(NSString *)mapPresetName
                       onComplete:(void(^)(void))onComplete;
 
+- (NSDictionary<NSString *, NSString *> *)get3DBuildingsRendererSettings;
+
 - (BOOL)isAnyWeatherContourLinesEnabled;
 - (BOOL)isWeatherContourLinesEnabled:(NSString *)attr;
 - (void)setWeatherContourLinesEnabled:(BOOL)enabled weatherContourLinesAttr:(NSString *)attr;

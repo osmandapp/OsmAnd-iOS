@@ -22,6 +22,7 @@
 #import "OASearchCoreFactory.h"
 #import "OAArabicNormalizer.h"
 #import "OAPOI.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -57,6 +58,7 @@
         self.preferredZoom = PREFERRED_DEFAULT_ZOOM;
         self.requiredSearchPhrase = sp;
         _unknownPhraseMatchWeight = 0;
+        _searchResultResource = EOASearchResultResourceUnknown;
     }
     return self;
 }
@@ -74,7 +76,7 @@
 
 - (double) getSumPhraseMatchWeight:(OASearchResult *)exactResult
 {
-    double res = [OAObjectType getTypeWeight:_objectType];
+    double res = 1;
     if ([_requiredSearchPhrase getUnselectedPoiType])
     {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
@@ -82,6 +84,10 @@
     else if (_objectType == EOAObjectTypePoiType)
     {
         // don't overload with poi types
+    }
+    else if ([self isPublicTransport])
+    {
+        res -= 0.1;
     }
     else
     {
@@ -182,6 +188,29 @@
                 res += 1;
             }
             // range 60 - 91
+        }
+        if (res < MAX_TYPES_BASE_10 * 4)
+        {
+            // equalize unmatched results
+            res = MAX_TYPES_BASE_10;
+
+            bool basemap = _amenity != nil && _amenity->regionName == QStringLiteral("basemap");
+            if (basemap || [self getResourceType] == EOASearchResultResourceBasemap)
+            {
+                res += 1;
+            }
+            if (_object != nil && [_object isKindOfClass:OAPOI.class])
+            {
+                OAPOI * amenity = (OAPOI *) _object;
+                if ([amenity isRouteArticle])
+                {
+                    res += 0.5;
+                }
+            }
+            if (_objectType == EOAObjectTypeStreetIntersection)
+            {
+                res -= 1;
+            }
         }
         return res;
     }
@@ -640,6 +669,77 @@
             self.otherNames = [oth copy];
         }
     }
+}
+
+- (EOASearchResultResource) getResourceType
+{
+    if (_searchResultResource == EOASearchResultResourceUnknown)
+    {
+        _searchResultResource = EOASearchResultResourceDetailed;
+        if (self.object != nil && [self.object isKindOfClass:[OAPOI class]])
+        {
+            OAPOI *amenity = (OAPOI *)self.object;
+            if ([amenity.type isWiki])
+            {
+                _searchResultResource = EOASearchResultResourceWikipedia;
+            }
+        }
+
+        bool basemap = _amenity != nil && _amenity->regionName == QStringLiteral("basemap");
+        if (basemap)
+        {
+            _searchResultResource = EOASearchResultResourceBasemap;
+        }
+        else if (self.resourceId != nil)
+        {
+            if ([self.resourceId containsString:@".travel"])
+            {
+                _searchResultResource = EOASearchResultResourceTravel;
+            }
+
+            if ([self.resourceId containsString:@"_basemap"])
+            {
+                _searchResultResource = EOASearchResultResourceBasemap;
+            }
+        }
+    }
+    return _searchResultResource;
+}
+
+- (NSInteger) resourceWeight
+{
+    [self getResourceType];
+    switch (self.searchResultResource)
+    {
+        case EOASearchResultResourceDetailed:
+        case EOASearchResultResourceBasemap:
+            return 3;
+        case EOASearchResultResourceWikipedia:
+            return 2;
+        case EOASearchResultResourceTravel:
+            return 1;
+        default:
+            return 0;
+    }
+}
+
+- (BOOL)isPublicTransport
+{
+    if (self.objectType != EOAObjectTypePoi)
+    {
+        return NO;
+    }
+    if (![self.object isKindOfClass:[OAPOI class]])
+    {
+        return NO;
+    }
+    OAPOI *am = (OAPOI *)self.object;
+    NSArray<NSString *> *transportTypes = [[OAPOIHelper sharedInstance] getPublicTransportTypes];
+    if (!transportTypes)
+    {
+        return NO;
+    }
+    return [transportTypes containsObject:am.subType];
 }
 
 @end

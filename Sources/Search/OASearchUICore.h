@@ -40,9 +40,11 @@
 @interface OASearchUICore : NSObject
 
 typedef void (^OASearchUICoreRunnable)();
+typedef NSString* (^OAHttpRedirectRequester)(NSString *url);
 
 @property (nonatomic) OASearchUICoreRunnable onSearchStart;
 @property (nonatomic) OASearchUICoreRunnable onResultsComplete;
+@property (nonatomic) OAHttpRedirectRequester httpRedirectRequester;
 
 - (instancetype) initWithLang:(NSString *)lang transliterate:(BOOL)transliterate;
 

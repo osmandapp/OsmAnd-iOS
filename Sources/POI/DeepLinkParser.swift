@@ -12,11 +12,62 @@ private enum DeepLinkAppRoute: String {
     case main = ""
     case lastReleaseNotes = "help/last-release-notes"
     case helpWhatsNew = "help/whats-new"
+    case settings = "settings"
+    case cloud = "cloud"
+    case plugins = "plugins"
+    case pluginsTripRecording = "plugins/trip-recording"
+    case pluginsTopography = "plugins/topography"
+    case pluginsWeather = "plugins/weather"
+    case pluginsExternalSensors = "plugins/external-sensors"
+    case pluginsVehicleMetrics = "plugins/vehicle-metrics"
+    case help = "help"
+    case planRoute = "plan-a-route"
+    case configureScreenWidgetsLeft = "configure-screen/widgets/left"
+    case configureScreenWidgetsRight = "configure-screen/widgets/right"
+    case configureScreenWidgetsTop = "configure-screen/widgets/top"
+    case configureScreenWidgetsBottom = "configure-screen/widgets/bottom"
+    case mapSettingsMain = "map-settings"
+    case mapSettingsMapType = "map-settings/map-type"
+    case mapSettingsWikipedia = "map-settings/wikipedia"
+    case mapSettingsOverlay = "map-settings/overlay"
+    case mapSettingsUnderlay = "map-settings/underlay"
+    case destinations = "destinations"
+    case destinationsDirectionAppearance = "destinations/direction-appearance"
+    case myPlacesFavorites = "my-places/favorites"
+    case myPlacesTracks = "my-places/tracks"
+    case myPlacesOsmEdits = "my-places/osm-edits"
+    case mapsAndResources = "maps-and-resources"
+    case mapsAndResourcesLocal = "maps-and-resources/local"
+    case mapsAndResourcesUpdates = "maps-and-resources/updates"
     case purchases = "purchases"
     case purchasesOsmAndPro = "purchases/osmand-pro"
     case purchasesMapsPlus = "purchases/maps-plus"
     case quickActionsLockScreenAdd = "quick-actions/lock-screen/add"
+    case tripRecordingAppMode = "settings/profile-settings/trip-recording/"
+    case distanceByTapAppMode = "settings/profile-settings/configure-screen/distance-by-tap/"
+    case speedometerCar = "settings/profile-settings/configure-screen/speedometer/car"
+    case navigationScreenAppMode = "navigation-screen/"
     case tripRecordingExternalSensors = "trip-recording/external-sensors"
+}
+
+private enum DeepLinkAppModeKey: String {
+    case browse
+    case car
+    case bicycle
+    case walking
+    
+    func toAppMode(allowBrowse: Bool) -> OAApplicationMode? {
+        switch self {
+        case .browse:
+            return allowBrowse ? .default() : nil
+        case .car:
+            return .car()
+        case .bicycle:
+            return .bicycle()
+        case .walking:
+            return .pedestrian()
+        }
+    }
 }
 
 @objcMembers
@@ -38,12 +89,27 @@ final class DeepLinkParser: NSObject {
         guard let rootViewController, OAUtilities.isOsmAndSite(url), OAUtilities.isPathPrefix(url, pathPrefix: kOsmAndAppPathPrefix) else { return false }
         let path = url.path.split(separator: "/", omittingEmptySubsequences: true).map { $0.lowercased() }
         let routeRaw = path.dropFirst().joined(separator: "/")
+        let router = DeepLinkAppRouter(rootViewController: rootViewController)
+        if let route = DeepLinkAppRoute.parseAppModeRoute(routeRaw) {
+            switch route.route {
+            case .tripRecordingAppMode:
+                router.openTripRecordingSettings(appMode: route.appMode)
+            case .distanceByTapAppMode:
+                router.openDistanceByTapSettings(appMode: route.appMode)
+            case .navigationScreenAppMode:
+                router.openNavigationScreen(appMode: route.appMode)
+            default:
+                break
+            }
+            
+            return true
+        }
+        
         guard let route = DeepLinkAppRoute(rawValue: routeRaw) else {
             NSLog("[DeepLinkParser] Unknown /app route: %@ (url=%@)", routeRaw, url.absoluteString)
             return false
         }
         
-        let router = DeepLinkAppRouter(rootViewController: rootViewController)
         switch route {
         case .main:
             router.openMainScreen()
@@ -51,6 +117,60 @@ final class DeepLinkParser: NSObject {
             router.openLastReleaseNotes()
         case .helpWhatsNew:
             router.openWhatsNew()
+        case .settings:
+            router.openGlobalSettingsMain()
+        case .cloud:
+            router.openCloudScreen()
+        case .plugins:
+            router.openPlugins()
+        case .pluginsTripRecording:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().trackRecording)
+        case .pluginsTopography:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().srtm)
+        case .pluginsWeather:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().weather)
+        case .pluginsExternalSensors:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().sensors)
+        case .pluginsVehicleMetrics:
+            router.openPlugin(product: OAIAPHelper.sharedInstance().vehicleMetrics)
+        case .help:
+            router.openHelp()
+        case .planRoute:
+            router.openPlanRoute()
+        case .configureScreenWidgetsLeft:
+            router.openWidgetsList(panel: .leftPanel)
+        case .configureScreenWidgetsRight:
+            router.openWidgetsList(panel: .rightPanel)
+        case .configureScreenWidgetsTop:
+            router.openWidgetsList(panel: .topPanel)
+        case .configureScreenWidgetsBottom:
+            router.openWidgetsList(panel: .bottomPanel)
+        case .mapSettingsMain:
+            router.openMapSettings(screen: .main)
+        case .mapSettingsMapType:
+            router.openMapSettings(screen: .mapType)
+        case .mapSettingsWikipedia:
+            router.openMapSettings(screen: .wikipedia)
+        case .mapSettingsOverlay:
+            router.openMapSettings(screen: .overlay)
+        case .mapSettingsUnderlay:
+            router.openMapSettings(screen: .underlay)
+        case .destinations:
+            router.openDestinations()
+        case .destinationsDirectionAppearance:
+            router.openDestinationsDirectionAppearance()
+        case .myPlacesFavorites:
+            router.openMyPlaces(tabClass: OAFavoriteListViewController.self)
+        case .myPlacesTracks:
+            router.openMyPlaces(tabClass: TracksViewController.self)
+        case .myPlacesOsmEdits:
+            router.openMyPlaces(tabClass: OAOsmEditsListViewController.self)
+        case .mapsAndResources:
+            router.openMapsAndResources()
+        case .mapsAndResourcesLocal:
+            router.openMapsAndResourcesLocal()
+        case .mapsAndResourcesUpdates:
+            router.openMapsAndResourcesUpdates()
         case .purchases:
             router.openChoosePlan(feature: nil)
         case .purchasesOsmAndPro:
@@ -59,8 +179,12 @@ final class DeepLinkParser: NSObject {
             router.openChoosePlan(feature: OAFeature.monthly_MAP_UPDATES())
         case .quickActionsLockScreenAdd:
             router.openCustomButtonsAddAction()
+        case .speedometerCar:
+            router.openSpeedometerSettings(appMode: OAApplicationMode.car())
         case .tripRecordingExternalSensors:
             router.openExternalSensorsRecording()
+        case .tripRecordingAppMode, .distanceByTapAppMode, .navigationScreenAppMode:
+            return false
         }
         
         return true
@@ -347,7 +471,7 @@ final class DeepLinkParser: NSObject {
             return true
         }
         let synthetic = amenity.syntheticAmenity
-        guard let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic) else { return false }
+        let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic, touch: nil)
         targetPoint.location = latLon.coordinate
         targetPoint.shouldFetchAddress = true;
         targetPoint.centerMap = true
@@ -468,5 +592,27 @@ final class DeepLinkParser: NSObject {
         }
         
         return fallback
+    }
+}
+
+extension DeepLinkAppRoute {
+    static func parseAppModeRoute(_ rawValue: String) -> (route: DeepLinkAppRoute, appMode: OAApplicationMode)? {
+        if let appMode = parseAppMode(rawValue, prefix: DeepLinkAppRoute.tripRecordingAppMode.rawValue, allowBrowse: true) {
+            return (.tripRecordingAppMode, appMode)
+        }
+        if let appMode = parseAppMode(rawValue, prefix: DeepLinkAppRoute.distanceByTapAppMode.rawValue, allowBrowse: true) {
+            return (.distanceByTapAppMode, appMode)
+        }
+        if let appMode = parseAppMode(rawValue, prefix: DeepLinkAppRoute.navigationScreenAppMode.rawValue, allowBrowse: false) {
+            return (.navigationScreenAppMode, appMode)
+        }
+        
+        return nil
+    }
+    
+    private static func parseAppMode(_ rawValue: String, prefix: String, allowBrowse: Bool) -> OAApplicationMode? {
+        guard rawValue.hasPrefix(prefix) else { return nil }
+        let appModeKey = String(rawValue.dropFirst(prefix.count))
+        return DeepLinkAppModeKey(rawValue: appModeKey)?.toAppMode(allowBrowse: allowBrowse)
     }
 }

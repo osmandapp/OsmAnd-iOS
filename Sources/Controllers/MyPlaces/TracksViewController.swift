@@ -35,6 +35,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
+    private let defaultBarButtonEdgeInset: CGFloat = 12
     // TODO: Keys to enums
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -423,7 +424,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             navigationItem.hidesBackButton = true
             let cancelButton = UIButton(type: .system)
             if #available(iOS 26.0, *) {
-                cancelButton.configuration = .plain()
+                cancelButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: defaultBarButtonEdgeInset, bottom: 0, right: defaultBarButtonEdgeInset);
             }
             cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
             cancelButton.setImage(nil, for: .normal)

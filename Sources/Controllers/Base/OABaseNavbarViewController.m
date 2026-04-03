@@ -20,6 +20,7 @@ static const CGFloat kRightIconLargeTitleSmall = 34.;
 static const CGFloat kRightIconLargeTitleLarge = 40.;
 static const CGFloat kDefaultBarButtonSize = 44.;
 static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
+static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
 @implementation OABaseNavbarViewController
 {
@@ -502,7 +503,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
             if (@available(iOS 26.0, *))
             {
                 if (leftButtonTitle.length > 0)
-                    leftButton.configuration = [UIButtonConfiguration plainButtonConfiguration];
+                    leftButton.contentEdgeInsets = UIEdgeInsetsMake(0., kDefaultBarButtonEdgeInset, 0., kDefaultBarButtonEdgeInset);
             }
             UIColor *buttonsTintColor = [self navbarButtonsTintColor];
             leftButton.contentHorizontalAlignment = leftNavbarButtonCustomIcon ? UIControlContentHorizontalAlignmentCenter : UIControlContentHorizontalAlignmentLeading;
@@ -629,7 +630,7 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
     if (@available(iOS 26.0, *))
     {
         if (title.length > 0)
-            button.configuration = [UIButtonConfiguration plainButtonConfiguration];
+            button.contentEdgeInsets = UIEdgeInsetsMake(0., kDefaultBarButtonEdgeInset, 0., kDefaultBarButtonEdgeInset);
     }
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;

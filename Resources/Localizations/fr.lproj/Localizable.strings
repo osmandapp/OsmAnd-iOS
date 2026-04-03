@@ -4033,3 +4033,11 @@
 "context_menu_read_full_article" = "Lire l'article complet";
 "read_on" = "Continuer la lecture %@";
 "show_spherical_map" = "Vue globe terrestre";
+"enable_3d_objects" = "Bâtiments en 3D";
+"free_custom_color_description" = "Personnalisez les bâtiments 3D avec n'importe quelle couleur. Idéal pour harmoniser votre carte avec son thème ou améliorer le contraste.";
+"buildings_3d_visibility_description" = "Ajustez l'opacité des structures 3D sur la carte.";
+"level_of_details" = "Niveau de détail";
+"performance" = "Performance";
+"view_distance" = "Distance de visibilité";
+"custom_color" = "Couleur personnalisée";
+"choose_color" = "Choisissez la couleur";

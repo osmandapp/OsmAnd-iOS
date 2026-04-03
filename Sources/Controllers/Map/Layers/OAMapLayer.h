@@ -46,6 +46,8 @@ static const float TOUCH_RADIUS_MULTIPLIER = 1.5;
 - (void) didReceiveMemoryWarning;
 
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint;
+- (void)add3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude color:(UIColor *)color;
+- (void)remove3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude;
 
 - (int) getScaledTouchRadius:(int)radiusPoi;
 - (int) getDefaultRadiusPoi;

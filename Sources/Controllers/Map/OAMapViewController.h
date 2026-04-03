@@ -175,6 +175,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
+- (void)add3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude color:(int)color;
+- (void)remove3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude;
 
 - (void) highlightRegion:(OAWorldRegion *)region;
 - (void) hidePolygonHighlight;

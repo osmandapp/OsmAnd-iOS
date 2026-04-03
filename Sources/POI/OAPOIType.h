@@ -55,5 +55,6 @@
 - (NSDictionary<NSString *, NSString *> *)getOsmTagsValues;
 
 - (BOOL) isReference;
+- (BOOL) isWiki;
 
 @end

@@ -21,6 +21,7 @@
 #import "OAAbbreviations.h"
 #import "OAMapUtils.h"
 #import "OAArabicNormalizer.h"
+#import "OARegionPriorityProvider.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -71,6 +72,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ",
 @property (nonatomic) QuadRect *cache1kmRect;
 
 @property (nonatomic) OAPOIBaseType *unselectedPoiType;
+@property (nonatomic) OARegionPriorityProvider *regionPriorityProvider;
 
 @end
 
@@ -228,6 +230,10 @@ static NSComparator _OACommonWordsComparator = nil;
         _otherUnknownWords = [NSMutableArray new];
         _mainUnknownWordToSearch = nil;
         _unknownWordsMatcher = [NSMutableArray new];
+        if (settings != nil)
+        {
+            _regionPriorityProvider = [[OARegionPriorityProvider alloc] initWithPhrase:self];
+        }
     }
     return self;
 }
@@ -502,8 +508,7 @@ static NSComparator _OACommonWordsComparator = nil;
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt
 {
     QuadRect *rect = meters > 0 ? [self getRadiusBBox31ToSearch:meters] : nil;
-    return [self getOfflineIndexes:rect dt:dt];
-    
+    return [self getOfflineIndexesWithRect:rect dataType:dt];
 }
 
 - (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes
@@ -529,9 +534,8 @@ static NSComparator _OACommonWordsComparator = nil;
     return NO;
 }
 
-- (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt
+- (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt indexes:(NSArray<NSString *> *)indexes
 {
-    NSArray<NSString *> *indexes = _indexes ? _indexes : [self.settings getOfflineIndexes];
     NSMutableArray<NSString *> *result = [NSMutableArray array];
     if (rect)
     {
@@ -569,6 +573,36 @@ static NSComparator _OACommonWordsComparator = nil;
         return _indexes;
     
     return [self.settings getOfflineIndexes];
+}
+
+- (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)minMeters maxMeters:(int)maxMeters dataType:(EOASearchPhraseDataType)dataType
+{
+    NSArray<NSString *> *list;
+    if (_regionPriorityProvider)
+    {
+        list = [_regionPriorityProvider getOfflineIndexesWithMinRadius:minMeters maxRadius:maxMeters];
+    }
+    else
+    {
+        list = _indexes ? _indexes : [self.settings getOfflineIndexes];
+    }
+
+    QuadRect *rect = [self getRadiusBBox31ToSearch:maxMeters];
+    return [self getOfflineIndexes:rect dt:dataType indexes:list];
+}
+
+- (NSArray<NSString *> *)getOfflineIndexesWithRect:(QuadRect *)rect dataType:(EOASearchPhraseDataType)dataType
+{
+    NSArray<NSString *> *list;
+    if (_regionPriorityProvider)
+    {
+        list = [_regionPriorityProvider getOfflineIndexes];
+    }
+    else
+    {
+        list = _indexes ? _indexes : [self.settings getOfflineIndexes];
+    }
+    return [self getOfflineIndexes:rect dt:dataType indexes:list];
 }
 
 - (OASearchSettings *) getSettings
@@ -1124,6 +1158,15 @@ static NSComparator _OACommonWordsComparator = nil;
         }
     }
     return @"";
+}
+
+- (NSNumber *) getRegionPriority:(NSString *) resId
+{
+    if (_regionPriorityProvider != nil)
+    {
+        return @([_regionPriorityProvider getRegionWeight:resId]);
+    }
+    return 0;
 }
 
 @end

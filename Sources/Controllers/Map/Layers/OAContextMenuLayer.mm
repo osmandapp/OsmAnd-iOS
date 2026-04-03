@@ -791,9 +791,6 @@
 
 - (void) animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    if (!_animatedPin)
-        return;
-    
     _animationDone = YES;
     _contextPinMarker->setIsHidden(false);
 }

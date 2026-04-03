@@ -111,13 +111,6 @@
     }];
 }
 
-- (void)deinitLayer
-{
-    [super deinitLayer];
-    [self hideContextPinMarker];
-    [self hideRegionHighlight];
-}
-
 - (BOOL) isObjectMovable:(id)object
 {
     for (OAMapLayer *layer in self.mapViewController.mapLayers.getLayers)
@@ -265,19 +258,8 @@
     if (!_initDone)
         return;
     
-    const auto previous = _contextPinMarker->getPosition();
-    const auto latLon = OsmAnd::LatLon(latitude, longitude);
-    const auto target = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    const BOOL wasHidden = _contextPinMarker->isHidden();
-    const BOOL changed = previous != target;
-    if (changed && !wasHidden)
-    {
-        const auto previousLatLon = [OANativeUtilities getLanlonFromPoint31:previous];
-        [self remove3DObjectColorAtLatitude:previousLatLon.latitude longitude:previousLatLon.longitude];
-    }
-
-    if (changed || wasHidden)
-        [self add3DObjectColorAtLatitude:latitude longitude:longitude color:UIColorFromRGB(color_osmand_orange)];
+    const auto target = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latitude, longitude));
+    [self updateContextPin3DHighlight:latitude longitude:longitude target:target];
     
     _contextPinMarker->setIsHidden(true);
     
@@ -297,7 +279,7 @@
         @try
         {
             CGPoint targetPoint;
-            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
+            OsmAnd::PointI targetPositionI = target;
             [self.mapView convert:&targetPositionI toScreen:&targetPoint];
             
             _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
@@ -406,6 +388,27 @@
         }
     }
     return nil;
+}
+
+- (void)updateContextPin3DHighlight:(double)latitude longitude:(double)longitude target:(const OsmAnd::PointI &)target
+{
+    const auto previous = _contextPinMarker->getPosition();
+    const BOOL wasHidden = _contextPinMarker->isHidden();
+    const BOOL changed = previous != target;
+    if (changed && !wasHidden)
+    {
+        const auto previousLatLon = [OANativeUtilities getLanlonFromPoint31:previous];
+        [self remove3DObjectColorAtLatitude:previousLatLon.latitude longitude:previousLatLon.longitude];
+    }
+    
+    if ([self isContextPin3DHighlightEnabled] && (changed || wasHidden))
+        [self add3DObjectColorAtLatitude:latitude longitude:longitude color:UIColorFromRGB(color_osmand_orange)];
+}
+
+- (BOOL)isContextPin3DHighlightEnabled
+{
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+    return plugin && [plugin is3dMapObjectsEnabled];
 }
 
 - (BOOL) isSecondaryProvider

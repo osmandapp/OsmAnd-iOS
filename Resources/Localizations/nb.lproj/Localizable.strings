@@ -1753,8 +1753,8 @@
 "private_access_routing_req" = "Reisemålet ditt ligger i et område med privat adgang. Tillat bruk av private veier for denne turen\?";
 "expired" = "Utløpt";
 "lang_ckb" = "Sorani";
-"transport_hazmat_yes_desc" = "Du må velge rett kategori.";
-"transport_hazmat_no_desc" = "I noen tunneler og på noen veier er transport av farlig gods forbudt.";
+"transport_hazmat_yes_desc" = "Velg den riktige kategorien.";
+"transport_hazmat_no_desc" = "Veier og tunneler kan ha begrensninger for transport av farlig gods.";
 "shared_string_delete_all" = "Slett alle";
 "shared_string_undefined" = "Udefinert";
 "restore_from_osmand_cloud" = "Gjenopprett fra OsmAnd-sky";
@@ -2081,7 +2081,7 @@
 "restoring_from" = "Gjenoppretter valgt data fra skyen …";
 "ltr_or_rtl_combine_via_of" = "%ld av %ld";
 "shared_string_total_size" = "Total størrelse";
-"shared_string_loading" = "Laster inn …";
+"shared_string_loading" = "Laster inn";
 "shared_string_delete_data" = "Slett data";
 "shared_string_updated" = "Oppdatert";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d spor?";
@@ -2111,7 +2111,7 @@
 "map_3d_mode_hint" = "Med langt trykk på knappen kan knappeposisjon endres.";
 "angular_measeurement_descr" = "Endre hva asimut måles i.";
 "free_favorites_backup" = "Gratis favoritt-sikkerhetskopiering";
-"free_account" = "Gratiskonto";
+"free_account" = "Gratis konto";
 "get_osmand_cloud" = "Skaff OsmAnd-sky";
 "true_bearing_wdiget_desc" = "Vinkel mellom sann nord og målpunktet observert fra din posisjon.";
 "street_name_widget_desc" = "Gatenavnmodulen viser det aktuelle gatenavnet med en rett posisjonspil eller det neste gatenavnet med en pil som indikerer en kommende sving.";
@@ -2184,7 +2184,7 @@
 "help_article_map_legend_osmand_name" = "OsmAnd-kartstil";
 "change_appearance" = "Endre utseende";
 "map_screen_orientation" = "Skjermorientering";
-"ant_plus_searching" = "Søker …";
+"ant_plus_searching" = "Søker";
 "help_article_navigation_routing_ski_routing_name" = "Skiruting";
 "help_article_map_point_layers_on_map_name" = "Punkter på kartet";
 "help_article_widgets_info_widgets_name" = "Informasjonsmoduler";
@@ -2226,7 +2226,7 @@
 "help_article_navigation_routing_public_transport_navigation_name" = "Kollektivtransportruting";
 "shared_string_bookmark" = "Bokmerk";
 "external_sensors_plugin_description" = "Får tilgang til eksterne sensorer for å lese av f.eks. pulsen din, sykkelhastighet, sykkelkraft eller tråkkfrekvens. Krever at enheten er koblet til respektive sensorer via den trådløse personlige nettverksprotokollen ANT+.";
-"shared_string_next_event" = "Neste begivenhet";
+"shared_string_next_event" = "Neste hendelse";
 "ant_plus_searching_text" = "Søker etter sensorer";
 "external_device_details_information" = "Informasjon";
 "shared_string_foot" = "Fot";
@@ -2281,7 +2281,7 @@
 "air_pressure_widget_desc" = "Viser lufttrykk for nåværende kartsentrum.";
 "specify_number_of_dir_indicators_desc" = "Velg antall retningsindikatorer.";
 "coordinates_widget_secondary_desc" = "Koordinatformatet kan endres i %@ – %@ – %@.";
-"action_cannot_be_undone" = "Dette kan ikke angres.";
+"action_cannot_be_undone" = "Denne handlingen kan ikke angres.";
 "purchases_feature_desc_external_sensors" = "Vis og registrer data fra eksterne sensorer: sykkelhastighet, sykkelkraft, tråkkfrekvens og puls.";
 "help_article_navigation_setup_route_details_name" = "Rutedetaljer";
 "map_3d_mode_action" = "3D-modus";
@@ -2315,7 +2315,7 @@
 "shared_string_move" = "Flytt";
 "lanes_widgets_desc" = "Viser gjeldende kjørefeltoppsett og framhever filene å kjøre i under navigering.";
 "external_sensors_support" = "Støtte for eksterne sensorer";
-"map_widget_sun_position_desc" = "Miniprogrammet viser tid til neste solopp- eller nedgang, avhengig av nåværende til.";
+"map_widget_sun_position_desc" = "Viser hvor lang tid det er til soloppgang eller solnedgang.";
 "help_article_purchases_android_name" = "Android-kjøp";
 "go_to_marker_location" = "Gå til markørposisjon";
 "activity_type_car_name" = "Bil";
@@ -2406,7 +2406,7 @@
 "map_markers_desc" = "Viser avstand eller anslått tid til ankomst (ETA) for de første to markørene i kartmarkørlisten.";
 "help_article_map_interact_with_map_name" = "Samhandle med kart";
 "about_osmAnd" = "Om OsmAnd";
-"help_article_navigation_guidance_name" = "Veiledning";
+"help_article_navigation_guidance_name" = "Navigeringsveiledning";
 "help_article_widgets_map_buttons_name" = "Kartknapper";
 "time_to_go_desc" = "Tid i minutter eller timer til du når ditt mål.";
 "shared_string_clear_online_cache" = "Tøm nettbasert hurtiglager";
@@ -2430,7 +2430,7 @@
 "help_article_navigation_routing_bicycle_based_routing_name" = "Sykkelruting (MTB)";
 "map_widget_group_sunrise_sunset_desc" = "Viser info om neste solopp- og nedgang.";
 "complex_widget_alert" = "%@-miniprogram kan kun plasseres på egen rad.";
-"beats_per_minute_short" = "slag per minutt";
+"beats_per_minute_short" = "slag/min";
 "gitHub_discussion" = "GitHub-diskusjon";
 "osmand_cloud_deletion_secondary_devices_warning" = "Sekundære enheter vil bli fralogget fra OsmAnd-sky og miste tilgangen til betalte funksjoner.";
 "context_menu_read_article" = "Les artikkel";
@@ -2460,7 +2460,7 @@
 "map_settings_topography" = "Koter";
 "help_article_navigation_routing_car_based_routing_name" = "Bilruting (lastebil, motorsykkel)";
 "help_article_map_track_context_menu_name" = "Kontekstmeny for spor";
-"reset_all_settings_desc" = "Tilbakestill alle innstillingene\?";
+"reset_all_settings_desc" = "Tilbakestille alle innstillinger til standard?";
 "external_device_details_battery" = "Batteri";
 "shared_string_open_track" = "Åpne spor";
 "activity_type_offroad_name" = "Terreng";
@@ -2484,7 +2484,7 @@
 "not_recorded" = "Ikke tatt opp";
 "help_article_navigation_routing_straight_line_routing_name" = "Rett linje ruting (fly)";
 "shared_string_error" = "Feil";
-"osmand_cloud_deleted_account_descr" = "Konto og all data slettet fra OsmAnd-sky.";
+"osmand_cloud_deleted_account_descr" = "Konto og alle data ble slettet fra OsmAnd Cloud.";
 "help_article_personal_name" = "Mine data";
 "map_widget_sunrise_desc" = "Viser tidspunktet for neste soloppgang eller tiden som er igjen til soloppgang.";
 "help_article_search_search_coordinates_name" = "Søk koordinater";
@@ -2607,7 +2607,7 @@
 "shared_string_colors" = "Farger";
 "cloud_layer" = "Skylag";
 "quick_action_directions_from" = "Startpunkt";
-"shared_string_set" = "Bruk";
+"shared_string_set" = "Angi";
 "shared_string_app_profile" = "Programprofil";
 "precipitation_layer" = "Nedbørslag";
 "voices" = "Talemeldinger";
@@ -2636,7 +2636,7 @@
 "rendering_value_managerName_name" = "Etter forvaltingsnavn";
 "upward_gradient" = "Oppadgående gradient";
 "custom_buttons" = "Egendefinerte knapper";
-"vertical_exaggeration" = "Loddrett overdrivelse";
+"vertical_exaggeration" = "Vertikal overdrivelse";
 "speed_limit_warning" = "Fartsgrenseadvarsel";
 "required_maps_list" = "Kart som også vil bli brukt: %@";
 "shared_string_show" = "Vis";
@@ -2842,3 +2842,11 @@
 "unit_of_temperature_description" = "Valgte enheter vil bli brukt på alle temperaturrelaterte data i den gjeldende profilen.";
 "trip_recording_moving_time_widget_description" = "Viser den gjeldende registrerte tid i bevegelse eller tiden for den siste oppover- og nedoverbakken.";
 "trip_recording_moving_time" = "Tid i bevegelse";
+"key_assignments" = "Tastetilordninger";
+"key_event_action_move_to_my_location" = "Flytt til min posisjon";
+"remove_key_assignment_summary" = "Tastetilordning for valgt handling vil bli fjernet.";
+"remove_key_assignment" = "Fjern tastetilordning";
+"clear_all_key_shortcuts_summary" = "Alle tastetilordninger for valgt type vil bli fjernet.";
+"no_assigned_keys" = "Ingen tilordnede taster";
+"new_key_assignment" = "Ny tastetilordning";
+"assigned_keys" = "Tilordnede taster";

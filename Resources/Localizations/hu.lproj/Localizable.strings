@@ -3998,3 +3998,11 @@
 "context_menu_read_full_article" = "Teljes cikk elolvasása";
 "read_on" = "Olvassa el itt: %@";
 "show_spherical_map" = "Földgömbnézet";
+"enable_3d_objects" = "3D épületek";
+"free_custom_color_description" = "A 3D épületek tetszőleges színnel testreszabhatók. Ideális a térkép témájához való illesztéshez vagy a kontraszt javításához.";
+"buildings_3d_visibility_description" = "3D objektumok átlátszóságának finomhangolása a térképen.";
+"level_of_details" = "Részletességi szint";
+"performance" = "Teljesítmény";
+"view_distance" = "Látótávolság";
+"custom_color" = "Egyéni szín";
+"choose_color" = "Válasszon színt";

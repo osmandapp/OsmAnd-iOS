@@ -7,6 +7,7 @@
 //
 
 #import "OARouteInfoView.h"
+#import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -135,6 +136,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSArray<OAWorldRegion *> * _missingMaps;
     NSArray<OAWorldRegion *> * _mapsToUpdate;
     NSArray<OAWorldRegion *> * _potentiallyUsedMaps;
+    NSInteger _lastFastRoutingComplicationOrdinal;
     BOOL _optionsMenuSelected;
 
     NSIndexPath *_routingInfoIndexPath;
@@ -267,14 +269,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) setupGoButton
 {
-    BOOL isActive = _app.data.pointToNavigate != nil;
-    _goButton.backgroundColor = isActive ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
-    UIColor *color = isActive ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+    BOOL routeCalculated = [self isRouteCalculated];
+    _goButton.backgroundColor = routeCalculated ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
+    UIColor *color = routeCalculated ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
     [_goButton setTintColor:color];
     [_goButton setTitleColor:color forState:UIControlStateNormal];
     [_goButton.imageView setTintColor:_goButton.tintColor];
-    
-    _goButton.userInteractionEnabled = isActive;
+    _goButton.enabled = routeCalculated;
+    _goButton.userInteractionEnabled = routeCalculated;
     
     if (!_routingHelper.isPublicTransportMode)
     {
@@ -580,6 +582,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     _emission = nil;
     _routingInfoIndexPath = nil;
+    BOOL isRouteBeingCalculated = (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
+        || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]);
 
     int sectionIndex = 0;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -618,6 +622,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     if (_hasEmptyTransportRoute || [self hasMissingOrOutdatedMaps])
     {
+        if (isRouteBeingCalculated)
+        {
+            [section addObject:@{
+                @"cell" : [OARouteProgressBarCell getCellIdentifier]
+            }];
+        }
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         _data = [NSDictionary dictionaryWithDictionary:dictionary];
         [self setupGoButton];
@@ -625,7 +635,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return;
     }
     
-    if ((![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated]) || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
+    if (isRouteBeingCalculated)
     {
         [section addObject:@{
             @"cell" : [OARouteProgressBarCell getCellIdentifier]
@@ -1308,6 +1318,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     _hasEmptyTransportRoute = NO;
     [self clearMissingMapsState];
+    _lastFastRoutingComplicationOrdinal = -1;
     [_routingHelper setAppMode:next];
     [_settings setApplicationModePref:next markAsLastUsed:NO];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
@@ -1326,6 +1337,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (_routingHelper.isPublicTransportMode)
+        {
+            [self clearMissingMapsState];
+            return;
+        }
         directionInfo = -1;
         _trackAnalysis = nil;
         _gpx = nil;
@@ -1361,6 +1377,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         directionInfo = -1;
+        _progressBarView = nil;
+        _lastFastRoutingComplicationOrdinal = -1;
+        [self clearMissingMapsState];
+        _hasEmptyTransportRoute = NO;
+        [self updateMenu];
         // do not hide fragment (needed for use case entering Planning mode without destination)
     });
 }
@@ -2017,8 +2038,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)showRequiredMapsResourceViewControllerIfNeeded
 {
-    if (_missingMaps.count > 0 || _mapsToUpdate.count > 0)
+    if (_routingHelper.isRouteBeingCalculated && [_routingHelper hasCurrentMissingMaps])
     {
+        [self catchCurrentMissingMaps];
+    }
+
+    if ([self hasMissingOrOutdatedMaps])
+    {
+        [_routingHelper stopRouteCalculation];
         [self showRequiredMapsResourceViewController];
     }
     else
@@ -2049,6 +2076,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)showRequiredMapsResourceViewController
 {
+    if (_routingHelper.isRouteBeingCalculated && [_routingHelper hasCurrentMissingMaps])
+    {
+        [self catchCurrentMissingMaps];
+    }
+
     if (_missingMaps.count > 0 || _mapsToUpdate.count > 0)
     {
         __weak __typeof(self) weakSelf = self;
@@ -2073,14 +2105,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             UITableViewHeaderFooterView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[UITableViewHeaderFooterView getCellIdentifier]];
             headerView.translatesAutoresizingMaskIntoConstraints = NO;
+            LeftIconRightStackTitleDescriptionButtonView *missingOrOutdatedMapsView = [self missingOrOutdatedMapsView];
             
-            _missingOrOutdatedMapsView.translatesAutoresizingMaskIntoConstraints = NO;
-            [headerView.contentView addSubview:_missingOrOutdatedMapsView];
+            missingOrOutdatedMapsView.translatesAutoresizingMaskIntoConstraints = NO;
+            [headerView.contentView addSubview:missingOrOutdatedMapsView];
             [NSLayoutConstraint activateConstraints:@[
-                [_missingOrOutdatedMapsView.leadingAnchor constraintEqualToAnchor:headerView.contentView.leadingAnchor constant:20],
-                [_missingOrOutdatedMapsView.trailingAnchor constraintEqualToAnchor:headerView.contentView.trailingAnchor constant:-20],
-                [_missingOrOutdatedMapsView.topAnchor constraintEqualToAnchor:headerView.contentView.topAnchor constant:20],
-                [_missingOrOutdatedMapsView.bottomAnchor constraintEqualToAnchor:headerView.contentView.bottomAnchor]
+                [missingOrOutdatedMapsView.leadingAnchor constraintEqualToAnchor:headerView.contentView.leadingAnchor constant:20],
+                [missingOrOutdatedMapsView.trailingAnchor constraintEqualToAnchor:headerView.contentView.trailingAnchor constant:-20],
+                [missingOrOutdatedMapsView.topAnchor constraintEqualToAnchor:headerView.contentView.topAnchor constant:20],
+                [missingOrOutdatedMapsView.bottomAnchor constraintEqualToAnchor:headerView.contentView.bottomAnchor]
             ]];
             
             return headerView;
@@ -2287,6 +2320,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         _hasEmptyTransportRoute = NO;
+        _lastFastRoutingComplicationOrdinal = -1;
         [self updateData];
         [self.tableView reloadData];
     });
@@ -2301,9 +2335,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) updateProgress:(int)progress
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL hasCurrentMissingMaps = [_routingHelper hasCurrentMissingMaps];
+        if (hasCurrentMissingMaps)
+        {
+            [self catchCurrentMissingMaps];
+        }
         if (!_progressBarView)
         {
-            [self clearMissingMapsState];
+            if (!hasCurrentMissingMaps)
+            {
+                [self clearMissingMapsState];
+            }
             _hasEmptyTransportRoute = NO;
             [self updateData];
             [self.tableView reloadData];
@@ -2325,6 +2367,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     dispatch_async(dispatch_get_main_queue(), ^{
         [self clearMissingMapsState];
         _hasEmptyTransportRoute = NO;
+        _lastFastRoutingComplicationOrdinal = -1;
         if (!_progressBarView)
         {
             [self updateData];
@@ -2337,7 +2380,47 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (BOOL)hasMissingOrOutdatedMaps
 {
-    return _missingMaps.count || _mapsToUpdate.count;
+    if (_routingHelper.isPublicTransportMode)
+    {
+        return NO;
+    }
+    return (_routingHelper.isRouteBeingCalculated && [_routingHelper hasCurrentMissingMaps]) || _missingMaps.count || _mapsToUpdate.count;
+}
+
+- (void)catchCurrentMissingMaps
+{
+    if (_routingHelper.isPublicTransportMode)
+    {
+        [self clearMissingMapsState];
+        _lastFastRoutingComplicationOrdinal = -1;
+        return;
+    }
+    if (![_routingHelper hasCurrentMissingMaps])
+    {
+        _lastFastRoutingComplicationOrdinal = -1;
+        return;
+    }
+
+    NSInteger complicationOrdinal = [_routingHelper getCurrentFastRoutingComplicationOrdinal];
+    if (complicationOrdinal == _lastFastRoutingComplicationOrdinal)
+    {
+        return;
+    }
+    _lastFastRoutingComplicationOrdinal = complicationOrdinal;
+
+    OARouteCalculationResult *result = [[OARouteCalculationResult alloc] initWithErrorMessage:@""];
+    [_routingHelper attachCurrentMissingMapsToRouteCalculationResult:result];
+    if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
+    {
+        directionInfo = -1;
+        _trackAnalysis = nil;
+        _gpx = nil;
+        _missingMaps = result.missingMaps;
+        _mapsToUpdate = result.mapsToUpdate;
+        _potentiallyUsedMaps = result.potentiallyUsedMaps;
+        _hasEmptyTransportRoute = NO;
+        [self updateMenu];
+    }
 }
 
 - (void)clearMissingMapsState

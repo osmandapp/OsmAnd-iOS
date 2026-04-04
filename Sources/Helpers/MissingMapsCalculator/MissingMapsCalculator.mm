@@ -11,6 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
+#import "OARouteCalculationResult.h"
 #import "OAWorldRegion.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -20,6 +21,7 @@ static const double kDISTANCE_SPLIT = 15000;
 static const double DISTANCE_SKIP = 10000;
 
 @interface MissingMapsCalculatorPoint : NSObject
+@property (nonatomic, assign) BOOL isStartEnd;
 @property (nonatomic, strong) NSMutableArray<NSString *> *regions;
 // 0 means routing data present but no HH data, nil means no data at all
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *hhEditions;
@@ -65,9 +67,18 @@ static const double DISTANCE_SKIP = 10000;
                            targets:(NSArray<CLLocation *> *)targets
                    checkHHEditions:(BOOL)checkHHEditions
 {
-    self.startPoint = start;
-    
     NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
+    std::vector<std::pair<double, double>> missingMapsPoints;
+    missingMapsPoints.emplace_back(start.coordinate.latitude, start.coordinate.longitude);
+    for (CLLocation *target in targets)
+    {
+        missingMapsPoints.emplace_back(target.coordinate.latitude, target.coordinate.longitude);
+    }
+    std::shared_ptr<MissingMapsCalculationResult> calculationResult = nullptr;
+    if (ctx->progress != nullptr)
+    {
+        calculationResult = std::make_shared<MissingMapsCalculationResult>(ctx, missingMapsPoints);
+    }
     _lastKeyNames = [NSMutableArray new];
     NSMutableArray<MissingMapsCalculatorPoint *> *pointsToCheck = [NSMutableArray new];
     string profile = profileToString(ctx->config->router->getProfile());
@@ -115,19 +126,23 @@ static const double DISTANCE_SKIP = 10000;
             continue;
         }
         
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:prev next:end];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:prev isStartEnd:i == 0 next:end];
         prev = end;
     }
     
     if (end != nil)
     {
-        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:end];
+        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:end isStartEnd:YES];
     }
     
     NSMutableSet<NSString *> *usedMaps = [NSMutableSet set];
     NSMutableSet<NSString *> *mapsToDownload = [NSMutableSet set];
     NSMutableSet<NSString *> *mapsToUpdate = [NSMutableSet set];
     NSMutableSet<NSNumber *> *presentTimestamps = nil;
+    BOOL mixedMapsAtStartOrEnd = NO;
+    BOOL missingMapsAtStartOrEnd = NO;
+    BOOL mixedMapsIntermediates = NO;
+    BOOL missingMapsIntermediates = NO;
     
     for (MissingMapsCalculatorPoint *p in pointsToCheck)
     {
@@ -137,6 +152,18 @@ static const double DISTANCE_SKIP = 10000;
             {
                 if (![self isRoadOnlyMap:r])
                 {
+                    if (p.isStartEnd)
+                    {
+                        missingMapsAtStartOrEnd = YES;
+                    }
+                    else
+                    {
+                        missingMapsIntermediates = YES;
+                    }
+                    if (calculationResult != nullptr)
+                    {
+                        calculationResult->addMissingMaps(r.UTF8String);
+                    }
                     [mapsToDownload addObject:r];
                     break;
                 }
@@ -192,10 +219,26 @@ static const double DISTANCE_SKIP = 10000;
             {
                 if (!fresh)
                 {
+                    if (p.isStartEnd)
+                    {
+                        mixedMapsAtStartOrEnd = YES;
+                    }
+                    else
+                    {
+                        mixedMapsIntermediates = YES;
+                    }
+                    if (calculationResult != nullptr)
+                    {
+                        calculationResult->addMapToUpdate(region.UTF8String);
+                    }
                     [mapsToUpdate addObject:region];
                 }
                 else
                 {
+                    if (calculationResult != nullptr)
+                    {
+                        calculationResult->addUsedMaps(region.UTF8String);
+                    }
                     [usedMaps addObject:region];
                 }
             }
@@ -213,6 +256,10 @@ static const double DISTANCE_SKIP = 10000;
                 {
                     if ([p.hhEditions[i] longValue] == selectedEdition)
                     {
+                        if (calculationResult != nullptr)
+                        {
+                            calculationResult->addUsedMaps(p.regions[i].UTF8String);
+                        }
                         [usedMaps addObject:p.regions[i]];
                         break;
                     }
@@ -223,40 +270,58 @@ static const double DISTANCE_SKIP = 10000;
     
     if ([mapsToDownload count] == 0 && [mapsToUpdate count] == 0)
     {
+        if (ctx->progress != nullptr)
+        {
+            ctx->progress->missingMapsCalculationResult = nullptr;
+            ctx->progress->resetFastRoutingStatus();
+        }
         return NO;
     }
-    self.missingMaps = [self convert:[mapsToDownload copy]];
-    self.mapsToUpdate = [self convert:[mapsToUpdate copy]];
-    self.potentiallyUsedMaps = [self convert:[usedMaps copy]];
-    
+    if (ctx->progress != nullptr)
+    {
+        if (missingMapsAtStartOrEnd)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_AT_START_OR_END);
+        }
+        else if (mixedMapsAtStartOrEnd)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_AT_START_OR_END);
+        }
+        else if (missingMapsIntermediates)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_INTERMEDIATES);
+        }
+        else if (mixedMapsIntermediates)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_INTERMEDIATES);
+        }
+    }
+    if (ctx->progress != nullptr)
+    {
+        ctx->progress->missingMapsCalculationResult = calculationResult;
+    }
     NSLog(@"Check missing maps %lu points %.2f sec", [pointsToCheck count], ([NSDate timeIntervalSinceReferenceDate] - tm));
     
     return YES;
-}
-
-- (void)clearResult
-{
-    self.missingMaps = @[];
-    self.mapsToUpdate = @[];
-    self.potentiallyUsedMaps = @[];
 }
 
 - (void)split:(std::shared_ptr<RoutingContext>)ctx
     knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
 pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
           pnt:(CLLocation *)pnt
+   isStartEnd:(BOOL)isStartEnd
          next:(CLLocation *)next
 {
     double distance = [OAMapUtils getDistance:pnt.coordinate second:next.coordinate];
     if (distance < kDISTANCE_SPLIT)
     {
-        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:pnt];
+        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:pnt isStartEnd:isStartEnd];
     }
     else
     {
         CLLocation *mid = [OAMapUtils calculateMidPoint:pnt s2:next];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:pnt next:mid];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:mid next:next];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:pnt isStartEnd:isStartEnd next:mid];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:mid isStartEnd:NO next:next];
     }
 }
 
@@ -264,6 +329,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
        knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
    pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
            point:(CLLocation *)loc
+      isStartEnd:(BOOL)isStartEnd
 {
     NSMutableArray<NSString *> *regions = [NSMutableArray array];
     
@@ -294,10 +360,11 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
         NSInteger lengthComparisonResult = [@(o1.length) compare:@(o2.length)];
         return (NSComparisonResult)(-lengthComparisonResult);
     }];
-    if ((pointsToCheck.count == 0 || ![regions isEqualToArray:_lastKeyNames]) && !onlyJointMap)
+    if ((pointsToCheck.count == 0 || isStartEnd || ![regions isEqualToArray:_lastKeyNames]) && !onlyJointMap)
     {
         MissingMapsCalculatorPoint *pnt = [MissingMapsCalculatorPoint new];
         _lastKeyNames = regions;
+        pnt.isStartEnd = isStartEnd;
         pnt.regions = [[NSMutableArray alloc] initWithArray:regions];
         
         BOOL hasHHEdition = [self addMapEditions:knownMaps point:pnt];
@@ -333,34 +400,53 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     }
 }
 
-- (NSArray<OAWorldRegion *> *)convert:(NSOrderedSet<NSString *> *)mapsToDownload
+- (NSArray<OAWorldRegion *> *)convert:(const std::vector<std::string>&)maps
 {
-    if (mapsToDownload.count == 0)
+    if (maps.empty())
     {
         return nil;
     }
     
     NSMutableArray<OAWorldRegion *> *worldRegions = [NSMutableArray array];
     
-    for (NSString *mapName in mapsToDownload)
+    for (const auto& map : maps)
     {
-        OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:mapName];
+        OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:[NSString stringWithUTF8String:map.c_str()]];
         if (worldRegion != nil)
         {
             [worldRegions addObject:worldRegion];
         }
     }
-    return [[self getSortedByDistanceRegions:worldRegions lat:self.startPoint.coordinate.latitude lon:self.startPoint.coordinate.longitude] copy];
+    return [worldRegions copy];
 }
 
-- (NSArray<OAWorldRegion *> *) getSortedByDistanceRegions:(NSArray<OAWorldRegion *> *)array lat:(double)lat lon:(double)lon
+- (NSArray<CLLocation *> *)convertPoints:(const std::vector<std::pair<double, double>>&)points
 {
-    return [array sortedArrayUsingComparator:^NSComparisonResult(OAWorldRegion *obj1, OAWorldRegion *obj2)
-            {
-        const auto distance1 = OsmAnd::Utilities::distance(lon, lat, obj1.regionCenter.longitude, obj1.regionCenter.latitude);
-        const auto distance2 = OsmAnd::Utilities::distance(lon, lat, obj2.regionCenter.longitude, obj2.regionCenter.latitude);
-        return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
-    }];
+    if (points.empty())
+    {
+        return nil;
+    }
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithCapacity:points.size()];
+    for (const auto& point : points)
+    {
+        [locations addObject:[[CLLocation alloc] initWithLatitude:point.first longitude:point.second]];
+    }
+    return [locations copy];
+}
+
+- (void)attachToRouteCalculationResult:(OARouteCalculationResult *)routeResult
+                              progress:(std::shared_ptr<RouteCalculationProgress>)progress
+{
+    if (progress == nullptr || progress->missingMapsCalculationResult == nullptr || routeResult == nil)
+    {
+        return;
+    }
+    const auto& calculationResult = progress->missingMapsCalculationResult;
+    [routeResult setMissingMaps:[self convert:calculationResult->missingMaps]
+                   mapsToUpdate:[self convert:calculationResult->mapsToUpdate]
+                       usedMaps:[self convert:calculationResult->usedMaps]
+                            ctx:calculationResult->missingMapsRoutingContext.lock()
+                         points:[self convertPoints:calculationResult->missingMapsPoints]];
 }
 
 - (BOOL)addMapEditions:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
@@ -394,29 +480,6 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     }
     
     return hhEditionPresent;
-}
-
-- (NSString *)getErrorMessage
-{
-    NSString *msg = @"";
-    
-    if (self.mapsToUpdate != nil)
-    {
-        msg = [NSString stringWithFormat:@"%@ need to be updated", self.mapsToUpdate];
-    }
-    
-    if (self.missingMaps != nil)
-    {
-        if ([msg length] > 0)
-        {
-            msg = [msg stringByAppendingString:@" and "];
-        }
-        msg = [NSString stringWithFormat:@"%@ need to be downloaded", self.missingMaps];
-    }
-    
-    msg = [NSString stringWithFormat:@"To calculate the route maps %@", msg];
-    
-    return msg;
 }
 
 - (BOOL) isRoadOnlyMap:(NSString *)regionName

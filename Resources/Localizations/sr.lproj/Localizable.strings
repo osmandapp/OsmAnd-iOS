@@ -4037,3 +4037,11 @@
 "context_menu_read_full_article" = "Прочитај цео чланак";
 "read_on" = "Читај на %@";
 "show_spherical_map" = "Поглед на глобус";
+"enable_3d_objects" = "3Д зграде";
+"free_custom_color_description" = "Прилагодите 3Д зграде било којом бојом. Савршено за усклађивање са предметом карте или побољшање супротности осветљења.";
+"buildings_3d_visibility_description" = "Подесите непрозирност 3Д предмета на карти.";
+"level_of_details" = "Ниво детаља";
+"performance" = "Перформансе";
+"view_distance" = "Удаљеност видљивости";
+"custom_color" = "Произвољна боја";
+"choose_color" = "Изабери боју";

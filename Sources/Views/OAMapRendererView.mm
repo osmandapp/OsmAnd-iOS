@@ -39,6 +39,19 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
+static CGFloat OAEffectiveMapViewScale(UIView* view)
+{
+    const CGFloat scale = view.contentScaleFactor;
+    if (scale > 0.0f)
+        return scale;
+
+#if TARGET_IPHONE_SIMULATOR
+    return 2.0f;
+#else
+    return UIScreen.mainScreen.scale;
+#endif
+}
+
 @implementation OAMapRendererView
 {
     EAGLSharegroup* _glShareGroup;
@@ -580,8 +593,9 @@ forcedUpdate:(BOOL)forcedUpdate
 
     if (res) 
     {
-        point->x = _point.x / [UIScreen mainScreen].scale;
-        point->y = _point.y / [UIScreen mainScreen].scale;
+        const CGFloat scale = OAEffectiveMapViewScale(self);
+        point->x = _point.x / scale;
+        point->y = _point.y / scale;
     }
     return res;
 }
@@ -601,8 +615,9 @@ forcedUpdate:(BOOL)forcedUpdate
 
     if (res) 
     {
-        point->x = _point.x / [UIScreen mainScreen].scale;
-        point->y = _point.y / [UIScreen mainScreen].scale;
+        const CGFloat scale = OAEffectiveMapViewScale(self);
+        point->x = _point.x / scale;
+        point->y = _point.y / scale;
     }
     return res;
 }
@@ -724,8 +739,8 @@ forcedUpdate:(BOOL)forcedUpdate
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
     eaglLayer.opaque = YES;
+    eaglLayer.contentsScale = OAEffectiveMapViewScale(self);
 #if TARGET_IPHONE_SIMULATOR
-    //eaglLayer.contentsScale = 1.0;
     eaglLayer.drawableProperties = @{
         kEAGLDrawablePropertyRetainedBacking: @NO,
         kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGB565
@@ -1351,8 +1366,13 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (void)updateFrameRefreshRate
 {
-    if (_limitFrameRate)
-    	_displayLink.preferredFrameRateRange = CAFrameRateRangeMake(20.0f, 20.0f, 20.0f);
+    BOOL limitFrameRate = _limitFrameRate;
+#if TARGET_IPHONE_SIMULATOR
+    limitFrameRate = YES;
+#endif
+
+    if (limitFrameRate)
+        _displayLink.preferredFrameRateRange = CAFrameRateRangeMake(20.0f, 20.0f, 20.0f);
     else
         _displayLink.preferredFrameRateRange = CAFrameRateRangeDefault;
 }

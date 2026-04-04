@@ -133,7 +133,7 @@
     UIImage *flagImage = [UIImage imageNamed:@"map_intermediate_point"];
     if (flagImage)
     {
-        UIGraphicsBeginImageContextWithOptions(flagImage.size, NO, [UIScreen mainScreen].scale);
+        UIGraphicsBeginImageContextWithOptions(flagImage.size, NO, self.displayDensityFactor);
         
         [flagImage drawAtPoint:{0, 0}];
         

@@ -534,7 +534,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void)updateMapRulerData
 {
     CGFloat oldWidth = CGRectGetWidth(self.rulerLabel.frame);
-    [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+    [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]
+                      renderScale:_mapViewController.displayDensityFactor];
     CGFloat newWidth = CGRectGetWidth(self.rulerLabel.frame);
     if (fabs(newWidth - oldWidth) >= kGridCellWidthPt)
         [_mapHudLayout updateButtons];

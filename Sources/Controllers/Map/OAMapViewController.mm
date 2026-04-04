@@ -136,6 +136,15 @@ static const float ZONE_2_ZOOM_THRESHOLD = 1.5f;
 static const CGFloat kDistanceBetweenFingers = 50.0;
 static const NSInteger kDetailedMapZoom = 9;
 
+static CGFloat OAEffectiveMapRenderScale()
+{
+#if TARGET_IPHONE_SIMULATOR
+    return 2.0f;
+#else
+    return [UIScreen mainScreen].scale;
+#endif
+}
+
 @interface OATouchLocation : NSObject
 
 @property (nonatomic) Point31 touchLocation31;
@@ -475,7 +484,7 @@ static const NSInteger kDetailedMapZoom = 9;
     _mapView = [[OAMapRendererView alloc] init];
     self.view = _mapView;
     _mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _contentScaleFactor = [[UIScreen mainScreen] scale];
+    _contentScaleFactor = OAEffectiveMapRenderScale();
     _mapView.contentScaleFactor = _contentScaleFactor;
 
     // Tell view to create context
@@ -2447,10 +2456,14 @@ static const NSInteger kDetailedMapZoom = 9;
         const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
-		if ([settings.batterySavingMode get])
+#if TARGET_IPHONE_SIMULATOR
+        [_mapView limitFrameRefreshRate];
+#else
+        if ([settings.batterySavingMode get])
             [_mapView limitFrameRefreshRate];
         else
             [_mapView restoreFrameRefreshRate];
+#endif
 
         // Set reference tile size on the screen
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
@@ -2823,9 +2836,8 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (CGFloat) displayDensityFactor
 {
-
     if (!self.mapViewLoaded || _contentScaleFactor == 0.0)
-        return [UIScreen mainScreen].scale;
+        return OAEffectiveMapRenderScale();
     
     return _contentScaleFactor;
 }

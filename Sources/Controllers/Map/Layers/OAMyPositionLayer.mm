@@ -467,7 +467,7 @@ typedef enum {
     locationMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
     locationMarkerBuilder.setBaseOrder(baseOrder);
     locationMarkerBuilder.setIsHidden(true);
-    locationMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * locationIconScaleFactor * [[UIScreen mainScreen] scale]));
+    locationMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * locationIconScaleFactor * self.displayDensityFactor));
     
     OsmAnd::MapMarkerBuilder courseMarkerBuilder;
 
@@ -475,7 +475,7 @@ typedef enum {
     courseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
     courseMarkerBuilder.setBaseOrder(baseOrder);
     courseMarkerBuilder.setIsHidden(true);
-    courseMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * courseIconScaleFactor * [[UIScreen mainScreen] scale]));
+    courseMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * courseIconScaleFactor * self.displayDensityFactor));
     
     UIColor *iconColor = [mode getProfileColor];
     

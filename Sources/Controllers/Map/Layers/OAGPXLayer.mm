@@ -772,7 +772,7 @@ colorizationScheme:(int)colorizationScheme
                        .setSpecialPathIconStep(specialIconBitmap->height() * kPathIconStepCoef)
                        .setShouldShowArrows(true);
             }
-            builder.setScreenScale(UIScreen.mainScreen.scale);
+            builder.setScreenScale(MAX(self.displayDensityFactor, 1.0f));
         }
         
         if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
@@ -866,7 +866,7 @@ colorizationScheme:(int)colorizationScheme
                            .setSpecialPathIconStep(specialIconBitmap->height() * kPathIconStepCoef)
                            .setShouldShowArrows(true);
                 }
-                builder.setScreenScale(UIScreen.mainScreen.scale);
+                builder.setScreenScale(MAX(self.displayDensityFactor, 1.0f));
             }
             
             if ([OAGPXDatabase lineVisualizationByTypeForName:gpx.get3DVisualizationType] != EOAGPX3DLineVisualizationByTypeNone)
@@ -1385,7 +1385,7 @@ colorizationScheme:(int)colorizationScheme
         if (startIcon && finishIcon  && startFinishIcon)
         {
             _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
-                                                                              UIScreen.mainScreen.scale,
+                                                                              MAX(self.displayDensityFactor, 1.0f),
                                                                               _startFinishPoints,
                                                                               _splitLabels,
                                                                               OsmAnd::SingleSkImage(startIcon),
@@ -2120,12 +2120,14 @@ colorizationScheme:(int)colorizationScheme
 
         return [OAFavoritesLayer getImageWithColor:point.color
                                         background:backgroundType
-                                              icon:[@"mx_" stringByAppendingString:iconName]];
+                                              icon:[@"mx_" stringByAppendingString:iconName]
+                                             scale:self.displayDensityFactor];
     }
     OAFavoriteColor *def = [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject];
     return [OAFavoritesLayer getImageWithColor:def.color
                                     background:DEFAULT_ICON_SHAPE_KEY
-                                          icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]];
+                                          icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME_KEY]
+                                         scale:self.displayDensityFactor];
 }
 
 - (void) setPointVisibility:(id)object hidden:(BOOL)hidden

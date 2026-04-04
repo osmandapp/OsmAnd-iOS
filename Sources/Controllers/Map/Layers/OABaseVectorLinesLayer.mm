@@ -144,8 +144,9 @@
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color
 {
     SkBitmap bitmap;
-    CGFloat bitmapSize = 20. * UIScreen.mainScreen.scale;
-    CGFloat strokeWidth = 2.5 * UIScreen.mainScreen.scale;
+    CGFloat density = MAX(self.displayDensityFactor, 1.0f);
+    CGFloat bitmapSize = 20. * density;
+    CGFloat strokeWidth = 2.5 * density;
     if (!bitmap.tryAllocPixels(SkImageInfo::MakeN32Premul(bitmapSize, bitmapSize)))
     {
         LogPrintf(OsmAnd::LogSeverityLevel::Error,
@@ -184,9 +185,8 @@
     SkBitmap bitmap;
     CGFloat walkCircleH = lineWidth / VECTOR_LINE_SCALE_COEF * 1.33f;
     CGFloat walkCircleW = lineWidth / VECTOR_LINE_SCALE_COEF;
-    CGFloat strokeWidth = 1.0 * UIScreen.mainScreen.scale;
-
-    CGFloat density = UIScreen.mainScreen.scale;
+    CGFloat density = MAX(self.displayDensityFactor, 1.0f);
+    CGFloat strokeWidth = 1.0 * density;
     CGFloat margin = 1.5 * density;
 
     // create walk arrow bitmap

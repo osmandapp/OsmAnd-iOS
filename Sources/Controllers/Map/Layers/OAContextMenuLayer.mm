@@ -147,7 +147,8 @@
 - (void)setupIconCenter
 {
     auto centerPixel = self.mapView.getCenterPixel;
-    CGPoint targetPoint = CGPointMake(centerPixel.x / UIScreen.mainScreen.scale, centerPixel.y / UIScreen.mainScreen.scale);
+    CGFloat displayDensityFactor = MAX(self.displayDensityFactor, 1.0f);
+    CGPoint targetPoint = CGPointMake(centerPixel.x / displayDensityFactor, centerPixel.y / displayDensityFactor);
     if (CGPointEqualToPoint(targetPoint, _cachedTargetPoint))
         return;
         
@@ -610,7 +611,7 @@
         builder.setPoints(points)
             .setIsHidden(false)
             .setLineId(1)
-            .setLineWidth(2 * kWidthCorrectionValue * [[UIScreen mainScreen] scale])
+            .setLineWidth(2 * kWidthCorrectionValue * self.displayDensityFactor)
             .setFillColor(OsmAnd::ColorARGB(color_osmand_orange_argb))
             .setApproximationEnabled(false)
             .setBaseOrder(self.pointsOrder + 1);

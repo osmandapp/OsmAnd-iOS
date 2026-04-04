@@ -15,5 +15,6 @@
 - (BOOL) hasNoData;
 - (void) updateColors;
 - (void) setRulerData:(float) metersPerPixel;
+- (void) setRulerData:(float)metersPerPixel renderScale:(CGFloat)renderScale;
 
 @end

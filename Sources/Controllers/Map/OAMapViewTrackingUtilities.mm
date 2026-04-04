@@ -352,7 +352,7 @@ static double const TILT_ANIMATION_TIME = 0.4;
                     }
                     if (isnan(rotation) && prevLocation)
                     {
-                        CGFloat distDp = [location distanceFromLocation:prevLocation] / _mapView.currentPixelsToMetersScaleFactor / UIScreen.mainScreen.scale;
+                        CGFloat distDp = [location distanceFromLocation:prevLocation] / _mapView.currentPixelsToMetersScaleFactor / MAX(_mapViewController.displayDensityFactor, 1.0f);
                         if (distDp > SKIP_ANIMATION_DP_THRESHOLD)
                         {
                             movingTime = 0;

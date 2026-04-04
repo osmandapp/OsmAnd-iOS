@@ -314,7 +314,7 @@ const static int kDoubleTouchCount = 2;
     _fingerDistanceSublayer.frame = self.bounds;
     _fingerDistanceSublayer.bounds = self.bounds;
     _fingerDistanceSublayer.contentsCenter = self.layer.contentsCenter;
-    _fingerDistanceSublayer.contentsScale = [[UIScreen mainScreen] scale];
+    _fingerDistanceSublayer.contentsScale = MAX(_mapViewController.displayDensityFactor, 1.0f);
     _fingerRulerDelegate = [[OAFingerRulerDelegate alloc] initWithRulerLayer:self];
     _fingerDistanceSublayer.delegate = _fingerRulerDelegate;
 }

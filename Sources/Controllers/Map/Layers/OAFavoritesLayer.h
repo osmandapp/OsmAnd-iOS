@@ -12,5 +12,6 @@
 @interface OAFavoritesLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 + (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon;
++ (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon scale:(CGFloat)scale;
 
 @end

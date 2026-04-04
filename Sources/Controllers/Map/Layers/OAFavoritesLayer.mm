@@ -161,15 +161,20 @@ static const int START_ZOOM = 6;
 {
     UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:fav->getColor().a/255.0];
     return [self.class getImageWithColor:color
-                        background:fav->getBackground().toNSString()
-                              icon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
+                              background:fav->getBackground().toNSString()
+                                    icon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]
+                                   scale:self.displayDensityFactor];
 }
 
 + (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon
 {
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGFloat outerImageSide = 36 * scale;
-    CGFloat innerImageSide = 27. / 2 * scale;
+    return [self getImageWithColor:color background:background icon:icon scale:UIScreen.mainScreen.scale];
+}
+
++ (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon scale:(CGFloat)scale
+{
+    const CGFloat outerImageSide = 36.0f;
+    const CGFloat innerImageSide = 27.0f / 2.0f;
     CGRect outerImageRect = CGRectMake(0, 0, outerImageSide, outerImageSide);
     CGRect innerImageCenterRect = CGRectMake(((outerImageSide / 2) - (innerImageSide / 2)), ((outerImageSide / 2) - (innerImageSide / 2)), innerImageSide, innerImageSide);
 
@@ -189,7 +194,7 @@ static const int START_ZOOM = 6;
     if (!topImage)
         topImage = [OATargetInfoViewController getIcon:@"mx_special_star" size:outerImageRect.size];
 
-    UIGraphicsBeginImageContext(outerImageRect.size);
+    UIGraphicsBeginImageContextWithOptions(outerImageRect.size, NO, scale);
     [shadowImage drawInRect:outerImageRect];
     [colorFilledImage drawInRect:outerImageRect];
     [innerImage drawInRect:innerImageCenterRect blendMode:kCGBlendModeNormal alpha:1.0];
@@ -353,8 +358,9 @@ static const int START_ZOOM = 6;
 {
     OAFavoriteColor* color = OADefaultFavorite.builtinColors.firstObject;
     return [self.class getImageWithColor:color.color
-                        background:@"circle"
-                              icon:[@"mx_" stringByAppendingString:@"special_star"]];
+                              background:@"circle"
+                                    icon:[@"mx_" stringByAppendingString:@"special_star"]
+                                   scale:self.displayDensityFactor];
 }
 
 - (UIImage *) getPointIcon:(id)object

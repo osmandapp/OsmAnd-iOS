@@ -426,7 +426,7 @@ struct DrawPathData
         }
         
         builder.setFillColor(lineColor)
-            .setScreenScale(UIScreen.mainScreen.scale);
+            .setScreenScale(MAX(self.displayDensityFactor, 1.0f));
         
         if (!colors.empty())
         {

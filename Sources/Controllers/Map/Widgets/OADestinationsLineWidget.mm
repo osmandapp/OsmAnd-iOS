@@ -120,7 +120,7 @@
     _destinationLineSublayer = [[CALayer alloc] init];
     _destinationLineSublayer.frame = self.bounds;
     _destinationLineSublayer.contentsCenter = self.layer.contentsCenter;
-    _destinationLineSublayer.contentsScale = [[UIScreen mainScreen] scale];
+    _destinationLineSublayer.contentsScale = MAX(_mapViewController.displayDensityFactor, 1.0f);
     _destinationLineDelegate = [[OADestinationLineDelegate alloc] initWithDestinationLine:self];
     _destinationLineSublayer.delegate = _destinationLineDelegate;
 }
@@ -242,7 +242,7 @@
 - (double) getStrokeWidth
 {
     float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6;
-    return strokeWidth * kWidthCorrectionValue / [[UIScreen mainScreen] scale];
+    return strokeWidth * kWidthCorrectionValue / MAX(_mapViewController.displayDensityFactor, 1.0f);
 }
 
 - (UIImage *)getArrowImage:(UIImage *)fgImage inImage:(UIImage *)bgImage withShadow:(UIImage *)shadow

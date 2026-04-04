@@ -115,6 +115,11 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     OAMapWidgetRegistry *_widgetRegistry;
 }
 
+- (CGFloat) mapRenderScale
+{
+    return MAX(_mapViewController.displayDensityFactor, 1.0f);
+}
+
 - (instancetype) init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:@"OARulerWidget" owner:nil options:nil];
@@ -205,7 +210,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _shadowColor = shadowColorAttr ? UIColorFromARGB(shadowColorAttr.intValue).CGColor : nil;
     
     _strokeWidth = (hasAttributes && [_rulerCircleAttrs valueForKey:@"strokeWidth"]) ? [_rulerCircleAttrs valueForKey:@"strokeWidth"].floatValue : 1.0;
-    _strokeWidth = scaleFactor < 1.0 ? 1.0 : _strokeWidth / [[UIScreen mainScreen] scale];
+    _strokeWidth = scaleFactor < 1.0 ? 1.0 : _strokeWidth / [self mapRenderScale];
     _strokeWidthText = ((hasAttributes && [_rulerCircleAttrs valueForKey:@"strokeWidth_3"]) ? [_rulerCircleAttrs valueForKey:@"strokeWidth_3"].floatValue : 6.0) * 3.0;
                 
     _shadowRadius = hasAttributes && [_rulerCircleAttrs valueForKey:@"shadowRadius"] ? [_rulerCircleAttrs valueForKey:@"shadowRadius"].floatValue : 3.0;
@@ -366,10 +371,10 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 - (void) updateDistance
 {
     _cachedMapDensity = _mapViewController.mapView.currentPixelsToMetersScaleFactor;
-    double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
+    double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [self mapRenderScale];
     _mapScaleUnrounded = fullMapScale;
     _roundedDist = [OAOsmAndFormatter calculateRoundedDist:_mapScaleUnrounded];
-    _radius = _mapScale / _cachedMapDensity / [[UIScreen mainScreen] scale];
+    _radius = _mapScale / _cachedMapDensity / [self mapRenderScale];
     [self updateText];
 }
 
@@ -403,7 +408,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         
         for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
         {
-            double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
+            double pixelDensity = _cachedMapDensity * [self mapRenderScale];
             auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, circleRadius * pixelDensity, a);
             if (ABS(latLon.latitude) > 90)
             {
@@ -752,7 +757,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (CGPoint) getPointFromCenterByRadius:(double)radius angle:(double)angle
 {
-    double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
+    double pixelDensity = _cachedMapDensity * [self mapRenderScale];
     auto pointLatLon = OsmAnd::Utilities::rhumbDestinationPoint(_cachedCenterLatLon, radius * pixelDensity, angle);
     return [self latLonToScreenPoint:pointLatLon];
 }
@@ -808,7 +813,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         if (_firstUpdate || (visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || centerChanged || viewportChanged || modeChanged)
         {
             _cachedMapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
-            double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
+            double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [self mapRenderScale];
             float mapAzimuth = mapRendererView.azimuth;
             float mapZoom = mapRendererView.zoom;
             int targetUpdatingThreshold = TARGET31_UPDATING_THRESHOLD;
@@ -853,7 +858,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             _cachedHeading = _app.locationServices.lastKnownHeading;
             _mapScaleUnrounded = fullMapScale;
             _mapScale = [OAOsmAndFormatter calculateRoundedDist:_mapScaleUnrounded];
-            _radius = (_mapScale / _cachedMapDensity) / [[UIScreen mainScreen] scale];
+            _radius = (_mapScale / _cachedMapDensity) / [self mapRenderScale];
             _maxRadius = [self calculateMaxRadiusInPx];
             
              _needUpdate |= _firstUpdate || mapMoved || shouldUpdateCompass;

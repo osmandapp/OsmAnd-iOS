@@ -216,13 +216,19 @@
 
 - (void) setRulerData:(float)metersPerPixel
 {
-    double metersPerMaxSize = metersPerPixel * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
+    [self setRulerData:metersPerPixel renderScale:UIScreen.mainScreen.scale];
+}
+
+- (void) setRulerData:(float)metersPerPixel renderScale:(CGFloat)renderScale
+{
+    CGFloat effectiveRenderScale = MAX(renderScale, 1.0f);
+    double metersPerMaxSize = metersPerPixel * kMapRulerMaxWidth * effectiveRenderScale;
     int rulerWidth = 0;
     NSString * vl = @"";
     if (metersPerPixel > 0 && metersPerPixel < 10000000.0)
     {
         double roundedDist = [OAOsmAndFormatter calculateRoundedDist:metersPerMaxSize];
-        rulerWidth =  (roundedDist / metersPerPixel) / [[UIScreen mainScreen] scale];
+        rulerWidth =  (roundedDist / metersPerPixel) / effectiveRenderScale;
         if (rulerWidth < 0)
             rulerWidth = 0;
         else

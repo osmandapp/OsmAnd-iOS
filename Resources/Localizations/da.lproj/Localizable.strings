@@ -4035,3 +4035,11 @@
 "poi_cuisine" = "Køkken";
 "poi_brand" = "Varemærke";
 "show_spherical_map" = "Klodevisning";
+"enable_3d_objects" = "3D-bygninger";
+"free_custom_color_description" = "Tilpas 3D-bygninger med en hvilken som helst farve. Perfekt til at matche et korttema eller forbedre kontrasten.";
+"buildings_3d_visibility_description" = "Juster gennemsigtigheden af 3D-strukturer på kortet.";
+"level_of_details" = "Detaljeringsgrad";
+"performance" = "Ydeevne";
+"view_distance" = "Visningsafstand";
+"custom_color" = "Tilpasset farve";
+"choose_color" = "Vælg farve";

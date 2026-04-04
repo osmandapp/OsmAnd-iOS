@@ -28,21 +28,14 @@
 @implementation OARouteResultPreparationTest
 {
     std::shared_ptr<RoutePlannerFrontEnd> _fe;
-    std::shared_ptr<RoutingContext> _ctx;
 }
 
 - (void)setUp {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
     initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
-    
+
     _fe = std::make_shared<RoutePlannerFrontEnd>();
-    auto builder = [self getDefaultRoutingConfig];
-    MAP_STR_STR params;
-    params["car"] = "true";
-    const auto config = builder->build("car", 30 * 3, params);
-    _ctx = _fe->buildRoutingContext(config);
-    _ctx->leftSideNavigation = false;
 }
 
 - (void)tearDown {
@@ -52,27 +45,32 @@
 - (void)testTurnLanes
 {
     NSString *jsonFilePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"test_turn_lanes" ofType:@"json" inDirectory:@"test-resources"];
-    
+
     NSError *err = nil;
     NSString *sourceJsonText = [NSString stringWithContentsOfFile:jsonFilePath encoding:NSUTF8StringEncoding error:&err];
     XCTAssertNil(err);
     XCTAssertNotNil(sourceJsonText);
     XCTAssertTrue(sourceJsonText.length > 0);
-    
+
     NSError *error;
     NSDictionary *sourceJson = [NSJSONSerialization JSONObjectWithData:[sourceJsonText dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&error];
     XCTAssertNil(error);
     // this is not a turn lanes test
     if (![sourceJson isKindOfClass:NSArray.class])
         return;
-    
+
     for (NSDictionary *testCase in sourceJson)
+    {
+        if ([testCase[@"ignoreNative"] boolValue])
+            continue;
         [self testLanes:testCase];
+    }
 }
 
 - (void) testLanes:(NSDictionary *)testCase
 {
     NSLog(@"Testing: %@", testCase[@"testName"]);
+    const auto ctx = [self buildRoutingContext:testCase[@"params"]];
     CLLocation *start = [[CLLocation alloc] initWithLatitude:[testCase[@"startPoint"][@"latitude"] doubleValue] longitude:[testCase[@"startPoint"][@"longitude"] doubleValue]];
     CLLocation *end = [[CLLocation alloc] initWithLatitude:[testCase[@"endPoint"][@"latitude"] doubleValue] longitude:[testCase[@"endPoint"][@"longitude"] doubleValue]];
     int startX = get31TileNumberX(start.coordinate.longitude);
@@ -81,10 +79,12 @@
     int endY = get31TileNumberY(end.coordinate.latitude);
     vector<int> intX;
     vector<int> intY;
-    const auto routeSegments = _fe->searchRoute(_ctx, startX, startY, endX, endY, intX, intY);
-    
-    NSMutableSet<NSNumber *> *reachedSegments = [NSMutableSet new];
+    const auto routeSegments = _fe->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
+
     NSDictionary *expectedResults = testCase[@"expectedResults"];
+    NSMutableSet<NSString *> *reachedSegmentsWithStartPoint = [NSMutableSet new];
+    NSMutableDictionary<NSNumber *, NSValue *> *reachedSegments = [NSMutableDictionary new];
+    NSMutableSet<NSNumber *> *checkedSegments = [NSMutableSet new];
     NSInteger prevSegment = -1;
     for (NSInteger i = 0; i <= routeSegments.size(); i++) {
         if (i == routeSegments.size() || routeSegments[i]->turnType != nullptr)
@@ -98,41 +98,96 @@
                 NSString *name = [NSString stringWithUTF8String:segment->description.c_str()];
                 bool skipToSpeak = segment->turnType->isSkipToSpeak();
                 long segmentId = segment->object->id >> 6;
-                
-                NSString *expectedResult = expectedResults[@(segmentId).stringValue];
-                
-                if (expectedResult != nil && ![expectedResult isKindOfClass:NSNull.class])
+
+                if (skipToSpeak)
+                    turnLanes = [@"[MUTE] " stringByAppendingString:turnLanes];
+
+                NSString *expectedResult = nil;
+                NSInteger startPoint = -1;
+                NSInteger segmentStartPoint = segment->getStartPointIndex();
+                for (NSString *roadInfo in expectedResults)
                 {
-                    if ([@"skipToSpeak" isEqualToString:expectedResult])
+                    if ([self getRoadId:roadInfo] != segmentId)
+                        continue;
+                    NSInteger roadStartPoint = [self getRoadStartPoint:roadInfo];
+                    if (roadStartPoint == segmentStartPoint)
                     {
-                        XCTAssertTrue(skipToSpeak);
-                        NSLog(@"Test case %@ failed", testCase[@"testName"]);
-                    } else if (![expectedResult isEqualToString:turnLanes] &&
-                       ![expectedResult isEqualToString:lanes] &&
-                       ![expectedResult isEqualToString:turn])
+                        expectedResult = expectedResults[roadInfo];
+                        startPoint = roadStartPoint;
+                        break;
+                    }
+                    if (roadStartPoint < 0 && expectedResult == nil)
                     {
-                        XCTAssertEqualObjects(expectedResult, turnLanes, @"Segment %ld", segmentId);
-                        NSLog(@"Test case %@ failed", testCase[@"testName"]);
+                        expectedResult = expectedResults[roadInfo];
+                        startPoint = roadStartPoint;
                     }
                 }
-                
+
+                if (expectedResult != nil && ![expectedResult isKindOfClass:NSNull.class])
+                {
+                    if (startPoint < 0 || segment->getStartPointIndex() == startPoint)
+                    {
+                        if (![expectedResult isEqualToString:turnLanes] &&
+                            ![expectedResult isEqualToString:lanes] &&
+                            ![expectedResult isEqualToString:turn])
+                        {
+                            XCTAssertEqualObjects(expectedResult, turnLanes, @"Segment %ld", segmentId);
+                        }
+                    }
+                }
+
                 NSLog(@"segmentId: %ld description: %@", segmentId, name);
             }
             prevSegment = i;
+            if (i < routeSegments.size())
+                [checkedSegments addObject:@(routeSegments[i]->object->id >> 6)];
         }
-        
+
         if (i < routeSegments.size())
         {
-            [reachedSegments addObject:@(routeSegments[i]->object->id >> 6)];
+            long segmentId = routeSegments[i]->object->id >> 6;
+            int startPointIndex = routeSegments[i]->getStartPointIndex();
+            [reachedSegmentsWithStartPoint addObject:[NSString stringWithFormat:@"%ld:%d", segmentId, startPointIndex]];
+            reachedSegments[@(segmentId)] = [NSValue valueWithPointer:routeSegments[i].get()];
         }
     }
 
-    NSMutableSet<NSNumber *> *expectedSegments = [NSMutableSet new];
-    for (NSString *key in expectedResults)
-        [expectedSegments addObject:@(key.longLongValue)];
-    for (NSNumber *expSegId in expectedSegments)
+    for (NSString *roadInfo in expectedResults)
     {
-        XCTAssertTrue([reachedSegments containsObject:expSegId], @"Expected segment %ld weren't reached in route segments %@", expSegId.longValue, [reachedSegments allObjects]);
+        long segmentId = [self getRoadId:roadInfo];
+        NSInteger startPoint = [self getRoadStartPoint:roadInfo];
+        XCTAssertTrue(startPoint < 0 ? reachedSegments[@(segmentId)] != nil : [reachedSegmentsWithStartPoint containsObject:roadInfo],
+                      @"Segment %@ was not reached in %@", roadInfo, reachedSegmentsWithStartPoint);
+
+        if (![checkedSegments containsObject:@(segmentId)])
+        {
+            NSString *expectedResult = expectedResults[roadInfo];
+            if (![self isEmptyExpectedValue:expectedResult])
+                XCTAssertEqualObjects(expectedResult, @"NULL", @"Segment %ld", segmentId);
+        }
+    }
+
+    NSDictionary *expectedExits = testCase[@"expectedExits"];
+    for (NSString *roadInfo in expectedExits)
+    {
+        long segmentId = [self getRoadId:roadInfo];
+        NSValue *segmentValue = reachedSegments[@(segmentId)];
+        XCTAssertNotNil(segmentValue, @"Segment %ld was not reached", segmentId);
+        if (segmentValue == nil)
+            continue;
+
+        auto segment = static_cast<RouteSegmentResult *>(segmentValue.pointerValue);
+        NSString *expectedRef = expectedExits[roadInfo];
+        bool hasExitInfo = segment->hasExitInfo();
+        if ([self isEmptyExpectedValue:expectedRef])
+        {
+            XCTAssertFalse(hasExitInfo, @"Segment %ld has unexpected exit info", segmentId);
+        }
+        else
+        {
+            NSString *actualRef = [NSString stringWithUTF8String:segment->object->getExitRef().c_str()];
+            XCTAssertTrue(hasExitInfo && [expectedRef isEqualToString:actualRef], @"Segment %ld exit mismatch", segmentId);
+        }
     }
 }
 
@@ -155,6 +210,44 @@
         if (te - tm > 30)
             NSLog(@"Defalt routing config init took %f ms", (te - tm));
     }
+}
+
+- (std::shared_ptr<RoutingContext>)buildRoutingContext:(NSDictionary<NSString *, NSString *> *)testParams
+{
+    auto builder = [self getDefaultRoutingConfig];
+    MAP_STR_STR params;
+    for (NSString *key in testParams)
+    {
+        id value = testParams[key];
+        if ([value isKindOfClass:NSString.class])
+            params[key.UTF8String] = ((NSString *)value).UTF8String;
+    }
+    params["car"] = "true";
+    string vehicle = "car";
+    auto vehicleIt = params.find("vehicle");
+    if (vehicleIt != params.end() && !vehicleIt->second.empty())
+        vehicle = vehicleIt->second;
+    const auto config = builder->build(vehicle, 30 * 3, params);
+    const auto ctx = _fe->buildRoutingContext(config);
+    ctx->leftSideNavigation = false;
+    return ctx;
+}
+
+- (long)getRoadId:(NSString *)roadInfo
+{
+    NSArray<NSString *> *parts = [roadInfo componentsSeparatedByString:@":"];
+    return parts.firstObject.longLongValue;
+}
+
+- (NSInteger)getRoadStartPoint:(NSString *)roadInfo
+{
+    NSArray<NSString *> *parts = [roadInfo componentsSeparatedByString:@":"];
+    return parts.count > 1 ? parts[1].integerValue : -1;
+}
+
+- (BOOL)isEmptyExpectedValue:(NSString *)value
+{
+    return value == nil || [value isKindOfClass:NSNull.class] || value.length == 0;
 }
 
 @end

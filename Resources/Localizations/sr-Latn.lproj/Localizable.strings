@@ -4035,3 +4035,11 @@
 "context_menu_read_full_article" = "Pročitaj ceo članak";
 "read_on" = "Pročitaj na %@";
 "show_spherical_map" = "Pogled na globus";
+"enable_3d_objects" = "3D zgrada";
+"free_custom_color_description" = "Prilagodite 3D zgrada bilo kojom bojom. Idealno za usklađivanje sa temom mape ili poboljšanje kontrasta.";
+"buildings_3d_visibility_description" = "Podesite neprozirnost 3D struktura na mapi.";
+"level_of_details" = "Nivo detalja";
+"performance" = "Performanse";
+"view_distance" = "Vidna udaljenost";
+"custom_color" = "Proizvoljna boja";
+"choose_color" = "Izaberi boju";

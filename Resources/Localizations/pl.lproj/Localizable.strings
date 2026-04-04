@@ -3551,3 +3551,6 @@
 "rendering_attr_tidalFlatStyle_name" = "Styl równiny pływowej";
 "rendering_attr_tidalFlatStyle_description" = "Styl równin pływowych";
 "lang_crh" = "Krymsko-tatarski (łaciński)";
+"choose_color" = "Wybierz kolor";
+"custom_color" = "Kolor niestandardowy";
+"view_distance" = "Podgląd odległości";

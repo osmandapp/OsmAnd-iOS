@@ -4044,3 +4044,11 @@
 "context_menu_read_full_article" = "Прочитать статью полностью";
 "read_on" = "Читайте дальше %@";
 "show_spherical_map" = "Вид глобус";
+"enable_3d_objects" = "Трехмерные здания";
+"free_custom_color_description" = "Настройте 3D-модели зданий в любом цвете. Идеально подходит для создания карты в едином стиле или для усиления контраста.";
+"buildings_3d_visibility_description" = "Отрегулируйте прозрачность 3D-структур на карте.";
+"level_of_details" = "Уровень детализации";
+"performance" = "Производительность";
+"view_distance" = "Видимость";
+"custom_color" = "Пользовательский цвет";
+"choose_color" = "Выберите цвет";

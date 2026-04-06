@@ -530,6 +530,17 @@ static BOOL _repositoryUpdated = NO;
     return self.region != OsmAndApp.instance.worldRegion && self.region.superregion != OsmAndApp.instance.worldRegion && [self hasFreeMaps];
 }
 
+- (NSInteger)currentScope
+{
+    return _currentScope;
+}
+
+- (void)configureForLocalResources
+{
+    hideUpdateButton = YES;
+    _currentScope = kLocalResourcesScope;
+}
+
 - (BOOL) hasFreeMaps
 {
     BOOL free = NO;

@@ -2443,7 +2443,7 @@ static const NSInteger kDetailedMapZoom = 9;
         else
             mapDensityAligned = mapDensity;
 
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * mapDensityAligned);
+        const auto rasterTileSize = (int)(256 * self.displayDensityFactor * mapDensityAligned);
         const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 

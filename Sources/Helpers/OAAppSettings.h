@@ -1116,6 +1116,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *use3dIconsByDefault;
 @property (nonatomic) OACommonBoolean *batterySavingMode;
 @property (nonatomic) OACommonBoolean *enableMsaaForСarPlay;
+@property (nonatomic) OACommonBoolean *showPrimitivesDebugInfo;
 @property (nonatomic) OACommonInteger *appModeOrder;
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;

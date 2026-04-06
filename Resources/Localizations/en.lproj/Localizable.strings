@@ -4511,3 +4511,4 @@
 "popular_places"= "Popular places";
 "shared_string_wikipedia"= "Wikipedia";
 "poi_source" = "POI Source";
+"show_debug_tile" = "Show tile information";

@@ -464,7 +464,32 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 {
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
-    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
+    UIBarButtonItem *systemLeftItem = [self systemLeftBarButtonItem];
+    BOOL isModalController = [self isModal];
+    BOOL isRootController = self.navigationController.viewControllers.count == 1;
+    BOOL shouldUseSystemBackButton = [self useSystemBackButton] && !systemLeftItem && !isRootController;
+    if (@available(iOS 16.0, *))
+    {
+        if (shouldUseSystemBackButton)
+        {
+            __weak __typeof(self) weakSelf = self;
+            self.navigationItem.backAction = [UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
+                [weakSelf onLeftNavbarButtonPressed];
+            }];
+        }
+        else
+        {
+            self.navigationItem.backAction = nil;
+        }
+    }
+    else if (shouldUseSystemBackButton)
+    {
+        shouldUseSystemBackButton = NO;
+        if (!leftNavbarButtonCustomIcon)
+            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+    }
+    
+    if (!leftNavbarButtonCustomIcon && !shouldUseSystemBackButton && ((isModalController && isRootController && !leftButtonTitle) || (!isModalController && leftButtonTitle && leftButtonTitle.length == 0)))
         leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
@@ -489,11 +514,14 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     BOOL isLongTitle = freeSpaceForNavbarButton < 50.;
 
     _leftNavbarButton = nil;
-    UIBarButtonItem *systemLeftItem = [self systemLeftBarButtonItem];
     if (systemLeftItem)
     {
         _leftNavbarButton = systemLeftItem;
         [self.navigationItem setLeftBarButtonItem:systemLeftItem animated:YES];
+    }
+    else if (shouldUseSystemBackButton)
+    {
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     }
     else
     {
@@ -779,6 +807,11 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
         return NO;
     else
         return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
+}
+
+- (BOOL)useSystemBackButton
+{
+    return NO;
 }
 
 - (UIImage *)getCenterIconAboveTitle

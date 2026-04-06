@@ -212,9 +212,9 @@
                                       menu:nil]];
 }
 
-- (UIImage *)getCustomIconForLeftNavbarButton
+- (BOOL)useSystemBackButton
 {
-    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection;
+    return YES;
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme

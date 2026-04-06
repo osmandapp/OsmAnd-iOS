@@ -8,12 +8,17 @@
 
 import Foundation
 
-final class TravelGuidesSettingsCacheViewController : OABaseNavbarViewController {
+final class TravelGuidesSettingsCacheViewController: OABaseNavbarViewController {
     
-    var delegate: Updatable?
+    weak var delegate: Updatable?
     
-    override func getTitle() -> String! {
-        return localizedString("wikivoyage_download_pics")
+    override func getTitle() -> String {
+        return localizedString("cache_size")
+    }
+    
+    override func registerCells() {
+        addCell(OAValueTableViewCell.reuseIdentifier)
+        addCell(OASearchMoreCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -21,7 +26,7 @@ final class TravelGuidesSettingsCacheViewController : OABaseNavbarViewController
         
         let infoSection = tableData.createNewSection()
         let cacheSizeRow = infoSection.createNewRow()
-        cacheSizeRow.cellType = OAValueTableViewCell.getIdentifier()
+        cacheSizeRow.cellType = OAValueTableViewCell.reuseIdentifier
         cacheSizeRow.title = localizedString("cache_size")
         cacheSizeRow.descr = TravelGuidesImageCacheHelper.sharedDatabase.getFormattedFileSize()
         cacheSizeRow.iconName = "ic_custom_photo"
@@ -29,52 +34,35 @@ final class TravelGuidesSettingsCacheViewController : OABaseNavbarViewController
         
         let buttonSection = tableData.createNewSection()
         let buttonRow = buttonSection.createNewRow()
-        buttonRow.cellType = OASearchMoreCell.getIdentifier()
+        buttonRow.cellType = OASearchMoreCell.reuseIdentifier
         buttonRow.title = localizedString("remove_cache")
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell? = nil
-        
-        if item.cellType == OAValueTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OAValueTableViewCell
-                cell?.accessoryType = .disclosureIndicator
-                cell?.descriptionVisibility(false)
-                cell?.leftIconView.tintColor = UIColor.iconColorSecondary
+        if item.cellType == OAValueTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as? OAValueTableViewCell {
+            cell.accessoryType = .disclosureIndicator
+            cell.descriptionVisibility(false)
+            cell.leftIconView.tintColor = UIColor.iconColorSecondary
+            cell.titleLabel.text = item.title
+            cell.valueLabel.text = item.descr
+            if let iconName = item.iconName {
+                cell.leftIconView.image = UIImage(named: iconName)
             }
-            if let cell {
-                cell.titleLabel.text = item.title
-                cell.valueLabel.text = item.descr
-                if let iconName = item.iconName {
-                    cell.leftIconView.image = UIImage(named: iconName)
-                }
-            }
-            outCell = cell
-            
-        } else if item.cellType == OASearchMoreCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASearchMoreCell.getIdentifier()) as? OASearchMoreCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASearchMoreCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASearchMoreCell
-                cell?.textView.font = UIFont.preferredFont(forTextStyle: .body)
-                cell?.textView.textColor = UIColor.buttonBgColorDisruptive
-            }
-            if let cell {
-                cell.textView.text = item.title
-            }
-            outCell = cell
+            return cell
+        } else if item.cellType == OASearchMoreCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OASearchMoreCell.reuseIdentifier, for: indexPath) as? OASearchMoreCell {
+            cell.textView.font = UIFont.preferredFont(forTextStyle: .body)
+            cell.textView.textColor = UIColor.buttonBgColorDisruptive
+            cell.textView.text = item.title
+            return cell
         }
         
-        return outCell
+        return nil
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        if item.cellType == OASearchMoreCell.getIdentifier() {
+        if item.cellType == OASearchMoreCell.reuseIdentifier {
             showClearCacheAlert()
         }
     }
@@ -82,7 +70,7 @@ final class TravelGuidesSettingsCacheViewController : OABaseNavbarViewController
     func showClearCacheAlert() {
         let alert = UIAlertController(title: localizedString("image_cache"), message: localizedString("remove_cache_alert"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .default))
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { [weak self] a in
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { [weak self] _ in
             guard let self else { return }
             TravelGuidesImageCacheHelper.sharedDatabase.cleanAllData()
             if let delegate {
@@ -90,7 +78,7 @@ final class TravelGuidesSettingsCacheViewController : OABaseNavbarViewController
             }
             self.dismiss()
         }))
+        
         self.present(alert, animated: true)
     }
-    
 }

@@ -8,12 +8,16 @@
 
 import UIKit
 
-final class TravelGuidesSettingsDownloadViewController : OABaseNavbarViewController {
+final class TravelGuidesSettingsDownloadViewController: OABaseNavbarViewController {
     
-    var delegate: Updatable?
+    weak var delegate: Updatable?
     
-    override func getTitle() -> String! {
+    override func getTitle() -> String {
         return localizedString("wikivoyage_download_pics")
+    }
+    
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -26,47 +30,39 @@ final class TravelGuidesSettingsDownloadViewController : OABaseNavbarViewControl
         section.footerText = localizedString("download_images_settings_footer")
         
         let noneRow = section.createNewRow()
-        noneRow.cellType = OASimpleTableViewCell.getIdentifier()
+        noneRow.cellType = OASimpleTableViewCell.reuseIdentifier
         noneRow.title = OADownloadMode.none().title
         noneRow.setObj((mode == OADownloadMode.none()), forKey: "isSelected")
         noneRow.key = "none"
         
         let wifiRow = section.createNewRow()
-        wifiRow.cellType = OASimpleTableViewCell.getIdentifier()
+        wifiRow.cellType = OASimpleTableViewCell.reuseIdentifier
         wifiRow.title = OADownloadMode.wifi_ONLY().title
         wifiRow.setObj((mode == OADownloadMode.wifi_ONLY()), forKey: "isSelected")
         wifiRow.key = "wifi"
         
         let anyRow = section.createNewRow()
-        anyRow.cellType = OASimpleTableViewCell.getIdentifier()
+        anyRow.cellType = OASimpleTableViewCell.reuseIdentifier
         anyRow.title = OADownloadMode.any_NETWORK().title
         anyRow.setObj((mode == OADownloadMode.any_NETWORK()), forKey: "isSelected")
         anyRow.key = "any"
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell? = nil
-        
-        if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASimpleTableViewCell
-                cell?.descriptionVisibility(false)
-                cell?.leftIconVisibility(false)
-            }
-            if let cell {
-                cell.titleLabel.text = item.title
-                let isSelected = item.bool(forKey: "isSelected")
-                cell.accessoryType = isSelected ? .checkmark : .none
-            }
-            outCell = cell
+        if item.cellType == OASimpleTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
+            cell.descriptionVisibility(false)
+            cell.leftIconVisibility(false)
+            cell.titleLabel.text = item.title
+            let isSelected = item.bool(forKey: "isSelected")
+            cell.accessoryType = isSelected ? .checkmark : .none
+            return cell
         }
-        return outCell
+        
+        return nil
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if item.key == "none" {
             OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode = OADownloadMode.none()
@@ -81,5 +77,4 @@ final class TravelGuidesSettingsDownloadViewController : OABaseNavbarViewControl
         }
         dismiss()
     }
-    
 }

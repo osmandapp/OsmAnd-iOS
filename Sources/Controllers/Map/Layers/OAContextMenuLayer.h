@@ -9,6 +9,7 @@
 #import "OASymbolMapLayer.h"
 
 @class OATargetPoint, OAMapObject, OARenderedObject, SelectedMapObject;
+@protocol OAContextMenuProvider;
 
 @protocol OAChangePositionModeDelegate <NSObject>
 
@@ -16,7 +17,7 @@
 
 @end
 
-@interface OAContextMenuLayer : OASymbolMapLayer
+@interface OAContextMenuLayer : OASymbolMapLayer<OAContextMenuProvider>
 
 @property (nonatomic) id<OAChangePositionModeDelegate> changePositionDelegate;
 

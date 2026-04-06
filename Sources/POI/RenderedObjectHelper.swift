@@ -52,19 +52,19 @@ final class RenderedObjectHelper: NSObject {
             firstTag = (firstTag == nil || firstTag!.isEmpty) ? key + ": " + value : firstTag
             if !value.isEmpty {
                 // typeStr uses (key - key_value - value) sequence
-                var t = OAPOIHelper.sharedInstance().getTranslation(translationKey)
+                var t = OAPOIHelper.sharedInstance().translation(translationKey, withDefault: false)
                 if t == nil {
-                    t = OAPOIHelper.sharedInstance().getTranslation(translationKey + "_" + value)
+                    t = OAPOIHelper.sharedInstance().translation(translationKey + "_" + value, withDefault: false)
                 }
                 if t == nil {
-                    t = OAPOIHelper.sharedInstance().getTranslation(value)
+                    t = OAPOIHelper.sharedInstance().translation(value, withDefault: false)
                 }
                 if let t, translated == nil && !t.isEmpty {
                     translated = t
                 }
 
-                let t1 = OAPOIHelper.sharedInstance().getTranslation(key)
-                let t2 = OAPOIHelper.sharedInstance().getTranslation(value)
+                let t1 = OAPOIHelper.sharedInstance().translation(key, withDefault: false)
+                let t2 = OAPOIHelper.sharedInstance().translation(value, withDefault: false)
                 if let t1, let t2, separate == nil {
                     separate = t1 + ": " + t2.lowercased()
                 }

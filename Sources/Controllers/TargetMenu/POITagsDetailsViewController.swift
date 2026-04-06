@@ -39,6 +39,7 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
+        sortTags()
         var sections = [String: [(tag: (key: String, value: String, descr: String, renderedObject: OARenderedObject?), header: String)]]()
         for tagDict in tags {
             guard let tagKey = tagDict["key"] as? String,
@@ -62,6 +63,18 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
         }
     }
     
+    private func sortTags() {
+        tags.sort { obj1, obj2 in
+            let key1 = obj1["key"] as? String ?? ""
+            let key2 = obj2["key"] as? String ?? ""
+            
+            if key1 == "name" { return true }
+            if key2 == "name" { return false }
+            
+            return key1.localizedCompare(key2) == .orderedAscending
+        }
+    }
+    
     private func extractHeader(from title: String, withKey key: String) -> String {
         if key.hasPrefix("name:") {
             return getTitle()
@@ -75,7 +88,6 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
                 return polygonValue
             }
             return title
-            
         } else {
             let endIndex = title.firstIndex(of: "(") ?? title.endIndex
             return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
@@ -83,7 +95,10 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
     }
     
     private func extractDescription(from title: String, withKey key: String) -> String {
-        if key.hasPrefix("name:") {
+        let isNameTag = kNameTagPrefixes.contains { prefix in
+            key.hasPrefix("\(prefix):")
+        }
+        if isNameTag {
             let components = key.components(separatedBy: ":")
             if components.count > 1 {
                 let languageCode = components[1]
@@ -102,7 +117,6 @@ final class POITagsDetailsViewController: OABaseNavbarViewController {
                 return polygonTag
             }
             return ""
-            
         }
         
         guard let start = title.firstIndex(of: "("),

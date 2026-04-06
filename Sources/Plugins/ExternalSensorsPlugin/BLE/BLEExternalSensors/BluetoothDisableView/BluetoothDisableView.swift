@@ -24,7 +24,7 @@ final class BluetoothDisableView: UIView {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var settingsButton: UIButton! {
         didSet {
-            settingsButton.titleLabel?.text = localizedString("ant_plus_open_settings")
+            settingsButton.setTitle(localizedString("ant_plus_open_settings"), for: .normal)
         }
     }
     

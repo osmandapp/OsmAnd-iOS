@@ -204,7 +204,7 @@
     }
     if (poi.hasOpeningHours)
     {
-        NSString *formattedOpeningHours = [[OAPOIHelper sharedInstance] getFormattedOpeningHours:poi];
+        NSString *formattedOpeningHours = [[OAPOIHelper sharedInstance] getShortFormattedOpeningHours:poi];
         if (formattedOpeningHours.length > 0)
         {
             if (needsSeparator)

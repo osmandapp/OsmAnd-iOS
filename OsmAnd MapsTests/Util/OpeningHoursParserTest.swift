@@ -566,6 +566,25 @@ final class OpeningHoursParserTest: XCTestCase {
         assertOpened("01.01.2029 00:00", hours: hours, expected: false)
     }
 
+    func testGetShortInfo() {
+        configure(localeIdentifier: "en_GB", twelveHour: false)
+
+        var hours = makeHours("24/7")
+        assertShortInfo("16.02.2018 12:00", hours: hours, equals: "24/7")
+
+        hours = makeHours("Mo-Fr 12:00-15:00, Tu-Fr 17:00-23:00, Sa 12:00-23:00, Su 14:00-23:00")
+        assertShortInfo("16.02.2018 09:45", hours: hours, equals: "12:00")
+        assertShortInfo("16.02.2018 12:00", hours: hours, equals: "Till 15:00")
+        assertShortInfo("16.02.2018 14:00", hours: hours, equals: "Until 15:00")
+        assertShortInfo("16.02.2018 16:00", hours: hours, equals: "17:00")
+
+        hours = makeHours("Mo-Fr 09:00-18:00")
+        assertShortInfo("18.02.2018 12:00", hours: hours, equals: "Tomorrow 09:00")
+
+        hours = makeHours("Mo-Fr 08:00-12:00, Mo,Tu,Th 15:00-17:00; PH off")
+        assertShortInfo("09.08.2019 15:00", hours: hours, equals: "08:00 Mon")
+    }
+
     private func configure(localeIdentifier: String?, twelveHour: Bool) {
         OpeningHoursParserTestSupport.configureLocaleIdentifier(localeIdentifier, twelveHourFormattingEnabled: twelveHour)
     }
@@ -583,6 +602,16 @@ final class OpeningHoursParserTest: XCTestCase {
             normalized(hours.info(at: dateTime, sequenceIndex: sequenceIndex)),
             normalized(expected),
             "Unexpected info for \(dateTime)",
+            file: file,
+            line: line
+        )
+    }
+
+    private func assertShortInfo(_ dateTime: String, hours: OpeningHoursParserTestSupport, equals expected: String, sequenceIndex: Int = -1, file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertEqual(
+            normalized(hours.shortInfo(at: dateTime, sequenceIndex: sequenceIndex)),
+            normalized(expected),
+            "Unexpected short info for \(dateTime)",
             file: file,
             line: line
         )

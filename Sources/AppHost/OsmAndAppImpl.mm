@@ -275,8 +275,11 @@
     OpeningHoursParser::setAdditionalString("will_open_at", [OALocalizedString(@"will_open_at") UTF8String]);
     OpeningHoursParser::setAdditionalString("open_from", [OALocalizedString(@"open_from") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_close_at", [OALocalizedString(@"will_close_at") UTF8String]);
+    OpeningHoursParser::setAdditionalString("will_close_at_short", [OALocalizedString(@"will_close_at_short") UTF8String]);
     OpeningHoursParser::setAdditionalString("open_till", [OALocalizedString(@"open_till") UTF8String]);
+    OpeningHoursParser::setAdditionalString("open_till_short", [OALocalizedString(@"open_till_short") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_tomorrow_at", [OALocalizedString(@"will_open_tomorrow_at") UTF8String]);
+    OpeningHoursParser::setAdditionalString("will_open_tomorrow_at_short", [OALocalizedString(@"tomorrow") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_on", [OALocalizedString(@"will_open_on") UTF8String]);
 
     // [self runOpeningHoursParserTests]; // Synced with Java and moved to OpeningHoursParserTest.swift

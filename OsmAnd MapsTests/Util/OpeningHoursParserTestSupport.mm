@@ -73,12 +73,24 @@ NSString *normalizeString(const std::string &value) {
     return [self infoAt:dateTimeString sequenceIndex:OpeningHoursParser::OpeningHours::ALL_SEQUENCES];
 }
 
+- (NSString *)shortInfoAt:(NSString *)dateTimeString {
+    return [self shortInfoAt:dateTimeString sequenceIndex:OpeningHoursParser::OpeningHours::ALL_SEQUENCES];
+}
+
 - (NSString *)infoAt:(NSString *)dateTimeString sequenceIndex:(NSInteger)sequenceIndex {
     tm dateTime = parseDateTimeString(dateTimeString);
     const auto info = sequenceIndex == OpeningHoursParser::OpeningHours::ALL_SEQUENCES
         ? _hours->getCombinedInfo(dateTime)
         : _hours->getInfo(dateTime)[sequenceIndex];
     return normalizeString(info->getInfo());
+}
+
+- (NSString *)shortInfoAt:(NSString *)dateTimeString sequenceIndex:(NSInteger)sequenceIndex {
+    tm dateTime = parseDateTimeString(dateTimeString);
+    const auto info = sequenceIndex == OpeningHoursParser::OpeningHours::ALL_SEQUENCES
+        ? _hours->getCombinedInfo(dateTime)
+        : _hours->getInfo(dateTime)[sequenceIndex];
+    return normalizeString(info->getShortInfo());
 }
 
 - (NSString *)assembledString {

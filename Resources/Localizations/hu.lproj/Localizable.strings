@@ -554,7 +554,7 @@
 "unknown_location" = "A jelenlegi helyzet még nem ismert.";
 "animate_routing_route_not_calculated" = "Először számítsa ki az útvonalat";
 "settings_preset" = "Alapértelmezett profil";
-"switch_start_finish" = "Kiindulási pont és az úti cél felcserélése";
+"switch_start_finish" = "A kiindulási pont és az úti cél felcserélése";
 "clear_all_intermediates" = "Minden köztes célpont törlése";
 "shared_string_options" = "Beállítások";
 "shared_string_current" = "Jelenlegi";
@@ -2216,7 +2216,7 @@
 "routing_attr_hazmat_category_description" = "Veszélyes anyagok kategória / A kategóriára vonatkozó behajtási tilalmak figyelembevétele";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Fixme címkék";
 "rendering_attr_horseScale_name" = "Lovas utak nehézségi szintje";
-"routing_attr_freeride_policy_allow_name" = "Engedélyezve";
+"routing_attr_freeride_policy_allow_name" = "Engedélyezés";
 "routing_attr_goods_restrictions_description" = "Az (áruszállító) könnyű tehergépjárművekre vonatkozó behajtási engedélyek figyelembevétele";
 "routing_attr_avoid_4wd_only_name" = "Nehéz terep elkerülése";
 "routing_attr_avoid_footways_name" = "Gyalogutak elkerülése";

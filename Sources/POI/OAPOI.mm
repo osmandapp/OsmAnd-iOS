@@ -1188,4 +1188,9 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     return [self getAdditionalInfo][@"osmand_poi_key"];;
 }
 
+- (BOOL) isRouteArticle
+{
+    return [_subType isEqualToString:ROUTE_ARTICLE];
+}
+
 @end

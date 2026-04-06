@@ -35,14 +35,16 @@ static const int SEARCH_ADDRESS_BY_NAME_API_PRIORITY = 500;
 static const int SEARCH_ADDRESS_BY_NAME_API_PRIORITY_RADIUS2 = 500;
 static const int SEARCH_ADDRESS_BY_NAME_PRIORITY = 500;
 static const int SEARCH_ADDRESS_BY_NAME_PRIORITY_RADIUS2 = 500;
+static const int SEARCH_ADDRESS_BY_NAME_LONG_API_PRIORITY = 700;
 
 // context less (slower)
 static const int SEARCH_AMENITY_BY_NAME_PRIORITY = 500;
 static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_POI_TYPE = 500;
-static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 500;
+static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 600;
 
-static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
-static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
+static const double SEARCH_ADDRESS_BY_NAME_CITY_PRIORITY_DISTANCE = 0.4;
+static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.5;
+static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.7;
 
 // Define constants for preferred zoom levels
 static const int PREFERRED_STREET_ZOOM = 17;
@@ -76,15 +78,20 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 
 @end
 
-//@interface OASearchRegionByNameAPI : OASearchBaseAPI
-//
-//@end
+@interface OATownCitiesCache : NSObject
+- (instancetype _Nonnull ) init;
+- (BOOL) contains:(NSString *)resId;
+- (void) add:(NSString *)resId;
+@end
 
-@class OASearchStreetByCityAPI, OASearchBuildingAndIntersectionsByStreetAPI, OACustomSearchPoiFilter, OASearchAmenityTypesAPI;
+@class OASearchStreetByCityAPI, OASearchBuildingAndIntersectionsByStreetAPI, OACustomSearchPoiFilter, OASearchAmenityTypesAPI, OATownCitiesCache;
 
 @interface OASearchAddressByNameAPI : OASearchBaseAPI
 
-- (instancetype)initWithCityApi:(OASearchStreetByCityAPI *)cityApi streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi;
+- (instancetype) initWithCityApi:(OASearchStreetByCityAPI *)cityApi
+                     streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi
+                   longDistance:(BOOL)longDistance
+                townCitiesCache:(OATownCitiesCache *_Nonnull)townCitiesCache;
 
 @end
 

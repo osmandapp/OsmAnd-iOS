@@ -96,6 +96,8 @@ struct CLLocationCoordinate2D;
 - (float)get3DBuildingsAlpha;
 - (void)set3DBuildingsDetalization:(int)detalization;
 - (int)get3DBuildingsDetalization;
+- (BOOL)add3DObjectColor:(OsmAnd::PointI)location31 color:(OsmAnd::FColorRGB)color;
+- (BOOL)remove3DObjectColor:(OsmAnd::PointI)location31;
 - (void)setElevationScaleFactor:(float)scaleFactor;
 - (float)getElevationScaleFactor;
 - (void)setMyLocationCircleColor:(OsmAnd::FColorARGB)color;

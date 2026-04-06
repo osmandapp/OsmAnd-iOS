@@ -149,7 +149,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     {
         //hide root navbar if open screen without navbar
         if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
-            [self.navigationController setNavigationBarHidden:YES animated:YES];
+            [self.navigationController setNavigationBarHidden:YES animated:NO];
 
         //reset navbar to default appearance
         NSArray<UIViewController *> *viewControllers = self.navigationController.viewControllers;

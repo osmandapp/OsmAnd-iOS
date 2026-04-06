@@ -546,23 +546,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         if (!amenity || (s.alternateName && s.alternateName.length > 0)) {
             continue;
         }
-        NSString *city = s.cityName ?: @"";
-        QString qStreetName = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_street"];
-        if (qStreetName.isEmpty()) {
-            s.alternateName = city;
-            continue;
-        } else {
-            QString qHouseNumber = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_housenumber"];
-            NSString *nStreetName = qStreetName.toNSString();
-            NSString *nHouseNumber = qHouseNumber.toNSString();
-            NSString *addr = nHouseNumber.length > 0 ?
-                [NSString stringWithFormat:@"%@ %@", nStreetName, nHouseNumber] : nStreetName;
-            if ([dominatedCity isEqualToString:s.cityName]) {
-                s.alternateName = [NSString stringWithFormat:@"%@, %@", addr, s.cityName];
-            } else {
-                s.alternateName = city.length > 0 ? [NSString stringWithFormat:@"%@, %@", s.cityName, addr] : addr;
-            }
-        }
+        [OASearchResultCollection updateSearchResultAddress:s amenity:amenity dominatedCity:dominatedCity];
     }
 }
 
@@ -701,6 +685,56 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         return [r1.object isEqual:r2.object];
     }
     return false;
+}
+
++ (NSString *) getMainCityName:(NSString *)cityName
+{
+    NSString *mainCity = cityName;
+    if ([cityName containsString:@","])
+    {
+        NSRange range = [cityName rangeOfString:@","];
+        mainCity = [cityName substringToIndex:range.location];
+        mainCity = [mainCity stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    }
+    return mainCity;
+}
+
++ (NSString *) createAddressString:(NSString *)cityName mainCity:(NSString *)mainCity dominatedCity:(NSString *)dominatedCity addr:(NSString *)addr
+{
+    BOOL isCityEmpty = (cityName == nil || cityName.length == 0);
+    if (dominatedCity != nil && [dominatedCity isEqualToString:mainCity])
+    {
+        NSString *suffix = isCityEmpty ? @"" : [NSString stringWithFormat:@", %@", cityName];
+        return [NSString stringWithFormat:@"%@%@", addr, suffix];
+    }
+    else
+    {
+        NSString *prefix = isCityEmpty ? @"" : [NSString stringWithFormat:@"%@, ", cityName];
+        return [NSString stringWithFormat:@"%@%@", prefix, addr];
+    }
+}
+
++ (void) updateSearchResultAddress:(OASearchResult *)s amenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity dominatedCity:(NSString *)dominatedCity
+{
+    NSString *city = s.cityName ?: @"";
+    NSString *mainCity = [self getMainCityName:city];
+    QString qStreetName = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_street"];
+    if (qStreetName.isEmpty())
+    {
+        s.alternateName = city;
+    }
+    else
+    {
+        QString qHouseNumber = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_housenumber"];
+        NSString *hno = qHouseNumber.toNSString();
+        NSString *streetName = qStreetName.toNSString();
+        NSString *addr = streetName;
+        if (hno != nil && hno.length > 0)
+        {
+            addr = [NSString stringWithFormat:@"%@ %@", streetName, hno];
+        }
+        s.alternateName = [self createAddressString:s.cityName mainCity:mainCity dominatedCity:dominatedCity addr:addr];
+    }
 }
 
 @end

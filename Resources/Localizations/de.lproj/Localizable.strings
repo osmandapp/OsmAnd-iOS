@@ -301,7 +301,7 @@
 "from_location" = "entfernt";
 "show_alt_in_drive" = "Höhe im Fahrmodus anzeigen";
 "shared_string_get" = "Erwerben";
-"srtm_plugin_disabled" = "Topographie deaktiviert";
+"srtm_plugin_disabled" = "Topografie deaktiviert";
 "shared_string_open" = "Geöffnet";
 "time_closed" = "Geschlossen";
 "will_close_at" = "Schließt um";
@@ -376,9 +376,9 @@
 "purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehr über die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
 "prch_wiki_info" = "Wikipedia-plugin aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "prch_srtm_info" = "Höhenlinien-plugin aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
-"plugin_popup_srtm_desc" = "Um Topographie zu nutzen, bitte die entsprechenden Höhendaten herunterladen";
-"plugin_popup_srtm_ask" = "Um Höhendaten herunterzuladen, bitte das Modul <b>Topographie</b> aktivieren";
-"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
+"plugin_popup_srtm_desc" = "Um die Funktion „Topografie“ zu nutzen, bitte die entsprechenden Höhendaten herunterladen";
+"plugin_popup_srtm_ask" = "Um Höhendaten herunterzuladen, bitte das Modul <b>Topografie</b> aktivieren";
+"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Seekarte</b> aktivieren";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
 "srtm_plugin_description" = "Geländeinformationen wie Höhenlinien, Relief und Hangneigung helfen bei der visuellen Beurteilung des Geländes, des Reliefs, der Befahrbarkeit und vielem mehr. Die topografischen Informationen können auf der Karte durch Höhenlinien, Reliefschattierungen, und/oder Steilheitsfarben dargestellt werden. \n \nDie zugrunde liegenden Daten stammen von SRTM und ASTER. \n \nWeitere Informationen unter %@.";
@@ -1624,7 +1624,7 @@
 "touting_specified_vehicle_parameters_descr" = "Angegebene Fahrzeugparameter können die Streckenführung beeinflussen.";
 "default_speed_descr" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Streckenführung beeinflussen)";
 "public_transport_menu" = "ÖPNV";
-"select_base_profile_dialog_message" = "Bauen Sie ein eigenes Anwendungsprofil auf einem der Standardprofile der App auf. Dieses bestimmt die Grundeinstellungen wie Voreinstellungen zur Sichtbarkeit von Widgets und die Einheiten für Geschwindigkeit und Entfernungen. Dies sind die App-Standardprofile zusammen mit Beispielen für eigene Anwendungsprofile, die erweitert werden können:";
+"select_base_profile_dialog_message" = "Bauen Sie ein benutzerdefiniertes Anwendungsprofil auf einem der Standardprofile der App auf. Dieses bestimmt die Grundeinstellungen wie Voreinstellungen zur Sichtbarkeit von Widgets und die Einheiten für Geschwindigkeit und Entfernungen. Dies sind die App-Standardprofile zusammen mit Beispielen für benutzerdefinierte Anwendungsprofile, die erweitert werden können:";
 "device_settings" = "Geräteeinstellungen";
 "units_and_formats" = "Einheiten und Formate";
 "angular_measurment_units" = "Winkelmesseinheiten";
@@ -1775,7 +1775,7 @@
 "help_what_is_new" = "Was ist neu";
 "osm_notes" = "OSM-Hinweise";
 "plugin_popup_osm_editing_ask" = "Bitte aktivieren Sie die Erweiterung OpenStreetMap-Bearbeitung, um Kartenbearbeitungen und OSM-Hinweise hinzuzufügen und zu verwalten";
-"plugin_popup_osm_editing_title" = "OpenStreetMap Bearbeitung einschalten";
+"plugin_popup_osm_editing_title" = "OpenStreetMap-Bearbeitung einschalten";
 "layer_amenity_label" = "Punktbeschriftungen (POI, Favoriten)";
 "personal_category_name" = "Persönlich";
 "prev_segs_recalc_descr" = "Alle vorherigen Segmente werden unter Verwendung des ausgewählten Profils neu errechnet";

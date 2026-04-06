@@ -85,10 +85,12 @@ final class DeepLinkAppRouter: NSObject {
     }
     
     func openPlanRoute() {
-        let mapViewController = root.mapPanel.mapViewController
-        guard !(mapViewController.presentedViewController is InitialRoutePlanningBottomSheetViewController) else { return }
-        dismissAndPopToRoot()
-        InitialRoutePlanningBottomSheetViewController().present(in: mapViewController)
+        guard !(root.presentedViewController is InitialRoutePlanningBottomSheetViewController) else { return }
+        dismissAndPopToRoot { [weak self] _ in
+            guard let self else { return }
+            guard !(self.root.presentedViewController is InitialRoutePlanningBottomSheetViewController) else { return }
+            InitialRoutePlanningBottomSheetViewController().present(in: self.root)
+        }
     }
     
     func openWidgetsList(panel: WidgetsPanel) {
@@ -324,13 +326,26 @@ final class DeepLinkAppRouter: NSObject {
     }
     
     @discardableResult private func dismissAndPopToRoot() -> UINavigationController? {
+        guard let nav = prepareRootNavigationTransition() else { return nil }
+        nav.dismiss(animated: false)
+        nav.popToRootViewController(animated: false)
+        return nav
+    }
+    
+    private func dismissAndPopToRoot(completion: @escaping (UINavigationController) -> Void) {
+        guard let nav = prepareRootNavigationTransition() else { return }
+        nav.dismiss(animated: false) {
+            nav.popToRootViewController(animated: false)
+            completion(nav)
+        }
+    }
+    
+    private func prepareRootNavigationTransition() -> UINavigationController? {
         if let mapPanel = root.mapPanel, mapPanel.isDashboardVisible() {
             mapPanel.closeDashboard(withDuration: .zero)
         }
         
         guard let nav = root.navigationController else { return nil }
-        nav.dismiss(animated: false)
-        nav.popToRootViewController(animated: false)
         return nav
     }
     

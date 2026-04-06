@@ -118,6 +118,16 @@
     return CLLocationCoordinate2DMake(lat, lon);
 }
 
+- (void)add3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude color:(UIColor *)color
+{
+    [_mapViewController add3DObjectColorAtLatitude:latitude longitude:longitude color:[color toARGBNumber]];
+}
+
+- (void)remove3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude
+{
+    [_mapViewController remove3DObjectColorAtLatitude:latitude longitude:longitude];
+}
+
 - (int) getScaledTouchRadius:(int)radiusPoi
 {
     double textSize = [[OAAppSettings.sharedManager textSize] get];

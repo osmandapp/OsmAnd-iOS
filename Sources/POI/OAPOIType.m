@@ -10,6 +10,7 @@
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
+#import "OAPOIHelper.h"
 
 @implementation OAPOIType
 
@@ -240,6 +241,11 @@
 - (BOOL)isReference
 {
     return _referenceType != nil;
+}
+
+- (BOOL) isWiki
+{
+    return [self.name isEqualToString:OSM_WIKI_CATEGORY];
 }
 
 @end

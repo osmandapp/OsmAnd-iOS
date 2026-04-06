@@ -38,7 +38,12 @@
     NSString *addressString = nil;
     BOOL isAddressFound = NO;
     NSString *formattedTargetName = nil;
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:_location.latitude lon:_location.longitude];
+    NSString *roadTitle = nil;
+    if (self.obfId > 0 && [self isValidObfId])
+        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:_location.latitude lon:_location.longitude objectId:self.obfId];
+    else
+        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:_location.latitude lon:_location.longitude];
+
     if (!roadTitle || roadTitle.length == 0)
     {
         addressString = OALocalizedString(@"map_no_address");

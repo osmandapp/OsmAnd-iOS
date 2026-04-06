@@ -317,8 +317,8 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
                 mp[key] = self.localizedNames[key];
         }
         
-        if (includeEn && !self.name && self.name.length > 0)
-            mp[@"en"] = self.name;
+        if (includeEn && self.enName.length > 0)
+            mp[@"en"] = self.enName;
         
         return mp;
     }
@@ -1186,6 +1186,11 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
 - (NSString *)getOsmandPoiKey
 {
     return [self getAdditionalInfo][@"osmand_poi_key"];;
+}
+
+- (BOOL) isRouteArticle
+{
+    return [_subType isEqualToString:ROUTE_ARTICLE];
 }
 
 @end

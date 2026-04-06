@@ -174,18 +174,12 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
 }
 
-// override
-- (void) buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
-{
-}
-
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self processRoutePointAmenityTags:rows];
     [self buildInternalRows:rows];
     
     [self buildNearestRowsForAmenity:rows];
-    [self buildAltNamesRow:rows];
     [self buildNamesRow:rows];
 }
 
@@ -243,56 +237,117 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     [self buildNearestPoiRow:rows listener:nil];
 }
 
-- (void)buildAltNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
-{
-    if (_amenityUIHelper)
-    {
-        OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:[self.poi getAltNamesMap] altName:YES];
-        if (row)
-            [rows addObject:row];
-    }
-}
-
 - (void)buildNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     if (!_amenityUIHelper)
         return;
     
-    NSMutableDictionary<NSString *, NSString *> *names = [NSMutableDictionary new];
-    NSString *primaryName = [self.poi name];
-    if (!NSStringIsEmpty(primaryName))
-        names[@""] = primaryName; // @"" key represents the default OSM name, not country-specific.
-    
-    [names addEntriesFromDictionary:[self.poi getNamesMap:YES]];
-    OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithNamesMap:names altName:NO];
-    if (!row)
-        return;
-    
     NSMutableArray<NSDictionary *> *detailsArray = [NSMutableArray new];
-    NSString *title = OALocalizedString(@"shared_string_name");
-    NSArray<NSString *> *sortedKeys = [[names allKeys] sortedArrayUsingSelector:@selector(localizedCompare:)];
-    for (NSString *lang in sortedKeys)
+    NSDictionary<NSString *, NSString *> *rawTags = [self.poi getNamesMap:YES];
+    NSMutableDictionary<NSString *, NSString *> *allTags = [rawTags mutableCopy];
+    
+    NSArray<NSString *> *keys = [rawTags allKeys];
+    
+    for (NSString *key in keys)
     {
-        NSString *value = names[lang];
+        NSString *value = rawTags[key];
+        
         if (NSStringIsEmpty(value))
             continue;
         
-        NSString *tagKey = lang.length > 0 ? [NSString stringWithFormat:@"name:%@", lang] : @"name";
-        [detailsArray addObject:@{
-            @"key": tagKey,
-            @"value": value,
-            @"localizedTitle": title
-        }];
+        if ([key containsString:@":"])
+            continue;
+        
+        if ([key isEqualToString:@"name"])
+            continue;
+        
+        NSString *newKey = [NSString stringWithFormat:@"name:%@", key];
+        
+        if (!allTags[newKey])
+            allTags[newKey] = value;
+        
+        [allTags removeObjectForKey:key];
     }
     
-    if (detailsArray.count > 0)
+    MutableOrderedDictionary<NSString *, NSString *> *additionalInfo = [self.poi getAdditionalInfo];
+    
+    for (NSString *key in additionalInfo.allKeys)
+    {
+        NSString *value = additionalInfo[key];
+        
+        if (NSStringIsEmpty(value))
+            continue;
+        
+        BOOL isNameTag = NO;
+        
+        for (NSString *prefix in kNameTagPrefixes)
+        {
+            if ([key isEqualToString:prefix] ||
+                [key hasPrefix:[prefix stringByAppendingString:@":"]])
+            {
+                isNameTag = YES;
+                break;
+            }
+        }
+        
+        if (!isNameTag)
+            continue;
+        
+        if (!allTags[key])
+            allTags[key] = value;
+    }
+    
+    for (NSString *prefix in kNameTagPrefixes)
+    {
+        for (NSString *tagKey in allTags.allKeys)
+        {            
+            if ([tagKey isEqualToString:prefix] ||
+                [tagKey hasPrefix:[prefix stringByAppendingString:@":"]])
+            {
+                
+                NSString *value = allTags[tagKey];
+                if (!NSStringIsEmpty(value))
+                {
+                    [detailsArray addObject:@{
+                        @"key": tagKey,
+                        @"value": value,
+                        @"localizedTitle": [self localizedTitleFor:prefix]
+                    }];
+                }
+            }
+        }
+    }
+    
+    if (detailsArray.count == 0)
+        return;
+    
+    NSString *mainName = [self.poi name] ?: detailsArray.firstObject[@"value"];
+    
+    OAAmenityInfoRow *row = [_amenityUIHelper buildNamesRowWithName:mainName];
+    
+    if (row)
     {
         row.detailsArray = detailsArray;
-        if (detailsArray.count > 1)
-            row.collapsed = YES;
+        row.collapsed = detailsArray.count > 1;
+        [rows addObject:row];
     }
+}
+
+- (NSString *)localizedTitleFor:(NSString *)tag
+{
+    if (tag.length == 0)
+        return @"";
     
-    [rows addObject:row];
+    if ([tag hasPrefix:@"name"])
+        return OALocalizedString(@"shared_string_name");
+    else if ([tag hasPrefix:@"alt_name"])
+        return OALocalizedString(@"shared_string_alt_name");
+    else if ([tag hasPrefix:@"int_name"])
+        return OALocalizedString(@"shared_string_int_name");
+
+    NSString *spacedTag = [tag stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+
+    return [OAUtilities capitalizeFirstLetter:spacedTag];
 }
 
 - (BOOL)buildShortWikiDescription:(NSDictionary<NSString *, id> *)filteredInfo allowOnlineWiki:(BOOL)allowOnlineWiki rows:(NSMutableArray<OAAmenityInfoRow *> *)rows

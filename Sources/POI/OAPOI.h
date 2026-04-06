@@ -190,6 +190,7 @@ static int DEFAULT_ELO = 900;
 - (MutableOrderedDictionary<NSString *, NSString *> *)getOsmTags;
 
 - (BOOL) strictEquals:(id)object;
+- (BOOL) isRouteArticle;
 
 @end
 

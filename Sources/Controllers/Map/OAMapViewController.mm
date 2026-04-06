@@ -242,6 +242,7 @@ static const NSInteger kDetailedMapZoom = 9;
     OsmAnd::PointI _cachedTarget31;
     OsmAnd::PointI _cachedFixedPixel;
     CLLocation *_cachedMapLocation;
+    NSMutableDictionary<NSString *, NSNumber *> *_highlight3dObjects;
 
     MBProgressHUD *_progressHUD;
     BOOL _rotationAnd3DViewDisabled;
@@ -279,6 +280,7 @@ static const NSInteger kDetailedMapZoom = 9;
     _moveTouchLocations = [NSMutableArray array];
     _zoomTouchLocations = [NSMutableArray array];
     _rotateTouchLocations = [NSMutableArray array];
+    _highlight3dObjects = [NSMutableDictionary dictionary];
     
     _gpxFilesRec = [NSMutableArray array];
     _gpxFilesTemp = [NSMutableArray array];
@@ -2109,6 +2111,16 @@ static const NSInteger kDetailedMapZoom = 9;
     [self hidePolygonHighlight];
 }
 
+- (void)add3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude color:(int)color
+{
+    [self add3DObjectColor:OsmAnd::LatLon(latitude, longitude) color:color];
+}
+
+- (void)remove3DObjectColorAtLatitude:(double)latitude longitude:(double)longitude
+{
+    [self remove3DObjectColor:OsmAnd::LatLon(latitude, longitude)];
+}
+
 - (void)contextMenuDidShow:(id)targetObj
 {
     for (OAMapLayer *layer in self.mapLayers.getLayers)
@@ -2443,7 +2455,7 @@ static const NSInteger kDetailedMapZoom = 9;
         else
             mapDensityAligned = mapDensity;
 
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * mapDensityAligned);
+        const auto rasterTileSize = (int)(256 * self.displayDensityFactor * mapDensityAligned);
         const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
@@ -2738,6 +2750,50 @@ static const NSInteger kDetailedMapZoom = 9;
     NSInteger buildings3DColorStyle = [plugin get3DBuildingsColorStyle];
     int buildings3DCustomColor = [plugin getBuildings3dColor];
     [_mapView setMap3DObjectsProvider:std::make_shared<OsmAnd::Map3DObjectsTiledProvider>(_mapPrimitivesProvider, _mapPresentationEnvironment, buildings3DColorStyle == Buildings3DColorTypeCustom, [UIColorFromARGB(buildings3DCustomColor) toFColorRGB])];
+    for (NSString *key in _highlight3dObjects)
+    {
+        NSArray<NSString *> *components = [key componentsSeparatedByString:@":"];
+        if (components.count != 2)
+            continue;
+        
+        OsmAnd::PointI pointI;
+        pointI.x = components[0].intValue;
+        pointI.y = components[1].intValue;
+        NSNumber *color = _highlight3dObjects[key];
+        if (!color)
+            continue;
+        
+        [self add3DObjectColor:_mapView latLon:[OANativeUtilities getLanlonFromPoint31:pointI] color:color.intValue];
+    }
+}
+
+- (BOOL)add3DObjectColor:(OAMapRendererView *)mapRenderer latLon:(OsmAnd::LatLon)latLon color:(int)color
+{
+    OsmAnd::PointI pointI = [OANativeUtilities getPoint31FromLatLon:latLon.latitude lon:latLon.longitude];
+    return [mapRenderer add3DObjectColor:pointI color:[UIColorFromARGB(color) toFColorRGB]];
+}
+
+- (void)add3DObjectColor:(OsmAnd::LatLon)latLon color:(int)color
+{
+    if (_mapView && [self add3DObjectColor:_mapView latLon:latLon color:color])
+    {
+        OsmAnd::PointI pointI = [OANativeUtilities getPoint31FromLatLon:latLon.latitude lon:latLon.longitude];
+        NSString *key = [NSString stringWithFormat:@"%d:%d", pointI.x, pointI.y];
+        _highlight3dObjects[key] = @(color);
+    }
+}
+
+- (void)remove3DObjectColor:(OsmAnd::LatLon)latLon
+{
+    if (_mapView)
+    {
+        OsmAnd::PointI pointI = [OANativeUtilities getPoint31FromLatLon:latLon.latitude lon:latLon.longitude];
+        if ([_mapView remove3DObjectColor:pointI])
+        {
+            NSString *key = [NSString stringWithFormat:@"%d:%d", pointI.x, pointI.y];
+            [_highlight3dObjects removeObjectForKey:key];
+        }
+    }
 }
 
 - (void) updateElevationConfiguration

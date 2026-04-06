@@ -53,6 +53,8 @@ NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
 NSString *const kBLEScanerKey = @"kBLEScanerKey";
+NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
+
 
 #pragma mark - Initialization
 
@@ -146,6 +148,14 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
         kCellTitleKey : OALocalizedString(@"trace_rendering"),
         @"isOn" : @([[OAAppSettings sharedManager].debugRenderingInfo get])
     }];
+    
+    [renderingDebugSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kShowPrimitivesDebugInfoKey,
+        kCellTitleKey : OALocalizedString(@"show_debug_tile"),
+        @"isOn" : @([[OAAppSettings sharedManager].showPrimitivesDebugInfo get])
+    }];
+    
     [_data addSection:renderingDebugSection];
     
     OATableSectionData *imageСacheSection = [OATableSectionData sectionData];
@@ -268,6 +278,8 @@ NSString *const kBLEScanerKey = @"kBLEScanerKey";
     {
         [[OAAppSettings sharedManager].debugRenderingInfo set:sender.isOn];
         _app.performanceMetricsEnabled = sender.isOn;
+    } else if ([item.key isEqualToString:kShowPrimitivesDebugInfoKey]) {
+        [[OAAppSettings sharedManager].showPrimitivesDebugInfo set:sender.isOn];
     }
 }
 

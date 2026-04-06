@@ -289,23 +289,15 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         filtered = [[self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata] mutableCopy];
     }
 
-    if (NSArrayIsEmpty(filtered))
+    if (NSArrayIsEmpty(filtered) && !NSArrayIsEmpty(names))
     {
         OAPOI *amenity = [self findByName:amenities names:names searchLatLon:latLon];
         if (amenity)
         {
-            if ([amenity getOsmId] > 0)
-            {
                 filtered = [[self filterByOsmIdOrWikidata:amenities
                                                     osmId:[amenity getOsmId]
                                                     point:[amenity getLocation]
                                                  wikidata:[amenity getWikidata]] mutableCopy];
-            }
-            else
-            {
-                // Don't exist in android. Bugfix for invalid obfId values from cpp
-                [filtered addObject:amenity];
-            }
         }
     }
 

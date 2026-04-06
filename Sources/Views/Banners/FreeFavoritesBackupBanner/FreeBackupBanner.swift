@@ -29,7 +29,7 @@ final class FreeBackupBanner: UIView {
     @IBOutlet private weak var closeButton: UIButton!
     @IBOutlet private weak var osmAndCloudButton: UIButton! {
         didSet {
-            osmAndCloudButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
+            osmAndCloudButton.setTitle(localizedString("get_osmand_cloud"), for: .normal)
         }
     }
     
@@ -39,9 +39,8 @@ final class FreeBackupBanner: UIView {
         }
     }
     
-    var didCloseButtonAction: (() -> Void)? = nil
-    var didOsmAndCloudButtonAction: (() -> Void)? = nil
-    
+    var didCloseButtonAction: (() -> Void)?
+    var didOsmAndCloudButtonAction: (() -> Void)?
     var defaultFrameHeight = 100
     var leadingTrailingOffset = 137
     

@@ -93,6 +93,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) uint64_t obfId;
 @property (nonatomic) NSInteger sortIndex;
 @property (nonatomic) NSString* symbolGroupId;
+@property (nonatomic, assign) BOOL shouldFetchAddress;
 
 - (void)initAddressIfNeeded;
 - (BOOL)isValidObfId;

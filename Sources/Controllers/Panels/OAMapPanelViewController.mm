@@ -3783,7 +3783,7 @@ typedef enum
                bottomRight:bottomRight
                bottomInset:bottomInset
                  leftInset:leftInset
-      changeElevationAngle:YES];
+      changeElevationAngle:_targetMenuView.targetPoint.type != OATargetRouteDetails];
 }
 
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft

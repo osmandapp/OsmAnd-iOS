@@ -61,8 +61,7 @@ final class VehicleMetricAttributesUtils: NSObject {
                 }
                 
                 if attribute.hasValidValue(tag: key) {
-                    guard let attributeValue = attribute.getAttributeValue(tag: key) else { continue }
-                    var value: Float = attributeValue.floatValue
+                    var value: Float = attribute.getAttributeValue(tag: key)
                     let formattedValue = widgetType.flatMap {
                         plugin.getWidgetConvertedValue(type: $0, data: value)
                     }

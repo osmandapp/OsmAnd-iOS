@@ -4512,3 +4512,4 @@
 "shared_string_wikipedia"= "Wikipedia";
 "poi_source" = "POI Source";
 "shared_string_int_name" = "International name";
+"show_debug_tile" = "Show tile information";

@@ -28,7 +28,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) contentHeightChanged:(CGFloat)newHeight;
 - (void) contentHeightChanged;
 - (void) contentChanged;
-- (void) addresLabelUpdated;
+- (void) addressLabelUpdated;
 
 - (void) btnOkPressed;
 - (void) btnCancelPressed;

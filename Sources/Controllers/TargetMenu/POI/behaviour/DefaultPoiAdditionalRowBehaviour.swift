@@ -76,10 +76,9 @@ class DefaultPoiAdditionalRowBehaviour: PoiAdditionalRowBehavior {
                 if poiType.isText {
                     params.builder.setTextPrefixIfNotPresent(translation)
                     params.builder.setTextIfNotPresent(params.value)
-                } else if let translation, translation.contains(":") {
-                    let parts = translation.components(separatedBy: ":")
-                    params.builder.setTextPrefixIfNotPresent(parts[0].trimWhitespaces())
-                    params.builder.setTextIfNotPresent(OAUtilities.capitalizeFirstLetter(parts[0].trimWhitespaces()))
+                } else if let (prefix, value) = translation?.splitPrefixValue() {
+                    params.builder.setTextPrefixIfNotPresent(prefix)
+                    params.builder.setTextIfNotPresent(OAUtilities.capitalizeFirstLetter(value))
                 } else {
                     params.builder.setTextIfNotPresent(translation)
                 }
@@ -119,5 +118,15 @@ class DefaultPoiAdditionalRowBehaviour: PoiAdditionalRowBehavior {
         } else {
             return units
         }
+    }
+}
+
+private extension String {
+    func splitPrefixValue() -> (String, String)? {
+        guard let i = firstIndex(of: ":") else { return nil }
+        return (
+            String(self[..<i]).trimWhitespaces(),
+            String(self[index(after: i)...]).trimWhitespaces()
+        )
     }
 }

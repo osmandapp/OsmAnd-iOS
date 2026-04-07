@@ -4006,3 +4006,5 @@
 "view_distance" = "Látótávolság";
 "custom_color" = "Egyéni szín";
 "choose_color" = "Válasszon színt";
+"shared_string_int_name" = "Nemzetközi név";
+"show_debug_tile" = "Csempeadatok megjelenítése";

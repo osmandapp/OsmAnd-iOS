@@ -627,6 +627,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
 
 - (void)updateWikiOnlineAmenitiesControllerVisibleState;
 - (void)invalidateWikiOnlineAmenitiesController;
+- (void)resetNotifiedTiles;
 
 @end
 
@@ -655,6 +656,8 @@ static BOOL OAIsRequestApplicableToVisibleState(
     CGFloat _topPlacesTextScale;
     EOAWikiDataSourceType _topPlacesWikiDataSourceType;
     NSSet<NSString *> *_topPlacesWikipediaResourceIds;
+    QVector<OsmAnd::TileId> _notifiedTiles;
+    OsmAnd::ZoomLevel _notifiedZoom;
     
     CGSize _screenSize;
 }
@@ -675,6 +678,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
     _topPlacesTextScale = 1.f;
     _topPlacesWikipediaResourceIds = [NSSet set];
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
+    _notifiedZoom = OsmAnd::InvalidZoomLevel;
 }
 
 - (NSString *) layerId
@@ -697,6 +701,12 @@ static BOOL OAIsRequestApplicableToVisibleState(
     }
 }
 
+- (void)resetNotifiedTiles
+{
+    _notifiedTiles.clear();
+    _notifiedZoom = OsmAnd::InvalidZoomLevel;
+}
+
 - (void) resetLayer
 {
     if (_amenitySymbolsProvider)
@@ -716,6 +726,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
     {
         [self invalidateWikiOnlineAmenitiesController];
     }
+    [self resetNotifiedTiles];
     [_topPlacesProvider resetLayer];
 }
 
@@ -738,6 +749,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
             _wikiSymbolsProvider.reset();
         }];
         _showWikiOnMap = NO;
+        [self resetNotifiedTiles];
     }
     else
     {
@@ -881,6 +893,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
             {
                 [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
                 _wikiSymbolsProvider.reset();
+                [self resetNotifiedTiles];
             }
             else if (!isWiki && _amenitySymbolsProvider)
             {
@@ -900,14 +913,6 @@ static BOOL OAIsRequestApplicableToVisibleState(
                 PoiUIFilterDataProvider *wikiDataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:f];
                 OATopWikiOnlineAmenitiesController *wikiOnlineAmenitiesController =
                     [[OATopWikiOnlineAmenitiesController alloc] initWithDataProvider:wikiDataProvider];
-                __weak __typeof(self) weakSelf = self;
-                [wikiOnlineAmenitiesController setDataReadyHandler:^(const QList<std::shared_ptr<const OsmAnd::Amenity>>& amenities) {
-                    __typeof(self) strongSelf = weakSelf;
-                    if (!strongSelf)
-                        return;
-
-                    [strongSelf->_topPlacesProvider notifyAmenitiesChanged:amenities];
-                }];
                 [wikiOnlineAmenitiesController updateVisibleBBox31:[self.mapView getVisibleBBox31]
                                                              zoom:self.mapView.zoomLevel];
                 externalAmenitiesProvider =
@@ -1039,6 +1044,9 @@ static BOOL OAIsRequestApplicableToVisibleState(
         || visibleZoom > wikiSymbolsProvider->getMaxZoom())
         return;
 
+    if (_notifiedZoom == visibleZoom && _notifiedTiles == visibleTiles)
+        return;
+
     if ([self areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
     {
         QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
@@ -1060,10 +1068,9 @@ static BOOL OAIsRequestApplicableToVisibleState(
                 amenities.push_back(amenity);
             }
         }
-        if (amenities.size() > 0)
-        {
-            [_topPlacesProvider notifyAmenitiesChanged:amenities];
-        }
+        [_topPlacesProvider notifyAmenitiesChanged:amenities];
+        _notifiedTiles = visibleTiles;
+        _notifiedZoom = visibleZoom;
     }
 }
 
@@ -1100,6 +1107,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
 
     if (shouldReset)
     {
+        [self resetNotifiedTiles];
         [_topPlacesProvider resetLayer];
         [_topPlacesProvider drawTopPlacesIfNeeded:YES];
         [self notifyTopPlacesProviderIfWikiTilesCached];

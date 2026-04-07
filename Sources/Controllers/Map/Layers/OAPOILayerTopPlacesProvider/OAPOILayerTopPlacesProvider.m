@@ -24,7 +24,7 @@
 static const NSInteger kTopPlacesLimit = 20;
 static const NSInteger kStartZoom = 5;
 static const NSInteger kStartZoomRouteTrack = 11;
-static const NSInteger kImageIconSizeDP = 45;
+static const CGFloat kImageIconSizeDP = 55.0;
 static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 static NSString * const kWikiPhotoTag = @"wiki_photo";
 
@@ -37,8 +37,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     NSSet<NSNumber *> *_topPlaceIds;
     NSSet<NSNumber *> *_loadingImagePlaceIds;
     OsmAnd::AreaI _topPlacesBox;
-    QuadRect *_lastCalcBounds;
-    float _lastCalcZoom;
     
     POIImageLoader *_imageLoader;
     dispatch_queue_t _backgroundQueue;
@@ -49,6 +47,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     OAMapViewController *_mapViewController;
     CGFloat _textScale;
     CGFloat _displayDensityFactor;
+    
     NSNumber *_selectedTopPlaceId;
     BOOL _enabled;
     NSMutableDictionary<NSNumber *, NSString *> *_renderedMarkerStates;
@@ -94,11 +93,11 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (void)notifyAmenitiesChanged:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
 {
-    const QList<std::shared_ptr<const OsmAnd::Amenity>> amenitiesCopy = amenities;
+    __block QList<std::shared_ptr<const OsmAnd::Amenity>> amenitiesCopy = amenities;
     dispatch_async(_backgroundQueue, ^{
         self->_amenitiesGeneration++;
+        [self sortByElo:amenitiesCopy];
         self->_allPlaces = amenitiesCopy;
-        [self sortByElo:&self->_allPlaces];
         self->_topPlacesBox = OsmAnd::AreaI();
         [self refreshVisiblePlacesOnStateQueue];
     });
@@ -228,8 +227,8 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (float)getTopPlaceIconSize31:(int)zoom
 {
-    long long tileSize31 = (1LL << (31 - zoom));
-    double from31toPixelsScale = 256.0 / (double)tileSize31;
+    const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - zoom));
+    const auto from31toPixelsScale = (double)_mapViewController.referenceTileSizeRasterOrigInPixels / tileSize31;
     double estimatedIconSize = kImageIconSizeDP * _textScale * _displayDensityFactor;
     return (float)(estimatedIconSize / from31toPixelsScale);
 }
@@ -380,15 +379,13 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _topPlaceIds = nil;
     _loadingImagePlaceIds = nil;
     _topPlacesBox = OsmAnd::AreaI();
-    _lastCalcBounds = nil;
-    _lastCalcZoom = 0.f;
     _selectedTopPlaceId = nil;
     _renderedMarkerStates = nil;
 }
 
 - (void)refreshVisiblePlacesOnStateQueue
 {
-    if (!_enabled)
+    if (!_enabled || _allPlaces.isEmpty())
         return;
 
     OsmAnd::AreaI visibleBBox31;
@@ -396,22 +393,14 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     if (![self captureVisibleBounds:&visibleBBox31 zoom:&zoom])
         return;
 
-    if (_allPlaces.isEmpty())
-    {
-        _displayedPlaces.clear();
-        _topPlacesBox = OsmAnd::AreaI();
-        [self clearMapMarkersCollections];
-        [self cancelLoadingImages];
-        return;
-    }
-
-    if (_topPlacesBox.width() > 0
-        && _topPlacesBox.height() > 0
+    if (_topPlacesBox.width() > 0 && _topPlacesBox.height() > 0
         && _topPlacesBox.contains(visibleBBox31))
         return;
 
-    _topPlacesBox = [self topPlacesBoxForVisibleBounds:visibleBBox31 zoom:(int)zoom];
-    [self updateTopPlaces:_allPlaces visibleBBox31:visibleBBox31 zoom:(int)zoom];
+    int z = (int)(zoom + 0.5f);
+    _topPlacesBox = [self topPlacesBoxForVisibleBounds:visibleBBox31 zoom:z];
+    [self updateTopPlaces:_allPlaces visibleBBox31:visibleBBox31 zoom:z];
+
 }
 
 - (void)updateTopPlaceImageForId:(NSNumber *)placeId
@@ -433,7 +422,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 {
     [_mapViewController runWithRenderSync:^{
         QList<std::shared_ptr<const OsmAnd::Amenity>> places = _topPlaces;
-        [self sortByElo:&places];
         if (places.isEmpty())
         {
             [self clearMapMarkersCollectionLocked];
@@ -718,12 +706,12 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 
 
-- (void)sortByElo:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
+- (void)sortByElo:(QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
 {
-    if (!amenities)
+    if (amenities.isEmpty())
         return;
 
-    std::sort(amenities->begin(), amenities->end(), [self](const auto& a1, const auto& a2) {
+    std::sort(amenities.begin(), amenities.end(), [self](const auto& a1, const auto& a2) {
         NSInteger elo1 = [self travelEloForAmenity:a1];
         NSInteger elo2 = [self travelEloForAmenity:a2];
         if (elo1 != elo2)

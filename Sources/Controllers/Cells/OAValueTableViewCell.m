@@ -13,7 +13,6 @@
 @property (weak, nonatomic) IBOutlet UIStackView *valueStackView;
 @property (nonatomic) IBOutlet NSLayoutConstraint *titleWidthConstraint;
 @property (nonatomic) IBOutlet NSLayoutConstraint *valueWidthConstraint;
-@property (nonatomic) IBOutlet NSLayoutConstraint *leftTitleSpaceWidthConstraint;
 
 @end
 
@@ -39,11 +38,6 @@
 {
     [self valueVisibility:!show];
     self.proButton.hidden = !show;
-}
-
-- (void)leftTitleSpace:(CGFloat)space
-{
-    self.leftTitleSpaceWidthConstraint.constant = space;
 }
 
 - (BOOL)checkSubviewsToUpdateMargins

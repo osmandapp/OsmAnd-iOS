@@ -186,7 +186,6 @@
                 <outlet property="descriptionLabel" destination="RAZ-Y1-CfK" id="Dzm-Yu-ub1"/>
                 <outlet property="leftEditButton" destination="2je-Rn-N1k" id="C5W-mi-s9O"/>
                 <outlet property="leftIconView" destination="ZcW-nx-ZHb" id="XGq-lo-uUm"/>
-                <outlet property="leftTitleSpaceWidthConstraint" destination="rph-rT-YZ3" id="6Gq-Gj-S0J"/>
                 <outlet property="proButton" destination="tya-RY-7Oh" id="y7q-Ei-8e6"/>
                 <outlet property="textCustomMarginBottomStackView" destination="z5T-L5-iVs" id="r8F-bk-lMq"/>
                 <outlet property="textCustomMarginTopStackView" destination="kKL-Xr-Rbt" id="8b7-n3-JO3"/>

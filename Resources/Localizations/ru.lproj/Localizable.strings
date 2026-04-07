@@ -3715,9 +3715,9 @@
 "quick_action_wind_layer" = "Переключатель для отображения или скрытия слоя ветра на карте.";
 "quick_action_air_pressure_layer" = "Переключатель для отображения или скрытия уровня атмосферного давления на карте.";
 "quick_action_temperature_layer" = "Переключатель для отображения или скрытия температурного слоя на карте.";
-"quick_action_next_app_profile" = "К следующему Профилю приложения";
+"quick_action_next_app_profile" = "К следующему профилю";
 "key_event_action_next_app_profile" = "Следующий Профиль приложения";
-"quick_action_previous_app_profile" = "К предыдущему Профилю приложения";
+"quick_action_previous_app_profile" = "К предыдущему профилю";
 "key_event_action_previous_app_profile" = "Предыдущий профиль приложения";
 "quick_action_navigation_view_title" = "Навигационный вид";
 "quick_action_navigation_view_desc" = "Переключатель для открытия или закрытия режима навигации.";
@@ -4044,7 +4044,7 @@
 "context_menu_read_full_article" = "Прочитать статью полностью";
 "read_on" = "Читайте дальше %@";
 "show_spherical_map" = "Вид глобус";
-"enable_3d_objects" = "Трехмерные здания";
+"enable_3d_objects" = "3D-здания";
 "free_custom_color_description" = "Настройте 3D-модели зданий в любом цвете. Идеально подходит для создания карты в едином стиле или для усиления контраста.";
 "buildings_3d_visibility_description" = "Отрегулируйте прозрачность 3D-структур на карте.";
 "level_of_details" = "Уровень детализации";

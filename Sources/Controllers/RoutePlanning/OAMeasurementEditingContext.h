@@ -96,6 +96,8 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (BOOL) isApproximationNeeded;
 - (BOOL) isAddNewSegmentAllowed;
 - (BOOL) hasRoute;
+- (BOOL)shouldCheckApproximation;
+- (BOOL)hasTimestamps;
 
 - (BOOL) isInAddPointMode;
 

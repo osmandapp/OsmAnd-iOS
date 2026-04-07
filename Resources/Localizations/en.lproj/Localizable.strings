@@ -1167,6 +1167,14 @@
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
 "shared_string_terrain" = "Terrain";
+"enable_3d_objects" = "3D buildings";
+"free_custom_color_description" = "Customize 3D buildings with any color. Perfect for matching a map theme or improving contrast.";
+"buildings_3d_visibility_description" = "Adjust the opacity of 3D structures on the map.";
+"level_of_details" = "Level of detail";
+"performance" = "Performance";
+"view_distance" = "View distance";
+"custom_color" = "Custom color";
+"choose_color" = "Choose color";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
@@ -2443,6 +2451,7 @@
 "wiki_article_search_text" = "Searching for the corresponding wiki article";
 
 "srtm_plugin_name" = "Topography";
+"show_spherical_map" = "Globe view";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
 "srtm_plugin_description" = "Terrain information, like contour lines, hillshade, slope, help you to visually assess the lay of the land, the relief, navigability, and more. The topographic information can on the map be represented by contour lines, relief shading and/or steepness coloring.\n\nThe underlying data originates from SRTM and ASTER.\n\nFurther reading at %@.";
 
@@ -3827,6 +3836,20 @@
 • The issue with cross-platform purchases has been resolved\n\
 • Fixed the issue of a black screen on CarPlay after startup\n";
 
+"ios_release_5_3" = "• 3D Buildings support\n
+• Spherical map view\n
+• Speedometer: new color modes for tolerance & speeding\n
+• Customizable map buttons: size, shape, & style\n
+• Resizable location icon\n
+• New widgets: Max Speed, Average Slope; improved Uphill/Downhill\n
+• Track Analyzer: improved axis selection & vehicle metrics\n
+• Merge waypoints into a Favorites folder\n
+• Share link to any POI\n
+• CarPlay: fixed Dashboard map; added \"Always show dark map\"\n
+• CarPlay: smoother location icon & post-navigation dialog\n
+• Improved connectivity for paired OBD-II adapters\n
+• Fixed: Navigation ETA now updates while stationary\n";
+
 "ios_release_5_2" = "• Introduced customizable button mapping for external controllers, allowing any Quick Action to be assigned to a keyboard or controller button\n
 • Added new Quick Actions for controlling the app with an external controller\n
 • Improved widget visibility in transparency mode by adding text outlines\n
@@ -3842,14 +3865,6 @@
 • Improved brand search by including more local brands\n
 • General stability and performance improvements\n";
 
-"ios_release_5_3" = "• Added interactive animation for the Speedometer widget\n
-• Added an option to resize the location position icon\n
-• New Trip Recording widgets: Max Speed and Average Slope; improved Uphill/Downhill widgets\n
-• Added deep linking support for sharing specific POIs\n
-• Fixed an issue where ETA in Navigation widgets did not update while stationary\n
-• Improved connectivity for paired OBDII adapters\n
-• Added the ability to merge waypoints into a selected favorites folder\n
-• CarPlay: Fixed an issue with an unresponsive map on the Dashboard and added support for the \"Always show dark map\" parameter\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
@@ -4496,3 +4511,5 @@
 "popular_places"= "Popular places";
 "shared_string_wikipedia"= "Wikipedia";
 "poi_source" = "POI Source";
+"shared_string_int_name" = "International name";
+"show_debug_tile" = "Show tile information";

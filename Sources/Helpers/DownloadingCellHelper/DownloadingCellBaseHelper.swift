@@ -108,12 +108,17 @@ class DownloadingCellBaseHelper: NSObject {
         if progresses[resourceId] == nil {
             progresses[resourceId] = 0
         }
-        var cell = cells[resourceId]
-        if cell == nil {
-            cell = setupCell(resourceId)
-            cells[resourceId] = cell
+        
+        if let existingCell = cells[resourceId] {
+            return existingCell
         }
-        return cell
+        
+        guard let newCell = setupCell(resourceId) else {
+            return nil
+        }
+        
+        cells[resourceId] = newCell
+        return newCell
     }
     
     // Override in subclass

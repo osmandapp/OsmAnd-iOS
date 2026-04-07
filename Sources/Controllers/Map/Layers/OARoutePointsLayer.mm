@@ -39,6 +39,7 @@
 @implementation OARoutePointsLayer
 {
     OATargetPointsHelper *_targetPoints;
+    UIColor *_outlineColor;
     
     // Markers
     std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
@@ -57,6 +58,7 @@
     [super initLayer];
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
+    _outlineColor = UIColorFromRGB(color_osmand_orange);
     [self updatePoints];
     [_targetPoints addListener:self];
 }
@@ -66,14 +68,30 @@
     [super deinitLayer];
     
     [_targetPoints removeListener:self];
+    [self.mapViewController runWithRenderSync:^{
+        [self resetPoints];
+    }];
 }
 
 - (void) resetPoints
 {
+    [self remove3DObjectColors];
     if (_markersCollection)
         [self.mapView removeKeyedSymbolsProvider:_markersCollection];
     
     _markersCollection.reset(new OsmAnd::MapMarkersCollection());
+}
+
+- (void)remove3DObjectColors
+{
+    if (!_markersCollection)
+        return;
+    
+    for (const auto& marker : _markersCollection->getMarkers())
+    {
+        const auto latLon = [OANativeUtilities getLanlonFromPoint31:marker->getPosition()];
+        [self remove3DObjectColorAtLatitude:latLon.latitude longitude:latLon.longitude];
+    }
 }
 
 - (void) setupPoints
@@ -91,6 +109,7 @@
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
         .buildAndAddToCollection(_markersCollection);
+        [self add3DObjectColorAtLatitude:[pointToStart getLatitude] longitude:[pointToStart getLongitude] color:_outlineColor];
     }
     
     for (OARTargetPoint *point in [_targetPoints getIntermediatePoints])
@@ -105,6 +124,7 @@
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
         .buildAndAddToCollection(_markersCollection);
+        [self add3DObjectColorAtLatitude:[point getLatitude] longitude:[point getLongitude] color:_outlineColor];
     }
     
     OARTargetPoint *pointToNavigate = [_targetPoints getPointToNavigate];
@@ -120,6 +140,7 @@
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
         .buildAndAddToCollection(_markersCollection);
+        [self add3DObjectColorAtLatitude:[pointToNavigate getLatitude] longitude:[pointToNavigate getLongitude] color:_outlineColor];
     }
     
     // Add context pin markers
@@ -217,7 +238,7 @@
     }
 }
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     if ([obj isKindOfClass:OAMapMarkerWrapper.class])
     {
@@ -372,6 +393,7 @@
     if (object && [self isObjectMovable:object])
     {
         OARTargetPoint *point = (OARTargetPoint *)object;
+        [self remove3DObjectColorAtLatitude:[point getLatitude] longitude:[point getLongitude]];
         if (point.start)
         {
             [_targetPoints setStartPoint:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] updateRoute:YES name:nil];

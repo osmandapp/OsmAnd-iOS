@@ -117,6 +117,13 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
         }
     }
     
+    func updateResources() {
+        isWikipediaEnabled = app?.data.wikipedia ?? false
+        mapItems = OAResourcesUISwiftHelper.findWikiMapRegionsAtCurrentMapLocation()
+        initData()
+        tblView?.reloadData()
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         Int(data.sectionCount())
     }
@@ -230,12 +237,6 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
         }
         
         return UIMenu.composedMenu(from: [[online, offline]])
-    }
-    
-    private func updateResources() {
-        mapItems = OAResourcesUISwiftHelper.findWikiMapRegionsAtCurrentMapLocation()
-        initData()
-        tblView?.reloadData()
     }
     
     private func refreshPOI() {

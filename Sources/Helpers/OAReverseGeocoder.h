@@ -8,10 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OAReverseGeocoder : NSObject
 
 + (OAReverseGeocoder *)instance;
 
-- (NSString *) lookupAddressAtLat:(double)lat lon:(double)lon;
+- (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon;
+- (NSString *)lookupAddressAtLat:(double)lat lon:(double)lon objectId:(uint64_t)objectId;
 
 @end
+
+NS_ASSUME_NONNULL_END

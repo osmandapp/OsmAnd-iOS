@@ -514,7 +514,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     if (points.count > 0)
     {
         OAOsmPoint *p = points[points.count - 1];
-        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
+        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p touchLocation:nil];
         [mapPanel showContextMenu:newTarget];
     }
 }

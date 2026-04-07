@@ -130,7 +130,11 @@ final class ImageCarouselViewController: UIPageViewController {
     }
     
     private func configureNavigationBarAppearance() {
-        navigationController?.setDefaultNavigationBarAppearance()
+        if #available(iOS 26.0, *) {
+            navigationController?.setDefaultNavigationBarAppearance(foregroundColor: .navBarTextOnImgColorDefault)
+        } else {
+            navigationController?.setDefaultNavigationBarAppearance()
+        }
     }
     
     private func configureNavigationLeftBarButtonItemButtons() {

@@ -636,7 +636,7 @@ class GpxUIHelper: NSObject {
                     currentX += stepX / divX
                 }
                 if attribute.hasValidValue(tag: key) {
-                    let value: Float = Float(attribute.getAttributeValue(tag: key) ?? 1.0)
+                    let value: Float = attribute.getAttributeValue(tag: key)
                     var currentY: Float = divY.isNaN ? value * Float(mulY) : Float(divY) / value
                     if currentY < 0 || currentY.isInfinite {
                         currentY = 0

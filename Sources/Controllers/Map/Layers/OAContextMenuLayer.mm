@@ -258,6 +258,9 @@
     if (!_initDone)
         return;
     
+    const auto target = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latitude, longitude));
+    [self updateContextPin3DHighlight:latitude longitude:longitude target:target];
+    
     _contextPinMarker->setIsHidden(true);
     
     if (!self.mapView.hidden && animated)
@@ -266,9 +269,7 @@
         
         _latPin = latitude;
         _lonPin = longitude;
-        
-        const OsmAnd::LatLon latLon(_latPin, _lonPin);
-        _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+        _contextPinMarker->setPosition(target);
         
         if (_animatedPin)
             [self hideAnimatedPin];
@@ -278,7 +279,7 @@
         @try
         {
             CGPoint targetPoint;
-            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
+            OsmAnd::PointI targetPositionI = target;
             [self.mapView convert:&targetPositionI toScreen:&targetPoint];
             
             _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
@@ -325,8 +326,7 @@
     }
     else
     {
-        const OsmAnd::LatLon latLon(latitude, longitude);
-        _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+        _contextPinMarker->setPosition(target);
         _contextPinMarker->setIsHidden(false);
     }
 }
@@ -336,6 +336,17 @@
     if (!_initDone)
         return;
 
+    if (!_contextPinMarker->isHidden())
+    {
+        const auto latLon = [OANativeUtilities getLanlonFromPoint31:_contextPinMarker->getPosition()];
+        [self remove3DObjectColorAtLatitude:latLon.latitude longitude:latLon.longitude];
+    }
+    else if (_animatedPin)
+    {
+        [self remove3DObjectColorAtLatitude:_latPin longitude:_lonPin];
+    }
+    
+    [self hideAnimatedPin];
     _contextPinMarker->setIsHidden(true);
 }
 
@@ -349,14 +360,14 @@
     }
 }
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     OAMapViewController *mapViewController = self.mapViewController;
     for (OAMapLayer *layer in [mapViewController.mapLayers getLayers])
     {
         if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
         {
-            OATargetPoint *targetPoint = [((id<OAContextMenuProvider>)layer) getTargetPoint:obj];
+            OATargetPoint *targetPoint = [((id<OAContextMenuProvider>)layer) getTargetPoint:obj touchLocation:touchLocation];
             if (targetPoint)
                 return targetPoint;
         }
@@ -377,6 +388,30 @@
         }
     }
     return nil;
+}
+
+- (void)updateContextPin3DHighlight:(double)latitude longitude:(double)longitude target:(const OsmAnd::PointI &)target
+{
+    if (![self isContextPin3DHighlightEnabled])
+        return;
+
+    const auto previous = _contextPinMarker->getPosition();
+    const BOOL wasHidden = _contextPinMarker->isHidden();
+    const BOOL changed = previous != target;
+    if (changed && !wasHidden)
+    {
+        const auto previousLatLon = [OANativeUtilities getLanlonFromPoint31:previous];
+        [self remove3DObjectColorAtLatitude:previousLatLon.latitude longitude:previousLatLon.longitude];
+    }
+    
+    if (changed || wasHidden)
+        [self add3DObjectColorAtLatitude:latitude longitude:longitude color:UIColorFromRGB(color_osmand_orange)];
+}
+
+- (BOOL)isContextPin3DHighlightEnabled
+{
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+    return plugin && [plugin is3dMapObjectsEnabled];
 }
 
 - (BOOL) isSecondaryProvider
@@ -528,7 +563,7 @@
         
         if (provider)
         {
-            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object];
+            OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object touchLocation:nil];
             if (targetPoint)
             {
                 [filteredSelectedObjects addObject:selectedObject];
@@ -571,14 +606,14 @@
     {
         OATargetPoint *targetPoint;
         if (provider)
-            targetPoint = [provider getTargetPoint:object];
+            targetPoint = [provider getTargetPoint:object touchLocation:touchPointLatLon];
         else
-            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object];
+            targetPoint = [self.mapViewController.mapLayers.poiLayer getTargetPoint:object touchLocation:touchPointLatLon];
             
         if (targetPoint)
         {
             targetPoint.location = latLon.coordinate;
-            [targetPoint initAddressIfNeeded];
+            targetPoint.shouldFetchAddress = YES;
             
             [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
         }
@@ -763,8 +798,17 @@
 
 - (void) animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    _animationDone = YES;
     _contextPinMarker->setIsHidden(false);
+    _contextPinMarker->setUpdateAfterCreated(true);
+    _animationDone = YES;
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (void)contextMenuDidHide
+{
+    [self hideAnimatedPin];
+    [self hideContextPinMarker];
 }
 
 @end

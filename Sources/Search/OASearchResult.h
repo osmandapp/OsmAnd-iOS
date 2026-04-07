@@ -18,6 +18,7 @@ static double const MAX_TYPES_BASE_10 = 10.0;
 static double const MAX_PHRASE_WEIGHT_TOTAL = MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10;
 
 typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
+    EOASearchResultResourceUnknown = 0,
     EOASearchResultResourceDetailed,
     EOASearchResultResourceWikipedia,
     EOASearchResultResourceBasemap,
@@ -53,6 +54,7 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 @property (nonatomic) double priorityDistance;
 @property (nonatomic) NSMutableSet<NSString *> *otherWordsMatch;
 @property (nonatomic) BOOL unknownPhraseMatches;
+@property (nonatomic) BOOL impreciseCoordinates;
 @property (nonatomic) double unknownPhraseMatchWeight;
 
 @property (nonatomic) CLLocation *location;
@@ -68,6 +70,7 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 @property (nonatomic) NSString *relatedResourceId;
 @property (nonatomic, assign) OASGpxFile *relatedGpx;
 @property (nonatomic) double distRelatedObjectName;
+@property (nonatomic, assign) EOASearchResultResource searchResultResource;
 
 
 - (instancetype)initWithPhrase:(OASearchPhrase *)sp;
@@ -89,5 +92,6 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 - (void)restoreBraceNames:(NSArray<NSString *> *)backup;
 
 - (NSString *) toString;
+- (NSInteger) resourceWeight;
 
 @end

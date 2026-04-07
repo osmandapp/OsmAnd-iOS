@@ -157,7 +157,12 @@ final class ObfConstants: NSObject {
     }
     
     static func isTagIndexedForSearchAsName(_ tag: String?) -> Bool {
-        guard let tag = tag else { return false }
+        guard let tag = tag else {
+            return false
+        }
+        if tag.hasPrefix("route_name") {
+            return false
+        }
         return tag.contains("name") || tag.contains("brand")
     }
         

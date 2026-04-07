@@ -1090,6 +1090,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
+- (OACommonBoolean *)getCustomRenderBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
+- (OACommonString *)getCustomRenderProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
 @property (nonatomic) NSArray<NSString *> *appModeBeanPrefsIds;
 @property (nonatomic) OAApplicationMode *currentMode;
@@ -1114,6 +1116,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *use3dIconsByDefault;
 @property (nonatomic) OACommonBoolean *batterySavingMode;
 @property (nonatomic) OACommonBoolean *enableMsaaForСarPlay;
+@property (nonatomic) OACommonBoolean *showPrimitivesDebugInfo;
 @property (nonatomic) OACommonInteger *appModeOrder;
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;
@@ -1532,6 +1535,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (assign, nonatomic) BOOL stopOnMissingMaps;
 
 @property (nonatomic) OACommonBoolean *wikiShowImagePreviews;
+
+@property (nonatomic) OACommonBoolean *sphericalMap;
 
 // Developer plugin
 @property (nonatomic) OACommonBoolean *simulateOBDData;

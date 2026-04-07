@@ -532,6 +532,9 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 - (void)buildNearestPoiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows listener:(id)listener
 {
+    if (OARowsContainKey(rows, @"nearest_poi"))
+        return;
+    
     id targetObj = [self getTargetObj];
     if ([targetObj isKindOfClass:OAPOI.class])
     {
@@ -551,7 +554,7 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
             if (nearest.count > 0)
             {
                 UIImage *icon = poi.icon;
-                OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderNearestRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+                OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:@"nearest_poi" icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderNearestRow typeName:@"" isPhoneNumber:NO isUrl:NO];
                 rowInfo.collapsed = YES;
                 rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
                 [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
@@ -560,6 +563,16 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
             }
         }
     }
+}
+
+static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString *key)
+{
+    for (OAAmenityInfoRow *row in rows)
+    {
+        if ([row.key isEqualToString:key])
+            return YES;
+    }
+    return NO;
 }
 
 - (void)buildRouteRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -1577,24 +1590,48 @@ static const NSInteger kOrderMapillaryEmptyRow = 30002;
     else if ([info.typeName isEqualToString:kShortDescriptionWikiRowType])
     {
         NSString *url = info.hiddenUrl;
+        OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+        BOOL isWikiPurchased = helper.wiki.isPurchased;
+        
         if (NSStringIsEmpty(url))
         {
-            if ([self isKindOfClass:OAPOIViewController.class])
+            if (![self isKindOfClass:OAPOIViewController.class])
+                return;
+            
+            id target = [self getTargetObj];
+            if (![target isKindOfClass:OAPOI.class])
+                return;
+            
+            if (!isWikiPurchased)
             {
-                if ([[self getTargetObj] isKindOfClass:OAPOI.class])
-                {
-                    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
-                    if ([helper.wiki isPurchased])
-                    {
-                        OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithPoi:[self getTargetObj]];
-                        [OARootViewController.instance.mapPanel.navigationController pushViewController:wikiController animated:YES];
-                    }
-                    else
-                    {
-                        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-                    }
-                }
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+                return;
             }
+            
+            OAWikiWebViewController *wikiController =
+                [[OAWikiWebViewController alloc] initWithPoi:target];
+            
+            [OARootViewController.instance.mapPanel.navigationController
+                pushViewController:wikiController
+                          animated:YES];
+            return;
+        }
+        
+        if ([url containsString:kWikiLink])
+        {
+            if (!isWikiPurchased)
+            {
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+                return;
+            }
+            
+            CLLocation *location =
+                [[CLLocation alloc] initWithLatitude:self.location.latitude
+                                          longitude:self.location.longitude];
+            
+            [OAWikiArticleHelper showWikiArticle:location
+                                             url:url
+                                      sourceView:[tableView cellForRowAtIndexPath:indexPath]];
         }
         else
         {

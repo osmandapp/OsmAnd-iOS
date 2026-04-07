@@ -136,7 +136,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     if ([obj isKindOfClass:OAOnlineOsmNoteWrapper.class])
     {
@@ -187,7 +187,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     float zoom = [self.mapViewController getMapZoom];
     const auto objects = _notesMapProvider->getNotesCache();
     
-    BOOL showClosed = NO; // ios doesn't use SHOW_CLOSED_OSM_BUGS setting. use default value
+    BOOL showClosed = YES; // ios doesn't use SHOW_CLOSED_OSM_BUGS setting. use default value
     
     if (zoom >= START_ZOOM && !objects.isEmpty())
     {

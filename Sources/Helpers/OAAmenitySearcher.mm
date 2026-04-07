@@ -289,23 +289,15 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
         filtered = [[self filterByOsmIdOrWikidata:amenities osmId:osmId point:latLon wikidata:wikidata] mutableCopy];
     }
 
-    if (NSArrayIsEmpty(filtered))
+    if (NSArrayIsEmpty(filtered) && !NSArrayIsEmpty(names))
     {
         OAPOI *amenity = [self findByName:amenities names:names searchLatLon:latLon];
         if (amenity)
         {
-            if ([amenity getOsmId] > 0)
-            {
                 filtered = [[self filterByOsmIdOrWikidata:amenities
                                                     osmId:[amenity getOsmId]
                                                     point:[amenity getLocation]
                                                  wikidata:[amenity getWikidata]] mutableCopy];
-            }
-            else
-            {
-                // Don't exist in android. Bugfix for invalid obfId values from cpp
-                [filtered addObject:amenity];
-            }
         }
     }
 
@@ -804,9 +796,17 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 {
     OAPOIHelper *helper = [OAPOIHelper sharedInstance];
     OAPOIType *type = nil;
-    if (!amenity->categories.isEmpty() && ![[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
+    if (!amenity->subType.isEmpty() && ![[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
     {
-        const auto& catList = amenity->getDecodedCategories();
+        auto catList = amenity->getDecodedCategories();
+        if (catList.isEmpty() && !amenity->type.isEmpty())
+        {
+            OsmAnd::Amenity::DecodedCategory decodedCategory;
+            decodedCategory.category = amenity->type;
+            decodedCategory.subcategory = amenity->subType.split(';', Qt::SkipEmptyParts).value(0);
+            if (!decodedCategory.subcategory.isEmpty())
+                catList.push_back(decodedCategory);
+        }
         if (!catList.isEmpty())
         {
             NSString *category = catList.first().category.toNSString();

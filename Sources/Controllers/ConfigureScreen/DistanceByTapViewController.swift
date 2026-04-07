@@ -12,10 +12,10 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
     private static let distanceByTapKey = "distanceByTapKey"
     private static let textSizeKey = "textSizeKey"
     
+    var appMode: OAApplicationMode!
     weak var delegate: OASettingsDataDelegate?
     
     private var settings: OAAppSettings!
-    private var appMode: OAApplicationMode!
     
     override func commonInit() {
         settings = OAAppSettings.sharedManager()
@@ -48,7 +48,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
         imgRow.iconName = "img_distance_by_tap"
         
         let switchCellSection = tableData.createNewSection()
-        let showDistanceRuler = settings.showDistanceRuler.get()
+        let showDistanceRuler = settings.showDistanceRuler.get(appMode)
         
         let distanceByTapRow = switchCellSection.createNewRow()
         distanceByTapRow.cellType = OASwitchTableViewCell.reuseIdentifier
@@ -116,7 +116,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
     private func createTextSizeMenu() -> UIMenu {
         var actions: [UIAction] = []
         for textSize in [EOADistanceByTapTextSizeConstant.NORMAL, EOADistanceByTapTextSizeConstant.LARGE] {
-            let action = UIAction(title: OADistanceByTapTextSizeConstant.toHumanString(textSize), state: settings.distanceByTapTextSize.get() == textSize ? .on : .off) { [weak self] _ in
+            let action = UIAction(title: OADistanceByTapTextSizeConstant.toHumanString(textSize), state: settings.distanceByTapTextSize.get(appMode) == textSize ? .on : .off) { [weak self] _ in
                 guard let self else { return }
                 settings.distanceByTapTextSize.set(textSize, mode: appMode)
             }
@@ -132,7 +132,7 @@ final class DistanceByTapViewController: OABaseNavbarViewController {
         let data = tableData.item(for: indexPath)
         
         if data.key == Self.distanceByTapKey {
-            settings.showDistanceRuler.set(sw.isOn)
+            settings.showDistanceRuler.set(sw.isOn, mode: appMode)
             var delay: TimeInterval
             if #available(iOS 26.0, *) {
                 delay = 0.25

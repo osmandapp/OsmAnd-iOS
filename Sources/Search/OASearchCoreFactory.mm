@@ -41,6 +41,7 @@
 #import "OATopIndexFilter.h"
 #import "OACollatorStringMatcher.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -369,6 +370,61 @@
 
 @end
 
+@interface OATownCitiesCache ()
+{
+@public
+    NSMutableSet<NSString *> *_townCitiesInit;
+    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
+    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _boundariesQR;
+}
+@end
+
+@implementation OATownCitiesCache
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _townCitiesInit = [NSMutableSet set];
+        _townCitiesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), 12u);
+        _boundariesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), 12u);
+    }
+    return self;
+}
+
+- (BOOL)contains:(NSString *)resId
+{
+    return [_townCitiesInit containsObject:resId];
+}
+
+- (void)add:(NSString *)resId
+{
+    [_townCitiesInit addObject:resId];
+}
+
+- (void)insertCityQR:(std::shared_ptr<const OsmAnd::StreetGroup>)city area:(const OsmAnd::AreaI&)area
+{
+    _townCitiesQR->insert(city, area);
+}
+
+- (void)insertBoundaryQR:(std::shared_ptr<const OsmAnd::StreetGroup>)boundary area:(const OsmAnd::AreaI&)area
+{
+    _boundariesQR->insert(boundary, area);
+}
+
+- (void)queryCities:(const OsmAnd::AreaI&)area result:(QList<std::shared_ptr<const OsmAnd::StreetGroup>>&)result
+{
+    _townCitiesQR->query(area, result);
+}
+
+- (void)queryBoundaries:(const OsmAnd::AreaI&)area result:(QList<std::shared_ptr<const OsmAnd::StreetGroup>>&)result
+{
+    _boundariesQR->query(area, result);
+}
+
+@end
+
 
 @interface OASearchAddressByNameAPI ()
 
@@ -378,18 +434,20 @@
 {
     int DEFAULT_ADDRESS_BBOX_RADIUS;
     int LIMIT;
+    int LONG_ADDRESS_BBOX_RADIUS;
+    int MAX_ADRESS_RESULTS_BY_REGIONS;
 
-    NSMutableArray<NSString *> *_townCities;
-    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
-    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _boundariesQR;
-
-    QList<std::shared_ptr<const OsmAnd::StreetGroup>> _resArray;
+    OATownCitiesCache *_townCitiesCache;
     QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
     OASearchStreetByCityAPI *_cityApi;
     OASearchBuildingAndIntersectionsByStreetAPI *_streetsApi;
+    BOOL _longDistance;
 }
 
-- (instancetype) initWithCityApi:(OASearchStreetByCityAPI *)cityApi streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi
+- (instancetype)initWithCityApi:(OASearchStreetByCityAPI *)cityApi
+                     streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi
+                   longDistance:(BOOL)longDistance
+                townCitiesCache:(OATownCitiesCache * _Nonnull)townCitiesCache
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeCity],
                                         [OAObjectType withType:EOAObjectTypeVillage],
@@ -400,15 +458,15 @@
                                         [OAObjectType withType:EOAObjectTypeStreetIntersection]]];
     if (self)
     {
-        DEFAULT_ADDRESS_BBOX_RADIUS = 100 * 1000;
+        DEFAULT_ADDRESS_BBOX_RADIUS = 40 * 1000;
+        LONG_ADDRESS_BBOX_RADIUS = 100 * 1000;
         LIMIT = 10000;
-        
-        _townCities = [NSMutableArray array];
-        _townCitiesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), static_cast<uintmax_t>(12u));
-        _boundariesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), static_cast<uintmax_t>(12u));
-        
+        MAX_ADRESS_RESULTS_BY_REGIONS = 1000;
+
+        _townCitiesCache = townCitiesCache;
         _cityApi = cityApi;
         _streetsApi = streetsApi;
+        _longDistance = longDistance;
     }
     return self;
 }
@@ -420,7 +478,10 @@
 
     if ([p isLastWord:EOAObjectTypePoi] || [p isLastWord:EOAObjectTypePoiType])
         return -1;
-    
+    if (_longDistance)
+    {
+        return SEARCH_ADDRESS_BY_NAME_LONG_API_PRIORITY;
+    }
     if ([p isNoSelectedType])
         return SEARCH_ADDRESS_BY_NAME_API_PRIORITY;
     
@@ -465,13 +526,27 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
-    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
-    NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes:bbox dt:P_DATA_TYPE_ADDRESS];
+    QuadRect *bbox = nil;
+    NSArray<NSString *> *offlineIndexes = nil;
+    int longRadius = LONG_ADDRESS_BBOX_RADIUS * 5;
+    int defRadius = DEFAULT_ADDRESS_BBOX_RADIUS * 5;
+
+    if (_longDistance)
+    {
+        bbox = [phrase getRadiusBBox31ToSearch:longRadius];
+        offlineIndexes = [phrase getRadiusOfflineIndexes:defRadius maxMeters:longRadius dataType:P_DATA_TYPE_ADDRESS];
+    }
+    else
+    {
+        bbox = [phrase getRadiusBBox31ToSearch:defRadius];
+        offlineIndexes = [phrase getRadiusOfflineIndexes:0 maxMeters:defRadius dataType:P_DATA_TYPE_ADDRESS];
+    }
+
     for (NSString *resId in offlineIndexes)
     {
-        if (![_townCities containsObject:resId])
+        if (![_townCitiesCache contains:resId])
         {
-            [_townCities addObject:resId];
+            [_townCitiesCache add:resId];
             QString rId = QString::fromNSString(resId);
             const auto& r = app.resourcesManager->getLocalResource(rId);
             if (!r)
@@ -493,7 +568,7 @@
                     // city->bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
                     qr = OsmAnd::AreaI(city->bbox31.at(1), city->bbox31.at(0), city->bbox31.at(3), city->bbox31.at(2));
                 }
-                _townCitiesQR->insert(city, qr);
+                [_townCitiesCache insertCityQR:city area:qr];
             }
             
             QList< std::shared_ptr<const OsmAnd::StreetGroup> > l2;
@@ -508,35 +583,24 @@
                     // city->bbox31[left,top,right,bottom] => AreaI(top,left,bottom,right)
                     qr = OsmAnd::AreaI(city->bbox31.at(1), city->bbox31.at(0), city->bbox31.at(3), city->bbox31.at(2));
                 }
-                _boundariesQR->insert(city, qr);
+                [_townCitiesCache insertBoundaryQR:city area:qr];
             }
         }
     }
     if ([phrase isNoSelectedType] && bbox && ([phrase isUnknownSearchWordPresent] || [phrase isEmptyQueryAllowed]) && [phrase isSearchTypeAllowed:EOAObjectTypeCity])
     {
         OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
-        _resArray.clear();
         const OsmAnd::AreaI area(bbox.top, bbox.left, bbox.bottom, bbox.right);
-        _townCitiesQR->query(area, _resArray);
-        LogPrintf(OsmAnd::LogSeverityLevel::Debug,
-        "Resulting cities '%d'",
-                  _resArray.count());
+        QList<std::shared_ptr<const OsmAnd::StreetGroup>> cacheResArray;
+        [_townCitiesCache queryCities:area result:cacheResArray];
         int limit = 0;
-        for (const auto& c : _resArray)
+        for (const auto& c : cacheResArray)
         {
-//            if (phrase.getSettings.isExportObjects)
-//                [resultMatcher exportCity:phrase city:c];
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.object = [[OACity alloc] initWithCity:c];
             res.resourceId = _streetGroupResourceIds.value(c).toNSString();
             res.localeName = c->getName(QString::fromNSString([[phrase getSettings] getLang]), [[phrase getSettings] isTransliterate]).toNSString();
-            if (!c->localizedNames.isEmpty())
-            {
-                NSMutableArray<NSString *> *names = [NSMutableArray array];
-                for (const auto& name : c->localizedNames.values())
-                     [names addObject:name.toNSString()];
-                res.otherNames = names;
-            }
+            res.otherNames = [[OANativeUtilities QListOfStringsToNSArray:c->getOtherNames(TRUE)] mutableCopy];
             
             const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
             if (r)
@@ -549,7 +613,7 @@
                 OsmAnd::LatLon loc = OsmAnd::Utilities::convert31ToLatLon(c->position31);
                 res.location = [[CLLocation alloc] initWithLatitude:loc.latitude longitude:loc.longitude];
                 res.priority = SEARCH_ADDRESS_BY_NAME_PRIORITY;
-                res.priorityDistance = 0.1;
+                res.priorityDistance = SEARCH_ADDRESS_BY_NAME_CITY_PRIORITY_DISTANCE;
                 res.objectType = EOAObjectTypeCity;
                 if ([phrase isEmptyQueryAllowed] && [phrase isEmpty])
                 {
@@ -589,16 +653,23 @@
         BOOL locSpecified = [phrase getLastTokenLocation] != nil;
         CLLocation *loc = [phrase getLastTokenLocation];
         NSMutableArray<OASearchResult *> *immediateResults = [NSMutableArray array];
-        QuadRect *streetBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
-        QuadRect *postcodeBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
-        QuadRect *villagesBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 3];
-        QuadRect *cityBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5]; // covered by separate radius before
+        int searchRadius =  _longDistance ? LONG_ADDRESS_BBOX_RADIUS : DEFAULT_ADDRESS_BBOX_RADIUS;
+        QuadRect *postcodeBbox = [phrase getRadiusBBox31ToSearch:searchRadius * 5];
+        QuadRect *villagesBbox = [phrase getRadiusBBox31ToSearch:searchRadius * 3];
+        QuadRect *cityBbox = [phrase getRadiusBBox31ToSearch:searchRadius * 5]; // covered by separate radius before
         int priority = [phrase isNoSelectedType] ? SEARCH_ADDRESS_BY_NAME_PRIORITY : SEARCH_ADDRESS_BY_NAME_PRIORITY_RADIUS2;
         
         NSString *currentResId;
         NSString *currentRegionName;
-        NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:DEFAULT_ADDRESS_BBOX_RADIUS * 5 dt:P_DATA_TYPE_ADDRESS];
-        
+        int minRadius = 0;
+        int maxRadius = DEFAULT_ADDRESS_BBOX_RADIUS * 5;
+        if (_longDistance)
+        {
+            minRadius = maxRadius;
+            maxRadius = LONG_ADDRESS_BBOX_RADIUS * 5;
+        }
+        NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:minRadius maxMeters:maxRadius dataType:P_DATA_TYPE_ADDRESS];
+
         const auto& obfsCollection = app.resourcesManager->obfsCollection;
         const auto search = std::shared_ptr<const OsmAnd::AddressesByNameSearch>(new OsmAnd::AddressesByNameSearch(obfsCollection));
         
@@ -637,10 +708,12 @@
             }
             else
             {
-                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:maxRadius], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
             }
         }
-        
+
+        int lastRegionPriority = 0;
+        int lastResultCount = [resultMatcher getCount];
         for (NSString *resId in offlineIndexes)
         {
             currentResId = resId;
@@ -656,7 +729,7 @@
             searchCriteria->localResources = {r};
 
             search->performSearch(*searchCriteria,
-                                  [self, &limit, &ctrl, &phrase, &currentResId, priority, &lang, transliterate, currentRegionName, locSpecified, &streetBbox, &postcodeBbox, &villagesBbox, &cityBbox, &immediateResults]
+                                  [self, &limit, &ctrl, &phrase, &currentResId, priority, &lang, transliterate, currentRegionName, locSpecified, &postcodeBbox, &villagesBbox, &cityBbox, &immediateResults]
                                   (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                       if (ctrl->isAborted())
@@ -707,7 +780,7 @@
                                                   return NO;
                                               
                                               sr.objectType = EOAObjectTypeCity;
-                                              sr.priorityDistance = 0.1;
+                                              sr.priorityDistance = SEARCH_ADDRESS_BY_NAME_CITY_PRIORITY_DISTANCE;
                                           }
                                           else if (city->type == OsmAnd::ObfAddressStreetGroupSubtype::Postcode)
                                           {
@@ -737,7 +810,7 @@
                                               if (!closestCitiesRequested)
                                               {
                                                   const OsmAnd::AreaI villagesArea(villagesBbox.top, villagesBbox.left, villagesBbox.bottom, villagesBbox.right);
-                                                  _townCitiesQR->query(villagesArea, closestCities);
+                                                  [_townCitiesCache queryCities:villagesArea result:closestCities];
                                                   closestCitiesRequested = YES;
                                               }
                                               double minDist = -1;
@@ -772,6 +845,8 @@
                                   },
                                   ctrl);
             
+            NSNumber * lastRegionPriority = 0;
+            int lastResultCount = [resultMatcher getCount];
             for (OASearchResult *res in immediateResults)
             {
                 if ([resultMatcher isCancelled])
@@ -806,11 +881,11 @@
                         }
                         else
                         {
-                            _resArray.clear();
+                            QList<std::shared_ptr<const OsmAnd::StreetGroup>> cacheResArray;
                             QuadRect * bbox = [OASearchPhrase calculateBbox:@(1000) location:res.location];
                             const OsmAnd::AreaI area(bbox.top, bbox.left, bbox.bottom, bbox.right);
-                            _boundariesQR->query(area, _resArray);
-                            for (std::shared_ptr<const OsmAnd::StreetGroup> & streetGroup : _resArray)
+                            [_townCitiesCache queryBoundaries:area result:cacheResArray];
+                            for (std::shared_ptr<const OsmAnd::StreetGroup> & streetGroup : cacheResArray)
                             {
                                 OACity * boundary = [[OACity alloc] initWithCity:streetGroup];
                                 std::vector bb = boundary.city->bbox31;
@@ -863,6 +938,13 @@
             
             if (![resultMatcher isCancelled])
                 [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+            NSNumber * regionPriority = [phrase getRegionPriority:resId];
+            int cnt = [resultMatcher getCount] - lastResultCount;
+            if (cnt > MAX_ADRESS_RESULTS_BY_REGIONS && regionPriority > lastRegionPriority)
+            {
+                break;
+            }
+            lastRegionPriority = regionPriority;
         }
     }
 }
@@ -881,6 +963,7 @@
     int BBOX_RADIUS_INSIDE;// to support city search for basemap
     int BBOX_RADIUS_POI_IN_CITY;
     int FIRST_WORD_MIN_LENGTH;
+    int MAX_POI_RESULTS_BY_REGIONS;
     OAPOIHelper *_types;
 }
 
@@ -894,6 +977,7 @@
         BBOX_RADIUS_INSIDE = 5600 * 1000;
         BBOX_RADIUS_POI_IN_CITY = 25 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
+        MAX_POI_RESULTS_BY_REGIONS = 1000;
         _types = [OAPOIHelper sharedInstance];
     }
     return self;
@@ -955,7 +1039,9 @@
         offlineIndexes = @[phraseResId];
     else
         offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
-        
+
+    NSNumber * lastRegionPriority = 0;
+    int lastResultCount = [resultMatcher getCount];
     for (NSString *resId in offlineIndexes)
     {
         currentResId = resId;
@@ -1041,6 +1127,13 @@
 
         if (![resultMatcher isCancelled])
             [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+        NSNumber * regionPriority = [phrase getRegionPriority:resId];
+        int cnt = [resultMatcher getCount] - lastResultCount;
+        if (cnt > MAX_POI_RESULTS_BY_REGIONS && regionPriority > lastRegionPriority)
+        {
+            break;
+        }
+        lastRegionPriority = regionPriority;
     }
 
     return true;
@@ -2297,15 +2390,17 @@
     NSUInteger _olcPhraseHash;
     CLLocation *_olcPhraseLocation;
     OAParsedOpenLocationCode *_cachedParsedCode;
+    OAHttpRedirectRequester _httpRedirectRequester;
 }
 
-- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI requester:(OAHttpRedirectRequester)requester
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeLocation],
                                         [OAObjectType withType:EOAObjectTypePartialLocation]]];
     if (self)
     {
         _amenitiesAPI = amenitiesAPI;
+        _httpRedirectRequester = requester;
     }
     return self;
 }
@@ -2409,7 +2504,7 @@
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = l;
-            sp.localeName = [NSString stringWithFormat:@"%.5f, %.5f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
+            sp.localeName = [self formatLocation:sp.location];
             sp.objectType = EOAObjectTypeLocation;
             sp.wordsSpan = lw;
             [resultMatcher publish:sp];
@@ -2536,7 +2631,44 @@
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    return false;
+    NSString *lines = [[phrase getUnknownSearchPhrase] stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+    
+    OASKGeoParsedPoint *pnt = nil;
+    for (NSString *text in [lines componentsSeparatedByString:@"\n"])
+    {
+        pnt = [OASKGeoPointParserUtil.shared parseUriString:text];
+        if (!pnt && _httpRedirectRequester && [OASKGeoPointParserUtil.shared isGooGlUrlUrl:text])
+        {
+            NSString *requestedText = _httpRedirectRequester(text);
+            if (requestedText)
+            {
+                pnt = [OASKGeoPointParserUtil.shared parseUriString:requestedText];
+            }
+        }
+        if (pnt)
+        {
+            break;
+        }
+    }
+    
+    if (pnt && [pnt isGeoPoint] && [phrase isSearchTypeAllowed:EOAObjectTypeLocation])
+    {
+        OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
+        sp.priority = 0;
+        sp.object = pnt;
+        sp.wordsSpan = lines;
+        sp.impreciseCoordinates = [pnt hasImpreciseCoordinates];
+        sp.location = [[CLLocation alloc] initWithLatitude:[pnt getLatitude] longitude:[pnt getLongitude]];
+        sp.localeName = [self formatLocation:sp.location];
+        if ([pnt getZoom] > 0)
+        {
+            sp.preferredZoom = [pnt getZoom];
+        }
+        sp.objectType = EOAObjectTypeLocation;
+        [resultMatcher publish:sp];
+        return YES;
+    }
+    return NO;
 }
 
 - (int) getSearchPriority:(OASearchPhrase *)p
@@ -2566,6 +2698,11 @@
 - (BOOL) isSearchDone:(OASearchPhrase *)phrase
 {
     return _cachedParsedCode != nil;
+}
+
+- (NSString *)formatLocation:(CLLocation *)location
+{
+    return [NSString stringWithFormat:@"%.5f, %.5f", (float) location.coordinate.latitude, (float) location.coordinate.longitude];
 }
 
 @end

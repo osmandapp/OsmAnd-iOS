@@ -413,7 +413,7 @@ typedef enum
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
         _activeTargetType = OATargetWeatherLayerSettings;
-    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class])
+    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class] || [controller isKindOfClass:MapSettingsBuildings3DParametersViewController.class])
         _activeTargetType = OATargetTerrainParametersSettings;
     else if ([controller isKindOfClass:MapSettingsMapModeParametersViewController.class])
         _activeTargetType = OATargetMapModeParametersSettings;
@@ -958,6 +958,13 @@ typedef enum
     [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
+- (void)showBuildings3DScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenBuildings3DVisibility];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
+}
+
 - (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
 {
     if (event)
@@ -1051,6 +1058,12 @@ typedef enum
 - (void) showRouteInfo
 {
     [self showRouteInfo:YES];
+}
+
+- (void)showRouteInfo:(BOOL)fullScreen appMode:(OAApplicationMode *)appMode
+{
+    [self.routeInfoView selectAppMode:appMode];
+    [self showRouteInfo:fullScreen];
 }
 
 - (void)showRouteInfo:(BOOL)fullScreen
@@ -1522,6 +1535,7 @@ typedef enum
     _gpxProgress.detailsLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
     _gpxProgress.detailsLabelColor = UIColor.blackColor;
     _gpxProgress.labelColor = UIColor.blackColor;
+    _gpxProgress.activityIndicatorColor = UIColor.blackColor;
     [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.blackColor];
     _gpxProgress.color = UIColor.whiteColor;
     [self.view addSubview:_gpxProgress];
@@ -1613,7 +1627,7 @@ typedef enum
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
     [mapVC showContextPinMarker:mapObject.latitude longitude:mapObject.longitude animated:NO];
     
-    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:mapObject touchLocation:nil];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
@@ -3145,7 +3159,7 @@ typedef enum
                 
                 [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
                 
-                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r];
+                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r touchLocation:nil];
                 if (targetPoint)
                 {
                     targetPoint.toolbarNeeded = pushed;
@@ -3769,7 +3783,7 @@ typedef enum
                bottomRight:bottomRight
                bottomInset:bottomInset
                  leftInset:leftInset
-      changeElevationAngle:YES];
+      changeElevationAngle:_targetMenuView.targetPoint.type != OATargetRouteDetails];
 }
 
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft

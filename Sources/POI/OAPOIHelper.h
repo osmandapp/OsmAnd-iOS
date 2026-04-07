@@ -14,6 +14,8 @@ extern NSString * const WIKI_LANG;
 extern NSString * const WIKI_PLACE;
 extern NSString * const ROUTE_ARTICLE_POINT;
 
+static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name", @"lock_name"];
+
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
@@ -83,7 +85,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (NSMutableArray<NSString *> *) getPublicTransportTypes;
 
 - (NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedNames:(BOOL)skipNonEditable;
-- (nullable NSString *) getTranslation:(nullable NSString *)keyName;
+- (nullable NSString *)translation:(nullable NSString *)keyName
+                       withDefault:(BOOL)withDefault;
 
 + (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter;
 

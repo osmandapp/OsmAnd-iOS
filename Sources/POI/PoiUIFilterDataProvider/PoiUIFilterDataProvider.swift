@@ -76,7 +76,7 @@ final class PoiUIFilterDataProvider: NSObject {
             loading = true
             isCancelled = matcher?.isCancelled() ?? false
         }
-        
+
         if isCancelled {
             return []
         }

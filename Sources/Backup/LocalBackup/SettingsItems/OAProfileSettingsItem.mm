@@ -515,7 +515,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         {
             if ([p.value isEqualToString:@"true"] && ![p.defaultValue isEqualToString:p.value])
             {
-                [enabledTransport appendString:[@"nrenderer_" stringByAppendingString:p.name]];
+                [enabledTransport appendString:[kRendererPreferencePrefix stringByAppendingString:p.name]];
                 [enabledTransport appendString:@","];
             }
         }
@@ -529,7 +529,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
     {
         if (param.value.length > 0 && ![param.defaultValue isEqualToString:param.value])
         {
-            json[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+            json[[kRendererPreferencePrefix stringByAppendingString:param.name]] = param.value;
         }
     }
     

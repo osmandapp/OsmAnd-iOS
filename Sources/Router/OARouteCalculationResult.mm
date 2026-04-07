@@ -1490,13 +1490,13 @@
                 std::shared_ptr<RouteDataObject> rdoWithShield = nullptr;
                 std::shared_ptr<RouteDataObject> rdoWithoutShield = nullptr;
                 
-                if (s->object->isExitPoint())
+                if (s->hasExitInfo())
                 {
                     OAExitInfo *exitInfo = [[OAExitInfo alloc] init];
                     exitInfo.ref = [NSString stringWithUTF8String:current->object->getExitRef().c_str()];
                     exitInfo.exitStreetName = [NSString stringWithUTF8String:current->object->getExitName().c_str()];
                     exitInfo.ref = exitInfo.ref.length > 0 ? exitInfo.ref : nil;
-                    exitInfo.exitStreetName = exitInfo.exitStreetName.length > 0 ? exitInfo.ref : nil;
+                    exitInfo.exitStreetName = exitInfo.exitStreetName.length > 0 ? exitInfo.exitStreetName : nil;
                     info.exitInfo = exitInfo;
                     if (![exitInfo isEmpty] && info.destinationRef == nil && routeInd > 0)
                     {

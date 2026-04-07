@@ -9,6 +9,7 @@
 #import "OASymbolMapLayer.h"
 
 @class OATargetPoint, OAMapObject, OARenderedObject, SelectedMapObject;
+@protocol OAContextMenuProvider;
 
 @protocol OAChangePositionModeDelegate <NSObject>
 
@@ -16,7 +17,7 @@
 
 @end
 
-@interface OAContextMenuLayer : OASymbolMapLayer
+@interface OAContextMenuLayer : OASymbolMapLayer<OAContextMenuProvider>
 
 @property (nonatomic) id<OAChangePositionModeDelegate> changePositionDelegate;
 
@@ -34,7 +35,7 @@
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 
-- (OATargetPoint *) getTargetPoint:(id)obj;
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation;
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj;
 
 - (void) hideRegionHighlight;

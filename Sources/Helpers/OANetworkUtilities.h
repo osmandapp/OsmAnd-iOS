@@ -60,6 +60,13 @@ authorizationHeader:(NSString *)authorizationHeader
 
 + (BOOL) downloadFile:(NSString *)fileName url:(NSString *)url progress:(OAURLSessionProgress *)progress;
 
++ (NSString *) okHttpRedirectRequester:(NSString *)url;
+
+@end
+
+
+@interface OANoRedirectDelegate : NSObject <NSURLSessionTaskDelegate>
+
 @end
 
 NS_ASSUME_NONNULL_END

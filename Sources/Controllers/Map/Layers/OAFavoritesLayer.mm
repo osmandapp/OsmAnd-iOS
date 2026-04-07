@@ -202,7 +202,7 @@ static const int START_ZOOM = 6;
 
 #pragma mark - OAContextMenuProvider
 
-- (OATargetPoint *) getTargetPoint:(id)obj
+- (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
     if ([obj isKindOfClass:OAFavoriteItem.class])
     {
@@ -263,7 +263,7 @@ static const int START_ZOOM = 6;
 
 - (void) collectObjectsFromPoint:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    if ([self.mapViewController getMapZoom] < START_ZOOM)
+    if (![self isVisible] || [self.mapViewController getMapZoom] < START_ZOOM)
         return;
     
     NSArray<OAFavoriteItem *> *favouritePoints = [OAFavoritesHelper getFavoriteItems];

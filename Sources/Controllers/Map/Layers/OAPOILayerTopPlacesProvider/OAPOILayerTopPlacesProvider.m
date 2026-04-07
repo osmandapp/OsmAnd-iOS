@@ -554,7 +554,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     for (const auto& place : newTopPlaces)
         [newTopPlaceIds addObject:[self placeIdForAmenity:place]];
     BOOL topPlacesChanged = ![previousTopPlaceIds isEqualToSet:newTopPlaceIds];
-    NSUInteger generation = topPlacesChanged ? ++_imagesGeneration : _imagesGeneration;
     NSDictionary<NSNumber *, UIImage *> *cachedImages = [_topPlacesImages copy] ?: @{};
     _topPlaces = newTopPlaces;
     _topPlaceIds = [newTopPlaceIds copy];

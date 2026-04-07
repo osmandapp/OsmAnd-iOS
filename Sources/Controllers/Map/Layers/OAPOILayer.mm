@@ -102,7 +102,7 @@ static uint64_t OAResolveSyntheticAmenityId(OAPOI *poi)
 {
     const uint64_t rawId = poi.obfId;
     const uint64_t invalidId = [OAMapObject getInvalidObfId];
-    if (rawId != 0 && rawId != invalidId && static_cast<int64_t>(rawId) > 0)
+    if (rawId != 0 && rawId != invalidId)
         return rawId;
 
     const uint64_t latHash = static_cast<uint64_t>(llround((poi.latitude + 90.0) * 1000000.0));
@@ -242,7 +242,6 @@ static BOOL OAIsRequestApplicableToVisibleState(
 
 @interface OATopWikiOnlineAmenitiesController : NSObject
 {
-@private
     PoiUIFilterDataProvider *_dataProvider;
     std::weak_ptr<OsmAnd::AmenitySymbolsProvider> _symbolsProvider;
     QMutex _stateMutex;
@@ -255,6 +254,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
     BOOL _needsNewRequest;
     BOOL _invalidated;
     void (^_dataReadyHandler)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&);
+    dispatch_queue_t _loadQueue;
 }
 
 - (instancetype)initWithDataProvider:(PoiUIFilterDataProvider *)dataProvider;
@@ -319,6 +319,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
         _activeRequest = nil;
         _needsNewRequest = NO;
         _invalidated = NO;
+        _loadQueue = dispatch_queue_create("com.osmand.topWikiOnlie.loadQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -472,7 +473,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
 - (void)dispatchLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request
 {
     __weak OATopWikiOnlineAmenitiesController *weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(_loadQueue, ^{
         OATopWikiOnlineAmenitiesController *strongSelf = weakSelf;
         if (!strongSelf || !request)
             return;
@@ -1056,8 +1057,10 @@ static BOOL OAIsRequestApplicableToVisibleState(
                 amenities.push_back(amenity);
             }
         }
-
-        [_topPlacesProvider notifyAmenitiesChanged:amenities];
+        if (amenities.size() > 0)
+        {
+            [_topPlacesProvider notifyAmenitiesChanged:amenities];
+        }
     }
 }
 

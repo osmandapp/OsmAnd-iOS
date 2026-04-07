@@ -46,7 +46,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
             return nil
         }
         let newProfileAction = UIAction(title: localizedString("new_profile"),
-                                               image: UIImage(systemName: "plus.square")) { [weak self] _ in
+                                               image: UIImage(systemName: "plus.square")?.resizedMenuImage()) { [weak self] _ in
             guard let self = self else { return }
             
             self.dismiss(animated: true)
@@ -54,7 +54,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
         }
 
         let rearrangeAction = UIAction(title: localizedString("shared_string_rearrange"),
-                                       image: UIImage(systemName: "arrow.up.and.down.text.horizontal")) { [weak self] _ in
+                                       image: UIImage(systemName: "arrow.up.and.down.text.horizontal")?.resizedMenuImage()) { [weak self] _ in
             
             guard let self = self else { return }
             

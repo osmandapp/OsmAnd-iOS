@@ -347,13 +347,13 @@ extension BLEExternalSensorsViewController {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
             guard let self else { return nil }
             
-            let info = UIAction(title: localizedString("info_button"), image: UIImage(systemName: "info.circle")) { _ in
+            let info = UIAction(title: localizedString("info_button"), image: UIImage(systemName: "info.circle")?.resizedMenuImage()) { _ in
                 self.showDescriptionViewController(device: device)
             }
-            let rename = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")) { _ in
+            let rename = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")?.resizedMenuImage()) { _ in
                 self.showRenameViewController(device: device)
             }
-            let forget = UIAction(title: localizedString("external_device_menu_forget"), image: UIImage(systemName: "xmark.circle")) { _ in
+            let forget = UIAction(title: localizedString("external_device_menu_forget"), image: UIImage(systemName: "xmark.circle")?.resizedMenuImage()) { _ in
                 self.showForgetSensorActionSheet(device: device)
             }
             return UIMenu(title: "", options: .displayInline, children: [info, rename, forget])

@@ -104,7 +104,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (self.delegate && !isDefaultColor)
     {
         UIAction *editAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
-                                                   image:[UIImage systemImageNamed:@"pencil"]
+                                                   image:[[UIImage systemImageNamed:@"pencil"] resizedMenuImage]
                                               identifier:nil
                                                  handler:^(__kindof UIAction * _Nonnull action) {
             [weakSelf onContextMenuItemEdit:indexPath];
@@ -114,7 +114,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     }
 
     UIAction *duplicateAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_duplicate")
-                                                    image:[UIImage systemImageNamed:@"doc.on.doc"]
+                                                    image:[[UIImage systemImageNamed:@"doc.on.doc"] resizedMenuImage]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
             [weakSelf duplicateItemFromContextMenu:indexPath];
@@ -125,7 +125,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (!isDefaultColor)
     {
         UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
-                                                     image:[UIImage systemImageNamed:@"trash"]
+                                                     image:[[UIImage systemImageNamed:@"trash"] resizedMenuImage]
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
             [weakSelf deleteItemFromContextMenu:indexPath];

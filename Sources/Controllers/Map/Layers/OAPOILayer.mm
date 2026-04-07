@@ -858,9 +858,12 @@ static BOOL OAIsRequestApplicableToVisibleState(
                         if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
                             return check ? accepted : false;
                         
+                        EOAWikiDataSourceType wikiType = OAAppSettings.sharedManager.wikiDataSourceType.get;
+                        BOOL isOnline = wikiType == EOAWikiDataSourceTypeOnline;
+                        
                         if ((check && accepted)
                             || (isWiki
-                                ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type]
+                                ? wikiUiNameFilter && isOnline ? YES : [wikiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type]
                                 : accepted))
                         {
                             const auto& amenityDecodedValues = obtainDecodedValues();

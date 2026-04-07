@@ -1071,7 +1071,7 @@
     router->setUseFastRecalculation(settings.useFastRecalculation);
 
     router->CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
-    router->CONTINUE_ON_MISSING_MAPS = !settings.stopOnMissingMaps;
+    router->CONTINUE_ON_MISSING_MAPS = true; // unlike Android, false is never required
 
     auto config = [app getRoutingConfigForMode:params.mode];
     auto generalRouter = [app getRouter:config mode:params.mode];

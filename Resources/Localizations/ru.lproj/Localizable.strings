@@ -4052,3 +4052,7 @@
 "view_distance" = "Видимость";
 "custom_color" = "Пользовательский цвет";
 "choose_color" = "Выберите цвет";
+"will_close_at_short" = "Закроется в";
+"open_till_short" = "Открыто до";
+"shared_string_int_name" = "Международное название";
+"show_debug_tile" = "Отображать информацию о тайлах";

@@ -4043,3 +4043,7 @@
 "view_distance" = "Vidna udaljenost";
 "custom_color" = "Proizvoljna boja";
 "choose_color" = "Izaberi boju";
+"will_close_at_short" = "Do";
+"open_till_short" = "Do";
+"show_debug_tile" = "Prikaži informaciju o pločici";
+"shared_string_int_name" = "Međunarodno ime";

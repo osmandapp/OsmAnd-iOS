@@ -260,6 +260,16 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->get3DBuildingsDetalization();
 }
 
+- (BOOL)add3DObjectColor:(OsmAnd::PointI)location31 color:(OsmAnd::FColorRGB)color
+{
+    return _renderer->add3DObjectColor(location31, color);
+}
+
+- (BOOL)remove3DObjectColor:(OsmAnd::PointI)location31
+{
+    return _renderer->remove3DObjectColor(location31);
+}
+
 - (int) maxMissingDataZoomShift
 {
     return _renderer->getMaxMissingDataZoomShift();

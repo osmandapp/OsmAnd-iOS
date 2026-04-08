@@ -621,6 +621,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) prepareNoInit
 {
     [self doUpdateUI];
+    [self fetchAddressIfNeededAsync];
     [self doLayoutSubviews];
 }
 
@@ -1133,7 +1134,6 @@ static const NSInteger _buttonsCount = 4;
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.attributedText width:labelPreferredWidth].height;
     else
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
-        
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + (_addressLabel.frame.size.height == 0 ? 0.0 : 10.0), labelPreferredWidth, coordinateHeight);
     if ([_coordinateLabel isDirectionRTL])
@@ -1718,8 +1718,9 @@ static const NSInteger _buttonsCount = 4;
                 [attributedStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
             }
             self.addressStr = [attributedStr string];
-            [_coordinateLabel setAttributedText:attributedStr];
-            [_coordinateLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+            _coordinateLabel.attributedText = attributedStr;
+            _coordinateLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            [self setNeedsLayout];
             return;
         }
     }
@@ -2378,7 +2379,7 @@ static const NSInteger _buttonsCount = 4;
     [self doLayoutSubviews:YES];
 }
 
-- (void) addresLabelUpdated
+- (void) addressLabelUpdated
 {
     [self updateAddressLabel];
 }
@@ -2768,6 +2769,31 @@ static const NSInteger _buttonsCount = 4;
 {
     [[UIPasteboard generalPasteboard] setString:text];
     [OAUtilities showToast:OALocalizedString(@"copied_to_clipboard") details:text duration:4 inView:self.parentView];
+}
+
+- (void)fetchAddressIfNeededAsync
+{
+    OATargetPoint *targetPoint = self.targetPoint;
+    if (!targetPoint || targetPoint.titleAddress.length > 0 || !targetPoint.shouldFetchAddress)
+        return;
+
+    __weak __typeof(self) weakSelf = self;
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [weakSelf.targetPoint initAddressIfNeeded];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf updateTargetPointAddress];
+        });
+    });
+}
+
+- (void)updateTargetPointAddress
+{
+    if (self.targetPoint.titleAddress.length == 0)
+        self.targetPoint.titleAddress = OALocalizedString(@"map_no_address");
+
+    self.targetPoint.shouldFetchAddress = NO;
+    [self addressLabelUpdated];
 }
 
 @end

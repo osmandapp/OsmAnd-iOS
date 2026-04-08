@@ -629,8 +629,8 @@ final class BaseDetailsObject: NSObject {
             }
 
             if !value.isEmpty {
-                let translate = mapPoiTypes.getTranslation("\(tag)_\(value)")
-                let translate2 = mapPoiTypes.getTranslation(value)
+                let translate = mapPoiTypes.translation("\(tag)_\(value)", withDefault: false)
+                let translate2 = mapPoiTypes.translation(value, withDefault: false)
 
                 if let translate, let translate2 {
                     additionalInfo[translate] = translate2

@@ -21,6 +21,7 @@
 #import "OARootViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "OACurrentPositionHelper.h"
+#import "MissingMapsCalculator.h"
 #import "OsmAndSharedWrapper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -318,6 +319,29 @@
     }
 }
 
+- (BOOL)hasCurrentMissingMaps
+{
+    return _lastTask != nil
+        && _lastTask.params.calculationProgress != nullptr
+        && _lastTask.params.calculationProgress->hasMixedOrMissingMaps();
+}
+
+- (NSInteger)getCurrentFastRoutingComplicationOrdinal
+{
+    return _lastTask != nil && _lastTask.params.calculationProgress != nullptr
+        ? _lastTask.params.calculationProgress->getFastRoutingStatusOrdinal()
+        : -1;
+}
+
+- (void)attachCurrentMissingMapsToRouteCalculationResult:(OARouteCalculationResult *)result
+{
+    if (_lastTask != nil && _lastTask.params.calculationProgress != nullptr)
+    {
+        MissingMapsCalculator *missingMapsCalculator = [MissingMapsCalculator new];
+        [missingMapsCalculator attachToRouteCalculationResult:result progress:_lastTask.params.calculationProgress];
+    }
+}
+
 @end
 
 
@@ -430,6 +454,13 @@
 
 - (void)configureNewRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result
 {
+    if ((result.missingMaps.count == 0 && result.mapsToUpdate.count == 0)
+        && _params.calculationProgress != nullptr
+        && _params.calculationProgress->missingMapsCalculationResult != nullptr)
+    {
+        MissingMapsCalculator *missingMapsCalculator = [MissingMapsCalculator new];
+        [missingMapsCalculator attachToRouteCalculationResult:result progress:_params.calculationProgress];
+    }
     if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
     {
         [_routingHelper setRoute:result];

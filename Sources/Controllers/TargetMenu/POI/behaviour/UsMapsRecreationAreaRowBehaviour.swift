@@ -11,7 +11,7 @@ final class UsMapsRecreationAreaRowBehaviour: DefaultPoiAdditionalRowBehaviour {
     override func applyCustomRules(params: PoiRowParams) {
         super.applyCustomRules(params: params)
         
-        if let translatedUsMapsKey = OAPOIHelper.sharedInstance().getTranslation(params.key), !translatedUsMapsKey.isEmpty {
+        if let translatedUsMapsKey = OAPOIHelper.sharedInstance().translation(params.key, withDefault: false), !translatedUsMapsKey.isEmpty {
             params.builder.textPrefix = translatedUsMapsKey
         } else {
             params.builder.textPrefix = OAUtilities.capitalizeFirstLetter(params.key)

@@ -317,8 +317,8 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
                 mp[key] = self.localizedNames[key];
         }
         
-        if (includeEn && !self.name && self.name.length > 0)
-            mp[@"en"] = self.name;
+        if (includeEn && self.enName.length > 0)
+            mp[@"en"] = self.enName;
         
         return mp;
     }

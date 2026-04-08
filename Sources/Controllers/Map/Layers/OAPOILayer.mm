@@ -22,7 +22,6 @@
 #import "OAAmenitySearcher.h"
 #import "OAAmenitySearcher+cpp.h"
 #import "OATargetPoint.h"
-#import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
@@ -103,7 +102,7 @@ static uint64_t OAResolveSyntheticAmenityId(OAPOI *poi)
 {
     const uint64_t rawId = poi.obfId;
     const uint64_t invalidId = [OAMapObject getInvalidObfId];
-    if (rawId != 0 && rawId != invalidId && static_cast<int64_t>(rawId) > 0)
+    if (rawId != 0 && rawId != invalidId)
         return rawId;
 
     const uint64_t latHash = static_cast<uint64_t>(llround((poi.latitude + 90.0) * 1000000.0));
@@ -243,7 +242,6 @@ static BOOL OAIsRequestApplicableToVisibleState(
 
 @interface OATopWikiOnlineAmenitiesController : NSObject
 {
-@private
     PoiUIFilterDataProvider *_dataProvider;
     std::weak_ptr<OsmAnd::AmenitySymbolsProvider> _symbolsProvider;
     QMutex _stateMutex;
@@ -256,6 +254,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
     BOOL _needsNewRequest;
     BOOL _invalidated;
     void (^_dataReadyHandler)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&);
+    dispatch_queue_t _loadQueue;
 }
 
 - (instancetype)initWithDataProvider:(PoiUIFilterDataProvider *)dataProvider;
@@ -320,6 +319,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
         _activeRequest = nil;
         _needsNewRequest = NO;
         _invalidated = NO;
+        _loadQueue = dispatch_queue_create("com.osmand.topWikiOnlie.loadQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -473,7 +473,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
 - (void)dispatchLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request
 {
     __weak OATopWikiOnlineAmenitiesController *weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(_loadQueue, ^{
         OATopWikiOnlineAmenitiesController *strongSelf = weakSelf;
         if (!strongSelf || !request)
             return;
@@ -627,6 +627,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
 
 - (void)updateWikiOnlineAmenitiesControllerVisibleState;
 - (void)invalidateWikiOnlineAmenitiesController;
+- (void)resetNotifiedTiles;
 
 @end
 
@@ -655,6 +656,8 @@ static BOOL OAIsRequestApplicableToVisibleState(
     CGFloat _topPlacesTextScale;
     EOAWikiDataSourceType _topPlacesWikiDataSourceType;
     NSSet<NSString *> *_topPlacesWikipediaResourceIds;
+    QVector<OsmAnd::TileId> _notifiedTiles;
+    OsmAnd::ZoomLevel _notifiedZoom;
     
     CGSize _screenSize;
 }
@@ -675,6 +678,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
     _topPlacesTextScale = 1.f;
     _topPlacesWikipediaResourceIds = [NSSet set];
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
+    _notifiedZoom = OsmAnd::InvalidZoomLevel;
 }
 
 - (NSString *) layerId
@@ -697,6 +701,12 @@ static BOOL OAIsRequestApplicableToVisibleState(
     }
 }
 
+- (void)resetNotifiedTiles
+{
+    _notifiedTiles.clear();
+    _notifiedZoom = OsmAnd::InvalidZoomLevel;
+}
+
 - (void) resetLayer
 {
     if (_amenitySymbolsProvider)
@@ -716,6 +726,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
     {
         [self invalidateWikiOnlineAmenitiesController];
     }
+    [self resetNotifiedTiles];
     [_topPlacesProvider resetLayer];
 }
 
@@ -738,6 +749,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
             _wikiSymbolsProvider.reset();
         }];
         _showWikiOnMap = NO;
+        [self resetNotifiedTiles];
     }
     else
     {
@@ -858,9 +870,12 @@ static BOOL OAIsRequestApplicableToVisibleState(
                         if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
                             return check ? accepted : false;
                         
+                        EOAWikiDataSourceType wikiType = OAAppSettings.sharedManager.wikiDataSourceType.get;
+                        BOOL isOnline = wikiType == EOAWikiDataSourceTypeOnline;
+                        
                         if ((check && accepted)
                             || (isWiki
-                                ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type]
+                                ? wikiUiNameFilter && isOnline ? YES : [wikiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type]
                                 : accepted))
                         {
                             const auto& amenityDecodedValues = obtainDecodedValues();
@@ -878,6 +893,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
             {
                 [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
                 _wikiSymbolsProvider.reset();
+                [self resetNotifiedTiles];
             }
             else if (!isWiki && _amenitySymbolsProvider)
             {
@@ -897,14 +913,6 @@ static BOOL OAIsRequestApplicableToVisibleState(
                 PoiUIFilterDataProvider *wikiDataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:f];
                 OATopWikiOnlineAmenitiesController *wikiOnlineAmenitiesController =
                     [[OATopWikiOnlineAmenitiesController alloc] initWithDataProvider:wikiDataProvider];
-                __weak __typeof(self) weakSelf = self;
-                [wikiOnlineAmenitiesController setDataReadyHandler:^(const QList<std::shared_ptr<const OsmAnd::Amenity>>& amenities) {
-                    __typeof(self) strongSelf = weakSelf;
-                    if (!strongSelf)
-                        return;
-
-                    [strongSelf->_topPlacesProvider notifyAmenitiesChanged:amenities];
-                }];
                 [wikiOnlineAmenitiesController updateVisibleBBox31:[self.mapView getVisibleBBox31]
                                                              zoom:self.mapView.zoomLevel];
                 externalAmenitiesProvider =
@@ -1036,6 +1044,9 @@ static BOOL OAIsRequestApplicableToVisibleState(
         || visibleZoom > wikiSymbolsProvider->getMaxZoom())
         return;
 
+    if (_notifiedZoom == visibleZoom && _notifiedTiles == visibleTiles)
+        return;
+
     if ([self areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
     {
         QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
@@ -1057,8 +1068,9 @@ static BOOL OAIsRequestApplicableToVisibleState(
                 amenities.push_back(amenity);
             }
         }
-
         [_topPlacesProvider notifyAmenitiesChanged:amenities];
+        _notifiedTiles = visibleTiles;
+        _notifiedZoom = visibleZoom;
     }
 }
 
@@ -1095,6 +1107,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
 
     if (shouldReset)
     {
+        [self resetNotifiedTiles];
         [_topPlacesProvider resetLayer];
         [_topPlacesProvider drawTopPlacesIfNeeded:YES];
         [self notifyTopPlacesProviderIfWikiTilesCached];

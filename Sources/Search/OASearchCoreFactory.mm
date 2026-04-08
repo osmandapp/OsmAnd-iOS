@@ -1079,9 +1079,13 @@
                                   sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, false).toNSString();
-                                  if (transliterate && ![nm matches:sr.localeName])
+                                  BOOL matchLocalName = [nm matches:sr.localeName];
+                                  if (!matchLocalName)
+                                  {
                                       sr.localeName = amenity->getName(lang, transliterate).toNSString();
-                                  if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]) {
+                                      matchLocalName = [nm matches:sr.localeName];
+                                  }
+                                  if (!matchLocalName && ![nm matchesMap:sr.otherNames]) {
                                       [object.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
                                        {
                                           if (([ObfConstants isTagIndexedForSearchAsId:key] || [ObfConstants isTagIndexedForSearchAsName:key])

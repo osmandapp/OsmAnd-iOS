@@ -3429,6 +3429,7 @@
 		FAE446C42CCFC82700598BE3 /* ZoomLevelWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE446C32CCFC82400598BE3 /* ZoomLevelWidgetState.swift */; };
 		FAE446D62CD3C10900598BE3 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */; };
 		FAE6E8642C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */; };
+		FAF0332A2F85556E006F1377 /* AmenityExtensionsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF033292F85556E006F1377 /* AmenityExtensionsHelper.swift */; };
 		FAF068332C3BC6840054BBEA /* WeatherContoursButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF068322C3BC6840054BBEA /* WeatherContoursButton.swift */; };
 		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
@@ -8210,6 +8211,7 @@
 		FAE446C32CCFC82400598BE3 /* ZoomLevelWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomLevelWidgetState.swift; sourceTree = "<group>"; };
 		FAE446D52CD3C10300598BE3 /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
 		FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLayerSettingsViewController.swift; sourceTree = "<group>"; };
+		FAF033292F85556E006F1377 /* AmenityExtensionsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityExtensionsHelper.swift; sourceTree = "<group>"; };
 		FAF068322C3BC6840054BBEA /* WeatherContoursButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherContoursButton.swift; sourceTree = "<group>"; };
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
@@ -12904,6 +12906,7 @@
 				DA5A7E5326C563A400F274C7 /* OAPOIViewController.mm */,
 				324F6C642ED5E90F00C76A85 /* PlaceDetailsViewController.swift */,
 				3226C1A62D3E66DB008F9905 /* RenderedObjectViewController.swift */,
+				FAF033292F85556E006F1377 /* AmenityExtensionsHelper.swift */,
 			);
 			path = POI;
 			sourceTree = "<group>";
@@ -17788,6 +17791,7 @@
 				FA69F2852A73948B0044CFCA /* main.m in Sources */,
 				C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */,
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
+				FAF0332A2F85556E006F1377 /* AmenityExtensionsHelper.swift in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
 				323F04CC2C6579C30058DD78 /* ShowHideRunningRoutesAction.swift in Sources */,

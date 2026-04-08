@@ -644,10 +644,16 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     if (_type == EOAChooseSubscription)
         y += [OAUtilities getTopMargin];
     
-    CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
-    backgroundFrame.origin.y = y < 0. ? y : -y;
-    backgroundFrame.size.height = y < 0. ? ABS(y) : 0.;
-    _backgroundAboveScrollViewContainer.frame = backgroundFrame;
+    if (@available(iOS 26.0, *))
+    {
+    }
+    else
+    {
+        CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
+        backgroundFrame.origin.y = y < 0. ? y : -y;
+        backgroundFrame.size.height = y < 0. ? ABS(y) : 0.;
+        _backgroundAboveScrollViewContainer.frame = backgroundFrame;
+    }
 
     if (!_isHeaderBlurred && y > 0.)
     {

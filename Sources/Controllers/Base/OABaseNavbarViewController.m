@@ -20,6 +20,7 @@ static const CGFloat kRightIconLargeTitleSmall = 34.;
 static const CGFloat kRightIconLargeTitleLarge = 40.;
 static const CGFloat kDefaultBarButtonSize = 44.;
 static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
+static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
 @implementation OABaseNavbarViewController
 {
@@ -499,8 +500,13 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
         if (leftButtonTitle || leftNavbarButtonCustomIcon)
         {
             UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
+            if (@available(iOS 26.0, *))
+            {
+                if (leftButtonTitle.length > 0)
+                    leftButton.contentEdgeInsets = UIEdgeInsetsMake(0., kDefaultBarButtonEdgeInset, 0., kDefaultBarButtonEdgeInset);
+            }
             UIColor *buttonsTintColor = [self navbarButtonsTintColor];
-            leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+            leftButton.contentHorizontalAlignment = leftNavbarButtonCustomIcon ? UIControlContentHorizontalAlignmentCenter : UIControlContentHorizontalAlignmentLeading;
             leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
             leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
             leftButton.titleLabel.numberOfLines = 1;
@@ -621,6 +627,11 @@ static const CGFloat kDefaultBarButtonSizeiOS26 = 30.;
                                         menu:(UIMenu *)menu
 {
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., [self defaultBarButtonIconSize], 30.)];
+    if (@available(iOS 26.0, *))
+    {
+        if (title.length > 0)
+            button.contentEdgeInsets = UIEdgeInsetsMake(0., kDefaultBarButtonEdgeInset, 0., kDefaultBarButtonEdgeInset);
+    }
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;
     button.titleLabel.adjustsFontForContentSizeCategory = YES;

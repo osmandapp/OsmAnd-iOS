@@ -151,13 +151,17 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     }
     
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
-        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(rgb: color_text_footer)])
-        searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1.0, alpha: 0.3)
-        if isFiltered {
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.8)
+        if #available(iOS 26.0, *) {
+            searchController.searchBar.searchTextField.placeholder = localizedString("shared_string_search")
         } else {
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.3)
-            searchController.searchBar.searchTextField.tintColor = UIColor.gray
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(rgb: color_text_footer)])
+            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1.0, alpha: 0.3)
+            if isFiltered {
+                searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.8)
+            } else {
+                searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.3)
+                searchController.searchBar.searchTextField.tintColor = UIColor.gray
+            }
         }
     }
     

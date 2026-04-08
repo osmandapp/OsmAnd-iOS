@@ -108,8 +108,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     }
 
     self.navigationController.navigationBar.prefersLargeTitles = YES;
-    if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 
     [self updateAppearance];
 
@@ -147,8 +146,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
     if (![self.navigationController isNavigationBarHidden])
     {
-        //hide root navbar if open screen without navbar
-        if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
+        if ([self shouldResetNavbarForTransition])
             [self.navigationController setNavigationBarHidden:YES animated:NO];
 
         //reset navbar to default appearance
@@ -164,6 +162,25 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
             self.navigationController.navigationBar.tintColor = nil;
         }
     }
+}
+
+- (BOOL)shouldResetNavbarForTransition
+{
+    UIViewController *nextController = self.isMovingFromParentViewController ? self.navigationController.topViewController : self.navigationController.viewControllers.lastObject;
+    if (!nextController || nextController == self)
+        return NO;
+    if (![nextController isNavbarVisible])
+        return YES;
+    if (![nextController isKindOfClass:OABaseNavbarViewController.class])
+        return NO;
+    
+    OABaseNavbarViewController *nextNavbarController = (OABaseNavbarViewController *) nextController;
+    return [self getNavbarStyle] != [nextNavbarController getNavbarStyle]
+    || [self getNavbarColorScheme] != [nextNavbarController getNavbarColorScheme]
+    || [self isNavbarSeparatorVisible] != [nextNavbarController isNavbarSeparatorVisible]
+    || [self shouldBlurAppearanceNavBar] != [nextNavbarController shouldBlurAppearanceNavBar]
+    || ![[self navbarBackgroundColor] isEqual:[nextNavbarController navbarBackgroundColor]]
+    || ![[self blurAppearanceBackgroundColor] isEqual:[nextNavbarController blurAppearanceBackgroundColor]];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

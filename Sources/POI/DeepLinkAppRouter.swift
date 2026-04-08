@@ -325,19 +325,19 @@ final class DeepLinkAppRouter: NSObject {
         controller.show(parent, parentViewController: current, animated: true)
     }
     
-    @discardableResult private func dismissAndPopToRoot() -> UINavigationController? {
+    @discardableResult private func dismissAndPopToRoot(completion: ((UINavigationController) -> Void)? = nil) -> UINavigationController? {
         guard let nav = prepareRootNavigationTransition() else { return nil }
-        nav.dismiss(animated: false)
-        nav.popToRootViewController(animated: false)
-        return nav
-    }
-    
-    private func dismissAndPopToRoot(completion: @escaping (UINavigationController) -> Void) {
-        guard let nav = prepareRootNavigationTransition() else { return }
-        nav.dismiss(animated: false) {
+        if let completion {
+            nav.dismiss(animated: false) {
+                nav.popToRootViewController(animated: false)
+                completion(nav)
+            }
+        } else {
+            nav.dismiss(animated: false)
             nav.popToRootViewController(animated: false)
-            completion(nav)
         }
+        
+        return nav
     }
     
     private func prepareRootNavigationTransition() -> UINavigationController? {

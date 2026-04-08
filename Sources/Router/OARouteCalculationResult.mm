@@ -1458,6 +1458,10 @@
         
         if (turn)
         {
+            NSString *actualExitRef = nil;
+            NSString *actualExitName = nil;
+            NSString *currentExitRef = nil;
+            NSString *currentExitName = nil;
             OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:s->segmentSpeed turnType:turn];
             if (routeInd < list.size())
             {
@@ -1489,14 +1493,18 @@
                 
                 std::shared_ptr<RouteDataObject> rdoWithShield = nullptr;
                 std::shared_ptr<RouteDataObject> rdoWithoutShield = nullptr;
+                currentExitRef = [NSString stringWithUTF8String:current->object->getExitRef().c_str()];
+                currentExitName = [NSString stringWithUTF8String:current->object->getExitName().c_str()];
+                currentExitRef = currentExitRef.length > 0 ? currentExitRef : nil;
+                currentExitName = currentExitName.length > 0 ? currentExitName : nil;
                 
                 if (s->hasExitInfo())
                 {
                     OAExitInfo *exitInfo = [[OAExitInfo alloc] init];
-                    exitInfo.ref = [NSString stringWithUTF8String:current->object->getExitRef().c_str()];
-                    exitInfo.exitStreetName = [NSString stringWithUTF8String:current->object->getExitName().c_str()];
-                    exitInfo.ref = exitInfo.ref.length > 0 ? exitInfo.ref : nil;
-                    exitInfo.exitStreetName = exitInfo.exitStreetName.length > 0 ? exitInfo.exitStreetName : nil;
+                    actualExitRef = currentExitRef;
+                    exitInfo.ref = currentExitRef;
+                    actualExitName = currentExitName;
+                    exitInfo.exitStreetName = currentExitName;
                     info.exitInfo = exitInfo;
                     if (![exitInfo isEmpty] && info.destinationRef == nil && routeInd > 0)
                     {
@@ -1544,11 +1552,19 @@
                 {
                     for (int t = 0; t < pointNames.size(); t++)
                     {
-                        description = [description trim];
-                        description = [description stringByAppendingString:[NSString stringWithFormat:@" %@", [NSString stringWithUTF8String:pointNames[t].c_str()]]];
+                        NSString *pointName = [NSString stringWithUTF8String:pointNames[t].c_str()];
+                        if (pointName.length == 0
+                            || [pointName isEqualToString:currentExitRef]
+                            || [pointName isEqualToString:currentExitName])
+                            continue;
+                        description = [description stringByAppendingFormat:@" %@", pointName];
                     }
                 }
             }
+            if (actualExitRef)
+                description = [description stringByAppendingFormat:@" %@", actualExitRef];
+            if (actualExitName)
+                description = [description stringByAppendingFormat:@" %@", actualExitName];
             info.descriptionRoute = description;
             info.routePointOffset = prevLocationSize;
             if (directions.count > 0 && prevDirectionTime > 0 && prevDirectionDistance > 0)

@@ -2850,3 +2850,5 @@
 "no_assigned_keys" = "Ingen tilordnede taster";
 "new_key_assignment" = "Ny tastetilordning";
 "assigned_keys" = "Tilordnede taster";
+"open_till_short" = "Til";
+"will_close_at_short" = "Til";

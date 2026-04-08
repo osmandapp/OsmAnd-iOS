@@ -28,6 +28,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
     // MARK: - Properties
     private let dbHelper: PlacesDatabaseHelper
     private let lock = NSLock()
+    private let tileProcessingQueue = DispatchQueue(label: "com.osmand.exploreplaces.tileProcessing", qos: .utility)
     
     private var loadingTasks: [TileKey: GetExplorePlacesImagesTask] = [:]
     private var tilesCache: [TileKey: [OAPOI]] = [:]
@@ -309,51 +310,55 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         var task: GetExplorePlacesImagesTask?
         let listener = ExplorePlacesTaskListener(onStart: {}, onFinish: { [weak self] result in
             guard let self else { return }
+            self.tileProcessingQueue.async { [weak self] in
+                guard let self else { return }
 
-            self.lock.lock()
-            guard let currentTask = self.loadingTasks[key],
-                  let loadingTask = task,
-                  ObjectIdentifier(currentTask) == ObjectIdentifier(loadingTask) else {
+                self.lock.lock()
+                guard let currentTask = self.loadingTasks[key],
+                      let loadingTask = task,
+                      ObjectIdentifier(currentTask) == ObjectIdentifier(loadingTask) else {
+                    self.lock.unlock()
+                    return
+                }
                 self.lock.unlock()
-                return
-            }
-            self.lock.unlock()
 
-            var map: [String: [WikiCoreHelper.OsmandApiFeatureData]] = [:]
-            var amenities: [OAPOI] = []
-            if !result.isEmpty {
-                for item in result {
-                    if let p = item.properties {
-                        let l = (p.lang?.isEmpty == false ? p.lang : nil)
-                            ?? (p.wikiLang?.isEmpty == false ? p.wikiLang : nil)
-                            ?? "en"
-                        map[l, default: []].append(item)
-                    }
-                    if let amenity = self.createAmenity(item) {
-                        amenities.append(amenity)
+                var map: [String: [WikiCoreHelper.OsmandApiFeatureData]] = [:]
+                var amenities: [OAPOI] = []
+                if !result.isEmpty {
+                    for item in result {
+                        if let p = item.properties {
+                            let l = (p.lang?.isEmpty == false ? p.lang : nil)
+                                ?? (p.wikiLang?.isEmpty == false ? p.wikiLang : nil)
+                                ?? "en"
+                            map[l, default: []].append(item)
+                        }
+                        if let amenity = self.createAmenity(item) {
+                            amenities.append(amenity)
+                        }
                     }
                 }
-            }
 
-            for lang in languages where map[lang] == nil {
-                map[lang] = []
-            }
+                for lang in languages where map[lang] == nil {
+                    map[lang] = []
+                }
 
-            self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map)
+                self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map)
 
-            self.lock.lock()
-            guard let currentTask = self.loadingTasks[key],
-                  ObjectIdentifier(currentTask) == ObjectIdentifier(loadingTask) else {
+                self.lock.lock()
+                guard let currentTask = self.loadingTasks[key],
+                      let loadingTask = task,
+                      ObjectIdentifier(currentTask) == ObjectIdentifier(loadingTask) else {
+                    self.lock.unlock()
+                    return
+                }
+
+                self.tilesCache[key] = amenities
+                self.loadingTasks.removeValue(forKey: key)
+                let currentlyLoading = !self.loadingTasks.isEmpty
                 self.lock.unlock()
-                return
+
+                self.notifyListeners(isPartial: currentlyLoading)
             }
-
-            self.tilesCache[key] = amenities
-            self.loadingTasks.removeValue(forKey: key)
-            let currentlyLoading = !self.loadingTasks.isEmpty
-            self.lock.unlock()
-
-            self.notifyListeners(isPartial: currentlyLoading)
         })
 
         task = GetExplorePlacesImagesTask(mapRect: tRect, zoom: Int32(zoom), languages: languages, listener: listener)

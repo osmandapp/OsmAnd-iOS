@@ -193,6 +193,9 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
             amenity.obfId = parsedId
         }
 
+        if let id {
+            amenity.setAdditionalInfo("wikidata", value: "Q\(id)")
+        }
         amenity.name = properties.wikiTitle
         // NOTE: android use TransliterationHelper
         amenity.enName = amenity.name ?? ""

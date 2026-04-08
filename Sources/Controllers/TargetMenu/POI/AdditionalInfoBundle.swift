@@ -11,7 +11,8 @@ final class AdditionalInfoBundle: NSObject {
     
     private static let HIDDEN_EXTENSIONS: [String] = [COLOR_NAME_EXTENSION_KEY, ICON_NAME_EXTENSION_KEY, BACKGROUND_TYPE_EXTENSION_KEY, PROFILE_TYPE_EXTENSION_KEY, ADDRESS_EXTENSION_KEY, AMENITY_ORIGIN_EXTENSION_KEY, POITYPE, SUBTYPE]
     
-    private let additionalInfo: [String: String]?
+    let additionalInfo: [String: String]?
+    
     private var filteredAdditionalInfo: [String: String]?
     private var localizedAdditionalInfo: [String: Any]?
     private var customHiddenExtensions: [String] = []

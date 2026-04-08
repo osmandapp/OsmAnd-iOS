@@ -187,6 +187,8 @@
         _favoritesGroupNameSeparator = @"-";
         _legacyFavoritesFilePrefix = @"favourites";
 
+        [NSFileManager.defaultManager removeItemAtPath:[_cachePath stringByAppendingPathComponent:@"places.db"] error:nil];
+        
         [self buildFolders];
         [self createLogFile];
 

@@ -565,6 +565,10 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
             {
                 leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
                 freeSpaceForNavbarButton = 30.;
+                leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+                UIButtonConfiguration *configuration = leftButton.configuration ?: [UIButtonConfiguration plainButtonConfiguration];
+                configuration.contentInsets = NSDirectionalEdgeInsetsMake(0., 4., 0., -4.);
+                leftButton.configuration = configuration;
             }
             [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
             [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

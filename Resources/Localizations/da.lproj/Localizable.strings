@@ -4043,3 +4043,7 @@
 "view_distance" = "Visningsafstand";
 "custom_color" = "Tilpasset farve";
 "choose_color" = "Vælg farve";
+"will_close_at_short" = "Indtil";
+"open_till_short" = "Til";
+"shared_string_int_name" = "Internationalt navn";
+"show_debug_tile" = "Vis kortfliseinformation";

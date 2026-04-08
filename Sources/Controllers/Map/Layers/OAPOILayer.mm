@@ -431,9 +431,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 {
     BOOL shouldWakeStateWaiters = NO;
     QuadRect *rectToKeep = nil;
-    uint64_t cancelledRequestId = 0;
-    OsmAnd::AreaI cancelledRequestBBox31;
-    OsmAnd::ZoomLevel cancelledRequestZoom = OsmAnd::InvalidZoomLevel;
     {
         QMutexLocker scopedLocker(&_stateMutex);
         const auto visibleTilesBBox31 = OATileBoundsForVisibleTiles(visibleTiles, zoom, 0);
@@ -447,9 +444,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         if (_activeRequest && ![self isCurrentRequest:_activeRequest])
         {
             const BOOL shouldKeepLatestRectLoads = _activeRequest->zoom == _latestVisibleZoom;
-            cancelledRequestId = _activeRequest->requestId;
-            cancelledRequestBBox31 = _activeRequest->visibleBBox31;
-            cancelledRequestZoom = _activeRequest->zoom;
             shouldWakeStateWaiters = [self cancelRequest:_activeRequest];
             rectToKeep = shouldKeepLatestRectLoads ? OAExpandedVisibleQuadRect(_latestVisibleTilesBBox31, _latestVisibleZoom) : nil;
         }
@@ -457,21 +451,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
     if (shouldWakeStateWaiters)
     {
-        NSLog(@"[TopWikiTrace][Controller] updateVisibleBBox31 cancelledRequest=%llu requestZoom=%d requestBBox31=(%d,%d,%d,%d) latestZoom=%d latestBBox31=(%d,%d,%d,%d) keepRect=%@",
-              cancelledRequestId,
-              cancelledRequestZoom,
-              cancelledRequestBBox31.left(),
-              cancelledRequestBBox31.top(),
-              cancelledRequestBBox31.right(),
-              cancelledRequestBBox31.bottom(),
-              zoom,
-              visibleBBox31.left(),
-              visibleBBox31.top(),
-              visibleBBox31.right(),
-              visibleBBox31.bottom(),
-              rectToKeep
-                  ? [NSString stringWithFormat:@"(%.5f,%.5f,%.5f,%.5f)", rectToKeep.left, rectToKeep.top, rectToKeep.right, rectToKeep.bottom]
-                  : @"nil");
         _stateWaitCondition.wakeAll();
         [_dataProvider cancelWikiOnlineLoadingExcept:rectToKeep];
     }
@@ -515,73 +494,27 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     {
         QMutexLocker scopedLocker(&_stateMutex);
         if (_invalidated)
-        {
-            NSLog(@"[TopWikiTrace][Controller] obtainAmenitiesForTileId tile=(%d,%d) zoom=%d -> invalidated",
-                  tileId.x,
-                  tileId.y,
-                  zoom);
             return NO;
-        }
 
         if (!_hasLatestVisibleState || _latestVisibleZoom != zoom)
-        {
-            NSLog(@"[TopWikiTrace][Controller] obtainAmenitiesForTileId tile=(%d,%d) zoom=%d -> latestVisibleStateMismatch hasLatest=%d latestZoom=%d latestTilesBBox31=(%d,%d,%d,%d)",
-                  tileId.x,
-                  tileId.y,
-                  zoom,
-                  _hasLatestVisibleState,
-                  _latestVisibleZoom,
-                  _latestVisibleTilesBBox31.left(),
-                  _latestVisibleTilesBBox31.top(),
-                  _latestVisibleTilesBBox31.right(),
-                  _latestVisibleTilesBBox31.bottom());
             return NO;
-        }
 
         const auto requestedTileBBox31 = OsmAnd::Utilities::tileBoundingBox31(tileId, zoom);
         if (!_latestVisibleTilesBBox31.contains(requestedTileBBox31))
-        {
-            NSLog(@"[TopWikiTrace][Controller] obtainAmenitiesForTileId tile=(%d,%d) zoom=%d -> outsideLatestVisibleTiles latestTilesBBox31=(%d,%d,%d,%d)",
-                  tileId.x,
-                  tileId.y,
-                  zoom,
-                  _latestVisibleTilesBBox31.left(),
-                  _latestVisibleTilesBBox31.top(),
-                  _latestVisibleTilesBBox31.right(),
-                  _latestVisibleTilesBBox31.bottom());
             return NO;
-        }
 
         if (OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleTilesBBox31, _latestVisibleZoom))
         {
             request = _activeRequest;
-            NSLog(@"[TopWikiTrace][Controller] obtainAmenitiesForTileId tile=(%d,%d) zoom=%d reuseRequest=%llu state=%ld amenities=%d",
-                  tileId.x,
-                  tileId.y,
-                  zoom,
-                  request->requestId,
-                  (long)request->state,
-                  request->amenities.size());
         }
         else
         {
             const BOOL shouldKeepLatestRectLoads = !_activeRequest || _activeRequest->zoom == _latestVisibleZoom;
-            const uint64_t previousRequestId = _activeRequest ? _activeRequest->requestId : 0;
             shouldWakeStateWaiters = [self cancelRequest:_activeRequest];
             rectToKeep = shouldKeepLatestRectLoads ? OAExpandedVisibleQuadRect(_latestVisibleTilesBBox31, _latestVisibleZoom) : nil;
             const auto requestVisibleBBox31 = _latestVisibleTilesBBox31;
             if (!OAIsValidVisibleState(requestVisibleBBox31, _latestVisibleZoom))
-            {
-                NSLog(@"[TopWikiTrace][Controller] obtainAmenitiesForTileId tile=(%d,%d) zoom=%d -> invalidExpandedBBox31 latestBBox31=(%d,%d,%d,%d)",
-                      tileId.x,
-                      tileId.y,
-                      zoom,
-                      _latestVisibleBBox31.left(),
-                      _latestVisibleBBox31.top(),
-                      _latestVisibleBBox31.right(),
-                      _latestVisibleBBox31.bottom());
                 return NO;
-            }
 
             request = [[OATopWikiOnlineAmenitiesRequest alloc] initWithRequestId:_nextRequestId++
                                                                    visibleBBox31:requestVisibleBBox31
@@ -589,23 +522,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
                                                                             zoom:_latestVisibleZoom];
             _activeRequest = request;
             shouldStartLoad = YES;
-            NSLog(@"[TopWikiTrace][Controller] obtainAmenitiesForTileId tile=(%d,%d) zoom=%d createRequest=%llu previousRequest=%llu requestBBox31=(%d,%d,%d,%d) latestBBox31=(%d,%d,%d,%d) keepRect=%@",
-                  tileId.x,
-                  tileId.y,
-                  zoom,
-                  request->requestId,
-                  previousRequestId,
-                  requestVisibleBBox31.left(),
-                  requestVisibleBBox31.top(),
-                  requestVisibleBBox31.right(),
-                  requestVisibleBBox31.bottom(),
-                  _latestVisibleBBox31.left(),
-                  _latestVisibleBBox31.top(),
-                  _latestVisibleBBox31.right(),
-                  _latestVisibleBBox31.bottom(),
-                  rectToKeep
-                      ? [NSString stringWithFormat:@"(%.5f,%.5f,%.5f,%.5f)", rectToKeep.left, rectToKeep.top, rectToKeep.right, rectToKeep.bottom]
-                      : @"nil");
         }
     }
 
@@ -636,15 +552,12 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         if (_invalidated)
         {
             outResponse.amenities.clear();
-            NSLog(@"[TopWikiTrace][Controller] waitForRequest request=%llu -> invalidated",
-                  request ? request->requestId : 0);
             return NO;
         }
 
         if (!request)
         {
             outResponse.amenities.clear();
-            NSLog(@"[TopWikiTrace][Controller] waitForRequest request=nil -> no");
             return NO;
         }
 
@@ -654,21 +567,13 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
                 if (![self isCurrentRequest:request])
                 {
                     outResponse.amenities.clear();
-                    NSLog(@"[TopWikiTrace][Controller] waitForRequest request=%llu readyButNotCurrent -> no",
-                          request->requestId);
                     return NO;
                 }
                 outResponse.amenities = request->amenities;
-                NSLog(@"[TopWikiTrace][Controller] waitForRequest request=%llu -> ready amenities=%d",
-                      request->requestId,
-                      request->amenities.size());
                 return YES;
             case OATopWikiOnlineAmenitiesStateFailed:
             case OATopWikiOnlineAmenitiesStateCancelled:
                 outResponse.amenities.clear();
-                NSLog(@"[TopWikiTrace][Controller] waitForRequest request=%llu -> state=%ld",
-                      request->requestId,
-                      (long)request->state);
                 return NO;
             case OATopWikiOnlineAmenitiesStateLoading:
             case OATopWikiOnlineAmenitiesStateUndefined:
@@ -678,18 +583,11 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         if (![self isCurrentRequest:request])
         {
             outResponse.amenities.clear();
-            NSLog(@"[TopWikiTrace][Controller] waitForRequest request=%llu -> noLongerCurrent state=%ld",
-                  request->requestId,
-                  (long)request->state);
             return NO;
         }
 
         if (isCancelled && isCancelled())
-        {
-            NSLog(@"[TopWikiTrace][Controller] waitForRequest request=%llu -> tileCancelledWhileWaiting",
-                  request->requestId);
             return NO;
-        }
 
         _stateWaitCondition.wait(&_stateMutex, kWikiOnlineAmenitiesWaitIntervalMs);
     }
@@ -704,20 +602,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             return;
 
         if ([strongSelf shouldCancelLoadForRequest:request])
-        {
-            NSLog(@"[TopWikiTrace][Controller] dispatchLoadForRequest request=%llu skippedBeforeStart state=%ld",
-                  request->requestId,
-                  (long)request->state);
             return;
-        }
-
-        NSLog(@"[TopWikiTrace][Controller] dispatchLoadForRequest request=%llu start bbox31=(%d,%d,%d,%d) zoom=%d",
-              request->requestId,
-              request->visibleBBox31.left(),
-              request->visibleBBox31.top(),
-              request->visibleBBox31.right(),
-              request->visibleBBox31.bottom(),
-              request->zoom);
 
         QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
         const auto requestCancelled =
@@ -740,7 +625,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
                      amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>>&)amenities
 {
     void (^dataReadyHandler)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&) = nil;
-    NSString *result = @"ignored";
     {
         QMutexLocker scopedLocker(&_stateMutex);
         if (!request)
@@ -749,13 +633,11 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         if (request->state == OATopWikiOnlineAmenitiesStateCancelled || ![self isCurrentRequest:request])
         {
             request->amenities.clear();
-            result = @"ignored-stale";
         }
         else if (loaded)
         {
             request->state = OATopWikiOnlineAmenitiesStateReady;
             request->amenities = amenities;
-            result = @"ready";
         }
         else
         {
@@ -763,7 +645,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             request->amenities.clear();
             if (_activeRequest == request)
                 _activeRequest = nil;
-            result = @"failed";
         }
 
         if (loaded
@@ -774,13 +655,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             dataReadyHandler = [_dataReadyHandler copy];
         }
     }
-
-    NSLog(@"[TopWikiTrace][Controller] completeLoadForRequest request=%llu loaded=%d amenities=%d result=%@ hasDataReadyHandler=%d",
-          request->requestId,
-          loaded,
-          amenities.size(),
-          result,
-          dataReadyHandler != nil);
 
     _stateWaitCondition.wakeAll();
 
@@ -798,11 +672,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         amenities->clear();
 
     if (!_dataProvider)
-    {
-        NSLog(@"[TopWikiTrace][Controller] loadAmenitiesForVisibleBBox31 zoom=%d -> noDataProvider",
-              zoom);
         return NO;
-    }
 
     OAResultMatcher<OAPOI *> *matcher =
         [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
@@ -818,17 +688,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     const double leftLongitude = OsmAnd::Utilities::get31LongitudeX(visibleBBox31.left());
     const double rightLongitude = OsmAnd::Utilities::get31LongitudeX(visibleBBox31.right());
 
-    NSLog(@"[TopWikiTrace][Controller] loadAmenitiesForVisibleBBox31 zoom=%d bbox31=(%d,%d,%d,%d) latLon=(%.5f,%.5f,%.5f,%.5f)",
-          zoom,
-          visibleBBox31.left(),
-          visibleBBox31.top(),
-          visibleBBox31.right(),
-          visibleBBox31.bottom(),
-          leftLongitude,
-          topLatitude,
-          rightLongitude,
-          bottomLatitude);
-
     NSArray<OAPOI *> *pois = [_dataProvider searchAmenitiesWithLat:centerLatLon.latitude
                                                                lon:centerLatLon.longitude
                                                        topLatitude:topLatitude
@@ -841,15 +700,8 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     {
         if (amenities)
             amenities->clear();
-        NSLog(@"[TopWikiTrace][Controller] loadAmenitiesForVisibleBBox31 zoom=%d -> cancelledAfterSearch pois=%lu",
-              zoom,
-              (unsigned long)pois.count);
         return NO;
     }
-
-    NSLog(@"[TopWikiTrace][Controller] loadAmenitiesForVisibleBBox31 zoom=%d searchReturnedPois=%lu",
-          zoom,
-          (unsigned long)pois.count);
 
     for (OAPOI *poi in pois)
     {
@@ -857,8 +709,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         {
             if (amenities)
                 amenities->clear();
-            NSLog(@"[TopWikiTrace][Controller] loadAmenitiesForVisibleBBox31 zoom=%d -> cancelledWhileMappingPois",
-                  zoom);
             return NO;
         }
 
@@ -887,10 +737,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             });
     }
 
-    NSLog(@"[TopWikiTrace][Controller] loadAmenitiesForVisibleBBox31 zoom=%d -> amenities=%d",
-          zoom,
-          amenities ? amenities->size() : 0);
-
     return YES;
 }
 
@@ -903,14 +749,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     }
 
     if (symbolsProvider)
-    {
-        NSLog(@"[TopWikiTrace][Controller] invalidateCurrentProviderTiles");
         symbolsProvider->invalidateTiles();
-    }
-    else
-    {
-        NSLog(@"[TopWikiTrace][Controller] invalidateCurrentProviderTiles skippedNoSymbolsProvider");
-    }
 }
 
 @end
@@ -1339,13 +1178,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     for (const auto& tileId : visibleTiles)
     {
         if (!wikiSymbolsProvider->cache->contains(tileId, visibleZoom))
-        {
-            NSLog(@"[TopWikiTrace][Layer] visibleTileMissingFromCache tile=(%d,%d) zoom=%d",
-                  tileId.x,
-                  tileId.y,
-                  visibleZoom);
             return NO;
-        }
     }
     return YES;
 }
@@ -1372,12 +1205,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         return;
 
     if (_notifiedZoom == visibleZoom && _notifiedTiles == visibleTiles)
-    {
-        NSLog(@"[TopWikiTrace][Layer] notifyTopPlacesProviderIfWikiTilesCached skippedAlreadyNotified zoom=%d tiles=%d",
-              visibleZoom,
-              visibleTiles.size());
         return;
-    }
 
     if ([self areVisibleWikiTilesCached:visibleTiles zoom:visibleZoom wikiSymbolsProvider:wikiSymbolsProvider])
     {
@@ -1403,16 +1231,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         [_topPlacesProvider notifyAmenitiesChanged:amenities];
         _notifiedTiles = visibleTiles;
         _notifiedZoom = visibleZoom;
-        NSLog(@"[TopWikiTrace][Layer] notifyTopPlacesProviderIfWikiTilesCached notified zoom=%d tiles=%d amenities=%d",
-              visibleZoom,
-              visibleTiles.size(),
-              amenities.size());
-    }
-    else
-    {
-        NSLog(@"[TopWikiTrace][Layer] notifyTopPlacesProviderIfWikiTilesCached waitingForCache zoom=%d tiles=%d",
-              visibleZoom,
-              visibleTiles.size());
     }
 }
 

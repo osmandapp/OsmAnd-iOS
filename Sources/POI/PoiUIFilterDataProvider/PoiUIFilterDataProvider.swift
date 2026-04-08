@@ -64,11 +64,6 @@ final class PoiUIFilterDataProvider: NSObject {
         guard filter.isTopWikiFilter(), dataSourceType() == .online else {
             return
         }
-        if let rect {
-            NSLog("[TopWikiTrace][PoiUIFilterDataProvider] cancelWikiOnlineLoading except=(\(rect.left),\(rect.top),\(rect.right),\(rect.bottom))")
-        } else {
-            NSLog("[TopWikiTrace][PoiUIFilterDataProvider] cancelWikiOnlineLoading except=nil")
-        }
         explorePlacesProvider.cancelLoading(except: rect)
     }
     
@@ -85,37 +80,27 @@ final class PoiUIFilterDataProvider: NSObject {
         }
 
         if isCancelled() {
-            NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline startCancelled rect=(\(rect.left),\(rect.top),\(rect.right),\(rect.bottom))")
             return []
         }
 
-        NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline start rect=(\(rect.left),\(rect.top),\(rect.right),\(rect.bottom))")
         var data = explorePlacesProvider.getDataCollection(rect, limit: 0, isCancelled: isCancelled)
         var loading = false
-        NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline firstFetch count=\(data.count)")
         
         while explorePlacesProvider.isLoading(rect: rect) && !isCancelled() {
-            if !loading {
-                NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline waitingForRectLoads")
-            }
             Thread.sleep(forTimeInterval: 0.1)
             loading = true
             if isCancelled() {
-                NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline cancelledWhileWaiting")
                 return []
             }
         }
 
         if isCancelled() {
-            NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline cancelledAfterWaiting")
             return []
         }
         
         if loading {
             data = explorePlacesProvider.getDataCollection(rect, limit: 0, isCancelled: isCancelled)
-            NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline secondFetch count=\(data.count)")
             if isCancelled() {
-                NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline cancelledAfterSecondFetch")
                 return []
             }
         }
@@ -136,7 +121,6 @@ final class PoiUIFilterDataProvider: NSObject {
             
             return loc1.distance(from: targetLocation) < loc2.distance(from: targetLocation)
         }
-        NSLog("[TopWikiTrace][PoiUIFilterDataProvider] searchWikiOnline done result=\(sortedPOIs.count) loading=\(loading)")
         return sortedPOIs
     }
 }

@@ -4045,3 +4045,7 @@
 "view_distance" = "Удаљеност видљивости";
 "custom_color" = "Произвољна боја";
 "choose_color" = "Изабери боју";
+"will_close_at_short" = "До";
+"open_till_short" = "До";
+"shared_string_int_name" = "Међународно име";
+"show_debug_tile" = "Прикажи информацију о плочици";

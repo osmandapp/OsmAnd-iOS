@@ -6,6 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
+import Foundation
 import OsmAndShared
 
 final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
@@ -27,6 +28,7 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
     // MARK: - Properties
     private let dbHelper: PlacesDatabaseHelper
     private let lock = NSLock()
+    private let tileProcessingQueue = DispatchQueue(label: "com.osmand.exploreplaces.tileProcessing", qos: .utility)
     
     private var loadingTasks: [TileKey: GetExplorePlacesImagesTask] = [:]
     private var tilesCache: [TileKey: [OAPOI]] = [:]
@@ -59,46 +61,38 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 
     // MARK: - Protocol Implementation: Data Collection
     func getDataCollection(_ rect: QuadRect) -> [OAPOI] {
-        getDataCollection(rect, limit: Self.defaultLimitPoints)
+        getDataCollection(rect, limit: Self.defaultLimitPoints, isCancelled: nil)
     }
     
     @discardableResult
     func getDataCollection(_ rect: QuadRect, limit: Int) -> [OAPOI] {
-        let kRect = KQuadRect(left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom)
-        
-        lock.lock()
-        loadingTasks = loadingTasks.filter { (_, task) in
-            let isRelevant = task.isRunning() &&
-                             (kRect.contains(box: task.mapRect) ||
-                              KQuadRect.companion.intersects(a: kRect, b: task.mapRect))
-            if !isRelevant { task.cancel() }
-            return isRelevant
-        }
-        lock.unlock()
+        getDataCollection(rect, limit: limit, isCancelled: nil)
+    }
 
-        var zoom = Double(Self.maxLevelZoomCache)
-        let mapUtils = KMapUtils.shared
-        while zoom >= 0 {
-            let tileWidth = Int(mapUtils.getTileNumberX(zoom: zoom, longitude: rect.right)) -
-                            Int(mapUtils.getTileNumberX(zoom: zoom, longitude: rect.left)) + 1
-            let tileHeight = Int(mapUtils.getTileNumberY(zoom: zoom, latitude: rect.bottom)) -
-                             Int(mapUtils.getTileNumberY(zoom: zoom, latitude: rect.top)) + 1
-            if tileWidth * tileHeight <= Self.maxTilesPerQuadRect { break }
-            zoom -= 3
-        }
-        zoom = max(zoom, 1)
-
-        let minTileX = Int(mapUtils.getTileNumberX(zoom: zoom, longitude: rect.left))
-        let maxTileX = Int(mapUtils.getTileNumberX(zoom: zoom, longitude: rect.right))
-        let minTileY = Int(mapUtils.getTileNumberY(zoom: zoom, latitude: rect.top))
-        let maxTileY = Int(mapUtils.getTileNumberY(zoom: zoom, latitude: rect.bottom))
-        
-        guard minTileX <= maxTileX, minTileY <= maxTileY else {
-            NSLog("[ExplorePlacesOnlineProvider] -> Coordinate error: Invalid tile range")
+    @discardableResult
+    func getDataCollection(_ rect: QuadRect, limit: Int, isCancelled: (() -> Bool)?) -> [OAPOI] {
+        if isCancelled?() ?? false {
             return []
         }
 
-        let loadAll = Int(zoom) == Self.maxLevelZoomCache &&
+        let kRect = KQuadRect(left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom)
+        pruneLoadingTasks(keeping: kRect)
+
+        if isCancelled?() ?? false {
+            return []
+        }
+
+        guard let tileRange = resolveTileRange(for: rect) else {
+            NSLog("[ExplorePlacesOnlineProvider] -> Coordinate error: Invalid tile range")
+            return []
+        }
+        let zoom = tileRange.zoom
+        let minTileX = tileRange.minTileX
+        let maxTileX = tileRange.maxTileX
+        let minTileY = tileRange.minTileY
+        let maxTileY = tileRange.maxTileY
+
+        let loadAll = zoom == Self.maxLevelZoomCache &&
                       (abs(Double(maxTileX - minTileX)) <= Self.loadAllTinyRect)
 
         var filteredAmenities: [OAPOI] = []
@@ -107,6 +101,10 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
 
         for tx in minTileX...maxTileX {
             for ty in minTileY...maxTileY {
+                if isCancelled?() ?? false {
+                    return []
+                }
+
                 let tileKey = TileKey(zoom: Int(zoom), tileX: tx, tileY: ty)
                 
                 if !dbHelper.isDataExpired(zoom: Int32(zoom), tileX: Int32(tx), tileY: Int32(ty), languages: languages) {
@@ -130,12 +128,15 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
                         lock.unlock()
                     }
                 } else {
-                    loadTile(zoom: Int(zoom), tileX: tx, tileY: ty, languages: languages)
+                    if isCancelled?() ?? false {
+                        return []
+                    }
+                    loadTile(zoom: zoom, tileX: tx, tileY: ty, languages: languages)
                 }
             }
         }
 
-        clearCache(zoom: Int(zoom), minX: minTileX, maxX: maxTileX, minY: minTileY, maxY: maxTileY)
+        clearCache(zoom: zoom, minX: minTileX, maxX: maxTileX, minY: minTileY, maxY: maxTileY)
         filteredAmenities.sort { $0.getTravelEloNumber() > $1.getTravelEloNumber() }
         
         return limit > 0 ? Array(filteredAmenities.prefix(limit)) : filteredAmenities
@@ -151,11 +152,60 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         lock.lock(); defer { lock.unlock() }
         let kRect = KQuadRect(left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom)
         return loadingTasks.values.contains { task in
-            task.isRunning() && KQuadRect.companion.intersects(a: kRect, b: task.mapRect)
+            isTaskRelevant(task, for: kRect)
         }
     }
 
+    func cancelLoading(except rect: QuadRect?) {
+        let kRect = rect.map { KQuadRect(left: $0.left, top: $0.top, right: $0.right, bottom: $0.bottom) }
+        pruneLoadingTasks(keeping: kRect)
+    }
+
     // MARK: - Private Helpers
+    private func resolveTileRange(for rect: QuadRect) -> (zoom: Int, minTileX: Int, maxTileX: Int, minTileY: Int, maxTileY: Int)? {
+        var zoom = Double(Self.maxLevelZoomCache)
+        let mapUtils = KMapUtils.shared
+        while zoom >= 0 {
+            let tileWidth = Int(mapUtils.getTileNumberX(zoom: zoom, longitude: rect.right)) -
+                            Int(mapUtils.getTileNumberX(zoom: zoom, longitude: rect.left)) + 1
+            let tileHeight = Int(mapUtils.getTileNumberY(zoom: zoom, latitude: rect.bottom)) -
+                             Int(mapUtils.getTileNumberY(zoom: zoom, latitude: rect.top)) + 1
+            if tileWidth * tileHeight <= Self.maxTilesPerQuadRect { break }
+            zoom -= 3
+        }
+
+        let resolvedZoom = max(Int(zoom), 1)
+        let minTileX = Int(mapUtils.getTileNumberX(zoom: Double(resolvedZoom), longitude: rect.left))
+        let maxTileX = Int(mapUtils.getTileNumberX(zoom: Double(resolvedZoom), longitude: rect.right))
+        let minTileY = Int(mapUtils.getTileNumberY(zoom: Double(resolvedZoom), latitude: rect.top))
+        let maxTileY = Int(mapUtils.getTileNumberY(zoom: Double(resolvedZoom), latitude: rect.bottom))
+        guard minTileX <= maxTileX, minTileY <= maxTileY else {
+            return nil
+        }
+        return (resolvedZoom, minTileX, maxTileX, minTileY, maxTileY)
+    }
+
+    private func isTaskRelevant(_ task: GetExplorePlacesImagesTask, for rect: KQuadRect) -> Bool {
+        rect.contains(box: task.mapRect) || KQuadRect.companion.intersects(a: rect, b: task.mapRect)
+    }
+
+    private func pruneLoadingTasks(keeping rect: KQuadRect?) {
+        var tasksToCancel: [GetExplorePlacesImagesTask] = []
+
+        lock.lock()
+        let keysToRemove = loadingTasks.compactMap { key, task in
+            guard let rect else { return key }
+            return isTaskRelevant(task, for: rect) ? nil : key
+        }
+        for key in keysToRemove {
+            if let task = loadingTasks.removeValue(forKey: key) {
+                tasksToCancel.append(task)
+            }
+        }
+        lock.unlock()
+        tasksToCancel.forEach { $0.cancel() }
+    }
+
     private func filterAmenity(_ amenity: OAPOI, _ rect: QuadRect, _ result: inout [OAPOI], _ uniqueIds: inout Set<Int64>, _ loadAll: Bool) {
         let lat = amenity.latitude
         let lon = amenity.longitude
@@ -259,42 +309,66 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
             right: mapUtils.getLongitudeFromTile(zoom: Double(zoom), x: Double(tileX + 1)),
             bottom: mapUtils.getLatitudeFromTile(zoom: Double(zoom), y: Double(tileY + 1))
         )
-        
-        let listener = ExplorePlacesTaskListener {
-        } onFinish: { [weak self] result in
-            guard let self else { return }
-            self.lock.lock()
-            let currentlyLoading = !self.loadingTasks.isEmpty
-            self.lock.unlock()
-            self.notifyListeners(isPartial: currentlyLoading)
 
-            var map: [String: [WikiCoreHelper.OsmandApiFeatureData]] = [:]
-            if !result.isEmpty {
-                for item in result {
-                    if let p = item.properties {
-                        let l = (p.lang?.isEmpty == false ? p.lang : nil)
-                            ?? (p.wikiLang?.isEmpty == false ? p.wikiLang : nil)
-                            ?? "en"
-                        map[l, default: []].append(item)
+        var task: GetExplorePlacesImagesTask?
+        let listener = ExplorePlacesTaskListener(onStart: {}, onFinish: { [weak self] result in
+            guard let self else { return }
+            self.tileProcessingQueue.async { [weak self] in
+                guard let self else { return }
+
+                self.lock.lock()
+                guard let currentTask = self.loadingTasks[key],
+                      let loadingTask = task,
+                      ObjectIdentifier(currentTask) == ObjectIdentifier(loadingTask) else {
+                    self.lock.unlock()
+                    return
+                }
+                self.lock.unlock()
+
+                var map: [String: [WikiCoreHelper.OsmandApiFeatureData]] = [:]
+                var amenities: [OAPOI] = []
+                if !result.isEmpty {
+                    for item in result {
+                        if let p = item.properties {
+                            let l = (p.lang?.isEmpty == false ? p.lang : nil)
+                                ?? (p.wikiLang?.isEmpty == false ? p.wikiLang : nil)
+                                ?? "en"
+                            map[l, default: []].append(item)
+                        }
+                        if let amenity = self.createAmenity(item) {
+                            amenities.append(amenity)
+                        }
                     }
                 }
+
+                for lang in languages where map[lang] == nil {
+                    map[lang] = []
+                }
+
+                self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map)
+
+                self.lock.lock()
+                guard let currentTask = self.loadingTasks[key],
+                      let loadingTask = task,
+                      ObjectIdentifier(currentTask) == ObjectIdentifier(loadingTask) else {
+                    self.lock.unlock()
+                    return
+                }
+
+                self.tilesCache[key] = amenities
+                self.loadingTasks.removeValue(forKey: key)
+                let currentlyLoading = !self.loadingTasks.isEmpty
+                self.lock.unlock()
+
+                self.notifyListeners(isPartial: currentlyLoading)
             }
+        })
 
-            for lang in languages where map[lang] == nil {
-                map[lang] = []
-            }
-            self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map)
-
-            self.lock.lock()
-            self.loadingTasks.removeValue(forKey: key)
-            self.lock.unlock()
-        }
-
-        let task = GetExplorePlacesImagesTask(mapRect: tRect, zoom: Int32(zoom), languages: languages, listener: listener)
+        task = GetExplorePlacesImagesTask(mapRect: tRect, zoom: Int32(zoom), languages: languages, listener: listener)
         lock.lock()
         loadingTasks[key] = task
         lock.unlock()
-        task.execute(params: .init(size: 0) { _ in .init() })
+        task?.execute(params: .init(size: 0) { _ in .init() })
     }
 
     private func clearCache(zoom: Int, minX: Int, maxX: Int, minY: Int, maxY: Int) {

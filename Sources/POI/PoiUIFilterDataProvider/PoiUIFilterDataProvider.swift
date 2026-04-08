@@ -58,6 +58,14 @@ final class PoiUIFilterDataProvider: NSObject {
                 publish: nil)
         }
     }
+
+    @objc(cancelWikiOnlineLoadingExcept:)
+    func cancelWikiOnlineLoading(except rect: QuadRect?) {
+        guard filter.isTopWikiFilter(), dataSourceType() == .online else {
+            return
+        }
+        explorePlacesProvider.cancelLoading(except: rect)
+    }
     
     private func searchWikiOnline(lat: Double,
                                   lon: Double,
@@ -67,22 +75,34 @@ final class PoiUIFilterDataProvider: NSObject {
                                   rightLongitude: Double,
                                   matcher: OAResultMatcher<OAPOI>? = nil) -> [OAPOI] {
         let rect = QuadRect(left: leftLongitude, top: topLatitude, right: rightLongitude, bottom: bottomLatitude)
-        var data = explorePlacesProvider.getDataCollection(rect, limit: 0)
-        var loading = false
-        var isCancelled = false
-
-        while explorePlacesProvider.isLoading() && !isCancelled {
-            Thread.sleep(forTimeInterval: 0.1)
-            loading = true
-            isCancelled = matcher?.isCancelled() ?? false
+        let isCancelled = {
+            matcher?.isCancelled() ?? false
         }
 
-        if isCancelled {
+        if isCancelled() {
+            return []
+        }
+
+        var data = explorePlacesProvider.getDataCollection(rect, limit: 0, isCancelled: isCancelled)
+        var loading = false
+        
+        while explorePlacesProvider.isLoading(rect: rect) && !isCancelled() {
+            Thread.sleep(forTimeInterval: 0.1)
+            loading = true
+            if isCancelled() {
+                return []
+            }
+        }
+
+        if isCancelled() {
             return []
         }
         
         if loading {
-            data = explorePlacesProvider.getDataCollection(rect, limit: 0)
+            data = explorePlacesProvider.getDataCollection(rect, limit: 0, isCancelled: isCancelled)
+            if isCancelled() {
+                return []
+            }
         }
         
         var result: [OAPOI] = matcher == nil ? data : []

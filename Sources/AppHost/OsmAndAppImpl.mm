@@ -186,7 +186,7 @@
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
         _legacyFavoritesFilePrefix = @"favourites";
-
+        
         [self buildFolders];
         [self createLogFile];
 

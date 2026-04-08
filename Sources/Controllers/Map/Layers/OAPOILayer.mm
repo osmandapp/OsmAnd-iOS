@@ -35,6 +35,7 @@
 #import "OARenderedObject+cpp.h"
 #import "OAPointDescription.h"
 #import "QuadTree.h"
+#import "QuadRect.h"
 #import "OAMapTopPlace.h"
 #import "OANativeUtilities.h"
 #import "OAPOILayerTopPlacesProvider.h"
@@ -69,6 +70,7 @@ static const NSTimeInterval kWikiSymbolsCacheWaitInterval = 0.05;
 static const unsigned long kWikiOnlineAmenitiesWaitIntervalMs = 50;
 static const uint32_t kMinPoiCacheSize = 64;
 static const uint32_t kPoiVisibleTilesMargin = 2;
+static const int kWikiOnlineRequestTilesMargin = 1;
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
@@ -113,18 +115,54 @@ static uint64_t OAResolveSyntheticAmenityId(OAPOI *poi)
     return syntheticId != 0 ? syntheticId : 1;
 }
 
-static OsmAnd::AreaI OAExpandVisibleBBox31ToTileBounds(const OsmAnd::AreaI& visibleBBox31,
-                                                       const OsmAnd::ZoomLevel zoom)
+static OsmAnd::AreaI OATileBoundsForVisibleBBox31(const OsmAnd::AreaI& visibleBBox31,
+                                                  const OsmAnd::ZoomLevel zoom,
+                                                  const int tilesMargin)
 {
     if (zoom == OsmAnd::InvalidZoomLevel || visibleBBox31.width() <= 0 || visibleBBox31.height() <= 0)
         return OsmAnd::AreaI();
 
-    const auto halfWidth = qMax(1, visibleBBox31.width() / 3);
-    const auto halfHeight = qMax(1, visibleBBox31.height() / 3);
-    const auto expandedBBox31 = visibleBBox31.getEnlargedBy(halfHeight, halfWidth, halfHeight, halfWidth);
+    const auto topLeftTileId = OsmAnd::Utilities::getTileId(visibleBBox31.topLeft, zoom);
+    const auto bottomRightTileId = OsmAnd::Utilities::getTileId(visibleBBox31.bottomRight, zoom);
+    const auto maxTileId = static_cast<int>((1u << static_cast<uint32_t>(zoom)) - 1u);
+    const auto expandedTopLeftTileId = OsmAnd::TileId::fromXY(
+        qBound(0, topLeftTileId.x - tilesMargin, maxTileId),
+        qBound(0, topLeftTileId.y - tilesMargin, maxTileId));
+    const auto expandedBottomRightTileId = OsmAnd::TileId::fromXY(
+        qBound(0, bottomRightTileId.x + tilesMargin, maxTileId),
+        qBound(0, bottomRightTileId.y + tilesMargin, maxTileId));
 
-    const auto topLeftTileId = OsmAnd::Utilities::getTileId(expandedBBox31.topLeft, zoom);
-    const auto bottomRightTileId = OsmAnd::Utilities::getTileId(expandedBBox31.bottomRight, zoom);
+    auto result = OsmAnd::Utilities::tileBoundingBox31(expandedTopLeftTileId, zoom);
+    result.enlargeToInclude(OsmAnd::Utilities::tileBoundingBox31(expandedBottomRightTileId, zoom));
+    return result;
+}
+
+static OsmAnd::AreaI OATileBoundsForVisibleTiles(const QVector<OsmAnd::TileId>& visibleTiles,
+                                                 const OsmAnd::ZoomLevel zoom,
+                                                 const int tilesMargin)
+{
+    if (zoom == OsmAnd::InvalidZoomLevel || visibleTiles.isEmpty())
+        return OsmAnd::AreaI();
+
+    int minTileX = std::numeric_limits<int>::max();
+    int minTileY = std::numeric_limits<int>::max();
+    int maxTileX = std::numeric_limits<int>::min();
+    int maxTileY = std::numeric_limits<int>::min();
+    for (const auto& tileId : visibleTiles)
+    {
+        minTileX = std::min(minTileX, tileId.x);
+        minTileY = std::min(minTileY, tileId.y);
+        maxTileX = std::max(maxTileX, tileId.x);
+        maxTileY = std::max(maxTileY, tileId.y);
+    }
+
+    const auto maxTileId = static_cast<int>((1u << static_cast<uint32_t>(zoom)) - 1u);
+    const auto topLeftTileId = OsmAnd::TileId::fromXY(
+        qBound(0, minTileX - tilesMargin, maxTileId),
+        qBound(0, minTileY - tilesMargin, maxTileId));
+    const auto bottomRightTileId = OsmAnd::TileId::fromXY(
+        qBound(0, maxTileX + tilesMargin, maxTileId),
+        qBound(0, maxTileY + tilesMargin, maxTileId));
 
     auto result = OsmAnd::Utilities::tileBoundingBox31(topLeftTileId, zoom);
     result.enlargeToInclude(OsmAnd::Utilities::tileBoundingBox31(bottomRightTileId, zoom));
@@ -200,7 +238,8 @@ typedef NS_ENUM(NSInteger, OATopWikiOnlineAmenitiesState)
     OATopWikiOnlineAmenitiesStateUndefined = -1,
     OATopWikiOnlineAmenitiesStateLoading,
     OATopWikiOnlineAmenitiesStateReady,
-    OATopWikiOnlineAmenitiesStateFailed
+    OATopWikiOnlineAmenitiesStateFailed,
+    OATopWikiOnlineAmenitiesStateCancelled
 };
 
 @interface OATopWikiOnlineAmenitiesRequest : NSObject
@@ -229,7 +268,7 @@ static BOOL OAIsValidVisibleState(const OsmAnd::AreaI& visibleBBox31, const OsmA
 static BOOL OAIsRequestApplicableToVisibleState(
     OATopWikiOnlineAmenitiesRequest *request,
     const BOOL hasLatestVisibleState,
-    const OsmAnd::AreaI& latestVisibleBBox31,
+    const OsmAnd::AreaI& latestVisibleTilesBBox31,
     const OsmAnd::ZoomLevel latestVisibleZoom)
 {
     return request
@@ -237,7 +276,24 @@ static BOOL OAIsRequestApplicableToVisibleState(
         && request->zoom == latestVisibleZoom
         && request->visibleBBox31.width() > 0
         && request->visibleBBox31.height() > 0
-        && request->visibleBBox31.contains(latestVisibleBBox31);
+        && request->visibleBBox31.contains(latestVisibleTilesBBox31);
+}
+
+static QuadRect *OAQuadRectFromArea31(const OsmAnd::AreaI& bbox31)
+{
+    if (bbox31.width() <= 0 || bbox31.height() <= 0)
+        return nil;
+
+    return [[QuadRect alloc] initWithLeft:OsmAnd::Utilities::get31LongitudeX(bbox31.left())
+                                      top:OsmAnd::Utilities::get31LatitudeY(bbox31.top())
+                                    right:OsmAnd::Utilities::get31LongitudeX(bbox31.right())
+                                   bottom:OsmAnd::Utilities::get31LatitudeY(bbox31.bottom())];
+}
+
+static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, const OsmAnd::ZoomLevel zoom)
+{
+    const auto expandedBBox31 = OATileBoundsForVisibleBBox31(visibleBBox31, zoom, kWikiOnlineRequestTilesMargin);
+    return OAIsValidVisibleState(expandedBBox31, zoom) ? OAQuadRectFromArea31(expandedBBox31) : nil;
 }
 
 @interface OATopWikiOnlineAmenitiesController : NSObject
@@ -248,10 +304,10 @@ static BOOL OAIsRequestApplicableToVisibleState(
     QWaitCondition _stateWaitCondition;
     uint64_t _nextRequestId;
     OsmAnd::AreaI _latestVisibleBBox31;
+    OsmAnd::AreaI _latestVisibleTilesBBox31;
     OsmAnd::ZoomLevel _latestVisibleZoom;
     BOOL _hasLatestVisibleState;
     OATopWikiOnlineAmenitiesRequest *_activeRequest;
-    BOOL _needsNewRequest;
     BOOL _invalidated;
     void (^_dataReadyHandler)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&);
     dispatch_queue_t _loadQueue;
@@ -260,13 +316,14 @@ static BOOL OAIsRequestApplicableToVisibleState(
 - (instancetype)initWithDataProvider:(PoiUIFilterDataProvider *)dataProvider;
 - (void)setSymbolsProvider:(const std::shared_ptr<OsmAnd::AmenitySymbolsProvider>&)symbolsProvider;
 - (void)setDataReadyHandler:(void (^)(const QList<std::shared_ptr<const OsmAnd::Amenity>>&))dataReadyHandler;
-- (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31 zoom:(OsmAnd::ZoomLevel)zoom;
+- (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31
+                visibleTiles:(const QVector<OsmAnd::TileId>&)visibleTiles
+                       zoom:(OsmAnd::ZoomLevel)zoom;
 - (void)invalidate;
 - (BOOL)obtainAmenitiesForTileId:(OsmAnd::TileId)tileId
                             zoom:(OsmAnd::ZoomLevel)zoom
                      isCancelled:(const std::function<bool()>&)isCancelled
                         response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse;
-- (BOOL)isInvalidated;
 - (BOOL)waitForRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request
            isCancelled:(const std::function<bool()>&)isCancelled
               response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse;
@@ -274,6 +331,9 @@ static BOOL OAIsRequestApplicableToVisibleState(
 - (void)completeLoadForRequest:(OATopWikiOnlineAmenitiesRequest *)request
                         loaded:(BOOL)loaded
                      amenities:(const QList<std::shared_ptr<const OsmAnd::Amenity>>&)amenities;
+- (BOOL)isCurrentRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request;
+- (BOOL)shouldCancelLoadForRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request;
+- (BOOL)cancelRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request;
 - (BOOL)loadAmenitiesForVisibleBBox31:(const OsmAnd::AreaI&)visibleBBox31
                              center31:(const OsmAnd::PointI&)center31
                                  zoom:(OsmAnd::ZoomLevel)zoom
@@ -314,10 +374,10 @@ static BOOL OAIsRequestApplicableToVisibleState(
     {
         _dataProvider = dataProvider;
         _nextRequestId = 1;
+        _latestVisibleTilesBBox31 = OsmAnd::AreaI();
         _latestVisibleZoom = OsmAnd::InvalidZoomLevel;
         _hasLatestVisibleState = NO;
         _activeRequest = nil;
-        _needsNewRequest = NO;
         _invalidated = NO;
         _loadQueue = dispatch_queue_create("com.osmand.topWikiOnlie.loadQueue", DISPATCH_QUEUE_SERIAL);
     }
@@ -336,42 +396,86 @@ static BOOL OAIsRequestApplicableToVisibleState(
     _dataReadyHandler = [dataReadyHandler copy];
 }
 
-- (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31 zoom:(OsmAnd::ZoomLevel)zoom
+- (BOOL)isCurrentRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request
+{
+    return request
+        && !_invalidated
+        && _activeRequest == request
+        && OAIsRequestApplicableToVisibleState(request, _hasLatestVisibleState, _latestVisibleTilesBBox31, _latestVisibleZoom);
+}
+
+- (BOOL)shouldCancelLoadForRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request
+{
+    QMutexLocker scopedLocker(&_stateMutex);
+    return !request
+        || _invalidated
+        || request->state != OATopWikiOnlineAmenitiesStateLoading
+        || ![self isCurrentRequest:request];
+}
+
+- (BOOL)cancelRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request
+{
+    if (!request || request->state == OATopWikiOnlineAmenitiesStateCancelled)
+        return NO;
+
+    request->state = OATopWikiOnlineAmenitiesStateCancelled;
+    request->amenities.clear();
+    if (_activeRequest == request)
+        _activeRequest = nil;
+    return YES;
+}
+
+- (void)updateVisibleBBox31:(OsmAnd::AreaI)visibleBBox31
+                visibleTiles:(const QVector<OsmAnd::TileId>&)visibleTiles
+                       zoom:(OsmAnd::ZoomLevel)zoom
 {
     BOOL shouldWakeStateWaiters = NO;
+    QuadRect *rectToKeep = nil;
     {
         QMutexLocker scopedLocker(&_stateMutex);
+        const auto visibleTilesBBox31 = OATileBoundsForVisibleTiles(visibleTiles, zoom, 0);
         _latestVisibleBBox31 = visibleBBox31;
+        _latestVisibleTilesBBox31 = visibleTilesBBox31;
         _latestVisibleZoom = zoom;
-        _hasLatestVisibleState = OAIsValidVisibleState(visibleBBox31, zoom);
+        _hasLatestVisibleState = OAIsValidVisibleState(visibleTilesBBox31, zoom);
         if (_invalidated)
             return;
 
-        const BOOL needsNewRequest = _activeRequest
-            && !OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom);
-        shouldWakeStateWaiters = needsNewRequest && !_needsNewRequest;
-        _needsNewRequest = needsNewRequest;
+        if (_activeRequest && ![self isCurrentRequest:_activeRequest])
+        {
+            const BOOL shouldKeepLatestRectLoads = _activeRequest->zoom == _latestVisibleZoom;
+            shouldWakeStateWaiters = [self cancelRequest:_activeRequest];
+            rectToKeep = shouldKeepLatestRectLoads ? OAExpandedVisibleQuadRect(_latestVisibleTilesBBox31, _latestVisibleZoom) : nil;
+        }
     }
 
     if (shouldWakeStateWaiters)
+    {
         _stateWaitCondition.wakeAll();
+        [_dataProvider cancelWikiOnlineLoadingExcept:rectToKeep];
+    }
 }
 
 - (void)invalidate
 {
+    BOOL shouldWakeStateWaiters = NO;
     {
         QMutexLocker scopedLocker(&_stateMutex);
         if (_invalidated)
             return;
 
+        shouldWakeStateWaiters = [self cancelRequest:_activeRequest];
         _invalidated = YES;
         _latestVisibleBBox31 = OsmAnd::AreaI();
+        _latestVisibleTilesBBox31 = OsmAnd::AreaI();
         _latestVisibleZoom = OsmAnd::InvalidZoomLevel;
         _hasLatestVisibleState = NO;
         _activeRequest = nil;
-        _needsNewRequest = NO;
     }
 
+    if (shouldWakeStateWaiters)
+        _stateWaitCondition.wakeAll();
+    [_dataProvider cancelWikiOnlineLoadingExcept:nil];
     _stateWaitCondition.wakeAll();
     [self invalidateCurrentProviderTiles];
 }
@@ -381,11 +485,12 @@ static BOOL OAIsRequestApplicableToVisibleState(
                      isCancelled:(const std::function<bool()>&)isCancelled
                         response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse
 {
-    Q_UNUSED(tileId);
     outResponse.amenities.clear();
     
     OATopWikiOnlineAmenitiesRequest *request = nil;
     BOOL shouldStartLoad = NO;
+    BOOL shouldWakeStateWaiters = NO;
+    QuadRect *rectToKeep = nil;
     {
         QMutexLocker scopedLocker(&_stateMutex);
         if (_invalidated)
@@ -394,13 +499,20 @@ static BOOL OAIsRequestApplicableToVisibleState(
         if (!_hasLatestVisibleState || _latestVisibleZoom != zoom)
             return NO;
 
-        if (OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom))
+        const auto requestedTileBBox31 = OsmAnd::Utilities::tileBoundingBox31(tileId, zoom);
+        if (!_latestVisibleTilesBBox31.contains(requestedTileBBox31))
+            return NO;
+
+        if (OAIsRequestApplicableToVisibleState(_activeRequest, _hasLatestVisibleState, _latestVisibleTilesBBox31, _latestVisibleZoom))
         {
             request = _activeRequest;
         }
         else
         {
-            const auto requestVisibleBBox31 = OAExpandVisibleBBox31ToTileBounds(_latestVisibleBBox31, zoom);
+            const BOOL shouldKeepLatestRectLoads = !_activeRequest || _activeRequest->zoom == _latestVisibleZoom;
+            shouldWakeStateWaiters = [self cancelRequest:_activeRequest];
+            rectToKeep = shouldKeepLatestRectLoads ? OAExpandedVisibleQuadRect(_latestVisibleTilesBBox31, _latestVisibleZoom) : nil;
+            const auto requestVisibleBBox31 = _latestVisibleTilesBBox31;
             if (!OAIsValidVisibleState(requestVisibleBBox31, _latestVisibleZoom))
                 return NO;
 
@@ -409,9 +521,14 @@ static BOOL OAIsRequestApplicableToVisibleState(
                                                                         center31:_latestVisibleBBox31.center()
                                                                             zoom:_latestVisibleZoom];
             _activeRequest = request;
-            _needsNewRequest = NO;
             shouldStartLoad = YES;
         }
+    }
+
+    if (shouldWakeStateWaiters)
+    {
+        _stateWaitCondition.wakeAll();
+        [_dataProvider cancelWikiOnlineLoadingExcept:rectToKeep];
     }
 
     if (shouldStartLoad)
@@ -425,12 +542,6 @@ static BOOL OAIsRequestApplicableToVisibleState(
                        response:outResponse];
 }
 
-- (BOOL)isInvalidated
-{
-    QMutexLocker scopedLocker(&_stateMutex);
-    return _invalidated;
-}
-
 - (BOOL)waitForRequest:(nullable OATopWikiOnlineAmenitiesRequest *)request
            isCancelled:(const std::function<bool()>&)isCancelled
               response:(OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse&)outResponse
@@ -441,26 +552,38 @@ static BOOL OAIsRequestApplicableToVisibleState(
         if (_invalidated)
         {
             outResponse.amenities.clear();
-            return YES;
+            return NO;
         }
 
         if (!request)
         {
             outResponse.amenities.clear();
-            return YES;
+            return NO;
         }
 
         switch (request->state)
         {
             case OATopWikiOnlineAmenitiesStateReady:
+                if (![self isCurrentRequest:request])
+                {
+                    outResponse.amenities.clear();
+                    return NO;
+                }
                 outResponse.amenities = request->amenities;
                 return YES;
             case OATopWikiOnlineAmenitiesStateFailed:
+            case OATopWikiOnlineAmenitiesStateCancelled:
                 outResponse.amenities.clear();
-                return YES;
+                return NO;
             case OATopWikiOnlineAmenitiesStateLoading:
             case OATopWikiOnlineAmenitiesStateUndefined:
                 break;
+        }
+
+        if (![self isCurrentRequest:request])
+        {
+            outResponse.amenities.clear();
+            return NO;
         }
 
         if (isCancelled && isCancelled())
@@ -478,12 +601,15 @@ static BOOL OAIsRequestApplicableToVisibleState(
         if (!strongSelf || !request)
             return;
 
+        if ([strongSelf shouldCancelLoadForRequest:request])
+            return;
+
         QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
         const auto requestCancelled =
-            [weakSelf]() -> bool
+            [weakSelf, request]() -> bool
             {
                 OATopWikiOnlineAmenitiesController *controller = weakSelf;
-                return !controller || [controller isInvalidated];
+                return !controller || [controller shouldCancelLoadForRequest:request];
             };
         const BOOL loaded = [strongSelf loadAmenitiesForVisibleBBox31:request->visibleBBox31
                                                              center31:request->center31
@@ -504,7 +630,11 @@ static BOOL OAIsRequestApplicableToVisibleState(
         if (!request)
             return;
 
-        if (loaded)
+        if (request->state == OATopWikiOnlineAmenitiesStateCancelled || ![self isCurrentRequest:request])
+        {
+            request->amenities.clear();
+        }
+        else if (loaded)
         {
             request->state = OATopWikiOnlineAmenitiesStateReady;
             request->amenities = amenities;
@@ -513,13 +643,14 @@ static BOOL OAIsRequestApplicableToVisibleState(
         {
             request->state = OATopWikiOnlineAmenitiesStateFailed;
             request->amenities.clear();
+            if (_activeRequest == request)
+                _activeRequest = nil;
         }
 
         if (loaded
             && !_invalidated
             && _activeRequest == request
-            && !_needsNewRequest
-            && OAIsRequestApplicableToVisibleState(request, _hasLatestVisibleState, _latestVisibleBBox31, _latestVisibleZoom))
+            && OAIsRequestApplicableToVisibleState(request, _hasLatestVisibleState, _latestVisibleTilesBBox31, _latestVisibleZoom))
         {
             dataReadyHandler = [_dataReadyHandler copy];
         }
@@ -541,7 +672,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
         amenities->clear();
 
     if (!_dataProvider)
-        return YES;
+        return NO;
 
     OAResultMatcher<OAPOI *> *matcher =
         [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
@@ -628,6 +759,8 @@ static BOOL OAIsRequestApplicableToVisibleState(
 - (void)updateWikiOnlineAmenitiesControllerVisibleState;
 - (void)invalidateWikiOnlineAmenitiesController;
 - (void)resetNotifiedTiles;
+- (void)scheduleTopPlacesCacheRefresh;
+- (void)scheduleTopPlacesCacheRefreshForTileId:(OsmAnd::TileId)tileId zoom:(OsmAnd::ZoomLevel)zoom;
 
 @end
 
@@ -658,6 +791,9 @@ static BOOL OAIsRequestApplicableToVisibleState(
     NSSet<NSString *> *_topPlacesWikipediaResourceIds;
     QVector<OsmAnd::TileId> _notifiedTiles;
     OsmAnd::ZoomLevel _notifiedZoom;
+    dispatch_queue_t _topPlacesCacheQueue;
+    BOOL _topPlacesCacheRefreshScheduled;
+    NSMutableSet<NSString *> *_pendingTopPlacesDirtyTileKeys;
     
     CGSize _screenSize;
 }
@@ -679,6 +815,9 @@ static BOOL OAIsRequestApplicableToVisibleState(
     _topPlacesWikipediaResourceIds = [NSSet set];
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
     _notifiedZoom = OsmAnd::InvalidZoomLevel;
+    _topPlacesCacheQueue = dispatch_queue_create("com.osmand.topplaces.cacheRefresh", DISPATCH_QUEUE_SERIAL);
+    _topPlacesCacheRefreshScheduled = NO;
+    _pendingTopPlacesDirtyTileKeys = [NSMutableSet set];
 }
 
 - (NSString *) layerId
@@ -688,8 +827,21 @@ static BOOL OAIsRequestApplicableToVisibleState(
 
 - (void)updateWikiOnlineAmenitiesControllerVisibleState
 {
-    if (_wikiOnlineAmenitiesController)
-        [_wikiOnlineAmenitiesController updateVisibleBBox31:[self.mapView getVisibleBBox31] zoom:self.mapView.zoomLevel];
+    if (!_wikiOnlineAmenitiesController)
+        return;
+
+    __block OsmAnd::AreaI visibleBBox31;
+    __block QVector<OsmAnd::TileId> visibleTiles;
+    __block OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
+    [self.mapViewController runWithRenderSync:^{
+        visibleBBox31 = [self.mapView getVisibleBBox31];
+        visibleTiles = self.mapView.visibleTiles;
+        visibleZoom = self.mapView.zoomLevel;
+    }];
+
+    [_wikiOnlineAmenitiesController updateVisibleBBox31:visibleBBox31
+                                           visibleTiles:visibleTiles
+                                                  zoom:visibleZoom];
 }
 
 - (void)invalidateWikiOnlineAmenitiesController
@@ -705,6 +857,74 @@ static BOOL OAIsRequestApplicableToVisibleState(
 {
     _notifiedTiles.clear();
     _notifiedZoom = OsmAnd::InvalidZoomLevel;
+}
+
+- (NSString *)topPlacesDirtyTileKeyForTileId:(OsmAnd::TileId)tileId zoom:(OsmAnd::ZoomLevel)zoom
+{
+    return [NSString stringWithFormat:@"%d:%d:%d", zoom, tileId.x, tileId.y];
+}
+
+- (void)scheduleTopPlacesCacheRefresh
+{
+    if (!_topPlacesCacheQueue)
+    {
+        [self notifyTopPlacesProviderIfWikiTilesCached];
+        return;
+    }
+
+    dispatch_async(_topPlacesCacheQueue, ^{
+        if (_topPlacesCacheRefreshScheduled)
+            return;
+
+        _topPlacesCacheRefreshScheduled = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.03 * NSEC_PER_SEC)), _topPlacesCacheQueue, ^{
+            NSSet<NSString *> *dirtyTileKeys = [_pendingTopPlacesDirtyTileKeys copy];
+            [_pendingTopPlacesDirtyTileKeys removeAllObjects];
+            _topPlacesCacheRefreshScheduled = NO;
+
+            if (dirtyTileKeys.count > 0)
+            {
+                BOOL showWikiOnMap = NO;
+                std::shared_ptr<OsmAnd::AmenitySymbolsProvider> wikiSymbolsProvider;
+                QVector<OsmAnd::TileId> visibleTiles;
+                OsmAnd::ZoomLevel visibleZoom = OsmAnd::InvalidZoomLevel;
+                [self readVisibleWikiCacheStateShowWikiOnMap:&showWikiOnMap
+                                           wikiSymbolsProvider:&wikiSymbolsProvider
+                                                  visibleTiles:&visibleTiles
+                                                   visibleZoom:&visibleZoom];
+                if (showWikiOnMap
+                    && wikiSymbolsProvider
+                    && visibleZoom != OsmAnd::InvalidZoomLevel)
+                {
+                    for (const auto& visibleTileId : visibleTiles)
+                    {
+                        NSString *tileKey = [self topPlacesDirtyTileKeyForTileId:visibleTileId zoom:visibleZoom];
+                        if ([dirtyTileKeys containsObject:tileKey])
+                        {
+                            [self resetNotifiedTiles];
+                            break;
+                        }
+                    }
+                }
+            }
+            [self notifyTopPlacesProviderIfWikiTilesCached];
+        });
+    });
+}
+
+- (void)scheduleTopPlacesCacheRefreshForTileId:(OsmAnd::TileId)tileId zoom:(OsmAnd::ZoomLevel)zoom
+{
+    if (_topPlacesCacheQueue)
+    {
+        NSString *tileKey = [self topPlacesDirtyTileKeyForTileId:tileId zoom:zoom];
+        dispatch_async(_topPlacesCacheQueue, ^{
+            [_pendingTopPlacesDirtyTileKeys addObject:tileKey];
+            [self scheduleTopPlacesCacheRefresh];
+        });
+        return;
+    }
+
+    [self scheduleTopPlacesCacheRefresh];
 }
 
 - (void) resetLayer
@@ -913,8 +1133,6 @@ static BOOL OAIsRequestApplicableToVisibleState(
                 PoiUIFilterDataProvider *wikiDataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:f];
                 OATopWikiOnlineAmenitiesController *wikiOnlineAmenitiesController =
                     [[OATopWikiOnlineAmenitiesController alloc] initWithDataProvider:wikiDataProvider];
-                [wikiOnlineAmenitiesController updateVisibleBBox31:[self.mapView getVisibleBBox31]
-                                                             zoom:self.mapView.zoomLevel];
                 externalAmenitiesProvider =
                     [wikiOnlineAmenitiesController]
                     (const OsmAnd::TileId tileId,
@@ -928,6 +1146,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
                                                                               response:outResponse];
                     };
                 _wikiOnlineAmenitiesController = wikiOnlineAmenitiesController;
+                [self updateWikiOnlineAmenitiesControllerVisibleState];
                 categoriesFilter.remove(QString::fromNSString(OSM_WIKI_CATEGORY));
             }
             else if (isWiki)
@@ -954,10 +1173,10 @@ static BOOL OAIsRequestApplicableToVisibleState(
             {
                 __weak __typeof(self) weakSelf = self;
                 _wikiSymbolsProvider->setDataObtainedHandler(
-                    [weakSelf](const OsmAnd::TileId, const OsmAnd::ZoomLevel) {
+                    [weakSelf](const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom) {
                         __typeof(self) strongSelf = weakSelf;
                         if (strongSelf)
-                            [strongSelf notifyTopPlacesProviderIfWikiTilesCached];
+                            [strongSelf scheduleTopPlacesCacheRefreshForTileId:tileId zoom:zoom];
                     });
             }
 
@@ -965,7 +1184,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
             if (isWiki)
             {
                 [_topPlacesProvider drawTopPlacesIfNeeded:YES];
-                [self notifyTopPlacesProviderIfWikiTilesCached];
+                [self scheduleTopPlacesCacheRefresh];
             }
         };
 
@@ -1110,7 +1329,7 @@ static BOOL OAIsRequestApplicableToVisibleState(
         [self resetNotifiedTiles];
         [_topPlacesProvider resetLayer];
         [_topPlacesProvider drawTopPlacesIfNeeded:YES];
-        [self notifyTopPlacesProviderIfWikiTilesCached];
+        [self scheduleTopPlacesCacheRefresh];
     }
     else if (shouldRefreshVisiblePlaces)
     {

@@ -3767,7 +3767,6 @@
 "rendering_attr_spotDistance_description" = "Απόσταση βυθομέτρησης σημείου";
 "rendering_attr_spotDistance_name" = "Απόσταση βυθομέτρησης σημείου";
 "trip_recording_moving_time_widget_description" = "Δείχνει τον τρέχον κατεγεγραμμένο χρόνο σε κίνηση, ή τον χρόνο της τελευταίας ανηφόρας και κατηφόρας.";
-"will_close_at_short" = "Έως";
 "open_till_short" = "Έως";
 "show_debug_tile" = "Εμφάνιση πληροφοριών πλακιδίων";
 "show_image_previews" = "Εμφάνιση προεπισκόπησης εικόνων";

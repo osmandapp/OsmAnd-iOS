@@ -108,7 +108,8 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     }
 
     self.navigationController.navigationBar.prefersLargeTitles = YES;
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
 
     [self updateAppearance];
 
@@ -146,7 +147,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
     if (![self.navigationController isNavigationBarHidden])
     {
-        if ([self shouldResetNavbarForTransition])
+        if ([self shouldHideNavbarForTransition])
             [self.navigationController setNavigationBarHidden:YES animated:NO];
 
         //reset navbar to default appearance
@@ -164,7 +165,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     }
 }
 
-- (BOOL)shouldResetNavbarForTransition
+- (BOOL)shouldHideNavbarForTransition
 {
     UIViewController *nextController = self.isMovingFromParentViewController ? self.navigationController.topViewController : self.navigationController.viewControllers.lastObject;
     if (!nextController || nextController == self)
@@ -566,9 +567,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
                 leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
                 freeSpaceForNavbarButton = 30.;
                 leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-                UIButtonConfiguration *configuration = leftButton.configuration ?: [UIButtonConfiguration plainButtonConfiguration];
-                configuration.contentInsets = NSDirectionalEdgeInsetsMake(0., 4., 0., -4.);
-                leftButton.configuration = configuration;
+                leftButton.contentEdgeInsets = UIEdgeInsetsMake(0., 4., 0., -4.);
             }
             [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
             [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

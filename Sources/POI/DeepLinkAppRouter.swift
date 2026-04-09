@@ -11,7 +11,6 @@ import UIKit
 @objcMembers
 final class DeepLinkAppRouter: NSObject {
     private let root: OARootViewController
-    private var navigationActivationObserver: NSObjectProtocol?
     
     init(rootViewController: OARootViewController) {
         self.root = rootViewController
@@ -292,28 +291,16 @@ final class DeepLinkAppRouter: NSObject {
     }
     
     func openNavigationScreen(appMode: OAApplicationMode) {
-        // Opening Route Info immediately mutates routing state and triggers route recalculation,so deeplinks wait until the app is active to match the regular map button flow.
-        guard UIApplication.shared.applicationState == .active else {
-            guard navigationActivationObserver == nil else { return }
-            navigationActivationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [self] _ in
-                if let navigationActivationObserver {
-                    NotificationCenter.default.removeObserver(navigationActivationObserver)
-                    self.navigationActivationObserver = nil
-                }
-                
-                openNavigationScreen(appMode: appMode)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+            guard let mapPanel = self.root.mapPanel else { return }
+            if !OAApplicationMode.values().contains(where: { $0.stringKey == appMode.stringKey }) {
+                OAApplicationMode.changeProfileAvailability(appMode, isSelected: true)
             }
-            return
+            
+            guard !(mapPanel.isRouteInfoVisible() && OARoutingHelper.sharedInstance()?.getAppMode().stringKey == appMode.stringKey) else { return }
+            dismissAndPopToRoot()
+            mapPanel.showRouteInfo(true, appMode: appMode)
         }
-        
-        guard let mapPanel = root.mapPanel else { return }
-        if !OAApplicationMode.values().contains(where: { $0.stringKey == appMode.stringKey }) {
-            OAApplicationMode.changeProfileAvailability(appMode, isSelected: true)
-        }
-        
-        guard !(mapPanel.isRouteInfoVisible() && OARoutingHelper.sharedInstance()?.getAppMode().stringKey == appMode.stringKey) else { return }
-        dismissAndPopToRoot()
-        mapPanel.showRouteInfo(true, appMode: appMode)
     }
     
     private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController) {

@@ -15,7 +15,7 @@ final class ButtonConfigurationHelper: NSObject {
         UIButton.Configuration.purchasePlanButtonConfiguration(title: title)
     }
     
-    static func proBannerButtonConfiguration(imageName: String) -> UIButton.Configuration {
-        UIButton.Configuration.proBannerButtonConfiguration(image: UIImage(named: imageName))
+    static func paymentLabelButtonConfiguration(imageName: String, isMapsPlus: Bool = false) -> UIButton.Configuration {
+        UIButton.Configuration.paymentLabelButtonConfiguration(image: UIImage(named: imageName), isMapsPlus: isMapsPlus)
     }
 }

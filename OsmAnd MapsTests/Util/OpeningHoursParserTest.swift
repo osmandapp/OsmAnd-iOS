@@ -575,7 +575,7 @@ final class OpeningHoursParserTest: XCTestCase {
         hours = makeHours("Mo-Fr 12:00-15:00, Tu-Fr 17:00-23:00, Sa 12:00-23:00, Su 14:00-23:00")
         assertShortInfo("16.02.2018 09:45", hours: hours, equals: "12:00")
         assertShortInfo("16.02.2018 12:00", hours: hours, equals: "Till 15:00")
-        assertShortInfo("16.02.2018 14:00", hours: hours, equals: "Until 15:00")
+        assertShortInfo("16.02.2018 14:00", hours: hours, equals: "Till 15:00")
         assertShortInfo("16.02.2018 16:00", hours: hours, equals: "17:00")
 
         hours = makeHours("Mo-Fr 09:00-18:00")

@@ -4017,7 +4017,7 @@
 "trip_recording_moving_time_widget_description" = "Показывает текущую длительность записи перемещения или продолжительносить последнего подъема и спуска с горы.";
 "trip_recording_moving_time" = "Длительность движения";
 "finish_navigation" = "Завершить навигацию";
-"context_menu_item_add_parking_point" = "Отметить как место для парковки";
+"context_menu_item_add_parking_point" = "Отметить место парковки";
 "find_parking" = "Найти парковку";
 "background_liquid_glass_clear_ios" = "Прозрачный";
 "enable_msaa_carplay" = "Включить MSAA для CarPlay";

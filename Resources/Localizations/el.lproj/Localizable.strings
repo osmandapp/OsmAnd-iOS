@@ -3767,3 +3767,13 @@
 "rendering_attr_spotDistance_description" = "Απόσταση βυθομέτρησης σημείου";
 "rendering_attr_spotDistance_name" = "Απόσταση βυθομέτρησης σημείου";
 "trip_recording_moving_time_widget_description" = "Δείχνει τον τρέχον κατεγεγραμμένο χρόνο σε κίνηση, ή τον χρόνο της τελευταίας ανηφόρας και κατηφόρας.";
+"will_close_at_short" = "Έως";
+"open_till_short" = "Έως";
+"show_debug_tile" = "Εμφάνιση πληροφοριών πλακιδίων";
+"show_image_previews" = "Εμφάνιση προεπισκόπησης εικόνων";
+"popular_places" = "Δημοφιλή μέρη";
+"shared_string_wikipedia" = "Βικιπαίδεια";
+"poi_source" = "Πηγή ΣΕ";
+"shared_string_int_name" = "Διεθνές όνομα";
+"shared_string_online_only" = "Με διαδίκτυο μόνο";
+"shared_string_offline_only" = "Χωρίς διαδίκτυο μόνο";

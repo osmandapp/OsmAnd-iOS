@@ -109,7 +109,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
 
     [self updateAppearance];
 

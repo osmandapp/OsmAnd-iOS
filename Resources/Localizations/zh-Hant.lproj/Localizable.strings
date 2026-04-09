@@ -4016,3 +4016,5 @@
 "has_vehicle_metrics" = "有 OBDII 資料";
 "context_menu_read_full_article" = "閱讀文章全文";
 "read_on" = "在 %@ 閱讀";
+"will_close_at_short" = "直到";
+"open_till_short" = "直到";

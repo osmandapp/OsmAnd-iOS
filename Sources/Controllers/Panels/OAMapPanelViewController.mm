@@ -4165,37 +4165,40 @@ typedef enum
 
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle animated:(BOOL)animated
 {
-    if (UIApplication.sharedApplication.isCarPlayAppActive)
-    {
-        CGSize screenBBox = _mapViewController.view.bounds.size;
-        [self displayAreaOnMap:topLeft
-                   bottomRight:bottomRight
-                    screenBBox:screenBBox
-                   bottomInset:0.0
-                     leftInset:0.0
-                      topInset:0.0
-          changeElevationAngle:changeElevationAngle];
-        return;
-    }
+    CGFloat topInset = 0.0;
+    CGFloat bottomInset = 0.0;
+    CGFloat leftInset = 0.0;
+    CGSize screenBBox;
+    UIWindow *carPlayActiveWindow = UIApplication.sharedApplication.carPlayActiveWindow;
 
-    CGFloat bottomInset;
-    CGFloat leftInset;
-    BOOL landscape = [self.targetMenuView isLandscape];
-    if ([_routeInfoView superview])
+    if (UIApplication.sharedApplication.isCarPlayAppActive && carPlayActiveWindow)
     {
-        bottomInset = !landscape ? _routeInfoView.frame.size.height : 0.0;
-        leftInset = landscape ? _routeInfoView.frame.size.width : 0.0;
+        topInset = carPlayActiveWindow.safeAreaInsets.top;
+        screenBBox = CGSizeMake(CGRectGetWidth(_mapViewController.view.bounds),
+                                CGRectGetHeight(_mapViewController.view.bounds) - topInset);
     }
     else
     {
-        bottomInset = [OARootViewController.instance.mapPanel.hudViewController getHudBottomOffset];
-        leftInset = 0.0;
+        BOOL landscape = [self.targetMenuView isLandscape];
+        if ([_routeInfoView superview])
+        {
+            bottomInset = !landscape ? _routeInfoView.frame.size.height : 0.0;
+            leftInset = landscape ? _routeInfoView.frame.size.width : 0.0;
+        }
+        else
+        {
+            bottomInset = [OARootViewController.instance.mapPanel.hudViewController getHudBottomOffset];
+        }
+
+        screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
     }
-    
+
     [self displayAreaOnMap:topLeft
                bottomRight:bottomRight
+                screenBBox:screenBBox
                bottomInset:bottomInset
                  leftInset:leftInset
+                  topInset:topInset
       changeElevationAngle:changeElevationAngle];
 }
 

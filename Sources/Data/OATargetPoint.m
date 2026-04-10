@@ -32,9 +32,8 @@
 
 - (void)initAddressIfNeeded
 {
-    if (self.addressFound) {
+    if (self.addressFound)
         return;
-    }
     
     OAReverseGeocoder *geocoder = [OAReverseGeocoder instance];
     

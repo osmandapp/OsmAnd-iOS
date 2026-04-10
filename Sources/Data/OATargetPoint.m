@@ -35,38 +35,19 @@
     if (self.addressFound)
         return;
     
-    NSString *addressString = nil;
-    BOOL isAddressFound = NO;
-    NSString *formattedTargetName = nil;
-    NSString *roadTitle = nil;
-    if (self.obfId > 0 && [self isValidObfId])
-        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:_location.latitude lon:_location.longitude objectId:self.obfId];
-    else
-        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:_location.latitude lon:_location.longitude];
-
-    if (!roadTitle || roadTitle.length == 0)
-    {
-        addressString = OALocalizedString(@"map_no_address");
-    }
-    else
-    {
-        addressString = roadTitle;
-        isAddressFound = YES;
-    }
+    OAReverseGeocoder *geocoder = [OAReverseGeocoder instance];
     
-    if (isAddressFound || addressString)
-    {
-        formattedTargetName = addressString;
-    }
-    else
-    {
-        formattedTargetName = [OAPointDescription getLocationName:_location.latitude lon:_location.longitude sh:NO];
-    }
+    NSString *roadTitle = self.obfId > 0 && [self isValidObfId]
+        ? [geocoder lookupAddressAtLat:_location.latitude
+                                   lon:_location.longitude
+                              objectId:self.obfId]
+        : [geocoder lookupAddressAtLat:_location.latitude
+                                   lon:_location.longitude];
     
-    if (NSStringIsEmpty(_title))
-        _title = formattedTargetName;
-    _titleAddress = roadTitle;
-    _addressFound = isAddressFound;
+    BOOL isAddressFound = roadTitle.length > 0;
+    
+    self.titleAddress = roadTitle;
+    self.addressFound = isAddressFound;
 }
 
 - (OAPointDescription *) pointDescription

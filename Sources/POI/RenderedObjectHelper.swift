@@ -14,7 +14,7 @@ final class RenderedObjectHelper: NSObject {
             return nameLocalized
         } else if let name = syntheticAmenity.name, !name.isEmpty {
             return name
-        } else if let polygon = polygon {
+        } else if let polygon {
             return RenderedObjectHelper.getTranslatedType(renderedObject: polygon) ?? ""
         } else {
             return syntheticAmenity.getSubTypeStr()

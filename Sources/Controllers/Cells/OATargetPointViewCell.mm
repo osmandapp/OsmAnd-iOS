@@ -71,35 +71,35 @@
         if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class])
             _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         
-        NSString *t;
+        NSString *title;
         if (_targetPoint.titleSecond)
         {
-            t = [NSString stringWithFormat:@"%@ - %@", _targetPoint.title, _targetPoint.titleSecond];
-            CGFloat h = [OAUtilities calculateTextBounds:t width:_titleView.bounds.size.width font:_titleView.font].height;
+            title = [NSString stringWithFormat:@"%@ - %@", _targetPoint.title, _targetPoint.titleSecond];
+            CGFloat h = [OAUtilities calculateTextBounds:title width:_titleView.bounds.size.width font:_titleView.font].height;
             if (h > 41.0)
             {
-                t = _targetPoint.title;
+                title = _targetPoint.title;
             }
             else if (h > 21.0)
             {
-                t = [NSString stringWithFormat:@"%@\n%@", _targetPoint.title, _targetPoint.titleSecond];
-                h = [OAUtilities calculateTextBounds:t width:_titleView.bounds.size.width font:_titleView.font].height;
+                title = [NSString stringWithFormat:@"%@\n%@", _targetPoint.title, _targetPoint.titleSecond];
+                h = [OAUtilities calculateTextBounds:title width:_titleView.bounds.size.width font:_titleView.font].height;
                 if (h > 41.0)
-                    t = _targetPoint.title;
+                    title = _targetPoint.title;
             }
         }
         else if (_targetPoint.type == OATargetNetworkGPX)
         {
             OARouteKey *routeKey = (OARouteKey *)_targetPoint.targetObj;
             NSString *localizedTitle = routeKey ? routeKey.localizedTitle : @"";
-            t = localizedTitle.length > 0 ? localizedTitle : _targetPoint.title;
+            title = localizedTitle.length > 0 ? localizedTitle : _targetPoint.title;
         }
         else
         {
-            t = _targetPoint.title;
+            title = _targetPoint.title;
         }
         
-        [_titleView setText:t];
+        [_titleView setText:title];
         [self updateDescriptionView];
     }
 }

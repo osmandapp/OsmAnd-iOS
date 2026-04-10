@@ -128,12 +128,9 @@ static int DEFAULT_ELO = 900;
 - (void)updateContentLocales:(NSSet<NSString *> *)locales;
 
 - (nullable NSString *)getName:(nullable NSString *)lang;
-- (nullable NSString *)getName:(nullable NSString *)lang transliterate:(BOOL)transliterate;
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 - (NSDictionary<NSString *, NSString *> *)getAltNamesMap;
-
-- (NSString *)getEnName:(BOOL)transliterate;
 
 - (NSString *)getGpxFileName:(nullable NSString *)lang;
 

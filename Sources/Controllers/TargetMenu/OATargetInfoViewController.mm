@@ -112,8 +112,6 @@ static const NSInteger kOrderNearestRow = 1000;
 static const NSInteger kOrderNamesRow = 18000;
 static const NSInteger kOrderOsmRow = 19000;
 static const NSInteger kOrderCoordinatesRow = 20000;
-static const NSInteger kOrderPhotoEmptyRow = 30001;
-static const NSInteger kOrderMapillaryEmptyRow = 30002;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -1113,10 +1111,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             collapsableView.placeholderImage = [self targetImage];
             
             [collapsableView setCards:cards];
-            
-            BOOL hasPhoto = !filter.cardsIsEmpty && !filter.hasOnlyMapillaryPhotosContent;
-            NSInteger order = hasPhoto ? kOrderPhotoRow : kOrderPhotoEmptyRow;
-            _onlinePhotoCardsRowInfo.order = order;
         }
         if (_mapillaryCardsRowInfo)
         {
@@ -1124,13 +1118,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
-            
-            BOOL hasPhoto = !filter.cardsIsEmpty && !filter.hasOnlyOnlinePhotosContent;
-            NSInteger order = hasPhoto ? kOrderMapillaryRow : kOrderMapillaryEmptyRow;
-            _mapillaryCardsRowInfo.order = order;
         }
-        
-        [self updateInfoRows];
     }
 }
 
@@ -1165,7 +1153,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoEmptyRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoRow typeName:@"" isPhoneNumber:NO isUrl:NO];
     
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
@@ -1196,7 +1184,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
                                                                 textColor:nil
                                                                    isText:NO
                                                                 needLinks:NO
-                                                                    order:kOrderMapillaryEmptyRow
+                                                                    order:kOrderMapillaryRow
                                                                  typeName:@""
                                                             isPhoneNumber:NO isUrl:NO];
 

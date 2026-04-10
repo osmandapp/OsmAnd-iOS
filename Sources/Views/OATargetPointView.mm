@@ -1613,18 +1613,11 @@ static const NSInteger _buttonsCount = 4;
         }
         else
         {
-            if (_targetPoint.title.length > 0)
+            NSString *targetTitle = [self getTargetTitle];
+            if (targetTitle.length > 0)
             {
-                title = _targetPoint.title;
-            }
-            else
-            {
-                NSString *name = [self.customController getNameStr];
-                if (name.length > 0)
-                {
-                    title = name;
-                    _targetPoint.title = title;
-                }
+                title = targetTitle;
+                _targetPoint.title = title;
             }
         }
         
@@ -1636,8 +1629,6 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.activeTargetType == OATargetGPX)
         _buttonFavorite.enabled = _targetPoint.type != OATargetWpt || _targetPoint.type == OATargetWpt;
-    //else
-    //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     
     if (self.customController)
     {
@@ -2543,7 +2534,7 @@ static const NSInteger _buttonsCount = 4;
     return newOffset;
 }
 
-- (NSString *) getTargetTitle
+- (NSString *)getTargetTitle
 {
     if (_targetPoint.title.length > 0)
     {
@@ -2553,9 +2544,7 @@ static const NSInteger _buttonsCount = 4;
     {
         NSString *name = [self.customController getNameStr];
         if (name.length > 0)
-        {
             return name;
-        }
     }
     
     return @"";

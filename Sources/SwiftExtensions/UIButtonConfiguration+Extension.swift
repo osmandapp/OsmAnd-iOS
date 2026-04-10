@@ -24,8 +24,6 @@ extension UIButton.Configuration {
     
     static func proBannerButtonConfiguration(image: UIImage?) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
-        config.title = nil
-        config.image = nil
         config.background.image = image
         config.background.imageContentMode = .scaleAspectFill
         config.background.cornerRadius = 8.0
@@ -36,8 +34,6 @@ extension UIButton.Configuration {
     
     static func mapsPlusBannerButtonConfiguration(image: UIImage?) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
-        config.title = nil
-        config.image = nil
         config.background.image = image
         config.background.imageContentMode = .scaleAspectFill
         config.background.cornerRadius = 8.0

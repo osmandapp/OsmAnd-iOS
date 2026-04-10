@@ -88,13 +88,13 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         detailRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         detailRow.key = RowKey.detail.rawValue
         detailRow.title = localizedString("level_of_details")
-        detailRow.setObj([resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailLowOff).withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailHighOff).withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.valuesOff.rawValue)
+        detailRow.setObj([resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailLowOff, tintColor: .iconColorActive), resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailHighOff, tintColor: .iconColorActive)], forKey: RowKey.valuesOff.rawValue)
         detailRow.setObj([resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailLowOn), resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailHighOn)], forKey: RowKey.selectedValues.rawValue)
         let viewDistanceRow = performanceSection.createNewRow()
         viewDistanceRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         viewDistanceRow.key = RowKey.viewDistance.rawValue
         viewDistanceRow.title = localizedString("view_distance")
-        viewDistanceRow.setObj([resizedSegmentIcon(UIImage.icCustomViewDistanceNearOff).withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), resizedSegmentIcon(UIImage.icCustomViewDistanceFarOff).withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.valuesOff.rawValue)
+        viewDistanceRow.setObj([resizedSegmentIcon(UIImage.icCustomViewDistanceNearOff, tintColor: .iconColorActive), resizedSegmentIcon(UIImage.icCustomViewDistanceFarOff, tintColor: .iconColorActive)], forKey: RowKey.valuesOff.rawValue)
         viewDistanceRow.setObj([resizedSegmentIcon(UIImage.icCustomViewDistanceNearOn), resizedSegmentIcon(UIImage.icCustomViewDistanceFarOn)], forKey: RowKey.selectedValues.rawValue)
     }
     
@@ -184,8 +184,10 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         tblView?.reloadData()
     }
     
-    private func resizedSegmentIcon(_ image: UIImage) -> UIImage {
-        OAUtilities.resize(image, newSize: segmentIconSize)?.withRenderingMode(image.renderingMode) ?? image
+    private func resizedSegmentIcon(_ image: UIImage, tintColor: UIColor? = nil) -> UIImage {
+        let resizedImage = OAUtilities.resize(image, newSize: segmentIconSize) ?? image
+        guard let tintColor else { return resizedImage }
+        return resizedImage.withTintColor(tintColor, renderingMode: .alwaysOriginal)
     }
     
     private func is3DObjectsCurrentlyEnabled() -> Bool {

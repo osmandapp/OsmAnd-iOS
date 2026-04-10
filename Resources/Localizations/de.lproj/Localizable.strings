@@ -4060,3 +4060,6 @@
 "choose_color" = "Farbe auswählen";
 "buildings_3d_visibility_description" = "Passe die Deckkraft der 3D-Strukturen auf der Karte an.";
 "level_of_details" = "Detailtiefe";
+"open_till_short" = "Bis";
+"shared_string_int_name" = "Internationaler Name";
+"show_debug_tile" = "Kachelinformationen anzeigen";

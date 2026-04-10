@@ -89,13 +89,13 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         detailRow.key = RowKey.detail.rawValue
         detailRow.title = localizedString("level_of_details")
         detailRow.setObj([resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailLowOff), resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailHighOff)], forKey: RowKey.valuesOff.rawValue)
-        detailRow.setObj([resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailLowOn, tintColor: nil), resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailHighOn, tintColor: nil)], forKey: RowKey.selectedValues.rawValue)
+        detailRow.setObj([OAUtilities.resize(UIImage.icCustom3DBuildingsDetailLowOn, newSize: segmentIconSize) ?? UIImage.icCustom3DBuildingsDetailLowOn, OAUtilities.resize(UIImage.icCustom3DBuildingsDetailHighOn, newSize: segmentIconSize) ?? UIImage.icCustom3DBuildingsDetailHighOn], forKey: RowKey.selectedValues.rawValue)
         let viewDistanceRow = performanceSection.createNewRow()
         viewDistanceRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         viewDistanceRow.key = RowKey.viewDistance.rawValue
         viewDistanceRow.title = localizedString("view_distance")
         viewDistanceRow.setObj([resizedSegmentIcon(UIImage.icCustomViewDistanceNearOff), resizedSegmentIcon(UIImage.icCustomViewDistanceFarOff)], forKey: RowKey.valuesOff.rawValue)
-        viewDistanceRow.setObj([resizedSegmentIcon(UIImage.icCustomViewDistanceNearOn, tintColor: nil), resizedSegmentIcon(UIImage.icCustomViewDistanceFarOn, tintColor: nil)], forKey: RowKey.selectedValues.rawValue)
+        viewDistanceRow.setObj([OAUtilities.resize(UIImage.icCustomViewDistanceNearOn, newSize: segmentIconSize) ?? UIImage.icCustomViewDistanceNearOn, OAUtilities.resize(UIImage.icCustomViewDistanceFarOn, newSize: segmentIconSize) ?? UIImage.icCustomViewDistanceFarOn], forKey: RowKey.selectedValues.rawValue)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -184,9 +184,8 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         tblView?.reloadData()
     }
     
-    private func resizedSegmentIcon(_ image: UIImage, tintColor: UIColor? = .iconColorActive) -> UIImage {
+    private func resizedSegmentIcon(_ image: UIImage, tintColor: UIColor = .iconColorActive) -> UIImage {
         let resizedImage = OAUtilities.resize(image, newSize: segmentIconSize) ?? image
-        guard let tintColor else { return resizedImage }
         return resizedImage.withTintColor(tintColor, renderingMode: .alwaysOriginal)
     }
     

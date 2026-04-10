@@ -87,14 +87,14 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         detailRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         detailRow.key = RowKey.detail.rawValue
         detailRow.title = localizedString("level_of_details")
-        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOff, .icCustom3DBuildingsDetailHighOff], forKey: RowKey.valuesOff.rawValue)
-        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), UIImage.icCustom3DBuildingsDetailHighOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.selectedValues.rawValue)
+        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOff.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), .icCustom3DBuildingsDetailHighOff.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.valuesOff.rawValue)
+        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOn, UIImage.icCustom3DBuildingsDetailHighOn], forKey: RowKey.selectedValues.rawValue)
         let viewDistanceRow = performanceSection.createNewRow()
         viewDistanceRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         viewDistanceRow.key = RowKey.viewDistance.rawValue
         viewDistanceRow.title = localizedString("view_distance")
-        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOff, .icCustomViewDistanceFarOff], forKey: RowKey.valuesOff.rawValue)
-        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), UIImage.icCustomViewDistanceFarOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.selectedValues.rawValue)
+        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOff.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), .icCustomViewDistanceFarOff.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.valuesOff.rawValue)
+        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOn, UIImage.icCustomViewDistanceFarOn], forKey: RowKey.selectedValues.rawValue)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

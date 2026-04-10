@@ -638,7 +638,7 @@
 "shared_string_turn" = "Bifurcation";
 "day_off_label" = "fermé";
 "open_from" = "Ouvre à";
-"open_till" = "Ouvert jusqu\'à";
+"open_till" = "Ouvert jusqu'à";
 "will_open_at" = "Ouvre à";
 "will_open_on" = "Ouvre à";
 "will_open_tomorrow_at" = "Ouvre demain à";

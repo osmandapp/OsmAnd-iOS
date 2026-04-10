@@ -283,13 +283,13 @@ static const double DISTANCE_SKIP = 10000;
         {
             ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_AT_START_OR_END);
         }
-        else if (mixedMapsAtStartOrEnd)
-        {
-            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_AT_START_OR_END);
-        }
         else if (missingMapsIntermediates)
         {
             ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_INTERMEDIATES);
+        }
+        else if (mixedMapsAtStartOrEnd)
+        {
+            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_AT_START_OR_END);
         }
         else if (mixedMapsIntermediates)
         {

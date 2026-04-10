@@ -3146,4 +3146,4 @@
 "trip_recording_moving_time_widget_description" = "Zobrazuje zaznamenávaný čas pohybu, alebo čas pre posledný stúpajúci alebo klesajúci úsek.";
 "trip_recording_moving_time" = "Čas pohybu";
 "shared_string_maximum" = "Maximum";
-"open_till_short" = "Od";
+"open_till_short" = "Do";

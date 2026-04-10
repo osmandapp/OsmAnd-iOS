@@ -147,9 +147,8 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
     if (![self.navigationController isNavigationBarHidden])
     {
-        //hide root navbar if open screen without navbar
-        if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
-            [self.navigationController setNavigationBarHidden:YES animated:YES];
+        if ([self shouldHideNavbarForTransition])
+            [self.navigationController setNavigationBarHidden:YES animated:NO];
 
         //reset navbar to default appearance
         NSArray<UIViewController *> *viewControllers = self.navigationController.viewControllers;
@@ -164,6 +163,25 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
             self.navigationController.navigationBar.tintColor = nil;
         }
     }
+}
+
+- (BOOL)shouldHideNavbarForTransition
+{
+    UIViewController *nextController = self.isMovingFromParentViewController ? self.navigationController.topViewController : self.navigationController.viewControllers.lastObject;
+    if (!nextController || nextController == self)
+        return NO;
+    if (![nextController isNavbarVisible])
+        return YES;
+    if (![nextController isKindOfClass:OABaseNavbarViewController.class])
+        return NO;
+    
+    OABaseNavbarViewController *nextNavbarController = (OABaseNavbarViewController *) nextController;
+    return [self getNavbarStyle] != [nextNavbarController getNavbarStyle]
+    || [self getNavbarColorScheme] != [nextNavbarController getNavbarColorScheme]
+    || [self isNavbarSeparatorVisible] != [nextNavbarController isNavbarSeparatorVisible]
+    || [self shouldBlurAppearanceNavBar] != [nextNavbarController shouldBlurAppearanceNavBar]
+    || ![[self navbarBackgroundColor] isEqual:[nextNavbarController navbarBackgroundColor]]
+    || ![[self blurAppearanceBackgroundColor] isEqual:[nextNavbarController blurAppearanceBackgroundColor]];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -464,7 +482,32 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 {
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
-    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
+    UIBarButtonItem *systemLeftItem = [self systemLeftBarButtonItem];
+    BOOL isModalController = [self isModal];
+    BOOL isRootController = self.navigationController.viewControllers.count == 1;
+    BOOL shouldUseSystemBackButton = [self useSystemBackButton] && !systemLeftItem && !isRootController;
+    if (@available(iOS 16.0, *))
+    {
+        if (shouldUseSystemBackButton)
+        {
+            __weak __typeof(self) weakSelf = self;
+            self.navigationItem.backAction = [UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
+                [weakSelf onLeftNavbarButtonPressed];
+            }];
+        }
+        else
+        {
+            self.navigationItem.backAction = nil;
+        }
+    }
+    else if (shouldUseSystemBackButton)
+    {
+        shouldUseSystemBackButton = NO;
+        if (!leftNavbarButtonCustomIcon)
+            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+    }
+    
+    if (!leftNavbarButtonCustomIcon && !shouldUseSystemBackButton && ((isModalController && isRootController && !leftButtonTitle) || (!isModalController && leftButtonTitle && leftButtonTitle.length == 0)))
         leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
@@ -489,11 +532,14 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     BOOL isLongTitle = freeSpaceForNavbarButton < 50.;
 
     _leftNavbarButton = nil;
-    UIBarButtonItem *systemLeftItem = [self systemLeftBarButtonItem];
     if (systemLeftItem)
     {
         _leftNavbarButton = systemLeftItem;
         [self.navigationItem setLeftBarButtonItem:systemLeftItem animated:YES];
+    }
+    else if (shouldUseSystemBackButton)
+    {
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     }
     else
     {
@@ -520,6 +566,8 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
             {
                 leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
                 freeSpaceForNavbarButton = 30.;
+                leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+                leftButton.contentEdgeInsets = UIEdgeInsetsMake(0., 4., 0., -4.);
             }
             [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
             [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -779,6 +827,11 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
         return NO;
     else
         return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
+}
+
+- (BOOL)useSystemBackButton
+{
+    return NO;
 }
 
 - (UIImage *)getCenterIconAboveTitle

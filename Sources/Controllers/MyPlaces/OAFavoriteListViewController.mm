@@ -1155,7 +1155,7 @@ static UIViewController *parentController;
         
         NSString *appearanceName = OALocalizedString(@"default_appearance");
         UIAction *appearanceAction = [UIAction actionWithTitle:appearanceName
-                                                         image:[UIImage systemImageNamed:@"paintpalette"]
+                                                         image:[[UIImage systemImageNamed:@"paintpalette"] resizedMenuImage]
                                                     identifier:nil
                                                        handler:^(__kindof UIAction * _Nonnull action) {
             OAFavoriteGroupEditorViewController *viewController = [[OAFavoriteGroupEditorViewController alloc] initWithGroup:[groupData.favoriteGroup toPointsGroup]];
@@ -1166,7 +1166,7 @@ static UIViewController *parentController;
         [menuElements addObject:appearanceAction];
 
         UIAction *shareAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_share")
-                                                    image:[UIImage systemImageNamed:@"square.and.arrow.up"]
+                                                    image:[[UIImage systemImageNamed:@"square.and.arrow.up"] resizedMenuImage]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
             NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
@@ -1182,7 +1182,7 @@ static UIViewController *parentController;
         [menuElements addObject:shareAction];
 
         UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
-                                                     image:[UIImage systemImageNamed:@"trash"]
+                                                     image:[[UIImage systemImageNamed:@"trash"] resizedMenuImage]
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
 

@@ -414,7 +414,7 @@ static const NSInteger kDetailedMapZoom = 9;
     _grZoomOut = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                          action:@selector(zoomOutGestureDetected:)];
     _grZoomOut.delegate = self;
-    _grZoomOut.numberOfTapsRequired = 2;
+    _grZoomOut.numberOfTapsRequired = 1;
     _grZoomOut.numberOfTouchesRequired = 2;
 
     // - MouseWheelScroll gesture (run under MacOS)
@@ -908,6 +908,8 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
+    if (gestureRecognizer == _grZoomOut && [[OAAppSettings sharedManager].showDistanceRuler get])
+        return NO;
     if (gestureRecognizer == _grZoomDoubleTap)
         return touch.tapCount == 2;
     return YES;

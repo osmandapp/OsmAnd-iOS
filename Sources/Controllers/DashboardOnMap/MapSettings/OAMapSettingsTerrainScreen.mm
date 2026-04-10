@@ -504,7 +504,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [cell leftIconVisibility:item.iconName && item.iconName.length > 0];
                 cell.leftIconView.image = cell.leftIconView.hidden ? nil : [UIImage templateImageNamed:item.iconName];
                 cell.leftIconView.tintColor = item.iconTintColor;
-                cell.button.configuration = [ButtonConfigurationHelper paymentLabelButtonConfigurationWithImageName:item.secondaryIconName isMapsPlus:NO];
+                cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:item.secondaryIconName];
                 [cell.button setTitleColor:nil forState:UIControlStateHighlighted];
                 cell.button.tintColor = nil;
                 cell.button.menu = nil;

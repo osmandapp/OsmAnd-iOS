@@ -574,7 +574,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
                 cell.button.setImage(nil, for: .normal)
                 cell.button.contentHorizontalAlignment = .center
                 if let secondaryIconName = item.secondaryIconName {
-                    cell.button.configuration = ButtonConfigurationHelper.paymentLabelButtonConfiguration(imageName: secondaryIconName, isMapsPlus: true)
+                    cell.button.configuration = ButtonConfigurationHelper.mapsPlusBannerButtonConfiguration(imageName: secondaryIconName)
                 }
                 cell.button.setTitleColor(nil, for: .highlighted)
                 cell.button.tintColor = nil

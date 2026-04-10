@@ -619,7 +619,7 @@
                 else
                 {
                     cell.accessoryType = UITableViewCellAccessoryNone;
-                    cell.button.configuration = [ButtonConfigurationHelper paymentLabelButtonConfigurationWithImageName:@"ic_payment_label_pro" isMapsPlus:NO];
+                    cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:@"ic_payment_label_pro"];
                     [cell.button addTarget:self action:@selector(onSubscriptionExpired) forControlEvents:UIControlEventTouchUpInside];
                 }
             }

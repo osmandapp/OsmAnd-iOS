@@ -205,7 +205,7 @@
             [cell titleVisibility:YES];
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:NO];
-            cell.button.configuration = [ButtonConfigurationHelper paymentLabelButtonConfigurationWithImageName:@"ic_payment_label_pro" isMapsPlus:NO];
+            cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:@"ic_payment_label_pro"];
             [cell.button setTitle:@"" forState:UIControlStateNormal];
             cell.button.imageView.tintColor = [UIColor clearColor];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];

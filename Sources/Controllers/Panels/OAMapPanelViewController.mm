@@ -4165,6 +4165,19 @@ typedef enum
 
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight changeElevationAngle:(BOOL)changeElevationAngle animated:(BOOL)animated
 {
+    if (UIApplication.sharedApplication.isCarPlayAppActive)
+    {
+        CGSize screenBBox = _mapViewController.view.bounds.size;
+        [self displayAreaOnMap:topLeft
+                   bottomRight:bottomRight
+                    screenBBox:screenBBox
+                   bottomInset:0.0
+                     leftInset:0.0
+                      topInset:0.0
+          changeElevationAngle:changeElevationAngle];
+        return;
+    }
+
     CGFloat bottomInset;
     CGFloat leftInset;
     BOOL landscape = [self.targetMenuView isLandscape];

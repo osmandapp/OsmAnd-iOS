@@ -4105,6 +4105,9 @@ static const NSInteger kDetailedMapZoom = 9;
         if (OARoutingHelper.sharedInstance.isPublicTransportMode)
             [_mapLayers.routeMapLayer refreshRoute];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (UIApplication.sharedApplication.isCarPlayAppActive)
+                return;
+
             if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
                 [OARootViewController.instance.mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left)
                                                                         bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)

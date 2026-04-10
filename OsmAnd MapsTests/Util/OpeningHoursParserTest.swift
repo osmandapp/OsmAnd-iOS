@@ -74,7 +74,7 @@ final class OpeningHoursParserTest: XCTestCase {
         assertOpened("28.06.2023 12:00", hours: hours, expected: false)
 
         hours = makeHours("Mo 09:00-12:00; We,Sa 13:30-17:00, Apr 01-Oct 31 We,Sa 17:00-18:30; PH off")
-        assertInfo("03.10.2020 14:00", hours: hours, equals: "Open till 18:30")
+        assertInfo("03.10.2020 14:00", hours: hours, equals: "Open until 18:30")
 
         hours = makeHours("PH,Mo-Su 09:00-22:00")
         assertOpened("13.10.2021 11:54", hours: hours, expected: true)
@@ -367,16 +367,16 @@ final class OpeningHoursParserTest: XCTestCase {
         assertAssembled(hours, equals: "mo-fr 11:00-21:00; PH off")
 
         hours = makeHours("Mo-Fr 08:30-17:00; 12:00-12:40 off;")
-        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open till 12:00")
+        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open until 12:00")
         assertInfo("15.01.2018 11:00", hours: hours, equals: "Will close at 12:00")
         assertInfo("15.01.2018 12:00", hours: hours, equals: "Will open at 12:40")
 
         hours = makeHours("Mo-Fr: 9:00-13:00, 14:00-18:00")
         assertInfo("15.01.2018 08:00", hours: hours, equals: "Will open at 09:00")
-        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open till 13:00")
+        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open until 13:00")
         assertInfo("15.01.2018 12:00", hours: hours, equals: "Will close at 13:00")
         assertInfo("15.01.2018 13:10", hours: hours, equals: "Will open at 14:00")
-        assertInfo("15.01.2018 14:00", hours: hours, equals: "Open till 18:00")
+        assertInfo("15.01.2018 14:00", hours: hours, equals: "Open until 18:00")
         assertInfo("15.01.2018 16:00", hours: hours, equals: "Will close at 18:00")
         assertInfo("15.01.2018 18:10", hours: hours, equals: "Will open tomorrow at 09:00")
 
@@ -385,7 +385,7 @@ final class OpeningHoursParserTest: XCTestCase {
 
         hours = makeHours("Mo-Sa 23:00-02:00; Th off")
         assertInfo("15.01.2018 22:00", hours: hours, equals: "Will open at 23:00")
-        assertInfo("15.01.2018 23:00", hours: hours, equals: "Open till 02:00")
+        assertInfo("15.01.2018 23:00", hours: hours, equals: "Open until 02:00")
         assertInfo("16.01.2018 00:30", hours: hours, equals: "Will close at 02:00")
         assertInfo("16.01.2018 02:00", hours: hours, equals: "Open from 23:00")
 
@@ -397,7 +397,7 @@ final class OpeningHoursParserTest: XCTestCase {
         assertInfo("22.01.2018 02:00", hours: hours, equals: "Open from 08:30")
         assertInfo("22.01.2018 04:00", hours: hours, equals: "Open from 08:30")
         assertInfo("22.01.2018 07:00", hours: hours, equals: "Will open at 08:30")
-        assertInfo("23.01.2018 10:00", hours: hours, equals: "Open till 17:00")
+        assertInfo("23.01.2018 10:00", hours: hours, equals: "Open until 17:00")
         assertInfo("23.01.2018 16:00", hours: hours, equals: "Will close at 17:00")
 
         hours = makeHours("24/7")
@@ -422,9 +422,9 @@ final class OpeningHoursParserTest: XCTestCase {
         assertInfo("22.01.2018 05:00", hours: hours, equals: "Will open at 07:00 - Restaurant", sequenceIndex: 0)
         assertInfo("26.01.2018 00:00", hours: hours, equals: "Will close at 01:00 - Restaurant", sequenceIndex: 0)
         assertInfo("22.01.2018 05:00", hours: hours, equals: "Will open at 07:00 - McDrive", sequenceIndex: 1)
-        assertInfo("22.01.2018 00:00", hours: hours, equals: "Open till 04:00 - McDrive", sequenceIndex: 1)
+        assertInfo("22.01.2018 00:00", hours: hours, equals: "Open until 04:00 - McDrive", sequenceIndex: 1)
         assertInfo("22.01.2018 02:00", hours: hours, equals: "Will close at 04:00 - McDrive", sequenceIndex: 1)
-        assertInfo("27.01.2018 02:00", hours: hours, equals: "Open till 24:00 - McDrive", sequenceIndex: 1)
+        assertInfo("27.01.2018 02:00", hours: hours, equals: "Open until 24:00 - McDrive", sequenceIndex: 1)
 
         hours = makeHours("07:00-03:00 open \"Restaurant\" || 24/7 open \"McDrive\"")
         assertOpened("22.01.2018 02:00", hours: hours, expected: true)
@@ -437,10 +437,10 @@ final class OpeningHoursParserTest: XCTestCase {
         assertOpened("16.02.2018 16:00", hours: hours, expected: false)
         assertOpened("16.02.2018 17:00", hours: hours, expected: true)
         assertInfo("16.02.2018 9:45", hours: hours, equals: "Open from 12:00")
-        assertInfo("16.02.2018 12:00", hours: hours, equals: "Open till 15:00")
+        assertInfo("16.02.2018 12:00", hours: hours, equals: "Open until 15:00")
         assertInfo("16.02.2018 14:00", hours: hours, equals: "Will close at 15:00")
         assertInfo("16.02.2018 16:00", hours: hours, equals: "Will open at 17:00")
-        assertInfo("16.02.2018 18:00", hours: hours, equals: "Open till 23:00")
+        assertInfo("16.02.2018 18:00", hours: hours, equals: "Open until 23:00")
 
         hours = makeHours("Mo-Fr 08:00-12:00, Mo,Tu,Th 15:00-17:00; PH off")
         assertOpened("09.08.2019 15:00", hours: hours, expected: false)
@@ -461,7 +461,7 @@ final class OpeningHoursParserTest: XCTestCase {
         assertOpened("25.03.2025 13:30", hours: hours, expected: false)
         assertOpened("25.03.2025 17:50", hours: hours, expected: true)
         assertInfo("24.03.2025 16:00", hours: hours, equals: "Will open tomorrow at 9:00 AM")
-        assertInfo("25.03.2025 10:00", hours: hours, equals: "Open till 1:00 PM")
+        assertInfo("25.03.2025 10:00", hours: hours, equals: "Open until 1:00 PM")
         assertInfo("25.03.2025 13:30", hours: hours, equals: "Will open at 2:00 PM")
         assertInfo("25.03.2025 17:50", hours: hours, equals: "Will close at 6:00 PM")
         assertInfo("25.03.2025 18:50", hours: hours, equals: "Will open on 9:00 AM Thu.")
@@ -472,10 +472,10 @@ final class OpeningHoursParserTest: XCTestCase {
 
         var hours = makeHours("Mo-Fr: 9:00-13:00, 14:00-18:00")
         assertInfo("15.01.2018 08:00", hours: hours, equals: "Will open at 9:00 AM")
-        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open till 1:00 PM")
+        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open until 1:00 PM")
         assertInfo("15.01.2018 12:00", hours: hours, equals: "Will close at 1:00 PM")
         assertInfo("15.01.2018 13:10", hours: hours, equals: "Will open at 2:00 PM")
-        assertInfo("15.01.2018 14:00", hours: hours, equals: "Open till 6:00 PM")
+        assertInfo("15.01.2018 14:00", hours: hours, equals: "Open until 6:00 PM")
         assertInfo("15.01.2018 16:00", hours: hours, equals: "Will close at 6:00 PM")
         assertInfo("15.01.2018 18:10", hours: hours, equals: "Will open tomorrow at 9:00 AM")
 
@@ -574,8 +574,8 @@ final class OpeningHoursParserTest: XCTestCase {
 
         hours = makeHours("Mo-Fr 12:00-15:00, Tu-Fr 17:00-23:00, Sa 12:00-23:00, Su 14:00-23:00")
         assertShortInfo("16.02.2018 09:45", hours: hours, equals: "12:00")
-        assertShortInfo("16.02.2018 12:00", hours: hours, equals: "Till 15:00")
-        assertShortInfo("16.02.2018 14:00", hours: hours, equals: "Till 15:00")
+        assertShortInfo("16.02.2018 12:00", hours: hours, equals: "Until 15:00")
+        assertShortInfo("16.02.2018 14:00", hours: hours, equals: "Until 15:00")
         assertShortInfo("16.02.2018 16:00", hours: hours, equals: "17:00")
 
         hours = makeHours("Mo-Fr 09:00-18:00")

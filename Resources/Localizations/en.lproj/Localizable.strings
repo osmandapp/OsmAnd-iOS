@@ -84,8 +84,8 @@
 
 "day_off_label" = "off";
 "open_from" = "Open from";
-"open_till" = "Open till";
-"open_till_short" = "Till";
+"open_till" = "Open until";
+"open_till_short" = "Until";
 "will_close_at" = "Closes at";
 "will_open_at" = "Opens at";
 "will_open_on" = "Opens at";

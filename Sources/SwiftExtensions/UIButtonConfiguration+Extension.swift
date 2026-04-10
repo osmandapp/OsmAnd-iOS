@@ -24,12 +24,20 @@ extension UIButton.Configuration {
     
     static func proBannerButtonConfiguration(image: UIImage?) -> UIButton.Configuration {
         var config = UIButton.Configuration.plain()
-        config.title = nil
-        config.image = nil
         config.background.image = image
         config.background.imageContentMode = .scaleAspectFill
         config.background.cornerRadius = 8.0
         config.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 35, bottom: 16, trailing: 35)
+        config.cornerStyle = .fixed
+        return config
+    }
+    
+    static func mapsPlusBannerButtonConfiguration(image: UIImage?) -> UIButton.Configuration {
+        var config = UIButton.Configuration.plain()
+        config.background.image = image
+        config.background.imageContentMode = .scaleAspectFill
+        config.background.cornerRadius = 8.0
+        config.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 45.5, bottom: 16, trailing: 45.5)
         config.cornerStyle = .fixed
         return config
     }

@@ -29,6 +29,7 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
     var tableData: [Any]?
     
     private let srtmPlugin = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin
+    private let segmentIconSize = CGSize(width: 20.0, height: 20.0)
     
     private var data: OATableDataModel
     private var is3DObjectsEnabled = false
@@ -87,14 +88,14 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         detailRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         detailRow.key = RowKey.detail.rawValue
         detailRow.title = localizedString("level_of_details")
-        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOff, .icCustom3DBuildingsDetailHighOff], forKey: RowKey.valuesOff.rawValue)
-        detailRow.setObj([UIImage.icCustom3DBuildingsDetailLowOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), UIImage.icCustom3DBuildingsDetailHighOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.selectedValues.rawValue)
+        detailRow.setObj([resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailLowOff), resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailHighOff)], forKey: RowKey.valuesOff.rawValue)
+        detailRow.setObj([OAUtilities.resize(UIImage.icCustom3DBuildingsDetailLowOn, newSize: segmentIconSize) ?? UIImage.icCustom3DBuildingsDetailLowOn, OAUtilities.resize(UIImage.icCustom3DBuildingsDetailHighOn, newSize: segmentIconSize) ?? UIImage.icCustom3DBuildingsDetailHighOn], forKey: RowKey.selectedValues.rawValue)
         let viewDistanceRow = performanceSection.createNewRow()
         viewDistanceRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         viewDistanceRow.key = RowKey.viewDistance.rawValue
         viewDistanceRow.title = localizedString("view_distance")
-        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOff, .icCustomViewDistanceFarOff], forKey: RowKey.valuesOff.rawValue)
-        viewDistanceRow.setObj([UIImage.icCustomViewDistanceNearOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal), UIImage.icCustomViewDistanceFarOn.withTintColor(.iconColorActive, renderingMode: .alwaysOriginal)], forKey: RowKey.selectedValues.rawValue)
+        viewDistanceRow.setObj([resizedSegmentIcon(UIImage.icCustomViewDistanceNearOff), resizedSegmentIcon(UIImage.icCustomViewDistanceFarOff)], forKey: RowKey.valuesOff.rawValue)
+        viewDistanceRow.setObj([OAUtilities.resize(UIImage.icCustomViewDistanceNearOn, newSize: segmentIconSize) ?? UIImage.icCustomViewDistanceNearOn, OAUtilities.resize(UIImage.icCustomViewDistanceFarOn, newSize: segmentIconSize) ?? UIImage.icCustomViewDistanceFarOn], forKey: RowKey.selectedValues.rawValue)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -181,6 +182,11 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
     private func updateData() {
         initData()
         tblView?.reloadData()
+    }
+    
+    private func resizedSegmentIcon(_ image: UIImage, tintColor: UIColor = .iconColorActive) -> UIImage {
+        let resizedImage = OAUtilities.resize(image, newSize: segmentIconSize) ?? image
+        return resizedImage.withTintColor(tintColor, renderingMode: .alwaysOriginal)
     }
     
     private func is3DObjectsCurrentlyEnabled() -> Bool {

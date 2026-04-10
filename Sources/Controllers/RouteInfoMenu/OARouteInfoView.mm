@@ -1377,11 +1377,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         directionInfo = -1;
-        _progressBarView = nil;
         _lastFastRoutingComplicationOrdinal = -1;
-        [self clearMissingMapsState];
-        _hasEmptyTransportRoute = NO;
-        [self updateMenu];
         // do not hide fragment (needed for use case entering Planning mode without destination)
     });
 }

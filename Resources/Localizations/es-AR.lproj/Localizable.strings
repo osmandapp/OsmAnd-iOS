@@ -3985,7 +3985,7 @@
 "deleted_maps_prompt" = "Estos mapas ya no se admiten y se han reemplazado por regiones más pequeñas. Quitalos y descargá las versiones nuevas.";
 "unsupported_maps" = "Mapas incompatibles";
 "deleted_maps_alert_message" = "¿Borrar %d mapa(s)?";
-"ios_release_5_3" = "• Se agregó una animación interactiva para el widget del velocímetro.\n• Se agregó una opción para cambiar el tamaño del ícono de ubicación.\n• Nuevos widgets de grabación de viajes: velocidad máxima y pendiente media; widgets mejorados de ascenso/descenso.\n• Se admiten enlaces profundos para compartir puntos de interés específicos.\n• Se corrigió un problema por el que la hora estimada de llegada en los widgets de navegación no se actualizaba mientras el vehículo estaba parado.\n• Se mejoró la conectividad para los adaptadores OBDII vinculados.\n• Se agregó la posibilidad de fusionar puntos de ruta en una carpeta de favoritos específica.\n• CarPlay: se corrigió un problema por el que el mapa no respondía en el tablero y se corrigió la compatibilidad con el parámetro «Mostrar siempre mapa oscuro».\n";
+"ios_release_5_3" = "• Compatibilidad con edificios en 3D\n• Vista esférica del mapa\n• Velocímetro: nuevos modos de color para la tolerancia y el exceso de velocidad\n• Botones del mapa personalizables: tamaño, forma y estilo\n• Ícono de ubicación redimensionable\n• Widgets nuevos: velocidad máxima, pendiente media; mejora en las subidas y bajadas\n• Analizador de ruta: selección de ejes y métricas del vehículo mejoradas\n• Combinar puntos de ruta en una carpeta de Favoritos\n• Compartir enlace a cualquier PDI\n• CarPlay: mapa del tablero corregido; se agregó «Mostrar siempre mapa oscuro»\n• CarPlay: icono de ubicación y diálogo posterior a la navegación más fluidos\n• Conectividad mejorada para adaptadores OBD-II vinculados\n• Corregido: la hora estimada de llegada de la navegación ahora se actualiza mientras el vehículo está detenido\n";
 "copy_link" = "Copiar enlace";
 "wind_animation_layer" = "Capa animada del viento";
 "quick_action_wind_animation_layer" = "Un botón que alterna en el mapa la capa animada del viento.";
@@ -4043,3 +4043,15 @@
 "has_vehicle_metrics" = "Con datos de OBDII";
 "context_menu_read_full_article" = "Leer artículo completo";
 "read_on" = "Leer en %@";
+"open_till_short" = "Hasta las";
+"enable_3d_objects" = "Edificios en 3D";
+"free_custom_color_description" = "Personaliza los edificios 3D con cualquier color. Perfecto para combinar con un tema de mapa o mejorar el contraste.";
+"buildings_3d_visibility_description" = "Ajusta la opacidad de las estructuras 3D en el mapa.";
+"level_of_details" = "Nivel de detalle";
+"performance" = "Rendimiento";
+"view_distance" = "Ver distancia";
+"custom_color" = "Color personalizado";
+"choose_color" = "Elegir color";
+"show_spherical_map" = "Vista del globo terráqueo";
+"shared_string_int_name" = "Nombre internacional";
+"show_debug_tile" = "Mostrar información de la tesela";

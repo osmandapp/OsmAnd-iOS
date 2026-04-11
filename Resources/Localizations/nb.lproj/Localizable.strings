@@ -1382,7 +1382,7 @@
 "replace_favorite_confirmation" = "Er du sikker på at du vil erstatte favoritt %@?";
 "shared_string_search_history" = "Søkehistorikk";
 "shared_string_circle" = "Sirkel";
-"restart" = "Start på ny";
+"restart" = "Start på nytt";
 "settings_item_read_error" = "Kunne ikke lese fra \"%@\".";
 "move_marker_bottom_sheet_title" = "Beveg kartet for å endre markørposisjon";
 "calc_pedestrian_route" = "Regn ut spaseringsrute";
@@ -1976,7 +1976,7 @@
 "rendering_attr_hideMilitaryAreas_description" = "Skjul militære områder";
 "rendering_value_omit_name" = "Utelat";
 "routing_attr_avoid_4wd_only_name" = "Unngå 4WD-veier";
-"routing_attr_driving_style_description" = "Velg kjøreformål for å få kortere, raskere, eller tryggere rute";
+"routing_attr_driving_style_description" = "Velg kjøreformål for å få kortere, raskere eller tryggere rute";
 "routing_attr_allow_streams_description" = "Tillat bekker og dreneringsgrøfter";
 "routing_attr_carriage_restrictions_name" = "Vognbegrensninger";
 "routing_attr_difficulty_preference_expert_name" = "Ekspert";
@@ -2851,3 +2851,4 @@
 "new_key_assignment" = "Ny tastetilordning";
 "assigned_keys" = "Tilordnede taster";
 "open_till_short" = "Til";
+"button_frames" = "Knapperammer";

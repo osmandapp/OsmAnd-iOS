@@ -3784,3 +3784,4 @@
 "trip_recording_max_speed_widget_description" = "Toont de maximale snelheid van de momenteel geregistreerde rit. Tik om de wisselen tussen de algehele snelheid en de maximale snelheid van de laatste beklimming of afdaling.";
 "trip_recording_average_slope_widget_description" = "Toont de gemiddelde helling van het laatste afdaling- of beklimmingssegment van de momenteel geregistreerde rit.";
 "vehicle_metrics_chart_category" = "Voertuigdiagnostiek";
+"open_till_short" = "Tot";

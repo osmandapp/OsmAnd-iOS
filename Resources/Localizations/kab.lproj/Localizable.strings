@@ -168,7 +168,7 @@
 "si_m_s" = "Imitren di tasint (m/tasint)";
 "poi_filter_by_name" = "Anadi s yisem";
 "rendering_attr_smoothness_good_name" = "Igerrez";
-"routing_settings" = "Asnirem";
+"routing_settings" = "Tunigin";
 "route_kr" = "Ttef tama tayeffust t defred";
 "tab_title_advanced" = "Talqayt";
 "rendering_attr_currentTrackWidth_name" = "Tehri";
@@ -220,7 +220,7 @@
 "shared_string_distance" = "Ameccaq";
 "add_work" = "Rnu";
 "search_nearby" = "Nadi di liqrib";
-"download_tab_updates" = "Isedɣiten";
+"download_tab_updates" = "Ileqman";
 "change_color" = "Snifel ini";
 "rendering_attr_piste_difficulty_advanced_name" = "Talqayt";
 "open_till" = "Yeldi almi";
@@ -377,7 +377,7 @@
 "shared_string_reload" = "Smiren";
 "postcode" = "Tangalt n lpusṭa";
 "rendering_value_yellow_name" = "Awraɣ";
-"download_select_map_types" = "Wayeḍ";
+"download_select_map_types" = "Tikarḍiwin nniḍen";
 "favorite_home_category" = "Agejdan";
 "poi_remove_success" = "Yettwakkes";
 "shared_string_my_location" = "ideg";
@@ -541,7 +541,7 @@
 "plan_route_create_new_route" = "Rnu abrid amaynut";
 "copied_to_clipboard" = "Aḍris yettwanɣel ɣef afus";
 "shared_string_gpx_tracks" = "Iberdan";
-"map_mode" = "Takarḍa";
+"map_mode" = "Askar n tkarḍa";
 "searching_gps" = "Anadi ɣef GPS";
 "access_default_color" = "Fren ini n lexṣas";
 "shared_string_enable" = "Rmed";
@@ -812,7 +812,7 @@
 "shared_string_items" = "Iferdisen";
 "shared_string_date" = "Azemz";
 "shared_string_pause" = "Bedd";
-"shared_string_other" = "Wayeḍ";
+"shared_string_other" = "Ayen nniḍen";
 "average" = "Talemmast";
 "map_settings_weather_temp" = "Tazɣelt";
 "map_settings_weather_wind" = "Aḍu";
@@ -871,3 +871,10 @@
 "no_photos_available" = "Ulac tiwlafin";
 "nm" = "nmi";
 "day_off_label" = "yemdel";
+"res_mapsres" = "Tikerḍiwin d Yiɣbula";
+"osmand_live_donation_header" = "Iɣewwaren n tawsa";
+"map_settings_weather_temp_water" = "Tazɣelt n waman";
+"profile_settings" = "Iɣewwaren i umaɣnu-a";
+"open_map_settings" = "Ldi iɣewwaren n tkarḍa";
+"public_transport_try_change_settings" = "Ɛreḍ beddel iɣewwaren.";
+"shared_string_select_on_map" = "Fren-it s ufella n tkarḍa";

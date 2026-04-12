@@ -43,8 +43,8 @@
 "choose_audio_stream_descr" = "Chọn kênh để chạy hướng dẫn bằng giọng nói.";
 "routing_settings" = "Chỉ đường";
 "get_directions" = "Hướng";
-"gpx_option_from_start_point" = "Dọc theo toàn bộ track";
-"gpx_option_reverse_route" = "Đảo ngược hướng cung đường";
+"gpx_option_from_start_point" = "Dọc theo toàn bộ hành trình";
+"gpx_option_reverse_route" = "Đảo ngược hướng hành trình";
 "impassable_road" = "Tránh đường …";
 "error_calculating_route" = "Không thể tính toán lộ trình.";
 "internet_connection_required_for_online_route" = "Điều hướng trực tuyến không hoạt động ngoại tuyến.";
@@ -97,13 +97,13 @@
 
 // My Places
 "favorites_item" = "Ưa thích";
-"shared_string_gpx_tracks" = "Đường dẫn";
+"shared_string_gpx_tracks" = "Hành trình";
 
 // GPX
-"save_current_track" = "Lưu đường dẫn hiện tại";
-"save_current_track_descr" = "Lưu đường dẫn hiện tại dưới dạng tệp GPX luôn.";
+"save_current_track" = "Lưu hành trình hiện tại";
+"save_current_track_descr" = "Lưu hành trình hiện tại dưới dạng tệp GPX ngay.";
 "shared_string_clear" = "Xoá";
-"save_track_to_gpx" = "Tự động ghi lại đường đi trong quá trình điều hướng";
+"save_track_to_gpx" = "Tự động ghi lại hành trình trong quá trình điều hướng";
 
 // Map settings
 "routing_engine_vehicle_type_driving" = "Lái xe";
@@ -260,7 +260,7 @@
 "auth_failed" = "Định danh thất bại";
 "rendering_attr_OSMMapperAssistantNote_description" = "Hiển thị thẻ ghi chú";
 "map_orientation_landscape" = "Nằm ngang";
-"show_all_tracks" = "Hiện tất cả đường dẫn";
+"show_all_tracks" = "Hiện tất cả hành trình";
 "change_appearance" = "Thay đổi ngoại hình";
 "announce_when_exceeded" = "Tuyên bố khi vượt quá";
 "shared_string_any" = "Bất kỳ";
@@ -313,7 +313,7 @@
 "resting_position_icon" = "Biểu tượng vị trí nghỉ";
 "navigation_position_icon_summary" = "Biểu tượng được hiển thị trong khi bạn đang điều hướng hoặc di chuyển.";
 "navigation_position_icon" = "Biểu tượng vị trí điều hướng";
-"quick_action_track_waypoint" = "Điểm dừng trên đường dẫn";
+"quick_action_track_waypoint" = "Điểm dừng trên hành trình";
 "quick_action_first_intermediate" = "Điểm trung gian đầu tiên";
 "quick_action_parking_place" = "Nơi đỗ xe";
 "weather_source_ecmwf_description" = "Trung tâm Dự báo Thời tiết hạn vừa châu Âu";
@@ -355,8 +355,8 @@
 "help_article_map_map_context_menu_name" = "Menu thông tin của đối tượng trên bản đồ";
 "help_article_map_point_layers_on_map_name" = "Những điểm trên bản đồ";
 "help_article_map_raster_maps_name" = "Những mảng bản đồ (Trực tuyến / Ngoại tuyến)";
-"help_article_map_track_context_menu_name" = "Menu ngữ cảnh của các đường dẫn";
-"help_article_map_tracks_on_map_name" = "Đường dẫn và Tuyến đường";
+"help_article_map_track_context_menu_name" = "Menu ngữ cảnh hành trình";
+"help_article_map_tracks_on_map_name" = "Hành trình và Tuyến đường";
 "help_article_map_vector_maps_name" = "Những bản đồ Véc-tơ (Những giao diện bản đồ)";
 "help_article_navigation_guidance_name" = "Hướng dẫn điều hướng";
 "help_article_navigation_guidance_map_during_navigation_name" = "Màn hình bản đồ trong khi điều hướng";
@@ -372,7 +372,7 @@
 "help_article_navigation_routing_pedestrian_routing_name" = "Tìm đường cho người đi bộ";
 "help_article_navigation_routing_ski_routing_name" = "Dốc và tuyến đường trượt tuyết";
 "help_article_navigation_routing_straight_line_routing_name" = "Tìm đường thẳng (Máy bay)";
-"help_article_navigation_setup_gpx_navigation_name" = "Điều hướng bởi đường dẫn";
+"help_article_navigation_setup_gpx_navigation_name" = "Điều hướng bởi hành trình";
 "help_article_navigation_setup_markers_navigation_name" = "Điều hướng bởi các điểm đánh dấu";
 "help_article_navigation_setup_route_details_name" = "Chi tiết tuyến đường";
 "help_article_navigation_setup_route_navigation_name" = "Chuẩn bị tuyến đường";
@@ -390,7 +390,7 @@
 "help_article_troubleshooting_crash_logs_name" = "Nhật ký sự cố";
 "help_article_troubleshooting_general_name" = "Chung";
 "help_article_troubleshooting_maps_data_name" = "Bản đồ và Dữ liệu";
-"help_article_troubleshooting_track_recording_issues_name" = "Ghi đường dẫn";
+"help_article_troubleshooting_track_recording_issues_name" = "Ghi hành trình";
 "help_article_widgets_name" = "Các widget bản đồ";
 "help_article_widgets_info_widgets_name" = "Widget cung cấp thông tin";
 "help_article_widgets_map_buttons_name" = "Nút bấm bản đồ";
@@ -433,7 +433,7 @@
 "shared_string_expires" = "Hết hạn";
 "reset_all_settings_desc" = "Đặt lại tất cả cài đặt về mặc định?";
 "vertical_exaggeration" = "Phóng đại theo chiều dọc";
-"track_vertical_exaggeration_description" = "Bằng cách thay đổi thang giá trị, bạn có thể thay đổi chiều cao của đường dẫn 3D.";
+"track_vertical_exaggeration_description" = "Bằng cách thay đổi thang giá trị, bạn có thể thay đổi chiều cao của hành trình 3D.";
 "speed_limit_warning" = "Cảnh báo giới hạn tốc độ";
 "when_exceeded" = "Khi bị vượt quá";
 "height_legend_description" = "Những bản đồ màu sắc của độ cao được dùng để thể hiện địa hình một cách trực quan.";
@@ -460,7 +460,7 @@
 "shared_string_duplicate" = "Nhân bản";
 "number_of_tiles" = "Số lượng các mảng";
 "import_export" = "Nhập/xuất";
-"import_tracks" = "Nhập đường dẫn";
+"import_tracks" = "Nhập hành trình";
 "shared_string_weather" = "Thời tiết";
 "rendering_attr_showShareTaxiRoutes_name" = "Tuyến xe con thoi";
 "rendering_value_all_name" = "Tất cả";
@@ -491,7 +491,7 @@
 "rendering_attr_showRunningRoutes_description" = "Hiện những cung đường chạy bộ";
 "rendering_attr_showFitnessTrails_description" = "Hiện những cung đường tập luyện thể chất";
 "zoom_levels_difference_description" = "Sự khác biệt lớn giữa những mức thu phóng khác nhau có thể làm tăng kích thước của dữ liệu được tải xuống.";
-"save_track_to_gpx_descrp" = "Tự động bắt đầu ghi lại đường dẫn trong khi điều hướng và sau đó tự động lưu.";
+"save_track_to_gpx_descrp" = "Tự động bắt đầu ghi lại hành trình trong khi điều hướng và sau đó tự động lưu.";
 "auto_zoom" = "Tự động thu phóng";
 "auto_zoom_discrete" = "Riêng biệt";
 "measurement_units" = "Đơn vị đo";
@@ -888,7 +888,7 @@
 "routing_attr_driving_style_prefer_unpaved_name" = "Ưu tiên đường chưa lát";
 "rendering_attr_streetLightingNight_name" = "Chỉ hiển thị vào buổi tối";
 "rendering_attr_smoothness_horrible_name" = "Tồi tệ";
-"routeInfo_tracktype_description" = "Tô màu tuyến đường hoặc nét vẽ cung đường theo thành phần bề mặt của nó. Thường áp dụng khi mạng lưới đường chủ yếu là đường chưa được lát.";
+"routeInfo_tracktype_description" = "Tô màu tuyến đường hoặc nét vẽ hành trình theo thành phần bề mặt của nó. Thường áp dụng khi mạng lưới đường chủ yếu là đường chưa được lát.";
 "rendering_attr_hideText_name" = "Chữ";
 "routing_attr_avoid_unpaved_description" = "Tránh đường chưa lát";
 "rendering_attr_noAdminboundaries_name" = "Đường biên giới";
@@ -935,7 +935,7 @@
 "rendering_attr_surface_stone_name" = "Đá";
 "rendering_attr_surface_pebblestone_name" = "Đá cuội nhỏ";
 "rendering_attr_smoothness_intermediate_name" = "Khá";
-"routeInfo_winter_ice_road_description" = "Tô màu tuyến đường hoặc nét vẽ cung đường bằng sự phân loại đường mùa đông của nó.";
+"routeInfo_winter_ice_road_description" = "Tô màu tuyến đường hoặc nét vẽ hành trình bằng sự phân loại đường mùa đông của nó.";
 "routing_attr_only_permitted_streets_name" = "Các phố được cho phép rõ ràng";
 "routing_attr_avoid_borders_description" = "Tránh đi qua biên giới giữa các nước";
 "rendering_attr_surface_fine_gravel_name" = "Sỏi mịn";
@@ -1009,7 +1009,7 @@
 "routing_attr_driving_style_speed_name" = "Tuyến đường ngắn hơn";
 "rendering_attr_noPolygons_name" = "Hình đa giác";
 "rendering_attr_surface_mud_name" = "Bùn";
-"routeInfo_roadClass_description" = "Tô màu tuyến đường hoặc nét vẽ cung đường theo phân loại đường.";
+"routeInfo_roadClass_description" = "Tô màu tuyến đường hoặc nét vẽ hành trình theo phân loại đường.";
 "routing_attr_driving_style_prefer_unpaved_description" = "Ưu tiên đường chưa lát hơn đường đã lát khi đi.";
 "rendering_attr_hikingRoutesOSMC_name" = "Tuyến đường leo núi";
 "routing_attr_height_name" = "Chiều cao";
@@ -1291,7 +1291,7 @@
 "default_speed_setting_title" = "Tốc độ mặc định";
 "traffic_warning_speed_limit" = "Giới hạn tốc độ";
 "keep_informing_descr" = "Thông báo lại hướng dẫn điều hướng ở những khoảng cách đều đặn.";
-"shared_string_gpx_waypoints" = "Điểm dừng trên đường dẫn";
+"shared_string_gpx_waypoints" = "Điểm dừng trên hành trình";
 "custom_search" = "Tuỳ chỉnh tìm kiếm";
 "purchases_feature_desc_terrain" = "Đường đồng mức địa hình, bóng đồi núi theo thang màu xám và chỉ thị độ dốc theo thang màu, để hiện đỉnh núi và vùng đồng bằng.";
 "shared_string_zoom_levels" = "Các mức thu phóng";
@@ -1319,7 +1319,7 @@
 "mapillary_menu_title_tile_cache" = "Bộ nhớ đệm của mảng";
 "osmand_parking_overdue" = "quá hạn";
 "shared_string_location" = "Vị trí";
-"show_gpx" = "Đường dẫn";
+"show_gpx" = "Hành trình";
 "shared_string_map" = "Bản đồ";
 "text_size" = "Cỡ chữ";
 "arrival_distance_factor_normally" = "Bình thường";
@@ -1427,8 +1427,8 @@
 "shared_string_favorite" = "Ưa thích";
 "shared_string_near" = "Gần";
 "external_device_status_connected" = "Đã kết nối";
-"select_another_track" = "Chọn đường dẫn khác";
-"shared_string_currently_recording_track" = "Hiện đang ghi đường dẫn";
+"select_another_track" = "Chọn hành trình khác";
+"shared_string_currently_recording_track" = "Hiện đang ghi hành trình";
 "service_is_not_available_please_try_later" = "Dịch vụ không khả dụng. Vui lòng thử lại sau.";
 "add_widget_to_the_left" = "Thêm widget vào bên trái";
 "map_markers_history" = "Lịch sử đánh dấu trên bản đồ";
@@ -1514,8 +1514,8 @@
 "srtm_plugin_description" = "Thông tin địa hình, như các đường đồng mức, bóng đồi núi, độ dốc bề mặt theo chiều cao, giúp bạn đánh giá trực quan về đặc điểm địa hình, sự nổi khối, khả năng điều hướng, và nhiều hơn nữa. Thông tin địa hình có thể được thể hiện trên bản đồ bằng các đường đồng mức, bóng đồi núi và/hoặc màu sắc độ dốc.\n\nDữ liệu cơ sở đến từ SRTM và ASTER.\n\nĐọc thêm tại %@.";
 "osmand_development_plugin_description" = "Cung cấp chức năng để kiểm tra và gỡ lỗi OsmAnd: mô phỏng các tuyến đường điều hướng, giám sát việc hiển thị trên màn hình, kiểm tra hiệu suất, v.v. Plugin này không cần thiết cho việc sử dụng ứng dụng bình thường.";
 "lang_vi" = "Tiếng Việt";
-"help_article_map_tracks_name" = "Đường dẫn";
-"save_global_track_interval_descr" = "Chỉ định quãng thời gian ghi nhật ký cho việc ghi đường dẫn nói chung (được bật qua widget \"Ghi chuyến đi\" trên bản đồ).";
+"help_article_map_tracks_name" = "Hành trình";
+"save_global_track_interval_descr" = "Chỉ định quãng thời gian ghi nhật ký cho việc ghi hành trình nói chung (được bật qua widget \"Ghi chuyến đi\" trên bản đồ).";
 "base_profile_descr_bicycle" = "Xe đạp địa hình, xe đạp điện, ngựa";
 "shared_string_paused" = "Đã tạm dừng";
 "application_profiles" = "Hồ sơ ứng dụng";
@@ -1554,7 +1554,7 @@
 "manage_subscription" = "Quản lý đăng ký";
 "unlimited_map_downloads" = "Không giới hạn số lần tải bản đồ xuống";
 "copy_to_map_favorites" = "Sao chép đến mục ưa thích";
-"open_saved_track" = "Mở cung đường đã lưu";
+"open_saved_track" = "Mở hành trình đã lưu";
 "restore_from_file" = "Khôi phục từ tệp";
 "attribute" = "Thuộc tính";
 "shared_string_interval" = "Giãn cách";
@@ -1562,7 +1562,7 @@
 "icon_group_travel" = "Du lịch";
 "backup_error_file_not_available" = "Tệp không có sẵn";
 "backup_delete_old_data" = "Loại bỏ các phiên bản cũ";
-"rename_track" = "Đổi tên cung đường";
+"rename_track" = "Đổi tên hành trình";
 "osmand_cloud" = "OsmAnd Cloud";
 "activity_type_winter_name" = "Mùa đông";
 "osmand_cloud_authorize_descr" = "Không bao giờ mất dữ liệu của bạn. Sao lưu và khôi phục dữ liệu một cách dễ dàng.";
@@ -1590,13 +1590,13 @@
 "register_opr_create_new_account" = "Tạo một tài khoản mới";
 "backup_data" = "Sao lưu dữ liệu";
 "upload_local_version" = "Tải lên phiên bản địa phương";
-"track_has_no_needed_data" = "Cung đường đang thiếu các dữ liệu tương ứng.";
+"track_has_no_needed_data" = "Hành trình đang thiếu các dữ liệu tương ứng.";
 "purchases_feature_desc_unlimited_map_download" = "Không giới hạn số lượt tải xuống các bản đồ ngoại tuyến của các châu lục và khu vực.";
 "purchases_feature_desc_nautical" = "Lấy quyền truy cập đến thông tin độ sâu hàng hải";
 "contact_support" = "Liên hệ trợ giúp";
 "new_device_account" = "Thiết bị mới / tài khoản mới";
 "routing_attr_allow_streams_description" = "Cho phép các dòng suối và cống rãnh";
-"edit_track" = "Chỉnh sửa cung đường";
+"edit_track" = "Chỉnh sửa hành trình";
 "upload_to_openstreetmap" = "Tải lên OpenStreetMap";
 "make_backup" = "Tạo một bản sao lưu";
 "context_menu_edit_descr" = "Chỉnh sửa mô tả";
@@ -1680,24 +1680,24 @@
 "contributions_may_calculate_with_delay" = "Việc tính toán các đóng góp có thể mất vài giờ.";
 "enough_contributions_descr" = "Chúc mừng, bạn đã cung cấp đủ đóng góp cho OpenStreetMap và bây giờ có thể tận hưởng các bản cập nhật bản đồ OsmAnd không giới hạn!";
 "attach_to_the_roads" = "Gắn với các con đường";
-"start_of_the_track" = "Điểm bắt đầu của cung đường";
-"simplified_track" = "Cung đường đơn giản hoá";
+"start_of_the_track" = "Điểm bắt đầu của hành trình";
+"simplified_track" = "Hành trình đơn giản hoá";
 "simplified_track_description" = "Chỉ có tuyến đường sẽ được lưu lại, các điểm dừng sẽ bị xóa.";
 "nearest_point" = "Điểm gần nhất";
-"follow_track" = "Đi theo cung đường";
-"plan_route_open_existing_track" = "Mở cung đường đã có sẵn";
+"follow_track" = "Đi theo hành trình";
+"plan_route_open_existing_track" = "Mở hành trình đã có sẵn";
 "threshold_distance" = "Khoảng cách ngưỡng";
 "next_segment" = "Phân đoạn tiếp theo";
 "gpx_split_interval_none_descr" = "Chọn cách chia tách mong muốn: bởi thời gian hoặc bởi khoảng cách.";
-"save_as_new_track" = "Lưu dưới dạng cung đường mới";
-"whole_track" = "Toàn bộ cung đường";
+"save_as_new_track" = "Lưu thành hành trình mới";
+"whole_track" = "Toàn bộ hành trình";
 "plan_route_create_new_route" = "Tạo tuyến đường mới";
-"route_between_points_add_track_desc" = "Chọn một tệp cung đường để thêm đoạn mới vào.";
+"route_between_points_add_track_desc" = "Chọn một tệp hành trình để thêm đoạn mới vào.";
 "reverse_route" = "Đảo ngược tuyến đường";
 "quick_action_remove_next_destination_descr" = "Xoá đích đến kế tiếp trên tuyến đường của bạn. Nếu đó là đích đến cuối cùng, việc điều hướng sẽ dừng lại.";
-"add_to_a_track" = "Thêm vào một cung đường";
+"add_to_a_track" = "Thêm vào một hành trình";
 "route_between_points" = "Tuyến đường giữa các điểm";
-"gpx_split_interval_descr" = "Chọn khoảng thời gian mà các dấu mốc với khoảng cách hoặc thời gian trên cung đường sẽ được hiển thị.";
+"gpx_split_interval_descr" = "Chọn khoảng thời gian mà các dấu mốc với khoảng cách hoặc thời gian trên hành trình sẽ được hiển thị.";
 "add_online_source" = "Thêm nguồn trực tuyến";
 "quick_action_showhide_mapillary_descr" = "Một công tắc để hiện hoặc ẩn lớp phủ Mapillary trên bản đồ.";
 "routing_attr_length_description" = "Chỉ rõ chiều dài phương tiện được phép lưu thông trên đường.";
@@ -1866,7 +1866,7 @@
 "rendering_value_white_name" = "Trắng";
 "selected_profile" = "Hồ sơ đã chọn";
 "cancel_subscription" = "Hủy gói đăng ký";
-"save_heading_descr" = "Lưu hướng di chuyển đến mỗi điểm trên cung đường trong khi ghi.";
+"save_heading_descr" = "Lưu hướng di chuyển đến mỗi điểm trên hành trình trong khi ghi.";
 "driving_region" = "Khu vực lái xe";
 "prefer_in_routing_descr" = "Ưu tiên đường cao tốc.";
 "avoid_in_routing_title" = "Tránh…";
@@ -1895,7 +1895,7 @@
 "hide_compass_ruler" = "Ẩn thước đo la bàn";
 "rendering_attr_tracktype_grade1_name" = "Cứng (được lát)";
 "app_mode_monowheel" = "Xe một bánh";
-"shared_string_open_track" = "Mở cung đường";
+"shared_string_open_track" = "Mở hành trình";
 "edit_profile_screen_options_subtitle" = "Chọn các tùy chọn màn hình cho bản đồ";
 "app_mode_taxi" = "Taxi";
 "rendering_attr_showLez_description" = "Hiện Vùng Phát Thải Thấp trên bản đồ. Không ảnh hưởng đến việc tìm đường.";
@@ -1968,8 +1968,8 @@
 "routing_profile_straightline" = "Đường thẳng";
 "avoid_pt_types_descr" = "Chọn loại hình giao thông công cộng cần tránh khi điều hướng:";
 "avoid_pt_types" = "Tránh các loại phương tiện giao thông…";
-"current_track" = "Cung đường hiện tại";
-"tracks_on_map" = "Cung đường được hiển thị";
+"current_track" = "Hành trình hiện tại";
+"tracks_on_map" = "Hành trình được hiển thị";
 "osm_live_payment_renews_quarterly" = "Gia hạn mỗi quý";
 "osm_live_subscriptions" = "Gói đăng ký";
 "years_3" = "Ba năm";
@@ -2122,7 +2122,7 @@
 "meridian_180" = "Kinh tuyến 180";
 "simulate_obd" = "Mô phỏng dữ liệu obd";
 "auto_25_chars_route_roundabout_kr" = "Đi theo lối ra số %d và hướng về bên phải";
-"detailed_track_guidance" = "Hướng dẫn đường dẫn chi tiết";
+"detailed_track_guidance" = "Hướng dẫn hành trình chi tiết";
 "shared_string_show_less" = "Hiện ít hơn";
 "shared_string_pause" = "Tạm dừng";
 "obd_fuel_consumption_rate_scanner" = "Mức tiêu thụ nhiên liệu (obd)";
@@ -2143,7 +2143,7 @@
 "obd_fuel_consumption_rate_sensor_type" = "Dùng các đơn vị đã chọn trong tên.";
 "auto_25_chars_route_tu_kr" = "Quay đầu và hướng về bên phải";
 "osm_live_payment_discount_descr" = "Tiết kiệm %@";
-"unchanged_parameter_summary" = "Mỗi đường dẫn sẽ giữ lại những tham số riêng của chúng.";
+"unchanged_parameter_summary" = "Mỗi hành trình sẽ giữ lại những tham số riêng của chúng.";
 "ltr_or_rtl_combine_via_or" = "%@ hoặc %@";
 "smart_folder_name_present" = "Thư mục thông minh như vậy đã tồn tại";
 "obd_fuel_level_liter" = "Mức nhiên liệu (l)";
@@ -2185,7 +2185,7 @@
 "obd_fuel_type" = "Loại nhiên liệu";
 "us_gallons" = "Ga-lông hệ US";
 "shared_string_volume" = "Khối lượng";
-"empty_smart_folder_title" = "Không có đường dẫn phù hợp";
+"empty_smart_folder_title" = "Không có hành trình khớp";
 "obd_fuel_consumption_desc" = "Hiện tỷ lệ tiêu thụ nhiên liệu của động cơ, được tính toán dựa trên lượng nhiên liệu còn lại, kích thước bình xăng và quãng đường đã đi theo định vị GPS.";
 "auto_25_chars_route_tr_kr" = "Rẽ phải và hướng về bên phải";
 "three_months_subscription" = "Đăng ký ba tháng";
@@ -2227,7 +2227,7 @@
 "unit_of_volume_description" = "Những đơn vị đã chọn sẽ được áp dụng cho tất cả dữ liệu liên quan đến thể tích trong hồ sơ hiện tại.";
 "type_of_activity" = "Loại hoạt động";
 "auto_25_chars_route_tr" = "Rẽ phải";
-"attach_roads_descr" = "Gắn đường dẫn của bạn với những đường đi để lấy thông tin tuyến đường chi tiết, bao gồm chỉ dẫn rẽ từng bước và các thuộc tính đường.";
+"attach_roads_descr" = "Gắn hành trình của bạn với những đường đi để lấy thông tin tuyến đường chi tiết, bao gồm chỉ dẫn rẽ từng bước và các thuộc tính đường.";
 "auto_25_chars_route_tu_kl" = "Quay đầu và hướng về bên trái";
 "obd_fuel_left_liters" = "Nhiên liệu còn lại (lít)";
 "obd_fuel_type_bifuel_gasoline" = "Xăng nhiên liệu kép";
@@ -2252,7 +2252,7 @@
 "unit_of_volume" = "Đơn vị thể tích";
 "display_priority" = "Ưu tiên hiển thị";
 "obd_air_intake_temp_desc" = "Hiển thị nhiệt độ của không khí đi vào bộ ống nạp của động cơ.";
-"detailed_track_guidance_description" = "OsmAnd sẽ khớp đường dẫn của bạn với những con đường ở gần để cải thiện việc chỉ đường tại từng lối rẽ.";
+"detailed_track_guidance_description" = "OsmAnd sẽ khớp hành trình của bạn với những con đường ở gần để cải thiện việc chỉ đường tại từng lối rẽ.";
 "route_roundabout_short" = "Đi theo lối ra số %d và tiếp tục";
 "change_activity" = "Thay đổi hoạt động";
 "obd_fuel_level_desc" = "Hiện mức nhiên liệu của xe qua cảm biến OBD";
@@ -2493,3 +2493,7 @@
 "nearest_cities" = "Những thành phố gần nhất";
 "select_city" = "Chọn thành phố";
 "quick_action_auto_zoom" = "Tự động thu phóng bản đồ";
+"shared_string_gpx_track" = "Hành trình";
+"show_track_on_map" = "Hiện hành trình trên bản đồ";
+"towards" = "hướng tới";
+"local_openstreetmap_uploading" = "Đang tải lên…";

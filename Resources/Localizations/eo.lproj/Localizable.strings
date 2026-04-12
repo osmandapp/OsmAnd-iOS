@@ -2761,3 +2761,4 @@
 "lang_mi" = "Maoria";
 "trip_recording_moving_time_widget_description" = "Montras tempon dum movo aŭ tempon de la antaŭa supreniro aŭ malsupreniro.";
 "trip_recording_moving_time" = "Tempo dum movo";
+"open_till_short" = "ĝis";

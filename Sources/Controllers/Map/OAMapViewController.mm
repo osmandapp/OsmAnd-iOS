@@ -2599,7 +2599,7 @@ static const NSInteger kDetailedMapZoom = 9;
             if (newSettings.count > 0)
                 _mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:newSettings]);
         
-            if ([[OAAppSettings sharedManager].showPrimitivesDebugInfo get])
+            if ([settings.showPrimitivesDebugInfo get])
                   _obfMapRasterLayerProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider));
               else
                   _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider, true, false, true));

@@ -573,16 +573,19 @@ final class OpeningHoursParserTest: XCTestCase {
         assertShortInfo("16.02.2018 12:00", hours: hours, equals: "24/7")
 
         hours = makeHours("Mo-Fr 12:00-15:00, Tu-Fr 17:00-23:00, Sa 12:00-23:00, Su 14:00-23:00")
-        assertShortInfo("16.02.2018 09:45", hours: hours, equals: "12:00")
+        assertShortInfo("16.02.2018 09:45", hours: hours, equals: "From 12:00")
         assertShortInfo("16.02.2018 12:00", hours: hours, equals: "Until 15:00")
         assertShortInfo("16.02.2018 14:00", hours: hours, equals: "Until 15:00")
-        assertShortInfo("16.02.2018 16:00", hours: hours, equals: "17:00")
+        assertShortInfo("16.02.2018 16:00", hours: hours, equals: "From 17:00")
 
         hours = makeHours("Mo-Fr 09:00-18:00")
         assertShortInfo("18.02.2018 12:00", hours: hours, equals: "Tomorrow 09:00")
 
         hours = makeHours("Mo-Fr 08:00-12:00, Mo,Tu,Th 15:00-17:00; PH off")
-        assertShortInfo("09.08.2019 15:00", hours: hours, equals: "08:00 Mon")
+        assertShortInfo("09.08.2019 15:00", hours: hours, equals: "From 08:00 Mon")
+
+        hours = makeHours("Mo-Fr; PH off")
+        assertShortInfo("09.08.2019 15:00", hours: hours, equals: "Mon-Fri")
     }
 
     private func configure(localeIdentifier: String?, twelveHour: Bool) {

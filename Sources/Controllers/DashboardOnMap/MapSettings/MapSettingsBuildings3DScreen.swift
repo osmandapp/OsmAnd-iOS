@@ -88,14 +88,14 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         detailRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         detailRow.key = RowKey.detail.rawValue
         detailRow.title = localizedString("level_of_details")
-        detailRow.setObj([resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailLowOff), resizedSegmentIcon(UIImage.icCustom3DBuildingsDetailHighOff)], forKey: RowKey.valuesOff.rawValue)
-        detailRow.setObj([OAUtilities.resize(UIImage.icCustom3DBuildingsDetailLowOn, newSize: segmentIconSize) ?? UIImage.icCustom3DBuildingsDetailLowOn, OAUtilities.resize(UIImage.icCustom3DBuildingsDetailHighOn, newSize: segmentIconSize) ?? UIImage.icCustom3DBuildingsDetailHighOn], forKey: RowKey.selectedValues.rawValue)
+        detailRow.setObj([resizedSegmentIcon(.icCustom3DBuildingsDetailLowOff), resizedSegmentIcon(.icCustom3DBuildingsDetailHighOff)], forKey: RowKey.valuesOff.rawValue)
+        detailRow.setObj([OAUtilities.resize(.icCustom3DBuildingsDetailLowOn, newSize: segmentIconSize), OAUtilities.resize(.icCustom3DBuildingsDetailHighOn, newSize: segmentIconSize)], forKey: RowKey.selectedValues.rawValue)
         let viewDistanceRow = performanceSection.createNewRow()
         viewDistanceRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         viewDistanceRow.key = RowKey.viewDistance.rawValue
         viewDistanceRow.title = localizedString("view_distance")
-        viewDistanceRow.setObj([resizedSegmentIcon(UIImage.icCustomViewDistanceNearOff), resizedSegmentIcon(UIImage.icCustomViewDistanceFarOff)], forKey: RowKey.valuesOff.rawValue)
-        viewDistanceRow.setObj([OAUtilities.resize(UIImage.icCustomViewDistanceNearOn, newSize: segmentIconSize) ?? UIImage.icCustomViewDistanceNearOn, OAUtilities.resize(UIImage.icCustomViewDistanceFarOn, newSize: segmentIconSize) ?? UIImage.icCustomViewDistanceFarOn], forKey: RowKey.selectedValues.rawValue)
+        viewDistanceRow.setObj([resizedSegmentIcon(.icCustomViewDistanceNearOff), resizedSegmentIcon(.icCustomViewDistanceFarOff)], forKey: RowKey.valuesOff.rawValue)
+        viewDistanceRow.setObj([OAUtilities.resize(.icCustomViewDistanceNearOn, newSize: segmentIconSize), OAUtilities.resize(.icCustomViewDistanceFarOn, newSize: segmentIconSize)], forKey: RowKey.selectedValues.rawValue)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

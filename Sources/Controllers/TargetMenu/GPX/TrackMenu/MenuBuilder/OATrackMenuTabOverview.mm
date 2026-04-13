@@ -18,8 +18,11 @@
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+
+#include <OsmAndCore/NetworkRouteContext.h>
 
 #define kDescriptionImageCell 0
 #define kInfoCreatedOnCell 0
@@ -36,6 +39,23 @@
     NSString *_description;
     NSString *_imageURL;
     NSMutableArray<NSDictionary *> *_nameTags;
+}
+
+- (BOOL)containsUnwantedOsmRouteTags:(NSString *)routeTagKey value:(NSString *)routeTagValue
+{
+    if (NSStringIsEmpty(routeTagValue))
+        return YES;
+
+    for (const auto routeType : OsmAnd::OsmRouteType::getAllValues())
+    {
+        NSString *routeTypeName = routeType->name.toNSString();
+        if ([routeTagKey hasPrefix:[routeTypeName stringByAppendingString:@"_"]]
+            || [routeTagKey hasPrefix:[@"route_" stringByAppendingString:routeTypeName]])
+        {
+            return YES; // hiking_*, route_hiking, route_hiking_*, etc.
+        }
+    }
+    return NO;
 }
 
 @dynamic tableData, isGeneratedData;
@@ -212,6 +232,7 @@
     NSArray<NSString *> *tagsToGpx = [routeKey getRouteMapAllKeys];
     _nameTags = [[NSMutableArray alloc] init];
     BOOL hasName = NO;
+    BOOL isOsmRoute = [tagsToGpx containsObject:ROUTE_ID]; // ready for OSM routes v2
     for (NSString *routeTagKey in tagsToGpx)
     {
         NSString *routeTagValue = [routeKey getRouteValue:routeTagKey];
@@ -224,6 +245,9 @@
             || [routeTagKey isEqualToString:@"type"]
             || [routeTagKey hasPrefix:@"shield_"]
             || [GpxAppearanceInfo isGpxAppearanceTag:routeTagKey])
+            continue;
+
+        if (!isOsmRoute && [self containsUnwantedOsmRouteTags:routeTagKey value:routeTagValue])
             continue;
         
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])

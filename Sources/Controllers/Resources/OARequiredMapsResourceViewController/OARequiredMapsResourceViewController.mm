@@ -535,13 +535,10 @@
                     if ([missingMapsCalculator checkIfThereAreMissingMaps:prevRoute.missingMapsRoutingContext start:prevRoute.missingMapsPoints.firstObject targets:locations checkHHEditions:!oldRouting])
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
-                                                                 mapsToUpdate:missingMapsCalculator.mapsToUpdate
-                                                          potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
-                            [prevRoute setMissingMaps:missingMapsCalculator.missingMaps
-                                         mapsToUpdate:missingMapsCalculator.mapsToUpdate
-                                             usedMaps:missingMapsCalculator.potentiallyUsedMaps ctx:prevRoute.missingMapsRoutingContext points:prevRoute.missingMapsPoints];
-                            [missingMapsCalculator clearResult];
+                            [missingMapsCalculator attachToRouteCalculationResult:prevRoute progress:prevRoute.missingMapsRoutingContext->progress];
+                            [strongSelf updateRoutingResourcesWithMissingMaps:prevRoute.missingMaps
+                                                                 mapsToUpdate:prevRoute.mapsToUpdate
+                                                          potentiallyUsedMaps:prevRoute.potentiallyUsedMaps];
                             [strongSelf selectAllCells:YES];
                         });
                     } else {

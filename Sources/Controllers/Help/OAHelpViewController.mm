@@ -44,6 +44,16 @@ static NSString * const kLinkExternalType = @"ext_link";
     [super viewDidLoad];
     
     [self loadAndParseJson];
+    if (@available(iOS 26.0, *))
+    {
+        if ([OAUtilities isiOSAppOnMac])
+        {
+            CGFloat topOffset = 30.;
+            UIEdgeInsets insets = [self.tableView contentInset];
+            [self.tableView setContentInset:UIEdgeInsetsMake(insets.top + topOffset, insets.left, insets.bottom, insets.right)];
+            [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y - topOffset)];
+        }
+    }
 }
 
 #pragma mark - Base UI

@@ -161,9 +161,9 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (UIImage *)getCustomIconForLeftNavbarButton
+- (BOOL)useSystemBackButton
 {
-    return [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+    return YES;
 }
 
 - (NSString *)getTableHeaderDescription

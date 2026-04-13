@@ -273,7 +273,17 @@
 //        [self showClearTypeScreen:type view:view];
 
     if (_selectedIndexPath)
-        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    {
+        if ([view isKindOfClass:UISwitch.class])
+        {
+            OASwitchTableViewCell *cell = (OASwitchTableViewCell *) [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
+            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        }
+        else
+        {
+            [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
 }
 
 - (void)showClearTypeScreen:(OAExportSettingsType *)type view:(UIView *)view

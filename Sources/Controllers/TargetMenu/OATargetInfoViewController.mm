@@ -838,18 +838,20 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         return;
 
     NSString *openPlaceReviewsTagContent = nil;
-    NSString *imageTagContent = nil;
-    NSString *mapillaryTagContent = nil;
     if ([self.getTargetObj isKindOfClass:OAPOI.class])
     {
         OAPOI *poi = self.getTargetObj;
         openPlaceReviewsTagContent = @(poi.obfId >> 1).stringValue;
-        imageTagContent = poi.values[@"image"];
-        mapillaryTagContent = poi.values[@"mapillary"];
     }
     
+    NSDictionary<NSString *, NSString *> *extensions = [self additionalCardParams];
     _otherCardsReady = NO;
-    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_onlinePhotoCardsRowInfo onFailureNoCache:onFailureNoCache];
+    [self addOtherCards:extensions cards:cards rowInfo:_onlinePhotoCardsRowInfo onFailureNoCache:onFailureNoCache];
+}
+
+- (NSDictionary<NSString *, NSString *> *)additionalCardParams
+{
+    return [AmenityExtensionsHelper imageParamsFrom:self.infoBundle.additionalInfo];
 }
 
 - (void)getCard:(NSDictionary *)feature
@@ -857,9 +859,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     NSString *type = feature[@"type"];
 
-    BOOL isMaplillaryEnabled = !OAIAPHelper.sharedInstance.mapillary.disabled;
+    BOOL isMapillaryEnabled = !OAIAPHelper.sharedInstance.mapillary.disabled;
 
-    if ([TYPE_MAPILLARY_PHOTO isEqualToString:type] && isMaplillaryEnabled)
+    if ([TYPE_MAPILLARY_PHOTO isEqualToString:type] && isMapillaryEnabled)
     {
         if ([feature[@"imageUrl"] length] == 0 || [feature[@"imageHiresUrl"] length] == 0) {
             [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
@@ -882,7 +884,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
                 onComplete([[MapillaryImageCard alloc] initWithData:feature]);
         }
     }
-    else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type] && isMaplillaryEnabled)
+    else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type] && isMapillaryEnabled)
     {
         if (onComplete)
             onComplete([[MapillaryContributeCard alloc] init]);
@@ -899,44 +901,24 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     }
 }
 
-- (void)addOtherCards:(NSString *)imageTagContent
-            mapillary:(NSString *)mapillaryTagContent
+- (void)addOtherCards:(NSDictionary<NSString *, NSString *> *)imageParams
                 cards:(NSMutableArray<AbstractCard *> *)cards
               rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
      onFailureNoCache:(void (^)(void))onFailureNoCache
 {
-    CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    NSString *preferredLang = [[OAAppSettings sharedManager].settingPrefMapLanguage get] ?: [OAUtilities currentLang];
-
-    NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f&app=%@",
-                           self.location.latitude,
-                           self.location.longitude,
-                           [OAIAPHelper isPaidVersion] ? @"paid" : @"free"];
-
-    if (!NSStringIsEmpty(preferredLang))
-        urlString = [urlString stringByAppendingFormat:@"&lang=%@", preferredLang];
-    if (myLocation)
-        urlString = [urlString stringByAppendingFormat:@"&mloc=%f,%f", myLocation.coordinate.latitude, myLocation.coordinate.longitude];
-
-    if (imageTagContent)
-        urlString = [urlString stringByAppendingFormat:@"&osm_image=%@", imageTagContent];
-    if (mapillaryTagContent)
-        urlString = [urlString stringByAppendingFormat:@"&mapillary=%@", mapillaryTagContent];
-
-    urlString = [[[urlString stringByReplacingOccurrencesOfString:@" " withString:@"_"]
-                  stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]] copy];
-
+    NSString *urlString = [self buildCMPlaceURLWithImageParams:imageParams];
+    
     NSURL *urlObj = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
-
+    
     NSMutableArray<AbstractCard *> *newCards = [NSMutableArray arrayWithArray:cards];
     NSInteger existingCount = cards.count;
     
     __weak __typeof(self) weakSelf = self;
     [[[self onlineAndMapillarySession] dataTaskWithRequest:request
-                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                         completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
@@ -945,7 +927,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         
         NSData *effectiveData = data;
         NSURLResponse *effectiveResponse = response;
-
+        
         NSURLRequest *cacheRequest;
         NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
         if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
@@ -984,7 +966,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             });
             return;
         }
-
+        
         NSError *jsonError = nil;
         NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:effectiveData
                                                                  options:NSJSONReadingAllowFragments
@@ -996,7 +978,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             });
             return;
         }
-
+        
         NSArray<NSDictionary *> *images = jsonDict[@"features"];
         if (images.count == 0)
         {
@@ -1015,7 +997,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
                             [newCards addObject:card];
                         else
                             count--;
-
+                        
                         if (newCards.count == count + existingCount)
                         {
                             [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
@@ -1025,6 +1007,56 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             }
         }
     }] resume];
+}
+
+- (NSString *)buildCMPlaceURLWithImageParams:(NSDictionary<NSString *, NSString *> *)imageParams
+{
+    NSMutableString *urlMutable = [NSMutableString stringWithFormat:
+        @"https://osmand.net/api/cm_place?lat=%f&lon=%f&app=%@",
+        self.location.latitude,
+        self.location.longitude,
+        [OAIAPHelper isPaidVersion] ? @"paid" : @"free"];
+    
+    NSString *preferredLang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+    if (preferredLang.length == 0)
+        preferredLang = [OAUtilities currentLang];
+    
+    if (preferredLang.length > 0)
+    {
+        NSString *encodedLang =
+        [preferredLang stringByAddingPercentEncodingWithAllowedCharacters:
+         [NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        [urlMutable appendFormat:@"&lang=%@", encodedLang];
+    }
+    
+    CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    
+    if (myLocation)
+    {
+        [urlMutable appendFormat:@"&mloc=%f,%f",
+         myLocation.coordinate.latitude,
+         myLocation.coordinate.longitude];
+    }
+    
+    // NOTE: order is important for NSCachedURLResponse key
+    NSArray<NSString *> *sortedKeys =
+        [[imageParams allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    
+    for (NSString *key in sortedKeys)
+    {
+        NSString *value = imageParams[key];
+        if (value.length > 0)
+        {
+            NSString *encodedValue =
+            [value stringByAddingPercentEncodingWithAllowedCharacters:
+             [NSCharacterSet URLQueryAllowedCharacterSet]];
+            
+            [urlMutable appendFormat:@"&%@=%@", key, encodedValue];
+        }
+    }
+    
+    return [urlMutable copy];
 }
 
 - (void)onOtherCardsReady:(NSMutableArray<AbstractCard *> *)cards

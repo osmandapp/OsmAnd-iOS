@@ -34,8 +34,6 @@ static const int kLocationIconSectionIndex = 3;
 static const int kNavigationIconSectionIndex = 4;
 static const int kOptionsSectionIndex = 5;
 
-static const CGFloat kLeftTitleSpace = 4;
-
 static NSString *kColorsCellKey =  @"kColorsCellKey";
 static NSString *kProfileIconCellKey =  @"kProfileIconCellKey";
 static NSString *kPositionIconCellKey =  @"kPositionIconCellKey";
@@ -860,13 +858,11 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         }
         if (cell)
         {
-            BOOL isSize = [item.key isEqualToString:kPositionIconSizeCellKey] || [item.key isEqualToString:kLocationIconSizeCellKey];
             cell.titleLabel.text = item.title;
             cell.titleLabel.textColor = (UIColor *)[item objForKey:kCellTitleColorKey];
             cell.valueLabel.text = item.descr;
             cell.leftIconView.tintColor = item.iconTintColor;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            [cell leftTitleSpace:isSize ? kLeftTitleSpace : 0];
             [cell leftIconVisibility:item.iconName];
             return cell;
         }

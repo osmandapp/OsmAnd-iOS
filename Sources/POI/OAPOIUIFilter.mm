@@ -797,7 +797,7 @@
         if (!filtersOfCategory)
         {
             filtersOfCategory = [NSMutableArray array];
-            filterCategories[category ? category : @""] = filtersOfCategory;
+            filterCategories[category ?: @""] = filtersOfCategory;
         }
         [filtersOfCategory addObject:filter];
 
@@ -873,6 +873,7 @@
 {
     QString filterName = QString::fromNSString(filter.name);
     QString filterValue = values[filterName];
+    
     if (filterValue != nullptr)
         return YES;
     

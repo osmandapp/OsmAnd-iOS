@@ -245,7 +245,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
                                                                    delegate: self)
         let languageButton = createRightNavbarButton(nil, iconName: "ic_navbar_languge", action: #selector(onLanguagesButtonClicked), menu: languageMenu)
         
-        let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage(systemName: "square.and.arrow.up") ) { [weak self] _ in
+        let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage(systemName: "square.and.arrow.up")?.resizedMenuImage()) { [weak self] _ in
             self?.shareArticle()
         }
         
@@ -269,13 +269,13 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         let imageActionsAboveDivider = [noDownloadAction, overWifiAction, anyNetworkAction]
         let divider = UIMenu(title: "", options: .displayInline, children: imageActionsAboveDivider)
-        let downloadNowAction = UIAction(title: localizedString("download_only_now"), image: UIImage(systemName: "square.and.arrow.down"), state: isDownloadImagesOnlyNow() ? .on : .off) { [weak self] _ in
+        let downloadNowAction = UIAction(title: localizedString("download_only_now"), image: UIImage(systemName: "square.and.arrow.down")?.resizedMenuImage(), state: isDownloadImagesOnlyNow() ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.setDownloadImagesOnlyNow(true)
             self.loadWebView()
             self.setupNavbarButtons()
         }
-        let imagesMenu = UIMenu(title: localizedString("images"), image: UIImage(systemName: "photo"), children: [divider, downloadNowAction])
+        let imagesMenu = UIMenu(title: localizedString("images"), image: UIImage(systemName: "photo")?.resizedMenuImage(), children: [divider, downloadNowAction])
         
         let optionsMenu = UIMenu(title: "", children: [shareAction, imagesMenu])
         let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: nil, menu: optionsMenu)

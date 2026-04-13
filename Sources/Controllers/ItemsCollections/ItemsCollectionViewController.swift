@@ -612,7 +612,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func createPaletteMenu(for indexPath: IndexPath, cell: UITableViewCell) -> UIMenu {
-        let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+        let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage(systemName: "doc.on.doc")?.resizedMenuImage()) { [weak self] _ in
             guard let self else { return }
             self.duplicateItem(fromContextMenu: indexPath)
         }
@@ -627,7 +627,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
               TerrainMode.TerrainTypeWrapper.getNameFor(type: TerrainType.height) == gradientPaletteColor.paletteName))
             
             if !isDefault {
-                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")?.resizedMenuImage(), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.deleteItem(fromContextMenu: cell)
                 }

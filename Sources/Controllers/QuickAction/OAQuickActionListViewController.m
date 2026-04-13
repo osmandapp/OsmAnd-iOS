@@ -106,14 +106,14 @@
         __weak __typeof(self) weakSelf = self;
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
         UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_appearance")
-                                                         image:[UIImage imageNamed:@"ic_custom_appearance_outlined"]
+                                                         image:[[UIImage imageNamed:@"ic_custom_appearance_outlined"] resizedMenuImage]
                                                     identifier:nil
                                                        handler:^(UIAction * _Nonnull action) {
             [weakSelf showMapButtonViewController];
         }];
         appearanceAction.accessibilityLabel = appearanceAction.title;
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
-                                                     image:[UIImage systemImageNamed:@"square.and.pencil"]
+                                                     image:[[UIImage systemImageNamed:@"square.and.pencil"] resizedMenuImage]
                                                 identifier:nil
                                                    handler:^(UIAction * _Nonnull action) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_rename")
@@ -159,7 +159,7 @@
         [menuElements addObject:renameAction];
 
         UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
-                                                     image:[UIImage systemImageNamed:@"trash"]
+                                                     image:[[UIImage systemImageNamed:@"trash"] resizedMenuImage]
                                                 identifier:nil
                                                    handler:^(UIAction * _Nonnull action) {
             NSString *message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_delete"),

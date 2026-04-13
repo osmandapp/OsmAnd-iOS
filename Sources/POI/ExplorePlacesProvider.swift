@@ -12,12 +12,14 @@ protocol ExplorePlacesProvider: AnyObject {
 
     func getDataCollection(_ mapRect: QuadRect) -> [OAPOI]
     func getDataCollection(_ mapRect: QuadRect, limit: Int) -> [OAPOI]
+    func getDataCollection(_ mapRect: QuadRect, limit: Int, isCancelled: (() -> Bool)?) -> [OAPOI]
 
     func addListener(_ listener: ExplorePlacesListener)
     func removeListener(_ listener: ExplorePlacesListener)
 
     func isLoading() -> Bool
     func isLoading(rect: QuadRect) -> Bool
+    func cancelLoading(except rect: QuadRect?)
 }
 
 protocol ExplorePlacesListener: AnyObject {

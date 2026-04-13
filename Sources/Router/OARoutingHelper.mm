@@ -1107,9 +1107,29 @@ static BOOL _isDeviatedFromRoute = false;
     return [_mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
 }
 
+- (BOOL)hasCurrentMissingMaps
+{
+    return [_recalcHelper hasCurrentMissingMaps];
+}
+
+- (NSInteger)getCurrentFastRoutingComplicationOrdinal
+{
+    return [_recalcHelper getCurrentFastRoutingComplicationOrdinal];
+}
+
+- (void)attachCurrentMissingMapsToRouteCalculationResult:(OARouteCalculationResult *)result
+{
+    [_recalcHelper attachCurrentMissingMapsToRouteCalculationResult:result];
+}
+
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress
 {
     [_recalcHelper startRouteCalculationThread:params paramsChanged:paramsChanged updateProgress:updateProgress];
+}
+
+- (void)stopRouteCalculation
+{
+    [_recalcHelper stopCalculation];
 }
 
 - (OASGpxFile *) generateGPXFileWithRoute:(NSString *)name

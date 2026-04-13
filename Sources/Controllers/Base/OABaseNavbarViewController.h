@@ -78,6 +78,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (EOABaseNavbarColorScheme)getNavbarColorScheme;
 - (BOOL)isNavbarBlurring;
 - (BOOL)isNavbarSeparatorVisible;
+- (BOOL)useSystemBackButton;
 - (UIImage *)getCenterIconAboveTitle;
 - (UIImage *)getRightIconLargeTitle;
 - (UIColor *)getRightIconTintColorLargeTitle;

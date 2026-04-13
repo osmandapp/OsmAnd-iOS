@@ -92,7 +92,7 @@ final class CustomMapButtonsViewController: OABaseNavbarViewController {
             let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
                 var menuElements = [UIMenuElement]()
                 
-                let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
+                let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")?.resizedMenuImage()) { [weak self] _ in
                     guard let self else { return }
                     
                     let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
@@ -124,7 +124,7 @@ final class CustomMapButtonsViewController: OABaseNavbarViewController {
                 renameAction.accessibilityLabel = renameAction.title
                 menuElements.append(renameAction)
                 
-                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")) { [weak self] _ in
+                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")?.resizedMenuImage()) { [weak self] _ in
                     guard let self else { return }
                     
                     let message = String(format: localizedString("res_confirmation_delete"), "\"\(buttonState.getName())\"")

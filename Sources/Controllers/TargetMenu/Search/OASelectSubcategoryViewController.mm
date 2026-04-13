@@ -109,18 +109,25 @@
 
 - (void)setupSearchControllerWithFilter:(BOOL)isFiltered
 {
-    if (isFiltered)
+    if (@available(iOS 26.0, *))
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.placeholder = OALocalizedString(@"shared_string_search");
     }
     else
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+        if (isFiltered)
+        {
+            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+            _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+            _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+        }
+        else
+        {
+            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+            _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+            _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+            _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+        }
     }
 }
 
@@ -465,7 +472,13 @@
     NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     UIEdgeInsets insets = [[self tableView] contentInset];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        self.buttonsBottomOffsetConstraint.constant = keyboardHeight - [OAUtilities getBottomMargin];
+        if (@available(iOS 26.0, *))
+        {
+        }
+        else
+        {
+            self.buttonsBottomOffsetConstraint.constant = keyboardHeight - [OAUtilities getBottomMargin];
+        }
         [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
         [[self view] layoutIfNeeded];
     } completion:nil];

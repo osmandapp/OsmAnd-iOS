@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) recalculateRouteInBackground:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates gpxRoute:(OAGPXRouteParamsBuilder *)gpxRoute previousRoute:(OARouteCalculationResult *)previousRoute paramsChanged:(BOOL)paramsChanged onlyStartPointChanged:(BOOL)onlyStartPointChanged;
 - (void) stopCalculation;
 - (void) stopCalculationIfParamsNotChanged;
+- (BOOL)hasCurrentMissingMaps;
+- (NSInteger)getCurrentFastRoutingComplicationOrdinal;
+- (void)attachCurrentMissingMapsToRouteCalculationResult:(OARouteCalculationResult *)result;
 
 @end
 

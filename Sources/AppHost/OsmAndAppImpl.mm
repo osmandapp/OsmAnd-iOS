@@ -186,7 +186,7 @@
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
         _legacyFavoritesFilePrefix = @"favourites";
-
+        
         [self buildFolders];
         [self createLogFile];
 
@@ -1423,7 +1423,9 @@
     OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
         settings.defaultApplicationMode.get;
-    [settings setApplicationModePref:UIApplication.sharedApplication.isCarPlayConnected ? carPlayMode : defaultAppMode markAsLastUsed:NO];
+    OAApplicationMode *restoredAppMode = UIApplication.sharedApplication.isCarPlayConnected ? carPlayMode : defaultAppMode;
+    [routingHelper setAppMode:restoredAppMode];
+    [settings setApplicationModePref:restoredAppMode markAsLastUsed:NO];
 }
 
 - (void) setupDrivingRegion:(OAWorldRegion *)reg

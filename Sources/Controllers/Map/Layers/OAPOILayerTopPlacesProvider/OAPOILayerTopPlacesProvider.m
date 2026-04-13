@@ -19,14 +19,55 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <SkImage.h>
 #include <algorithm>
 
 static const NSInteger kTopPlacesLimit = 20;
 static const NSInteger kStartZoom = 5;
 static const NSInteger kStartZoomRouteTrack = 11;
-static const NSInteger kImageIconSizeDP = 45;
+static const CGFloat kImageIconSizeDP = 55.0;
 static void *kTopPlacesStateQueueKey = &kTopPlacesStateQueueKey;
 static NSString * const kWikiPhotoTag = @"wiki_photo";
+
+@interface OATopPlacePreparedMarker : NSObject
+{
+@public
+    std::shared_ptr<const OsmAnd::Amenity> amenity;
+    int32_t markerId;
+    NSNumber *markerKey;
+    NSString *markerState;
+    sk_sp<SkImage> pinIcon;
+}
+
+- (instancetype)initWithAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
+                       markerId:(int32_t)markerId
+                      markerKey:(NSNumber *)markerKey
+                    markerState:(NSString *)markerState
+                        pinIcon:(const sk_sp<SkImage> &)pinIcon;
+
+@end
+
+@implementation OATopPlacePreparedMarker
+
+- (instancetype)initWithAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)newAmenity
+                       markerId:(int32_t)newMarkerId
+                      markerKey:(NSNumber *)newMarkerKey
+                    markerState:(NSString *)newMarkerState
+                        pinIcon:(const sk_sp<SkImage> &)newPinIcon
+{
+    self = [super init];
+    if (self)
+    {
+        amenity = newAmenity;
+        markerId = newMarkerId;
+        markerKey = newMarkerKey;
+        markerState = [newMarkerState copy];
+        pinIcon = newPinIcon;
+    }
+    return self;
+}
+
+@end
 
 @implementation OAPOILayerTopPlacesProvider
 {
@@ -37,8 +78,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     NSSet<NSNumber *> *_topPlaceIds;
     NSSet<NSNumber *> *_loadingImagePlaceIds;
     OsmAnd::AreaI _topPlacesBox;
-    QuadRect *_lastCalcBounds;
-    float _lastCalcZoom;
     
     POIImageLoader *_imageLoader;
     dispatch_queue_t _backgroundQueue;
@@ -49,8 +88,10 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     OAMapViewController *_mapViewController;
     CGFloat _textScale;
     CGFloat _displayDensityFactor;
+    
     NSNumber *_selectedTopPlaceId;
     BOOL _enabled;
+    BOOL _visiblePlacesRefreshScheduled;
     NSMutableDictionary<NSNumber *, NSString *> *_renderedMarkerStates;
     NSUInteger _amenitiesGeneration;
     NSUInteger _imagesGeneration;
@@ -81,26 +122,39 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (void)drawTopPlacesIfNeeded:(BOOL)forceRecalc
 {
-    if (!_enabled)
-        return;
-
-    dispatch_async(_backgroundQueue, ^{
+    dispatch_block_t refreshBlock = ^{
         if (!_enabled)
             return;
 
-        [self refreshVisiblePlacesOnStateQueue];
-    });
+        if (forceRecalc)
+            _topPlacesBox = OsmAnd::AreaI();
+
+        if (_visiblePlacesRefreshScheduled)
+            return;
+
+        _visiblePlacesRefreshScheduled = YES;
+        dispatch_async(_backgroundQueue, ^{
+            _visiblePlacesRefreshScheduled = NO;
+            if (_enabled)
+                [self refreshVisiblePlacesOnStateQueue];
+        });
+    };
+
+    if ([self isOnStateQueue])
+        refreshBlock();
+    else
+        dispatch_async(_backgroundQueue, refreshBlock);
 }
 
 - (void)notifyAmenitiesChanged:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
 {
-    const QList<std::shared_ptr<const OsmAnd::Amenity>> amenitiesCopy = amenities;
+    __block QList<std::shared_ptr<const OsmAnd::Amenity>> amenitiesCopy = amenities;
     dispatch_async(_backgroundQueue, ^{
         self->_amenitiesGeneration++;
+        [self sortByElo:amenitiesCopy];
         self->_allPlaces = amenitiesCopy;
-        [self sortByElo:&self->_allPlaces];
         self->_topPlacesBox = OsmAnd::AreaI();
-        [self refreshVisiblePlacesOnStateQueue];
+        [self drawTopPlacesIfNeeded:NO];
     });
 }
 
@@ -135,17 +189,14 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         if (_enabled)
         {
             _topPlacesBox = OsmAnd::AreaI();
-            [self refreshVisiblePlacesOnStateQueue];
+            [self drawTopPlacesIfNeeded:NO];
         }
     });
 }
 
 - (void)refreshVisiblePlaces
 {
-    dispatch_async(_backgroundQueue, ^{
-        if (_enabled)
-            [self refreshVisiblePlacesOnStateQueue];
-    });
+    [self drawTopPlacesIfNeeded:NO];
 }
 
 - (void)updateSelectedTopPlaceId:(NSNumber *)placeId
@@ -228,8 +279,8 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (float)getTopPlaceIconSize31:(int)zoom
 {
-    long long tileSize31 = (1LL << (31 - zoom));
-    double from31toPixelsScale = 256.0 / (double)tileSize31;
+    const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - zoom));
+    const auto from31toPixelsScale = (double)_mapViewController.referenceTileSizeRasterOrigInPixels / tileSize31;
     double estimatedIconSize = kImageIconSizeDP * _textScale * _displayDensityFactor;
     return (float)(estimatedIconSize / from31toPixelsScale);
 }
@@ -342,21 +393,17 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (BOOL)addTopPlaceMarker:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
                  markerId:(int32_t)markerId
-                    image:(UIImage *)image
+                  pinIcon:(const sk_sp<SkImage> &)pinIcon
        toCollectionLocked:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
 {
-    if (!image)
-        return NO;
-
-    NSData *data = UIImagePNGRepresentation(image);
-    if (!data)
+    if (!pinIcon)
         return NO;
 
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
         .setMarkerId(markerId)
         .setBaseOrder(_topPlaceBaseOrder)
-        .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromNSData:data]))
+        .setPinIcon(OsmAnd::SingleSkImage(pinIcon))
         .setPosition(amenity->position31)
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
@@ -380,15 +427,14 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _topPlaceIds = nil;
     _loadingImagePlaceIds = nil;
     _topPlacesBox = OsmAnd::AreaI();
-    _lastCalcBounds = nil;
-    _lastCalcZoom = 0.f;
     _selectedTopPlaceId = nil;
+    _visiblePlacesRefreshScheduled = NO;
     _renderedMarkerStates = nil;
 }
 
 - (void)refreshVisiblePlacesOnStateQueue
 {
-    if (!_enabled)
+    if (!_enabled || _allPlaces.isEmpty())
         return;
 
     OsmAnd::AreaI visibleBBox31;
@@ -396,22 +442,14 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     if (![self captureVisibleBounds:&visibleBBox31 zoom:&zoom])
         return;
 
-    if (_allPlaces.isEmpty())
-    {
-        _displayedPlaces.clear();
-        _topPlacesBox = OsmAnd::AreaI();
-        [self clearMapMarkersCollections];
-        [self cancelLoadingImages];
-        return;
-    }
-
-    if (_topPlacesBox.width() > 0
-        && _topPlacesBox.height() > 0
+    if (_topPlacesBox.width() > 0 && _topPlacesBox.height() > 0
         && _topPlacesBox.contains(visibleBBox31))
         return;
 
-    _topPlacesBox = [self topPlacesBoxForVisibleBounds:visibleBBox31 zoom:(int)zoom];
-    [self updateTopPlaces:_allPlaces visibleBBox31:visibleBBox31 zoom:(int)zoom];
+    int z = (int)(zoom + 0.5f);
+    _topPlacesBox = [self topPlacesBoxForVisibleBounds:visibleBBox31 zoom:z];
+    [self updateTopPlaces:_allPlaces visibleBBox31:visibleBBox31 zoom:z];
+
 }
 
 - (void)updateTopPlaceImageForId:(NSNumber *)placeId
@@ -431,18 +469,63 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (void)updateTopPlacesCollection
 {
-    [_mapViewController runWithRenderSync:^{
-        QList<std::shared_ptr<const OsmAnd::Amenity>> places = _topPlaces;
-        [self sortByElo:&places];
-        if (places.isEmpty())
-        {
+    QList<std::shared_ptr<const OsmAnd::Amenity>> places = _topPlaces;
+    if (places.isEmpty())
+    {
+        [_mapViewController runWithRenderSync:^{
             [self clearMapMarkersCollectionLocked];
-            [self performStateSync:^{
-                _displayedPlaces.clear();
-            }];
-            return;
+        }];
+        [self performStateSync:^{
+            _displayedPlaces.clear();
+        }];
+        return;
+    }
+
+    NSDictionary<NSNumber *, NSString *> *currentMarkerStates = [_renderedMarkerStates copy] ?: @{};
+    NSMutableDictionary<NSNumber *, NSString *> *desiredMarkerStates = [NSMutableDictionary dictionary];
+    NSMutableArray<OATopPlacePreparedMarker *> *preparedMarkers = [NSMutableArray array];
+    NSInteger markerCount = 0;
+    __block QList<std::shared_ptr<const OsmAnd::Amenity>> displayedPlaces;
+
+    for (const auto& place : places)
+    {
+        UIImage *topPlaceImage = [self markerImageForAmenity:place];
+        if (!topPlaceImage)
+            continue;
+
+        int32_t markerId = [self truncatedTopPlaceId:place];
+        NSNumber *markerKey = @(markerId);
+        NSString *markerState = [self markerStateForAmenity:place image:topPlaceImage];
+        if (!markerState)
+            continue;
+
+        NSString *currentMarkerState = currentMarkerStates[markerKey];
+        if (![currentMarkerState isEqualToString:markerState])
+        {
+            NSData *imageData = UIImagePNGRepresentation(topPlaceImage);
+            if (!imageData)
+                continue;
+
+            sk_sp<SkImage> pinIcon = [OANativeUtilities skImageFromNSData:imageData];
+            if (!pinIcon)
+                continue;
+
+            [preparedMarkers addObject:[[OATopPlacePreparedMarker alloc] initWithAmenity:place
+                                                                                markerId:markerId
+                                                                               markerKey:markerKey
+                                                                             markerState:markerState
+                                                                                 pinIcon:pinIcon]];
         }
 
+        desiredMarkerStates[markerKey] = markerState;
+        displayedPlaces.push_back(place);
+
+        markerCount++;
+        if (markerCount >= kTopPlacesLimit)
+            break;
+    }
+
+    [_mapViewController runWithRenderSync:^{
         if (!_mapMarkersCollection)
         {
             _mapMarkersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
@@ -454,49 +537,23 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
             _renderedMarkerStates = [NSMutableDictionary dictionary];
         }
 
-        NSMutableDictionary<NSNumber *, NSString *> *desiredMarkerStates = [NSMutableDictionary dictionary];
-        NSInteger markerCount = 0;
-        QList<std::shared_ptr<const OsmAnd::Amenity>> actualDisplayedPlaces;
-
-        for (const auto& place : places)
+        NSMutableSet<NSNumber *> *failedMarkerKeys = [NSMutableSet set];
+        for (OATopPlacePreparedMarker *preparedMarker in preparedMarkers)
         {
-            UIImage *topPlaceImage = [self markerImageForAmenity:place];
-            if (!topPlaceImage)
-                continue;
-
-            int32_t markerId = [self truncatedTopPlaceId:place];
-            NSNumber *markerKey = @(markerId);
-            NSString *markerState = [self markerStateForAmenity:place image:topPlaceImage];
-            if (!markerState)
-                continue;
-
-            desiredMarkerStates[markerKey] = markerState;
-            NSString *currentMarkerState = _renderedMarkerStates[markerKey];
-            if (![currentMarkerState isEqualToString:markerState])
+            [self removeMarkerWithId:preparedMarker->markerId fromCollectionLocked:_mapMarkersCollection];
+            if ([self addTopPlaceMarker:preparedMarker->amenity
+                               markerId:preparedMarker->markerId
+                                pinIcon:preparedMarker->pinIcon
+                     toCollectionLocked:_mapMarkersCollection])
             {
-                [self removeMarkerWithId:markerId fromCollectionLocked:_mapMarkersCollection];
-                if ([self addTopPlaceMarker:place
-                                   markerId:markerId
-                                      image:topPlaceImage
-                         toCollectionLocked:_mapMarkersCollection])
-                {
-                    _renderedMarkerStates[markerKey] = markerState;
-                    actualDisplayedPlaces.push_back(place);
-                }
-                else
-                {
-                    [_renderedMarkerStates removeObjectForKey:markerKey];
-                    [desiredMarkerStates removeObjectForKey:markerKey];
-                }
+                _renderedMarkerStates[preparedMarker->markerKey] = preparedMarker->markerState;
             }
             else
             {
-                actualDisplayedPlaces.push_back(place);
+                [_renderedMarkerStates removeObjectForKey:preparedMarker->markerKey];
+                [desiredMarkerStates removeObjectForKey:preparedMarker->markerKey];
+                [failedMarkerKeys addObject:preparedMarker->markerKey];
             }
-
-            markerCount++;
-            if (markerCount >= kTopPlacesLimit)
-                break;
         }
 
         for (NSNumber *markerKey in [_renderedMarkerStates allKeys])
@@ -511,9 +568,21 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         if (_renderedMarkerStates.count == 0)
             [self clearMapMarkersCollectionLocked];
 
-        [self performStateSync:^{
-            _displayedPlaces = actualDisplayedPlaces;
-        }];
+        if (failedMarkerKeys.count > 0)
+        {
+            QList<std::shared_ptr<const OsmAnd::Amenity>> filteredDisplayedPlaces;
+            for (const auto& place : displayedPlaces)
+            {
+                NSNumber *markerKey = @([self truncatedTopPlaceId:place]);
+                if (![failedMarkerKeys containsObject:markerKey])
+                    filteredDisplayedPlaces.push_back(place);
+            }
+            displayedPlaces = filteredDisplayedPlaces;
+        }
+    }];
+
+    [self performStateSync:^{
+        _displayedPlaces = displayedPlaces;
     }];
 }
 
@@ -554,7 +623,6 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     for (const auto& place : newTopPlaces)
         [newTopPlaceIds addObject:[self placeIdForAmenity:place]];
     BOOL topPlacesChanged = ![previousTopPlaceIds isEqualToSet:newTopPlaceIds];
-    NSUInteger generation = topPlacesChanged ? ++_imagesGeneration : _imagesGeneration;
     NSDictionary<NSNumber *, UIImage *> *cachedImages = [_topPlacesImages copy] ?: @{};
     _topPlaces = newTopPlaces;
     _topPlaceIds = [newTopPlaceIds copy];
@@ -719,12 +787,12 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 
 
-- (void)sortByElo:(QList<std::shared_ptr<const OsmAnd::Amenity>> *)amenities
+- (void)sortByElo:(QList<std::shared_ptr<const OsmAnd::Amenity>> &)amenities
 {
-    if (!amenities)
+    if (amenities.isEmpty())
         return;
 
-    std::sort(amenities->begin(), amenities->end(), [self](const auto& a1, const auto& a2) {
+    std::sort(amenities.begin(), amenities.end(), [self](const auto& a1, const auto& a2) {
         NSInteger elo1 = [self travelEloForAmenity:a1];
         NSInteger elo2 = [self travelEloForAmenity:a2];
         if (elo1 != elo2)

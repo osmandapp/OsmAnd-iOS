@@ -345,7 +345,10 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
                     map[lang] = []
                 }
 
-                self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map)
+                let allLanguagesEmptyResult: KotlinBoolean? = languages.isEmpty ? KotlinBoolean(bool: result.isEmpty) : nil
+                if (!self.dbHelper.insertPlaces(zoom: Int32(zoom), tileX: Int32(tileX), tileY: Int32(tileY), placesByLang: map, allLanguagesEmptyResult: allLanguagesEmptyResult)) {
+                    return
+                }
 
                 self.lock.lock()
                 guard let currentTask = self.loadingTasks[key],

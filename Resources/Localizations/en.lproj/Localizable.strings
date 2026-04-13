@@ -83,6 +83,7 @@
 "search_favorites" = "Search in Favorites";
 
 "day_off_label" = "off";
+"open_from_short" = "From";
 "open_from" = "Open from";
 "open_till" = "Open until";
 "open_till_short" = "Until";

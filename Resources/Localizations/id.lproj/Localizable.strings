@@ -3844,3 +3844,5 @@
 "vehicle_metrics_chart_category" = "Metrik kendaraan";
 "show_polygons" = "Tampilkan poligon";
 "offline_weather_forecast" = "Prediksi cuaca luring";
+"shared_string_int_name" = "Nama internasional";
+"open_till_short" = "Sampai";

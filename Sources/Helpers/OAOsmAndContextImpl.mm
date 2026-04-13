@@ -298,13 +298,10 @@ static NSString * const kGpxImportDir = @"import";
     EOATemperatureConstant temperatureUnit = [OAAppSettings.sharedManager getTemperatureUnit];
     switch (temperatureUnit)
     {
-        case CELSIUS:
-            return OASTemperatureUnits.celsius;
-        case FAHRENHEIT:
-            return OASTemperatureUnits.fahrenheit;
+        case CELSIUS: return OASTemperatureUnits.celsius;
+        case FAHRENHEIT: return OASTemperatureUnits.fahrenheit;
         case SYSTEM_DEFAULT:
-        default:
-            return OASTemperatureUnits.celsius;
+        default: return OASTemperatureUnits.celsius;
     }
 }
 

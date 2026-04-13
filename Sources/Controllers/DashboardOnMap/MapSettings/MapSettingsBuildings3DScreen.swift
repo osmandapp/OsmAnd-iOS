@@ -89,13 +89,13 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         detailRow.key = RowKey.detail.rawValue
         detailRow.title = localizedString("level_of_details")
         detailRow.setObj([resizedSegmentIcon(.icCustom3DBuildingsDetailLowOff), resizedSegmentIcon(.icCustom3DBuildingsDetailHighOff)], forKey: RowKey.valuesOff.rawValue)
-        detailRow.setObj([OAUtilities.resize(.icCustom3DBuildingsDetailLowOn, newSize: segmentIconSize), OAUtilities.resize(.icCustom3DBuildingsDetailHighOn, newSize: segmentIconSize)], forKey: RowKey.selectedValues.rawValue)
+        detailRow.setObj([resizedSegmentIcon(.icCustom3DBuildingsDetailLowOn, tintColor: nil), resizedSegmentIcon(.icCustom3DBuildingsDetailHighOn, tintColor: nil)], forKey: RowKey.selectedValues.rawValue)
         let viewDistanceRow = performanceSection.createNewRow()
         viewDistanceRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
         viewDistanceRow.key = RowKey.viewDistance.rawValue
         viewDistanceRow.title = localizedString("view_distance")
         viewDistanceRow.setObj([resizedSegmentIcon(.icCustomViewDistanceNearOff), resizedSegmentIcon(.icCustomViewDistanceFarOff)], forKey: RowKey.valuesOff.rawValue)
-        viewDistanceRow.setObj([OAUtilities.resize(.icCustomViewDistanceNearOn, newSize: segmentIconSize), OAUtilities.resize(.icCustomViewDistanceFarOn, newSize: segmentIconSize)], forKey: RowKey.selectedValues.rawValue)
+        viewDistanceRow.setObj([resizedSegmentIcon(.icCustomViewDistanceNearOn, tintColor: nil), resizedSegmentIcon(.icCustomViewDistanceFarOn, tintColor: nil)], forKey: RowKey.selectedValues.rawValue)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -184,8 +184,9 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         tblView?.reloadData()
     }
     
-    private func resizedSegmentIcon(_ image: UIImage, tintColor: UIColor = .iconColorActive) -> UIImage {
+    private func resizedSegmentIcon(_ image: UIImage, tintColor: UIColor? = .iconColorActive) -> UIImage {
         let resizedImage = OAUtilities.resize(image, newSize: segmentIconSize) ?? image
+        guard let tintColor else { return resizedImage }
         return resizedImage.withTintColor(tintColor, renderingMode: .alwaysOriginal)
     }
     

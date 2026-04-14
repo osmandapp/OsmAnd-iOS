@@ -16,6 +16,10 @@ final class ButtonConfigurationHelper: NSObject {
     }
     
     static func proBannerButtonConfiguration(imageName: String) -> UIButton.Configuration {
-        UIButton.Configuration.proBannerButtonConfiguration(image: UIImage(named: imageName))
+        .proBannerButtonConfiguration(image: UIImage(named: imageName))
+    }
+    
+    static func mapsPlusBannerButtonConfiguration(imageName: String) -> UIButton.Configuration {
+        .mapsPlusBannerButtonConfiguration(image: UIImage(named: imageName))
     }
 }

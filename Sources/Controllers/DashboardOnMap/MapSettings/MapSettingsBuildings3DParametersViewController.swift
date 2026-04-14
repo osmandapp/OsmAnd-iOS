@@ -574,7 +574,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
                 cell.button.setImage(nil, for: .normal)
                 cell.button.contentHorizontalAlignment = .center
                 if let secondaryIconName = item.secondaryIconName {
-                    cell.button.configuration = ButtonConfigurationHelper.proBannerButtonConfiguration(imageName: secondaryIconName)
+                    cell.button.configuration = ButtonConfigurationHelper.mapsPlusBannerButtonConfiguration(imageName: secondaryIconName)
                 }
                 cell.button.setTitleColor(nil, for: .highlighted)
                 cell.button.tintColor = nil
@@ -654,7 +654,9 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let item = data.item(for: indexPath)
-        if item.key == RowKey.allColors.rawValue {
+        if item.key == RowKey.buildings3DColorChooseColor.rawValue {
+            showChoosePlanScreen()
+        } else if item.key == RowKey.allColors.rawValue {
             let allColors = appearanceCollection.getAvailableColorsSortingByLastUsed() ?? []
             let selectedItem = (isNightColorMode ? currentNightColorItem : currentDayColorItem) ?? appearanceCollection.getDefaultLineColorItem()
             guard let selectedItem else { return }

@@ -1206,4 +1206,9 @@
     return YES;
 }
 
+- (NSString *)getNameStr
+{
+    return nil;
+}
+
 @end

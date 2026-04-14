@@ -46,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)parseNamesJSON:(NSString *)json
                 object:(OAMapObject *)object;
+- (nullable NSString *)getName:(nullable NSString *)lang transliterate:(BOOL)transliterate;
+- (NSString *)getEnName:(BOOL)transliterate;
 
 @end
 

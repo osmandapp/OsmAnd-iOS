@@ -248,11 +248,11 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 - (nullable BaseDetailsObject *)searchDetailedObject:(id)object
 {
     OAAmenitySearcherRequest *request;
-    if ([object isKindOfClass:OAMapObject.class])
+    if ([object isKindOfClass:[OAMapObject class]])
     {
         request = [[OAAmenitySearcherRequest alloc] initWithMapObject:object];
     }
-    else if ([object isKindOfClass:BaseDetailsObject.class])
+    else if ([object isKindOfClass:[BaseDetailsObject class]])
     {
         BaseDetailsObject *detailsObject = object;
         if ([detailsObject isObjectFull])

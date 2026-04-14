@@ -214,13 +214,13 @@
     return res;
 }
 
-+ (NSArray<NSString *> *) QListOfStringsToNSArray:(const QList<QString> &)list
++ (NSMutableArray<NSString *> *) QListOfStringsToNSArray:(const QList<QString> &)list
 {
     NSMutableArray<NSString *> *array = [[NSMutableArray alloc] initWithCapacity:list.size()];
     for (const auto& item : list)
         [array addObject:item.toNSString()];
 
-    return [NSArray arrayWithArray:array];
+    return array;
 }
 
 + (Point31) convertFromPointI:(OsmAnd::PointI)input

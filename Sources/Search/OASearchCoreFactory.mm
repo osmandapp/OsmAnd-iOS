@@ -600,8 +600,8 @@
             res.object = [[OACity alloc] initWithCity:c];
             res.resourceId = _streetGroupResourceIds.value(c).toNSString();
             res.localeName = c->getName(QString::fromNSString([[phrase getSettings] getLang]), [[phrase getSettings] isTransliterate]).toNSString();
-            res.otherNames = [[OANativeUtilities QListOfStringsToNSArray:c->getOtherNames(TRUE)] mutableCopy];
-            
+            res.otherNames = [OANativeUtilities QListOfStringsToNSArray:c->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
+
             const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
             if (r)
             {
@@ -741,7 +741,7 @@
                                       sr.resourceId = currentResId;
                                       // IMPORTANT: the names with braces restored here (check matchAddressName)
                                       sr.localeName = address->getName(lang, transliterate).toNSString();
-                                      sr.otherNames = [OASearchCoreFactory getAllNames:address->localizedNames nativeName:address->nativeName];
+                                      sr.otherNames = [OANativeUtilities QListOfStringsToNSArray:address->getOtherNames(TRUE, QString::fromNSString(sr.localeName))];
                                       sr.localeRelatedObjectName = currentRegionName;
                                       sr.relatedResourceId = sr.resourceId;
                                       sr.location = [OASearchCoreFactory getLocation:address->position31];
@@ -1077,11 +1077,15 @@
                                   OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
                                   OAPOI *object = [OAAmenitySearcher parsePOIByAmenity:amenity];
                                   sr.object = object;
-                                  sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, false).toNSString();
-                                  if (transliterate && ![nm matches:sr.localeName])
+                                  sr.otherNames = [OANativeUtilities QListOfStringsToNSArray:amenity->getOtherNames(TRUE, QString::fromNSString(sr.localeName))];
+                                  BOOL matchLocalName = [nm matches:sr.localeName];
+                                  if (!matchLocalName)
+                                  {
                                       sr.localeName = amenity->getName(lang, transliterate).toNSString();
-                                  if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]) {
+                                      matchLocalName = [nm matches:sr.localeName];
+                                  }
+                                  if (!matchLocalName && ![nm matchesMap:sr.otherNames]) {
                                       [object.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
                                        {
                                           if (([ObfConstants isTagIndexedForSearchAsId:key] || [ObfConstants isTagIndexedForSearchAsName:key])
@@ -1974,7 +1978,7 @@
         }
         
         res.localeName = _currentAmenity->getName(_lang, _transliterate).toNSString();
-        res.otherNames = [OASearchCoreFactory getAllNames:_currentAmenity->localizedNames nativeName:_currentAmenity->nativeName];
+        res.otherNames = [OANativeUtilities QListOfStringsToNSArray:_currentAmenity->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
         if (res.localeName.length == 0)
         {
             OAPOIBaseType *st = [_types getAnyPoiTypeByName:_currentAmenity->subType.toNSString()];
@@ -2213,7 +2217,7 @@
                     res.localeName = b->getName(lang, transliterate).toNSString();
                     res.location = [OASearchCoreFactory getLocation:b->position31];
                 }
-                res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames nativeName:b->nativeName];
+                res.otherNames = [OANativeUtilities QListOfStringsToNSArray:b->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
                 res.object = [[OABuilding alloc] initWithBuilding:b];
                 res.resourceId = resId;
                 res.priority = priority;
@@ -2344,7 +2348,7 @@
         {
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.localeName = object->getName(lang, transliterate).toNSString();
-            res.otherNames = [OASearchCoreFactory getAllNames:object->localizedNames nativeName:object->nativeName];
+            res.otherNames = [OANativeUtilities QListOfStringsToNSArray:object->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
             res.object = [[OAStreet alloc] initWithStreet:object];
             BOOL pub = YES;
             if (object->nativeName.startsWith('<'))

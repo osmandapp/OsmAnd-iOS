@@ -281,6 +281,30 @@ static NSString * const kGpxImportDir = @"import";
     }
 }
 
+- (OASAngularConstants * _Nullable)getAngularSystem
+{
+    EOAAngularConstant angularSystem = OAAppSettings.sharedManager.angularUnits.get;
+    switch (angularSystem)
+    {
+        case DEGREES: return OASAngularConstants.degrees;
+        case DEGREES360: return OASAngularConstants.degrees360;
+        case MILLIRADS: return OASAngularConstants.millirads;
+        default: return nil;
+    }
+}
+
+- (OASTemperatureUnits * _Nullable)getTemperatureUnits
+{
+    EOATemperatureConstant temperatureUnit = [OAAppSettings.sharedManager getTemperatureUnit];
+    switch (temperatureUnit)
+    {
+        case CELSIUS: return OASTemperatureUnits.celsius;
+        case FAHRENHEIT: return OASTemperatureUnits.fahrenheit;
+        case SYSTEM_DEFAULT:
+        default: return OASTemperatureUnits.celsius;
+    }
+}
+
 - (OASAltitudeMetrics * _Nullable)getAltitudeMetric __attribute__((swift_name("getAltitudeMetric()")))
 {
     return [OASAltitudeMetricsCompanion.companion fromMetricsConstantMc:[self getMetricSystem]];

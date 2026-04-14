@@ -28,7 +28,9 @@
 #include <QString>
 #include <QList>
 #include <QDateTime>
+#define _OSMAND_LOGGING_H_
 #include <common.cpp>
+#undef _OSMAND_LOGGING_H_
 
 #define kSearchResourcesPath @"test-resources/search"
 

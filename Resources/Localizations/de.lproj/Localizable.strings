@@ -301,7 +301,7 @@
 "from_location" = "entfernt";
 "show_alt_in_drive" = "Höhe im Fahrmodus anzeigen";
 "shared_string_get" = "Erwerben";
-"srtm_plugin_disabled" = "Topographie deaktiviert";
+"srtm_plugin_disabled" = "Topografie deaktiviert";
 "shared_string_open" = "Geöffnet";
 "time_closed" = "Geschlossen";
 "will_close_at" = "Schließt um";
@@ -376,9 +376,9 @@
 "purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehr über die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
 "prch_wiki_info" = "Wikipedia-plugin aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "prch_srtm_info" = "Höhenlinien-plugin aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
-"plugin_popup_srtm_desc" = "Um Topographie zu nutzen, bitte die entsprechenden Höhendaten herunterladen";
-"plugin_popup_srtm_ask" = "Um Höhendaten herunterzuladen, bitte das Modul <b>Topographie</b> aktivieren";
-"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
+"plugin_popup_srtm_desc" = "Um die Funktion „Topografie“ zu nutzen, bitte die entsprechenden Höhendaten herunterladen";
+"plugin_popup_srtm_ask" = "Um Höhendaten herunterzuladen, bitte das Modul <b>Topografie</b> aktivieren";
+"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Seekarte</b> aktivieren";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
 "srtm_plugin_description" = "Geländeinformationen wie Höhenlinien, Relief und Hangneigung helfen bei der visuellen Beurteilung des Geländes, des Reliefs, der Befahrbarkeit und vielem mehr. Die topografischen Informationen können auf der Karte durch Höhenlinien, Reliefschattierungen, und/oder Steilheitsfarben dargestellt werden. \n \nDie zugrunde liegenden Daten stammen von SRTM und ASTER. \n \nWeitere Informationen unter %@.";
@@ -959,7 +959,7 @@
 "month_short" = "M";
 "months_short" = "Mon.";
 "year_short" = "J";
-"years_short" = "Jahre";
+"years_short" = "Jhr";
 "day" = "Tag";
 "days_2_4" = "Tage";
 "days_5" = "Tage";
@@ -1624,7 +1624,7 @@
 "touting_specified_vehicle_parameters_descr" = "Angegebene Fahrzeugparameter können die Streckenführung beeinflussen.";
 "default_speed_descr" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Streckenführung beeinflussen)";
 "public_transport_menu" = "ÖPNV";
-"select_base_profile_dialog_message" = "Bauen Sie ein eigenes Anwendungsprofil auf einem der Standardprofile der App auf. Dieses bestimmt die Grundeinstellungen wie Voreinstellungen zur Sichtbarkeit von Widgets und die Einheiten für Geschwindigkeit und Entfernungen. Dies sind die App-Standardprofile zusammen mit Beispielen für eigene Anwendungsprofile, die erweitert werden können:";
+"select_base_profile_dialog_message" = "Bauen Sie ein benutzerdefiniertes Anwendungsprofil auf einem der Standardprofile der App auf. Dieses bestimmt die Grundeinstellungen wie Voreinstellungen zur Sichtbarkeit von Widgets und die Einheiten für Geschwindigkeit und Entfernungen. Dies sind die App-Standardprofile zusammen mit Beispielen für benutzerdefinierte Anwendungsprofile, die erweitert werden können:";
 "device_settings" = "Geräteeinstellungen";
 "units_and_formats" = "Einheiten und Formate";
 "angular_measurment_units" = "Winkelmesseinheiten";
@@ -1775,7 +1775,7 @@
 "help_what_is_new" = "Was ist neu";
 "osm_notes" = "OSM-Hinweise";
 "plugin_popup_osm_editing_ask" = "Bitte aktivieren Sie die Erweiterung OpenStreetMap-Bearbeitung, um Kartenbearbeitungen und OSM-Hinweise hinzuzufügen und zu verwalten";
-"plugin_popup_osm_editing_title" = "OpenStreetMap Bearbeitung einschalten";
+"plugin_popup_osm_editing_title" = "OpenStreetMap-Bearbeitung einschalten";
 "layer_amenity_label" = "Punktbeschriftungen (POI, Favoriten)";
 "personal_category_name" = "Persönlich";
 "prev_segs_recalc_descr" = "Alle vorherigen Segmente werden unter Verwendung des ausgewählten Profils neu errechnet";
@@ -1925,7 +1925,7 @@
 "shared_string_enable" = "Aktivieren";
 "search_poi_types_descr" = "Kombinieren Sie POI-Typen aus verschiedenen Kategorien. Tippen Sie auf den Schalter, um alle auszuwählen, tippen Sie auf die linke Seite zur Kategorieauswahl.";
 "add_custom_category" = "Benutzerdefinierte Kategorie hinzufügen";
-"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten und Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien hinzugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Erweiterungen in Großbuchstaben behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
+"ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Erweiterungen-Bildschirm wurde aus dem Menü Karten und Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien hinzugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Erweiterungen in Großbuchstaben behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
 "approximate_file_size" = "Ungefähre Dateigröße";
 "gpx_upload_private_visibility_descr" = "„Privat“ bedeutet, dass der Track nicht in öffentlichen Verzeichnissen auftaucht, aber seine Trackpunkte in nicht chronologischer Reihenfolge über die öffentliche GPS-API ohne Zeitstempel verfügbar sind.";
 "gpx_upload_identifiable_visibility_descr" = "„Identifizierbar“ bedeutet, dass der Track in Ihren GPS-Tracks und in öffentlichen GPS-Trackverzeichnissen angezeigt wird, d. h., andere Benutzer können den Track herunterladen und mit Ihrem Benutzernamen verknüpfen. Öffentliche, mit Zeitstempel versehene Trackpunkt-Daten von der GPS-API, die über die Trackpunkt-API bereitgestellt werden, verweisen auf Ihre ursprüngliche Trackseite.";
@@ -2508,7 +2508,7 @@
 "map_download_privacy_descr" = "Beim Herunterladen von Karten stimmen Sie den <a href='https://osmand.net/docs/legal/terms-of-use'>Nutzungsbedingen</a> und den <a href='https://osmand.net/docs/legal/privacy-policy'>Datenschutzbestimmungen zu</a>.";
 "shared_string_profile" = "Profil";
 "map_widget_rendering_fps" = "Kartendarstellung FPS";
-"ios_release_4_3" = "• Flüssige Animation für Standortwechsel während der Bewegung\n• CarPlay: Fahrspuren hinzugefügt, 2½D-Ansicht, Soundprobleme behoben, während über Bluetooth verbunden\n• Einführung neuer Kaufpläne: \"OsmAnd Pro\"-Abonnements mit Zugriff auf alle Funktionen und \"Maps+\"-Kauf mit unbegrenzten Kartendownloads und kostenpflichtigem Plugin-Zugang.\n• Cloud-Backup und Offline-Wettervorhersage für OsmAnd Pro-Benutzer hinzugefügt\n• Neuer bequemer \"Kauf\" -Bildschirm mit der Liste aller Einkäufe\n• Vorteile für aktive OpenStreetMap.org Mitwirkende\n• Tracks können jetzt nach Höhe, Geschwindigkeit oder Neigung eingefärbt werden\n• Offline-Karten sind jetzt über die Dateien-App zugänglich\n• Favoriten: Generierung lokaler Backups nach jeder Änderung hinzugefügt, Backups, auf die über die Dateien-App zugegriffen werden kann\n• POI, die in Favoriten gespeichert werden, speichern und zeigen alle POI-Daten auch ohne Offline-Karte an\n• GPX fügt Unterstützung für Link-, CMT-, DESC-Tags und für benutzerdefinierte Erweiterungen hinzu\n• Modus für die Kompasstaste hinzugefügt\n• Problem mit dem UTM-Koordinatenformat behoben\n• Problem mit Zwischenpunkten in der Navigation behoben\n";
+"ios_release_4_3" = "• Flüssige Animation für Standortwechsel während der Bewegung\n• CarPlay: Fahrspuren hinzugefügt, 2½D-Ansicht, Soundprobleme behoben, während über Bluetooth verbunden\n• Einführung neuer Kaufpläne: \"OsmAnd Pro\"-Abonnements mit Zugriff auf alle Funktionen und \"Maps+\"-Kauf mit unbegrenzten Kartendownloads und Zugang zu kostenpflichtigen Erweiterungen.\n• Cloud-Backup und Offline-Wettervorhersage für OsmAnd Pro-Benutzer hinzugefügt\n• Neuer bequemer \"Kauf\" -Bildschirm mit der Liste aller Einkäufe\n• Vorteile für aktive OpenStreetMap.org Mitwirkende\n• Tracks können jetzt nach Höhe, Geschwindigkeit oder Neigung eingefärbt werden\n• Offline-Karten sind jetzt über die Dateien-App zugänglich\n• Favoriten: Generierung lokaler Backups nach jeder Änderung hinzugefügt, Backups, auf die über die Dateien-App zugegriffen werden kann\n• POI, die in Favoriten gespeichert werden, speichern und zeigen alle POI-Daten auch ohne Offline-Karte an\n• GPX fügt Unterstützung für Link-, CMT-, DESC-Tags und für benutzerdefinierte Erweiterungen hinzu\n• Modus für die Kompasstaste hinzugefügt\n• Problem mit dem UTM-Koordinatenformat behoben\n• Problem mit Zwischenpunkten in der Navigation behoben\n";
 "shared_string_download_update" = "Aktualisierung herunterladen";
 "track_has_no_needed_data" = "Dem Track fehlen die entsprechenden Daten.";
 "backup_error_failed_to_fetch_remote_items" = "Fehler beim Abrufen der Dateiliste vom Server.";
@@ -3388,7 +3388,7 @@
 "shared_string_routing" = "Routenführung";
 "quick_action_terrain_color_scheme" = "Gelände-Farbschema";
 "quick_action_need_to_add_item_to_list" = "Mindestens ein Element in die Liste der Schnellaktionseinstellungen hinzufügen";
-"ios_release_4_9" = "• Das Verhalten des Kompasses wurde geändert: ein einfaches Antippen dreht die Karte nach Norden, während ein doppeltes Antippen die Ausrichtung ändert\n• Suchfunktion für die beliebtesten Markennamen hinzugefügt\n• Das Erscheinungsbild der Grafik wurde verbessert: Die Beschriftungen der Y-Achse überschneiden sich nicht mehr mit dem Diagramm\n• In der Fußzeile jedes Ordners wird nun eine Gesamtstatistik des Tracks angezeigt\n• Alle Tags mit Übersetzungen wurden in einem einzigen Punkt im Kontextmenü zusammengefasst\n• Ein Problem wurde behoben, bei dem die POI-Kategorie im Kontextmenü fehlte\n• Ein Problem mit der automatischen Erkennung der Sprache der Sprachansagen wurde behoben\n• Absturz im Bootsprofil Routenparameter behoben\n• Verbesserungen für CarPlay: Ein Problem wurde behoben, bei dem das Hauptnavigations-Widget nach der Neuberechnung der Route nicht aktualisiert wurde, und die Größe der Pfeile im Widget für die nächste Abbiegung wurde korrigiert\n• Es wurde ein Kartenmodus-Parameter eingeführt, der nun dem App-Thema folgt\n• Verbesserte UI für die Auswahl des Standort-Symbols, zusätzliche Optionen zur Deaktivierung des Standort-Radius und des Blickwinkels\n• Hinzufügen einer Schnellaktion zum Ändern der „Standortposition auf dem Bildschirm“.\n";
+"ios_release_4_9" = "• Das Verhalten des Kompasses wurde geändert: ein einfaches Antippen dreht die Karte nach Norden, während ein doppeltes Antippen die Ausrichtung ändert\n• Suchfunktion für die beliebtesten Markennamen hinzugefügt\n• Erscheinungsbild von Diagrammen verbessert: Die Beschriftungen der Y-Achse überschneiden sich nicht mehr mit dem Diagramm\n• In der Fußzeile jedes Ordners wird nun eine Gesamtstatistik des Tracks angezeigt\n• Alle Tags mit Übersetzungen wurden in einem einzigen Punkt im Kontextmenü zusammengefasst\n• Ein Problem wurde behoben, bei dem die POI-Kategorie im Kontextmenü fehlte\n• Ein Problem mit der automatischen Erkennung der Sprache der Sprachansagen wurde behoben\n• Absturz im Bootsprofil Routenparameter behoben\n• Verbesserungen für CarPlay: Ein Problem wurde behoben, bei dem das Hauptnavigations-Widget nach der Neuberechnung der Route nicht aktualisiert wurde, und die Größe der Pfeile im Widget für die nächste Abbiegung wurde korrigiert\n• Es wurde ein Kartenmodus-Parameter eingeführt, der nun dem App-Thema folgt\n• Verbesserte UI für die Auswahl des Standort-Symbols, zusätzliche Optionen zur Deaktivierung des Standort-Radius und des Blickwinkels\n• Hinzufügen einer Schnellaktion zum Ändern der „Standortposition auf dem Bildschirm“.\n";
 "download_persian_voice_alert_title" = "Persische Sprachdatei herunterladen:";
 "download_persian_voice_alert_descr_ios" = "Einstellungen -> Eingabehilfen -> Gesprochene Inhalte -> Stimmen -> Persisch -> Dariush";
 "download_persian_voice_alert_descr_macos" = "Einstellungen -> Eingabehilfen -> Gesprochene Inhalte -> Systemstimme -> Stimmen verwalten -> Persisch -> Dariush";
@@ -3513,7 +3513,7 @@
 "lang_te" = "Telugu";
 "lang_tl" = "Tagalog";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"detailed_track_guidance" = "Detaillierte Spurführung";
+"detailed_track_guidance" = "Detaillierte Track Navigation";
 "shared_string_import" = "Importieren";
 "battery_widget_level_privacy_ios_desc" = "Aus Gründen des iOS-Datenschutzes kann das Widget den Akkustand nur in 5-Prozent-Schritten anzeigen, z. B. 35 %, 60 % oder 85 %";
 "osmand_live" = "OsmAnd Live";
@@ -4002,7 +4002,7 @@
 "quick_action_temperature_layer" = "Eine Schaltfläche zum Ein- und Ausblenden der Temperaturebene auf der Karte.";
 "deleted_maps_alert_message" = "%d Karten löschen?";
 "ios_release_5_2" = "* Benutzerdefinierte Zuordnung von Tasten externer Eingabegeräte eingeführt, ermöglicht die Zuordnung einer beliebigen Schnellaktion zur Taste einer Tastatur oder eines Controllers\n• Neue Schnellaktionen zur Steuerung der App über ein externes Eingabegerät hinzugefügt\n• Sichtbarkeit von Widgets im transparenten Modus verbessert durch Hinzufügung von Textkonturen\n• Genaues Gitter zur Ausrichtung von Karten-Bedienfeldern hinzugefügt\n• Neuen Seekartendarstellung \"Seefahrt\" mit umfangreichen Einstellmöglichkeiten eingeführt\n• Straßen- und Stadtangaben zu Suchergebnissen hinzugefügt\n• Einstellmöglichkeit zur Vergrößerung der Textgröße des Abstandsmesswerkzeugs hinzugefügt\n• Auswahl der Einheit der Temperatur zu Allgemeine Einstellungen verschoben\n• Einheit der Höhe kann nun getrennt von Einheit der Länge eingestellt werden\n• Schnellaktion für Kartenausrichtung mit auswählbaren Kartenausrichtungsmodi hinzugefügt\t\n• Problem gelöst, das die Bewegung einiger Widgets verhinderte\n• Falsche Anzeige des Abstands im Widget \"Nächste Abzweigung\" behoben\n• Suche nach Marke (brand) verbessert durch Einbeziehung von mehr lokalen Marken\n• Allgemeine Stabilitäts- und Leistungsverbesserungen\n";
-"ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n• Fähigkeit hinzugefügt Wegpunkte in einen ausgewählten Favoriten-Ordner zusammenzuführen\n• CarPlay: Problem mit nicht reagierender Karte auf dem Dashboard behoben und Unterstützung hinzugefügt für Parameter „Zeige immer dunkle Karte“\n";
+"ios_release_5_3" = "• Interaktive Animation für Tacho-Widget hinzugefügt\n• Möglichkeit hinzugefügt die Größe des Positions-Symbols einzustellen\n• Neue Widgets für Fahrtaufzeichnung: Höchstbeschwindigkeit und durchschnittliche Steigung; verbesserte Bergauf/Bergab-Widgets\n• Unterstützung für das Teilen von Deep Links für spezifische POIs hinzugefügt\n• Problem behoben, dass während des Stillstands die erwartete Ankunftszeit in Navigation-Widgets nicht aktualisiert wurde\n• Verbindung gepaarter OBDII-Adapter verbessert\n•\n";
 "image_cache_online_photo_high_res" = "Zwischenspeicher für hochauflösende Online-Fotos";
 "image_cache_online_photo_mapillary_default_cache" = "Standard-Zwischenspeicher für Online-Fotos/Mapillary";
 "trip_recording_moving_time" = "Bewegungszeit";
@@ -4048,3 +4048,18 @@
 "travel_guides" = "Touristenführer";
 "has_vehicle_metrics" = "Mit OBDII-Daten";
 "context_menu_read_full_article" = "Ganzen Artikel lesen";
+"graph_axis" = "Diagramm-Achse";
+"poi_mobile" = "Handy";
+"show_spherical_map" = "Weltansicht";
+"y_axis_description" = "Wählen Sie bis zu zwei Optionen für die Y-Achse.";
+"enable_3d_objects" = "3D-Gebäude";
+"free_custom_color_description" = "3D-Gebäude können mit beliebigen Farben angepasst werden. Ideal, um sie an ein Kartendesign anzupassen oder den Kontrast zu verbessern.";
+"performance" = "Leistung";
+"view_distance" = "Entfernung anzeigen";
+"custom_color" = "Benutzerdefinierte Farbe";
+"choose_color" = "Farbe auswählen";
+"buildings_3d_visibility_description" = "Passe die Deckkraft der 3D-Strukturen auf der Karte an.";
+"level_of_details" = "Detailtiefe";
+"open_till_short" = "Bis";
+"shared_string_int_name" = "Internationaler Name";
+"show_debug_tile" = "Kachelinformationen anzeigen";

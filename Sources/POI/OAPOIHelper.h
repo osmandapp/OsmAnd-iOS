@@ -69,7 +69,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (NSString *) getPhraseEN:(OAPOIBaseType *)type;
 
 - (NSString *)getPoiStringWithoutType:(OAPOI *)poi;
-- (NSString *)getFormattedOpeningHours:(OAPOI *)poi;
+- (NSString *)getShortFormattedOpeningHours:(OAPOI *)poi;
 - (NSString *)getAmenityDistanceFormatted:(OAPOI *)amenity;
 
 - (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory;

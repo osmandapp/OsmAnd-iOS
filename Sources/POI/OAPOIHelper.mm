@@ -656,49 +656,13 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     return [NSString stringWithFormat:@"%@ %@", typeName, localName];
 }
 
-- (NSString *) getFormattedOpeningHours:(OAPOI *)poi
+- (NSString *) getShortFormattedOpeningHours:(OAPOI *)poi
 {
-    const int intervalMinutes = 120;
-    const int arrLength = intervalMinutes / 5;
-    int minutesArr[arrLength];
-    int k = 0;
-    for (int i = 0; i < arrLength; i++)
-    {
-        minutesArr[i] = k;
-        k += 5;
-    }
-    
     auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
     if (!parser)
         return @"";
-    BOOL isOpenedNow = parser->isOpened();
-    NSDate *newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + intervalMinutes * 60];
-    BOOL isOpened = parser->isOpenedForTime([newTime toTm]);
-    if (isOpened == isOpenedNow)
-        return (isOpenedNow ? OALocalizedString(@"shared_string_is_open") : OALocalizedString(@"time_closed"));
-    
-    int imax = arrLength - 1;
-    int imin = 0;
-    int imid;
-    while (imax >= imin)
-    {
-        imid = (imin + imax) / 2;
-        newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + minutesArr[imid] * 60];
-        BOOL isOpened = parser->isOpenedForTime([newTime toTm]);
-        if (isOpened == isOpenedNow)
-            imin = imid + 1;
-        else
-            imax = imid - 1;
-    }
-    
-    int hours, minutes, seconds;
-    [OAUtilities getHMS:minutesArr[imid] * 60 hours:&hours minutes:&minutes seconds:&seconds];
-    NSMutableString *timeStr = [NSMutableString string];
-    if (hours > 0)
-        [timeStr appendFormat:@"%d %@", hours, OALocalizedString(@"int_hour")];
-    if (minutes > 0)
-        [timeStr appendFormat:@"%@%d %@", (timeStr.length > 0 ? @" " : @""), minutes, OALocalizedString(@"int_min")];
-    return (isOpenedNow ? [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"will_close_at"), timeStr] : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_open"), timeStr]);
+    const auto info = parser->getCombinedInfo([NSDate.date toTm]);
+    return [NSString stringWithUTF8String:info->getShortInfo().c_str()] ?: @"";
 }
 
 - (NSString *) getAmenityDistanceFormatted:(OAPOI *)amenity

@@ -785,7 +785,7 @@
 "shared_string_read_more" = "Preberite več";
 "months_3" = "Tri mesece";
 "get_discount_first_part" = "%@ za prvi %@";
-"get_discount_second_part" = "nato %@";
+"get_discount_second_part" = "Nato %@";
 "sett_generic_ext_input" = "Tipkovnica";
 "shared_string_distance" = "Razdalja";
 "configure_map" = "Nastavitve zemljevida";
@@ -2504,3 +2504,7 @@
 "liter_single" = "Liter";
 "trip_recording_moving_time_widget_description" = "Prikaže trenutno zabeleženi čas gibanja ali čas zadnjega vzpona in spusta.";
 "trip_recording_moving_time" = "Čas premikanja";
+"open_till_short" = "Do";
+"years_3" = "Tri leta";
+"get_discount_first_few_parts" = "%@ za prvih %@";
+"allow_3d_descr" = "Omogočite to možnost, da omogočite pogled zemljevida v 2,5 D pogledu";

@@ -3800,11 +3800,22 @@ typedef enum
                leftInset:(float)leftInset
     changeElevationAngle:(BOOL)changeElevationAngle
 {
-    OAToolbarViewController *toolbar = [self getTopToolbar];
+    CGSize screenBBox = CGSizeZero;
     CGFloat topInset = 0.0;
-    if (toolbar && [toolbar.navBarView superview])
-        topInset = toolbar.navBarView.frame.size.height;
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+    UIWindow *carPlayActiveWindow = UIApplication.sharedApplication.carPlayActiveWindow;
+    if (carPlayActiveWindow)
+    {
+        screenBBox = carPlayActiveWindow.frame.size;
+    }
+    else
+    {
+        OAToolbarViewController *toolbar = [self getTopToolbar];
+        if (toolbar && [toolbar.navBarView superview])
+            topInset = toolbar.navBarView.frame.size.height;
+        
+        screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+    }
+    
     [self displayAreaOnMap:topLeft
                bottomRight:bottomRight
                 screenBBox:screenBBox
@@ -3890,8 +3901,8 @@ typedef enum
         OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
         float appliedLeftInset = 0.0f;
         float appliedTopInset = 0.0f;
-        
         CGSize safeScreenBBox = [self safeScreenBBox:screenBBox leftInset:leftInset rightInset:0.0f topInset:topInset bottomInset:bottomInset outLeftInset:appliedLeftInset outTopInset:appliedTopInset];
+        
         _targetZoom = [self getZoomForBounds:bounds mapSize:safeScreenBBox];
         if (maxZoom > 0 && _targetZoom > maxZoom)
             _targetZoom = maxZoom;

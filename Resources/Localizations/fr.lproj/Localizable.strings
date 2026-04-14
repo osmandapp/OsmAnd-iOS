@@ -4044,3 +4044,4 @@
 "open_till_short" = "Jusqu'à";
 "shared_string_int_name" = "Nom international";
 "show_debug_tile" = "Afficher les informations sur la vignette";
+"open_from_short" = "De";

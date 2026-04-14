@@ -18,8 +18,11 @@
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+
+#include <OsmAndCore/NetworkRouteContext.h>
 
 #define kDescriptionImageCell 0
 #define kInfoCreatedOnCell 0
@@ -212,6 +215,7 @@
     NSArray<NSString *> *tagsToGpx = [routeKey getRouteMapAllKeys];
     _nameTags = [[NSMutableArray alloc] init];
     BOOL hasName = NO;
+    BOOL isOsmRoute = [tagsToGpx containsObject:ROUTE_ID]; // ready for OSM routes v2
     for (NSString *routeTagKey in tagsToGpx)
     {
         NSString *routeTagValue = [routeKey getRouteValue:routeTagKey];
@@ -224,6 +228,10 @@
             || [routeTagKey isEqualToString:@"type"]
             || [routeTagKey hasPrefix:@"shield_"]
             || [GpxAppearanceInfo isGpxAppearanceTag:routeTagKey])
+            continue;
+
+        if (!isOsmRoute && OsmAnd::OsmRouteType::containsUnwantedOsmRouteTags(QString::fromNSString(routeTagKey),
+                                                                              QString::fromNSString(routeTagValue)))
             continue;
         
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])

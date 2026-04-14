@@ -381,15 +381,17 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 {
     return [self getFormattedSpeed:metersperseconds
                        speedSystem:speedSystem
-                             drive:NO
+                             drive:[[[OAAppSettings sharedManager].applicationMode get] hasFastSpeed]
                     valueUnitArray:nil];
 }
 
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OAApplicationMode *mode = [settings.applicationMode get];
     return [self getFormattedSpeed:metersperseconds
-                       speedSystem:[[OAAppSettings sharedManager].speedSystem get]
-                             drive:NO
+                       speedSystem:[settings.speedSystem get:mode]
+                             drive:[mode hasFastSpeed]
                     valueUnitArray:valueUnitArray];
 }
 
@@ -401,32 +403,30 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     float kmh = metersperseconds * 3.6f;
     if (speedSystem == KILOMETERS_PER_HOUR)
     {
-        int kmh10 = (int) (kmh * 10.0f);
-        if (kmh >= 20)
-        {
-            return [self getFormattedSpeed:(int) kmh10 / 10.0f unit:_unitsKmh valueUnitArray:valueUnitArray];
-        }
-        // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
+        // e.g. car case and for high-speeds: Display rounded to 1 km/h (5% precision at 20 km/h)
+        if (kmh >= 20 || drive)
+            return [self getFormattedSpeed:roundf(kmh) unit:_unitsKmh valueUnitArray:valueUnitArray];
+        
+        // for smaller values display 1 decimal digit x.y km/h, (0.5% precision at 20 km/h)
+        int kmh10 = roundf(kmh * 10.0f);
         return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsKmh valueUnitArray:valueUnitArray];
     }
     else if (speedSystem == MILES_PER_HOUR)
     {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
-        int mph10 = (int) (mph * 10.0f);
-        if (mph >= 20)
-        {
-            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsMph valueUnitArray:valueUnitArray];
-        }
+        if (mph >= 20 || drive)
+            return [self getFormattedSpeed:roundf(mph) unit:_unitsMph valueUnitArray:valueUnitArray];
+        
+        int mph10 = roundf(mph * 10.0f);
         return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsMph valueUnitArray:valueUnitArray];
     }
     else if (speedSystem == NAUTICALMILES_PER_HOUR)
     {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_NAUTICALMILE;
-        int mph10 = (int) (mph * 10.0f);
-        if (mph >= 20)
-        {
-            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsNmh valueUnitArray:valueUnitArray];
-        }
+        if (mph >= 20 || drive)
+            return [self getFormattedSpeed:roundf(mph) unit:_unitsNmh valueUnitArray:valueUnitArray];
+        
+        int mph10 = roundf(mph * 10.0f);
         return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNmh valueUnitArray:valueUnitArray];
     }
     else if (speedSystem == MINUTES_PER_KILOMETER)

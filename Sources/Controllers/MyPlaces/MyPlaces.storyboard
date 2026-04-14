@@ -220,7 +220,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="npH-mS-lH3">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="779"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
@@ -234,7 +234,7 @@
                         <color key="backgroundColor" name="viewBg"/>
                         <constraints>
                             <constraint firstItem="npH-mS-lH3" firstAttribute="leading" secondItem="MuT-fW-w07" secondAttribute="leading" id="loL-Cv-Gvs"/>
-                            <constraint firstItem="041-i2-uHy" firstAttribute="bottom" secondItem="npH-mS-lH3" secondAttribute="bottom" id="tNh-aa-VSa"/>
+                            <constraint firstAttribute="bottom" secondItem="npH-mS-lH3" secondAttribute="bottom" id="tNh-aa-VSa"/>
                             <constraint firstItem="npH-mS-lH3" firstAttribute="top" secondItem="MuT-fW-w07" secondAttribute="top" id="tQZ-7x-iuZ"/>
                             <constraint firstAttribute="trailing" secondItem="npH-mS-lH3" secondAttribute="trailing" id="xBy-Nf-hUz"/>
                         </constraints>

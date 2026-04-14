@@ -68,7 +68,8 @@ final class SpeedometerView: OATextInfoWidget {
     
     @discardableResult
     override func updateInfo() -> Bool {
-        guard settings.showSpeedometer.get() else {
+        let isContextMenuVisible = !isPreview && carPlayConfig == nil && OARootViewController.instance().mapPanel.isContextMenuVisible()
+        guard settings.showSpeedometer.get() && !isContextMenuVisible else {
             isHidden = true
             return false
         }

@@ -89,6 +89,15 @@
     }
 }
 
+- (void)removeCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)callback
+{
+    @synchronized (self) {
+        NSMutableArray<id<OARouteCalculationProgressCallback>> *calculationProgressCallbacks = [NSMutableArray arrayWithArray:_calculationProgressCallbacks];
+        [calculationProgressCallbacks removeObject:callback];
+        _calculationProgressCallbacks = calculationProgressCallbacks;
+    }
+}
+
 - (BOOL) isRouteBeingCalculated
 {
     @synchronized (self)

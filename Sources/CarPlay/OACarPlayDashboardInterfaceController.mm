@@ -95,9 +95,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void) commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _routingHelper = OARoutingHelper.sharedInstance;
-    [_routingHelper addListener:self];
-    [_routingHelper addCalculationProgressCallback:self];
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
     _lightGuidanceBackgroundColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];

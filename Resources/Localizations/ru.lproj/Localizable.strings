@@ -4055,3 +4055,4 @@
 "open_till_short" = "До";
 "shared_string_int_name" = "Международное название";
 "show_debug_tile" = "Отображать информацию о тайлах";
+"open_from_short" = "C";

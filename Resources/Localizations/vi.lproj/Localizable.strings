@@ -2497,3 +2497,7 @@
 "show_track_on_map" = "Hiện hành trình trên bản đồ";
 "towards" = "hướng tới";
 "local_openstreetmap_uploading" = "Đang tải lên…";
+"open_from_short" = "Từ";
+"open_till_short" = "Cho đến";
+"trip_recording_moving_time_widget_description" = "Hiện thời gian di chuyển đang ghi, hoặc thời gian cho đoạn đi lên và đi xuống gần nhất.";
+"trip_recording_moving_time" = "Thời gian di chuyển";

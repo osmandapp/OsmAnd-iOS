@@ -243,8 +243,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void)contextMenuDidShow:(id)targetObj;
 - (void)contextMenuDidHide;
 
-- (void)updateCurrentMapSource;
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -221,6 +221,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (CGFloat)mapHeightKoef;
 - (void)setTargetImage:(UIImage * _Nullable)image;
 - (UIImage *_Nullable)targetImage;
+- (nullable NSString *)getNameStr;
 
 @end
 

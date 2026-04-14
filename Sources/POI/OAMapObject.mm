@@ -10,6 +10,7 @@
 #import "OAUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/ICU.h>
 
 @implementation OAMapObject
 {
@@ -208,6 +209,41 @@
 + (uint64_t) getInvalidObfId
 {
     return OsmAnd::ObfObjectId::invalidId();
+}
+
+- (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate
+{
+    if (lang != nil && lang.length > 0)
+    {
+        if ([lang isEqualToString:@"en"])
+        {
+            NSString *enName = [self getEnName:transliterate];
+            return enName.length > 0 ? enName : self.name;
+        }
+        else
+        {
+            if (self.localizedNames != nil)
+            {
+                NSString *nm = self.localizedNames[lang];
+                if (nm.length > 0)
+                    return nm;
+                
+                if (transliterate)
+                    return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
+            }
+        }
+    }
+    
+    return self.name;
+}
+
+- (NSString *)getEnName:(BOOL)transliterate
+{
+    if (!NSStringIsEmpty(self.enName))
+        return self.enName;
+    else if (!NSStringIsEmpty(self.name) && transliterate)
+        return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
+    return @"";
 }
 
 @end

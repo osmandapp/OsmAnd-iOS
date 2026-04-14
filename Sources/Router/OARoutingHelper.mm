@@ -338,6 +338,11 @@ static BOOL _isDeviatedFromRoute = false;
     [_recalcHelper addCalculationProgressCallback:callback];
 }
 
+- (void) removeCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)callback
+{
+    [_recalcHelper removeCalculationProgressCallback:callback];
+}
+
 - (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMaps
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps

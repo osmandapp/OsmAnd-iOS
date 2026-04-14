@@ -24,6 +24,7 @@ final class CarPlaySceneDelegate: UIResponder {
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
+        removeListeners()
         isForegroundScene = false
     }
     
@@ -83,6 +84,37 @@ final class CarPlaySceneDelegate: UIResponder {
             if let navigationController = OARootViewController.instance()?.navigationController {
                 OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.carplay(), navController: navigationController)
             }
+        }
+        addListeners()
+    }
+    
+    private func addListeners() {
+        guard let carPlayDashboardController else { return }
+        guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
+
+        // Register as a route information listener
+        if let infoListener = carPlayDashboardController as? OARouteInformationListener {
+            routingHelper.add(infoListener)
+        }
+
+        // Register for route calculation progress callbacks
+        if let progressListener = carPlayDashboardController as? OARouteCalculationProgressCallback {
+            routingHelper.add(progressListener)
+        }
+    }
+
+    private func removeListeners() {
+        guard let carPlayDashboardController else { return }
+        guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
+
+        // Unregister as a route information listener
+        if let infoListener = carPlayDashboardController as? OARouteInformationListener {
+            routingHelper.remove(infoListener)
+        }
+
+        // Unregister route calculation progress callbacks
+        if let progressListener = carPlayDashboardController as? OARouteCalculationProgressCallback {
+            routingHelper.remove(progressListener)
         }
     }
     

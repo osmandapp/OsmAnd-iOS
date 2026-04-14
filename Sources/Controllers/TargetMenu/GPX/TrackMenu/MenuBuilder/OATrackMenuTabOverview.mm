@@ -41,23 +41,6 @@
     NSMutableArray<NSDictionary *> *_nameTags;
 }
 
-- (BOOL)containsUnwantedOsmRouteTags:(NSString *)routeTagKey value:(NSString *)routeTagValue
-{
-    if (NSStringIsEmpty(routeTagValue))
-        return YES;
-
-    for (const auto routeType : OsmAnd::OsmRouteType::getAllValues())
-    {
-        NSString *routeTypeName = routeType->name.toNSString();
-        if ([routeTagKey hasPrefix:[routeTypeName stringByAppendingString:@"_"]]
-            || [routeTagKey hasPrefix:[@"route_" stringByAppendingString:routeTypeName]])
-        {
-            return YES; // hiking_*, route_hiking, route_hiking_*, etc.
-        }
-    }
-    return NO;
-}
-
 @dynamic tableData, isGeneratedData;
 
 - (NSString *)getTabTitle
@@ -247,7 +230,8 @@
             || [GpxAppearanceInfo isGpxAppearanceTag:routeTagKey])
             continue;
 
-        if (!isOsmRoute && [self containsUnwantedOsmRouteTags:routeTagKey value:routeTagValue])
+        if (!isOsmRoute && OsmAnd::OsmRouteType::containsUnwantedOsmRouteTags(QString::fromNSString(routeTagKey),
+                                                                              QString::fromNSString(routeTagValue)))
             continue;
         
         if ([routeTagKey containsString:@":"] && ![routeTagKey hasPrefix:@"name"] && ![routeTagKey hasPrefix:@"ref"])

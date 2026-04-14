@@ -1088,7 +1088,8 @@
                                   if (!matchLocalName && ![nm matchesMap:sr.otherNames]) {
                                       [object.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
                                        {
-                                          if (([ObfConstants isTagIndexedForSearchAsId:key] || [ObfConstants isTagIndexedForSearchAsName:key])
+                                          if (![key hasPrefix:ROUTE_NAME]
+                                              && ([ObfConstants isTagIndexedForSearchAsId:key] || [ObfConstants isTagIndexedForSearchAsName:key])
                                               && [nm matches:value])
                                           {
                                               sr.alternateName = value;

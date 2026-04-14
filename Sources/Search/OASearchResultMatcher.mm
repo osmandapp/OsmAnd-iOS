@@ -161,7 +161,8 @@
         {
             [((OAPOI *) object.object).values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
             {
-                if (![ObfConstants isTagIndexedForSearchAsId:key] && ![ObfConstants isTagIndexedForSearchAsName:key])
+                if ([key hasPrefix:ROUTE_NAME]
+                    || (![ObfConstants isTagIndexedForSearchAsId:key] && ![ObfConstants isTagIndexedForSearchAsName:key]))
                 {
                     return;
                 }

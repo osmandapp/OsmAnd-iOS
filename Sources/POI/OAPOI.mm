@@ -17,8 +17,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
-#include <OsmAndCore/ICU.h>
-
 NSString * const TYPE = @"type";
 NSString * const POI_NAME = @"name";
 NSString * const COLLAPSABLE_PREFIX = @"collapsable_";
@@ -276,32 +274,6 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     return [self getName:lang transliterate:NO];
 }
 
-- (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate
-{
-    if (lang != nil && lang.length > 0)
-    {
-        if ([lang isEqualToString:@"en"])
-        {
-            NSString *enName = [self getEnName:transliterate];
-            return enName.length > 0 ? enName : self.name;
-        }
-        else
-        {
-            if (self.localizedNames != nil)
-            {
-                NSString *nm = self.localizedNames[lang];
-                if (nm.length > 0)
-                    return nm;
-                
-                if (transliterate)
-                    return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
-            }
-        }
-    }
-    
-    return self.name;
-}
-
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn
 {
     if ((!includeEn || !self.name || self.name.length == 0) && (!self.localizedNames || self.localizedNames.count == 0))
@@ -337,15 +309,6 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
         }
     }
     return names;
-}
-
-- (NSString *)getEnName:(BOOL)transliterate
-{
-    if (!NSStringIsEmpty(self.enName))
-        return self.enName;
-    else if (!NSStringIsEmpty(self.name) && transliterate)
-        return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
-    return @"";
 }
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang

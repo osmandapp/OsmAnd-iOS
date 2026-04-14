@@ -1528,11 +1528,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
             poi = [BaseDetailsObject convertRenderedObjectToAmenity:renderedObject];
         if (poi)
         {
-            if (!targetPoint || targetPoint.title.length == 0)
-                targetPoint.title = [RenderedObjectHelper getFirstNonEmptyNameFor:poi withRenderedObject:renderedObject];
-            
             targetPoint.localizedNames = targetPoint.localizedNames.count > 0 ? targetPoint.localizedNames : poi.localizedNames;
-            
             targetPoint.icon = [RenderedObjectHelper getIconWithRenderedObject:renderedObject];
             
         }

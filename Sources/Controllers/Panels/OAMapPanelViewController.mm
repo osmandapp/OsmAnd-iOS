@@ -1349,6 +1349,14 @@ typedef enum
     {
         targetPoint.ctrlAttrTypeStr = [controller getAttributedTypeStr];
         targetPoint.ctrlTypeStr = [controller getTypeStr];
+        if (targetPoint.title.length == 0)
+        {
+            NSString *name = [controller getNameStr];
+            if (name.length > 0)
+            {
+                targetPoint.title = name;
+            }
+        }
     }
 }
 

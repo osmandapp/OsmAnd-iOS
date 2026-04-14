@@ -1594,29 +1594,34 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        NSString *t;
+        NSString *title;
         if (_targetPoint.titleSecond)
         {
-            t = [NSString stringWithFormat:@"%@ - %@", _targetPoint.title, _targetPoint.titleSecond];
-            CGFloat h = [OAUtilities calculateTextBounds:t width:_addressLabel.bounds.size.width font:_addressLabel.font].height;
+            title = [NSString stringWithFormat:@"%@ - %@", _targetPoint.title, _targetPoint.titleSecond];
+            CGFloat h = [OAUtilities calculateTextBounds:title width:_addressLabel.bounds.size.width font:_addressLabel.font].height;
             if (h > 41.0)
             {
-                t = _targetPoint.title;
+                title = _targetPoint.title;
             }
             else if (h > 21.0)
             {
-                t = [NSString stringWithFormat:@"%@\n%@", _targetPoint.title, _targetPoint.titleSecond];
-                h = [OAUtilities calculateTextBounds:t width:_addressLabel.bounds.size.width font:_addressLabel.font].height;
+                title = [NSString stringWithFormat:@"%@\n%@", _targetPoint.title, _targetPoint.titleSecond];
+                h = [OAUtilities calculateTextBounds:title width:_addressLabel.bounds.size.width font:_addressLabel.font].height;
                 if (h > 41.0)
-                    t = _targetPoint.title;
+                    title = _targetPoint.title;
             }
         }
         else
         {
-            t = _targetPoint.title;
+            NSString *targetTitle = [self getTargetTitle];
+            if (targetTitle.length > 0)
+            {
+                title = targetTitle;
+                _targetPoint.title = title;
+            }
         }
         
-        [_addressLabel setText:t];
+        [_addressLabel setText:title];
         [self updateAddressLabel];
         [self updateTransportView];
         [self updateDescriptionLabel];
@@ -1624,8 +1629,6 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.activeTargetType == OATargetGPX)
         _buttonFavorite.enabled = _targetPoint.type != OATargetWpt || _targetPoint.type == OATargetWpt;
-    //else
-    //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
     
     if (self.customController)
     {
@@ -2531,9 +2534,20 @@ static const NSInteger _buttonsCount = 4;
     return newOffset;
 }
 
-- (NSString *) getTargetTitle
+- (NSString *)getTargetTitle
 {
-    return _targetPoint.title;
+    if (_targetPoint.title.length > 0)
+    {
+        return _targetPoint.title;
+    }
+    else
+    {
+        NSString *name = [self.customController getNameStr];
+        if (name.length > 0)
+            return name;
+    }
+    
+    return @"";
 }
 
 - (BOOL) isInFullMode

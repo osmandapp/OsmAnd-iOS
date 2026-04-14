@@ -149,7 +149,9 @@
             {
                 if ([[_phrase getFirstUnknownNameStringMatcher] matches:s])
                 {
-                    object.localeName = s;
+                    // previous implementation didn't fit enough
+                    // object.localeName = s;
+                    object.alternateName = s;
                     updateName = true;
                     break;
                 }

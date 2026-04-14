@@ -4009,3 +4009,4 @@
 "shared_string_int_name" = "Nemzetközi név";
 "show_debug_tile" = "Csempeadatok megjelenítése";
 "open_till_short" = "Ekkor:";
+"open_from_short" = "Ettől:";

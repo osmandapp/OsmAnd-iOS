@@ -56,7 +56,12 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     private var shouldShowSpeedometer: Bool {
-        settings.showSpeedometer.get() && (isPreview || carPlayConfig != nil || !OARootViewController.instance().mapPanel.isContextMenuVisible())
+        guard settings.showSpeedometer.get() else { return false }
+        if isPreview || carPlayConfig != nil {
+            return true
+        }
+        
+        return !OARootViewController.instance().mapPanel.isContextMenuVisible()
     }
     
     private lazy var speedViewWrapper = SpeedLimitWrapper()

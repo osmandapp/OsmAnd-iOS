@@ -17,7 +17,7 @@
 "favorite" = "Избранное";
 "fav_no_group" = "Без группы";
 "fav_import_export" = "Импорт/Экспорт";
-"fav_import_title" = "Импортировать избранное";
+"fav_import_title" = "Импортировать в избранное";
 "fav_export_title" = "Экспортировать избранное";
 "fav_select_remove" = "Выберите избранные для удаления";
 "fav_remove_q" = "Удалить избранное?";
@@ -4052,6 +4052,6 @@
 "view_distance" = "Видимость";
 "custom_color" = "Пользовательский цвет";
 "choose_color" = "Выберите цвет";
-"open_till_short" = "Открыто до";
+"open_till_short" = "До";
 "shared_string_int_name" = "Международное название";
 "show_debug_tile" = "Отображать информацию о тайлах";

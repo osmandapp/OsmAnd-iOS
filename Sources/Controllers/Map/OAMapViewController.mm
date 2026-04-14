@@ -118,6 +118,7 @@
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/QKeyValueIterator.h>
+#include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -2442,8 +2443,6 @@ static const NSInteger kDetailedMapZoom = 9;
     if (!self.mapViewLoaded)
         return;
     
-    //[self showProgressHUD];
-    
     @synchronized(_rendererSync)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -2602,7 +2601,11 @@ static const NSInteger kDetailedMapZoom = 9;
             if (newSettings.count > 0)
                 _mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:newSettings]);
         
-            _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider, true, false, true));
+            if ([settings.showPrimitivesDebugInfo get])
+                  _obfMapRasterLayerProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider));
+              else
+                  _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider, true, false, true));
+
             [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
 
             _obfMapSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,

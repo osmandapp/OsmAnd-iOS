@@ -280,6 +280,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         _app.performanceMetricsEnabled = sender.isOn;
     } else if ([item.key isEqualToString:kShowPrimitivesDebugInfoKey]) {
         [[OAAppSettings sharedManager].showPrimitivesDebugInfo set:sender.isOn];
+        [[_app mapSettingsChangeObservable] notifyEvent];
     }
 }
 

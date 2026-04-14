@@ -57,7 +57,6 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
 
         downloadingResources = []
         setupDownloadingCellHelper()
-        populateData(resetData: true)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -69,9 +68,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         navigationItem.hidesSearchBarWhenScrolling = false
         setupSearchControllerWithFilter(false)
         tableView.keyboardDismissMode = .onDrag
-        isInited = true
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable))
         addObserver(OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable))
+        
+        populateData(resetData: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -645,6 +645,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     func onDataLoaded() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            self.isInited = true
             self.isDataLoaded = true
             self.generateData()
             self.downloadingCellResourceHelper.cleanCellCache()

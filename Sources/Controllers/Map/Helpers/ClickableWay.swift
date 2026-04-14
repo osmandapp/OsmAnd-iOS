@@ -39,13 +39,30 @@ final class ClickableWay: NSObject {
         if let name, !name.isEmpty {
             return name
         } else {
-            let altName = gpxFile.getExtensionsToRead()["ref"]
+            let altName = findSuitableName(gpxFile.getExtensionsToRead())
             return altName ?? String(osmId)
         }
     }
     
     func getGpxFileName() -> String {
         getWayName().sanitizeFileName()
+    }
+
+    private func findSuitableName(_ tags: [String: String]) -> String? {
+        if let ref = tags["ref"] {
+            return ref
+        }
+
+        var underscoreName: String?
+        for (key, value) in tags {
+            if key.hasSuffix(":name") {
+                return value
+            }
+            if underscoreName == nil, key.hasSuffix("_name"), !key.hasSuffix("stub_name") {
+                underscoreName = value
+            }
+        }
+        return underscoreName
     }
     
     func toString() -> String {

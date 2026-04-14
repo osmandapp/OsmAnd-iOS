@@ -4063,3 +4063,4 @@
 "open_till_short" = "Bis";
 "shared_string_int_name" = "Internationaler Name";
 "show_debug_tile" = "Kachelinformationen anzeigen";
+"open_from_short" = "Von";

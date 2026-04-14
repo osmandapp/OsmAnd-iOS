@@ -95,6 +95,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void) commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _routingHelper = OARoutingHelper.sharedInstance;
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
     _lightGuidanceBackgroundColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];
@@ -146,7 +147,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self onMap3dModeUpdated];
 }
 
-- (void) enterRoutePreviewMode
+- (void) enterRoutePreviewMode:(BOOL)shouldCheckConnectedMainScene
 {
     if ([[OAMapViewTrackingUtilities instance] is3DMode])
         _wasIn3DBeforePreview = YES;
@@ -178,8 +179,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _isInRoutePreview = YES;
     
-    if (![_routingHelper isFollowingMode])
-    	[self centerMapOnRoute];
+    // When mainScene exists, main iOS UI is responsible for map centering behavior
+    BOOL shouldCenter =
+        ![_routingHelper isFollowingMode] &&
+    (!shouldCheckConnectedMainScene || UIApplication.sharedApplication.mainScene == nil);
+
+    if (shouldCenter)
+        [self centerMapOnRoute];
+    
     if (_delegate)
         [_delegate enterNavigationMode];
 }
@@ -583,7 +590,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             _isInRouteCalculation = NO;
-            [self enterRoutePreviewMode];
+            [self enterRoutePreviewMode:YES];
         });
     }
 }
@@ -1067,7 +1074,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     CLLocation *start = _routingHelper.getLastFixedLocation;
     if (route && start && _routingHelper.isRouteCalculated)
     {
-        [self enterRoutePreviewMode];
+        [self enterRoutePreviewMode:NO];
         if ([_routingHelper isFollowingMode])
             [self onTripStartTriggered];
     }

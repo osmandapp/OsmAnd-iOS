@@ -160,6 +160,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>osmandmaps</string>
+				<string>geo-navigation</string>
 			</array>
 		</dict>
 	</array>

@@ -204,6 +204,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         }
         tabBarController?.navigationItem.searchController = nil
         navigationItem.searchController = nil
+        definesPresentationContext = false
         super.viewWillDisappear(animated)
     }
     

@@ -41,7 +41,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lsw-2B-bAC">
-                                <rect key="frame" x="0.0" y="96" width="414" height="683"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
@@ -54,10 +54,10 @@
                         <viewLayoutGuide key="safeArea" id="Jan-5F-L7o"/>
                         <color key="backgroundColor" name="viewBg"/>
                         <constraints>
-                            <constraint firstItem="Jan-5F-L7o" firstAttribute="bottom" secondItem="lsw-2B-bAC" secondAttribute="bottom" id="Mc0-1b-kck"/>
-                            <constraint firstItem="lsw-2B-bAC" firstAttribute="top" secondItem="Jan-5F-L7o" secondAttribute="top" id="Mi4-wn-d8x"/>
-                            <constraint firstItem="lsw-2B-bAC" firstAttribute="leading" secondItem="Jan-5F-L7o" secondAttribute="leading" id="jaG-23-fpp"/>
-                            <constraint firstItem="Jan-5F-L7o" firstAttribute="trailing" secondItem="lsw-2B-bAC" secondAttribute="trailing" id="tSu-F8-ojl"/>
+                            <constraint firstAttribute="bottom" secondItem="lsw-2B-bAC" secondAttribute="bottom" id="Mc0-1b-kck"/>
+                            <constraint firstItem="lsw-2B-bAC" firstAttribute="top" secondItem="4sR-lk-4Xy" secondAttribute="top" id="Mi4-wn-d8x"/>
+                            <constraint firstItem="lsw-2B-bAC" firstAttribute="leading" secondItem="4sR-lk-4Xy" secondAttribute="leading" id="jaG-23-fpp"/>
+                            <constraint firstAttribute="trailing" secondItem="lsw-2B-bAC" secondAttribute="trailing" id="tSu-F8-ojl"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_travel" id="3ay-iq-gNx"/>
@@ -78,7 +78,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="zzn-bN-eNS">
-                                <rect key="frame" x="0.0" y="140" width="414" height="756"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" name="viewBg"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
@@ -106,7 +106,7 @@
                         <color key="backgroundColor" name="viewBg"/>
                         <constraints>
                             <constraint firstItem="g46-oF-81a" firstAttribute="trailing" secondItem="erl-gB-7ba" secondAttribute="trailing" constant="20" id="3Fr-Yb-IPG"/>
-                            <constraint firstItem="zzn-bN-eNS" firstAttribute="top" secondItem="7Bf-uz-mXb" secondAttribute="bottom" id="3lE-ez-Sjp"/>
+                            <constraint firstItem="zzn-bN-eNS" firstAttribute="top" secondItem="HiK-Id-V8n" secondAttribute="top" id="3lE-ez-Sjp"/>
                             <constraint firstItem="erl-gB-7ba" firstAttribute="centerY" secondItem="7Bf-uz-mXb" secondAttribute="centerY" id="Amm-Yp-vkb"/>
                             <constraint firstItem="7Bf-uz-mXb" firstAttribute="top" secondItem="g46-oF-81a" secondAttribute="top" id="Cqz-4g-ev8"/>
                             <constraint firstItem="erl-gB-7ba" firstAttribute="leading" secondItem="g46-oF-81a" secondAttribute="leading" constant="20" id="HKx-oP-qrc"/>

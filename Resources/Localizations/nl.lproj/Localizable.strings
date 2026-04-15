@@ -3785,3 +3785,4 @@
 "trip_recording_average_slope_widget_description" = "Toont de gemiddelde helling van het laatste afdaling- of beklimmingssegment van de momenteel geregistreerde rit.";
 "vehicle_metrics_chart_category" = "Voertuigdiagnostiek";
 "open_till_short" = "Tot";
+"open_from_short" = "Vanaf";

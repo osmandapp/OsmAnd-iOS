@@ -255,6 +255,7 @@
 		279AB4242EE2DAE100377620 /* IconEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */; };
 		279AB4262EE2DAE900377620 /* IconEmptyStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */; };
 		27AD03EF2EBC9B2400B2149A /* ProfileAppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */; };
+		27B0967E2F8FCB0A00EDC462 /* GeoNavigationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */; };
 		27B378962F1161DF00CC9C96 /* BackgroundOpacityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */; };
 		27C242212E682F15000801B7 /* NoneDeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C242202E682F15000801B7 /* NoneDeviceProfile.swift */; };
 		27C6D5B02E7AE36600695D5B /* KeyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */; };
@@ -3762,6 +3763,7 @@
 		279AB4232EE2DAE100377620 /* IconEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconEmptyStateView.swift; sourceTree = "<group>"; };
 		279AB4252EE2DAE800377620 /* IconEmptyStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IconEmptyStateView.xib; sourceTree = "<group>"; };
 		27AD03EE2EBC9B2400B2149A /* ProfileAppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceConfig.swift; sourceTree = "<group>"; };
+		27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoNavigationParser.swift; sourceTree = "<group>"; };
 		27B378952F1161DF00CC9C96 /* BackgroundOpacityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundOpacityType.swift; sourceTree = "<group>"; };
 		27C242202E682F15000801B7 /* NoneDeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoneDeviceProfile.swift; sourceTree = "<group>"; };
 		27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTableViewCell.swift; sourceTree = "<group>"; };
@@ -11702,6 +11704,7 @@
 				9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */,
 				9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */,
 				C563193D2EF0353E008854B3 /* DeepLinkParser.swift */,
+				27B0967D2F8FCB0A00EDC462 /* GeoNavigationParser.swift */,
 				C56319452EF189EC008854B3 /* DeepLinkManager.swift */,
 				C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */,
 			);
@@ -17762,6 +17765,7 @@
 				3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */,
 				FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */,
 				464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */,
+				27B0967E2F8FCB0A00EDC462 /* GeoNavigationParser.swift in Sources */,
 				279322472E82EEF300B9FC81 /* KeyEvent.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
 				27E8D9EC2ED461E900F98462 /* NumberFormatter+Extension.swift in Sources */,

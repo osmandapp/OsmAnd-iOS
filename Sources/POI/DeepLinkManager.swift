@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 final class DeepLinkManager: NSObject {
     static let shared = DeepLinkManager()
@@ -19,6 +17,6 @@ final class DeepLinkManager: NSObject {
     }
     
     @discardableResult func handleDeepLink(url: URL, rootViewController: OARootViewController?) -> Bool {
-        return deepLinkParser.parseDeepLink(url, rootViewController: rootViewController)
+        deepLinkParser.parseDeepLink(url, rootViewController: rootViewController)
     }
 }

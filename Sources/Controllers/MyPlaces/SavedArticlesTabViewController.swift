@@ -36,6 +36,18 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         startAsyncInit()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupSearchController()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.navigationItem.searchController = nil
+        navigationItem.searchController = nil
+        definesPresentationContext = false
+    }
+    
     override func isNavbarVisible() -> Bool {
         true
     }
@@ -65,7 +77,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     func generateData() {
         tableData.clearAllData()
         var savedArticles = TravelObfHelper.shared.getBookmarksHelper().getSavedArticles()
-        savedArticles = savedArticles.sorted { ($0.title ?? "") < ($1.title ?? "")}
+        savedArticles = savedArticles.sorted { ($0.title ?? "") < ($1.title ?? "") }
         if isFiltered {
             savedArticles = savedArticles.filter { ($0.title?.lowercased() ?? "").contains(searchText.lowercased()) }
         }
@@ -81,7 +93,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             articleRow.descr = OATravelGuidesHelper.getPatrialContent(item.content)
             articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
             articleRow.setObj(item, forKey: "article")
-            articleRow.setObj(item.lang, forKey: "lang")
+            articleRow.setObj(item.lang as Any, forKey: "lang")
             if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
                 articleRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
             }
@@ -93,7 +105,15 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        if #available(iOS 26.0, *) {
+            if !OAUtilities.isIPad() {
+                tabBarController?.navigationItem.preferredSearchBarPlacement = .stacked
+                navigationItem.preferredSearchBarPlacement = .stacked
+            }
+        }
         tabBarController?.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
         updateSearchController()
     }
     
@@ -278,5 +298,4 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             }
         }
     }
-    
 }

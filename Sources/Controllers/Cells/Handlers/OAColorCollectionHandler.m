@@ -338,20 +338,18 @@ static NSString * const kSolidColorKey = @"solid_color";
         return;
 
     [self removeItem:indexPath];
+    NSIndexPath *previousSelectedIndexPath = [self.selectedIndexPath copy];
     __weak __typeof(self) weakSelf = self;
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
         
         if (indexPath == weakSelf.selectedIndexPath)
-        {
             [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-            [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
-        }
         else if (indexPath.row < weakSelf.selectedIndexPath.row)
-        {
             [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section]];
-        }
     } completion:^(BOOL finished) {
+        if ([indexPath isEqual:previousSelectedIndexPath])
+            [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
         if (indexPath == weakSelf.selectedIndexPath)
             [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
     }];

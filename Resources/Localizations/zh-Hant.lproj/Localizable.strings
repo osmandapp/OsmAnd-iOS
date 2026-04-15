@@ -4017,3 +4017,4 @@
 "context_menu_read_full_article" = "閱讀文章全文";
 "read_on" = "在 %@ 閱讀";
 "open_till_short" = "直到";
+"open_from_short" = "從";

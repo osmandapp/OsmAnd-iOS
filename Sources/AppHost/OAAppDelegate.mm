@@ -219,6 +219,11 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             [self initCheckUpdatesTimer];
             LogStartup(@"initialize: update timer initialized");
             LogStartup(@"initialize: finish");
+            // TODO: vlad
+            //NSURL *url = [NSURL URLWithString:@"geo-navigation:///place?coordinate=55.7512,37.6184&address=Red+Square"];
+            NSURL *url = [NSURL URLWithString:@"geo-navigation:///directions?source=48.465,35.045&destination=48.471,35.065"];
+            [[DeepLinkManager shared] handleDeepLinkWithUrl:url rootViewController:self.rootViewController];
+            
         });
     });
 

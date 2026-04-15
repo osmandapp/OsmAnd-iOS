@@ -6,8 +6,6 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 private enum DeepLinkAppRoute: String {
     case main = ""
     case lastReleaseNotes = "help/last-release-notes"
@@ -74,7 +72,8 @@ private enum DeepLinkAppModeKey: String {
 final class DeepLinkParser: NSObject {
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        handleIncomingAppURL(url, rootViewController: rootViewController)
+        handleIncomingGeoNavigationURL(url, rootViewController: rootViewController)
+        || handleIncomingAppURL(url, rootViewController: rootViewController)
         || handleIncomingFileURL(url, rootViewController: rootViewController)
         || handleIncomingActionsURL(url, rootViewController: rootViewController)
         || handleIncomingNavigationURL(url, rootViewController: rootViewController)
@@ -83,6 +82,24 @@ final class DeepLinkParser: NSObject {
         || handleIncomingOpenLocationMenuURL(url, rootViewController: rootViewController)
         || handleIncomingTileSourceURL(url, rootViewController: rootViewController)
         || handleIncomingOsmAndCloudURL(url, rootViewController: rootViewController)
+    }
+    
+    private func handleIncomingGeoNavigationURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController,
+              url.scheme == "geo-navigation",
+              let action = GeoNavigationParser.parse(url) else { return false }
+        
+        switch action {
+        case .showOnMap(let coord, let title):
+            moveMapToLat(coord.coordinate.latitude, lon: coord.coordinate.longitude, zoom: 15, title: title, rootViewController: rootViewController)
+            return true
+        case .buildRoute(let source, let destination, let waypoints):
+            // TODO: Vlad
+            rootViewController.mapPanel.buildRoute(source, end: destination, appMode: OAApplicationMode.car(), points: waypoints)
+            return true
+        case .search(let query):
+            return true
+        }
     }
     
     private func handleIncomingAppURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {

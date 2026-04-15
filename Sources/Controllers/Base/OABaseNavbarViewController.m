@@ -109,7 +109,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
 
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
+        [self.navigationController setNavigationBarHidden:NO animated:animated && !self.isMovingToParentViewController && ![OAUtilities isiOSAppOnMac]];
 
     [self updateAppearance];
 
@@ -628,7 +628,11 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
                     CGFloat buttonWidth = barButtonSize;
                     NSString *buttonTitle = [button titleForState:UIControlStateNormal];
                     if (buttonTitle && buttonTitle.length > 0)
+                    {
                         buttonWidth = [OAUtilities calculateTextBounds:buttonTitle width:freeSpaceForNavbarButton font:button.titleLabel.font].width;
+                        if (@available(iOS 26.0, *))
+                            buttonWidth += kDefaultBarButtonEdgeInset * 2;
+                    }
                     [button.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
                     button.contentHorizontalAlignment = i == 0 ? buttonAlignment : UIControlContentHorizontalAlignmentCenter;
                     button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;

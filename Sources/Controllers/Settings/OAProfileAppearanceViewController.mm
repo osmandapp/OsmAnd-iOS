@@ -685,11 +685,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     return [_data rowCount:section];
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [self tableView:tableView titleForHeaderInSection:section].length > 0 ? 34.0 : UITableViewAutomaticDimension;
-}
-
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     OATableRowData *item = [_data itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];

@@ -74,7 +74,8 @@ private enum DeepLinkAppModeKey: String {
 final class DeepLinkParser: NSObject {
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        handleIncomingAppURL(url, rootViewController: rootViewController)
+        handleIncomingGeoNavigationURL(url, rootViewController: rootViewController)
+        || handleIncomingAppURL(url, rootViewController: rootViewController)
         || handleIncomingFileURL(url, rootViewController: rootViewController)
         || handleIncomingActionsURL(url, rootViewController: rootViewController)
         || handleIncomingNavigationURL(url, rootViewController: rootViewController)
@@ -83,6 +84,23 @@ final class DeepLinkParser: NSObject {
         || handleIncomingOpenLocationMenuURL(url, rootViewController: rootViewController)
         || handleIncomingTileSourceURL(url, rootViewController: rootViewController)
         || handleIncomingOsmAndCloudURL(url, rootViewController: rootViewController)
+    }
+    
+    private func handleIncomingGeoNavigationURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+        guard let rootViewController,
+              url.scheme == "geo-navigation",
+              let action = GeoNavigationParser.parse(url) else { return false }
+        
+        switch action {
+        case .showOnMap(let coord, let title):
+            moveMapToLat(coord.coordinate.latitude, lon: coord.coordinate.longitude, zoom: 15, title: title, rootViewController: rootViewController)
+            return true
+        case .buildRoute(let source, let destination, let waypoints):
+            rootViewController.mapPanel.buildRoute(source, end: destination, appMode: OAApplicationMode.car(), points: waypoints)
+            return true
+        case .search:
+            return true
+        }
     }
     
     private func handleIncomingAppURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
@@ -473,7 +491,7 @@ final class DeepLinkParser: NSObject {
         let synthetic = amenity.syntheticAmenity
         let targetPoint = rootViewController.mapPanel.mapViewController.getMapPoiLayer().getTargetPoint(synthetic, touch: nil)
         targetPoint.location = latLon.coordinate
-        targetPoint.shouldFetchAddress = true;
+        targetPoint.shouldFetchAddress = true
         targetPoint.centerMap = true
         rootViewController.mapPanel.showContextMenu(targetPoint, saveState: false, preferredZoom: zoom)
         return true

@@ -381,6 +381,11 @@
     return [self.appMode.getRoutingProfile isEqualToString:@"boat"];
 }
 
+- (BOOL)isBicycle
+{
+    return [self.appMode.getRoutingProfile isEqualToString:@"bicycle"];
+}
+
 - (NSString *)getParameterDescription:(NSString *)parameter
 {
     if ([parameter isEqualToString:RouteParamVehicleHelper.weight])
@@ -388,7 +393,7 @@
     else if ([parameter isEqualToString:RouteParamVehicleHelper.height])
         return [self isBoat] ? OALocalizedString(@"vessel_height_limit_description") : OALocalizedString(@"height_limit_description");
     else if ([parameter isEqualToString:RouteParamVehicleHelper.width])
-        return  [self isBoat] ? OALocalizedString(@"vessel_width_limit_description") : OALocalizedString(@"width_limit_description");
+        return OALocalizedString([self isBoat] ? @"vessel_width_limit_description" : [self isBicycle] ? @"bicycle_width_limit_description" : @"width_limit_description");
     else if ([parameter isEqualToString:RouteParamVehicleHelper.length])
         return OALocalizedString(@"lenght_limit_description");
     else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])
@@ -409,7 +414,7 @@
     else if ([parameter isEqualToString:RouteParamVehicleHelper.height])
         return [self isBoat] ? @"img_help_vessel_height" : @"img_help_height_limit";
     else if ([parameter isEqualToString:RouteParamVehicleHelper.width])
-        return  [self isBoat] ? @"img_help_vessel_width" : @"img_help_width_limit";
+        return [self isBoat] ? @"img_help_vessel_width" : [self isBicycle] ? @"img_help_cycleway_width" : @"img_help_width_limit";
     else if ([parameter isEqualToString:RouteParamVehicleHelper.length])
         return @"img_help_length_limit";
     else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])

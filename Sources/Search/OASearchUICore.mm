@@ -563,29 +563,34 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
 - (void) filterSearchDuplicateResults:(NSMutableArray<OASearchResult *> *)lst
 {
-    NSMutableArray<OASearchResult *> *remove = [NSMutableArray array];
-    NSMutableArray<OASearchResult *> *lstUnique = [NSMutableArray array];
-    for (OASearchResult *r in lst)
+    for (NSInteger i = 0; i < (NSInteger)lst.count; )
     {
-        bool same = false;
-        for (OASearchResult *rs in lstUnique)
+        OASearchResult *current = lst[i];
+        BOOL duplicate = NO;
+        NSInteger startCheck = MAX(i - DEPTH_TO_CHECK_SAME_SEARCH_RESULTS, 0);
+        for (NSInteger j = i - 1; j >= startCheck; j--)
         {
-            same = [self sameSearchResult:rs r2:r];
-            if (same)
+            OASearchResult *prevAdded = lst[j];
+            if ([self sameSearchResult:prevAdded r2:current])
+            {
+                duplicate = YES;
+                double wDiff = fabs(current.unknownPhraseMatchWeight - prevAdded.unknownPhraseMatchWeight);
+                if ([OAObjectType getTypeWeight:current.objectType] > [OAObjectType getTypeWeight:prevAdded.objectType] && wDiff <= 1)
+                {
+                    [lst replaceObjectAtIndex:j withObject:current];
+                }
                 break;
+            }
         }
-        if (same)
+        if (duplicate)
         {
-            [remove addObject:r];
+            [lst removeObjectAtIndex:i];
         }
         else
         {
-            [lstUnique addObject:r];
-            if (lstUnique.count > DEPTH_TO_CHECK_SAME_SEARCH_RESULTS)
-                [lstUnique removeObjectAtIndex:0];
+            i++;
         }
     }
-    [lst removeObjectsInArray:remove];
 }
 
 + (long) getOsmId:(std::shared_ptr<const OsmAnd::Amenity>)amenity

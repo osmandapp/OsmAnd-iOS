@@ -4163,6 +4163,8 @@
 
 "track_appearance_3D_visualization" = "3D visualization";
 
+"visualization" = "Visualization";
+
 "routing_attr_hazmat_category_usa_7_name" = "Radioactive Substances";
 "rendering_attr_padusDisplayMode_name" = "Public lands display mode";
 "routing_attr_hazmat_category_usa_6_name" = "Toxic and Infectious Substances";

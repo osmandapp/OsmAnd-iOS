@@ -144,7 +144,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainType",
             kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"srtm_color_scheme")
+            kCellTitleKey : OALocalizedString(@"visualization")
         }];
 
         [titleSection addRowFromDictionary:@{

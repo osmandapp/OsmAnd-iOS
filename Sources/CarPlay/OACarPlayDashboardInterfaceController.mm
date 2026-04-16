@@ -39,6 +39,7 @@
 #import "OAFavoritesHelper.h"
 #import "OACarPlayCategoryResultListController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kUnitsKm = OALocalizedString(@"km");
 static NSString * const kUnitsM = OALocalizedString(@"m");
@@ -46,9 +47,6 @@ static NSString * const kUnitsMi = OALocalizedString(@"mile");
 static NSString * const kUnitsYd = OALocalizedString(@"yard");
 static NSString * const kUnitsFt = OALocalizedString(@"foot");
 static NSString * const kUnitsNm = OALocalizedString(@"nm");
-
-static UIColor * const kLightColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];
-static UIColor * const kDarkColor = [UIColor colorWithRed:0.231 green:0.231 blue:0.231 alpha:1.0];
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
@@ -90,9 +88,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_map3DModeObserver;
     OANextDirectionInfo *_currentDirectionInfo;
-    
-    UIColor *_lightGuidanceBackgroundColor;
-    UIColor *_darkGuidanceBackgroundColor;
 }
 
 - (void) commonInit
@@ -101,8 +96,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _routingHelper = OARoutingHelper.sharedInstance;
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
-    _lightGuidanceBackgroundColor = kLightColor;
-    _darkGuidanceBackgroundColor = kDarkColor;
 }
 
 - (void) stopNavigation
@@ -120,6 +113,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [[OARootViewController instance].mapPanel closeRouteInfo];
     
     _mapTemplate = [[CPMapTemplate alloc] init];
+    // NOTE: iOS 26 specification
+    if (@available(iOS 26.0, *))
+        [self onUpdateMapTemplateStyle];
     _mapTemplate.mapDelegate = self;
 
     [self enterBrowsingState];
@@ -820,7 +816,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                         strongSelf.navigationSession.currentRoadNameVariants = @[];
                 }
             }
-
             NSMeasurement<NSUnitLength *> *dist = [strongSelf getFormattedDistance:nextTurnDistance];
             long leftTurnTimeSec = [strongSelf.routingHelper getLeftTimeNextTurn];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:leftTurnTimeSec];
@@ -831,11 +826,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 @"turnImminent": turnType ? @(turnImminent) : @(-1),
                 @"deviatedFromRoute": turnType ? @(deviatedFromRoute) : @(NO),
             };
-            if (@available(iOS 15.4, *))
-            {
-                BOOL isDarkStyle = self.interfaceController.carTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
-                maneuver.cardBackgroundColor = isDarkStyle ? kDarkColor : kLightColor;
-            }
             [upcomingManeuvers addObject:maneuver];
 
             UIImage *nextTurnImage;
@@ -898,12 +888,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
                     secondaryManeuver.attributedInstructionVariants = @[attributedString];
                 }
-            }
-            
-            if (@available(iOS 15.4, *))
-            {
-                BOOL isDarkStyle = self.interfaceController.carTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
-                secondaryManeuver.cardBackgroundColor = isDarkStyle ? kDarkColor : kLightColor;
             }
 
             if (secondaryManeuver)
@@ -1099,7 +1083,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
     BOOL isDarkStyle = style == UIUserInterfaceStyleDark;
     NSLog(@"onUpdateMapTemplateStyle: %d (%@)", int(style), isDarkStyle ? @"dark" : @"light");
-    _mapTemplate.guidanceBackgroundColor = isDarkStyle ? _darkGuidanceBackgroundColor : _lightGuidanceBackgroundColor;
+    _mapTemplate.guidanceBackgroundColor = [UIColor colorNamed:ACColorNameCarPlayTurnPreviewBackground];
     _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
 }
 

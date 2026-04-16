@@ -405,13 +405,13 @@
 - (NSString *)getParameterImage:(NSString *)parameter
 {
     if ([RouteParamVehicleHelper isWeightParameter:parameter])
-        return @"img_help_weight_limit_day";
+        return @"img_help_weight_limit";
     else if ([parameter isEqualToString:RouteParamVehicleHelper.height])
-        return [self isBoat] ? @"img_help_vessel_height_day" : @"img_help_height_limit_day";
+        return [self isBoat] ? @"img_help_vessel_height" : @"img_help_height_limit";
     else if ([parameter isEqualToString:RouteParamVehicleHelper.width])
-        return  [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
+        return  [self isBoat] ? @"img_help_vessel_width" : @"img_help_width_limit";
     else if ([parameter isEqualToString:RouteParamVehicleHelper.length])
-        return @"img_help_length_limit_day";
+        return @"img_help_length_limit";
     else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])
         return @"ic_custom_fuel";
     return @"";

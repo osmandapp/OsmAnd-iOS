@@ -40,12 +40,15 @@
 #import "OACarPlayCategoryResultListController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define unitsKm OALocalizedString(@"km")
-#define unitsM OALocalizedString(@"m")
-#define unitsMi OALocalizedString(@"mile")
-#define unitsYd OALocalizedString(@"yard")
-#define unitsFt OALocalizedString(@"foot")
-#define unitsNm OALocalizedString(@"nm")
+static NSString * const kUnitsKm = OALocalizedString(@"km");
+static NSString * const kUnitsM = OALocalizedString(@"m");
+static NSString * const kUnitsMi = OALocalizedString(@"mile");
+static NSString * const kUnitsYd = OALocalizedString(@"yard");
+static NSString * const kUnitsFt = OALocalizedString(@"foot");
+static NSString * const kUnitsNm = OALocalizedString(@"nm");
+
+static UIColor * const kLightColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];
+static UIColor * const kDarkColor = [UIColor colorWithRed:0.231 green:0.231 blue:0.231 alpha:1.0];
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
@@ -98,8 +101,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _routingHelper = OARoutingHelper.sharedInstance;
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
-    _lightGuidanceBackgroundColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];
-    _darkGuidanceBackgroundColor = [UIColor colorWithRed:0.231 green:0.231 blue:0.231 alpha:1.0];
+    _lightGuidanceBackgroundColor = kLightColor;
+    _darkGuidanceBackgroundColor = kDarkColor;
 }
 
 - (void) stopNavigation
@@ -659,19 +662,19 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     return nil;
 }
 
-- (NSUnitLength *) getUnitByString:(NSString *)unitStr
+- (NSUnitLength *)getUnitByString:(NSString *)unitStr
 {
-    if ([unitStr isEqualToString:unitsM])
+    if ([unitStr isEqualToString:kUnitsM])
         return NSUnitLength.meters;
-    else if ([unitStr isEqualToString:unitsKm])
+    else if ([unitStr isEqualToString:kUnitsKm])
         return NSUnitLength.kilometers;
-    else if ([unitStr isEqualToString:unitsMi])
+    else if ([unitStr isEqualToString:kUnitsMi])
         return NSUnitLength.miles;
-    else if ([unitStr isEqualToString:unitsYd])
+    else if ([unitStr isEqualToString:kUnitsYd])
         return NSUnitLength.yards;
-    else if ([unitStr isEqualToString:unitsFt])
+    else if ([unitStr isEqualToString:kUnitsFt])
         return NSUnitLength.feet;
-    else if ([unitStr isEqualToString:unitsNm])
+    else if ([unitStr isEqualToString:kUnitsNm])
         return NSUnitLength.nauticalMiles;
     
     return NSUnitLength.meters;
@@ -828,6 +831,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 @"turnImminent": turnType ? @(turnImminent) : @(-1),
                 @"deviatedFromRoute": turnType ? @(deviatedFromRoute) : @(NO),
             };
+            if (@available(iOS 15.4, *))
+            {
+                BOOL isDarkStyle = self.interfaceController.carTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
+                maneuver.cardBackgroundColor = isDarkStyle ? kDarkColor : kLightColor;
+            }
             [upcomingManeuvers addObject:maneuver];
 
             UIImage *nextTurnImage;
@@ -890,6 +898,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
                     secondaryManeuver.attributedInstructionVariants = @[attributedString];
                 }
+            }
+            
+            if (@available(iOS 15.4, *))
+            {
+                BOOL isDarkStyle = self.interfaceController.carTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
+                secondaryManeuver.cardBackgroundColor = isDarkStyle ? kDarkColor : kLightColor;
             }
 
             if (secondaryManeuver)

@@ -14,6 +14,8 @@
 
 #define INVALID_ORDER -1
 
+NS_ASSUME_NONNULL_BEGIN
+
 static NSString* const STD_PREFIX = @"std_";
 static NSString* const USER_PREFIX = @"user_";
 static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
@@ -52,7 +54,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic, readonly) OAPOIBaseType *baseType;
 @property (nonatomic, readonly) NSArray<NSNumber *> *distanceToSearchValues;
 
-- (instancetype) initWithBasePoiType:(OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
+- (instancetype) initWithBasePoiType:(nullable OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
 - (instancetype) initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 - (instancetype) initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
 - (instancetype) initWithFilter:(OAPOIUIFilter *)filter name:(NSString *)nm filterId:(NSString *)fId;
@@ -76,7 +78,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin;
 
-- (void) setFilterByName:(NSString *)filter;
+- (void) setFilterByName:(nullable NSString *)filter;
 - (void) updateFilterResults;
 - (NSArray<OAPOI *> *) searchAgain:(double)lat lon:(double)lon;
 - (NSArray<OAPOI *> *) searchFurther:(double)latitude longitude:(double)longitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
@@ -118,3 +120,5 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (void) setFilterByKey:(NSString *)key;
 - (NSArray<OAPOI *> *)getCurrentSearchResult:(BOOL)filterUnique;
 @end
+
+NS_ASSUME_NONNULL_END

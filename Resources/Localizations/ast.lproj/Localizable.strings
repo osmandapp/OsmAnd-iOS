@@ -849,3 +849,8 @@
 "rendering_attr_hideWaterPolygons_name" = "Hide water";
 "trace_rendering_descr" = "Amuesa\'l rindimientu de la renderización.";
 "rendering_attr_pisteRoutes_name" = "Ski slopes";
+"map_2d_mode_action" = "Mou 2D";
+"map_3d_mode_action" = "Mou 3D";
+"co2_mission" = "Emisión de CO₂";
+"kg" = "kg";
+"shared_string_int_name" = "Nome internacional";

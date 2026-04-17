@@ -4164,6 +4164,9 @@
 "track_appearance_3D_visualization" = "3D visualization";
 
 "visualization" = "Visualization";
+"terrain_shadows" = "Terrain shadows";
+"terrain_shadows_descr" = "Real-time dynamic shading for 3D terrain. Highlights landscape geometry with minimal performance impact.";
+"terrain_shadows_footer_descr" = "3D Relief is automatically enabled, as it is required to render Terrain shadows";
 
 "routing_attr_hazmat_category_usa_7_name" = "Radioactive Substances";
 "rendering_attr_padusDisplayMode_name" = "Public lands display mode";

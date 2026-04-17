@@ -61,7 +61,7 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
 
     override func generateData() {
         var data = [(String, [TerrainMode])]()
-        for type in TerrainType.allCases {
+        for type in TerrainType.allCases.filter({ $0 != .terrainShadows }) {
             var header = ""
             var modes = [TerrainMode]()
             for mode in TerrainMode.values where mode.type == type {

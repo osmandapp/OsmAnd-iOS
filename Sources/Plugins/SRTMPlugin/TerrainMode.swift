@@ -15,12 +15,14 @@ final class TerrainMode: NSObject {
         case hillshade
         case slope
         case height
+        case terrainShadows
 
         var name: String {
             switch self {
             case .hillshade: "hillshade"
             case .slope: "slope"
             case .height: "height"
+            case .terrainShadows: "terrainShadows"
             }
         }
 
@@ -132,7 +134,8 @@ final class TerrainMode: NSObject {
 
         var newTerrainModes = [
             TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")),
-            TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope"))
+            TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")),
+            TerrainMode(defaultKey, type: .terrainShadows, translateName: localizedString("terrain_shadows"))
         ]
         let prefixes = [
             Pair(hillshadePrefix, TerrainType.hillshade),
@@ -180,6 +183,8 @@ final class TerrainMode: NSObject {
             prefix = Self.colorSlopePrefix
         case .height:
             prefix = Self.heightPrefix
+        default:
+            return ""
         }
         return prefix + key + TXT_EXT
     }
@@ -259,6 +264,8 @@ final class TerrainMode: NSObject {
             return localizedString("shared_string_slope")
         case .height:
             return localizedString("altitude")
+        case .terrainShadows:
+            return localizedString("terrain_shadows")
         }
     }
 

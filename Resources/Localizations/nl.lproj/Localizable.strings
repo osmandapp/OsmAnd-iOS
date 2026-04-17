@@ -1650,7 +1650,7 @@
 "select_folder_descr" = "Selecteer een map of maak een nieuwe";
 "shared_string_recorded" = "Opgenomen";
 "offline_edition_descr" = "Als offline bewerken is ingeschakeld, worden veranderingen eerst lokaal opgeslagen en op verzoek geüpload. Anders worden veranderingen onmiddelijk geüpload.";
-"benefits_for_contributors_secondary_descr" = "Log in op OpenStreetMap om te controleren of je recht hebt op onbeperkte maandelijkse en uurlijkse kaart updates.";
+"benefits_for_contributors_secondary_descr" = "Log in bij OpenStreetMap om te controleren of je in aanmerking komt voor onbeperkte maandelijkse en uurlijkse kaartupdates.";
 "benefits_for_contributors" = "Voordelen voor actieve OSM bijdragers";
 "recalc_angle_dialog_title" = "Minimale hoek tussen mijn locatie en de route";
 "tracks_on_map" = "Getoonde tracks";
@@ -1739,7 +1739,7 @@
 "gpx_upload_trackable_visibility_descr" = "\"Traceerbaar\" betekent dat de track niet wordt getoond in openbare GPS-track-lijsten maar de trackpunten zijn wel beschikbaar door de publieke GPS API met tijdinformatie. Andere gebruikers kunnen alleen bewerkte trackpunten downloaden die niet aan jou herleid kunnen worden.";
 "no_purchases" = "U heeft geen aankopen gedaan";
 "recording_delete_confirm" = "Wil je dit object verwijderen\?";
-"enough_contributions_descr" = "Proficiat, je hebt genoeg OpenStreetMap bijdragen geleverd en kan nu genieten van onbeperkte OsmAnd kaart updates!";
+"enough_contributions_descr" = "Proficiat, je hebt genoeg OpenStreetMap-bijdragen geleverd en kunt nu genieten van onbeperkte OsmAnd-kaartupdates!";
 "simulation_constant_mode_title" = "Vaste snelheid";
 "sync_now" = "Nu synchroniseren";
 "recalculate_route" = "Route opnieuw berekenen";
@@ -1807,7 +1807,7 @@
 "cloud_changes_will_be_dismissed" = "De cloud aanpassingen zullen genegeerd worden";
 "backup_delete_old_data" = "Verwijder oude versies";
 "gpx_upload_public_visibility_descr" = "\"Publiek\" betekent dat de track openbaar wordt getoond in jouw GPS-tracks en in openbare GPS-track-lijsten. Kaartgegevens afkomstig van de API zullen niet aan je trackpagina refereren. Tijdregistraties in de tracks zijn niet beschikbaar in de publieke GPS API, en de track-punten zullen niet chronologisch geordend zijn.";
-"map_updates_are_unavailable_yet" = "Kaart updates zijn nog niet beschikbaar. :-(";
+"map_updates_are_unavailable_yet" = "Kaartupdates zijn nog niet beschikbaar. :-(";
 "simulation_preview_mode_title" = "Snelle voorbeeld modus";
 "nav_type_hint" = "Navigatietype";
 "weather_pressure_hectopascals" = "Hectopascal";

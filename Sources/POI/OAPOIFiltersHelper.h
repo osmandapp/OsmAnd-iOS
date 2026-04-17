@@ -55,5 +55,6 @@
 
 - (long)getLastModifiedTime;
 - (void) setLastModifiedTime:(long)lastModified;
+- (void)replaceSelectedPoiFilters:(OAPOIUIFilter *)filter;
 
 @end

@@ -601,8 +601,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 {
                     filter = (OAPOIUIFilter *) [searchPhrase getLastSelectedWord].result.object;
                 }
-                [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
-                [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:filter];
+                if (filter)
+                    [[OAPOIFiltersHelper sharedInstance] replaceSelectedPoiFilters:filter];
 
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC updatePoiLayer];

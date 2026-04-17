@@ -417,6 +417,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
     OAPOIFilterDbHelper *_helper;
     OAPOIHelper *_poiHelper;
+    NSSet<OAPOIUIFilter *> *_overwrittenPoiFilters;
     
     OAAutoObserverProxy *_applicationModeObserver;
 }
@@ -523,7 +524,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) hidePoiFilters
 {
-    [_selectedPoiFilters removeAllObjects];
+    [self restoreSelectedPoiFilters];
 }
 
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId filters:(NSArray<OAPOIUIFilter *> *)filters
@@ -858,15 +859,26 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters
 {
-    return [NSSet setWithSet:_selectedPoiFilters];
+    return _overwrittenPoiFilters != nil ? _overwrittenPoiFilters : [NSSet setWithSet:_selectedPoiFilters];
+}
+
+- (void)replaceSelectedPoiFilters:(OAPOIUIFilter *)filter
+{
+    _overwrittenPoiFilters = [NSSet setWithObject:filter];
+}
+
+- (void)restoreSelectedPoiFilters
+{
+    _overwrittenPoiFilters = nil;
 }
 
 - (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters:(NSArray<OAPOIUIFilter *> *)filtersToExclude
 {
+    NSSet<OAPOIUIFilter *> *selectedPoiFilters = [self getSelectedPoiFilters];
     if (filtersToExclude && filtersToExclude.count > 0)
     {
         NSMutableSet<OAPOIUIFilter *> *filters = [NSMutableSet set];
-        for (OAPOIUIFilter *filter in _selectedPoiFilters)
+        for (OAPOIUIFilter *filter in selectedPoiFilters)
         {
             BOOL skip = NO;
             for (OAPOIUIFilter *filterToExclude in filtersToExclude)
@@ -886,7 +898,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         }
         return filters;
     }
-    return [NSSet setWithSet:_selectedPoiFilters];
+    return [NSSet setWithSet:selectedPoiFilters];
 }
 
 - (void) addSelectedPoiFilter:(OAPOIUIFilter *)filter

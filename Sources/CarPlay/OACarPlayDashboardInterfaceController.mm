@@ -88,6 +88,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_map3DModeObserver;
     OANextDirectionInfo *_currentDirectionInfo;
+    
+    UIColor *_lightGuidanceBackgroundColor;
+    UIColor *_darkGuidanceBackgroundColor;
 }
 
 - (void) commonInit
@@ -96,6 +99,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _routingHelper = OARoutingHelper.sharedInstance;
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
+    
+    UIColor *guidanceBackgroundColor = [UIColor colorNamed:ACColorNameCarPlayTurnPreviewBackground];
+    _lightGuidanceBackgroundColor = guidanceBackgroundColor.light;
+    _darkGuidanceBackgroundColor = guidanceBackgroundColor.dark;
 }
 
 - (void) stopNavigation
@@ -113,7 +120,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [[OARootViewController instance].mapPanel closeRouteInfo];
     
     _mapTemplate = [[CPMapTemplate alloc] init];
-    // NOTE: iOS 26 specification
+    // NOTE: traitCollectionDidChange method in OACarPlayMapViewController calls earlier than present method in iOS 26
     if (@available(iOS 26.0, *))
         [self onUpdateMapTemplateStyle];
     _mapTemplate.mapDelegate = self;
@@ -1083,7 +1090,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
     BOOL isDarkStyle = style == UIUserInterfaceStyleDark;
     NSLog(@"onUpdateMapTemplateStyle: %d (%@)", int(style), isDarkStyle ? @"dark" : @"light");
-    _mapTemplate.guidanceBackgroundColor = [UIColor colorNamed:ACColorNameCarPlayTurnPreviewBackground];
+    _mapTemplate.guidanceBackgroundColor = isDarkStyle ? _darkGuidanceBackgroundColor : _lightGuidanceBackgroundColor;
     _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
 }
 

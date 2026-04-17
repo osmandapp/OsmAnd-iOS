@@ -4055,3 +4055,4 @@
 "show_spherical_map" = "Vista del globo terráqueo";
 "shared_string_int_name" = "Nombre internacional";
 "show_debug_tile" = "Mostrar información de la tesela";
+"open_from_short" = "Desde";

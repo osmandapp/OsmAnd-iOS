@@ -1280,7 +1280,7 @@
 "arrival_distance_factor_at_last" = "Rất muộn";
 "max_altitude" = "Độ cao lớn nhất";
 "shared_string_is_deleted" = "%@ bị xoá.";
-"shared_string_maximum" = "Tối đa";
+"shared_string_maximum" = "Lớn nhất";
 "app_mode_truck" = "Xe tải";
 "welmode_download_maps" = "Tải bản đồ";
 "help_article_personal_color_palette_schemes_name" = "Hệ màu";
@@ -2501,3 +2501,18 @@
 "open_till_short" = "Cho đến";
 "trip_recording_moving_time_widget_description" = "Hiện thời gian di chuyển đang ghi, hoặc thời gian cho đoạn đi lên và đi xuống gần nhất.";
 "trip_recording_moving_time" = "Thời gian di chuyển";
+"free_custom_color_description" = "Cá nhân hóa màu sắc của tòa nhà 3D để phù hợp với giao diện bản đồ hoặc cải thiện độ tương phản.";
+"buildings_3d_visibility_description" = "Điều chỉnh độ trong suốt của các cấu trúc 3D trên bản đồ.";
+"level_of_details" = "Mức độ chi tiết";
+"performance" = "Hiệu suất";
+"view_distance" = "Vùng hiển thị";
+"no_overlay" = "Không có lớp phủ trên";
+"no_underlay" = "Không có lớp phủ nền";
+"subscribe_email_error" = "Lỗi";
+"subscribe_email_desc" = "Đăng ký nhận tin qua email về các chương trình giảm giá ứng dụng và nhận thêm 3 lượt tải bản đồ!";
+"restore_purchases" = "Khôi phục các giao dịch mua";
+"routing_attr_relief_smoothness_factor_plains_name" = "Ít dốc hơn";
+"routing_attr_driving_style_safety_name" = "Ưu tiên đường vòng";
+"relief_smoothness_factor_descr" = "Địa hình ưa thích: bằng phẳng hoặc dốc.";
+"shared_string_start_time" = "Thời gian bắt đầu";
+"shared_string_end_time" = "Thời gian kết thúc";

@@ -369,30 +369,43 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 
 - (OAEntity *)loadEntity:(OATargetPoint *)targetPoint
 {
-    uint64_t objectId = targetPoint.obfId;
     BOOL isTransportStop = targetPoint.type == OATargetTransportStop;
+    id object = targetPoint.targetObj;
+    OAPOI *poi = nil;
+
     if (isTransportStop)
-        objectId = ((OATransportStop *)targetPoint.targetObj).poi.obfId;
-    
-    if (!(objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX)))
-        return nil;
-    BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
-    OAPOI *poi = isTransportStop ? ((OATransportStop *)targetPoint.targetObj).poi : (OAPOI *)targetPoint.targetObj;
-    if (!poi)
-        return nil;
-    
-    BOOL isAmenity = NO;
-    if ([poi isKindOfClass:OARenderedObject.class])
     {
+        poi = ((OATransportStop *)object).poi;
+    }
+    else if ([object isKindOfClass:[OAPOI class]])
+    {
+        poi = (OAPOI *)object;
+    }
+    else if ([object isKindOfClass:[OARenderedObject class]])
+    {
+        poi = [BaseDetailsObject convertRenderedObjectToAmenity:object];
         poi.latitude = targetPoint.location.latitude;
         poi.longitude = targetPoint.location.longitude;
     }
-    else
+    
+    else if ([object isKindOfClass:[BaseDetailsObject class]])
     {
-        isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
+        BaseDetailsObject *baseDetailsObject = object;
+        poi = baseDetailsObject.syntheticAmenity;
+    }
+    if (!poi)
+        return nil;
+    
+    NSString *type = [ObfConstants getOsmEntityType:poi];
+    if (!type || type.length == 0 || [type isEqualToString:kEntityTypeRelation])
+    {
+        return nil;
     }
     
-    unsigned long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+    BOOL isWay = type == kEntityTypeWay;
+    uint64_t entityId = [ObfConstants getOsmObjectId:poi];
+    
+    BOOL isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
     
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
     NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%llu", BASE_URL, api, entityId]

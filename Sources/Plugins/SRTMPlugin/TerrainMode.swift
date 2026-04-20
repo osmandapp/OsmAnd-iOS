@@ -113,7 +113,7 @@ final class TerrainMode: NSObject {
         return terrainMode
     }
 
-    static func getByKey(_ key: String) -> TerrainMode? {
+    static func byKey(_ key: String) -> TerrainMode? {
         return terrainModes?.first { $0.getKeyName() == key }
             ?? terrainModes?.first { $0.type == .hillshade }
     }
@@ -172,6 +172,10 @@ final class TerrainMode: NSObject {
 
     func isSlope() -> Bool {
         type == .slope
+    }
+    
+    func isTerrainShadows() -> Bool {
+        type == .terrainShadows
     }
 
     func getMainFile() -> String {

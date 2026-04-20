@@ -110,7 +110,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     BOOL isTerrainEbabled = [_plugin isTerrainLayerEnabled];
     BOOL isHillshade = [_terrainMode isHillshade];
     BOOL isSlope = [_terrainMode isSlope];
-    BOOL isTerrainShadows = _terrainMode.type == TerrainTypeTerrainShadows;
+    BOOL isTerrainShadows = [_terrainMode isTerrainShadows];
 
     OATableSectionData *switchSection = [_data createNewSection];
     [switchSection addRowFromDictionary:@{

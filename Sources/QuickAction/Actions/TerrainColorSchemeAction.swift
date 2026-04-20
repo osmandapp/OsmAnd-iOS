@@ -73,7 +73,7 @@ final class TerrainColorSchemeAction: OASwitchableAction {
     override func execute(withParams params: [String]) {
         if let plugin = getSrtmPlugin(),
            let nextStyle = params.first,
-           let newMode = TerrainMode.getByKey(nextStyle) {
+           let newMode = TerrainMode.byKey(nextStyle) {
             plugin.setTerrainMode(newMode)
             plugin.updateLayers()
         }
@@ -108,7 +108,7 @@ final class TerrainColorSchemeAction: OASwitchableAction {
             for paletteKey in palettes {
                 var title = ""
                 var desc = ""
-                if let mode = TerrainMode.getByKey(paletteKey) {
+                if let mode = TerrainMode.byKey(paletteKey) {
                     title = mode.getDefaultDescription()
                     if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.getMainFile()) {
                         desc = PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: true)
@@ -159,7 +159,7 @@ final class TerrainColorSchemeAction: OASwitchableAction {
         guard !filters.isEmpty, let filtersStr = filters as? [String] else { return "" }
 
         if let firstItem = filtersStr.first,
-           let translatedFirstItem = TerrainMode.getByKey(firstItem)?.getDescription() {
+           let translatedFirstItem = TerrainMode.byKey(firstItem)?.getDescription() {
             return filtersStr.count > 1
                 ? (translatedFirstItem + " +" + "\(filtersStr.count - 1)")
                 : translatedFirstItem

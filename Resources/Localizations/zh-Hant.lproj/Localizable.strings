@@ -4018,3 +4018,13 @@
 "read_on" = "在 %@ 閱讀";
 "open_till_short" = "直到";
 "open_from_short" = "從";
+"enable_3d_objects" = "3D 建築";
+"free_custom_color_description" = "任何顏色的客製化 3D 建築，能夠完美吻合地圖主題或是增進對比。";
+"buildings_3d_visibility_description" = "調整地圖上的 3D 結構的透明度。";
+"level_of_details" = "詳細內容的程度";
+"performance" = "效能";
+"view_distance" = "檢視距離";
+"custom_color" = "客製顏色";
+"choose_color" = "選擇顏色";
+"shared_string_int_name" = "國際名稱";
+"show_debug_tile" = "顯示標題資訊";

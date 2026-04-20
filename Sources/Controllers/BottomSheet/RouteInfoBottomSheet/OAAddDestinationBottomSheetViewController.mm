@@ -124,25 +124,32 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray *) generateMarkersData
+- (NSArray *)generateMarkersData
 {
-    NSMutableArray *arr = [NSMutableArray new];
-    [arr addObject:@{
-        @"title" : OALocalizedString(@"map_markers"),
-        @"key" : @"markers",
-        @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
-        @"img" : @"ic_custom_marker"
+    NSMutableArray *result = [NSMutableArray new];
+
+    [result addObject:@{
+        @"title": OALocalizedString(@"map_markers"),
+        @"key": @"markers",
+        @"color": [UIColor colorNamed:ACColorNameIconColorActive],
+        @"img": @"ic_custom_marker"
     }];
+
     NSArray *markers = [_destinationsHelper sortedDestinationsWithoutParking];
+
     for (OADestination *item in markers)
     {
-        [arr addObject:@{
-            @"title" : item.desc,
-            @"img" : [item.markerResourceName ? item.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"],
-            @"point" : item
+        NSString *imgName = item.markerResourceName ?: @"ic_destination_pin_1";
+        imgName = [imgName stringByAppendingString:@"_small"];
+
+        [result addObject:@{
+            @"title": item.desc ?: @"",
+            @"img": imgName,
+            @"point": item
         }];
     }
-    return [NSArray arrayWithArray:arr];
+
+    return [result copy];
 }
 
 - (NSArray<OAFavoriteItem *> *) getSortedFavorites

@@ -40,6 +40,7 @@
     NSArray<NSNumber *> *_measurementRangeValuesArr;
     NSString *_measurementValue;
     NSNumber *_selectedParameter;
+    id<OASMeasurementUnit> _sharedMeasurementUnit;
 }
 
 #pragma mark - Initialization
@@ -66,6 +67,7 @@
     {
         _isMotorType = [_vehicleParameter[@"name"] isEqualToString:RouteParamVehicleHelper.motorType];
         _isFuelTankCapacity = [_vehicleParameter[@"name"] isEqualToString:RouteParamVehicleHelper.fuelTankCapacity];
+        _sharedMeasurementUnit = _vehicleParameter[@"sharedMeasurementUnit"];
 
         _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
@@ -80,7 +82,13 @@
         _selectedParameter = _vehicleParameter[@"selectedItem"];
         NSString *valueString = _vehicleParameter[@"value"];
         
-        if (_selectedParameter.intValue != -1 && (![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]] || _selectedParameter.intValue == 0))
+        if ([self usesSharedVehicleSpecs])
+        {
+            NSString *storedValue = [((OACommonString *) _vehicleParameter[@"setting"]) get:self.appMode];
+            double displayValue = storedValue && _sharedMeasurementUnit ? [[OASVehicleValueConverter shared] readSavedValueValueStr:storedValue displayUnit:_sharedMeasurementUnit] : 0.0;
+            _measurementValue = [VehicleAlgorithms formattedSelectedValue:displayValue maximumFractionDigits:4];
+        }
+        else if (_selectedParameter.intValue != -1 && (![VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]] || _selectedParameter.intValue == 0))
         {
             double value = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
             _measurementValue = [VehicleAlgorithms formattedSelectedValue:value maximumFractionDigits:1];
@@ -101,6 +109,11 @@
 - (BOOL)isWeight
 {
     return [RouteParamVehicleHelper isWeightParameter:_vehicleParameter[@"name"]];
+}
+
+- (BOOL)usesSharedVehicleSpecs
+{
+    return !_isMotorType && !_isFuelTankCapacity && _sharedMeasurementUnit != nil;
 }
 
 - (NSString *)roundToSecondSignificantDigitFormat:(float)value
@@ -256,6 +269,8 @@
 
 - (NSString *)getMeasurementUnit:(NSString *)parameter
 {
+    if ([self usesSharedVehicleSpecs])
+        return [_sharedMeasurementUnit getName];
     if ([RouteParamVehicleHelper isWeightParameter:parameter])
         return OALocalizedString([VehicleAlgorithms usePoundsWith:self.appMode] ? @"shared_string_pounds" : @"shared_string_tones");
     else if ([parameter isEqualToString:RouteParamVehicleHelper.height] || [parameter isEqualToString:RouteParamVehicleHelper.width] || [parameter isEqualToString:RouteParamVehicleHelper.length])
@@ -293,7 +308,6 @@
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
             cell.inputField.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.inputField.delegate = self;
-//            cell.inputField.userInteractionEnabled = NO;
         }
         if (cell)
         {
@@ -449,7 +463,12 @@
     }
     if (_selectedParameter.intValue != -1)
     {
-        if (!_isMotorType && [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]]) {
+        if ([self usesSharedVehicleSpecs])
+        {
+            _measurementValue = [self formattedSelectedValueStr:_selectedParameter.intValue];
+        }
+        else if (!_isMotorType && [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]])
+        {
             NSString *unit = [VehicleAlgorithms weightOrSizeUnitWith:self.appMode isWeight:[self isWeight]];
             NSString *valueString = _measurementRangeStringArr[_selectedParameter.intValue];
             _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0 ? unit.length : 0)];
@@ -460,7 +479,12 @@
         }
     }
     
-    if (!_isMotorType && !_isFuelTankCapacity && [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]])
+    if ([self usesSharedVehicleSpecs])
+    {
+        double baseValue = [[OASVehicleValueConverter shared] prepareValueToSaveDisplayValue:_measurementValue.doubleValue displayUnit:_sharedMeasurementUnit];
+        _measurementValue = [VehicleAlgorithms formattedSelectedValue:baseValue maximumFractionDigits:8];
+    }
+    else if (!_isMotorType && !_isFuelTankCapacity && [VehicleAlgorithms usePoundsOrInchesWith:self.appMode isWeight:[self isWeight]])
     {
         _measurementValue = [VehicleAlgorithms formattedSelectedValue:[VehicleAlgorithms convertToMetric:_measurementValue.doubleValue isWeight:[self isWeight] appMode:self.appMode] - 0.0001 maximumFractionDigits:8];
     }
@@ -491,6 +515,10 @@
 {
     _selectedParameter = [NSNumber numberWithInteger:newValueIndex];
     if (_isFuelTankCapacity)
+    {
+        _measurementValue = [self formattedSelectedValueStr:newValueIndex];
+    }
+    else if ([self usesSharedVehicleSpecs])
     {
         _measurementValue = [self formattedSelectedValueStr:newValueIndex];
     }

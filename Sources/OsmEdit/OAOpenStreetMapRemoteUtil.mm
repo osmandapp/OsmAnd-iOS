@@ -398,9 +398,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     
     NSString *type = [ObfConstants getOsmEntityType:poi];
     if (!type || type.length == 0 || [type isEqualToString:kEntityTypeRelation])
-    {
         return nil;
-    }
     
     BOOL isWay = type == kEntityTypeWay;
     uint64_t entityId = [ObfConstants getOsmObjectId:poi];

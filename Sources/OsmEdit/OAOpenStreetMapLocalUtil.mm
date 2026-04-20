@@ -96,9 +96,7 @@
     
     NSString *type = [ObfConstants getOsmEntityType:poi];
     if (!type || type.length == 0 || [type isEqualToString:kEntityTypeRelation])
-    {
         return nil;
-    }
     
     BOOL isWay = type == kEntityTypeWay;
     uint64_t entityId = [ObfConstants getOsmObjectId:poi];

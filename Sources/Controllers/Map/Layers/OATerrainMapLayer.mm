@@ -131,6 +131,8 @@
         if (notification.object == _plugin.terrainEnabledPref || notification.object == _plugin.terrainModeTypePref)
         {
             [self updateTerrainLayer];
+            if (_plugin.terrainModeTypePref)
+                [self onVerticalExaggerationScaleChanged];
         }
         else if ([notification.object isKindOfClass:OACommonInteger.class])
         {

@@ -24,6 +24,11 @@
     if (self)
     {
         _parser = OpeningHoursParser::parseOpenedHours([openingHours UTF8String]);
+        if (!_parser)
+        {
+            return nil;
+        }
+
         _openingHoursInfo = _parser->getInfo();
     }
     return self;

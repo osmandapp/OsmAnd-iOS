@@ -243,6 +243,11 @@ double const buildings3DAlphaDefValue = 0.5;
     return [self isHeightmapEnabled] && ([_enable3dMapsPref get] || [[TerrainMode byKey:[_terrainModeTypePref get]] isTerrainShadows]);
 }
 
+- (BOOL)isHillshadeMode
+{
+    return [[TerrainMode byKey:[_terrainModeTypePref get]] isHillshade];
+}
+
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
     if (notification.object == _enable3dMapsPref)

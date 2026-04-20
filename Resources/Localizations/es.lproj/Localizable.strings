@@ -2107,7 +2107,7 @@
 "cloud_email_already_registered" = "Este correo electrónico ya se encuentra registrado.";
 "backup_error_no_valid_subscription" = "No hay ninguna suscripción válida";
 "lang_new" = "Nevarí / Nepal Bhasa";
-"shared_string_width" = "Ancho";
+"shared_string_width" = "Anchura";
 "lang_nb" = "Noruego Bokmål";
 "lang_pl" = "Polaco";
 "route_line_use_map_style_color" = "Usa el color predefinido del estilo de mapa (%@).";
@@ -2594,7 +2594,7 @@
 "download_heightmap_maps" = "Mapa de alturas";
 "nautical_depth_points" = "Puntos de profundidad náutica";
 "position_on_map" = "Posición en la pantalla";
-"co2_mission" = "Emisión de CO2";
+"co2_mission" = "Emisión de CO₂";
 "position_on_map_center" = "Centro";
 "position_on_map_bottom" = "Abajo";
 "routing_attr_motor_type_name" = "Combustible del vehículo";
@@ -4032,3 +4032,13 @@
 "shared_string_wikipedia" = "Wikipedia";
 "poi_source" = "Fuente de PDI";
 "show_spherical_map" = "Vista de globo";
+"open_from_short" = "Desde";
+"open_till_short" = "Hasta";
+"enable_3d_objects" = "Edificios en 3D";
+"level_of_details" = "Nivel de detalle";
+"performance" = "Rendimiento";
+"custom_color" = "Color personalizado";
+"shared_string_int_name" = "Nombre internacional";
+"choose_color" = "Elegir color";
+"view_distance" = "Distancia de visualización";
+"buildings_3d_visibility_description" = "Ajuste la opacidad de las estructuras en 3D del mapa.";

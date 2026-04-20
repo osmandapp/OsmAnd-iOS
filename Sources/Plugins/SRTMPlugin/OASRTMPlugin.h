@@ -49,5 +49,6 @@ extern NSInteger const defaultTrasparency;
 - (BOOL)isHeightmapEnabled;
 - (BOOL)isHeightmapAllowed;
 - (BOOL)is3DMapsEnabled;
+- (BOOL)isHillshadeMode;
 
 @end

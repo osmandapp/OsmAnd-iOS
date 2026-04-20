@@ -200,7 +200,7 @@
     NSString *heightmapDir = self.app.colorsPalettePath;
     auto mainColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getMainFile]]);
 
-    if ([mode isHillshade])
+    if ([mode isHillshade] || [mode isTerrainShadows])
     {
         auto slopeSecondaryColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getSecondFile]]);
         auto hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename, slopeSecondaryColorFilename);

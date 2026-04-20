@@ -21,6 +21,7 @@
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -64,22 +65,45 @@
 
 - (OAEntity *)loadEntity:(OATargetPoint *)targetPoint
 {
-    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
-    uint64_t objectId = targetPoint.obfId;
     BOOL isTransportStop = targetPoint.type == OATargetTransportStop;
+    id object = targetPoint.targetObj;
+    OAPOI *poi = nil;
+
     if (isTransportStop)
-        objectId = ((OATransportStop *)targetPoint.targetObj).poi.obfId;
+    {
+        poi = ((OATransportStop *)object).poi;
+    }
+    else if ([object isKindOfClass:[OAPOI class]])
+    {
+        poi = (OAPOI *)object;
+    }
+    else if ([object isKindOfClass:[OARenderedObject class]])
+    {
+        poi = [BaseDetailsObject convertRenderedObjectToAmenity:object];
+        poi.latitude = targetPoint.location.latitude;
+        poi.longitude = targetPoint.location.longitude;
+        if (!poi.name && targetPoint.title.length > 0)
+            poi.name = targetPoint.title;
+    }
     
-    if (!(objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX)))
-        return nil;
-    OAPOI *poi = isTransportStop ? ((OATransportStop *)targetPoint.targetObj).poi : (OAPOI *)targetPoint.targetObj;
+    else if ([object isKindOfClass:[BaseDetailsObject class]])
+    {
+        BaseDetailsObject *baseDetailsObject = object;
+        poi = baseDetailsObject.syntheticAmenity;
+    }
     if (!poi)
         return nil;
-    OAPOIType *poiType = poi.type;
-    BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
     
-    uint64_t entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
-    BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
+    NSString *type = [ObfConstants getOsmEntityType:poi];
+    if (!type || type.length == 0 || [type isEqualToString:kEntityTypeRelation])
+        return nil;
+    
+    BOOL isWay = type == kEntityTypeWay;
+    uint64_t entityId = [ObfConstants getOsmObjectId:poi];
+    
+    BOOL isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
+    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+    OAPOIType *poiType = poi.type;
     
     OAEntity *entity;
     if (isWay)

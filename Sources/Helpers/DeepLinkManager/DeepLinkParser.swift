@@ -90,7 +90,6 @@ final class DeepLinkParser: NSObject {
     
     func handleIncomingGeoNavigationURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
             guard let rootViewController,
-                  url.scheme == "geo-navigation",
                   let action = GeoNavigationParser.parse(url) else { return false }
             
             switch action {

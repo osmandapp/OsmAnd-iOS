@@ -1766,3 +1766,6 @@
 "trace_rendering" = "Información de fallo de renderizado";
 "liter_per_hour" = "l/h";
 "average" = "Media";
+"open_from_short" = "Desde";
+"open_till_short" = "Ata";
+"years_3" = "3 anos";

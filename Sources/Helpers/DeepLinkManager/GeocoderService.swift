@@ -6,8 +6,35 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
+/// A service responsible for converting a textual address into geographic coordinates.
+///
+/// `GeocoderService` provides a unified API for geocoding across different iOS versions.
+/// - On iOS 26 and later, it uses `MKGeocodingRequest` with async/await.
+/// - On earlier versions, it falls back to `CLGeocoder`.
+///
+/// The result is returned via a completion handler with an optional `CLLocationCoordinate2D`.
+/// If geocoding fails or no result is found, `nil` is returned.
+///
+/// ### Usage Example:
+/// ```swift
+/// let service = GeocoderService()
+/// service.geocode(address: "1 Infinite Loop, Cupertino, CA") { coordinate in
+///     guard let coordinate else { return }
+///     print("Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
+/// }
+/// ```
 final class GeocoderService {
-    
+    /// Converts a human-readable address string into geographic coordinates.
+    ///
+    /// This method performs an asynchronous request. If the address is not found, or if a
+    /// network/parsing error occurs, the completion handler returns `nil`.
+    ///
+    /// - Parameters:
+    ///   - address: A string describing a physical location (e.g., "1 Infinite Loop, Cupertino, CA").
+    ///   - completion: A closure called when the geocoding request finishes.
+    ///     Returns an optional `CLLocationCoordinate2D`.
+    ///
+    /// - Note: Internal process logs and errors are output via `NSLog`.
     func geocode(address: String,
                  completion: @escaping (CLLocationCoordinate2D?) -> Void) {
         

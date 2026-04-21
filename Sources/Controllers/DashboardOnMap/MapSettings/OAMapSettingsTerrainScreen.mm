@@ -148,11 +148,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTitleKey : OALocalizedString(@"visualization")
         }];
 
+        NSString *terrainTypeDesc;
+        if (isHillshade)
+            terrainTypeDesc = OALocalizedString(@"map_settings_hillshade_description");
+        else if (isSlope)
+            terrainTypeDesc = OALocalizedString(@"map_settings_slopes_description");
+        else if (isTerrainShadows)
+            terrainTypeDesc = OALocalizedString(@"terrain_shadows_descr");
+        else
+            terrainTypeDesc = OALocalizedString(@"height_legend_description");
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
             kCellTypeKey : [OATextLineViewCell getCellIdentifier],
-            kCellDescrKey : OALocalizedString(isHillshade ? @"map_settings_hillshade_description"
-                : isSlope ? @"map_settings_slopes_description" : isTerrainShadows ? @"terrain_shadows_descr" : @"height_legend_description"),
+            kCellDescrKey : terrainTypeDesc,
         }];
 
         if (!isTerrainShadows)
@@ -196,9 +204,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
 
         OATableSectionData *relief3DSection = [_data createNewSection];
+        NSString *typeKey;
+        if (isTerrainShadows)
+            typeKey = [OAValueTableViewCell reuseIdentifier];
+        else if (isRelief3D)
+            typeKey = [OASwitchTableViewCell reuseIdentifier];
+        else
+            typeKey = [OAButtonTableViewCell reuseIdentifier];
         [relief3DSection addRowFromDictionary:@{
             kCellKeyKey : @"relief3D",
-            kCellTypeKey : isTerrainShadows ? [OAValueTableViewCell reuseIdentifier] : isRelief3D ? [OASwitchTableViewCell reuseIdentifier] : [OAButtonTableViewCell reuseIdentifier],
+            kCellTypeKey : typeKey,
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : @"ic_custom_3d_relief",
             kCellIconTintColor : !isTerrainShadows && (![_plugin.enable3dMapsPref get] || !isRelief3D) ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],

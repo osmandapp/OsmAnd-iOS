@@ -2804,7 +2804,7 @@ static const NSInteger kDetailedMapZoom = 9;
 - (void) updateElevationConfiguration
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    BOOL disableVertexHillshade = plugin && [plugin isHillshadeMode] && [plugin isTerrainLayerEnabled];
+    BOOL disableVertexHillshade = plugin && [plugin isTerrainLayerEnabled] && [plugin isHillshadeMode];
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)
     {

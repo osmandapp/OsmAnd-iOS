@@ -886,7 +886,7 @@ final class TravelObfHelper: NSObject {
         }
     }
     
-    func buildGpxFile(readers: [String], article: TravelArticle) -> OAGPXDocumentAdapter {
+    func buildGpxFile(readers: [String], article: TravelArticle) -> OAGPXDocumentAdapter? {
         OATravelGuidesHelper.buildGpxFile(readers, article: article)
     }
     

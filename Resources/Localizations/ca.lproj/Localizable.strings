@@ -636,7 +636,6 @@
 "map_widget_bearing" = "Desviació relativa";
 "map_widget_transparent" = "Ginys transparents";
 "shared_string_near" = "Prop de";
-"settings_preset" = "Perfil per defecte";
 "settings_preset_descr" = "La configuració de la representació del mapa i de la navegació segueix un perfil d\'utilització. Seleccioneu aquí el vostre perfil predeterminat.";
 "rotate_map_to" = "Orientació del mapa";
 "rotate_map_to_bearing_descr" = "Seleccioneu l'alineació de la pantalla del mapa.";
@@ -1715,7 +1714,6 @@
 "repeat_after" = "Repeteix després";
 "profile_alert_delete_title" = "Suprimeix el perfil";
 "import_profile_descr" = "Per importar un perfil, premeu necessàriament un arxiu (*.osf) a qualsevol aplicació i seleccioneu \"Copia a OsmAnd\"";
-"profile_prefs_reset_successful" = "Tots els paràmetres del perfil s'han reinicialitzat al valor per defecte.";
 "navigation_profiles_item" = "Perfils de navegació";
 "reset_profile_action_descr" = "Reinicialitza la configuració de tots els perfils als valors inicials d'instal·lació. Si toqueu Restableix, es descartaran tots els canvis i no es podrà desfer aquesta acció.";
 "gpx_parse_error" = "S\'han trobat problemes amb un fitxer GPX. \n \nPodeu contactar amb l\'assistència d\'OsmAnd per investigar.";
@@ -1751,7 +1749,6 @@
 "add_point_after" = "Afegeix un punt després de";
 "add_point_before" = "Afegeix un punt abans de";
 "move_point_descr" = "Mou el mapa per canviar la posició d'aquest punt.";
-"move_point" = "Mou el punt";
 "add_to_a_track" = "Afegeix a una ruta";
 "save_as_new_track" = "Desa com una traça nova";
 "profile_alert_need_save_title" = "Desa els canvis";
@@ -2249,7 +2246,6 @@
 "routing_attr_motor_type_lpg_name" = "Gas liquat del petroli (GLP)";
 "rotate_map_manual_opt" = "Gira manualment";
 "routing_attr_motor_type_diesel_name" = "Dièsel";
-"co2_mission" = "Emissió de CO₂";
 "rendering_attr_hideMilitaryAreas_name" = "Zones militars";
 "routing_attr_motor_type_electric_name" = "Elèctric";
 "routing_attr_motor_type_description" = "Seleccioneu el tipus de combustible del vostre motor, això és necessari per estimar l\'emissió de CO2.";
@@ -3256,10 +3252,3 @@
 "help_article_troubleshooting_general_name" = "General";
 "monitoring_control_start" = "Enregistrament";
 "mpg" = "MPG";
-"shared_string_int_name" = "Nom internacional";
-"open_from_short" = "Des de";
-"open_till_short" = "Fins a";
-"help_article_plugins_custom_name" = "Paquet personalitzat";
-"help_article_troubleshooting_android_auto_name" = "Android Auto";
-"help_article_troubleshooting_resources_name" = "Recursos i personalitzacions";
-"help_article_troubleshooting_video_tutorials_name" = "Videotutorials i guies";

@@ -3276,7 +3276,6 @@
 "routing_attr_allow_ferries_description" = "Zezwalaj na wyznaczanie tras według tras promów";
 "equator" = "Równik";
 "online_photos" = "Zdjęcia w sieci";
-"preview_next_turn" = "Podgląd następnego zakrętu";
 "no_internet_descr" = "Sprawdź połączenie i spróbuj ponownie.";
 "litres" = "Litry";
 "shared_string_unchanged" = "Niezmienione";

@@ -72,7 +72,6 @@ private enum DeepLinkAppModeKey: String {
 
 @objcMembers
 final class DeepLinkParser: NSObject {
-    
     private lazy var geocoderService = GeocoderService()
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
@@ -106,8 +105,7 @@ final class DeepLinkParser: NSObject {
 
                    case let .address(address):
                        geocoderService.geocode(address: address) { [weak self] coord in
-                           guard let self else {return }
-                           guard let coord else { return }
+                           guard let self, let coord else { return }
                            moveMapToLat(
                                coord.latitude,
                                lon: coord.longitude,

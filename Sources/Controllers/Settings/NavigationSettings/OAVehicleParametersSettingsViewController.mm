@@ -82,7 +82,7 @@
         _selectedParameter = _vehicleParameter[@"selectedItem"];
         NSString *valueString = _vehicleParameter[@"value"];
         
-        if ([self usesSharedVehicleSpecs])
+        if ([self isSharedVehicleSpecParameter])
         {
             NSString *storedValue = [((OACommonString *) _vehicleParameter[@"setting"]) get:self.appMode];
             double displayValue = storedValue && _sharedMeasurementUnit ? [[OASVehicleValueConverter shared] readSavedValueValueStr:storedValue displayUnit:_sharedMeasurementUnit] : 0.0;
@@ -111,7 +111,7 @@
     return [RouteParamVehicleHelper isWeightParameter:_vehicleParameter[@"name"]];
 }
 
-- (BOOL)usesSharedVehicleSpecs
+- (BOOL)isSharedVehicleSpecParameter
 {
     return !_isMotorType && !_isFuelTankCapacity && _sharedMeasurementUnit != nil;
 }
@@ -169,7 +169,7 @@
     else
     {
         NSString *text = [self getTableHeaderDescription];
-        UIImage *image = [UIImage imageNamed:[self getParameterImage:_vehicleParameter[@"name"]]];
+        UIImage *image = [self imageForParameter:_vehicleParameter[@"name"]];
         if (!image && (!text || text.length == 0))
             return;
         
@@ -269,7 +269,7 @@
 
 - (NSString *)getMeasurementUnit:(NSString *)parameter
 {
-    if ([self usesSharedVehicleSpecs])
+    if ([self isSharedVehicleSpecParameter])
         return [_sharedMeasurementUnit getName];
     if ([RouteParamVehicleHelper isWeightParameter:parameter])
         return OALocalizedString([VehicleAlgorithms usePoundsWith:self.appMode] ? @"shared_string_pounds" : @"shared_string_tones");
@@ -403,37 +403,75 @@
 - (NSString *)getParameterDescription:(NSString *)parameter
 {
     if ([parameter isEqualToString:RouteParamVehicleHelper.weight])
+    {
         return OALocalizedString(@"weight_limit_description");
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.height])
+    {
         return [self isBoat] ? OALocalizedString(@"vessel_height_limit_description") : OALocalizedString(@"height_limit_description");
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.width])
-        return OALocalizedString([self isBoat] ? @"vessel_width_limit_description" : [self isBicycle] ? @"bicycle_width_limit_description" : @"width_limit_description");
+    {
+        if ([self isBoat])
+            return OALocalizedString(@"vessel_width_limit_description");
+        if ([self isBicycle])
+            return OALocalizedString(@"bicycle_width_limit_description");
+        
+        return OALocalizedString(@"width_limit_description");
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.length])
+    {
         return OALocalizedString(@"lenght_limit_description");
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])
+    {
         return OALocalizedString(@"routing_attr_motor_type_description");
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.fuelTankCapacity])
+    {
         return OALocalizedString(@"fuel_tank_capacity_description");
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.maxAxleLoad])
+    {
         return OALocalizedString(@"max_axle_load_description");
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.weightRating])
+    {
         return OALocalizedString(@"max_weight_at_full_load_description");
+    }
+    
     return @"";
 }
 
-- (NSString *)getParameterImage:(NSString *)parameter
+- (UIImage *)imageForParameter:(NSString *)parameter
 {
     if ([RouteParamVehicleHelper isWeightParameter:parameter])
-        return @"img_help_weight_limit";
+    {
+        return [UIImage imageNamed:ACImageNameImgHelpWeightLimit];
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.height])
-        return [self isBoat] ? @"img_help_vessel_height" : @"img_help_height_limit";
+    {
+        return [UIImage imageNamed:[self isBoat] ? ACImageNameImgHelpVesselHeight : ACImageNameImgHelpHeightLimit];
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.width])
-        return [self isBoat] ? @"img_help_vessel_width" : [self isBicycle] ? @"img_help_cycleway_width" : @"img_help_width_limit";
+    {
+        if ([self isBoat])
+            return [UIImage imageNamed:ACImageNameImgHelpVesselWidth];
+        if ([self isBicycle])
+            return [UIImage imageNamed:ACImageNameImgHelpCyclewayWidth];
+        
+        return [UIImage imageNamed:ACImageNameImgHelpWidthLimit];
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.length])
-        return @"img_help_length_limit";
+    {
+        return [UIImage imageNamed:ACImageNameImgHelpLengthLimit];
+    }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])
-        return @"ic_custom_fuel";
-    return @"";
+    {
+        return [UIImage imageNamed:@"ic_custom_fuel"];
+    }
+    
+    return nil;
 }
 
 - (NSString *)formattedSelectedValueStr:(NSInteger)index
@@ -463,7 +501,7 @@
     }
     if (_selectedParameter.intValue != -1)
     {
-        if ([self usesSharedVehicleSpecs])
+        if ([self isSharedVehicleSpecParameter])
         {
             _measurementValue = [self formattedSelectedValueStr:_selectedParameter.intValue];
         }
@@ -479,7 +517,7 @@
         }
     }
     
-    if ([self usesSharedVehicleSpecs])
+    if ([self isSharedVehicleSpecParameter])
     {
         double baseValue = [[OASVehicleValueConverter shared] prepareValueToSaveDisplayValue:_measurementValue.doubleValue displayUnit:_sharedMeasurementUnit];
         _measurementValue = [VehicleAlgorithms formattedSelectedValue:baseValue maximumFractionDigits:8];
@@ -518,7 +556,7 @@
     {
         _measurementValue = [self formattedSelectedValueStr:newValueIndex];
     }
-    else if ([self usesSharedVehicleSpecs])
+    else if ([self isSharedVehicleSpecParameter])
     {
         _measurementValue = [self formattedSelectedValueStr:newValueIndex];
     }

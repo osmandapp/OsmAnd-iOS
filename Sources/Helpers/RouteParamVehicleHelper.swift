@@ -16,13 +16,14 @@ final class RouteParamVehicleHelper: NSObject {
     static let maxAxleLoad = "maxaxleload"
     static let weightRating = "weightrating"
     static let fuelTankCapacity = "fuel_tank_capacity"
+    private static let imperialMetricSystems: Set<EOAMetricsConstant> = [.MILES_AND_FEET, .NAUTICAL_MILES_AND_FEET, .MILES_AND_YARDS]
     
     static func isWeightParameter(_ parameter: String) -> Bool {
         [weight, weightRating, maxAxleLoad].contains(where: { $0 == parameter })
     }
     
-    static func enrichParameterInfo(_ paramInfo: NSMutableDictionary, parameterId: String, storedValue: String?, routerProfileKey: String?, derivedProfile: String?, appMode: OAApplicationMode) {
-        guard let vehicleSpecs = getVehicleSpecs(routerProfileKey, derivedProfile: derivedProfile), let specificationType = SpecificationType.companion.getByKey(key: parameterId) else { return }
+    static func applySharedVehicleSpecs(to paramInfo: NSMutableDictionary, parameterId: String, storedValue: String?, routerProfileKey: String?, derivedProfile: String?, appMode: OAApplicationMode) {
+        guard let vehicleSpecs = vehicleSpecs(for: routerProfileKey, derivedProfile: derivedProfile), let specificationType = SpecificationType.companion.getByKey(key: parameterId) else { return }
         let isMetric = shouldUseMetricSystem(specificationType, appMode: appMode)
         let measurementUnit = vehicleSpecs.getMeasurementUnits(type: specificationType, isMetric: isMetric)
         let displayValue = VehicleValueConverter.shared.readSavedValue(valueStr: storedValue ?? "0", displayUnit: measurementUnit)
@@ -49,12 +50,12 @@ final class RouteParamVehicleHelper: NSObject {
         paramInfo["sharedMeasurementUnit"] = measurementUnit as AnyObject
     }
     
-    private static func getVehicleSpecs(_ routerProfileKey: String?, derivedProfile: String?) -> VehicleSpecs? {
-        guard let routerProfile = getSharedRouterProfile(routerProfileKey) else { return nil }
+    private static func vehicleSpecs(for routerProfileKey: String?, derivedProfile: String?) -> VehicleSpecs? {
+        guard let routerProfile = sharedRouterProfile(for: routerProfileKey) else { return nil }
         return VehicleSpecsFactory.shared.createSpecifications(profile: routerProfile, derivedProfile: derivedProfile)
     }
     
-    private static func getSharedRouterProfile(_ routerProfileKey: String?) -> GeneralRouterProfile? {
+    private static func sharedRouterProfile(for routerProfileKey: String?) -> GeneralRouterProfile? {
         switch routerProfileKey?.lowercased() {
         case "bicycle":
             return .bicycle
@@ -74,6 +75,6 @@ final class RouteParamVehicleHelper: NSObject {
         }
         
         let metricSystem = settings.metricSystem.get(appMode)
-        return metricSystem != .MILES_AND_FEET && metricSystem != .NAUTICAL_MILES_AND_FEET && metricSystem != .MILES_AND_YARDS
+        return !imperialMetricSystems.contains(metricSystem)
     }
 }

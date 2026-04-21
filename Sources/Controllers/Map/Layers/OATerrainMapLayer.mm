@@ -131,6 +131,8 @@
         if (notification.object == _plugin.terrainEnabledPref || notification.object == _plugin.terrainModeTypePref)
         {
             [self updateTerrainLayer];
+            if (_plugin.terrainModeTypePref)
+                [self onVerticalExaggerationScaleChanged];
         }
         else if ([notification.object isKindOfClass:OACommonInteger.class])
         {
@@ -200,7 +202,7 @@
     NSString *heightmapDir = self.app.colorsPalettePath;
     auto mainColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getMainFile]]);
 
-    if ([mode isHillshade])
+    if ([mode isHillshade] || [mode isTerrainShadows])
     {
         auto slopeSecondaryColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getSecondFile]]);
         auto hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename, slopeSecondaryColorFilename);

@@ -15,12 +15,14 @@ final class TerrainMode: NSObject {
         case hillshade
         case slope
         case height
+        case terrainShadows
 
         var name: String {
             switch self {
             case .hillshade: "hillshade"
             case .slope: "slope"
             case .height: "height"
+            case .terrainShadows: "terrainShadows"
             }
         }
 
@@ -111,7 +113,7 @@ final class TerrainMode: NSObject {
         return terrainMode
     }
 
-    static func getByKey(_ key: String) -> TerrainMode? {
+    static func byKey(_ key: String) -> TerrainMode? {
         return terrainModes?.first { $0.getKeyName() == key }
             ?? terrainModes?.first { $0.type == .hillshade }
     }
@@ -132,12 +134,14 @@ final class TerrainMode: NSObject {
 
         var newTerrainModes = [
             TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")),
-            TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope"))
+            TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")),
+            TerrainMode(defaultKey, type: .terrainShadows, translateName: localizedString("terrain_shadows"))
         ]
         let prefixes = [
             Pair(hillshadePrefix, TerrainType.hillshade),
             Pair(colorSlopePrefix, TerrainType.slope),
-            Pair(heightPrefix, TerrainType.height)
+            Pair(heightPrefix, TerrainType.height),
+            Pair(hillshadePrefix, TerrainType.terrainShadows)
         ]
         if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
            let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
@@ -170,11 +174,15 @@ final class TerrainMode: NSObject {
     func isSlope() -> Bool {
         type == .slope
     }
+    
+    func isTerrainShadows() -> Bool {
+        type == .terrainShadows
+    }
 
     func getMainFile() -> String {
         let prefix: String
         switch type {
-        case .hillshade:
+        case .hillshade, .terrainShadows:
             prefix = Self.hillshadePrefix
         case .slope:
             prefix = Self.colorSlopePrefix
@@ -259,6 +267,8 @@ final class TerrainMode: NSObject {
             return localizedString("shared_string_slope")
         case .height:
             return localizedString("altitude")
+        case .terrainShadows:
+            return localizedString("terrain_shadows")
         }
     }
 

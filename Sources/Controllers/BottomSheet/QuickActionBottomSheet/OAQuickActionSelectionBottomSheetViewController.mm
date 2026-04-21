@@ -94,7 +94,7 @@
     {
         for (NSString *palette in params)
         {
-            TerrainMode *mode = [TerrainMode getByKey:palette];
+            TerrainMode *mode = [TerrainMode byKey:palette];
             if (mode)
             {
                 ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[mode getMainFile]];

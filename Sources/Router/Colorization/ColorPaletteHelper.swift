@@ -167,7 +167,7 @@ final class ColorPaletteHelper: NSObject {
 
     private func getTerrainModePallets(_ type: TerrainType) -> [String: [Any]] {
         var colorPalettes: [String: [Any]] = [:]
-        for mode in TerrainMode.values where mode.type == type {
+        for mode in TerrainMode.values where !mode.isTerrainShadows() && mode.type == type {
             let fileName = mode.getMainFile()
             let filePath = getColorPaletteDir().appendingPathComponent(fileName)
             if let colorPalette = getGradientColorPalette(fileName),

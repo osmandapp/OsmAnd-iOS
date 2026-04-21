@@ -110,6 +110,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     BOOL isTerrainEbabled = [_plugin isTerrainLayerEnabled];
     BOOL isHillshade = [_terrainMode isHillshade];
     BOOL isSlope = [_terrainMode isSlope];
+    BOOL isTerrainShadows = [_terrainMode isTerrainShadows];
 
     OATableSectionData *switchSection = [_data createNewSection];
     [switchSection addRowFromDictionary:@{
@@ -144,29 +145,40 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainType",
             kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"srtm_color_scheme")
+            kCellTitleKey : OALocalizedString(@"visualization")
         }];
 
+        NSString *terrainTypeDesc;
+        if (isHillshade)
+            terrainTypeDesc = OALocalizedString(@"map_settings_hillshade_description");
+        else if (isSlope)
+            terrainTypeDesc = OALocalizedString(@"map_settings_slopes_description");
+        else if (isTerrainShadows)
+            terrainTypeDesc = OALocalizedString(@"terrain_shadows_descr");
+        else
+            terrainTypeDesc = OALocalizedString(@"height_legend_description");
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
             kCellTypeKey : [OATextLineViewCell getCellIdentifier],
-            kCellDescrKey : OALocalizedString(isHillshade ? @"map_settings_hillshade_description"
-                : isSlope ? @"map_settings_slopes_description" : @"height_legend_description"),
+            kCellDescrKey : terrainTypeDesc,
         }];
 
-        [titleSection addRowFromDictionary:@{
-            kCellKeyKey: @"gradientLegend",
-            kCellTypeKey : GradientChartCell.reuseIdentifier
-        }];
-        _paletteLegendIndexPath = [NSIndexPath indexPathForRow:[titleSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+        if (!isTerrainShadows)
+        {
+            [titleSection addRowFromDictionary:@{
+                kCellKeyKey: @"gradientLegend",
+                kCellTypeKey : GradientChartCell.reuseIdentifier
+            }];
+            _paletteLegendIndexPath = [NSIndexPath indexPathForRow:[titleSection rowCount] - 1 inSection:[_data sectionCount] - 1];
 
-        [titleSection addRowFromDictionary:@{
-            kCellKeyKey : @"modifyPalette",
-            kCellTypeKey : isRelief3D ? [OAValueTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"shared_string_modify"),
-            kCellSecondaryIconName : @"ic_payment_label_pro",
-            @"purchased" : @(isRelief3D)
-        }];
+            [titleSection addRowFromDictionary:@{
+                kCellKeyKey : @"modifyPalette",
+                kCellTypeKey : isRelief3D ? [OAValueTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+                kCellTitleKey : OALocalizedString(@"shared_string_modify"),
+                kCellSecondaryIconName : @"ic_payment_label_pro",
+                @"purchased" : @(isRelief3D)
+            }];
+        }
 
         OATableSectionData *appearanceSection = [_data createNewSection];
         appearanceSection.headerText = OALocalizedString(@"shared_string_appearance");
@@ -179,41 +191,53 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
             @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparency]]
         }];
-        [appearanceSection addRowFromDictionary:@{
-            kCellKeyKey : @"zoomLevels",
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
-            kCellIconNameKey : @"ic_custom_overlay_map",
-            kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : [NSString stringWithFormat:@"%ld-%ld", _minZoom, _maxZoom]
-        }];
+        if (!isTerrainShadows)
+        {
+            [appearanceSection addRowFromDictionary:@{
+                kCellKeyKey : @"zoomLevels",
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
+                kCellIconNameKey : @"ic_custom_overlay_map",
+                kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
+                @"value" : [NSString stringWithFormat:@"%ld-%ld", _minZoom, _maxZoom]
+            }];
+        }
 
         OATableSectionData *relief3DSection = [_data createNewSection];
+        NSString *typeKey;
+        if (isTerrainShadows)
+            typeKey = [OAValueTableViewCell reuseIdentifier];
+        else if (isRelief3D)
+            typeKey = [OASwitchTableViewCell reuseIdentifier];
+        else
+            typeKey = [OAButtonTableViewCell reuseIdentifier];
         [relief3DSection addRowFromDictionary:@{
             kCellKeyKey : @"relief3D",
-            kCellTypeKey : isRelief3D ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+            kCellTypeKey : typeKey,
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : @"ic_custom_3d_relief",
-            kCellIconTintColor : ![_plugin.enable3dMapsPref get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
+            kCellIconTintColor : !isTerrainShadows && (![_plugin.enable3dMapsPref get] || !isRelief3D) ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellSecondaryIconName : @"ic_payment_label_pro",
-            @"value" : @([_plugin.enable3dMapsPref get]),
-            @"purchased" : @(isRelief3D)
+            @"value" : isTerrainShadows ? OALocalizedString(@"shared_string_on") : @([_plugin.enable3dMapsPref get]),
+            @"purchased" : @(isTerrainShadows || isRelief3D)
         }];
-        if (isRelief3D && [_plugin.enable3dMapsPref get])
+        if ((isRelief3D && [_plugin.enable3dMapsPref get]) || isTerrainShadows)
         {
             double scaleValue = _app.data.verticalExaggerationScale;
             NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
             if (scaleValue > 1)
-            {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
-            }
+            if (isTerrainShadows)
+                relief3DSection.footerText = OALocalizedString(@"terrain_shadows_footer_descr");
             [relief3DSection addRowFromDictionary:@{
                 kCellKeyKey : @"vertical_exaggeration",
-                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                kCellTypeKey : isTerrainShadows && !isRelief3D ? [OAButtonTableViewCell reuseIdentifier] : [OAValueTableViewCell reuseIdentifier],
                 kCellTitleKey : OALocalizedString(@"vertical_exaggeration"),
                 kCellIconNameKey : @"ic_custom_terrain_scale",
-                kCellIconTintColor : [UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                kCellIconTintColor : [UIColor colorNamed:scaleValue > 1 && isRelief3D ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                kCellSecondaryIconName : @"ic_payment_label_pro",
                 @"value" : alphaValueString,
+                @"purchased" : @(isRelief3D)
             }];
         }
         if (_mapItems.count > 0)
@@ -318,6 +342,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UIMenu *)createTerrainTypeMenuForCellButton:(UIButton *)button
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    UIMenuElement *terrainShadowsElement;
     NSMutableAttributedString *attributedString;
 
     __weak __typeof(self) weakSelf = self;
@@ -352,12 +377,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [attributedString appendAttributedString:attachmentString];
         }
 
-        [menuElements addObject:action];
+        if (mode.type == TerrainTypeTerrainShadows)
+            terrainShadowsElement = action;
+        else
+            [menuElements addObject:action];
     }
 
     if (attributedString)
         [button setAttributedTitle:attributedString forState:UIControlStateNormal];
-    return [UIMenu menuWithChildren:menuElements];
+    return [UIMenu composedMenuFrom:@[menuElements, @[terrainShadowsElement]]];
 }
 
 - (void)setupDownloadingCellHelper

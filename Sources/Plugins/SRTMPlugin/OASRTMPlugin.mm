@@ -112,7 +112,7 @@ double const buildings3DAlphaDefValue = 0.5;
 
 - (TerrainMode *)getTerrainMode
 {
-    return [TerrainMode getByKey:[_terrainModeTypePref get]];
+    return [TerrainMode byKey:[_terrainModeTypePref get]];
 }
 
 - (void)setTerrainMode:(TerrainMode *)mode
@@ -240,7 +240,12 @@ double const buildings3DAlphaDefValue = 0.5;
 
 - (BOOL)is3DMapsEnabled
 {
-    return [self isHeightmapEnabled] && [_enable3dMapsPref get];
+    return [self isHeightmapEnabled] && ([_enable3dMapsPref get] || [[TerrainMode byKey:[_terrainModeTypePref get]] isTerrainShadows]);
+}
+
+- (BOOL)isHillshadeMode
+{
+    return [[TerrainMode byKey:[_terrainModeTypePref get]] isHillshade];
 }
 
 - (void)onProfileSettingSet:(NSNotification *)notification

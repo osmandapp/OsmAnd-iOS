@@ -4047,3 +4047,7 @@
 "show_debug_tile" = "Prikaži informaciju o pločici";
 "shared_string_int_name" = "Međunarodno ime";
 "open_from_short" = "Od";
+"visualization" = "Vizuelizacija";
+"terrain_shadows" = "Senke terena";
+"terrain_shadows_descr" = "Dinamičko senčenje u realnom vremenu za 3D teren. Ističe geometriju pejzaža uz minimalan uticaj na performanse.";
+"terrain_shadows_footer_descr" = "3D reljef je automatski omogućen, jer je potreban za renderovanje senki terena";

@@ -4042,3 +4042,10 @@
 "choose_color" = "Elegir color";
 "view_distance" = "Distancia de visualización";
 "buildings_3d_visibility_description" = "Ajuste la opacidad de las estructuras en 3D del mapa.";
+"free_custom_color_description" = "Personalice los edificios 3D con cualquier color. Ideal para combinar con un tema del mapa o para mejorar el contraste.";
+"visualization" = "Visualización";
+"terrain_shadows" = "Sombras de terreno";
+"terrain_shadows_descr" = "Sombreado dinámico en tiempo real para terrenos 3D. Resalta la geometría del paisaje con un impacto mínimo en el rendimiento.";
+"terrain_shadows_footer_descr" = "El relieve 3D se activa automáticamente, ya que es necesario para representar las sombras del terreno";
+"rendering_attr_shellsStyle_name" = "Estilo de conchas";
+"rendering_attr_shellsStyle_description" = "Estilo de las conchas en el lecho marino";

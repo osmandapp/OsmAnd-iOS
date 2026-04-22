@@ -73,9 +73,10 @@
     }
     
     NSError *categoryError = nil;
+    AVAudioSessionCategoryOptions option = [[OAAppSettings sharedManager].pauseSpokenAudio get] ? AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers : AVAudioSessionCategoryOptionDuckOthers;
     BOOL categorySet = [_audioSession setCategory:AVAudioSessionCategoryPlayback
                                              mode:AVAudioSessionModeVoicePrompt
-                                          options:AVAudioSessionCategoryOptionDuckOthers
+                                          options:option
                                             error:&categoryError];
     if (!categorySet)
     {

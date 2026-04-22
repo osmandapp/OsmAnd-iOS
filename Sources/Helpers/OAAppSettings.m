@@ -226,6 +226,7 @@ static NSString * const voiceMuteKey = @"voiceMute";
 static NSString * const voiceProviderKey = @"voiceProvider";
 static NSString * const interruptMusicKey = @"interruptMusic";
 static NSString * const showScreenAlertsKey = @"showScreenAlerts";
+static NSString * const pauseSpokenAudioKey = @"pauseSpokenAudio";
 
 static NSString * const gpxRouteCalcOsmandPartsKey = @"gpxRouteCalcOsmandParts";
 static NSString * const gpxCalculateRteptKey = @"gpxCalculateRtept";
@@ -6321,6 +6322,9 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         _voiceMute = [OACommonBoolean withKey:voiceMuteKey defValue:NO];
         [_profilePreferences setObject:_voiceMute forKey:@"voice_mute"];
+        
+        _pauseSpokenAudio = [OACommonBoolean withKey:pauseSpokenAudioKey defValue:YES];
+        [_profilePreferences setObject:_pauseSpokenAudio forKey:@"pause_spoken_audio"];
 
         _interruptMusic = [OACommonBoolean withKey:interruptMusicKey defValue:NO];
         [_profilePreferences setObject:_interruptMusic forKey:@"interrupt_music"];

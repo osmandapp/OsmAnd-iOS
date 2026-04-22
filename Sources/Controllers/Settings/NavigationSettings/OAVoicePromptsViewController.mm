@@ -26,6 +26,7 @@
 #import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -238,6 +239,13 @@
     arrivalAnnouncementItem.title = OALocalizedString(@"announcement_time_title");
     [self generateValueForItem:arrivalAnnouncementItem];
     [optionsSection addRow:arrivalAnnouncementItem];
+    
+    [optionsSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell reuseIdentifier],
+        kCellTitleKey : OALocalizedString(@"pause_spoken_audio"),
+        kCellKeyKey : @"pauseSpokenAudio",
+        @"value" : _settings.pauseSpokenAudio
+    }];
 }
 
 - (void)generateValueForItem:(OATableRowData *)item

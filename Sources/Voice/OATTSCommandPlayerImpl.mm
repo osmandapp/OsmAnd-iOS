@@ -136,7 +136,7 @@
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
 {
     if (!_isInterrupted)
-        [_audioSession setActive:NO error:nil];
+        [_audioSession setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
 }
 
 - (BOOL)supportsStructuredStreetNames

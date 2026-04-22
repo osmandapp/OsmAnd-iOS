@@ -7,15 +7,22 @@
 //
 
 final class RouteInfoWidgetState: OAWidgetState {
+    private static let showExpandButtonId = "show_expand_button"
     private static let defaultViewId = "route_info_widget_display_mode"
     private static let displayPriorityId = "route_info_widget_display_priority"
     
     let defaultViewPref: OACommonWidgetDefaultView
     let displayPriorityPref: OACommonWidgetDisplayPriority
+    let showExpandButtonPref: OACommonBoolean
     
     init(customId: String?, widgetParams: ([String: Any])?) {
         defaultViewPref = RouteInfoWidgetState.registerDefaultViewPreferenceWith(customId: customId, widgetParams: widgetParams)
         displayPriorityPref = RouteInfoWidgetState.registerDisplayPriorityPreferenceWith(customId: customId, widgetParams: widgetParams)
+        showExpandButtonPref = RouteInfoWidgetState.registerShowExpandButtonPreferenceWith(customId: customId, widgetParams: widgetParams)
+    }
+    
+    func isShowExpandButtonEnabled(with appMode: OAApplicationMode) -> Bool {
+        showExpandButtonPref.get(appMode)
     }
     
     func getDefaultView() -> RouteInfoDisplayValue {
@@ -79,6 +86,7 @@ final class RouteInfoWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerDefaultViewPreferenceWith(customId: customId).set(defaultViewPref.get(appMode), mode: appMode)
         Self.registerDisplayPriorityPreferenceWith(customId: customId).set(displayPriorityPref.get(appMode), mode: appMode)
+        Self.registerShowExpandButtonPreferenceWith(customId: customId).set(showExpandButtonPref.get(appMode), mode: appMode)
     }
     
     private static func registerDefaultViewPreferenceWith(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonWidgetDefaultView {
@@ -119,5 +127,13 @@ final class RouteInfoWidgetState: OAWidgetState {
             }
         }
         return preference
+    }
+    
+    private static func registerShowExpandButtonPreferenceWith(customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
+        var prefId = Self.showExpandButtonId
+        if let customId, !customId.isEmpty {
+            prefId += "_" + customId
+        }
+        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true).makeProfile()
     }
 }

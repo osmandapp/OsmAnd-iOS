@@ -4095,6 +4095,7 @@
 "show_icon" = "Show icon";
 "simple_widget_footer" = "Widget can take full row width or just one column.";
 "complex_widget_alert" = "%@ widget can only be placed on its own row.";
+"show_expand_button" = "Show expand button";
 
 "shared_string_deleted" = "Deleted";
 "duration_moment_ago" = "a moment ago";

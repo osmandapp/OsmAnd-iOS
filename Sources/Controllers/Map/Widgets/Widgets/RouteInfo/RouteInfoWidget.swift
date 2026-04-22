@@ -117,11 +117,13 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     override func getSettingsData(forSimpleWidget appMode: OAApplicationMode, widgetsPanel: WidgetsPanel, widgetConfigurationParams: [String: Any]?) -> OATableDataModel? {
-        let data = super.getSettingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams)
-        let showExpandButtonRow = data?.sectionData(for: 0).createNewRow()
-        showExpandButtonRow?.cellType = OASwitchTableViewCell.reuseIdentifier
-        showExpandButtonRow?.title = localizedString("show_expand_button")
-        showExpandButtonRow?.setObj(showExpandButtonPref, forKey: "pref")
+        guard let data = super.getSettingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams) else {
+            return nil
+        }
+        let showExpandButtonRow = data.sectionData(for: 0).createNewRow()
+        showExpandButtonRow.cellType = OASwitchTableViewCell.reuseIdentifier
+        showExpandButtonRow.title = localizedString("show_expand_button")
+        showExpandButtonRow.setObj(showExpandButtonPref, forKey: "pref")
         return data
     }
     
@@ -344,7 +346,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func isUpdateNeeded(for routeInfo: [DestinationInfo]) -> Bool {
-        let metricSystem = OAAppSettings.sharedManager().metricSystem.get().rawValue
+        let metricSystem = settings.metricSystem.get().rawValue
         let metricSystemChanged = cachedMetricSystem == nil || cachedMetricSystem != metricSystem
         cachedMetricSystem = metricSystem
         if metricSystemChanged {

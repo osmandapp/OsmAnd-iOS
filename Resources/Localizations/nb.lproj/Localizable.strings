@@ -781,7 +781,7 @@
 "routing_attr_piste_type_sled_name" = "Kjelke";
 "rendering_value_lightblue_name" = "Lyseblå";
 "routeInfo_piste_difficulty_name" = "Løypevanskelighetsgrad";
-"routing_attr_height_description" = "Spesifiser kjøretøyhøyde som tillates på ruter.";
+"routing_attr_height_description" = "Angi kjøretøyhøyde som tillates på ruter.";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Nodenettverk";
 "routing_attr_allow_private_description" = "Tillat adgang til private områder.";
 "rendering_attr_surface_compacted_name" = "Komprimert";
@@ -2551,7 +2551,7 @@
 "shared_string_top" = "Topp";
 "shared_string_round_up" = "Avrund oppover";
 "avoid_pt_types" = "Unngå transporttyper…";
-"edit_tilesource_maxzoom" = "Maks.-zoom";
+"edit_tilesource_maxzoom" = "Maksimal zoom";
 "fixed_height" = "Fast høyde";
 "dangerous_goods" = "Farlig gods";
 "avoid_pt_types_descr" = "Velg offentlige transporttyper å unngå for navigasjon:";
@@ -2563,7 +2563,7 @@
 "shared_string_limit" = "Grense";
 "shared_string_top_bottom" = "Topp og bunn";
 "calculate_online" = "Regn ut på nett";
-"edit_tilesource_minzoom" = "Minste forstørrelse";
+"edit_tilesource_minzoom" = "Minimumszoom";
 "shared_string_development" = "Utvikling";
 "missing_or_outdated_maps_title" = "Manglende eller utdaterte kart";
 "shared_string_millimeters" = "Millimeter";

@@ -244,7 +244,7 @@ protocol SortableFolder {
         }
         
         attributedString.append(NSAttributedString(string: " | ", attributes: defaultAttributes))
-        if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: UIColor.textColorSecondary, defaultAttributes: defaultAttributes, rotate: false) {
+        if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: .textColorSecondary, defaultAttributes: defaultAttributes, rotate: false) {
             attributedString.append(folderAttributedString)
             attributedString.append(NSAttributedString(string: " \(folderName)", attributes: defaultAttributes))
         } else {

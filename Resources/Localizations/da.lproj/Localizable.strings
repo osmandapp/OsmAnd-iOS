@@ -4047,3 +4047,7 @@
 "shared_string_int_name" = "Internationalt navn";
 "show_debug_tile" = "Vis kortfliseinformation";
 "open_from_short" = "Fra";
+"visualization" = "Visualisering";
+"terrain_shadows" = "Terrænskygger";
+"terrain_shadows_descr" = "Dynamisk skyggeeffekt i realtid til 3D-terræn. Fremhæver landskabets geometri med minimal påvirkning af ydeevnen.";
+"terrain_shadows_footer_descr" = "3D-relief aktiveres automatisk, da det er nødvendigt for at gengive terrænskygger";

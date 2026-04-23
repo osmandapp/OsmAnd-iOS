@@ -51,6 +51,6 @@ extern NSInteger const defaultTrasparency;
 - (BOOL)is3DMapsEnabled;
 - (BOOL)isHillshadeMode;
 - (BOOL)isTerrainShadowsMode;
-- (int)terrainShadowsTransparency;
+- (int)terrainShadowsOpacity;
 
 @end

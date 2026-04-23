@@ -2806,7 +2806,9 @@ static const NSInteger kDetailedMapZoom = 9;
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (plugin && [plugin isTerrainLayerEnabled] && [plugin isTerrainShadowsMode])
-        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsTransparency] * 0.01);
+    {
+        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] * 0.01);
+    }
     else
     {
         elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);

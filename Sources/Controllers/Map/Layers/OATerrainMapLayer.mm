@@ -100,7 +100,9 @@
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         }
         else
+        {
             [self.mapView resetProviderFor:self.layerIndex];
+        }
         [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
         return YES;
     }
@@ -143,9 +145,17 @@
             if ([_terrainMode isTransparencySetting:notification.object])
             {
                 [self.mapViewController runWithRenderSync:^{
-                    OsmAnd::MapLayerConfiguration config;
-                    config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
-                    [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+                    if ([_terrainMode isTerrainShadows])
+                    {
+                        [self.mapViewController updateElevationConfiguration];
+                        [self onVerticalExaggerationScaleChanged];
+                    }
+                    else
+                    {
+                        OsmAnd::MapLayerConfiguration config;
+                        config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
+                        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+                    }
                 }];
             }
             else if ([_terrainMode isZoomSetting:notification.object])

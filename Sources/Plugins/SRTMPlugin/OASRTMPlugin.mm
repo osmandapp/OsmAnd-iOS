@@ -253,7 +253,7 @@ double const buildings3DAlphaDefValue = 0.5;
     return [[TerrainMode byKey:[_terrainModeTypePref get]] isTerrainShadows];
 }
 
-- (int)terrainShadowsTransparency
+- (int)terrainShadowsOpacity
 {
     return [[TerrainMode byKey:[_terrainModeTypePref get]] getTransparency];
 }

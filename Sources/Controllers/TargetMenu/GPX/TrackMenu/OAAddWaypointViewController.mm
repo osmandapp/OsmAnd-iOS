@@ -105,10 +105,6 @@
 
     _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
     _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-
-    if (![OAUtilities isLandscapeIpadAware])
-        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 
@@ -146,6 +142,12 @@
 
 - (void)onMenuShown
 {
+    if (![OAUtilities isLandscapeIpadAware])
+    {
+        [self.contentView layoutIfNeeded];
+        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+    }
+    
     auto rect = _currentGpx.getRect;
     [_mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                   bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)

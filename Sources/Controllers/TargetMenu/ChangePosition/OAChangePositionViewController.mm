@@ -116,12 +116,6 @@
         _iconView.image = _targetPoint.icon;
     }
     
-    if (![OAUtilities isLandscapeIpadAware])
-    {
-        [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    }
-    
     OsmAnd::LatLon latLon(_targetPoint.location.latitude, _targetPoint.location.longitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
 
@@ -236,6 +230,16 @@
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];
     [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedX y:_cachedY];
+}
+
+- (void)onMenuShown
+{
+    if (![OAUtilities isLandscapeIpadAware])
+    {
+        [self.contentView layoutIfNeeded];
+        [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+    }
 }
 
 - (void) applyLocalization

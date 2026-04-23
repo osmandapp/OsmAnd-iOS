@@ -2230,6 +2230,7 @@
 "nm" = "nmi";
 "km" = "km";
 "m" = "m";
+"centimeter" = "cm";
 
 "km_h" = "km/h";
 "mile_per_hour" = "mph";
@@ -2246,6 +2247,7 @@
 "inch" = "in";
 "shared_string_inches" = "inches";
 "shared_string_pounds" = "pounds";
+"shared_string_centimeters" = "centimeters";
 
 "shared_background" = "Background";
 "corner_radius" = "Corner radius";
@@ -3255,6 +3257,7 @@
 "lenght_limit_description" = "Provide your vehicle length, some routes restrictions may be applied for long vehicles.";
 "width_limit_description" = "Provide your vehicle width some route restrictions may apply for wide vehicles.";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, we will use its height in the open state.";
+"bicycle_width_limit_description" = "Provide your bicycle width to avoid narrow cycle paths.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 "transport_hazmat_title" = "Transporting of hazardous materials";

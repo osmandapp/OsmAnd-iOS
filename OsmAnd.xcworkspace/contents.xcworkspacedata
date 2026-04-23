@@ -34,6 +34,9 @@
                            <FileRef
                               location = "group:MetricsConstants.kt">
                            </FileRef>
+                           <FileRef
+                              location = "group:AngularConstants.kt">
+                           </FileRef>
                         </Group>
                      </Group>
                      <Group
@@ -90,6 +93,76 @@
                         </FileRef>
                      </Group>
                      <Group
+                        location = "group:vehicle"
+                        name = "vehicle">
+                        <Group
+                           location = "group:specification"
+                           name = "specification">
+                           <Group
+                              location = "group:data"
+                              name = "data">
+                              <Group
+                                 location = "group:validator"
+                                 name = "validator">
+                                 <FileRef
+                                    location = "group:TruckWeightValidator.kt">
+                                 </FileRef>
+                                 <FileRef
+                                    location = "group:VehicleSpecValidator.kt">
+                                 </FileRef>
+                              </Group>
+                              <FileRef
+                                 location = "group:VehicleSpecsFactory.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:VehicleValueConverter.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:domain"
+                              name = "domain">
+                              <FileRef
+                                 location = "group:Specification.kt">
+                              </FileRef>
+                              <Group
+                                 location = "group:util"
+                                 name = "util">
+                                 <FileRef
+                                    location = "group:Assets.kt">
+                                 </FileRef>
+                                 <FileRef
+                                    location = "group:UnitValues.kt">
+                                 </FileRef>
+                              </Group>
+                              <FileRef
+                                 location = "group:SpecificationType.kt">
+                              </FileRef>
+                              <Group
+                                 location = "group:profiles"
+                                 name = "profiles">
+                                 <FileRef
+                                    location = "group:BicycleSpecs.kt">
+                                 </FileRef>
+                                 <FileRef
+                                    location = "group:CarSpecs.kt">
+                                 </FileRef>
+                                 <FileRef
+                                    location = "group:MotorcycleSpecs.kt">
+                                 </FileRef>
+                                 <FileRef
+                                    location = "group:BoatSpecs.kt">
+                                 </FileRef>
+                                 <FileRef
+                                    location = "group:VehicleSpecs.kt">
+                                 </FileRef>
+                                 <FileRef
+                                    location = "group:TruckSpecs.kt">
+                                 </FileRef>
+                              </Group>
+                           </Group>
+                        </Group>
+                     </Group>
+                     <Group
                         location = "group:util"
                         name = "util">
                         <FileRef
@@ -123,6 +196,12 @@
                            location = "group:StringBundleWriter.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:KGeoPointParserURI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KGeoPointParserSimpleS2.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:StringBundleXmlReader.kt">
                         </FileRef>
                         <FileRef
@@ -141,6 +220,9 @@
                            location = "group:PlatformUtil.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:NamingUtils.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:MultiNameSerializer.kt">
                         </FileRef>
                         <FileRef
@@ -148,6 +230,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:UrlEncoder.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KGeoPointParserUtil.kt">
                         </FileRef>
                         <FileRef
                            location = "group:StringBundle.kt">
@@ -160,6 +245,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:SharedDateFormatter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SharedNumberFormatter.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -245,6 +333,9 @@
                            location = "group:RotationUnits.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:PercentUnits.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:LengthUnits.kt">
                         </FileRef>
                         <FileRef
@@ -255,6 +346,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:TimeUnits.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AngleUnits.kt">
                         </FileRef>
                      </Group>
                      <FileRef
@@ -577,6 +671,9 @@
                         location = "group:routing"
                         name = "routing">
                         <FileRef
+                           location = "group:GeneralRouterProfile.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:ColoringType.kt">
                         </FileRef>
                         <FileRef
@@ -584,6 +681,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:Gpx3DWallColorType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SlopeCalculator.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -614,6 +714,115 @@
                         <FileRef
                            location = "group:KQuadRect.kt">
                         </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:palette"
+                        name = "palette">
+                        <Group
+                           location = "group:data"
+                           name = "data">
+                           <Group
+                              location = "group:gradient"
+                              name = "gradient">
+                              <FileRef
+                                 location = "group:GradientPaletteModifier.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GradientPaletteIO.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GradientSettingsItem.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GradientSettingsHelper.kt">
+                              </FileRef>
+                           </Group>
+                           <FileRef
+                              location = "group:PaletteMappers.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PaletteSortMode.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PaletteModifier.kt">
+                           </FileRef>
+                           <Group
+                              location = "group:solid"
+                              name = "solid">
+                              <FileRef
+                                 location = "group:SolidPaletteFactory.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:SolidPaletteModifier.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:SolidPaletteIO.kt">
+                              </FileRef>
+                           </Group>
+                           <FileRef
+                              location = "group:PaletteIO.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PaletteChangeEvent.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PaletteRepository.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PaletteUtils.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PaletteRepositoryListener.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
+                           location = "group:domain"
+                           name = "domain">
+                           <FileRef
+                              location = "group:DefaultPaletteColors.kt">
+                           </FileRef>
+                           <Group
+                              location = "group:category"
+                              name = "category">
+                              <FileRef
+                                 location = "group:GradientPaletteCategory.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:PaletteCategory.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:SolidPaletteCategory.kt">
+                              </FileRef>
+                           </Group>
+                           <FileRef
+                              location = "group:PaletteItem.kt">
+                           </FileRef>
+                           <Group
+                              location = "group:filetype"
+                              name = "filetype">
+                              <FileRef
+                                 location = "group:PaletteFileType.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:SolidFileType.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GradientFileType.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:PaletteFileTypeRegistry.kt">
+                              </FileRef>
+                           </Group>
+                           <FileRef
+                              location = "group:Palette.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:GradientRangeType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PaletteConstants.kt">
+                           </FileRef>
+                        </Group>
                      </Group>
                      <Group
                         location = "group:grid"
@@ -684,6 +893,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:SharedDateFormatter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SharedNumberFormatter.kt">
                         </FileRef>
                      </Group>
                      <Group

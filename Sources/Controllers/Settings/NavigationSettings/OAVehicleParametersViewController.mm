@@ -80,6 +80,7 @@
         ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
     {
         auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
+        NSString *sharedRouterProfileKey = OAStringFromUTF8Nullable(profileToString(router->getProfile()).c_str());
         for (auto it = parameters.begin(); it != parameters.end(); ++it)
         {
             auto& p = it->second;
@@ -141,7 +142,7 @@
                     value = [self parameterValue:value paramId:paramId cutUnit:NO isDescription:NO];
                 }
                 
-                NSDictionary *paramInfo = @{
+                NSMutableDictionary *paramInfo = [@{
                     @"name": paramId,
                     @"title": title,
                     @"value": value,
@@ -151,7 +152,8 @@
                     @"possibleValuesDescr": valueDescriptions,
                     @"setting": stringParam,
                     @"type": [OAValueTableViewCell reuseIdentifier]
-                };
+                } mutableCopy];
+                [RouteParamVehicleHelper applySharedVehicleSpecsTo:paramInfo parameterId:paramId storedValue:[stringParam get:self.appMode] routerProfileKey:sharedRouterProfileKey derivedProfile:self.appMode.getDerivedProfile appMode:self.appMode];
                 if ([paramId isEqualToString:RouteParamVehicleHelper.maxAxleLoad] || [paramId isEqualToString:RouteParamVehicleHelper.weightRating])
                     [otherParametersArr addObject:paramInfo];
                 else

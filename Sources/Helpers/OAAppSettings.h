@@ -1165,6 +1165,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonInteger *gpxRouteSegment;
 @property (nonatomic) OACommonBoolean *showStartFinishIcons;
 @property (nonatomic) OACommonBoolean *voiceMute;
+@property (nonatomic) OACommonBoolean *pauseSpokenAudio;
 @property (nonatomic) OACommonString *voiceProvider;
 @property (nonatomic) OACommonBoolean *interruptMusic;
 @property (nonatomic) OACommonBoolean *previewNextTurn;

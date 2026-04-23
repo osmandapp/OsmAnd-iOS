@@ -73,9 +73,10 @@
     }
     
     NSError *categoryError = nil;
+    AVAudioSessionCategoryOptions option = [[OAAppSettings sharedManager].pauseSpokenAudio get] ? AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers : AVAudioSessionCategoryOptionDuckOthers;
     BOOL categorySet = [_audioSession setCategory:AVAudioSessionCategoryPlayback
                                              mode:AVAudioSessionModeVoicePrompt
-                                          options:AVAudioSessionCategoryOptionDuckOthers
+                                          options:option
                                             error:&categoryError];
     if (!categorySet)
     {
@@ -135,7 +136,7 @@
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
 {
     if (!_isInterrupted)
-        [_audioSession setActive:NO error:nil];
+        [_audioSession setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
 }
 
 - (BOOL)supportsStructuredStreetNames

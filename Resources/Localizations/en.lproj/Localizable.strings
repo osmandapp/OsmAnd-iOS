@@ -516,6 +516,7 @@
 "connect_rp" = "Connect route points";
 "voice_announces" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
+"pause_spoken_audio" = "Pause spoken audio";
 "vehicle_parameters" = "Vehicle parameters";
 "map_during_navigation" = "Map during navigation";
 "detailed_track_guidance" = "Detailed track guidance";

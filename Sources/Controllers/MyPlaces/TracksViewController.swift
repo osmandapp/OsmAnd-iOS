@@ -404,6 +404,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     fileprivate func createRowFor(track: GpxDataItem, section: OATableSectionData) {
         let trackRow = section.createNewRow()
         let fileName = track.gpxFileName
+        let shouldShowFolderInfo = isSmartFolder || isSearchActive || isSelectionModeInSearch
         
         trackRow.cellType = OASimpleTableViewCell.reuseIdentifier
         trackRow.key = trackKey
@@ -415,7 +416,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
         trackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
-        trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode, includeFolderInfo: false), forKey: trackSortDescrKey)
+        trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode, includeFolderInfo: shouldShowFolderInfo), forKey: trackSortDescrKey)
     }
     
     private func setupNavbar() {

@@ -189,23 +189,7 @@ protocol SortableFolder {
             fullString.append(dateString)
             fullString.append(detailsString)
         case .nameAZ, .nameZA:
-            if includeFolderInfo {
-                let folderName: String
-                if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(track.gpxFolderName), !capitalizedFolderName.isEmpty {
-                    folderName = capitalizedFolderName
-                } else {
-                    folderName = localizedString("shared_string_gpx_tracks")
-                }
-                
-                fullString.append(detailsString)
-                fullString.append(NSAttributedString(string: " | ", attributes: defaultAttributes))
-                if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: UIColor.textColorSecondary, defaultAttributes: defaultAttributes, rotate: false) {
-                    fullString.append(folderAttributedString)
-                    fullString.append(NSAttributedString(string: " \(folderName)", attributes: defaultAttributes))
-                }
-            } else {
-                fullString.append(detailsString)
-            }
+            fullString.append(detailsString)
         case .newestDateFirst, .oldestDateFirst:
             let dateString = NSAttributedString(string: "\(creationDate) | ", attributes: defaultAttributes)
             fullString.append(dateString)
@@ -215,6 +199,10 @@ protocol SortableFolder {
         case .longestDurationFirst, .shorterDurationFirst:
             let durationFirstDetailsString = NSAttributedString(string: "\(time) • \(distance) • \(waypointCount)", attributes: defaultAttributes)
             fullString.append(durationFirstDetailsString)
+        }
+        
+        if includeFolderInfo {
+            appendFolderInfo(to: fullString, track: track, defaultAttributes: defaultAttributes)
         }
         
         return fullString
@@ -245,6 +233,23 @@ protocol SortableFolder {
         }
         
         return NSAttributedString(attachment: attachment)
+    }
+    
+    private static func appendFolderInfo(to attributedString: NSMutableAttributedString, track: GpxDataItem, defaultAttributes: [NSAttributedString.Key: Any]) {
+        let folderName: String
+        if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(track.gpxFolderName), !capitalizedFolderName.isEmpty {
+            folderName = capitalizedFolderName
+        } else {
+            folderName = localizedString("shared_string_gpx_tracks")
+        }
+        
+        attributedString.append(NSAttributedString(string: " | ", attributes: defaultAttributes))
+        if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: .textColorSecondary, defaultAttributes: defaultAttributes, rotate: false) {
+            attributedString.append(folderAttributedString)
+            attributedString.append(NSAttributedString(string: " \(folderName)", attributes: defaultAttributes))
+        } else {
+            attributedString.append(NSAttributedString(string: folderName, attributes: defaultAttributes))
+        }
     }
 }
 

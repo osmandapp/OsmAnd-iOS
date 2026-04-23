@@ -41,12 +41,25 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         configureNavigationButtons()
     }
     
+    override func registerNotifications() {
+        super.registerNotifications()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow(_:)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(_:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OASwitchTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
         addCell(OAButtonTableViewCell.reuseIdentifier)
+        addCell(OAInputTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -211,6 +224,34 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.button.changesSelectionAsPrimaryAction = true
             cell.button.setContentHuggingPriority(.required, for: .horizontal)
             cell.button.setContentCompressionResistancePriority(.required, for: .horizontal)
+            outCell = cell
+        } else if item.cellType == OAInputTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAInputTableViewCell.reuseIdentifier, for: indexPath) as! OAInputTableViewCell
+            cell.selectionStyle = .none
+            cell.leftIconVisibility(false)
+            cell.descriptionVisibility(false)
+            cell.titleLabel.text = item.title
+            cell.inputFieldVisibility(true)
+
+            let currentValue = item.obj(forKey: "value") as? String ?? ""
+            let defaultValue = item.obj(forKey: "default_value") as? String ?? ""
+            cell.inputField.text = currentValue
+            cell.inputField.placeholder = item.descr
+            cell.inputField.keyboardType = .URL
+            cell.inputField.autocorrectionType = .no
+            cell.inputField.autocapitalizationType = .none
+            cell.inputField.returnKeyType = .done
+            cell.inputField.delegate = self
+            cell.inputField.tag = indexPath.section << 10 | indexPath.row
+
+            let showClear = !currentValue.isEmpty && currentValue != defaultValue
+            cell.clearButtonVisibility(showClear)
+            cell.clearButton.removeTarget(nil, action: nil, for: .allEvents)
+            cell.clearButton.tag = indexPath.section << 10 | indexPath.row
+            cell.clearButton.addTarget(self, action: #selector(onClearURLButtonPressed(_:)), for: .touchUpInside)
+            cell.clearButtonArea.removeTarget(nil, action: nil, for: .allEvents)
+            cell.clearButtonArea.tag = indexPath.section << 10 | indexPath.row
+            cell.clearButtonArea.addTarget(self, action: #selector(onClearURLButtonPressed(_:)), for: .touchUpInside)
             outCell = cell
         }
         return outCell
@@ -463,6 +504,85 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         }
         
         return false
+    }
+
+    @objc private func onClearURLButtonPressed(_ sender: UIButton) {
+        let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
+        let item = tableData.item(for: indexPath)
+        let defaultValue = item.obj(forKey: "default_value") as? String ?? ""
+
+        if let pref = item.obj(forKey: "pref") as? OACommonString {
+            if createNew {
+                widgetConfigurationParams?[pref.key] = defaultValue
+            } else {
+                pref.set(defaultValue, mode: selectedAppMode)
+            }
+        }
+
+        generateData()
+        tableView.reloadData()
+    }
+}
+
+// MARK: - Keyboard Avoidance
+
+extension WidgetConfigurationViewController {
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else {
+            return
+        }
+        let options = UIView.AnimationOptions(rawValue: curveValue << 16)
+        UIView.animate(withDuration: duration, delay: 0, options: options) {
+            var insets = self.tableView.contentInset
+            insets.bottom = keyboardFrame.height
+            self.tableView.contentInset = insets
+            self.tableView.scrollIndicatorInsets = insets
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else {
+            return
+        }
+        let options = UIView.AnimationOptions(rawValue: curveValue << 16)
+        UIView.animate(withDuration: duration, delay: 0, options: options) {
+            var insets = self.tableView.contentInset
+            insets.bottom = 0
+            self.tableView.contentInset = insets
+            self.tableView.scrollIndicatorInsets = insets
+        }
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension WidgetConfigurationViewController: UITextFieldDelegate {
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let indexPath = IndexPath(row: textField.tag & 0x3FF, section: textField.tag >> 10)
+        let item = tableData.item(for: indexPath)
+        let newValue = textField.text ?? ""
+
+        if let pref = item.obj(forKey: "pref") as? OACommonString {
+            if createNew {
+                widgetConfigurationParams?[pref.key] = newValue
+            } else {
+                pref.set(newValue, mode: selectedAppMode)
+            }
+        }
+
+        generateData()
+        tableView.reloadData()
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

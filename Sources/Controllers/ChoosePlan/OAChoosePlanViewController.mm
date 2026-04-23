@@ -691,46 +691,63 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 
 - (void)onFeatureSelected:(NSInteger)tag state:(UIGestureRecognizerState)state
 {
-    if (self.scrollView.subviews.count > tag)
+    UIView *targetView = nil;
+    for (UIView *subview in self.scrollView.subviews)
     {
-        if (state == UIGestureRecognizerStateChanged)
+        if (subview.tag == tag)
         {
-            _buttonPressCanceled = YES;
-            [UIView animateWithDuration:0.2 animations:^{
-                OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                row.backgroundColor = self.scrollView.backgroundColor;
-            }                completion:nil];
+            targetView = subview;
+            break;
         }
-        else if (state == UIGestureRecognizerStateEnded)
+    }
+    
+    if (![targetView isKindOfClass:[OAFeatureCardRow class]])
+        return;
+    
+    OAFeatureCardRow *row = (OAFeatureCardRow *)targetView;
+    UIColor *baseColor = self.scrollView.backgroundColor;
+    UIColor *highlightColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
+
+    if (state == UIGestureRecognizerStateBegan)
+    {
+        _buttonPressCanceled = NO;
+        [UIView animateWithDuration:0.2 animations:^{
+            row.backgroundColor = highlightColor;
+        }];
+    }
+    else if (state == UIGestureRecognizerStateChanged)
+    {
+        _buttonPressCanceled = YES;
+        [UIView animateWithDuration:0.2 animations:^{
+            row.backgroundColor = baseColor;
+        }];
+    }
+    else if (state == UIGestureRecognizerStateEnded)
+    {
+        if (_buttonPressCanceled)
         {
-            if (_buttonPressCanceled)
-            {
-                _buttonPressCanceled = NO;
-                return;
-            }
+            _buttonPressCanceled = NO;
+            return;
+        }
 
+        [UIView animateWithDuration:0.2 animations:^{
+            row.backgroundColor = highlightColor;
+        } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
-                OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
-            }                completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.2 animations:^{
-                    OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                    row.backgroundColor = self.scrollView.backgroundColor;
-
-                    if (tag == _buttonTermsOfUse.tag)
-                        [self openSafariWithURL:[kOsmAndTermsOfUse localizedURLIfAvailable]];
-                    else if (tag == _buttonPrivacyPolicy.tag)
-                        [self openSafariWithURL:[kOsmAndPrivacyPolicy localizedURLIfAvailable]];
-                }];
+                row.backgroundColor = baseColor;
+            } completion:^(BOOL finished) {
+                if (tag == _buttonTermsOfUse.tag)
+                    [self openSafariWithURL:[kOsmAndTermsOfUse localizedURLIfAvailable]];
+                else if (tag == _buttonPrivacyPolicy.tag)
+                    [self openSafariWithURL:[kOsmAndPrivacyPolicy localizedURLIfAvailable]];
             }];
-        }
-        else if (state == UIGestureRecognizerStateBegan)
-        {
-            [UIView animateWithDuration:0.2 animations:^{
-                OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
-            }                completion:nil];
-        }
+        }];
+    }
+    else if (state == UIGestureRecognizerStateCancelled || state == UIGestureRecognizerStateFailed)
+    {
+        [UIView animateWithDuration:0.2 animations:^{
+            row.backgroundColor = baseColor;
+        }];
     }
 }
 

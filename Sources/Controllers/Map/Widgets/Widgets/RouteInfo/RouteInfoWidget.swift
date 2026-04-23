@@ -15,6 +15,7 @@ final class RouteInfoWidget: OASimpleWidget {
     @IBOutlet private var secondaryBlockStackView: UIStackView!
     @IBOutlet private var secondaryDividerView: UIView!
     @IBOutlet private var navigationButtonView: UIView!
+    @IBOutlet private var buttonContainerView: UIView!
     @IBOutlet private var buttonArrowImageView: UIImageView!
     @IBOutlet private var leftViewButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet private var leftViewButtonTopConstraint: NSLayoutConstraint!
@@ -22,6 +23,7 @@ final class RouteInfoWidget: OASimpleWidget {
     @IBOutlet private var secondLineBottomConstraint: NSLayoutConstraint!
     @IBOutlet private var widgetHeightConstraint: NSLayoutConstraint!
     @IBOutlet private var trailingConstraint: NSLayoutConstraint!
+    @IBOutlet private var infoContainerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private var showButton: UIButton!
     
     private static let oneHundredKmInMeters: Int32 = 100_000
@@ -31,11 +33,13 @@ final class RouteInfoWidget: OASimpleWidget {
     private var widgetState: RouteInfoWidgetState
     private var defaultViewPref: OACommonWidgetDefaultView
     private var displayPriorityPref: OACommonWidgetDisplayPriority
+    private var showExpandButtonPref: OACommonBoolean
     private var isForceUpdate: Bool
     private var cachedRouteInfo: [DestinationInfo] = []
     private var cachedTimeToGo: [TimeInterval] = []
     private var cachedDefaultView: RouteInfoDisplayValue?
     private var cachedDisplayPriority: RouteInfoDisplayPriority?
+    private var cachedShowExpandButton: Bool?
     private var hasSecondaryData: Bool
     private var cachedMetricSystem: Int?
     private let calculator: RouteInfoCalculator
@@ -75,6 +79,7 @@ final class RouteInfoWidget: OASimpleWidget {
         widgetState = RouteInfoWidgetState(customId: customId, widgetParams: widgetParams)
         defaultViewPref = widgetState.defaultViewPref
         displayPriorityPref = widgetState.displayPriorityPref
+        showExpandButtonPref = widgetState.showExpandButtonPref
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         updateVisibility(false)
     }
@@ -84,6 +89,7 @@ final class RouteInfoWidget: OASimpleWidget {
         self.widgetState = widgetState
         defaultViewPref = widgetState.defaultViewPref
         displayPriorityPref = widgetState.displayPriorityPref
+        showExpandButtonPref = widgetState.showExpandButtonPref
         isForceUpdate = true
         calculator = RouteInfoCalculator()
         hasSecondaryData = false
@@ -108,6 +114,17 @@ final class RouteInfoWidget: OASimpleWidget {
         secondLineBottomConstraint.constant = secondLineBottomSpace
         secondaryBlockStackView.isHidden = !hasEnoughWidth || cachedRouteInfo.count < 2
         forceUpdateView()
+    }
+    
+    override func getSettingsData(forSimpleWidget appMode: OAApplicationMode, widgetsPanel: WidgetsPanel, widgetConfigurationParams: [String: Any]?) -> OATableDataModel? {
+        guard let data = super.getSettingsData(forSimpleWidget: appMode, widgetsPanel: widgetsPanel, widgetConfigurationParams: widgetConfigurationParams) else {
+            return nil
+        }
+        let showExpandButtonRow = data.sectionData(for: 0).createNewRow()
+        showExpandButtonRow.cellType = OASwitchTableViewCell.reuseIdentifier
+        showExpandButtonRow.title = localizedString("show_expand_button")
+        showExpandButtonRow.setObj(showExpandButtonPref, forKey: "pref")
+        return data
     }
     
     override func getSettingsData(_ appMode: OAApplicationMode,
@@ -211,6 +228,10 @@ final class RouteInfoWidget: OASimpleWidget {
                 cachedRouteInfo[i].distance = newRouteInfo.distance
             }
         }
+        
+        let showExpandButton = !widgetState.isShowExpandButtonEnabled(with: appMode)
+        buttonContainerView.isHidden = showExpandButton
+        infoContainerLeadingConstraint.constant = showExpandButton ? 16 : 0
         
         let hasSecondaryData = hasSecondaryDataValue
         if self.hasSecondaryData != hasSecondaryData {
@@ -325,7 +346,7 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     private func isUpdateNeeded(for routeInfo: [DestinationInfo]) -> Bool {
-        let metricSystem = OAAppSettings.sharedManager().metricSystem.get().rawValue
+        let metricSystem = settings.metricSystem.get().rawValue
         let metricSystemChanged = cachedMetricSystem == nil || cachedMetricSystem != metricSystem
         cachedMetricSystem = metricSystem
         if metricSystemChanged {
@@ -340,6 +361,11 @@ final class RouteInfoWidget: OASimpleWidget {
         let displayPriority = widgetState.getDisplayPriority()
         if cachedDisplayPriority != displayPriority {
             cachedDisplayPriority = displayPriority
+            return true
+        }
+        let showExpandButton = widgetState.isShowExpandButtonEnabled(with: settings.applicationMode.get())
+        if cachedShowExpandButton != showExpandButton {
+            cachedShowExpandButton = showExpandButton
             return true
         }
         if cachedRouteInfo.isEmpty || cachedRouteInfo.count != routeInfo.count {

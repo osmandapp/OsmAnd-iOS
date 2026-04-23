@@ -93,11 +93,14 @@
         _terrainMode = [_plugin getTerrainMode];
         _layerProvider = [self createGeoTiffLayerProvider:_terrainMode];
         if (_layerProvider)
+        {
             [self.mapView setProvider:_layerProvider forLayer:self.layerIndex];
-
-        OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
-        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
+            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        }
+        else
+            [self.mapView resetProviderFor:self.layerIndex];
         [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
         return YES;
     }

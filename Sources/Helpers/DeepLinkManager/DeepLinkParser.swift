@@ -72,6 +72,7 @@ private enum DeepLinkAppModeKey: String {
 
 @objcMembers
 final class DeepLinkParser: NSObject {
+    private lazy var geocoderService = GeocoderService()
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
         handleIncomingGeoNavigationURL(url, rootViewController: rootViewController)
@@ -86,20 +87,96 @@ final class DeepLinkParser: NSObject {
         || handleIncomingOsmAndCloudURL(url, rootViewController: rootViewController)
     }
     
-    private func handleIncomingGeoNavigationURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-        guard let rootViewController,
-              url.scheme == "geo-navigation",
-              let action = GeoNavigationParser.parse(url) else { return false }
+    func handleIncomingGeoNavigationURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
+            guard let rootViewController,
+                  let action = GeoNavigationParser.parse(url) else { return false }
+            
+            switch action {
+            case let .showOnMap(coord):
+                guard let coord else { return false }
+                   switch coord {
+                   case let .coordinate(coord):
+                       moveMapToLat(coord.coordinate.latitude,
+                                    lon: coord.coordinate.longitude,
+                                    zoom: 15,
+                                    title: nil,
+                                    rootViewController: rootViewController
+                       )
+
+                   case let .address(address):
+                       geocoderService.geocode(address: address) { [weak self] coord in
+                           guard let self, let coord else { return }
+                           moveMapToLat(
+                               coord.latitude,
+                               lon: coord.longitude,
+                               zoom: 15,
+                               title: nil,
+                               rootViewController: rootViewController
+                           )
+                       }
+                   }
+                return true
+                
+            case let .buildRoute(source, destination, waypoints):
+                var pointsToResolve: [String: LocationPoint] = [:]
+                
+                if let source {
+                    pointsToResolve["source"] = source
+                }
+                if let destination {
+                    pointsToResolve["destination"] = destination
+                }
+                
+                for (index, wpt) in waypoints.enumerated() {
+                    pointsToResolve["wpt\(index)"] = wpt
+                }
+                
+                resolveMap(pointsToResolve) { resolvedCoords in
+                    let startLocation = resolvedCoords["source"]
+                    let endLocation = resolvedCoords["destination"]
+                    
+                    let waypointLocations = waypoints.indices.compactMap { index in
+                        resolvedCoords["wpt\(index)"]
+                    }
+                    
+                    rootViewController.mapPanel.buildRoute(
+                        startLocation,
+                        end: endLocation,
+                        appMode: OAApplicationMode.car(),
+                        points: endLocation != nil ? waypointLocations : []
+                    )
+                }
+                return true
+            }
+        }
+    
+    private func resolveMap(_ points: [String: LocationPoint],
+                            completion: @escaping ([String: CLLocation]) -> Void) {
+        let group = DispatchGroup()
+        var results = [String: CLLocation]()
+        let lock = NSLock()
         
-        switch action {
-        case .showOnMap(let coord, let title):
-            moveMapToLat(coord.coordinate.latitude, lon: coord.coordinate.longitude, zoom: 15, title: title, rootViewController: rootViewController)
-            return true
-        case .buildRoute(let source, let destination, let waypoints):
-            rootViewController.mapPanel.buildRoute(source, end: destination, appMode: OAApplicationMode.car(), points: waypoints)
-            return true
-        case .search:
-            return true
+        for (key, value) in points {
+            switch value {
+            case .coordinate(let loc):
+                lock.lock()
+                results[key] = loc
+                lock.unlock()
+            case .address(let addr):
+                group.enter()
+                geocoderService.geocode(address: addr) { coord in
+                    if let coord {
+                        lock.lock()
+                        results[key] = .init(latitude: coord.latitude, longitude: coord.longitude)
+                        lock.unlock()
+                    }
+                    group.leave()
+                }
+            }
+        }
+        
+        group.notify(queue: .main) {
+            completion(results)
         }
     }
     

@@ -164,6 +164,11 @@
     return nil;
 }
 
+- (NSString *)getCommonTypeStr
+{
+    return @"";
+}
+
 - (BOOL)isBottomsControlVisible
 {
     return NO;

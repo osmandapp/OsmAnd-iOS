@@ -192,6 +192,11 @@
     return [OAUtilities isLandscapeIpadAware] ? 0. : [self contentHeight];
 }
 
+- (NSString *)getCommonTypeStr
+{
+    return @"";
+}
+
 - (BOOL)hasBottomToolbar
 {
     return YES;

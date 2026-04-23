@@ -200,12 +200,12 @@
     }];
 }
 
-- (OsmAnd::ZoomLevel)getMinZoom
+- (OsmAnd::ZoomLevel)minZoom
 {
     return OsmAnd::ZoomLevel([_plugin getTerrainMinZoom]);
 }
 
-- (OsmAnd::ZoomLevel)getMaxZoom
+- (OsmAnd::ZoomLevel)maxZoom
 {
     return OsmAnd::ZoomLevel([_plugin getTerrainMaxZoom]);
 }
@@ -221,24 +221,24 @@
 
         if ([mode isHillshade])
         {
-            auto slopeSecondaryColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getSecondFile]]);
+            auto slopeSecondaryColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode secondFile]]);
             auto hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename, slopeSecondaryColorFilename);
-            hillshadeLayerProvider->setMinVisibleZoom([self getMinZoom]);
-            hillshadeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+            hillshadeLayerProvider->setMinVisibleZoom([self minZoom]);
+            hillshadeLayerProvider->setMaxVisibleZoom([self maxZoom]);
             return hillshadeLayerProvider;
         }
         else if ([mode isSlope])
         {
             auto slopeLayerProvider = std::make_shared<OsmAnd::SlopeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
-            slopeLayerProvider->setMinVisibleZoom([self getMinZoom]);
-            slopeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+            slopeLayerProvider->setMinVisibleZoom([self minZoom]);
+            slopeLayerProvider->setMaxVisibleZoom([self maxZoom]);
             return slopeLayerProvider;
         }
         else if ([mode isHeight])
         {
             auto heightLayerProvider = std::make_shared<OsmAnd::HeightRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
-            heightLayerProvider->setMinVisibleZoom([self getMinZoom]);
-            heightLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+            heightLayerProvider->setMinVisibleZoom([self minZoom]);
+            heightLayerProvider->setMaxVisibleZoom([self maxZoom]);
             return heightLayerProvider;
         }
         else

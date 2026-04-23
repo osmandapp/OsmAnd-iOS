@@ -197,7 +197,7 @@ final class TerrainMode: NSObject {
         return prefix + key + TXT_EXT
     }
 
-    func getSecondFile() -> String {
+    func secondFile() -> String {
         (isHillshade() ? Self.hillshadeScndPrefix : "") + key + TXT_EXT
     }
 

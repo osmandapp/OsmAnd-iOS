@@ -92,7 +92,8 @@
     {
         _terrainMode = [_plugin getTerrainMode];
         _layerProvider = [self createGeoTiffLayerProvider:_terrainMode];
-        [self.mapView setProvider:_layerProvider forLayer:self.layerIndex];
+        if (_layerProvider)
+            [self.mapView setProvider:_layerProvider forLayer:self.layerIndex];
 
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
@@ -161,7 +162,7 @@
     if (!colorPaletteFiles)
         return;
 
-    NSString *currentPaletteFile = [_terrainMode getMainFile];
+    NSString *currentPaletteFile = [_terrainMode mainFile];
     if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
     {
         if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
@@ -198,31 +199,43 @@
 
 - (std::shared_ptr<OsmAnd::IMapLayerProvider>)createGeoTiffLayerProvider:(TerrainMode *)mode
 {
-    auto geoTiffCollection = self.mapViewController.mapRendererEnv.geoTiffCollection;
-    NSString *heightmapDir = self.app.colorsPalettePath;
-    auto mainColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getMainFile]]);
+    NSString *mainFile = [mode mainFile];
+    if (mainFile.length > 0)
+    {
+        auto geoTiffCollection = self.mapViewController.mapRendererEnv.geoTiffCollection;
+        NSString *heightmapDir = self.app.colorsPalettePath;
+        auto mainColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:mainFile]);
 
-    if ([mode isHillshade] || [mode isTerrainShadows])
-    {
-        auto slopeSecondaryColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getSecondFile]]);
-        auto hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename, slopeSecondaryColorFilename);
-        hillshadeLayerProvider->setMinVisibleZoom([self getMinZoom]);
-        hillshadeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
-        return hillshadeLayerProvider;
-    }
-    else if ([mode isSlope])
-    {
-        auto slopeLayerProvider = std::make_shared<OsmAnd::SlopeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
-        slopeLayerProvider->setMinVisibleZoom([self getMinZoom]);
-        slopeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
-        return slopeLayerProvider;
+        if ([mode isHillshade])
+        {
+            auto slopeSecondaryColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getSecondFile]]);
+            auto hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename, slopeSecondaryColorFilename);
+            hillshadeLayerProvider->setMinVisibleZoom([self getMinZoom]);
+            hillshadeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+            return hillshadeLayerProvider;
+        }
+        else if ([mode isSlope])
+        {
+            auto slopeLayerProvider = std::make_shared<OsmAnd::SlopeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
+            slopeLayerProvider->setMinVisibleZoom([self getMinZoom]);
+            slopeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+            return slopeLayerProvider;
+        }
+        else if ([mode isHeight])
+        {
+            auto heightLayerProvider = std::make_shared<OsmAnd::HeightRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
+            heightLayerProvider->setMinVisibleZoom([self getMinZoom]);
+            heightLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+            return heightLayerProvider;
+        }
+        else
+        {
+            return nil;
+        }
     }
     else
     {
-        auto heightLayerProvider = std::make_shared<OsmAnd::HeightRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
-        heightLayerProvider->setMinVisibleZoom([self getMinZoom]);
-        heightLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
-        return heightLayerProvider;
+        return nil;
     }
 }
 

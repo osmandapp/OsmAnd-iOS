@@ -311,7 +311,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (!colorPaletteFiles)
         return;
 
-    NSString *currentPaletteFile = [_terrainMode getMainFile];
+    NSString *currentPaletteFile = [_terrainMode mainFile];
     if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
     {
         if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
@@ -595,7 +595,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
 
-        ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[_terrainMode getMainFile]];
+        ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[_terrainMode mainFile]];
         if (!colorPalette)
             return cell;
 

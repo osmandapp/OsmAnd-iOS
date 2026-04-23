@@ -113,7 +113,7 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
         let mode = data[indexPath.section].1[indexPath.row]
 
         cell.leftIconView.layer.cornerRadius = 3
-        if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.getMainFile()) {
+        if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.mainFile()) {
             PaletteCollectionHandler.applyGradient(to: cell.leftIconView,
                                                    with: colorPalette)
             cell.descriptionLabel.text = PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: true)
@@ -143,7 +143,7 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
                 let mode = data[item.section].1[item.row]
                 if let colorPalette = ColorPaletteHelper
                     .shared
-                    .getGradientColorPalette(mode.getMainFile()) {
+                    .getGradientColorPalette(mode.mainFile()) {
                     items.append([
                         "title": mode.getDefaultDescription(),
                         "desc": PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: true),

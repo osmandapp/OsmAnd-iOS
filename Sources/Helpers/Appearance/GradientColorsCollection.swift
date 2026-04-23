@@ -61,7 +61,7 @@ final class GradientColorsCollection: ColorsCollection {
             } else if gradientType is TerrainType,
                       let terrainType = TerrainType.allCases.first(where: { $0.name == paletteGradientColor.typeName }),
                       let terrainMode = TerrainMode.getMode(terrainType, keyName: paletteGradientColor.paletteName),
-                      let newColorPalette = ColorPaletteHelper.shared.getGradientColorPalette(terrainMode.getMainFile()) {
+                      let newColorPalette = ColorPaletteHelper.shared.getGradientColorPalette(terrainMode.mainFile()) {
                 paletteGradientColor.colorPalette = newColorPalette
             }
         }

@@ -140,8 +140,7 @@ final class TerrainMode: NSObject {
         let prefixes = [
             Pair(hillshadePrefix, TerrainType.hillshade),
             Pair(colorSlopePrefix, TerrainType.slope),
-            Pair(heightPrefix, TerrainType.height),
-            Pair(hillshadePrefix, TerrainType.terrainShadows)
+            Pair(heightPrefix, TerrainType.height)
         ]
         if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
            let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
@@ -178,16 +177,22 @@ final class TerrainMode: NSObject {
     func isTerrainShadows() -> Bool {
         type == .terrainShadows
     }
+    
+    func isHeight() -> Bool {
+        type == .height
+    }
 
-    func getMainFile() -> String {
+    func mainFile() -> String {
         let prefix: String
         switch type {
-        case .hillshade, .terrainShadows:
+        case .hillshade:
             prefix = Self.hillshadePrefix
         case .slope:
             prefix = Self.colorSlopePrefix
         case .height:
             prefix = Self.heightPrefix
+        default:
+            return ""
         }
         return prefix + key + TXT_EXT
     }

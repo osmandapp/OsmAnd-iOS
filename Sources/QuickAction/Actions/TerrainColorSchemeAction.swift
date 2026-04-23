@@ -110,7 +110,7 @@ final class TerrainColorSchemeAction: OASwitchableAction {
                 var desc = ""
                 if let mode = TerrainMode.byKey(paletteKey) {
                     title = mode.getDefaultDescription()
-                    if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.getMainFile()) {
+                    if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.mainFile()) {
                         desc = PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: true)
                         arr.append([
                             "type": OATitleDescrDraggableCell.reuseIdentifier,

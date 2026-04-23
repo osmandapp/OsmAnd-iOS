@@ -2811,6 +2811,8 @@ static const NSInteger kDetailedMapZoom = 9;
         elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
         elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);
     }
+    if ([plugin isTerrainShadowsMode])
+        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsTransparency]);
     [_mapView setElevationConfiguration:elevationConfiguration forcedUpdate:YES];
 }
 

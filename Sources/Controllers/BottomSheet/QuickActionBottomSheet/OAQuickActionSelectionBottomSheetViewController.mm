@@ -97,7 +97,7 @@
             TerrainMode *mode = [TerrainMode byKey:palette];
             if (mode)
             {
-                ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[mode getMainFile]];
+                ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[mode mainFile]];
                 [arr addObject:@{
                     @"type": [OASimpleTableViewCell reuseIdentifier],
                     @"title": [mode getDefaultDescription],

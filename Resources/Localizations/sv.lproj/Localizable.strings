@@ -24,8 +24,8 @@
 "get_discount_second_part" = "Därefter %@";
 "mapillary_image" = "Mapillary-bild";
 "shared_string_milliradians" = "Milliradianer";
-"angular_units" = "Vinkelmåttenheter";
-"angular_units_descr" = "Ändra azimutmätenheter.";
+"angular_units" = "Vinkelmätenheter";
+"angular_units_descr" = "Ändra enheter för azimutmätning";
 "allow_3d" = "Tillåt 2,5D-vy";
 "allow_3d_descr" = "Aktivera det här alternativet för att kunna visa kartan i ett 2,5D-perspektiv";
 "access_intermediate_arrival_time" = "Mellanliggande ankomsttid";
@@ -34,8 +34,8 @@
 "shared_string_next" = "Nästa";
 "route_stops_before" = "%@ stopp innan";
 "transport_Routes" = "Rutter";
-"transport_nearby_routes_within" = "Rutter nära i";
-"transport_nearby_routes" = "i";
+"transport_nearby_routes_within" = "Rutter i närheten inom";
+"transport_nearby_routes" = "Inom";
 "shared_string_control_stop" = "Stoppa";
 "cancel_navigation" = "Avbryt navigeringen";
 "intermediate_items_sort_by_distance" = "Sortera dörr-till-dörr";
@@ -47,7 +47,7 @@
 "shared_string_current" = "Nuvarande";
 "make_as_start_point" = "Gör som utgångspunkt";
 "keep_and_add_destination_point" = "Lägg till som en följande destination";
-"subsequent_dest_description" = "Flytta upp destination och skapa";
+"subsequent_dest_description" = "Flytta destinationen uppåt och skapa den";
 "add_as_first_destination_point" = "Lägg till som första mellanliggande destination";
 "first_intermediate_dest_description" = "Lägger till första stoppet";
 "add_as_last_destination_point" = "Lägg till som sista mellanliggande destination";
@@ -642,7 +642,7 @@
 "map_settings_slopes_description" = "Lutningsgrad är färglagda visualiseringar av terrängens lutning.";
 "map_settings_hillshade_description" = "Terrängskuggning använder mörka skuggor på kartan för att visa och framhäva sluttningar, toppar och dalar.";
 "map_settings_zoom_level_description" = "Ange minsta och maximala zoomnivån där lagret ska visas";
-"map_settings_add_maps_hillshade" = "Ytterligare kartor behövs för att se terrängskuggning på kartan.";
+"map_settings_add_maps_hillshade" = "Ytterligare kartor behövs för att se terrängskuggningar på kartan.";
 "map_settings_add_maps_slopes" = "Ytterligare kartor behövs för att se lutningsgrad på kartan.";
 "shared_string_legend" = "Teckenförklaring";
 "map_settings_show_slider_map" = "Visa reglage på kartan";
@@ -901,7 +901,7 @@
 "prch_nau_q1" = "Välj Sjökort-stilen i kartinställningarna och installera global baskarta för sjömärken.";
 "prch_nau_q2_cell" = "Nedladdning kräver %@ via mobildata.";
 "incur_high_charges" = "Detta kan medföra höga kostnader.";
-"prch_nau_q2_wifi" = "Nedladdning kräver %@ via wifi.";
+"prch_nau_q2_wifi" = "Nedladdning kräver %@ via Wi-Fi-nätverk.";
 "prch_nau_q3" = "Du kan installera det senare via menyn Kartor & Resurser.";
 "proceed_q" = "Fortsätta?";
 "shared_string_download" = "Hämta";
@@ -986,7 +986,7 @@
 "weekly" = "Varje vecka";
 "osmand_live_server_date" = "Senaste serveruppdatering: %@";
 "update_frequency" = "Uppdateringsfrekvens";
-"osmand_live_wifi_only" = "Uppdatera bara via wifi";
+"osmand_live_wifi_only" = "Uppdatera bara via Wi-Fi";
 "osmand_live_donation_header" = "Donationsinställningar";
 "donations" = "Donationer";
 "osmand_live_donation_switch_title" = "Donationer till OpenStreetMap-communityt";
@@ -1020,7 +1020,7 @@
 "res_free_exp" = "Du har använt dina fria nedladdningar. Köp kontinent för att ladda ner/uppdatera kartorna.";
 "res_upd_avail_q" = "En uppdatering finns tillgänglig för";
 "res_inst_avail_cell_q" = "Installation av %@ behöver %@ för att laddas ner över mobildata.";
-"res_inst_avail_wifi_q" = "Installation av %@ behöver %@ för att laddas ner över wifi.";
+"res_inst_avail_wifi_q" = "Installationen av %@ kräver att %@ laddas ner via Wi-Fi-nätverk.";
 "res_cancel_upd_q" = "Du kommer avbryta %@ uppdatering.";
 "data_will_be_lost" = "Allt nedladdat data kommer gå förlorat.";
 "res_cancel_inst_q" = "Du kommer avbryta %@ installation.";
@@ -1270,7 +1270,7 @@
 "hide_contour_lines" = "Dölj höjdkurvor";
 "enable_contour_lines" = "Aktivera för att visa höjdkurvor på kartan";
 "enable_hillshade" = "Aktivera för att visa terrängdata från terrängskuggning eller lutningskarta.";
-"contour_lines_hillshades_slope" = "Höjdkurvor, terrängskuggning, lutning";
+"contour_lines_hillshades_slope" = "Höjdkurvor, terrängskuggningar, lutning";
 "quick_action_dir_from_descr" = "Tryck för att starta vägvisning från skärmens aktuella mittpunkt.";
 "quick_action_transport_descr" = "Knapp som visar eller döljer kollektivtrafik på kartan.";
 "toggle_public_transport" = "Visa/dölj kollektivtrafik";
@@ -2641,7 +2641,7 @@
 "mapillary_widget_desc" = "Ger snabb tillgång till Mapillary-appen för att lägga till gatunivåbilder.";
 "activity_type_hiking_name" = "Vandring";
 "map_3d_mode_action" = "3D-läge";
-"weather_update_over_wifi_only" = "Endast via WiFi";
+"weather_update_over_wifi_only" = "Endast via Wi-Fi";
 "simulate_in_progress" = "Pågående";
 "lang_zh-Hans" = "Kinesiska (förenklad)";
 "altitude_widget_desc" = "Visar höjd över havet för den aktuella positionen.";
@@ -2681,7 +2681,7 @@
 "announcement_time_passing" = "Passerar";
 "use_login_and_password_description" = "Använd användarnamn/e-post och lösenord för att logga in på OpenStreetMap.org.";
 "speed_camera_pois" = "Fartkameror";
-"weather_update_parameters_wifi" = "Väderprognosen kommer uppdateras enbart via wifi.";
+"weather_update_parameters_wifi" = "Väderprognosen uppdateras endast om Wi-Fi-nätverket är tillgängligt.";
 "speed_cameras_legal_descr" = "I några länder och regioner är det förbjudet att använda funktioner som varnar för fartkameror. \n \nDu behöver göra ett val beroende på lagstiftningen i ditt land. \n \nVälj %@ så kan du få information och varningar om fartkameror. \n \nVälj %@ så kommer all data om fartkameror raderas (varningar, objekt i kartan etc) tills OsmAnd ominstalleras helt.";
 "restart_is_required" = "En omstart krävs för att tillämpa ändringen.";
 "no_widgets_descr" = "Lägg till en eller flera widgetar från listan av tillgängliga widgetar.";
@@ -2702,7 +2702,7 @@
 "dont_download" = "Ladda inte ner";
 "announcement_time_arrive" = "Ankomst till destinationen";
 "wikivoyage_download_pics" = "Ladda ner bilder";
-"over_wifi_only" = "Endast Wi-Fi";
+"over_wifi_only" = "Endast via Wi-Fi";
 "no_widgets_here_yet" = "Inga widgetar här ännu";
 "announce_when_exceeded" = "Meddela när den överskrids";
 "rendering_attr_alpineHikingScaleScheme_description" = "Typer av klassificering för leders svårighetsgrad.";
@@ -2899,7 +2899,7 @@
 "help_article_plan_route_name" = "Planera rutt";
 "help_article_plan_route_coordinate_input_name" = "Koordinat-inmatning";
 "help_article_purchases_android_name" = "Androidköp";
-"audionotes_plugin_name" = "Ljud-/Videoanteckningar";
+"audionotes_plugin_name" = "Ljud-/videoanteckningar";
 "shared_string_accessibility" = "Tillgänglighet";
 "user_guide" = "Användarmanual";
 "general_settings" = "Allmänt";

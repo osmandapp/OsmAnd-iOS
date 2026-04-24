@@ -4051,3 +4051,8 @@
 "terrain_shadows" = "Senke terena";
 "terrain_shadows_descr" = "Dinamičko senčenje u realnom vremenu za 3D teren. Ističe geometriju pejzaža uz minimalan uticaj na performanse.";
 "terrain_shadows_footer_descr" = "3D reljef je automatski omogućen, jer je potreban za renderovanje senki terena";
+"pause_spoken_audio" = "Pauziraj govorni zvuk";
+"centimeter" = "cm";
+"shared_string_centimeters" = "centimetri";
+"bicycle_width_limit_description" = "Dostavite širinu vašeg bicikla kako biste izbegli uske biciklističke staze.";
+"show_expand_button" = "Prikaži dugme za proširivanje";

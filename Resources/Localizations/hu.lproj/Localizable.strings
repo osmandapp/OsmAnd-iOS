@@ -4014,3 +4014,8 @@
 "terrain_shadows" = "Domborzati árnyékok";
 "terrain_shadows_descr" = "Valós idejű dinamikus árnyékolás 3D terephez. A táj geometriáját kiemeli, minimális teljesítménycsökkenés mellett.";
 "terrain_shadows_footer_descr" = "A 3D domborzat automatikusan engedélyezve lesz, mivel szükséges a domborzati árnyékok megjelenítéséhez";
+"pause_spoken_audio" = "Hangutasítások szüneteltetése";
+"centimeter" = "cm";
+"shared_string_centimeters" = "centiméter";
+"bicycle_width_limit_description" = "Adja meg a kerékpár szélességét, hogy elkerülje a szűk kerékpárutakat.";
+"show_expand_button" = "Kibontásgomb megjelenítése";

@@ -4049,3 +4049,8 @@
 "terrain_shadows" = "Ombres du terrain";
 "terrain_shadows_descr" = "Ombrage dynamique en temps réel pour les terrains 3D. Met en valeur la géométrie du paysage avec un impact minimal sur les performances.";
 "terrain_shadows_footer_descr" = "Le relief 3D est activé automatiquement, car il est nécessaire pour le rendu des ombres du terrain";
+"pause_spoken_audio" = "Mettre en pause l'audio";
+"centimeter" = "cm";
+"shared_string_centimeters" = "centimètres";
+"bicycle_width_limit_description" = "Indiquez la largeur de votre vélo afin d'éviter les pistes cyclables étroites.";
+"show_expand_button" = "Afficher le bouton d'expansion";

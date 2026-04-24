@@ -118,6 +118,11 @@
     self.addButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
+- (void)registerNotifications
+{
+    [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
+}
+
 - (void)applyLocalization
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
@@ -159,6 +164,15 @@
 {
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
     [_mapPanelViewController.mapViewController setViewportScaleY:_cachedYViewPort];
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    if (notification.object != [OAAppSettings sharedManager].rotateMap)
+        return;
+
+    _cachedYViewPort = _mapPanelViewController.mapViewController.mapView.viewportYScale;
+    [_mapPanelViewController.mapViewController setViewportScaleY:kViewportScale];
 }
 
 - (NSString *)getTypeStr

@@ -35,6 +35,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAPointDescription.h"
+#import "OAAppSettings.h"
 #import "OAFavoriteItem.h"
 
 #import <OsmAndCore/Utilities.h>
@@ -127,6 +128,11 @@
     self.coordinatesView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+}
+
+- (void)registerNotifications
+{
+    [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
 }
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
@@ -240,6 +246,15 @@
         [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    if (notification.object != [OAAppSettings sharedManager].rotateMap)
+        return;
+
+    _cachedY = _mapView.viewportYScale;
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleY:kRegularViewportScale];
 }
 
 - (void) applyLocalization

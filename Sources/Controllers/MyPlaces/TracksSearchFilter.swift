@@ -302,7 +302,7 @@ extension TracksSearchFilter {
     
     static func getDisplayMaxValue(filter: RangeTrackFilter<AnyObject>) -> Int {
         let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: filter.ceilMaxValue())
-        return Int(ceil(formattedValue.valueSrc))
+        return ceil(formattedValue.valueSrc).toIntSafe()
     }
     
     static func getFormattedValue(measureUnitType: MeasureUnitType, value: String) -> FormattedValue {

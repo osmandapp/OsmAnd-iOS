@@ -4045,3 +4045,7 @@
 "shared_string_int_name" = "Nom international";
 "show_debug_tile" = "Afficher les informations sur la vignette";
 "open_from_short" = "De";
+"visualization" = "Visualisation";
+"terrain_shadows" = "Ombres du terrain";
+"terrain_shadows_descr" = "Ombrage dynamique en temps réel pour les terrains 3D. Met en valeur la géométrie du paysage avec un impact minimal sur les performances.";
+"terrain_shadows_footer_descr" = "Le relief 3D est activé automatiquement, car il est nécessaire pour le rendu des ombres du terrain";

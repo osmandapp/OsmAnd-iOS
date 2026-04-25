@@ -4056,3 +4056,12 @@
 "shared_string_int_name" = "Nombre internacional";
 "show_debug_tile" = "Mostrar información de la tesela";
 "open_from_short" = "Desde";
+"pause_spoken_audio" = "Pausar audio hablado";
+"centimeter" = "cm";
+"shared_string_centimeters" = "centímetros";
+"bicycle_width_limit_description" = "Indicá el ancho de la bicicleta para evitar ciclovías/bicisendas angostas.";
+"show_expand_button" = "Mostrar botón de expandir";
+"visualization" = "Visualización";
+"terrain_shadows" = "Sombras del terreno";
+"terrain_shadows_descr" = "Sombreado dinámico en tiempo real para terrenos en 3D. Resalta la geometría del paisaje con un impacto mínimo en el rendimiento.";
+"terrain_shadows_footer_descr" = "El relieve en 3D se activa automáticamente, ya que se necesita para dibujar las sombras del terreno";

@@ -4068,3 +4068,7 @@
 "shared_string_centimeters" = "Zentimeter";
 "visualization" = "Visualisierung";
 "terrain_shadows" = "Geländeschattierung";
+"show_expand_button" = "Zeige Schaltfäche \"Erweitern\"";
+"bicycle_width_limit_description" = "Stellen die Breite deines Fahrrads ein, um schmale Radwege zu vermeiden.";
+"pause_spoken_audio" = "Sprachausgabe pausieren";
+"terrain_shadows_footer_descr" = "3D-Relief wird automatisch aktiviert, da es erforderlich ist, um Geländeschattierungen darzustellen";

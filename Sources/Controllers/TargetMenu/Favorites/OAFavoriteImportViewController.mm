@@ -24,7 +24,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 @implementation OAFavoriteImportViewController
 {
     NSURL *_url;
-    NSMutableArray<NSString *> *_ignoredNames;
+    NSMutableSet<NSString *> *_ignoredNames;
     OASGpxFile *_gpxFile;
     OASWptPt *_conflictedItem;
 }
@@ -44,7 +44,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 
 - (void)commonInit
 {
-    _ignoredNames = [NSMutableArray array];
+    _ignoredNames = [NSMutableSet set];
 }
 
 - (void)postInit
@@ -189,141 +189,209 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
         return NO;
 
     NSArray<OAFavoriteItem *> *favoriteItems = [OAFavoritesHelper getFavoriteItems];
-    for (OAFavoriteItem *localItem in favoriteItems)
+    if (favoriteItems.count == 0)
+        return YES;
+
+    NSMutableDictionary<NSString *, OAFavoriteItem *> *localIndex =
+        [NSMutableDictionary dictionaryWithCapacity:favoriteItems.count];
+
+    for (OAFavoriteItem *item in favoriteItems)
     {
-        for (NSString *key in _gpxFile.pointsGroups.allKeys)
+        NSString *name = [item getName];
+        if (!name)
+            continue;
+
+        NSString *cat = [item getCategory] ?: @"";
+        NSString *key = [[cat stringByAppendingString:@"|"] stringByAppendingString:name];
+
+        localIndex[key] = item;
+    }
+
+    NSMutableSet<NSString *> *ignoredSet = [_ignoredNames mutableCopy];
+
+    __weak __typeof(self) weakSelf = self;
+
+    for (NSString *groupKey in _gpxFile.pointsGroups)
+    {
+        OASGpxUtilitiesPointsGroup *group = _gpxFile.pointsGroups[groupKey];
+
+        for (OASWptPt *wpt in group.points)
         {
-            OASGpxUtilitiesPointsGroup *pointGroup = _gpxFile.pointsGroups[key];
-            for (OASWptPt *item in pointGroup.points)
-            {
-                NSString *importItemName = item.name;
-                NSString *importItemFolder = item.category;
-                NSString *localItemName = [localItem getName];
-                NSString *localItemFolder = [localItem getCategory];
-                
-                if ([importItemName isEqualToString:localItemName] &&
-                    [importItemFolder isEqualToString:localItemFolder] &&
-                    ![_ignoredNames containsObject:importItemName])
+            NSString *name = wpt.name;
+            if (!name)
+                continue;
+
+            if ([ignoredSet containsObject:name])
+                continue;
+
+            NSString *cat = wpt.category ?: @"";
+            NSString *key = [[cat stringByAppendingString:@"|"] stringByAppendingString:name];
+
+            OAFavoriteItem *match = localIndex[key];
+            if (!match)
+                continue;
+
+            _conflictedItem = wpt;
+
+            UIAlertController *alert =
+                [UIAlertController alertControllerWithTitle:nil
+                                                    message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), name]
+                                             preferredStyle:UIAlertControllerStyleAlert];
+
+            // CANCEL
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:^(UIAlertAction *action) {
+
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+
+                [strongSelf->_ignoredNames removeAllObjects];
+                strongSelf->_conflictedItem = nil;
+            }]];
+
+            // IGNORE
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_ignore")
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction *action) {
+
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+
+                if (strongSelf->_conflictedItem.name)
                 {
-                    _conflictedItem = item;
-
-                    UIAlertController *alert =
-                            [UIAlertController alertControllerWithTitle:nil
-                                                                message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), importItemName]
-                                                         preferredStyle:UIAlertControllerStyleAlert];
-
-                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                                                           style:UIAlertActionStyleDefault
-                                                                         handler:^(UIAlertAction * _Nonnull action)
-                        {
-                            [_ignoredNames removeAllObjects];
-                            _conflictedItem = nil;
-                        }
-                    ];
-
-                    UIAlertAction *ignoreAction =
-                        [UIAlertAction actionWithTitle:OALocalizedString(@"fav_ignore")
-                                                 style:UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction * _Nonnull action)
-                        {
-                            [_ignoredNames addObject:_conflictedItem.name];
-                            [self onRightNavbarButtonPressed];
-                        }
-                    ];
-
-                    UIAlertAction *renameAction =
-                        [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_rename")
-                                                 style:UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction * _Nonnull action)
-                        {
-                            UIAlertController *alertRename =
-                                    [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_rename_q")
-                                                                        message:OALocalizedString(@"fav_enter_new_name \"%@\"", _conflictedItem.name)
-                                                                 preferredStyle:UIAlertControllerStyleAlert];
-
-                            [alertRename addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-                                textField.text = _conflictedItem.name;
-                            }];
-
-                            UIAlertAction *cancelRenameAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                                                                   style:UIAlertActionStyleDefault
-                                                                                 handler:nil
-                            ];
-
-                            UIAlertAction *okAction =
-                                [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
-                                                         style:UIAlertActionStyleDefault
-                                                       handler:^(UIAlertAction * _Nonnull action)
-                                {
-                                    
-                                    NSString *newFavoriteName = alertRename.textFields[0].text;
-                                    _conflictedItem.name = newFavoriteName;
-                                    [self onRightNavbarButtonPressed];
-                                }
-                            ];
-
-                            [alertRename addAction:cancelRenameAction];
-                            [alertRename addAction:okAction];
-
-                            [self presentViewController:alertRename animated:YES completion:nil];
-                        }
-                    ];
-
-                    UIAlertAction *updateAction =
-                        [UIAlertAction actionWithTitle:OALocalizedString(@"update_existing")
-                                                 style:UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction * _Nonnull action)
-                        {
-                            for (OAFavoriteItem *localFavortite in favoriteItems)
-                            {
-                                if ([[localFavortite getName] isEqualToString:_conflictedItem.name])
-                                {
-                                    [OAFavoritesHelper deleteFavoriteGroups:nil
-                                                          andFavoritesItems:@[localFavortite]];
-                                    break;
-                                }
-                            }
-                            [self onRightNavbarButtonPressed];
-                        }
-                    ];
-
-                    UIAlertAction *replaceAction =
-                        [UIAlertAction actionWithTitle:OALocalizedString(@"replace_all")
-                                                 style:UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction * _Nonnull action)
-                        {
-                            for (NSString *keyGroup in _gpxFile.pointsGroups.allKeys)
-                            {
-                                OASGpxUtilitiesPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
-                                for (OASWptPt *wptPt in group.points)
-                                {
-                                    for (OAFavoriteItem *localFavortite in favoriteItems)
-                                    {
-                                        if ([[localFavortite getName] isEqualToString:wptPt.name])
-                                        {
-                                            [OAFavoritesHelper deleteFavoriteGroups:nil
-                                                                  andFavoritesItems:@[localFavortite]];
-                                        }
-                                    }
-                                }
-                            }
-                            [self onRightNavbarButtonPressed];
-                        }
-                    ];
-
-                    [alert addAction:cancelAction];
-                    [alert addAction:ignoreAction];
-                    [alert addAction:renameAction];
-                    [alert addAction:updateAction];
-                    [alert addAction:replaceAction];
-
-                    [self presentViewController:alert animated:YES completion:nil];
-                    return NO;
+                    [strongSelf->_ignoredNames addObject:strongSelf->_conflictedItem.name];
+                    [ignoredSet addObject:strongSelf->_conflictedItem.name];
                 }
-            }
+
+                [strongSelf onRightNavbarButtonPressed];
+            }]];
+
+            // RENAME
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_rename")
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction *action) {
+
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+
+                [strongSelf showRenameAlertForConflict:strongSelf->_conflictedItem];
+            }]];
+
+            // UPDATE
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"update_existing")
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction *action) {
+
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+
+                OAFavoriteItem *toDelete = match;
+
+                [OAFavoritesHelper deleteFavoriteGroups:nil
+                                      andFavoritesItems:@[toDelete]];
+
+                [strongSelf onRightNavbarButtonPressed];
+            }]];
+
+            // REPLACE ALL
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"replace_all")
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction *action) {
+
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+
+                NSMutableArray<OAFavoriteItem *> *toDelete =
+                    [NSMutableArray array];
+
+                for (NSString *gKey in strongSelf->_gpxFile.pointsGroups)
+                {
+                    OASGpxUtilitiesPointsGroup *group = strongSelf->_gpxFile.pointsGroups[gKey];
+
+                    for (OASWptPt *pt in group.points)
+                    {
+                        NSString *ptName = pt.name;
+                        if (!ptName)
+                            continue;
+
+                        NSString *ptCat = pt.category ?: @"";
+                        NSString *ptKey = [[ptCat stringByAppendingString:@"|"] stringByAppendingString:ptName];
+
+                        OAFavoriteItem *fav = localIndex[ptKey];
+                        if (fav)
+                        {
+                            [toDelete addObject:fav];
+                        }
+                    }
+                }
+
+                if (toDelete.count > 0)
+                {
+                    [OAFavoritesHelper deleteFavoriteGroups:nil
+                                          andFavoritesItems:toDelete];
+                }
+
+                [strongSelf onRightNavbarButtonPressed];
+            }]];
+
+            [self presentViewController:alert animated:YES completion:nil];
+            return NO;
         }
     }
+
     return YES;
+}
+
+- (void)showRenameAlertForConflict:(OASWptPt *)conflictedItem
+{
+    if (!conflictedItem)
+        return;
+
+    __weak __typeof(self) weakSelf = self;
+    
+    NSString *alertRenameMessage = [NSString stringWithFormat:@"%@ \"%@\"",
+        OALocalizedString(@"fav_enter_new_name"),
+        conflictedItem.name ?: @""];
+
+    UIAlertController *alertRename =
+        [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_rename_q")
+                                            message:alertRenameMessage
+                                     preferredStyle:UIAlertControllerStyleAlert];
+
+    [alertRename addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.text = conflictedItem.name;
+    }];
+
+    // CANCEL
+    [alertRename addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                    style:UIAlertActionStyleCancel
+                                                  handler:nil]];
+
+    // OK
+    [alertRename addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                                    style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * _Nonnull action)
+    {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        NSString *newName = alertRename.textFields.firstObject.text;
+        if (newName.length == 0)
+            return;
+
+        conflictedItem.name = newName;
+
+        [strongSelf onRightNavbarButtonPressed];
+    }]];
+
+    [self presentViewController:alertRename animated:YES completion:nil];
 }
 
 @end

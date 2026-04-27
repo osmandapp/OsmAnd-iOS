@@ -85,7 +85,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WikiMapRegion:
             return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
-            return OALocalizedString(@"roads");
+            return OALocalizedString(@"download_roads_only_maps");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
@@ -1975,7 +1975,7 @@ includeHidden:(BOOL)includeHidden
                         [app.data.terrainResourcesChangeObservable notifyEvent];
                 }
 
-                if (item.resourceType == OsmAndResourceType::MapRegion)
+                if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
             }
         }

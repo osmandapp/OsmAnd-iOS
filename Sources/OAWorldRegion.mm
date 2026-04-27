@@ -836,7 +836,9 @@
         NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:subregions resourceTypes:resourceGroupTypes isGroup:YES];
         for (OAResourceItem *item in items)
         {
-            if (item.worldRegion && item.worldRegion.regionMap && item.worldRegion.regionJoinMap && item.resourceType == OsmAndResourceType::MapRegion)
+            BOOL regionJoinMap = item.worldRegion.regionMap && item.worldRegion.regionJoinMap && item.resourceType == OsmAndResourceType::MapRegion;
+            BOOL regionJoinRoads = item.worldRegion.regionRoads && item.worldRegion.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
+            if (item.worldRegion && (regionJoinMap || regionJoinRoads))
                 continue;
 
             if ([item isKindOfClass:OARepositoryResourceItem.class])

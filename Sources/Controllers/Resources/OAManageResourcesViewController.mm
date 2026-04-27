@@ -849,6 +849,10 @@ static BOOL _repositoryUpdated = NO;
                         if (!region.regionJoinMap)
                             [typesArray addObject:@((int) resource->type)];
                         break;
+                    case OsmAndResourceType::RoadMapRegion:
+                        if (!region.regionJoinRoads)
+                            [typesArray addObject:@((int) resource->type)];
+                        break;
                     case OsmAndResourceType::SrtmMapRegion:
                         hasSrtm = YES;
                     case OsmAndResourceType::WikiMapRegion:
@@ -979,7 +983,7 @@ static BOOL _repositoryUpdated = NO;
             {
                 if ([OAResourceType isSRTMResourceItem:item_])
                     [srtmResourcesArray addObject:item_];
-                else if (!region.regionJoinMap || item_.resourceType != OsmAndResourceType::MapRegion)
+                else if ((!region.regionJoinMap || item_.resourceType != OsmAndResourceType::MapRegion) && (!region.regionJoinRoads || item_.resourceType != OsmAndResourceType::RoadMapRegion))
                     [regionMapArray addObject:item_];
             }
             else
@@ -998,6 +1002,7 @@ static BOOL _repositoryUpdated = NO;
     if ([self.region hasGroupItems]
         && (([self.region getLevel] > 1 && _regionMapItems.count > 0)
             || self.region.regionJoinMap
+            || self.region.regionJoinRoads
             || [self.region.regionId hasPrefix:russiaRegionId]
             || [self.region.regionId hasPrefix:unitedKingdomRegionId]
             || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))

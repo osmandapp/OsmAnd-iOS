@@ -44,6 +44,7 @@ static const int START_ZOOM = 6;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
     double _textScaleFactor;
+    dispatch_queue_t _favoritesUpdateQueue;
 }
 
 - (NSString *) layerId
@@ -58,6 +59,7 @@ static const int START_ZOOM = 6;
     _hiddenPointPos31 = OsmAnd::PointI();
     _showCaptionsCache = self.showCaptions;
     _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
+    _favoritesUpdateQueue = dispatch_queue_create("com.osmand.favorites.update", DISPATCH_QUEUE_SERIAL);
     
     [OAFavoritesHelper getFavoritesCollection]->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]
@@ -112,24 +114,39 @@ static const int START_ZOOM = 6;
     [OAFavoritesHelper getFavoritesCollection]->favoriteLocationChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
-- (void) show
+- (void)show
 {
-    [self.mapViewController runWithRenderSync:^{
-        if (_favoritesMapProvider)
-        {
-            [self.mapView removeTiledSymbolsProvider:_favoritesMapProvider];
-            _favoritesMapProvider = nullptr;
-        }
-        const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-        QList<OsmAnd::PointI> hiddenPoints;
-        if (_hiddenPointPos31 != OsmAnd::PointI())
-            hiddenPoints.append(_hiddenPointPos31);
+    const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+    const auto pointsOrder = self.pointsOrder;
+    const auto showCaptions = self.showCaptions;
+    const auto captionStyle = self.captionStyle;
+    const auto captionTopSpace = self.captionTopSpace;
+    const float textScale = _textScaleFactor;
+    const auto hiddenPoint = _hiddenPointPos31;
 
-        _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider(
-            [OAFavoritesHelper getFavoritesCollection]->getVisibleFavoriteLocations(),
-            self.pointsOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
-        [self.mapView addTiledSymbolsProvider:kFavoritesSymbolSection provider:_favoritesMapProvider];
-    }];
+    dispatch_async(_favoritesUpdateQueue, ^{
+        auto favorites = [OAFavoritesHelper getFavoritesCollection]->getVisibleFavoriteLocations();
+        
+        QList<OsmAnd::PointI> hiddenPoints;
+        if (hiddenPoint != OsmAnd::PointI())
+            hiddenPoints.append(hiddenPoint);
+
+        auto newProvider = std::make_shared<OAFavoritesMapLayerProvider>(
+            favorites, pointsOrder, hiddenPoints, showCaptions,
+            captionStyle, captionTopSpace, rasterTileSize, textScale);
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapViewController runWithRenderSync:^{
+                if (_favoritesMapProvider)
+                    [self.mapView removeTiledSymbolsProvider:_favoritesMapProvider];
+                
+                _favoritesMapProvider = newProvider;
+                
+                if (_favoritesMapProvider)
+                    [self.mapView addTiledSymbolsProvider:kFavoritesSymbolSection provider:_favoritesMapProvider];
+            }];
+        });
+    });
 }
 
 - (void) hide

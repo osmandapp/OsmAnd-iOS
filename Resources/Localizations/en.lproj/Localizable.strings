@@ -4155,6 +4155,7 @@
 "obd_ambient_air_temp_desc" = "Shows the temperature outside the vehicle.";
 "obd_battery_voltage" = "Battery voltage";
 "obd_alt_battery_voltage" = "Adapter voltage";
+"obd_alt_battery_voltage_desc" = "Shows the voltage level on the OBD adapter";
 "obd_engine_coolant_temp" = "Coolant temperature";
 "remaining_fuel" = "Remaining fuel";
 "remaining_fuel_description" = "Shows the amount of fuel left in the vehicle\'s tank";

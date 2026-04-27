@@ -189,32 +189,52 @@ static NSOperationQueue *_favQueue;
 
 + (void)checkDuplicateNames:(NSArray<OAFavoriteItem *> *)favorites
 {
+    if (favorites.count <= 1)
+        return;
+
+    NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSMutableArray<OAFavoriteItem *> *> *> *categoryMap =
+        [NSMutableDictionary dictionaryWithCapacity:favorites.count];
+
     for (OAFavoriteItem *item in favorites)
     {
-        NSInteger number = 1;
-        NSString *index;
-        NSString *name = [item getName];
-        NSString *category = [item getCategory];
-        BOOL duplicatesFound = NO;
-        for (OAFavoriteItem *favoriteItem in favorites)
+        NSString *name = [item getName] ?: @"";
+        NSString *category = [item getCategory] ?: @"";
+
+        NSMutableDictionary *nameMap = categoryMap[category];
+        if (!nameMap)
+            categoryMap[category] = nameMap = [NSMutableDictionary dictionary];
+
+        NSMutableArray *group = nameMap[name];
+        if (!group)
+            nameMap[name] = group = [NSMutableArray array];
+
+        BOOL isAlreadyInGroup = NO;
+        for (OAFavoriteItem *existingItem in group)
         {
-            NSString *favoriteItemName = [favoriteItem getName];
-            if ([name isEqualToString:favoriteItemName]
-                && [category isEqualToString:[favoriteItem getCategory]]
-                && ![item isEqual:favoriteItem])
+            if ([item isEqual:existingItem])
             {
-                if (!duplicatesFound)
-                {
-                    index = [NSString stringWithFormat:@" (%li)", number];
-                    [item setName:[name stringByAppendingString:index]];
-                }
-                duplicatesFound = YES;
-                number++;
-                index = [NSString stringWithFormat:@" (%li)", number];
-                [favoriteItem setName:[favoriteItemName stringByAppendingString:index]];
+                isAlreadyInGroup = YES;
+                break;
             }
         }
+
+        if (!isAlreadyInGroup)
+            [group addObject:item];
     }
+
+    [categoryMap enumerateKeysAndObjectsUsingBlock:^(NSString *category, NSMutableDictionary *nameMap, BOOL *stop) {
+        [nameMap enumerateKeysAndObjectsUsingBlock:^(NSString *name, NSMutableArray<OAFavoriteItem *> *items, BOOL *stop) {
+            
+            if (items.count > 1)
+            {
+                for (NSInteger i = 0; i < items.count; i++)
+                {
+                    NSString *newName = [NSString stringWithFormat:@"%@ (%ld)", name, (long)(i + 1)];
+                    [items[i] setName:newName];
+                }
+            }
+        }];
+    }];
 }
 
 + (void) recalculateCachedFavPoints
@@ -586,7 +606,9 @@ static NSOperationQueue *_favQueue;
         {
             for (NSString *file in files)
             {
-                [self loadFileGroups:file groups:deletedGroups];
+                @autoreleasepool {
+                    [self loadFileGroups:file groups:deletedGroups];
+                }
                 if ([operation isCancelled])
                     return;
             }

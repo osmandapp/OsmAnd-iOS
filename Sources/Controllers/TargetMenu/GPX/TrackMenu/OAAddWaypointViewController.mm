@@ -148,10 +148,7 @@
 - (void)onMenuShown
 {
     if (![OAUtilities isLandscapeIpadAware])
-    {
-        [self.contentView layoutIfNeeded];
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    }
     
     auto rect = _currentGpx.getRect;
     [_mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)

@@ -242,7 +242,6 @@
 {
     if (![OAUtilities isLandscapeIpadAware])
     {
-        [self.contentView layoutIfNeeded];
         [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }

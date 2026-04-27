@@ -206,6 +206,8 @@ class OBDTextWidget: OASimpleWidget {
             return .temperatureAmbient
         case .OBDBatteryVoltage:
             return .batteryVoltage
+        case .OBDAltBatteryVoltage:
+            return .adapterBatteryVoltage
         case .OBDEngineCoolantTemp:
             return .temperatureCoolant
         case .OBDCalculatedEngineLoad:
@@ -292,6 +294,7 @@ class OBDTextWidget: OASimpleWidget {
             .OBDFuelPressure,
             .OBDThrottlePosition,
             .OBDBatteryVoltage,
+            .OBDAltBatteryVoltage,
             .OBDAirIntakeTemp,
             .engineOilTemperature,
             .OBDAmbientAirTemp,

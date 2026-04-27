@@ -28,7 +28,7 @@ static NSString * const kOsmAndAppPathPrefix = @"/app";
 
 static NSString * const kPopularArticlesAndTelegramChats = @"https://osmand.net/help-structure.json";
 static NSString * const kDocsPlugins = @"https://docs.osmand.net/docs/user/plugins/";
-static NSString * const kGitHubDiscussion = @"https://github.com/osmandapp/OsmAnd-iOS/discussions/landing";
+static NSString * const kGitHubDiscussion = @"https://github.com/osmandapp/OsmAnd-iOS/discussions";
 static NSString * const kOpenIssueOnGitHub = @"https://github.com/osmandapp/OsmAnd-iOS/issues";
 static NSString * const kOsmAndTeam = @"https://docs.osmand.net/help-online/about";
 static NSString * const kTestFlight = @"https://docs.osmand.net/docs/versions/nightly_versions#testflight";

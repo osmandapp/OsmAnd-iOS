@@ -168,6 +168,7 @@
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
+    // Keep the movable pin centered by ignoring map position changes from rotation mode updates.
     if (notification.object != [OAAppSettings sharedManager].rotateMap)
         return;
 

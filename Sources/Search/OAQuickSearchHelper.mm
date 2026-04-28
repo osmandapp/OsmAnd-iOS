@@ -179,7 +179,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     for (NSString *resourceId in ids)
     {
         const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        if (resource && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion))
         {
             BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
             if (!isInstalled)

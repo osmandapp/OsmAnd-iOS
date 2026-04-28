@@ -501,7 +501,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (BOOL) isRouteCalculated
 {
-    return [_routingHelper isRouteCalculated] || (_routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() > 0);
+    return [_routingHelper isRouteCalculated] || [self publicTransportHasRoutes];
 }
 
 - (void)generateTransportCells:(NSMutableDictionary *)dictionary section:(NSMutableArray *)section sectionIndex:(int &)sectionIndex {
@@ -2136,15 +2136,25 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return nil;
     
     if (section == _prevRouteSection)
-        return OALocalizedString(@"previous_route");
+        return [self hidePublicTransportHeadersFor:section] ? nil : OALocalizedString(@"previous_route");
     else if (section == _gpxTripSection)
         return OALocalizedString(@"tracks_on_map");
     else if (section == _mapMarkerSection)
-        return OALocalizedString(@"map_markers");
+        return [self hidePublicTransportHeadersFor:section] ? nil : OALocalizedString(@"map_markers");
     else if (section == _historySection)
-        return OALocalizedString(@"shared_string_history");
+        return [self hidePublicTransportHeadersFor:section] ? nil : OALocalizedString(@"shared_string_history");
         
     return nil;
+}
+
+- (BOOL)hidePublicTransportHeadersFor:(NSInteger)section
+{
+    return [self publicTransportHasRoutes] && (section == _prevRouteSection || section == _mapMarkerSection || section == _historySection);
+}
+
+- (BOOL)publicTransportHasRoutes
+{
+    return _routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() > 0;
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -2250,7 +2260,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     routeBBox.bottom = DBL_MAX;
                     routeBBox.left = DBL_MAX;
                     routeBBox.right = DBL_MAX;
-                    if (([_routingHelper isRouteCalculated] && !error) || (_routingHelper.isPublicTransportMode && !_transportHelper.isRouteBeingCalculated && _transportHelper.getRoutes.size() > 0 && _transportHelper.currentRoute != -1))
+                    if (([_routingHelper isRouteCalculated] && !error) ||  (!_transportHelper.isRouteBeingCalculated && [self publicTransportHasRoutes] && _transportHelper.currentRoute != -1))
                     {
                         routeBBox = _routingHelper.isPublicTransportMode? [_transportHelper getBBox] : [_routingHelper getBBox];
                         if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)

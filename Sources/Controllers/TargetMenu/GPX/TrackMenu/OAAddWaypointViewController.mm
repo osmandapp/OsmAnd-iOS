@@ -51,6 +51,8 @@
     OAGpxWptItem *_movedPoint;
     
     OASGpxFile *_currentGpx;
+    
+    CGFloat _cachedYViewPort;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
@@ -65,6 +67,8 @@
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _contextLayer = _mapPanelViewController.mapViewController.mapLayers.contextMenuLayer;
         _targetMenuState = targetMenuState;
+        _cachedYViewPort = _mapPanelViewController.mapViewController.mapView.viewportYScale;
+        [_mapPanelViewController.mapViewController setViewportScaleY:kViewportScale];
         [self commonInit];
     }
     return self;
@@ -101,10 +105,6 @@
 
     _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
     _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-
-    if (![OAUtilities isLandscapeIpadAware])
-        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 
@@ -116,6 +116,11 @@
     self.coordinatesView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.addButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+}
+
+- (void)registerNotifications
+{
+    [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
 }
 
 - (void)applyLocalization
@@ -142,6 +147,9 @@
 
 - (void)onMenuShown
 {
+    if (![OAUtilities isLandscapeIpadAware])
+        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+    
     auto rect = _currentGpx.getRect;
     [_mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                   bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
@@ -152,11 +160,27 @@
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
+    [_mapPanelViewController.mapViewController setViewportScaleY:_cachedYViewPort];
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    // Keep the movable pin centered by ignoring map position changes from rotation mode updates.
+    if (notification.object != [OAAppSettings sharedManager].rotateMap)
+        return;
+
+    _cachedYViewPort = _mapPanelViewController.mapViewController.mapView.viewportYScale;
+    [_mapPanelViewController.mapViewController setViewportScaleY:kViewportScale];
 }
 
 - (NSString *)getTypeStr
 {
     return nil;
+}
+
+- (NSString *)getCommonTypeStr
+{
+    return @"";
 }
 
 - (BOOL)isBottomsControlVisible

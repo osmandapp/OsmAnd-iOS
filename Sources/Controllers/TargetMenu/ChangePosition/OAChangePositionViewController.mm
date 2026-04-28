@@ -35,6 +35,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAPointDescription.h"
+#import "OAAppSettings.h"
 #import "OAFavoriteItem.h"
 
 #import <OsmAndCore/Utilities.h>
@@ -116,12 +117,6 @@
         _iconView.image = _targetPoint.icon;
     }
     
-    if (![OAUtilities isLandscapeIpadAware])
-    {
-        [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    }
-    
     OsmAnd::LatLon latLon(_targetPoint.location.latitude, _targetPoint.location.longitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
 
@@ -133,6 +128,11 @@
     self.coordinatesView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+}
+
+- (void)registerNotifications
+{
+    [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
 }
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
@@ -192,6 +192,11 @@
     return [OAUtilities isLandscapeIpadAware] ? 0. : [self contentHeight];
 }
 
+- (NSString *)getCommonTypeStr
+{
+    return @"";
+}
+
 - (BOOL)hasBottomToolbar
 {
     return YES;
@@ -231,6 +236,25 @@
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];
     [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedX y:_cachedY];
+}
+
+- (void)onMenuShown
+{
+    if (![OAUtilities isLandscapeIpadAware])
+    {
+        [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+    }
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    // Keep the movable pin centered by ignoring map position changes from rotation mode updates.
+    if (notification.object != [OAAppSettings sharedManager].rotateMap)
+        return;
+
+    _cachedY = _mapView.viewportYScale;
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleY:kRegularViewportScale];
 }
 
 - (void) applyLocalization

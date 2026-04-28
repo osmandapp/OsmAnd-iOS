@@ -954,7 +954,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     BOOL isInternetConnectionAvailable = AFNetworkReachabilityManager.sharedManager.isReachable;
     if (uri && isInternetConnectionAvailable)
     {
-        return [OANetworkUtilities okHttpRedirectRequester:[uri asString]];
+        return [OASKNetworkUtils.shared okHttpRedirectRequesterUrl:[uri asString] userAgent:@"Mozilla/5.0 (OsmAnd; iOS)"];
     }
     return nil;
 }

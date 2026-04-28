@@ -88,12 +88,14 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
     }
     
     private func getSlope() -> Int {
-        let lastSlope = getLastSlope(isUphill: (widgetState?.getAverageSlopeModePreference().get() ?? AverageSlopeMode.lastUphill.rawValue) == AverageSlopeMode.lastUphill.rawValue)
-        if let lastSlope {
-            return Int(lastSlope.elevDiff / lastSlope.distance * 100.0)
-        } else {
-            return 0
+        let mode = widgetState?.getAverageSlopeModePreference().get() ?? AverageSlopeMode.lastUphill.rawValue
+        let isUphill = mode == AverageSlopeMode.lastUphill.rawValue
+        
+        if let lastSlope = getLastSlope(isUphill: isUphill) {
+            return (lastSlope.elevDiff / lastSlope.distance * 100.0).toIntSafe()
         }
+        
+        return 0
     }
     
     private func updateTitleAndIcon() {
@@ -110,5 +112,14 @@ final class TripRecordingSlopeWidget: BaseRecordingWidget {
     private func currentMode() -> AverageSlopeMode {
         guard let pref = widgetState?.getAverageSlopeModePreference() else { return .lastUphill }
         return AverageSlopeMode(rawValue: Int(pref.get())) ?? .lastUphill
+    }
+}
+
+private extension Double {
+    func toIntSafe() -> Int {
+        if !isFinite { return 0 }
+        if self > Double(Int.max) { return Int.max }
+        if self < Double(Int.min) { return Int.min }
+        return Int(self)
     }
 }

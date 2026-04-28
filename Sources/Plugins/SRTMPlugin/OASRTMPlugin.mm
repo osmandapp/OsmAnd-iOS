@@ -248,6 +248,16 @@ double const buildings3DAlphaDefValue = 0.5;
     return [[TerrainMode byKey:[_terrainModeTypePref get]] isHillshade];
 }
 
+- (BOOL)isTerrainShadowsMode
+{
+    return [[TerrainMode byKey:[_terrainModeTypePref get]] isTerrainShadows];
+}
+
+- (int)terrainShadowsOpacity
+{
+    return [[TerrainMode byKey:[_terrainModeTypePref get]] getTransparency];
+}
+
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
     if (notification.object == _enable3dMapsPref)

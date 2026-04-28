@@ -78,7 +78,7 @@ final class TerrainMode: NSObject {
         let settings = OAAppSettings.sharedManager()
         minZoomPref = settings.registerIntPreference(type.name + "_min_zoom", defValue: Int32(terrainMinSupportedZoom)).makeProfile()
         maxZoomPref = settings.registerIntPreference(type.name + "_max_zoom", defValue: Int32(terrainMaxSupportedZoom)).makeProfile()
-        transparencyPref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(type == .hillshade ? hillshadeDefaultTrasparency : defaultTrasparency)).makeProfile()
+        transparencyPref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(type == .hillshade || type == .terrainShadows ? hillshadeDefaultTrasparency : defaultTrasparency)).makeProfile()
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
@@ -140,8 +140,7 @@ final class TerrainMode: NSObject {
         let prefixes = [
             Pair(hillshadePrefix, TerrainType.hillshade),
             Pair(colorSlopePrefix, TerrainType.slope),
-            Pair(heightPrefix, TerrainType.height),
-            Pair(hillshadePrefix, TerrainType.terrainShadows)
+            Pair(heightPrefix, TerrainType.height)
         ]
         if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
            let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
@@ -178,21 +177,27 @@ final class TerrainMode: NSObject {
     func isTerrainShadows() -> Bool {
         type == .terrainShadows
     }
+    
+    func isHeight() -> Bool {
+        type == .height
+    }
 
-    func getMainFile() -> String {
+    func mainFile() -> String {
         let prefix: String
         switch type {
-        case .hillshade, .terrainShadows:
+        case .hillshade:
             prefix = Self.hillshadePrefix
         case .slope:
             prefix = Self.colorSlopePrefix
         case .height:
             prefix = Self.heightPrefix
+        default:
+            return ""
         }
         return prefix + key + TXT_EXT
     }
 
-    func getSecondFile() -> String {
+    func secondFile() -> String {
         (isHillshade() ? Self.hillshadeScndPrefix : "") + key + TXT_EXT
     }
 

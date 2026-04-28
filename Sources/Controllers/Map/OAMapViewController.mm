@@ -2804,9 +2804,12 @@ static const NSInteger kDetailedMapZoom = 9;
 - (void) updateElevationConfiguration
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    BOOL disableVertexHillshade = plugin && [plugin isTerrainLayerEnabled] && [plugin isHillshadeMode];
     OsmAnd::ElevationConfiguration elevationConfiguration;
-    if (disableVertexHillshade)
+    if (plugin && [plugin isTerrainLayerEnabled] && [plugin isTerrainShadowsMode])
+    {
+        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] * 0.01);
+    }
+    else
     {
         elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
         elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);

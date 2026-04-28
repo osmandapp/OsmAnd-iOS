@@ -15,6 +15,9 @@ final class AppStartupMonitor: NSObject {
     /// Shared singleton instance of the startup monitor.
     static let shared = AppStartupMonitor()
     
+    /// A lock to ensure thread-safe access to shared state.
+    private let lock = NSLock()
+    
     /// The timestamp when the monitoring started.
     private var startTime: CFTimeInterval
     
@@ -23,9 +26,6 @@ final class AppStartupMonitor: NSObject {
     
     /// A flag indicating whether the startup logging has been completed.
     private var didFinishStartupLogging = false
-    
-    /// A lock to ensure thread-safe access to shared state.
-    private let lock = NSLock()
     
     /// Private initializer to enforce singleton usage.
     private override init() {
@@ -54,7 +54,7 @@ final class AppStartupMonitor: NSObject {
         events.append((name: fullEventName, time: elapsed))
         lock.unlock()
         
-        NSLog("[Startup] \(fullEventName): \(String(format: "%.3f", elapsed))s")
+        NSLog("[Startup] %@: %.3fs", fullEventName, elapsed)
     }
     
     /// Logs all recorded startup events to the console along with total startup duration,
@@ -66,10 +66,16 @@ final class AppStartupMonitor: NSObject {
         lock.unlock()
         
         NSLog("\n=== App Startup Timeline ===")
+        
+        var previousTime: CFTimeInterval = 0
+        
         for event in capturedEvents {
-            NSLog("\(event.name): \(String(format: "%.3f", event.time))s")
+            let delta = event.time - previousTime
+            NSLog("%@: %.3fs (+%.3fs)", event.name, event.time, delta)
+            previousTime = event.time
         }
-        NSLog("Total startup time: \(String(format: "%.3f", totalTime))s")
+        
+        NSLog("[Startup] Total: %.3fs", totalTime)
         NSLog("============================\n")
         
         reset()

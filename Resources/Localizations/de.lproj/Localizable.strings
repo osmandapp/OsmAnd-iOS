@@ -4073,3 +4073,4 @@
 "pause_spoken_audio" = "Sprachausgabe pausieren";
 "terrain_shadows_footer_descr" = "3D-Relief wird automatisch aktiviert, da es erforderlich ist, um Geländeschattierungen darzustellen";
 "obd_alt_battery_voltage_desc" = "Zeigt den Spannungspegel am OBD-Adapter an";
+"terrain_shadows_descr" = "Dynamische Schattierung in Echtzeit für 3D-Gelände. Hebt den Geländeverlauf hervor bei minimaler Beeinträchtigung der Leistung.";

@@ -150,7 +150,9 @@
         }
         else
         {
-            [OAResourcesUIHelper requestMapDownloadInfo:_cachedLocation.coordinate resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion onComplete:^(NSArray<OAResourceItem *> *res) {
+            [OAResourcesUIHelper requestMapDownloadInfo:_cachedLocation.coordinate
+                                          resourceTypes:@[[OAResourceType toValue:OsmAndResourceType::MapRegion], [OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
+                                             onComplete:^(NSArray<OAResourceItem *> *res) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     if (res.count > 0)
                     {

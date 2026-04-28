@@ -253,6 +253,10 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
                                          resourceTypes:(NSArray<NSNumber *> *)resourceTypes
                                                isGroup:(BOOL)isGroup;
 
++ (void)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                 resourceTypes:(NSArray<NSNumber *> *)resourceTypes
+                    onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
+
 + (NSArray<OAResourceItem *> *) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
                                           resourceType:(OsmAndResourceType)resourceType
                                             subregions:(NSArray<OAWorldRegion *> *)subregions;

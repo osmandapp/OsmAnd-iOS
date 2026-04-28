@@ -391,7 +391,7 @@
             return controller;
         
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
-                                       resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                      resourceTypes:@[[OAResourceType toValue:OsmAndResourceType::MapRegion], [OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
                                          onComplete:^(NSArray<OAResourceItem *>* res) {
             if (res.count > 0)
             {
@@ -427,35 +427,46 @@
     {
         if (AFNetworkReachabilityManager.sharedManager.isReachable)
         {
-            OAResourceItem *item = ((OADownloadMapObject *)targetPoint.targetObj).indexItem;
-            OARepositoryResourceItem *repoItem = nil;
-            const auto& resourceManager = OsmAndApp.instance.resourcesManager;
-            if (resourceManager->isInstalledResourceOutdated(item.resourceId))
-            {
-                repoItem = [[OARepositoryResourceItem alloc] init];
-                repoItem.resourceId = item.resourceId;
-                repoItem.resourceType = item.resourceType;
-                repoItem.title = item.title;
-                repoItem.resource = resourceManager->getResourceInRepository(item.resourceId);
-                repoItem.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
-                repoItem.size = repoItem.resource->size;
-                repoItem.sizePkg = repoItem.resource->packageSize;
-                repoItem.worldRegion = item.worldRegion;
-                repoItem.date = item.date;
-            }
-            else if ([item isKindOfClass:OARepositoryResourceItem.class])
-            {
-                repoItem = (OARepositoryResourceItem *) item;
-            }
-            controller.localMapIndexItem = repoItem;
-            BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
-                    [controller.delegate showProgressBar];
-                else if (controller.delegate && [controller.delegate respondsToSelector:@selector(hideProgressBar)])
-                    [controller.delegate hideProgressBar];
-                [controller createMapDownloadControls];
-            });
+            [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
+                                          resourceTypes:@[[OAResourceType toValue:OsmAndResourceType::MapRegion], [OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
+                                             onComplete:^(NSArray<OAResourceItem *>* res) {
+                OAResourceItem *item = ((OADownloadMapObject *)targetPoint.targetObj).indexItem;
+                OARepositoryResourceItem *repoItem = nil;
+                const auto& resourceManager = OsmAndApp.instance.resourcesManager;
+                if (resourceManager->isInstalledResourceOutdated(item.resourceId))
+                {
+                    repoItem = [[OARepositoryResourceItem alloc] init];
+                    repoItem.resourceId = item.resourceId;
+                    repoItem.resourceType = item.resourceType;
+                    repoItem.title = item.title;
+                    repoItem.resource = resourceManager->getResourceInRepository(item.resourceId);
+                    repoItem.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
+                    repoItem.size = repoItem.resource->size;
+                    repoItem.sizePkg = repoItem.resource->packageSize;
+                    repoItem.worldRegion = item.worldRegion;
+                    repoItem.date = item.date;
+                }
+                else if ([item isKindOfClass:OARepositoryResourceItem.class])
+                {
+                    BOOL hasLocalResource = NO;
+                    for (OAResourceItem *item in res)
+                    {
+                        if ([item isKindOfClass:OALocalResourceItem.class])
+                            hasLocalResource = YES;
+                    }
+                    if (!hasLocalResource)
+                        repoItem = (OARepositoryResourceItem *) item;
+                }
+                controller.localMapIndexItem = repoItem;
+                BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
+                        [controller.delegate showProgressBar];
+                    else if (controller.delegate && [controller.delegate respondsToSelector:@selector(hideProgressBar)])
+                        [controller.delegate hideProgressBar];
+                    [controller createMapDownloadControls];
+                });
+            }];
         }
     }
     return controller;

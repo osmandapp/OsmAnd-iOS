@@ -1101,6 +1101,25 @@ includeHidden:(BOOL)includeHidden
     });
 }
 
++ (void)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                 resourceTypes:(NSArray<NSNumber *> *)resourceTypes
+                    onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray<OAResourceItem *> *resources = [NSMutableArray new];
+        for (NSNumber *resourceType in resourceTypes)
+        {
+            OsmAndResourceType type = [OAResourceType toResourceType:resourceType isGroup:YES];
+            if (type != [OAResourceType unknownType])
+                [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:coordinate resourceType:type subregions:nil]];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (onComplete)
+                onComplete([NSArray arrayWithArray:resources]);
+        });
+    });
+}
+
 + (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
                                          resourceType:(OsmAndResourceType)resourceType
                                            subregions:(NSArray<OAWorldRegion *> *)subregions

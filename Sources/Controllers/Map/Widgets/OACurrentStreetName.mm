@@ -243,11 +243,7 @@
             NSString *val = @"";
             auto it = rdo->names.find(nameId);
             if (it != rdo->names.end() && !it->second.empty())
-            {
                 val = OAStringFromUTF8Nullable(it->second.c_str());
-            } else {
-                NSLog(@"[RoadShield] Warning: value not found for nameId %u", nameId);
-            }
             
             if (![tag hasSuffix:@"_ref"] && ![tag hasPrefix:@"route_road"])
             {

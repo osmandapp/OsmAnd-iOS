@@ -83,6 +83,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.segmentContainerView.bounds), 0.0, 0.0, 0.0);
     
     _isSearchActive = NO;
 }
@@ -120,12 +121,21 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_searchController && !self.tabBarController.navigationItem.searchController)
+        self.tabBarController.navigationItem.searchController = _searchController;
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    self.tabBarController.navigationItem.searchController = nil;
+    self.navigationItem.searchController = nil;
     self.definesPresentationContext = NO;
 }
 

@@ -8,7 +8,7 @@
 
 @interface OAOpeningHoursParser : NSObject
 
-- (instancetype)initWithString:(NSString *)openingHours;
+- (nullable instancetype)initWithString:(NSString * _Nullable)openingHours;
 
 - (NSString *)toLocalString;
 - (BOOL)isOpenedForTime;

@@ -285,23 +285,24 @@ final class TracksSearchFilter: FilterChangedListener {
 extension TracksSearchFilter {
     static func getDisplayMinValue(filter: RangeTrackFilter<AnyObject>) -> Int {
         let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: String(filter.ceilMinValue()))
-        return Int(formattedValue.valueSrc)
+        return formattedValue.valueSrc.toIntSafe()
+    }
+    
+    static func getDisplayValueFrom(filter: RangeTrackFilter<AnyObject>) -> Int {
+        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType,
+                                               value: String(describing: filter.valueFrom))
+        return formattedValue.valueSrc.rounded().toIntSafe()
+    }
+
+    static func getDisplayValueTo(filter: RangeTrackFilter<AnyObject>) -> Int {
+        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType,
+                                               value: filter.ceilValueTo())
+        return formattedValue.valueSrc.rounded().toIntSafe()
     }
     
     static func getDisplayMaxValue(filter: RangeTrackFilter<AnyObject>) -> Int {
         let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: filter.ceilMaxValue())
-        return Int(ceil(formattedValue.valueSrc))
-    }
-    
-    static func getDisplayValueFrom(filter: RangeTrackFilter<AnyObject>) -> Int {
-        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: String(describing: filter.valueFrom))
-        return Int(formattedValue.valueSrc)
-    }
-    
-    static func getDisplayValueTo(filter: RangeTrackFilter<AnyObject>) -> Int {
-        let valueToUse = filter.ceilValueTo() == filter.ceilMaxValue() ? filter.ceilValueTo() : String(describing: filter.valueTo)
-        let formattedValue = getFormattedValue(measureUnitType: filter.trackFilterType.measureUnitType, value: valueToUse)
-        return Int(ceil(formattedValue.valueSrc))
+        return ceil(formattedValue.valueSrc).toIntSafe()
     }
     
     static func getFormattedValue(measureUnitType: MeasureUnitType, value: String) -> FormattedValue {
@@ -344,5 +345,14 @@ extension TracksSearchFilter {
     static func getTrackFolderByPath(_ path: String) -> TrackFolder? {
         guard !path.isEmpty, let rootFolder = TracksSearchFilter.rootFolder else { return TracksSearchFilter.rootFolder }
         return rootFolder.getFlattenedSubFolders().first(where: { $0.getDirFile().path().hasSuffix(path) }) ?? rootFolder
+    }
+}
+
+private extension Float {
+    func toIntSafe() -> Int {
+        if !isFinite { return 0 }
+        if self > Float(Int.max) { return Int.max }
+        if self < Float(Int.min) { return Int.min }
+        return Int(self)
     }
 }

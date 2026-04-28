@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) resetEvalWaitInterval;
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
 - (void) addCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)callback;
+- (void)removeCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)callback;
 - (void) recalculateRouteInBackground:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates gpxRoute:(OAGPXRouteParamsBuilder *)gpxRoute previousRoute:(OARouteCalculationResult *)previousRoute paramsChanged:(BOOL)paramsChanged onlyStartPointChanged:(BOOL)onlyStartPointChanged;
 - (void) stopCalculation;
 - (void) stopCalculationIfParamsNotChanged;

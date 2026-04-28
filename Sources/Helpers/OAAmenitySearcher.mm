@@ -64,6 +64,15 @@ int const kRadiusKmToMetersKoef = 1200.0;
 int const kZoomToSearchPOI = 16.0;
 using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAnd::BinaryMapObject>&)>;
 
+static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const OsmAnd::ISearch::IResultEntry& resultEntry)
+{
+    if (const auto *byNameResultEntry = dynamic_cast<const OsmAnd::AmenitiesByNameSearch::ResultEntry *>(&resultEntry))
+        return byNameResultEntry->amenity;
+    if (const auto *inAreaResultEntry = dynamic_cast<const OsmAnd::AmenitiesInAreaSearch::ResultEntry *>(&resultEntry))
+        return inAreaResultEntry->amenity;
+    return nullptr;
+}
+
 
 @implementation OAAmenitySearcherRequest
 
@@ -673,7 +682,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     OAPOI *poi = [self.class parsePOI:resultEntry];
     if (poi)
     {
-        const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+        const auto amenity = OAGetAmenityFromSearchResult(resultEntry);
+        if (!amenity)
+            return;
         poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
         
         _limitCounter--;
@@ -687,7 +698,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 {
     if (poi)
     {
-        const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+        const auto amenity = OAGetAmenityFromSearchResult(resultEntry);
+        if (!amenity)
+            return;
         poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
         
         _limitCounter--;
@@ -787,7 +800,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
 
 + (nullable OAPOI *) parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry withValues:(BOOL)withValues withContent:(BOOL)withContent
 {
-    const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+    const auto amenity = OAGetAmenityFromSearchResult(resultEntry);
+    if (!amenity)
+        return nil;
     OAPOIType *type = [self.class parsePOITypeByAmenity:amenity];
     return [self.class parsePOIByAmenity:amenity type:type withValues:withValues withContent:withContent];
 }
@@ -1082,7 +1097,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                           [self, &amenity, &keyword, settings]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              auto a = ((OsmAnd::AmenitiesInAreaSearch::ResultEntry&)resultEntry).amenity;
+                              auto a = OAGetAmenityFromSearchResult(resultEntry);
+                              if (!a)
+                                  return;
                               if (![settings isTypeDisabled:a->subType.toNSString()] && (a->nativeName == keyword || a->localizedNames.contains(keyword)))
                                   amenity = qMove(a);
                           }, ctrl);
@@ -1215,7 +1232,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                           [&arr, &tagName, &name, &location, &deduplicateTypeIdSet]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                              const auto am = OAGetAmenityFromSearchResult(resultEntry);
+                              if (!am)
+                                  return;
                               NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:am];
                               if (![deduplicateTypeIdSet containsObject:typeIdKey])
                               {
@@ -1261,7 +1280,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
     search->performTravelGuidesSearch(QString::fromNSString(reader), *searchCriteria,
                                       [&categoryNames, &arr, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                                const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                const auto am = OAGetAmenityFromSearchResult(resultEntry);
+                                if (!am)
+                                    return;
                                 NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:am];
                                 if (![deduplicateTypeIdSet containsObject:typeIdKey])
                                 {
@@ -1334,9 +1355,13 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                                       [self, &arr, &publish]
                                         (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                         {
-                                            const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                            const auto am = OAGetAmenityFromSearchResult(resultEntry);
+                                            if (!am)
+                                                return;
 
                                             OAPOI *poi = [self.class parsePOI:resultEntry withValues:YES withContent:YES];
+                                            if (!poi)
+                                                return;
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
                                             
                                             if (publish)
@@ -1385,7 +1410,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                               [&arr, &filter, &matcher, &deduplicateTypeIdSet]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
-                                  const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  const auto amenity = OAGetAmenityFromSearchResult(resultEntry);
+                                  if (!amenity)
+                                      return;
                                   NSString *typeIdKey = [OAAmenitySearcher getAmenityTypeIdKey:amenity];
                                   if (![deduplicateTypeIdSet containsObject:typeIdKey])
                                   {
@@ -1550,7 +1577,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
             search->performTravelGuidesSearch(QString::fromNSString(repoName), *searchCriteria,
                                               [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
-                                        const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                        const auto am = OAGetAmenityFromSearchResult(resultEntry);
+                                        if (!am)
+                                            return;
 
                                         OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:am];
                                         BOOL accept = [filter accept:type.category subcategory:type.name];
@@ -1751,7 +1780,9 @@ using BinaryObjectMatcher = std::function<bool(const std::shared_ptr<const OsmAn
                               [&arr, &filter, &matcher, &radius, &zooms]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
-                                  const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  const auto amenity = OAGetAmenityFromSearchResult(resultEntry);
+                                  if (!amenity)
+                                      return;
                                   OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
                                   if (type && [filter accept:type.category subcategory:type.name])
                                   {

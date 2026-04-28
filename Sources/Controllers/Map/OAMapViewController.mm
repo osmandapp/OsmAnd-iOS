@@ -417,6 +417,7 @@ static const NSInteger kDetailedMapZoom = 9;
     _grZoomOut.delegate = self;
     _grZoomOut.numberOfTapsRequired = 1;
     _grZoomOut.numberOfTouchesRequired = 2;
+    [_grZoomOut requireGestureRecognizerToFail:_grZoom];
 
     // - MouseWheelScroll gesture (run under MacOS)
     if ([OAUtilities isiOSAppOnMac]) {

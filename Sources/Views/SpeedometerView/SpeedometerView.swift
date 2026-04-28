@@ -55,6 +55,15 @@ final class SpeedometerView: OATextInfoWidget {
         return drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA
     }
     
+    private var shouldShowSpeedometer: Bool {
+        guard settings.showSpeedometer.get() else { return false }
+        if isPreview || carPlayConfig != nil {
+            return true
+        }
+        
+        return !OARootViewController.instance().mapPanel.isContextMenuVisible()
+    }
+    
     private lazy var speedViewWrapper = SpeedLimitWrapper()
     
     override var intrinsicContentSize: CGSize {
@@ -68,7 +77,7 @@ final class SpeedometerView: OATextInfoWidget {
     
     @discardableResult
     override func updateInfo() -> Bool {
-        guard settings.showSpeedometer.get() else {
+        guard shouldShowSpeedometer else {
             isHidden = true
             return false
         }

@@ -10,5 +10,7 @@
 	</array>
 	<key>com.apple.developer.carplay-maps</key>
 	<true/>
+	<key>com.apple.developer.navigation-app</key>
+	<true/>
 </dict>
 </plist>

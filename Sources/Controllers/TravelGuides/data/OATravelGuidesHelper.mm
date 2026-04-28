@@ -315,7 +315,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
         
         //publish function
         BOOL (^publish)(OAPOI *amenity) = ^BOOL(OAPOI *amenity) {
-            if ([amenity.getRouteId isEqualToString:article.routeId])
+            if ([[amenity getRouteId] isEqualToString:article.routeId])
             {
                 if ([[article getPointFilterString] isEqualToString:@"route_track_point"])
                 {
@@ -477,7 +477,7 @@ static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia
     //TODO: add point groups support if needed
     //reconstructPointsGroups(gpxFile, pgNames, pgIcons, pgColors, pgBackgrounds); // create groups before points
     
-    if (NSArrayIsEmpty(pointList))
+    if (!NSArrayIsEmpty(pointList))
     {
         for (OAPOI *wayPoint in pointList)
         {

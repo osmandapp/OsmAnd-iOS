@@ -51,6 +51,7 @@
 #define FavoriteTableGroup _(FavoriteTableGroup)
 
 static const NSInteger _exportButtonIndex = 1;
+static const NSStringCompareOptions searchOptions = NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch | NSWidthInsensitiveSearch;
 
 @interface FavoriteTableGroup : NSObject
     @property BOOL isOpen;
@@ -490,6 +491,8 @@ static UIViewController *parentController;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    self.tabBarController.navigationItem.searchController = nil;
+    self.navigationItem.searchController = nil;
     self.definesPresentationContext = NO;
 }
 
@@ -2147,12 +2150,25 @@ static UIViewController *parentController;
     {
         _isFiltered = YES;
         [self setupSearchController:NO filtered:YES];
+        
+        NSString *searchText = searchController.searchBar.searchTextField.text;
+        NSLocale *currentLocale = [NSLocale currentLocale];
+        
         _filteredItems = [NSMutableArray new];
         for (OAFavoriteItem *item in self.sortedFavoriteItems)
         {
-            NSRange nameTagRange = [[item getDisplayName] rangeOfString:searchController.searchBar.searchTextField.text options:NSCaseInsensitiveSearch];
-            if (nameTagRange.location != NSNotFound)
-                [_filteredItems addObject:item];
+            NSString *displayName = [item getDisplayName];
+            
+            if (displayName.length > 0)
+            {
+                NSRange range = [displayName rangeOfString:searchText
+                                                   options:searchOptions
+                                                     range:NSMakeRange(0, displayName.length)
+                                                    locale:currentLocale];
+                
+                if (range.location != NSNotFound)
+                    [_filteredItems addObject:item];
+            }
         }
         [self.favoriteTableView reloadData];
     }

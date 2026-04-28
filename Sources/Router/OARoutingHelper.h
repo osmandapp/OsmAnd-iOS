@@ -98,6 +98,7 @@ struct RouteSegmentResult;
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;
 - (void) addCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)progressRoute;
+- (void)removeCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)callback;
 
 - (void)updateLocation:(CLLocation *)currentLocation;
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation;

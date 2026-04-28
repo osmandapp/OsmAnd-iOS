@@ -39,13 +39,14 @@
 #import "OAFavoritesHelper.h"
 #import "OACarPlayCategoryResultListController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
-#define unitsKm OALocalizedString(@"km")
-#define unitsM OALocalizedString(@"m")
-#define unitsMi OALocalizedString(@"mile")
-#define unitsYd OALocalizedString(@"yard")
-#define unitsFt OALocalizedString(@"foot")
-#define unitsNm OALocalizedString(@"nm")
+static NSString * const kUnitsKm = OALocalizedString(@"km");
+static NSString * const kUnitsM = OALocalizedString(@"m");
+static NSString * const kUnitsMi = OALocalizedString(@"mile");
+static NSString * const kUnitsYd = OALocalizedString(@"yard");
+static NSString * const kUnitsFt = OALocalizedString(@"foot");
+static NSString * const kUnitsNm = OALocalizedString(@"nm");
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
@@ -96,12 +97,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     _settings = [OAAppSettings sharedManager];
     _routingHelper = OARoutingHelper.sharedInstance;
-    [_routingHelper addListener:self];
-    [_routingHelper addCalculationProgressCallback:self];
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
-    _lightGuidanceBackgroundColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];
-    _darkGuidanceBackgroundColor = [UIColor colorWithRed:0.231 green:0.231 blue:0.231 alpha:1.0];
+    
+    UIColor *guidanceBackgroundColor = [UIColor colorNamed:ACColorNameCarPlayTurnPreviewBackground];
+    _lightGuidanceBackgroundColor = guidanceBackgroundColor.light;
+    _darkGuidanceBackgroundColor = guidanceBackgroundColor.dark;
 }
 
 - (void) stopNavigation
@@ -119,6 +120,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [[OARootViewController instance].mapPanel closeRouteInfo];
     
     _mapTemplate = [[CPMapTemplate alloc] init];
+    // NOTE: traitCollectionDidChange method in OACarPlayMapViewController calls earlier than present method in iOS 26
+    if (@available(iOS 26.0, *))
+        [self onUpdateMapTemplateStyle];
     _mapTemplate.mapDelegate = self;
 
     [self enterBrowsingState];
@@ -149,7 +153,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self onMap3dModeUpdated];
 }
 
-- (void) enterRoutePreviewMode
+- (void) enterRoutePreviewMode:(BOOL)shouldCheckConnectedMainScene
 {
     if ([[OAMapViewTrackingUtilities instance] is3DMode])
         _wasIn3DBeforePreview = YES;
@@ -181,8 +185,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _isInRoutePreview = YES;
     
-    if (![_routingHelper isFollowingMode])
-    	[self centerMapOnRoute];
+    // When mainScene exists, main iOS UI is responsible for map centering behavior
+    BOOL shouldCenter =
+        ![_routingHelper isFollowingMode] &&
+    (!shouldCheckConnectedMainScene || UIApplication.sharedApplication.mainScene == nil);
+
+    if (shouldCenter)
+        [self centerMapOnRoute];
+    
     if (_delegate)
         [_delegate enterNavigationMode];
 }
@@ -586,7 +596,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             _isInRouteCalculation = NO;
-            [self enterRoutePreviewMode];
+            [self enterRoutePreviewMode:YES];
         });
     }
 }
@@ -655,19 +665,19 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     return nil;
 }
 
-- (NSUnitLength *) getUnitByString:(NSString *)unitStr
+- (NSUnitLength *)getUnitByString:(NSString *)unitStr
 {
-    if ([unitStr isEqualToString:unitsM])
+    if ([unitStr isEqualToString:kUnitsM])
         return NSUnitLength.meters;
-    else if ([unitStr isEqualToString:unitsKm])
+    else if ([unitStr isEqualToString:kUnitsKm])
         return NSUnitLength.kilometers;
-    else if ([unitStr isEqualToString:unitsMi])
+    else if ([unitStr isEqualToString:kUnitsMi])
         return NSUnitLength.miles;
-    else if ([unitStr isEqualToString:unitsYd])
+    else if ([unitStr isEqualToString:kUnitsYd])
         return NSUnitLength.yards;
-    else if ([unitStr isEqualToString:unitsFt])
+    else if ([unitStr isEqualToString:kUnitsFt])
         return NSUnitLength.feet;
-    else if ([unitStr isEqualToString:unitsNm])
+    else if ([unitStr isEqualToString:kUnitsNm])
         return NSUnitLength.nauticalMiles;
     
     return NSUnitLength.meters;
@@ -813,7 +823,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                         strongSelf.navigationSession.currentRoadNameVariants = @[];
                 }
             }
-
             NSMeasurement<NSUnitLength *> *dist = [strongSelf getFormattedDistance:nextTurnDistance];
             long leftTurnTimeSec = [strongSelf.routingHelper getLeftTimeNextTurn];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:leftTurnTimeSec];
@@ -1070,7 +1079,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     CLLocation *start = _routingHelper.getLastFixedLocation;
     if (route && start && _routingHelper.isRouteCalculated)
     {
-        [self enterRoutePreviewMode];
+        [self enterRoutePreviewMode:NO];
         if ([_routingHelper isFollowingMode])
             [self onTripStartTriggered];
     }

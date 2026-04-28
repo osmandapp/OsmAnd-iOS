@@ -30,8 +30,19 @@
 #import "OAAppVersion.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <exception>
 
 #define SECOND_IN_MILLIS 1000L
+
+static NSLock *OAGPXNearestCitySearchLock()
+{
+    static NSLock *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSLock new];
+    });
+    return lock;
+}
 
 @implementation OAGpxFileInfo
 
@@ -50,6 +61,8 @@
 
 
 @interface OAGPXUIHelper() <UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate>
+
++ (OAPOI *)performNearestCitySearch:(CLLocationCoordinate2D)latLon;
 
 @end
 
@@ -366,6 +379,37 @@
 }
 
 + (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
+{
+    OAPOI *nearestCity = nil;
+    NSLock *lock = OAGPXNearestCitySearchLock();
+    [lock lock];
+    @try
+    {
+        try
+        {
+            nearestCity = [self performNearestCitySearch:latLon];
+        }
+        catch (const std::exception &ex)
+        {
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %s", ex.what());
+        }
+        catch (...)
+        {
+            NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: unknown C++ exception");
+        }
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"[ERROR] -> OAGPXUIHelper -> searchNearestCity failed: %@ %@", exception.name, exception.reason);
+    }
+    @finally
+    {
+        [lock unlock];
+    }
+    return nearestCity;
+}
+
++ (OAPOI *)performNearestCitySearch:(CLLocationCoordinate2D)latLon
 {
     OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
     const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(50 * 1000, pointI);

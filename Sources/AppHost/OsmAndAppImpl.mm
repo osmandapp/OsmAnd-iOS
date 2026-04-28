@@ -470,7 +470,8 @@
                                                                  [_localResourcesChangedObservable notifyEventWithKey:self];
                                                                  [OAResourcesBaseViewController setDataInvalidated];
                                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                                     [[OAAvoidSpecificRoads instance] initRouteObjects:YES];
+                                                                     if (self.defaultRoutingConfig)
+                                                                         [[OAAvoidSpecificRoads instance] initRouteObjects:YES];
                                                                  });
                                                              });
     LogStartup(@"localResourcesChangeObservable attached");
@@ -921,8 +922,11 @@
 {
     std::vector<std::shared_ptr<RoutingConfigurationBuilder>> values;
     for (auto it = _customRoutingConfigs.begin(); it != _customRoutingConfigs.end(); ++it)
-        values.push_back(it->second);
-    values.push_back(self.defaultRoutingConfig);
+        if (it->second)
+            values.push_back(it->second);
+    auto defaultRoutingConfig = self.defaultRoutingConfig;
+    if (defaultRoutingConfig)
+        values.push_back(defaultRoutingConfig);
     return values;
 }
 
@@ -1036,6 +1040,9 @@
 
 - (std::shared_ptr<GeneralRouter>) getRouter:(std::shared_ptr<RoutingConfigurationBuilder> &)builder mode:(OAApplicationMode *)am
 {
+    if (!builder)
+        return nullptr;
+
     auto router = builder->getRouter([am.getRoutingProfile UTF8String]);
     if (!router && am.parent)
         router = builder->getRouter([am.parent.stringKey UTF8String]);

@@ -4048,3 +4048,13 @@
 "shared_string_int_name" = "Nome internacional";
 "show_debug_tile" = "Mostrar informações do mosaico";
 "open_from_short" = "De";
+"pause_spoken_audio" = "Pausar o áudio falado";
+"centimeter" = "cm";
+"shared_string_centimeters" = "centímetros";
+"bicycle_width_limit_description" = "Indique a largura da sua bicicleta para evitar ciclovias estreitas.";
+"show_expand_button" = "Mostrar botão expandir";
+"obd_alt_battery_voltage_desc" = "Mostra o nível de tensão no adaptador OBD";
+"visualization" = "Visualização";
+"terrain_shadows" = "Sombras do terreno";
+"terrain_shadows_descr" = "Sombreamento dinâmico em tempo real para terrenos 3D. Realça a geometria da paisagem com impacto mínimo no desempenho.";
+"terrain_shadows_footer_descr" = "O relevo 3D é ativado automaticamente, pois é necessário para renderizar as sombras do terreno";

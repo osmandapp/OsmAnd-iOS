@@ -33,6 +33,18 @@ final class GeocoderService {
 
     // MARK: - Public API
 
+    /// Converts a human-readable address string into geographic coordinates.
+    ///
+    /// This method performs an asynchronous request. If the address is not found, or if a
+    /// network/parsing error occurs, the completion handler returns `nil`.
+    ///
+    /// - Parameters:
+    ///   - address: A string describing a physical location (e.g., "1 Infinite Loop, Cupertino, CA").
+    ///   - near: Optional coordinate used as a bias location to improve search relevance.
+    ///   - completion: A closure called when the geocoding request finishes.
+    ///     Returns an optional `CLLocationCoordinate2D`.
+    ///
+    /// - Note: Internal process logs and errors are output via `NSLog`.
     func geocode(address: String,
                  near location: CLLocationCoordinate2D? = nil,
                  completion: @escaping (CLLocationCoordinate2D?) -> Void) {

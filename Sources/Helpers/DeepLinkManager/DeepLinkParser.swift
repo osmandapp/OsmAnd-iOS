@@ -72,6 +72,11 @@ private enum DeepLinkAppModeKey: String {
 
 @objcMembers
 final class DeepLinkParser: NSObject {
+    private let resolveLocationTimeout: TimeInterval = 20.0
+    
+    private var updateFirstTimeObserver: OAAutoObserverProxy?
+    private var locationCompletion: ((CLLocationCoordinate2D?) -> Void)?
+    
     private lazy var geocoderService = GeocoderService()
     
     func parseDeepLink(_ url: URL, rootViewController: OARootViewController?) -> Bool {
@@ -88,67 +93,125 @@ final class DeepLinkParser: NSObject {
     }
     
     func handleIncomingGeoNavigationURL(_ url: URL, rootViewController: OARootViewController?) -> Bool {
-            guard let rootViewController,
-                  let action = GeoNavigationParser.parse(url) else { return false }
-            
-            switch action {
-            case let .showOnMap(coord):
-                guard let coord else { return false }
-                   switch coord {
-                   case let .coordinate(coord):
-                       moveMapToLat(coord.coordinate.latitude,
-                                    lon: coord.coordinate.longitude,
-                                    zoom: 15,
-                                    title: nil,
-                                    rootViewController: rootViewController
-                       )
-
-                   case let .address(address):
-                       geocoderService.geocode(address: address) { [weak self] coord in
-                           guard let self, let coord else { return }
-                           moveMapToLat(
-                               coord.latitude,
-                               lon: coord.longitude,
-                               zoom: 15,
-                               title: nil,
-                               rootViewController: rootViewController
-                           )
-                       }
-                   }
-                return true
+        guard let rootViewController,
+              let action = GeoNavigationParser.parse(url) else { return false }
+        
+        switch action {
+        case let .showOnMap(coord):
+            guard let coord else { return false }
+            switch coord {
+            case let .coordinate(coord):
+                moveMapToLat(coord.coordinate.latitude,
+                             lon: coord.coordinate.longitude,
+                             zoom: 15,
+                             title: nil,
+                             rootViewController: rootViewController
+                )
                 
-            case let .buildRoute(source, destination, waypoints):
-                var pointsToResolve: [String: LocationPoint] = [:]
-                
-                if let source {
-                    pointsToResolve["source"] = source
-                }
-                if let destination {
-                    pointsToResolve["destination"] = destination
-                }
-                
-                for (index, wpt) in waypoints.enumerated() {
-                    pointsToResolve["wpt\(index)"] = wpt
-                }
-                
-                resolveMap(pointsToResolve) { resolvedCoords in
-                    let startLocation = resolvedCoords["source"]
-                    let endLocation = resolvedCoords["destination"]
+            case let .address(address):
+                resolveLocation(timeout: resolveLocationTimeout) { [weak self] location in
+                    guard let self, let location else { return }
                     
-                    let waypointLocations = waypoints.indices.compactMap { index in
-                        resolvedCoords["wpt\(index)"]
+                    self.geocoderService.geocode(address: address,
+                                                 near: location) { coord in
+                        guard let coord else { return }
+                        
+                        self.moveMapToLat(
+                            coord.latitude,
+                            lon: coord.longitude,
+                            zoom: 15,
+                            title: nil,
+                            rootViewController: rootViewController
+                        )
                     }
-                    
-                    rootViewController.mapPanel.buildRoute(
-                        startLocation,
-                        end: endLocation,
-                        appMode: OAApplicationMode.car(),
-                        points: endLocation != nil ? waypointLocations : []
-                    )
                 }
-                return true
             }
+            return true
+            
+        case let .buildRoute(source, destination, waypoints):
+            var pointsToResolve: [String: LocationPoint] = [:]
+            
+            if let source {
+                pointsToResolve["source"] = source
+            }
+            if let destination {
+                pointsToResolve["destination"] = destination
+            }
+            
+            for (index, wpt) in waypoints.enumerated() {
+                pointsToResolve["wpt\(index)"] = wpt
+            }
+            
+            resolveMap(pointsToResolve) { resolvedCoords in
+                let startLocation = resolvedCoords["source"]
+                let endLocation = resolvedCoords["destination"]
+                
+                let waypointLocations = waypoints.indices.compactMap { index in
+                    resolvedCoords["wpt\(index)"]
+                }
+                
+                rootViewController.mapPanel.buildRoute(
+                    startLocation,
+                    end: endLocation,
+                    appMode: OAApplicationMode.car(),
+                    points: endLocation != nil ? waypointLocations : []
+                )
+            }
+            return true
         }
+    }
+    
+    // MARK: - Location resolving
+    
+    private func resolveLocation(timeout: TimeInterval,
+                                 completion: @escaping (CLLocationCoordinate2D?) -> Void) {
+        guard let locationServices = OsmAndApp.swiftInstance().locationServices else {
+            completion(nil)
+            return
+        }
+        
+        if let coord = locationServices.lastKnownLocation?.coordinate {
+            completion(coord)
+            return
+        }
+
+        guard locationServices.available && locationServices.allowed else {
+            completion(nil)
+            return
+        }
+        
+        var isCompleted = false
+        
+        updateFirstTimeObserver = OAAutoObserverProxy(self,
+                                                      withHandler: #selector(onFirstLocationUpdate(_:)),
+                                                      andObserve: locationServices.updateFirstTimeObserver)
+        
+        locationCompletion = { coord in
+            guard !isCompleted else { return }
+            isCompleted = true
+            
+            completion(coord)
+            self.cleanupLocationWait()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + timeout) { [weak self] in
+            guard let self, !isCompleted else { return }
+            isCompleted = true
+            
+            completion(nil)
+            self.cleanupLocationWait()
+        }
+    }
+    
+    private func cleanupLocationWait() {
+        updateFirstTimeObserver = nil
+        locationCompletion = nil
+    }
+    
+    @objc private func onFirstLocationUpdate(_ arg: Any?) {
+        let coord = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation?.coordinate
+        locationCompletion?(coord)
+    }
     
     private func resolveMap(_ points: [String: LocationPoint],
                             completion: @escaping ([String: CLLocation]) -> Void) {
@@ -164,14 +227,22 @@ final class DeepLinkParser: NSObject {
                 lock.unlock()
             case .address(let addr):
                 group.enter()
-                geocoderService.geocode(address: addr) { coord in
-                    if let coord {
-                        lock.lock()
-                        results[key] = .init(latitude: coord.latitude, longitude: coord.longitude)
-                        lock.unlock()
-                    }
-                    group.leave()
-                }
+                resolveLocation(timeout: resolveLocationTimeout) { [weak self] coordinate in
+                     guard let self else {
+                         group.leave()
+                         return
+                     }
+                     
+                     self.geocoderService.geocode(address: addr, near: coordinate) { coord in
+                         if let coord {
+                             lock.lock()
+                             results[key] = .init(latitude: coord.latitude,
+                                                  longitude: coord.longitude)
+                             lock.unlock()
+                         }
+                         group.leave()
+                     }
+                 }
             }
         }
         

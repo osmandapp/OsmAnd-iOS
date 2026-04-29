@@ -34,7 +34,8 @@ struct GeoNavigationParser {
             if let coord = parseCoord(value) {
                 return .coordinate(coord)
             }
-            return .address(value)
+            let address = value.removingPercentEncoding ?? value
+            return .address(address)
         }
         
         let waypoints = queryItems

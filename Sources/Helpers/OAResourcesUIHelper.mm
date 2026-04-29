@@ -1105,7 +1105,7 @@ includeHidden:(BOOL)includeHidden
                  resourceTypes:(NSArray<NSNumber *> *)resourceTypes
                     onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
         NSMutableArray<OAResourceItem *> *resources = [NSMutableArray new];
         for (NSNumber *resourceType in resourceTypes)
         {
@@ -1115,7 +1115,7 @@ includeHidden:(BOOL)includeHidden
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             if (onComplete)
-                onComplete([NSArray arrayWithArray:resources]);
+                onComplete([resources copy]);
         });
     });
 }

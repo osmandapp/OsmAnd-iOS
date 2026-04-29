@@ -836,9 +836,7 @@
         NSArray<OAResourceItem *> *items = [OAResourcesUIHelper requestMapDownloadInfo:subregions resourceTypes:resourceGroupTypes isGroup:YES];
         for (OAResourceItem *item in items)
         {
-            BOOL regionJoinMap = item.worldRegion.regionMap && item.worldRegion.regionJoinMap && item.resourceType == OsmAndResourceType::MapRegion;
-            BOOL regionJoinRoads = item.worldRegion.regionRoads && item.worldRegion.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
-            if (item.worldRegion && (regionJoinMap || regionJoinRoads))
+            if (item.worldRegion && ([self isRegionJoinMapItem:item] || [self isRegionJoinRoadsItem:item]))
                 continue;
 
             if ([item isKindOfClass:OARepositoryResourceItem.class])
@@ -863,6 +861,16 @@
             }
         }
     }
+}
+
+- (BOOL)isRegionJoinMapItem:(OAResourceItem *)item
+{
+    return item.worldRegion.regionMap && item.worldRegion.regionJoinMap && item.resourceType == OsmAndResourceType::MapRegion;
+}
+
+- (BOOL)isRegionJoinRoadsItem:(OAResourceItem *)item
+{
+    return item.worldRegion.regionRoads && item.worldRegion.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
 }
 
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type

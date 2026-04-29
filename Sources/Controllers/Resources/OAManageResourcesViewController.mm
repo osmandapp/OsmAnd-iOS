@@ -983,7 +983,7 @@ static BOOL _repositoryUpdated = NO;
             {
                 if ([OAResourceType isSRTMResourceItem:item_])
                     [srtmResourcesArray addObject:item_];
-                else if ((!region.regionJoinMap || item_.resourceType != OsmAndResourceType::MapRegion) && (!region.regionJoinRoads || item_.resourceType != OsmAndResourceType::RoadMapRegion))
+                else if (![self shouldJoinMapRegionItem:item_ inRegion:region] && ![self shouldJoinRoadMapRegionItem:item_ inRegion:region])
                     [regionMapArray addObject:item_];
             }
             else
@@ -1082,6 +1082,16 @@ static BOOL _repositoryUpdated = NO;
     {
         [_allResourceItems addObjectsFromArray:allResourcesArray];
     }
+}
+
+- (BOOL)shouldJoinMapRegionItem:(OAResourceItem *)item inRegion:(OAWorldRegion *)region
+{
+    return region.regionJoinMap && item.resourceType == OsmAndResourceType::MapRegion;
+}
+
+- (BOOL)shouldJoinRoadMapRegionItem:(OAResourceItem *)item inRegion:(OAWorldRegion *)region
+{
+    return region.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
 }
 
 - (void) collectSubregionItems:(OAWorldRegion *)region

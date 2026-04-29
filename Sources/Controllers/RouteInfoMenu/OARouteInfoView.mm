@@ -2135,21 +2135,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ([_routingHelper isRouteCalculated])
         return nil;
     
+    if ([self publicTransportHasRoutes])
+        return nil;
+    
     if (section == _prevRouteSection)
-        return [self hidePublicTransportHeadersFor:section] ? nil : OALocalizedString(@"previous_route");
+        return OALocalizedString(@"previous_route");
     else if (section == _gpxTripSection)
         return OALocalizedString(@"tracks_on_map");
     else if (section == _mapMarkerSection)
-        return [self hidePublicTransportHeadersFor:section] ? nil : OALocalizedString(@"map_markers");
+        return OALocalizedString(@"map_markers");
     else if (section == _historySection)
-        return [self hidePublicTransportHeadersFor:section] ? nil : OALocalizedString(@"shared_string_history");
+        return OALocalizedString(@"shared_string_history");
         
     return nil;
-}
-
-- (BOOL)hidePublicTransportHeadersFor:(NSInteger)section
-{
-    return [self publicTransportHasRoutes] && (section == _prevRouteSection || section == _mapMarkerSection || section == _historySection);
 }
 
 - (BOOL)publicTransportHasRoutes

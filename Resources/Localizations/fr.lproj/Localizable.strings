@@ -4054,3 +4054,4 @@
 "shared_string_centimeters" = "centimètres";
 "bicycle_width_limit_description" = "Indiquez la largeur de votre vélo afin d'éviter les pistes cyclables étroites.";
 "show_expand_button" = "Afficher le bouton d'expansion";
+"obd_alt_battery_voltage_desc" = "Affiche le niveau de tension sur l'adaptateur OBD";

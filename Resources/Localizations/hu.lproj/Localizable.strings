@@ -4019,3 +4019,4 @@
 "shared_string_centimeters" = "centiméter";
 "bicycle_width_limit_description" = "Adja meg a kerékpár szélességét, hogy elkerülje a szűk kerékpárutakat.";
 "show_expand_button" = "Kibontásgomb megjelenítése";
+"obd_alt_battery_voltage_desc" = "Megjeleníti a feszültségszintet az OBD-adapteren";

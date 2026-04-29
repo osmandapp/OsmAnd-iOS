@@ -4056,3 +4056,4 @@
 "shared_string_centimeters" = "centimeter";
 "bicycle_width_limit_description" = "Angiv din cykels bredde for at undgå smalle cykelstier.";
 "show_expand_button" = "Vis udvidelsesknap";
+"obd_alt_battery_voltage_desc" = "Viser spændingsniveauet på OBD-adapteren";

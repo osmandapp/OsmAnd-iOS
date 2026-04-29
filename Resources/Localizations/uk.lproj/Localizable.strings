@@ -4014,7 +4014,7 @@
 "context_menu_item_add_parking_point" = "Позначити місцем паркування";
 "find_parking" = "Знайти паркінг";
 "finish_navigation" = "Завершити навігацію";
-"open_till_short" = "Доки";
+"open_till_short" = "До";
 "free_custom_color_description" = "Налаштуйте 3D-будівлі під будь-який колір. Ідеально підходить для узгодження з темою карти або підвищення контрастності.";
 "buildings_3d_visibility_description" = "Налаштуйте прозорість 3D-об’єктів на карті.";
 "shared_string_alt_name" = "Альтернативне ім'я";

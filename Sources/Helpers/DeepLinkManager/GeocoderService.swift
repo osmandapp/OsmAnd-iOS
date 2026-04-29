@@ -119,7 +119,7 @@ final class GeocoderService {
         }
     }
 
-    // MARK: - CLGeocoder
+    // MARK: - CLGeocoder search
 
     private func geocodeWithCL(address: String,
                                near location: CLLocationCoordinate2D?,

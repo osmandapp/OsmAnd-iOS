@@ -333,18 +333,21 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
                 for (NSString *resourceId in ids)
                 {
                     const auto& resource = self.app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                    {
-                        BOOL installed = resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
-                        
-                        if (mapItem.resourceType != OsmAnd::ResourcesManager::ResourceType::RoadMapRegion && (!hasExternalMaps || installed))
-                            mapItem = [self resourceItemByResource:resource region:region];
-                    }
-                    else if (resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
                     {
                         BOOL installed = self.app.resourcesManager->isResourceInstalled(resource->id);
                         
                         if (installed)
+                        {
+                            mapItem = [self resourceItemByResource:resource region:region];
+                            break;
+                        }
+                    }
+                    else if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                    {
+                        BOOL installed = resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
+                        
+                        if (!hasExternalMaps || installed)
                             mapItem = [self resourceItemByResource:resource region:region];
                     }
                 }

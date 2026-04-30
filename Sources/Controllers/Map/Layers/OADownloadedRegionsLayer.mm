@@ -336,11 +336,16 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
                     if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                     {
                         BOOL installed = resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
-                        if (!hasExternalMaps || installed)
-                        {
-                            OAResourceItem *item = [self resourceItemByResource:resource region:region];
-                            mapItem = item;
-                        }
+                        
+                        if (mapItem.resourceType != OsmAnd::ResourcesManager::ResourceType::RoadMapRegion && (!hasExternalMaps || installed))
+                            mapItem = [self resourceItemByResource:resource region:region];
+                    }
+                    else if (resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                    {
+                        BOOL installed = self.app.resourcesManager->isResourceInstalled(resource->id);
+                        
+                        if (installed)
+                            mapItem = [self resourceItemByResource:resource region:region];
                     }
                 }
                 if (mapItem)

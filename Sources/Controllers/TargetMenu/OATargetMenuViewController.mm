@@ -391,7 +391,7 @@
             return controller;
         
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
-                                       resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                      resourceTypes:@[[OAResourceType toValue:OsmAndResourceType::MapRegion], [OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
                                          onComplete:^(NSArray<OAResourceItem *>* res) {
             if (res.count > 0)
             {
@@ -688,7 +688,7 @@
         }
         else if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
-            if (_localMapIndexItem.resourceType == OsmAndResourceType::MapRegion)
+            if (_localMapIndexItem.resourceType == OsmAndResourceType::MapRegion || _localMapIndexItem.resourceType == OsmAndResourceType::RoadMapRegion)
                 [_app.data.mapLayerChangeObservable notifyEvent];
 
             _localMapIndexItem = nil;

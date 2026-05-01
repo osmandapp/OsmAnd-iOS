@@ -418,7 +418,7 @@
     if (isDir /*|| file.getName().endsWith(IndexConstants.BINARY_WIKIVOYAGE_MAP_INDEX_EXT)*/)
         return OALocalizedString(@"online_map");
     if ([filePath hasSuffix:BINARY_ROAD_MAP_INDEX_EXT])
-        return OALocalizedString(@"roads");
+        return OALocalizedString(@"download_roads_only_maps");
     else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
         return OALocalizedString(@"download_wikipedia_maps");
     else if ([filePath hasSuffix:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT])

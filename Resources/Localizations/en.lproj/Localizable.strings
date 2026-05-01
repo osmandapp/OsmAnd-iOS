@@ -2490,6 +2490,7 @@
 "roads" = "Roads";
 "shared_string_hillshade" = "Hillshade";
 "download_regular_maps" = "Standard map";
+"download_roads_only_maps" = "Roads-only map";
 "free_downloads" = "Free downloads";
 
 "select_language" = "Select language";

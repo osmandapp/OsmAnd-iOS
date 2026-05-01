@@ -849,6 +849,10 @@ static BOOL _repositoryUpdated = NO;
                         if (!region.regionJoinMap)
                             [typesArray addObject:@((int) resource->type)];
                         break;
+                    case OsmAndResourceType::RoadMapRegion:
+                        if (!region.regionJoinRoads)
+                            [typesArray addObject:@((int) resource->type)];
+                        break;
                     case OsmAndResourceType::SrtmMapRegion:
                         hasSrtm = YES;
                     case OsmAndResourceType::WikiMapRegion:
@@ -979,7 +983,7 @@ static BOOL _repositoryUpdated = NO;
             {
                 if ([OAResourceType isSRTMResourceItem:item_])
                     [srtmResourcesArray addObject:item_];
-                else if (!region.regionJoinMap || item_.resourceType != OsmAndResourceType::MapRegion)
+                else if (![self shouldJoinMapRegionItem:item_ inRegion:region] && ![self shouldJoinRoadMapRegionItem:item_ inRegion:region])
                     [regionMapArray addObject:item_];
             }
             else
@@ -998,6 +1002,7 @@ static BOOL _repositoryUpdated = NO;
     if ([self.region hasGroupItems]
         && (([self.region getLevel] > 1 && _regionMapItems.count > 0)
             || self.region.regionJoinMap
+            || self.region.regionJoinRoads
             || [self.region.regionId hasPrefix:russiaRegionId]
             || [self.region.regionId hasPrefix:unitedKingdomRegionId]
             || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
@@ -1077,6 +1082,16 @@ static BOOL _repositoryUpdated = NO;
     {
         [_allResourceItems addObjectsFromArray:allResourcesArray];
     }
+}
+
+- (BOOL)shouldJoinMapRegionItem:(OAResourceItem *)item inRegion:(OAWorldRegion *)region
+{
+    return region.regionJoinMap && item.resourceType == OsmAndResourceType::MapRegion;
+}
+
+- (BOOL)shouldJoinRoadMapRegionItem:(OAResourceItem *)item inRegion:(OAWorldRegion *)region
+{
+    return region.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
 }
 
 - (void) collectSubregionItems:(OAWorldRegion *)region

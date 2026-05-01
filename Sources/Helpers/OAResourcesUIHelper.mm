@@ -85,7 +85,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WikiMapRegion:
             return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
-            return OALocalizedString(@"roads");
+            return OALocalizedString(@"download_roads_only_maps");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
@@ -1101,6 +1101,25 @@ includeHidden:(BOOL)includeHidden
     });
 }
 
++ (void)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
+                 resourceTypes:(NSArray<NSNumber *> *)resourceTypes
+                    onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
+{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+        NSMutableArray<OAResourceItem *> *resources = [NSMutableArray new];
+        for (NSNumber *resourceType in resourceTypes)
+        {
+            OsmAndResourceType type = [OAResourceType toResourceType:resourceType isGroup:YES];
+            if (type != [OAResourceType unknownType])
+                [resources addObjectsFromArray:[OAResourcesUIHelper requestMapDownloadInfo:coordinate resourceType:type subregions:nil]];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (onComplete)
+                onComplete([resources copy]);
+        });
+    });
+}
+
 + (NSArray<OAResourceItem *> *)requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate
                                          resourceType:(OsmAndResourceType)resourceType
                                            subregions:(NSArray<OAWorldRegion *> *)subregions
@@ -1975,7 +1994,7 @@ includeHidden:(BOOL)includeHidden
                         [app.data.terrainResourcesChangeObservable notifyEvent];
                 }
 
-                if (item.resourceType == OsmAndResourceType::MapRegion)
+                if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
             }
         }

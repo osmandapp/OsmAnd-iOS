@@ -128,7 +128,7 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 
 @interface OASearchLocationAndUrlAPI : OASearchBaseAPI
 
-- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI requester:(OAHttpRedirectRequester)requester;
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI;
 
 @end
 

@@ -2394,17 +2394,15 @@
     NSUInteger _olcPhraseHash;
     CLLocation *_olcPhraseLocation;
     OAParsedOpenLocationCode *_cachedParsedCode;
-    OAHttpRedirectRequester _httpRedirectRequester;
 }
 
-- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI requester:(OAHttpRedirectRequester)requester
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:EOAObjectTypeLocation],
                                         [OAObjectType withType:EOAObjectTypePartialLocation]]];
     if (self)
     {
         _amenitiesAPI = amenitiesAPI;
-        _httpRedirectRequester = requester;
     }
     return self;
 }
@@ -2641,12 +2639,12 @@
     for (NSString *text in [lines componentsSeparatedByString:@"\n"])
     {
         pnt = [OASKGeoPointParserUtil.shared parseUriString:text];
-        if (!pnt && _httpRedirectRequester && [OASKGeoPointParserUtil.shared isGooGlUrlUrl:text])
+        if (!pnt && [OASKGeoPointParserUtil.shared isGooGlUrlUrl:text])
         {
-            NSString *requestedText = _httpRedirectRequester(text);
-            if (requestedText)
+            NSString *resolvedUrl = [self resolveRedirectUrl:text];
+            if (resolvedUrl)
             {
-                pnt = [OASKGeoPointParserUtil.shared parseUriString:requestedText];
+                pnt = [OASKGeoPointParserUtil.shared parseUriString:resolvedUrl];
             }
         }
         if (pnt)
@@ -2673,6 +2671,16 @@
         return YES;
     }
     return NO;
+}
+
+- (NSString *) resolveRedirectUrl:(NSString *)url
+{
+    OASKGeoPointParserURI *uri = [OASKGeoPointParserUtil.shared createUriUriString:url];
+    if (uri)
+    {
+        return [[OASPlatformUtil.shared getNetworkAPI] resolveRedirectUrlUrl:[uri asString] userAgent:@"Mozilla/5.0 (OsmAnd; iOS)"];
+    }
+    return nil;
 }
 
 - (int) getSearchPriority:(OASearchPhrase *)p

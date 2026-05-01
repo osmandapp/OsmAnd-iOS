@@ -8,7 +8,7 @@
 
 import OsmAndShared
 
-final class SharedLibNetworkAPI: NSObject, NetworkAPI {
+final class SharedLibNetworkAPI: BaseNetworkAPI {
 
     private static let requestTimeout: TimeInterval = 30
 
@@ -19,7 +19,7 @@ final class SharedLibNetworkAPI: NSObject, NetworkAPI {
         return URLSession(configuration: config)
     }()
 
-    func hasProxy() -> Bool {
+    override func hasProxy() -> Bool {
         guard let settings = CFNetworkCopySystemProxySettings()?.takeRetainedValue() as? [AnyHashable: Any] else {
             return false
         }
@@ -27,11 +27,11 @@ final class SharedLibNetworkAPI: NSObject, NetworkAPI {
         return settings[kCFNetworkProxiesHTTPProxy as String] != nil
     }
 
-    func setProxy(host: String?, port: Int32) {
+    override func setProxy(host: String?, port: Int32) {
         // proxy is configured externally
     }
 
-    func sendGetRequest(url: String,
+    override func sendGetRequest(url: String,
                         auth: String?,
                         useGzip: Bool,
                         userAgent: String) -> NetworkAPINetworkResponse {

@@ -638,9 +638,6 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         _core = [[OASearchUICore alloc] initWithLang:lang ? lang : @"" transliterate:transliterate];
         
         __weak __typeof(self) weakSelf = self;
-        _core.httpRedirectRequester = ^NSString *(NSString *url) {
-            return [weakSelf httpRedirectRequester:url];
-        };
 
         _searchCitiesSerialQueue = dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL);
         _searchCitiesGroup = dispatch_group_create();
@@ -947,17 +944,5 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         dispatch_async(_searchCitiesSerialQueue, searchCitiesFunc);
     });
 }
-
-- (nullable NSString *)httpRedirectRequester:(nonnull NSString *)url
-{
-    OASKGeoPointParserURI *uri = [OASKGeoPointParserUtil.shared createUriUriString:url];
-    BOOL isInternetConnectionAvailable = AFNetworkReachabilityManager.sharedManager.isReachable;
-    if (uri && isInternetConnectionAvailable)
-    {
-        return [OASKNetworkUtils.shared okHttpRedirectRequesterUrl:[uri asString] userAgent:@"Mozilla/5.0 (OsmAnd; iOS)"];
-    }
-    return nil;
-}
-
 
 @end

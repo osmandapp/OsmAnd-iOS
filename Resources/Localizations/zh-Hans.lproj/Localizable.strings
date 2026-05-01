@@ -2848,3 +2848,5 @@
 "rendering_attr_safetyContour_name" = "安全等深线";
 "rendering_attr_safetyContour_description" = "安全等深线";
 "rendering_attr_spotDistance_name" = "离散水深间距";
+"open_from_short" = "从";
+"open_till_short" = "直到";

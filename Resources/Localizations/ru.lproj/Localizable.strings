@@ -4065,3 +4065,4 @@
 "shared_string_centimeters" = "сантиметры";
 "bicycle_width_limit_description" = "Укажите ширину своего велосипеда, чтобы не попасть на узкие велодорожки.";
 "show_expand_button" = "Показать кнопку \"развернуть\"";
+"obd_alt_battery_voltage_desc" = "Показывает уровень напряжения на OBD-адаптере";

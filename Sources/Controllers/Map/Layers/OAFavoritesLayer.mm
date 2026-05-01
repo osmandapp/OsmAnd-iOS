@@ -116,6 +116,14 @@ static const int START_ZOOM = 6;
 
 - (void)show
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateFavoritesProvider) object:nil];
+        [self performSelector:@selector(updateFavoritesProvider) withObject:nil afterDelay:0.2];
+    });
+}
+
+- (void)updateFavoritesProvider
+{
     const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
     const auto pointsOrder = self.pointsOrder;
     const auto showCaptions = self.showCaptions;

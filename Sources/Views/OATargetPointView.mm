@@ -244,14 +244,6 @@ static const NSInteger _buttonsCount = 4;
                                                                 {
                                                                     [self onFavoritesCollectionChanged];
                                                                 });
-
-    [OAFavoritesHelper getFavoritesCollection]->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
-                                                                      [self]
-                                                                      (const OsmAnd::IFavoriteLocationsCollection* const collection,
-                                                                       const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
-                                                                      {
-                                                                          [self onFavoriteLocationChanged:favoriteLocation];
-                                                                      });
 }
 
 - (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -1927,21 +1919,6 @@ static const NSInteger _buttonsCount = 4;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.menuViewDelegate targetHide];
             });
-    }
-}
-
-- (void) onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
-{
-    if (_targetPoint.type == OATargetFavorite)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OAFavoriteItem *item = [OAFavoritesHelper getVisibleFavByLat:favoriteLocation->getLatLon().latitude lon:favoriteLocation->getLatLon().longitude];
-            _targetPoint.title = [item getDisplayName];
-            
-            [_addressLabel setText:_targetPoint.title];
-            [self updateAddressLabel];
-            _imageView.image = [item getCompositeIcon];
-        });
     }
 }
 

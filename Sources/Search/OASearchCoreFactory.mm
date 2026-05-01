@@ -2678,7 +2678,7 @@
     OASKGeoPointParserURI *uri = [OASKGeoPointParserUtil.shared createUriUriString:url];
     if (uri)
     {
-        return [[OASPlatformUtil.shared getNetworkAPI] resolveRedirectUrlUrl:[uri asString] userAgent:@"Mozilla/5.0 (OsmAnd; iOS)"];
+        return [[OASPlatformUtil.shared getNetworkAPI] resolveRedirectUrlUrl:[uri asString]];
     }
     return nil;
 }

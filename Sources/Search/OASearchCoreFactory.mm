@@ -2676,10 +2676,10 @@
 - (NSString *) resolveRedirectUrl:(NSString *)url
 {
     OASKGeoPointParserURI *uri = [OASKGeoPointParserUtil.shared createUriUriString:url];
-    if (uri)
-    {
+    BOOL isInternetConnectionAvailable = AFNetworkReachabilityManager.sharedManager.isReachable;
+    if (uri && isInternetConnectionAvailable)
         return [[OASPlatformUtil.shared getNetworkAPI] resolveRedirectUrlUrl:[uri asString]];
-    }
+
     return nil;
 }
 

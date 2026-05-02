@@ -18,7 +18,7 @@
 + (void)initSharedLib:(NSString *)documentsPath gpxPath:(NSString *)gpxPath
 {
     [OASPlatformUtil.shared initializeOsmAndContext:[[OAOsmAndContextImpl alloc] init]
-                                      xmlFactoryApi:[[OAXmlFactory alloc] init] networkAPI:[SharedLibNetworkAPI new]];
+                                      xmlFactoryApi:[[OAXmlFactory alloc] init]];
 }
 
 // Temporary test code

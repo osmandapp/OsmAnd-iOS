@@ -4057,3 +4057,4 @@
 "bicycle_width_limit_description" = "Dostavite širinu vašeg bicikla kako biste izbegli uske biciklističke staze.";
 "show_expand_button" = "Prikaži dugme za proširivanje";
 "obd_alt_battery_voltage_desc" = "Prikazuje nivo napona na OBD adapteru";
+"download_roads_only_maps" = "Mapa samo puteva";

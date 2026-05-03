@@ -4065,3 +4065,5 @@
 "terrain_shadows" = "Sombras del terreno";
 "terrain_shadows_descr" = "Sombreado dinámico en tiempo real para terrenos en 3D. Resalta la geometría del paisaje con un impacto mínimo en el rendimiento.";
 "terrain_shadows_footer_descr" = "El relieve en 3D se activa automáticamente, ya que se necesita para dibujar las sombras del terreno";
+"download_roads_only_maps" = "Mapa sólo vial";
+"obd_alt_battery_voltage_desc" = "Muestra el nivel de voltaje en el adaptador OBD";

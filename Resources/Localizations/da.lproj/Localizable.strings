@@ -886,7 +886,7 @@
 "osm_edit_created_note" = "Oprettet OSM-bemærkning";
 "osm_note_create" = "Opret OSM-bemærkning";
 "upload_osm_note" = "Overfør OSM-bemærkning";
-"osm_tag" = "Mærke";
+"osm_tag" = "Tag";
 "osm_value" = "Værdi";
 "osm_note_upload_info" = "Overfør bemærkningen anonymt eller ved brug af OpenStreetMap profil.";
 "osm_note_upload_immediately" = "Overfør straks";
@@ -4057,3 +4057,4 @@
 "bicycle_width_limit_description" = "Angiv din cykels bredde for at undgå smalle cykelstier.";
 "show_expand_button" = "Vis udvidelsesknap";
 "obd_alt_battery_voltage_desc" = "Viser spændingsniveauet på OBD-adapteren";
+"download_roads_only_maps" = "Kort kun med veje";

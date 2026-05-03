@@ -4059,3 +4059,4 @@
 "bicycle_width_limit_description" = "Доставите ширину вашег бицикла како бисте избегли уске бициклистичке стазе.";
 "show_expand_button" = "Прикажи дугме за проширивање";
 "obd_alt_battery_voltage_desc" = "Приказује ниво напона на ДНВ адаптеру";
+"download_roads_only_maps" = "Карта само путева";

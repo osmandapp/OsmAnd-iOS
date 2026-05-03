@@ -216,7 +216,7 @@
 "import_cannot" = "A megadott fájlt nem lehet importálni";
 "import_gpx" = "GPX-út";
 // Alerts
-"alert_inet_needed" = "Internetkapcsolat szükséges a művelet végrehajtásához. Ellenőrizze az Internetkapcsolatát.";
+"alert_inet_needed" = "Internetkapcsolat szükséges a művelet végrehajtásához. Ellenőrizze az internetkapcsolatát.";
 // Context menu
 "ctx_mnu_edit_fav" = "Kedvenc szerkesztése";
 "ctx_mnu_add_fav" = "Kedvenc hozzáadása";
@@ -3043,7 +3043,7 @@
 "shared_string_original" = "Eredeti";
 "destination_first" = "Úti cél először";
 "three_months_subscription" = "Három hónapos előfizetés";
-"no_internet_descr" = "Ellenőrizze az internetkapcsolatát és próbálja újra.";
+"no_internet_descr" = "Ellenőrizze az internetkapcsolatát, és próbálja újra.";
 "auto_25_chars_route_tr" = "Forduljon jobbra";
 "empty_smart_folder_title" = "Nincs egyező nyomvonal";
 "online_photos" = "Online fényképek";
@@ -3594,7 +3594,7 @@
 "osm_tag_too_long_message" = "A(z) %@ címke legnagyobb értékhossza 255 karakter.\nA folytatáshoz rövidítse le.";
 "osm_editing_access_descr" = "Az összes helyi szerkesztését és jegyzetét megtekintheti itt: %@. A már feltöltött pontok nem szerepelnek az OsmAnd listájában.";
 "osm_upload_gpx_description_footer" = "Ha a leírás üres, a nyomvonal neve lesz használva. A beírt leírás minden nyomvonalra érvényes lesz.";
-"mapil_no_inet_descr" = "A Mapillary fényképek megtekintéséhez internetkapcsolatra van szükség.";
+"mapil_no_inet_descr" = "A Mapillary-fényképek megtekintéséhez internetkapcsolatra van szükség.";
 "mapil_images_nearby" = "Képek a közelben";
 "mapil_no_images" = "Nem érhető el fénykép ehhez a helyhez.";
 "mapillary_get_descr" = "Szerezze be a Mapillaryt, hogy fotókat adhasson hozzá ehhez a helyhez";

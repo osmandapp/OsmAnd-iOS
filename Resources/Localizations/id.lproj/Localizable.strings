@@ -3782,7 +3782,7 @@
 "shared_string_large" = "Besar";
 "obd_fuel_type_hybrid_ethanol" = "Etanol hibrida";
 "obd_fuel_type_bifuel_ethanol" = "Bahan Bakar Ganda menggunakan Etanol";
-"distance_by_tap_use_description" = "Ketuk pada peta untuk menampilkan jarak antara lokasi Anda saat ini dan titik yang diketuk.  \nKetuk dengan 2 jari pada peta untuk menampilkan jarak antara titik yang diklik";
+"distance_by_tap_use_description" = "Ketuk pada peta untuk menampilkan jarak antara lokasi Anda saat ini dan titik yang diketuk. \nKetuk dengan 2 jari pada peta untuk menampilkan jarak antara titik yang diklik";
 "obd_fuel_type_methanol" = "Metanol";
 "obd_fuel_type_gasoline" = "Bensin";
 "obd_fuel_type_hybrid_gasoline" = "Bensin hibrida";
@@ -3850,3 +3850,4 @@
 "shared_string_centimeters" = "sentimeter";
 "shared_background" = "Latar belakang";
 "nm_h" = "kn";
+"liter_single" = "Liter";

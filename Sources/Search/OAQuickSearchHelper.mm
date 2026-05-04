@@ -65,43 +65,50 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     OAWorldRegion *worldRegion = [[OsmAndApp instance] worldRegion];
     [self processGroups:worldRegion search:phrase resultMatcher:resultMatcher];
     NSString *fullSearchPhrase = [phrase getFullSearchPhrase];
-    
+
     if (fullSearchPhrase.length > 3)
     {
         [OAQuickSearchHelper.instance cancelSearchCities];
         __weak __typeof(self) weakSelf = self;
+        
         [OAQuickSearchHelper.instance searchCities:fullSearchPhrase
                                     searchLocation:[OsmAndApp instance].locationServices.lastKnownLocation
                                       allowedTypes:@[@"city", @"town"]
                                          cityLimit:10000
                                         onComplete:^(NSMutableArray *searchResults) {
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
-
-            for (OASearchResult *amenity in searchResults)
-            {
-                OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude
-                                                                                lon:amenity.location.coordinate.longitude];
-                if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
-                    continue;
-
-                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
-                if (ids.count > 0)
+            
+            dispatch_queue_t taskQueue = [[[OAQuickSearchHelper instance] getCore] taskQueue];
+            
+            dispatch_async(taskQueue, ^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+                
+                for (OASearchResult *amenity in searchResults)
                 {
-                    OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
-                                                                                                   region:region
-                                                                                                    title:amenity.localeName];
-                    if (item)
+                    OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude
+                                                                                   lon:amenity.location.coordinate.longitude];
+                    
+                    if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+                        continue;
+
+                    NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
+                    if (ids.count > 0)
                     {
-                        OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
-                        
-                        [strongSelf addResultIfNotExists:result
-                                   existingResults:[resultMatcher getRequestResults]
-                                     resultMatcher:resultMatcher];
+                        OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
+                                                                                                     region:region
+                                                                                                      title:amenity.localeName];
+                        if (item)
+                        {
+                            OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
+                            
+                            [strongSelf addResultIfNotExists:result
+                                             existingResults:[resultMatcher getRequestResults]
+                                               resultMatcher:resultMatcher];
+                        }
                     }
                 }
-            }
+            });
         }];
     }
 

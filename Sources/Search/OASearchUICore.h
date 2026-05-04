@@ -45,6 +45,7 @@ typedef NSString* (^OAHttpRedirectRequester)(NSString *url);
 @property (nonatomic) OASearchUICoreRunnable onSearchStart;
 @property (nonatomic) OASearchUICoreRunnable onResultsComplete;
 @property (nonatomic) OAHttpRedirectRequester httpRedirectRequester;
+@property (nonatomic, readonly) dispatch_queue_t taskQueue;
 
 - (instancetype) initWithLang:(NSString *)lang transliterate:(BOOL)transliterate;
 

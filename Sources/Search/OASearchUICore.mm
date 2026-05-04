@@ -750,7 +750,6 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     OASearchPhrase *_phrase;
     OASearchResultCollection *_currentSearchResult;
     
-    dispatch_queue_t _taskQueue;
     OAAtomicInteger *_requestNumber;
     int totalLimit; // -1 unlimited - not used
     BOOL _searchActive;

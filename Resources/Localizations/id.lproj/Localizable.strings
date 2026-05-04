@@ -3851,3 +3851,5 @@
 "shared_background" = "Latar belakang";
 "nm_h" = "kn";
 "liter_single" = "Liter";
+"download_roads_only_maps" = "Peta jalan saja";
+"obd_alt_battery_voltage_desc" = "Tampilkan tingkat voltase pada adapter OBD";

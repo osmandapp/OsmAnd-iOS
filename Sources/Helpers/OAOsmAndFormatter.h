@@ -47,6 +47,7 @@ static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
 + (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedDistance:(float)meters;
 + (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params;
++ (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode withParams:(OsmAndFormatterParams *)params;
 + (NSString *)getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *)getFormattedAzimuth:(float)bearing;
 + (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;

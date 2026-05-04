@@ -742,7 +742,7 @@ forcedUpdate:(BOOL)forcedUpdate
     };
 #else
     eaglLayer.drawableProperties = @{
-        kEAGLDrawablePropertyRetainedBacking: @YES,
+        kEAGLDrawablePropertyRetainedBacking: @NO,
         kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8
     };
 #endif
@@ -935,6 +935,10 @@ forcedUpdate:(BOOL)forcedUpdate
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
 
+    // Keep the default framebuffer compact; 32F depth is costly on older iPad GPUs.
+    const GLenum depthStencilFormat = _glVersion == kEAGLRenderingAPIOpenGLES3
+        ? GL_DEPTH24_STENCIL8
+        : GL_DEPTH24_STENCIL8_OES;
     GLint maxSamples = 0;
     glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
     GLint samples = MIN(4, maxSamples);
@@ -957,7 +961,7 @@ forcedUpdate:(BOOL)forcedUpdate
         // MSAA Depth
         glGenRenderbuffers(1, &_msaaDepthRenderBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _msaaDepthRenderBuffer);
-        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH32F_STENCIL8, _viewSize.x, _viewSize.y);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, depthStencilFormat, _viewSize.x, _viewSize.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _msaaDepthRenderBuffer);
 
@@ -983,7 +987,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
         glGenRenderbuffers(1, &_depthRenderBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH32F_STENCIL8, _viewSize.x, _viewSize.y);
+        glRenderbufferStorage(GL_RENDERBUFFER, depthStencilFormat, _viewSize.x, _viewSize.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
     }

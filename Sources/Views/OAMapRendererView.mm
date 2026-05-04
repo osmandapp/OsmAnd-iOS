@@ -742,7 +742,7 @@ forcedUpdate:(BOOL)forcedUpdate
     };
 #else
     eaglLayer.drawableProperties = @{
-        kEAGLDrawablePropertyRetainedBacking: @YES,
+        kEAGLDrawablePropertyRetainedBacking: @NO,
         kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8
     };
 #endif

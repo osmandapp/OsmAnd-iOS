@@ -88,6 +88,8 @@
         return CITY_TYPE_HAMLET;
     if ([typeStr isEqualToString:@"suburb"])
         return CITY_TYPE_SUBURB;
+    if ([typeStr isEqualToString:@"allotments"])
+        return CITY_TYPE_SUBURB;
     if ([typeStr isEqualToString:@"boundary"])
         return CITY_TYPE_BOUNDARY;
     if ([typeStr isEqualToString:@"postcode"])

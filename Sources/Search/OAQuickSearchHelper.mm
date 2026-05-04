@@ -821,8 +821,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     NSMutableArray<OASearchResult *> *amenities = [NSMutableArray array];
 
-    OANameStringMatcher *nm =
-    [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
+    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
 
     NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
     BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
@@ -830,8 +829,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
     OASearchUICore *searchUICore = [searchHelper getCore];
 
-    OASearchSettings *settings =
-    [[OASearchSettings alloc] initWithSettings:[searchUICore getSearchSettings]];
+    OASearchSettings *settings = [[OASearchSettings alloc] initWithSettings:[searchUICore getSearchSettings]];
 
     NSMutableArray<NSString *> *resIds = [NSMutableArray array];
 
@@ -853,8 +851,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     settings = [settings setSortByName:NO];
     settings = [settings setAddressSearch:YES];
     settings = [settings setEmptyQueryAllowed:YES];
-    settings = [settings setSearchBBox31:
-                [[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
+    settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
 
     __block int count = 0;
 

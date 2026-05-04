@@ -56,6 +56,11 @@
                    limit:(NSInteger)limit
               onComplete:(void (^)(NSArray<OASearchResult *> *searchResults))onComplete;
 
+- (NSArray<OASearchResult *> *)searchCitiesSync:(NSString *)text
+                                 searchLocation:(CLLocation *)searchLocation
+                                   allowedTypes:(NSArray<NSString *> *)allowedTypes
+                                      cityLimit:(NSInteger)cityLimit
+                                    isCancelled:(BOOL (^)(void))isCancelled;
 
 - (void)cancelSearchCities;
 - (void)searchCities:(NSString *)text

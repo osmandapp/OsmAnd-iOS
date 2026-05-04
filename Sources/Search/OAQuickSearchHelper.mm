@@ -64,52 +64,52 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     OAWorldRegion *worldRegion = [[OsmAndApp instance] worldRegion];
     [self processGroups:worldRegion search:phrase resultMatcher:resultMatcher];
+
     NSString *fullSearchPhrase = [phrase getFullSearchPhrase];
 
     if (fullSearchPhrase.length > 3)
     {
-        [OAQuickSearchHelper.instance cancelSearchCities];
         __weak __typeof(self) weakSelf = self;
-        
-        [OAQuickSearchHelper.instance searchCities:fullSearchPhrase
-                                    searchLocation:[OsmAndApp instance].locationServices.lastKnownLocation
-                                      allowedTypes:@[@"city", @"town"]
-                                         cityLimit:10000
-                                        onComplete:^(NSMutableArray *searchResults) {
-            
-            dispatch_queue_t taskQueue = [[[OAQuickSearchHelper instance] getCore] taskQueue];
-            
-            dispatch_async(taskQueue, ^{
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                if (!strongSelf)
-                    return;
-                
-                for (OASearchResult *amenity in searchResults)
-                {
-                    OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude
-                                                                                   lon:amenity.location.coordinate.longitude];
-                    
-                    if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
-                        continue;
-
-                    NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
-                    if (ids.count > 0)
-                    {
-                        OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
-                                                                                                     region:region
-                                                                                                      title:amenity.localeName];
-                        if (item)
-                        {
-                            OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
-                            
-                            [strongSelf addResultIfNotExists:result
-                                             existingResults:[resultMatcher getRequestResults]
-                                               resultMatcher:resultMatcher];
-                        }
-                    }
-                }
-            });
+        NSArray<OASearchResult *> *searchResults = [[OAQuickSearchHelper instance] searchCitiesSync:fullSearchPhrase
+                                                                                     searchLocation:[OsmAndApp instance].locationServices.lastKnownLocation
+                                                                                       allowedTypes:@[@"city", @"town"]
+                                                                                          cityLimit:10000
+                                                                                        isCancelled:^BOOL{
+            return [resultMatcher isCancelled];
         }];
+
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return YES;
+
+        for (OASearchResult *amenity in searchResults)
+        {
+            if ([resultMatcher isCancelled])
+                break;
+
+            OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+
+            if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+                continue;
+
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
+
+            if (ids.count == 0)
+                continue;
+
+            OARepositoryResourceItem *item = [strongSelf getUninstalledMapRegionResourceFromIds:ids
+                                                                                         region:region
+                                                                                          title:amenity.localeName];
+
+            if (!item)
+                continue;
+
+            OASearchResult *result = [strongSelf createSearchResultWithPhrase:phrase item:item localeName:item.title];
+            
+            [strongSelf addResultIfNotExists:result
+                             existingResults:[resultMatcher getRequestResults]
+                               resultMatcher:resultMatcher];
+        }
     }
 
     return YES;
@@ -811,6 +811,86 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 - (void)cancelSearchCities
 {
     _searchRequestsCount = 0;
+}
+
+- (NSArray<OASearchResult *> *)searchCitiesSync:(NSString *)text
+                                 searchLocation:(CLLocation *)searchLocation
+                                   allowedTypes:(NSArray<NSString *> *)allowedTypes
+                                      cityLimit:(NSInteger)cityLimit
+                                    isCancelled:(BOOL (^)(void))isCancelled
+{
+    NSMutableArray<OASearchResult *> *amenities = [NSMutableArray array];
+
+    OANameStringMatcher *nm =
+    [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
+
+    NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+    BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
+
+    OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
+    OASearchUICore *searchUICore = [searchHelper getCore];
+
+    OASearchSettings *settings =
+    [[OASearchSettings alloc] initWithSettings:[searchUICore getSearchSettings]];
+
+    NSMutableArray<NSString *> *resIds = [NSMutableArray array];
+
+    for (const auto& resource : OsmAndApp.instance.resourcesManager->getLocalResources())
+    {
+        if (resource->id.compare(QString(kWorldBasemapKey)) == 0)
+        {
+            [resIds addObject:resource->id.toNSString()];
+            break;
+        }
+    }
+
+    if (resIds.count == 0)
+        [resIds addObject:[kWorldMiniBasemapKey lowerCase]];
+
+    [settings setOfflineIndexes:[resIds copy]];
+    settings = [settings setOriginalLocation:searchLocation];
+    settings = [settings setLang:lang ?: @"" transliterateIfMissing:transliterate];
+    settings = [settings setSortByName:NO];
+    settings = [settings setAddressSearch:YES];
+    settings = [settings setEmptyQueryAllowed:YES];
+    settings = [settings setSearchBBox31:
+                [[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
+
+    __block int count = 0;
+
+    [searchUICore shallowSearch:OASearchAmenityByNameAPI.class
+                           text:text
+                        matcher:[[OAResultMatcher alloc]
+                                 initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object)
+    {
+        if (isCancelled && isCancelled())
+            return NO;
+
+        OASearchResult *searchResult = *object;
+        auto amenity = searchResult.amenity;
+        if (!amenity)
+            return NO;
+
+        if (count++ > cityLimit)
+            return NO;
+
+        NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
+
+        NSString *subType = amenity->subType.toNSString();
+
+        if (![allowedTypes containsObject:subType] ||
+            (![nm matches:localeName] && ![nm matchesMap:searchResult.otherNames]))
+            return NO;
+
+        [amenities addObject:searchResult];
+
+        return NO;
+
+    } cancelledFunc:^BOOL {
+        return (isCancelled && isCancelled()) || count > cityLimit;
+    }] resortAll:YES removeDuplicates:YES searchSettings:settings];
+
+    return [amenities copy];
 }
 
 - (void)searchCities:(NSString *)text

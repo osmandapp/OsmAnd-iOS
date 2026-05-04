@@ -294,8 +294,16 @@ final class TravelObfHelper: NSObject {
     }
     
     func search(searchQuery: String) -> [TravelSearchResult] {
-        var res = [TravelSearchResult]()
         let appLang = OAUtilities.currentLang() ?? ""
+        let res = searchWithLang(searchQuery: searchQuery, appLang: appLang)
+        if res.isEmpty {
+            return searchWithLang(searchQuery: searchQuery, appLang: "en")
+        }
+        return res
+    }
+    
+    func searchWithLang(searchQuery: String, appLang: String) -> [TravelSearchResult] {
+        var res = [TravelSearchResult]()
         
         var amenities = [OAPOI]()
         var amenityMap = [String: [OAPOI]]()

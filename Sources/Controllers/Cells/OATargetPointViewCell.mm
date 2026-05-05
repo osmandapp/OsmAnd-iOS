@@ -155,6 +155,12 @@
         self.descriptionView.text = text;
         return;
     }
+    
+    if (targetPoint.type == OATargetGPX && [targetPoint.targetObj isKindOfClass:OASGpxDataItem.class])
+    {
+        self.descriptionView.attributedText = [TracksSortModeHelper getTrackDescriptionWithTrack:(OASGpxDataItem *)targetPoint.targetObj sortMode:TracksSortModeNameAZ includeFolderInfo:YES];
+        return;
+    }
 
     self.descriptionView.text = targetPoint.titleAddress ?: @"";
 }

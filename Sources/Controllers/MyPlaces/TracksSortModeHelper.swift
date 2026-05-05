@@ -146,7 +146,7 @@ protocol SortableFolder {
         }
     }
     
-    static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {
+    @objc static func getTrackDescription(track: GpxDataItem, sortMode: TracksSortMode, includeFolderInfo: Bool = false) -> NSAttributedString {
         let date = TracksSortModeHelper.dateFormatter.string(from: track.lastModifiedTime)
         let creationDate = TracksSortModeHelper.dateFormatter.string(from: track.creationDate)
         let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) ?? localizedString("shared_string_not_available")

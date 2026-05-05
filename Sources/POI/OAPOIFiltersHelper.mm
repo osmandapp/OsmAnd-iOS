@@ -462,7 +462,6 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 - (void) onApplicationModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self hidePoiFilters];
         [self loadSelectedPoiFilters];
     });
 }
@@ -1028,21 +1027,26 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) loadSelectedPoiFilters
 {
+    NSMutableSet<OAPOIUIFilter *> *selectedPoiFilters = [NSMutableSet set];
     NSString *storedString = [[OAAppSettings sharedManager].selectedPoiFilters get];
     if (storedString.length > 0)
     {
+        BOOL wikiEnabled = [[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] isEnabled];
+        NSString *wikiFilterId = [NSString stringWithFormat:@"std_%@", OSM_WIKI_CATEGORY];
         NSArray<NSString *> *filters = [storedString componentsSeparatedByString:@","];
         for (NSString *f in filters)
         {
-            if ([f isEqualToString:[NSString stringWithFormat:@"std_%@", OSM_WIKI_CATEGORY]] && ![[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] isEnabled])
+            if ([f isEqualToString:wikiFilterId] && !wikiEnabled)
                 continue;
 
             OAPOIUIFilter *filter = [self getFilterById:f];
             if (filter)
-                [_selectedPoiFilters addObject:filter];
+                [selectedPoiFilters addObject:filter];
         }
-        [OAPluginsHelper onPrepareExtraTopPoiFilters:_selectedPoiFilters];
     }
+    [OAPluginsHelper onPrepareExtraTopPoiFilters:selectedPoiFilters];
+
+    _selectedPoiFilters = selectedPoiFilters;
 }
 
 - (void) saveSelectedPoiFilters

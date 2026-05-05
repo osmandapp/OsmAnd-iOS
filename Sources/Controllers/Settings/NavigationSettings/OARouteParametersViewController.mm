@@ -483,7 +483,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
 {
     double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
     recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
-    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OAOsmAndFormatter getFormattedDistance:recalcDist  mode:self.appMode withParams:[OsmAndFormatterParams noTrailingZeros]];
+    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OAOsmAndFormatter getFormattedDistance:recalcDist mode:self.appMode withParams:[OsmAndFormatterParams noTrailingZeros]];
     [tableSection addObject:@{
         headerKey: OALocalizedString(@"recalculate_route"),
         typeKey : [OAValueTableViewCell getCellIdentifier],

@@ -1639,11 +1639,11 @@ static BOOL _repositoryUpdated = NO;
             return;
         }
         
-        [OAQuickSearchHelper.instance searchCities:searchString
-                                    searchLocation:_app.locationServices.lastKnownLocation
-                                      allowedTypes:@[@"city", @"town"]
-                                         cityLimit:kSearchCityLimit
-                                        onComplete:^(NSMutableArray *searchResults) {
+        [OAQuickSearchHelper.instance searchCitiesAsync:searchString
+                                         searchLocation:_app.locationServices.lastKnownLocation
+                                           allowedTypes:@[@"city", @"town"]
+                                              cityLimit:kSearchCityLimit
+                                             onComplete:^(NSMutableArray *searchResults) {
             NSMutableArray *regionsByCity = [NSMutableArray array];
             for (OASearchResult *amenity in searchResults)
             {

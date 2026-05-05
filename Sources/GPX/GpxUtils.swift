@@ -38,14 +38,14 @@ final class GpxUtils: NSObject {
                 point = getSegmentPointByTime(segment,
                                               gpxFile: gpxFile,
                                               time: time,
-                                              preciseLocation: true,
+                                              preciseLocation: false,
                                               joinSegments: joinSegments)
             } else {
                 let distance = pos * Float(dataSet.getDivX())
                 point = getSegmentPointByDistance(segment,
                                                   gpxFile: gpxFile,
                                                   distanceToPoint: distance,
-                                                  preciseLocation: true,
+                                                  preciseLocation: false,
                                                   joinSegments: joinSegments)
             }
         }

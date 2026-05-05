@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OAApplicationMode;
+
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -322,10 +324,10 @@ static inline double normalizeDouble(double v)
 
 + (BOOL) isWordComplete:(NSString *)text;
 
-+ (NSString *) appendMeters:(float)value;
-+ (NSString *) appendSpeed:(float)value;
-+ (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values;
-+ (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values;
++ (NSString *)appendMeters:(float)value mode:(OAApplicationMode *)mode;
++ (NSString *)appendSpeed:(float)value mode:(OAApplicationMode *)mode;
++ (NSArray<NSString *> *)arrayOfMeterValues:(NSArray<NSNumber *> *) values mode:(OAApplicationMode *)mode;
++ (NSArray<NSString *> *)arrayOfSpeedValues:(NSArray<NSNumber *> *) values mode:(OAApplicationMode *)mode;
 
 + (nullable UIImage *) getMxIcon:(NSString *)name;
 + (nullable UIImage *) resizeImage:(nullable UIImage *)image newSize:(CGSize)newSize;

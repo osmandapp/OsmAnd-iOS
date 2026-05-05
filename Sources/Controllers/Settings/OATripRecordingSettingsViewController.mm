@@ -42,15 +42,16 @@
     OAAppSettings *_settings;
     OASavingTrackHelper *_recHelper;
     
+    NSArray<NSString *> *_minTrackDistanceNames;
+    NSArray<NSString *> *_trackPrecisionNames;
+    NSArray<NSString *> *_minTrackSpeedNames;
+
     int _navigationSection;
 }
 
 static NSArray<NSNumber *> *minTrackDistanceValues;
-static NSArray<NSString *> *minTrackDistanceNames;
 static NSArray<NSNumber *> *trackPrecisionValues;
-static NSArray<NSString *> *trackPrecisionNames;
 static NSArray<NSNumber *> *minTrackSpeedValues;
-static NSArray<NSString *> *minTrackSpeedNames;
 
 #pragma mark - Initialization
 
@@ -59,14 +60,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
     if (self == [OATripRecordingSettingsViewController class])
     {
         minTrackDistanceValues = @[@0.f, @2.f, @5.f, @10.f, @20.f, @30.f, @50.f];
-        minTrackDistanceNames = [OAUtilities arrayOfMeterValues:minTrackDistanceValues];
-        
         trackPrecisionValues = @[@0.f, @1.f, @2.f, @5.f, @10.f, @15.f, @20.f, @50.f, @100.f];
-        trackPrecisionNames = [OAUtilities arrayOfMeterValues:trackPrecisionValues];
-        
         minTrackSpeedValues = @[@0.f, @0.000001f, @1.f, @2.f, @3.f, @4.f, @5.f, @6.f, @7.f];
-        minTrackSpeedNames = [OAUtilities arrayOfSpeedValues:minTrackSpeedValues];
-        
     }
 }
 
@@ -78,6 +73,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         _settingsType = settingsType;
         _settings = [OAAppSettings sharedManager];
         _recHelper = [OASavingTrackHelper sharedInstance];
+        _minTrackDistanceNames = [OAUtilities arrayOfMeterValues:minTrackDistanceValues mode:self.appMode];
+        _trackPrecisionNames = [OAUtilities arrayOfMeterValues:trackPrecisionValues mode:self.appMode];
+        _minTrackSpeedNames = [OAUtilities arrayOfSpeedValues:minTrackSpeedValues mode:self.appMode];
         _navigationSection = -1;
     }
     return self;
@@ -182,9 +180,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
             NSString *recIntervalValue = [settings getFormattedTrackInterval:[settings.mapSettingSaveTrackIntervalGlobal get:self.appMode]];
             NSString *navIntervalValue = [settings getFormattedTrackInterval:[settings.mapSettingSaveTrackInterval get:self.appMode]];
             
-            NSString *minDistValue = [OAUtilities appendMeters:[settings.saveTrackMinDistance get:self.appMode]];
-            NSString *minPrecision = [OAUtilities appendMeters:[settings.saveTrackPrecision get:self.appMode]];
-            NSString *minSpeed = [OAUtilities appendSpeed:[settings.saveTrackMinSpeed get:self.appMode] * MPS_TO_KMH_MULTIPLIER];
+            NSString *minDistValue = [OAUtilities appendMeters:[settings.saveTrackMinDistance get:self.appMode] mode:self.appMode];
+            NSString *minPrecision = [OAUtilities appendMeters:[settings.saveTrackPrecision get:self.appMode] mode:self.appMode];
+            NSString *minSpeed = [OAUtilities appendSpeed:[settings.saveTrackMinSpeed get:self.appMode] * MPS_TO_KMH_MULTIPLIER mode:self.appMode];
             
             [dataArr addObject:
              @[@{
@@ -401,7 +399,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             for (int i = 0; i < trackPrecisionValues.count; i++)
             {
                 [dataArr addObject: @{
-                    @"title" : trackPrecisionNames[i],
+                    @"title" : _trackPrecisionNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackPrecision get:self.appMode] == trackPrecisionValues[i].floatValue)
                     ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
@@ -411,7 +409,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             for (int i = 0; i < minTrackSpeedValues.count; i++)
             {
                 [dataArr addObject: @{
-                    @"title" : minTrackSpeedNames[i],
+                    @"title" : _minTrackSpeedNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue / MPS_TO_KMH_MULTIPLIER)
                     ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
@@ -421,7 +419,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             for (int i = 0; i < minTrackDistanceValues.count; i++)
             {
                 [dataArr addObject: @{
-                    @"title" : minTrackDistanceNames[i],
+                    @"title" : _minTrackDistanceNames[i],
                     @"value" : @"",
                     @"img" : ([settings.saveTrackMinDistance get:self.appMode] == minTrackDistanceValues[i].floatValue)
                     ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];

@@ -63,7 +63,7 @@
     NSMutableArray<NSString *> *arr = [NSMutableArray new];
     for (NSNumber *n in _possibleDistanceValues)
     {
-        [arr addObject:[OAOsmAndFormatter getFormattedDistance:n.doubleValue withParams:[OsmAndFormatterParams noTrailingZeros]]];
+        [arr addObject:[OAOsmAndFormatter getFormattedDistance:n.doubleValue mode:self.appMode withParams:[OsmAndFormatterParams noTrailingZeros]]];
     }
     _valueSummaries = arr;
 }
@@ -72,7 +72,7 @@
 {
     double defValue = [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]];
     defValue = defValue == -1 ? _possibleDistanceValues.firstObject.doubleValue : defValue;
-    return [OAOsmAndFormatter getFormattedDistance:defValue withParams:[OsmAndFormatterParams noTrailingZeros]];
+    return [OAOsmAndFormatter getFormattedDistance:defValue mode:self.appMode withParams:[OsmAndFormatterParams noTrailingZeros]];
 }
 
 #pragma mark - Base UI

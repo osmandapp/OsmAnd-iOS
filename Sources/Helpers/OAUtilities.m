@@ -1828,34 +1828,39 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return coloredImg;
 }
 
-+ (NSString *) appendMeters:(float)value
++ (NSString *)appendMeters:(float)value mode:(OAApplicationMode *)mode
 {
-    NSString *formattedValue = [OAOsmAndFormatter getFormattedDistance:value];
+    NSString *formattedValue = [OAOsmAndFormatter getFormattedDistance:value mode:mode withParams:nil];
     return value == 0.f ? OALocalizedString(@"shared_string_not_selected") : formattedValue;
 }
 
-+ (NSString *) appendSpeed:(float)value
++ (NSString *)appendSpeed:(float)value mode:(OAApplicationMode *)mode
 {
-    BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get] == KILOMETERS_AND_METERS;
+    if (value == 0.f)
+        return OALocalizedString(@"shared_string_not_selected");
+    if (value == 0.000001f)
+        return @">0";
+    
+    BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get:mode] == KILOMETERS_AND_METERS;
     value = kilometers ? value : round(value / 0.3048f);
     NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"km_h") : OALocalizedString(@"mile_per_hour")];
-    return value == 0.f ? OALocalizedString(@"shared_string_not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
+    return [NSString stringWithFormat:distUnitsFormat, value];
 }
 
-+ (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values
++ (NSArray<NSString *> *)arrayOfMeterValues:(NSArray<NSNumber *> *) values mode:(OAApplicationMode *)mode
 {
     NSMutableArray<NSString *> *res = [NSMutableArray new];
     for (NSNumber *num in values) {
-        [res addObject:[OAUtilities appendMeters:num.floatValue]];
+        [res addObject:[OAUtilities appendMeters:num.floatValue mode:mode]];
     }
     return [NSArray arrayWithArray:res];
 }
 
-+ (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values
++ (NSArray<NSString *> *)arrayOfSpeedValues:(NSArray<NSNumber *> *) values mode:(OAApplicationMode *)mode
 {
     NSMutableArray<NSString *> *res = [NSMutableArray new];
     for (NSNumber *num in values) {
-        [res addObject:[self appendSpeed:num.floatValue]];
+        [res addObject:[self appendSpeed:num.floatValue mode:mode]];
     }
     return res;
 }

@@ -187,8 +187,23 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 
 + (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
+    return [self getFormattedDistance:meters mode:nil withParams:params valueUnitArray:valueUnitArray];
+}
+
++ (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode
+{
+    return [self getFormattedDistance:meters mode:mode withParams:nil];
+}
+
++ (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode withParams:(OsmAndFormatterParams *)params
+{
+    return [self getFormattedDistance:meters mode:mode withParams:params valueUnitArray:nil];
+}
+
++ (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
+{
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    EOAMetricsConstant mc = [settings.metricSystem get];
+    EOAMetricsConstant mc = mode ? [settings.metricSystem get:mode] : [settings.metricSystem get];
     
     NSString *mainUnitStr;
     float mainUnitInMeters;
@@ -213,7 +228,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 
     float floatDistance = meters / mainUnitInMeters;
     BOOL forceTrailingZeroes = params.forceTrailingZerosInDecimalMainUnit;
-    int decimalPrecision = params.extraDecimalPrecision;
+    NSInteger decimalPrecision = params.extraDecimalPrecision;
     if (params.forcePreciseValue)
     {
         return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:decimalPrecision valueUnitArray:valueUnitArray];

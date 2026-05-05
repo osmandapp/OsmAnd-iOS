@@ -452,7 +452,6 @@ static NSString *foregroundImageKey = @"foregroundImage";
 - (void) setupViaFerrataPreference:(NSMutableArray *)tableSection param:(RoutingParameter)param
 {
     NSString *paramId = [NSString stringWithUTF8String:param.id.c_str()];
-    OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:paramId defaultValue:param.defaultBoolean];
     OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
     rp.routingParameter = param;
     [tableSection addObject: @{
@@ -467,7 +466,6 @@ static NSString *foregroundImageKey = @"foregroundImage";
 - (void) setupGoodsRestrictionsPreference:(NSMutableArray *)tableSection param:(RoutingParameter)param
 {
     NSString *paramId = [NSString stringWithUTF8String:param.id.c_str()];
-    OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:paramId defaultValue:param.defaultBoolean];
     OAGoodsDeliveryRoutingParameter *goodsParameter = [[OAGoodsDeliveryRoutingParameter alloc] initWithAppMode:self.appMode];
     goodsParameter.routingParameter = param;
     OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
@@ -485,9 +483,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
 {
     double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
     recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
-    NSString *descr = recalcDist == -1
-            ? OALocalizedString(@"rendering_value_disabled_name")
-    : [OAOsmAndFormatter getFormattedDistance:recalcDist withParams:[OsmAndFormatterParams noTrailingZeros]];
+    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OAOsmAndFormatter getFormattedDistance:recalcDist mode:self.appMode withParams:[OsmAndFormatterParams noTrailingZeros]];
     [tableSection addObject:@{
         headerKey: OALocalizedString(@"recalculate_route"),
         typeKey : [OAValueTableViewCell getCellIdentifier],
@@ -557,7 +553,6 @@ static NSString *foregroundImageKey = @"foregroundImage";
         {
             if ([paramId isEqualToString:kRouteParamHeightObstacles])
                 title = OALocalizedString(@"routing_attr_height_obstacles_name");
-            OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:paramId defaultValue:param.defaultBoolean];
             [tableSection addObject: @{
                 typeKey : [OASwitchTableViewCell getCellIdentifier],
                 nameKey : paramId,

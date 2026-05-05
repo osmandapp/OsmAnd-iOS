@@ -190,6 +190,11 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     return [self getFormattedDistance:meters mode:nil withParams:params valueUnitArray:valueUnitArray];
 }
 
++ (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode
+{
+    return [self getFormattedDistance:meters mode:mode withParams:nil];
+}
+
 + (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode withParams:(OsmAndFormatterParams *)params
 {
     return [self getFormattedDistance:meters mode:mode withParams:params valueUnitArray:nil];

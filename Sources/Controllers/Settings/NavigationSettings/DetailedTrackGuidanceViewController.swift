@@ -114,7 +114,7 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
             cell.sliderView.minimumValue = 0
             cell.sliderView.maximumValue = 100
             cell.sliderView.value = Float(distanceThreshold)
-            cell.valueLabel.text = OAOsmAndFormatter.getFormattedDistance(Float(distanceThreshold), mode: appMode, with: nil)
+            cell.valueLabel.text = OAOsmAndFormatter.getFormattedDistance(Float(distanceThreshold), mode: appMode)
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row
             cell.sliderView.removeTarget(self, action: nil, for: .allEvents)
             cell.sliderView.addTarget(self, action: #selector(sliderValueChanged(sender:)), for: .allEvents)
@@ -157,7 +157,7 @@ final class DetailedTrackGuidanceViewController: OABaseSettingsViewController {
             if newDistanceThreshold != distanceThreshold {
                 distanceThreshold = newDistanceThreshold
                 isSettingsChanged = true
-                cell.valueLabel.text = OAOsmAndFormatter.getFormattedDistance(Float(distanceThreshold), mode: appMode, with: nil)
+                cell.valueLabel.text = OAOsmAndFormatter.getFormattedDistance(Float(distanceThreshold), mode: appMode)
             }
         }
     }

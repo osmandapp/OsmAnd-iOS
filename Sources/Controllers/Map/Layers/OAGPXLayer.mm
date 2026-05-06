@@ -1083,7 +1083,7 @@ colorizationScheme:(int)colorizationScheme
                 {
                     for (OASTrkSegment *segment in subtrack.segments)
                     {
-                        [array addObjectsFromArray:[segment splitByDistanceMeters:gpx.splitInterval joinSegments:gpx.joinSegments]];
+                        [array addObjectsFromArray:[segment splitByDistanceMeters:gpx.splitInterval joinSegments:gpx.joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
                     }
                 }
                 splitData = [array copy];
@@ -1096,7 +1096,7 @@ colorizationScheme:(int)colorizationScheme
                 {
                     for (OASTrkSegment *segment in subtrack.segments)
                     {
-                        [array addObjectsFromArray:[segment splitByTimeSeconds:gpx.splitInterval joinSegments:gpx.joinSegments]];
+                        [array addObjectsFromArray:[segment splitByTimeSeconds:gpx.splitInterval joinSegments:gpx.joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
                     }
                 }
                 splitData = [array copy];

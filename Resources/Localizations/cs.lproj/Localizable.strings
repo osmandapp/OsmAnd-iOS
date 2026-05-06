@@ -4028,3 +4028,14 @@
 "shared_string_int_name" = "Mezinárodní název";
 "show_debug_tile" = "Zobrazit informace o dlaždici";
 "open_from_short" = "Od";
+"centimeter" = "cm";
+"shared_string_centimeters" = "centimetry";
+"download_roads_only_maps" = "Silniční mapa";
+"bicycle_width_limit_description" = "Zadejte šířku kola, abyste se vyhnuli úzkým cyklostezkám.";
+"show_expand_button" = "Zobrazit rozbalovací tlačítko";
+"obd_alt_battery_voltage_desc" = "Zobrazuje úroveň napětí na adaptéru OBD";
+"visualization" = "Vizualizace";
+"terrain_shadows" = "Stínování terénu";
+"terrain_shadows_descr" = "Dynamické stínování v reálném čase pro 3D terén. Zvýrazňuje geometrii krajiny s minimálním dopadem na výkon.";
+"terrain_shadows_footer_descr" = "3D reliéf je automaticky povolen, protože je nutný pro vykreslení stínů terénu";
+"pause_spoken_audio" = "Pozastavit mluvený zvuk";

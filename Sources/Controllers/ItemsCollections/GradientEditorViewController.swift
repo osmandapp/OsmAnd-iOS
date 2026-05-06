@@ -11,5 +11,4 @@ import OsmAndShared
 
 @objcMembers
 final class GradientEditorViewController: OABaseNavbarViewController {
-
 }

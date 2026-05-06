@@ -93,6 +93,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
+    override func registerNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(productPurchased(_:)), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(productsRestored(_:)), name: Notification.Name(NSNotification.Name.OAIAPProductsRestored.rawValue), object: nil)
+    }
+    
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
@@ -293,13 +298,14 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             return cell
         } else if item.cellType == OACollectionSingleLineTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier) as! OACollectionSingleLineTableViewCell
-            cell.rightActionButtonVisibility(isSolidColorSelected)
-            cell.rightActionButton.setImage(isSolidColorSelected ? UIImage.templateImageNamed("ic_custom_add") : nil, for: .normal)
-            cell.rightActionButton.tag = isSolidColorSelected ? (indexPath.section << 10 | indexPath.row) : 0
+            cell.rightActionButtonVisibility(true)
+            cell.rightActionButton.setImage( UIImage.templateImageNamed("ic_custom_add"), for: .normal)
+            cell.rightActionButton.tag = (indexPath.section << 10 | indexPath.row)
+            cell.rightActionButton.accessibilityLabel = localizedString(isSolidColorSelected ? "shared_string_add_color" : "add_palette")
             cell.rightActionButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.disableAnimationsOnStart = true
             if isSolidColorSelected {
-                cell.rightActionButton.addTarget(self, action: #selector(onCellButtonPressed(_:)), for: .touchUpInside)
+                cell.rightActionButton.addTarget(self, action: #selector(onColorCellButtonPressed(_:)), for: .touchUpInside)
                 let colorHandler = OAColorCollectionHandler(data: [sortedColorItems], collectionView: cell.collectionView)
                 colorHandler?.delegate = self
                 colorHandler?.hostVC = self
@@ -307,6 +313,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 colorHandler?.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
                 cell.setCollectionHandler(colorHandler)
             } else if isGradientColorSelected {
+                cell.rightActionButton.addTarget(self, action: #selector(onPaletteCellButtonPressed(_:)), for: .touchUpInside)
                 let paletteHandler = PaletteCollectionHandler(data: [sortedPaletteColorItems.asArray()], collectionView: cell.collectionView)
                 paletteHandler?.delegate = self
                 var selectedIndex = sortedPaletteColorItems.index(ofObjectSync: selectedPaletteColorItem)
@@ -653,7 +660,15 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         updateSection(containingRowKey: .splitIntervalRowKey)
     }
     
-    @objc private func onCellButtonPressed(_ sender: UIButton) {
+    private func getColorHandler() -> OAColorCollectionHandler? {
+        guard let colorsCollectionIndexPath,
+              let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell,
+              let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler else { return nil }
+        
+        return colorHandler
+    }
+    
+    @objc private func onColorCellButtonPressed(_ sender: UIButton) {
         guard let tableData else { return }
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item = tableData.item(for: indexPath)
@@ -663,6 +678,14 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             colorPickerVC.delegate = self
             colorPickerVC.selectedColor = colorItem.getColor()
             self.navigationController?.present(colorPickerVC, animated: true, completion: nil)
+        }
+    }
+    
+    @objc private func onPaletteCellButtonPressed(_ sender: UIButton) {
+        if !OAIAPHelper.isOsmAndProAvailable() {
+            if let navigationController {
+                OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+            }
         }
     }
     
@@ -694,12 +717,20 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         tableView.reloadRows(at: [indexPath], with: .none)
     }
     
-    private func getColorHandler() -> OAColorCollectionHandler? {
-        guard let colorsCollectionIndexPath,
-              let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell,
-              let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler else { return nil }
-        
-        return colorHandler
+    @objc private func productPurchased(_: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.generateData()
+            self.tableView.reloadData()
+        }
+    }
+    
+    @objc private func productsRestored(_: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.generateData()
+            self.tableView.reloadData()
+        }
     }
 }
 

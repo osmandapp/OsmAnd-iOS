@@ -299,6 +299,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                                              selector:@selector(onCollectionUpdated:)
                                                  name:ColorsCollection.collectionUpdatedNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(productPurchased:)
+                                                 name:OAIAPProductPurchasedNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(productsRestored:)
+                                                 name:OAIAPProductsRestoredNotification
+                                               object:nil];
 }
 
 - (void)setOldValues
@@ -1590,16 +1598,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     else if ([cellData.type isEqualToString:OACollectionSingleLineTableViewCell.reuseIdentifier])
     {
         OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OACollectionSingleLineTableViewCell.reuseIdentifier];
-        BOOL isRightActionButtonVisible = [_selectedType.coloringType isCustomColor];
         cell.separatorInset = UIEdgeInsetsZero;
-        [cell rightActionButtonVisibility:isRightActionButtonVisible];
-        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
-        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
-        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
+        [cell rightActionButtonVisibility:YES];
+        [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+        cell.rightActionButton.tag = (indexPath.section << 10 | indexPath.row);
+        cell.rightActionButton.accessibilityLabel = OALocalizedString([_selectedType.coloringType isCustomColor] ? @"shared_string_add_color" : @"add_palette");
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-        if (isRightActionButtonVisible)
-            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
         if ([_selectedType.coloringType isCustomColor])
         {
             OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
@@ -1610,6 +1614,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [colorHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:colorHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         else if ([_selectedType.coloringType isGradient])
         {
@@ -1620,6 +1625,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]] inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
             [cell configureTopOffset:12];
             [cell configureBottomOffset:12];
@@ -1796,7 +1802,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
 }
 
-- (void)onCellButtonPressed:(UIButton *)sender
+- (void)onColorCellButtonPressed:(UIButton *)sender
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
@@ -1807,6 +1813,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         colorViewController.selectedColor = [_selectedColorItem getColor];
         [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
     }
+}
+
+- (void)onPaletteCellButtonPressed:(UIButton *)sender
+{
+    if (![OAIAPHelper isOsmAndProAvailable])
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.ADVANCED_WIDGETS navController:[OARootViewController instance].navigationController];
 }
 
 - (void)onCollectionDeleted:(NSNotification *)notification
@@ -2179,6 +2191,26 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {
     [self addAndGetNewColorItem:viewController.selectedColor];
+}
+
+#pragma mark - OAIAPProductNotification
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
+}
+
+- (void)productsRestored:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
 }
 
 @end

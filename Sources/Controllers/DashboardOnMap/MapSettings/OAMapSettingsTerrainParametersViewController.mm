@@ -151,6 +151,14 @@ static const NSInteger kElevationMaxMeters = 2000;
                                                  selector:@selector(onCollectionUpdated:)
                                                      name:ColorsCollection.collectionUpdatedNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(productPurchased:)
+                                                     name:OAIAPProductPurchasedNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(productsRestored:)
+                                                     name:OAIAPProductsRestoredNotification
+                                                   object:nil];
     }
     else if (_terrainType == EOATerrainSettingsTypeCoordinatesGridColor)
     {
@@ -865,13 +873,19 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self refreshColorsCollection];
 }
 
-- (void)onCellButtonPressed:(UIButton *)sender
+- (void)onColorCellButtonPressed:(UIButton *)sender
 {
     UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
     colorViewController.delegate = self;
     OAColorItem *activeItem = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
     colorViewController.selectedColor = [activeItem getColor];
     [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
+}
+
+- (void)onPaletteCellButtonPressed:(UIButton *)sender
+{
+    if (![OAIAPHelper isOsmAndProAvailable])
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.ADVANCED_WIDGETS navController:[OARootViewController instance].navigationController];
 }
 
 - (NSString *)sliderValueString:(float)value
@@ -1138,10 +1152,12 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:OACollectionSingleLineTableViewCell.reuseIdentifier];
         BOOL isCoordinatesGridColors = [item.key isEqualToString:@"coordinatesGridColors"];
-        [cell rightActionButtonVisibility:isCoordinatesGridColors];
-        [cell.rightActionButton setImage:isCoordinatesGridColors ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
-        cell.rightActionButton.tag = isCoordinatesGridColors ? (indexPath.section << 10 | indexPath.row) : 0;
-        cell.rightActionButton.accessibilityLabel = isCoordinatesGridColors ? OALocalizedString(@"shared_string_add_color") : nil;
+        BOOL isPaletteGrid = [item.key isEqualToString:@"colorGrid"];
+        BOOL isRightActionButtonVisible = isCoordinatesGridColors || isPaletteGrid;
+        [cell rightActionButtonVisibility:isRightActionButtonVisible];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = OALocalizedString(isCoordinatesGridColors ? @"shared_string_add_color" : @"add_palette");
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
         if (isCoordinatesGridColors)
         {
@@ -1154,7 +1170,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [colorHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:colorHandler];
-            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         else
         {
@@ -1166,6 +1182,7 @@ static const NSInteger kElevationMaxMeters = 2000;
                 selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getPaletteColorByName:[_terrainMode getKeyName]]] inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
             [cell configureTopOffset:12];
             [cell configureBottomOffset:12];
@@ -1462,6 +1479,26 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {
     [self addAndGetNewColorItem:viewController.selectedColor];
+}
+
+#pragma mark - OAIAPProductNotification
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
+}
+
+- (void)productsRestored:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
 }
 
 @end

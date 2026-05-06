@@ -206,6 +206,14 @@ static const NSInteger kColorsSection = 1;
                                              selector:@selector(onCollectionUpdated:)
                                                  name:ColorsCollection.collectionUpdatedNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(productPurchased:)
+                                                 name:OAIAPProductPurchasedNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(productsRestored:)
+                                                 name:OAIAPProductsRestoredNotification
+                                               object:nil];
 }
 
 - (void)dealloc
@@ -1790,22 +1798,12 @@ static const NSInteger kColorsSection = 1;
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell =
-            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
-        [cell rightActionButtonVisibility:isRightActionButtonVisible];
-        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
-                                forState:UIControlStateNormal];
-        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
-        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
+        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        [cell rightActionButtonVisibility:YES];
+        [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+        cell.rightActionButton.tag = (indexPath.section << 10 | indexPath.row);
+        cell.rightActionButton.accessibilityLabel = OALocalizedString([self isSelectedTypeSolid] ? @"shared_string_add_color" : @"add_palette");
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-        if (isRightActionButtonVisible)
-        {
-            [cell.rightActionButton addTarget:self
-                                       action:@selector(onCellButtonPressed:)
-                             forControlEvents:UIControlEventTouchUpInside];
-        }
-
         if ([self isSelectedTypeSolid])
         {
             OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
@@ -1816,6 +1814,7 @@ static const NSInteger kColorsSection = 1;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [colorHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:colorHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.delegate = self;
         }
         else if ([self isSelectedTypeGradient])
@@ -1828,6 +1827,7 @@ static const NSInteger kColorsSection = 1;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
             [cell configureTopOffset:12];
             [cell configureBottomOffset:12];
@@ -2730,9 +2730,15 @@ static const NSInteger kColorsSection = 1;
 
 #pragma mark - Selectors
 
-- (void)onCellButtonPressed:(UIButton *)sender
+- (void)onColorCellButtonPressed:(UIButton *)sender
 {
     [self onRightActionButtonPressed:sender.tag];
+}
+
+- (void)onPaletteCellButtonPressed:(UIButton *)sender
+{
+    if (![OAIAPHelper isOsmAndProAvailable])
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.ADVANCED_WIDGETS navController:[OARootViewController instance].navigationController];
 }
 
 - (void)onCollectionDeleted:(NSNotification *)notification
@@ -3067,6 +3073,26 @@ static const NSInteger kColorsSection = 1;
     {
         [self addAndGetNewColorItem:viewController.selectedColor];
     }
+}
+
+#pragma mark - OAIAPProductNotification
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
+}
+
+- (void)productsRestored:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
 }
 
 @end

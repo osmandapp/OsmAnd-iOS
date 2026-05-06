@@ -1542,6 +1542,7 @@
 		C5AD0F162EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD0F152EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift */; };
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
 		C5AF907B2A25E8C400989A86 /* OAKeyboardHintBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */; };
+		C5B058ED2FAB6C4C00805A7B /* GradientEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B058EC2FAB6C4C00805A7B /* GradientEditorViewController.swift */; };
 		C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */; };
 		C5B2AA612DB00700007FB854 /* GridFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA602DB00700007FB854 /* GridFormat.swift */; };
 		C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */; };
@@ -5429,6 +5430,7 @@
 		C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAKeyboardHintBar.h; sourceTree = "<group>"; };
 		C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAKeyboardHintBar.m; sourceTree = "<group>"; };
 		C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAKeyboardHintBar.xib; sourceTree = "<group>"; };
+		C5B058EC2FAB6C4C00805A7B /* GradientEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientEditorViewController.swift; sourceTree = "<group>"; };
 		C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsCoordinatesGridScreen.swift; sourceTree = "<group>"; };
 		C5B2AA602DB00700007FB854 /* GridFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridFormat.swift; sourceTree = "<group>"; };
 		C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpDetailsViewController.swift; sourceTree = "<group>"; };
@@ -8549,6 +8551,7 @@
 			isa = PBXGroup;
 			children = (
 				3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */,
+				C5B058EC2FAB6C4C00805A7B /* GradientEditorViewController.swift */,
 			);
 			path = ItemsCollections;
 			sourceTree = "<group>";
@@ -17812,6 +17815,7 @@
 				C5C81F8E2E5340CB009D3439 /* MyLocationButtonState.swift in Sources */,
 				32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */,
 				DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */,
+				C5B058ED2FAB6C4C00805A7B /* GradientEditorViewController.swift in Sources */,
 				C5C81F902E534595009D3439 /* OptionsMenuButtonState.swift in Sources */,
 				FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */,
 				FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */,

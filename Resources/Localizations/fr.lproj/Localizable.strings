@@ -2831,7 +2831,7 @@
 "rendering_value_sacScale_name" = "CAS";
 "add_row" = "Ajouter une ligne";
 "reset_all_settings_desc" = "Réinitialiser tous les paramètres \?";
-"no_widgets_here_yet" = "Pas encore de widget ici";
+"no_widgets_here_yet" = "Aucun widget pour l'instant";
 "no_widgets_descr" = "Ajouter un ou plusieurs widgets depuis la liste des widgets disponibles.";
 "free_account" = "Compte gratuit";
 "free_favorites_backup_description" = "S\'inscrire au cloud OsmAnd pour obtenir une sauvegarde gratuite de vos favoris et de vos paramètres.";

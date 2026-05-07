@@ -250,7 +250,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 {
     if ([self showDetailsButton])
     {
-        OAAmenityInfoRow *collapseDetailsRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderDetailsRow typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *collapseDetailsRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:kOrderDetailsRow typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
         [collapseDetailsRowCell setHeight:[self detailsButtonHeight]];
         [rows addObject:collapseDetailsRowCell];
     }
@@ -259,10 +259,8 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 - (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     _rows = rows;
-    
-    // don't exist in android. and maybe already not used in ios.
-    [self appendDetailsButtonRow:rows];
 
+    [self appendDetailsButtonRow:rows];
     [self buildTopInternal:rows];
 
     if (_showTitleIfTruncated)
@@ -278,7 +276,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     [self buildInternal:rows];
     
     [self buildPluginRows:rows];
-    
+
     if ([self needBuildCoordinatesRow])
         [self buildCoordinateRows:rows];
     
@@ -287,9 +285,6 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     
     [self handleOnlineAndMapillaryLoadingIfNeeded];
     
-    [self sortInfoRows];
-    _calculatedWidth = 0;
-    [self contentHeight:self.tableView.bounds.size.width];
     [self updateInfoRows];
 }
 
@@ -532,35 +527,78 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 {
     if (OARowsContainKey(rows, @"nearest_poi"))
         return;
-    
-    id targetObj = [self getTargetObj];
-    if ([targetObj isKindOfClass:OAPOI.class])
+
+    OAPOI *poi = [self getTargetObj];
+    if (![poi isKindOfClass:OAPOI.class] || ![self showNearestPoi])
+        return;
+
+    OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:NO];
+    if (!filter)
+        return;
+
+    if (_nearestPoi)
     {
-        OAPOI *poi = (OAPOI *) targetObj;
-        
-        if ([self showNearestPoi] && poi)
-        {
-            OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:NO];
-            if (!filter)
-                return;
-            
-            [self processNearestPoi:poi filter:filter];
-
-            NSArray<OAPOI *> *nearest = _nearestPoi;
-            NSString *rowText = [NSString stringWithFormat:@"%@ \"%@\" (%d)", OALocalizedString(@"speak_poi"), poi.type.nameLocalized, (int) nearest.count];
-
-            if (nearest.count > 0)
-            {
-                UIImage *icon = poi.icon;
-                OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc] initWithKey:@"nearest_poi" icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:kOrderNearestRow typeName:@"" isPhoneNumber:NO isUrl:NO];
-                rowInfo.collapsed = YES;
-                rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-                [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
-                rowInfo.order = kOrderNearestRow;
-                [rows addObject:rowInfo];
-            }
-        }
+        [self addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
+        return;
     }
+
+    __weak __typeof(self) weakSelf = self;
+    [self fetchNearestPoi:poi filter:filter completion:^(NSArray<OAPOI *> *results) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        strongSelf->_nearestPoi = [results copy];
+
+        if (results.count > 0)
+        {
+            [strongSelf addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
+            [strongSelf updateInfoRows];
+        }
+    }];
+}
+
+- (void)addNearestPoiRowIfNeeded:(NSMutableArray<OAAmenityInfoRow *> *)rows
+                             poi:(OAPOI *)poi
+                          filter:(OAPOIUIFilter *)filter
+{
+    NSArray<OAPOI *> *nearest = _nearestPoi;
+    if (nearest.count == 0)
+        return;
+
+    NSString *rowText = [NSString stringWithFormat:@"%@ \"%@\" (%d)",
+                         OALocalizedString(@"speak_poi"),
+                         poi.type.nameLocalized,
+                         (int)nearest.count];
+
+    OAAmenityInfoRow *rowInfo = [[OAAmenityInfoRow alloc]
+        initWithKey:@"nearest_poi"
+              icon:poi.icon
+        textPrefix:nil
+              text:rowText
+         textColor:nil
+            isText:NO
+         needLinks:NO
+             order:kOrderNearestRow
+          typeName:@""
+     isPhoneNumber:NO
+             isUrl:NO];
+
+    rowInfo.collapsed = YES;
+    rowInfo.order = kOrderNearestRow;
+
+    OACollapsableNearestPoiWikiView *view =
+        [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+
+    [view setData:nearest
+         hasItems:YES
+         latitude:self.location.latitude
+        longitude:self.location.longitude
+           filter:filter];
+
+    rowInfo.collapsableView = view;
+
+    [rows addObject:rowInfo];
 }
 
 static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString *key)
@@ -773,35 +811,64 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     _nearestWiki = [NSArray arrayWithArray:[osmwiki subarrayWithRange:NSMakeRange(0, MIN(kNearbyPoiMaxCount, osmwiki.count))]];
 }
 
-- (void)processNearestPoi:(OAPOI *)poi filter:(OAPOIUIFilter *)filter
+- (void)fetchNearestPoi:(OAPOI *)poi
+                 filter:(OAPOIUIFilter *)filter
+             completion:(void(^)(NSArray<OAPOI *> *results))completion
 {
-    NSMutableArray<OAPOI *> *amenities = [NSMutableArray new];
-    if (!poi.type.category.isWiki)
-    {
-        int radius = kNearbyPoiMinRadius;
-        while (amenities.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        
+        NSMutableArray<OAPOI *> *amenities = [NSMutableArray new];
+        
+        if (!poi.type.category.isWiki)
         {
+            int radius = kNearbyPoiMinRadius;
             OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
-            const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, pointI);
-            const auto top = OsmAnd::Utilities::get31LatitudeY(rect.top());
-            const auto left = OsmAnd::Utilities::get31LongitudeX(rect.left());
-            const auto bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom());
-            const auto right = OsmAnd::Utilities::get31LongitudeX(rect.right());
-            amenities = [[filter searchAmenities:top left:left bottom:bottom right:right zoom:-1 matcher:nil filterUnique:NO] mutableCopy];
-            radius *= kNearbyPoiSearchFactory;
+            
+            while (amenities.count < kNearbyPoiMaxCount && radius <= kNearbyPoiMaxRadius)
+            {
+                const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, pointI);
+                
+                NSArray<OAPOI *> *found = [filter searchAmenities:OsmAnd::Utilities::get31LatitudeY(rect.top())
+                                                            left:OsmAnd::Utilities::get31LongitudeX(rect.left())
+                                                          bottom:OsmAnd::Utilities::get31LatitudeY(rect.bottom())
+                                                           right:OsmAnd::Utilities::get31LongitudeX(rect.right())
+                                                            zoom:-1 matcher:nil filterUnique:YES];
+                
+                if (found.count > 0)
+                {
+                    for (OAPOI *a in found)
+                    {
+                        if (![amenities containsObject:a]) {
+                            [amenities addObject:a];
+                        }
+                    }
+                }
+                
+                if (amenities.count >= kNearbyPoiMaxCount)
+                    break;
+                radius *= kNearbyPoiSearchFactory;
+            }
+            
+            NSMutableArray<OAPOI *> *filteredAmenities = [NSMutableArray new];
+            NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
+            for (OAPOI *amenity in amenities)
+            {
+                if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
+                    [filteredAmenities addObject:amenity];
+            }
+            
+            NSArray *sorted = [OAMapUtils sortPOI:filteredAmenities lat:self.location.latitude lon:self.location.longitude];
+            
+            NSUInteger finalCount = MIN(kNearbyPoiMaxCount, sorted.count);
+            amenities = [[sorted subarrayWithRange:NSMakeRange(0, finalCount)] mutableCopy];
         }
-    
-        NSMutableArray<OAPOI *> *filterdAmenities = [NSMutableArray new];
-        NSInteger osmObfId = [ObfConstants getOsmObjectId:poi];
-        for (OAPOI *amenity in amenities)
-        {
-            if ([ObfConstants getOsmObjectId:amenity] != osmObfId)
-                [filterdAmenities addObject:amenity];
-        }
-
-        amenities = [[OAMapUtils sortPOI:filterdAmenities lat:self.location.latitude lon:self.location.longitude] mutableCopy];
-    }
-    _nearestPoi = amenities.count > 0 ? [NSArray arrayWithArray:[amenities subarrayWithRange:NSMakeRange(0, MIN(kNearbyPoiMaxCount, amenities.count))]] : [NSArray new];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion([amenities copy]);
+            }
+        });
+    });
 }
 
 - (BOOL) showNearestWiki

@@ -2986,11 +2986,11 @@ typedef enum
     }];
 }
 
-- (void)showWaypointOnMap:(OAGpxWptItem *)item cameraLatitude:(double)cameraLatitude cameraLongitude:(double)cameraLongitude
+- (void)showWaypointOnMap:(OAGpxWptItem *)item latitude:(double)latitude longitude:(double)longitude
 {
     [_mapViewController showContextPinMarker:item.point.lat longitude:item.point.lon animated:NO];
-    _targetLatitude = cameraLatitude;
-    _targetLongitude = cameraLongitude;
+    _targetLatitude = latitude;
+    _targetLongitude = longitude;
     [self goToTargetPointDefault];
 }
 

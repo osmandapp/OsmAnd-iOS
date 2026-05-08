@@ -3009,7 +3009,7 @@
         }
         
         CLLocationCoordinate2D locationCoordinate = location.coordinate;
-        [self.mapPanelViewController showWaypointOnMap:gpxWptItem cameraLatitude:locationCoordinate.latitude cameraLongitude:locationCoordinate.longitude];
+        [self.mapPanelViewController showWaypointOnMap:gpxWptItem latitude:locationCoordinate.latitude longitude:locationCoordinate.longitude];
     }
     
     return NO;

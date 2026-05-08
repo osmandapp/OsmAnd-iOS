@@ -161,7 +161,7 @@
 "shared_string_details" = "Dettagli";
 "shared_string_type" = "Tipo";
 "res_unknown" = "Sconosciuto";
-"shared_string_size" = "Misura";
+"shared_string_size" = "Dimensione";
 "created_on" = "Creato il";
 "res_update_all" = "Aggiorna tutto";
 "res_updates_no_space" = "Spazio insufficiente per installare %d aggiornamento(i). %@ è necessario. Per favore liberate spazio.";

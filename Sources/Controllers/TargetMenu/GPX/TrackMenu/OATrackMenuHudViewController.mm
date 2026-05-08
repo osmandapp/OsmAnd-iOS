@@ -2994,7 +2994,7 @@
         CLLocation *location;
         if (isLandscaped)
         {
-            CGFloat mapAreaWidth = viewSize.width - (self.scrollableView.frame.size.width);
+            CGFloat mapAreaWidth = viewSize.width - self.scrollableView.frame.size.width;
             CGFloat newWaypointScreenPointX = mapAreaWidth / 2 + (waypointScreenPoint.x - self.scrollableView.frame.size.width);
             CGFloat newWaypointScreenPointY = waypointScreenPoint.y - self.groupsButtonContainerView.frame.size.height;
             CLLocation *locationFromPixel = [self.mapViewController getLatLonFromElevatedPixel:newWaypointScreenPointX * scale y:newWaypointScreenPointY * scale];

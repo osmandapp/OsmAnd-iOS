@@ -2880,3 +2880,8 @@
 "road_min_speed_descr" = "设置路线中所有道路的最低行驶速度。提高建议速度低于最低速度的道路的优先级。";
 "trip_recording_moving_time_widget_description" = "显示当前记录的移动时间，或最后一次上坡和下坡的时间。";
 "trip_recording_moving_time" = "移动时间";
+"free_custom_color_description" = "使用任意颜色自定义 3D 建筑。非常适合搭配地图主题或提高对比度。";
+"buildings_3d_visibility_description" = "调整地图上 3D 建筑的透明度。";
+"level_of_details" = "详细程度";
+"performance" = "性能";
+"view_distance" = "可视距离";

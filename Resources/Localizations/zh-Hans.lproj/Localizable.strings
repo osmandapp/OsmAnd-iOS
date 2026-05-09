@@ -2563,7 +2563,7 @@
 "shared_string_minute_lowercase" = "分";
 "resting_navigation_position" = "静止与导航位置";
 "delete_widget_description" = "这个小工具将被删除。您可以稍后在 “配置屏幕 ”中恢复它。";
-"shared_string_maximum" = "最大";
+"shared_string_maximum" = "最大值";
 "navigation_position_icon" = "导航位置图标";
 "root_folder" = "根文件夹";
 "avg_sensor_cadence" = "自行车平均踏频";
@@ -2878,3 +2878,5 @@
 "testFlight" = "TestFlight";
 "download_install_beta_version" = "下载并安装 OsmAnd 测试版本";
 "road_min_speed_descr" = "设置路线中所有道路的最低行驶速度。提高建议速度低于最低速度的道路的优先级。";
+"trip_recording_moving_time_widget_description" = "显示当前记录的移动时间，或最后一次上坡和下坡的时间。";
+"trip_recording_moving_time" = "移动时间";

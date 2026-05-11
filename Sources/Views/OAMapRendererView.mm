@@ -1274,10 +1274,13 @@ forcedUpdate:(BOOL)forcedUpdate
 
     // Release display link
     [_displayLink invalidate];
-    _displayLink = nil;
 
     // Suspend GPU worker
     _renderer->suspendGpuWorker();
+
+    glFinish();
+
+    _displayLink = nil;
 
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 
@@ -1300,11 +1303,6 @@ forcedUpdate:(BOOL)forcedUpdate
     const auto configuration = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
     configuration->referenceTileSizeOnScreenInPixels = referenceTileSizeOnScreenInPixels;
     _renderer->setConfiguration(configuration);
-}
-
-- (BOOL) isGpuWorkerPaused
-{
-    return _renderer->isGpuWorkerPaused();
 }
 
 - (BOOL) suspendGpuWorker

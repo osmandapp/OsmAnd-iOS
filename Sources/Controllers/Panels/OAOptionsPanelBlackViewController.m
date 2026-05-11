@@ -385,7 +385,7 @@
 - (IBAction) myDataButtonClicked:(id)sender
 {
     [OAAnalyticsHelper logEvent:@"my_places_open"];
-    UIViewController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+    MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
     [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
 }
 

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyPlacesContainerViewController">
+            <connections>
+                <outlet property="contentView" destination="bel-oP-mWo" id="v5w-ap-IVD"/>
+                <outlet property="segmentContainerView" destination="COI-FC-npu" id="sNY-Ax-vDI"/>
+                <outlet property="segmentControl" destination="CDK-ru-NR9" id="Nrv-Pj-iKN"/>
+                <outlet property="view" destination="iN0-l3-epB" id="qqm-iF-NSb"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COI-FC-npu">
+                    <rect key="frame" x="0.0" y="118" width="393" height="42"/>
+                    <subviews>
+                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-ru-NR9">
+                            <rect key="frame" x="16" y="0.0" width="361" height="43"/>
+                            <segments>
+                                <segment title="First"/>
+                                <segment title="Second"/>
+                            </segments>
+                        </segmentedControl>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="CDK-ru-NR9" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="top" id="0Kt-TX-aV8"/>
+                        <constraint firstAttribute="height" constant="42" id="1jS-hb-wBc"/>
+                        <constraint firstAttribute="bottom" secondItem="CDK-ru-NR9" secondAttribute="bottom" id="TlK-OO-4ge"/>
+                        <constraint firstAttribute="trailing" secondItem="CDK-ru-NR9" secondAttribute="trailing" constant="16" id="kA4-yf-3CD"/>
+                        <constraint firstItem="CDK-ru-NR9" firstAttribute="leading" secondItem="COI-FC-npu" secondAttribute="leading" constant="16" id="urP-Pd-eT0"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bel-oP-mWo">
+                    <rect key="frame" x="0.0" y="160" width="393" height="692"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="bel-oP-mWo" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="8jQ-rp-Dij"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bel-oP-mWo" secondAttribute="trailing" id="AKs-Vu-muF"/>
+                <constraint firstAttribute="bottom" secondItem="bel-oP-mWo" secondAttribute="bottom" id="LGZ-U7-3kI"/>
+                <constraint firstItem="COI-FC-npu" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="OjW-58-sVQ"/>
+                <constraint firstItem="COI-FC-npu" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="c9w-lH-gTn"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="COI-FC-npu" secondAttribute="trailing" id="uLu-GM-aL5"/>
+                <constraint firstItem="bel-oP-mWo" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="bottom" id="veN-Xp-C2f"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="19" y="68"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

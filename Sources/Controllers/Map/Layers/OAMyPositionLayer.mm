@@ -620,9 +620,22 @@ typedef enum {
     _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onSettingsChanged)
                                                         andObserve:[OsmAndApp instance].mapSettingsChangeObservable];
+    
+    OAAppSettings *settings = [OAAppSettings sharedManager];
 
-    _locationIconScaleFactor = [[OAAppSettings sharedManager].locationIconSize get];
-    _courseIconScaleFactor = [[OAAppSettings sharedManager].courseIconSize get];
+    _locationIconScaleFactor = [settings.locationIconSize get];
+    if (_locationIconScaleFactor <= 0)
+    {
+        [settings.locationIconSize resetToDefault];
+        _locationIconScaleFactor = [settings.locationIconSize get];
+    }
+
+    _courseIconScaleFactor = [settings.courseIconSize get];
+    if (_courseIconScaleFactor <= 0)
+    {
+        [settings.courseIconSize resetToDefault];
+        _courseIconScaleFactor = [settings.courseIconSize get];
+    }
     
     __weak OAMyPositionLayer *weakSelf = self;
     [Model3dHelper.shared loadAllModelsWithCallback:

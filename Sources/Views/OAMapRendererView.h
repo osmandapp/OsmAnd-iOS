@@ -122,7 +122,6 @@ struct CLLocationCoordinate2D;
 - (void) setMapDebugSettings:(std::shared_ptr<OsmAnd::MapRendererDebugSettings>) debugSettings;
 - (void)setFlatEarth:(BOOL)flatEarth;
 
-- (BOOL) isGpuWorkerPaused;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
 - (void) invalidateFrame;

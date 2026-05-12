@@ -37,7 +37,8 @@
 #include <routingConfiguration.h>
 #include <routingContext.h>
 #include <routeSegmentResult.h>
-#include "routeResultPreparation.h"
+#include <routeResultPreparation.h>
+#include <gpxRouteApproximation.h>
 
 #define OSMAND_ROUTER @"OsmAndRouter"
 #define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
@@ -1038,6 +1039,9 @@
 
 - (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(SHARED_PTR<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
 {
+    if (!env || !env.router || !locationsHolder || gctx == nullptr || gctx->ctx == nullptr || gctx->ctx->config == nullptr)
+        return {};
+
     return env.router->generateGpxPoints(gctx, locationsHolder.getLatLonList);
 }
 
@@ -1046,11 +1050,23 @@
                                                          points:(std::vector<SHARED_PTR<GpxPoint>> &)points
                                                   resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
+    if (!env || !env.router || gctx == nullptr || gctx->ctx == nullptr || gctx->ctx->config == nullptr || gctx->ctx->progress == nullptr || points.empty())
+    {
+        [resultMatcher publish:nil];
+        return nullptr;
+    }
+
     @synchronized (_nativeRoutingLock) {
         const auto resultAcceptor =
         [resultMatcher]
         (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
         {
+            if (approximation == nullptr)
+            {
+                [resultMatcher publish:nil];
+                return true;
+            }
+
             OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
             [resultMatcher publish:approx];
             return true;

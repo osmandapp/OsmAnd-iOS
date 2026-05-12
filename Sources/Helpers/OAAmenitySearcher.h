@@ -65,6 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities;
 
+- (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId;
+
 @end
 
 

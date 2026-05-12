@@ -46,6 +46,10 @@ static const NSString *US_MAPS_RECREATION_AREA = @"us_maps_recreation_area";
 static const NSInteger WAY_MODULO_REMAINDER = 1;
 static const NSInteger kOrderShortDescrRow = -10000;
 
+static NSString * const ROUTE_MEMBERS_ROW_KEY = @"route_members_row_key";
+static NSString * const ROUTE_PART_OF_ROW_KEY = @"route_part_of_row_key";
+static NSString * const ROUTE_RELATED_ROUTES_ROW_KEY = @"route_related_routes_row_key";
+
 @interface OAPOIViewController ()
 
 @end
@@ -225,6 +229,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     {
         [self buildNearestPoiRowForAmenity:rows];
     }
+    [self buildRouteRows:rows];
 }
 
 - (void)buildNearestWikiForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -236,6 +241,67 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 {
     [self buildNearestPoiRow:rows listener:nil];
 }
+
+- (void)buildRouteRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    //TODO: test
+    if (!self.poi)
+        return;
+    
+    if (!NSStringIsEmpty([self.poi getAdditionalInfo:ROUTE_MEMBERS_IDS]))
+    {
+        //        buildRouteRow(amenities -> {
+        //            String title = app.getString(R.string.route_members);
+        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_MEMBERS_ROW_KEY, title);
+        //        }, SearchType.MEMBERS);
+        [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:@"SearchType.MEMBERS"];
+    }
+    
+    if (!NSStringIsEmpty([self.poi getAdditionalInfo:ROUTE_ID]))
+    {
+        //        buildRouteRow(amenities -> {
+        //            String title = app.getString(R.string.route_part_of);
+        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_PART_OF_ROW_KEY, title);
+        //        }, SearchType.PART_OF);
+        //
+        //        buildRouteRow(amenities -> {
+        //            String title = app.getString(R.string.multipoligon_related);
+        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_RELATED_ROUTES_ROW_KEY, title);
+        //        }, SearchType.RELATED);
+        
+        [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:@"SearchType.PART_OF"];
+        
+        [self buildRouteRow:rows tag:ROUTE_RELATED_ROUTES_ROW_KEY searchType:@"SearchType.RELATED"];
+    }
+}
+
+
+//protected void buildRouteRow(SearchByRouteIdListener listener, SearchType type) {
+//    if (amenity != null) {
+//        OsmAndTaskManager.executeTask(new SearchByRouteIdTask(amenity, type, app, listener));
+//    }
+//}
+
+- (void)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows tag:(NSString *)tag searchType:(NSString *)searchType
+{
+    //TODO: test
+    if (self.poi)
+    {
+        SearchByRouteIdTask *task = [[SearchByRouteIdTask alloc] initWithAmenity:self.poi searchType:searchType];
+        [task execute];
+    }
+}
+
+
+
+
+//TODO: implement
+//SearchByRouteIdTask.doInBackground()
+// List<Amenity> list =  amenitySearcher.searchRoutePartOf(routeId);
+
+
+
+
 
 - (void)buildNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {

@@ -599,6 +599,7 @@
 		32D7D6D22CD9564D00EB752F /* ObfConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D7D6D12CD9564D00EB752F /* ObfConstants.swift */; };
 		32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */; };
 		32DE2BE42B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */; };
+		32E080C22FAB2DCA0095A278 /* SearchByRouteIdTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E080C12FAB2DC50095A278 /* SearchByRouteIdTask.swift */; };
 		32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */; };
 		32E2D30229B9DB5700A17D0B /* ic_custom_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2FE29B9DB5500A17D0B /* ic_custom_coordinates_location@3x.png */; };
 		32E2D30329B9DB5700A17D0B /* ic_custom_coordinates_map_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2FF29B9DB5600A17D0B /* ic_custom_coordinates_map_center@2x.png */; };
@@ -4233,6 +4234,7 @@
 		32DA38A62BA9C4C600A3AC3C /* CLLocation+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLLocation+Extension.h"; sourceTree = "<group>"; };
 		32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+Extension.m"; sourceTree = "<group>"; };
 		32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATwoButtonsTableViewCell.swift; sourceTree = "<group>"; };
+		32E080C12FAB2DC50095A278 /* SearchByRouteIdTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchByRouteIdTask.swift; sourceTree = "<group>"; };
 		32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinateFormatsViewController.xib; sourceTree = "<group>"; };
 		32E2D2FE29B9DB5500A17D0B /* ic_custom_coordinates_location@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_location@3x.png"; path = "Resources/Icons/ic_custom_coordinates_location@3x.png"; sourceTree = "<group>"; };
 		32E2D2FF29B9DB5600A17D0B /* ic_custom_coordinates_map_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_map_center@2x.png"; path = "Resources/Icons/ic_custom_coordinates_map_center@2x.png"; sourceTree = "<group>"; };
@@ -13844,6 +13846,7 @@
 				32EB34472E462D58004F7C75 /* OAAmenitySearcher.h */,
 				32EB34482E462D68004F7C75 /* OAAmenitySearcher.mm */,
 				32F6B3902E47A842007F3902 /* OAAmenitySearcher+cpp.h */,
+				32E080C12FAB2DC50095A278 /* SearchByRouteIdTask.swift */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
 				DA5A80B226C563A600F274C7 /* OAAppSettings.m */,
 				2C8E8A542D5104E600746A69 /* OAArabicNormalizer.h */,
@@ -18491,6 +18494,7 @@
 				DA5A83EA26C563A800F274C7 /* OACollapsableWaypointsView.mm in Sources */,
 				27D33B572E7459FA00AD4F70 /* MoveToMyLocationAction.swift in Sources */,
 				DA5A837D26C563A800F274C7 /* GpxUIHelper.swift in Sources */,
+				32E080C22FAB2DCA0095A278 /* SearchByRouteIdTask.swift in Sources */,
 				DA21F1BB29BA101E004985BA /* OANetworkRouteDrawable.mm in Sources */,
 				DA4ABF252876DA6800B996EF /* OAFileSettingsItem.mm in Sources */,
 				FA7341142BBC1C2000CBF7EC /* OARequiredMapsResourceViewController.mm in Sources */,

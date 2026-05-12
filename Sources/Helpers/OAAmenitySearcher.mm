@@ -1819,4 +1819,53 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return [NSArray arrayWithArray:arr];
 }
 
+//public List<Amenity> searchRoutePartOf(final String routeId) {
+//    ResultMatcher<Amenity> matcher = new ResultMatcher<Amenity>() {
+//        public boolean publish(Amenity amenity) {
+//            String members = amenity.getAdditionalInfo("route_members_ids");
+//            if (members != null) {
+//                HashSet<String> ids = new HashSet();
+//                Collections.addAll(ids, members.split(" "));
+//                return ids.contains(routeId);
+//            } else {
+//                return false;
+//            }
+//        }
+//
+//        public boolean isCancelled() {
+//            return false;
+//        }
+//    };
+//    return this.searchRouteByName(routeId, StringMatcherMode.CHECK_EQUALS_FROM_SPACE, matcher);
+//}
+
+- (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId
+{
+    //TODO: implement
+    return [self searchRouteByName];
+}
+
+
+
+//private List<Amenity> searchRouteByName(String multipleSearch, CollatorStringMatcher.StringMatcherMode mode, ResultMatcher<Amenity> matcher) {
+//    List<Amenity> result = new ArrayList();
+//    BinaryMapIndexReader.SearchRequest<Amenity> req = BinaryMapIndexReader.buildSearchPoiRequest(0, 0, multipleSearch, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, matcher);
+//    req.setMatcherMode(mode);
+//
+//    for(AmenityIndexRepository index : this.getAmenityRepositories(false, (Predicate)null)) {
+//        List<Amenity> amenities = index.searchPoiByName(req);
+//        if (!Algorithms.isEmpty(amenities)) {
+//            result.addAll(amenities);
+//        }
+//    }
+//
+//    return result;
+//}
+
+- (NSArray<OAPOI *> *)searchRouteByName
+{
+    //TODO: implement
+    return nil;
+}
+
 @end

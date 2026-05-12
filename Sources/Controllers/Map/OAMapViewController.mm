@@ -649,6 +649,15 @@ static const NSInteger kDetailedMapZoom = 9;
         [_mapView addGestureRecognizer:_grMouseWheelScroll];
 }
 
+- (void) applicationWillResignActive:(UIApplication*)application
+{
+    if (self.mapViewLoaded && !UIApplication.sharedApplication.isCarPlayConnected)
+    {
+        // Suspend rendering
+        [_mapView suspendRendering];
+    }
+}
+
 - (void) applicationDidEnterBackground:(UIApplication*)application
 {
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];

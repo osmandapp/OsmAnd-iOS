@@ -66,7 +66,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
                                bottom:(double)bottom
                                 right:(double)right
                                  zoom:(int)zoom
-                              matcher:(OAResultMatcher<OAPOI *> *)matcher
+                              matcher:(nullable OAResultMatcher<OAPOI *> *)matcher
                          filterUnique:(BOOL)filterUnique;
 
 + (NSComparator) getComparator;

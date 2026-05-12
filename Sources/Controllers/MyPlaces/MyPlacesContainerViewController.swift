@@ -23,18 +23,15 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         }
     }
     
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var segmentContainerView: UIView!
-    @IBOutlet weak var segmentControl: UISegmentedControl!
+    @IBOutlet private weak var contentView: UIView!
+    @IBOutlet private weak var segmentContainerView: UIView!
+    @IBOutlet private weak var segmentControl: UISegmentedControl!
     
     private let segmentedControlIconSize: CGFloat = 24
     
     private var availableTabs: [Tab] = []
+    private var availableViewControllers: [UIViewController] = []
     private var pageViewController: UIPageViewController?
-    private var favoritesViewController: OAFavoriteListViewController?
-    private var tracksViewController: TracksViewController?
-    private var osmEditsViewController: OAOsmEditsListViewController?
-    private var travelGuidesViewController: SavedArticlesTabViewController?
     private var searchController: UISearchController?
     
     override func viewDidLoad() {
@@ -50,6 +47,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         setupSearchController()
+        setupPageController()
+        setupViewControllers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -76,6 +75,42 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         }
         
         availableTabs = tabs
+    }
+    
+    private func setupPageController() {
+        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        pageViewController?.dataSource = self
+        pageViewController?.delegate = self
+        let frame = CGRect(x: 0, y: 0, width: contentView.frame.size.width, height: contentView.frame.size.height)
+        pageViewController?.view.frame = frame
+        pageViewController?.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        if let pageViewController {
+            addChild(pageViewController)
+            contentView.addSubview(pageViewController.view)
+            pageViewController.didMove(toParent: self)
+        }
+    }
+    
+    private func setupViewControllers() {
+        guard let pageViewController else { return }
+        var viewControllers: [UIViewController] = []
+        
+        if let favoritesViewController = OAFavoriteListViewController(frame: pageViewController.view.frame) {
+            viewControllers.append(favoritesViewController)
+            pageViewController.setViewControllers([favoritesViewController], direction: .forward, animated: false)
+        }
+        
+        viewControllers.append(TracksViewController(frame: pageViewController.view.frame))
+        
+        if OAIAPHelper.sharedInstance().osmEditing.isActive() {
+            viewControllers.append(OAOsmEditsListViewController(frame: pageViewController.view.frame))
+        }
+        
+        if TravelLocalDataHelper.shared.hasSavedArticles() {
+            viewControllers.append(SavedArticlesTabViewController(frame: pageViewController.view.frame))
+        }
+        
+        availableViewControllers = viewControllers
     }
     
     private func setupSearchController() {
@@ -114,7 +149,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func switchTo(tab: Tab) {
-        // - TODO:
+        guard let index = availableTabs.firstIndex(of: tab) else { return }
+        pageViewController?.setViewControllers([availableViewControllers[index]], direction: .forward, animated: true)
     }
     
     @objc private func onBackPressed() {
@@ -122,10 +158,35 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     @objc private func onSegmentChanged() {
+        view.endEditing(true)
         let index = segmentControl.selectedSegmentIndex
         guard availableTabs.indices.contains(index) else { return }
         
         let tab = availableTabs[index]
         switchTo(tab: tab)
+    }
+}
+
+// MARK: - UIPageViewControllerDataSource
+extension MyPlacesContainerViewController: UIPageViewControllerDataSource {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let index = availableViewControllers.firstIndex(of: viewController), index > 0 else { return nil }
+        return availableViewControllers[index - 1]
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let index = availableViewControllers.firstIndex(of: viewController), index < availableViewControllers.count - 1 else { return nil }
+        return availableViewControllers[index + 1]
+    }
+}
+
+// MARK: - UIPageViewControllerDelegate
+extension MyPlacesContainerViewController: UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard let viewController = pageViewController.viewControllers?.first,
+              let index = availableViewControllers.firstIndex(of: viewController) else {
+            return
+        }
+        segmentControl.selectedSegmentIndex = index
     }
 }

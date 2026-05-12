@@ -101,7 +101,6 @@ static const NSStringCompareOptions searchOptions = NSCaseInsensitiveSearch | NS
 
     UIBarButtonItem *_directionButton;
     UIBarButtonItem *_editButton;
-    UISearchController *_searchController;
     FreeBackupBanner *_freeBackupBanner;
     
     BOOL _isSearchActive;
@@ -115,6 +114,16 @@ static const NSStringCompareOptions searchOptions = NSCaseInsensitiveSearch | NS
 }
 
 static UIViewController *parentController;
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithStyle:UITableViewStyleInsetGrouped];
+    if (self)
+    {
+        self.view.frame = frame;
+    }
+    return self;
+}
 
 + (BOOL)popToParent
 {
@@ -153,9 +162,8 @@ static UIViewController *parentController;
 
     _selectedItems = [[NSMutableArray alloc] init];
     
-    self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
-    [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
-    [self addNotification:OAFavoriteImportViewControllerDidDismissNotification selector:@selector(favoriteImportViewControllerDidDismiss:)];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(favoriteImportViewControllerDidDismiss:) name:OAFavoriteImportViewControllerDidDismissNotification object:nil];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -191,15 +199,15 @@ static UIViewController *parentController;
 - (void)resizeHeaderBanner {
     if ([self isAvailablePaymentBanner] && _freeBackupBanner)
     {
-        CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:self.tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
         
-        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:self.tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
         _freeBackupBanner.frame = CGRectMake(0,
                                              0,
-                                             self.favoriteTableView.frame.size.width,
+                                             self.tableView.frame.size.width,
                                              _freeBackupBanner.defaultFrameHeight + titleHeight + descriptionHeight);
-        self.favoriteTableView.tableHeaderView = _freeBackupBanner;
-        UIEdgeInsets insets = self.favoriteTableView.layoutMargins;
+        self.tableView.tableHeaderView = _freeBackupBanner;
+        UIEdgeInsets insets = self.tableView.layoutMargins;
         if (insets.left != 0 || insets.right != 0)
         {
             _freeBackupBanner.leadingSubviewConstraint.constant = insets.left;
@@ -256,7 +264,7 @@ static UIViewController *parentController;
 
 - (void)closeFreeBackupBanner
 {
-    self.favoriteTableView.tableHeaderView = nil;
+    self.tableView.tableHeaderView = nil;
     [self changeContentInsetTop:-20];
     _freeBackupBanner = nil;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClosedFreeBackupFavoritesBannerKey];
@@ -264,8 +272,8 @@ static UIViewController *parentController;
 
 - (void)changeContentInsetTop:(CGFloat)top
 {
-    UIEdgeInsets insets = [self.favoriteTableView contentInset];
-    [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top + top, insets.left, insets.bottom, insets.right)];
+    UIEdgeInsets insets = [self.tableView contentInset];
+    [self.tableView setContentInset:UIEdgeInsetsMake(insets.top + top, insets.left, insets.bottom, insets.right)];
 }
 
 
@@ -283,12 +291,12 @@ static UIViewController *parentController;
 
 -(UIView *) getMiddleView
 {
-    return _favoriteTableView;
+    return self.tableView;
 }
 
 -(UIView *) getBottomView
 {
-    return [self.favoriteTableView isEditing] ? _editToolbarView : nil;
+    return [self.tableView isEditing] ? _editToolbarView : nil;
 }
 
 -(CGFloat) getToolBarHeight
@@ -305,7 +313,7 @@ static UIViewController *parentController;
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ([self.favoriteTableView isEditing])
+    if ([self.tableView isEditing])
         return;
     
     CFTimeInterval currentTime = CACurrentMediaTime();
@@ -377,13 +385,13 @@ static UIViewController *parentController;
 
 - (void)refreshVisibleRows
 {
-    if ([self.favoriteTableView isEditing])
+    if ([self.tableView isEditing])
         return;
     
-    NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
+    NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
     for (NSIndexPath *i in visibleIndexPaths)
     {
-        UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:i];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:i];
         if ([cell isKindOfClass:[OAPointTableViewCell class]])
         {
             OAFavoriteItem* item;
@@ -418,7 +426,7 @@ static UIViewController *parentController;
         }
     }
     
-    [self.favoriteTableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -437,41 +445,18 @@ static UIViewController *parentController;
     _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(updateDistanceAndDirection)
                                                         andObserve:app.locationServices.updateHeadingObserver];
-    [self applySafeAreaMargins];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"pencil"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
     _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
-    self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
-    if (!_searchController)
-    {
-        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-        _searchController.searchResultsUpdater = self;
-        _searchController.searchBar.delegate = self;
-        _searchController.obscuresBackgroundDuringPresentation = NO;
-        self.tabBarController.navigationItem.searchController = _searchController;
-        if (@available(iOS 26.0, *))
-        {
-            if (![OAUtilities isIPad])
-                self.tabBarController.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
-        }
-            
-        [self setupSearchController:NO filtered:NO];
-    }
+    self.navigationItem.title = OALocalizedString(@"my_favorites");
     self.definesPresentationContext = YES;
     [self addAccessibilityLabels];
     [self configurePaymentBanner];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (_searchController && !self.tabBarController.navigationItem.searchController)
-        self.tabBarController.navigationItem.searchController = _searchController;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -491,8 +476,6 @@ static UIViewController *parentController;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    self.tabBarController.navigationItem.searchController = nil;
-    self.navigationItem.searchController = nil;
     self.definesPresentationContext = NO;
 }
 
@@ -585,43 +568,20 @@ static UIViewController *parentController;
 
     _data = [NSMutableArray arrayWithArray:tableData];
 
-    [self.favoriteTableView reloadData];
+    [self.tableView reloadData];
 
     _unsortedHeaderViews = [NSArray arrayWithArray:headerViews];
 }
 
 -(void)setupView
 {
-    self.favoriteTableView.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-    [self.favoriteTableView setDataSource:self];
-    [self.favoriteTableView setDelegate:self];
-    self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.favoriteTableView reloadData];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
+    [self.tableView setDataSource:self];
+    [self.tableView setDelegate:self];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.tableView reloadData];
     _isSearchActive = NO;
     _isFiltered = NO;
-}
-
-- (void) setupSearchController:(BOOL)isSearchActive filtered:(BOOL)isFiltered
-{
-    if (isSearchActive)
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-    }
-    else if (isFiltered)
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
-    }
-    else
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -644,7 +604,7 @@ static UIViewController *parentController;
 
 - (IBAction)sortByDistance:(id)sender
 {
-    if (![self.favoriteTableView isEditing])
+    if (![self.tableView isEditing])
     {
         if (_directionButton.tag == 0)
         {
@@ -798,7 +758,7 @@ static UIViewController *parentController;
         [OAFavoritesHelper saveCurrentPointsIntoFile];
     }
     [self finishEditing];
-    [self.favoriteTableView reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - OAEditGroupViewControllerDelegate
@@ -882,36 +842,27 @@ static UIViewController *parentController;
 
 - (void) startEditing
 {
-    [self.favoriteTableView setEditing:YES animated:YES];
+    [self.tableView setEditing:YES animated:YES];
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     _editToolbarView.hidden = NO;
-    [UIView animateWithDuration:.3 animations:^{
-        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
-        [self applySafeAreaMargins];
-    } completion:^(BOOL finished) {
-        [self.tabBarController.tabBar setHidden:YES];
-    }];
 
     _editButton.image = [UIImage systemImageNamed:@"pencil"];
-    self.tabBarController.navigationItem.hidesBackButton = YES;
+    self.navigationItem.hidesBackButton = YES; // TODO
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
-    [self.favoriteTableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void) finishEditing
 {
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-    self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
-        [self.tabBarController.tabBar setHidden:NO];
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
-        [self applySafeAreaMargins];
     }];
 
     _editButton.image = [UIImage systemImageNamed:@"pencil"];
-    self.tabBarController.navigationItem.hidesBackButton = NO;
+    self.navigationItem.hidesBackButton = NO;
 
     if (_directionButton.tag == 1)
         _directionButton.image = [UIImage imageNamed:@"icon_direction_active"];
@@ -919,18 +870,18 @@ static UIViewController *parentController;
         _directionButton.image = [UIImage imageNamed:@"icon_direction"];
 
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
-    [self.favoriteTableView setEditing:NO animated:YES];
+    [self.tableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
 }
 
 - (IBAction)editButtonClicked:(id)sender
 {
-    [self.favoriteTableView beginUpdates];
-    if ([self.favoriteTableView isEditing])
+    [self.tableView beginUpdates];
+    if ([self.tableView isEditing])
         [self finishEditing];
     else
         [self startEditing];
-    [self.favoriteTableView endUpdates];
+    [self.tableView endUpdates];
 }
 
 - (IBAction) shareButtonClicked:(id)sender
@@ -1028,7 +979,7 @@ static UIViewController *parentController;
     
     //export button is on last section, last row
     NSIndexPath *exportButtonIndex = [NSIndexPath indexPathForRow:_exportButtonIndex inSection:_data.count - 1];
-    UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:exportButtonIndex];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:exportButtonIndex];
     [self showActivity:@[favoritesUrl] sourceView:cell barButtonItem:nil completionWithItemsHandler:^{
         [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
     }];
@@ -1089,7 +1040,7 @@ static UIViewController *parentController;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != self.favoriteTableView.numberOfSections - 1 || _isSearchActive)
+    if (indexPath.section != self.tableView.numberOfSections - 1 || _isSearchActive)
         return 60.;
     return  44.;
 }
@@ -1178,7 +1129,7 @@ static UIViewController *parentController;
                 [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:section]];
             }
             
-            UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
             [self shareItems:indexPaths sounceItem:(cell ?: self.view)];
         }];
         shareAction.accessibilityLabel = OALocalizedString(@"shared_string_share");
@@ -1284,7 +1235,7 @@ static UIViewController *parentController;
     if (indexPath.section == 0 || _isSearchActive)
     {
         OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
@@ -1309,7 +1260,7 @@ static UIViewController *parentController;
     else
     {
         OASimpleTableViewCell* cell;
-        cell = (OASimpleTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        cell = (OASimpleTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -1347,7 +1298,7 @@ static UIViewController *parentController;
     FavoriteTableGroup* groupData = item[@"group"];
 
     OAPointHeaderTableViewCell* cell;
-    cell = (OAPointHeaderTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointHeaderTableViewCell getCellIdentifier]];
+    cell = (OAPointHeaderTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointHeaderTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
@@ -1380,7 +1331,7 @@ static UIViewController *parentController;
         cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
         [cell.openCloseGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        if ([self.favoriteTableView isEditing])
+        if ([self.tableView isEditing])
             [cell.openCloseGroupButton setHidden:NO];
         else
             [cell.openCloseGroupButton setHidden:YES];
@@ -1407,7 +1358,7 @@ static UIViewController *parentController;
 
     NSInteger dataIndex = indexPath.row - 1;
     OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+    cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
@@ -1444,7 +1395,7 @@ static UIViewController *parentController;
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     OASimpleTableViewCell* cell;
-    cell = (OASimpleTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+    cell = (OASimpleTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -1463,7 +1414,7 @@ static UIViewController *parentController;
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.favoriteTableView isEditing])
+    if ([self.tableView isEditing])
     {
         if (_directionButton.tag == 0)
         {
@@ -1520,7 +1471,7 @@ static UIViewController *parentController;
         NSInteger itemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
         if (itemIndex != NSNotFound)
         {
-            [self.favoriteTableView beginUpdates];
+            [self.tableView beginUpdates];
             if (!_isFiltered)
             {
                 [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
@@ -1532,8 +1483,8 @@ static UIViewController *parentController;
                 [_filteredItems removeObjectAtIndex:itemIndex];
             }
             
-            [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-            [self.favoriteTableView endUpdates];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+            [self.tableView endUpdates];
         }
     }
 }
@@ -1550,7 +1501,7 @@ static UIViewController *parentController;
         if (itemIndex != NSNotFound)
         {
             NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
-            [self.favoriteTableView beginUpdates];
+            [self.tableView beginUpdates];
             if (group.favoriteGroup.points.count == 1)
             {
                 NSMutableArray *unsortedHeaderViews = [_unsortedHeaderViews mutableCopy];
@@ -1572,16 +1523,16 @@ static UIViewController *parentController;
             if (group.favoriteGroup.points.count == 0)
             {
                 [_data removeObjectAtIndex:indexPath.section];
-                [self.favoriteTableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
             }
             else
             {
-                [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
             }
-            [self.favoriteTableView endUpdates];
+            [self.tableView endUpdates];
 
             if (indexPaths.count > 0)
-                [self.favoriteTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     }
 }
@@ -1600,7 +1551,7 @@ static UIViewController *parentController;
             NSInteger itemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
             if (itemIndex != NSNotFound)
             {
-                [self.favoriteTableView beginUpdates];
+                [self.tableView beginUpdates];
                 if (!_isFiltered)
                 {
                     [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
@@ -1611,8 +1562,8 @@ static UIViewController *parentController;
                     [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[_filteredItems[itemIndex]]];
                     [_filteredItems removeObjectAtIndex:itemIndex];
                 }
-                [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
-                [self.favoriteTableView endUpdates];
+                [self.tableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
+                [self.tableView endUpdates];
             }
         }
     }
@@ -1639,13 +1590,13 @@ static UIViewController *parentController;
             OAFavoriteItem* item = group.favoriteGroup.points[index];
             if (item && group.isOpen)
             {
-                [self.favoriteTableView beginUpdates];
+                [self.tableView beginUpdates];
                 [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[item]];
                 NSInteger sortedItemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
                 if (sortedItemIndex != NSNotFound)
                     _isFiltered ? [_filteredItems removeObjectAtIndex:sortedItemIndex] : [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
-                [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
-                [self.favoriteTableView endUpdates];
+                [self.tableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
+                [self.tableView endUpdates];
             }
         }
     }
@@ -1654,11 +1605,11 @@ static UIViewController *parentController;
 
 - (void)removeGroupHeader:(NSIndexPath *)indexPath
 {
-    NSInteger numberOfRows = [self.favoriteTableView numberOfRowsInSection:[indexPath section]];
+    NSInteger numberOfRows = [self.tableView numberOfRowsInSection:[indexPath section]];
 
     if (numberOfRows == 1)
     {
-        [self.favoriteTableView beginUpdates];
+        [self.tableView beginUpdates];
 
         NSDictionary *groupData = _data[indexPath.section][0];
         FavoriteTableGroup* group = groupData[@"group"];
@@ -1677,11 +1628,11 @@ static UIViewController *parentController;
             [indexPaths addObject:[NSIndexPath indexPathForRow:0 inSection:i]];
         }
 
-        [self.favoriteTableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                               withRowAnimation:UITableViewRowAnimationFade];
-        [self.favoriteTableView endUpdates];
+        [self.tableView endUpdates];
         if (indexPaths.count > 0)
-            [self.favoriteTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -1774,22 +1725,22 @@ static UIViewController *parentController;
 
 - (void) selectAllItemsInGroup:(NSIndexPath *)indexPath selectHeader:(BOOL)selectHeader
 {
-    NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:indexPath.section];
+    NSInteger rowsCount = [self.tableView numberOfRowsInSection:indexPath.section];
 
-    [self.favoriteTableView beginUpdates];
+    [self.tableView beginUpdates];
     if (selectHeader)
         for (int i = 0; i < rowsCount; i++)
         {
-            [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
             [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
         }
     else
         for (int i = 0; i < rowsCount; i++)
         {
             [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
-            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:YES];
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:YES];
         }
-    [self.favoriteTableView endUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void) selectGroupForEditing:(NSIndexPath *)indexPath
@@ -1805,14 +1756,14 @@ static UIViewController *parentController;
 
 - (void) deselectGroupForEditing:(NSIndexPath *)indexPath
 {
-    BOOL isGroupHeaderSelected = [self.favoriteTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+    BOOL isGroupHeaderSelected = [self.tableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
     NSDictionary *item = _data[indexPath.section][0];
     FavoriteTableGroup* groupData = item[@"group"];
 
     if (groupData.isOpen)
     {
-        NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
-        NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:indexPath.section];
+        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+        NSInteger rowsCount = [self.tableView numberOfRowsInSection:indexPath.section];
         [self selectAllItemsInGroup:indexPath selectHeader:(rowsCount != selectedRows.count && isGroupHeaderSelected)];
     }
     else
@@ -1820,7 +1771,7 @@ static UIViewController *parentController;
         NSMutableArray *tmp = [[NSMutableArray alloc] initWithArray:_selectedItems];
         for (NSUInteger i = 0; i < tmp.count; i++)
             [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
-        [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
+        [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
     }
 }
 
@@ -1828,7 +1779,7 @@ static UIViewController *parentController;
 {
     for (NSIndexPath *itemPath in _selectedItems)
         if (itemPath.section == indexPath.section)
-            [self.favoriteTableView selectRowAtIndexPath:itemPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView selectRowAtIndexPath:itemPath animated:YES scrollPosition:UITableViewScrollPositionNone];
 }
 
 - (void) openCloseFavoriteGroup:(NSIndexPath *)indexPath
@@ -1838,18 +1789,18 @@ static UIViewController *parentController;
     if (groupData.isOpen)
     {
         groupData.isOpen = NO;
-        [self.favoriteTableView beginUpdates];
-        [self.favoriteTableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-        [self.favoriteTableView endUpdates];
+        [self.tableView beginUpdates];
+        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
         if ([_selectedItems containsObject: [NSIndexPath indexPathForRow:0 inSection:indexPath.section]])
-            [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
     {
         groupData.isOpen = YES;
-        [self.favoriteTableView beginUpdates];
-        [self.favoriteTableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-        [self.favoriteTableView endUpdates];
+        [self.tableView beginUpdates];
+        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
 
         [self selectPreselectedCells:indexPath];
     }
@@ -1867,9 +1818,9 @@ static UIViewController *parentController;
         NSString *cellType = item[@"type"];
         if ([cellType isEqualToString:@"group"])
         {
-            if (indexPath.row == 0 && ![self.favoriteTableView isEditing])
+            if (indexPath.row == 0 && ![self.tableView isEditing])
                 [self openCloseFavoriteGroup:indexPath];
-            else if (indexPath.row == 0 && [self.favoriteTableView isEditing])
+            else if (indexPath.row == 0 && [self.tableView isEditing])
                 [self selectGroupForEditing:indexPath];
             else
                 [self didSelectRowAtIndexPathUnsorted:indexPath];
@@ -1889,9 +1840,9 @@ static UIViewController *parentController;
         NSString *cellType = item[@"type"];
         if ([cellType isEqualToString:@"group"])
         {
-            if (indexPath.row == 0 && ![self.favoriteTableView isEditing])
+            if (indexPath.row == 0 && ![self.tableView isEditing])
                 [self openCloseFavoriteGroup:indexPath];
-            else if (indexPath.row == 0 && [self.favoriteTableView isEditing])
+            else if (indexPath.row == 0 && [self.tableView isEditing])
                 [self deselectGroupForEditing:indexPath];
             else
                 [self didDeselectRowAtIndexPathUnsorted:indexPath];
@@ -1901,7 +1852,7 @@ static UIViewController *parentController;
 
 - (void) didSelectRowAtIndexPathSorter:(NSIndexPath *)indexPath
 {
-    if ([self.favoriteTableView isEditing])
+    if ([self.tableView isEditing])
     {
         [self addIndexPathToSelectedCellsArray:indexPath];
         return;
@@ -1920,13 +1871,13 @@ static UIViewController *parentController;
         SEL action = NSSelectorFromString([item objectForKey:@"action"]);
         [self performSelector:action];
         [self removeIndexPathFromSelectedCellsArray:indexPath];
-        [self.favoriteTableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
 - (void) didDeselectRowAtIndexPathSorted:(NSIndexPath *)indexPath
 {
-    if ([self.favoriteTableView isEditing])
+    if ([self.tableView isEditing])
     {
         [self removeIndexPathFromSelectedCellsArray:indexPath];
         return;
@@ -1935,11 +1886,11 @@ static UIViewController *parentController;
 
 - (void) didDeselectRowAtIndexPathUnsorted:(NSIndexPath *)indexPath
 {
-    if ([self.favoriteTableView isEditing])
+    if ([self.tableView isEditing])
     {
-        BOOL isGroupHeaderSelected = [self.favoriteTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-        NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
-        NSInteger numberOfRowsInSection = [self.favoriteTableView numberOfRowsInSection:indexPath.section] - 1;
+        BOOL isGroupHeaderSelected = [self.tableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+        NSInteger numberOfRowsInSection = [self.tableView numberOfRowsInSection:indexPath.section] - 1;
         NSInteger numberOfSelectedRowsInSection = 0;
         for (NSIndexPath *item in selectedRows)
         {
@@ -1951,12 +1902,12 @@ static UIViewController *parentController;
         if (indexPath.row == 0)
         {
             [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
         }
         else if (numberOfSelectedRowsInSection == numberOfRowsInSection && isGroupHeaderSelected)
         {
             [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
         }
         return;
     }
@@ -1964,11 +1915,11 @@ static UIViewController *parentController;
 
 - (void) didSelectRowAtIndexPathUnsorted:(NSIndexPath *)indexPath
 {
-    if ([self.favoriteTableView isEditing])
+    if ([self.tableView isEditing])
     {
-        BOOL isGroupHeaderSelected = [self.favoriteTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-        NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
-        NSInteger numberOfRowsInSection = [self.favoriteTableView numberOfRowsInSection:indexPath.section] - 1;
+        BOOL isGroupHeaderSelected = [self.tableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+        NSInteger numberOfRowsInSection = [self.tableView numberOfRowsInSection:indexPath.section] - 1;
         NSInteger numberOfSelectedRowsInSection = 0;
         for (NSIndexPath *item in selectedRows)
         {
@@ -1978,13 +1929,13 @@ static UIViewController *parentController;
         }
         if (numberOfSelectedRowsInSection == numberOfRowsInSection && !isGroupHeaderSelected)
         {
-            [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
             [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
         }
         else
         {
             [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
         }
         return;
     }
@@ -2004,7 +1955,7 @@ static UIViewController *parentController;
         SEL action = NSSelectorFromString([item objectForKey:@"action"]);
         [self performSelector:action];
         [self removeIndexPathFromSelectedCellsArray:indexPath];
-        [self.favoriteTableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
@@ -2040,20 +1991,20 @@ static UIViewController *parentController;
 {
     OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
     NSInteger section = headerView.section;
-    NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:section];
+    NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
 
-    [self.favoriteTableView beginUpdates];
+    [self.tableView beginUpdates];
     if (value)
     {
         for (NSInteger i = 0; i < rowsCount; i++)
-            [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
     {
         for (NSInteger i = 0; i < rowsCount; i++)
-            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
-    [self.favoriteTableView endUpdates];
+    [self.tableView endUpdates];
 }
 
 #pragma mark - OAEditorDelegate
@@ -2115,9 +2066,9 @@ static UIViewController *parentController;
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            UIEdgeInsets insets = [self.favoriteTableView contentInset];
-            [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
-            [self.favoriteTableView setScrollIndicatorInsets:self.favoriteTableView.contentInset];
+            UIEdgeInsets insets = [self.tableView contentInset];
+            [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+            [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
         } completion:nil];
 }
 
@@ -2127,9 +2078,9 @@ static UIViewController *parentController;
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            UIEdgeInsets insets = [self.favoriteTableView contentInset];
-            [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
-            [self.favoriteTableView setScrollIndicatorInsets:self.favoriteTableView.contentInset];
+            UIEdgeInsets insets = [self.tableView contentInset];
+            [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+            [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
         } completion:nil];
 }
 
@@ -2141,15 +2092,13 @@ static UIViewController *parentController;
     {
         _isSearchActive = YES;
         _isFiltered = NO;
-        [self setupSearchController:YES filtered:NO];
         _directionButton.tag = 1;
         [self generateData];
-        [self.favoriteTableView reloadData];
+        [self.tableView reloadData];
     }
     else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)
     {
         _isFiltered = YES;
-        [self setupSearchController:NO filtered:YES];
         
         NSString *searchText = searchController.searchBar.searchTextField.text;
         NSLocale *currentLocale = [NSLocale currentLocale];
@@ -2170,25 +2119,15 @@ static UIViewController *parentController;
                     [_filteredItems addObject:item];
             }
         }
-        [self.favoriteTableView reloadData];
+        [self.tableView reloadData];
     }
     else
     {
         _isSearchActive = NO;
         _isFiltered = NO;
         _directionButton.tag = 0;
-        [self setupSearchController:NO filtered:NO];
-        [self.favoriteTableView reloadData];
+        [self.tableView reloadData];
     }
-}
-
-#pragma mark - UISearchBarDelegate
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-    searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-    searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
 @end

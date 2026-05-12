@@ -13,8 +13,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAOsmEditsListViewController : OACompoundViewController
+@interface OAOsmEditsListViewController : UITableViewController
 
+- (instancetype)initWithFrame:(CGRect)frame;
 - (void) setShouldPopToParent:(BOOL)shouldPop;
 
 @end

@@ -8,26 +8,31 @@
 
 import Foundation
 
-final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
-    
-    @IBOutlet private weak var tableView: UITableView!
+final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
     var savedArticlesObserver: OAAutoObserverProxy?
     var isGpxReading = false
-    var searchController = UISearchController()
     var isSearchActive = false
     var isFiltered = false
     var searchText = ""
     var lastSelectedIndexPath: IndexPath?
     
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    init(frame: CGRect) {
+        super.init(style: .insetGrouped)
+        view.frame = frame
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
-        tabBarController?.navigationItem.title = localizedString("shared_string_travel_guides")
-        setupSearchController()
+        navigationItem.title = localizedString("shared_string_travel_guides")
+        definesPresentationContext = true
     }
     
     override func viewDidLoad() {
@@ -36,15 +41,8 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         startAsyncInit()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        setupSearchController()
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        tabBarController?.navigationItem.searchController = nil
-        navigationItem.searchController = nil
         definesPresentationContext = false
     }
     
@@ -100,50 +98,17 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         }
     }
     
-    func setupSearchController() {
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        if #available(iOS 26.0, *) {
-            if !OAUtilities.isIPad() {
-                tabBarController?.navigationItem.preferredSearchBarPlacement = .stacked
-                navigationItem.preferredSearchBarPlacement = .stacked
-            }
-        }
-        tabBarController?.navigationItem.searchController = searchController
-        navigationItem.searchController = searchController
-        updateSearchController()
-    }
-    
-    func updateSearchController() {
-        if isFiltered {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBg
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorTertiary
-        } else if isSearchActive {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-        } else {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-        }
-    }
-    
     // MARK: TableView
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         Int(tableData.sectionCount())
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         Int(tableData.rowCount(UInt(section)))
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
         if item.cellType == ArticleTravelCell.getIdentifier() {
             var cell = self.tableView.dequeueReusableCell(withIdentifier: ArticleTravelCell.getIdentifier()) as? ArticleTravelCell
@@ -192,7 +157,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         return UITableViewCell()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         lastSelectedIndexPath = indexPath
         if let article = item.obj(forKey: "article") as? TravelArticle {
@@ -203,7 +168,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
         if item.cellType == ArticleTravelCell.getIdentifier() {
             if let article = item.obj(forKey: "article") as? TravelArticle {
@@ -274,7 +239,6 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             isSearchActive = false
             isFiltered = false
         }
-        updateSearchController()
         generateData()
         tableView.reloadData()
     }
@@ -284,7 +248,6 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
         isFiltered = false
-        updateSearchController()
     }
     
     // MARK: TravelExploreViewControllerDelegate

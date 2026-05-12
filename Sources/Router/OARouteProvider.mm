@@ -32,6 +32,9 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAWorldRegion.h"
 
+#include <exception>
+#include <new>
+
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
 #include <routingConfiguration.h>
@@ -49,6 +52,21 @@
 #define NEAREST_POINT_EXTRA_SEARCH_DISTANCE 300
 
 #define GPX_CALC_DIST_THRESHOLD 1000000
+
+static NSString * const kRouteCalculationOutOfMemoryError = @"Not enough memory to calculate route.";
+static NSString * const kRouteCalculationFailedError = @"Route calculation failed.";
+
+static NSString *RouteCalculationErrorMessage(const std::exception &exception)
+{
+    const char *what = exception.what();
+    if (what && what[0] != '\0')
+    {
+        NSString *message = [NSString stringWithUTF8String:what];
+        if (message.length > 0)
+            return message;
+    }
+    return kRouteCalculationFailedError;
+}
 
 @interface OARouteProvider()
 
@@ -984,6 +1002,16 @@
             return [[OARouteCalculationResult alloc] initWithSegmentResults:result start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode calculateFirstAndLastPoint:YES initialCalculation:params.initialCalculation];
         }
     }
+    catch (const std::bad_alloc &e)
+    {
+        NSLog(@"Failed to calculate route: %s", e.what());
+        return [[OARouteCalculationResult alloc] initWithErrorMessage:kRouteCalculationOutOfMemoryError];
+    }
+    catch (const std::exception &e)
+    {
+        NSLog(@"Failed to calculate route: %s", e.what());
+        return [[OARouteCalculationResult alloc] initWithErrorMessage:RouteCalculationErrorMessage(e)];
+    }
     catch (NSException *e)
     {
         return [[OARouteCalculationResult alloc] initWithErrorMessage:e.reason];
@@ -1814,6 +1842,16 @@
         catch (NSException *e)
         {
             NSLog(@"Failed to find route %@", e.reason);
+        }
+        catch (const std::bad_alloc &e)
+        {
+            NSLog(@"Failed to find route: %s", e.what());
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:kRouteCalculationOutOfMemoryError];
+        }
+        catch (const std::exception &e)
+        {
+            NSLog(@"Failed to find route: %s", e.what());
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:RouteCalculationErrorMessage(e)];
         }
     }
     return [[OARouteCalculationResult alloc] initWithErrorMessage:nil];

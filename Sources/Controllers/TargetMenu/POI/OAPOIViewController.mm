@@ -46,9 +46,9 @@ static const NSString *US_MAPS_RECREATION_AREA = @"us_maps_recreation_area";
 static const NSInteger WAY_MODULO_REMAINDER = 1;
 static const NSInteger kOrderShortDescrRow = -10000;
 
-static NSString * const ROUTE_MEMBERS_ROW_KEY = @"route_members_row_key";
-static NSString * const ROUTE_PART_OF_ROW_KEY = @"route_part_of_row_key";
-static NSString * const ROUTE_RELATED_ROUTES_ROW_KEY = @"route_related_routes_row_key";
+//static NSString * const ROUTE_MEMBERS_ROW_KEY = @"route_members_row_key";
+//static NSString * const ROUTE_PART_OF_ROW_KEY = @"route_part_of_row_key";
+//static NSString * const ROUTE_RELATED_ROUTES_ROW_KEY = @"route_related_routes_row_key";
 
 @interface OAPOIViewController ()
 
@@ -59,6 +59,10 @@ static NSString * const ROUTE_RELATED_ROUTES_ROW_KEY = @"route_related_routes_ro
     OAPOIHelper *_poiHelper;
     AmenityUIHelper *_amenityUIHelper;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
+    
+//    OAAmenityInfoRow *routeMembersRow;
+//    OAAmenityInfoRow *routePartOfRow;
+//    OAAmenityInfoRow *routeRelatedRow;
 }
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"x", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
@@ -229,7 +233,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     {
         [self buildNearestPoiRowForAmenity:rows];
     }
-    [self buildRouteRows:rows];
+//    [self buildRouteRows:rows];
 }
 
 - (void)buildNearestWikiForAmenity:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -242,65 +246,135 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     [self buildNearestPoiRow:rows listener:nil];
 }
 
-- (void)buildRouteRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
-{
-    //TODO: test
-    if (!self.poi)
-        return;
-    
-    if (!NSStringIsEmpty([self.poi getAdditionalInfo:ROUTE_MEMBERS_IDS]))
-    {
-        //        buildRouteRow(amenities -> {
-        //            String title = app.getString(R.string.route_members);
-        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_MEMBERS_ROW_KEY, title);
-        //        }, SearchType.MEMBERS);
-        [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:@"SearchType.MEMBERS"];
-    }
-    
-    if (!NSStringIsEmpty([self.poi getAdditionalInfo:ROUTE_ID]))
-    {
-        //        buildRouteRow(amenities -> {
-        //            String title = app.getString(R.string.route_part_of);
-        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_PART_OF_ROW_KEY, title);
-        //        }, SearchType.PART_OF);
-        //
-        //        buildRouteRow(amenities -> {
-        //            String title = app.getString(R.string.multipoligon_related);
-        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_RELATED_ROUTES_ROW_KEY, title);
-        //        }, SearchType.RELATED);
-        
-        [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:@"SearchType.PART_OF"];
-        
-        [self buildRouteRow:rows tag:ROUTE_RELATED_ROUTES_ROW_KEY searchType:@"SearchType.RELATED"];
-    }
-}
-
-
-//protected void buildRouteRow(SearchByRouteIdListener listener, SearchType type) {
-//    if (amenity != null) {
-//        OsmAndTaskManager.executeTask(new SearchByRouteIdTask(amenity, type, app, listener));
-//    }
+//- (void)buildRouteRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
+//{
+////    //TODO: test
+////    if (!self.poi)
+////        return;
+////
+////    if (!NSStringIsEmpty([self.poi getAdditionalInfo:ROUTE_MEMBERS_IDS]))
+////    {
+////        //        buildRouteRow(amenities -> {
+////        //            String title = app.getString(R.string.route_members);
+////        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_MEMBERS_ROW_KEY, title);
+////        //        }, SearchType.MEMBERS);
+////
+//////        [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeMembers completionHandler:^(id  _Nullable result) {
+//////            NSArray<OAPOI *> *amenities = result;
+//////            if (NSArrayIsEmpty(amenities))
+//////            {
+//////                NSString *title = OALocalizedString(@"route_members");
+//////                [self buildRouteRow:rows amenities:amenities key:ROUTE_MEMBERS_ROW_KEY title:title];
+//////            }
+//////        }];
+////    }
+////
+////    if (!NSStringIsEmpty([self.poi getAdditionalInfo:ROUTE_ID]))
+////    {
+////        //        buildRouteRow(amenities -> {
+////        //            String title = app.getString(R.string.route_part_of);
+////        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_PART_OF_ROW_KEY, title);
+////        //        }, SearchType.PART_OF);
+////        //
+////        //        buildRouteRow(amenities -> {
+////        //            String title = app.getString(R.string.multipoligon_related);
+////        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_RELATED_ROUTES_ROW_KEY, title);
+////        //        }, SearchType.RELATED);
+////
+////
+////        //TODO: add build row with new results
+////
+////        //TODO: uncomment
+//////        [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypePartOf completionHandler:^(id  _Nullable result) {
+//////            NSArray<OAPOI *> *amenities = result;
+//////            if (NSArrayIsEmpty(amenities))
+//////            {
+//////                NSString *title = OALocalizedString(@"route_part_of");
+//////                [self buildRouteRow:rows amenities:amenities key:ROUTE_PART_OF_ROW_KEY title:title];
+//////            }
+//////        }];
+////
+////
+////        if (routeRelatedRow)
+////        {
+//////            [rows addObject:routeRelatedRow];
+////            [self appendInfoRow:routeRelatedRow];
+////        }
+////        else
+////        {
+////            [self buildRouteRow:rows tag:ROUTE_RELATED_ROUTES_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeRelated completionHandler:^(NSArray<OAPOI *> * _Nullable amenities) {
+//////                NSArray<OAPOI *> *amenities = (NSArray<OAPOI *> *)result;
+////                if (!NSArrayIsEmpty(amenities))
+////                {
+////                    NSString *title = OALocalizedString(@"multipoligon_related");
+////                    routeRelatedRow = [self buildRouteRow:rows amenities:amenities key:ROUTE_RELATED_ROUTES_ROW_KEY title:title];
+//////                    [rows addObject:routeRelatedRow];
+//////                    [self rebuildRows];
+////                    [self appendInfoRow:routeRelatedRow];
+////                }
+////            }];
+////        }
+////    }
 //}
 
-- (void)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows tag:(NSString *)tag searchType:(NSString *)searchType
-{
-    //TODO: test
-    if (self.poi)
-    {
-        SearchByRouteIdTask *task = [[SearchByRouteIdTask alloc] initWithAmenity:self.poi searchType:searchType];
-        [task execute];
-    }
-}
 
-
-
-
-//TODO: implement
-//SearchByRouteIdTask.doInBackground()
-// List<Amenity> list =  amenitySearcher.searchRoutePartOf(routeId);
-
-
-
+////protected void buildRouteRow(SearchByRouteIdListener listener, SearchType type) {
+////    if (amenity != null) {
+////        OsmAndTaskManager.executeTask(new SearchByRouteIdTask(amenity, type, app, listener));
+////    }
+////}
+//
+//- (void)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows tag:(NSString *)tag searchType:(EOASearchByRouteIdTaskSearchType)searchType completionHandler:(void (^ _Nullable)(NSArray<OAPOI *> * _Nullable amenities))completionHandler
+//{
+//    if (self.poi)
+//    {
+//        SearchByRouteIdTask *task = [[SearchByRouteIdTask alloc] initWithAmenity:self.poi searchType:searchType];
+//        task.completionHandler = completionHandler;
+//        [task execute];
+//    }
+//}
+//
+////private void buildRouteRow(List<Amenity> amenities, WeakReference<ViewGroup> viewGroupRef, int position, String key, String title) {
+////    ViewGroup viewGroup1 = viewGroupRef.get();
+////    if (viewGroup1 == null || Algorithms.isEmpty(amenities)) {
+////        return;
+////    }
+////    String type = "\"" + AmenityMenuController.getTypeStr(app, amenity) + "\"";
+////    String count = "(" + amenities.size() + ")";
+////    String text = app.getString(R.string.ltr_or_rtl_triple_combine_via_space, title, type, count);
+////    View wikiRow = viewGroup1.findViewWithTag(NEAREST_WIKI_KEY);
+////    View amenitiesRow = createRowContainer(viewGroup1.getContext(), key);
+////    firstRow = position == 0 || isDividerAtPosition(viewGroup1, position - 1);
+////    int iconId = AmenityMenuController.getRightIconId(app, amenity);
+////    CollapsableView collapsableView = getCollapsableView(amenitiesRow.getContext(), true, amenities, key);
+////    buildRow(amenitiesRow, new BuildRowAttrs.Builder().setIconId(iconId).setText(text)
+////            .setCollapsable(true).setCollapsableView(collapsableView).build());
+////    viewGroup1.addView(amenitiesRow, position);
+////    buildNearestRowDividerIfMissing(viewGroup1, position);
+////    requestMenuRelayout(viewGroup1);
+////}
+//
+//
+//- (OAAmenityInfoRow *)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows amenities:(NSArray<OAPOI *> *)amenities key:(NSString *)key title:(NSString *)title
+//{
+//
+//    NSString *type = [self getTypeStr]; //TODO: test this line
+//    NSString *count = [NSString stringWithFormat:@"(%lu)", amenities.count];
+//    NSString *text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_triple_combine_via_space"), title, type, count];
+//    
+//    UIImage *icon = [self getIcon];
+//    
+//    OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:key icon:icon textPrefix:nil text:text textColor:nil isText:YES needLinks:NO order:0 typeName:nil isPhoneNumber:NO isUrl:NO];
+//    
+//    //TODO: implement
+//    
+//    row.collapsableView = nil;
+//    
+////    [rows addObject:row];
+//    
+////    [self rebuildRows];
+//    return row;
+//}
 
 
 - (void)buildNamesRow:(NSMutableArray<OAAmenityInfoRow *> *)rows

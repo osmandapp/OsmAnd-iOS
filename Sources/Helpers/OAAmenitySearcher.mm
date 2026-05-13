@@ -1842,7 +1842,95 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 - (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId
 {
     //TODO: implement
-    return [self searchRouteByName];
+    
+    OACollatorStringMatcher *mode = [[OACollatorStringMatcher alloc] initWithPart:nil mode:CHECK_EQUALS_FROM_SPACE];
+    
+    
+    return [self searchRouteByName:routeId mode:mode matcher:nil];
+}
+
+
+
+//public Map<String, List<Amenity>> searchRouteMembers(String multipleSearch) {
+
+- (NSDictionary<NSString *, NSArray<OAPOI *> *> *)searchRouteMembers:(NSString *)multipleSearch
+{
+    //TODO: implement
+    QString qRouteIdKey = QString::fromNSString(ROUTE_ID);
+    
+    QSet<QString> routeIds;
+    NSArray<NSString *> *components = [multipleSearch componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    for (NSString *routeId in components)
+    {
+        if (routeId.length > 0)
+            routeIds.insert(QString::fromNSString(routeId));
+    }
+    
+    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+    
+    
+    OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(__autoreleasing id *objectPtr) {
+        
+        if (objectPtr == nil || *objectPtr == nil)
+            return false;
+
+        NSValue *value = (NSValue *)*objectPtr;
+        const OsmAnd::ISearch::IResultEntry *resultEntry = static_cast<const OsmAnd::ISearch::IResultEntry *>([value pointerValue]);
+        
+        if (resultEntry)
+        {
+            const auto amenity = OAGetAmenityFromSearchResult(*resultEntry);
+            if (amenity)
+            {
+                QHash<QString, QString> valuesHash = amenity->getDecodedValuesHash();
+                
+                const auto it = valuesHash.constFind(qRouteIdKey);
+                if (it != valuesHash.constEnd())
+                {
+                    const QString qRouteIdValue = it.value();
+                    
+                    if (routeIds.contains(qRouteIdValue))
+                    {
+                        OAPOI *poi = [OAAmenitySearcher parsePOI:*resultEntry];
+                        if (poi)
+                        {
+                            [result addObject:poi];
+                            return YES;
+                        }
+                    }
+                }
+            }
+        }
+        return NO;
+        
+    } cancelledFunc:^BOOL{
+        return false;
+    }];
+    
+
+    
+    OACollatorStringMatcher *mode = [[OACollatorStringMatcher alloc] initWithPart:nil mode:MULTISEARCH];
+//    NSArray<OAPOI *> *result = [self searchRouteByName:multipleSearch mode:mode matcher:matcher];
+    [self searchRouteByName:multipleSearch mode:mode matcher:matcher];
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOI *> *> *map = [NSMutableDictionary new];
+    
+    for (OAPOI *am in result)
+    {
+        NSString *routeId = [am getAdditionalInfo:ROUTE_ID];
+        if (map[routeId] == nil)
+        {
+            map[routeId] = [NSMutableArray new];
+        }
+        [map[routeId] addObject:am];
+    }
+    
+//    for (String id : ids) {
+//        if (!map.containsKey(id)) {
+//            map.put(id, null);
+//        }
+//    }
+    
+    return map;
 }
 
 
@@ -1862,10 +1950,69 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 //    return result;
 //}
 
-- (NSArray<OAPOI *> *)searchRouteByName
+- (NSArray<OAPOI *> *)searchRouteByName:(NSString *)multipleSearch mode:(OACollatorStringMatcher *)mode matcher:(OAResultMatcher *)matcher
 {
     //TODO: implement
-    return nil;
+    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+    
+    //TODO: use this like in androd
+//    OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
+//    OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
+//    OsmAnd::AreaI bbox31 = OsmAnd::AreaI(topLeft, bottomRight);
+    
+    //TODO: for quick testing
+    OsmAnd::LatLon latLon(50.448514, 30.495601);
+    const auto location = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(10000, location);
+    
+
+    NSMutableArray<OAPOI *> * amenities = [self searchPoiByName:multipleSearch mode:mode matcher:matcher bbox31:bbox31];
+    if (!NSArrayIsEmpty(amenities))
+    {
+        [result addObjectsFromArray:amenities];
+    }
+    
+    return result; //TODO: delete?
+}
+
+
+- (NSMutableArray<OAPOI *> *) searchPoiByName:(NSString *)code mode:(OACollatorStringMatcher *)mode matcher:(OAResultMatcher *)matcher bbox31:(OsmAnd::AreaI)bbox31
+{
+//    NSString *code = @"R5121502";
+    QString qKey = QString::fromNSString(ROUTE_ID);
+    QString qCode = QString::fromNSString(code);
+    
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&matcher]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      return [matcher isCancelled];
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    
+
+    searchCriteria->bbox31 = bbox31;
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    NSMutableArray<OAPOI *> *res = [NSMutableArray new];
+    
+    search->performSearch(*searchCriteria,
+//                          [&osmId, &res, &cancel]
+                          [&res, &code, &qCode, &qKey, &matcher]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+        
+                                 BOOL foobar = [matcher publish:[NSValue valueWithPointer:&resultEntry]];
+        
+                          },
+                          ctrl);
+    
+    return res; //TODO: delete?
 }
 
 @end

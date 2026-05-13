@@ -1351,7 +1351,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _potentiallyUsedMaps = potentiallyUsedMaps;
         _hasEmptyTransportRoute = NO;
         [self updateMenu];
+        [self showMissingMapsAlertIfNeeded];
     });
+}
+
+- (void)showMissingMapsAlertIfNeeded
+{
+    if (!UIApplication.sharedApplication.isCarPlayAppActive)
+        return;
+
+    [AlertPresenter showMissingMapsAlertOnDownloadMapsHandler:^{
+        [OAAppSettings sharedManager].ignoreMissingMaps = YES;
+        [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    } onViewOnPhoneHandler:^{
+        [self showRequiredMapsResourceViewControllerIfNeeded];
+    }];
 }
 
 - (void) newRouteIsCalculated:(BOOL)newRoute

@@ -2,7 +2,8 @@ import CarPlay
 
 @objc
 protocol CarPlayActionDelegate: NSObjectProtocol {
-    func showAlertWith(title: String)
+    func showAlertWith(title: String, completion: (() -> Void)?)
+    func showAlert(title: String, actions: [AlertActionConfig])
 }
 
 final class CarPlaySceneDelegate: UIResponder {
@@ -181,17 +182,36 @@ extension CarPlaySceneDelegate: OAWidgetListener {
 }
 
 extension CarPlaySceneDelegate: CarPlayActionDelegate {
-    func showAlertWith(title: String) {
-        guard let carPlayInterfaceController else {
-            return
-        }
+    func showAlertWith(title: String, completion: (() -> Void)? = nil) {
+        guard let carPlayInterfaceController else { return }
+        
         let okAction = CPAlertAction(title: localizedString("shared_string_ok"), style: .default) { _ in
-            carPlayInterfaceController.dismissTemplate(animated: true, completion: nil)
+            carPlayInterfaceController.dismissTemplate(animated: true) { _, _ in
+                completion?()
+            }
         }
         let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: [okAction])
         
         Task { @MainActor in
-            try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            try? await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+        }
+    }
+
+    func showAlert(title: String, actions: [AlertActionConfig]) {
+        guard let carPlayInterfaceController else { return }
+        
+        let cpActions = actions.map { config in
+            CPAlertAction(title: config.title, style: config.carPlayAlertStyle) { _ in
+                carPlayInterfaceController.dismissTemplate(animated: true) { _, _ in
+                    config.handler?()
+                }
+            }
+        }
+        
+        let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: cpActions)
+        
+        Task { @MainActor in
+            try? await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
         }
     }
 }

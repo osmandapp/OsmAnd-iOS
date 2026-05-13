@@ -623,11 +623,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     if (!NSStringIsEmpty([amenity getAdditionalInfo:ROUTE_MEMBERS_IDS]))
     {
-        //        buildRouteRow(amenities -> {
-        //            String title = app.getString(R.string.route_members);
-        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_MEMBERS_ROW_KEY, title);
-        //        }, SearchType.MEMBERS);
-        
         [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeMembers completionHandler:^(id  _Nullable result) {
             NSArray<OAPOI *> *amenities = result;
             if (!NSArrayIsEmpty(amenities))
@@ -641,20 +636,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     if (!NSStringIsEmpty([amenity getAdditionalInfo:ROUTE_ID]))
     {
-        //        buildRouteRow(amenities -> {
-        //            String title = app.getString(R.string.route_part_of);
-        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_PART_OF_ROW_KEY, title);
-        //        }, SearchType.PART_OF);
-        //
-        //        buildRouteRow(amenities -> {
-        //            String title = app.getString(R.string.multipoligon_related);
-        //            buildRouteRow(amenities, viewGroupRef, position, ROUTE_RELATED_ROUTES_ROW_KEY, title);
-        //        }, SearchType.RELATED);
-        
-        
-        //TODO: add build row with new results
-        
-        //TODO: uncomment
         [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypePartOf completionHandler:^(id  _Nullable result) {
             NSArray<OAPOI *> *amenities = result;
             if (!NSArrayIsEmpty(amenities))
@@ -665,8 +646,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             }
         }];
         
-        
-
         [self buildRouteRow:rows tag:ROUTE_RELATED_ROUTES_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeRelated completionHandler:^(NSArray<OAPOI *> * _Nullable amenities) {
             if (!NSArrayIsEmpty(amenities))
             {
@@ -677,13 +656,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         }];
     }
 }
-
-
-//protected void buildRouteRow(SearchByRouteIdListener listener, SearchType type) {
-//    if (amenity != null) {
-//        OsmAndTaskManager.executeTask(new SearchByRouteIdTask(amenity, type, app, listener));
-//    }
-//}
 
 - (void)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows tag:(NSString *)tag searchType:(EOASearchByRouteIdTaskSearchType)searchType completionHandler:(void (^ _Nullable)(NSArray<OAPOI *> * _Nullable amenities))completionHandler
 {
@@ -698,27 +670,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         [task execute];
     }
 }
-
-//private void buildRouteRow(List<Amenity> amenities, WeakReference<ViewGroup> viewGroupRef, int position, String key, String title) {
-//    ViewGroup viewGroup1 = viewGroupRef.get();
-//    if (viewGroup1 == null || Algorithms.isEmpty(amenities)) {
-//        return;
-//    }
-//    String type = "\"" + AmenityMenuController.getTypeStr(app, amenity) + "\"";
-//    String count = "(" + amenities.size() + ")";
-//    String text = app.getString(R.string.ltr_or_rtl_triple_combine_via_space, title, type, count);
-//    View wikiRow = viewGroup1.findViewWithTag(NEAREST_WIKI_KEY);
-//    View amenitiesRow = createRowContainer(viewGroup1.getContext(), key);
-//    firstRow = position == 0 || isDividerAtPosition(viewGroup1, position - 1);
-//    int iconId = AmenityMenuController.getRightIconId(app, amenity);
-//    CollapsableView collapsableView = getCollapsableView(amenitiesRow.getContext(), true, amenities, key);
-//    buildRow(amenitiesRow, new BuildRowAttrs.Builder().setIconId(iconId).setText(text)
-//            .setCollapsable(true).setCollapsableView(collapsableView).build());
-//    viewGroup1.addView(amenitiesRow, position);
-//    buildNearestRowDividerIfMissing(viewGroup1, position);
-//    requestMenuRelayout(viewGroup1);
-//}
-
 
 - (OAAmenityInfoRow *)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows amenities:(NSArray<OAPOI *> *)amenities key:(NSString *)key title:(NSString *)title
 {
@@ -737,10 +688,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
     return row;
 }
-
-
-
-
 
 - (void)buildPluginRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {

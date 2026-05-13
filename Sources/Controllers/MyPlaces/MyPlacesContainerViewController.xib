@@ -22,40 +22,42 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COI-FC-npu">
-                    <rect key="frame" x="0.0" y="118" width="393" height="42"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="PGt-Ow-fLH">
+                    <rect key="frame" x="0.0" y="118" width="393" height="734"/>
                     <subviews>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-ru-NR9">
-                            <rect key="frame" x="16" y="0.0" width="361" height="43"/>
-                            <segments>
-                                <segment title="First"/>
-                                <segment title="Second"/>
-                            </segments>
-                        </segmentedControl>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COI-FC-npu">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="42"/>
+                            <subviews>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-ru-NR9">
+                                    <rect key="frame" x="16" y="0.0" width="361" height="43"/>
+                                    <segments>
+                                        <segment title="First"/>
+                                        <segment title="Second"/>
+                                    </segments>
+                                </segmentedControl>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="CDK-ru-NR9" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="top" id="0Kt-TX-aV8"/>
+                                <constraint firstAttribute="height" constant="42" id="1jS-hb-wBc"/>
+                                <constraint firstAttribute="bottom" secondItem="CDK-ru-NR9" secondAttribute="bottom" id="TlK-OO-4ge"/>
+                                <constraint firstAttribute="trailing" secondItem="CDK-ru-NR9" secondAttribute="trailing" constant="16" id="kA4-yf-3CD"/>
+                                <constraint firstItem="CDK-ru-NR9" firstAttribute="leading" secondItem="COI-FC-npu" secondAttribute="leading" constant="16" id="urP-Pd-eT0"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bel-oP-mWo">
+                            <rect key="frame" x="0.0" y="42" width="393" height="692"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
                     </subviews>
-                    <constraints>
-                        <constraint firstItem="CDK-ru-NR9" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="top" id="0Kt-TX-aV8"/>
-                        <constraint firstAttribute="height" constant="42" id="1jS-hb-wBc"/>
-                        <constraint firstAttribute="bottom" secondItem="CDK-ru-NR9" secondAttribute="bottom" id="TlK-OO-4ge"/>
-                        <constraint firstAttribute="trailing" secondItem="CDK-ru-NR9" secondAttribute="trailing" constant="16" id="kA4-yf-3CD"/>
-                        <constraint firstItem="CDK-ru-NR9" firstAttribute="leading" secondItem="COI-FC-npu" secondAttribute="leading" constant="16" id="urP-Pd-eT0"/>
-                    </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bel-oP-mWo">
-                    <rect key="frame" x="0.0" y="160" width="393" height="692"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                </view>
+                </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="bel-oP-mWo" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="8jQ-rp-Dij"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bel-oP-mWo" secondAttribute="trailing" id="AKs-Vu-muF"/>
-                <constraint firstAttribute="bottom" secondItem="bel-oP-mWo" secondAttribute="bottom" id="LGZ-U7-3kI"/>
-                <constraint firstItem="COI-FC-npu" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="OjW-58-sVQ"/>
-                <constraint firstItem="COI-FC-npu" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="c9w-lH-gTn"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="COI-FC-npu" secondAttribute="trailing" id="uLu-GM-aL5"/>
-                <constraint firstItem="bel-oP-mWo" firstAttribute="top" secondItem="COI-FC-npu" secondAttribute="bottom" id="veN-Xp-C2f"/>
+                <constraint firstAttribute="bottom" secondItem="PGt-Ow-fLH" secondAttribute="bottom" id="9jd-oq-g5S"/>
+                <constraint firstItem="PGt-Ow-fLH" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b6L-gG-ajR"/>
+                <constraint firstItem="PGt-Ow-fLH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="skG-Xg-FWe"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="PGt-Ow-fLH" secondAttribute="trailing" id="wHS-tv-KiB"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="19" y="68"/>

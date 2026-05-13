@@ -37,6 +37,7 @@
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
 #import "OAFavoriteImportViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "Localization.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import "GeneratedAssetSymbols.h"
@@ -99,7 +100,7 @@ static const NSStringCompareOptions searchOptions = NSCaseInsensitiveSearch | NS
     CALayer *_horizontalLine;
     NSMutableArray<NSIndexPath *> *_selectedItems;
 
-    UIBarButtonItem *_directionButton;
+    UIBarButtonItem *_actionsButton;
     UIBarButtonItem *_editButton;
     FreeBackupBanner *_freeBackupBanner;
     
@@ -196,7 +197,8 @@ static UIViewController *parentController;
     && !OABackupHelper.sharedInstance.isRegistered;
 }
 
-- (void)resizeHeaderBanner {
+- (void)resizeHeaderBanner
+{
     if ([self isAvailablePaymentBanner] && _freeBackupBanner)
     {
         CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:self.tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
@@ -395,21 +397,13 @@ static UIViewController *parentController;
         if ([cell isKindOfClass:[OAPointTableViewCell class]])
         {
             OAFavoriteItem* item;
-            if (_directionButton.tag == 1)
+            NSDictionary *groupData = _data[i.section][0];
+            NSString *cellType = groupData[@"type"];
+            if ([cellType isEqualToString:@"group"])
             {
-                if (i.section == 0)
-                    item = [_isFiltered ? _filteredItems : self.sortedFavoriteItems objectAtIndex:i.row];
-            }
-            else
-            {
-                NSDictionary *groupData = _data[i.section][0];
-                NSString *cellType = groupData[@"type"];
-                if ([cellType isEqualToString:@"group"])
-                {
-                    FavoriteTableGroup *group = groupData[@"group"];
-                    if (group.favoriteGroup.points != nil && [group.favoriteGroup.points count] > (i.row - 1)) {
-                        item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
-                    }
+                FavoriteTableGroup *group = groupData[@"group"];
+                if (group.favoriteGroup.points != nil && [group.favoriteGroup.points count] > (i.row - 1)) {
+                    item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
                 }
             }
             
@@ -447,10 +441,19 @@ static UIViewController *parentController;
                                                         andObserve:app.locationServices.updateHeadingObserver];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"pencil"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
-    _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
-    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
-    self.navigationItem.title = OALocalizedString(@"my_favorites");
+    _editButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_select")
+                                                                 icon:nil
+                                                                color:[UIColor labelColor]
+                                                               action:@selector(editButtonClicked:)
+                                                               target:self
+                                                                 menu:nil];
+    if (@available(iOS 26.0, *))
+    {
+        _editButton.style = UIBarButtonItemStyleProminent;
+        _editButton.tintColor = [[UIColor colorNamed:ACColorNameNavBarTextColorPrimary] colorWithAlphaComponent:.3];
+    }
+    _actionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"ellipsis.circle"] menu:[self actionsMenu]];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _editButton] animated:YES];
     self.definesPresentationContext = YES;
     [self addAccessibilityLabels];
     [self configurePaymentBanner];
@@ -481,7 +484,7 @@ static UIViewController *parentController;
 
 -(void) addAccessibilityLabels
 {
-    _editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    _editButton.accessibilityLabel = OALocalizedString(@"shared_string_select");
     self.exportButton.accessibilityLabel = OALocalizedString(@"shared_string_export");
     self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
 }
@@ -584,6 +587,21 @@ static UIViewController *parentController;
     _isFiltered = NO;
 }
 
+- (UIMenu *)actionsMenu
+{
+    UIAction *importAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_import")
+                                                 image:[[UIImage imageNamed:ACImageNameIcCustomImportOutlined] resizedMenuImage]
+                                            identifier:nil
+                                               handler:^(__kindof UIAction * _Nonnull action) {
+        [self onImportClicked];
+    }];
+    return [UIMenu menuWithTitle:@""
+                           image:nil
+                      identifier:nil
+                         options:UIMenuOptionsDisplayInline
+                        children:@[importAction]];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -601,27 +619,6 @@ static UIViewController *parentController;
 }
 
 #pragma mark - Actions
-
-- (IBAction)sortByDistance:(id)sender
-{
-    if (![self.tableView isEditing])
-    {
-        if (_directionButton.tag == 0)
-        {
-            _directionButton.tag = 1;
-            _directionButton.image = [UIImage imageNamed:@"icon_direction_active"];
-            self.sortingType = 1;
-        }
-        else
-        {
-            _directionButton.tag = 0;
-            _directionButton.image = [UIImage imageNamed:@"icon_direction"];
-            self.sortingType = 0;
-        }
-        [self generateData];
-        [self updateDistanceAndDirection:YES];
-    }
-}
 
 - (IBAction) deletePressed:(id)sender
 {
@@ -724,30 +721,22 @@ static UIViewController *parentController;
         for (NSIndexPath *indexPath in _selectedItems)
         {
             OAFavoriteItem* item;
-            if (_directionButton.tag == 1)
+            NSDictionary *groupData = _data[indexPath.section][0];
+            NSString *cellType = groupData[@"type"];
+            if ([cellType isEqualToString:@"group"])
             {
-                if (indexPath.section == 0)
-                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+                FavoriteTableGroup* tableGroup = groupData[@"group"];
+                if (indexPath.row != 0)
+                    item = [tableGroup.favoriteGroup.points objectAtIndex:indexPath.row - 1];
+                else
+                    tableGroup.favoriteGroup.color = favCol.color;
             }
-            else
-            {
-                NSDictionary *groupData = _data[indexPath.section][0];
-                NSString *cellType = groupData[@"type"];
-                if ([cellType isEqualToString:@"group"])
-                {
-                    FavoriteTableGroup* tableGroup = groupData[@"group"];
-                    if (indexPath.row != 0)
-                        item = [tableGroup.favoriteGroup.points objectAtIndex:indexPath.row - 1];
-                    else
-                        tableGroup.favoriteGroup.color = favCol.color;
-                }
-            }
-
+            
             if (item)
             {
                 [item setColor:favCol.color];
                 [groupNames addObject:item.getCategory];
-
+                
                 if (indexPath.row == 1)
                 {
                     OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[item getCategory]];
@@ -781,31 +770,23 @@ static UIViewController *parentController;
         for (NSIndexPath *indexPath in sortedSelectedItems)
         {
             OAFavoriteItem* item;
-            if (_directionButton.tag == 1)
+            NSDictionary *groupData = _data[indexPath.section][0];
+            NSString *cellType = groupData[@"type"];
+            if ([cellType isEqualToString:@"group"])
             {
-                if (indexPath.section == 0)
-                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
-            }
-            else
-            {
-                NSDictionary *groupData = _data[indexPath.section][0];
-                NSString *cellType = groupData[@"type"];
-                if ([cellType isEqualToString:@"group"])
+                if (indexPath.row != 0)
                 {
-                    if (indexPath.row != 0)
-                    {
-                        FavoriteTableGroup *group = groupData[@"group"];
-                        NSArray<OAFavoriteItem *> *points = [group.favoriteGroup.points copy];
-                        NSInteger index = indexPath.row - 1;
-                        if (index >= 0 && index < points.count)
-                            item = points[index];
-                        else
-                            NSLog(@"OAFavoriteListViewController [ERROR] Invalid index %ld for points.count=%lu (section=%ld)",
-                                             (long)index, (unsigned long)points.count, (long)indexPath.section);
-                    }
+                    FavoriteTableGroup *group = groupData[@"group"];
+                    NSArray<OAFavoriteItem *> *points = [group.favoriteGroup.points copy];
+                    NSInteger index = indexPath.row - 1;
+                    if (index >= 0 && index < points.count)
+                        item = points[index];
+                    else
+                        NSLog(@"OAFavoriteListViewController [ERROR] Invalid index %ld for points.count=%lu (section=%ld)",
+                              (long)index, (unsigned long)points.count, (long)indexPath.section);
                 }
             }
-
+            
             if (item)
             {
                 [groupNames addObject:item.getCategory];
@@ -820,34 +801,22 @@ static UIViewController *parentController;
 - (NSArray<OAFavoriteItem *> *)getItemsForRows:(NSArray<NSIndexPath *> *)indexPath
 {
     NSMutableArray<OAFavoriteItem *> *itemList = [[NSMutableArray alloc] init];
-    if (_directionButton.tag == 1)
-    { // Sorted
-        [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
-            [itemList addObject:[self.sortedFavoriteItems objectAtIndex:path.row]];
-        }];
-    }
-    else
-    {
-        [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
-            NSDictionary *groupData = _data[path.section][0];
-            FavoriteTableGroup* group = groupData[@"group"];
-            if (path.row != 0)
-            {
-                [itemList addObject:[group.favoriteGroup.points objectAtIndex:path.row - 1]];
-            }
-        }];
-    }
+    [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
+        NSDictionary *groupData = _data[path.section][0];
+        FavoriteTableGroup* group = groupData[@"group"];
+        if (path.row != 0)
+            [itemList addObject:[group.favoriteGroup.points objectAtIndex:path.row - 1]];
+    }];
     return itemList;
 }
 
 - (void) startEditing
 {
-    [self.tableView setEditing:YES animated:YES];
+    [self setEdit:YES];
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     _editToolbarView.hidden = NO;
 
-    _editButton.image = [UIImage systemImageNamed:@"pencil"];
-    self.navigationItem.hidesBackButton = YES; // TODO
+    [_myPlacesDelegate showBackButton:NO];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.tableView reloadData];
 }
@@ -861,17 +830,18 @@ static UIViewController *parentController;
         _editToolbarView.hidden = YES;
     }];
 
-    _editButton.image = [UIImage systemImageNamed:@"pencil"];
-    self.navigationItem.hidesBackButton = NO;
+    [_myPlacesDelegate showBackButton:YES];
 
-    if (_directionButton.tag == 1)
-        _directionButton.image = [UIImage imageNamed:@"icon_direction_active"];
-    else
-        _directionButton.image = [UIImage imageNamed:@"icon_direction"];
-
-    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
-    [self.tableView setEditing:NO animated:YES];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _editButton] animated:YES];
+    
+    [self setEdit:NO];
     [_selectedItems removeAllObjects];
+}
+
+- (void)setEdit:(BOOL)isEdit
+{
+    [self.tableView setEditing:isEdit animated:YES];
+    [_myPlacesDelegate setEdit:isEdit];
 }
 
 - (IBAction)editButtonClicked:(id)sender
@@ -988,8 +958,6 @@ static UIViewController *parentController;
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_directionButton.tag == 1)
-        return [self getSortedNumberOfSectionsInTableView];
     return [self getUnsortedNumberOfSectionsInTableView];
 }
 
@@ -1011,7 +979,7 @@ static UIViewController *parentController;
         return 44;
     NSDictionary *item = _data[section][0];
     NSString *cellType = item[@"type"];
-    return [cellType isEqualToString:@"actionItem"] || _directionButton.tag == 1 ? 44 : 16;
+    return [cellType isEqualToString:@"actionItem"] ? 44 : 16;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -1021,21 +989,7 @@ static UIViewController *parentController;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_isSearchActive)
-    {
-        return nil;
-    }
-    else if (_directionButton.tag == 1)
-    {
-        if (section == 0)
-            return _sortedHeaderView;
-        else
-            return _menuHeaderView;
-    }
-    else
-    {
-        return _unsortedHeaderViews[section];
-    }
+    return _isSearchActive ? nil : _unsortedHeaderViews[section];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1047,8 +1001,6 @@ static UIViewController *parentController;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_directionButton.tag == 1)
-        return [self getSortedNumberOfRowsInSection:section];
     return [self getUnsortedNumberOfRowsInSection:section];
 }
 
@@ -1188,8 +1140,6 @@ static UIViewController *parentController;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_directionButton.tag == 1)
-        return [self getSortedcellForRowAtIndexPath:indexPath];
     return [self getUnsortedcellForRowAtIndexPath:indexPath];
 }
 
@@ -1416,18 +1366,11 @@ static UIViewController *parentController;
 {
     if ([self.tableView isEditing])
     {
-        if (_directionButton.tag == 0)
-        {
-            NSDictionary *item = _data[indexPath.section][0];
-            NSString *cellType = item[@"type"];
-            if ([cellType isEqualToString:@"group"])
-                return indexPath;
-            return nil;
-        }
-        else if (indexPath.section > 0)
-        {
-            return nil;
-        }
+        NSDictionary *item = _data[indexPath.section][0];
+        NSString *cellType = item[@"type"];
+        if ([cellType isEqualToString:@"group"])
+            return indexPath;
+        return nil;
     }
     return indexPath;
 
@@ -1435,9 +1378,6 @@ static UIViewController *parentController;
 
 - (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_directionButton.tag == 1)
-        return [self canEditSortedRowAtIndexPath:indexPath];
-
     return [self canEditUnsortedRowAtIndexPath:indexPath];
 }
 
@@ -1457,10 +1397,7 @@ static UIViewController *parentController;
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.row != 0 && _directionButton.tag == 0) || _directionButton.tag == 1)
-        return UITableViewCellEditingStyleDelete;
-    else
-        return UITableViewCellEditingStyleNone;
+    return indexPath.row != 0 ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
 }
 
 - (void)removeItemFromSortedFavoriteItems:(NSIndexPath *)indexPath
@@ -1638,18 +1575,12 @@ static UIViewController *parentController;
 
 - (void) removeFavoriteItems
 {
-    if (_directionButton.tag == 0)
-        [self removeItemsFromUnsortedFavoriteItems];
-    else
-        [self removeItemsFromSortedFavoriteItems];
+    [self removeItemsFromUnsortedFavoriteItems];
 }
 
 - (void)removeFavoriteItem:(NSIndexPath *)indexPath
 {
-    if (_directionButton.tag == 0)
-        [self removeItemFromUnsortedFavoriteItems:indexPath];
-    else
-        [self removeItemFromSortedFavoriteItems:indexPath];
+    [self removeItemFromUnsortedFavoriteItems:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1810,43 +1741,35 @@ static UIViewController *parentController;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_directionButton.tag == 1)
-        [self didSelectRowAtIndexPathSorter:indexPath];
-    else
+    NSDictionary *item = _data[indexPath.section][0];
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:@"group"])
     {
-        NSDictionary *item = _data[indexPath.section][0];
-        NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:@"group"])
-        {
-            if (indexPath.row == 0 && ![self.tableView isEditing])
-                [self openCloseFavoriteGroup:indexPath];
-            else if (indexPath.row == 0 && [self.tableView isEditing])
-                [self selectGroupForEditing:indexPath];
-            else
-                [self didSelectRowAtIndexPathUnsorted:indexPath];
-        }
+        if (indexPath.row == 0 && ![self.tableView isEditing])
+            [self openCloseFavoriteGroup:indexPath];
+        else if (indexPath.row == 0 && [self.tableView isEditing])
+            [self selectGroupForEditing:indexPath];
         else
             [self didSelectRowAtIndexPathUnsorted:indexPath];
+    }
+    else
+    {
+        [self didSelectRowAtIndexPathUnsorted:indexPath];
     }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_directionButton.tag == 1)
-        [self didDeselectRowAtIndexPathSorted:indexPath];
-    else
+    NSDictionary *item = _data[indexPath.section][0];
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:@"group"])
     {
-        NSDictionary *item = _data[indexPath.section][0];
-        NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:@"group"])
-        {
-            if (indexPath.row == 0 && ![self.tableView isEditing])
-                [self openCloseFavoriteGroup:indexPath];
-            else if (indexPath.row == 0 && [self.tableView isEditing])
-                [self deselectGroupForEditing:indexPath];
-            else
-                [self didDeselectRowAtIndexPathUnsorted:indexPath];
-        }
+        if (indexPath.row == 0 && ![self.tableView isEditing])
+            [self openCloseFavoriteGroup:indexPath];
+        else if (indexPath.row == 0 && [self.tableView isEditing])
+            [self deselectGroupForEditing:indexPath];
+        else
+            [self didDeselectRowAtIndexPathUnsorted:indexPath];
     }
 }
 
@@ -2092,7 +2015,6 @@ static UIViewController *parentController;
     {
         _isSearchActive = YES;
         _isFiltered = NO;
-        _directionButton.tag = 1;
         [self generateData];
         [self.tableView reloadData];
     }
@@ -2125,7 +2047,6 @@ static UIViewController *parentController;
     {
         _isSearchActive = NO;
         _isFiltered = NO;
-        _directionButton.tag = 0;
         [self.tableView reloadData];
     }
 }

@@ -58,8 +58,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     OAMultiselectableHeaderView *_headerView;
     
-    UIBarButtonItem *_deleteButton;
-    UIBarButtonItem *_uploadButton;
+    UIBarButtonItem *_selectButton;
     
     BOOL _popToParent;
     BOOL _isSearchActive;
@@ -105,12 +104,14 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    _deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_trash"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonPressed:)];
-    _uploadButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_upload_to_openstreetmap_outlined"] style:UIBarButtonItemStylePlain target:self action:@selector(uploadButtonPressed:)];
-    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
-    _deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
-    _uploadButton.accessibilityLabel = OALocalizedString(@"upload_to_openstreetmap");
-    self.navigationItem.title = OALocalizedString(@"osm_edits_title");
+    _selectButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_select")
+                                                                   icon:nil
+                                                                  color:[UIColor labelColor]
+                                                                 action:@selector(selectButtonPressed:)
+                                                                 target:self
+                                                                   menu:nil];
+    _selectButton.accessibilityLabel = OALocalizedString(@"shared_string_select");
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_selectButton] animated:YES];
     self.definesPresentationContext = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -168,6 +169,35 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         }
     }
     _data = [NSArray arrayWithArray:dataArr];
+}
+
+- (void)setupNavbar
+{
+    if ([self.tableView isEditing])
+    {
+        [_myPlacesDelegate showBackButton:NO];
+        UIBarButtonItem *cancelBarButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_cancel")
+                                                                     icon:nil
+                                                                    color:[UIColor labelColor]
+                                                                   action:@selector(cancelButtonPressed:)
+                                                                   target:self
+                                                                     menu:nil];
+        cancelBarButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");
+        self.navigationController.navigationBar.topItem.leftBarButtonItem = cancelBarButton;
+        self.navigationItem.leftBarButtonItem = cancelBarButton;
+    }
+    else
+    {
+        [_myPlacesDelegate showBackButton:YES];
+        self.navigationController.navigationBar.topItem.leftBarButtonItem = nil;
+        self.navigationItem.leftBarButtonItem = nil;
+    }
+}
+
+- (void)setEdit:(BOOL)isEdit
+{
+    [self.tableView setEditing:isEdit animated:YES];
+    [_myPlacesDelegate setEdit:isEdit];
 }
 
 -(NSString *)getDescription:(OAOsmPoint *)point
@@ -317,104 +347,84 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     }
 }
 
+- (IBAction)selectButtonPressed:(id)sender
+{
+    [self setEdit:YES];
+    [self setupNavbar];
+}
+
 - (IBAction)deleteButtonPressed:(id)sender {
     [self.tableView beginUpdates];
     BOOL shouldEdit = ![self.tableView isEditing];
-    
-    if (shouldEdit)
+    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+    if (indexes.count > 0)
     {
-        if (@available(iOS 16.0, *))
-            [_uploadButton setHidden:YES];
-        else
-            [_uploadButton setEnabled:NO];
-    }
-    else
-    {
-        if (@available(iOS 16.0, *))
-            [_uploadButton setHidden:NO];
-        else
-            [_uploadButton setEnabled:YES];
-
-        NSArray *indexes = [self.tableView indexPathsForSelectedRows];
-        if (indexes.count > 0)
-        {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
-                                        [NSString stringWithFormat:OALocalizedString(@"osm_confirm_bulk_delete"), indexes.count]
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                for (NSIndexPath *path in indexes)
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
+                                    [NSString stringWithFormat:OALocalizedString(@"osm_confirm_bulk_delete"), indexes.count]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            for (NSIndexPath *path in indexes)
+            {
+                NSDictionary *item = [self getItem:path];
+                OAOsmPoint *point = item[@"item"];
+                if (point)
                 {
-                    NSDictionary *item = [self getItem:path];
-                    OAOsmPoint *point = item[@"item"];
-                    if (point)
-                    {
-                        if (point.getGroup == EOAGroupPoi)
-                            [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
-                        else
-                            [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)point];
-                    }
+                    if (point.getGroup == EOAGroupPoi)
+                        [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
+                    else
+                        [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)point];
                 }
-                [self setupView];
-                [self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
-                [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
-            }]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
+            }
+            [self setupView];
+            [self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
+            [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
     }
-    [self.tableView setEditing:shouldEdit animated:YES];
+    [self setEdit:shouldEdit];
     [self.tableView endUpdates];
 }
 
 - (IBAction)uploadButtonPressed:(id)sender {
     [self.tableView beginUpdates];
     BOOL shouldEdit = ![self.tableView isEditing];
-
-    if (shouldEdit)
-    {
-        if (@available(iOS 16.0, *))
-            [_deleteButton setHidden:YES];
-        else
-            [_deleteButton setEnabled:NO];
-    }
-    else
-    {
-        if (@available(iOS 16.0, *))
-            [_deleteButton setHidden:NO];
-        else
-            [_deleteButton setEnabled:YES];
-
-        NSArray *indexes = [self.tableView indexPathsForSelectedRows];
-        NSMutableArray *edits = [NSMutableArray new];
-        NSMutableArray *notes = [NSMutableArray new];
-        
-        for (NSIndexPath *indexPath in indexes)
-        {
-            OAOsmPoint *p = [self getItem:indexPath][@"item"];
-            if (p.getGroup == EOAGroupPoi)
-                [edits addObject:p];
-            else
-                [notes addObject:p];
-        }
-        if (edits.count > 0)
-        {
-            OAOsmUploadPOIViewController *editsBottomsheet = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:edits];
-            editsBottomsheet.delegate = self;
-            _pendingNotes = notes;
-            [[OARootViewController instance].mapPanel.navigationController pushViewController:editsBottomsheet animated:YES];
-            
-        }
-        else if (notes.count > 0)
-        {
-            _pendingNotes = nil;
-            OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
-            notesBottomsheet.delegate = self;
-            [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
-        }
     
+    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+    NSMutableArray *edits = [NSMutableArray new];
+    NSMutableArray *notes = [NSMutableArray new];
+    
+    for (NSIndexPath *indexPath in indexes)
+    {
+        OAOsmPoint *p = [self getItem:indexPath][@"item"];
+        if (p.getGroup == EOAGroupPoi)
+            [edits addObject:p];
+        else
+            [notes addObject:p];
     }
-    [self.tableView setEditing:shouldEdit animated:YES];
+    if (edits.count > 0)
+    {
+        OAOsmUploadPOIViewController *editsBottomsheet = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:edits];
+        editsBottomsheet.delegate = self;
+        _pendingNotes = notes;
+        [[OARootViewController instance].mapPanel.navigationController pushViewController:editsBottomsheet animated:YES];
+        
+    }
+    else if (notes.count > 0)
+    {
+        _pendingNotes = nil;
+        OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
+        notesBottomsheet.delegate = self;
+        [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
+    }
+    [self setEdit:shouldEdit];
     [self.tableView endUpdates];
+}
+
+- (IBAction)cancelButtonPressed:(id)sender
+{
+    [self setEdit:NO];
+    [self setupNavbar];
 }
 
 -(void) overflowButtonPressed:(UIButton *)sender

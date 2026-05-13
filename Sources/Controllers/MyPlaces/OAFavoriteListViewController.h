@@ -10,6 +10,8 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
+@protocol MyPlacesDelegate;
+
 @interface OAFavoriteListViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;
@@ -17,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *groupButton;
 @property (weak, nonatomic) IBOutlet UIButton *colorButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+
+@property (nonatomic, weak) id<MyPlacesDelegate> myPlacesDelegate;
 
 @property CGFloat azimuthDirection;
 

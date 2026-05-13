@@ -9,11 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "OACompoundViewController.h"
 
+@protocol MyPlacesDelegate;
+
 #define kOSMEditsTabIndex 2
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOsmEditsListViewController : UITableViewController
+
+@property (nonatomic, weak) id<MyPlacesDelegate> myPlacesDelegate;
 
 - (instancetype)initWithFrame:(CGRect)frame;
 - (void) setShouldPopToParent:(BOOL)shouldPop;

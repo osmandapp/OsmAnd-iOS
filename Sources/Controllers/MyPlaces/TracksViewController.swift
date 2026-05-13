@@ -33,7 +33,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
-    private let defaultBarButtonEdgeInset: CGFloat = 12
+    
+    weak var myPlacesDelegate: MyPlacesDelegate?
+    
     // TODO: Keys to enums
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -455,30 +457,22 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func setupNavbar() {
         if tableView.isEditing {
-            navigationItem.hidesBackButton = true
-            let cancelButton = UIButton(type: .system)
-            if #available(iOS 26.0, *) {
-                cancelButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: defaultBarButtonEdgeInset, bottom: 0, right: defaultBarButtonEdgeInset);
-            }
-            cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
-            cancelButton.setImage(nil, for: .normal)
-            cancelButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
-            cancelButton.addTarget(self, action: #selector(onNavbarCancelButtonClicked), for: .touchUpInside)
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
+            myPlacesDelegate?.showBackButton(false)
+            let cancelBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_cancel"), icon: nil, color: .label, action: #selector(onNavbarCancelButtonClicked), target: self, menu: nil)
+            cancelBarButton?.accessibilityLabel = localizedString("shared_string_cancel")
+            navigationController?.navigationBar.topItem?.leftBarButtonItem = cancelBarButton
+            navigationItem.leftBarButtonItem = cancelBarButton
         } else if isEditFilterActive {
-            navigationItem.hidesBackButton = true
-            let editFilterCancelButton = UIButton(type: .system)
-            editFilterCancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
-            editFilterCancelButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
-            editFilterCancelButton.addTarget(self, action: #selector(onNavbarEditFilterCancelButtonClicked), for: .touchUpInside)
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: editFilterCancelButton)
-            let doneButton = UIButton(type: .system)
-            doneButton.setTitle(localizedString("shared_string_done"), for: .normal)
-            doneButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
-            doneButton.addTarget(self, action: #selector(onNavbarDoneButtonClicked), for: .touchUpInside)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButton)
+            myPlacesDelegate?.showBackButton(false)
+            let editFilterCancelBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_cancel"), icon: nil, color: .label, action: #selector(onNavbarCancelButtonClicked), target: self, menu: nil)
+            navigationController?.navigationBar.topItem?.leftBarButtonItem = editFilterCancelBarButton
+            navigationItem.leftBarButtonItem = editFilterCancelBarButton
+            let doneBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_done"), icon: nil, color: .label, action: #selector(onNavbarDoneButtonClicked), target: self, menu: nil)
+            navigationController?.navigationBar.topItem?.rightBarButtonItem = doneBarButton
+            navigationItem.rightBarButtonItem = doneBarButton
         } else {
-            navigationItem.hidesBackButton = false
+            myPlacesDelegate?.showBackButton(true)
+            navigationController?.navigationBar.topItem?.leftBarButtonItem = nil
             navigationItem.leftBarButtonItem = nil
         }
         
@@ -525,23 +519,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         var menuActions: [UIMenuElement] = []
         if !tableView.isEditing {
             if isSmartFolder {
-                let selectSmartFolderAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined.resizedMenuImage()) { [weak self] _ in
-                    self?.onNavbarSelectButtonClicked()
-                }
                 let refreshSmartFolderAction = UIAction(title: localizedString("shared_string_refresh"), image: .icCustomUpdate.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarRefreshSmartFolderButtonClicked()
                 }
                 let editFilterSmartFolderAction = UIAction(title: localizedString("edit_filter"), image: .icCustomParameters.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarEditFilterSmartFolderButtonClicked()
                 }
-                let selectSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectSmartFolderAction])
                 let refreshSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [refreshSmartFolderAction])
                 let editFilterSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [editFilterSmartFolderAction])
-                menuActions.append(contentsOf: [selectSmartFolderActionWithDivider, refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider])
+                menuActions.append(contentsOf: [refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider])
             } else {
-                let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined.resizedMenuImage()) { [weak self] _ in
-                    self?.onNavbarSelectButtonClicked()
-                }
                 let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarAddFolderButtonClicked()
                 }
@@ -560,11 +547,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 }
                 let sortSubfoldersActions = createSortMenu(isSortingSubfolders: true)
                 
-                let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
                 let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: folderActions)
                 let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
                 let sortSubfoldersActionWithDivider = UIMenu(title: "", options: .displayInline, children: [sortSubfoldersActions])
-                menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
+                menuActions.append(contentsOf: [addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
             }
         } else {
             let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomMapPinOutlined.resizedMenuImage()) { [weak self] _ in
@@ -603,9 +589,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         } else {
             color = .navBarTextColorPrimary
         }
-        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: .icNavbarOverflowMenuStroke, color: color, action: nil, target: self, menu: menu) {
-            navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
-            navigationItem.setRightBarButtonItems([navBarButton], animated: false)
+        if let selectBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_select"), icon: nil, color: color, action: #selector(onNavbarSelectButtonClicked), target: self, menu: nil) {
+            if #available(iOS 26.0, *) {
+                selectBarButton.style = .prominent
+                selectBarButton.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+            }
+            let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, selectBarButton], animated: false)
+            navigationItem.setRightBarButtonItems([actionsBarButton, selectBarButton], animated: false)
         }
     }
     
@@ -848,9 +839,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         setupTableFooter()
     }
     
-    private func onNavbarSelectButtonClicked() {
+    @objc private func onNavbarSelectButtonClicked() {
         removeRefreshControl()
-        tableView.setEditing(true, animated: false)
+        setEdit(true)
         tableView.allowsMultipleSelectionDuringEditing = true
         updateData()
         setupNavbar()
@@ -903,6 +894,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func show(_ vc: UIViewController) {
         show(vc, sender: nil) // TODO
+    }
+    
+    private func setEdit(_ edit: Bool) {
+        tableView.setEditing(edit, animated: true)
+        myPlacesDelegate?.setEdit(edit)
     }
     
     @objc private func onNavbarImportButtonClicked() {
@@ -1077,7 +1073,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         selectedTracks.removeAll()
         selectedFolders.removeAll()
         addRefreshControl()
-        tableView.setEditing(false, animated: true)
+        setEdit(false)
         tableView.allowsMultipleSelectionDuringEditing = false
         isSelectionModeInSearch = false
         updateSortButtonAndMenu()

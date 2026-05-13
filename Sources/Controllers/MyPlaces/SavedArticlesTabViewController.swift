@@ -31,7 +31,6 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
-        navigationItem.title = localizedString("shared_string_travel_guides")
         definesPresentationContext = true
     }
     

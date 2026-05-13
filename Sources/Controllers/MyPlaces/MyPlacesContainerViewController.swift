@@ -6,6 +6,12 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
+@objc
+protocol MyPlacesDelegate: AnyObject {
+    func showBackButton(_ show: Bool)
+    func setEdit(_ isEdit: Bool)
+}
+
 final class MyPlacesContainerViewController: OACompoundViewController {
     private enum Tab: Int, CaseIterable {
         case favorites
@@ -19,6 +25,15 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             case .tracks: .icCustomTrip
             case .osm: .icCustomOsmEdits
             case .travel: .icCustomBackpack
+            }
+        }
+        
+        var title: String {
+            switch self {
+            case .favorites: localizedString("shared_string_favorites")
+            case .tracks: localizedString("shared_string_gpx_tracks")
+            case .osm: localizedString("osm_edits_title")
+            case .travel: localizedString("shared_string_travel_guides")
             }
         }
     }
@@ -36,7 +51,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        setupSegmentControl()
         setupTabs()
         setupSegments()
         selectInitialTab()
@@ -49,6 +64,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         setupSearchController()
         setupPageController()
         setupViewControllers()
+        setupNavbar()
+        segmentContainerView.backgroundColor = .viewBg
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -57,7 +74,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
-    private func setupUI() {
+    private func setupSegmentControl() {
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
         segmentControl.selectedSegmentTintColor = .tabBgColorSelected
         segmentControl.setTitleTextAttributes([.foregroundColor: UIColor.navBarTextColorPrimary], for: .selected)
@@ -96,14 +113,19 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         var viewControllers: [UIViewController] = []
         
         if let favoritesViewController = OAFavoriteListViewController(frame: pageViewController.view.frame) {
+            favoritesViewController.myPlacesDelegate = self
             viewControllers.append(favoritesViewController)
             pageViewController.setViewControllers([favoritesViewController], direction: .forward, animated: false)
         }
         
-        viewControllers.append(TracksViewController(frame: pageViewController.view.frame))
+        let tracksViewController = TracksViewController(frame: pageViewController.view.frame)
+        tracksViewController.myPlacesDelegate = self
+        viewControllers.append(tracksViewController)
         
         if OAIAPHelper.sharedInstance().osmEditing.isActive() {
-            viewControllers.append(OAOsmEditsListViewController(frame: pageViewController.view.frame))
+            let osmEditsViewController = OAOsmEditsListViewController(frame: pageViewController.view.frame)
+            osmEditsViewController.myPlacesDelegate = self
+            viewControllers.append(osmEditsViewController)
         }
         
         if TravelLocalDataHelper.shared.hasSavedArticles() {
@@ -127,6 +149,21 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         updateSearchController()
     }
     
+    private func setupNavbarTitle(with tab: Tab) {
+        navigationItem.setStackViewWithTitle(tab.title,
+                                             titleColor: .textColorPrimary,
+                                             titleFont: .scaledSystemFont(ofSize: 17.0, weight: .semibold, maximumSize: 22.0),
+                                             subtitle: localizedString("shared_string_my_places"),
+                                             subtitleColor: .textColorSecondary,
+                                             subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
+    }
+    
+    private func setupNavbar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .viewBg
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+    
     private func updateSearchController() {
         searchController?.searchBar.searchTextField.placeholder = localizedString("search_activity")
     }
@@ -140,7 +177,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                                          animated: false)
         }
         
-        segmentControl.selectedSegmentIndex = 0
+        segmentControl.selectedSegmentIndex = Tab.favorites.rawValue
     }
     
     private func selectInitialTab() {
@@ -151,6 +188,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     private func switchTo(tab: Tab) {
         guard let index = availableTabs.firstIndex(of: tab) else { return }
         pageViewController?.setViewControllers([availableViewControllers[index]], direction: .forward, animated: true)
+        setupNavbarTitle(with: tab)
     }
     
     @objc private func onBackPressed() {
@@ -170,12 +208,12 @@ final class MyPlacesContainerViewController: OACompoundViewController {
 // MARK: - UIPageViewControllerDataSource
 extension MyPlacesContainerViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = availableViewControllers.firstIndex(of: viewController), index > 0 else { return nil }
+        guard let index = availableViewControllers.firstIndex(of: viewController), index > 0 else { return viewController }
         return availableViewControllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = availableViewControllers.firstIndex(of: viewController), index < availableViewControllers.count - 1 else { return nil }
+        guard let index = availableViewControllers.firstIndex(of: viewController), index < availableViewControllers.count - 1 else { return viewController }
         return availableViewControllers[index + 1]
     }
 }
@@ -188,5 +226,20 @@ extension MyPlacesContainerViewController: UIPageViewControllerDelegate {
             return
         }
         segmentControl.selectedSegmentIndex = index
+        setupNavbarTitle(with: availableTabs[index])
+    }
+}
+
+// MARK: - MyPlacesDelegate
+extension MyPlacesContainerViewController: MyPlacesDelegate {
+    func showBackButton(_ show: Bool) {
+        navigationItem.hidesBackButton = !show
+    }
+    
+    func setEdit(_ isEdit: Bool) {
+        guard let pageViewController else { return }
+        pageViewController.delegate = isEdit ? nil : self
+        pageViewController.dataSource = isEdit ? nil : self
+        segmentContainerView.isHidden = isEdit
     }
 }

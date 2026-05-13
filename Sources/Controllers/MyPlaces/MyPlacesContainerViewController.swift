@@ -208,12 +208,12 @@ final class MyPlacesContainerViewController: OACompoundViewController {
 // MARK: - UIPageViewControllerDataSource
 extension MyPlacesContainerViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = availableViewControllers.firstIndex(of: viewController), index > 0 else { return viewController }
+        guard let index = availableViewControllers.firstIndex(of: viewController), index > 0 else { return nil }
         return availableViewControllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = availableViewControllers.firstIndex(of: viewController), index < availableViewControllers.count - 1 else { return viewController }
+        guard let index = availableViewControllers.firstIndex(of: viewController), index < availableViewControllers.count - 1 else { return nil }
         return availableViewControllers[index + 1]
     }
 }

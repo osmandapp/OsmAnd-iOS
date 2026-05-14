@@ -748,12 +748,12 @@ static UIViewController *parentController;
                         tableGroup.favoriteGroup.color = favCol.color;
                 }
             }
-            
+
             if (item)
             {
                 [item setColor:favCol.color];
                 [groupNames addObject:item.getCategory];
-                
+
                 if (indexPath.row == 1)
                 {
                     OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:[item getCategory]];

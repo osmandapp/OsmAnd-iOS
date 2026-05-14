@@ -9,7 +9,8 @@
 @objc
 protocol MyPlacesDelegate: AnyObject {
     func showBackButton(_ show: Bool)
-    func setEdit(_ isEdit: Bool)
+    func setSegmentedControlVisibility(_ show: Bool)
+    func setEditMode(_ edit: Bool)
 }
 
 final class MyPlacesContainerViewController: OACompoundViewController {
@@ -72,6 +73,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewWillDisappear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.navigationItem.searchController = nil
     }
     
     private func setupSegmentControl() {
@@ -129,7 +131,9 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         }
         
         if TravelLocalDataHelper.shared.hasSavedArticles() {
-            viewControllers.append(SavedArticlesTabViewController(frame: pageViewController.view.frame))
+            let travelGuidesViewController = SavedArticlesTabViewController(frame: pageViewController.view.frame)
+            travelGuidesViewController.myPlacesDelegate = self
+            viewControllers.append(travelGuidesViewController)
         }
         
         availableViewControllers = viewControllers
@@ -145,6 +149,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
         }
+        navigationController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
     }
@@ -196,7 +201,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     @objc private func onSegmentChanged() {
-        view.endEditing(true)
         let index = segmentControl.selectedSegmentIndex
         guard availableTabs.indices.contains(index) else { return }
         
@@ -236,10 +240,17 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         navigationItem.hidesBackButton = !show
     }
     
-    func setEdit(_ isEdit: Bool) {
+    func setSegmentedControlVisibility(_ show: Bool) {
         guard let pageViewController else { return }
-        pageViewController.delegate = isEdit ? nil : self
-        pageViewController.dataSource = isEdit ? nil : self
-        segmentContainerView.isHidden = isEdit
+        pageViewController.delegate = show ? self : nil
+        pageViewController.dataSource = show ? self : nil
+        segmentContainerView.isHidden = !show
+    }
+    
+    func setEditMode(_ edit: Bool) {
+        setSegmentedControlVisibility(!edit)
+        let searchController = edit ? nil : searchController
+        navigationController?.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
     }
 }

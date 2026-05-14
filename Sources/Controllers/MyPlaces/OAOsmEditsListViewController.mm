@@ -112,6 +112,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
                                                                    menu:nil];
     _selectButton.accessibilityLabel = OALocalizedString(@"shared_string_select");
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_selectButton] animated:YES];
+    self.navigationController.navigationItem.searchController.searchResultsUpdater = self;
     self.definesPresentationContext = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -197,7 +198,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 - (void)setEdit:(BOOL)isEdit
 {
     [self.tableView setEditing:isEdit animated:YES];
-    [_myPlacesDelegate setEdit:isEdit];
+    [_myPlacesDelegate setEditMode:isEdit];
 }
 
 -(NSString *)getDescription:(OAOsmPoint *)point
@@ -563,6 +564,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [self setupView];
         [self.tableView reloadData];
     }
+    [_myPlacesDelegate setSegmentedControlVisibility:!_isSearchActive];
 }
 
 #pragma mark - UIScrollViewDelegate

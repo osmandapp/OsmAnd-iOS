@@ -397,13 +397,21 @@ static UIViewController *parentController;
         if ([cell isKindOfClass:[OAPointTableViewCell class]])
         {
             OAFavoriteItem* item;
-            NSDictionary *groupData = _data[i.section][0];
-            NSString *cellType = groupData[@"type"];
-            if ([cellType isEqualToString:@"group"])
+            if (_isSearchActive)
             {
-                FavoriteTableGroup *group = groupData[@"group"];
-                if (group.favoriteGroup.points != nil && [group.favoriteGroup.points count] > (i.row - 1)) {
-                    item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
+                if (i.section == 0)
+                    item = [_isFiltered ? _filteredItems : self.sortedFavoriteItems objectAtIndex:i.row];
+            }
+            else
+            {
+                NSDictionary *groupData = _data[i.section][0];
+                NSString *cellType = groupData[@"type"];
+                if ([cellType isEqualToString:@"group"])
+                {
+                    FavoriteTableGroup *group = groupData[@"group"];
+                    if (group.favoriteGroup.points != nil && [group.favoriteGroup.points count] > (i.row - 1)) {
+                        item = [group.favoriteGroup.points objectAtIndex:i.row - 1];
+                    }
                 }
             }
             
@@ -454,6 +462,7 @@ static UIViewController *parentController;
     }
     _actionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"ellipsis.circle"] menu:[self actionsMenu]];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _editButton] animated:YES];
+    self.navigationController.navigationItem.searchController.searchResultsUpdater = self;
     self.definesPresentationContext = YES;
     [self addAccessibilityLabels];
     [self configurePaymentBanner];
@@ -721,15 +730,23 @@ static UIViewController *parentController;
         for (NSIndexPath *indexPath in _selectedItems)
         {
             OAFavoriteItem* item;
-            NSDictionary *groupData = _data[indexPath.section][0];
-            NSString *cellType = groupData[@"type"];
-            if ([cellType isEqualToString:@"group"])
+            if (_isSearchActive)
             {
-                FavoriteTableGroup* tableGroup = groupData[@"group"];
-                if (indexPath.row != 0)
-                    item = [tableGroup.favoriteGroup.points objectAtIndex:indexPath.row - 1];
-                else
-                    tableGroup.favoriteGroup.color = favCol.color;
+                if (indexPath.section == 0)
+                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+            }
+            else
+            {
+                NSDictionary *groupData = _data[indexPath.section][0];
+                NSString *cellType = groupData[@"type"];
+                if ([cellType isEqualToString:@"group"])
+                {
+                    FavoriteTableGroup* tableGroup = groupData[@"group"];
+                    if (indexPath.row != 0)
+                        item = [tableGroup.favoriteGroup.points objectAtIndex:indexPath.row - 1];
+                    else
+                        tableGroup.favoriteGroup.color = favCol.color;
+                }
             }
             
             if (item)
@@ -770,20 +787,28 @@ static UIViewController *parentController;
         for (NSIndexPath *indexPath in sortedSelectedItems)
         {
             OAFavoriteItem* item;
-            NSDictionary *groupData = _data[indexPath.section][0];
-            NSString *cellType = groupData[@"type"];
-            if ([cellType isEqualToString:@"group"])
+            if (_isSearchActive)
             {
-                if (indexPath.row != 0)
+                if (indexPath.section == 0)
+                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+            }
+            else
+            {
+                NSDictionary *groupData = _data[indexPath.section][0];
+                NSString *cellType = groupData[@"type"];
+                if ([cellType isEqualToString:@"group"])
                 {
-                    FavoriteTableGroup *group = groupData[@"group"];
-                    NSArray<OAFavoriteItem *> *points = [group.favoriteGroup.points copy];
-                    NSInteger index = indexPath.row - 1;
-                    if (index >= 0 && index < points.count)
-                        item = points[index];
-                    else
-                        NSLog(@"OAFavoriteListViewController [ERROR] Invalid index %ld for points.count=%lu (section=%ld)",
-                              (long)index, (unsigned long)points.count, (long)indexPath.section);
+                    if (indexPath.row != 0)
+                    {
+                        FavoriteTableGroup *group = groupData[@"group"];
+                        NSArray<OAFavoriteItem *> *points = [group.favoriteGroup.points copy];
+                        NSInteger index = indexPath.row - 1;
+                        if (index >= 0 && index < points.count)
+                            item = points[index];
+                        else
+                            NSLog(@"OAFavoriteListViewController [ERROR] Invalid index %ld for points.count=%lu (section=%ld)",
+                                  (long)index, (unsigned long)points.count, (long)indexPath.section);
+                    }
                 }
             }
             
@@ -801,12 +826,23 @@ static UIViewController *parentController;
 - (NSArray<OAFavoriteItem *> *)getItemsForRows:(NSArray<NSIndexPath *> *)indexPath
 {
     NSMutableArray<OAFavoriteItem *> *itemList = [[NSMutableArray alloc] init];
-    [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
-        NSDictionary *groupData = _data[path.section][0];
-        FavoriteTableGroup* group = groupData[@"group"];
-        if (path.row != 0)
-            [itemList addObject:[group.favoriteGroup.points objectAtIndex:path.row - 1]];
-    }];
+    if (_isSearchActive)
+    { // Sorted
+        [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
+            [itemList addObject:[self.sortedFavoriteItems objectAtIndex:path.row]];
+        }];
+    }
+    else
+    {
+        [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
+            NSDictionary *groupData = _data[path.section][0];
+            FavoriteTableGroup* group = groupData[@"group"];
+            if (path.row != 0)
+            {
+                [itemList addObject:[group.favoriteGroup.points objectAtIndex:path.row - 1]];
+            }
+        }];
+    }
     return itemList;
 }
 
@@ -841,7 +877,7 @@ static UIViewController *parentController;
 - (void)setEdit:(BOOL)isEdit
 {
     [self.tableView setEditing:isEdit animated:YES];
-    [_myPlacesDelegate setEdit:isEdit];
+    [_myPlacesDelegate setEditMode:isEdit];
 }
 
 - (IBAction)editButtonClicked:(id)sender
@@ -958,7 +994,7 @@ static UIViewController *parentController;
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self getUnsortedNumberOfSectionsInTableView];
+    return _isSearchActive ? [self getSortedNumberOfSectionsInTableView] : [self getUnsortedNumberOfSectionsInTableView];
 }
 
 -(NSInteger)getSortedNumberOfSectionsInTableView
@@ -979,7 +1015,7 @@ static UIViewController *parentController;
         return 44;
     NSDictionary *item = _data[section][0];
     NSString *cellType = item[@"type"];
-    return [cellType isEqualToString:@"actionItem"] ? 44 : 16;
+    return [cellType isEqualToString:@"actionItem"] || _isSearchActive ? 44 : 16;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -1001,7 +1037,7 @@ static UIViewController *parentController;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self getUnsortedNumberOfRowsInSection:section];
+    return _isSearchActive ? [self getSortedNumberOfRowsInSection:section] : [self getUnsortedNumberOfRowsInSection:section];
 }
 
 -(NSInteger)getSortedNumberOfRowsInSection:(NSInteger)section
@@ -1140,7 +1176,7 @@ static UIViewController *parentController;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self getUnsortedcellForRowAtIndexPath:indexPath];
+    return _isSearchActive ? [self getSortedcellForRowAtIndexPath:indexPath] : [self getUnsortedcellForRowAtIndexPath:indexPath];
 }
 
 - (void)openRenameAlertWith:(OAFavoriteGroup *)favoriteGroup
@@ -1366,19 +1402,25 @@ static UIViewController *parentController;
 {
     if ([self.tableView isEditing])
     {
-        NSDictionary *item = _data[indexPath.section][0];
-        NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:@"group"])
-            return indexPath;
-        return nil;
+        if (!_isSearchActive)
+        {
+            NSDictionary *item = _data[indexPath.section][0];
+            NSString *cellType = item[@"type"];
+            if ([cellType isEqualToString:@"group"])
+                return indexPath;
+            return nil;
+        }
+        else if (indexPath.section > 0)
+        {
+            return nil;
+        }
     }
     return indexPath;
-
 }
 
 - (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self canEditUnsortedRowAtIndexPath:indexPath];
+    return _isSearchActive ? [self canEditSortedRowAtIndexPath:indexPath] : [self canEditUnsortedRowAtIndexPath:indexPath];
 }
 
 - (BOOL) canEditSortedRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1397,7 +1439,10 @@ static UIViewController *parentController;
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return indexPath.row != 0 ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
+    if ((indexPath.row != 0 && !_isSearchActive) || _isSearchActive)
+        return UITableViewCellEditingStyleDelete;
+    else
+        return UITableViewCellEditingStyleNone;
 }
 
 - (void)removeItemFromSortedFavoriteItems:(NSIndexPath *)indexPath
@@ -1575,12 +1620,18 @@ static UIViewController *parentController;
 
 - (void) removeFavoriteItems
 {
-    [self removeItemsFromUnsortedFavoriteItems];
+    if (!_isSearchActive)
+        [self removeItemsFromUnsortedFavoriteItems];
+    else
+        [self removeItemsFromSortedFavoriteItems];
 }
 
 - (void)removeFavoriteItem:(NSIndexPath *)indexPath
 {
-    [self removeItemFromUnsortedFavoriteItems:indexPath];
+    if (!_isSearchActive)
+        [self removeItemFromUnsortedFavoriteItems:indexPath];
+    else
+        [self removeItemFromSortedFavoriteItems:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1741,35 +1792,49 @@ static UIViewController *parentController;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][0];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"group"])
+    if (_isSearchActive)
     {
-        if (indexPath.row == 0 && ![self.tableView isEditing])
-            [self openCloseFavoriteGroup:indexPath];
-        else if (indexPath.row == 0 && [self.tableView isEditing])
-            [self selectGroupForEditing:indexPath];
-        else
-            [self didSelectRowAtIndexPathUnsorted:indexPath];
+        [self didSelectRowAtIndexPathSorter:indexPath];
     }
     else
     {
-        [self didSelectRowAtIndexPathUnsorted:indexPath];
+        NSDictionary *item = _data[indexPath.section][0];
+        NSString *cellType = item[@"type"];
+        if ([cellType isEqualToString:@"group"])
+        {
+            if (indexPath.row == 0 && ![self.tableView isEditing])
+                [self openCloseFavoriteGroup:indexPath];
+            else if (indexPath.row == 0 && [self.tableView isEditing])
+                [self selectGroupForEditing:indexPath];
+            else
+                [self didSelectRowAtIndexPathUnsorted:indexPath];
+        }
+        else
+        {
+            [self didSelectRowAtIndexPathUnsorted:indexPath];
+        }
     }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][0];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"group"])
+    if (_isSearchActive)
     {
-        if (indexPath.row == 0 && ![self.tableView isEditing])
-            [self openCloseFavoriteGroup:indexPath];
-        else if (indexPath.row == 0 && [self.tableView isEditing])
-            [self deselectGroupForEditing:indexPath];
-        else
-            [self didDeselectRowAtIndexPathUnsorted:indexPath];
+        [self didDeselectRowAtIndexPathSorted:indexPath];
+    }
+    else
+    {
+        NSDictionary *item = _data[indexPath.section][0];
+        NSString *cellType = item[@"type"];
+        if ([cellType isEqualToString:@"group"])
+        {
+            if (indexPath.row == 0 && ![self.tableView isEditing])
+                [self openCloseFavoriteGroup:indexPath];
+            else if (indexPath.row == 0 && [self.tableView isEditing])
+                [self deselectGroupForEditing:indexPath];
+            else
+                [self didDeselectRowAtIndexPathUnsorted:indexPath];
+        }
     }
 }
 
@@ -2049,6 +2114,7 @@ static UIViewController *parentController;
         _isFiltered = NO;
         [self.tableView reloadData];
     }
+    [_myPlacesDelegate setSegmentedControlVisibility:!_isSearchActive];
 }
 
 @end

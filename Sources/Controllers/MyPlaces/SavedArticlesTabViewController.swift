@@ -18,6 +18,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     var isFiltered = false
     var searchText = ""
     var lastSelectedIndexPath: IndexPath?
+    weak var myPlacesDelegate: MyPlacesDelegate?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -31,6 +32,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
+        navigationController?.navigationItem.searchController?.searchResultsUpdater = self
         definesPresentationContext = true
     }
     
@@ -238,6 +240,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
             isSearchActive = false
             isFiltered = false
         }
+        myPlacesDelegate?.setSegmentedControlVisibility(!isSearchActive)
         generateData()
         tableView.reloadData()
     }

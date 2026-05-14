@@ -193,6 +193,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavbar()
+        navigationController?.navigationItem.searchController?.searchResultsUpdater = self
         updateNavigationBarTitle()
         tableView.tableHeaderView = setupHeaderView()
         filterButton.isHidden = true
@@ -898,7 +899,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func setEdit(_ edit: Bool) {
         tableView.setEditing(edit, animated: true)
-        myPlacesDelegate?.setEdit(edit)
+        myPlacesDelegate?.setEditMode(edit)
     }
     
     @objc private func onNavbarImportButtonClicked() {
@@ -1165,7 +1166,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     @objc private func onSelectToolbarButtonClicked() {
         isSelectionModeInSearch = true
-        // TODO searchController.isActive = false
         onNavbarSelectButtonClicked()
     }
     
@@ -2295,9 +2295,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if let baseFilters = self.baseFilters {
                 self.baseFiltersResult?.values = baseFilters.getFilteredTrackItems()
                 self.isSearchTextFilterChanged = true
-                // TODO
-//                self.searchController.searchBar.text = (baseFilters.getFilterByType(.name) as? TextTrackFilter)?.value
-//                self.isNameFiltered = !(self.searchController.searchBar.text?.isEmpty ?? true)
+                if let searchController = self.navigationController?.navigationItem.searchController {
+                    searchController.searchBar.text = (baseFilters.getFilterByType(.name) as? TextTrackFilter)?.value
+                    self.isNameFiltered = !(searchController.searchBar.text?.isEmpty ?? true)
+                }
                 self.generateData()
                 self.tableView.reloadData()
                 self.updateFilterButton()
@@ -2342,6 +2343,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             isFiltersInitialized = false
         }
         
+        myPlacesDelegate?.setSegmentedControlVisibility(!isSearchActive)
         updateFilterButtonVisibility(filterIsActive: isSearchActive)
         baseFiltersResult = baseFilters?.performFiltering()
         updateSortButtonAndMenu()

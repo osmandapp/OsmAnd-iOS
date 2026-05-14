@@ -623,28 +623,28 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     if (!NSStringIsEmpty([amenity getAdditionalInfo:ROUTE_MEMBERS_IDS]))
     {
-        [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeMembers completionHandler:^(id  _Nullable result) {
-            NSArray<OAPOI *> *amenities = result;
-            if (!NSArrayIsEmpty(amenities))
-            {
-                NSString *title = OALocalizedString(@"route_members");
-                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_MEMBERS_ROW_KEY title:title];
-                [self appendInfoRow:row];
-            }
-        }];
+//        [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeMembers completionHandler:^(id  _Nullable result) {
+//            NSArray<OAPOI *> *amenities = result;
+//            if (!NSArrayIsEmpty(amenities))
+//            {
+//                NSString *title = OALocalizedString(@"route_members");
+//                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_MEMBERS_ROW_KEY title:title];
+//                [self appendInfoRow:row];
+//            }
+//        }];
     }
     
     if (!NSStringIsEmpty([amenity getAdditionalInfo:ROUTE_ID]))
     {
-        [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypePartOf completionHandler:^(id  _Nullable result) {
-            NSArray<OAPOI *> *amenities = result;
-            if (!NSArrayIsEmpty(amenities))
-            {
-                NSString *title = OALocalizedString(@"route_part_of");
-                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_PART_OF_ROW_KEY title:title];
-                [self appendInfoRow:row];
-            }
-        }];
+//        [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypePartOf completionHandler:^(id  _Nullable result) {
+//            NSArray<OAPOI *> *amenities = result;
+//            if (!NSArrayIsEmpty(amenities))
+//            {
+//                NSString *title = OALocalizedString(@"route_part_of");
+//                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_PART_OF_ROW_KEY title:title];
+//                [self appendInfoRow:row];
+//            }
+//        }];
         
         [self buildRouteRow:rows tag:ROUTE_RELATED_ROUTES_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeRelated completionHandler:^(NSArray<OAPOI *> * _Nullable amenities) {
             if (!NSArrayIsEmpty(amenities))
@@ -673,18 +673,26 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (OAAmenityInfoRow *)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows amenities:(NSArray<OAPOI *> *)amenities key:(NSString *)key title:(NSString *)title
 {
-
-    NSString *type = [self getTypeStr]; //TODO: test this line
+    NSString *type = [NSString stringWithFormat:@"\"%@\"", [self getTypeStr]];
     NSString *count = [NSString stringWithFormat:@"(%lu)", amenities.count];
     NSString *text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_triple_combine_via_space"), title, type, count];
     
     UIImage *icon = [self getIcon];
-    
+    if (!icon && [self getTargetObj])
+        icon = [[OAPOILayer getTargetPoint:[self getTargetObj]] icon];
+   
     OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:key icon:icon textPrefix:nil text:text textColor:nil isText:YES needLinks:NO order:0 typeName:nil isPhoneNumber:NO isUrl:NO];
     
-    //TODO: implement
+    NSMutableArray<NSString *> *titles = [NSMutableArray new];
+    for (OAPOI *amenity in amenities)
+    {
+        NSString * title = [[OAPOILayer getTargetPoint:amenity] title];
+        [titles addObject:title ? title : @""];
+    }
     
-    row.collapsableView = nil;
+    OACollapsablePoiView *collapsableView = [[OACollapsablePoiView alloc] init];
+    [collapsableView setDataWithTitles:titles amenities:amenities];
+    row.collapsableView = collapsableView;
 
     return row;
 }

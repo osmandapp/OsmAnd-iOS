@@ -63,8 +63,6 @@ final class SearchByRouteIdTask : OAAsyncTask {
         
         self.searchType = searchType
         self.amenity = amenity
-        //this.listener = listener;
-        
         super.init()
     }
     
@@ -126,7 +124,6 @@ final class SearchByRouteIdTask : OAAsyncTask {
     
     
     override func onPostExecute(result: Any?) {
-        //TODO: implement
         if let completionHandler, let amenities = result as? [OAPOI] {
             completionHandler(amenities)
         }

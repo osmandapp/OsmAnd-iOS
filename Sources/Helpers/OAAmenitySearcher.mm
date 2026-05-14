@@ -1955,12 +1955,12 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     //TODO: implement
     NSMutableArray<OAPOI *> *result = [NSMutableArray new];
     
-    //TODO: use this like in androd
+//    //TODO: use this like in androd
 //    OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
 //    OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
 //    OsmAnd::AreaI bbox31 = OsmAnd::AreaI(topLeft, bottomRight);
     
-    //TODO: for quick testing
+//    TODO: for quick testing
     OsmAnd::LatLon latLon(50.448514, 30.495601);
     const auto location = OsmAnd::Utilities::convertLatLonTo31(latLon);
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(10000, location);
@@ -1976,15 +1976,14 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 }
 
 
-- (NSMutableArray<OAPOI *> *) searchPoiByName:(NSString *)code mode:(OACollatorStringMatcher *)mode matcher:(OAResultMatcher *)matcher bbox31:(OsmAnd::AreaI)bbox31
+- (NSMutableArray<OAPOI *> *) searchPoiByName:(NSString *)multipleSearch mode:(OACollatorStringMatcher *)mode matcher:(OAResultMatcher *)matcher bbox31:(OsmAnd::AreaI)bbox31
 {
-//    NSString *code = @"R5121502";
     QString qKey = QString::fromNSString(ROUTE_ID);
-    QString qCode = QString::fromNSString(code);
-    
+    QString qCode = QString::fromNSString(multipleSearch);
     
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    NSMutableArray<OAPOI *> *res = [NSMutableArray new];
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([&matcher]
@@ -1993,25 +1992,44 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                                                       return [matcher isCancelled];
                                                   }));
     
+    //TODO: delete AmenitiesInAreaSearch
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
-    
-
     searchCriteria->bbox31 = bbox31;
     
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
-    NSMutableArray<OAPOI *> *res = [NSMutableArray new];
     
     search->performSearch(*searchCriteria,
 //                          [&osmId, &res, &cancel]
-                          [&res, &code, &qCode, &qKey, &matcher]
+                          [&res, &multipleSearch, &qCode, &qKey, &matcher]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-        
+
                                  BOOL foobar = [matcher publish:[NSValue valueWithPointer:&resultEntry]];
         
                           },
                           ctrl);
     
+    
+    
+   //TODO: use AmenitiesByNameSearch
+    
+//    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+//    
+//    searchCriteria->name = multipleSearch;
+////    searchCriteria->obfInfoAreaFilter = _visibleArea; // ???
+//    searchCriteria->bbox31 = bbox31;
+//    
+//    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+//    search->performSearch(*searchCriteria,
+//                          [self, &matcher]
+//                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+//                          {
+////                              [self onPOIFound:resultEntry];
+//                                BOOL foobar = [matcher publish:[NSValue valueWithPointer:&resultEntry]];
+//                          },
+//                          ctrl);
+    
+
     return res; //TODO: delete?
 }
 

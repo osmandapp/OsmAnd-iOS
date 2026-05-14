@@ -309,7 +309,7 @@ static OASubscriptionState *EXPIRED;
 
 + (BOOL)isSensorPurchased
 {
-    return [self isOsmAndProAvailable] || [self isMapsPlusAvailable];
+    return [self isOsmAndProAvailable] || [self isMapsPlusAvailable] || [self isSubscribedToLiveUpdates];
 }
 
 + (BOOL)isVehicleMetricsPurchased

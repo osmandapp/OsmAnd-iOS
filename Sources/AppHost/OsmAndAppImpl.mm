@@ -102,6 +102,7 @@
     OAMapMode _mapMode;
     OAMapMode _prevMapMode;
 
+    OASPaletteRepository *_paletteRepository;
     OAResourcesInstaller* _resourcesInstaller;
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
@@ -198,6 +199,7 @@
         _firstLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter] == 1;
         
         [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
+        _paletteRepository = [[OASPaletteRepository alloc] init];
         
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];
@@ -1019,6 +1021,11 @@
 - (void)rescanUnmanagedStoragePaths
 {
     _resourcesManager->rescanUnmanagedStoragePaths();
+}
+
+- (OASPaletteRepository *)paletteRepository
+{
+    return _paletteRepository;
 }
 
 - (MAP_STR_STR) getDefaultAttributes

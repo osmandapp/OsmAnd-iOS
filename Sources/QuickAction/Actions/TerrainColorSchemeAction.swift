@@ -11,9 +11,7 @@ import Foundation
 @objcMembers
 final class TerrainColorSchemeAction: OASwitchableAction {
 
-    private static let type = QuickActionType(id: QuickActionIds.terrainColorSchemeActionId.rawValue,
-                                      stringId: "terrain.colorscheme.change",
-                                      cl: TerrainColorSchemeAction.self)
+    private static let type = QuickActionType(id: QuickActionIds.terrainColorSchemeActionId.rawValue, stringId: "terrain.colorscheme.change", cl: TerrainColorSchemeAction.self)
         .name(getName())
         .nameAction(localizedString("shared_string_change"))
         .iconName("ic_custom_terrain")
@@ -110,13 +108,13 @@ final class TerrainColorSchemeAction: OASwitchableAction {
                 var desc = ""
                 if let mode = TerrainMode.byKey(paletteKey) {
                     title = mode.getDefaultDescription()
-                    if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.mainFile()) {
-                        desc = PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: true)
+                    if let paletteItem = GradientPaletteHelper.shared.getPaletteItem(fileName: mode.mainFile()) {
+                        desc = PaletteCollectionHandler.createDescriptionForPalette(paletteItem)
                         arr.append([
                             "type": OATitleDescrDraggableCell.reuseIdentifier,
                             "title": title,
                             "desc": desc,
-                            "colorPalette": colorPalette,
+                            "colorPalette": paletteItem.getColorPalette(),
                             "palette": paletteKey
                         ])
                     }

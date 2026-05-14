@@ -71,6 +71,7 @@ static const unsigned long kWikiOnlineAmenitiesWaitIntervalMs = 50;
 static const uint32_t kMinPoiCacheSize = 64;
 static const uint32_t kPoiVisibleTilesMargin = 2;
 static const int kWikiOnlineRequestTilesMargin = 1;
+static char kTopPlacesCacheQueueKey;
 
 const QString TAG_POI_LAT_LON = QStringLiteral("osmand_poi_lat_lon");
 
@@ -759,6 +760,8 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 - (void)updateWikiOnlineAmenitiesControllerVisibleState;
 - (void)invalidateWikiOnlineAmenitiesController;
 - (void)resetNotifiedTiles;
+- (BOOL)isOnTopPlacesCacheQueue;
+- (void)resetNotifiedTilesOnTopPlacesCacheQueue;
 - (void)scheduleTopPlacesCacheRefresh;
 - (void)scheduleTopPlacesCacheRefreshForTileId:(OsmAnd::TileId)tileId zoom:(OsmAnd::ZoomLevel)zoom;
 
@@ -816,6 +819,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     _topPlacesProvider = [[OAPOILayerTopPlacesProvider alloc] initWithTopPlaceBaseOrder:(int)[self getTopPlaceBaseOrder]];
     _notifiedZoom = OsmAnd::InvalidZoomLevel;
     _topPlacesCacheQueue = dispatch_queue_create("com.osmand.topplaces.cacheRefresh", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_set_specific(_topPlacesCacheQueue, &kTopPlacesCacheQueueKey, &kTopPlacesCacheQueueKey, NULL);
     _topPlacesCacheRefreshScheduled = NO;
     _pendingTopPlacesDirtyTileKeys = [NSMutableSet set];
 }
@@ -855,6 +859,24 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (void)resetNotifiedTiles
 {
+    if ([self isOnTopPlacesCacheQueue])
+    {
+        [self resetNotifiedTilesOnTopPlacesCacheQueue];
+        return;
+    }
+
+    dispatch_async(_topPlacesCacheQueue, ^{
+        [self resetNotifiedTilesOnTopPlacesCacheQueue];
+    });
+}
+
+- (BOOL)isOnTopPlacesCacheQueue
+{
+    return dispatch_get_specific(&kTopPlacesCacheQueueKey) == &kTopPlacesCacheQueueKey;
+}
+
+- (void)resetNotifiedTilesOnTopPlacesCacheQueue
+{
     _notifiedTiles.clear();
     _notifiedZoom = OsmAnd::InvalidZoomLevel;
 }
@@ -866,12 +888,6 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (void)scheduleTopPlacesCacheRefresh
 {
-    if (!_topPlacesCacheQueue)
-    {
-        [self notifyTopPlacesProviderIfWikiTilesCached];
-        return;
-    }
-
     dispatch_async(_topPlacesCacheQueue, ^{
         if (_topPlacesCacheRefreshScheduled)
             return;
@@ -896,9 +912,12 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
                     && wikiSymbolsProvider
                     && visibleZoom != OsmAnd::InvalidZoomLevel)
                 {
-                    for (const auto& visibleTileId : visibleTiles)
+                    const auto& constVisibleTiles = visibleTiles;
+                    for (auto itVisibleTileId = constVisibleTiles.cbegin();
+                         itVisibleTileId != constVisibleTiles.cend();
+                         ++itVisibleTileId)
                     {
-                        NSString *tileKey = [self topPlacesDirtyTileKeyForTileId:visibleTileId zoom:visibleZoom];
+                        NSString *tileKey = [self topPlacesDirtyTileKeyForTileId:*itVisibleTileId zoom:visibleZoom];
                         if ([dirtyTileKeys containsObject:tileKey])
                         {
                             [self resetNotifiedTiles];
@@ -914,17 +933,11 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (void)scheduleTopPlacesCacheRefreshForTileId:(OsmAnd::TileId)tileId zoom:(OsmAnd::ZoomLevel)zoom
 {
-    if (_topPlacesCacheQueue)
-    {
-        NSString *tileKey = [self topPlacesDirtyTileKeyForTileId:tileId zoom:zoom];
-        dispatch_async(_topPlacesCacheQueue, ^{
-            [_pendingTopPlacesDirtyTileKeys addObject:tileKey];
-            [self scheduleTopPlacesCacheRefresh];
-        });
-        return;
-    }
-
-    [self scheduleTopPlacesCacheRefresh];
+    NSString *tileKey = [self topPlacesDirtyTileKeyForTileId:tileId zoom:zoom];
+    dispatch_async(_topPlacesCacheQueue, ^{
+        [_pendingTopPlacesDirtyTileKeys addObject:tileKey];
+        [self scheduleTopPlacesCacheRefresh];
+    });
 }
 
 - (void) resetLayer
@@ -1216,6 +1229,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         if (localWikiSymbolsProvider)
         {
             localVisibleTiles = self.mapView.visibleTiles;
+            localVisibleTiles.detach();
             localVisibleZoom = self.mapView.zoomLevel;
         }
     }];
@@ -1244,6 +1258,14 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (void)notifyTopPlacesProviderIfWikiTilesCached
 {
+    if (![self isOnTopPlacesCacheQueue])
+    {
+        dispatch_async(_topPlacesCacheQueue, ^{
+            [self notifyTopPlacesProviderIfWikiTilesCached];
+        });
+        return;
+    }
+
     BOOL showWikiOnMap = NO;
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> wikiSymbolsProvider;
     QVector<OsmAnd::TileId> visibleTiles;
@@ -1271,10 +1293,13 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
         NSMutableSet<NSNumber *> *seenAmenityIds = [NSMutableSet set];
 
-        for (const auto& tileId : visibleTiles)
+        const auto& constVisibleTiles = visibleTiles;
+        for (auto itTileId = constVisibleTiles.cbegin();
+             itTileId != constVisibleTiles.cend();
+             ++itTileId)
         {
             QList<std::shared_ptr<const OsmAnd::Amenity>> cachedAmenities;
-            if (!wikiSymbolsProvider->cache->obtainAmenities(tileId, visibleZoom, cachedAmenities))
+            if (!wikiSymbolsProvider->cache->obtainAmenities(*itTileId, visibleZoom, cachedAmenities))
                 continue;
 
             for (const auto& amenity : cachedAmenities)

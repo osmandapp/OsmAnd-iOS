@@ -811,7 +811,7 @@ static UIViewController *parentController;
                     }
                 }
             }
-            
+
             if (item)
             {
                 [groupNames addObject:item.getCategory];
@@ -869,7 +869,6 @@ static UIViewController *parentController;
     [_myPlacesDelegate showBackButton:YES];
 
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _editButton] animated:YES];
-    
     [self setEdit:NO];
     [_selectedItems removeAllObjects];
 }

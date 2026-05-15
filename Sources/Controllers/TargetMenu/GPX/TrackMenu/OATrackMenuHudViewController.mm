@@ -2983,34 +2983,26 @@
     CGFloat scale = self.mapViewController.view.contentScaleFactor;
     CGSize viewSize = self.view.bounds.size;
     BOOL isLandscaped = [OAUtilities isLandscapeIpadAware];
+    auto targetPointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
     
-    CGPoint waypointScreenPoint = CGPointZero;
-    CGPoint prevWaypointScreenPoint = CGPointMake(-CGFLOAT_MAX, -CGFLOAT_MAX);
-    
-    while(!CGPointEqualToPoint(waypointScreenPoint, prevWaypointScreenPoint))
+    if (isLandscaped)
     {
-        prevWaypointScreenPoint = waypointScreenPoint;
-        waypointScreenPoint = [OANativeUtilities getScreenPointFromLatLon:lat lon:lon];
-        CLLocation *location;
-        if (isLandscaped)
-        {
-            CGFloat mapAreaWidth = viewSize.width - self.scrollableView.frame.size.width;
-            CGFloat newWaypointScreenPointX = mapAreaWidth / 2 + (waypointScreenPoint.x - self.scrollableView.frame.size.width);
-            CGFloat newWaypointScreenPointY = waypointScreenPoint.y - self.groupsButtonContainerView.frame.size.height;
-            CLLocation *locationFromPixel = [self.mapViewController getLatLonFromElevatedPixel:newWaypointScreenPointX * scale y:newWaypointScreenPointY * scale];
-            location = [[CLLocation alloc] initWithLatitude:locationFromPixel.coordinate.latitude longitude:locationFromPixel.coordinate.longitude];
-        }
-        else
-        {
-            CGFloat mapAreaHeight = viewSize.height - self.scrollableView.frame.size.height;
-            CGFloat newWaypointScreenPointY = waypointScreenPoint.y + mapAreaHeight / 2 - self.groupsButtonContainerView.frame.origin.y;
-            CLLocation *locationFromPixel = [self.mapViewController getLatLonFromElevatedPixel:waypointScreenPoint.x * scale y:newWaypointScreenPointY * scale];
-            location = [[CLLocation alloc] initWithLatitude:locationFromPixel.coordinate.latitude longitude:lon];
-        }
-        
-        CLLocationCoordinate2D locationCoordinate = location.coordinate;
-        [self.mapPanelViewController showWaypointOnMap:gpxWptItem latitude:locationCoordinate.latitude longitude:locationCoordinate.longitude];
+        CGFloat mapAreaWidth = (viewSize.width - self.scrollableView.frame.size.width) / 2 + self.scrollableView.frame.size.width;
+        [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
+                                                                    (int)(mapAreaWidth * scale),
+                                                                    (int)(viewSize.height / 2 * scale))
+                                          location31:targetPointI];
     }
+    else
+    {
+        CGFloat mapAreaHeight = (viewSize.height - self.scrollableView.frame.size.height) / 2;
+        [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
+                                                                    (int)(viewSize.width / 2 * scale),
+                                                                    (int)(mapAreaHeight * scale))
+                                          location31:targetPointI];
+    }
+    
+    [self.mapPanelViewController showWaypointOnMap:gpxWptItem latitude:lat longitude:lon];
     
     return NO;
 }

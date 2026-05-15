@@ -12,5 +12,6 @@
 
 + (NSString *) removeApostrophes:(NSString *)s;
 + (NSString *) replaceGermanSS:(NSString *)fullText;
++ (NSString *) canonicalizePunctuation:(NSString *)s;
 
 @end

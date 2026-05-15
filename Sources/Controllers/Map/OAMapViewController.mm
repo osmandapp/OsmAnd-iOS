@@ -2694,7 +2694,6 @@ static const NSInteger kDetailedMapZoom = 9;
             return;
         }
         [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
-        [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
         OASRTMPlugin *srtmPlugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
         if (srtmPlugin)
         {
@@ -3972,20 +3971,6 @@ static const NSInteger kDetailedMapZoom = 9;
         return UIColorFromARGB(_mapPresentationEnvironment->getTransportRouteColor(nightMode, QString::fromNSString(renderAttrName)).argb);
     else
         return nil;
-}
-
-- (NSDictionary<NSString *, NSNumber *> *) getGpxColors
-{
-    const auto &gpxColorsMap = _mapPresentationEnvironment->getGpxColors();
-    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary dictionary];
-    QHashIterator<QString, int> it(gpxColorsMap);
-    while (it.hasNext()) {
-        it.next();
-        NSString *key = (0 == it.key().length()) ? (@"") : (it.key().toNSString());
-        NSNumber *value = @(it.value());
-        [result setObject:value forKey:key];
-    }
-    return result;
 }
 
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth

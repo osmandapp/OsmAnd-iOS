@@ -207,7 +207,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (nullable UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
 - (nullable NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
-- (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(nullable NSDictionary<NSString *, NSString*> *) additionalSettings;
 

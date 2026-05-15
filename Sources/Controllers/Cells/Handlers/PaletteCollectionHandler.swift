@@ -12,7 +12,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     private var selectedIndexPath: IndexPath?
     private var defaultIndexPath: IndexPath?
-    private var data = [[PaletteColor]]()
+    private var data = [[PaletteItemGradient]]()
 
     override func getCellIdentifier() -> String {
         PaletteCollectionViewCell.reuseIdentifier
@@ -30,30 +30,22 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         self.selectedIndexPath = selectedIndexPath
     }
 
+    func setSelectionItem(_ item: PaletteItemGradient?) {
+        if let indexPath = indexPath(for: item) {
+            selectedIndexPath = indexPath
+        }
+    }
+
     override func generateData(_ data: [[Any]]) {
-        var newData = [[PaletteColor]]()
-        for i in 0...data.count - 1 {
+        var newData = [[PaletteItemGradient]]()
+        defaultIndexPath = nil
+        for i in data.indices {
             let items = data[i]
-            if let palettes = items as? [PaletteColor] {
+            if let palettes = items as? [PaletteItemGradient] {
                 newData.append(palettes)
 
-                if let gradients = palettes as? [PaletteGradientColor] {
-                    var defaultGradient = gradients.first(where: {
-                        $0.paletteName == TerrainMode.defaultKey
-                    })
-                    if defaultGradient == nil {
-                        defaultGradient = gradients.first(where: {
-                            $0.typeName == TerrainType.height.name && $0.paletteName == TerrainMode.altitudeDefaultKey
-                        })
-                    }
-                    if defaultGradient == nil {
-                        defaultGradient = gradients.first(where: {
-                            $0.typeName == $0.paletteName
-                        })
-                    }
-                    if let defaultGradient, let index = gradients.firstIndex(of: defaultGradient) {
-                        defaultIndexPath = IndexPath(row: index, section: i)
-                    }
+                if defaultIndexPath == nil, let index = palettes.firstIndex(where: { $0.isDefault }) {
+                    defaultIndexPath = IndexPath(row: index, section: i)
                 }
             }
         }
@@ -61,7 +53,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     override func insertItem(_ newItem: Any, at indexPath: IndexPath) {
-        if let newItem = newItem as? PaletteColor, data.count > indexPath.section, (indexPath.row == 0 || data[indexPath.section].count > indexPath.row - 1) {
+        if let newItem = newItem as? PaletteItemGradient, data.count > indexPath.section, (indexPath.row == 0 || data[indexPath.section].count > indexPath.row - 1) {
             data[indexPath.section].insert(newItem, at: indexPath.row)
         }
         if let collectionView = getCollectionView() {
@@ -73,8 +65,8 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         }
     }
 
-    override func replaceItem(_ newItem: Any, at indexPath: IndexPath) {     
-        if let newItem = newItem as? PaletteColor, data.count > indexPath.section, data[indexPath.section].count > indexPath.row {
+    override func replaceItem(_ newItem: Any, at indexPath: IndexPath) {
+        if let newItem = newItem as? PaletteItemGradient, data.count > indexPath.section, data[indexPath.section].count > indexPath.row {
             data[indexPath.section][indexPath.row] = newItem
         }
         if let collectionView = getCollectionView() {
@@ -135,13 +127,13 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         }
         if !deletedIndexPaths.isEmpty, let collectionView = getCollectionView() {
             collectionView.performBatchUpdates {
-            collectionView.deleteItems(at: deletedIndexPaths)
+                collectionView.deleteItems(at: deletedIndexPaths)
             } completion: { [weak self] _ in
                 guard let self else { return }
 
                 collectionView.reloadData()
-                if deleteCurrent, let defaultIndexPath {
-                    let indexPathsToUpdate = [self.selectedIndexPath!, defaultIndexPath]
+                if deleteCurrent, let defaultIndexPath, let selectedIndexPath = self.selectedIndexPath {
+                    let indexPathsToUpdate = [selectedIndexPath, defaultIndexPath]
                     self.selectedIndexPath = defaultIndexPath
                     collectionView.reloadItems(at: indexPathsToUpdate)
                 }
@@ -154,13 +146,10 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     override func getCollectionViewCell(_ indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: PaletteCollectionViewCell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath) as! PaletteCollectionViewCell
+        let cell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath)
+        guard let cell = cell as? PaletteCollectionViewCell else { return cell }
         cell.backgroundImageView.layer.cornerRadius = 3
-        let paletteColor = data[indexPath.section][indexPath.row]
-        if let gradientPalette = paletteColor as? PaletteGradientColor {
-            Self.applyGradient(to: cell.backgroundImageView,
-                               with: gradientPalette.colorPalette)
-        }
+        cell.backgroundImageView.gradated(Self.createGradientPoints(data[indexPath.section][indexPath.row].getColorPalette()))
 
         if indexPath == selectedIndexPath {
             cell.selectionView.layer.borderWidth = 2
@@ -175,26 +164,44 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     override func sectionsCount() -> Int {
         data.count
     }
-    
-    @objc static func applyGradient(to imageView: UIImageView,
-                                    with colorPalette: ColorPalette) {
+
+    @objc static func applyGradient(to imageView: UIImageView, with colorPalette: OsmAndShared.ColorPalette) {
         imageView.gradated(Self.createGradientPoints(colorPalette))
     }
 
-    @objc static func createDescriptionForPalette(_ colorPalette: ColorPalette, isTerrain: Bool) -> String {
-        return colorPalette.colorValues.map {
-            isTerrain ? GradientUiHelper.formatTerrainTypeValues($0.val) : "\($0.val)"
+    @objc static func createDescriptionForPalette(_ paletteItem: PaletteItemGradient) -> String {
+        let fileType = paletteItem.properties.fileType
+        return paletteItem.points.map {
+            GradientFormatter.formatSimpleValue(value: $0.value, fileType: fileType)
         }.joined(separator: " • ")
     }
 
-    private static func createGradientPoints(_ colorPalette: ColorPalette) -> [GradientPoint] {
+    private static func createGradientPoints(_ colorPalette: OsmAndShared.ColorPalette) -> [GradientPoint] {
+        let colorValues = colorPalette.colors.compactMap { $0 as? OsmAndShared.ColorPalette.ColorValue }
+        guard !colorValues.isEmpty else { return [] }
+        if colorValues.count == 1 {
+            let color = UIColor(argb: Int(colorValues[0].clr))
+            return [GradientPoint(location: 0, color: color), GradientPoint(location: 1, color: color)]
+        }
+
         var gradientPoints = [GradientPoint]()
-            let step = 1.0 / CGFloat(colorPalette.colorValues.count - 1)
-            for i in 0...colorPalette.colorValues.count - 1 {
-                let colorValue = colorPalette.colorValues[i]
-                gradientPoints.append(GradientPoint(location: CGFloat(i) * step,
-                                                    color: UIColor(argb: colorValue.clr)))
-            }
+        let step = 1.0 / CGFloat(colorValues.count - 1)
+        for i in 0...colorValues.count - 1 {
+            let colorValue = colorValues[i]
+            gradientPoints.append(GradientPoint(location: CGFloat(i) * step, color: UIColor(argb: Int(colorValue.clr))))
+        }
+
         return gradientPoints
+    }
+
+    private func indexPath(for item: PaletteItemGradient?) -> IndexPath? {
+        guard let item else { return nil }
+        for section in data.indices {
+            if let row = data[section].firstIndex(where: { $0.id == item.id }) {
+                return IndexPath(row: row, section: section)
+            }
+        }
+    
+        return nil
     }
 }

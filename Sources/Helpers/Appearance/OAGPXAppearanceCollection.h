@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "OAGPXDatabase.h"
+#import "OsmAndSharedWrapper.h"
 
-@class OAColorItem, OAFavoriteGroup, OAMapViewController;
+@class OAFavoriteGroup, OAMapViewController;
 
 @interface OAGPXTrackAppearance : NSObject
 
@@ -53,19 +54,20 @@
 + (OAGPXAppearanceCollection *)sharedInstance;
 
 - (void)onUpdateMapSource:(OAMapViewController *)mapViewController;
-- (void)generateAvailableColors;
 - (BOOL)saveFavoriteColorsIfNeeded:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
-- (OAColorItem *)getDefaultLineColorItem;
-- (OAColorItem *)getDefaultPointColorItem;
+- (OASPaletteItemSolid *)getDefaultLineColorItem;
+- (OASPaletteItemSolid *)getDefaultPointColorItem;
 
-- (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor;
-- (OAColorItem *)addNewSelectedColor:(UIColor *)newColor;
-- (OAColorItem *)duplicateColor:(OAColorItem *)colorItem;
-- (void)deleteColor:(OAColorItem *)colorItem;
-- (void)selectColor:(OAColorItem *)colorItem;
-- (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;
-- (NSArray<OAColorItem *> *)getAvailableColorsSortingByLastUsed;
-- (OAColorItem *)getColorItemWithValue:(int)defaultValue;
+- (OASPaletteItemSolid *)changeColor:(OASPaletteItemSolid *)colorItem newColor:(UIColor *)newColor;
+- (OASPaletteItemSolid *)addNewSelectedColor:(UIColor *)newColor;
+- (OASPaletteItemSolid *)duplicateColor:(OASPaletteItemSolid *)colorItem;
+- (void)deleteColor:(OASPaletteItemSolid *)colorItem;
+- (void)selectColor:(OASPaletteItemSolid *)colorItem;
+- (NSArray<OASPaletteItemSolid *> *)getAvailableColorsSortingByLastUsed;
+- (OASPaletteItemSolid *)getColorItemWithValue:(int)defaultValue;
+- (NSInteger)indexOfColorItem:(OASPaletteItemSolid *)colorItem items:(NSArray<OASPaletteItemSolid *> *)items;
+- (BOOL)isSameColorItem:(OASPaletteItemSolid *)firstItem secondItem:(OASPaletteItemSolid *)secondItem;
+- (BOOL)isSameColorValue:(OASPaletteItemSolid *)firstItem secondItem:(OASPaletteItemSolid *)secondItem;
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;

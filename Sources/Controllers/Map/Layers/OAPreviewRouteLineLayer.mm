@@ -36,6 +36,10 @@
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
 
+@interface OAPreviewRouteLineLayer () <OASPaletteRepositoryListener>
+
+@end
+
 @implementation OAPreviewRouteLineLayer
 {
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
@@ -78,7 +82,7 @@
 {
     [super initLayer];
 
-    _routeGradientPalette = PaletteGradientColor.defaultName;
+    _routeGradientPalette = [OASPaletteConstants shared].DEFAULT_NAME;
     _routingHelper = OARoutingHelper.sharedInstance;
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -96,10 +100,12 @@
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [NSMutableDictionary dictionary];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onColorPalettesFilesUpdated:)
-                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
-                                               object:nil];
+    [self.app.paletteRepository addListenerListener:self];
+}
+
+- (void)deinitLayer
+{
+    [self.app.paletteRepository removeListenerListener:self];
 }
 
 - (void) resetLayer
@@ -152,27 +158,60 @@
     return YES;
 }
 
-- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+- (void)onPaletteChangedEvent:(OASPaletteChangeEvent *)event
 {
-    NSString *currentColorPaletteFile = @"";
-    if (_routeColoringType && [_routeColoringType isGradient])
+    if (![_routeColoringType isGradient])
+        return;
+    
+    OASGradientPaletteCategory *category = [[_routeColoringType toGradientScaleType] toPaletteCategory];
+    if (!category)
+        return;
+    
+    BOOL shouldRefresh = NO;
+    if ([event isKindOfClass:OASPaletteChangeEventRemoved.class])
     {
-        currentColorPaletteFile =
-            [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [_routeColoringType toColorizationType]
-                                    gradientPaletteName:_routeGradientPalette];
+        OASPaletteChangeEventRemoved *removed = (OASPaletteChangeEventRemoved *) event;
+        if ([removed.paletteId isEqualToString:category.id] && [removed.id isEqualToString:_routeGradientPalette])
+        {
+            _routeGradientPalette = [OASPaletteConstants shared].DEFAULT_NAME;
+            if (_previewRouteLineInfo)
+                _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
+            shouldRefresh = YES;
+        }
     }
-
-    if (currentColorPaletteFile.length == 0 || ![notification.object isKindOfClass:NSDictionary.class])
-        return;
-
-    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-    if (!colorPaletteFiles)
-        return;
-
-    if ([colorPaletteFiles.allKeys containsObject:currentColorPaletteFile])
+    else
     {
-        if ([colorPaletteFiles[currentColorPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
-            _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
+        NSString *oldId = nil;
+        NSObject *item = nil;
+        if ([event isKindOfClass:OASPaletteChangeEventUpdated.class])
+            item = (NSObject *) ((OASPaletteChangeEventUpdated *) event).item;
+        else if ([event isKindOfClass:OASPaletteChangeEventAdded.class])
+            item = (NSObject *) ((OASPaletteChangeEventAdded *) event).item;
+        else if ([event isKindOfClass:OASPaletteChangeEventReplaced.class])
+        {
+            OASPaletteChangeEventReplaced *replaced = (OASPaletteChangeEventReplaced *) event;
+            oldId = replaced.oldId;
+            item = (NSObject *) replaced.newItem;
+        }
+        
+        if ([item isKindOfClass:OASPaletteItemGradient.class])
+        {
+            OASPaletteItemGradient *paletteItem = (OASPaletteItemGradient *) item;
+            if ([paletteItem.source.paletteId isEqualToString:category.id] && ([oldId isEqualToString:_routeGradientPalette] || [paletteItem.id isEqualToString:_routeGradientPalette]))
+            {
+                if ([oldId isEqualToString:_routeGradientPalette])
+                {
+                    _routeGradientPalette = paletteItem.id;
+                    if (_previewRouteLineInfo)
+                        _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
+                }
+                shouldRefresh = YES;
+            }
+        }
+    }
+    
+    if (shouldRefresh)
+    {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.mapViewController runWithRenderSync:^{
                 [self resetLayer];
@@ -369,6 +408,9 @@
         _routeInfoAttribute = [settings.routeInfoAttribute get:mode];
         _routeGradientPalette = [settings.routeGradientPalette get:mode];
     }
+
+    if (_routeGradientPalette.length == 0)
+        _routeGradientPalette = [OASPaletteConstants shared].DEFAULT_NAME;
 }
 
 - (BOOL)shouldShowTurnArrows
@@ -618,26 +660,10 @@
 
 - (void) fillAltitudeGradientArrays:(NSArray<NSNumber *> *)distances colors:(QList<OsmAnd::FColorARGB> &)colors
 {
-    ColorPalette *previewPalette;
-    OAGradientScaleType *gradientScaleType = [_routeColoringType toGradientScaleType];
-    if (gradientScaleType)
-    {
-        ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
-        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType
-                                                                  gradientPaletteName:_routeGradientPalette];
-    }
-    NSMutableArray<NSNumber *> *colorsArr = [NSMutableArray array];
-    if (previewPalette)
-    {
-        for (ColorValue *colorValue in [previewPalette colorValues])
-        {
-            [colorsArr addObject:@(colorValue.clr)];
-        }
-    }
-    else
-    {
-        colorsArr = [NSMutableArray arrayWithArray:ColorPalette.colors];
-    }
+    NSArray<NSNumber *> *colorsArr = [OARouteColorize colorsFromSharedPalette:[OASColorPaletteCompanion shared].MIN_MAX_PALETTE];
+    if (colorsArr.count == 0)
+        return;
+    
     for (int i = 1; i < distances.count; i++)
     {
         double prevDist = distances[i - 1].doubleValue;
@@ -655,7 +681,7 @@
         return OsmAnd::ColorARGB(colors[0].intValue);
     else if (index > 0 && index < colors.count) {
         double percent = fmax(0.0, fmin(1.0, normalizeDouble(coeff)));
-        return OsmAnd::ColorARGB((uint32_t)[ColorPalette getIntermediateColorWithMin:colors[index - 1].intValue max:colors[index].intValue percent:percent]);
+        return OsmAnd::ColorARGB((uint32_t)[[OASColorPaletteCompanion shared] getIntermediateColorMin:colors[index - 1].intValue max:colors[index].intValue percent:percent]);
     } else if (index == colors.count)
         return OsmAnd::ColorARGB(colors[index - 1].intValue);
 
@@ -665,19 +691,21 @@
 - (void)fillSlopeGradientArrays:(QVector<OsmAnd::PointI> &)points distances:(NSMutableArray<NSNumber *> *)distances
                           angles:(NSMutableArray<NSNumber *> *)angles colors:(QList<OsmAnd::FColorARGB> &)colors
 {
-    ColorPalette *previewPalette = ColorPalette.minMaxPalette;
+    OASColorPalette *previewPalette = [OASColorPaletteCompanion shared].MIN_MAX_PALETTE;
     OAGradientScaleType *gradientScaleType = [_routeColoringType toGradientScaleType];
     if (gradientScaleType)
     {
-        ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
-        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType
-                                                                  gradientPaletteName:_routeGradientPalette];
+        OASGradientPaletteCategory *category = [gradientScaleType toPaletteCategory];
+        OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] getPaletteItemWithCategory:category name:_routeGradientPalette] : nil;
+        if (paletteItem)
+            previewPalette = [paletteItem getColorPalette];
+        if (![previewPalette isValid])
+            previewPalette = [[OASRouteColorizeCompanion shared] getDefaultPaletteColorizationType:[OARouteColorize sharedColorizationType:[gradientScaleType toColorizationType]]];
     }
-    NSMutableArray<NSNumber *> *palette = [NSMutableArray array];
-    for (ColorValue *colorValue in [previewPalette colorValues])
-    {
-        [palette addObject:@(colorValue.clr)];
-    }
+    
+    NSArray<NSNumber *> *palette = [OARouteColorize colorsFromSharedPalette:previewPalette];
+    if (palette.count < 2)
+        return;
     
     NSUInteger ratiosAmount = palette.count - 1;
     double lengthRatio = 1.0 / palette.count;

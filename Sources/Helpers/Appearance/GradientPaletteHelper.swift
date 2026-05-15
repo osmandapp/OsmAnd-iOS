@@ -76,6 +76,10 @@ final class GradientPaletteHelper: NSObject {
             return item.source.paletteId == paletteData.category.id && item.id == paletteData.name
         }
         
+        if let added = event as? PaletteChangeEvent.Added, let item = added.item as? PaletteItemGradient {
+            return item.source.paletteId == paletteData.category.id && item.id == paletteData.name
+        }
+
         if let replaced = event as? PaletteChangeEvent.Replaced, let item = replaced.newItem as? PaletteItemGradient {
             return item.source.paletteId == paletteData.category.id && (replaced.oldId == paletteData.name || item.id == paletteData.name)
         }

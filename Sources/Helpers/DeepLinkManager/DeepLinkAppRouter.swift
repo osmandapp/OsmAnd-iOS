@@ -183,16 +183,18 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(OADirectionAppearanceViewController(), animated: true)
     }
     
-    func openMyPlaces(tabClass: UIViewController.Type) {
+    func openMyPlaces(tab: MyPlacesContainerViewController.Tab) {
         guard let nav = root.navigationController else { return }
-        if let myPlaces = nav.visibleViewController as? OAMyPlacesTabBarViewController {
-            selectMyPlacesTab(tabClass, in: myPlaces)
+        if let myPlaces = nav.visibleViewController as? MyPlacesContainerViewController {
+            selectMyPlacesTab(tab, in: myPlaces)
+            myPlaces.switchToWithSegmentControl(tab: tab)
             return
         }
         
-        guard let nav = dismissAndPopToRoot(), let myPlaces = UIStoryboard(name: "MyPlaces", bundle: nil).instantiateInitialViewController() as? OAMyPlacesTabBarViewController else { return }
+        guard let nav = dismissAndPopToRoot() else { return }
+        let myPlaces = MyPlacesContainerViewController()
         myPlaces.loadViewIfNeeded()
-        guard selectMyPlacesTab(tabClass, in: myPlaces) else { return }
+        selectMyPlacesTab(tab, in: myPlaces)
         nav.pushViewController(myPlaces, animated: true)
     }
     
@@ -336,9 +338,7 @@ final class DeepLinkAppRouter: NSObject {
         return nav
     }
     
-    @discardableResult private func selectMyPlacesTab(_ tabClass: UIViewController.Type, in controller: UITabBarController) -> Bool {
-        guard let viewControllers = controller.viewControllers, let targetIndex = viewControllers.firstIndex(where: { $0.isKind(of: tabClass) }) else { return false }
-        controller.selectedIndex = targetIndex
-        return true
+    private func selectMyPlacesTab(_ tab: MyPlacesContainerViewController.Tab, in controller: MyPlacesContainerViewController) {
+        controller.selectedTab = tab
     }
 }

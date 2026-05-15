@@ -14,7 +14,7 @@ protocol MyPlacesDelegate: AnyObject {
 }
 
 final class MyPlacesContainerViewController: OACompoundViewController {
-    private enum Tab: Int, CaseIterable {
+    enum Tab: Int, CaseIterable {
         case favorites
         case tracks
         case osm
@@ -37,11 +37,17 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             case .travel: localizedString("shared_string_travel_guides")
             }
         }
+        
+        static var `default`: Tab {
+            .favorites
+        }
     }
     
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var segmentContainerView: UIView!
     @IBOutlet private weak var segmentControl: UISegmentedControl!
+    
+    var selectedTab: Tab = .default
     
     private let segmentedControlIconSize: CGFloat = 24
     
@@ -54,8 +60,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewDidLoad()
         setupSegmentControl()
         setupTabs()
-        setupSegments()
-        selectInitialTab()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,8 +69,11 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         setupSearchController()
         setupPageController()
         setupViewControllers()
+        setupSegments()
+        initialSelectedTab()
         setupNavbar()
         segmentContainerView.backgroundColor = .viewBg
+        pageViewController?.scrollView?.backgroundColor = .viewBg
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -74,6 +81,11 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.navigationItem.searchController = nil
+    }
+    
+    func switchToWithSegmentControl(tab: Tab) {
+        switchTo(tab: tab)
+        segmentControl.selectedSegmentIndex = availableTabs.firstIndex(of: tab) ?? Tab.default.rawValue
     }
     
     private func setupSegmentControl() {
@@ -181,19 +193,18 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                                          at: index,
                                          animated: false)
         }
-        
-        segmentControl.selectedSegmentIndex = Tab.favorites.rawValue
-    }
-    
-    private func selectInitialTab() {
-        guard let first = availableTabs.first else { return }
-        switchTo(tab: first)
     }
     
     private func switchTo(tab: Tab) {
-        guard let index = availableTabs.firstIndex(of: tab) else { return }
+        let index = availableTabs.firstIndex(of: tab) ?? Tab.default.rawValue
+        let tab = availableTabs[index]
+        selectedTab = tab
         pageViewController?.setViewControllers([availableViewControllers[index]], direction: .forward, animated: true)
         setupNavbarTitle(with: tab)
+    }
+    
+    private func initialSelectedTab() {
+        switchToWithSegmentControl(tab: selectedTab)
     }
     
     @objc private func onBackPressed() {
@@ -229,8 +240,10 @@ extension MyPlacesContainerViewController: UIPageViewControllerDelegate {
               let index = availableViewControllers.firstIndex(of: viewController) else {
             return
         }
+        let tab = availableTabs[index]
         segmentControl.selectedSegmentIndex = index
-        setupNavbarTitle(with: availableTabs[index])
+        setupNavbarTitle(with: tab)
+        selectedTab = tab
     }
 }
 

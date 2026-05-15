@@ -125,7 +125,12 @@
 {
     OAMeasurementEditingContext *context = [self createEditingContext:gpxFile params:params];
     NSArray *pair = [self calculateGpxApproximationSync];
-    OASGpxFile *approximatedGpx = [self createApproximatedGpx:context params:params approximations:pair.firstObject points:pair.lastObject];
+    NSArray<OAGpxRouteApproximation *> *approximations = pair.firstObject;
+    NSArray<NSArray<OASWptPt *> *> *points = pair.lastObject;
+    if (approximations.count == 0 || points.count == 0)
+        return gpxFile;
+
+    OASGpxFile *approximatedGpx = [self createApproximatedGpx:context params:params approximations:approximations points:points];
     if (approximatedGpx != nil && [approximatedGpx isAttachedToRoads])
         return approximatedGpx;
     

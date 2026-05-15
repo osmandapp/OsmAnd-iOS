@@ -979,7 +979,7 @@
 "external_device_characteristic_speed" = "Arured";
 "external_device_characteristic_distance" = "Ameccaq";
 "shared_string_mode" = "Askar";
-"add_page" = "Rnu asebtar";
+"add_page" = "Rnu asebter";
 "rendering_value_all_name" = "Akk";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_size" = "Tiddi";
@@ -994,3 +994,6 @@
 "shared_string_angle" = "Tiɣmert";
 "shared_string_default" = "Amezwer";
 "nm_h" = "kn";
+"quick_action_mapillary_hide" = "Ɣumm Mapillary";
+"shared_string_hide_all" = "Ɣumm-iten akk";
+"temperature_hide" = "Ɣumm tazɣelt";

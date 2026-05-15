@@ -343,14 +343,14 @@
 "intermediate_point" = "中转地点 %@";
 "arrived_at_intermediate_point" = "到达中间目的地";
 "shared_string_current" = "当前";
-"make_as_start_point" = "以此为出发点";
+"make_as_start_point" = "将此设为起点";
 "poi" = "兴趣点";
 "will_open_on" = "开始营业于";
 "m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
 "transport_Routes" = "路线";
-"switch_start_finish" = "交换起始点和目的地";
+"switch_start_finish" = "交换起点和终点";
 "replace_destination_point" = "替换目的地";
 "traffic_warning_stop" = "停车标志";
 "traffic_warning_pedestrian" = "人行横道";
@@ -418,7 +418,7 @@
 "map_widget_bearing" = "相对方位";
 "map_widget_transparent" = "透明小部件";
 "settings_preset" = "用户配置文件";
-"settings_preset_descr" = "每种使用场景的地图和导航设置是相互独立的。在这里设置您的缺省使用场景。";
+"settings_preset_descr" = "地图视图和导航设置会根据每次使用的配置文件分别记忆。请在此处设置您的默认配置文件。";
 // Trip recording settings
 "save_global_track_interval" = "通用记录间隔";
 "info_button" = "信息";
@@ -581,7 +581,7 @@
 "donations" = "捐赠";
 "osmand_live_donation_switch_title" = "向 OpenStreetMap 社区捐赠";
 "osm_live_support_region" = "支持地区";
-"poi_dialog_poi_type" = "POI 类型";
+"poi_dialog_poi_type" = "兴趣点类型";
 "retry" = "重试";
 "day_short" = "天";
 "short_location_on_map" = "纬度 %@ \n经度 %@";
@@ -605,7 +605,7 @@
 "upload_osm_note" = "上传 OSM 注记";
 "last_update" = "上次更新于： %@";
 "simulate_navigation" = "模拟导航";
-"time_of_day" = "一天中的时间";
+"time_of_day" = "当日时间";
 "configure_map" = "配置地图";
 "osm_edit_created_poi" = "创建的 OSM 兴趣点";
 "purchase_unlim_title" = "购买 - %@";
@@ -637,7 +637,7 @@
 "quick_action_add_category" = "添加一个类别";
 "no_overlay" = "无覆盖层";
 "select_map_marker" = "选择地图标记";
-"altitude_range" = "海拔高度范围";
+"altitude_range" = "海拔范围";
 "context_menu_item_create_poi" = "创建POI";
 "tab_title_advanced" = "高级";
 "quick_action_pause_nav_descr" = "点击该按钮以暂停或恢复导航。";
@@ -670,7 +670,7 @@
 "other_location" = "其他";
 "shared_string_unexpected_error" = "意外的错误";
 "quick_action_map_styles" = "地图样式";
-"quick_action_poi_list" = "POI 列表";
+"quick_action_poi_list" = "兴趣点列表";
 "cancel_subscription" = "取消订阅";
 "previous_route" = "上一条路线";
 "shared_string_commit" = "提交";
@@ -807,7 +807,7 @@
 "routing_attr_prefer_unpaved_description" = "偏好未铺设道路。";
 "rendering_attr_highway_class_street_name" = "街道";
 "routing_attr_height_obstacles_name" = "使用海拔数据";
-"rendering_attr_pisteRoutes_name" = "滑雪路线";
+"rendering_attr_pisteRoutes_name" = "滑雪道与路线";
 "routing_attr_height_name" = "高度";
 "rendering_attr_roadColors_name" = "道路颜色主题";
 "rendering_attr_surface_salt_name" = "盐地";
@@ -944,7 +944,7 @@
 "start_navigation" = "开始导航";
 "shared_string_appearance" = "外观";
 "osmand_parking_warning" = "警告";
-"context_menu_points_of_group" = "组中所有的点";
+"context_menu_points_of_group" = "该分组的所有点";
 "map_transparency" = "基础地图透明度";
 "routing_attr_width_description" = "指定路线上允许的车辆宽度。";
 "app_mode_skiing" = "滑雪";
@@ -1059,7 +1059,7 @@
 "profile_alert_delete_title" = "删除配置文件";
 "wikivoyage_travel_guide" = "旅行指南";
 "shared_string_poi_types" = "兴趣点类型";
-"route_between_points" = "两点间路线";
+"route_between_points" = "点对点路线";
 "shared_string_preparing" = "正在准备";
 "light_theme" = "明亮";
 "subscription_osmandlive_item" = "订阅 - OsmAnd Live";
@@ -1082,7 +1082,7 @@
 "shared_string_legend" = "图例";
 "select_data_to_import" = "选择要导入的数据。";
 "shared_string_tones" = "色调";
-"shared_string_total" = "共计";
+"shared_string_total" = "总计";
 "shared_string_importing" = "正在导入";
 "shared_string_meters" = "米";
 "shared_string_terrain" = "地形";
@@ -1514,7 +1514,7 @@
 "monitoring_min_speed" = "最低速度";
 "osmand_cloud" = "OsmAnd 云";
 "rendering_attr_showFunicularRoutes_name" = "缆车线路";
-"osmand_cloud_authorize_descr" = "永不丢失你的数据。轻易备份和恢复所有信息。";
+"osmand_cloud_authorize_descr" = "永不丢失你的数据。轻松备份和恢复所有信息。";
 "points_delete_multiple" = "删除 %d 个点？";
 "reset_plugin_to_default" = "重置插件设置为默认值";
 "backup_error_subscription_was_expired" = "订阅已过期";
@@ -1550,7 +1550,7 @@
 "purchases_feature_desc_unlimited_map_download" = "获得所有大洲和地区离线地图的无限制下载。";
 "unlimited_map_downloads" = "无限制的地图下载";
 "shared_string_learn_more" = "了解更多信息";
-"altitude_ascent" = "上坡";
+"altitude_ascent" = "爬升";
 "added_profiles_descr" = "插件所添加的配置文件";
 "osm_live_subscriptions" = "订阅";
 "routeInfo_horse_scale_description" = "根据马道的难度级别渲染路径";
@@ -1567,7 +1567,7 @@
 "speed_mode" = "速度模式";
 "redeem_promo_code" = "兑换优惠码";
 "new_device_account" = "新设备/新账户";
-"altitude_descent" = "下坡";
+"altitude_descent" = "下降";
 "added_profiles" = "添加的配置文件";
 "complete_purchase" = "完成购买";
 "toast_empty_name_error" = "未命名的位置";
@@ -1597,7 +1597,7 @@
 "routing_attr_piste_type_downhill_description" = "可进行高山或滑降滑雪的斜坡，并可使用滑雪缆车。";
 "routing_attr_piste_type_nordic_description" = "适合北欧或越野滑雪的小径。";
 "routing_attr_allow_classic_only_name" = "只允许经典路线";
-"routing_attr_difficulty_preference_description" = "优先选择此难度等级的路线，尽管当距离很短时，仍可能使用更难或容易的滑雪路线。";
+"routing_attr_difficulty_preference_description" = "优先选择此难度的路线，但如果路程更短，仍可能会规划经过难度更高或更低的雪道。";
 "routing_attr_piste_type_sled_description" = "供雪橇使用的斜坡。";
 "routing_attr_avoid_sett_name" = "无原石铺砖";
 "routing_attr_allow_skating_only_name" = "允许滑行 / 自由式滑雪路线";
@@ -1660,7 +1660,7 @@
 "shared_string_angle" = "角度";
 "routing_attr_motor_type_description" = "选择发动机的燃料类型，这是估算二氧化碳排放量所必需的。";
 "change_application_profile" = "更改应用配置文件";
-"gpx_upload_trackable_visibility_descr" = "“可追踪”意味着该轨迹不会出现在任何公开的列表中，但经过处理的轨迹点与其中的时间戳（不能直接与你关联）会通过从公共 GPS API 下载。";
+"gpx_upload_trackable_visibility_descr" = "“可追踪”意味着该轨迹不会出现在任何公开列表中，但经过处理的轨迹点与其中的时间戳（无法直接关联到您）可以通过公开 GPS API 的下载功能获取。";
 "parking_place" = "停车位";
 "depth_contours" = "等深线";
 "delete_all_confirmation" = "是，删除全部";
@@ -1673,7 +1673,7 @@
 "fav_point_dublicate_message" = "收藏重命名为%@，以避免重复。";
 "by_transport_type" = "乘坐 %@";
 "local_backup" = "本地备份";
-"offline_edition_descr" = "如果启用了离线编辑，则会先将更改保存在本地，然后根据要求上传，否则会立即上传更改。";
+"offline_edition_descr" = "如果启用了离线编辑，则会先将更改保存到本地，再根据需要上传，否则会立即上传更改。";
 "listed_exist" = "列出的%@，已存在于OsmAnd中。";
 "animate_my_location" = "动画处理我的位置";
 "weather_precip_inches" = "英寸";
@@ -2125,7 +2125,7 @@
 "activity_type_running_name" = "跑步";
 "new_track" = "新轨迹";
 "lanes_widgets_desc" = "显示当前的道路车道布局，并突出显示导航时要走的车道。";
-"trip_recording_distance_widget_desc" = "显示当前记录的行程距离。";
+"trip_recording_distance_widget_desc" = "显示当前记录行程的总距离，并提供查看近期爬升和下降距离的模式。";
 "help_article_personal_name" = "我的数据";
 "help_article_navigation_routing_direct_to_point_routing_name" = "直达点路线规划（船）";
 "help_contact_us" = "联系我们";
@@ -2153,7 +2153,7 @@
 "short_min" = "米";
 "map_markers_bar" = "地图标记栏";
 "cache_size" = "缓存大小";
-"trip_recording_uphill_widget_desc" = "显示当前记录的行程中所有爬升高度的总和。";
+"trip_recording_uphill_widget_desc" = "显示当前记录行程中所有爬升的总和或近期爬升的数值。";
 "coordinates_widget_map_center_desc" = "显示当前地图中心的地理坐标";
 "user_points" = "用户点";
 "wind_widget_desc" = "显示当前地图中心的风速。";
@@ -2247,7 +2247,7 @@
 "map_widget_zoom_level" = "缩放层级";
 "map_widget_trip_recording_distance" = "距离";
 "no_bt_permission" = "未授予蓝牙权限";
-"angular_measeurement_descr" = "更改方位角测量方式。";
+"angular_measeurement_descr" = "更改方位角的测量单位。";
 "verify_account" = "验证您的帐号";
 "speak_gps_signal_status" = "宣布 GPS 信号丢失和恢复";
 "osmand_cloud_deleted_account_descr" = "账户和所有数据均已从 OsmAnd Cloud 中删除。";
@@ -2307,7 +2307,7 @@
 "specify_number_of_dir_indicators_desc" = "指定方向指示器的数量。";
 "context_menu_read_article" = "阅读文章";
 "start_recording" = "开始录制";
-"trip_recording_downhill_widget_desc" = "显示当前记录的行程中所有下降高度的总和。";
+"trip_recording_downhill_widget_desc" = "显示当前记录行程的所有下降总和或近期下降的数值。";
 "shared_string_format" = "格式";
 "shared_string_nearest" = "距离最近";
 "verify_account_deletion_descr" = "删除之前，我们需要验证您的帐户。 \n \n请输入您注册时使用的电子邮件地址。我们将向其发送下一步操作的一次性密码。";
@@ -2530,7 +2530,7 @@
 "visualization_3d_wall_color" = "墙壁颜色";
 "track_vertical_exaggeration_description" = "通过更改比例值，可以改变 3D 轨迹的高度。";
 "fixed_height" = "固定高度";
-"height_legend_description" = "海拔彩色地图用于直观显示地形。";
+"height_legend_description" = "海拔高度着色图用于可视化地形起伏。";
 "profile_icon" = "配置文件图标";
 "battery_saving_mode" = "省电模式";
 "view_angle_description" = "显示您当前面对方向的锥形区域";
@@ -2563,7 +2563,7 @@
 "shared_string_minute_lowercase" = "分";
 "resting_navigation_position" = "静止与导航位置";
 "delete_widget_description" = "这个小工具将被删除。您可以稍后在 “配置屏幕 ”中恢复它。";
-"shared_string_maximum" = "最大";
+"shared_string_maximum" = "最大值";
 "navigation_position_icon" = "导航位置图标";
 "root_folder" = "根文件夹";
 "avg_sensor_cadence" = "自行车平均踏频";
@@ -2852,7 +2852,7 @@
 "open_till_short" = "直到";
 "get_discount_short_descr" = "%@ 对于 %d %@，然后 %@";
 "allow_3d" = "允许 2.5D 视角";
-"altitude_metrics_description" = "设置小部件和统计数据中海拔高度的显示单位。";
+"altitude_metrics_description" = "设置小组件和统计数据中海拔高度的显示单位。";
 "shared_string_int_name" = "国际名称";
 "rendering_attr_hideMinorContours_description" = "隐藏次要等深线";
 "rendering_attr_watercolor_name" = "水体颜色";
@@ -2878,3 +2878,41 @@
 "testFlight" = "TestFlight";
 "download_install_beta_version" = "下载并安装 OsmAnd 测试版本";
 "road_min_speed_descr" = "设置路线中所有道路的最低行驶速度。提高建议速度低于最低速度的道路的优先级。";
+"trip_recording_moving_time_widget_description" = "显示当前记录的移动时间，或最后一次上坡和下坡的时间。";
+"trip_recording_moving_time" = "移动时间";
+"free_custom_color_description" = "使用任意颜色自定义 3D 建筑。非常适合搭配地图主题或提高对比度。";
+"buildings_3d_visibility_description" = "调整地图上 3D 建筑的透明度。";
+"level_of_details" = "详细程度";
+"performance" = "性能";
+"view_distance" = "可视距离";
+"lang_mi" = "毛利语";
+"has_vehicle_metrics" = "包含 OBDII 数据";
+"vehicle_metrics_chart_category" = "车辆指标";
+"centimeter" = "厘米";
+"shared_string_centimeters" = "厘米";
+"bicycle_width_limit_description" = "提供您的自行车宽度，以避开狭窄的自行车道。";
+"copy_link" = "复制链接";
+"efficient_grid" = "高效网格";
+"button_frames" = "按钮边框";
+"routing_attr_maxaxleload_name" = "最大轴重";
+"routing_attr_weightrating_name" = "满载最大重量";
+"visualizing_button_grid" = "地图按钮网格";
+"deleted_maps_prompt" = "这些地图已不再受支持，并已被更小的区域地图取代。请删除它们并下载新版本。";
+"unsupported_maps" = "不受支持的地图";
+"quick_action_weather_layers" = "在地图上显示或隐藏天气图层的开关。";
+"quick_action_wind_animation_layer" = "在地图上显示或隐藏风向动画图层的开关。";
+"weather_layers" = "天气图层";
+"wind_animation_layer" = "风动画图层";
+"reconnect" = "重新连接";
+"rendering_attr_showSkiSlopes_name" = "显示滑雪道";
+"rendering_attr_showSkiSlopes_description" = "";
+"obd_alt_battery_voltage" = "适配器电压";
+"obd_alt_battery_voltage_desc" = "显示 OBD 适配器上的电压水平";
+"show_expand_button" = "显示展开按钮";
+"slots" = "槽位";
+"trip_recording_max_speed_widget_description" = "显示当前记录行程的最高速度。点击可在总最高速度与近期爬升或下降时的最高速度之间切换。";
+"trip_recording_average_slope_widget_description" = "显示当前记录行程中最后一段下降或爬升路段的平均坡度。";
+"average_slope" = "平均坡度";
+"shared_string_last_uphill" = "近期爬升";
+"shared_string_last_downhill" = "近期下降";
+"enable_3d_objects" = "3D 建筑";

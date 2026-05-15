@@ -3603,7 +3603,7 @@
 "selected_tracks_count" = "Tracks – %d";
 "m_s" = "m/s";
 "kg" = "kg";
-"int_hour" = "Stunden";
+"int_hour" = "h";
 "download_wikipedia_maps" = "Wikipedia";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "carplay" = "CarPlay";

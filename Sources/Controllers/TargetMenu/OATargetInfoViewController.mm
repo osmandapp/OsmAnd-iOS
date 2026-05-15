@@ -214,6 +214,16 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     return img;
 }
 
+- (OAPOI *) getTargetPoiIfExisted
+{
+    id obj = [self getTargetObj];
+    if (obj && [[self getTargetObj] isKindOfClass:OAPOI.class])
+    {
+        return ((OAPOI *) obj);
+    }
+    return nil;
+}
+
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self buildDescription:rows];
@@ -487,10 +497,9 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         }
         else
         {
-            id targetObj = [self getTargetObj];
-            if ([targetObj isKindOfClass:OAPOI.class])
+            OAPOI *poi = [self getTargetPoiIfExisted];
+            if (poi)
             {
-                OAPOI *poi = (OAPOI *) targetObj;
                 [self processNearestWiki:poi];
                 
                 NSArray<OAPOI *> *nearest = _nearestWiki;
@@ -531,8 +540,8 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     if (OARowsContainKey(rows, @"nearest_poi"))
         return;
 
-    OAPOI *poi = [self getTargetObj];
-    if (![poi isKindOfClass:OAPOI.class] || ![self showNearestPoi])
+    OAPOI *poi = [self getTargetPoiIfExisted];
+    if (!poi || ![self showNearestPoi])
         return;
 
     OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:NO];
@@ -616,35 +625,32 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)buildRouteRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    //TODO: test
-    if (![self getTargetObj] || ![[self getTargetObj] isKindOfClass:OAPOI.class])
+    OAPOI *amenity = [self getTargetPoiIfExisted];
+    if (!amenity)
         return;
-    OAPOI *amenity = [self getTargetObj];
     
     if (!NSStringIsEmpty([amenity getAdditionalInfo:ROUTE_MEMBERS_IDS]))
     {
-//        [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeMembers completionHandler:^(id  _Nullable result) {
-//            NSArray<OAPOI *> *amenities = result;
-//            if (!NSArrayIsEmpty(amenities))
-//            {
-//                NSString *title = OALocalizedString(@"route_members");
-//                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_MEMBERS_ROW_KEY title:title];
-//                [self appendInfoRow:row];
-//            }
-//        }];
+        [self buildRouteRow:rows tag:ROUTE_MEMBERS_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeMembers completionHandler:^(NSArray<OAPOI *> *  _Nullable amenities) {
+            if (!NSArrayIsEmpty(amenities))
+            {
+                NSString *title = OALocalizedString(@"route_members");
+                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_MEMBERS_ROW_KEY title:title];
+                [self appendInfoRow:row];
+            }
+        }];
     }
     
     if (!NSStringIsEmpty([amenity getAdditionalInfo:ROUTE_ID]))
     {
-//        [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypePartOf completionHandler:^(id  _Nullable result) {
-//            NSArray<OAPOI *> *amenities = result;
-//            if (!NSArrayIsEmpty(amenities))
-//            {
-//                NSString *title = OALocalizedString(@"route_part_of");
-//                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_PART_OF_ROW_KEY title:title];
-//                [self appendInfoRow:row];
-//            }
-//        }];
+        [self buildRouteRow:rows tag:ROUTE_PART_OF_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypePartOf completionHandler:^(NSArray<OAPOI *> *  _Nullable amenities) {
+            if (!NSArrayIsEmpty(amenities))
+            {
+                NSString *title = OALocalizedString(@"route_part_of");
+                OAAmenityInfoRow *row = [self buildRouteRow:rows amenities:amenities key:ROUTE_PART_OF_ROW_KEY title:title];
+                [self appendInfoRow:row];
+            }
+        }];
         
         [self buildRouteRow:rows tag:ROUTE_RELATED_ROUTES_ROW_KEY searchType:EOASearchByRouteIdTaskSearchTypeRelated completionHandler:^(NSArray<OAPOI *> * _Nullable amenities) {
             if (!NSArrayIsEmpty(amenities))
@@ -659,14 +665,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)buildRouteRow:(NSMutableArray<OAAmenityInfoRow *> *)rows tag:(NSString *)tag searchType:(EOASearchByRouteIdTaskSearchType)searchType completionHandler:(void (^ _Nullable)(NSArray<OAPOI *> * _Nullable amenities))completionHandler
 {
-    if (![self getTargetObj] || ![[self getTargetObj] isKindOfClass:OAPOI.class])
-        return;
-    OAPOI *amenity = [self getTargetObj];
-    
+    OAPOI *amenity = [self getTargetPoiIfExisted];
     if (amenity)
     {
-        SearchByRouteIdTask *task = [[SearchByRouteIdTask alloc] initWithAmenity:amenity searchType:searchType];
-        task.completionHandler = completionHandler;
+        SearchByRouteIdTask *task = [[SearchByRouteIdTask alloc] initWithAmenity:amenity searchType:searchType completionHandler:completionHandler];
         [task execute];
     }
 }
@@ -958,9 +960,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         return;
 
     NSString *openPlaceReviewsTagContent = nil;
-    if ([self.getTargetObj isKindOfClass:OAPOI.class])
+    OAPOI *poi = [self getTargetPoiIfExisted];
+    if (poi)
     {
-        OAPOI *poi = self.getTargetObj;
         openPlaceReviewsTagContent = @(poi.obfId >> 1).stringValue;
     }
     
@@ -1740,8 +1742,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             if (![self isKindOfClass:OAPOIViewController.class])
                 return;
             
-            id target = [self getTargetObj];
-            if (![target isKindOfClass:OAPOI.class])
+            OAPOI *poi = [self getTargetPoiIfExisted];
+            if (!poi)
                 return;
             
             if (!isWikiPurchased)
@@ -1751,7 +1753,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             }
             
             OAWikiWebViewController *wikiController =
-                [[OAWikiWebViewController alloc] initWithPoi:target];
+                [[OAWikiWebViewController alloc] initWithPoi:poi];
             
             [OARootViewController.instance.mapPanel.navigationController
                 pushViewController:wikiController
@@ -1783,9 +1785,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     else if ([info.typeName isEqualToString:kShortDescriptionTravelRowType])
     {
         NSString *routeId = info.hiddenUrl;
-        if (!NSStringIsEmpty(routeId) && [[self getTargetObj] isKindOfClass:OAPOI.class])
+        OAPOI *poi = [self getTargetPoiIfExisted];
+        if (!NSStringIsEmpty(routeId) && poi)
         {
-            OAPOI *poi = [self getTargetObj];
             NSDictionary<NSString *, CLLocation *> *routeIdMap = @{routeId : [poi getLocation]};
             
             SearchTravelArticlesTask *task = [[SearchTravelArticlesTask alloc] initWithRouteIds:routeIdMap callback:^(NSDictionary<NSString *,NSDictionary<NSString *,OATravelArticle *> *> * _Nonnull result) {
@@ -1858,9 +1860,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     }
     
     onlinePhotoCardsView.isLoading = YES;
-    if ([self.getTargetObj isKindOfClass:OAPOI.class])
+    OAPOI *poi = [self getTargetPoiIfExisted];
+    if (poi)
     {
-        OAPOI *poi = self.getTargetObj;
         onlinePhotoCardsView.title = poi.nameLocalized ?: poi.name;
     }
     

@@ -9,38 +9,7 @@
 typealias SearchByRouteIdTaskResultBlock = (_ result: Any?) -> Void
 
 @objcMembers
-final class SearchByRouteIdTask : OAAsyncTask {
-    
-    var completionHandler: (([OAPOI]) -> Void)? = nil
-    
-//    protected SearchByRouteIdTask(@Nullable Amenity amenity, SearchType type, OsmandApplication app, SearchByRouteIdListener listener) {
-//        this.listener = listener;
-//        if (amenity != null) {
-//            routeId = amenity.getAdditionalInfo(Amenity.ROUTE_ID);
-//            routeMembersIds = amenity.getAdditionalInfo(Amenity.ROUTE_MEMBERS_IDS);
-//        } else {
-//            routeId = null;
-//            routeMembersIds = null;
-//        }
-//        searchType = type;
-//        this.app = app;
-//        this.amenity = amenity;
-//    }
-//
-//    public SearchByRouteIdTask(String routeId, String routeMembersIds, SearchType type, OsmandApplication app, SearchByRouteIdListener listener) {
-//        this.routeId = routeId;
-//        this.routeMembersIds = routeMembersIds;
-//        this.listener = listener;
-//        this.searchType = type;
-//        this.app = app;
-//        this.amenity = null;
-//    }
-    
-//    init(routeIds: [String: CLLocation], callback: @escaping (([String: [String: TravelArticle]]) -> Void)) {
-//        self.routeIds = routeIds
-//        self.callback = callback
-//        super.init()
-//    }
+final class SearchByRouteIdTask: OAAsyncTask {
     
     @objc(EOASearchByRouteIdTaskSearchType)
     enum SearchType: Int {
@@ -49,16 +18,19 @@ final class SearchByRouteIdTask : OAAsyncTask {
         case members
     }
     
+    var completionHandler: (([OAPOI]) -> Void)?
+    
     private var amenity: OAPOI?
     private var searchType: SearchType
     
     private var routeId: String?
     private var routeMembersIds: String?
     
-    init(amenity: OAPOI?, searchType: SearchType) {
+    init(amenity: OAPOI?, searchType: SearchType, completionHandler: (([OAPOI]) -> Void)?) {
+        self.completionHandler = completionHandler
         if let amenity {
-            routeId = amenity.getAdditionalInfo(ROUTE_ID)
-            routeMembersIds = amenity.getAdditionalInfo(ROUTE_MEMBERS_IDS)
+            self.routeId = amenity.getAdditionalInfo(ROUTE_ID)
+            self.routeMembersIds = amenity.getAdditionalInfo(ROUTE_MEMBERS_IDS)
         }
         
         self.searchType = searchType
@@ -71,16 +43,16 @@ final class SearchByRouteIdTask : OAAsyncTask {
         let amenitySearcher = OAAmenitySearcher()
         
         if searchType == .members {
-//            if let routeMembersIds, !routeMembersIds.isEmpty {
-//                let members = amenitySearcher.searchRouteMembers(routeMembersIds)
-//            
-//                for entry in members {
-//                    let amenityList = entry.value
-//                    if !amenityList.isEmpty {
-//                        amenities.append(amenityList[0])
-//                    }
-//                }
-//            }
+            if let routeMembersIds, !routeMembersIds.isEmpty {
+                let members = amenitySearcher.searchRouteMembers(routeMembersIds)
+            
+                for entry in members {
+                    let amenityList = entry.value
+                    if !amenityList.isEmpty {
+                        amenities.append(amenityList[0])
+                    }
+                }
+            }
         } else if searchType == .related {
             if let routeId, !routeId.isEmpty {
                 let related = amenitySearcher.searchRouteMembers(routeId)
@@ -105,23 +77,22 @@ final class SearchByRouteIdTask : OAAsyncTask {
                 }
             }
         } else if searchType == .partOf {
-//            if let routeId, !routeId.isEmpty {
-//                let list = amenitySearcher.searchRoutePart(of: routeId)
-//                var routeIdHash = Set<String>()
-//                
-//                for am in list {
-//                    if let routeId = am.getAdditionalInfo(ROUTE_ID) {
-//                        if !routeIdHash.contains(routeId) {
-//                            amenities.append(am)
-//                        }
-//                        routeIdHash.insert(routeId)
-//                    }
-//                }
-//            }
+            if let routeId, !routeId.isEmpty {
+                let list = amenitySearcher.searchRoutePart(of: routeId)
+                var routeIdHash = Set<String>()
+                
+                for am in list {
+                    if let routeId = am.getAdditionalInfo(ROUTE_ID) {
+                        if !routeIdHash.contains(routeId) {
+                            amenities.append(am)
+                        }
+                        routeIdHash.insert(routeId)
+                    }
+                }
+            }
         }
         return amenities
     }
-    
     
     override func onPostExecute(result: Any?) {
         if let completionHandler, let amenities = result as? [OAPOI] {

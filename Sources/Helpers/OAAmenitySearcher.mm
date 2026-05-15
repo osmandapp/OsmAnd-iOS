@@ -1841,21 +1841,54 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 - (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId
 {
-    //TODO: implement
-    
     OACollatorStringMatcher *mode = [[OACollatorStringMatcher alloc] initWithPart:nil mode:CHECK_EQUALS_FROM_SPACE];
     
+    OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(__autoreleasing id *objectPtr) {
+        
+        if (objectPtr == nil || *objectPtr == nil)
+            return false;
+
+        NSValue *value = (NSValue *)*objectPtr;
+        const OsmAnd::ISearch::IResultEntry *resultEntry = static_cast<const OsmAnd::ISearch::IResultEntry *>([value pointerValue]);
+        
+        if (resultEntry)
+        {
+            const auto amenity = OAGetAmenityFromSearchResult(*resultEntry);
+            if (amenity)
+            {
+                //TODO: implement
+                
+//                QHash<QString, QString> valuesHash = amenity->getDecodedValuesHash();
+//                
+//                const auto it = valuesHash.constFind(qRouteIdKey);
+//                if (it != valuesHash.constEnd())
+//                {
+//                    const QString qRouteIdValue = it.value();
+//                    
+//                    if (routeIds.contains(qRouteIdValue))
+//                    {
+//                        OAPOI *poi = [OAAmenitySearcher parsePOI:*resultEntry];
+//                        if (poi)
+//                        {
+//                            [result addObject:poi];
+//                            return YES;
+//                        }
+//                    }
+//                }
+            }
+        }
+        return NO;
+        
+    } cancelledFunc:^BOOL{
+        return false;
+    }];
     
-    return [self searchRouteByName:routeId mode:mode matcher:nil];
+    
+    return [self searchRouteByName:routeId mode:mode matcher:matcher];
 }
-
-
-
-//public Map<String, List<Amenity>> searchRouteMembers(String multipleSearch) {
 
 - (NSDictionary<NSString *, NSArray<OAPOI *> *> *)searchRouteMembers:(NSString *)multipleSearch
 {
-    //TODO: implement
     QString qRouteIdKey = QString::fromNSString(ROUTE_ID);
     
     QSet<QString> routeIds;

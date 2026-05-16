@@ -257,7 +257,11 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _collectionHandler ? [_collectionHandler getCollectionViewCell:indexPath] : nil;
+    if (!_collectionHandler)
+        return nil;
+
+    [_collectionHandler setCollectionView:collectionView];
+    return [_collectionHandler getCollectionViewCell:indexPath];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView

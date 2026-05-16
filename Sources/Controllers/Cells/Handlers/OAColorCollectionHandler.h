@@ -7,7 +7,6 @@
 //
 
 #import "OABaseCollectionHandler.h"
-#import "OASuperViewController.h"
 #import "OsmAndSharedWrapper.h"
 
 @class OACollectionSingleLineTableViewCell;
@@ -23,7 +22,7 @@
 @interface OAColorCollectionHandler : OABaseCollectionHandler
 
 @property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
-@property (weak, nonatomic) OASuperViewController *hostVC;
+@property (weak, nonatomic) UIViewController *hostVC;
 @property (weak, nonatomic) OACollectionSingleLineTableViewCell *hostCell;
 @property (weak, nonatomic) UIView *hostVCOpenColorPickerButton;
 @property (strong, nonatomic) NSArray<UIColor *> *groupColors;

@@ -202,6 +202,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 
+// Synchronously commits a short renderer/view mutation on the main thread.
+// Do not perform file I/O, DB/cache/network work, dispatch_sync, or notifications here.
 - (void) runWithRenderSync:(nullable void (^)(void))runnable;
 - (void) updateLayer:(NSString *)layerId;
 

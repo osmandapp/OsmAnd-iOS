@@ -136,6 +136,8 @@ static const float ZONE_2_ZOOM_THRESHOLD = 1.5f;
 
 static const CGFloat kDistanceBetweenFingers = 50.0;
 static const NSInteger kDetailedMapZoom = 9;
+static const NSTimeInterval kRenderSyncSlowBlockThreshold = 0.05;
+static char kMapSourceUpdateQueueKey;
 
 @interface OATouchLocation : NSObject
 
@@ -150,6 +152,10 @@ static const NSInteger kDetailedMapZoom = 9;
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
 @property (atomic) BOOL mapViewLoaded;
+
+- (void)runAsyncWithRenderSync:(void (^)(void))runnable;
+- (void)updateMapLocaleLanguageForEnvironment:(const std::shared_ptr<OsmAnd::MapPresentationEnvironment>&)mapPresentationEnvironment
+                                          zoom:(OsmAnd::ZoomLevel)zoom;
 
 @end
 
@@ -176,8 +182,9 @@ static const NSInteger kDetailedMapZoom = 9;
     
     OsmAndAppInstance _app;
     
-    NSObject* _rendererSync;
+    dispatch_queue_t _mapSourceUpdateQueue;
     BOOL _mapSourceInvalidated;
+    NSInteger _lastMapLocaleLanguageZoom;
     CGFloat _contentScaleFactor;
     
     // Current provider of raster map
@@ -275,8 +282,9 @@ static const NSInteger kDetailedMapZoom = 9;
     _currentPositionHelper = [OACurrentPositionHelper instance];
     
     _webClient = std::make_shared<OAWebClient>();
-
-    _rendererSync = [[NSObject alloc] init];
+    _mapSourceUpdateQueue = dispatch_queue_create("net.osmand.maps.map-source-update", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_set_specific(_mapSourceUpdateQueue, &kMapSourceUpdateQueueKey, &kMapSourceUpdateQueueKey, NULL);
+    _lastMapLocaleLanguageZoom = NSNotFound;
 
     _moveTouchLocations = [NSMutableArray array];
     _zoomTouchLocations = [NSMutableArray array];
@@ -2384,10 +2392,25 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    @synchronized(_rendererSync)
-    {
-        [self updateMapLocaleLanguage];
-    }
+    id zoomValue = [value respondsToSelector:@selector(doubleValue)] ? value : nil;
+    void (^updateLocaleIfNeeded)(void) = ^{
+        if (!self.mapViewLoaded)
+            return;
+
+        NSInteger integerZoom = zoomValue ? (NSInteger)[zoomValue doubleValue] : (NSInteger)_mapView.zoom;
+        if (_lastMapLocaleLanguageZoom == integerZoom)
+            return;
+
+        _lastMapLocaleLanguageZoom = integerZoom;
+        [self runWithRenderSync:^{
+            [self updateMapLocaleLanguage];
+        }];
+    };
+
+    if ([NSThread isMainThread])
+        updateLocaleIfNeeded();
+    else
+        dispatch_async(dispatch_get_main_queue(), updateLocaleIfNeeded);
 }
 
 - (BOOL)isBasemapZoom:(int)zoom
@@ -2397,17 +2420,23 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void)updateMapLocaleLanguage
 {
-    if (_mapPresentationEnvironment != nullptr)
+    [self updateMapLocaleLanguageForEnvironment:_mapPresentationEnvironment zoom:static_cast<OsmAnd::ZoomLevel>((int)_mapView.zoom)];
+}
+
+- (void)updateMapLocaleLanguageForEnvironment:(const std::shared_ptr<OsmAnd::MapPresentationEnvironment>&)mapPresentationEnvironment
+                                          zoom:(OsmAnd::ZoomLevel)zoom
+{
+    if (mapPresentationEnvironment != nullptr)
     {
-        NSString *langId = [self isBasemapZoom:_mapView.zoomLevel] ? [OAUtilities currentLang] : [[OAAppSettings sharedManager].settingPrefMapLanguage get];
-        if (![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
+        NSString *langId = [self isBasemapZoom:zoom] ? [OAUtilities currentLang] : [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+        if (![langId isEqualToString:mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
         {
-            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
         }
 
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
-        _mapPresentationEnvironment->setLanguagePreference(langPreferences);
+        OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:zoom];
+        mapPresentationEnvironment->setLanguagePreference(langPreferences);
     }
 }
 
@@ -2416,7 +2445,7 @@ static const NSInteger kDetailedMapZoom = 9;
     OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
 
 
-    if ([self isBasemapZoom:_mapView.zoomLevel])
+    if ([self isBasemapZoom:zoom])
     {
         return OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
     }
@@ -2452,280 +2481,370 @@ static const NSInteger kDetailedMapZoom = 9;
 {
     if (!self.mapViewLoaded)
         return;
-    
-    @synchronized(_rendererSync)
+
+    if (dispatch_get_specific(&kMapSourceUpdateQueueKey) != &kMapSourceUpdateQueueKey)
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        const auto screenTileSize = 256 * self.displayDensityFactor;
-        double mapDensity = [settings.mapDensity get];
-        double mapDensityAligned;
-        if (mapDensity > 2)
-            mapDensityAligned = 2.0;
-        else if (mapDensity > 1)
-            mapDensityAligned = 1.0;
+        dispatch_async(_mapSourceUpdateQueue, ^{
+            [self updateCurrentMapSource];
+        });
+        return;
+    }
+
+    __block CGFloat displayDensityFactor = [UIScreen mainScreen].scale;
+    __block OsmAnd::ZoomLevel zoomLevel = OsmAnd::InvalidZoomLevel;
+    __block BOOL hasTempGpxTrack = NO;
+    __block int elevationDataTileSize = 0;
+    __block NSDictionary<NSString *, NSNumber *> *highlight3dObjects = nil;
+    [self runWithRenderSync:^{
+        displayDensityFactor = self.displayDensityFactor;
+        zoomLevel = static_cast<OsmAnd::ZoomLevel>((int)_mapView.zoom);
+        hasTempGpxTrack = _gpxFilePathTemp != nil;
+        elevationDataTileSize = _mapView.elevationDataTileSize;
+        highlight3dObjects = [_highlight3dObjects copy];
+    }];
+
+    if (!self.mapViewLoaded)
+        return;
+
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    const auto screenTileSize = 256 * displayDensityFactor;
+    double mapDensity = [settings.mapDensity get];
+    double mapDensityAligned;
+    if (mapDensity > 2)
+        mapDensityAligned = 2.0;
+    else if (mapDensity > 1)
+        mapDensityAligned = 1.0;
+    else
+        mapDensityAligned = mapDensity;
+
+    const auto rasterTileSize = (int)(256 * displayDensityFactor * mapDensityAligned);
+    const unsigned int rasterTileSizeOrig = (unsigned int)(256 * displayDensityFactor * mapDensity);
+    OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
+
+    typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+    OAMapSource* lastMapSource = _app.data.lastMapSource;
+    const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
+    const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+    OsmAnd::ResourcesManager::ResourceType resourceType = OsmAnd::ResourcesManager::ResourceType::Unknown;
+    NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[lastMapSource.resourceId];
+    if (mapSourceResource)
+        resourceType = mapSourceResource->type;
+
+    std::shared_ptr<OsmAnd::IMapLayerProvider> obfMapRasterLayerProvider;
+    std::shared_ptr<OsmAnd::ObfMapObjectsProvider> obfMapObjectsProvider;
+    std::shared_ptr<OsmAnd::MapPresentationEnvironment> mapPresentationEnvironment;
+    std::shared_ptr<OsmAnd::MapPrimitiviser> mapPrimitiviser;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> mapPrimitivesProvider;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> obfMapSymbolsProvider;
+    BOOL shouldSetVisualZoomShift = NO;
+    BOOL shouldSetSkyFog = NO;
+    BOOL shouldApplyWeatherBandSettings = NO;
+
+    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+    NSDictionary<NSString *, NSString *> *buildings3DRenderSettings = [[OAMapStyleSettings sharedInstance] get3DBuildingsRendererSettings];
+    if (resourceType == OsmAndResourceType::MapStyle)
+    {
+        const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
+
+        const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
+        OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
+
+        obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection, OsmAnd::ObfMapObjectsProvider::Mode::BinaryMapObjectsAndRoads, 2));
+
+        NSLog(@"%@", [OAUtilities currentLang]);
+
+        OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:zoomLevel];
+        shouldSetVisualZoomShift = YES;
+
+        QSet<QString> disabledPoiTypes = QSet<QString>();
+        for (NSString *disabledPoiType in [settings getDisabledTypes])
+        {
+            disabledPoiTypes.insert(QString::fromNSString(disabledPoiType));
+        }
+        mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
+                                                                                 displayDensityFactor,
+                                                                                 mapDensity,
+                                                                                 [settings.textSize get:settings.applicationMode.get],
+                                                                                 nullptr,
+                                                                                 disabledPoiTypes));
+        [self updateMapLocaleLanguageForEnvironment:mapPresentationEnvironment zoom:zoomLevel];
+        mapPresentationEnvironment->setLanguagePreference(langPreferences);
+
+        mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(mapPresentationEnvironment));
+        mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(obfMapObjectsProvider,
+                                                                      mapPrimitiviser,
+                                                                      rasterTileSize));
+
+        NSMutableDictionary<NSString *, NSString *> *newSettings = [NSMutableDictionary dictionary];
+        if (lastMapSource.variant != nil)
+        {
+            OALog(@"Using '%@' variant of style '%@'", lastMapSource.variant, unresolvedMapStyle->name.toNSString());
+            OAApplicationMode *am = settings.applicationMode.get;
+            NSString *appMode = am.stringKey;
+            newSettings[@"appMode"] = appMode;
+            NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
+            newSettings[@"baseAppMode"] = baseMode;
+
+            if (settings.nightMode)
+                newSettings[@"nightMode"] = @"true";
+            shouldSetSkyFog = YES;
+
+            OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+            NSArray *params = styleSettings.getAllParameters;
+            BOOL useContours = [iapHelper.srtm isActive];
+            BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
+            for (OAMapStyleParameter *param in params)
+            {
+                if ([param.name isEqualToString:ELEVATION_UNITS_ATTR])
+                {
+                    BOOL useFeet = [OAAltitudeMetricsConstant shouldUseFeet:[[OAAppSettings sharedManager].altitudeMetric get]];
+                    newSettings[ELEVATION_UNITS_ATTR] = useFeet ? ELEVATION_UNITS_FEET_VALUE : ELEVATION_UNITS_METERS_VALUE;
+                    continue;
+                }
+                if ([param.name isEqualToString:CONTOUR_LINES] && !useContours)
+                {
+                    newSettings[param.name] = @"disabled";
+                    continue;
+                }
+                if ([param.name isEqualToString:NAUTICAL_DEPTH_CONTOURS] && !useDepthContours)
+                {
+                    newSettings[param.name] = @"false";
+                    continue;
+                }
+                if ([param.name isEqualToString:NO_POLYGONS])
+                {
+                    newSettings[param.name] = [settings shouldHidePolygons] ? @"true" : @"false";
+                    continue;
+                }
+                if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
+                    newSettings[param.name] = param.value;
+            }
+        }
+
+        [newSettings addEntriesFromDictionary:buildings3DRenderSettings];
+        if (newSettings.count > 0)
+            mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:newSettings]);
+
+        if ([settings.showPrimitivesDebugInfo get])
+            obfMapRasterLayerProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(mapPrimitivesProvider));
         else
-            mapDensityAligned = mapDensity;
+            obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(mapPrimitivesProvider, true, false, true));
 
-        const auto rasterTileSize = (int)(256 * self.displayDensityFactor * mapDensityAligned);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
-        OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
+        obfMapSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(mapPrimitivesProvider,
+                                                                          rasterTileSize,
+                                                                          nullptr,
+                                                                          false,
+                                                                          false));
 
-		if ([settings.batterySavingMode get])
+        shouldApplyWeatherBandSettings = YES;
+    }
+    else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
+    {
+        if (resourceType == OsmAndResourceType::OnlineTileSources)
+        {
+            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+            OALog(@"Using '%@' online source from '%@' resource", lastMapSource.variant, mapSourceResource->id.toNSString());
+
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant), _webClient);
+            if (!onlineMapTileProvider)
+            {
+                _app.data.lastMapSource = [OAAppData defaultMapSource];
+                return;
+            }
+            onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+            obfMapRasterLayerProvider = onlineMapTileProvider;
+        }
+        else
+        {
+            OALog(@"Using '%@' source", lastMapSource.resourceId);
+
+            const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(mapCreatorFilePath));
+            if (!sqliteTileSourceMapProvider)
+            {
+                _app.data.lastMapSource = [OAAppData defaultMapSource];
+                return;
+            }
+
+            obfMapRasterLayerProvider = sqliteTileSourceMapProvider;
+        }
+
+        lastMapSource = [OAAppData defaultMapSource];
+        const auto defaultResourceId = QString::fromNSString(lastMapSource.resourceId);
+        const auto defaultMapSourceResource = _app.resourcesManager->getResource(defaultResourceId);
+        const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(defaultMapSourceResource->metadata)->mapStyle;
+
+        const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
+        OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), defaultMapSourceResource->id.toNSString());
+
+        obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
+
+        NSLog(@"%@", [OAUtilities currentLang]);
+
+        OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:zoomLevel];
+
+        QSet<QString> disabledPoiTypes = QSet<QString>();
+        for (NSString *disabledPoiType in [settings getDisabledTypes])
+        {
+            disabledPoiTypes.insert(QString::fromNSString(disabledPoiType));
+        }
+        mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
+                                                                                 displayDensityFactor,
+                                                                                 1.0,
+                                                                                 1.0,
+                                                                                 nullptr,
+                                                                                 disabledPoiTypes));
+        [self updateMapLocaleLanguageForEnvironment:mapPresentationEnvironment zoom:zoomLevel];
+        mapPresentationEnvironment->setLanguagePreference(langPreferences);
+        if (buildings3DRenderSettings.count > 0)
+            mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:buildings3DRenderSettings]);
+        mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(mapPresentationEnvironment));
+        mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(obfMapObjectsProvider,
+                                                                      mapPrimitiviser,
+                                                                      rasterTileSize));
+    }
+    else
+    {
+        _app.data.lastMapSource = [OAAppData defaultMapSource];
+        return;
+    }
+
+    BOOL shouldShowRecTrack = !hasTempGpxTrack && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get;
+    BOOL gpxListLoading = [_selectedGpxHelper buildGpxList];
+    BOOL shouldInitGpxTracks = !gpxListLoading && (_selectedGpxHelper.activeGpx.allKeys.count != 0 || hasTempGpxTrack);
+    OASRTMPlugin *srtmPlugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+    OASRTMPlugin *enabledSrtmPlugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
+    BOOL hasSrtmPlugin = srtmPlugin != nil;
+    float buildings3DAlpha = hasSrtmPlugin ? (float) [srtmPlugin.buildings3dAlphaPref get] : 0.0f;
+    int buildings3DDetalization = hasSrtmPlugin ? (int) [srtmPlugin.buildings3dViewDistancePref get] : 0;
+    BOOL heightmapSupported = enabledSrtmPlugin && [enabledSrtmPlugin is3DMapsEnabled] && [enabledSrtmPlugin isTerrainLayerEnabled];
+    std::shared_ptr<OsmAnd::IMapElevationDataProvider> heightmapProvider;
+    if (heightmapSupported)
+        heightmapProvider = std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(_geoTiffCollection, elevationDataTileSize);
+
+    OsmAnd::ElevationConfiguration elevationConfiguration;
+    if (enabledSrtmPlugin && [enabledSrtmPlugin isTerrainLayerEnabled] && [enabledSrtmPlugin isTerrainShadowsMode])
+    {
+        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] * 0.01);
+    }
+    else
+    {
+        elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
+        elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);
+    }
+
+    std::shared_ptr<OsmAnd::IMapTiledDataProvider> map3DObjectsProvider;
+    if (srtmPlugin && [srtmPlugin is3dMapObjectsEnabled] && mapPrimitivesProvider)
+    {
+        NSInteger buildings3DColorStyle = [srtmPlugin get3DBuildingsColorStyle];
+        int buildings3DCustomColor = [srtmPlugin getBuildings3dColor];
+        map3DObjectsProvider = std::make_shared<OsmAnd::Map3DObjectsTiledProvider>(mapPrimitivesProvider, mapPresentationEnvironment, buildings3DColorStyle == Buildings3DColorTypeCustom, [UIColorFromARGB(buildings3DCustomColor) toFColorRGB]);
+    }
+
+    [self runWithRenderSync:^{
+        if ([settings.batterySavingMode get])
             [_mapView limitFrameRefreshRate];
         else
             [_mapView restoreFrameRefreshRate];
 
-        // Set reference tile size on the screen
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
         self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
 
-        // Release previously-used resources (if any)
         [_mapLayers resetLayers];
-        
-        _obfMapRasterLayerProvider.reset();
 
+        if (_obfMapSymbolsProvider)
+            [_mapView removeTiledSymbolsProvider:_obfMapSymbolsProvider];
+
+        _obfMapRasterLayerProvider.reset();
         _obfMapObjectsProvider.reset();
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
         _mapPrimitiviser.reset();
-        [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:nil];
-
-        if (_obfMapSymbolsProvider)
-            [_mapView removeTiledSymbolsProvider:_obfMapSymbolsProvider];
         _obfMapSymbolsProvider.reset();
 
         if (!_gpxFilePathTemp)
             [_gpxFilesTemp removeAllObjects];
-
         [_gpxFilesRec removeAllObjects];
-        
-        [self recreateHeightmapProvider];
-        [self recreate3dObjectsProvider];
-        [self updateElevationConfiguration];
-        
-        // Determine what type of map-source is being activated
-        typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
-        OAMapSource* lastMapSource = _app.data.lastMapSource;
-        const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
-        const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-        OsmAnd::ResourcesManager::ResourceType resourceType = OsmAnd::ResourcesManager::ResourceType::Unknown;
-        NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[lastMapSource.resourceId];
-        if (mapSourceResource)
-            resourceType = mapSourceResource->type;
 
-        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-        NSDictionary<NSString *, NSString *> *buildings3DRenderSettings = [[OAMapStyleSettings sharedInstance] get3DBuildingsRendererSettings];
-        if (resourceType == OsmAndResourceType::MapStyle)
-        {
-            const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
-            
-            const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
-            OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
+        _obfMapRasterLayerProvider = obfMapRasterLayerProvider;
+        _obfMapObjectsProvider = obfMapObjectsProvider;
+        _mapPresentationEnvironment = mapPresentationEnvironment;
+        _mapPrimitiviser = mapPrimitiviser;
+        _mapPrimitivesProvider = mapPrimitivesProvider;
+        _obfMapSymbolsProvider = obfMapSymbolsProvider;
 
-            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection, OsmAnd::ObfMapObjectsProvider::Mode::BinaryMapObjectsAndRoads, 2));
+        _mapView.heightmapSupported = heightmapSupported;
+        if (heightmapProvider)
+            [_mapView setElevationDataProvider:heightmapProvider];
+        else
+            [_mapView resetElevationDataProvider:YES];
+        [_mapView setElevationConfiguration:elevationConfiguration forcedUpdate:YES];
 
-            NSLog(@"%@", [OAUtilities currentLang]);
-            
-            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
-            
-            double mapDensity = [settings.mapDensity get];
+        if (shouldSetVisualZoomShift)
             [_mapView setVisualZoomShift:mapDensity];
-            
-            QSet<QString> disabledPoiTypes = QSet<QString>();
-            for (NSString *disabledPoiType in [settings getDisabledTypes])
-            {
-                disabledPoiTypes.insert(QString::fromNSString(disabledPoiType));
-            }
-            _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
-                                                                                     self.displayDensityFactor,
-                                                                                     mapDensity,
-                                                                                     [settings.textSize get:settings.applicationMode.get],
-                                                                                     nullptr,
-                                                                                     disabledPoiTypes));
-            [self updateMapLocaleLanguage];
-            _mapPresentationEnvironment->setLanguagePreference(langPreferences);
-            [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
-            
-            _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
-            _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
-                                                                           _mapPrimitiviser,
-                                                                           rasterTileSize));
-
-            NSMutableDictionary<NSString *, NSString *> *newSettings = [NSMutableDictionary dictionary];
-            // Configure with preset if such is set
-            if (lastMapSource.variant != nil)
-            {
-                OALog(@"Using '%@' variant of style '%@'", lastMapSource.variant, unresolvedMapStyle->name.toNSString());
-                OAApplicationMode *am = settings.applicationMode.get;
-                NSString *appMode = am.stringKey;
-                newSettings[@"appMode"] = appMode;
-                NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
-                newSettings[@"baseAppMode"] = baseMode;
-                                
-                if (settings.nightMode)
-                {
-                    newSettings[@"nightMode"] = @"true";
-                    [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
-                    [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];
-                }
-                else
-                {
-                    [_mapView setSkyColor:OsmAnd::ColorRGB(255, 255, 255)];
-                    [_mapView setFogColor:OsmAnd::ColorRGB(235, 231, 228)];
-                }
-                
-                // --- Apply Map Style Settings
-                OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-                NSArray *params = styleSettings.getAllParameters;
-                BOOL useContours = [iapHelper.srtm isActive];
-                BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
-                for (OAMapStyleParameter *param in params)
-                {
-                    if ([param.name isEqualToString:ELEVATION_UNITS_ATTR])
-                    {
-                        BOOL useFeet = [OAAltitudeMetricsConstant shouldUseFeet:[[OAAppSettings sharedManager].altitudeMetric get]];
-                        newSettings[ELEVATION_UNITS_ATTR] = useFeet ? ELEVATION_UNITS_FEET_VALUE : ELEVATION_UNITS_METERS_VALUE;
-                        continue;
-                    }
-                    if ([param.name isEqualToString:CONTOUR_LINES] && !useContours)
-                    {
-                        newSettings[param.name] = @"disabled";
-                        continue;
-                    }
-                    if ([param.name isEqualToString:NAUTICAL_DEPTH_CONTOURS] && !useDepthContours)
-                    {
-                        newSettings[param.name] = @"false";
-                        continue;
-                    }
-                    if ([param.name isEqualToString:NO_POLYGONS])
-                    {
-                        newSettings[param.name] = [settings shouldHidePolygons] ? @"true" : @"false";
-                        continue;
-                    }
-                    if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
-                        newSettings[param.name] = param.value;
-                }
-            }
-
-            [newSettings addEntriesFromDictionary:buildings3DRenderSettings];
-            if (newSettings.count > 0)
-                _mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:newSettings]);
-        
-            if ([settings.showPrimitivesDebugInfo get])
-                  _obfMapRasterLayerProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider));
-              else
-                  _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider, true, false, true));
-
-            [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
-
-            _obfMapSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
-                                                                                   rasterTileSize,
-                                                                                   nullptr,
-                                                                                   false,
-                                                                                   false));
-            
-            [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
-            
-            _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
-        }
-        else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
+        if (shouldSetSkyFog)
         {
-            if (resourceType == OsmAndResourceType::OnlineTileSources)
+            if (settings.nightMode)
             {
-                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-                OALog(@"Using '%@' online source from '%@' resource", lastMapSource.variant, mapSourceResource->id.toNSString());
-                
-                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant), _webClient);
-                if (!onlineMapTileProvider)
-                {
-                    // Missing resource, shift to default
-                    _app.data.lastMapSource = [OAAppData defaultMapSource];
-                    return;
-                }
-                onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                _obfMapRasterLayerProvider = onlineMapTileProvider;
-                [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
+                [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
+                [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];
             }
             else
             {
-                OALog(@"Using '%@' source", lastMapSource.resourceId);
-                
-                const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(mapCreatorFilePath));
-                if (!sqliteTileSourceMapProvider)
-                {
-                    // Missing resource, shift to default
-                    _app.data.lastMapSource = [OAAppData defaultMapSource];
-                    return;
-                }
-
-                _obfMapRasterLayerProvider = sqliteTileSourceMapProvider;
-                [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
+                [_mapView setSkyColor:OsmAnd::ColorRGB(255, 255, 255)];
+                [_mapView setFogColor:OsmAnd::ColorRGB(235, 231, 228)];
             }
-            
-            lastMapSource = [OAAppData defaultMapSource];
-            const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
-            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-            const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
-            
-            const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
-            OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
-            
-            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
-            
-            NSLog(@"%@", [OAUtilities currentLang]);
-            
-            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = [self getLanguagePreference:settings.settingMapLanguage.get zoom:_mapView.zoomLevel];
+        }
 
-            QSet<QString> disabledPoiTypes = QSet<QString>();
-            for (NSString *disabledPoiType in [settings getDisabledTypes])
+        if (_obfMapRasterLayerProvider)
+            [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
+        if (_obfMapSymbolsProvider)
+            [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
+
+        if (hasSrtmPlugin)
+        {
+            [_mapView set3DBuildingsAlpha:buildings3DAlpha];
+            [_mapView set3DBuildingsDetalization:buildings3DDetalization];
+        }
+
+        if (map3DObjectsProvider)
+        {
+            [_mapView setMap3DObjectsProvider:map3DObjectsProvider];
+            for (NSString *key in highlight3dObjects)
             {
-                disabledPoiTypes.insert(QString::fromNSString(disabledPoiType));
+                NSArray<NSString *> *components = [key componentsSeparatedByString:@":"];
+                if (components.count != 2)
+                    continue;
+
+                OsmAnd::PointI pointI;
+                pointI.x = components[0].intValue;
+                pointI.y = components[1].intValue;
+                NSNumber *color = highlight3dObjects[key];
+                if (!color)
+                    continue;
+
+                [self add3DObjectColor:_mapView latLon:[OANativeUtilities getLanlonFromPoint31:pointI] color:color.intValue];
             }
-            _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
-                                                                                     self.displayDensityFactor,
-                                                                                     1.0,
-                                                                                     1.0,
-                                                                                     nullptr,
-                                                                                     disabledPoiTypes));
-            [self updateMapLocaleLanguage];
-            _mapPresentationEnvironment->setLanguagePreference(langPreferences);
-            if (buildings3DRenderSettings.count > 0)
-                _mapPresentationEnvironment->setSettings([OANativeUtilities dictionaryToQHash:buildings3DRenderSettings]);
-            _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
-            _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
-                                                                           _mapPrimitiviser,
-                                                                           rasterTileSize));
         }
         else
         {
-            // Missing resource, shift to default
-            _app.data.lastMapSource = [OAAppData defaultMapSource];
-            return;
+            [_mapView resetMap3DObjectsProvider:YES];
         }
-        [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
-        [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
-        OASRTMPlugin *srtmPlugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
-        if (srtmPlugin)
-        {
-            [_mapView set3DBuildingsAlpha:(float) [srtmPlugin.buildings3dAlphaPref get]];
-            [_mapView set3DBuildingsDetalization:(int) [srtmPlugin.buildings3dViewDistancePref get]];
-        }
-
-        [self recreate3dObjectsProvider];
-
         [_mapLayers updateLayers];
-
-        if (!_gpxFilePathTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
-            [self showRecGpxTrack:YES];
-
-        [_selectedGpxHelper buildGpxList];
-        if (_selectedGpxHelper.activeGpx.allKeys.count != 0 || _gpxFilesTemp.count != 0)
-            [self initRendererWithGpxTracks];
-
-        //[self hideProgressHUD];
-        [_mapSourceUpdatedObservable notifyEvent];
         [_mapView setFlatEarth:![settings.sphericalMap get]];
-    }
+    }];
+
+    [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:[[OAMapPresentationEnvironment alloc] initWithEnvironment:mapPresentationEnvironment]];
+    if (shouldApplyWeatherBandSettings)
+        _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
+    [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
+    [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
+
+    if (shouldShowRecTrack)
+        [self showRecGpxTrack:YES];
+    if (shouldInitGpxTracks)
+        [self initRendererWithGpxTracks];
+
+    [_mapSourceUpdatedObservable notifyEvent];
 }
 
 - (void) createGeoTiffCollection
@@ -2872,13 +2991,40 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) runWithRenderSync:(void (^)(void))runnable
 {
-    if (!self.mapViewLoaded || !runnable)
+    if (!runnable)
         return;
-    
-    @synchronized(_rendererSync)
-    {
+
+    void (^commit)(void) = ^{
+        if (!self.mapViewLoaded)
+            return;
+#if DEBUG
+        NSTimeInterval startTime = [NSDate timeIntervalSinceReferenceDate];
+#endif
         runnable();
-    }
+#if DEBUG
+        NSTimeInterval elapsed = [NSDate timeIntervalSinceReferenceDate] - startTime;
+        if (elapsed > kRenderSyncSlowBlockThreshold)
+            OALog(@"runWithRenderSync block took %.1f ms; keep renderer commits short and avoid I/O, synchronous queues, DB work, and notifications.", elapsed * 1000.0);
+#endif
+    };
+
+    if ([NSThread isMainThread])
+        commit();
+    else
+        dispatch_sync(dispatch_get_main_queue(), commit);
+}
+
+- (void)runAsyncWithRenderSync:(void (^)(void))runnable
+{
+    if (!runnable)
+        return;
+
+    if ([NSThread isMainThread])
+        [self runWithRenderSync:runnable];
+    else
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self runWithRenderSync:runnable];
+        });
 }
 
 - (void) updateLayer:(NSString *)layerId
@@ -2886,13 +3032,12 @@ static const NSInteger kDetailedMapZoom = 9;
     if (!self.mapViewLoaded)
         return;
 
-    @synchronized(_rendererSync)
-    {
+    [self runWithRenderSync:^{
         if ([_app.data.mapLayersConfiguration isLayerVisible:layerId])
             [_mapLayers showLayer:layerId];
         else
             [_mapLayers hideLayer:layerId];
-    }
+    }];
 }
 
 - (CGFloat) displayDensityFactor
@@ -2922,8 +3067,7 @@ static const NSInteger kDetailedMapZoom = 9;
     if (!self.mapViewLoaded || (position31.x == 0 && position31.y == 0))
         return;
 
-    @synchronized(_rendererSync)
-    {
+    [self runWithRenderSync:^{
         CGFloat screensToFly = [self screensToFly:position31];
         
         _app.mapMode = OAMapModeFree;
@@ -2942,7 +3086,7 @@ static const NSInteger kDetailedMapZoom = 9;
         {
             [_mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
         }
-    }
+    }];
 }
 
 - (void) goToPosition:(Point31)position31
@@ -2952,8 +3096,7 @@ static const NSInteger kDetailedMapZoom = 9;
     if (!self.mapViewLoaded || (position31.x == 0 && position31.y == 0))
         return;
     
-    @synchronized(_rendererSync)
-    {
+    [self runWithRenderSync:^{
         CGFloat z = [self normalizeZoom:zoom defaultZoom:_mapView.zoom];
         
         CGFloat screensToFly = [self screensToFly:position31];
@@ -2979,7 +3122,7 @@ static const NSInteger kDetailedMapZoom = 9;
             [_mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
             [_mapView setZoom:z];
         }
-    }
+    }];
 }
 
 - (void) correctPosition:(Point31)targetPosition31
@@ -3066,83 +3209,118 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update
 {
-    if (_recTrackShowing)
+    __block BOOL recTrackShowing = NO;
+    [self runWithRenderSync:^{
+        recTrackShowing = _recTrackShowing;
+    }];
+    if (recTrackShowing)
         [self hideRecGpxTrack];
 
-    @synchronized(_rendererSync)
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if ([settings.mapSettingVisibleGpx.get containsObject:filePath])
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings.mapSettingVisibleGpx.get containsObject:filePath]) {
+        [self runWithRenderSync:^{
             [_gpxFilesTemp removeAllObjects];
             _gpxFilePathTemp = nil;
-            return;
-        }
-        
+        }];
+        return;
+    }
+
+    __block BOOL shouldLoadGpx = YES;
+    [self runWithRenderSync:^{
+        shouldLoadGpx = ![_gpxFilePathTemp isEqualToString:filePath] || _gpxFilesTemp.count == 0;
+    }];
+
+    OASGpxFile *gpxFile = nil;
+    if (shouldLoadGpx)
+    {
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+        NSString *path = gpx.file.absolutePath;
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    }
+
+    [self runWithRenderSync:^{
         _tempTrackShowing = YES;
 
-        if (![_gpxFilePathTemp isEqualToString:filePath] || _gpxFilesTemp.count == 0) {
+        if (shouldLoadGpx)
+        {
             [_gpxFilesTemp removeAllObjects];
             _gpxFilePathTemp = [filePath copy];
-            OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-            NSString *path = gpx.file.absolutePath;
-            
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
-            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-            [_gpxFilesTemp addObject:gpxFile];
+            if (gpxFile)
+                [_gpxFilesTemp addObject:gpxFile];
         }
-        
-        if (update)
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
+    }];
+
+    if (update)
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void) showTempGpxTrackFromGpxFile:(OASGpxFile *)doc
 {
-    if (_recTrackShowing)
+    __block BOOL recTrackShowing = NO;
+    [self runWithRenderSync:^{
+        recTrackShowing = _recTrackShowing;
+    }];
+    if (recTrackShowing)
         [self hideRecGpxTrack];
     NSString *filePath = doc.path;
 
-    @synchronized(_rendererSync)
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if ([settings.mapSettingVisibleGpx.get containsObject:filePath])
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings.mapSettingVisibleGpx.get containsObject:filePath]) {
+        [self runWithRenderSync:^{
             [_gpxFilesTemp removeAllObjects];
             _gpxFilePathTemp = nil;
-            return;
-        }
-        
+        }];
+        return;
+    }
+
+    __block BOOL shouldLoadGpx = YES;
+    [self runWithRenderSync:^{
+        shouldLoadGpx = ![_gpxFilePathTemp isEqualToString:filePath] || _gpxFilesTemp.count == 0;
+    }];
+
+    OASGpxFile *gpxFile = nil;
+    if (shouldLoadGpx)
+    {
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    }
+
+    [self runWithRenderSync:^{
         _tempTrackShowing = YES;
 
-        if (![_gpxFilePathTemp isEqualToString:filePath] || _gpxFilesTemp.count == 0) {
+        if (shouldLoadGpx)
+        {
             [_gpxFilesTemp removeAllObjects];
             _gpxFilePathTemp = [filePath copy];
-            
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:filePath];
-            OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-            
-            [_gpxFilesTemp addObject:gpxFile];
+            if (gpxFile)
+                [_gpxFilesTemp addObject:gpxFile];
         }
-        
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
+    }];
+
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void) hideTempGpxTrack:(BOOL)update
 {
-    @synchronized(_rendererSync)
-    {
-        BOOL wasTempTrackShowing = _tempTrackShowing;
+    __block BOOL wasTempTrackShowing = NO;
+    __block NSString *folderPath = nil;
+    [self runWithRenderSync:^{
+        wasTempTrackShowing = _tempTrackShowing;
         _tempTrackShowing = NO;
         
         [_gpxFilesTemp removeAllObjects];
-        NSString *folderParh = [_gpxFilePathTemp stringByDeletingLastPathComponent];
-        if ([folderParh.lastPathComponent isEqualToString:@"Temp"])
-            [NSFileManager.defaultManager removeItemAtPath:folderParh error:nil];
+        folderPath = [_gpxFilePathTemp stringByDeletingLastPathComponent];
         _gpxFilePathTemp = nil;
-        
-        if (wasTempTrackShowing && update)
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
+    }];
+
+    if ([folderPath.lastPathComponent isEqualToString:@"Temp"])
+        [NSFileManager.defaultManager removeItemAtPath:folderPath error:nil];
+
+    if (wasTempTrackShowing && update)
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void) hideTempGpxTrack
@@ -3152,64 +3330,73 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) showRecGpxTrack:(BOOL)refreshData
 {
-    if (_tempTrackShowing)
+    __block BOOL tempTrackShowing = NO;
+    [self runWithRenderSync:^{
+        tempTrackShowing = _tempTrackShowing;
+    }];
+    if (tempTrackShowing)
         [self hideTempGpxTrack];
-    
-    @synchronized(_rendererSync)
-    {
-        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+
+    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+    __block OASGpxFile *gpxFile = nil;
+    [helper runSyncBlock:^{
+        if (helper.currentTrack && [helper hasData])
+            gpxFile = helper.currentTrack;
+    }];
+
+    NSMutableDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [NSMutableDictionary dictionary];
+    if (gpxFile)
+        gpxFilesDic[kCurrentTrack] = gpxFile;
+
+    [self runWithRenderSync:^{
         if (refreshData)
             [_mapLayers.gpxRecMapLayer resetLayer];
-        
-        [helper runSyncBlock:^{
-            OASGpxFile *gpxFile = helper.currentTrack;
-            if (gpxFile && [helper hasData])
-            {
-                _recTrackShowing = YES;
-                
-                [_gpxFilesRec removeAllObjects];
-                [_gpxFilesRec addObject:gpxFile];
 
-                NSMutableDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [NSMutableDictionary dictionary];
-                gpxFilesDic[kCurrentTrack] = gpxFile;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
-            }
-        }];
-    }
+        if (gpxFile)
+        {
+            _recTrackShowing = YES;
+            [_gpxFilesRec removeAllObjects];
+            [_gpxFilesRec addObject:gpxFile];
+            [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
+        }
+    }];
 }
 
 - (void) hideRecGpxTrack
 {
-    @synchronized(_rendererSync)
-    {
+    [self runWithRenderSync:^{
         _recTrackShowing = NO;
         [_mapLayers.gpxRecMapLayer resetLayer];
         [_gpxFilesRec removeAllObjects];
-    }
+    }];
 }
 
 
 - (void) keepTempGpxTrackVisible
 {
-    if (!_gpxFilePathTemp || _gpxFilesTemp.count == 0)
+    __block NSString *tempGpxFilePath = nil;
+    __block OASGpxFile *tempGpxFile = nil;
+    [self runWithRenderSync:^{
+        tempGpxFilePath = [_gpxFilePathTemp copy];
+        tempGpxFile = _gpxFilesTemp.firstObject;
+    }];
+
+    if (!tempGpxFilePath || !tempGpxFile)
         return;
 
-    OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxFilePathTemp];
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:tempGpxFilePath];
     NSString *path = gpx.file.absolutePath;
-    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxFilePathTemp])
+    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:tempGpxFilePath])
     {
-        [_selectedGpxHelper addGpxFile:gpxFile for:path];
+        [_selectedGpxHelper addGpxFile:tempGpxFile for:path];
 
-        NSString *gpxGpxFilePathTemp = _gpxFilePathTemp;
-        @synchronized(_rendererSync)
-        {
+        [self runWithRenderSync:^{
             _tempTrackShowing = NO;
             [_gpxFilesTemp removeAllObjects];
             _gpxFilePathTemp = nil;
-        }
+        }];
 
-        [[OAAppSettings sharedManager] showGpx:@[gpxGpxFilePathTemp] update:NO];
+        [[OAAppSettings sharedManager] showGpx:@[tempGpxFilePath] update:NO];
     }
 }
 
@@ -3945,9 +4132,16 @@ static const NSInteger kDetailedMapZoom = 9;
 - (void) initRendererWithGpxTracks
 {
     NSMutableDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [NSMutableDictionary dictionary];
-    if (_selectedGpxHelper.activeGpx.allKeys.count > 0 || _gpxFilesTemp.count > 0)
+    NSDictionary<NSString *, OASGpxFile *> *activeGpx = [_selectedGpxHelper.activeGpx copy];
+    __block NSString *tempGpxFilePath = nil;
+    __block OASGpxFile *tempGpxFile = nil;
+    [self runWithRenderSync:^{
+        tempGpxFilePath = [_gpxFilePathTemp copy];
+        tempGpxFile = _gpxFilesTemp.firstObject;
+    }];
+
+    if (activeGpx.allKeys.count > 0 || tempGpxFile)
     {
-        NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [_selectedGpxHelper.activeGpx mutableCopy];
         for (NSString *key in activeGpx.allKeys) {
             OASGpxFile *gpxFile = activeGpx[key];
             if (gpxFile)
@@ -3955,72 +4149,87 @@ static const NSInteger kDetailedMapZoom = 9;
                 gpxFilesDic[key] = gpxFile;
             }
         }
-        if (_gpxFilePathTemp && _gpxFilesTemp.count > 0)
+        if (tempGpxFilePath && tempGpxFile)
         {
-            gpxFilesDic[_gpxFilePathTemp] = _gpxFilesTemp.firstObject;
+            gpxFilesDic[tempGpxFilePath] = tempGpxFile;
         }
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
+    [self runWithRenderSync:^{
+        [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
+    }];
     
     [_gpxTracksRefreshedObservable notifyEvent];
 }
 
 - (void)refreshGpxTracks
 {
-    @synchronized(_rendererSync)
-    {
+    [self runWithRenderSync:^{
         [_mapLayers.gpxMapLayer resetLayer];
-        if (![_selectedGpxHelper buildGpxList])
-            [self initRendererWithGpxTracks];
-    }
+    }];
+    if (![_selectedGpxHelper buildGpxList])
+        [self initRendererWithGpxTracks];
 }
 
 - (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName
 {
-    if (_mapPresentationEnvironment)
-        return UIColorFromARGB(_mapPresentationEnvironment->getTransportRouteColor(nightMode, QString::fromNSString(renderAttrName)).argb);
-    else
-        return nil;
+    __block UIColor *color = nil;
+    [self runWithRenderSync:^{
+        if (_mapPresentationEnvironment)
+            color = UIColorFromARGB(_mapPresentationEnvironment->getTransportRouteColor(nightMode, QString::fromNSString(renderAttrName)).argb);
+    }];
+    return color;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors
 {
-    const auto &gpxColorsMap = _mapPresentationEnvironment->getGpxColors();
-    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary dictionary];
-    QHashIterator<QString, int> it(gpxColorsMap);
-    while (it.hasNext()) {
-        it.next();
-        NSString *key = (0 == it.key().length()) ? (@"") : (it.key().toNSString());
-        NSNumber *value = @(it.value());
-        [result setObject:value forKey:key];
-    }
-    return result;
+    __block NSDictionary<NSString *, NSNumber *> *colors = @{};
+    [self runWithRenderSync:^{
+        if (!_mapPresentationEnvironment)
+            return;
+
+        const auto &gpxColorsMap = _mapPresentationEnvironment->getGpxColors();
+        NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary dictionary];
+        QHashIterator<QString, int> it(gpxColorsMap);
+        while (it.hasNext()) {
+            it.next();
+            NSString *key = (0 == it.key().length()) ? (@"") : (it.key().toNSString());
+            NSNumber *value = @(it.value());
+            [result setObject:value forKey:key];
+        }
+        colors = result;
+    }];
+    return colors;
 }
 
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth
 {
-    auto gpxWidthMap = _mapPresentationEnvironment->getGpxWidth();
-    if (gpxWidthMap.isEmpty())
-        gpxWidthMap = _app.defaultRenderer->getGpxWidth();
-    NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary dictionary];
-    QHashIterator<QString, QList<int>> it(gpxWidthMap);
-    while (it.hasNext()) {
-        it.next();
-        NSString *key = (0 == it.key().length()) ? (@"") : (it.key().toNSString());
-        NSMutableArray<NSNumber *> *values = [NSMutableArray array];
-        QList<int> itValues = it.value();
-        for (int itValue : itValues)
-        {
-            [values addObject:@(itValue)];
+    __block NSDictionary<NSString *, NSArray<NSNumber *> *> *width = @{};
+    [self runWithRenderSync:^{
+        auto gpxWidthMap = _mapPresentationEnvironment ? _mapPresentationEnvironment->getGpxWidth() : QHash<QString, QList<int>>();
+        if (gpxWidthMap.isEmpty())
+            gpxWidthMap = _app.defaultRenderer->getGpxWidth();
+        NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary dictionary];
+        QHashIterator<QString, QList<int>> it(gpxWidthMap);
+        while (it.hasNext()) {
+            it.next();
+            NSString *key = (0 == it.key().length()) ? (@"") : (it.key().toNSString());
+            NSMutableArray<NSNumber *> *values = [NSMutableArray array];
+            QList<int> itValues = it.value();
+            for (int itValue : itValues)
+            {
+                [values addObject:@(itValue)];
+            }
+            result[key] = values;
         }
-        result[key] = values;
-    }
-    return result;
+        width = result;
+    }];
+    return width;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
 {
-    @synchronized(_rendererSync) {
+    __block NSDictionary<NSString *, NSNumber *> *attributes = nil;
+    [self runWithRenderSync:^{
         if (_mapPresentationEnvironment)
         {
             NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
@@ -4033,24 +4242,23 @@ static const NSInteger kDetailedMapZoom = 9;
                 
                 [result setObject:value forKey:key];
             }
-            return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
+            attributes = [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
         }
-        else
-            return nil;
-    }
+    }];
+    return attributes;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings
 {
-    if (_mapPresentationEnvironment && additionalSettings)
-    {
-        const auto& pair = _mapPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(renderAttrName), [OANativeUtilities dictionaryToQHash:additionalSettings]);
-        return @{pair.first.toNSString() : @(pair.second)};
-    }
-    else
-    {
-        return @{kUndefinedAttr : @(0xFFFFFFFF)};
-    }
+    __block NSDictionary<NSString *, NSNumber *> *attributes = @{kUndefinedAttr : @(0xFFFFFFFF)};
+    [self runWithRenderSync:^{
+        if (_mapPresentationEnvironment && additionalSettings)
+        {
+            const auto& pair = _mapPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(renderAttrName), [OANativeUtilities dictionaryToQHash:additionalSettings]);
+            attributes = @{pair.first.toNSString() : @(pair.second)};
+        }
+    }];
+    return attributes;
 }
 
 @synthesize framePreparedObservable = _framePreparedObservable;
@@ -4138,18 +4346,16 @@ static const NSInteger kDetailedMapZoom = 9;
 
 - (void) routeWasCancelled
 {
-    @synchronized(_rendererSync)
-    {
+    [self runWithRenderSync:^{
         [_mapLayers.routeMapLayer resetLayer];
-    }
+    }];
 }
 
 - (void) routeWasFinished
 {
-    @synchronized(_rendererSync)
-    {
+    [self runWithRenderSync:^{
         [_mapLayers.routeMapLayer resetLayer];
-    }
+    }];
 }
 
 - (OAMapRendererEnvironment *)mapRendererEnv

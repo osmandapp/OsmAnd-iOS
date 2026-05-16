@@ -299,7 +299,7 @@ static const int START_ZOOM = 7;
 
 - (void) refreshGpxTracks
 {
-    BOOL hasVolumetricSymbols;
+    BOOL hasVolumetricSymbols = NO;
     for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
     {
         OASGpxDataItem *gpx = cachedTrack[@"gpx"];
@@ -312,7 +312,10 @@ static const int START_ZOOM = 7;
         }
     }
     if (_linesCollection->hasVolumetricSymbols != hasVolumetricSymbols)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_linesCollection];
         _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
+    }
 
     if (_gpxFiles.count > 0)
     {

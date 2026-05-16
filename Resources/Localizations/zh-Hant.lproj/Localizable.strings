@@ -4028,3 +4028,12 @@
 "choose_color" = "選擇顏色";
 "shared_string_int_name" = "國際名稱";
 "show_debug_tile" = "顯示標題資訊";
+"pause_spoken_audio" = "暫停語音";
+"centimeter" = "厘米";
+"shared_string_centimeters" = "厘米";
+"bicycle_width_limit_description" = "提供您的自行車寬度，以避免狹窄的自行車道。";
+"show_expand_button" = "顯示展開按鈕";
+"obd_alt_battery_voltage_desc" = "顯示 OBD 適配器上的電壓水平";
+"visualization" = "視覺化";
+"terrain_shadows" = "地形陰影";
+"terrain_shadows_footer_descr" = "3D地形功能已自動啟用，因為它是渲染地形陰影所需的";

@@ -4033,3 +4033,5 @@
 "has_vehicle_metrics" = "مع بيانات OBDII";
 "context_menu_read_full_article" = "اقرأ المقال كاملا";
 "read_on" = "تابع القراءة %@";
+"open_from_short" = "مِن";
+"open_till_short" = "حتى";

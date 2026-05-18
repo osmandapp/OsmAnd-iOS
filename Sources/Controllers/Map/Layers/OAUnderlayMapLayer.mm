@@ -119,15 +119,13 @@
 
 - (void) onUnderlayLayerAlphaChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mapViewController runWithRenderSync:^{
-            OsmAnd::MapLayerConfiguration config;
-            BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
-            float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
-            config.setOpacityFactor(alpha);
-            [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-        }];
-    });
+    [self.mapViewController runWithRenderSync:^{
+        OsmAnd::MapLayerConfiguration config;
+        BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
+        float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
+        config.setOpacityFactor(alpha);
+        [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+    }];
 }
 
 - (void) onUnderlayLayerChanged

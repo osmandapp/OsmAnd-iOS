@@ -3617,3 +3617,4 @@
 "altitude_metrics_description" = "Seadistab kõrguse mõõtühiku vidinate ja statistika jaoks.";
 "quick_action_map_center_widget_descr" = "Nupp, mis võimaldab näidata või peita kaardi keskpunkti vidinat.";
 "key_event_category_map_interactions" = "Tegevused kaardiga";
+"x" = "X (varem Twitter)";

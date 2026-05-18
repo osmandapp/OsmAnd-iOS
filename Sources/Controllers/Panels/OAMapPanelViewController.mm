@@ -1389,7 +1389,7 @@ typedef enum
     if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
         [validPoints addObjectsFromArray:targetPoints];
-        if (selectedObjects)
+        if (!NSArrayIsEmpty(selectedObjects))
             [validSelectedObjects addObjectsFromArray:selectedObjects];
     }
     else
@@ -1400,7 +1400,7 @@ typedef enum
             if ([self processTargetPoint:targetPoint])
             {
                 [validPoints addObject:targetPoint];
-                if (selectedObjects)
+                if (!NSArrayIsEmpty(selectedObjects))
                     [validSelectedObjects addObject:selectedObjects[i]];
             }
         }

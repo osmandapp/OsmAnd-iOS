@@ -11,4 +11,6 @@
 
 @interface OAPOILayer : OASymbolMapLayer<OAContextMenuProvider>
 
++ (OATargetPoint *)getTargetPoint:(id)obj;
+
 @end

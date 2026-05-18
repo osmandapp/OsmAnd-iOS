@@ -253,11 +253,11 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         navigationItem.hidesBackButton = !show
     }
     
-    func updateSegmentedControlVisibility(_ show: Bool) {
+    func updateSegmentedControlVisibility(_ isVisible: Bool) {
         guard let pageViewController else { return }
-        pageViewController.delegate = show ? self : nil
-        pageViewController.dataSource = show ? self : nil
-        segmentContainerView.isHidden = !show
+        pageViewController.delegate = isVisible ? self : nil
+        pageViewController.dataSource = isVisible ? self : nil
+        segmentContainerView.isHidden = !isVisible
     }
     
     func updateEditMode(_ edit: Bool) {

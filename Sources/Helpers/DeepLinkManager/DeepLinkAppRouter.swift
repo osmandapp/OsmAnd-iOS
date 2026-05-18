@@ -186,12 +186,15 @@ final class DeepLinkAppRouter: NSObject {
     func openMyPlaces(tab: MyPlacesContainerViewController.Tab) {
         guard let nav = root.navigationController else { return }
         if let myPlaces = nav.visibleViewController as? MyPlacesContainerViewController {
-            selectMyPlacesTab(tab, in: myPlaces)
-            myPlaces.switchToWithSegmentControl(tab: tab)
+            if myPlaces.availableTabs.contains(tab) {
+                selectMyPlacesTab(tab, in: myPlaces)
+                myPlaces.switchToWithSegmentControl(tab: tab)
+            }
             return
         }
         
-        guard let nav = dismissAndPopToRoot() else { return }
+        let canOpenMyPlaces = tab == .favorites || tab == .tracks || (tab == .osm && OAIAPHelper.sharedInstance().osmEditing.isActive())
+        guard let nav = dismissAndPopToRoot(), canOpenMyPlaces else { return }
         let myPlaces = MyPlacesContainerViewController()
         myPlaces.loadViewIfNeeded()
         selectMyPlacesTab(tab, in: myPlaces)

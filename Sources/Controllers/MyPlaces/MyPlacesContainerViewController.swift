@@ -38,6 +38,15 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             }
         }
         
+        var controllerType: AnyClass {
+            switch self {
+            case .favorites: OAFavoriteListViewController.self
+            case .tracks: TracksViewController.self
+            case .osm: OAOsmEditsListViewController.self
+            case .travel: SavedArticlesTabViewController.self
+            }
+        }
+        
         static var `default`: Tab {
             .favorites
         }
@@ -48,11 +57,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     @IBOutlet private weak var segmentControl: UISegmentedControl!
     
     var selectedTab: Tab = .default
+    var availableTabs: [Tab] = []
     
     private let segmentedControlIconSize: CGFloat = 24
-    
-    private var availableTabs: [Tab] = []
-    private var availableViewControllers: [UIViewController] = []
+    private var availableViewControllers: [Tab: UIViewController] = [:]
     private var pageViewController: UIPageViewController?
     private var searchController: UISearchController?
     
@@ -68,7 +76,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         setupSearchController()
         setupPageController()
-        setupViewControllers()
         setupSegments()
         initialSelectedTab()
         setupNavbar()
@@ -126,35 +133,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         }
     }
     
-    private func setupViewControllers() {
-        guard let pageViewController else { return }
-        var viewControllers: [UIViewController] = []
-        
-        if let favoritesViewController = OAFavoriteListViewController(frame: pageViewController.view.frame) {
-            favoritesViewController.myPlacesDelegate = self
-            viewControllers.append(favoritesViewController)
-            pageViewController.setViewControllers([favoritesViewController], direction: .forward, animated: false)
-        }
-        
-        let tracksViewController = TracksViewController(frame: pageViewController.view.frame)
-        tracksViewController.myPlacesDelegate = self
-        viewControllers.append(tracksViewController)
-        
-        if OAIAPHelper.sharedInstance().osmEditing.isActive() {
-            let osmEditsViewController = OAOsmEditsListViewController(frame: pageViewController.view.frame)
-            osmEditsViewController.myPlacesDelegate = self
-            viewControllers.append(osmEditsViewController)
-        }
-        
-        if TravelLocalDataHelper.shared.hasSavedArticles() {
-            let travelGuidesViewController = SavedArticlesTabViewController(frame: pageViewController.view.frame)
-            travelGuidesViewController.myPlacesDelegate = self
-            viewControllers.append(travelGuidesViewController)
-        }
-        
-        availableViewControllers = viewControllers
-    }
-    
     private func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         guard let searchController else { return }
@@ -203,12 +181,45 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         let index = availableTabs.firstIndex(of: tab) ?? Tab.default.rawValue
         let tab = availableTabs[index]
         selectedTab = tab
-        pageViewController?.setViewControllers([availableViewControllers[index]], direction: .forward, animated: true)
+        if let viewController = viewController(for: tab) {
+            pageViewController?.setViewControllers([viewController], direction: .forward, animated: true)
+        }
         setupNavbarTitle(with: tab)
     }
     
     private func initialSelectedTab() {
         switchToWithSegmentControl(tab: selectedTab)
+    }
+    
+    private func viewController(for tab: Tab) -> UIViewController? {
+        guard let pageViewController else { return nil }
+        switch tab {
+        case .favorites:
+            if !availableViewControllers.contains(where: { $0.key == .favorites }),
+               let favoritesViewController = OAFavoriteListViewController(frame: pageViewController.view.frame) {
+                favoritesViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = favoritesViewController
+            }
+        case .tracks:
+            if !availableViewControllers.contains(where: { $0.key == .tracks }) {
+                let tracksViewController = TracksViewController(frame: pageViewController.view.frame)
+                tracksViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = tracksViewController
+            }
+        case .osm:
+            if !availableViewControllers.contains(where: { $0.key == .osm }) {
+                let osmEditsViewController = OAOsmEditsListViewController(frame: pageViewController.view.frame)
+                osmEditsViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = osmEditsViewController
+            }
+        case .travel:
+            if !availableViewControllers.contains(where: { $0.key == .travel }) {
+                let travelGuidesViewController = SavedArticlesTabViewController(frame: pageViewController.view.frame)
+                travelGuidesViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = travelGuidesViewController
+            }
+        }
+        return availableViewControllers.first(where: { $0.key == tab })?.value
     }
     
     @objc private func onBackPressed() {
@@ -227,13 +238,13 @@ final class MyPlacesContainerViewController: OACompoundViewController {
 // MARK: - UIPageViewControllerDataSource
 extension MyPlacesContainerViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = availableViewControllers.firstIndex(of: viewController), index > 0 else { return nil }
-        return availableViewControllers[index - 1]
+        guard let index = availableTabs.firstIndex(where: { viewController.isKind(of: $0.controllerType) }), index > 0 else { return nil }
+        return self.viewController(for: availableTabs[index - 1])
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = availableViewControllers.firstIndex(of: viewController), index < availableViewControllers.count - 1 else { return nil }
-        return availableViewControllers[index + 1]
+        guard let index = availableTabs.firstIndex(where: { viewController.isKind(of: $0.controllerType) }), index < availableTabs.count - 1 else { return nil }
+        return self.viewController(for: availableTabs[index + 1])
     }
 }
 
@@ -241,7 +252,7 @@ extension MyPlacesContainerViewController: UIPageViewControllerDataSource {
 extension MyPlacesContainerViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard let viewController = pageViewController.viewControllers?.first,
-              let index = availableViewControllers.firstIndex(of: viewController) else {
+              let index = availableTabs.firstIndex(where: { viewController.isKind(of: $0.controllerType) }) else {
             return
         }
         let tab = availableTabs[index]

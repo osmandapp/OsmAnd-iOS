@@ -73,7 +73,7 @@ static NSString * const kSolidColorKey = @"solid_color";
 {
     if (!_groupColors)
         return;
-    
+
     BOOL allEqual = YES;
     UIColor *first = _groupColors.firstObject;
 
@@ -85,7 +85,7 @@ static NSString * const kSolidColorKey = @"solid_color";
             break;
         }
     }
-    
+
     [self selectCategoryWithName:_isFavoriteList && !allEqual ? kOriginalKey : kSolidColorKey];
 }
 
@@ -146,7 +146,7 @@ static NSString * const kSolidColorKey = @"solid_color";
                                          handler:^(__kindof UIAction * _Nonnull action) {
         [self onMenuItemSelectedWithName:category.key];
     }];
-    
+
     [menuElements addObject:action];
 }
 
@@ -220,7 +220,7 @@ static NSString * const kSolidColorKey = @"solid_color";
 {
     [self initOriginalCategory];
     [self initSolidColorCategory];
-    
+
     for (OAColorsAppearanceCategory *category in _categories)
         _categoriesByKeyName[category.key] = category;
 }
@@ -244,29 +244,15 @@ static NSString * const kSolidColorKey = @"solid_color";
         return;
 
     __weak __typeof(self) weakSelf = self;
-    NSIndexPath *prevSelectedIndexPath = [_selectedIndexPath copy];
     [self setSelectedIndexPath:indexPath];
     [self insertItem:newItem atIndexPath:self.selectedIndexPath];
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
-        if (prevSelectedIndexPath)
-        {
-            NSInteger previousRow = prevSelectedIndexPath.row;
-            if (prevSelectedIndexPath.section == indexPath.section && indexPath.row <= prevSelectedIndexPath.row)
-                previousRow++;
-
-            NSIndexPath *updatedPrevSelectedIndexPath = [NSIndexPath indexPathForRow:previousRow inSection:prevSelectedIndexPath.section];
-            if ([updatedPrevSelectedIndexPath isEqual:weakSelf.selectedIndexPath])
-                [collectionView reloadItemsAtIndexPaths:@[updatedPrevSelectedIndexPath]];
-            else
-                [collectionView reloadItemsAtIndexPaths:@[updatedPrevSelectedIndexPath, weakSelf.selectedIndexPath]];
-        }
-
         [weakSelf.delegate onCollectionItemSelected:weakSelf.selectedIndexPath selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
-        
         if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
             [weakSelf.delegate reloadCollectionData];
     } completion:^(BOOL finished) {
+        [collectionView reloadData];
         [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
     }];
 }
@@ -276,7 +262,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     UICollectionView *collectionView = [self getCollectionView];
     if (!collectionView)
         return;
-    
+
     NSInteger rowsCount = [collectionView numberOfItemsInSection:indexPath.section];
     if (![collectionView.indexPathsForVisibleItems containsObject:indexPath] && indexPath.row < (rowsCount - 1))
     {
@@ -378,6 +364,17 @@ static NSString * const kSolidColorKey = @"solid_color";
 {
     if (_data.count > indexPath.section && (indexPath.row == 0 || _data[indexPath.section].count > indexPath.row - 1))
         [_data[indexPath.section] insertObject:newItem atIndex:indexPath.row];
+}
+
+- (void)replaceItem:(OASPaletteItemSolid *)newItem atIndexPath:(NSIndexPath *)indexPath
+{
+    if (!newItem || _data.count <= indexPath.section || _data[indexPath.section].count <= indexPath.row)
+        return;
+
+    _data[indexPath.section][indexPath.row] = newItem;
+    UICollectionView *collectionView = [self getCollectionView];
+    if (collectionView)
+        [collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
 - (void)removeItem:(NSIndexPath *)indexPath
@@ -516,7 +513,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     NSArray<NSIndexPath *> *indexPaths = prevSelectedColorIndex ? @[prevSelectedColorIndex, selectedIndex] : @[selectedIndex];
     [[self getCollectionView] reloadItemsAtIndexPaths:indexPaths];
     [self scrollToIndexPathIfNeeded:selectedIndex];
-    
+
     if (self.delegate)
     {
         [self.delegate onCollectionItemSelected:selectedIndex selectedItem:nil collectionView:[self getCollectionView] shouldDismiss:YES];
@@ -536,18 +533,33 @@ static NSString * const kSolidColorKey = @"solid_color";
 - (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color
 {
     NSIndexPath *indexPath = [self indexForColorItem:colorItem];
-    if (!indexPath)
+    if (!indexPath || !color)
         return;
 
-    OASPaletteItemSolid *newItem = [[OAGPXAppearanceCollection sharedInstance] changeColor:colorItem newColor:color];
+    OASPaletteItemSolid *newItem;
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler)
+    {
+        [_hostColorHandler changeColorItem:colorItem withColor:color];
+        newItem = [[OASPaletteUtils shared] updateSolidColorOriginalItem:colorItem newColorInt:(int32_t)[color toARGBNumber]];
+    }
+    else if (!_isOpenedFromAllColorsScreen && [self.delegate respondsToSelector:@selector(changeColorItem:withColor:)])
+    {
+        [(id<ColorCollectionViewControllerDelegate>)self.delegate changeColorItem:colorItem withColor:color];
+        newItem = [[OASPaletteUtils shared] updateSolidColorOriginalItem:colorItem newColorInt:(int32_t)[color toARGBNumber]];
+    }
+    else
+    {
+        newItem = [[OAGPXAppearanceCollection sharedInstance] changeColor:colorItem newColor:color];
+    }
     if (!newItem)
         return;
 
+    BOOL shouldNotifySelection = [indexPath isEqual:_selectedIndexPath] && _data[indexPath.section][indexPath.row].colorInt != newItem.colorInt;
     _data[indexPath.section][indexPath.row] = newItem;
     UICollectionView *collectionView = [self getCollectionView];
     if (collectionView)
         [collectionView reloadItemsAtIndexPaths:@[indexPath]];
-    if (self.delegate && [indexPath isEqual:_selectedIndexPath])
+    if (self.delegate && shouldNotifySelection)
         [self.delegate onCollectionItemSelected:indexPath selectedItem:newItem collectionView:collectionView shouldDismiss:NO];
 }
 
@@ -557,24 +569,50 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (!indexPath)
         return colorItem;
 
+    if (_isOpenedFromAllColorsScreen && _hostColorHandler)
+    {
+        OASPaletteItemSolid *duplicatedColorItem = [_hostColorHandler duplicateColorItem:colorItem];
+        if (!duplicatedColorItem || [duplicatedColorItem.id isEqualToString:colorItem.id])
+            return colorItem;
+
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+        [self addColor:newIndexPath newItem:duplicatedColorItem];
+
+        if (_hostCell && [_hostCell needUpdateHeight])
+            [self.delegate reloadCollectionData];
+
+        return duplicatedColorItem;
+    }
+
+    if (!_isOpenedFromAllColorsScreen && [self.delegate respondsToSelector:@selector(duplicateColorItem:)])
+    {
+        OASPaletteItemSolid *duplicatedColorItem = [(id<ColorCollectionViewControllerDelegate>)self.delegate duplicateColorItem:colorItem];
+        if (!duplicatedColorItem || [duplicatedColorItem.id isEqualToString:colorItem.id])
+            return colorItem;
+
+        if (![self indexForColorItem:duplicatedColorItem])
+            [self addColor:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section] newItem:duplicatedColorItem];
+
+        return duplicatedColorItem;
+    }
+
     OASPaletteItemSolid *duplicatedColorItem = [[OAGPXAppearanceCollection sharedInstance] duplicateColor:colorItem];
     if (!duplicatedColorItem)
         return colorItem;
 
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
     [self addColor:newIndexPath newItem:duplicatedColorItem];
-    if (_isOpenedFromAllColorsScreen && _hostColorHandler)
-    {
-        [_hostColorHandler addColor:newIndexPath newItem:duplicatedColorItem];
-        
-        if (_hostCell && [_hostCell needUpdateHeight])
-            [self.delegate reloadCollectionData];
-    }
     return duplicatedColorItem;
 }
 
 - (void)deleteColorItem:(OASPaletteItemSolid *)colorItem
 {
+    if (!_isOpenedFromAllColorsScreen && [self.delegate respondsToSelector:@selector(deleteColorItem:)])
+    {
+        [(id<ColorCollectionViewControllerDelegate>)self.delegate deleteColorItem:colorItem];
+        return;
+    }
+
     NSIndexPath *indexPath = [self indexForColorItem:colorItem];
     if (!indexPath)
         return;

@@ -19,12 +19,12 @@ import UIKit
 }
 
 @objc protocol ColorCollectionViewControllerDelegate: AnyObject {
-    func selectColorItem(_ colorItem: ColorItem)
-    @objc optional func selectPaletteItem(_ paletteItem: PaletteColor)
-    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> ColorItem
-    func changeColorItem(_ colorItem: ColorItem, withColor color: UIColor)
-    @discardableResult func duplicateColorItem(_ colorItem: ColorItem) -> ColorItem
-    func deleteColorItem(_ colorItem: ColorItem)
+    func selectColorItem(_ colorItem: PaletteItemSolid)
+    @objc optional func selectPaletteItem(_ paletteItem: PaletteItemGradient)
+    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid
+    func changeColorItem(_ colorItem: PaletteItemSolid, withColor color: UIColor)
+    @discardableResult func duplicateColorItem(_ colorItem: PaletteItemSolid) -> PaletteItemSolid
+    func deleteColorItem(_ colorItem: PaletteItemSolid)
     @objc optional func reloadData()
 }
 
@@ -73,12 +73,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     private var searchCancelled = false
     
     private var collectionType: ColorCollectionType
-    private var colorsCollection: GradientColorsCollection?
-    private var selectedPaletteItem: PaletteColor?
-    private var paletteItems: OAConcurrentArray<PaletteColor>?
+    private var selectedPaletteItem: PaletteItemGradient?
+    private var paletteItems: OAConcurrentArray<PaletteItemGradient>?
     private var colorCollectionIndexPath: IndexPath?
-    private var colorItems = [ColorItem]()
-    private var selectedColorItem: ColorItem?
+    private var colorItems = [PaletteItemSolid]()
+    private var selectedColorItem: PaletteItemSolid?
     private var editColorIndexPath: IndexPath?
     private var isStartedNewColorAdding = false
     
@@ -94,16 +93,15 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         switch collectionType {
         case .colorItems:
-            if let colorItems = items as? [ColorItem] {
+            if let colorItems = items as? [PaletteItemSolid] {
                 self.colorItems = colorItems
-                self.selectedColorItem = selectedItem as? ColorItem
+                self.selectedColorItem = selectedItem as? PaletteItemSolid
             }
         case .colorizationPaletteItems, .terrainPaletteItems:
-            if let collection = items as? GradientColorsCollection {
-                self.colorsCollection = collection
+            if let paletteItems = items as? [PaletteItemGradient] {
                 self.paletteItems = OAConcurrentArray()
-                self.paletteItems?.addObjectsSync(collection.getColors(.original))
-                self.selectedPaletteItem = selectedItem as? PaletteColor
+                self.paletteItems?.addObjectsSync(paletteItems)
+                self.selectedPaletteItem = selectedItem as? PaletteItemGradient
             }
         case .iconItems, .bigIconItems:
             if let icons = items as? [String] {
@@ -122,23 +120,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func registerNotifications() {
-        if collectionType == .colorizationPaletteItems || collectionType == .terrainPaletteItems {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(onCollectionDeleted(_:)),
-                                                   name: ColorsCollection.collectionDeletedNotification,
-                                                   object: nil)
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(onCollectionCreated(_:)),
-                                                   name: ColorsCollection.collectionCreatedNotification,
-                                                   object: nil)
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(onCollectionUpdated(_:)),
-                                                   name: ColorsCollection.collectionUpdatedNotification,
-                                                   object: nil)
-        }
     }
     
     override func registerCells() {
@@ -185,7 +166,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         super.viewWillAppear(animated)
         
         if collectionType == .colorizationPaletteItems || collectionType == .terrainPaletteItems {
-            if let index = paletteItems?.index(ofObjectSync: selectedPaletteItem) as? Int {
+            if let selectedPaletteItem, let paletteItems {
+                let index = GradientPaletteHelper.shared.indexOfPaletteItem(selectedPaletteItem, items: paletteItems.asArray().compactMap { $0 as? PaletteItemGradient })
+                guard index != NSNotFound else { return }
                 let selectedIndexPath = IndexPath(row: index, section: 0)
                 if let isContains = tableView.indexPathsForVisibleRows?.contains(selectedIndexPath), !isContains {
                     tableView.scrollToRow(at: selectedIndexPath, at: .middle, animated: true)
@@ -259,8 +242,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     if !iconName.hasSuffix(poiTypeNoIconValue) && OASvgHelper.hasMxMapImageNamed(iconName) {
                         section.addRow(from: [
                             kCellTypeKey: OASimpleTableViewCell.reuseIdentifier,
-                            kCellTitle: poiType.nameLocalized,
-                            kCellDescrKey: poiType.category.nameLocalized,
+                            kCellTitle: poiType.nameLocalized ?? "",
+                            kCellDescrKey: poiType.category.nameLocalized ?? "",
                             kCellIconNameKey: iconName
                         ])
                     }
@@ -270,8 +253,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 if let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler {
                     selectedChipsIndex = iconCategories.firstIndex(where: { $0.key == poiIconsDelegate.selectedCatagoryKey }) ?? 0
                 }
-                var chipsValues = [[String: String]]()
-                iconCategories.map { chipsValues.append(["title": $0.translatedName]) }
+                let chipsValues = iconCategories.map { ["title": $0.translatedName] }
                 
                 let chipsSection = data.createNewSection()
                 chipsSection.addRow(from: [
@@ -297,10 +279,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             }
         } else {
             let palettesSection = data.createNewSection()
-            paletteItems?.asArray().forEach { paletteColor in
-                if let color = paletteColor as? PaletteColor {
-                    palettesSection.addRow(generateRowData(for: color))
-                }
+            paletteItems?.asArray().compactMap { $0 as? PaletteItemGradient }.forEach { paletteItem in
+                palettesSection.addRow(generateRowData(for: paletteItem))
             }
         }
     }
@@ -313,39 +293,12 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         iconsDelegate is BaseAppearanceIconCollectionHandler && section == 0 ? 14 : super.getCustomHeight(forHeader: section)
     }
     
-    private func generateRowData(for paletteColor: PaletteColor) -> OATableRowData {
+    private func generateRowData(for paletteItem: PaletteItemGradient) -> OATableRowData {
         let paletteColorRow = OATableRowData()
         paletteColorRow.cellType = OATwoIconsButtonTableViewCell.reuseIdentifier
         paletteColorRow.key = "paletteColor"
-        paletteColorRow.title = paletteColor.toHumanString()
-        paletteColorRow.setObj(paletteColor, forKey: "palette")
-        
-        if let gradientPaletteColor = paletteColor as? PaletteGradientColor,
-           let prefix = colorsCollection?.getFileNamePrefix() {
-            var colorPaletteFileName = ""
-            
-            if colorsCollection?.isTerrainType() == true {
-                let typeName = gradientPaletteColor.typeName
-                let paletteName = gradientPaletteColor.paletteName
-                
-                var secondPart = ""
-                if paletteName == typeName {
-                    if TerrainMode.TerrainTypeWrapper.getNameFor(type: TerrainType.height) == paletteName {
-                        secondPart = TerrainMode.altitudeDefaultKey
-                    } else {
-                        secondPart = PaletteGradientColor.defaultName
-                    }
-                } else {
-                    secondPart = paletteName
-                }
-                colorPaletteFileName = prefix + secondPart + TXT_EXT
-            } else {
-                colorPaletteFileName = "\(prefix)\(gradientPaletteColor.typeName)\(ColorPaletteHelper.gradientIdSplitter)\(gradientPaletteColor.paletteName)\(TXT_EXT)"
-            }
-            
-            paletteColorRow.setObj(colorPaletteFileName, forKey: "fileName")
-        }
-        
+        paletteColorRow.title = paletteItem.displayName
+        paletteColorRow.setObj(paletteItem, forKey: "palette")
         return paletteColorRow
     }
     
@@ -376,21 +329,18 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             
             if let cell = tableView.dequeueReusableCell(withIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier, for: indexPath) as? OATwoIconsButtonTableViewCell {
                 
-                if let palette = item.obj(forKey: "palette") as? PaletteColor {
+                if let palette = item.obj(forKey: "palette") as? PaletteItemGradient {
                     cell.titleLabel.text = item.title
-                    
-                    if let gradientPalette = palette as? PaletteGradientColor {
-                        let colorPalette = gradientPalette.colorPalette
-                        cell.descriptionLabel.text = PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: collectionType == .terrainPaletteItems)
-                        cell.descriptionLabel.numberOfLines = 1
-                        PaletteCollectionHandler.applyGradient(to: cell.secondLeftIconView, with: colorPalette)
-                    }
+                    cell.descriptionLabel.text = PaletteCollectionHandler.createDescriptionForPalette(palette)
+                    cell.descriptionLabel.numberOfLines = 1
+                    PaletteCollectionHandler.applyGradient(to: cell.secondLeftIconView, with: palette.getColorPalette())
                     
                     cell.secondLeftIconView.layer.cornerRadius = 3
-                    cell.leftIconView.image = palette == selectedPaletteItem ? UIImage(named: "ic_checkmark_default") : nil
+                    cell.leftIconView.image = palette.id == selectedPaletteItem?.id ? UIImage(named: "ic_checkmark_default") : nil
                     cell.button.setTitle(nil, for: .normal)
                     cell.button.setImage(UIImage(named: "ic_navbar_overflow_menu_outlined")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    cell.button.menu = createPaletteMenu(for: indexPath, cell: cell)
+//                    cell.button.isHidden = false
+                    cell.button.menu = createPaletteMenu(for: indexPath)
                     cell.button.showsMenuAsPrimaryAction = true
                     
                     return cell
@@ -439,7 +389,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupColorCollectionCell(_ cell: OACollectionSingleLineTableViewCell) {
-        guard let data = hostColorHandler?.getData() as? [[ColorItem]] else { return }
+        let data = (hostColorHandler?.getData() as? [[PaletteItemSolid]]) ?? [colorItems]
+        if let items = data.first {
+            colorItems = items
+        }
         if let handler = OAColorCollectionHandler(data: data, collectionView: cell.collectionView) {
             handler.isOpenedFromAllColorsScreen = true
             handler.hostColorHandler = hostColorHandler
@@ -449,8 +402,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             handler.hostVCOpenColorPickerButton = navigationItem.rightBarButtonItem?.customView
             handler.setScrollDirection(.vertical)
             
-            if let selectedColorItem, let selectedIndex = colorItems.firstIndex(of: selectedColorItem) {
-                handler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+            if let selectedColorItem {
+                let selectedIndex = OAGPXAppearanceCollection.sharedInstance().index(ofColorItem: selectedColorItem, items: data.first ?? colorItems)
+                if selectedIndex != NSNotFound {
+                    handler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+                }
             }
 
             colorCollectionHandler = handler
@@ -550,7 +506,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         super.onRowSelected(indexPath)
         let item = data.item(for: indexPath)
         if item.key == "paletteColor" {
-            if let palette = item.obj(forKey: "palette") as? PaletteColor {
+            if let palette = item.obj(forKey: "palette") as? PaletteItemGradient {
                 selectedPaletteItem = palette
                 delegate?.selectPaletteItem?(palette)
             }
@@ -580,7 +536,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         let item = data.item(for: indexPath)
         if item.cellType == OADividerCell.reuseIdentifier {
             return 1.0 / UIScreen.main.scale
-        } else if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
+        } else if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
             return 52
         }
         return UITableView.automaticDimension
@@ -588,7 +544,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let item = data.item(for: indexPath)
-        if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String] {
+        if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
             return ChipsCollectionHandler.folderCellHeight
         }
         if let iconsHandler = iconsDelegate as? IconCollectionHandler {
@@ -601,41 +557,33 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     
     // MARK: - Additions
     
-    private func openColorPicker(with colorItem: ColorItem) {
+    private func openColorPicker(with colorItem: PaletteItemSolid) {
         let colorPicker = OAColorPickerViewController()
         colorPicker.delegate = self
         colorPicker.closingDelegete = self
-        colorPicker.selectedColor = colorItem.getColor()
+        colorPicker.selectedColor = UIColor(argb: Int(colorItem.colorInt))
         colorPicker.modalPresentationStyle = .popover
         colorPicker.popoverPresentationController?.sourceView = navigationItem.rightBarButtonItem?.customView
         navigationController?.present(colorPicker, animated: true)
     }
     
-    private func createPaletteMenu(for indexPath: IndexPath, cell: UITableViewCell) -> UIMenu {
+    private func createPaletteMenu(for indexPath: IndexPath) -> UIMenu {
+        guard let paletteItem = data.item(for: indexPath).obj(forKey: "palette") as? PaletteItemGradient else { return UIMenu(children: []) }
         let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage(systemName: "doc.on.doc")?.resizedMenuImage()) { [weak self] _ in
             guard let self else { return }
             self.duplicateItem(fromContextMenu: indexPath)
         }
         
-        let item = data.item(for: indexPath)
-        if let paletteColor = item.obj(forKey: "palette") as? PaletteColor,
-           let gradientPaletteColor = paletteColor as? PaletteGradientColor {
-            
-            let isDefault = gradientPaletteColor.paletteName == PaletteGradientColor.defaultName ||
-            (colorsCollection?.isTerrainType() == true &&
-             (gradientPaletteColor.typeName == gradientPaletteColor.paletteName ||
-              TerrainMode.TerrainTypeWrapper.getNameFor(type: TerrainType.height) == gradientPaletteColor.paletteName))
-            
-            if !isDefault {
-                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")?.resizedMenuImage(), attributes: .destructive) { [weak self] _ in
-                    guard let self else { return }
-                    self.deleteItem(fromContextMenu: cell)
-                }
-                
-                let deleteMenu = UIMenu(options: .displayInline, children: [deleteAction])
-                return UIMenu(children: [duplicateAction, deleteMenu])
+        if !paletteItem.isDefault {
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")?.resizedMenuImage(), attributes: .destructive) { [weak self] _ in
+                guard let self else { return }
+                self.deleteItem(fromContextMenu: indexPath)
             }
+
+            let deleteMenu = UIMenu(options: .displayInline, children: [deleteAction])
+            return UIMenu(children: [duplicateAction, deleteMenu])
         }
+
         return UIMenu(children: [duplicateAction])
     }
     
@@ -645,118 +593,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         isStartedNewColorAdding = true
         if let selectedColorItem {
             openColorPicker(with: selectedColorItem)
-        }
-    }
-    
-    @objc private func onCollectionDeleted(_ notification: Notification) {
-        guard let gradientPaletteColors = notification.object as? [PaletteGradientColor],
-              let selectedPaletteItem = selectedPaletteItem as? PaletteGradientColor,
-              let paletteItems
-        else { return }
-        
-        let currentGradientPaletteColor = selectedPaletteItem
-        var removeCurrent = false
-        let currentIndex = paletteItems.index(ofObjectSync: currentGradientPaletteColor)
-        
-        var indexPathsToDelete = [IndexPath]()
-        for paletteColor in gradientPaletteColors {
-            let index = paletteItems.index(ofObjectSync: paletteColor)
-            if index != NSNotFound {
-                paletteItems.removeObjectSync(paletteColor)
-                indexPathsToDelete.append(IndexPath(row: Int(index), section: 0))
-                if index == currentIndex {
-                    removeCurrent = true
-                }
-            }
-        }
-        
-        guard !indexPathsToDelete.isEmpty else { return }
-        
-        data.removeItems(at: indexPathsToDelete)
-        tableView.performBatchUpdates { [weak self] in
-            guard let self else { return }
-            self.tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
-        } completion: { [weak self] _ in
-            guard let self else { return }
-            
-            if removeCurrent {
-                var newCurrentSelected: PaletteColor?
-                if let colorsCollection = self.colorsCollection {
-                    
-                    if colorsCollection.isTerrainType() {
-                        let terrainType = TerrainMode.TerrainTypeWrapper.valueOf(typeName: currentGradientPaletteColor.typeName)
-                        if let defaultMode = TerrainMode.getDefaultMode(terrainType) {
-                            newCurrentSelected = colorsCollection.getPaletteColor(byName: defaultMode.getKeyName())
-                        }
-                    } else {
-                        newCurrentSelected = colorsCollection.getDefaultGradientPalette()
-                    }
-                }
-                
-                self.selectedPaletteItem = newCurrentSelected
-                if let newCurrentSelected = newCurrentSelected,
-                   let currentIndex = self.paletteItems?.index(ofObjectSync: newCurrentSelected) {
-                    self.tableView.reloadRows(at: [IndexPath(row: Int(currentIndex), section: 0)], with: .automatic)
-                }
-                self.delegate?.reloadData?()
-            }
-        }
-    }
-    
-    @objc private func onCollectionCreated(_ notification: Notification) {
-        guard let gradientPaletteColors = notification.object as? [PaletteGradientColor],
-        let paletteItems else { return }
-        
-        var indexPathsToInsert: [IndexPath] = []
-        for paletteColor in gradientPaletteColors {
-            let index = paletteColor.getIndex() - 1
-            let indexPath: IndexPath
-            
-            if index < paletteItems.countSync() {
-                indexPath = IndexPath(row: index, section: 0)
-                paletteItems.insertObjectSync(paletteColor, at: UInt(index))
-            } else {
-                indexPath = IndexPath(row: Int(paletteItems.countSync()), section: 0)
-                paletteItems.addObjectSync(paletteColor)
-            }
-            
-            indexPathsToInsert.append(indexPath)
-            data.addRow(at: indexPath, row: generateRowData(for: paletteColor))
-        }
-        
-        if !indexPathsToInsert.isEmpty {
-            tableView.performBatchUpdates { [weak self] in
-                guard let self else { return }
-                self.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
-            } completion: { finished in
-                self.delegate?.reloadData?()
-            }
-        }
-    }
-    
-    @objc private func onCollectionUpdated(_ notification: Notification) {
-        guard let gradientPaletteColors = notification.object as? [PaletteGradientColor],
-        let paletteItems else { return }
-        
-        var indexPathsToUpdate: [IndexPath] = []
-        for paletteColor in gradientPaletteColors {
-            let index = paletteColor.getIndex() - 1
-            if index < paletteItems.countSync() {
-                let indexPath = IndexPath(row: index, section: 0)
-                paletteItems.replaceObject(atIndexSync: UInt(index), with: paletteColor)
-                indexPathsToUpdate.append(indexPath)
-                data.removeRow(at: indexPath)
-                data.addRow(at: indexPath, row: generateRowData(for: paletteColor))
-            }
-        }
-        
-        if !indexPathsToUpdate.isEmpty {
-            tableView.performBatchUpdates { [weak self] in
-                guard let self else { return }
-                self.tableView.reloadRows(at: indexPathsToUpdate, with: .automatic)
-            } completion: { finished in
-                self.delegate?.reloadData?()
-            }
         }
     }
     
@@ -873,7 +709,6 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
         } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
-            let chipsTitles = iconCategories.map { $0.translatedName }
             if let baseIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler,
                let selectedName = selectedItem as? String {
                 
@@ -921,60 +756,53 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
     }
     
     func duplicateItem(fromContextMenu indexPath: IndexPath) {
-        guard let delegate else { return }
-        
         switch collectionType {
         case .colorItems:
-            if let colorCollectionIndexPath {
+            guard let delegate else { return }
+            if colorCollectionIndexPath != nil {
                 let colorItem = colorItems[indexPath.row]
-                if let colorCell = tableView.cellForRow(at: colorCollectionIndexPath) as? OACollectionSingleLineTableViewCell {
-
-                    let newIndexPath = IndexPath(row: colorItem.isDefault ? colorCell.collectionView.numberOfItems(inSection: indexPath.section) :
-                        indexPath.row + 1,
-                                                 section: indexPath.section)
-                    
-                    let duplicateColorItem = delegate.duplicateColorItem(colorItem)
-                    colorItems.insert(duplicateColorItem, at: newIndexPath.row)
-                    colorCollectionHandler?.addColor(newIndexPath, newItem: duplicateColorItem)
-                }
+                let newIndexPath = IndexPath(row: indexPath.row + 1, section: indexPath.section)
+                let duplicateColorItem = delegate.duplicateColorItem(colorItem)
+                guard duplicateColorItem.id != colorItem.id else { return }
+                colorItems.insert(duplicateColorItem, at: newIndexPath.row)
+                colorCollectionHandler?.addColor(newIndexPath, newItem: duplicateColorItem)
             }
         case .colorizationPaletteItems, .terrainPaletteItems:
-            if let fileName = data.item(for: indexPath).string(forKey: "fileName"),
-               !fileName.isEmpty {
-                do {
-                    try ColorPaletteHelper.shared.duplicateGradient(fileName)
-                } catch {
-                    print("Failed to duplicate color palette: \(fileName)")
-                }
-            }
+            guard let paletteItem = data.item(for: indexPath).obj(forKey: "palette") as? PaletteItemGradient, let duplicatedPaletteItem = GradientPaletteHelper.shared.duplicatePaletteItem(paletteItem), let paletteItems else { return }
+            let newIndexPath = IndexPath(row: indexPath.row + 1, section: indexPath.section)
+            paletteItems.insertObjectSync(duplicatedPaletteItem, at: UInt(newIndexPath.row))
+            data.addRow(at: newIndexPath, row: generateRowData(for: duplicatedPaletteItem))
+            tableView.insertRows(at: [newIndexPath], with: .automatic)
+            delegate?.reloadData?()
         default:
             break
         }
     }
     
-    func deleteItem(fromContextMenu cell: UITableViewCell) {
-        guard let delegate else { return }
-        guard let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
-        
+    func deleteItem(fromContextMenu indexPath: IndexPath) {
         switch collectionType {
         case .colorItems:
-            if let colorCollectionIndexPath {
-                let colorItem = colorItems[currentIndexPath.row]
-                colorItems.remove(at: currentIndexPath.row)
+            guard let delegate else { return }
+            if colorCollectionIndexPath != nil {
+                let colorItem = colorItems[indexPath.row]
+                colorItems.remove(at: indexPath.row)
                 delegate.deleteColorItem(colorItem)
-                colorCollectionHandler?.removeColor(currentIndexPath)
+                colorCollectionHandler?.removeColor(indexPath)
             }
         case .colorizationPaletteItems, .terrainPaletteItems:
-            guard let currentIndexPath = self.tableView.indexPath(for: cell) else { return }
-            if let fileName = data.item(for: currentIndexPath).string(forKey: "fileName"),
-               !fileName.isEmpty {
-                do {
-                    try ColorPaletteHelper.shared.deleteGradient(fileName)
-                    delegate.reloadData?()
-                } catch {
-                    print("Failed to delete color palette: \(fileName)")
+            guard let paletteItem = data.item(for: indexPath).obj(forKey: "palette") as? PaletteItemGradient, let paletteItems, GradientPaletteHelper.shared.deletePaletteItem(paletteItem) else { return }
+            paletteItems.removeObject(atIndexSync: UInt(indexPath.row))
+            data.removeRow(at: indexPath)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            if selectedPaletteItem?.id == paletteItem.id {
+                let paletteItemsArray = paletteItems.asArray().compactMap { $0 as? PaletteItemGradient }
+                selectedPaletteItem = GradientPaletteHelper.shared.getDefaultPaletteItem(category: paletteItem.properties.fileType.category) ?? paletteItemsArray.first
+                let selectedIndex = GradientPaletteHelper.shared.indexOfPaletteItem(selectedPaletteItem, items: paletteItemsArray)
+                if selectedIndex != NSNotFound {
+                    tableView.reloadRows(at: [IndexPath(row: selectedIndex, section: indexPath.section)], with: .automatic)
                 }
             }
+            delegate?.reloadData?()
         default:
             break
         }
@@ -984,8 +812,7 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
 extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
     
     func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
-        guard let delegate = delegate, let colorCollectionIndexPath else { return }
-        
+        guard let delegate, colorCollectionIndexPath != nil else { return }
         if isStartedNewColorAdding {
             isStartedNewColorAdding = false
             let newColorItem = delegate.addAndGetNewColorItem(viewController.selectedColor)
@@ -994,16 +821,17 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
             colorCollectionHandler?.addAndSelectColor(IndexPath(row: 0, section: 0), newItem: newColorItem)
             delegate.selectColorItem(newColorItem)
         } else {
-            var editingColor = colorItems[0]
-            if let editColorIndexPath {
-                editingColor = colorItems[editColorIndexPath.row]
-            }
-            
-            if editingColor.getHexColor() != viewController.selectedColor.toHexARGBString() {
-                
+            let editingIndexPath = editColorIndexPath ?? IndexPath(row: 0, section: 0)
+            guard editingIndexPath.row < colorItems.count else { return }
+            var editingColor = colorItems[editingIndexPath.row]
+            let colorInt = Int32(UIColor.toNumber(from: viewController.selectedColor.toHexARGBString()))
+            if editingColor.colorInt != colorInt {
                 delegate.changeColorItem(editingColor, withColor: viewController.selectedColor)
-                if let editColorIndexPath {
-                    colorCollectionHandler?.replaceOldColor(editColorIndexPath)
+                if let newColorItem = OsmAndApp.swiftInstance().paletteRepository.findPaletteItem(paletteId: editingColor.source.paletteId, itemId: editingColor.id) as? PaletteItemSolid {
+                    colorItems[editingIndexPath.row] = newColorItem
+                    selectedColorItem = newColorItem
+                    colorCollectionHandler?.replaceItem(newColorItem, at: editingIndexPath)
+                    editingColor = newColorItem
                 }
             }
             delegate.selectColorItem(editingColor)

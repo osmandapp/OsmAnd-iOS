@@ -116,8 +116,8 @@
 
     OAColorCollectionHandler *_colorCollectionHandler;
     OAGPXAppearanceCollection *_appearanceCollection;
-    NSMutableArray<OAColorItem *> *_sortedColorItems;
-    OAColorItem *_selectedColorItem;
+    NSMutableArray<OASPaletteItemSolid *> *_sortedColorItems;
+    OASPaletteItemSolid *_selectedColorItem;
     NSIndexPath *_editColorIndexPath;
     BOOL _isNewColorSelected;
     BOOL _needToScrollToSelectedColor;
@@ -329,9 +329,7 @@
         _selectedBackgroundIndex = 0;
     
     if (backgroundIcon)
-        return [OAFavoritesHelper getCompositeIcon:_selectedIconName
-                                    backgroundIcon:backgroundIcon
-                                             color:[_selectedColorItem getColor]];
+        return [OAFavoritesHelper getCompositeIcon:_selectedIconName backgroundIcon:backgroundIcon color:UIColorFromARGB(_selectedColorItem.colorInt)];
     else
         return nil;
 }
@@ -450,7 +448,7 @@
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
     _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-    _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+    _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);
     [_poiIconCollectionHandler setItemSizeWithSize:48];
     [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
     [_poiIconCollectionHandler setIconSizeWithSize:24];
@@ -704,7 +702,7 @@
             cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         cell.hostVC = self;
-        _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+        _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);
         [_poiIconCollectionHandler setCollectionView:cell.collectionView];
         [cell setCollectionHandler:_poiIconCollectionHandler];
         [_poiIconCollectionHandler updateTopButtonName];
@@ -735,7 +733,7 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             cell.valueLabel.hidden = NO;
-            cell.currentColor = _selectedColorItem.value;
+            cell.currentColor = _selectedColorItem.colorInt;
             cell.currentIcon = selectedIndex;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -1007,7 +1005,7 @@
         
         data.descr = self.desc ? self.desc : @"";
         data.address = self.address ? self.address : @"";
-        data.color = [_selectedColorItem getColor];
+        data.color = UIColorFromARGB(_selectedColorItem.colorInt);
         data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
         data.icon = _selectedIconName;
         [_poiIconCollectionHandler addIconToLastUsed:_selectedIconName];
@@ -1177,6 +1175,31 @@
     [self addGroupWithName:name iconName:iconName color:color backgroundIconName:backgroundIconName];
 }
 
+- (void)selectColorItem:(OASPaletteItemSolid *)colorItem
+{
+    // The child group editor applies its color when the group is saved.
+}
+
+- (OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color
+{
+    return [_appearanceCollection addNewSelectedColor:color];
+}
+
+- (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color
+{
+    [_appearanceCollection changeColor:colorItem newColor:color];
+}
+
+- (OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem
+{
+    return [_appearanceCollection duplicateColor:colorItem];
+}
+
+- (void)deleteColorItem:(OASPaletteItemSolid *)colorItem
+{
+    [_appearanceCollection deleteColor:colorItem];
+}
+
 - (void)addGroupWithName:(NSString *)name
                 iconName:(NSString *)iconName
                    color:(UIColor *)color
@@ -1340,7 +1363,10 @@
     {
         _isNewColorSelected = YES;
         _needToScrollToSelectedColor = YES;
-        _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
+        if ([selectedItem isKindOfClass:OASPaletteItemSolid.class])
+            _selectedColorItem = (OASPaletteItemSolid *)selectedItem;
+        else
+            _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
     }
     
     _wasChanged = YES;
@@ -1349,7 +1375,7 @@
     
     if (collectionView == [_colorCollectionHandler getCollectionView])
     {
-        _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+        _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);
         [[_poiIconCollectionHandler getCollectionView] reloadData];
         
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];

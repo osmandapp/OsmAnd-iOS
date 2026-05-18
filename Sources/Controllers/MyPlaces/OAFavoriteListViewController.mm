@@ -598,11 +598,12 @@ static UIViewController *parentController;
 
 - (UIMenu *)actionsMenu
 {
+    __weak __typeof(self) weakSelf = self;
     UIAction *importAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_import")
                                                  image:[[UIImage imageNamed:ACImageNameIcCustomImportOutlined] resizedMenuImage]
                                             identifier:nil
                                                handler:^(__kindof UIAction * _Nonnull action) {
-        [self onImportClicked];
+        [weakSelf onImportClicked];
     }];
     return [UIMenu menuWithTitle:@""
                            image:nil
@@ -876,7 +877,7 @@ static UIViewController *parentController;
 - (void)setEdit:(BOOL)isEdit
 {
     [self.tableView setEditing:isEdit animated:YES];
-    [_myPlacesDelegate setEditMode:isEdit];
+    [_myPlacesDelegate updateEditMode:isEdit];
 }
 
 - (IBAction)editButtonClicked:(id)sender
@@ -2113,7 +2114,7 @@ static UIViewController *parentController;
         _isFiltered = NO;
         [self.tableView reloadData];
     }
-    [_myPlacesDelegate setSegmentedControlVisibility:!_isSearchActive];
+    [_myPlacesDelegate updateSegmentedControlVisibility:!_isSearchActive];
 }
 
 @end

@@ -53,7 +53,7 @@ extension UIImage {
         return OAUtilities.resize(self, newSize: CGSize(width: navBarImageSize, height: navBarImageSize))?.withRenderingMode(.alwaysTemplate)
     }
     
-    @objc func resizedImage(with size: CGFloat) -> UIImage? {
+    @objc func resizedTemplateImage(with size: CGFloat) -> UIImage? {
         OAUtilities.resize(self, newSize: CGSize(width: size, height: size))?.withRenderingMode(.alwaysTemplate)
     }
 }

@@ -240,7 +240,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
             isSearchActive = false
             isFiltered = false
         }
-        myPlacesDelegate?.setSegmentedControlVisibility(!isSearchActive)
+        myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         generateData()
         tableView.reloadData()
     }

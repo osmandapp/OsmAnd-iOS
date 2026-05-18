@@ -89,8 +89,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var routingHelper: OARoutingHelper
     private var gpxDB: OAGPXDatabase
     private var rootVC: OARootViewController
-    private var importHelper: OAGPXImportUIHelper
-    private var dateFormatter: DateFormatter
+    private lazy var importHelper: OAGPXImportUIHelper = OAGPXImportUIHelper(hostViewController: self)
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+        return dateFormatter
+    }()
     private var smartFolderHelper: SmartFolderHelper
     
     private var observers: [OAAutoObserverProxy] = []
@@ -131,14 +136,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         routingHelper = OARoutingHelper.sharedInstance()
         gpxDB = OAGPXDatabase.sharedDb()
         smartFolderHelper = SharedLibSmartFolderHelper.shared
-        
-        dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        
-        importHelper = OAGPXImportUIHelper()
         super.init(coder: coder)
-        importHelper = OAGPXImportUIHelper(hostViewController: self)
     }
     
     init(frame: CGRect) {
@@ -151,14 +149,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         routingHelper = OARoutingHelper.sharedInstance()
         gpxDB = OAGPXDatabase.sharedDb()
         smartFolderHelper = SharedLibSmartFolderHelper.shared
-        
-        dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        
-        importHelper = OAGPXImportUIHelper()
         super.init(style: .insetGrouped)
-        importHelper = OAGPXImportUIHelper(hostViewController: self)
         view.frame = frame
     }
     
@@ -899,7 +890,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func setEdit(_ edit: Bool) {
         tableView.setEditing(edit, animated: true)
-        myPlacesDelegate?.setEditMode(edit)
+        myPlacesDelegate?.updateEditMode(edit)
     }
     
     @objc private func onNavbarImportButtonClicked() {
@@ -2343,7 +2334,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             isFiltersInitialized = false
         }
         
-        myPlacesDelegate?.setSegmentedControlVisibility(!isSearchActive)
+        myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         updateFilterButtonVisibility(filterIsActive: isSearchActive)
         baseFiltersResult = baseFilters?.performFiltering()
         updateSortButtonAndMenu()

@@ -9,8 +9,8 @@
 @objc
 protocol MyPlacesDelegate: AnyObject {
     func showBackButton(_ show: Bool)
-    func setSegmentedControlVisibility(_ show: Bool)
-    func setEditMode(_ edit: Bool)
+    func updateSegmentedControlVisibility(_ isVisible: Bool)
+    func updateEditMode(_ edit: Bool)
 }
 
 final class MyPlacesContainerViewController: OACompoundViewController {
@@ -189,7 +189,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         segmentControl.removeAllSegments()
         
         for (index, tab) in availableTabs.enumerated() {
-            segmentControl.insertSegment(with: tab.image.resizedImage(with: segmentedControlIconSize),
+            segmentControl.insertSegment(with: tab.image.resizedTemplateImage(with: segmentedControlIconSize),
                                          at: index,
                                          animated: false)
         }
@@ -253,15 +253,15 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         navigationItem.hidesBackButton = !show
     }
     
-    func setSegmentedControlVisibility(_ show: Bool) {
+    func updateSegmentedControlVisibility(_ show: Bool) {
         guard let pageViewController else { return }
         pageViewController.delegate = show ? self : nil
         pageViewController.dataSource = show ? self : nil
         segmentContainerView.isHidden = !show
     }
     
-    func setEditMode(_ edit: Bool) {
-        setSegmentedControlVisibility(!edit)
+    func updateEditMode(_ edit: Bool) {
+        updateSegmentedControlVisibility(!edit)
         let searchController = edit ? nil : searchController
         navigationController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController

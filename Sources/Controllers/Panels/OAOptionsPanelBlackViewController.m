@@ -385,8 +385,7 @@
 - (IBAction) myDataButtonClicked:(id)sender
 {
     [OAAnalyticsHelper logEvent:@"my_places_open"];
-    MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
-    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+    [[OARootViewController instance].navigationController pushViewController:[[MyPlacesContainerViewController alloc] init] animated:YES];
 }
 
 - (IBAction) myDestinationsButtonClicked:(id)sender

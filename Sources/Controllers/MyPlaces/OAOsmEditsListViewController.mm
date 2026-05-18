@@ -198,7 +198,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 - (void)setEdit:(BOOL)isEdit
 {
     [self.tableView setEditing:isEdit animated:YES];
-    [_myPlacesDelegate setEditMode:isEdit];
+    [_myPlacesDelegate updateEditMode:isEdit];
 }
 
 -(NSString *)getDescription:(OAOsmPoint *)point
@@ -564,7 +564,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [self setupView];
         [self.tableView reloadData];
     }
-    [_myPlacesDelegate setSegmentedControlVisibility:!_isSearchActive];
+    [_myPlacesDelegate updateSegmentedControlVisibility:!_isSearchActive];
 }
 
 #pragma mark - UIScrollViewDelegate

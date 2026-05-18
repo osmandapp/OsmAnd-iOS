@@ -2987,18 +2987,18 @@
     
     if (isLandscaped)
     {
-        CGFloat mapAreaWidth = (viewSize.width - self.scrollableView.frame.size.width) / 2 + self.scrollableView.frame.size.width;
+        CGFloat mapTargetX = (viewSize.width - self.scrollableView.frame.size.width) / 2 + self.scrollableView.frame.size.width;
         [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
-                                                                    (int)(mapAreaWidth * scale),
+                                                                    (int)(mapTargetX * scale),
                                                                     (int)(viewSize.height / 2 * scale))
                                           location31:targetPointI];
     }
     else
     {
-        CGFloat mapAreaHeight = (viewSize.height - self.scrollableView.frame.size.height) / 2;
+        CGFloat mapTargetY = (viewSize.height - self.scrollableView.frame.size.height) / 2;
         [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
                                                                     (int)(viewSize.width / 2 * scale),
-                                                                    (int)(mapAreaHeight * scale))
+                                                                    (int)(mapTargetY * scale))
                                           location31:targetPointI];
     }
     

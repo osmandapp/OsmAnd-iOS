@@ -10,17 +10,21 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OAFavoriteListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+@protocol MyPlacesDelegate;
 
-@property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;
+@interface OAFavoriteListViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *groupButton;
 @property (weak, nonatomic) IBOutlet UIButton *colorButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
+@property (nonatomic, weak) id<MyPlacesDelegate> myPlacesDelegate;
+
 @property CGFloat azimuthDirection;
 
+- (instancetype)initWithFrame:(CGRect)frame;
 + (BOOL)popToParent;
 
 @end

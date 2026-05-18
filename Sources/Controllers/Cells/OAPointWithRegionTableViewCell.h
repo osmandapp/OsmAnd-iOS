@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *directionIconView;
 @property (weak, nonatomic) IBOutlet UILabel *directionTextView;
 @property (weak, nonatomic) IBOutlet UIView *locationSeparatorView;
+@property (weak, nonatomic) IBOutlet UIView *showWaypointView;
+@property (weak, nonatomic) IBOutlet UIImageView *showWaypointImageView;
+@property (weak, nonatomic) IBOutlet UIButton *showWaypointButton;
 @property (weak, nonatomic) IBOutlet UILabel *regionTextView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleWithLocationConstraint;
@@ -29,7 +32,10 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionWithDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerTrailingConstraint;
+
 - (void)setDirection:(NSString *)direction;
 - (void)setRegion:(NSString *)region;
+- (void)setShowWaypointButtonVisiblity:(BOOL)show;
 
 @end

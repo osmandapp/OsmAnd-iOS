@@ -73,6 +73,7 @@
 #import "OAFavoriteItem.h"
 #import "OAEditGroupViewController.h"
 #import "OAButton.h"
+#import "OANativeUtilities.h"
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -2486,6 +2487,13 @@
             [cell.iconView setImage:cellData.leftIcon];
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
+            cell.showWaypointImageView.image = [UIImage templateImageNamed:ACImageNameIcCustomLocationMarkerOutlined];
+            cell.showWaypointImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.showWaypointButton.accessibilityLabel = [NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), cellData.title];
+            [cell.showWaypointButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+            cell.showWaypointButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.showWaypointButton addTarget:self action:@selector(showWaypoint:) forControlEvents:UIControlEventTouchUpInside];
+            [cell setShowWaypointButtonVisiblity:YES];
 
             cell.directionIconView.transform =
                     CGAffineTransformMakeRotation([cellData.values[@"float_value_direction"] floatValue]);
@@ -2962,6 +2970,41 @@
     {
         [_uiBuilder onButtonPressed:cellData sourceView:button];
     }
+}
+
+- (BOOL)showWaypoint:(id)sender
+{
+    UIButton *btn = (UIButton *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag & 0x3FF inSection:btn.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    OAGpxWptItem *gpxWptItem = cellData.values[@"waypoint"];
+    double lat = gpxWptItem.point.lat;
+    double lon = gpxWptItem.point.lon;
+    CGFloat scale = self.mapViewController.view.contentScaleFactor;
+    CGSize viewSize = self.view.bounds.size;
+    BOOL isLandscaped = [OAUtilities isLandscapeIpadAware];
+    auto targetPointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    
+    if (isLandscaped)
+    {
+        CGFloat mapTargetX = (viewSize.width - self.scrollableView.frame.size.width) / 2 + self.scrollableView.frame.size.width;
+        [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
+                                                                    (int)(mapTargetX * scale),
+                                                                    (int)(viewSize.height / 2 * scale))
+                                          location31:targetPointI];
+    }
+    else
+    {
+        CGFloat mapTargetY = (viewSize.height - self.scrollableView.frame.size.height) / 2;
+        [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
+                                                                    (int)(viewSize.width / 2 * scale),
+                                                                    (int)(mapTargetY * scale))
+                                          location31:targetPointI];
+    }
+    
+    [self.mapPanelViewController showWaypointOnMap:gpxWptItem latitude:lat longitude:lon];
+    
+    return NO;
 }
 
 - (void)segmentChanged:(id)sender

@@ -62,6 +62,7 @@
 #include <OsmAndCore/Search/CommonWords.h>
 #include <GeographicLib/GeoCoords.hpp>
 #include <OsmAndCore/CollatorStringMatcher.h>
+#include <OsmAndCore/SearchAlgorithms.h>
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
 
@@ -317,56 +318,56 @@
     return NO;
 }
 
-- (NSSet<NSString *> *)splitAddressSearchNames:(NSString *)name
-{
-    NSInteger prev = -1;
-    NSMutableSet<NSString *> *namesToAdd = [NSMutableSet set];
-    NSUInteger length = [name length];
-
-    for (NSUInteger i = 0; i <= length; i++)
-    {
-        unichar currentChar = (i < length) ? [name characterAtIndex:i] : 0;
-        BOOL isHyphenNearNumber = NO;
-        if (i != length && currentChar == '-')
-        {
-            BOOL nextIsDigit = (i + 1 < length) && isdigit([name characterAtIndex:i + 1]);
-            BOOL prevIsDigit = (i > 0) && isdigit([name characterAtIndex:i - 1]);
-            isHyphenNearNumber = nextIsDigit || prevIsDigit;
-        }
-        BOOL isDelimiter = NO;
-        
-        if (i == length)
-        {
-            isDelimiter = YES;
-        }
-        else
-        {
-            if (!isalpha(currentChar) && !isdigit(currentChar) && currentChar != '\'' && !isHyphenNearNumber)
-            {
-                isDelimiter = YES;
-            }
-        }
-        
-        if (isDelimiter)
-        {
-            if (prev != -1)
-            {
-                NSRange substringRange = NSMakeRange(prev, i - prev);
-                NSString *substr = [name substringWithRange:substringRange];
-                [namesToAdd addObject:[substr lowercaseString]];
-                prev = -1;
-            }
-        }
-        else
-        {
-            if (prev == -1)
-            {
-                prev = i;
-            }
-        }
-    }
-    return namesToAdd;
-}
+//- (NSSet<NSString *> *)splitAddressSearchNames:(NSString *)name
+//{
+//    NSInteger prev = -1;
+//    NSMutableSet<NSString *> *namesToAdd = [NSMutableSet set];
+//    NSUInteger length = [name length];
+//
+//    for (NSUInteger i = 0; i <= length; i++)
+//    {
+//        unichar currentChar = (i < length) ? [name characterAtIndex:i] : 0;
+//        BOOL isHyphenNearNumber = NO;
+//        if (i != length && currentChar == '-')
+//        {
+//            BOOL nextIsDigit = (i + 1 < length) && isdigit([name characterAtIndex:i + 1]);
+//            BOOL prevIsDigit = (i > 0) && isdigit([name characterAtIndex:i - 1]);
+//            isHyphenNearNumber = nextIsDigit || prevIsDigit;
+//        }
+//        BOOL isDelimiter = NO;
+//        
+//        if (i == length)
+//        {
+//            isDelimiter = YES;
+//        }
+//        else
+//        {
+//            if (!isalpha(currentChar) && !isdigit(currentChar) && currentChar != '\'' && !isHyphenNearNumber)
+//            {
+//                isDelimiter = YES;
+//            }
+//        }
+//        
+//        if (isDelimiter)
+//        {
+//            if (prev != -1)
+//            {
+//                NSRange substringRange = NSMakeRange(prev, i - prev);
+//                NSString *substr = [name substringWithRange:substringRange];
+//                [namesToAdd addObject:[substr lowercaseString]];
+//                prev = -1;
+//            }
+//        }
+//        else
+//        {
+//            if (prev == -1)
+//            {
+//                prev = i;
+//            }
+//        }
+//    }
+//    return namesToAdd;
+//}
 
 @end
 
@@ -630,21 +631,23 @@
     }
 }
 
+- (BOOL) hasNonNumericLeftUnknownSearchWord:(OASearchResult *)res
+{
+    for (NSString * leftUnknownSearchWord in [res filterUnknownSearchWord:nil])
+    {
+        BOOL isNumber2Letters = OsmAnd::CommonWords::isNumber2Letters(QString::fromNSString(leftUnknownSearchWord));
+        if (!isNumber2Letters)
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (void) searchByName:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:EOAObjectTypePostcode exclusive:YES])
     {
-        NSString *wordToSearch = [phrase getUnknownWordToSearch];
-
-        if (wordToSearch.length == 0)
-            return;
-        
-        NSSet<NSString *> * wordToSearchSplit = [self splitAddressSearchNames:wordToSearch];
-        if (wordToSearchSplit.count > 1)
-        {
-            wordToSearch = [phrase selectMainUnknownWordToSearch:[NSMutableArray arrayWithArray:[wordToSearchSplit allObjects]]];
-        }
-
         OsmAndAppInstance app = [OsmAndApp instance];
 
         QString lang = QString::fromNSString([[phrase getSettings] getLang]);
@@ -682,7 +685,14 @@
                                                       }));
 
         const std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>(new OsmAnd::AddressesByNameSearch::Criteria);
-        
+
+        NSString *wordToSearch = [phrase getUnknownWordToSearch];
+        QString qWordToSearch = QString::fromNSString(wordToSearch);
+        QStringList wordToSearchSplit = OsmAnd::SearchAlgorithms::splitAndNormalize(qWordToSearch);
+        if (wordToSearchSplit.size() > 1)
+        {
+            wordToSearch = [phrase selectMainUnknownWordToSearch:[OANativeUtilities QListOfStringsToNSArray:wordToSearchSplit]];
+        }
         searchCriteria->name = QString::fromNSString([wordToSearch lowerCase]);
         searchCriteria->includeStreets = true;
         searchCriteria->matcherMode = [phrase isMainUnknownSearchWordComplete] ? OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE : OsmAnd::StringMatcherMode::CHECK_STARTS_FROM_SPACE;
@@ -879,7 +889,7 @@
                         {
                             newParentSearchResult = cityResult;
                         }
-                        else
+                        else if ([self hasNonNumericLeftUnknownSearchWord:res])
                         {
                             QList<std::shared_ptr<const OsmAnd::StreetGroup>> cacheResArray;
                             QuadRect * bbox = [OASearchPhrase calculateBbox:@(1000) location:res.location];

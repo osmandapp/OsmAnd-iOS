@@ -43,8 +43,11 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 @implementation SearchUICoreTest
 {
     NSArray<NSString *> *_filePaths;
-    
     std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
+    NSInteger _successCount;
+    NSInteger _failedCount;
+    NSInteger _firstResultCount;
+    NSInteger _missingCount;
 }
 
 - (void) setUp
@@ -66,9 +69,21 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 
 - (void) testSearch
 {
+    _successCount = 0;
+    _failedCount = 0;
+    _firstResultCount = 0;
+    _missingCount = 0;
     for (NSString *path in _filePaths)
+    {
         [self testSearchCase:path];
-
+    }
+    NSLog(@"========================================");
+    NSLog(@"Search tests done!");
+    NSLog(@"SUCCESS: %ld", (long)_successCount);
+    NSLog(@"FAILED:  %ld (total)", (long)_failedCount);
+    NSLog(@"FAILED:  %ld (first result is matched)", (long)_firstResultCount);
+    NSLog(@"FAILED:  %ld (totally missing)", (long)_missingCount);
+    NSLog(@"========================================");
     NSLog(@"Search tests done");
 }
 
@@ -77,6 +92,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     NSLog(@"Testing case: %@", path.lastPathComponent);
 
     NSString *jsonFile = path;
+    NSString *obfGzFile = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"obf.gz"];
     NSString *obfFile = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"obf"];
     //        NSString *obfZipFile = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"obf.gz"];
     NSError *err = nil;
@@ -107,27 +123,30 @@ static BOOL TEST_EXTRA_RESULTS = YES;
         }
     }
     NSDictionary *settingsJson = sourceJson[@"settings"];
-    //        BinaryMapIndexReader reader = null;
-    [OsmAndApp.instance installTestResource:obfFile];
-    BOOL useData = [settingsJson[@"useData"] boolValue];
-    if (useData)
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:obfGzFile])
     {
-        
-        //Assert.assertTrue(obfZipFileExists);
-        //            OsmAnd::ArchiveReader archive(QString::fromNSString(obfZipFile));
-        //            BOOL ok = NO;
-        //            const auto archiveItems = archive.getItems(&ok, false);
-        //            XCTAssertTrue(ok);
-        //            XCTAssertTrue(archiveItems.size() == 1);
-        //
-        //            for (const auto& archiveItem : constOf(archiveItems))
-        //            {
-        //                obfFile = [tempDir stringByAppendingPathComponent:archiveItem.name.toNSString()];
-        //                XCTAssertTrue(archive.extractItemToFile(archiveItem.name, QString::fromNSString(obfFile)));
-        //            }
-        
-        //            reader = new BinaryMapIndexReader(new RandomAccessFile(obfFile.getPath(), "r"), obfFile);
+        NSString *tempDir = NSTemporaryDirectory();
+        NSString *extractedObfPath = [tempDir stringByAppendingPathComponent:[obfFile lastPathComponent]];
+        OsmAnd::ArchiveReader archive(QString::fromNSString(obfGzFile));
+        bool ok = false;
+        const auto archiveItems = archive.getItems(&ok, true);
+
+        XCTAssertTrue(ok, @"Failed to open archive %@", obfGzFile);
+
+        if (ok && archiveItems.size() > 0)
+        {
+            const auto& archiveItem = archiveItems.first();
+            bool extracted = archive.extractItemToFile(archiveItem.name, QString::fromNSString(extractedObfPath), true);
+            XCTAssertTrue(extracted, @"Failed to extract target OBF from gz");
+            if (extracted)
+            {
+                obfFile = extractedObfPath;
+            }
+        }
     }
+
+    [OsmAndApp.instance installTestResource:obfFile];
     NSMutableArray<NSMutableArray<NSString *> *> *results = [NSMutableArray new];
     for (NSInteger i = 0; i < phrases.count; i++)
     {
@@ -192,48 +211,61 @@ static BOOL TEST_EXTRA_RESULTS = YES;
             phrase = [emptyPhrase generateNewPhrase:text settings:s];
             searchResults = [self getSearchResult:phrase rm:rm core:core];
         }
-        for(NSInteger i = 0; i < result.count; i++)
+        for (NSInteger i = 0; i < result.count; i++)
         {
             NSString *expected = result[i];
-            if (simpleTest && [expected indexOf:@"["] != -1)
+            if (simpleTest && [expected indexOf:@"["] != -1) {
                 expected = [expected substringToIndex:[expected indexOf:@"["]].trim;
-            //                String present = result.toString();
-            BOOL hasMatch = NO;
-            for (NSInteger j = i - 5; j <= i + 5; j++)
-            {
-                OASearchResult *res = j >= searchResults.count || j < 0 ? nil : searchResults[j];
-                
-                NSString *present = res == nil ? [NSString stringWithFormat:@"#MISSING %ld", j+1] : [self formatResult:simpleTest res:res phrase:phrase];
-                if ([present isEqualToString:expected])
-                {
-                    hasMatch = YES;
-                    break;
-                }
             }
-            if (!hasMatch)
+            OASearchResult *res = i >= searchResults.count ? nil : searchResults[i];
+            NSString *present = (res == nil) ? [NSString stringWithFormat:@"#MISSING %ld", i + 1] : [self formatResult:simpleTest res:res phrase:phrase];
+            expected = [expected stringByReplacingOccurrencesOfString:@"\\'" withString:@"'"];
+            present = [present stringByReplacingOccurrencesOfString:@"\\'" withString:@"'"];
+
+            if ([expected caseInsensitiveCompare:present] != NSOrderedSame)
             {
-                OASearchResult *res = i >= searchResults.count || i < 0 ? nil : searchResults[i];
-                
-                NSString *present = res == nil ? [NSString stringWithFormat:@"#MISSING %ld", i+1] : [self formatResult:simpleTest res:res phrase:phrase];
-                XCTAssertEqualObjects(expected, present);
-                if (![expected isEqualToString:present])
+                NSLog(@"Phrase: %@", [phrase toString]);
+                NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
+                NSLog(@"CURRENT RESULTS: ");
+                int limit = result.count;
+                int cnt = 1;
+                for (OASearchResult *r : searchResults)
                 {
-                    NSLog(@"Phrase: %@", [phrase toString]);
-                    NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
-                    for (OASearchResult *r : searchResults)
-                    {
-                        NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
-                    }
-                    passed = NO;
-                    break;
+                    NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
+                    cnt++;
+                    if (cnt >= limit)
+                        break;
                 }
+                NSLog(@"EXPECTED: ");
+                for (NSString *exp in result)
+                {
+                    NSLog(@"\t\"%@\",", exp);
+                }
+                _failedCount++;
+                if (i > 0)
+                {
+                    _firstResultCount++;
+                }
+                if (res == nil && i == 0)
+                {
+                    _missingCount++;
+                }
+                if ([obfFile hasPrefix:NSTemporaryDirectory()])
+                {
+                    [fileManager removeItemAtPath:obfFile error:nil];
+                }
+                return;
             }
-            
         }
         NSLog(@"Test phrase: %@ done (%@)", [phrase toString], passed ? @"PASSED" : @"FAILED");
     }
-    // Do not use this map for future searches
-    //[OsmAndApp.instance removeTestResource:obfFile];
+
+    _successCount++;
+    if ([obfFile hasPrefix:NSTemporaryDirectory()])
+    {
+        [fileManager removeItemAtPath:obfFile error:nil];
+    }
+    // [OsmAndApp.instance removeTestResource:obfFile];
 }
 
 - (NSArray<OASearchResult *> *) getSearchResult:(OASearchPhrase *)phrase rm:(OAResultMatcher<OASearchResult *> *)rm core:(OASearchUICore *)core

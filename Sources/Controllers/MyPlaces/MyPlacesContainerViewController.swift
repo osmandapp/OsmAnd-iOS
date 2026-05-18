@@ -112,13 +112,17 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageViewController?.dataSource = self
         pageViewController?.delegate = self
-        let frame = CGRect(x: 0, y: 0, width: contentView.frame.size.width, height: contentView.frame.size.height)
-        pageViewController?.view.frame = frame
-        pageViewController?.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         if let pageViewController {
             addChild(pageViewController)
             contentView.addSubview(pageViewController.view)
             pageViewController.didMove(toParent: self)
+            pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                contentView.topAnchor.constraint(equalTo: pageViewController.view.topAnchor),
+                contentView.leadingAnchor.constraint(equalTo: pageViewController.view.leadingAnchor),
+                contentView.trailingAnchor.constraint(equalTo: pageViewController.view.trailingAnchor),
+                contentView.bottomAnchor.constraint(equalTo: pageViewController.view.bottomAnchor)
+            ])
         }
     }
     

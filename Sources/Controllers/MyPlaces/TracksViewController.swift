@@ -89,6 +89,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var routingHelper: OARoutingHelper
     private var gpxDB: OAGPXDatabase
     private var rootVC: OARootViewController
+    private var smartFolderHelper: SmartFolderHelper
+    private var observers: [OAAutoObserverProxy] = []
+    
     private lazy var importHelper: OAGPXImportUIHelper = OAGPXImportUIHelper(hostViewController: self)
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -96,9 +99,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         dateFormatter.timeStyle = .none
         return dateFormatter
     }()
-    private var smartFolderHelper: SmartFolderHelper
-    
-    private var observers: [OAAutoObserverProxy] = []
     
     private lazy var filterButton: UIButton = {
         var config = UIButton.Configuration.plain()

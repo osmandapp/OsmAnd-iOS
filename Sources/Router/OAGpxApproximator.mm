@@ -18,6 +18,16 @@
 #include <routePlannerFrontEnd.h>
 #include <gpxRouteApproximation.h>
 
+static BOOL OAIsValidRoutingEnvironment(OARoutingEnvironment *env)
+{
+	return env && env.router && env.ctx && env.ctx->config;
+}
+
+static BOOL OAHasValidProgress(const SHARED_PTR<GpxRouteApproximation>& gctx)
+{
+	return gctx != nullptr && gctx->ctx != nullptr && gctx->ctx->progress != nullptr;
+}
+
 @interface OAGpxApproximator ()
 
 @property (nonatomic) NSThread *approximationTask;
@@ -81,6 +91,15 @@
 	@synchronized (_approximator)
 	{
 		_approximator.approximationTask = self;
+	}
+	if (!OAIsValidRoutingEnvironment(_env) || !OAHasValidProgress(_gctx) || _points.empty())
+	{
+		[_resultMatcher publish:nil];
+		@synchronized (_approximator)
+		{
+			_approximator.approximationTask = nil;
+		}
+		return;
 	}
 	[OARoutingHelper.sharedInstance calculateGpxApproximation:_env gctx:_gctx points:_points resultMatcher:_resultMatcher];
 	@synchronized (_approximator)
@@ -147,7 +166,13 @@
 
 - (SHARED_PTR<GpxRouteApproximation>) getNewGpxApproximationContext
 {
+	if (!OAIsValidRoutingEnvironment(_env))
+		return nullptr;
+
 	const auto newContext = std::make_shared<GpxRouteApproximation>(_env.ctx.get());
+	if (newContext->ctx == nullptr || newContext->ctx->config == nullptr)
+		return nullptr;
+
 	newContext->ctx->progress = std::make_shared<RouteCalculationProgress>();
 	newContext->ctx->config->minPointApproximation = _pointApproximation;
 	return newContext;
@@ -156,7 +181,13 @@
 - (std::vector<SHARED_PTR<GpxPoint>>) getPoints
 {
 	if (_points.empty())
-		_points = [_routingHelper generateGpxPoints:_env gctx:[self getNewGpxApproximationContext] locationsHolder:_locationsHolder];
+	{
+		auto gctx = [self getNewGpxApproximationContext];
+		if (gctx == nullptr)
+			return {};
+
+		_points = [_routingHelper generateGpxPoints:_env gctx:gctx locationsHolder:_locationsHolder];
+	}
 	vector<SHARED_PTR<GpxPoint>> points(_points.size());
 	for (int i = 0; i < _points.size(); i++)
 		points[i] = make_shared<GpxPoint>(_points[i]);
@@ -174,24 +205,39 @@
 
 - (BOOL) isCancelled
 {
-	return _gctx != nullptr && _gctx->ctx->progress->isCancelled();
+	return OAHasValidProgress(_gctx) && _gctx->ctx->progress->isCancelled();
 }
 
 - (void) cancelApproximation
 {
-	if (_gctx != nullptr)
+	if (OAHasValidProgress(_gctx))
 		_gctx->ctx->progress->cancelled = true;
 }
 
 - (void) calculateGpxApproximation:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
-	if (_gctx != nullptr)
+	if (OAHasValidProgress(_gctx))
 		_gctx->ctx->progress->cancelled = true;
 	auto gctx = [self getNewGpxApproximationContext];
+	if (gctx == nullptr)
+	{
+		_gctx = nullptr;
+		[resultMatcher publish:nil];
+		return;
+	}
+
+	std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
+	if (points.empty())
+	{
+		_gctx = nullptr;
+		[resultMatcher publish:nil];
+		return;
+	}
+
 	_gctx = gctx;
 	[self startProgress];
 	[self updateProgress:gctx];
-	OAApproximationTask *task = [[OAApproximationTask alloc] initWithApproximator:self env:_env gctx:_gctx points:self.getPoints resultMatcher:resultMatcher];
+	OAApproximationTask *task = [[OAApproximationTask alloc] initWithApproximator:self env:_env gctx:_gctx points:points resultMatcher:resultMatcher];
 	task.previousTask = _approximationTask;
 	[task start];
 }
@@ -200,7 +246,19 @@
 {
     @try {
         auto gctx = [self getNewGpxApproximationContext];
+        if (gctx == nullptr)
+        {
+            [resultMatcher publish:nil];
+            return;
+        }
+
         std::vector<SHARED_PTR<GpxPoint>> points = [self getPoints];
+        if (points.empty())
+        {
+            [resultMatcher publish:nil];
+            return;
+        }
+
         [_routingHelper calculateGpxApproximation:_env gctx:gctx points:points resultMatcher:resultMatcher];
     } @catch (NSException *exception) {
         [resultMatcher publish:nil];
@@ -224,11 +282,17 @@
 
 - (void) updateProgress:(SHARED_PTR<GpxRouteApproximation>)gctx
 {
+	if (!OAHasValidProgress(gctx))
+		return;
+
 	if (self.progressDelegate != nil)
 	{
 		double delayInSeconds = 0.3;
 		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+			if (!OAHasValidProgress(gctx))
+				return;
+
             // + UI Thread
 			const auto calculationProgress = gctx->ctx->progress;
 			if (!_approximationTask && _gctx == gctx)

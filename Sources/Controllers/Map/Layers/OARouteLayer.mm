@@ -366,9 +366,35 @@ struct DrawPathData
                      walk:(BOOL)walk
                      sync:(BOOL)sync
 {
-    int __block lineId;
+    int __block lineId = 0;
+    CGFloat lineWidth = [self getLineWidth];
+    UIColor *color = _routeLineColor == kDefaultRouteLineDayColor || _routeLineColor == kDefaultRouteLineNightColor
+        ? UIColorFromARGB(_routeLineColor)
+        : UIColorFromRGB(_routeLineColor);
+    OsmAnd::ColorARGB lineColor = walk ? OsmAnd::ColorARGB(0) : [color toColorARGB];
+    sk_sp<SkImage> walkIconBitmap = nullptr;
+    sk_sp<SkImage> iconBitmap = nullptr;
+    sk_sp<SkImage> specialIconBitmap = nullptr;
+
+    if (walk)
+    {
+        OsmAnd::ColorARGB bitmapColor([self getWalkDefaultColor]);
+        walkIconBitmap = [self walkBitmapWithColor:bitmapColor lineWidth:lineWidth];
+    }
+    else
+    {
+        NSNumber *colorVal = [self getParamFromAttr:@"color"];
+        BOOL hasStyleColor = (colorVal && colorVal.intValue == _routeLineColor)
+            || _routeLineColor == kDefaultRouteLineDayColor
+            || _routeLineColor == kDefaultRouteLineNightColor;
+
+        iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
+                                  fileName:@"map_direction_arrow"];
+        specialIconBitmap = [self specialBitmapWithColor:lineColor];
+    }
+
     void (^drawRouteSegment)(void) = ^{
-        _lineWidth = [self getLineWidth];
+        _lineWidth = lineWidth;
         int baseOrder = self.baseOrder;
         lineId = _collection->getLinesCount() + 1;
         OsmAnd::VectorLineBuilder builder;
@@ -376,24 +402,16 @@ struct DrawPathData
             .setIsHidden(points.size() < 2)
             .setLineId(lineId)
             //.setLineWidth(_lineWidth)
-            .setLineWidth(walk ? 0.0 : _lineWidth)
+            .setLineWidth(walk ? 0.0 : lineWidth)
             .setPoints(points);
         
         // Add outline for colorized lines
         if (!colors.isEmpty())
-            builder.setOutlineWidth(_lineWidth + kOutlineWidth)
+            builder.setOutlineWidth(lineWidth + kOutlineWidth)
                 .setOutlineColor(kOutlineColor);
-        
-        UIColor *color = _routeLineColor == kDefaultRouteLineDayColor || _routeLineColor == kDefaultRouteLineNightColor
-            ? UIColorFromARGB(_routeLineColor)
-            : UIColorFromRGB(_routeLineColor);
-        
-        OsmAnd::ColorARGB lineColor = walk ? OsmAnd::ColorARGB(0) : [color toColorARGB];
-        
+
         if (walk)
         {
-            OsmAnd::ColorARGB bitmapColor([self getWalkDefaultColor]);
-            auto walkIconBitmap = [self walkBitmapWithColor:bitmapColor lineWidth:_lineWidth];
             if (walkIconBitmap)
             {
                 builder.setPathIcon(OsmAnd::SingleSkImage(walkIconBitmap))
@@ -403,20 +421,12 @@ struct DrawPathData
         }
         else
         {
-            NSNumber *colorVal = [self getParamFromAttr:@"color"];
-            BOOL hasStyleColor = (colorVal && colorVal.intValue == _routeLineColor)
-                || _routeLineColor == kDefaultRouteLineDayColor
-                || _routeLineColor == kDefaultRouteLineNightColor;
-            
-            auto iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                                          fileName:@"map_direction_arrow"];
             if (iconBitmap)
             {
                 builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
                     .setPathIconStep(iconBitmap->height() * kPathIconStepCoef)
                     .setShouldShowArrows(true);
             }
-            auto specialIconBitmap = [self specialBitmapWithColor:lineColor];
             if (specialIconBitmap)
             {
                 builder.setSpecialPathIcon(OsmAnd::SingleSkImage(specialIconBitmap))

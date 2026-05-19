@@ -826,17 +826,21 @@ extension ItemsCollectionViewController: UIColorPickerViewControllerDelegate {
             var editingColor = colorItems[editingIndexPath.row]
             let colorInt = Int32(UIColor.toNumber(from: viewController.selectedColor.toHexARGBString()))
             if editingColor.colorInt != colorInt {
-                delegate.changeColorItem(editingColor, withColor: viewController.selectedColor)
-                if let newColorItem = OsmAndApp.swiftInstance().paletteRepository.findPaletteItem(paletteId: editingColor.source.paletteId, itemId: editingColor.id) as? PaletteItemSolid {
+                if let colorCollectionHandler {
+                    colorCollectionHandler.changeColorItem(editingColor, with: viewController.selectedColor)
+                } else {
+                    delegate.changeColorItem(editingColor, withColor: viewController.selectedColor)
+                }
+                if let data = colorCollectionHandler?.getData() as? [[PaletteItemSolid]], editingIndexPath.section < data.count, editingIndexPath.row < data[editingIndexPath.section].count {
+                    let newColorItem = data[editingIndexPath.section][editingIndexPath.row]
                     colorItems[editingIndexPath.row] = newColorItem
                     selectedColorItem = newColorItem
-                    colorCollectionHandler?.replaceItem(newColorItem, at: editingIndexPath)
                     editingColor = newColorItem
                 }
             }
+
             delegate.selectColorItem(editingColor)
         }
-        tableView.reloadData()
     }
 }
 

@@ -35,6 +35,7 @@
 - (void)setupDefaultCategory;
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OASPaletteItemSolid *)newItem;
 - (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OASPaletteItemSolid *)newItem;
+- (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color;
 - (void)removeColor:(NSIndexPath *)indexPath;
 - (void)updateHostCellIfNeeded;
 

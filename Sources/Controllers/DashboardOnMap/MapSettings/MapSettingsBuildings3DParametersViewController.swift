@@ -203,7 +203,6 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
             currentAlpha = baseAlpha
         case .color:
             guard let plugin else { return }
-            sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
             isNightColorMode = settings.nightMode
             baseBuildings3DColorStyle = plugin.get3DBuildingsColorStyle()
             currentBuildings3DColorStyle = baseBuildings3DColorStyle
@@ -212,6 +211,7 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
             currentDayColorItem = baseDayColorItem
             baseNightColorItem = appearanceCollection.getColorItem(withValue: plugin.buildings3dCustomNightColorPref.get()) ?? defaultColorItem
             currentNightColorItem = baseNightColorItem
+            sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
             NotificationCenter.default.addObserver(self, selector: #selector(productPurchased(_:)), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(productsRestored(_:)), name: Notification.Name(NSNotification.Name.OAIAPProductsRestored.rawValue), object: nil)
         }
@@ -428,9 +428,15 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
     
     private func setBuildings3DBaseColorItem() {
         guard let plugin, let baseDayColorItem, let baseNightColorItem else { return }
-        plugin.buildings3dCustomDayColorPref.set(Int32(baseDayColorItem.colorInt))
-        plugin.buildings3dCustomNightColorPref.set(Int32(baseNightColorItem.colorInt))
+        let dayColorItem = appearanceCollection.getColorItem(withValue: baseDayColorItem.colorInt) ?? baseDayColorItem
+        let nightColorItem = appearanceCollection.getColorItem(withValue: baseNightColorItem.colorInt) ?? baseNightColorItem
+        plugin.buildings3dCustomDayColorPref.set(Int32(dayColorItem.colorInt))
+        plugin.buildings3dCustomNightColorPref.set(Int32(nightColorItem.colorInt))
         plugin.buildings3dColorStylePref.set(Int32(baseBuildings3DColorStyle))
+        self.baseDayColorItem = dayColorItem
+        self.baseNightColorItem = nightColorItem
+        currentDayColorItem = dayColorItem
+        currentNightColorItem = nightColorItem
         currentBuildings3DColorStyle = baseBuildings3DColorStyle
     }
     
@@ -636,12 +642,10 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
             colorHandler?.delegate = self
             colorHandler?.hostVC = self
             let activeItem = isNightColorMode ? currentNightColorItem : currentDayColorItem
-            var selectedIndex = appearanceCollection.index(ofColorItem: activeItem, items: sortedColorItems)
-            if selectedIndex == NSNotFound {
-                selectedIndex = appearanceCollection.index(ofColorItem: appearanceCollection.getDefaultLineColorItem(), items: sortedColorItems)
+            let selectedIndex = appearanceCollection.index(ofColorItem: activeItem, items: sortedColorItems)
+            if selectedIndex != NSNotFound {
+                colorHandler?.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             }
-            selectedIndex = selectedIndex == NSNotFound ? 0 : selectedIndex
-            colorHandler?.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             cell.setCollectionHandler(colorHandler)
             cell.rightActionButton.addTarget(self, action: #selector(onCellButtonPressed(_:)), for: .touchUpInside)
             return cell
@@ -758,34 +762,13 @@ extension MapSettingsBuildings3DParametersViewController: ColorCollectionViewCon
         let row = appearanceCollection.index(ofColorItem: colorItem, items: sortedColorItems)
         guard let colorsCollectionIndexPath, row != NSNotFound else { return }
         let indexPathForColor = IndexPath(row: row, section: 0)
-        let isDayColorDeleted = appearanceCollection.isSameColorItem(currentDayColorItem, secondItem: colorItem)
-        let isNightColorDeleted = appearanceCollection.isSameColorItem(currentNightColorItem, secondItem: colorItem)
-        let isBaseDayColorDeleted = appearanceCollection.isSameColorItem(baseDayColorItem, secondItem: colorItem)
-        let isBaseNightColorDeleted = appearanceCollection.isSameColorItem(baseNightColorItem, secondItem: colorItem)
         appearanceCollection.deleteColor(colorItem)
         sortedColorItems.remove(at: row)
         if let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
+            if appearanceCollection.isSameColorItem(colorHandler.getSelectedItem(), secondItem: colorItem) {
+                colorHandler.setSelectedIndexPath(nil)
+            }
             colorHandler.removeColor(indexPathForColor)
-        }
-        if isDayColorDeleted || isNightColorDeleted || isBaseDayColorDeleted || isBaseNightColorDeleted {
-            let fallbackColorItem = sortedColorItems.first ?? appearanceCollection.getDefaultLineColorItem()
-            if isDayColorDeleted {
-                currentDayColorItem = fallbackColorItem
-            }
-            if isNightColorDeleted {
-                currentNightColorItem = fallbackColorItem
-            }
-            if isBaseDayColorDeleted {
-                baseDayColorItem = fallbackColorItem
-            }
-            if isBaseNightColorDeleted {
-                baseNightColorItem = fallbackColorItem
-            }
-            if isDayColorDeleted || isNightColorDeleted {
-                previewBuildings3DColor()
-            }
-            updateColorValueChanged()
-            updateApplyButton()
         }
     }
 }

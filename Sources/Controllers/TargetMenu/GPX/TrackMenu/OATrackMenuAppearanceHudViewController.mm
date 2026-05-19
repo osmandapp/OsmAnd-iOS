@@ -1794,10 +1794,8 @@ static const NSInteger kColorsSection = 1;
             colorHandler.delegate = self;
             colorHandler.hostVC = self;
             NSInteger selectedIndex = [_appearanceCollection indexOfColorItem:_selectedColorItem items:_sortedColorItems];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_appearanceCollection indexOfColorItem:[_appearanceCollection getDefaultLineColorItem] items:_sortedColorItems];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
-            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            if (selectedIndex != NSNotFound)
+                [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
             [cell setCollectionHandler:colorHandler];
             [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.delegate = self;
@@ -2749,10 +2747,22 @@ static const NSInteger kColorsSection = 1;
     OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
     if (!paletteCategory)
         return;
-
-    [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
+    
+    NSArray<OASPaletteItemGradient *> *paletteItems = [[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime];
+    [_sortedPaletteColorItems replaceAllWithObjectsSync:paletteItems];
+    if (_selectedPaletteColorItem && [[GradientPaletteHelper shared] indexOfPaletteItem:_selectedPaletteColorItem items:paletteItems] == NSNotFound)
+        _selectedPaletteColorItem = [[GradientPaletteHelper shared] getDefaultPaletteItemWithCategory:paletteCategory] ?: paletteItems.firstObject;
+    
+    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
     if (_colorsCollectionIndexPath)
-        [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [indexPaths addObject:_colorsCollectionIndexPath];
+    if (_paletteNameIndexPath)
+    {
+        [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
+        [indexPaths addObject:_paletteNameIndexPath];
+    }
+    if (indexPaths.count > 0)
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)selectColorItem:(OASPaletteItemSolid *)colorItem
@@ -2838,15 +2848,11 @@ static const NSInteger kColorsSection = 1;
         BOOL isSelectedColorDeleted = [_appearanceCollection isSameColorItem:_selectedColorItem secondItem:colorItem];
         [_appearanceCollection deleteColor:colorItem];
         [_sortedColorItems removeObjectAtIndex:indexPath.row];
-        if (isSelectedColorDeleted)
-        {
-            _selectedColorItem = _sortedColorItems.firstObject ?: [_appearanceCollection getDefaultLineColorItem];
-            [_appearanceCollection selectColor:_selectedColorItem];
-            [self onCollectionItemSelected:[NSIndexPath indexPathForRow:0 inSection:0] selectedItem:_selectedColorItem collectionView:nil shouldDismiss:NO];
-        }
-
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        if (isSelectedColorDeleted)
+            [colorHandler setSelectedIndexPath:nil];
+
         [colorHandler removeColor:indexPath];
     }
 }

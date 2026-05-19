@@ -93,7 +93,8 @@ final class GradientPaletteHelper: NSObject {
     
     func duplicatePaletteItem(_ item: PaletteItemGradient) -> PaletteItemGradient? {
         let category = item.properties.fileType.category
-        guard category.editable, let palette = getGradientPalette(id: item.source.paletteId), let newItem = PaletteUtils.shared.createGradientDuplicate(palette: palette, originalItemId: item.id) else { return nil }
+        // Android disables duplication for non-editable hillshade palettes; iOS keeps the legacy duplicate action.
+        guard (category.editable || category == .terrainHillshade), let palette = getGradientPalette(id: item.source.paletteId), let newItem = PaletteUtils.shared.createGradientDuplicate(palette: palette, originalItemId: item.id) else { return nil }
         repository.insertPaletteItemAfter(paletteId: palette.id, anchorId: item.id, newItem: newItem)
         updateExternalDependenciesIfNeeded(category: category)
         return newItem

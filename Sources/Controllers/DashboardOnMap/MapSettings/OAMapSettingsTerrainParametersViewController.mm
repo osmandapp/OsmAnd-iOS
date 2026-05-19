@@ -1032,10 +1032,8 @@ static const NSInteger kElevationMaxMeters = 2000;
             colorHandler.hostVC = self;
             OASPaletteItemSolid *activeItem = _isNightCoordinatesGridColorMode ? _currentNightColorItem : _currentDayColorItem;
             NSInteger selectedIndex = [_appearanceCollection indexOfColorItem:activeItem items:_sortedColorItems];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_appearanceCollection indexOfColorItem:[_appearanceCollection getDefaultLineColorItem] items:_sortedColorItems];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
-            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            if (selectedIndex != NSNotFound)
+                [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
             [cell setCollectionHandler:colorHandler];
             [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -1391,30 +1389,13 @@ static const NSInteger kElevationMaxMeters = 2000;
         return;
 
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    BOOL isDayColorDeleted = [_appearanceCollection isSameColorItem:_currentDayColorItem secondItem:colorItem];
-    BOOL isNightColorDeleted = [_appearanceCollection isSameColorItem:_currentNightColorItem secondItem:colorItem];
-    BOOL isBaseDayColorDeleted = [_appearanceCollection isSameColorItem:_baseDayColorItem secondItem:colorItem];
-    BOOL isBaseNightColorDeleted = [_appearanceCollection isSameColorItem:_baseNightColorItem secondItem:colorItem];
     [_appearanceCollection deleteColor:colorItem];
     [_sortedColorItems removeObjectAtIndex:indexPath.row];
-    if (isDayColorDeleted || isNightColorDeleted || isBaseDayColorDeleted || isBaseNightColorDeleted)
-    {
-        OASPaletteItemSolid *fallbackColorItem = _sortedColorItems.firstObject ?: [_appearanceCollection getDefaultLineColorItem];
-        if (isDayColorDeleted)
-            _currentDayColorItem = fallbackColorItem;
-        if (isNightColorDeleted)
-            _currentNightColorItem = fallbackColorItem;
-        if (isBaseDayColorDeleted)
-            _baseDayColorItem = fallbackColorItem;
-        if (isBaseNightColorDeleted)
-            _baseNightColorItem = fallbackColorItem;
-        [self applyCoordinatesGridColor];
-        _isValueChange = ![_appearanceCollection isSameColorValue:_currentDayColorItem secondItem:_baseDayColorItem] || ![_appearanceCollection isSameColorValue:_currentNightColorItem secondItem:_baseNightColorItem];
-        [self updateApplyButton];
-    }
-
     OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
     OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+    BOOL isSelectedColorDeleted = [_appearanceCollection isSameColorItem:[colorHandler getSelectedItem] secondItem:colorItem];
+    if (isSelectedColorDeleted)
+        [colorHandler setSelectedIndexPath:nil];
     [colorHandler removeColor:indexPath];
 }
 

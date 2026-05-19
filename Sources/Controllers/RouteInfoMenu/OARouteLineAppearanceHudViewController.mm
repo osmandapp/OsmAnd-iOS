@@ -1612,10 +1612,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             colorHandler.delegate = self;
             colorHandler.hostVC = self;
             NSInteger selectedIndex = [_appearanceCollection indexOfColorItem:_selectedColorItem items:_sortedColorItems];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_appearanceCollection indexOfColorItem:[_appearanceCollection getDefaultLineColorItem] items:_sortedColorItems];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
-            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            if (selectedIndex != NSNotFound)
+                [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
             [cell setCollectionHandler:colorHandler];
             [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -1981,8 +1979,20 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         _isDefaultColorRestored = YES;
     }
 
+    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
     if (_cellColorGridIndex != -1)
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors]] withRowAnimation:UITableViewRowAnimationNone];
+        [indexPaths addObject:[NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors]];
+    if (_cellPaletteNameIndex != -1 && _tableData.subjects.count > _sectionColors)
+    {
+        OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
+        if (sectionData.subjects.count > _cellPaletteNameIndex)
+        {
+            [self updateData:sectionData.subjects[_cellPaletteNameIndex]];
+            [indexPaths addObject:[NSIndexPath indexPathForRow:_cellPaletteNameIndex inSection:_sectionColors]];
+        }
+    }
+    if (indexPaths.count > 0)
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)selectPaletteItem:(OASPaletteItemGradient *)paletteItem
@@ -2071,18 +2081,15 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     BOOL isSelectedColorDeleted = [_appearanceCollection isSameColorItem:_selectedColorItem secondItem:colorItem];
     [_appearanceCollection deleteColor:colorItem];
     [_sortedColorItems removeObjectAtIndex:row];
-    if (isSelectedColorDeleted)
-    {
-        _selectedColorItem = _sortedColorItems.firstObject ?: [_appearanceCollection getDefaultLineColorItem];
-        [_appearanceCollection selectColor:_selectedColorItem];
-        [self onCollectionItemSelected:[NSIndexPath indexPathForRow:0 inSection:0] selectedItem:_selectedColorItem collectionView:nil shouldDismiss:NO];
-    }
-
     NSIndexPath *colorsCollectionIndexPath = [NSIndexPath indexPathForRow:_cellColorGridIndex inSection:_sectionColors];
     OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorsCollectionIndexPath];
     OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *)[colorCell getCollectionHandler];
     if (colorHandler)
+    {
+        if (isSelectedColorDeleted)
+            [colorHandler setSelectedIndexPath:nil];
         [colorHandler removeColor:[NSIndexPath indexPathForRow:row inSection:0]];
+    }
 }
 
 #pragma mark - UIColorPickerViewControllerDelegate

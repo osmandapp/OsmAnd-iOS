@@ -1187,17 +1187,43 @@
 
 - (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color
 {
-    [_appearanceCollection changeColor:colorItem newColor:color];
+    NSInteger index = [_appearanceCollection indexOfColorItem:colorItem items:_sortedColorItems];
+    OASPaletteItemSolid *newColorItem = [_appearanceCollection changeColor:colorItem newColor:color];
+    if (index != NSNotFound && newColorItem)
+    {
+        _sortedColorItems[index] = newColorItem;
+        if ([_appearanceCollection isSameColorItem:_selectedColorItem secondItem:colorItem])
+            _selectedColorItem = newColorItem;
+    }
 }
 
 - (OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem
 {
-    return [_appearanceCollection duplicateColor:colorItem];
+    OASPaletteItemSolid *duplicatedColorItem = [_appearanceCollection duplicateColor:colorItem];
+    NSInteger index = [_appearanceCollection indexOfColorItem:colorItem items:_sortedColorItems];
+    if (index != NSNotFound && duplicatedColorItem)
+        [_sortedColorItems insertObject:duplicatedColorItem atIndex:index + 1];
+    
+    return duplicatedColorItem;
 }
 
 - (void)deleteColorItem:(OASPaletteItemSolid *)colorItem
 {
+    NSInteger index = [_appearanceCollection indexOfColorItem:colorItem items:_sortedColorItems];
+    NSArray<OASPaletteItemSolid *> *handlerColorItems = [_colorCollectionHandler getData].firstObject;
+    NSInteger handlerIndex = [_appearanceCollection indexOfColorItem:colorItem items:handlerColorItems];
+    if (handlerIndex == NSNotFound)
+        return;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:handlerIndex inSection:0];
+    BOOL isSelectedColorDeleted = [_appearanceCollection isSameColorItem:[_colorCollectionHandler getSelectedItem] secondItem:colorItem];
     [_appearanceCollection deleteColor:colorItem];
+    if (index != NSNotFound)
+        [_sortedColorItems removeObjectAtIndex:index];
+    if (isSelectedColorDeleted)
+        [_colorCollectionHandler setSelectedIndexPath:nil];
+
+    [_colorCollectionHandler removeColor:indexPath];
 }
 
 - (void)addGroupWithName:(NSString *)name
@@ -1367,6 +1393,11 @@
             _selectedColorItem = (OASPaletteItemSolid *)selectedItem;
         else
             _selectedColorItem = [_colorCollectionHandler getData][indexPath.section][indexPath.row];
+        if ([_appearanceCollection indexOfColorItem:_selectedColorItem items:_sortedColorItems] == NSNotFound)
+        {
+            NSInteger insertIndex = MIN(indexPath.row, (NSInteger)_sortedColorItems.count);
+            [_sortedColorItems insertObject:_selectedColorItem atIndex:insertIndex];
+        }
     }
     
     _wasChanged = YES;

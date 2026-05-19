@@ -252,7 +252,7 @@ static NSString * const kSolidColorKey = @"solid_color";
         if (weakSelf.hostCell && [weakSelf.hostCell needUpdateHeight])
             [weakSelf.delegate reloadCollectionData];
     } completion:^(BOOL finished) {
-        [collectionView reloadData];
+        [weakSelf updateVisibleSelectionState];
         [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
     }];
 }
@@ -303,10 +303,10 @@ static NSString * const kSolidColorKey = @"solid_color";
     if (!collectionView)
         return;
 
-    [self removeItem:indexPath];
     NSIndexPath *previousSelectedIndexPath = [self.selectedIndexPath copy];
     __weak __typeof(self) weakSelf = self;
     [collectionView performBatchUpdates:^{
+        [weakSelf removeItem:indexPath];
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
         if ([indexPath isEqual:weakSelf.selectedIndexPath])
             [weakSelf setSelectedIndexPath:[weakSelf itemsCount:indexPath.section] > 0 ? [NSIndexPath indexPathForRow:0 inSection:indexPath.section] : nil];
@@ -315,6 +315,7 @@ static NSString * const kSolidColorKey = @"solid_color";
     } completion:^(BOOL finished) {
         if ([indexPath isEqual:previousSelectedIndexPath] && weakSelf.selectedIndexPath)
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
+        [weakSelf updateVisibleSelectionState];
         if ([indexPath isEqual:weakSelf.selectedIndexPath])
             [weakSelf scrollToIndexPathIfNeeded:weakSelf.selectedIndexPath];
     }];
@@ -386,6 +387,27 @@ static NSString * const kSolidColorKey = @"solid_color";
 - (NSInteger)itemsCount:(NSInteger)section
 {
     return _data[section].count;
+}
+
+- (void)updateVisibleSelectionState
+{
+    UICollectionView *collectionView = [self getCollectionView];
+    if (!collectionView)
+        return;
+    
+    for (NSIndexPath *indexPath in collectionView.indexPathsForVisibleItems)
+    {
+        if (_data.count <= indexPath.section || _data[indexPath.section].count <= indexPath.row)
+            continue;
+        
+        OAColorsCollectionViewCell *cell = (OAColorsCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        if (![cell isKindOfClass:OAColorsCollectionViewCell.class])
+            continue;
+        
+        BOOL isSelected = [self isColorItemSelected:_data[indexPath.section][indexPath.row]];
+        cell.selectionView.layer.borderWidth = isSelected ? 2 : 0;
+        cell.selectionView.layer.borderColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorActive].CGColor : UIColor.clearColor.CGColor;
+    }
 }
 
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath
@@ -616,6 +638,10 @@ static NSString * const kSolidColorKey = @"solid_color";
     NSIndexPath *indexPath = [self indexForColorItem:colorItem];
     if (!indexPath)
         return;
+
+    BOOL isSelectedColorDeleted = [[OAGPXAppearanceCollection sharedInstance] isSameColorItem:[self getSelectedItem] secondItem:colorItem];
+    if (isSelectedColorDeleted)
+        [self setSelectedIndexPath:nil];
 
     [self removeColor:indexPath];
     if (_isOpenedFromAllColorsScreen && _hostColorHandler)

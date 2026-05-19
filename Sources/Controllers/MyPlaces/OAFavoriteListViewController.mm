@@ -118,7 +118,7 @@ static UIViewController *parentController;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithStyle:UITableViewStyleInsetGrouped];
+    self = [super initWithStyle:UITableViewStylePlain];
     if (self)
     {
         self.view.frame = frame;
@@ -1015,7 +1015,7 @@ static UIViewController *parentController;
         return 44;
     NSDictionary *item = _data[section][0];
     NSString *cellType = item[@"type"];
-    return [cellType isEqualToString:@"actionItem"] || _isSearchActive ? 44 : 16;
+    return [cellType isEqualToString:@"actionItem"] || _isSearchActive ? 44 : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

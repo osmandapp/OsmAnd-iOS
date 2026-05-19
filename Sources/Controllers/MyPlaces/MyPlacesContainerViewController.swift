@@ -94,7 +94,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         super.viewWillDisappear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
-        navigationController?.navigationItem.searchController = nil
+        navigationItem.searchController = nil
     }
     
     func switchToWithSegmentControl(tab: Tab) {

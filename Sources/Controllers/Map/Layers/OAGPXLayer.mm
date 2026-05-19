@@ -75,6 +75,7 @@ static const int START_ZOOM = 7;
     NSObject* _splitLock;
     OAAtomicInteger *_splitCounter;
     QList<OsmAnd::PointI> _startFinishPoints;
+    QList<int> _startFinishExtraIds;
     QList<float> _startFinishPointsElevations;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
     OASRTMPlugin *_plugin;
@@ -1154,7 +1155,7 @@ colorizationScheme:(int)colorizationScheme
                     else if (splitByTime)
                         stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
                     const auto colorARGB = [UIColorFromARGB(dataWrapper.color == 0 ? kDefaultTrackColor : dataWrapper.color) toFColorARGB];
-                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, splitElevation));
+                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, 0, splitElevation));
                 }
             }
             if (splitCounter == _splitCounter && !weakOperation.isCancelled)
@@ -1390,6 +1391,7 @@ colorizationScheme:(int)colorizationScheme
             _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
                                                                               UIScreen.mainScreen.scale,
                                                                               _startFinishPoints,
+                                                                              _startFinishExtraIds,
                                                                               _splitLabels,
                                                                               OsmAnd::SingleSkImage(startIcon),
                                                                               OsmAnd::SingleSkImage(finishIcon),

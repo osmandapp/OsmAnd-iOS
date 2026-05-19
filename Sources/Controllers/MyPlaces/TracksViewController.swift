@@ -93,12 +93,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var observers: [OAAutoObserverProxy] = []
     
     private lazy var importHelper: OAGPXImportUIHelper = OAGPXImportUIHelper(hostViewController: self)
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        return dateFormatter
-    }()
     
     private lazy var filterButton: UIButton = {
         var config = UIButton.Configuration.plain()

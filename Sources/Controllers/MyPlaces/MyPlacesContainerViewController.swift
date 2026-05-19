@@ -171,9 +171,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         segmentControl.removeAllSegments()
         
         for (index, tab) in availableTabs.enumerated() {
-            segmentControl.insertSegment(with: tab.image.resizedTemplateImage(with: segmentedControlIconSize),
-                                         at: index,
-                                         animated: false)
+            guard let image = tab.image.resizedTemplateImage(with: segmentedControlIconSize) else {
+                continue
+            }
+            segmentControl.insertSegment(with: image, at: index, animated: false)
         }
     }
     
@@ -219,7 +220,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                 availableViewControllers[tab] = travelGuidesViewController
             }
         }
-        return availableViewControllers.first(where: { $0.key == tab })?.value
+        return availableViewControllers[tab]
     }
     
     @objc private func onBackPressed() {

@@ -48,7 +48,10 @@ extension AlertPresenter {
             config: .carPlayOnly)
     }
     
-    static func showRouteCalculationErrorAlert(_ error: String, from: UIViewController) {
+    static func showRouteCalculationErrorAlert(_ error: String?, from: UIViewController) {
+        guard let error, !error.isEmpty else {
+            return
+        }
         let isCarPlayAppActive = UIApplication.shared.isCarPlayConnected && UIApplication.shared.isCarPlayAppActive
         AlertPresenter.show(title: isCarPlayAppActive ? error : "",
                             message: error,

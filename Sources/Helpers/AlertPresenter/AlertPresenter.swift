@@ -19,7 +19,7 @@ enum AlertVisibility: Int {
 @objcMembers
 final class AlertPresentationConfig: NSObject {
     let visibility: AlertVisibility
-
+    
     init(visibility: AlertVisibility = .appOnly) {
         self.visibility = visibility
     }
@@ -36,7 +36,7 @@ final class AlertActionConfig: NSObject {
     let title: String
     let style: UIAlertAction.Style
     let handler: (() -> Void)?
-        
+    
     var carPlayAlertStyle: CPAlertAction.Style {
         switch style {
         case .destructive: .destructive
@@ -58,9 +58,11 @@ struct QueuedAlert: Equatable {
     let actions: [AlertActionConfig]
     let config: AlertPresentationConfig
     let fromViewController: UIViewController?
-
+    
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.title == rhs.title
+        && lhs.message == rhs.message
+        && lhs.actions.map(\.title) == rhs.actions.map(\.title)
     }
 }
 
@@ -105,8 +107,10 @@ final class AlertPresenter: NSObject {
         executePresentation(alert: nextAlert)
     }
     
-    private static func completeCurrentAlert(title: String) {
-        alertQueue.removeAll { $0.title == title }
+    private static func completeCurrentAlert(_ alert: QueuedAlert) {
+        if let index = alertQueue.firstIndex(of: alert) {
+            alertQueue.remove(at: index)
+        }
         isPresenting = false
         processQueue()
     }
@@ -125,7 +129,7 @@ final class AlertPresenter: NSObject {
             if UIApplication.shared.isCarPlayAppActive {
                 presentInCarPlay(alert: alert)
             } else {
-                completeCurrentAlert(title: alert.title)
+                completeCurrentAlert(alert)
             }
         }
     }
@@ -135,36 +139,40 @@ final class AlertPresenter: NSObject {
         
         if alert.actions.isEmpty {
             uiAlert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { _ in
-                completeCurrentAlert(title: alert.title)
+                completeCurrentAlert(alert)
             })
         } else {
             for config in alert.actions {
                 uiAlert.addAction(UIAlertAction(title: config.title, style: config.style) { _ in
                     config.handler?()
-                    completeCurrentAlert(title: alert.title)
+                    completeCurrentAlert(alert)
                 })
             }
         }
         
-        let presenter = alert.fromViewController ?? OARootViewController.instance()
-        presenter?.present(uiAlert, animated: true)
+        guard let presenter = alert.fromViewController ?? OARootViewController.instance() else {
+            completeCurrentAlert(alert)
+            return;
+        }
+        presenter.present(uiAlert, animated: true)
     }
     
     private static func presentInCarPlay(alert: QueuedAlert) {
         guard let delegate = UIApplication.shared.carPlaySceneDelegate else {
+            completeCurrentAlert(alert)
             return
         }
         
         let wrappedActions = alert.actions.map { original in
             AlertActionConfig(title: original.title, style: original.style) {
                 original.handler?()
-                completeCurrentAlert(title: alert.title)
+                completeCurrentAlert(alert)
             }
         }
         
         if wrappedActions.isEmpty {
             delegate.showAlertWith(title: alert.title) {
-                completeCurrentAlert(title: alert.title)
+                completeCurrentAlert(alert)
             }
         } else {
             delegate.showAlert(title: alert.title, actions: wrappedActions)

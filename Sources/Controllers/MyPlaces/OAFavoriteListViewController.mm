@@ -73,7 +73,7 @@ static const NSStringCompareOptions searchOptions = NSCaseInsensitiveSearch | NS
 
 @end
 
-@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, UIDocumentPickerDelegate, MyPlacesSearchable, UISearchBarDelegate>
 
 @property (strong, nonatomic) NSArray *menuItems;
 @property (strong, nonatomic) NSMutableArray *sortedFavoriteItems;
@@ -462,7 +462,6 @@ static UIViewController *parentController;
     }
     _actionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"ellipsis.circle"] menu:[self actionsMenu]];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _editButton] animated:YES];
-    self.navigationController.navigationItem.searchController.searchResultsUpdater = self;
     self.definesPresentationContext = YES;
     [self addAccessibilityLabels];
     [self configurePaymentBanner];
@@ -2072,9 +2071,8 @@ static UIViewController *parentController;
         } completion:nil];
 }
 
-#pragma mark - UISearchResultsUpdating
-
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+// MARK: - MyPlacesSearchable
+- (void)updateSearchResultsFor:(UISearchController *)searchController
 {
     if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
     {

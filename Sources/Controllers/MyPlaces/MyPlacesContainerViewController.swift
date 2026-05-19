@@ -13,6 +13,12 @@ protocol MyPlacesDelegate: AnyObject {
     func updateEditMode(_ edit: Bool)
 }
 
+@objc
+protocol MyPlacesSearchable: AnyObject {
+    func updateSearchResults(for searchController: UISearchController)
+    @objc optional func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
+}
+
 final class MyPlacesContainerViewController: OACompoundViewController {
     enum Tab: Int, CaseIterable {
         case favorites
@@ -81,6 +87,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         setupNavbar()
         segmentContainerView.backgroundColor = .viewBg
         pageViewController?.scrollView?.backgroundColor = .viewBg
+        view.backgroundColor = .viewBg
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -135,6 +142,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     private func setupSearchController() {
         searchController = UISearchController(searchResultsController: nil)
+        searchController?.searchResultsUpdater = self
+        searchController?.searchBar.delegate = self
         guard let searchController else { return }
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
@@ -143,7 +152,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
         }
-        navigationController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
     }
@@ -281,5 +289,25 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         let searchController = edit ? nil : searchController
         navigationController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
+    }
+}
+
+// MARK: - UISearchResultsUpdating
+extension MyPlacesContainerViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchableViewController = viewController(for: selectedTab) as? MyPlacesSearchable else {
+            return
+        }
+        searchableViewController.updateSearchResults(for: searchController)
+    }
+}
+
+// MARK: - UISearchBarDelegate
+extension MyPlacesContainerViewController: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchableViewController = viewController(for: selectedTab) as? MyPlacesSearchable else {
+            return
+        }
+        searchableViewController.searchBarCancelButtonClicked?(searchBar)
     }
 }

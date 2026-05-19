@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, MyPlacesSearchable, UISearchBarDelegate {
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
@@ -32,7 +32,6 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
-        navigationController?.navigationItem.searchController?.searchResultsUpdater = self
         definesPresentationContext = true
     }
     
@@ -226,7 +225,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         }
     }
     
-    // MARK: UISearchResultsUpdating
+    // MARK: MyPlacesSearchable
     
     func updateSearchResults(for searchController: UISearchController) {
         if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
@@ -244,8 +243,6 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         generateData()
         tableView.reloadData()
     }
-    
-    // MARK: UISearchBarDelegate
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false

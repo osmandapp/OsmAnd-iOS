@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, UIScrollViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, MyPlacesSearchable, UISearchBarDelegate, UIScrollViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIView *segmentContainerView;
 
@@ -112,7 +112,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
                                                                    menu:nil];
     _selectButton.accessibilityLabel = OALocalizedString(@"shared_string_select");
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_selectButton] animated:YES];
-    self.navigationController.navigationItem.searchController.searchResultsUpdater = self;
     self.definesPresentationContext = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -506,9 +505,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     } completion:nil];
 }
 
-// MARK: UISearchResultsUpdating
-
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+// MARK: - MyPlacesSearchable
+- (void)updateSearchResultsFor:(UISearchController *)searchController
 {
     if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
     {

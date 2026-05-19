@@ -18,7 +18,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
+final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchBarDelegate, FilterChangedListener {
     
     fileprivate var shouldReload = false
     
@@ -178,7 +178,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavbar()
-        navigationController?.navigationItem.searchController?.searchResultsUpdater = self
         updateNavigationBarTitle()
         tableView.tableHeaderView = setupHeaderView()
         filterButton.isHidden = true
@@ -2297,7 +2296,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         updateAllFoldersVCData(forceLoad: true)
     }
     
-    // MARK: - UISearchResultsUpdating
+    // MARK: - MyPlacesSearchable
     
     func updateSearchResults(for searchController: UISearchController) {
         if isSearchTextFilterChanged {
@@ -2334,8 +2333,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         updateSortButtonAndMenu()
         updateData()
     }
-    
-    // MARK: - UISearchBarDelegate
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false

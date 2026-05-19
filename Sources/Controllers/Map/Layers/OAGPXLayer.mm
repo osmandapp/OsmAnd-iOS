@@ -73,6 +73,7 @@ static const int START_ZOOM = 7;
     NSObject* _splitLock;
     OAAtomicInteger *_splitCounter;
     QList<OsmAnd::PointI> _startFinishPoints;
+    QList<int> _startFinishExtraIds;
     QList<float> _startFinishPointsElevations;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
     OASRTMPlugin *_plugin;
@@ -330,7 +331,7 @@ static const int START_ZOOM = 7;
 
 - (void) refreshGpxTracks
 {
-    BOOL hasVolumetricSymbols;
+    BOOL hasVolumetricSymbols = NO;
     for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
     {
         OASGpxDataItem *gpx = cachedTrack[@"gpx"];
@@ -343,7 +344,10 @@ static const int START_ZOOM = 7;
         }
     }
     if (_linesCollection->hasVolumetricSymbols != hasVolumetricSymbols)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_linesCollection];
         _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
+    }
 
     if (_gpxFiles.count > 0)
     {
@@ -1101,7 +1105,7 @@ colorizationScheme:(int)colorizationScheme
                 {
                     for (OASTrkSegment *segment in subtrack.segments)
                     {
-                        [array addObjectsFromArray:[segment splitByDistanceMeters:gpx.splitInterval joinSegments:gpx.joinSegments]];
+                        [array addObjectsFromArray:[segment splitByDistanceMeters:gpx.splitInterval joinSegments:gpx.joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
                     }
                 }
                 splitData = [array copy];
@@ -1114,7 +1118,7 @@ colorizationScheme:(int)colorizationScheme
                 {
                     for (OASTrkSegment *segment in subtrack.segments)
                     {
-                        [array addObjectsFromArray:[segment splitByTimeSeconds:gpx.splitInterval joinSegments:gpx.joinSegments]];
+                        [array addObjectsFromArray:[segment splitByTimeSeconds:gpx.splitInterval joinSegments:gpx.joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
                     }
                 }
                 splitData = [array copy];
@@ -1169,7 +1173,7 @@ colorizationScheme:(int)colorizationScheme
                     else if (splitByTime)
                         stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
                     const auto colorARGB = [UIColorFromARGB(dataWrapper.color == 0 ? kDefaultTrackColor : dataWrapper.color) toFColorARGB];
-                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, splitElevation));
+                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, 0, splitElevation));
                 }
             }
             if (splitCounter == _splitCounter && !weakOperation.isCancelled)
@@ -1405,6 +1409,7 @@ colorizationScheme:(int)colorizationScheme
             _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
                                                                               UIScreen.mainScreen.scale,
                                                                               _startFinishPoints,
+                                                                              _startFinishExtraIds,
                                                                               _splitLabels,
                                                                               OsmAnd::SingleSkImage(startIcon),
                                                                               OsmAnd::SingleSkImage(finishIcon),

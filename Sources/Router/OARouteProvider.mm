@@ -32,12 +32,16 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAWorldRegion.h"
 
+#include <exception>
+#include <new>
+
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
 #include <routingConfiguration.h>
 #include <routingContext.h>
 #include <routeSegmentResult.h>
-#include "routeResultPreparation.h"
+#include <routeResultPreparation.h>
+#include <gpxRouteApproximation.h>
 
 #define OSMAND_ROUTER @"OsmAndRouter"
 #define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
@@ -48,6 +52,21 @@
 #define NEAREST_POINT_EXTRA_SEARCH_DISTANCE 300
 
 #define GPX_CALC_DIST_THRESHOLD 1000000
+
+static NSString * const kRouteCalculationOutOfMemoryError = @"Not enough memory to calculate route.";
+static NSString * const kRouteCalculationFailedError = @"Route calculation failed.";
+
+static NSString *RouteCalculationErrorMessage(const std::exception &exception)
+{
+    const char *what = exception.what();
+    if (what && what[0] != '\0')
+    {
+        NSString *message = [NSString stringWithUTF8String:what];
+        if (message.length > 0)
+            return message;
+    }
+    return kRouteCalculationFailedError;
+}
 
 @interface OARouteProvider()
 
@@ -983,6 +1002,16 @@
             return [[OARouteCalculationResult alloc] initWithSegmentResults:result start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode calculateFirstAndLastPoint:YES initialCalculation:params.initialCalculation];
         }
     }
+    catch (const std::bad_alloc &e)
+    {
+        NSLog(@"Failed to calculate route: %s", e.what());
+        return [[OARouteCalculationResult alloc] initWithErrorMessage:kRouteCalculationOutOfMemoryError];
+    }
+    catch (const std::exception &e)
+    {
+        NSLog(@"Failed to calculate route: %s", e.what());
+        return [[OARouteCalculationResult alloc] initWithErrorMessage:RouteCalculationErrorMessage(e)];
+    }
     catch (NSException *e)
     {
         return [[OARouteCalculationResult alloc] initWithErrorMessage:e.reason];
@@ -1038,6 +1067,9 @@
 
 - (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(SHARED_PTR<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
 {
+    if (!env || !env.router || !locationsHolder || gctx == nullptr || gctx->ctx == nullptr || gctx->ctx->config == nullptr)
+        return {};
+
     return env.router->generateGpxPoints(gctx, locationsHolder.getLatLonList);
 }
 
@@ -1046,11 +1078,23 @@
                                                          points:(std::vector<SHARED_PTR<GpxPoint>> &)points
                                                   resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
+    if (!env || !env.router || gctx == nullptr || gctx->ctx == nullptr || gctx->ctx->config == nullptr || gctx->ctx->progress == nullptr || points.empty())
+    {
+        [resultMatcher publish:nil];
+        return nullptr;
+    }
+
     @synchronized (_nativeRoutingLock) {
         const auto resultAcceptor =
         [resultMatcher]
         (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
         {
+            if (approximation == nullptr)
+            {
+                [resultMatcher publish:nil];
+                return true;
+            }
+
             OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
             [resultMatcher publish:approx];
             return true;
@@ -1798,6 +1842,16 @@
         catch (NSException *e)
         {
             NSLog(@"Failed to find route %@", e.reason);
+        }
+        catch (const std::bad_alloc &e)
+        {
+            NSLog(@"Failed to find route: %s", e.what());
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:kRouteCalculationOutOfMemoryError];
+        }
+        catch (const std::exception &e)
+        {
+            NSLog(@"Failed to find route: %s", e.what());
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:RouteCalculationErrorMessage(e)];
         }
     }
     return [[OARouteCalculationResult alloc] initWithErrorMessage:nil];

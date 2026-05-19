@@ -270,13 +270,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) setupGoButton
 {
     BOOL routeCalculated = [self isRouteCalculated];
+    BOOL startButtonEnabled = routeCalculated || ![[_routingHelper getRoute] hasMissingMaps];
     _goButton.backgroundColor = routeCalculated ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
     UIColor *color = routeCalculated ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
     [_goButton setTintColor:color];
     [_goButton setTitleColor:color forState:UIControlStateNormal];
     [_goButton.imageView setTintColor:_goButton.tintColor];
-    _goButton.enabled = routeCalculated;
-    _goButton.userInteractionEnabled = routeCalculated;
+    _goButton.enabled = startButtonEnabled;
+    _goButton.userInteractionEnabled = startButtonEnabled;
     
     if (!_routingHelper.isPublicTransportMode)
     {

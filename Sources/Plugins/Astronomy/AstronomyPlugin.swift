@@ -43,7 +43,7 @@ final class AstronomyPlugin: OAPlugin {
     }
 
     func showStarMap() {
-        let controller = AstronomyViewController(plugin: self)
+        let controller = StarMapViewController(plugin: self)
         controller.modalPresentationStyle = .fullScreen
         OARootViewController.instance().present(controller, animated: true)
     }

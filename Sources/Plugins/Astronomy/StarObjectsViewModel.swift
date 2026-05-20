@@ -18,11 +18,6 @@ final class StarObjectsViewModel {
 
     var onDataChanged: (() -> Void)?
 
-    init(provider: AstroDataProvider, settings: AstronomyPluginSettings) {
-        self.provider = provider
-        self.settings = settings
-    }
-
     var visibleObjects: [SkyObject] {
         guard let objects = state.dataSnapshot?.objects else {
             return []
@@ -31,22 +26,25 @@ final class StarObjectsViewModel {
             guard settings.isObjectTypeVisible(object.type) else {
                 return false
             }
-            if settings.starMap.showMagnitudeFilter,
-               let maxMagnitude = settings.starMap.magnitudeFilter,
-               let magnitude = object.magnitude,
-               magnitude > maxMagnitude {
+            if let maxMagnitude = settings.starMap.magnitudeFilter,
+               object.magnitude > maxMagnitude {
                 return false
             }
-            return object.altitude != nil && object.azimuth != nil
+            return true
         }
     }
 
     var positionedObjects: [SkyObject] {
-        state.dataSnapshot?.objects.filter { $0.altitude != nil && $0.azimuth != nil } ?? []
+        state.dataSnapshot?.objects ?? []
     }
 
     var constellations: [Constellation] {
         state.dataSnapshot?.constellations ?? []
+    }
+
+    init(provider: AstroDataProvider, settings: AstronomyPluginSettings) {
+        self.provider = provider
+        self.settings = settings
     }
 
     func updateSettings(_ settings: AstronomyPluginSettings) {
@@ -62,7 +60,15 @@ final class StarObjectsViewModel {
             }
             let snapshot = provider.loadData(preferredLocale: preferredLocale)
             DispatchQueue.main.async {
-                self.state.dataSnapshot = snapshot
+                self.applyObjectSettings(to: snapshot.objects + snapshot.constellations.map { $0 as SkyObject })
+                let favoriteOrder = Dictionary(uniqueKeysWithValues: self.settings.starMap.favorites.enumerated().map { ($0.element.id, $0.offset) })
+                let sortedObjects = snapshot.objects.sorted { (favoriteOrder[$0.id] ?? Int.max) < (favoriteOrder[$1.id] ?? Int.max) }
+                let sortedConstellations = snapshot.constellations.sorted { (favoriteOrder[$0.id] ?? Int.max) < (favoriteOrder[$1.id] ?? Int.max) }
+                self.state.dataSnapshot = AstroDataSnapshot(objects: sortedObjects,
+                                                            constellations: sortedConstellations,
+                                                            catalogs: snapshot.catalogs,
+                                                            dbPath: snapshot.dbPath,
+                                                            usedFallback: snapshot.usedFallback)
                 self.updatePositions(date: self.state.date, location: self.state.location)
                 self.onDataChanged?()
             }
@@ -82,15 +88,15 @@ final class StarObjectsViewModel {
             guard let horizontal = AstroUtils.horizontalPosition(for: object, time: time, observer: observer) else {
                 continue
             }
-            object.startAzimuth = object.azimuth ?? horizontal.azimuth
-            object.startAltitude = object.altitude ?? horizontal.altitude
+            object.startAzimuth = object.azimuth
+            object.startAltitude = object.altitude
             object.azimuth = AstroUtils.normalizedDegrees(horizontal.azimuth)
             object.altitude = horizontal.altitude
-            object.targetAzimuth = object.azimuth ?? 0
-            object.targetAltitude = object.altitude ?? 0
+            object.targetAzimuth = object.azimuth
+            object.targetAltitude = object.altitude
             object.lastUpdateTime = time.tt
         }
-        applyObjectSettings(to: objects)
+        applyObjectSettings(to: objects + constellations.map { $0 as SkyObject })
         onDataChanged?()
     }
 
@@ -99,39 +105,19 @@ final class StarObjectsViewModel {
             return
         }
 
-        let favoriteIds = Set(settings.starMap.favorites)
-        let pathIds = Set(settings.starMap.celestialPaths)
+        let favoritesMap = Dictionary(uniqueKeysWithValues: settings.starMap.favorites.map { ($0.id, $0) })
+        let directionsMap = Dictionary(uniqueKeysWithValues: settings.starMap.directions.map { ($0.id, $0) })
+        let celestialPathsMap = Dictionary(uniqueKeysWithValues: settings.starMap.celestialPaths.map { ($0.id, $0) })
         for object in objects {
-            let ids = matchingIds(for: object)
-            object.isFavorite = !favoriteIds.isDisjoint(with: ids)
-            object.isCelestialPath = !pathIds.isDisjoint(with: ids)
-            if let direction = settings.starMap.directions.first(where: { ids.contains($0.objectId) }) {
-                object.isDirection = true
+            object.isFavorite = favoritesMap[object.id] != nil
+            object.showDirection = directionsMap[object.id] != nil
+            object.showCelestialPath = celestialPathsMap[object.id] != nil
+            if let direction = directionsMap[object.id] {
                 object.colorIndex = direction.colorIndex
             } else {
-                object.isDirection = false
                 object.colorIndex = 0
             }
         }
-    }
-
-    private func matchingIds(for object: SkyObject) -> Set<String> {
-        var ids: Set<String> = [object.id]
-        if let wid = object.wid {
-            ids.insert(wid)
-        }
-        if let hip = object.hip {
-            ids.insert(String(hip))
-        }
-        if let name = object.name {
-            ids.insert(name)
-        }
-        for catalog in object.catalogs {
-            ids.insert(catalog.catalogId)
-            ids.insert("\(catalog.catalogName)\(catalog.catalogId)")
-            ids.insert("\(catalog.catalogName) \(catalog.catalogId)")
-        }
-        return ids
     }
 
     func selectNearestObject(to point: CGPoint, in view: StarView) {

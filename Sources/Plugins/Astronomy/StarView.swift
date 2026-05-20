@@ -14,6 +14,24 @@ protocol StarViewDelegate: AnyObject {
 }
 
 final class StarView: UIView {
+    private struct CelestialPathData {
+        let azimuths: [Double]
+        let altitudes: [Double]
+        let labels: [String?]
+        let lastTime: Double
+        let lastLat: Double
+        let lastLon: Double
+    }
+
+    private struct ConstellationCenter {
+        let ra: Double
+        let dec: Double
+        var azimuth: Double
+        var altitude: Double
+        var targetAzimuth: Double
+        var targetAltitude: Double
+    }
+
     weak var delegate: StarViewDelegate?
 
     var viewModel: StarObjectsViewModel? {
@@ -38,11 +56,134 @@ final class StarView: UIView {
     }
 
     var isCameraMode = false
+    var onAnimationFinished: (() -> Void)?
+    var onAzimuthManualChangeListener: ((Double) -> Void)?
+    var onViewAngleChangeListener: ((Double) -> Void)?
 
     private(set) var centerAzimuth = 180.0
     private(set) var centerAltitude = 45.0
     private(set) var viewAngle = 60.0
-    private(set) var roll = 0.0
+    var roll = 0.0
+
+    var showAzimuthalGrid: Bool {
+        get { settings.starMap.showAzimuthalGrid }
+        set { settings.starMap.showAzimuthalGrid = newValue; setNeedsDisplay() }
+    }
+
+    var showEquatorialGrid: Bool {
+        get { settings.starMap.showEquatorialGrid }
+        set { settings.starMap.showEquatorialGrid = newValue; setNeedsDisplay() }
+    }
+
+    var showEclipticLine: Bool {
+        get { settings.starMap.showEclipticLine }
+        set { settings.starMap.showEclipticLine = newValue; setNeedsDisplay() }
+    }
+
+    var showMeridianLine: Bool {
+        get { settings.starMap.showMeridianLine }
+        set { settings.starMap.showMeridianLine = newValue; setNeedsDisplay() }
+    }
+
+    var showEquatorLine: Bool {
+        get { settings.starMap.showEquatorLine }
+        set { settings.starMap.showEquatorLine = newValue; setNeedsDisplay() }
+    }
+
+    var showGalacticLine: Bool {
+        get { settings.starMap.showGalacticLine }
+        set { settings.starMap.showGalacticLine = newValue; setNeedsDisplay() }
+    }
+
+    var showFavorites: Bool {
+        get { settings.starMap.showFavorites }
+        set { settings.starMap.showFavorites = newValue; setNeedsDisplay() }
+    }
+
+    var showDirections: Bool {
+        get { settings.starMap.showDirections }
+        set { settings.starMap.showDirections = newValue; setNeedsDisplay() }
+    }
+
+    var showCelestialPaths: Bool {
+        get { settings.starMap.showCelestialPaths }
+        set { settings.starMap.showCelestialPaths = newValue; setNeedsDisplay() }
+    }
+
+    var showRedFilter: Bool {
+        get { settings.starMap.showRedFilter }
+        set { settings.starMap.showRedFilter = newValue; updateRedFilter() }
+    }
+
+    var showStars: Bool {
+        get { settings.starMap.showStars }
+        set { settings.starMap.showStars = newValue; setNeedsDisplay() }
+    }
+
+    var showConstellations: Bool {
+        get { settings.starMap.showConstellations }
+        set { settings.starMap.showConstellations = newValue; setNeedsDisplay() }
+    }
+
+    var showGalaxies: Bool {
+        get { settings.starMap.showGalaxies }
+        set { settings.starMap.showGalaxies = newValue; setNeedsDisplay() }
+    }
+
+    var showBlackHoles: Bool {
+        get { settings.starMap.showBlackHoles }
+        set { settings.starMap.showBlackHoles = newValue; setNeedsDisplay() }
+    }
+
+    var showNebulae: Bool {
+        get { settings.starMap.showNebulae }
+        set { settings.starMap.showNebulae = newValue; setNeedsDisplay() }
+    }
+
+    var showOpenClusters: Bool {
+        get { settings.starMap.showOpenClusters }
+        set { settings.starMap.showOpenClusters = newValue; setNeedsDisplay() }
+    }
+
+    var showGlobularClusters: Bool {
+        get { settings.starMap.showGlobularClusters }
+        set { settings.starMap.showGlobularClusters = newValue; setNeedsDisplay() }
+    }
+
+    var showGalaxyClusters: Bool {
+        get { settings.starMap.showGalaxyClusters }
+        set { settings.starMap.showGalaxyClusters = newValue; setNeedsDisplay() }
+    }
+
+    var showSun: Bool {
+        get { settings.starMap.showSun }
+        set { settings.starMap.showSun = newValue; setNeedsDisplay() }
+    }
+
+    var showMoon: Bool {
+        get { settings.starMap.showMoon }
+        set { settings.starMap.showMoon = newValue; setNeedsDisplay() }
+    }
+
+    var showPlanets: Bool {
+        get { settings.starMap.showPlanets }
+        set { settings.starMap.showPlanets = newValue; setNeedsDisplay() }
+    }
+
+    var magnitudeFilter: Double? {
+        get { settings.starMap.magnitudeFilter }
+        set { settings.starMap.magnitudeFilter = newValue; setNeedsDisplay() }
+    }
+
+    var showMagnitudeFilter: Bool {
+        get { settings.starMap.showMagnitudeFilter }
+        set { settings.starMap.showMagnitudeFilter = newValue; setNeedsDisplay() }
+    }
+
+    var is2DMode: Bool {
+        get { settings.starMap.is2DMode }
+        set { settings.starMap.is2DMode = newValue; setNeedsDisplay() }
+    }
 
     private var panX: CGFloat = 0
     private var panY: CGFloat = 0
@@ -60,6 +201,14 @@ final class StarView: UIView {
     private var occupiedRects: [CGRect] = []
     private var pathCache: [String: CelestialPathData] = [:]
     private var selectedConstellationId: String?
+    private var pinnedObjects = Set<SkyObject>()
+    private var manualSkyObjects: [SkyObject]?
+    private var manualConstellations: [Constellation]?
+    private var constellationCenterCache: [String: ConstellationCenter] = [:]
+    private var explicitCurrentTime: Time?
+    private var explicitObserver: Observer?
+    private var onObjectClickListener: ((SkyObject?) -> Void)?
+    private var onConstellationClickListener: ((Constellation?) -> Void)?
 
     private let eclipticStep = 10
     private var eclipticAzimuths: [Double] = []
@@ -94,20 +243,36 @@ final class StarView: UIView {
     private var lastEquGridLat = -999.0
     private var lastEquGridLon = -999.0
 
-    private struct CelestialPathData {
-        let azimuths: [Double]
-        let altitudes: [Double]
-        let labels: [String?]
-        let lastTime: Double
-        let lastLat: Double
-        let lastLon: Double
+    var currentTime: Time {
+        get {
+            explicitCurrentTime ?? AstroUtils.astronomyTime(from: viewModel?.state.date ?? Date())
+        }
+        set {
+            explicitCurrentTime = newValue
+        }
     }
 
-    private struct ConstellationCenter {
-        let ra: Double
-        let dec: Double
-        let azimuth: Double
-        let altitude: Double
+    var observer: Observer {
+        get {
+            explicitObserver ?? AstroUtils.observer(from: viewModel?.state.location)
+        }
+        set {
+            explicitObserver = newValue
+        }
+    }
+
+    private var skyObjects: [SkyObject] {
+        (manualSkyObjects ?? viewModel?.positionedObjects ?? [])
+            .filter { $0.type != .CONSTELLATION }
+            .sorted { $0.magnitude < $1.magnitude }
+    }
+
+    private var constellations: [Constellation] {
+        manualConstellations ?? viewModel?.constellations ?? []
+    }
+
+    private var selectedObject: SkyObject? {
+        viewModel?.state.selectedObject
     }
 
     override init(frame: CGRect) {
@@ -140,16 +305,216 @@ final class StarView: UIView {
         setNeedsDisplay()
     }
 
+    func setObserverLocation(lat: Double, lon: Double, alt: Double) {
+        observer = Observer(latitude: lat, longitude: lon, height: alt)
+        recalculatePositions(time: currentTime, updateTargets: false, force: true)
+        setNeedsDisplay()
+    }
+
     func setCameraOrientation(azimuth: Double, altitude: Double, roll: Double) {
         setCenter(azimuth: azimuth, altitude: altitude)
         self.roll = roll
         setNeedsDisplay()
     }
 
-    func setCenter(azimuth: Double, altitude: Double) {
+    func setCenter(azimuth: Double, altitude: Double, animate: Bool = false) {
+        if animate {
+            animateTo(azimuth: azimuth, altitude: altitude)
+            return
+        }
         centerAzimuth = normalizedDegrees(azimuth)
         centerAltitude = max(-90, min(90, altitude))
         setNeedsDisplay()
+    }
+
+    private func animateTo(azimuth: Double, altitude: Double, targetViewAngle: Double? = nil) {
+        let startAz = centerAzimuth
+        let startAlt = centerAltitude
+        let startAngle = viewAngle
+        let targetAlt = max(-90, min(90, altitude))
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       options: [.curveEaseOut, .allowUserInteraction]) {
+            self.centerAzimuth = self.interpolateAngle(start: startAz, end: azimuth, fraction: 1)
+            self.centerAltitude = startAlt + (targetAlt - startAlt)
+            if let targetViewAngle {
+                self.viewAngle = startAngle + (targetViewAngle - startAngle)
+            }
+            self.setNeedsDisplay()
+            self.layoutIfNeeded()
+        } completion: { _ in
+            self.onAnimationFinished?()
+        }
+    }
+
+    func getAltitude() -> Double {
+        centerAltitude
+    }
+
+    func getAzimuth() -> Double {
+        centerAzimuth
+    }
+
+    func getViewAngle() -> Double {
+        viewAngle
+    }
+
+    func setAzimuth(_ azimuth: Double, animate: Bool = false, fps: Int? = 30) {
+        guard abs(centerAzimuth - azimuth) >= 0.5 else {
+            return
+        }
+        if animate {
+            animateTo(azimuth: azimuth, altitude: centerAltitude)
+        } else {
+            centerAzimuth = normalizedDegrees(azimuth)
+            setNeedsDisplay()
+        }
+        onAzimuthManualChangeListener?(centerAzimuth)
+    }
+
+    func setSkyObjects(_ objects: [SkyObject]) {
+        manualSkyObjects = objects.sorted { $0.magnitude < $1.magnitude }
+        rebuildObjectMap()
+        rebuildConstellationCenterCache()
+        recalculatePositions(time: currentTime, updateTargets: false, force: true)
+        pinnedObjects.formIntersection(Set(objects.filter { $0.showCelestialPath }))
+        pinnedObjects.formUnion(objects.filter { $0.showCelestialPath })
+        setNeedsDisplay()
+    }
+
+    func setConstellations(_ list: [Constellation]) {
+        manualConstellations = list
+        rebuildObjectMap()
+        rebuildConstellationCenterCache()
+        recalculatePositions(time: currentTime, updateTargets: false, force: true)
+        pinnedObjects.formUnion(list.filter { $0.showCelestialPath })
+        setNeedsDisplay()
+    }
+
+    func updateVisibility() {
+        recalculatePositions(time: currentTime, updateTargets: false)
+        setNeedsDisplay()
+    }
+
+    func refreshObjects() {
+        recalculatePositions(time: currentTime, updateTargets: false)
+        setNeedsDisplay()
+    }
+
+    func updateRedFilter() {
+        setNeedsDisplay()
+    }
+
+    func setOnObjectClickListener(_ listener: @escaping (SkyObject?) -> Void) {
+        onObjectClickListener = listener
+    }
+
+    func setOnConstellationClickListener(_ listener: @escaping (Constellation?) -> Void) {
+        onConstellationClickListener = listener
+    }
+
+    func getSelectedConstellationItem() -> Constellation? {
+        guard let selectedConstellationId else {
+            return nil
+        }
+        return constellations.first { $0.id == selectedConstellationId }
+    }
+
+    func setSelectedObject(_ object: SkyObject?, center: Bool = false, animate: Bool = false) {
+        if let constellation = object as? Constellation {
+            setSelectedConstellation(constellation, center: center, animate: animate)
+            return
+        }
+        selectedConstellationId = nil
+        viewModel?.state.selectedObject = object
+        if let object, center {
+            setCenter(azimuth: object.azimuth, altitude: object.altitude, animate: animate)
+        }
+        setNeedsDisplay()
+    }
+
+    func setSelectedConstellation(_ constellation: Constellation?, center: Bool = false, animate: Bool = false) {
+        selectedConstellationId = constellation?.id
+        viewModel?.state.selectedObject = constellation
+        if let constellation, center {
+            let centers = constellationCenters()
+            if let center = centers[constellation.id] {
+                let targetAngle = targetViewAngle(for: constellation, center: center)
+                if animate {
+                    animateTo(azimuth: center.azimuth, altitude: center.altitude, targetViewAngle: targetAngle)
+                } else {
+                    setCenter(azimuth: center.azimuth, altitude: center.altitude)
+                    setViewAngle(targetAngle)
+                }
+            }
+        }
+        setNeedsDisplay()
+    }
+
+    private func targetViewAngle(for constellation: Constellation, center: ConstellationCenter) -> Double {
+        var maxDistance = 0.0
+        var uniqueStars = Set<Int>()
+        for (first, second) in constellation.lines {
+            uniqueStars.insert(first)
+            uniqueStars.insert(second)
+        }
+        for id in uniqueStars {
+            guard let star = skyObjectMap[String(id)] else {
+                continue
+            }
+            maxDistance = max(maxDistance, angularDistance(ra1: center.ra, dec1: center.dec, ra2: star.ra, dec2: star.dec))
+        }
+        return maxDistance > 0 ? max(20, min(120, maxDistance * 3.5)) : viewAngle
+    }
+
+    func isObjectPinned(_ object: SkyObject) -> Bool {
+        pinnedObjects.contains(object)
+    }
+
+    func setObjectPinned(_ object: SkyObject, pinned: Bool, forceUpdate: Bool = false) {
+        if pinned {
+            pinnedObjects.insert(object)
+        } else {
+            pinnedObjects.remove(object)
+            pathCache.removeValue(forKey: object.id)
+        }
+        if forceUpdate {
+            setNeedsDisplay()
+        }
+    }
+
+    func setDateTime(_ time: Time, animate: Bool = true) {
+        currentTime = time
+        let millis = time.toMillisecondsSince1970()
+        viewModel?.state.date = Date(timeIntervalSince1970: TimeInterval(Double(millis) / 1000.0))
+        recalculatePositions(time: time, updateTargets: animate, force: true)
+        if animate {
+            for object in skyObjects {
+                object.azimuth = interpolateAngle(start: object.startAzimuth, end: object.targetAzimuth, fraction: 1)
+                object.altitude = object.targetAltitude
+            }
+            for constellation in constellations {
+                constellation.azimuth = constellation.targetAzimuth
+                constellation.altitude = constellation.targetAltitude
+            }
+            var updatedCenters = constellationCenterCache
+            for (id, center) in constellationCenterCache {
+                var updated = center
+                updated.azimuth = interpolateAngle(start: center.azimuth, end: center.targetAzimuth, fraction: 1)
+                updated.altitude = center.targetAltitude
+                updatedCenters[id] = updated
+            }
+            constellationCenterCache = updatedCenters
+        }
+        setNeedsDisplay()
+    }
+
+    func getMinZoom() -> Double {
+        settings.starMap.is2DMode ? 200 : 150
+    }
+
+    func getMaxZoom() -> Double {
+        150
     }
 
     func setViewAngle(_ angle: Double) {
@@ -165,11 +530,8 @@ final class StarView: UIView {
     }
 
     func project(object: SkyObject) -> CGPoint? {
-        guard let azimuth = object.azimuth, let altitude = object.altitude else {
-            return nil
-        }
         updateProjectionCache()
-        return skyToScreen(azimuth: azimuth, altitude: altitude)
+        return skyToScreen(azimuth: object.azimuth, altitude: object.altitude)
     }
 
     override func draw(_ rect: CGRect) {
@@ -216,43 +578,27 @@ final class StarView: UIView {
         context.restoreGState()
     }
 
-    private var currentTime: Time {
-        AstroUtils.astronomyTime(from: viewModel?.state.date ?? Date())
-    }
-
-    private var observer: Observer {
-        AstroUtils.observer(from: viewModel?.state.location)
-    }
-
-    private var skyObjects: [SkyObject] {
-        viewModel?.positionedObjects
-            .filter { $0.type != .constellation }
-            .sorted { ($0.magnitude ?? 99) < ($1.magnitude ?? 99) } ?? []
-    }
-
-    private var constellations: [Constellation] {
-        viewModel?.constellations ?? []
-    }
-
-    private var selectedObject: SkyObject? {
-        viewModel?.state.selectedObject
-    }
-
     private func rebuildObjectMap() {
         skyObjectMap.removeAll(keepingCapacity: true)
-        for object in viewModel?.positionedObjects ?? [] {
+        for object in (manualSkyObjects ?? viewModel?.positionedObjects ?? []) {
             skyObjectMap[object.id] = object
-            if let wid = object.wid {
-                skyObjectMap[wid] = object
+            if !object.wid.isEmpty {
+                skyObjectMap[object.wid] = object
             }
-            if let hip = object.hip {
+            let hip = object.hip
+            if hip > 0 {
                 skyObjectMap[String(hip)] = object
             }
         }
     }
 
     private func drawBackground(in context: CGContext) {
-        UIColor.black.withAlphaComponent(settings.common.showRegularMap ? 0.70 : 1.0).setFill()
+        if isCameraMode {
+            context.clear(bounds)
+            UIColor.black.withAlphaComponent(0.20).setFill()
+        } else {
+            UIColor.black.setFill()
+        }
         context.fill(bounds)
     }
 
@@ -265,9 +611,7 @@ final class StarView: UIView {
     }
 
     private func drawSkyObject(_ object: SkyObject, in context: CGContext) {
-        guard let azimuth = object.azimuth,
-              let altitude = object.altitude,
-              let point = skyToScreen(azimuth: azimuth, altitude: altitude),
+        guard let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude),
               bounds.insetBy(dx: -30, dy: -30).contains(point) else {
             return
         }
@@ -275,16 +619,16 @@ final class StarView: UIView {
         let zoomFactor = max(0, min(1, (viewAngle - 10) / (settings.starMap.is2DMode ? 210 : 140)))
         var color = object.color
         var baseSize: CGFloat = 15
-        if object.type == .star && zoomFactor > 0.3 && (object.magnitude ?? 99) > 2.5 {
+        if object.type == .STAR && zoomFactor > 0.3 && object.magnitude > 2.5 {
             baseSize = 8
             color = .gray
         }
 
-        var radius = max(2, baseSize - CGFloat(object.magnitude ?? 4) * 2)
-        if object.type == .star && zoomFactor > 0.5 {
+        var radius = max(2, baseSize - CGFloat(object.magnitude) * 2)
+        if object.type == .STAR && zoomFactor > 0.5 {
             radius *= 0.7
         }
-        if object.type == .sun || object.type == .moon {
+        if object.type == .SUN || object.type == .MOON {
             radius *= 0.5
         }
 
@@ -318,12 +662,12 @@ final class StarView: UIView {
         if object === selectedObject || (settings.starMap.showCelestialPaths && object.isCelestialPath) {
             return true
         }
-        if object.type == .star {
+        if object.type == .STAR {
             if object.displayName.lowercased().hasPrefix("hip") {
                 return false
             }
             let threshold = 5.0 - zoomFactor * 3.5
-            return (object.magnitude ?? 99) <= threshold
+            return object.magnitude <= threshold
         }
         return true
     }
@@ -341,26 +685,20 @@ final class StarView: UIView {
     private func drawHighlights(in context: CGContext) {
         if settings.starMap.showCelestialPaths {
             for object in skyObjects where object.isCelestialPath && isObjectVisibleInSettings(object) {
-                if let azimuth = object.azimuth,
-                   let altitude = object.altitude,
-                   let point = skyToScreen(azimuth: azimuth, altitude: altitude) {
+                if let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
                     strokeCircle(at: point, radius: 25, color: UIColor(red: 1, green: 0.84, blue: 0, alpha: 1), width: 2, in: context)
                 }
             }
         }
 
         if let object = selectedObject,
-           let azimuth = object.azimuth,
-           let altitude = object.altitude,
-           let point = skyToScreen(azimuth: azimuth, altitude: altitude) {
+           let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
             strokeCircle(at: point, radius: 25, color: .red, width: 2, in: context)
         }
 
         if settings.starMap.showDirections {
             for object in skyObjects where object.isDirection && isObjectVisibleInSettings(object) {
-                if let azimuth = object.azimuth,
-                   let altitude = object.altitude,
-                   let point = skyToScreen(azimuth: azimuth, altitude: altitude) {
+                if let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
                     strokeCircle(at: point, radius: 26, color: directionColor(object.colorIndex), width: 2, in: context)
                 }
             }
@@ -402,8 +740,8 @@ final class StarView: UIView {
                 (azimuth, Double(altitude))
             }
             if altitude != 0 {
-                drawGridLabel("\(altitude) deg", azimuth: centerAzimuth, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
-                drawGridLabel("\(altitude) deg", azimuth: centerAzimuth + 180, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
+                drawGridLabel("\(altitude)°", azimuth: centerAzimuth, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
+                drawGridLabel("\(altitude)°", azimuth: centerAzimuth + 180, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
             }
         }
 
@@ -411,11 +749,11 @@ final class StarView: UIView {
             appendSkyLine(to: path, range: stride(from: -90.0, through: 90.0, by: Double(density.lineStep))) { altitude in
                 (Double(azimuth), altitude)
             }
-            if azimuth % 90 != 0 {
-                drawOutsideLabel("\(azimuth) deg", azimuth: Double(azimuth), altitude: 0, color: UIColor(white: 0.55, alpha: 1), offset: 25, in: context)
+            if !azimuth.isMultiple(of: 90) {
+                drawOutsideLabel("\(azimuth)°", azimuth: Double(azimuth), altitude: 0, color: UIColor(white: 0.55, alpha: 1), offset: 25, in: context)
             }
         }
-        stroke(path, color: UIColor(white: 0.27, alpha: 1), width: 0.8, in: context)
+        stroke(path, color: UIColor(white: 0.27, alpha: 1), width: 2.0, in: context)
     }
 
     private func updateEquatorialGridCache() {
@@ -680,12 +1018,8 @@ final class StarView: UIView {
             for (firstId, secondId) in constellation.linePairs {
                 guard let first = skyObjectMap[firstId],
                       let second = skyObjectMap[secondId],
-                      let firstAz = first.azimuth,
-                      let firstAlt = first.altitude,
-                      let secondAz = second.azimuth,
-                      let secondAlt = second.altitude,
-                      let p1 = skyToScreen(azimuth: firstAz, altitude: firstAlt, allowLimitedOffScreen: true),
-                      let p2 = skyToScreen(azimuth: secondAz, altitude: secondAlt, allowLimitedOffScreen: true) else {
+                      let p1 = skyToScreen(azimuth: first.azimuth, altitude: first.altitude, allowLimitedOffScreen: true),
+                      let p2 = skyToScreen(azimuth: second.azimuth, altitude: second.altitude, allowLimitedOffScreen: true) else {
                     continue
                 }
                 path.move(to: p1)
@@ -712,7 +1046,7 @@ final class StarView: UIView {
 
             let color = isSelected ? UIColor(red: 1, green: 0.84, blue: 0, alpha: 1) : UIColor(red: 0.67, green: 0.73, blue: 1.0, alpha: 1)
             let font = UIFont.italicSystemFont(ofSize: 16)
-            let text = constellation.name
+            let text = constellation.getDisplayName()
             let size = text.size(withAttributes: [.font: font])
             let rect = CGRect(x: point.x - size.width / 2 - 10, y: point.y - 10, width: size.width + 20, height: size.height + 20)
             let overlaps = occupiedRects.contains { $0.intersects(rect) }
@@ -724,47 +1058,41 @@ final class StarView: UIView {
     }
 
     private func constellationCenters() -> [String: ConstellationCenter] {
+        if constellationCenterCache.isEmpty && !constellations.isEmpty {
+            rebuildConstellationCenterCache()
+        }
+        return constellationCenterCache
+    }
+
+    private func rebuildConstellationCenterCache() {
+        guard !constellations.isEmpty else {
+            constellationCenterCache.removeAll(keepingCapacity: true)
+            return
+        }
+
+        var objectMap: [Int: SkyObject] = [:]
+        for object in skyObjects where object.hip > 0 {
+            objectMap[object.hip] = object
+        }
+
         var centers: [String: ConstellationCenter] = [:]
         for constellation in constellations {
-            var uniqueIds: Set<String> = []
-            for (first, second) in constellation.linePairs {
-                uniqueIds.insert(first)
-                uniqueIds.insert(second)
-            }
-
-            var sumX = 0.0
-            var sumY = 0.0
-            var sumZ = 0.0
-            var count = 0
-            for id in uniqueIds {
-                guard let star = skyObjectMap[id] else {
-                    continue
-                }
-                let raRad = star.ra * 15.0 * .pi / 180.0
-                let decRad = star.dec * .pi / 180.0
-                sumX += cos(decRad) * cos(raRad)
-                sumY += cos(decRad) * sin(raRad)
-                sumZ += sin(decRad)
-                count += 1
-            }
-
-            guard count > 0 else {
+            guard let center = AstroUtils.calculateConstellationCenter(constellation, skyObjectMap: objectMap) else {
                 continue
             }
-            let avgX = sumX / Double(count)
-            let avgY = sumY / Double(count)
-            let avgZ = sumZ / Double(count)
-            let hypotenuse = hypot(avgX, avgY)
-            var raRad = atan2(avgY, avgX)
-            if raRad < 0 {
-                raRad += 2 * .pi
-            }
-            let ra = raRad * 180.0 / .pi / 15.0
-            let dec = atan2(avgZ, hypotenuse) * 180.0 / .pi
+            let ra = center.0
+            let dec = center.1
             let hor = AstronomyKt.horizon(time: currentTime, observer: observer, ra: ra, dec: dec, refraction: Refraction.normal)
-            centers[constellation.id] = ConstellationCenter(ra: ra, dec: dec, azimuth: hor.azimuth, altitude: hor.altitude)
+            constellation.ra = ra
+            constellation.dec = dec
+            centers[constellation.id] = ConstellationCenter(ra: ra,
+                                                            dec: dec,
+                                                            azimuth: hor.azimuth,
+                                                            altitude: hor.altitude,
+                                                            targetAzimuth: hor.azimuth,
+                                                            targetAltitude: hor.altitude)
         }
-        return centers
+        constellationCenterCache = centers
     }
 
     private func drawCelestialPaths(in context: CGContext) {
@@ -773,7 +1101,8 @@ final class StarView: UIView {
             objects.append(selectedObject)
         }
         if settings.starMap.showCelestialPaths {
-            objects.append(contentsOf: skyObjects.filter { $0.isCelestialPath })
+            objects.append(contentsOf: pinnedObjects)
+            objects.append(contentsOf: skyObjects.filter { $0.showCelestialPath })
         }
 
         var seenIds: Set<String> = []
@@ -787,7 +1116,7 @@ final class StarView: UIView {
             return
         }
 
-        let drawCount = object.type == .moon ? data.azimuths.count : min(data.azimuths.count, 145)
+        let drawCount = object.type == .MOON ? data.azimuths.count : min(data.azimuths.count, 145)
         let path = CGMutablePath()
         var penDown = false
         var previousPoint: CGPoint?
@@ -888,9 +1217,84 @@ final class StarView: UIView {
     private func horizontalPosition(for object: SkyObject, time: Time, observer: Observer) -> Topocentric? {
         if let body = object.body {
             let equatorial = AstronomyKt.equator(body: body, time: time, observer: observer, equdate: EquatorEpoch.ofdate, aberration: Aberration.corrected)
+            object.distAu = equatorial.dist
             return AstronomyKt.horizon(time: time, observer: observer, ra: equatorial.ra, dec: equatorial.dec, refraction: Refraction.normal)
         }
         return AstronomyKt.horizon(time: time, observer: observer, ra: object.ra, dec: object.dec, refraction: Refraction.normal)
+    }
+
+    private func recalculatePositions(time: Time, updateTargets: Bool, force: Bool = false) {
+        for object in skyObjects where shouldRecalculate(object) {
+            calculatePosition(object, time: time, updateTargets: updateTargets, force: force)
+        }
+
+        if constellationCenterCache.isEmpty && !constellations.isEmpty {
+            rebuildConstellationCenterCache()
+        }
+        for constellation in constellations {
+            guard var center = constellationCenterCache[constellation.id] else {
+                constellation.azimuth = 0
+                constellation.altitude = 0
+                constellation.targetAzimuth = 0
+                constellation.targetAltitude = 0
+                continue
+            }
+            let horizontal = AstronomyKt.horizon(time: time, observer: observer, ra: center.ra, dec: center.dec, refraction: Refraction.normal)
+            constellation.ra = center.ra
+            constellation.dec = center.dec
+            if updateTargets {
+                center.targetAzimuth = horizontal.azimuth
+                center.targetAltitude = horizontal.altitude
+                constellation.targetAzimuth = horizontal.azimuth
+                constellation.targetAltitude = horizontal.altitude
+            } else {
+                center.azimuth = horizontal.azimuth
+                center.altitude = horizontal.altitude
+                center.targetAzimuth = horizontal.azimuth
+                center.targetAltitude = horizontal.altitude
+                constellation.azimuth = horizontal.azimuth
+                constellation.altitude = horizontal.altitude
+                constellation.targetAzimuth = horizontal.azimuth
+                constellation.targetAltitude = horizontal.altitude
+            }
+            constellationCenterCache[constellation.id] = center
+        }
+    }
+
+    func calculatePosition(_ object: SkyObject) {
+        calculatePosition(object, time: currentTime, updateTargets: false)
+    }
+
+    private func calculatePosition(_ object: SkyObject, time: Time, updateTargets: Bool, force: Bool = false) {
+        if !force && object.lastUpdateTime == time.tt && !updateTargets {
+            return
+        }
+        guard let horizontal = horizontalPosition(for: object, time: time, observer: observer) else {
+            return
+        }
+        if updateTargets {
+            object.targetAzimuth = horizontal.azimuth
+            object.targetAltitude = horizontal.altitude
+        } else {
+            object.azimuth = horizontal.azimuth
+            object.altitude = horizontal.altitude
+            object.targetAzimuth = horizontal.azimuth
+            object.targetAltitude = horizontal.altitude
+            object.lastUpdateTime = time.tt
+        }
+    }
+
+    private func shouldRecalculate(_ object: SkyObject) -> Bool {
+        if object === selectedObject {
+            return true
+        }
+        if settings.starMap.showCelestialPaths && pinnedObjects.contains(object) {
+            return true
+        }
+        if settings.starMap.showConstellations {
+            return true
+        }
+        return isObjectVisibleInSettings(object)
     }
 
     private func drawDirectionArrows(in context: CGContext) {
@@ -901,9 +1305,7 @@ final class StarView: UIView {
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let radius = min(bounds.width, bounds.height) * 0.42
         for object in skyObjects where object.isDirection && isObjectVisibleInSettings(object) {
-            guard let azimuth = object.azimuth,
-                  let altitude = object.altitude,
-                  let projected = skyToScreen(azimuth: azimuth, altitude: altitude, allowAnyOffScreen: true),
+            guard let projected = skyToScreen(azimuth: object.azimuth, altitude: object.altitude, allowAnyOffScreen: true),
                   !bounds.contains(projected) else {
                 continue
             }
@@ -1047,20 +1449,18 @@ final class StarView: UIView {
         if settings.starMap.showFavorites && object.isFavorite {
             return true
         }
-        if settings.starMap.showMagnitudeFilter,
-           object.type == .star,
+        if object.type == .STAR,
            settings.starMap.showStars,
            let maxMagnitude = settings.starMap.magnitudeFilter,
-           let magnitude = object.magnitude,
-           magnitude > maxMagnitude {
+           object.magnitude > maxMagnitude {
             return false
         }
         return settings.isObjectTypeVisible(object.type)
     }
 
     private func directionColor(_ index: Int) -> UIColor {
-        let colors: [UIColor] = [.cyan, .systemOrange, .systemGreen, .systemPink, .systemPurple, .systemYellow]
-        return colors[index % colors.count]
+        let colors = AstronomyPluginSettings.DirectionColor.allCases
+        return colors[index % colors.count].color
     }
 
     private func updateProjectionCache() {
@@ -1157,6 +1557,7 @@ final class StarView: UIView {
             centerAltitude = max(-90, min(90, centerAltitude - offY * (oldScale - newScale)))
         }
         viewAngle = finalAngle
+        onViewAngleChangeListener?(viewAngle)
         setNeedsDisplay()
     }
 
@@ -1180,6 +1581,7 @@ final class StarView: UIView {
                     let scale = viewAngle / Double(max(bounds.width, 1))
                     centerAzimuth = normalizedDegrees(centerAzimuth - Double(dx) * scale)
                     centerAltitude = max(-90, min(90, centerAltitude + Double(dy) * scale))
+                    onAzimuthManualChangeListener?(centerAzimuth)
                 }
                 lastTouchPoint = point
                 setNeedsDisplay()
@@ -1208,9 +1610,7 @@ final class StarView: UIView {
         let clickRadius: CGFloat = 60
         var bestObject: SkyObject?
         for object in skyObjects where isObjectVisibleInSettings(object) {
-            guard let azimuth = object.azimuth,
-                  let altitude = object.altitude,
-                  let objectPoint = skyToScreen(azimuth: azimuth, altitude: altitude) else {
+            guard let objectPoint = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) else {
                 continue
             }
             if hypot(point.x - objectPoint.x, point.y - objectPoint.y) < clickRadius {
@@ -1224,6 +1624,8 @@ final class StarView: UIView {
             viewModel?.state.selectedObject = bestObject
             setNeedsDisplay()
             delegate?.starView(self, didSelect: bestObject)
+            onObjectClickListener?(bestObject)
+            onConstellationClickListener?(nil)
             return
         }
 
@@ -1240,12 +1642,8 @@ final class StarView: UIView {
                 for (firstId, secondId) in constellation.linePairs {
                     guard let first = skyObjectMap[firstId],
                           let second = skyObjectMap[secondId],
-                          let firstAz = first.azimuth,
-                          let firstAlt = first.altitude,
-                          let secondAz = second.azimuth,
-                          let secondAlt = second.altitude,
-                          let p1 = skyToScreen(azimuth: firstAz, altitude: firstAlt),
-                          let p2 = skyToScreen(azimuth: secondAz, altitude: secondAlt) else {
+                          let p1 = skyToScreen(azimuth: first.azimuth, altitude: first.altitude),
+                          let p2 = skyToScreen(azimuth: second.azimuth, altitude: second.altitude) else {
                         continue
                     }
                     let distance = distanceFrom(point: point, toSegmentStart: p1, end: p2)
@@ -1267,9 +1665,11 @@ final class StarView: UIView {
 
             if let bestConstellation {
                 selectedConstellationId = bestConstellation.id
-                viewModel?.state.selectedObject = nil
+                viewModel?.state.selectedObject = bestConstellation
                 setNeedsDisplay()
-                delegate?.starView(self, didSelect: nil)
+                delegate?.starView(self, didSelect: bestConstellation)
+                onObjectClickListener?(nil)
+                onConstellationClickListener?(bestConstellation)
                 return
             }
         }
@@ -1278,6 +1678,8 @@ final class StarView: UIView {
         viewModel?.state.selectedObject = nil
         setNeedsDisplay()
         delegate?.starView(self, didSelect: nil)
+        onObjectClickListener?(nil)
+        onConstellationClickListener?(nil)
     }
 
     private func distanceFrom(point: CGPoint, toSegmentStart start: CGPoint, end: CGPoint) -> CGFloat {
@@ -1294,6 +1696,33 @@ final class StarView: UIView {
             closest = CGPoint(x: start.x + parameter * segmentX, y: start.y + parameter * segmentY)
         }
         return hypot(point.x - closest.x, point.y - closest.y)
+    }
+
+    private func angularDistance(ra1: Double, dec1: Double, ra2: Double, dec2: Double) -> Double {
+        let phi1 = dec1 * .pi / 180.0
+        let phi2 = dec2 * .pi / 180.0
+        let lambda1 = ra1 * 15.0 * .pi / 180.0
+        let lambda2 = ra2 * 15.0 * .pi / 180.0
+        let cosD = sin(phi1) * sin(phi2) + cos(phi1) * cos(phi2) * cos(lambda1 - lambda2)
+        return acos(max(-1, min(1, cosD))) * 180.0 / .pi
+    }
+
+    private func interpolateAngle(start: Double, end: Double, fraction: Double) -> Double {
+        var diff = end - start
+        while diff > 180 {
+            diff -= 360
+        }
+        while diff < -180 {
+            diff += 360
+        }
+        var result = start + diff * fraction
+        while result < 0 {
+            result += 360
+        }
+        while result >= 360 {
+            result -= 360
+        }
+        return result
     }
 
     private func normalizedDegrees(_ degrees: Double) -> Double {

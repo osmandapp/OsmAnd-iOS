@@ -8,387 +8,175 @@
 
 import Foundation
 import OsmAndShared
-import SQLite3
 import UIKit
 
-protocol AstroDataProvider {
-    func loadData(preferredLocale: String?) -> AstroDataSnapshot
-    func clearCache()
+struct AstroDataSnapshot {
+    let objects: [SkyObject]
+    let constellations: [Constellation]
+    let catalogs: [String: Catalog]
+    let dbPath: String?
+    let usedFallback: Bool
 }
 
-final class AstroDataDbProvider: AstroDataProvider {
-    private enum Constants {
-        static let astroDir = "astro"
-        static let extendedDb = "stars-articles.stardb"
-        static let baseDb = "stars.db"
+class AstroDataProvider {
+    private var cachedSkyObjects: [SkyObject]?
+    private var cachedCatalogs: [Catalog]?
+    private var cachedConstellations: [Constellation]?
+
+    func getSkyObjectsImpl(preferredLocale: String?) -> [SkyObject] {
+        []
     }
 
-    private var cachedSnapshot: AstroDataSnapshot?
-
-    func loadData(preferredLocale: String?) -> AstroDataSnapshot {
-        if let cachedSnapshot {
-            return cachedSnapshot
-        }
-
-        for path in dbLookupPaths() {
-            guard FileManager.default.fileExists(atPath: path),
-                  let snapshot = loadDb(path: path, preferredLocale: preferredLocale),
-                  !snapshot.objects.isEmpty else {
-                continue
-            }
-            cachedSnapshot = snapshot
-            return snapshot
-        }
-
-        let fallback = AstroDataSnapshot(objects: solarSystemObjects(),
-                                         constellations: [],
-                                         catalogs: [:],
-                                         dbPath: nil,
-                                         usedFallback: true)
-        cachedSnapshot = fallback
-        return fallback
+    func getCatalogsImpl() -> [Catalog] {
+        []
     }
 
-    func clearCache() {
-        cachedSnapshot = nil
+    func getConstellationsImpl(preferredLocale: String?) -> [Constellation] {
+        []
     }
 
-    private func dbLookupPaths() -> [String] {
-        guard let documentsPath = OsmAndApp.swiftInstance()?.documentsPath else {
-            return []
-        }
-        let astroPath = documentsPath.appendingPathComponent(Constants.astroDir)
-        return [
-            astroPath.appendingPathComponent(Constants.extendedDb),
-            astroPath.appendingPathComponent(Constants.baseDb)
-        ]
+    func getAstroArticleImpl(wikidataId: String, lang: String? = nil) -> AstroArticle? {
+        nil
     }
 
-    private func loadDb(path: String, preferredLocale: String?) -> AstroDataSnapshot? {
-        guard let db = SQLiteDatabase(path: path) else {
-            return nil
+    func getCatalogs() -> [Catalog] {
+        if let cachedCatalogs {
+            return cachedCatalogs
         }
-
-        let catalogs = loadCatalogs(db)
-        let catalogIds = loadCatalogIds(db, catalogs: catalogs)
-        let localizedNames = loadNames(db, preferredLocale: preferredLocale)
-        let articles = loadArticles(db, preferredLocale: preferredLocale)
-        var objects = loadObjects(db,
-                                  catalogsByObjectId: catalogIds,
-                                  localizedNames: localizedNames,
-                                  articles: articles)
-
-        if objects.isEmpty {
-            objects = solarSystemObjects()
-        }
-
-        let constellations = objects
-            .filter { $0.type == .constellation }
-            .map {
-                Constellation(id: $0.id,
-                              name: $0.displayName,
-                              centerWId: $0.centerWId,
-                              lineObjectIds: $0.lineObjectIds,
-                              rightAscension: $0.ra,
-                              declination: $0.dec)
-            }
-
-        return AstroDataSnapshot(objects: objects,
-                                 constellations: constellations,
-                                 catalogs: catalogs,
-                                 dbPath: path,
-                                 usedFallback: false)
+        let catalogs = getCatalogsImpl()
+        cachedCatalogs = catalogs
+        return catalogs
     }
 
-    private func loadCatalogs(_ db: SQLiteDatabase) -> [String: Catalog] {
-        var result: [String: Catalog] = [:]
-        let rows = db.rows("SELECT catalogWid, catalogName FROM Catalogs")
-        for row in rows {
-            guard let wid = row.string("catalogWid"), let name = row.string("catalogName") else {
-                continue
-            }
-            result[wid] = Catalog(catalogWid: wid, catalogName: name, catalogId: "")
+    func getSkyObjects(preferredLocale: String?) -> [SkyObject] {
+        if cachedCatalogs == nil {
+            cachedCatalogs = getCatalogsImpl()
         }
-        return result
-    }
-
-    private func loadCatalogIds(_ db: SQLiteDatabase, catalogs: [String: Catalog]) -> [String: [Catalog]] {
-        var result: [String: [Catalog]] = [:]
-        let rows = db.rows("SELECT catalogWid, catalogId, wikidataid FROM CatalogIds")
-        for row in rows {
-            guard let catalogWid = row.string("catalogWid"),
-                  let objectWid = row.string("wikidataid"),
-                  let catalogId = row.string("catalogId") else {
-                continue
-            }
-            let catalogName = catalogs[catalogWid]?.catalogName ?? catalogWid
-            let catalog = Catalog(catalogWid: catalogWid, catalogName: catalogName, catalogId: catalogId)
-            result[objectWid, default: []].append(catalog)
+        if let cachedSkyObjects {
+            return cachedSkyObjects
         }
-        return result
-    }
-
-    private func loadNames(_ db: SQLiteDatabase, preferredLocale: String?) -> [String: String] {
-        let priorities = localePriorities(preferredLocale)
-        var ranked: [String: (rank: Int, name: String)] = [:]
-        let rows = db.rows("SELECT wikidata, name, type FROM Names")
-        for row in rows {
-            guard let wid = row.string("wikidata"), let name = row.string("name") else {
-                continue
-            }
-            let type = row.string("type")?.lowercased() ?? ""
-            let rank = priorities.firstIndex(of: type) ?? priorities.count
-            if ranked[wid] == nil || rank < ranked[wid]!.rank {
-                ranked[wid] = (rank, name)
-            }
-        }
-        return ranked.mapValues { $0.name }
-    }
-
-    private func loadArticles(_ db: SQLiteDatabase, preferredLocale: String?) -> [String: AstroArticle] {
-        let priorities = localePriorities(preferredLocale)
-        var ranked: [String: (rank: Int, article: AstroArticle)] = [:]
-        let rows = db.rows("SELECT wikidata, lang, title, extract, thumbnail_url, summary_json, mobile_html FROM Wikipedia")
-        for row in rows {
-            guard let wid = row.string("wikidata") else {
-                continue
-            }
-            let language = row.string("lang")?.lowercased() ?? ""
-            let rank = priorities.firstIndex(of: language) ?? priorities.count
-            let article = AstroArticle(wikidataId: wid,
-                                       language: language,
-                                       title: row.string("title"),
-                                       extract: row.string("extract"),
-                                       thumbnailUrl: row.string("thumbnail_url"),
-                                       summaryJson: row.string("summary_json"),
-                                       mobileHtml: row.data("mobile_html"))
-            if ranked[wid] == nil || rank < ranked[wid]!.rank {
-                ranked[wid] = (rank, article)
-            }
-        }
-        return ranked.mapValues { $0.article }
-    }
-
-    private func loadObjects(_ db: SQLiteDatabase,
-                             catalogsByObjectId: [String: [Catalog]],
-                             localizedNames: [String: String],
-                             articles: [String: AstroArticle]) -> [SkyObject] {
-        let sql = """
-        SELECT wikidata, name, type, ra, dec, lines, mag, hip, radius, distance, mass, centerwid
-        FROM Objects
-        """
-        var objects = solarSystemObjects()
-        let rows = db.rows(sql)
-        for row in rows {
-            guard let wid = row.string("wikidata") ?? row.string("name"),
-                  let dbType = row.string("type"),
-                  let objectType = SkyObjectType.fromDbType(dbType) else {
-                continue
-            }
-
-            if objectType == .planet,
-               let wikidata = row.string("wikidata"),
-               AstroUtils.solarSystemWikidataIds[wikidata] != nil {
-                continue
-            }
-
-            let magnitude = row.double("mag")
-            let lines = parseLineObjectIds(row.string("lines"))
-            let object = SkyObject(id: wid,
-                                   hip: row.int("hip"),
-                                   catalogs: catalogsByObjectId[wid] ?? [],
-                                   wid: row.string("wikidata"),
-                                   centerWId: row.string("centerwid"),
-                                   type: objectType,
-                                   name: row.string("name") ?? row.string("lines"),
-                                   ra: row.double("ra") ?? 0,
-                                   dec: row.double("dec") ?? 0,
-                                   magnitude: magnitude,
-                                   color: AstroUtils.color(for: objectType, magnitude: magnitude),
-                                   radius: row.double("radius"),
-                                   distance: row.double("distance"),
-                                   mass: row.double("mass"),
-                                   lineObjectIds: lines,
-                                   localizedName: localizedNames[wid])
-            object.article = articles[wid]
-            objects.append(object)
-        }
+        let objects = getSkyObjectsImpl(preferredLocale: preferredLocale)
+        cachedSkyObjects = objects
         return objects
     }
 
-    private func solarSystemObjects() -> [SkyObject] {
-        let bodies: [(String, SkyObjectType, Body)] = [
-            ("Q525", .sun, Body.sun),
-            ("Q405", .moon, Body.moon),
-            ("Q308", .planet, Body.mercury),
-            ("Q313", .planet, Body.venus),
-            ("Q111", .planet, Body.mars),
-            ("Q319", .planet, Body.jupiter),
-            ("Q193", .planet, Body.saturn),
-            ("Q324", .planet, Body.uranus),
-            ("Q332", .planet, Body.neptune),
-            ("Q339", .planet, Body.pluto)
+    func getConstellations(preferredLocale: String?) -> [Constellation] {
+        if let cachedConstellations {
+            return cachedConstellations
+        }
+        let constellations = getConstellationsImpl(preferredLocale: preferredLocale)
+        var skyObjectMap: [Int: SkyObject] = [:]
+        for object in getSkyObjects(preferredLocale: preferredLocale) {
+            skyObjectMap[object.hip] = object
+        }
+        for constellation in constellations {
+            if let center = AstroUtils.calculateConstellationCenter(constellation, skyObjectMap: skyObjectMap) {
+                constellation.ra = center.0
+                constellation.dec = center.1
+            }
+        }
+        cachedConstellations = constellations
+        return constellations
+    }
+
+    func getAstroArticle(wikidataId: String, lang: String? = nil) -> AstroArticle? {
+        getAstroArticleImpl(wikidataId: wikidataId, lang: lang)
+    }
+
+    func loadData(preferredLocale: String?) -> AstroDataSnapshot {
+        let objects = getSkyObjects(preferredLocale: preferredLocale)
+        let constellations = getConstellations(preferredLocale: preferredLocale)
+        let catalogs = Dictionary(uniqueKeysWithValues: getCatalogs().map { ($0.wid, $0) })
+        return AstroDataSnapshot(objects: objects,
+                                 constellations: constellations,
+                                 catalogs: catalogs,
+                                 dbPath: nil,
+                                 usedFallback: objects.isEmpty)
+    }
+
+    func clearCache() {
+        cachedSkyObjects = nil
+        cachedCatalogs = nil
+        cachedConstellations = nil
+    }
+
+    func getPlanets(_ objects: inout [SkyObject]) {
+        let planets: [(Body, UIColor, String)] = [
+            (Body.sun, AstroUtils.bodyColor(Body.sun), "Q525"),
+            (Body.moon, AstroUtils.bodyColor(Body.moon), "Q405"),
+            (Body.mercury, AstroUtils.bodyColor(Body.mercury), "Q308"),
+            (Body.venus, AstroUtils.bodyColor(Body.venus), "Q313"),
+            (Body.mars, AstroUtils.bodyColor(Body.mars), "Q111"),
+            (Body.jupiter, AstroUtils.bodyColor(Body.jupiter), "Q319"),
+            (Body.saturn, AstroUtils.bodyColor(Body.saturn), "Q193"),
+            (Body.uranus, AstroUtils.bodyColor(Body.uranus), "Q324"),
+            (Body.neptune, AstroUtils.bodyColor(Body.neptune), "Q332")
         ]
 
-        return bodies.map { item in
-            let (id, type, body) = item
-            return SkyObject(id: id,
-                      wid: id,
-                      type: type,
-                      body: body,
-                      name: AstroUtils.bodyDisplayName(body),
-                      ra: 0,
-                      dec: 0,
-                      magnitude: nil,
-                      color: AstroUtils.color(for: body),
-                      localizedName: AstroUtils.bodyDisplayName(body))
+        for (body, color, wid) in planets {
+            objects.append(SkyObject(id: body.name.lowercased(),
+                                     hip: -1,
+                                     wid: wid,
+                                     type: body === Body.sun ? .SUN : (body === Body.moon ? .MOON : .PLANET),
+                                     body: body,
+                                     name: AstroUtils.bodyName(body),
+                                     ra: 0,
+                                     dec: 0,
+                                     magnitude: -2,
+                                     color: color))
         }
     }
 
-    private func localePriorities(_ preferredLocale: String?) -> [String] {
-        let language = (preferredLocale ?? Locale.current.languageCode ?? "en").lowercased()
-        return [
-            language,
-            "\(language)wiki",
-            "en",
-            "enwiki",
-            "mul",
-            ""
-        ]
+    func getTypeColor(_ type: SkyObjectType) -> UIColor {
+        switch type {
+        case .STAR:
+            return .white
+        case .GALAXY, .GALAXY_CLUSTER:
+            return .lightGray
+        case .BLACK_HOLE:
+            return .magenta
+        case .NEBULA:
+            return UIColor(red: 0.88, green: 0.81, blue: 0.96, alpha: 1.0)
+        case .OPEN_CLUSTER:
+            return UIColor(red: 1.0, green: 1.0, blue: 0.88, alpha: 1.0)
+        case .GLOBULAR_CLUSTER:
+            return UIColor(red: 1.0, green: 0.98, blue: 0.80, alpha: 1.0)
+        default:
+            return .white
+        }
     }
 
-    private func parseLineObjectIds(_ value: String?) -> [String] {
-        guard let value else {
+    func parseLines(_ json: String?) -> [(Int, Int)] {
+        guard let json, !json.isEmpty, let data = json.data(using: .utf8) else {
             return []
         }
-        return value
-            .components(separatedBy: CharacterSet(charactersIn: "[],;| \n\t"))
-            .filter { !$0.isEmpty }
-    }
-}
 
-private enum SQLiteValue {
-    case int(Int)
-    case double(Double)
-    case string(String)
-    case data(Data)
-    case null
-}
-
-private struct SQLiteRow {
-    let values: [String: SQLiteValue]
-
-    func string(_ key: String) -> String? {
-        switch values[key] {
-        case .string(let value):
-            return value
-        case .int(let value):
-            return String(value)
-        case .double(let value):
-            return String(value)
-        default:
-            return nil
-        }
-    }
-
-    func int(_ key: String) -> Int? {
-        switch values[key] {
-        case .int(let value):
-            return value
-        case .double(let value):
-            return Int(value)
-        case .string(let value):
-            return Int(value)
-        default:
-            return nil
-        }
-    }
-
-    func double(_ key: String) -> Double? {
-        switch values[key] {
-        case .double(let value):
-            return value
-        case .int(let value):
-            return Double(value)
-        case .string(let value):
-            return Double(value)
-        default:
-            return nil
-        }
-    }
-
-    func data(_ key: String) -> Data? {
-        switch values[key] {
-        case .data(let value):
-            return value
-        case .string(let value):
-            return value.data(using: .utf8)
-        default:
-            return nil
-        }
-    }
-}
-
-private final class SQLiteDatabase {
-    private var handle: OpaquePointer?
-
-    init?(path: String) {
-        guard sqlite3_open_v2(path, &handle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
-            if handle != nil {
-                sqlite3_close(handle)
-            }
-            return nil
-        }
-    }
-
-    deinit {
-        sqlite3_close(handle)
-    }
-
-    func rows(_ sql: String) -> [SQLiteRow] {
-        var statement: OpaquePointer?
-        guard sqlite3_prepare_v2(handle, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
+        guard let array = try? JSONSerialization.jsonObject(with: data) as? [[Int]] else {
             return []
         }
-        defer {
-            sqlite3_finalize(statement)
-        }
-
-        var result: [SQLiteRow] = []
-        while sqlite3_step(statement) == SQLITE_ROW {
-            let count = sqlite3_column_count(statement)
-            var values: [String: SQLiteValue] = [:]
-            for index in 0..<count {
-                guard let namePointer = sqlite3_column_name(statement, index) else {
-                    continue
-                }
-                let name = String(cString: namePointer)
-                values[name] = value(statement, index: index)
+        return array.compactMap { segment in
+            guard segment.count >= 2 else {
+                return nil
             }
-            result.append(SQLiteRow(values: values))
+            return (segment[0], segment[1])
         }
-        return result
     }
 
-    private func value(_ statement: OpaquePointer, index: Int32) -> SQLiteValue {
-        switch sqlite3_column_type(statement, index) {
-        case SQLITE_INTEGER:
-            return .int(Int(sqlite3_column_int64(statement, index)))
-        case SQLITE_FLOAT:
-            return .double(sqlite3_column_double(statement, index))
-        case SQLITE_TEXT:
-            guard let text = sqlite3_column_text(statement, index) else {
-                return .null
-            }
-            let cString = UnsafeRawPointer(text).assumingMemoryBound(to: CChar.self)
-            return .string(String(cString: cString))
-        case SQLITE_BLOB:
-            guard let bytes = sqlite3_column_blob(statement, index) else {
-                return .null
-            }
-            return .data(Data(bytes: bytes, count: Int(sqlite3_column_bytes(statement, index))))
+    func generateId(type: SkyObjectType, name: String) -> String {
+        switch type {
+        case .STAR, .GALAXY:
+            return name.lowercased()
+                .replacingOccurrences(of: " ", with: "_")
+                .filter { type == .STAR || $0.isLetter || $0.isNumber || $0 == "_" }
+        case .BLACK_HOLE:
+            return "bh_" + name.lowercased()
+                .replacingOccurrences(of: "*", with: "_")
+                .replacingOccurrences(of: " ", with: "_")
+                .replacingOccurrences(of: "-", with: "_")
+                .replacingOccurrences(of: "(", with: "_")
+                .replacingOccurrences(of: ")", with: "_")
         default:
-            return .null
+            return name.lowercased().replacingOccurrences(of: " ", with: "_")
         }
     }
 }

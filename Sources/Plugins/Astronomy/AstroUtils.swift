@@ -37,14 +37,16 @@ enum AstroUtils {
 
     static func horizontalPosition(for object: SkyObject, time: Time, observer: Observer) -> Topocentric? {
         if let body = object.body {
-            let equatorial = AstronomyKt.equator(body: body,
-                                                time: time,
-                                                observer: observer,
-                                                equdate: EquatorEpoch.ofdate,
-                                                aberration: Aberration.corrected)
+            let equatorial = AstronomyKt.equator(
+                body: body,
+                time: time,
+                observer: observer,
+                equdate: EquatorEpoch.ofdate,
+                aberration: Aberration.corrected
+            )
             object.ra = equatorial.ra
             object.dec = equatorial.dec
-            object.distanceAu = equatorial.dist
+            object.distAu = equatorial.dist
             return AstronomyKt.horizon(time: time,
                                        observer: observer,
                                        ra: equatorial.ra,
@@ -57,6 +59,10 @@ enum AstroUtils {
                                    ra: object.ra,
                                    dec: object.dec,
                                    refraction: Refraction.normal)
+    }
+
+    static func bodyName(_ body: Body) -> String {
+        bodyDisplayName(body)
     }
 
     static func bodyDisplayName(_ body: Body) -> String {
@@ -85,6 +91,10 @@ enum AstroUtils {
         }
     }
 
+    static func bodyColor(_ body: Body) -> UIColor {
+        color(for: body)
+    }
+
     static func color(for body: Body) -> UIColor {
         if body === Body.sun {
             return UIColor(red: 1.0, green: 0.69, blue: 0.20, alpha: 1.0)
@@ -105,22 +115,88 @@ enum AstroUtils {
 
     static func color(for type: SkyObjectType, magnitude: Double?) -> UIColor {
         switch type {
-        case .star:
+        case .STAR:
             let brightness = max(0.45, min(1.0, 1.0 - ((magnitude ?? 2.0) / 8.0)))
             return UIColor(red: brightness, green: brightness, blue: 1.0, alpha: 1.0)
-        case .galaxy, .galaxyCluster:
+        case .GALAXY, .GALAXY_CLUSTER:
             return UIColor(red: 0.52, green: 0.74, blue: 1.0, alpha: 1.0)
-        case .nebula:
+        case .NEBULA:
             return UIColor(red: 0.85, green: 0.45, blue: 0.95, alpha: 1.0)
-        case .openCluster, .globularCluster:
+        case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
             return UIColor(red: 0.50, green: 0.95, blue: 0.78, alpha: 1.0)
-        case .blackHole:
+        case .BLACK_HOLE:
             return UIColor(red: 0.95, green: 0.45, blue: 0.35, alpha: 1.0)
-        case .constellation:
+        case .CONSTELLATION:
             return UIColor(red: 0.80, green: 0.86, blue: 1.0, alpha: 1.0)
-        case .sun, .moon, .planet:
+        case .SUN, .MOON, .PLANET:
             return UIColor.white
         }
+    }
+
+    static func getObjectTypeIcon(_ type: SkyObjectType) -> String {
+        switch type {
+        case .STAR:
+            return "ic_action_favorites"
+        case .GALAXY, .GALAXY_CLUSTER:
+            return "ic_action_planet"
+        case .BLACK_HOLE:
+            return "ic_action_target"
+        case .SUN:
+            return "ic_action_sun"
+        case .MOON:
+            return "ic_action_moon"
+        case .PLANET:
+            return "ic_action_planet"
+        case .NEBULA:
+            return "ic_action_cloud"
+        case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
+            return "ic_action_group"
+        case .CONSTELLATION:
+            return "ic_action_telescope"
+        }
+    }
+
+    static func getObjectTypeName(_ type: SkyObjectType) -> String {
+        localizedString(type.titleKey)
+    }
+
+    static func calculateConstellationCenter(_ constellation: Constellation, skyObjectMap: [Int: SkyObject]) -> (Double, Double)? {
+        var sumX = 0.0
+        var sumY = 0.0
+        var sumZ = 0.0
+        var count = 0
+        var uniqueStars = Set<Int>()
+        for (first, second) in constellation.lines {
+            uniqueStars.insert(first)
+            uniqueStars.insert(second)
+        }
+
+        for id in uniqueStars {
+            guard let star = skyObjectMap[id] else {
+                continue
+            }
+            let raRad = star.ra * 15.0 * .pi / 180.0
+            let decRad = star.dec * .pi / 180.0
+            sumX += cos(decRad) * cos(raRad)
+            sumY += cos(decRad) * sin(raRad)
+            sumZ += sin(decRad)
+            count += 1
+        }
+
+        guard count > 0 else {
+            return nil
+        }
+
+        let avgX = sumX / Double(count)
+        let avgY = sumY / Double(count)
+        let avgZ = sumZ / Double(count)
+        let hyp = sqrt(avgX * avgX + avgY * avgY)
+        let decRad = atan2(avgZ, hyp)
+        var raRad = atan2(avgY, avgX)
+        if raRad < 0 {
+            raRad += 2 * .pi
+        }
+        return (raRad * 180.0 / .pi / 15.0, decRad * 180.0 / .pi)
     }
 
     static func normalizedDegrees(_ degrees: Double) -> Double {

@@ -15,3 +15,5 @@
 "NSBluetoothAlwaysUsageDescription" = "Access to Bluetooth is required to find and connect to BLE sensors.";
 
 "NSCalendarsUsageDescription" = "OsmAnd would like to create a calendar event for vehicle pick-up notification.";
+
+"NSCameraUsageDescription" = "Camera access is needed to show the sky camera overlay in Astronomy.";

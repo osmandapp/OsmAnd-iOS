@@ -99,6 +99,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
     [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
+    [allPlugins addObject:[AstronomyPlugin new]];
     [allPlugins addObject:[[OAExternalSensorsPlugin alloc] init]];
     [allPlugins addObject:[VehicleMetricsPlugin new]];
     [allPlugins addObject:[[OAOsmandDevelopmentPlugin alloc] init]];

@@ -1165,6 +1165,16 @@
     return _resourcesManager->addLocalResource(filePathQ);
 }
 
+- (BOOL) installTestResources:(NSMutableArray<NSString *> *)obfFilePaths
+{
+    bool result = YES;
+    for (NSString * file in obfFilePaths)
+    {
+        result = [self installTestResource:file] && result;
+    }
+    return result;
+}
+
 - (BOOL) removeTestResource:(NSString *)filePath
 {
     NSString *fileId = filePath.lastPathComponent.lowerCase;

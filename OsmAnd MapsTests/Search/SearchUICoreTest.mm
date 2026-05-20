@@ -124,9 +124,42 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     }
     NSDictionary *settingsJson = sourceJson[@"settings"];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:obfGzFile])
+    NSArray *filesJson = sourceJson[@"files"];
+    NSString *currentDirectory = [path stringByDeletingLastPathComponent];
+    NSMutableArray<NSString *> *obfFilePaths = [NSMutableArray array];
+    NSString *tempDir = NSTemporaryDirectory();
+
+    if (filesJson && [filesJson isKindOfClass:[NSArray class]])
     {
-        NSString *tempDir = NSTemporaryDirectory();
+        for (NSString *fileName in filesJson)
+        {
+            if ([fileName isKindOfClass:[NSString class]] && [fileName hasSuffix:@".obf.gz"])
+            {
+                NSString *gzFilePath = [currentDirectory stringByAppendingPathComponent:fileName];
+                NSString *obfName = [fileName stringByReplacingOccurrencesOfString:@".gz" withString:@""];
+                NSString *destObfPath = [tempDir stringByAppendingPathComponent:obfName];
+
+                OsmAnd::ArchiveReader archive(QString::fromNSString(gzFilePath));
+                bool ok = false;
+                const auto archiveItems = archive.getItems(&ok, true);
+
+                XCTAssertTrue(ok, @"Failed to open archive %@", gzFilePath);
+
+                if (ok && archiveItems.size() > 0)
+                {
+                    const auto& archiveItem = archiveItems.first();
+                    bool extracted = archive.extractItemToFile(archiveItem.name, QString::fromNSString(destObfPath), true);
+                    XCTAssertTrue(extracted, @"Failed to extract target OBF from gz");
+                    if (extracted)
+                    {
+                        [obfFilePaths addObject:destObfPath];
+                    }
+                }
+            }
+        }
+    }
+    else if ([fileManager fileExistsAtPath:obfGzFile])
+    {
         NSString *extractedObfPath = [tempDir stringByAppendingPathComponent:[obfFile lastPathComponent]];
         OsmAnd::ArchiveReader archive(QString::fromNSString(obfGzFile));
         bool ok = false;
@@ -141,18 +174,31 @@ static BOOL TEST_EXTRA_RESULTS = YES;
             XCTAssertTrue(extracted, @"Failed to extract target OBF from gz");
             if (extracted)
             {
-                obfFile = extractedObfPath;
+                [obfFilePaths addObject:extractedObfPath];
             }
         }
     }
 
-    [OsmAndApp.instance installTestResource:obfFile];
+    if (obfFilePaths.count == 0 && [fileManager fileExistsAtPath:obfFile])
+    {
+        [obfFilePaths addObject:obfFile];
+    }
+
+    if (obfFilePaths.count == 0)
+    {
+        XCTFail(@"No OBF files found or extracted for test: %@", path.lastPathComponent);
+        _failedCount++;
+        return;
+    }
+
+    [OsmAndApp.instance installTestResources:obfFilePaths];
+
     NSMutableArray<NSMutableArray<NSString *> *> *results = [NSMutableArray new];
     for (NSInteger i = 0; i < phrases.count; i++)
     {
         [results addObject:[NSMutableArray new]];
     }
-    
+
     if (sourceJson[@"results"])
         [self parseResults:sourceJson tag:@"results" results:results];
     
@@ -161,11 +207,19 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     
     XCTAssertEqual(phrases.count, results.count);
     if (phrases.count != results.count)
+    {
+        _failedCount++;
         return;
-    
+    }
+
+    NSMutableArray<NSString *> *offlineIndexNames = [NSMutableArray array];
+    for (NSString *filePath in obfFilePaths)
+    {
+        [offlineIndexNames addObject:[filePath lastPathComponent]];
+    }
+
     OASearchSettings *s = [OASearchSettings parseJSON:settingsJson];
-    [s setOfflineIndexes:@[[obfFile lastPathComponent]]];
-    
+    [s setOfflineIndexes:offlineIndexNames];
     OASearchUICore *core = [[OASearchUICore alloc] initWithLang:@"en" transliterate:NO];
     [core initApi];
     
@@ -227,7 +281,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 NSLog(@"Phrase: %@", [phrase toString]);
                 NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
                 NSLog(@"CURRENT RESULTS: ");
-                int limit = result.count;
+                int limit = (int)result.count;
                 int cnt = 1;
                 for (OASearchResult *r : searchResults)
                 {
@@ -250,10 +304,15 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 {
                     _missingCount++;
                 }
-                if ([obfFile hasPrefix:NSTemporaryDirectory()])
+
+                for (NSString *fileToRemove in obfFilePaths)
                 {
-                    [fileManager removeItemAtPath:obfFile error:nil];
+                    if ([fileToRemove hasPrefix:tempDir])
+                    {
+                        [fileManager removeItemAtPath:fileToRemove error:nil];
+                    }
                 }
+                XCTFail(@"Test failed due to mismatch");
                 return;
             }
         }
@@ -261,11 +320,14 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     }
 
     _successCount++;
-    if ([obfFile hasPrefix:NSTemporaryDirectory()])
+
+    for (NSString *fileToRemove in obfFilePaths)
     {
-        [fileManager removeItemAtPath:obfFile error:nil];
+        if ([fileToRemove hasPrefix:tempDir])
+        {
+            [fileManager removeItemAtPath:fileToRemove error:nil];
+        }
     }
-    // [OsmAndApp.instance removeTestResource:obfFile];
 }
 
 - (NSArray<OASearchResult *> *) getSearchResult:(OASearchPhrase *)phrase rm:(OAResultMatcher<OASearchResult *> *)rm core:(OASearchUICore *)core

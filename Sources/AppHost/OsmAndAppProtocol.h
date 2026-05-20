@@ -124,6 +124,7 @@
 
 // Tests only
 - (BOOL) installTestResource:(NSString *)filePath;
+- (BOOL) installTestResources:(NSMutableArray<NSString *> *)obfFilePaths;
 - (BOOL) removeTestResource:(NSString *)filePath;
 
 @end

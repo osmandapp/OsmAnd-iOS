@@ -611,7 +611,7 @@
 "osm_live_payment_renews_monthly" = "Havonta megújul";
 "osm_live_payment_renews_quarterly" = "Negyedévente megújul";
 "osm_live_payment_renews_annually" = "Évente megújul";
-"osm_live_payment_header" = "Fizetési időköz:";
+"osm_live_payment_header" = "Fizetés időköze:";
 "osm_live_payment_contribute_descr" = "Az adományok az OSM-térképezést támogatják.";
 "osm_live_subscribe_btn" = "Előfizetés";
 "shared_string_previous" = "Előző";

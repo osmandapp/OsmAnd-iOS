@@ -2986,6 +2986,14 @@ typedef enum
     }];
 }
 
+- (void)showWaypointOnMap:(OAGpxWptItem *)item latitude:(double)latitude longitude:(double)longitude
+{
+    [_mapViewController showContextPinMarker:item.point.lat longitude:item.point.lon animated:NO];
+    _targetLatitude = latitude;
+    _targetLongitude = longitude;
+    [self goToTargetPointDefault];
+}
+
 - (void)openRecordingTrackTargetView
 {
     [self openTargetViewWithGPX:nil];

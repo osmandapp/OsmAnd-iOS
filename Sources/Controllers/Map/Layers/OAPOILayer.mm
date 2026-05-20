@@ -1045,173 +1045,210 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     if (!_poiUiFilter && !_wikiUiFilter)
         return;
 
+    OAPOIUIFilter *poiUiFilter = _poiUiFilter;
+    OAPOIUIFilter *wikiUiFilter = _wikiUiFilter;
+    __block CGFloat displayDensityFactorSnapshot = UIScreen.mainScreen.scale;
+    __block unsigned int rasterTileSizeSnapshot = 0;
     [self.mapViewController runWithRenderSync:^{
+        displayDensityFactorSnapshot = self.mapViewController.displayDensityFactor;
+        rasterTileSizeSnapshot = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+    }];
+    if (rasterTileSizeSnapshot == 0)
+        return;
+    const CGFloat displayDensityFactor = displayDensityFactorSnapshot;
+    const unsigned int rasterTileSize = rasterTileSizeSnapshot;
 
-        void (^_generate)(OAPOIUIFilter *) = ^(OAPOIUIFilter *f) {
-            BOOL isWiki = [f isWikiFilter];
+    OAAmenityExtendedNameFilter *preparedPoiUiNameFilter = nil;
+    OAAmenityExtendedNameFilter *preparedWikiUiNameFilter = nil;
+    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> preparedAmenitySymbolsProvider;
+    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> preparedWikiSymbolsProvider;
+    OATopWikiOnlineAmenitiesController *preparedWikiOnlineAmenitiesController = nil;
 
-            auto categoriesFilter = QHash<QString, QStringList>();
-            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [f getAcceptedTypes];
-            for (OAPOICategory *category in types.keyEnumerator)
+    auto prepareProvider = [&](OAPOIUIFilter *f, BOOL isWiki) -> std::shared_ptr<OsmAnd::AmenitySymbolsProvider> {
+        auto categoriesFilter = QHash<QString, QStringList>();
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [f getAcceptedTypes];
+        for (OAPOICategory *category in types.keyEnumerator)
+        {
+            QStringList list = QStringList();
+            NSSet<NSString *> *subcategories = [types objectForKey:category];
+            if (subcategories != [OAPOIBaseType nullSet])
             {
-                QStringList list = QStringList();
-                NSSet<NSString *> *subcategories = [types objectForKey:category];
-                if (subcategories != [OAPOIBaseType nullSet])
+                for (NSString *sub in subcategories)
+                    list << QString::fromNSString(sub);
+            }
+            categoriesFilter.insert(QString::fromNSString(category.name), list);
+        }
+
+        OAAmenityExtendedNameFilter *nameFilter = [f getNameAmenityFilter:f.filterByName];
+        if (isWiki)
+            preparedWikiUiNameFilter = nameFilter;
+        else
+            preparedPoiUiNameFilter = nameFilter;
+
+        __weak OAAmenityExtendedNameFilter *weakWikiUiNameFilter = preparedWikiUiNameFilter;
+        __weak OAPOIUIFilter *weakWikiUiFilter = wikiUiFilter;
+        __weak OAAmenityExtendedNameFilter *weakPoiUiNameFilter = preparedPoiUiNameFilter;
+        __weak OAPOIUIFilter *weakPoiUiFilter = poiUiFilter;
+        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
+                [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
                 {
-                    for (NSString *sub in subcategories)
-                        list << QString::fromNSString(sub);
-                }
-                categoriesFilter.insert(QString::fromNSString(category.name), list);
-            }
+                    OAAmenityExtendedNameFilter *wikiUiNameFilter = weakWikiUiNameFilter;
+                    OAPOIUIFilter *wikiUiFilter = weakWikiUiFilter;
+                    OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
+                    OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
 
-            if (isWiki)
-                _wikiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
-            else
-                _poiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
-
-            __weak OAAmenityExtendedNameFilter *weakWikiUiNameFilter = _wikiUiNameFilter;
-            __weak OAPOIUIFilter *weakWikiUiFilter = _wikiUiFilter;
-            __weak OAAmenityExtendedNameFilter *weakPoiUiNameFilter = _poiUiNameFilter;
-            __weak OAPOIUIFilter *weakPoiUiFilter = _poiUiFilter;
-            OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
-                    [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
-                    {
-                        OAAmenityExtendedNameFilter *wikiUiNameFilter = weakWikiUiNameFilter;
-                        OAPOIUIFilter *wikiUiFilter = weakWikiUiFilter;
-                        OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
-                        OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
-
-                        OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
-                        QHash<QString, QString> decodedValues;
-                        bool decodedValuesResolved = false;
-                        const auto obtainDecodedValues =
-                                [&amenity, &decodedValues, &decodedValuesResolved]() -> const QHash<QString, QString>&
+                    OAPOIType *type = [OAAmenitySearcher parsePOITypeByAmenity:amenity];
+                    QHash<QString, QString> decodedValues;
+                    bool decodedValuesResolved = false;
+                    const auto obtainDecodedValues =
+                            [&amenity, &decodedValues, &decodedValuesResolved]() -> const QHash<QString, QString>&
+                            {
+                                if (!decodedValuesResolved)
                                 {
-                                    if (!decodedValuesResolved)
-                                    {
-                                        decodedValues = amenity->getDecodedValuesHash();
-                                        decodedValuesResolved = true;
-                                    }
-                                    return decodedValues;
-                                };
-                        
-                        BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
-                                && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
-                        BOOL accepted = poiUiNameFilter
-                                && [poiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type];
+                                    decodedValues = amenity->getDecodedValuesHash();
+                                    decodedValuesResolved = true;
+                                }
+                                return decodedValues;
+                            };
 
-                        if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
-                            return check ? accepted : false;
-                        
-                        EOAWikiDataSourceType wikiType = OAAppSettings.sharedManager.wikiDataSourceType.get;
-                        BOOL isOnline = wikiType == EOAWikiDataSourceTypeOnline;
-                        
-                        if ((check && accepted)
-                            || (isWiki
-                                ? wikiUiNameFilter && isOnline ? YES : [wikiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type]
-                                : accepted))
-                        {
-                            const auto& amenityDecodedValues = obtainDecodedValues();
-                            BOOL isClosed = amenityDecodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
-                            return !isClosed;
-                        }
+                    BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
+                            && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
+                    BOOL accepted = poiUiNameFilter
+                            && [poiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type];
 
-                        return false;
-                    };
+                    if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
+                        return check ? accepted : false;
 
-            if (isWiki)
-                [self invalidateWikiOnlineAmenitiesController];
+                    EOAWikiDataSourceType wikiType = OAAppSettings.sharedManager.wikiDataSourceType.get;
+                    BOOL isOnline = wikiType == EOAWikiDataSourceTypeOnline;
 
-            if (isWiki && _wikiSymbolsProvider)
-            {
-                [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
-                _wikiSymbolsProvider.reset();
-                [self resetNotifiedTiles];
-            }
-            else if (!isWiki && _amenitySymbolsProvider)
-            {
-                [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-                _amenitySymbolsProvider.reset();
-            }
-
-            OAAppSettings *settings = OAAppSettings.sharedManager;
-            BOOL nightMode = settings.nightMode;
-            BOOL showLabels = settings.mapSettingShowPoiLabel.get;
-            NSString *lang = settings.settingPrefMapLanguage.get;
-            BOOL transliterate = settings.settingMapLanguageTranslit.get;
-            float textSize = settings.textSize.get;
-            OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesProvider externalAmenitiesProvider = nullptr;
-            if (isWiki && [f isTopWikiFilter] && settings.wikiDataSourceType.get == EOAWikiDataSourceTypeOnline)
-            {
-                PoiUIFilterDataProvider *wikiDataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:f];
-                OATopWikiOnlineAmenitiesController *wikiOnlineAmenitiesController =
-                    [[OATopWikiOnlineAmenitiesController alloc] initWithDataProvider:wikiDataProvider];
-                externalAmenitiesProvider =
-                    [wikiOnlineAmenitiesController]
-                    (const OsmAnd::TileId tileId,
-                     const OsmAnd::ZoomLevel tileZoom,
-                     const std::function<bool()>& isCancelled,
-                     OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse& outResponse) -> bool
+                    if ((check && accepted)
+                        || (isWiki
+                            ? wikiUiNameFilter && isOnline ? YES : [wikiUiNameFilter acceptAmenity:amenity values:obtainDecodedValues() type:type]
+                            : accepted))
                     {
-                        return [wikiOnlineAmenitiesController obtainAmenitiesForTileId:tileId
-                                                                                  zoom:tileZoom
-                                                                           isCancelled:isCancelled
-                                                                              response:outResponse];
-                    };
-                _wikiOnlineAmenitiesController = wikiOnlineAmenitiesController;
-                [self updateWikiOnlineAmenitiesControllerVisibleState];
-                categoriesFilter.remove(QString::fromNSString(OSM_WIKI_CATEGORY));
-            }
-            else if (isWiki)
-            {
-                _wikiOnlineAmenitiesController = nil;
-            }
+                        const auto& amenityDecodedValues = obtainDecodedValues();
+                        BOOL isClosed = amenityDecodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
+                        return !isClosed;
+                    }
 
-            const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
-            const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
-            const uint32_t cacheSize = OACalculatePoiCacheSize(_screenSize, rasterTileSize);
-            if (categoriesFilter.count() > 0 || _wikiOnlineAmenitiesController)
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
-            }
-            else
-            {
-                (isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider).reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
-            }
+                    return false;
+                };
 
-            if (isWiki && _wikiOnlineAmenitiesController && _wikiSymbolsProvider)
-                [_wikiOnlineAmenitiesController setSymbolsProvider:_wikiSymbolsProvider];
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        BOOL nightMode = settings.nightMode;
+        BOOL showLabels = settings.mapSettingShowPoiLabel.get;
+        NSString *lang = settings.settingPrefMapLanguage.get;
+        BOOL transliterate = settings.settingMapLanguageTranslit.get;
+        float textSize = settings.textSize.get;
+        OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesProvider externalAmenitiesProvider = nullptr;
+        OATopWikiOnlineAmenitiesController *wikiOnlineAmenitiesController = nil;
+        if (isWiki && [f isTopWikiFilter] && settings.wikiDataSourceType.get == EOAWikiDataSourceTypeOnline)
+        {
+            PoiUIFilterDataProvider *wikiDataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:f];
+            wikiOnlineAmenitiesController = [[OATopWikiOnlineAmenitiesController alloc] initWithDataProvider:wikiDataProvider];
+            externalAmenitiesProvider =
+                [wikiOnlineAmenitiesController]
+                (const OsmAnd::TileId tileId,
+                 const OsmAnd::ZoomLevel tileZoom,
+                 const std::function<bool()>& isCancelled,
+                 OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse& outResponse) -> bool
+                {
+                    return [wikiOnlineAmenitiesController obtainAmenitiesForTileId:tileId
+                                                                              zoom:tileZoom
+                                                                       isCancelled:isCancelled
+                                                                          response:outResponse];
+                };
+            categoriesFilter.remove(QString::fromNSString(OSM_WIKI_CATEGORY));
+        }
 
-            if (isWiki && _wikiSymbolsProvider)
+        const uint32_t cacheSize = OACalculatePoiCacheSize(_screenSize, rasterTileSize);
+        std::shared_ptr<OsmAnd::AmenitySymbolsProvider> symbolsProvider;
+        if (categoriesFilter.count() > 0 || wikiOnlineAmenitiesController)
+        {
+            symbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
+        }
+        else
+        {
+            symbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate), self.pointsOrder, cacheSize, externalAmenitiesProvider));
+        }
+
+        if (isWiki)
+        {
+            preparedWikiOnlineAmenitiesController = wikiOnlineAmenitiesController;
+            if (preparedWikiOnlineAmenitiesController && symbolsProvider)
+                [preparedWikiOnlineAmenitiesController setSymbolsProvider:symbolsProvider];
+            if (symbolsProvider)
             {
                 __weak __typeof(self) weakSelf = self;
-                _wikiSymbolsProvider->setDataObtainedHandler(
+                symbolsProvider->setDataObtainedHandler(
                     [weakSelf](const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom) {
                         __typeof(self) strongSelf = weakSelf;
                         if (strongSelf)
                             [strongSelf scheduleTopPlacesCacheRefreshForTileId:tileId zoom:zoom];
                     });
             }
+        }
 
-            [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:isWiki ? _wikiSymbolsProvider : _amenitySymbolsProvider];
-            if (isWiki)
-            {
-                [_topPlacesProvider drawTopPlacesIfNeeded:YES];
-                [self scheduleTopPlacesCacheRefresh];
-            }
-        };
+        return symbolsProvider;
+    };
 
-        if (_poiUiFilter)
-            _generate(_poiUiFilter);
-        else
-            _poiUiNameFilter = nil;
+    if (poiUiFilter)
+        preparedAmenitySymbolsProvider = prepareProvider(poiUiFilter, NO);
+    if (wikiUiFilter)
+        preparedWikiSymbolsProvider = prepareProvider(wikiUiFilter, YES);
 
-        if (_wikiUiFilter)
-            _generate(_wikiUiFilter);
-        else
-            _wikiUiNameFilter = nil;
+    __block OATopWikiOnlineAmenitiesController *oldWikiOnlineAmenitiesController = nil;
+    __block BOOL shouldResetNotifiedTiles = NO;
+    __block BOOL didCommitPreparedProviders = NO;
+    [self.mapViewController runWithRenderSync:^{
+        if (_poiUiFilter != poiUiFilter || _wikiUiFilter != wikiUiFilter)
+            return;
 
+        didCommitPreparedProviders = YES;
+        if (_amenitySymbolsProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+            _amenitySymbolsProvider.reset();
+        }
+
+        if (_wikiSymbolsProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
+            _wikiSymbolsProvider.reset();
+            shouldResetNotifiedTiles = YES;
+        }
+        oldWikiOnlineAmenitiesController = _wikiOnlineAmenitiesController;
+
+        _poiUiNameFilter = preparedPoiUiNameFilter;
+        _wikiUiNameFilter = preparedWikiUiNameFilter;
+        _amenitySymbolsProvider = preparedAmenitySymbolsProvider;
+        _wikiSymbolsProvider = preparedWikiSymbolsProvider;
+        _wikiOnlineAmenitiesController = preparedWikiOnlineAmenitiesController;
+
+        if (_amenitySymbolsProvider)
+            [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:_amenitySymbolsProvider];
+        if (_wikiSymbolsProvider)
+            [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:_wikiSymbolsProvider];
     }];
+
+    if (!didCommitPreparedProviders)
+    {
+        [preparedWikiOnlineAmenitiesController invalidate];
+        return;
+    }
+
+    [oldWikiOnlineAmenitiesController invalidate];
+    if (shouldResetNotifiedTiles || wikiUiFilter)
+        [self resetNotifiedTiles];
+
+    if (wikiUiFilter)
+    {
+        if (preparedWikiOnlineAmenitiesController)
+            [self updateWikiOnlineAmenitiesControllerVisibleState];
+        [_topPlacesProvider drawTopPlacesIfNeeded:YES];
+        [self scheduleTopPlacesCacheRefresh];
+    }
 }
 
 - (void)readVisibleWikiCacheStateShowWikiOnMap:(BOOL *)showWikiOnMap

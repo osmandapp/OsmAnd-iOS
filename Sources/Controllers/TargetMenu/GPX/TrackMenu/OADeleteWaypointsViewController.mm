@@ -197,6 +197,7 @@
             [cell.iconView setImage:cellData.leftIcon];
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
+            [cell setShowWaypointButtonVisiblity:NO];
 
             cell.directionIconView.transform =
             CGAffineTransformMakeRotation([cellData.values[@"float_value_direction"] floatValue]);

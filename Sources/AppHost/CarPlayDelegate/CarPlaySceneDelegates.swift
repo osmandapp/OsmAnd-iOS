@@ -2,8 +2,8 @@ import CarPlay
 
 @objc
 protocol CarPlayActionDelegate: NSObjectProtocol {
-    func showAlertWith(title: String, completion: (() -> Void)?)
-    func showAlert(title: String, actions: [AlertActionConfig])
+    func showAlertWith(title: String, completion: (() -> Void)?, presentationFailure: (() -> Void)?)
+    func showAlert(title: String, actions: [AlertActionConfig], presentationFailure: (() -> Void)?)
 }
 
 final class CarPlaySceneDelegate: UIResponder {
@@ -182,8 +182,11 @@ extension CarPlaySceneDelegate: OAWidgetListener {
 }
 
 extension CarPlaySceneDelegate: CarPlayActionDelegate {
-    func showAlertWith(title: String, completion: (() -> Void)? = nil) {
-        guard let carPlayInterfaceController else { return }
+    func showAlertWith(title: String, completion: (() -> Void)? = nil, presentationFailure: (() -> Void)? = nil) {
+        guard let carPlayInterfaceController else {
+            presentationFailure?()
+            return
+        }
         
         let okAction = CPAlertAction(title: localizedString("shared_string_ok"), style: .default) { _ in
             carPlayInterfaceController.dismissTemplate(animated: true) { _, _ in
@@ -193,12 +196,19 @@ extension CarPlaySceneDelegate: CarPlayActionDelegate {
         let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: [okAction])
         
         Task { @MainActor in
-            try? await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            do {
+                try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            } catch {
+                presentationFailure?()
+            }
         }
     }
 
-    func showAlert(title: String, actions: [AlertActionConfig]) {
-        guard let carPlayInterfaceController else { return }
+    func showAlert(title: String, actions: [AlertActionConfig], presentationFailure: (() -> Void)? = nil) {
+        guard let carPlayInterfaceController else {
+            presentationFailure?()
+            return
+        }
         
         let cpActions = actions.map { config in
             CPAlertAction(title: config.title, style: config.carPlayAlertStyle) { _ in
@@ -211,7 +221,11 @@ extension CarPlaySceneDelegate: CarPlayActionDelegate {
         let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: cpActions)
         
         Task { @MainActor in
-            try? await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            do {
+                try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            } catch {
+                presentationFailure?()
+            }
         }
     }
 }

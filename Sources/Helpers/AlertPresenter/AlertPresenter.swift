@@ -150,10 +150,12 @@ final class AlertPresenter: NSObject {
             }
         }
         
-        guard let presenter = alert.fromViewController ?? OARootViewController.instance() else {
+        guard let presenter = visiblePresenter(from: alert.fromViewController ?? OARootViewController.instance()),
+              !(presenter is UIAlertController) else {
             completeCurrentAlert(alert)
-            return;
+            return
         }
+        
         presenter.present(uiAlert, animated: true)
     }
     
@@ -173,9 +175,33 @@ final class AlertPresenter: NSObject {
         if wrappedActions.isEmpty {
             delegate.showAlertWith(title: alert.title) {
                 completeCurrentAlert(alert)
+            } presentationFailure: {
+                completeCurrentAlert(alert)
             }
         } else {
-            delegate.showAlert(title: alert.title, actions: wrappedActions)
+            delegate.showAlert(title: alert.title, actions: wrappedActions) {
+                completeCurrentAlert(alert)
+            }
         }
+    }
+    
+    private static func visiblePresenter(from viewController: UIViewController?) -> UIViewController? {
+        guard let viewController else {
+            return nil
+        }
+        
+        if let presentedViewController = viewController.presentedViewController {
+            return visiblePresenter(from: presentedViewController)
+        }
+        
+        if let navigationController = viewController as? UINavigationController {
+            return visiblePresenter(from: navigationController.visibleViewController)
+        }
+        
+        if let tabBarController = viewController as? UITabBarController {
+            return visiblePresenter(from: tabBarController.selectedViewController)
+        }
+        
+        return viewController
     }
 }

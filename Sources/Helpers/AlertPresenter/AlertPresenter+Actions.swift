@@ -24,34 +24,35 @@ extension AlertPresenter {
              config: .carPlayOrApp)
     }
     
-   static func showMissingMapsAlert(onDownloadMapsHandler: @escaping () -> Void,
-                                    onViewOnPhoneHandler: @escaping () -> Void) {
+    static func showMissingMapsAlert(onDownloadMapsHandler: @escaping () -> Void,
+                                     onViewOnPhoneHandler: @escaping () -> Void) {
         let downloadAction = AlertActionConfig(title: localizedString("missing_maps_ignore"),
                                                style: .default,
                                                handler: onDownloadMapsHandler)
-       var actions = [downloadAction]
-
-       if UIApplication.shared.mainScene != nil {
-           let viewOnPhoneAction = AlertActionConfig(title: localizedString("view_on_phone"),
-                                                     style: .default,
-                                                     handler: onViewOnPhoneHandler)
-           actions.append(viewOnPhoneAction)
-       }
-
-       let title = localizedString("missing_maps_header")
-       let message = localizedString("missing_maps_description")
-              
-       let text = "\(title). \(message)"
+        var actions = [downloadAction]
         
-       show(title: text,
-            actions: actions,
-            config: .carPlayOnly)
+        if UIApplication.shared.mainScene != nil {
+            let viewOnPhoneAction = AlertActionConfig(title: localizedString("view_on_phone"),
+                                                      style: .default,
+                                                      handler: onViewOnPhoneHandler)
+            actions.append(viewOnPhoneAction)
+        }
+        
+        let title = localizedString("missing_maps_header")
+        let message = localizedString("missing_maps_description")
+        
+        let text = "\(title). \(message)"
+        
+        show(title: text,
+             actions: actions,
+             config: .carPlayOnly)
     }
     
     static func showRouteCalculationErrorAlert(_ error: String?, from: UIViewController) {
         guard let error, !error.isEmpty else {
             return
         }
+        
         let isCarPlayAppActive = UIApplication.shared.isCarPlayConnected && UIApplication.shared.isCarPlayAppActive
         AlertPresenter.show(title: isCarPlayAppActive ? error : "",
                             message: error,

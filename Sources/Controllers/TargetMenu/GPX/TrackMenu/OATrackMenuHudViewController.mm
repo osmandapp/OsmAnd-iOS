@@ -2980,29 +2980,25 @@
     OAGpxWptItem *gpxWptItem = cellData.values[@"waypoint"];
     double lat = gpxWptItem.point.lat;
     double lon = gpxWptItem.point.lon;
-    CGFloat scale = self.mapViewController.view.contentScaleFactor;
     CGSize viewSize = self.view.bounds.size;
     BOOL isLandscaped = [OAUtilities isLandscapeIpadAware];
-    auto targetPointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    CGFloat bottomInset = 0;
+    CGFloat leftInset = 0;
     
     if (isLandscaped)
-    {
-        CGFloat mapTargetX = (viewSize.width - self.scrollableView.frame.size.width) / 2 + self.scrollableView.frame.size.width;
-        [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
-                                                                    (int)(mapTargetX * scale),
-                                                                    (int)(viewSize.height / 2 * scale))
-                                          location31:targetPointI];
-    }
+        leftInset = (viewSize.width - self.scrollableView.frame.size.width) / 2 + self.scrollableView.frame.size.width - kCorrectionMinLeftSpace;
     else
-    {
-        CGFloat mapTargetY = (viewSize.height - self.scrollableView.frame.size.height) / 2;
-        [self.mapViewController.mapView setMapTarget:OsmAnd::PointI(
-                                                                    (int)(viewSize.width / 2 * scale),
-                                                                    (int)(mapTargetY * scale))
-                                          location31:targetPointI];
-    }
+        bottomInset = (viewSize.height - self.scrollableView.frame.size.height) / 2 + self.scrollableView.frame.size.height - self.groupsButtonContainerView.frame.size.height;
     
     [self.mapPanelViewController showWaypointOnMap:gpxWptItem latitude:lat longitude:lon];
+    
+    Point31 targetPoint = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+    [self.mapViewController correctPosition:targetPoint
+                           originalCenter31:targetPoint
+                                  leftInset:leftInset
+                                bottomInset:bottomInset
+                                 centerBBox:NO
+                                   animated:NO];
     
     return NO;
 }

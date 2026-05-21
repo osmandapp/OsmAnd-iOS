@@ -283,7 +283,7 @@ static UIViewController *parentController;
 
 -(UIView *) getMiddleView
 {
-    return self.favoriteTableView;
+    return _favoriteTableView;
 }
 
 -(UIView *) getBottomView

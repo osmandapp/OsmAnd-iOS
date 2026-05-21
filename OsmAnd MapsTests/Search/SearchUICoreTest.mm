@@ -73,9 +73,13 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     _failedCount = 0;
     _firstResultCount = 0;
     _missingCount = 0;
+    [OsmAndApp.instance loadWorldRegions];
+    [OsmAndApp.instance addRegionNamesToCommonWords];
+    [OsmAndApp.instance addAbbrevationsToCommonWords];
     for (NSString *path in _filePaths)
     {
-        [self testSearchCase:path];
+        //if ([path.lastPathComponent isEqualToString:@"interpolation_by_alphabet.json"])
+            [self testSearchCase:path];
     }
     NSLog(@"========================================");
     NSLog(@"Search tests done!");

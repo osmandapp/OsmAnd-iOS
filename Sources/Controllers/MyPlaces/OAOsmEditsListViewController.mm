@@ -42,8 +42,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, MyPlacesSearchable, UISearchBarDelegate, UIScrollViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, MyPlacesSearchable, UIScrollViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *segmentContainerView;
 
 @end
@@ -60,26 +61,16 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     UIBarButtonItem *_selectButton;
     
-    BOOL _popToParent;
     BOOL _isSearchActive;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithStyle:UITableViewStyleInsetGrouped];
-    if (self)
-    {
-        self.view.frame = frame;
-    }
-    return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _poiHelper = [OAPOIHelper sharedInstance];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    [self applySafeAreaMargins];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
     
     self.segmentContainerView.backgroundColor = [[UIColor colorNamed:ACColorNameNavBarBgColorPrimary] colorWithAlphaComponent:1.0];
     
@@ -87,16 +78,11 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _headerView.delegate = self;
     [self setupView];
     
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.segmentContainerView.bounds), 0.0, 0.0, 0.0);
+    _tableView.estimatedRowHeight = kEstimatedRowHeight;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.segmentContainerView.bounds), 0.0, 0.0, 0.0);
     
     _isSearchActive = NO;
-}
-
-- (void) setShouldPopToParent:(BOOL)shouldPop
-{
-    _popToParent = shouldPop;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -173,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 - (void)setupNavbar
 {
-    if ([self.tableView isEditing])
+    if ([_tableView isEditing])
     {
         [_myPlacesDelegate showBackButton:NO];
         UIBarButtonItem *cancelBarButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_cancel")
@@ -196,7 +182,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 - (void)setEdit:(BOOL)isEdit
 {
-    [self.tableView setEditing:isEdit animated:YES];
+    [_tableView setEditing:isEdit animated:YES];
     [_myPlacesDelegate updateEditMode:isEdit];
 }
 
@@ -296,7 +282,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.tableView.isEditing)
+    if (_tableView.isEditing)
         return;
     NSDictionary *item = [self getItem:indexPath];
     OAOsmPoint *p = item[@"item"];
@@ -320,7 +306,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             {
                 _screenType = EDITS_ALL;
                 [self setupView];
-                [self.tableView reloadData];
+                [_tableView reloadData];
                 return;
             }
         }
@@ -330,7 +316,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             {
                 _screenType = EDITS_POI;
                 [self setupView];
-                [self.tableView reloadData];
+                [_tableView reloadData];
                 return;
             }
         }
@@ -340,7 +326,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             {
                 _screenType = EDITS_NOTES;
                 [self setupView];
-                [self.tableView reloadData];
+                [_tableView reloadData];
                 return;
             }
         }
@@ -354,9 +340,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 }
 
 - (IBAction)deleteButtonPressed:(id)sender {
-    [self.tableView beginUpdates];
-    BOOL shouldEdit = ![self.tableView isEditing];
-    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+    [_tableView beginUpdates];
+    BOOL shouldEdit = ![_tableView isEditing];
+    NSArray *indexes = [_tableView indexPathsForSelectedRows];
     if (indexes.count > 0)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
@@ -377,20 +363,20 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
                 }
             }
             [self setupView];
-            [self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
+            [_tableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
             [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
         }]];
         [self presentViewController:alert animated:YES completion:nil];
     }
     [self setEdit:shouldEdit];
-    [self.tableView endUpdates];
+    [_tableView endUpdates];
 }
 
 - (IBAction)uploadButtonPressed:(id)sender {
-    [self.tableView beginUpdates];
-    BOOL shouldEdit = ![self.tableView isEditing];
+    [_tableView beginUpdates];
+    BOOL shouldEdit = ![_tableView isEditing];
     
-    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+    NSArray *indexes = [_tableView indexPathsForSelectedRows];
     NSMutableArray *edits = [NSMutableArray new];
     NSMutableArray *notes = [NSMutableArray new];
     
@@ -418,7 +404,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
     }
     [self setEdit:shouldEdit];
-    [self.tableView endUpdates];
+    [_tableView endUpdates];
 }
 
 - (IBAction)cancelButtonPressed:(id)sender
@@ -440,7 +426,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 -(void)refreshData
 {
     [self setupView];
-    [self.tableView reloadData];
+    [_tableView reloadData];
 }
 
 -(void)uploadFinished:(BOOL)hasError
@@ -461,20 +447,20 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
     OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
     NSInteger section = headerView.section;
-    NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
+    NSInteger rowsCount = [_tableView numberOfRowsInSection:section];
     
-    [self.tableView beginUpdates];
+    [_tableView beginUpdates];
     if (value)
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+            [_tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
-    [self.tableView endUpdates];
+    [_tableView endUpdates];
 }
 
 // MARK: Keyboard Notifications
@@ -487,9 +473,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        UIEdgeInsets insets = [self.tableView contentInset];
-        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
-        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+        UIEdgeInsets insets = [_tableView contentInset];
+        [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+        [_tableView setScrollIndicatorInsets:_tableView.contentInset];
     } completion:nil];
 }
 
@@ -499,9 +485,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        UIEdgeInsets insets = [self.tableView contentInset];
-        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
-        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+        UIEdgeInsets insets = [_tableView contentInset];
+        [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+        [_tableView setScrollIndicatorInsets:_tableView.contentInset];
     } completion:nil];
 }
 
@@ -512,7 +498,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     {
         _isSearchActive = YES;
         [self setupView];
-        [self.tableView reloadData];
+        [_tableView reloadData];
     }
     else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)
     {
@@ -554,13 +540,13 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             }
         }
         _data = [NSArray arrayWithArray:filteredItems];
-        [self.tableView reloadData];
+        [_tableView reloadData];
     }
     else
     {
         _isSearchActive = NO;
         [self setupView];
-        [self.tableView reloadData];
+        [_tableView reloadData];
     }
     [_myPlacesDelegate updateSegmentedControlVisibility:!_isSearchActive];
 }

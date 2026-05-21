@@ -49,7 +49,7 @@
         <!--Osm Edits List View Controller-->
         <scene sceneID="TNK-ML-Wew">
             <objects>
-                <viewController id="Pg1-zp-xNx" customClass="OAOsmEditsListViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="OAOsmEditsListViewController" storyboardIdentifier="OAOsmEditsListViewController" id="Pg1-zp-xNx" customClass="OAOsmEditsListViewController" sceneMemberID="viewController">
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="HiK-Id-V8n">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

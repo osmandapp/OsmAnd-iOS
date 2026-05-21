@@ -21,8 +21,9 @@ protocol MyPlacesSearchable: AnyObject {
     @objc optional func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
 }
 
+@objcMembers
 final class MyPlacesContainerViewController: OACompoundViewController {
-    enum Tab: Int, CaseIterable {
+    @objc enum Tab: Int, CaseIterable {
         case favorites
         case tracks
         case osm
@@ -102,6 +103,38 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     func switchToWithSegmentControl(tab: Tab) {
         switchTo(tab: tab)
         segmentControl.selectedSegmentIndex = availableTabs.firstIndex(of: tab) ?? Tab.default.rawValue
+    }
+    
+    func viewController(for tab: Tab) -> UIViewController? {
+        guard let pageViewController else { return nil }
+        let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
+        switch tab {
+        case .favorites:
+            if !availableViewControllers.contains(where: { $0.key == .favorites }),
+               let favoritesViewController = storyboard.instantiateViewController(withIdentifier: "OAFavoriteListViewController") as? OAFavoriteListViewController {
+                favoritesViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = favoritesViewController
+            }
+        case .tracks:
+            if !availableViewControllers.contains(where: { $0.key == .tracks }),
+               let tracksViewController = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
+                tracksViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = tracksViewController
+            }
+        case .osm:
+            if !availableViewControllers.contains(where: { $0.key == .osm }),
+               let osmEditsViewController = storyboard.instantiateViewController(withIdentifier: "OAOsmEditsListViewController") as? OAOsmEditsListViewController {
+                osmEditsViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = osmEditsViewController
+            }
+        case .travel:
+            if !availableViewControllers.contains(where: { $0.key == .travel }) {
+                let travelGuidesViewController = SavedArticlesTabViewController(frame: pageViewController.view.frame)
+                travelGuidesViewController.myPlacesDelegate = self
+                availableViewControllers[tab] = travelGuidesViewController
+            }
+        }
+        return availableViewControllers[tab]
     }
     
     private func setupSegmentControl() {
@@ -204,38 +237,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     private func initialSelectedTab() {
         switchToWithSegmentControl(tab: selectedTab)
-    }
-    
-    private func viewController(for tab: Tab) -> UIViewController? {
-        guard let pageViewController else { return nil }
-        let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
-        switch tab {
-        case .favorites:
-            if !availableViewControllers.contains(where: { $0.key == .favorites }),
-               let favoritesViewController = storyboard.instantiateViewController(withIdentifier: "OAFavoriteListViewController") as? OAFavoriteListViewController {
-                favoritesViewController.myPlacesDelegate = self
-                availableViewControllers[tab] = favoritesViewController
-            }
-        case .tracks:
-            if !availableViewControllers.contains(where: { $0.key == .tracks }),
-               let tracksViewController = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
-                tracksViewController.myPlacesDelegate = self
-                availableViewControllers[tab] = tracksViewController
-            }
-        case .osm:
-            if !availableViewControllers.contains(where: { $0.key == .osm }) {
-                let osmEditsViewController = OAOsmEditsListViewController(frame: pageViewController.view.frame)
-                osmEditsViewController.myPlacesDelegate = self
-                availableViewControllers[tab] = osmEditsViewController
-            }
-        case .travel:
-            if !availableViewControllers.contains(where: { $0.key == .travel }) {
-                let travelGuidesViewController = SavedArticlesTabViewController(frame: pageViewController.view.frame)
-                travelGuidesViewController.myPlacesDelegate = self
-                availableViewControllers[tab] = travelGuidesViewController
-            }
-        }
-        return availableViewControllers[tab]
     }
     
     @objc private func onBackPressed() {

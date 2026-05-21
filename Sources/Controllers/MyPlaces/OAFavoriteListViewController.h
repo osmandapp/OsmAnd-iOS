@@ -12,7 +12,7 @@
 
 @protocol MyPlacesDelegate;
 
-@interface OAFavoriteListViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+@interface OAFavoriteListViewController : UITableViewController<UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;

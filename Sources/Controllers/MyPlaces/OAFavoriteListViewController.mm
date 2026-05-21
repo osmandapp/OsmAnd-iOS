@@ -590,6 +590,7 @@ static UIViewController *parentController;
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
     [self.tableView reloadData];
     _isSearchActive = NO;
     _isFiltered = NO;

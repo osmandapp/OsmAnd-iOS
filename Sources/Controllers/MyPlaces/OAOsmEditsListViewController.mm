@@ -506,7 +506,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 }
 
 // MARK: - MyPlacesSearchable
-- (void)updateSearchResultsFor:(UISearchController *)searchController
+- (void)searchResultsFor:(UISearchController *)searchController
 {
     if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
     {

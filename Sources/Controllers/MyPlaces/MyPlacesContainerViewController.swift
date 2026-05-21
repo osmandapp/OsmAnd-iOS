@@ -11,11 +11,13 @@ protocol MyPlacesDelegate: AnyObject {
     func showBackButton(_ show: Bool)
     func updateSegmentedControlVisibility(_ isVisible: Bool)
     func updateEditMode(_ edit: Bool)
+    @objc optional func updateTitle(_ title: String, hideSubtitle: Bool)
+    @objc optional func updateToolbar(with items: [UIBarButtonItem]?)
 }
 
 @objc
 protocol MyPlacesSearchable: AnyObject {
-    func updateSearchResults(for searchController: UISearchController)
+    func searchResults(for searchController: UISearchController)
     @objc optional func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
 }
 
@@ -157,10 +159,14 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func setupNavbarTitle(with tab: Tab) {
-        navigationItem.setStackViewWithTitle(tab.title,
+        setupNavbarTitle(tab.title, hideSubtitle: false)
+    }
+    
+    private func setupNavbarTitle(_ title: String, hideSubtitle: Bool) {
+        navigationItem.setStackViewWithTitle(title,
                                              titleColor: .textColorPrimary,
                                              titleFont: .scaledSystemFont(ofSize: 17.0, weight: .semibold, maximumSize: 22.0),
-                                             subtitle: localizedString("shared_string_my_places"),
+                                             subtitle: hideSubtitle ? "" : localizedString("shared_string_my_places"),
                                              subtitleColor: .textColorSecondary,
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
@@ -202,17 +208,17 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     private func viewController(for tab: Tab) -> UIViewController? {
         guard let pageViewController else { return nil }
+        let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
         switch tab {
         case .favorites:
-            let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
             if !availableViewControllers.contains(where: { $0.key == .favorites }),
                let favoritesViewController = storyboard.instantiateViewController(withIdentifier: "OAFavoriteListViewController") as? OAFavoriteListViewController {
                 favoritesViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = favoritesViewController
             }
         case .tracks:
-            if !availableViewControllers.contains(where: { $0.key == .tracks }) {
-                let tracksViewController = TracksViewController(frame: pageViewController.view.frame)
+            if !availableViewControllers.contains(where: { $0.key == .tracks }),
+               let tracksViewController = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
                 tracksViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = tracksViewController
             }
@@ -291,6 +297,14 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         navigationController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
     }
+    
+    func updateTitle(_ title: String, hideSubtitle: Bool) {
+        setupNavbarTitle(title, hideSubtitle: hideSubtitle)
+    }
+    
+    func updateToolbar(with items: [UIBarButtonItem]?) {
+        toolbarItems = items
+    }
 }
 
 // MARK: - UISearchResultsUpdating
@@ -299,7 +313,7 @@ extension MyPlacesContainerViewController: UISearchResultsUpdating {
         guard let searchableViewController = viewController(for: selectedTab) as? MyPlacesSearchable else {
             return
         }
-        searchableViewController.updateSearchResults(for: searchController)
+        searchableViewController.searchResults(for: searchController)
     }
 }
 

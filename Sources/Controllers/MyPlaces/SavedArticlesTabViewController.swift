@@ -227,7 +227,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     
     // MARK: MyPlacesSearchable
     
-    func updateSearchResults(for searchController: UISearchController) {
+    func searchResults(for searchController: UISearchController) {
         if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
             isSearchActive = true
             isFiltered = false

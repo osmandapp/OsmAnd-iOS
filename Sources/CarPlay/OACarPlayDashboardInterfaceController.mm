@@ -852,9 +852,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     [drawable setTurnImminent:nextNextDirInfo.imminent
                             deviatedFromRoute:deviatedFromRoute];
                     drawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
-                    CGFloat size = MAX(drawable.pathForTurn.bounds.origin.x + drawable.pathForTurn.bounds.size.width,
-                                       drawable.pathForTurn.bounds.origin.y + drawable.pathForTurn.bounds.size.height);
-                    drawable.frame = CGRectMake(0, 0, size, size);
+                    drawable.frame = CGRectMake(0, 0, UIScreen.mainScreen.scale * 16, UIScreen.mainScreen.scale * 16);
                     [drawable setNeedsDisplay];
                     nextTurnImage = [drawable toUIImage];
                     secondaryManeuver = [[CPManeuver alloc] init];

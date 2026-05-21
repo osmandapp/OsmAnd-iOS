@@ -6616,6 +6616,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_currentTrackRouteActivity setModeDefaultValue:@"horse_riding" mode:OAApplicationMode.HORSE];
         [_currentTrackRouteActivity setModeDefaultValue:@"motor_scooter" mode:OAApplicationMode.MOPED];
         [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
+        [_currentTrackRouteActivity setModeDefaultValue:@"adventure_motorcycling" mode:OAApplicationMode.MOTORCYCLE];
         
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];

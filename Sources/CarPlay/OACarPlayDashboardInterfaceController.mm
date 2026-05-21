@@ -48,6 +48,9 @@ static NSString * const kUnitsYd = OALocalizedString(@"yard");
 static NSString * const kUnitsFt = OALocalizedString(@"foot");
 static NSString * const kUnitsNm = OALocalizedString(@"nm");
 
+static const CGFloat kTurnArrowSize = 16.0;
+static const CGFloat kTurnArrowRenderSize = 32.0;
+
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
     EOACarPlayButtonTypePanMap,
@@ -852,7 +855,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     [drawable setTurnImminent:nextNextDirInfo.imminent
                             deviatedFromRoute:deviatedFromRoute];
                     drawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
-                    drawable.frame = CGRectMake(0, 0, UIScreen.mainScreen.scale * 16, UIScreen.mainScreen.scale * 16);
+                    drawable.frame = CGRectMake(0, 0, kTurnArrowRenderSize, kTurnArrowRenderSize);
                     [drawable setNeedsDisplay];
                     nextTurnImage = [drawable toUIImage];
                     secondaryManeuver = [[CPManeuver alloc] init];
@@ -878,7 +881,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     {
                         NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
                         attachment.image = [OAUtilities resizeImage:nextTurnImage
-                                                            newSize:CGSizeMake(16, 16)];
+                                                            newSize:CGSizeMake(kTurnArrowSize, kTurnArrowSize)];
                         [attributedString appendAttributedString:
                             [NSAttributedString attributedStringWithAttachment:attachment]];
                     }

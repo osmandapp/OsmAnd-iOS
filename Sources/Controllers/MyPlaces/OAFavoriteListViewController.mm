@@ -580,7 +580,6 @@ static UIViewController *parentController;
     [self.favoriteTableView setDataSource:self];
     [self.favoriteTableView setDelegate:self];
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    //self.favoriteTableView.allowsMultipleSelectionDuringEditing = YES;
     [self.favoriteTableView reloadData];
     _isSearchActive = NO;
     _isFiltered = NO;

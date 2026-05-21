@@ -204,8 +204,9 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         guard let pageViewController else { return nil }
         switch tab {
         case .favorites:
+            let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
             if !availableViewControllers.contains(where: { $0.key == .favorites }),
-               let favoritesViewController = OAFavoriteListViewController(frame: pageViewController.view.frame) {
+               let favoritesViewController = storyboard.instantiateViewController(withIdentifier: "OAFavoriteListViewController") as? OAFavoriteListViewController {
                 favoritesViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = favoritesViewController
             }

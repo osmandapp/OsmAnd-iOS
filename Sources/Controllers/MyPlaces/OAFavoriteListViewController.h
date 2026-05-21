@@ -12,8 +12,9 @@
 
 @protocol MyPlacesDelegate;
 
-@interface OAFavoriteListViewController : UITableViewController<UIScrollViewDelegate>
+@interface OAFavoriteListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *groupButton;
@@ -24,7 +25,6 @@
 
 @property CGFloat azimuthDirection;
 
-- (instancetype)initWithFrame:(CGRect)frame;
 + (BOOL)popToParent;
 
 @end

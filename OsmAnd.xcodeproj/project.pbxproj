@@ -2494,7 +2494,6 @@
 		DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DBF26C563A300F274C7 /* OASubscriptionCancelViewController.mm */; };
 		DA5A83B126C563A800F274C7 /* OAWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DC026C563A300F274C7 /* OAWebViewController.m */; };
 		DA5A83B226C563A800F274C7 /* MyPlaces.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */; };
-		DA5A83B326C563A800F274C7 /* OAMyPlacesTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DC526C563A300F274C7 /* OAMyPlacesTabBarViewController.m */; };
 		DA5A83B426C563A800F274C7 /* OAOsmEditsListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DC626C563A300F274C7 /* OAOsmEditsListViewController.mm */; };
 		DA5A83B526C563A800F274C7 /* OAActionAddProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCB26C563A300F274C7 /* OAActionAddProfileViewController.m */; };
 		DA5A83B626C563A800F274C7 /* OAActionAddCategoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCD26C563A300F274C7 /* OAActionAddCategoryViewController.mm */; };
@@ -6881,9 +6880,7 @@
 		DA5A7DBF26C563A300F274C7 /* OASubscriptionCancelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionCancelViewController.mm; sourceTree = "<group>"; };
 		DA5A7DC026C563A300F274C7 /* OAWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWebViewController.m; sourceTree = "<group>"; };
 		DA5A7DC126C563A300F274C7 /* OASubscriptionCancelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscriptionCancelViewController.h; sourceTree = "<group>"; };
-		DA5A7DC326C563A300F274C7 /* OAMyPlacesTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMyPlacesTabBarViewController.h; sourceTree = "<group>"; };
 		DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyPlaces.storyboard; sourceTree = "<group>"; };
-		DA5A7DC526C563A300F274C7 /* OAMyPlacesTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMyPlacesTabBarViewController.m; sourceTree = "<group>"; };
 		DA5A7DC626C563A300F274C7 /* OAOsmEditsListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditsListViewController.mm; sourceTree = "<group>"; };
 		DA5A7DC726C563A300F274C7 /* OAOsmEditsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmEditsListViewController.h; sourceTree = "<group>"; };
 		DA5A7DC826C563A300F274C7 /* OASuperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASuperViewController.h; sourceTree = "<group>"; };
@@ -12647,8 +12644,6 @@
 				DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */,
 				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
 				DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */,
-				DA5A7DC326C563A300F274C7 /* OAMyPlacesTabBarViewController.h */,
-				DA5A7DC526C563A300F274C7 /* OAMyPlacesTabBarViewController.m */,
 				DA5A7DC726C563A300F274C7 /* OAOsmEditsListViewController.h */,
 				DA5A7DC626C563A300F274C7 /* OAOsmEditsListViewController.mm */,
 				327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */,
@@ -18148,7 +18143,6 @@
 				DA5A855C26C563A900F274C7 /* OARoutingHelper.mm in Sources */,
 				C58923FF2D689C5F00EC5910 /* TripRecordingAction.swift in Sources */,
 				DA5A823A26C563A700F274C7 /* OABaseBigTitleSettingsViewController.m in Sources */,
-				DA5A83B326C563A800F274C7 /* OAMyPlacesTabBarViewController.m in Sources */,
 				DA5A84A226C563A900F274C7 /* OAMovePointCommand.mm in Sources */,
 				DA5A854026C563A900F274C7 /* SunriseSunset.m in Sources */,
 				DA5A832326C563A800F274C7 /* OATitleSliderTableViewCell.m in Sources */,

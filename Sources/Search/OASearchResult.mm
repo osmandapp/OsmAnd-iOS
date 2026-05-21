@@ -140,7 +140,7 @@
         }
         // if all words from search phrase match (<) the search result words - we prioritize it higher
         if (matched)
-            res = [self getPhraseWeightForCompleteMatch:completeMatchRes];
+            res = [self getPhraseWeightForCompleteMatch:completeMatchRes exactResult:exactResult];
         if ([_object isKindOfClass:OAPOI.class])
         {
             OAPOI * a = (OAPOI *) _object;
@@ -159,7 +159,7 @@
     return res;
 }
 
-- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes
+- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes exactResult:(OASearchResult *)exactResult
     {
         double res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10; // range 10 - 40
         BOOL closeDistance = false;
@@ -186,6 +186,10 @@
             if (closeDistance)
             {
                 res += 1;
+            }
+            if (_objectType == EOAObjectTypeCity && exactResult == nil)
+            {
+                res += MAX_PHRASE_WEIGHT_TOTAL / 2;
             }
             // range 60 - 91
         }

@@ -66,7 +66,7 @@ static NSCharacterSet * _APOSTROPHES;
 {
     if (fullName != nil && [fullName rangeOfString:@"-"].location != NSNotFound)
     {
-        NSString *stringWithoutHyphen = [fullName stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        NSString *stringWithoutHyphen = [self replaceHyphen:fullName];
         if ([self.class cmatches:stringWithoutHyphen part:part mode:mode])
         {
             return YES;
@@ -159,7 +159,9 @@ static NSCharacterSet * _APOSTROPHES;
     // FUTURE: This is not effective code, it runs on each comparision
     // It would be more efficient to normalize all strings in file and normalize search string before collator
     theStart = [self alignChars:theStart];
+    theStart = [self replaceHyphen:theStart];
     NSString *searchIn = [self lowercaseAndAlignChars:fullTextP];
+    searchIn = [self replaceHyphen:searchIn];
     NSInteger searchInLength = searchIn.length;
     
     NSInteger startLength = theStart.length;
@@ -205,7 +207,7 @@ static NSCharacterSet * _APOSTROPHES;
                     }
                     else
                     {
-                        return true;
+                        return YES;
                     }
                 }
             }
@@ -254,6 +256,11 @@ static NSCharacterSet * _APOSTROPHES;
     fullText = [OASearchAlgorithms removeApostrophes:fullText];
     fullText = [OASearchAlgorithms replaceGermanSS:fullText];
     return fullText;
+}
+
++ (NSString *) replaceHyphen:(NSString *)text
+{
+    return [text stringByReplacingOccurrencesOfString:@"-" withString:@" "];
 }
 
 @end

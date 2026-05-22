@@ -154,15 +154,13 @@ static const int START_ZOOM = 7;
     if (![self isRoutePaletteChangeEvent:event])
         return;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [self.mapViewController runWithRenderSync:^{
         NSDictionary<NSString *, OASGpxFile *> *gpxFiles = [_gpxFiles copy];
-        [self.mapViewController runWithRenderSync:^{
-            [_cachedTracks removeAllObjects];
-            _cachedColors.clear();
-            _cachedWallColors.clear();
-            [self refreshGpxTracks:gpxFiles reset:YES];
-        }];
-    });
+        [_cachedTracks removeAllObjects];
+        _cachedColors.clear();
+        _cachedWallColors.clear();
+        [self refreshGpxTracks:gpxFiles reset:YES];
+    }];
 }
 
 - (BOOL)isRoutePaletteChangeEvent:(OASPaletteChangeEvent *)event
@@ -284,13 +282,13 @@ static const int START_ZOOM = 7;
     }
 }
 
-- (OASColorPalette *)getRouteColorPalette:(OAColoringType *)type gradientPalette:(NSString *)gradientPalette fixedValues:(BOOL *)fixedValues
+- (OASColorPalette *)routeColorPalette:(OAColoringType *)type gradientPalette:(NSString *)gradientPalette fixedValues:(BOOL *)fixedValues
 {
     if (fixedValues)
         *fixedValues = NO;
     
     OASGradientPaletteCategory *category = [[type toGradientScaleType] toPaletteCategory];
-    OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] getPaletteItemWithCategory:category name:gradientPalette] : nil;
+    OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] paletteItemWithCategory:category name:gradientPalette] : nil;
     if (!paletteItem)
         return nil;
     
@@ -315,7 +313,7 @@ static const int START_ZOOM = 7;
     else
     {
         BOOL fixedValues = NO;
-        OASColorPalette *palette = [self getRouteColorPalette:type gradientPalette:gradientPalette fixedValues:&fixedValues];
+        OASColorPalette *palette = [self routeColorPalette:type gradientPalette:gradientPalette fixedValues:&fixedValues];
         OARouteColorize *routeColorize =
         [[OARouteColorize alloc] initWithGpxFile:gpxFile
                                         analysis:analysis ?: [gpxFile getAnalysisFileTimestamp:0]
@@ -411,7 +409,7 @@ static const int START_ZOOM = 7;
                 {
                     analysis = [gpxFile getAnalysisFileTimestamp:0];
                     BOOL fixedValues = NO;
-                    OASColorPalette *palette = [self getRouteColorPalette:type gradientPalette:cachedTrack[@"prev_color_palette"] fixedValues:&fixedValues];
+                    OASColorPalette *palette = [self routeColorPalette:type gradientPalette:cachedTrack[@"prev_color_palette"] fixedValues:&fixedValues];
                     OARouteColorize *routeColorize =
                     [[OARouteColorize alloc] initWithGpxFile:gpxFile
                                                     analysis:analysis

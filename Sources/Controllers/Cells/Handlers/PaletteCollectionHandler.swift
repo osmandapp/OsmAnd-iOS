@@ -31,9 +31,8 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     func setSelectionItem(_ item: PaletteItemGradient?) {
-        if let indexPath = indexPath(for: item) {
-            selectedIndexPath = indexPath
-        }
+        guard let indexPath = indexPath(for: item) else { return }
+        selectedIndexPath = indexPath
     }
 
     override func generateData(_ data: [[Any]]) {
@@ -96,8 +95,8 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
                     guard let self else { return }
 
                     collectionView.reloadData()
-                    if deleteCurrent, let defaultIndexPath = self.defaultIndexPath, let selectedIdxPath = self.selectedIndexPath {
-                        let indexPathsToUpdate = [selectedIdxPath, defaultIndexPath]
+                    if deleteCurrent, let defaultIndexPath, let selectedIndexPath {
+                        let indexPathsToUpdate = [selectedIndexPath, defaultIndexPath]
                         self.selectedIndexPath = defaultIndexPath
                         collectionView.reloadItems(at: indexPathsToUpdate)
                     }
@@ -132,7 +131,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
                 guard let self else { return }
 
                 collectionView.reloadData()
-                if deleteCurrent, let defaultIndexPath, let selectedIndexPath = self.selectedIndexPath {
+                if deleteCurrent, let defaultIndexPath, let selectedIndexPath {
                     let indexPathsToUpdate = [selectedIndexPath, defaultIndexPath]
                     self.selectedIndexPath = defaultIndexPath
                     collectionView.reloadItems(at: indexPathsToUpdate)
@@ -146,7 +145,7 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     }
 
     override func getCollectionViewCell(_ indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = getCollectionView().dequeueReusableCell(withReuseIdentifier: getCellIdentifier(), for: indexPath)
+        let cell = getCollectionView().dequeueReusableCell(withReuseIdentifier: PaletteCollectionViewCell.reuseIdentifier, for: indexPath)
         guard let cell = cell as? PaletteCollectionViewCell else { return cell }
         cell.backgroundImageView.layer.cornerRadius = 3
         cell.backgroundImageView.gradated(Self.createGradientPoints(data[indexPath.section][indexPath.row].getColorPalette()))
@@ -186,9 +185,8 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
         var gradientPoints = [GradientPoint]()
         let step = 1.0 / CGFloat(colorValues.count - 1)
-        for i in 0...colorValues.count - 1 {
-            let colorValue = colorValues[i]
-            gradientPoints.append(GradientPoint(location: CGFloat(i) * step, color: UIColor(argb: Int(colorValue.clr))))
+        for (index, colorValue) in colorValues.enumerated() {
+            gradientPoints.append(GradientPoint(location: CGFloat(index) * step, color: UIColor(argb: Int(colorValue.clr))))
         }
 
         return gradientPoints

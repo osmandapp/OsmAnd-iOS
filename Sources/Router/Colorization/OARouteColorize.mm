@@ -62,13 +62,13 @@
 - (NSArray<OARouteColorizationPoint *> *)getResult
 {
     NSMutableArray<OARouteColorizationPoint *> *result = [NSMutableArray array];
-    for (OASRouteColorizeRouteColorizationPoint *sharedPoint in _routeColorize.result)
+    for (OASRouteColorizeRouteColorizationPoint *colorizationPoint in _routeColorize.result)
     {
-        OARouteColorizationPoint *point = [[OARouteColorizationPoint alloc] initWithIdentifier:sharedPoint.id
-                                                                                           lat:sharedPoint.lat
-                                                                                           lon:sharedPoint.lon
-                                                                                           val:sharedPoint.value];
-        point.color = sharedPoint.primaryColor;
+        OARouteColorizationPoint *point = [[OARouteColorizationPoint alloc] initWithIdentifier:colorizationPoint.id
+                                                                                           lat:colorizationPoint.lat
+                                                                                           lon:colorizationPoint.lon
+                                                                                           val:colorizationPoint.value];
+        point.color = colorizationPoint.primaryColor;
         [result addObject:point];
     }
     return result;
@@ -77,9 +77,9 @@
 - (QList<OsmAnd::FColorARGB>)getResultQList
 {
     QList<OsmAnd::FColorARGB> result;
-    for (OASRouteColorizeRouteColorizationPoint *sharedPoint in _routeColorize.result)
+    for (OASRouteColorizeRouteColorizationPoint *colorizationPoint in _routeColorize.result)
     {
-        result.append(OsmAnd::ColorARGB((uint32_t) sharedPoint.primaryColor));
+        result.append(OsmAnd::ColorARGB((uint32_t) colorizationPoint.primaryColor));
     }
     
     return result;

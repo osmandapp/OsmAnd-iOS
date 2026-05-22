@@ -97,7 +97,7 @@
             TerrainMode *mode = [TerrainMode byKey:palette];
             if (mode)
             {
-                OASPaletteItemGradient *paletteItem = [[GradientPaletteHelper shared] getPaletteItemWithFileName:[mode mainFile]];
+                OASPaletteItemGradient *paletteItem = [[GradientPaletteHelper shared] paletteItemWithFileName:[mode mainFile]];
                 if (paletteItem)
                 {
                     [arr addObject:@{

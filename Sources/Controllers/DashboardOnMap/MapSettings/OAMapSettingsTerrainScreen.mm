@@ -564,7 +564,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                      labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
 
         OASGradientPaletteCategory *paletteCategory = [TerrainTypeWrapper toPaletteCategoryWithType:_terrainMode.type];
-        OASColorPalette *colorPalette = [[GradientPaletteHelper shared] getColorPaletteWithFileName:[_terrainMode mainFile]];
+        OASColorPalette *colorPalette = [[GradientPaletteHelper shared] colorPaletteWithFileName:[_terrainMode mainFile]];
         if (!colorPalette || !paletteCategory)
             return cell;
 

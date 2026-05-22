@@ -433,15 +433,15 @@ static const NSInteger kColorsSection = 1;
 {
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[self getGPXColor]];
     if (!_selectedColorItem)
-        _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
+        _selectedColorItem = [_appearanceCollection defaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
     _baseColorItem = _selectedColorItem;
 
     OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:[self getGPXColoringType]];
     OASGradientPaletteCategory *paletteCategory = [[currentType toGradientScaleType] toPaletteCategory];
-    NSArray<OASPaletteItemGradient *> *paletteItems = paletteCategory ? [[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime] : @[];
+    NSArray<OASPaletteItemGradient *> *paletteItems = paletteCategory ? [[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime] : @[];
     [_sortedPaletteColorItems replaceAllWithObjectsSync:paletteItems];
-    _selectedPaletteColorItem = paletteCategory ? [[GradientPaletteHelper shared] getPaletteItemOrDefaultWithCategory:paletteCategory name:[self getGPXGradientPaletteName]] : nil;
+    _selectedPaletteColorItem = paletteCategory ? [[GradientPaletteHelper shared] paletteItemOrDefaultWithCategory:paletteCategory name:[self getGPXGradientPaletteName]] : nil;
     if (!_selectedPaletteColorItem)
         _selectedPaletteColorItem = paletteItems.firstObject;
 
@@ -1804,15 +1804,15 @@ static const NSInteger kColorsSection = 1;
         {
             PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
             paletteHandler.delegate = self;
-            NSInteger selectedIndex = [[GradientPaletteHelper shared] indexOfPaletteItem:_selectedPaletteColorItem items:[_sortedPaletteColorItems asArray]];
+            NSInteger selectedIndex = [[GradientPaletteHelper shared] indexOf:_selectedPaletteColorItem in:[_sortedPaletteColorItems asArray]];
             OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
-            OASPaletteItemGradient *defaultPaletteItem = paletteCategory ? [[GradientPaletteHelper shared] getDefaultPaletteItemWithCategory:paletteCategory] : nil;
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [[GradientPaletteHelper shared] indexOfPaletteItem:defaultPaletteItem items:[_sortedPaletteColorItems asArray]];
+            OASPaletteItemGradient *defaultPaletteItem = paletteCategory ? [[GradientPaletteHelper shared] defaultPaletteItemWithCategory:paletteCategory] : nil;
+            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [[GradientPaletteHelper shared] indexOf:defaultPaletteItem in:[_sortedPaletteColorItems asArray]];
             selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
-            // TODO: Enable palette add/edit action in the palette editor task.
+            // TODO: Enable palette add/edit action in the palette editor task: https://github.com/osmandapp/OsmAnd-Issues/issues/3207
             // [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
             [cell configureTopOffset:12];
@@ -2669,10 +2669,10 @@ static const NSInteger kColorsSection = 1;
     if ([self isSelectedTypeGradient])
     {
         OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
-        NSArray<OASPaletteItemGradient *> *paletteItems = paletteCategory ? [[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime] : @[];
+        NSArray<OASPaletteItemGradient *> *paletteItems = paletteCategory ? [[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime] : @[];
         [_sortedPaletteColorItems replaceAllWithObjectsSync:paletteItems];
         NSString *paletteName = [_selectedItem.coloringType.name isEqualToString:previousColoringType] ? previousPaletteName : [OASPaletteConstants shared].DEFAULT_NAME;
-        _selectedPaletteColorItem = paletteCategory ? [[GradientPaletteHelper shared] getPaletteItemOrDefaultWithCategory:paletteCategory name:paletteName] : nil;
+        _selectedPaletteColorItem = paletteCategory ? [[GradientPaletteHelper shared] paletteItemOrDefaultWithCategory:paletteCategory name:paletteName] : nil;
         NSString *selectedPaletteName = _selectedPaletteColorItem ? _selectedPaletteColorItem.id : [OASPaletteConstants shared].DEFAULT_NAME;
         if (!self.isCurrentTrack)
             self.gpx.gradientPaletteName = selectedPaletteName;
@@ -2748,10 +2748,10 @@ static const NSInteger kColorsSection = 1;
     if (!paletteCategory)
         return;
     
-    NSArray<OASPaletteItemGradient *> *paletteItems = [[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime];
+    NSArray<OASPaletteItemGradient *> *paletteItems = [[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime];
     [_sortedPaletteColorItems replaceAllWithObjectsSync:paletteItems];
-    if (_selectedPaletteColorItem && [[GradientPaletteHelper shared] indexOfPaletteItem:_selectedPaletteColorItem items:paletteItems] == NSNotFound)
-        _selectedPaletteColorItem = [[GradientPaletteHelper shared] getDefaultPaletteItemWithCategory:paletteCategory] ?: paletteItems.firstObject;
+    if (_selectedPaletteColorItem && [[GradientPaletteHelper shared] indexOf:_selectedPaletteColorItem in:paletteItems] == NSNotFound)
+        _selectedPaletteColorItem = [[GradientPaletteHelper shared] defaultPaletteItemWithCategory:paletteCategory] ?: paletteItems.firstObject;
     
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
     if (_colorsCollectionIndexPath)
@@ -2777,8 +2777,8 @@ static const NSInteger kColorsSection = 1;
 {
     OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
     if (paletteCategory)
-        [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
-    NSInteger index = [[GradientPaletteHelper shared] indexOfPaletteItem:paletteItem items:[_sortedPaletteColorItems asArray]];
+        [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
+    NSInteger index = [[GradientPaletteHelper shared] indexOf:paletteItem in:[_sortedPaletteColorItems asArray]];
     if (index != NSNotFound)
         [self onCollectionItemSelected:[NSIndexPath indexPathForRow:index inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
 }

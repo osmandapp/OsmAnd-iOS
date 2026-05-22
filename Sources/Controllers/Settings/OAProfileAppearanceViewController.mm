@@ -444,7 +444,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _colorCollectionHandler.hostVC = self;
 
     NSInteger selectedIndex = [appearanceCollection indexOfColorItem:selectedColorItem items:sortedColorItems];
-    selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [appearanceCollection indexOfColorItem:[appearanceCollection getDefaultPointColorItem] items:sortedColorItems];
+    selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [appearanceCollection indexOfColorItem:[appearanceCollection defaultPointColorItem] items:sortedColorItems];
     selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
     [_colorCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
     

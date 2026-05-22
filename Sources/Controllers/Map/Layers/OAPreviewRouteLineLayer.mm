@@ -696,7 +696,7 @@
     if (gradientScaleType)
     {
         OASGradientPaletteCategory *category = [gradientScaleType toPaletteCategory];
-        OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] getPaletteItemWithCategory:category name:_routeGradientPalette] : nil;
+        OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] paletteItemWithCategory:category name:_routeGradientPalette] : nil;
         if (paletteItem)
             previewPalette = [paletteItem getColorPalette];
         if (![previewPalette isValid])

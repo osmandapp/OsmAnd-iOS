@@ -134,8 +134,8 @@ static const NSInteger kElevationMaxMeters = 2000;
         _sortedPaletteColorItems = [[OAConcurrentArray alloc] init];
         if (paletteCategory)
         {
-            [_sortedPaletteColorItems addObjectsSync:[[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
-            _basePaletteColorItem = [[GradientPaletteHelper shared] getPaletteItemOrDefaultWithCategory:paletteCategory name:[_terrainMode getKeyName]];
+            [_sortedPaletteColorItems addObjectsSync:[[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
+            _basePaletteColorItem = [[GradientPaletteHelper shared] paletteItemOrDefaultWithCategory:paletteCategory name:[_terrainMode getKeyName]];
         }
         _currentPaletteColorItem = _basePaletteColorItem;
 
@@ -153,9 +153,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
         _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
         _isNightCoordinatesGridColorMode = _settings.nightMode;
-        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+        _baseDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection defaultLineColorItem];
         _currentDayColorItem  = _baseDayColorItem;
-        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+        _baseNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection defaultLineColorItem];
         _currentNightColorItem = _baseNightColorItem;
     }
 
@@ -598,8 +598,8 @@ static const NSInteger kElevationMaxMeters = 2000;
     if (_currentDayColorItem.colorInt == defDay && _currentNightColorItem.colorInt == defNight)
         return NO;
 
-    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:(int)defDay] ?: [_appearanceCollection getDefaultLineColorItem];
-    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:(int)defNight] ?: [_appearanceCollection getDefaultLineColorItem];
+    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:(int)defDay] ?: [_appearanceCollection defaultLineColorItem];
+    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:(int)defNight] ?: [_appearanceCollection defaultLineColorItem];
     [self applyCoordinatesGridColor];
     OACollectionSingleLineTableViewCell *colorCell = (OACollectionSingleLineTableViewCell *)[self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
     if (colorCell)
@@ -1039,11 +1039,11 @@ static const NSInteger kElevationMaxMeters = 2000;
         }
         else
         {
-            // TODO: Add palette creation action in the palette editor task.
+            // TODO: Add palette creation action in the palette editor task: https://github.com/osmandapp/OsmAnd-Issues/issues/3207
             [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
             PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
             paletteHandler.delegate = self;
-            NSInteger selectedIndex = [[GradientPaletteHelper shared] indexOfPaletteItem:_currentPaletteColorItem items:[_sortedPaletteColorItems asArray]];
+            NSInteger selectedIndex = [[GradientPaletteHelper shared] indexOf:_currentPaletteColorItem in:[_sortedPaletteColorItems asArray]];
             if (selectedIndex == NSNotFound)
                 selectedIndex = 0;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
@@ -1264,8 +1264,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)reloadCollectionData
 {
-    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
-    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection getDefaultLineColorItem];
+    _currentDayColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getDayGridColor]] ?: [_appearanceCollection defaultLineColorItem];
+    _currentNightColorItem = [_appearanceCollection getColorItemWithValue:[_coordinatesGridSettings getNightGridColor]] ?: [_appearanceCollection defaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
 }
 
@@ -1280,10 +1280,10 @@ static const NSInteger kElevationMaxMeters = 2000;
     if (!paletteCategory)
         return;
 
-    [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
-    if ([[GradientPaletteHelper shared] indexOfPaletteItem:_currentPaletteColorItem items:[_sortedPaletteColorItems asArray]] == NSNotFound)
+    [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
+    if ([[GradientPaletteHelper shared] indexOf:_currentPaletteColorItem in:[_sortedPaletteColorItems asArray]] == NSNotFound)
     {
-        _currentPaletteColorItem = [[GradientPaletteHelper shared] getDefaultPaletteItemWithCategory:paletteCategory] ?: [_sortedPaletteColorItems firstObjectSync];
+        _currentPaletteColorItem = [[GradientPaletteHelper shared] defaultPaletteItemWithCategory:paletteCategory] ?: [_sortedPaletteColorItems firstObjectSync];
         _basePaletteColorItem = _currentPaletteColorItem;
         _isDefaultColorRestored = YES;
         _isValueChange = NO;
@@ -1306,8 +1306,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     OASGradientPaletteCategory *paletteCategory = [TerrainTypeWrapper toPaletteCategoryWithType:_terrainMode.type];
     if (paletteCategory)
-        [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] getPaletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
-    NSInteger row = [[GradientPaletteHelper shared] indexOfPaletteItem:paletteItem items:[_sortedPaletteColorItems asArray]];
+        [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
+    NSInteger row = [[GradientPaletteHelper shared] indexOf:paletteItem in:[_sortedPaletteColorItems asArray]];
     if (row != NSNotFound)
         [self onCollectionItemSelected:[NSIndexPath indexPathForRow:row inSection:0] selectedItem:paletteItem collectionView:nil shouldDismiss:YES];
 }

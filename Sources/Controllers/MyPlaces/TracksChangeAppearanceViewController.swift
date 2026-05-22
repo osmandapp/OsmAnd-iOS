@@ -311,13 +311,13 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 }
                 cell.setCollectionHandler(colorHandler)
             } else if isGradientColorSelected {
-                // TODO: Add palette creation action in the palette editor task.
+                // TODO: Add palette creation action in the palette editor task: https://github.com/osmandapp/OsmAnd-Issues/issues/3207
                 let paletteItems = sortedPaletteColorItems.asArray().compactMap { $0 as? PaletteItemGradient }
                 let paletteHandler = PaletteCollectionHandler(data: [paletteItems], collectionView: cell.collectionView)
                 paletteHandler?.delegate = self
-                var selectedIndex = GradientPaletteHelper.shared.indexOfPaletteItem(selectedPaletteColorItem, items: paletteItems)
-                selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : GradientPaletteHelper.shared.indexOfPaletteItem(GradientPaletteHelper.shared.getDefaultPaletteItem(gradientScaleType: selectedColorType?.toGradientScaleType()), items: paletteItems)
-                selectedIndex = (selectedIndex != NSNotFound) ? selectedIndex : 0
+                var selectedIndex = GradientPaletteHelper.shared.index(of: selectedPaletteColorItem, in: paletteItems)
+                selectedIndex = selectedIndex != NSNotFound ? selectedIndex : GradientPaletteHelper.shared.index(of: GradientPaletteHelper.shared.defaultPaletteItem(gradientScaleType: selectedColorType?.toGradientScaleType()), in: paletteItems)
+                selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0
                 let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
                 paletteHandler?.setSelectedIndexPath(selectedIndexPath)
                 cell.setCollectionHandler(paletteHandler)
@@ -377,12 +377,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         if item.key == RowKey.allColorsRowKey.rawValue {
             if isSolidColorSelected {
                 let items = appearanceCollection.getAvailableColorsSortingByLastUsed() ?? []
-                let selectedItem: Any
-                if let selectedColorItem {
-                    selectedItem = selectedColorItem
-                } else {
-                    selectedItem = NSNull()
-                }
+                let selectedItem: Any = selectedColorItem ?? NSNull()
     
                 let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorItems, items: items, selectedItem: selectedItem)
                 colorCollectionVC.delegate = self
@@ -514,21 +509,22 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         if let trackColor = tracks.first?.color {
             selectedColorItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
         } else {
-            selectedColorItem = appearanceCollection.getDefaultLineColorItem()
+            selectedColorItem = appearanceCollection.defaultLineColorItem()
         }
 
         sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
-        initialData.setParameter(.color, value: KotlinInt(integerLiteral: Int(selectedColorItem?.colorInt ?? 0)))
-        data.setParameter(.color, value: KotlinInt(integerLiteral: Int(selectedColorItem?.colorInt ?? 0)))
+        let selectedColor = Int(selectedColorItem?.colorInt ?? 0)
+        initialData.setParameter(.color, value: KotlinInt(integerLiteral: selectedColor))
+        data.setParameter(.color, value: KotlinInt(integerLiteral: selectedColor))
         initialData.setParameter(.colorPalette, value: PaletteConstants.shared.DEFAULT_NAME)
         data.setParameter(.colorPalette, value: PaletteConstants.shared.DEFAULT_NAME)
     }
     
     private func configureGradientColors() {
         let gradientScaleType = selectedColorType?.toGradientScaleType()
-        let paletteItems = GradientPaletteHelper.shared.getPaletteItems(gradientScaleType: gradientScaleType, sortMode: .lastUsedTime)
+        let paletteItems = GradientPaletteHelper.shared.paletteItems(gradientScaleType: gradientScaleType, sortMode: .lastUsedTime)
         sortedPaletteColorItems.replaceAll(withObjectsSync: paletteItems)
-        selectedPaletteColorItem = GradientPaletteHelper.shared.getPaletteItemOrDefault(gradientScaleType: gradientScaleType, name: tracks.first?.gradientPaletteName)
+        selectedPaletteColorItem = GradientPaletteHelper.shared.paletteItemOrDefault(gradientScaleType: gradientScaleType, name: tracks.first?.gradientPaletteName)
         if let selectedPaletteColorItem {
             initialData.setParameter(.colorPalette, value: selectedPaletteColorItem.id)
             data.setParameter(.colorPalette, value: selectedPaletteColorItem.id)
@@ -992,7 +988,7 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
             if let trackColor = tracks.first?.color {
                 selectedItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
             } else {
-                selectedItem = appearanceCollection.getDefaultLineColorItem()
+                selectedItem = appearanceCollection.defaultLineColorItem()
             }
         }
         selectedColorItem = selectedItem
@@ -1010,9 +1006,9 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     }
     
     func selectPaletteItem(_ paletteItem: PaletteItemGradient) {
-        let paletteItems = GradientPaletteHelper.shared.getPaletteItems(gradientScaleType: selectedColorType?.toGradientScaleType(), sortMode: .lastUsedTime)
+        let paletteItems = GradientPaletteHelper.shared.paletteItems(gradientScaleType: selectedColorType?.toGradientScaleType(), sortMode: .lastUsedTime)
         sortedPaletteColorItems.replaceAll(withObjectsSync: paletteItems)
-        let index = GradientPaletteHelper.shared.indexOfPaletteItem(paletteItem, items: paletteItems)
+        let index = GradientPaletteHelper.shared.index(of: paletteItem, in: paletteItems)
         if index != NSNotFound {
             onCollectionItemSelected(IndexPath(row: index, section: 0), selectedItem: paletteItem, collectionView: nil, shouldDismiss: true)
             updateSection(containingRowKey: .coloringRowKey)
@@ -1020,7 +1016,7 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     }
     
     func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
-        guard let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return appearanceCollection.getDefaultLineColorItem() }
+        guard let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return appearanceCollection.defaultLineColorItem() }
         if let colorsIndexPath = colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
             sortedColorItems.insert(newColorItem, at: 0)
             colorHandler.addAndSelectColor(IndexPath(row: 0, section: 0), newItem: newColorItem)
@@ -1073,10 +1069,10 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
     
     func reloadData() {
         let gradientScaleType = selectedColorType?.toGradientScaleType()
-        let paletteItems = GradientPaletteHelper.shared.getPaletteItems(gradientScaleType: gradientScaleType, sortMode: .lastUsedTime)
+        let paletteItems = GradientPaletteHelper.shared.paletteItems(gradientScaleType: gradientScaleType, sortMode: .lastUsedTime)
         sortedPaletteColorItems.replaceAll(withObjectsSync: paletteItems)
-        if GradientPaletteHelper.shared.indexOfPaletteItem(selectedPaletteColorItem, items: paletteItems) == NSNotFound {
-            selectedPaletteColorItem = GradientPaletteHelper.shared.getDefaultPaletteItem(gradientScaleType: gradientScaleType) ?? paletteItems.first
+        if GradientPaletteHelper.shared.index(of: selectedPaletteColorItem, in: paletteItems) == NSNotFound {
+            selectedPaletteColorItem = GradientPaletteHelper.shared.defaultPaletteItem(gradientScaleType: gradientScaleType) ?? paletteItems.first
             if let selectedPaletteColorItem {
                 data.setParameter(.colorPalette, value: selectedPaletteColorItem.id)
             }

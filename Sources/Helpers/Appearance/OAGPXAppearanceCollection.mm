@@ -195,7 +195,7 @@
     return (OASPaletteSolidCollection *)[[OsmAndApp instance].paletteRepository getPaletteId:[OASPaletteConstants shared].DEFAULT_SOLID_PALETTE_ID];
 }
 
-- (NSArray<OASPaletteItemSolid *> *)getSolidItemsWithSortMode:(OASPaletteSortMode *)sortMode
+- (NSArray<OASPaletteItemSolid *> *)solidItemsWithSortMode:(OASPaletteSortMode *)sortMode
 {
     NSMutableArray<OASPaletteItemSolid *> *result = [NSMutableArray array];
     NSArray<id<OASPaletteItem>> *items = [[OsmAndApp instance].paletteRepository getPaletteItemsPaletteId:[OASPaletteConstants shared].DEFAULT_SOLID_PALETTE_ID sortMode:sortMode];
@@ -210,7 +210,7 @@
 
 - (OASPaletteItemSolid *)findColorItemWithValue:(int)value
 {
-    for (OASPaletteItemSolid *colorItem in [self getSolidItemsWithSortMode:OASPaletteSortMode.originalOrder])
+    for (OASPaletteItemSolid *colorItem in [self solidItemsWithSortMode:OASPaletteSortMode.originalOrder])
     {
         if (colorItem.colorInt == value)
             return colorItem;
@@ -245,12 +245,12 @@
     return [self addNewSelectedColor:color] != nil;
 }
 
-- (OASPaletteItemSolid *)getDefaultLineColorItem
+- (OASPaletteItemSolid *)defaultLineColorItem
 {
-    return [self getSolidItemsWithSortMode:OASPaletteSortMode.originalOrder].firstObject;
+    return [self solidItemsWithSortMode:OASPaletteSortMode.originalOrder].firstObject;
 }
 
-- (OASPaletteItemSolid *)getDefaultPointColorItem
+- (OASPaletteItemSolid *)defaultPointColorItem
 {
     int colorValue = [[OADefaultFavorite getDefaultColor] toARGBNumber];
     return [self findColorItemWithValue:colorValue] ?: [self addNewSelectedColor:UIColorFromARGB(colorValue)];
@@ -308,7 +308,7 @@
 
 - (NSArray<OASPaletteItemSolid *> *)getAvailableColorsSortingByLastUsed
 {
-    return [self getSolidItemsWithSortMode:OASPaletteSortMode.lastUsedTime];
+    return [self solidItemsWithSortMode:OASPaletteSortMode.lastUsedTime];
 }
 
 - (OASPaletteItemSolid *)getColorItemWithValue:(int)value
@@ -317,7 +317,7 @@
     if (colorItem)
         return colorItem;
 
-    return value == 0 ? [self getDefaultLineColorItem] : [self addNewSelectedColor:UIColorFromARGB(value)];
+    return value == 0 ? [self defaultLineColorItem] : [self addNewSelectedColor:UIColorFromARGB(value)];
 }
 
 - (NSInteger)indexOfColorItem:(OASPaletteItemSolid *)colorItem items:(NSArray<OASPaletteItemSolid *> *)items

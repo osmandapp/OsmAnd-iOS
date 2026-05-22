@@ -199,7 +199,6 @@
         _firstLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter] == 1;
         
         [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
-        _paletteRepository = [[OASPaletteRepository alloc] init];
         
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];
@@ -1025,6 +1024,12 @@
 
 - (OASPaletteRepository *)paletteRepository
 {
+    @synchronized (self)
+    {
+        if (!_paletteRepository)
+            _paletteRepository = [[OASPaletteRepository alloc] init];
+    }
+    
     return _paletteRepository;
 }
 

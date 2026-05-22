@@ -304,14 +304,15 @@ static NSString * const kSolidColorKey = @"solid_color";
         return;
 
     NSIndexPath *previousSelectedIndexPath = [self.selectedIndexPath copy];
+    [self removeItem:indexPath];
+    if ([indexPath isEqual:self.selectedIndexPath])
+        [self setSelectedIndexPath:[self itemsCount:indexPath.section] > 0 ? [NSIndexPath indexPathForRow:0 inSection:indexPath.section] : nil];
+    else if (self.selectedIndexPath && indexPath.row < self.selectedIndexPath.row)
+        [self setSelectedIndexPath:[NSIndexPath indexPathForRow:self.selectedIndexPath.row - 1 inSection:self.selectedIndexPath.section]];
+
     __weak __typeof(self) weakSelf = self;
     [collectionView performBatchUpdates:^{
-        [weakSelf removeItem:indexPath];
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        if ([indexPath isEqual:weakSelf.selectedIndexPath])
-            [weakSelf setSelectedIndexPath:[weakSelf itemsCount:indexPath.section] > 0 ? [NSIndexPath indexPathForRow:0 inSection:indexPath.section] : nil];
-        else if (weakSelf.selectedIndexPath && indexPath.row < weakSelf.selectedIndexPath.row)
-            [weakSelf setSelectedIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedIndexPath.row - 1 inSection:weakSelf.selectedIndexPath.section]];
     } completion:^(BOOL finished) {
         if ([indexPath isEqual:previousSelectedIndexPath] && weakSelf.selectedIndexPath)
             [collectionView reloadItemsAtIndexPaths:@[weakSelf.selectedIndexPath]];
@@ -478,10 +479,15 @@ static NSString * const kSolidColorKey = @"solid_color";
         [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
         colorCollectionViewController.delegate = self;
         colorCollectionViewController.hostColorHandler = self;
-        if ([_hostVC respondsToSelector:@selector(showModalViewController:)])
+        if ([_hostVC isKindOfClass:OASuperViewController.class])
+        {
             [(OASuperViewController *)_hostVC showModalViewController:colorCollectionViewController];
+        }
         else
-            [_hostVC.navigationController pushViewController:colorCollectionViewController animated:YES];
+        {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:colorCollectionViewController];
+            [_hostVC presentViewController:navigationController animated:YES completion:nil];
+        }
     }
 }
 
@@ -509,7 +515,8 @@ static NSString * const kSolidColorKey = @"solid_color";
         if (_editColorIndexPath)
             editingColor = _data[0][_editColorIndexPath.row];
 
-        if (editingColor.colorInt != (int32_t) [viewController.selectedColor toARGBNumber])
+        int32_t selectedColor = (int32_t) viewController.selectedColor.toARGBNumber;
+        if (editingColor.colorInt != selectedColor)
         {
             [self changeColorItem:editingColor withColor:viewController.selectedColor];
         }

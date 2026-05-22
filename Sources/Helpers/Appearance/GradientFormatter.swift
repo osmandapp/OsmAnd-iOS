@@ -58,11 +58,11 @@ public enum RelativeConstants: CaseIterable {
         }
     }
 
-    func getName(useFullName: Bool) -> String {
+    func name(useFullName: Bool) -> String {
         Localization.shared.getString(key: useFullName ? longNameResId : shortNameResId)
     }
 
-    func getSummary() -> String {
+    func summary() -> String {
         Localization.shared.getString(key: summaryResId)
     }
 
@@ -149,7 +149,7 @@ final class GradientFormatter: NSObject {
                 // Show constants (Min/Max) or percentages.
                 let constant = RelativeConstants.valueOfRatio(value)
                 if let constant, fileType.useNamedConstants {
-                    valueStr = constant.getName(useFullName: false)
+                    valueStr = constant.name(useFullName: false)
                     unitsSrt = ""
                 } else {
                     let valueInDisplayUnits = displayUnits.from(value: Double(value), sourceUnit: baseUnits)
@@ -203,7 +203,7 @@ final class GradientFormatter: NSObject {
                 result = RealDataLimits(minValue: Float(min), maxValue: Float(max), units: LengthUnits.meters)
             }
         } else {
-            // Other types not supported for real data preview yet
+            debugPrint("GradientFormatter: real data preview is not supported for unit type \(unitType)")
         }
 
         return result

@@ -55,8 +55,8 @@
 
 - (void)onUpdateMapSource:(OAMapViewController *)mapViewController;
 - (BOOL)saveFavoriteColorsIfNeeded:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
-- (OASPaletteItemSolid *)getDefaultLineColorItem;
-- (OASPaletteItemSolid *)getDefaultPointColorItem;
+- (OASPaletteItemSolid *)defaultLineColorItem;
+- (OASPaletteItemSolid *)defaultPointColorItem;
 
 - (OASPaletteItemSolid *)changeColor:(OASPaletteItemSolid *)colorItem newColor:(UIColor *)newColor;
 - (OASPaletteItemSolid *)addNewSelectedColor:(UIColor *)newColor;

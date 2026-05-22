@@ -206,7 +206,7 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
             isNightColorMode = settings.nightMode
             baseBuildings3DColorStyle = plugin.get3DBuildingsColorStyle()
             currentBuildings3DColorStyle = baseBuildings3DColorStyle
-            let defaultColorItem = appearanceCollection.getDefaultLineColorItem()
+            let defaultColorItem = appearanceCollection.defaultLineColorItem()
             baseDayColorItem = appearanceCollection.getColorItem(withValue: plugin.buildings3dCustomDayColorPref.get()) ?? defaultColorItem
             currentDayColorItem = baseDayColorItem
             baseNightColorItem = appearanceCollection.getColorItem(withValue: plugin.buildings3dCustomNightColorPref.get()) ?? defaultColorItem
@@ -350,8 +350,8 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
         }
         
         currentBuildings3DColorStyle = defaultColorStyle
-        currentDayColorItem = appearanceCollection.getColorItem(withValue: defaultDayColor) ?? appearanceCollection.getDefaultLineColorItem()
-        currentNightColorItem = appearanceCollection.getColorItem(withValue: defaultNightColor) ?? appearanceCollection.getDefaultLineColorItem()
+        currentDayColorItem = appearanceCollection.getColorItem(withValue: defaultDayColor) ?? appearanceCollection.defaultLineColorItem()
+        currentNightColorItem = appearanceCollection.getColorItem(withValue: defaultNightColor) ?? appearanceCollection.defaultLineColorItem()
         previewBuildings3DColor()
         if let colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler, let currentColorItem = isNightColorMode ? currentNightColorItem : currentDayColorItem {
             let row = appearanceCollection.index(ofColorItem: currentColorItem, items: sortedColorItems)
@@ -674,7 +674,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDelegate {
             showChoosePlanScreen()
         } else if item.key == RowKey.allColors.rawValue {
             let allColors = appearanceCollection.getAvailableColorsSortingByLastUsed() ?? []
-            let selectedItem = (isNightColorMode ? currentNightColorItem : currentDayColorItem) ?? appearanceCollection.getDefaultLineColorItem()
+            let selectedItem = (isNightColorMode ? currentNightColorItem : currentDayColorItem) ?? appearanceCollection.defaultLineColorItem()
             guard let selectedItem else { return }
             let colorCollectionViewController = ItemsCollectionViewController(collectionType: .colorItems, items: allColors, selectedItem: selectedItem)
             colorCollectionViewController.delegate = self
@@ -710,8 +710,8 @@ extension MapSettingsBuildings3DParametersViewController: OACollectionCellDelega
     
     func reloadCollectionData() {
         guard settingsType == .color, let plugin else { return }
-        currentDayColorItem = appearanceCollection.getColorItem(withValue: plugin.buildings3dCustomDayColorPref.get()) ?? appearanceCollection.getDefaultLineColorItem()
-        currentNightColorItem = appearanceCollection.getColorItem(withValue: plugin.buildings3dCustomNightColorPref.get()) ?? appearanceCollection.getDefaultLineColorItem()
+        currentDayColorItem = appearanceCollection.getColorItem(withValue: plugin.buildings3dCustomDayColorPref.get()) ?? appearanceCollection.defaultLineColorItem()
+        currentNightColorItem = appearanceCollection.getColorItem(withValue: plugin.buildings3dCustomNightColorPref.get()) ?? appearanceCollection.defaultLineColorItem()
         sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
     }
 }
@@ -726,7 +726,7 @@ extension MapSettingsBuildings3DParametersViewController: ColorCollectionViewCon
     }
     
     func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
-        guard settingsType == .color, let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return appearanceCollection.getDefaultLineColorItem() }
+        guard settingsType == .color, let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return appearanceCollection.defaultLineColorItem() }
         if let colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
             sortedColorItems.insert(newColorItem, at: 0)
             colorHandler.addAndSelectColor(IndexPath(row: 0, section: 0), newItem: newColorItem)

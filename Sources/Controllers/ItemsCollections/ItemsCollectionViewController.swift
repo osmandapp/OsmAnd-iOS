@@ -167,7 +167,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         if collectionType == .colorizationPaletteItems || collectionType == .terrainPaletteItems {
             if let selectedPaletteItem, let paletteItems {
-                let index = GradientPaletteHelper.shared.indexOfPaletteItem(selectedPaletteItem, items: paletteItems.asArray().compactMap { $0 as? PaletteItemGradient })
+                let index = GradientPaletteHelper.shared.index(of: selectedPaletteItem, in: paletteItems.asArray().compactMap { $0 as? PaletteItemGradient })
                 guard index != NSNotFound else { return }
                 let selectedIndexPath = IndexPath(row: index, section: 0)
                 if let isContains = tableView.indexPathsForVisibleRows?.contains(selectedIndexPath), !isContains {
@@ -339,7 +339,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     cell.leftIconView.image = palette.id == selectedPaletteItem?.id ? UIImage(named: "ic_checkmark_default") : nil
                     cell.button.setTitle(nil, for: .normal)
                     cell.button.setImage(UIImage(named: "ic_navbar_overflow_menu_outlined")?.withRenderingMode(.alwaysTemplate), for: .normal)
-//                    cell.button.isHidden = false
                     cell.button.menu = createPaletteMenu(for: indexPath)
                     cell.button.showsMenuAsPrimaryAction = true
                     
@@ -796,8 +795,8 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             if selectedPaletteItem?.id == paletteItem.id {
                 let paletteItemsArray = paletteItems.asArray().compactMap { $0 as? PaletteItemGradient }
-                selectedPaletteItem = GradientPaletteHelper.shared.getDefaultPaletteItem(category: paletteItem.properties.fileType.category) ?? paletteItemsArray.first
-                let selectedIndex = GradientPaletteHelper.shared.indexOfPaletteItem(selectedPaletteItem, items: paletteItemsArray)
+                selectedPaletteItem = GradientPaletteHelper.shared.defaultPaletteItem(category: paletteItem.properties.fileType.category) ?? paletteItemsArray.first
+                let selectedIndex = GradientPaletteHelper.shared.index(of: selectedPaletteItem, in: paletteItemsArray)
                 if selectedIndex != NSNotFound {
                     tableView.reloadRows(at: [IndexPath(row: selectedIndex, section: indexPath.section)], with: .automatic)
                 }

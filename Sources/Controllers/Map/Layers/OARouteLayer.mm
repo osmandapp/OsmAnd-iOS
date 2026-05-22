@@ -637,13 +637,13 @@ struct DrawPathData
         _routeGradientPalette = [OASPaletteConstants shared].DEFAULT_NAME;
 }
 
-- (OASColorPalette *)getRouteColorPalette:(OAColoringType *)routeColoringType fixedValues:(BOOL *)fixedValues
+- (OASColorPalette *)routeColorPalette:(OAColoringType *)routeColoringType fixedValues:(BOOL *)fixedValues
 {
     if (fixedValues)
         *fixedValues = NO;
     
     OASGradientPaletteCategory *category = [[routeColoringType toGradientScaleType] toPaletteCategory];
-    OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] getPaletteItemOrDefaultWithCategory:category name:_routeGradientPalette] : nil;
+    OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] paletteItemOrDefaultWithCategory:category name:_routeGradientPalette] : nil;
     if (!paletteItem)
         return nil;
     
@@ -1075,7 +1075,7 @@ struct DrawPathData
         {
             OASGpxFile *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
             BOOL fixedValues = NO;
-            OASColorPalette *colorPalette = [self getRouteColorPalette:routeColoringType fixedValues:&fixedValues];
+            OASColorPalette *colorPalette = [self routeColorPalette:routeColoringType fixedValues:&fixedValues];
             OARouteColorize *colorizationHelper =
             [[OARouteColorize alloc] initWithGpxFile:gpx
                                             analysis:[gpx getAnalysisFileTimestamp:0]

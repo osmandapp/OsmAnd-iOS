@@ -226,13 +226,11 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func switchTo(tab: Tab) {
-        let index = availableTabs.firstIndex(of: tab) ?? Tab.default.rawValue
-        let tab = availableTabs[index]
-        selectedTab = tab
-        if let viewController = viewController(for: tab) {
+        selectedTab = availableTabs.first(where: { $0 == tab }) ?? .default
+        if let viewController = viewController(for: selectedTab) {
             pageViewController?.setViewControllers([viewController], direction: .forward, animated: true)
         }
-        setupNavbarTitle(with: tab)
+        setupNavbarTitle(with: selectedTab)
     }
     
     private func initialSelectedTab() {

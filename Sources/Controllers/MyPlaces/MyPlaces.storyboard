@@ -13,7 +13,7 @@
         <!--Saved Articles Tab View Controller-->
         <scene sceneID="H4P-Zr-3tv">
             <objects>
-                <viewController id="5lf-ib-SY3" customClass="SavedArticlesTabViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="SavedArticlesTabViewController" storyboardIdentifier="SavedArticlesTabViewController" id="5lf-ib-SY3" customClass="SavedArticlesTabViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4sR-lk-4Xy">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

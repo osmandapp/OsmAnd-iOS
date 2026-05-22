@@ -8,7 +8,9 @@
 
 import Foundation
 
-final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, MyPlacesSearchable, UISearchBarDelegate {
+final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, MyPlacesSearchable, UISearchBarDelegate {
+    
+    @IBOutlet private weak var tableView: UITableView!
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
@@ -19,15 +21,6 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     var searchText = ""
     var lastSelectedIndexPath: IndexPath?
     weak var myPlacesDelegate: MyPlacesDelegate?
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    init(frame: CGRect) {
-        super.init(style: .insetGrouped)
-        view.frame = frame
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -100,15 +93,15 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     
     // MARK: TableView
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         Int(tableData.sectionCount())
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         Int(tableData.rowCount(UInt(section)))
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
         if item.cellType == ArticleTravelCell.getIdentifier() {
             var cell = self.tableView.dequeueReusableCell(withIdentifier: ArticleTravelCell.getIdentifier()) as? ArticleTravelCell
@@ -157,7 +150,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         return UITableViewCell()
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         lastSelectedIndexPath = indexPath
         if let article = item.obj(forKey: "article") as? TravelArticle {
@@ -168,7 +161,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
         if item.cellType == ArticleTravelCell.getIdentifier() {
             if let article = item.obj(forKey: "article") as? TravelArticle {

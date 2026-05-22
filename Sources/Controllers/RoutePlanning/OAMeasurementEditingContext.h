@@ -93,6 +93,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (double) getRouteDistance;
 - (BOOL) isNewData;
+- (BOOL) hasRoutePoints;
 - (BOOL) isApproximationNeeded;
 - (BOOL) isAddNewSegmentAllowed;
 - (BOOL) hasRoute;

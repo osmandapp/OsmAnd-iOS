@@ -206,11 +206,17 @@
     return gpx;
 }
 
+- (BOOL)shouldSyncRouteActivityWithEditedProfile
+{
+    return !_editingCtx.isNewData && _editingCtx.hasRoutePoints;
+}
+
 - (void)savePreselectedRouteActivity:(OASGpxFile *)gpxFile
 {
     OASRouteActivityHelper *activityHelper = [OASRouteActivityHelper shared];
     OASMetadata *metadata = gpxFile.metadata;
-    if ([metadata getRouteActivityActivities:[activityHelper getActivities]] != nil)
+    BOOL syncWithProfile = [self shouldSyncRouteActivityWithEditedProfile];
+    if (!syncWithProfile && [metadata getRouteActivityActivities:[activityHelper getActivities]] != nil)
         return;
 
     OAApplicationMode *appMode = _editingCtx.appMode;
@@ -218,7 +224,7 @@
         appMode = [OAAppSettings sharedManager].applicationMode.get;
 
     NSString *activityId = (NSString *)[[OAAppSettings sharedManager].currentTrackRouteActivity getProfileDefaultValue:appMode];
-    if (activityId.length > 0)
+    if (syncWithProfile || activityId.length > 0)
         [metadata setRouteActivityActivity:[activityHelper findRouteActivityId:activityId]];
 }
 

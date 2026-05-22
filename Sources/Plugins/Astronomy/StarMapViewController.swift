@@ -21,9 +21,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let settingsSheetHeight: CGFloat = 520
         static let maxMagnitude: Double = 7.0
     }
-
-    private static let starLayerDefaultsMigrationKey = "astronomy_settings_star_layers_migrated"
-
     private var settings: AstronomyPluginSettings
     private let viewModel: StarObjectsViewModel
 
@@ -83,7 +80,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         setupControls()
         setupHelpers()
         setupListeners()
-        restoreAndroidStarViewObjectDefaultsIfNeeded()
         applySettings(settings.starMap)
         updateRegularMapVisibility(settings.common.showRegularMap)
         updateStarMap(updateAzimuth: true)
@@ -516,35 +512,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         apply2DMode(config.is2DMode)
         updateRedMode(config.showRedFilter)
         updateMagnitudeControls()
-    }
-
-    private func restoreAndroidStarViewObjectDefaultsIfNeeded() {
-        guard !UserDefaults.standard.bool(forKey: Self.starLayerDefaultsMigrationKey) else {
-            return
-        }
-        UserDefaults.standard.set(true, forKey: Self.starLayerDefaultsMigrationKey)
-
-        guard !settings.starMap.showConstellations,
-              !settings.starMap.showStars,
-              !settings.starMap.showGalaxies,
-              !settings.starMap.showBlackHoles,
-              !settings.starMap.showNebulae,
-              !settings.starMap.showOpenClusters,
-              !settings.starMap.showGlobularClusters,
-              !settings.starMap.showGalaxyClusters else {
-            return
-        }
-
-        settings.starMap.showConstellations = true
-        settings.starMap.showStars = true
-        settings.starMap.showGalaxies = true
-        settings.starMap.showBlackHoles = true
-        settings.starMap.showNebulae = true
-        settings.starMap.showOpenClusters = true
-        settings.starMap.showGlobularClusters = true
-        settings.starMap.showGalaxyClusters = true
-        settings.save()
-        viewModel.updateSettings(settings)
     }
 
     private func saveCommonSettings() {

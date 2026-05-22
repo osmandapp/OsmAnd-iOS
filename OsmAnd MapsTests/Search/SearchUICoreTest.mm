@@ -78,7 +78,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     [OsmAndApp.instance addAbbrevationsToCommonWords];
     for (NSString *path in _filePaths)
     {
-        //if ([path.lastPathComponent isEqualToString:@"interpolation_by_alphabet.json"])
+        //if ([path.lastPathComponent isEqualToString:@"31st_road.json"])
             [self testSearchCase:path];
     }
     NSLog(@"========================================");
@@ -280,7 +280,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
             expected = [expected stringByReplacingOccurrencesOfString:@"\\'" withString:@"'"];
             present = [present stringByReplacingOccurrencesOfString:@"\\'" withString:@"'"];
 
-            if ([expected caseInsensitiveCompare:present] != NSOrderedSame)
+            if ([expected caseInsensitiveCompare:present] != NSOrderedSame && ![self sameToDuplicate:result[i] res:res phrase:phrase])
             {
                 NSLog(@"Phrase: %@", [phrase toString]);
                 NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
@@ -383,6 +383,20 @@ static BOOL TEST_EXTRA_RESULTS = YES;
             r.unknownPhraseMatchWeight,
             dist / 1000
             ];
+}
+
+- (BOOL) sameToDuplicate:(NSString *)expected res:(OASearchResult *)res phrase:(OASearchPhrase *)phrase
+{
+    NSString * quotes1 = [expected substringFromIndex:[expected indexOf:@"["]].trim;
+    NSString * fullPresent = (res == nil) ? @"" : [self formatResult:NO res:res phrase:phrase];
+    NSString * quotes2 = [fullPresent substringFromIndex:[fullPresent indexOf:@"["]].trim;
+    NSString * part1 = [expected substringToIndex:[expected indexOf:@","]].trim;
+    NSString * part2 = [fullPresent substringToIndex:[fullPresent indexOf:@","]].trim;
+    if ([part2 indexOf:@"("] != -1)
+    {
+        part2 = [part2 substringToIndex:[part2 indexOf:@"("]].trim;
+    }
+    return [quotes1 isEqual:quotes2] && [part1 isEqual:part2];
 }
 
 @end

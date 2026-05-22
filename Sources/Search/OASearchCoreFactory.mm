@@ -375,6 +375,7 @@
 {
 @public
     NSMutableSet<NSString *> *_townCitiesInit;
+    QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
     std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
     std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _boundariesQR;
 }
@@ -424,6 +425,16 @@
     _boundariesQR->query(area, result);
 }
 
+- (void) saveStreetGroupResourceId:(std::shared_ptr<const OsmAnd::StreetGroup>)streetGroup resId:(QString)resId
+{
+    _streetGroupResourceIds.insert(streetGroup, resId);
+}
+
+- (QString) getResourceIdByStreetGroup:(std::shared_ptr<const OsmAnd::StreetGroup>)streetGroup
+{
+    return _streetGroupResourceIds.value(streetGroup);
+}
+
 @end
 
 
@@ -439,7 +450,6 @@
     int MAX_ADRESS_RESULTS_BY_REGIONS;
 
     OATownCitiesCache *_townCitiesCache;
-    QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
     OASearchStreetByCityAPI *_cityApi;
     OASearchBuildingAndIntersectionsByStreetAPI *_streetsApi;
     BOOL _longDistance;
@@ -559,7 +569,7 @@
             for (const auto& c : l)
             {
                 auto city = std::static_pointer_cast<const OsmAnd::StreetGroup>(c);
-                _streetGroupResourceIds.insert(city, rId);
+                [_townCitiesCache saveStreetGroupResourceId:city resId:rId];
                 OsmAnd::LatLon cl = OsmAnd::Utilities::convert31ToLatLon(city->position31);
                 int y = OsmAnd::Utilities::get31TileNumberY(cl.latitude);
                 int x = OsmAnd::Utilities::get31TileNumberX(cl.longitude);
@@ -577,7 +587,7 @@
             for (const auto& c : l2)
             {
                 auto city = std::static_pointer_cast<const OsmAnd::StreetGroup>(c);
-                _streetGroupResourceIds.insert(city, rId);
+                [_townCitiesCache saveStreetGroupResourceId:city resId:rId];
                 OsmAnd::AreaI qr(city->position31.y, city->position31.x, city->position31.y, city->position31.x);
                 if (city->bbox31.size() >= 4)
                 {
@@ -597,13 +607,14 @@
         int limit = 0;
         for (const auto& c : cacheResArray)
         {
+            QString resourceId = [_townCitiesCache getResourceIdByStreetGroup:c];
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.object = [[OACity alloc] initWithCity:c];
-            res.resourceId = _streetGroupResourceIds.value(c).toNSString();
+            res.resourceId = resourceId.toNSString();
             res.localeName = c->getName(QString::fromNSString([[phrase getSettings] getLang]), [[phrase getSettings] isTransliterate]).toNSString();
             res.otherNames = [OANativeUtilities QListOfStringsToNSArray:c->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
 
-            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
+            const auto& r = app.resourcesManager->getLocalResource(resourceId);
             if (r)
             {
                 const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
@@ -2254,14 +2265,13 @@
                     continue;
                 
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+                res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName];
+                res.localeName = street->getName(lang, transliterate).toNSString();
+                res.object = [[OAStreet alloc] initWithStreet:street];
                 if (![self matchAddressName:phrase prevRes:nil res:res fullMatch:false])
                 {
                     continue;
                 }
-                
-                res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName];
-                res.localeName = street->getName(lang, transliterate).toNSString();
-                res.object = [[OAStreet alloc] initWithStreet:street];
                 res.resourceId = resId;
                 res.relatedObject = [[OAStreet alloc] initWithStreet:s];
                 res.priority = priority + 1;

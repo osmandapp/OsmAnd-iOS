@@ -64,6 +64,8 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *exitRefTextContainerWidthConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stackViewLeadingConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *shieldIconWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *shieldIconHeightConstraint;
 
 @end
 
@@ -203,14 +205,14 @@ static int stackViewLeadingToRefViewPadding = 16;
     BOOL showTurn = !_turnView.isHidden && _turnView.subviews.count > 0;
     BOOL showExit = !_exitRefTextContainer.isHidden && _exitRefText.text.length > 0;
     BOOL showAddress = !_addressText.isHidden && _addressText.text.length > 0;
-    CGRect shieldFrame = _shieldIcon.frame;
     if (showShield)
     {
-        shieldFrame.size = _shieldIcon.image.size;
-        CGFloat height = h - 4;
-        CGFloat scaleFactor = height / shieldFrame.size.height;
-        shieldFrame.size = CGSizeMake(shieldFrame.size.width * scaleFactor, height);
-        _shieldIcon.frame = shieldFrame;
+        CGSize imageSize = _shieldIcon.image.size;
+        if (imageSize.height > 0)
+        {
+            CGFloat aspectRatio = imageSize.width / imageSize.height;
+            _shieldIconWidthConstraint.constant = _shieldIconHeightConstraint.constant * aspectRatio;
+        }
     }
     CGRect exitRefFrame = _exitRefTextContainer.frame;
     
@@ -232,7 +234,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;
     margin += _exitRefTextContainer.hidden ? 0 : _exitRefTextContainer.frame.size.width + 2;
-    margin += showShield ? shieldFrame.size.width + 2 : 0;
+    margin += showShield ? _shieldIconWidthConstraint.constant + 2 : 0;
     margin += showExit ? exitRefFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
     CGSize size = [OAUtilities calculateTextBounds:showAddress ? _addressText.text : @"" width:maxTextWidth height:h font:_textFont];

@@ -195,7 +195,7 @@
         // First of all, initialize user defaults
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
-        _firstLaunch = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter] == 1;
+        _firstLaunch = [defaults integerForKey:kAppExecCounter] == 1;
         
         [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
         

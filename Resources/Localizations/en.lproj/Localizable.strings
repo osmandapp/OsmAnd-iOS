@@ -4521,9 +4521,15 @@
 
 "shared_string_online_only" = "Online Only";
 "shared_string_offline_only" = "Offline Only";
-"show_image_previews"= "Show image previews";
-"popular_places"= "Popular places";
+"show_image_previews" = "Show image previews";
+"popular_places" = "Popular places";
 "shared_string_wikipedia"= "Wikipedia";
 "poi_source" = "POI Source";
 "shared_string_int_name" = "International name";
 "show_debug_tile" = "Show tile information";
+
+"private_access_routing_req_short" = "Your destination is in a private area. Allow using private roads?";
+"view_on_phone" = "View on Phone";
+"missing_maps_header" = "Missing or outdated maps";
+"missing_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
+"shared_string_allow" = "Allow";

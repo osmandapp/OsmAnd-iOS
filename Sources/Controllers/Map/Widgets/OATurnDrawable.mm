@@ -68,6 +68,8 @@
 
 - (void) layoutSubviews
 {
+    [super layoutSubviews];
+    
     float scaleX = self.bounds.size.width / 72.f;
     float scaleY = self.bounds.size.height / 72.f;
     CGAffineTransform m = CGAffineTransformMakeScale(scaleX, scaleY);
@@ -124,8 +126,9 @@
     if (_pathForTurnOutlayForDrawing)
     {
         CGContextSetFillColorWithColor(context, [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowCircleColor]].CGColor);
-        [_pathForTurnOutlayForDrawing fill];
-        [_pathForTurnOutlayForDrawing stroke];
+        
+        CGContextAddPath(context, _pathForTurnOutlayForDrawing.CGPath);
+        CGContextDrawPath(context, kCGPathFillStroke);
     }
 
     if (_pathForTurnForDrawing)
@@ -134,8 +137,9 @@
             CGContextSetFillColorWithColor(context, [self getThemeColor:_routeDirectionColor].CGColor);
         else
             CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
-        [_pathForTurnForDrawing fill];
-        [_pathForTurnForDrawing stroke];
+        
+        CGContextAddPath(context, _pathForTurnForDrawing.CGPath);
+        CGContextDrawPath(context, kCGPathFillStroke);
     }
 
     if (_turnType && !_mini && _turnType->getExitOut() > 0 && _textFont)

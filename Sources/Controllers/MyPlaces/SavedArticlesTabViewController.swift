@@ -8,9 +8,7 @@
 
 import Foundation
 
-final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, MyPlacesSearchable, UISearchBarDelegate {
-    
-    @IBOutlet private weak var tableView: UITableView!
+final class SavedArticlesTabViewController: UITableViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, MyPlacesSearchable {
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
@@ -22,16 +20,44 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     var lastSelectedIndexPath: IndexPath?
     weak var myPlacesDelegate: MyPlacesDelegate?
     
+    private var sortMode: MyPlacesSortMode = .lastModified
+    private lazy var settings: OAAppSettings = .sharedManager()
+    
+    private lazy var sortButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.imagePadding = 7
+        config.imagePlacement = .leading
+        config.baseForegroundColor = .iconColorActive
+        let button = UIButton(configuration: config, primaryAction: nil)
+        button.setImage(sortMode.image, for: .normal)
+        button.menu = createSortMenu()
+        button.showsMenuAsPrimaryAction = true
+        button.changesSelectionAsPrimaryAction = true
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+        
+    init(frame: CGRect) {
+        super.init(style: .insetGrouped)
+        view.frame = frame
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
         definesPresentationContext = true
+        tableView.tableHeaderView = setupHeaderView()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
         startAsyncInit()
+        sortMode = savedSortMode()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,16 +85,14 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
 
     @objc func update() {
         DispatchQueue.main.async {
-            self.generateData()
-            self.tableView?.reloadData()
+            self.updateData()
             self.view.removeSpinner()
         }
     }
     
     func generateData() {
         tableData.clearAllData()
-        var savedArticles = TravelObfHelper.shared.getBookmarksHelper().getSavedArticles()
-        savedArticles = savedArticles.sorted { ($0.title ?? "") < ($1.title ?? "") }
+        var savedArticles = MyPlacesSortModeHelper.sortTravelGuidesWithMode(TravelObfHelper.shared.getBookmarksHelper().getSavedArticles(), mode: sortMode)
         if isFiltered {
             savedArticles = savedArticles.filter { ($0.title?.lowercased() ?? "").contains(searchText.lowercased()) }
         }
@@ -93,15 +117,15 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     
     // MARK: TableView
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         Int(tableData.sectionCount())
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         Int(tableData.rowCount(UInt(section)))
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
         if item.cellType == ArticleTravelCell.getIdentifier() {
             var cell = self.tableView.dequeueReusableCell(withIdentifier: ArticleTravelCell.getIdentifier()) as? ArticleTravelCell
@@ -150,7 +174,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         return UITableViewCell()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         lastSelectedIndexPath = indexPath
         if let article = item.obj(forKey: "article") as? TravelArticle {
@@ -161,7 +185,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
         if item.cellType == ArticleTravelCell.getIdentifier() {
             if let article = item.obj(forKey: "article") as? TravelArticle {
@@ -178,20 +202,76 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                     let bookmarkAction = UIAction(title: localizedString("shared_string_remove_bookmark"), image: UIImage(named: "ic_custom_bookmark_outlined")) { [weak self] _ in
                         guard let self else { return }
                         TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
-                        self.generateData()
-                        self.tableView.reloadData()
+                        self.updateData()
                     }
                     let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_custom_point_markers_outlined")) { [weak self] _ in
                         guard let self else { return }
                         self.view.addSpinner(inCenterOfCurrentView: true)
                         _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
                     }
-                    return UIMenu(title: "", children: [readAction, bookmarkAction, pointsAction])
+                    return UIMenu.composedMenu(from: [[readAction, pointsAction], [bookmarkAction]])
                 }
                 return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
             }
         }
         return nil
+    }
+    
+    private func setupHeaderView() -> UIView? {
+        let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
+        headerView.backgroundColor = .viewBg
+        headerView.addSubview(sortButton)
+        sortButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            sortButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            sortButton.topAnchor.constraint(equalTo: headerView.topAnchor),
+            sortButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+            sortButton.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor)
+        ])
+        
+        return headerView
+    }
+    
+    private func updateSortButtonAndMenu() {
+        sortButton.setImage(sortMode.image, for: .normal)
+        sortButton.menu = createSortMenu()
+    }
+    
+    private func createSortMenu() -> UIMenu {
+        let sortingOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .lastModified)
+        ])
+        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nameAZ),
+            createAction(for: .nameZA)
+        ])
+        
+        return UIMenu(title: "", image: nil, children: [sortingOptions, alphabeticalOptions])
+    }
+    
+    private func createAction(for sortType: MyPlacesSortMode) -> UIAction {
+        let actionState: UIMenuElement.State = sortType == sortMode ? .on : .off
+        return UIAction(title: sortType.title, image: sortType.image?.resizedMenuImage(), state: actionState) { [weak self] _ in
+            guard let self else { return }
+            self.updateSortMode(sortType)
+            self.sortMode = savedSortMode()
+            updateSortButtonAndMenu()
+            updateData()
+        }
+    }
+    
+    private func updateSortMode(_ sortMode: MyPlacesSortMode) {
+        settings.travelGuidesSortMode.set(sortMode.title)
+    }
+    
+    private func savedSortMode() -> MyPlacesSortMode {
+        let sortModeTitle = settings.travelGuidesSortMode.get()
+        return MyPlacesSortMode.byTitle(sortModeTitle)
+    }
+    
+    private func updateData() {
+        generateData()
+        tableView.reloadData()
     }
     
     // MARK: GpxReadDelegate
@@ -233,8 +313,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             isFiltered = false
         }
         myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
-        generateData()
-        tableView.reloadData()
+        updateData()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

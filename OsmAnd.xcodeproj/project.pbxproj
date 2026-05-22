@@ -228,6 +228,7 @@
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
 		275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */; };
+		2765D1072FC0953B00D612A3 /* MyPlacesSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2765D1062FC0953B00D612A3 /* MyPlacesSortModeHelper.swift */; };
 		276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */; };
 		2778FE372EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */; };
 		2778FE392EB242CD00B18E11 /* BaseSettingsParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */; };
@@ -3727,6 +3728,7 @@
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
 		275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceUpdateSize.swift; sourceTree = "<group>"; };
+		2765D1062FC0953B00D612A3 /* MyPlacesSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlacesSortModeHelper.swift; sourceTree = "<group>"; };
 		276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonAppearanceViewController.swift; sourceTree = "<group>"; };
 		2778FE362EB23EEF00B18E11 /* BaseSettingsParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsParametersViewController.swift; sourceTree = "<group>"; };
 		2778FE382EB242CD00B18E11 /* BaseSettingsParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BaseSettingsParametersViewController.xib; sourceTree = "<group>"; };
@@ -12652,6 +12654,7 @@
 				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,
 				C5A887E32CAD7B8E00DA2979 /* TracksSearchFilter.swift */,
 				C57245D82CDF3B70004F1F19 /* TracksSortModeHelper.swift */,
+				2765D1062FC0953B00D612A3 /* MyPlacesSortModeHelper.swift */,
 				C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */,
 				C57693162D66159200E4F772 /* AppearanceData.swift */,
 				C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */,
@@ -17255,6 +17258,7 @@
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
+				2765D1072FC0953B00D612A3 /* MyPlacesSortModeHelper.swift in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
 				FA5D71E12CE24C570062BC4D /* LockHelper.swift in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,

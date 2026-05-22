@@ -1620,6 +1620,7 @@
 		CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
+		CE7818262FC07944005CCF47 /* CollapsibleTextWithButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* CollapsibleTextWithButtonCell.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
@@ -5548,6 +5549,7 @@
 		CA4EDFA46B3B672B32035B7F /* OASubscriptionCardView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionCardView.mm; sourceTree = "<group>"; };
 		CA4EDFFD2EBD6CFA86AF69F1 /* OADeleteOldFilesCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADeleteOldFilesCommand.h; sourceTree = "<group>"; };
 		CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE7818252FC07944005CCF47 /* CollapsibleTextWithButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleTextWithButtonCell.swift; sourceTree = "<group>"; };
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
@@ -12328,6 +12330,7 @@
 				277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */,
 				27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */,
 				27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */,
+				CE7818252FC07944005CCF47 /* CollapsibleTextWithButtonCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -17808,6 +17811,7 @@
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
 				C517665C2E9F993100F2B085 /* OAWeatherHelperBridge.mm in Sources */,
 				DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */,
+				CE7818262FC07944005CCF47 /* CollapsibleTextWithButtonCell.swift in Sources */,
 				C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */,
 				C5C81F8E2E5340CB009D3439 /* MyLocationButtonState.swift in Sources */,
 				32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */,

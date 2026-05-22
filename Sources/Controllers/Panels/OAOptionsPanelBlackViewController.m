@@ -40,7 +40,7 @@
 
 @interface OAOptionsPanelBlackViewController () <UINavigationControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet CancelableScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMaps;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyWaypoints;

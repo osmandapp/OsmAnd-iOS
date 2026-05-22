@@ -31,7 +31,6 @@
                                     <rect key="frame" x="26" y="10" width="30" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="7hC-kM-9B2"/>
-                                        <constraint firstAttribute="width" constant="30" id="B34-0F-X1d"/>
                                     </constraints>
                                 </imageView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8SS-I5-hTV">
@@ -215,8 +214,6 @@
                 <outlet property="exitRefTextContainer" destination="3ov-dr-SOd" id="yHV-0g-beC"/>
                 <outlet property="exitRefTextContainerWidthConstraint" destination="c2u-Jf-ukc" id="xpu-nB-UGX"/>
                 <outlet property="shieldIcon" destination="Z8c-N6-WrV" id="AtL-uY-5pa"/>
-                <outlet property="shieldIconHeightConstraint" destination="7hC-kM-9B2" id="tV2-aC-bYr"/>
-                <outlet property="shieldIconWidthConstraint" destination="B34-0F-X1d" id="sW1-xB-yZq"/>
                 <outlet property="stackViewLeadingConstraint" destination="wqD-d3-ul6" id="fYy-2t-Lqb"/>
                 <outlet property="turnView" destination="7DR-I9-K8G" id="0nc-tE-Svh"/>
                 <outlet property="waypointButtonMore" destination="6Px-uI-aHL" id="sPB-gq-CHR"/>

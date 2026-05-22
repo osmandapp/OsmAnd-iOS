@@ -106,6 +106,7 @@
     NSString *_customId;
     BOOL _prevShowNextTurn;
     NSLayoutConstraint *_shieldIconAspectRatioConstraint;
+    CGFloat _shieldIconAspectRatio;
 }
 
 static int stackViewLeadingDefaultValue = 2;
@@ -580,14 +581,18 @@ static int stackViewLeadingToRefViewPadding = 16;
             if([self setRoadShield:_shieldIcon shields:shields])
             {
                 _shieldIcon.hidden = NO;
-                _shieldIconAspectRatioConstraint.active = NO;
                 CGSize imageSize = _shieldIcon.image.size;
                 if (imageSize.height > 0)
                 {
                     CGFloat aspectRatio = imageSize.width / imageSize.height;
-                    _shieldIconAspectRatioConstraint = [_shieldIcon.widthAnchor constraintEqualToAnchor:_shieldIcon.heightAnchor
-                                                                                            multiplier:aspectRatio];
-                    _shieldIconAspectRatioConstraint.active = YES;
+                    if (aspectRatio != _shieldIconAspectRatio)
+                    {
+                        _shieldIconAspectRatioConstraint.active = NO;
+                        _shieldIconAspectRatioConstraint = [_shieldIcon.widthAnchor constraintEqualToAnchor:_shieldIcon.heightAnchor
+                                                                                                multiplier:aspectRatio];
+                        _shieldIconAspectRatioConstraint.active = YES;
+                        _shieldIconAspectRatio = aspectRatio;
+                    }
                 }
                 int idx = [streetName.text indexOf:@"»"];
                 if (idx > 0)

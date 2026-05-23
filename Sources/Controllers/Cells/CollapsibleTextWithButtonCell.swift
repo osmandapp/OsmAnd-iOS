@@ -83,6 +83,7 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
     // MARK: - Setup
 
     private func setupUI() {
+        separatorInset = .zero
         contentView.addSubview(titleLabel)
         contentView.addSubview(actionButton)
 
@@ -136,7 +137,7 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
         actionButton.setTitle(buttonText, for: .normal)
         if let icon {
             let resizedIcon = OAUtilities.resize(icon, newSize: .init(width: Constants.iconSize, height: Constants.iconSize))
-            actionButton.setImage(resizedIcon?.withTintColor(.buttonOutlineColorSecondary), for: .normal)
+            actionButton.setImage(resizedIcon, for: .normal)
         }
     }
     

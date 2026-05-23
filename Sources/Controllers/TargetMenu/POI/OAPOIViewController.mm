@@ -376,7 +376,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     
     if (!NSStringIsEmpty(description))
     {
-        NSString *labelText = [self getTrimmedDescription:description collapsed:YES];
+        NSString *labelText = [self getTrimmedDescription:description collapsed:NO];
         UIImage *icon = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
         
         NSString *buttonText;

@@ -4058,3 +4058,8 @@
 "show_expand_button" = "Vis udvidelsesknap";
 "obd_alt_battery_voltage_desc" = "Viser spændingsniveauet på OBD-adapteren";
 "download_roads_only_maps" = "Kort kun med veje";
+"private_access_routing_req_short" = "Din destination ligger i et privat område. Tillad brug af private veje?";
+"view_on_phone" = "Vis på telefon";
+"missing_maps_header" = "Manglende eller forældede kort";
+"missing_maps_description" = "Nogle af de offlinekort, der kræves til denne rute, mangler eller er ikke opdaterede. Download eller opdater disse kort.";
+"shared_string_allow" = "Tillad";

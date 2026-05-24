@@ -2070,26 +2070,26 @@ static UIViewController *parentController;
     [self generateData];
 }
 
-- (void)selectColorItem:(OAColorItem *)colorItem
+- (void)selectColorItem:(OASPaletteItemSolid *)colorItem
 {
 }
 
-- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
+- (OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color
 {
     return [_appearanceCollection addNewSelectedColor:color];
 }
 
-- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
+- (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color
 {
     [_appearanceCollection changeColor:colorItem newColor:color];
 }
 
-- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
+- (OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem
 {
     return [_appearanceCollection duplicateColor:colorItem];
 }
 
-- (void)deleteColorItem:(OAColorItem *)colorItem
+- (void)deleteColorItem:(OASPaletteItemSolid *)colorItem
 {
     [_appearanceCollection deleteColor:colorItem];
 }

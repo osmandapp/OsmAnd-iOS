@@ -378,9 +378,7 @@ static NSString * const lastUpdatesCardRefreshKey = @"lastUpdatesCardRefresh";
 
 static NSString * const currentTrackColorKey = @"currentTrackColor";
 static NSString * const currentTrackColoringTypeKey = @"currentTrackColoringType";
-static NSString * const currentTrackSpeedGradientPaletteKey = @"currentTrackSpeedGradientPalette";
-static NSString * const currentTrackAltitudeGradientPaletteKey = @"currentTrackAltitudeGradientPalette";
-static NSString * const currentTrackSlopeGradientPaletteKey = @"currentTrackSlopeGradientPalette";
+static NSString * const currentTrackGradientPaletteKey = @"current_track_gradient_palette";
 static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
@@ -396,7 +394,6 @@ static NSString * const currentTrackRouteActivityKey = @"currentTrackRouteActivi
 static NSString * const customTrackColorsKey = @"customTrackColors";
 static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
-static NSString * const gradientPalettesKey = @"gradient_color_palettes";
 
 static NSString * const gpsStatusAppKey = @"gpsStatusApp";
 
@@ -1209,6 +1206,21 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         return ColorizationTypeSlope;
     else
         return ColorizationTypeNone;
+}
+
+- (OASGradientPaletteCategory *)toPaletteCategory
+{
+    switch (self.gst)
+    {
+        case EOAGradientScaleTypeSpeed:
+            return OASGradientPaletteCategory.speed;
+        case EOAGradientScaleTypeAltitude:
+            return OASGradientPaletteCategory.altitude;
+        case EOAGradientScaleTypeSlope:
+            return OASGradientPaletteCategory.slope;
+        default:
+            return nil;
+    }
 }
 
 @end
@@ -6235,7 +6247,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
 
-        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:PaletteGradientColor.defaultName];
+        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:[OASPaletteConstants shared].DEFAULT_NAME];
         [_profilePreferences setObject:_routeGradientPalette forKey:routeGradientPaletteKey];
 
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
@@ -6589,9 +6601,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         _currentTrackColor = [[[OACommonInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
         _currentTrackColoringType = [[[OACommonColoringType withKey:currentTrackColoringTypeKey defValue:OAColoringType.TRACK_SOLID values:[OAColoringType getTrackColoringTypes]] makeGlobal] makeShared];
-        _currentTrackSpeedGradientPalette = [[[OACommonString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
-        _currentTrackAltitudeGradientPalette = [[[OACommonString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
-        _currentTrackSlopeGradientPalette = [[[OACommonString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackGradientPalette = [[[OACommonString withKey:currentTrackGradientPaletteKey defValue:[OASPaletteConstants shared].DEFAULT_NAME] makeGlobal] makeShared];
         _currentTrackWidth = [[[OACommonString withKey:currentTrackWidthKey defValue:@""] makeGlobal] makeShared];
         
         _currentTrackShowArrows = [[[OACommonBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
@@ -6621,13 +6631,10 @@ static NSString *kOfflineKey = @"OFFLINE";
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
-        _gradientPalettes = [[[OACommonString withKey:gradientPalettesKey defValue:nil] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
         [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
-        [_globalPreferences setObject:_currentTrackSpeedGradientPalette forKey:@"current_track_speed_gradient_palette"];
-        [_globalPreferences setObject:_currentTrackAltitudeGradientPalette forKey:@"current_track_altitude_gradient_palette"];
-        [_globalPreferences setObject:_currentTrackSlopeGradientPalette forKey:@"current_track_slope_gradient_palette"];
+        [_globalPreferences setObject:_currentTrackGradientPalette forKey:currentTrackGradientPaletteKey];
         [_globalPreferences setObject:_currentTrackWidth forKey:@"current_track_width"];
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
@@ -6644,7 +6651,6 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
         [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
-        [_globalPreferences setObject:_gradientPalettes forKey:gradientPalettesKey];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
         [_globalPreferences setObject:_gpsStatusApp forKey:@"gps_status_app"];

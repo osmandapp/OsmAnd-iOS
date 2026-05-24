@@ -249,8 +249,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
     _profile.locationIcon = [baseModeForNewProfile.getLocationIcon name];
     _profile.navigationIcon = [baseModeForNewProfile.getNavigationIcon name];
-    _profile.viewAngleVisibility = [baseModeForNewProfile getViewAngleVisibility];
-    _profile.locationRadiusVisibility = [baseModeForNewProfile getLocationRadiusVisibility];
+    _profile.viewAngleVisibility = (int)[baseModeForNewProfile getViewAngleVisibility];
+    _profile.locationRadiusVisibility = (int)[baseModeForNewProfile getLocationRadiusVisibility];
     _profile.locationIconSize = [baseModeForNewProfile getLocationIconSize];
     _profile.courseIconSize = [baseModeForNewProfile getCourseIconSize];
 }
@@ -437,17 +437,16 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void) prepareData
 {
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    NSMutableArray<OAColorItem *> *sortedColorItems = [NSMutableArray arrayWithArray:[appearanceCollection getAvailableColorsSortingByLastUsed]];
+    OASPaletteItemSolid *selectedColorItem = [appearanceCollection getColorItemWithValue:[UIColorFromRGB([_changedProfile profileColor]) toARGBNumber]];
+    NSMutableArray<OASPaletteItemSolid *> *sortedColorItems = [NSMutableArray arrayWithArray:[appearanceCollection getAvailableColorsSortingByLastUsed]];
     _colorCollectionHandler =  [[OAColorCollectionHandler alloc] initWithData:@[sortedColorItems] collectionView:nil];
     _colorCollectionHandler.delegate = self;
     _colorCollectionHandler.hostVC = self;
-    
-    UIColor *selectedColor = selectedColor = UIColorFromRGB([_changedProfile profileColor]);
-    OAColorItem * selectedColorItem = [appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
-    NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[[_colorCollectionHandler getData][0] indexOfObject:selectedColorItem] inSection:0];
-    if (selectedIndexPath.row == NSNotFound)
-        selectedIndexPath = [NSIndexPath indexPathForRow:[[_colorCollectionHandler getData][0] indexOfObject:[appearanceCollection getDefaultPointColorItem]] inSection:0];
-    [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
+
+    NSInteger selectedIndex = [appearanceCollection indexOfColorItem:selectedColorItem items:sortedColorItems];
+    selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [appearanceCollection indexOfColorItem:[appearanceCollection defaultPointColorItem] items:sortedColorItems];
+    selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
+    [_colorCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
     
     _profileIconNames = [PoiIconCollectionHandler getProfileIconsList];
     _profileIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_profileIconNames] collectionView:nil];
@@ -981,10 +980,15 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 {
     if (collectionView == [_colorCollectionHandler getCollectionView])
     {
+        OASPaletteItemSolid *colorItem = [selectedItem isKindOfClass:OASPaletteItemSolid.class] ? (OASPaletteItemSolid *)selectedItem : [_colorCollectionHandler getSelectedItem];
+        if (!colorItem)
+            return;
+
         _hasChangesBeenMade = YES;
         _needToScrollToSelectedColor = YES;
         _changedProfile.color = -1;
-        _changedProfile.customColor = (int)[_colorCollectionHandler getData][0][indexPath.row].value;
+        _changedProfile.customColor = (int)colorItem.colorInt;
+        [[OAGPXAppearanceCollection sharedInstance] selectColor:colorItem];
         
         _locationIconImages = [self getlocationIconImages];
         _navigationIconImages = [self getlocationIconImages];
@@ -1031,7 +1035,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 - (void) onViewAngleUpdatedWithNewValue:(NSInteger)newValue
 {
-    _changedProfile.viewAngleVisibility = newValue;
+    _changedProfile.viewAngleVisibility = (int)newValue;
     [self generateData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -1040,7 +1044,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 - (void) onLocationRadiusUpdatedWithNewValue:(NSInteger)newValue
 {
-    _changedProfile.locationRadiusVisibility = newValue;
+    _changedProfile.locationRadiusVisibility = (int)newValue;
     [self generateData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }

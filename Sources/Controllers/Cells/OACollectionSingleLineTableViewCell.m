@@ -209,14 +209,43 @@
         UIMenu *contextMenu = [_collectionHandler getMenuForItem:indexPath collectionView:collectionView];
         if (contextMenu)
         {
-            return [UIContextMenuConfiguration configurationWithIdentifier:nil
-                                                           previewProvider:nil
-                                                            actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+            return [UIContextMenuConfiguration configurationWithIdentifier:indexPath previewProvider:nil actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
                 return contextMenu;
             }];
         }
     }
     return nil;
+}
+
+- (UITargetedPreview *)collectionView:(UICollectionView *)collectionView previewForHighlightingContextMenuWithConfiguration:(UIContextMenuConfiguration *)configuration
+{
+    return [self targetedPreviewSnapshotForContextMenuConfiguration:configuration collectionView:collectionView];
+}
+
+- (UITargetedPreview *)collectionView:(UICollectionView *)collectionView previewForDismissingContextMenuWithConfiguration:(UIContextMenuConfiguration *)configuration
+{
+    return [self targetedPreviewSnapshotForContextMenuConfiguration:configuration collectionView:collectionView];
+}
+
+- (UITargetedPreview *)targetedPreviewSnapshotForContextMenuConfiguration:(UIContextMenuConfiguration *)configuration collectionView:(UICollectionView *)collectionView
+{
+    NSIndexPath *indexPath = (NSIndexPath *)configuration.identifier;
+    if (![indexPath isKindOfClass:NSIndexPath.class])
+        return nil;
+    
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    if (!cell)
+        return nil;
+    
+    UIView *snapshot = [cell snapshotViewAfterScreenUpdates:NO];
+    if (!snapshot)
+        return nil;
+    
+    snapshot.frame = cell.bounds;
+    UIPreviewParameters *parameters = [[UIPreviewParameters alloc] init];
+    parameters.backgroundColor = UIColor.clearColor;
+    UIPreviewTarget *target = [[UIPreviewTarget alloc] initWithContainer:collectionView center:cell.center];
+    return [[UITargetedPreview alloc] initWithView:snapshot parameters:parameters target:target];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -228,7 +257,11 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _collectionHandler ? [_collectionHandler getCollectionViewCell:indexPath] : nil;
+    if (!_collectionHandler)
+        return nil;
+
+    [_collectionHandler setCollectionView:collectionView];
+    return [_collectionHandler getCollectionViewCell:indexPath];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView

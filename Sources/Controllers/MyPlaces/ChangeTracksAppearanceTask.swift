@@ -71,7 +71,7 @@ final class ChangeTracksAppearanceTask: NSObject {
             settings.currentTrackVisualization3dByType.set(intValue)
         }
         if let gradientPalette: String = data.getParameter(for: GpxParameter.colorPalette) {
-            settings.gradientPalettes.set(gradientPalette)
+            settings.currentTrackGradientPalette.set(gradientPalette)
         }
     }
     

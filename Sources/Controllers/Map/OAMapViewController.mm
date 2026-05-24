@@ -2837,7 +2837,6 @@ static char kMapSourceUpdateQueueKey;
     if (shouldApplyWeatherBandSettings)
         _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
     [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
-    [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
 
     if (shouldShowRecTrack)
         [self showRecGpxTrack:YES];

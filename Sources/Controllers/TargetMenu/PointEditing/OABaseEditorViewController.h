@@ -8,7 +8,7 @@
 
 #import "OABaseNavbarSubviewViewController.h"
 
-@class OAGPXAppearanceCollection, OATextInputFloatingCell, OAColorItem, PoiIconCollectionHandler;
+@class OAGPXAppearanceCollection, OATextInputFloatingCell, OASPaletteItemSolid, PoiIconCollectionHandler;
 
 @protocol OAEditorDelegate <NSObject>
 
@@ -19,11 +19,11 @@
 
 - (void)onEditorUpdated;
 
-- (void)selectColorItem:(OAColorItem *)colorItem;
-- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color;
-- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color;
-- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem;
-- (void)deleteColorItem:(OAColorItem *)colorItem;
+- (void)selectColorItem:(OASPaletteItemSolid *)colorItem;
+- (OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color;
+- (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color;
+- (OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem;
+- (void)deleteColorItem:(OASPaletteItemSolid *)colorItem;
 
 @end
 

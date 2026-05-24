@@ -1473,20 +1473,26 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             __strong __typeof(weakInfo) strongInfo = weakInfo;
             
+            if (!strongSelf || !strongInfo) return;
+            
             [strongSelf didTapWiki:strongInfo];
         }];
 
-        cell.onCollapseChange = ^(CGFloat height) {
+        cell.onExpandStateChange = ^(BOOL isExpand, CollapsibleTextWithButtonCell * _Nonnull cell) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             __strong __typeof(weakInfo) strongInfo = weakInfo;
             
-            if (!self || !info) return;
+            if (!strongSelf || !strongInfo) return;
             
-            strongInfo.height = height;
+            strongInfo.height = [cell calculateHeightIn:strongSelf.tableView.bounds.size.width];
+            strongInfo.collapsed = isExpand;
             
             [strongSelf.tableView beginUpdates];
             [strongSelf.tableView endUpdates];
-
+            
+            [strongSelf calculateContentHeight];
+            if (strongSelf.delegate)
+                [strongSelf.delegate contentHeightChanged:0];
         };
         
         info.height = [cell calculateHeightIn:tableView.frame.size.width];

@@ -12,18 +12,26 @@ import UIKit
 final class CollapsibleTextWithButtonCell: UITableViewCell {
 
     // MARK: - UI
+    
+    private let labelContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.clipsToBounds = true
+        return view
+    }()
 
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.isUserInteractionEnabled = true
         return label
     }()
 
-    let actionButton: UIButton = {
+    private let actionButton: UIButton = {
         let button = UIButton(type: .custom)
-        
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         
@@ -36,9 +44,11 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
             config.background.cornerRadius = 8
             
             config.imagePadding = Constants.buttonInset
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Constants.buttonInset, bottom: 0, trailing: Constants.buttonInset)
+            config.contentInsets = NSDirectionalEdgeInsets(top: Constants.buttonInset / 2,
+                                                           leading: Constants.buttonInset,
+                                                           bottom: Constants.buttonInset / 2,
+                                                           trailing: Constants.buttonInset)
             button.configuration = config
-            
         } else {
             
             button.setTitleColor(.buttonTextColorSecondary, for: .normal)
@@ -47,7 +57,7 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
             button.borderWidth = 1
             button.borderColor = UIColor.buttonOutlineColorSecondary
             
-            button.contentHorizontalAlignment = .left;
+            button.contentHorizontalAlignment = .left
             button.contentEdgeInsets = .init(top: 0, left: Constants.buttonInset * 1.5,
                                              bottom: 0, right: Constants.buttonInset * 1.5)
             
@@ -66,7 +76,7 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
     var maxCollapsedTextLength = 200
     
     private var onButtonAction: (() -> Void)?
-    var onCollapseChange: ((_ height: CGFloat) -> Void)?
+    var onExpandStateChange: ((Bool, CollapsibleTextWithButtonCell) -> Void)?
 
     // MARK: - Init
 
@@ -84,22 +94,29 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
 
     private func setupUI() {
         separatorInset = .zero
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(actionButton)
 
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        actionButton.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(labelContainer)
+        contentView.addSubview(actionButton)
+        labelContainer.addSubview(titleLabel)
+        
+        let heightContainerConstraint = labelContainer.heightAnchor.constraint(equalTo: titleLabel.heightAnchor)
+        heightContainerConstraint.priority = .defaultLow
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.contentInset.top),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.contentInset.leading),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.contentInset.trailing),
+            labelContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.contentInset.top),
+            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.contentInset.leading),
+            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.contentInset.trailing),
+            heightContainerConstraint,
+            
+            titleLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: labelContainer.trailingAnchor),
 
-            actionButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.buttonTopInset),
+            actionButton.topAnchor.constraint(greaterThanOrEqualTo: labelContainer.bottomAnchor, constant: Constants.buttonTopInset),
             actionButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.contentInset.leading),
             actionButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -Constants.contentInset.trailing),
             actionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.contentInset.bottom),
-            actionButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight)
+            actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: Constants.buttonHeight)
         ])
     }
 
@@ -109,12 +126,12 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
         titleLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapText)))
     }
     
-    //MARK: - Actions
+    // MARK: - Actions
 
     @objc private func didTapText() {
         isExpanded.toggle()
         titleLabel.attributedText = makeAttributedText(from: text)
-        onCollapseChange?(calculateHeight(in: frame.width))
+        onExpandStateChange?(isExpanded, self)
     }
     
     @objc private func didTapActionButton() {
@@ -165,7 +182,7 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
 
         result.append(
             NSAttributedString(
-                string: "...",
+                string: localizedString("shared_string_ellipsis"),
                 attributes: [
                     .font: UIFont.preferredFont(forTextStyle: .callout),
                     .foregroundColor: UIColor.textColorActive
@@ -176,13 +193,14 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
         return result
     }
     
+    ///Used in legacy UITableView setups with manual row height calculation.
+    ///Returns the cell height based on Auto Layout fitting for a given width.
     func calculateHeight(in width: CGFloat) -> CGFloat {
-        let targetSize = CGSizeMake(width, width);
+        let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
 
         let size = contentView.systemLayoutSizeFitting(targetSize,
-                                                            withHorizontalFittingPriority: .required,
-                                                            verticalFittingPriority: .fittingSizeLevel)
-
+                                                       withHorizontalFittingPriority: .required,
+                                                       verticalFittingPriority: .fittingSizeLevel)
 
         return ceil(size.height)
     }

@@ -745,7 +745,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         {
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -811,7 +811,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             }
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
             [cell.collectionView reloadData];

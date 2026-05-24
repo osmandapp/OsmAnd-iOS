@@ -294,10 +294,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             return cell
         } else if item.cellType == OACollectionSingleLineTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier) as! OACollectionSingleLineTableViewCell
-            cell.rightActionButtonVisibility(isSolidColorSelected)
-            cell.rightActionButton.setImage(UIImage.templateImageNamed("ic_custom_add"), for: .normal)
-            cell.rightActionButton.tag = (indexPath.section << 10 | indexPath.row)
-            cell.rightActionButton.accessibilityLabel = localizedString("shared_string_add_color")
+            let isRightActionButtonVisible = isSolidColorSelected || isGradientColorSelected
+            cell.rightActionButtonVisibility(isRightActionButtonVisible)
+            cell.rightActionButton.setImage(isRightActionButtonVisible ? UIImage.templateImageNamed("ic_custom_add") : nil, for: .normal)
+            cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0
+            cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? localizedString(isSolidColorSelected ? "shared_string_add_color" : "add_palette") : nil
             cell.rightActionButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.disableAnimationsOnStart = true
             if isSolidColorSelected {
@@ -311,7 +312,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 }
                 cell.setCollectionHandler(colorHandler)
             } else if isGradientColorSelected {
-                // TODO: Add palette creation action in the palette editor task: https://github.com/osmandapp/OsmAnd-Issues/issues/3207
+                cell.rightActionButton.addTarget(self, action: #selector(onPaletteCellButtonPressed(_:)), for: .touchUpInside)
                 let paletteItems = sortedPaletteColorItems.asArray().compactMap { $0 as? PaletteItemGradient }
                 let paletteHandler = PaletteCollectionHandler(data: [paletteItems], collectionView: cell.collectionView)
                 paletteHandler?.delegate = self
@@ -681,6 +682,10 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         }
     }
     
+    @objc private func onPaletteCellButtonPressed(_ sender: UIButton) {
+        GradientPaletteHelper.shared.showAddPaletteEditor(from: self, paletteCategory: selectedColorType?.toGradientScaleType()?.toPaletteCategory(), sourceView: sender)
+    }
+
     @objc private func sliderChanged(sender: UISlider) {
         guard let tableData else { return }
         let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)

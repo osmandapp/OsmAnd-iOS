@@ -890,6 +890,12 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
 }
 
+- (void)onPaletteCellButtonPressed:(UIButton *)sender
+{
+    OASGradientPaletteCategory *paletteCategory = [TerrainTypeWrapper toPaletteCategoryWithType:_terrainMode.type];
+    [[GradientPaletteHelper shared] showAddPaletteEditorFrom:self paletteCategory:paletteCategory sourceView:sender];
+}
+
 - (NSString *)sliderValueString:(float)value
 {
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
@@ -1019,11 +1025,12 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:OACollectionSingleLineTableViewCell.reuseIdentifier];
         BOOL isCoordinatesGridColors = [item.key isEqualToString:@"coordinatesGridColors"];
-        BOOL isRightActionButtonVisible = isCoordinatesGridColors;
+        BOOL isPaletteGrid = [item.key isEqualToString:@"colorGrid"];
+        BOOL isRightActionButtonVisible = isCoordinatesGridColors || (isPaletteGrid && ![_terrainMode isHillshade]);
         [cell rightActionButtonVisibility:isRightActionButtonVisible];
-        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
         cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
-        cell.rightActionButton.accessibilityLabel = isCoordinatesGridColors ? OALocalizedString(@"shared_string_add_color") : nil;
+        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(isCoordinatesGridColors ? @"shared_string_add_color" : @"add_palette") : nil;
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
         if (isCoordinatesGridColors)
         {
@@ -1039,7 +1046,6 @@ static const NSInteger kElevationMaxMeters = 2000;
         }
         else
         {
-            // TODO: Add palette creation action in the palette editor task: https://github.com/osmandapp/OsmAnd-Issues/issues/3207
             [cell.collectionView registerNib:[UINib nibWithNibName:PaletteCollectionViewCell.reuseIdentifier bundle:nil] forCellWithReuseIdentifier:PaletteCollectionViewCell.reuseIdentifier];
             PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
             paletteHandler.delegate = self;
@@ -1049,6 +1055,8 @@ static const NSInteger kElevationMaxMeters = 2000;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
+            if (isRightActionButtonVisible)
+                [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
             [cell configureTopOffset:12];
             [cell configureBottomOffset:12];

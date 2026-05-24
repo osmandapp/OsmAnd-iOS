@@ -1601,10 +1601,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OACollectionSingleLineTableViewCell.reuseIdentifier];
         cell.separatorInset = UIEdgeInsetsZero;
         BOOL isSolidColorSelected = [_selectedType.coloringType isCustomColor];
-        [cell rightActionButtonVisibility:isSolidColorSelected];
-        [cell.rightActionButton setImage:isSolidColorSelected ? [UIImage templateImageNamed:@"ic_custom_add"] : nil forState:UIControlStateNormal];
-        cell.rightActionButton.tag = isSolidColorSelected ? (indexPath.section << 10 | indexPath.row) : 0;
-        cell.rightActionButton.accessibilityLabel = isSolidColorSelected ? OALocalizedString(@"shared_string_add_color") : nil;
+        BOOL isGradientColorSelected = [_selectedType.coloringType isGradient];
+        BOOL isRightActionButtonVisible = isSolidColorSelected || isGradientColorSelected;
+        [cell rightActionButtonVisibility:isRightActionButtonVisible];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
+        cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
+        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(isSolidColorSelected ? @"shared_string_add_color" : @"add_palette") : nil;
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
         if ([_selectedType.coloringType isCustomColor])
         {
@@ -1617,7 +1619,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [cell setCollectionHandler:colorHandler];
             [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
-        else if ([_selectedType.coloringType isGradient])
+        else if (isGradientColorSelected)
         {
             PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
             paletteHandler.delegate = self;
@@ -1629,8 +1631,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
-            // TODO: Enable palette add/edit action in the palette editor task: https://github.com/osmandapp/OsmAnd-Issues/issues/3207
-            // [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
             [cell configureTopOffset:12];
             [cell configureBottomOffset:12];
@@ -1817,8 +1818,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)onPaletteCellButtonPressed:(UIButton *)sender
 {
-    if (![OAIAPHelper isOsmAndProAvailable])
-        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.ADVANCED_WIDGETS navController:[OARootViewController instance].navigationController];
+    OASGradientPaletteCategory *paletteCategory = [[_selectedType.coloringType toGradientScaleType] toPaletteCategory];
+    [[GradientPaletteHelper shared] showAddPaletteEditorFrom:self paletteCategory:paletteCategory sourceView:sender];
 }
 
 #pragma mark - UIScrollViewDelegate

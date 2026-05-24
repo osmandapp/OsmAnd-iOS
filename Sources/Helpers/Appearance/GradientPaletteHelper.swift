@@ -6,7 +6,7 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 @objcMembers
 final class GradientPaletteHelper: NSObject {
@@ -116,6 +116,50 @@ final class GradientPaletteHelper: NSObject {
         updateExternalDependenciesIfNeeded(category: category)
         return newItem
     }
+
+    func showAddPaletteEditor(from viewController: UIViewController, paletteCategory: GradientPaletteCategory?, sourceView: UIView?) {
+        guard let paletteCategory else { return }
+        if !OAIAPHelper.isOsmAndProAvailable() {
+            guard let navigationController = OARootViewController.instance().navigationController else { return }
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+            return
+        }
+
+        let rangeTypes = paletteCategory.getSupportedRangeTypes()
+        if paletteCategory.isSupportDifferentRangeTypes(), rangeTypes.count > 1 {
+            let message = rangeTypes.map {
+                let rangeState = GradientEditorRangeState(rangeType: $0)
+                return String(format: localizedString("ltr_or_rtl_combine_via_colon"), rangeState.title, rangeState.summary)
+            }.joined(separator: "\n")
+            let alert = UIAlertController(title: localizedString("add_palette"), message: message, preferredStyle: .actionSheet)
+            for rangeType in rangeTypes {
+                let rangeState = GradientEditorRangeState(rangeType: rangeType)
+                alert.addAction(UIAlertAction(title: rangeState.title, style: .default) { [weak viewController] _ in
+                    guard let viewController, let fileType = paletteCategory.getFileType(rangeType: rangeType) else { return }
+                    self.openGradientEditor(from: viewController, fileType: fileType)
+                })
+            }
+
+            if let popoverPresentationController = alert.popoverPresentationController {
+                popoverPresentationController.sourceView = sourceView ?? viewController.view
+                popoverPresentationController.sourceRect = sourceView?.bounds ?? viewController.view.bounds
+            }
+
+            viewController.present(alert, animated: true)
+        } else {
+            openGradientEditor(from: viewController, fileType: paletteCategory.getFileType())
+        }
+    }
+
+    func showEditPaletteEditor(from viewController: UIViewController, paletteItem: PaletteItemGradient) {
+        if !OAIAPHelper.isOsmAndProAvailable() {
+            guard let navigationController = OARootViewController.instance().navigationController else { return }
+            OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
+            return
+        }
+        
+        openGradientEditor(from: viewController, originalId: paletteItem.id, fileType: paletteItem.properties.fileType)
+    }
     
     private func updateExternalDependenciesIfNeeded(category: GradientPaletteCategory) {
         guard category.isTerrainRelated() else { return }
@@ -129,5 +173,12 @@ final class GradientPaletteHelper: NSObject {
     private func paletteData(fileName: String?) -> (category: GradientPaletteCategory, name: String)? {
         guard let fileName, let fileType = PaletteFileTypeRegistry.shared.fromFileName(fileName: fileName) as? GradientFileType, let paletteName = PaletteUtils.shared.extractPaletteName(fileName: fileName) else { return nil }
         return (fileType.category, paletteName)
+    }
+
+    private func openGradientEditor(from viewController: UIViewController, originalId: String? = nil, fileType: GradientFileType) {
+        let editor = GradientEditorViewController(originalId: originalId, fileType: fileType)
+        let navigationController = UINavigationController(rootViewController: editor)
+        navigationController.modalPresentationStyle = .fullScreen
+        viewController.present(navigationController, animated: true)
     }
 }

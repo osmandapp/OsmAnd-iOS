@@ -2986,6 +2986,14 @@ typedef enum
     }];
 }
 
+- (void)showWaypointOnMap:(OAGpxWptItem *)item latitude:(double)latitude longitude:(double)longitude
+{
+    [_mapViewController showContextPinMarker:item.point.lat longitude:item.point.lon animated:NO];
+    _targetLatitude = latitude;
+    _targetLongitude = longitude;
+    [self goToTargetPointDefault];
+}
+
 - (void)openRecordingTrackTargetView
 {
     [self openTargetViewWithGPX:nil];
@@ -4406,21 +4414,19 @@ typedef enum
         }
         if (![allowPrivate get:[_routingHelper getAppMode]])
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"private_access_routing_req") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            __weak __typeof(self) weakSelf = self;
+            [AlertPresenter showRequestPrivateAccessAlertWithHandler:^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
                 
                 for (OAApplicationMode *mode in modes)
                 {
                     if (![allowPrivate get:mode])
-                    {
                         [allowPrivate set:YES mode:mode];
-                    }
                 }
-                [_routingHelper recalculateRouteDueToSettingsChange];
-                
-            }]];
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+                [strongSelf->_routingHelper recalculateRouteDueToSettingsChange];
+            }];
         }
     }
 }

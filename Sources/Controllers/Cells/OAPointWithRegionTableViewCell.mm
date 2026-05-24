@@ -69,4 +69,10 @@
     self.locationContainerView.hidden = !hasRegion && self.directionContainerView.hidden;
 }
 
+- (void)setShowWaypointButtonVisiblity:(BOOL)show
+{
+    self.showWaypointView.hidden = !show;
+    self.containerTrailingConstraint.constant = show ? 7.0 : 20.0;
+}
+
 @end

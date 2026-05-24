@@ -1615,6 +1615,7 @@
 		CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
+		CE2AAB2B2FBF281000A5D22E /* CancelableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
@@ -3390,6 +3391,8 @@
 		FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6243E2E0953830048965E /* SelectionManagerTests.swift */; };
 		FAB624412E0954F90048965E /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA055792E0301AA00F84EDF /* SelectionManager.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
+		FAB744112FB4672B0001FFF8 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB744102FB4672B0001FFF8 /* AlertPresenter.swift */; };
+		FAB744132FB467A60001FFF8 /* AlertPresenter+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB744122FB467A60001FFF8 /* AlertPresenter+Actions.swift */; };
 		FABDBF362F165AD80092F3C1 /* POIImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABDBF352F165AD80092F3C1 /* POIImageLoader.swift */; };
 		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
 		FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166172B21BEF800D63755 /* PeripheralProxy.swift */; };
@@ -5538,6 +5541,7 @@
 		CA4EDFA46B3B672B32035B7F /* OASubscriptionCardView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionCardView.mm; sourceTree = "<group>"; };
 		CA4EDFFD2EBD6CFA86AF69F1 /* OADeleteOldFilesCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADeleteOldFilesCommand.h; sourceTree = "<group>"; };
 		CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableScrollView.swift; sourceTree = "<group>"; };
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
@@ -8159,6 +8163,8 @@
 		FAB6243E2E0953830048965E /* SelectionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManagerTests.swift; sourceTree = "<group>"; };
 		FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OsmAnd MapsTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		FAB744102FB4672B0001FFF8 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		FAB744122FB467A60001FFF8 /* AlertPresenter+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertPresenter+Actions.swift"; sourceTree = "<group>"; };
 		FABDBF352F165AD80092F3C1 /* POIImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POIImageLoader.swift; sourceTree = "<group>"; };
 		FAC166162B21BEF700D63755 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FAC166172B21BEF800D63755 /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
@@ -13716,6 +13722,7 @@
 				DA5A806526C563A500F274C7 /* OARoutingProgressView.m */,
 				DA5A805226C563A500F274C7 /* OAScrollView.h */,
 				DA5A806A26C563A500F274C7 /* OAScrollView.m */,
+				CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */,
 				CA4EDD14CA25B1A6AEB53FE3 /* OASegmentedSlider.h */,
 				CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */,
 				DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */,
@@ -13790,6 +13797,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FAB7440F2FB467160001FFF8 /* AlertPresenter */,
 				FA29F6132F9610DB00257B88 /* DeepLinkManager */,
 				FA4FC4AA2F4F3F8F009ABB6E /* SharedLibSmartFolderHelper.swift */,
 				FA1394AE2EB11C9600197297 /* HudGridOverlay */,
@@ -14806,6 +14814,15 @@
 				FAB6243E2E0953830048965E /* SelectionManagerTests.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		FAB7440F2FB467160001FFF8 /* AlertPresenter */ = {
+			isa = PBXGroup;
+			children = (
+				FAB744102FB4672B0001FFF8 /* AlertPresenter.swift */,
+				FAB744122FB467A60001FFF8 /* AlertPresenter+Actions.swift */,
+			);
+			path = AlertPresenter;
 			sourceTree = "<group>";
 		};
 		FAC166152B21BECE00D63755 /* SwiftyBluetooth */ = {
@@ -18018,6 +18035,7 @@
 				DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */,
 				326087132F3251B00038A34B /* PoiAdditionalUiRules.swift in Sources */,
 				27D33B512E7454EA00AD4F70 /* BaseMapScrollAction.swift in Sources */,
+				FAB744112FB4672B0001FFF8 /* AlertPresenter.swift in Sources */,
 				32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */,
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,
 				DA5A847426C563A900F274C7 /* OAMapWidgetRegistry.mm in Sources */,
@@ -18060,6 +18078,7 @@
 				DA5A839026C563A800F274C7 /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				DA5A83C626C563A800F274C7 /* OAActionConfigurationViewController.mm in Sources */,
 				DA5A812226C563A700F274C7 /* OAIAPHelper.mm in Sources */,
+				CE2AAB2B2FBF281000A5D22E /* CancelableScrollView.swift in Sources */,
 				DA5A853C26C563A900F274C7 /* OAReverseGeocoder.mm in Sources */,
 				05DACD7F2C1CAF470023FAD9 /* OASharedUtil.m in Sources */,
 				DA5A853426C563A900F274C7 /* OASettingsExporter.mm in Sources */,
@@ -18266,6 +18285,7 @@
 				DA5A81B426C563A700F274C7 /* OAPOIBaseType.mm in Sources */,
 				DA5A852826C563A900F274C7 /* OAAvoidRoadInfo.m in Sources */,
 				DA5A850A26C563A900F274C7 /* OARoutingProgressView.m in Sources */,
+				FAB744132FB467A60001FFF8 /* AlertPresenter+Actions.swift in Sources */,
 				DA5A81D026C563A700F274C7 /* OAMapCreatorHelper.mm in Sources */,
 				DA5A842C26C563A800F274C7 /* OAImpassableRoadViewController.m in Sources */,
 				DA5A83CC26C563A800F274C7 /* OATransportRouteToolbarViewController.mm in Sources */,

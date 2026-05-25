@@ -88,8 +88,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         setupSegments()
         initialSelectedTab()
         setupNavbar()
-        segmentContainerView.backgroundColor = .viewBg
-        pageViewController?.scrollView?.backgroundColor = .viewBg
+        segmentContainerView.backgroundColor = .clear
+        pageViewController?.scrollView?.backgroundColor = .clear
         view.backgroundColor = .viewBg
     }
     

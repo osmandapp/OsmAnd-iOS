@@ -51,6 +51,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
+        tableView.backgroundColor = .viewBg
     }
     
     override func viewDidLoad() {
@@ -219,7 +220,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     
     private func setupHeaderView() -> UIView? {
         let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
-        headerView.backgroundColor = .viewBg
+        headerView.backgroundColor = .clear
         headerView.addSubview(sortButton)
         sortButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

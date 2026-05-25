@@ -17,9 +17,9 @@ final class AstroArticle: Equatable, Hashable {
     let summaryJson: String?
     private let mobileHtml: Data?
 
-    var wikidataId: String { wikidata }
-    var language: String { lang }
-    var extract: String { description }
+    private var mobileHtmlSize: Int? {
+        mobileHtml?.count
+    }
 
     init(wikidata: String,
          lang: String,
@@ -37,22 +37,6 @@ final class AstroArticle: Equatable, Hashable {
         self.mobileHtml = mobileHtml
     }
 
-    convenience init(wikidataId: String,
-                     language: String,
-                     title: String?,
-                     extract: String?,
-                     thumbnailUrl: String?,
-                     summaryJson: String?,
-                     mobileHtml: Data?) {
-        self.init(wikidata: wikidataId,
-                  lang: language,
-                  title: title ?? "",
-                  description: extract ?? "",
-                  thumbnailUrl: thumbnailUrl,
-                  summaryJson: summaryJson,
-                  mobileHtml: mobileHtml)
-    }
-
     func hasOfflineContent() -> Bool {
         mobileHtml?.isEmpty == false
     }
@@ -61,7 +45,7 @@ final class AstroArticle: Equatable, Hashable {
         guard let mobileHtml, !mobileHtml.isEmpty else {
             return nil
         }
-        return String(data: mobileHtml, encoding: .utf8)
+        return OAWikiArticleHelper.readArchiveString(mobileHtml)
     }
 
     func getOnlineArticleUrl() -> String? {
@@ -78,26 +62,27 @@ final class AstroArticle: Equatable, Hashable {
 
         if let mobile = content["mobile"] as? [String: Any],
            let page = mobile["page"] as? String,
-           !page.isEmpty {
+           !page.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return page
         }
         if let desktop = content["desktop"] as? [String: Any],
            let page = desktop["page"] as? String,
-           !page.isEmpty {
+           !page.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return page
         }
         return nil
     }
 
     private func buildFallbackArticleUrl() -> String? {
-        guard !lang.isEmpty, !title.isEmpty else {
+        guard !lang.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return nil
         }
         let normalizedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "_")
-        guard let encodedTitle = normalizedTitle.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else {
+        guard let baseUrl = URL(string: "https://\(lang.lowercased()).wikipedia.org/wiki") else {
             return nil
         }
-        return "https://\(lang.lowercased()).wikipedia.org/wiki/\(encodedTitle)"
+        return baseUrl.appendingPathComponent(normalizedTitle).absoluteString
     }
 
     static func == (lhs: AstroArticle, rhs: AstroArticle) -> Bool {
@@ -107,7 +92,7 @@ final class AstroArticle: Equatable, Hashable {
             lhs.description == rhs.description &&
             lhs.thumbnailUrl == rhs.thumbnailUrl &&
             lhs.summaryJson == rhs.summaryJson &&
-            lhs.mobileHtml == rhs.mobileHtml
+            lhs.mobileHtmlSize == rhs.mobileHtmlSize
     }
 
     func hash(into hasher: inout Hasher) {
@@ -117,7 +102,7 @@ final class AstroArticle: Equatable, Hashable {
         hasher.combine(description)
         hasher.combine(thumbnailUrl)
         hasher.combine(summaryJson)
-        hasher.combine(mobileHtml)
+        hasher.combine(mobileHtmlSize)
     }
 
     func isEqual(_ object: Any?) -> Bool {
@@ -130,6 +115,6 @@ final class AstroArticle: Equatable, Hashable {
             description == other.description &&
             thumbnailUrl == other.thumbnailUrl &&
             summaryJson == other.summaryJson &&
-            mobileHtml == other.mobileHtml
+            mobileHtmlSize == other.mobileHtmlSize
     }
 }

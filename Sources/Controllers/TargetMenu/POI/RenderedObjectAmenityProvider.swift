@@ -89,7 +89,7 @@ final class RenderedObjectAmenityProvider: NSObject {
         
         if let name = cachedNameStr, !name.isEmpty, !name.isStartingWithRTLChar {
             return name
-        } else if let renderedObject, renderedObject.tags.count > 0 {
+        } else if let renderedObject, renderedObject.isKind(of: OARenderedObject.self), renderedObject.tags.count > 0 {
             if !lang.isEmpty {
                 cachedNameStr = renderedObject.tags["name:\(lang)"] as? String
             }

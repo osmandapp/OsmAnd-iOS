@@ -711,6 +711,7 @@
         OASearchWord * lastWord = [phrase getLastSelectedWord];
         if (locSpecified)
         {
+            QuadRect * rect;
             if (lastWord != nil && lastWord.result != nil && [lastWord.result.object isKindOfClass:OACity.class])
             {
                 OACity * c = (OACity *) lastWord.result.object;
@@ -720,17 +721,23 @@
                     int w = (bb[2] - bb[0]) / 3, h = (bb[3] - bb[1]) / 3; // enlarge for 1234 Golden Pond Road Woodhull
                     int left = bb[0] - w,  top = bb[1] - h, right = bb[2] + w, bottom = bb[3] + h;
                     searchCriteria->bbox31 = OsmAnd::AreaI(top, left, bottom, right);
+                    rect = [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
                 }
                 else
                 {
                     NSString * cityType = [OACity getTypeStr:c.type];
-                    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([OACity getRadius:cityType] * 3, c.city->position31);
+                    CGFloat radius = [OACity getRadius:cityType] * 3;
+                    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, c.city->position31);
+                    rect = [OASearchPhrase calculateBbox:@(radius) location:[[CLLocation alloc] initWithLatitude:c.latitude longitude:c.longitude]];
                 }
             }
             else
             {
-                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:maxRadius], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+                int radius = [phrase getRadiusSearch:maxRadius];
+                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+                rect = [OASearchPhrase calculateBbox:@(radius) location:loc];
             }
+            offlineIndexes = [phrase getOfflineIndexesWithRect:rect dataType:P_DATA_TYPE_ADDRESS];
         }
 
         int lastRegionPriority = 0;
@@ -2185,7 +2192,7 @@
             if (r)
             {
                 const auto& dataInterface = obfsCollection->obtainDataInterface({r});
-                bool res = dataInterface->preloadBuildings({std::const_pointer_cast<OsmAnd::Street>(s)}, ctrl);
+                bool res = dataInterface->preloadBuildingsAndIntersections(std::const_pointer_cast<OsmAnd::Street>(s), ctrl);
                 if (res)
                 {
                     const auto& ms = std::const_pointer_cast<OsmAnd::Street>(s);

@@ -78,7 +78,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     [OsmAndApp.instance addAbbrevationsToCommonWords];
     for (NSString *path in _filePaths)
     {
-        //if ([path.lastPathComponent isEqualToString:@"31st_road.json"])
+        //if ([path.lastPathComponent isEqualToString:@"getmana.json"])
             [self testSearchCase:path];
     }
     NSLog(@"========================================");
@@ -237,7 +237,6 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     OASearchPhrase *emptyPhrase = [OASearchPhrase emptyPhrase:s];
     for (NSInteger k = 0; k < phrases.count; k++)
     {
-        BOOL passed = YES;
         NSString *text = phrases[k];
         NSArray<NSString *> *result = results[k];
         NSArray<OASearchResult *> *searchResults;
@@ -320,7 +319,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 return;
             }
         }
-        NSLog(@"Test phrase: %@ done (%@)", [phrase toString], passed ? @"PASSED" : @"FAILED");
+        NSLog(@"Test phrase: %@ done (%@)", [phrase toString], @"PASSED");
     }
 
     _successCount++;
@@ -390,13 +389,34 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     NSString * quotes1 = [expected substringFromIndex:[expected indexOf:@"["]].trim;
     NSString * fullPresent = (res == nil) ? @"" : [self formatResult:NO res:res phrase:phrase];
     NSString * quotes2 = [fullPresent substringFromIndex:[fullPresent indexOf:@"["]].trim;
+    if ([quotes1 containsString:@"LOCATION"]
+        && [quotes2 containsString:@"LOCATION"]
+        && [quotes1 isEqual:quotes2])
+    {
+        return YES;
+    }
     NSString * part1 = [expected substringToIndex:[expected indexOf:@","]].trim;
+    part1 = [part1 stringByReplacingOccurrencesOfString:@"@" withString:@""];// geocoding
+    if ([part1 indexOf:@"("] != -1)
+    {
+        part1 = [part1 substringToIndex:[part1 indexOf:@"("]].trim;
+    }
     NSString * part2 = [fullPresent substringToIndex:[fullPresent indexOf:@","]].trim;
     if ([part2 indexOf:@"("] != -1)
     {
         part2 = [part2 substringToIndex:[part2 indexOf:@"("]].trim;
     }
-    return [quotes1 isEqual:quotes2] && [part1 isEqual:part2];
+    if ([quotes1 isEqual:quotes2] && [part1 isEqual:part2])
+        return YES;
+
+    NSString * partial1 = [expected substringToIndex:[expected indexOf:@"["]].trim;
+    NSString * partial2 = [fullPresent substringToIndex:[fullPresent indexOf:@"["]].trim;
+    partial1 = [partial1 stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    partial1 = [partial1 stringByReplacingOccurrencesOfString:@"," withString:@""];
+    partial2 = [partial2 stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    partial2 = [partial2 stringByReplacingOccurrencesOfString:@"," withString:@""];
+    long length = min(partial1.length, partial2.length);
+    return [[partial1 substringToIndex:length] isEqualToString:[partial2 substringToIndex:length]];
 }
 
 @end

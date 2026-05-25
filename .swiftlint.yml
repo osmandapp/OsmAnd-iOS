@@ -591,10 +591,6 @@ opt_in_rules: # some rules are only opt-in
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#void-return
   - void_return
 
-  # Rationale: Avoids using weak when it has no effect.
-  # https://github.com/realm/SwiftLint/blob/master/Rules.md#weak-computed-property
-  - weak_computed_property
-
   # Rationale: Prevents retain cycles and coder error
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#weak-delegate
   - weak_delegate
@@ -623,10 +619,6 @@ opt_in_rules: # some rules are only opt-in
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#type-contents-order
   - type_contents_order
   
-  # Rationale: Provides consistency in coding style.
-  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-capture-list
-  - unused_capture_list
-  
   # Rationale: Prevents issues with using unowned.
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#unowned-variable-capture
   - unowned_variable_capture
@@ -644,9 +636,6 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Pods
   - OsmAnd_projects
   - Libraries/**
-
-attributes:
-  always_on_same_line: ["@IBAction", "@IBSegueAction", "@NSManaged", "@discardableResult", "@escaping", "@objc"]
 
 type_contents_order:
   order:

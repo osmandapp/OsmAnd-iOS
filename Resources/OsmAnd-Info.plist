@@ -188,6 +188,8 @@
 	<string>OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>OsmAnd would like to create a calendar event for vehicle pick-up notification.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>OsmAnd needs camera access to show the sky camera overlay in Astronomy.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

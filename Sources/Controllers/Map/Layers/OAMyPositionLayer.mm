@@ -846,13 +846,29 @@ typedef enum {
                            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
 
     float animationDuration = 0;
+    NSLog(@">>>> =============================");
+    NSLog(@">>>> animateMyLocation=%@", (OAAppSettings.sharedManager.animateMyLocation.get ? @"YES" : @"NO"));
+    NSLog(@">>>> newLocation %fx%f time=%f", newLocation.coordinate.latitude, newLocation.coordinate.longitude, newLocation.timestamp.timeIntervalSince1970);
+    NSLog(@">>>> prevLocation %fx%f time=%f", prevLocation.coordinate.latitude, prevLocation.coordinate.longitude, prevLocation.timestamp.timeIntervalSince1970);
     if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation
         && ![OAMapUtils areLatLonEqual:newLocation.coordinate coordinate2:prevLocation.coordinate precision:0.000001])
     {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
         if (animationDuration > 5)
+        {
             animationDuration = 0;
+            NSLog(@">>>> animationDuration reset");
+        }
+        else
+        {
+            NSLog(@">>>> animationDuration=%f", animationDuration);
+        }
     }
+    else
+    {
+        NSLog(@">>>> animationDuration 000");
+    }
+    NSLog(@">>>> ----------------------------------------------------");
 
     [self updateCollectionLocation:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:YES];
     _currentMarkerState = c.currentMarkerState;

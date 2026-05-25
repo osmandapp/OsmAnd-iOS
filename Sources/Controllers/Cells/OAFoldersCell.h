@@ -16,5 +16,8 @@
 @interface OAFoldersCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIButton *rightActionButton;
+
+- (void)rightActionButtonVisibility:(BOOL)show;
 
 @end

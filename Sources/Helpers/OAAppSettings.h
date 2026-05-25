@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
+@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
@@ -318,7 +318,7 @@ typedef NS_ENUM(NSInteger, EOAGradientScaleType)
 + (NSString *) toHumanString:(EOAGradientScaleType)gst;
 + (NSString *) toTypeName:(EOAGradientScaleType)gst;
 + (NSString *) toColorTypeName:(EOAGradientScaleType)gst;
-
+- (nullable OASGradientPaletteCategory *)toPaletteCategory;
 - (NSInteger)toColorizationType;
 
 @end
@@ -1458,9 +1458,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @property (nonatomic) OACommonInteger *currentTrackColor;
 @property (nonatomic) OACommonColoringType *currentTrackColoringType;
-@property (nonatomic) OACommonString *currentTrackSpeedGradientPalette;
-@property (nonatomic) OACommonString *currentTrackAltitudeGradientPalette;
-@property (nonatomic) OACommonString *currentTrackSlopeGradientPalette;
+@property (nonatomic) OACommonString *currentTrackGradientPalette;
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
@@ -1475,7 +1473,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
-@property (nonatomic) OACommonString *gradientPalettes;
 
 @property (nonatomic) OACommonString *gpsStatusApp;
 

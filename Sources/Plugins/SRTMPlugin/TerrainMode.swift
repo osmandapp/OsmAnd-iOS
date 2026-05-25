@@ -25,6 +25,19 @@ final class TerrainMode: NSObject {
             case .terrainShadows: "terrainShadows"
             }
         }
+        
+        func toPaletteCategory() -> GradientPaletteCategory? {
+            switch self {
+            case .hillshade:
+                    .terrainHillshade
+            case .slope:
+                    .terrainSlope
+            case .height:
+                    .terrainAltitude
+            case .terrainShadows:
+                nil
+            }
+        }
 
         static func < (a: TerrainType, b: TerrainType) -> Bool {
             return a.rawValue < b.rawValue
@@ -42,10 +55,14 @@ final class TerrainMode: NSObject {
         static func valueOf(typeName: String) -> TerrainType {
             TerrainType.allCases.first { $0.name == typeName } ?? .hillshade
         }
+
+        static func toPaletteCategory(type: TerrainType) -> GradientPaletteCategory? {
+            type.toPaletteCategory()
+        }
     }
 
-    static let defaultKey = "default"
-    static let altitudeDefaultKey = "altitude_default"
+    static let defaultKey = PaletteConstants.shared.DEFAULT_NAME
+    static let altitudeDefaultKey = PaletteConstants.shared.ALTITUDE_DEFAULT_NAME
     static let hillshadePrefix: String = "hillshade_main_"
     static let hillshadeScndPrefix = "hillshade_color_"
     static let colorSlopePrefix = "slope_"
@@ -88,7 +105,7 @@ final class TerrainMode: NSObject {
 
         var terrainMode: TerrainMode?
         terrainModes.forEach { mode in
-            if mode.type == type && mode.getKeyName() == keyName {
+            if mode.type == type && mode.isIdentifiedBy(keyName) {
                 terrainMode = mode
                 return
             }
@@ -114,16 +131,16 @@ final class TerrainMode: NSObject {
     }
 
     static func byKey(_ key: String) -> TerrainMode? {
-        return terrainModes?.first { $0.getKeyName() == key }
-            ?? terrainModes?.first { $0.type == .hillshade }
+        return terrainModes?.first { $0.isIdentifiedBy(key) }
+        ?? terrainModes?.first { $0.type == .hillshade }
     }
 
     static func getKeyByPaletteName(_ name: String) -> String? {
-        terrainModes?.first(where: { $0.getKeyName() == name })?.key
+        terrainModes?.first(where: { $0.isIdentifiedBy(name) })?.key
     }
 
     static func isModeExist(_ key: String) -> Bool {
-        terrainModes?.contains { $0.getKeyName() == key } ?? false
+        terrainModes?.contains { $0.isIdentifiedBy(key) } ?? false
     }
 
     static func reloadTerrainModes() {
@@ -213,7 +230,8 @@ final class TerrainMode: NSObject {
     }
 
     func isDefaultDuplicatedMode() -> Bool {
-        key.hasPrefix(type == .height ? Self.altitudeDefaultKey : Self.defaultKey + " ")
+        let defaultKey = type == .height ? Self.altitudeDefaultKey : Self.defaultKey
+        return key.hasPrefix(defaultKey + " ") || key.hasPrefix(defaultKey + "_")
     }
 
     func getCacheFileName() -> String {
@@ -262,6 +280,10 @@ final class TerrainMode: NSObject {
 
     func getDefaultDescription() -> String {
         translateName
+    }
+
+    func isIdentifiedBy(_ searchKey: String) -> Bool {
+        key == searchKey || getKeyName() == searchKey
     }
 
     func getDescription() -> String {

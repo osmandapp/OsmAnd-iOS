@@ -85,6 +85,7 @@
         NSString *trackName = [fileName stringByDeletingPathExtension];
         
         OASGpxFile *gpx = [self generateGpxFile:trackName gpx:[[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]]];
+        [self savePreselectedRouteActivity:gpx];
         OASKFile *file = [[OASKFile alloc] initWithFilePath:_outFile];
         OASKException *exception = [[OASGpxUtilities shared] writeGpxFileFile:file gpxFile:gpx];
         
@@ -105,6 +106,7 @@
             gpx.metadata = [[OASMetadata alloc] init];
             gpx.metadata.extensions = _gpxFile.metadata.extensions;
         }
+        [self savePreselectedRouteActivity:gpx];
 //        if (!gpx.showCurrentTrack) {
 //            res = GPXUtilities.writeGpxFile(outFile, gpx);
 //        }
@@ -202,6 +204,28 @@
         }
     }
     return gpx;
+}
+
+- (BOOL)shouldSyncRouteActivityWithEditedProfile
+{
+    return !_editingCtx.isNewData && _editingCtx.hasRoutePoints;
+}
+
+- (void)savePreselectedRouteActivity:(OASGpxFile *)gpxFile
+{
+    OASRouteActivityHelper *activityHelper = [OASRouteActivityHelper shared];
+    OASMetadata *metadata = gpxFile.metadata;
+    BOOL syncWithProfile = [self shouldSyncRouteActivityWithEditedProfile];
+    if (!syncWithProfile && [metadata getRouteActivityActivities:[activityHelper getActivities]] != nil)
+        return;
+
+    OAApplicationMode *appMode = _editingCtx.appMode;
+    if (appMode == OAApplicationMode.DEFAULT)
+        appMode = [OAAppSettings sharedManager].applicationMode.get;
+
+    NSString *activityId = (NSString *)[[OAAppSettings sharedManager].currentTrackRouteActivity getProfileDefaultValue:appMode];
+    if (syncWithProfile || activityId.length > 0)
+        [metadata setRouteActivityActivity:[activityHelper findRouteActivityId:activityId]];
 }
 
 - (void) onPostExecute:(void(^)(OASGpxFile *, NSString *))onComplete

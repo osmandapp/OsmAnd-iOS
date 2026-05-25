@@ -30,7 +30,6 @@
 #import "OAApplicationMode.h"
 #import "OAColoringType.h"
 #import "OAObservable.h"
-#import "OAConcurrentCollections.h"
 #import "OAPointDescription.h"
 #import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -54,7 +53,7 @@ struct DrawPathData
     int lineId;
 };
 
-@interface OARouteLayer()
+@interface OARouteLayer() <OASPaletteRepositoryListener>
 
 @property (nonatomic) CLLocation *lastProj;
 
@@ -99,8 +98,8 @@ struct DrawPathData
     QList<OsmAnd::FColorARGB> _colors;
     OAColoringType *_prevRouteColoringType;
     NSString *_prevRouteInfoAttribute;
+    NSString *_prevRouteGradientPalette;
     NSCache<NSString *, NSNumber *> *_cachedRouteLineWidth;
-    OAConcurrentDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
     
     QVector<DrawPathData> _pathsDataCache;
     int _lastCurrentRoute;
@@ -130,7 +129,7 @@ struct DrawPathData
 {
     [super initLayer];
 
-    _routeGradientPalette = PaletteGradientColor.defaultName;
+    _routeGradientPalette = [OASPaletteConstants shared].DEFAULT_NAME;
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
@@ -159,7 +158,6 @@ struct DrawPathData
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [[NSCache alloc] init];
-    _updatedColorPaletteFiles = [[OAConcurrentDictionary alloc] init];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -168,10 +166,12 @@ struct DrawPathData
                                                               withHandler:@selector(refreshRoute)
                                                                andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onColorPalettesFilesUpdated:)
-                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
-                                               object:nil];
+    [self.app.paletteRepository addListenerListener:self];
+}
+
+- (void)deinitLayer
+{
+    [self.app.paletteRepository removeListenerListener:self];
 }
 
 - (void) resetLayer
@@ -211,24 +211,59 @@ struct DrawPathData
     return YES;
 }
 
-- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+- (void)onPaletteChangedEvent:(OASPaletteChangeEvent *)event
 {
-    if (![notification.object isKindOfClass:NSDictionary.class])
+    if (![_routeColoringType isGradient])
         return;
-
-    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-    if (!colorPaletteFiles)
+    
+    OASGradientPaletteCategory *category = [[_routeColoringType toGradientScaleType] toPaletteCategory];
+    if (!category)
         return;
-    BOOL refresh = NO;
-    for (NSString *colorPaletteFile in colorPaletteFiles)
+    
+    BOOL shouldRefresh = NO;
+    if ([event isKindOfClass:OASPaletteChangeEventRemoved.class])
     {
-        if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
+        OASPaletteChangeEventRemoved *removed = (OASPaletteChangeEventRemoved *) event;
+        if ([removed.paletteId isEqualToString:category.id] && [removed.id isEqualToString:_routeGradientPalette])
         {
-            [_updatedColorPaletteFiles setObjectSync:colorPaletteFiles[colorPaletteFile] forKey:colorPaletteFile];
-            refresh = YES;
+            _routeGradientPalette = [OASPaletteConstants shared].DEFAULT_NAME;
+            if (_previewRouteLineInfo)
+                _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
+            shouldRefresh = YES;
         }
     }
-    if (refresh)
+    else
+    {
+        NSString *oldId = nil;
+        NSObject *item = nil;
+        if ([event isKindOfClass:OASPaletteChangeEventUpdated.class])
+            item = (NSObject *) ((OASPaletteChangeEventUpdated *) event).item;
+        else if ([event isKindOfClass:OASPaletteChangeEventAdded.class])
+            item = (NSObject *) ((OASPaletteChangeEventAdded *) event).item;
+        else if ([event isKindOfClass:OASPaletteChangeEventReplaced.class])
+        {
+            OASPaletteChangeEventReplaced *replaced = (OASPaletteChangeEventReplaced *) event;
+            oldId = replaced.oldId;
+            item = (NSObject *) replaced.newItem;
+        }
+        
+        if ([item isKindOfClass:OASPaletteItemGradient.class])
+        {
+            OASPaletteItemGradient *paletteItem = (OASPaletteItemGradient *) item;
+            if ([paletteItem.source.paletteId isEqualToString:category.id] && ([oldId isEqualToString:_routeGradientPalette] || [paletteItem.id isEqualToString:_routeGradientPalette]))
+            {
+                if ([oldId isEqualToString:_routeGradientPalette])
+                {
+                    _routeGradientPalette = paletteItem.id;
+                    if (_previewRouteLineInfo)
+                        _previewRouteLineInfo.gradientPalette = _routeGradientPalette;
+                }
+                shouldRefresh = YES;
+            }
+        }
+    }
+    
+    if (shouldRefresh)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self refreshRoute];
@@ -378,7 +413,7 @@ struct DrawPathData
 
     if (walk)
     {
-        OsmAnd::ColorARGB bitmapColor([self getWalkDefaultColor]);
+        OsmAnd::ColorARGB bitmapColor((uint32_t)[self getWalkDefaultColor]);
         walkIconBitmap = [self walkBitmapWithColor:bitmapColor lineWidth:lineWidth];
     }
     else
@@ -597,6 +632,25 @@ struct DrawPathData
         _routeInfoAttribute = [settings.routeInfoAttribute get:mode];
         _routeGradientPalette = [settings.routeGradientPalette get:mode];
     }
+
+    if (_routeGradientPalette.length == 0)
+        _routeGradientPalette = [OASPaletteConstants shared].DEFAULT_NAME;
+}
+
+- (OASColorPalette *)routeColorPalette:(OAColoringType *)routeColoringType fixedValues:(BOOL *)fixedValues
+{
+    if (fixedValues)
+        *fixedValues = NO;
+    
+    OASGradientPaletteCategory *category = [[routeColoringType toGradientScaleType] toPaletteCategory];
+    OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] paletteItemOrDefaultWithCategory:category name:_routeGradientPalette] : nil;
+    if (!paletteItem)
+        return nil;
+    
+    if (fixedValues)
+        *fixedValues = [paletteItem isFixed];
+    
+    return [paletteItem getColorPalette];
 }
 
 - (BOOL)shouldShowTurnArrows
@@ -743,7 +797,7 @@ struct DrawPathData
                                     .setLineWidth(_lineWidth * 0.4)
                                     .setPoints(points)
                                     .setEndCapStyle(OsmAnd::VectorLine::EndCapStyle::ARROW)
-                                    .setFillColor(OsmAnd::ColorARGB(_customTurnArrowsColor));
+                                    .setFillColor(OsmAnd::ColorARGB((uint32_t)_customTurnArrowsColor));
                             builder.buildAndAddToCollection(_actionLinesCollection);
                         }
                     }
@@ -987,25 +1041,24 @@ struct DrawPathData
     {
         OAColoringType *prevRouteColoringType = _prevRouteColoringType;
         NSString *prevRouteInfoAttribute = _prevRouteInfoAttribute;
+        NSString *prevRouteGradientPalette = _prevRouteGradientPalette;
         [self updateRouteColoringType];
         [self updateRouteColors:isNight];
         _prevRouteColoringType = _routeColoringType;
         _prevRouteInfoAttribute = _routeInfoAttribute;
+        _prevRouteGradientPalette = _routeGradientPalette;
 
         OAColoringType *routeColoringType = _routeColoringType;
         if (![self isColoringAvailable:route routeColoringType:routeColoringType attributeName:_routeInfoAttribute])
             routeColoringType = OAColoringType.DEFAULT;
         
         BOOL routeUpdated = shouldRedraw || _route != route;
-
         BOOL gradientRoute = [routeColoringType isGradient];
-        NSString *colorPaletteFile = @"";
         if (gradientRoute)
         {
-            colorPaletteFile = [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [routeColoringType toColorizationType]
-                                                       gradientPaletteName:_routeGradientPalette];
             routeUpdated = routeUpdated || prevRouteColoringType != routeColoringType
-                || _colorizationScheme != COLORIZATION_GRADIENT || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
+            || ![prevRouteGradientPalette isEqualToString:_routeGradientPalette]
+            || _colorizationScheme != COLORIZATION_GRADIENT;
         }
 
         BOOL attributedRoute = [routeColoringType isRouteInfoAttribute];
@@ -1020,23 +1073,16 @@ struct DrawPathData
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         if (gradientRoute && routeUpdated)
         {
-            NSString *updatedColorPaletteValue = [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
-            if ([updatedColorPaletteValue isEqualToString:ColorPaletteHelper.deletedFileKey])
-                _routeGradientPalette = PaletteGradientColor.defaultName;
-            [_updatedColorPaletteFiles removeObjectForKeySync:colorPaletteFile];
-            
             OASGpxFile *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
-            ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [routeColoringType toColorizationType]
-                                                                              gradientPaletteName:_routeGradientPalette];
-            if (!colorPalette)
-                return;
-            
+            BOOL fixedValues = NO;
+            OASColorPalette *colorPalette = [self routeColorPalette:routeColoringType fixedValues:&fixedValues];
             OARouteColorize *colorizationHelper =
-                [[OARouteColorize alloc] initWithGpxFile:gpx
-                                                analysis:[gpx getAnalysisFileTimestamp:0]
-                                                    type:[routeColoringType toColorizationType]
-                                                 palette:colorPalette
-                                         maxProfileSpeed:0
+            [[OARouteColorize alloc] initWithGpxFile:gpx
+                                            analysis:[gpx getAnalysisFileTimestamp:0]
+                                                type:[routeColoringType toColorizationType]
+                                             palette:colorPalette
+                                     maxProfileSpeed:0
+                                         fixedValues:fixedValues
             ];
             _colorizationScheme = COLORIZATION_GRADIENT;
             _colors.clear();

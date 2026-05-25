@@ -712,13 +712,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
-    [self.tableView registerClass:CollapsibleTextWithButtonCell.self forCellReuseIdentifier:[CollapsibleTextWithButtonCell reuseIdentifier]];
-    UIView *view = [[UIView alloc] init];
-    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-    self.tableView.backgroundView = view;
-    self.tableView.scrollEnabled = NO;
+    
+    [self setupTableView];
+    
     _calculatedWidth = 0;
     [self buildMenu:[NSMutableArray array]];
 }
@@ -731,6 +727,19 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void) setupTableView
+{
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.tableView.backgroundView = view;
+    self.tableView.scrollEnabled = NO;
+    
+    [self.tableView registerClass:CollapsibleTextWithButtonCell.self forCellReuseIdentifier:[CollapsibleTextWithButtonCell reuseIdentifier]];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {

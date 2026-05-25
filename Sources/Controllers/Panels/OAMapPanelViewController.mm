@@ -2986,6 +2986,14 @@ typedef enum
     }];
 }
 
+- (void)showWaypointOnMap:(OAGpxWptItem *)item latitude:(double)latitude longitude:(double)longitude
+{
+    [_mapViewController showContextPinMarker:item.point.lat longitude:item.point.lon animated:NO];
+    _targetLatitude = latitude;
+    _targetLongitude = longitude;
+    [self goToTargetPointDefault];
+}
+
 - (void)openRecordingTrackTargetView
 {
     [self openTargetViewWithGPX:nil];
@@ -3911,22 +3919,50 @@ typedef enum
         _targetLatitude = bounds.bottomRight.latitude;
         _targetLongitude = bounds.topLeft.longitude;
         
-        CGFloat scaleFactor = renderView.contentScaleFactor;
         auto targetPointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bounds.center.latitude, bounds.center.longitude));
         Point31 targetPoint31 = [OANativeUtilities convertFromPointI:targetPointI];
-        
-        [_mapViewController storeTargetPosition:nil scheduleRestore:YES];
-        [_mapViewController.mapView setMapTarget:OsmAnd::PointI(
-            (int)((safeScreenBBox.width / 2 + leftInset + appliedLeftInset) * scaleFactor),
-            (int)((safeScreenBBox.height / 2 + topInset + appliedTopInset) * scaleFactor))
-            location31:targetPointI];
         renderView.azimuth = 0.0;
         if (changeElevationAngle)
             renderView.elevationAngle = 90.0;
-        
         [_mapViewController goToPosition:targetPoint31
                                  andZoom:(_targetMode == EOATargetBBOX ? _targetZoom : kDefaultFavoriteZoomOnShow)
                                 animated:NO];
+
+        const BOOL centerBBox = _targetMode == EOATargetBBOX;
+        const CGFloat correctionLeftPadding = centerBBox ? kCorrectionMinLeftSpaceBBox : kCorrectionMinLeftSpace;
+        const CGFloat correctionBottomPadding = centerBBox ? kCorrectionMinBottomSpaceBBox : kCorrectionMinBottomSpace;
+        const CGFloat desiredTargetX = safeScreenBBox.width / 2.0 + leftInset + appliedLeftInset;
+        const CGFloat desiredTargetY = safeScreenBBox.height / 2.0 + topInset + appliedTopInset;
+
+        const CGFloat corrLeftInset = MAX(0.0, desiredTargetX - correctionLeftPadding);
+        const CGFloat corrBottomInset = MAX(0.0, DeviceScreenHeight - desiredTargetY - correctionBottomPadding);
+        const CGFloat targetX = corrLeftInset + correctionLeftPadding;
+        const CGFloat targetY = DeviceScreenHeight - corrBottomInset - correctionBottomPadding;
+
+        Point31 originalCenter31 = targetPoint31;
+        CGPoint centerPoint;
+        OsmAnd::PointI centerPointI = renderView.target31;
+        CGPoint targetPoint;
+        OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPoint31];
+        if ([renderView convert:&centerPointI toScreen:&centerPoint checkOffScreen:YES]
+            && [renderView convert:&targetPositionI toScreen:&targetPoint checkOffScreen:YES])
+        {
+            CGPoint correctionCenterPoint = CGPointMake(centerPoint.x + targetPoint.x - targetX,
+                                                        centerPoint.y + targetPoint.y - targetY);
+            correctionCenterPoint.x *= renderView.contentScaleFactor;
+            correctionCenterPoint.y *= renderView.contentScaleFactor;
+
+            OsmAnd::PointI originalCenterI;
+            if ([renderView convert:correctionCenterPoint toLocation:&originalCenterI])
+                originalCenter31 = [OANativeUtilities convertFromPointI:originalCenterI];
+        }
+
+        [self.mapViewController correctPosition:targetPoint31
+                               originalCenter31:originalCenter31
+                                      leftInset:corrLeftInset
+                                    bottomInset:corrBottomInset
+                                     centerBBox:centerBBox
+                                       animated:NO];
         
         OsmAnd::LatLon latLon(bounds.center.latitude, bounds.center.longitude);
         _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
@@ -4406,21 +4442,19 @@ typedef enum
         }
         if (![allowPrivate get:[_routingHelper getAppMode]])
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"private_access_routing_req") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            __weak __typeof(self) weakSelf = self;
+            [AlertPresenter showRequestPrivateAccessAlertWithHandler:^{
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
                 
                 for (OAApplicationMode *mode in modes)
                 {
                     if (![allowPrivate get:mode])
-                    {
                         [allowPrivate set:YES mode:mode];
-                    }
                 }
-                [_routingHelper recalculateRouteDueToSettingsChange];
-                
-            }]];
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+                [strongSelf->_routingHelper recalculateRouteDueToSettingsChange];
+            }];
         }
     }
 }

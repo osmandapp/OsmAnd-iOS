@@ -2771,9 +2771,15 @@ static const NSInteger _buttonsCount = 4;
     __weak __typeof(self) weakSelf = self;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [weakSelf.targetPoint initAddressIfNeeded];
+        @autoreleasepool
+        {
+            [targetPoint initAddressIfNeeded];
+        }
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf updateTargetPointAddress];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf.targetPoint == targetPoint)
+                [strongSelf updateTargetPointAddress];
         });
     });
 }

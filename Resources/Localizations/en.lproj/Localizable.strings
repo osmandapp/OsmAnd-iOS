@@ -927,6 +927,7 @@
 "shared_string_all_colors" = "All colors";
 "shared_string_all_icons" = "All icons";
 "shared_string_add_color" = "Add color";
+"add_palette" = "Add palette";
 "shared_string_edit_color" = "Edit color";
 "shared_string_duplicate_color" = "Duplicate color";
 "shared_string_delete_color" = "Delete color";
@@ -946,6 +947,29 @@
 "shared_string_deleting" = "Deleting";
 "shared_string_deleting_complete" = "Deleting complete";
 "shared_string_colors" = "Colors";
+
+"gradient_no_data_point_summary" = "Color applied when data is missing or undefined.";
+"gradient_input_value_too_low_warn" = "Minimum allowed value is %@.";
+"gradient_input_value_too_high_warn" = "Maximum allowed value is %@.";
+"gradient_input_value_duplicate_warn" = "This value already exists in the palette.";
+"gradient_input_invalid_value_warn" = "Please enter a valid number.";
+"value_cannot_be_edited_warn" = "This value cannot be edited.";
+"unexpected_error_occurred_warn" = "An unexpected error occurred.";
+"relative_gradient_point_m_summary" = "Color for the maximum value found in the track.";
+"relative_gradient_point_avg_summary" = "Color for the average value of the track.";
+"relative_gradient_point_min_summary" = "Color for the minimum value found in the track.";
+"shared_string_minimum" = "Minimum";
+"shared_string_ratio" = "ratio";
+"shared_string_percentage" = "percentage";
+"remove_step" = "Remove step";
+"shared_string_value" = "Value";
+"gradient_range_type_fixed_summary" = "Colors are assigned to specific absolute numbers (e.g. 50 km/h).";
+"gradient_range_type_fixed" = "Fixed Values";
+"gradient_range_type_relative_summary" = "Colors scale automatically based on the track's min/max range.";
+"gradient_range_type_relative" = "Relative";
+"edit_palette" = "Edit palette";
+"delete_palette" = "Delete palette";
+"delete_colors_palette_dialog_summary" = "Are you sure you want to delete %@ palette?";
 
 "profile_icon" = "Profile icon";
 "profile_icons" = "Profile icon";
@@ -3756,7 +3780,7 @@
 • Added a \"Screen orientation\" option to set your preferred orientation without automatic switching\n
 • Added a separate button to switch 3D Mode directly on CarPlay screen\n
 • Minimum and maximum elevation information has been added to navigation routes in addition to uphill and downhill\n
-• Improved track coloring in Slope mode with new symmetric gradient\n 
+• Improved track coloring in Slope mode with new symmetric gradient\n
 • Favorite folders now store default appearance that are applied automatically to each added point\n
 • Fixed the \"Radius ruler\" center point mismatching with the map center\n
 • Added \"Read article\" button for Wikipedia POIs context menu\n
@@ -3945,7 +3969,7 @@
 "dangerous_goods" = "Dangerous goods";
 "dangerous_goods_description" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
 "show_along_the_route" = "Show along the route";
-    
+
 "exit_number" = "Exit number";
 "announce_when_exceeded" = "Announce when exceeded";
 "speak_gps_signal_status" = "Announce GPS signal loss and recovery";
@@ -4521,8 +4545,8 @@
 
 "shared_string_online_only" = "Online Only";
 "shared_string_offline_only" = "Offline Only";
-"show_image_previews"= "Show image previews";
-"popular_places"= "Popular places";
+"show_image_previews" = "Show image previews";
+"popular_places" = "Popular places";
 "shared_string_wikipedia"= "Wikipedia";
 "poi_source" = "POI Source";
 "shared_string_int_name" = "International name";
@@ -4582,3 +4606,8 @@
 "astro_magnitude_filter" = "Magnitude filter";
 "astro_red_filter" = "Red filter";
 "shared_string_play" = "Play";
+"private_access_routing_req_short" = "Your destination is in a private area. Allow using private roads?";
+"view_on_phone" = "View on Phone";
+"missing_maps_header" = "Missing or outdated maps";
+"missing_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
+"shared_string_allow" = "Allow";

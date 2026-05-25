@@ -97,13 +97,17 @@
             TerrainMode *mode = [TerrainMode byKey:palette];
             if (mode)
             {
-                ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[mode mainFile]];
-                [arr addObject:@{
-                    @"type": [OASimpleTableViewCell reuseIdentifier],
-                    @"title": [mode getDefaultDescription],
-                    @"value": colorPalette,
-                    @"param": @[palette]
-                }];
+                OASPaletteItemGradient *paletteItem = [[GradientPaletteHelper shared] paletteItemWithFileName:[mode mainFile]];
+                if (paletteItem)
+                {
+                    [arr addObject:@{
+                        @"type": [OASimpleTableViewCell reuseIdentifier],
+                        @"title": [mode getDefaultDescription],
+                        @"value": [paletteItem getColorPalette],
+                        @"desc": [PaletteCollectionHandler createDescriptionForPalette:paletteItem],
+                        @"param": @[palette]
+                    }];
+                }
             }
         }
     }
@@ -189,11 +193,11 @@
             if (vwController.type == EOAQASelectionTypeTerrainScheme)
             {
                 cell.leftIconView.layer.cornerRadius = 3;
-                ColorPalette *colorPalette = item[@"value"];
+                OASColorPalette *colorPalette = item[@"value"];
                 [PaletteCollectionHandler applyGradientTo:cell.leftIconView
                                                      with:colorPalette];
                 [cell descriptionVisibility:YES];
-                cell.descriptionLabel.text = [PaletteCollectionHandler createDescriptionForPalette:colorPalette isTerrain:YES];
+                cell.descriptionLabel.text = item[@"desc"];
                 cell.descriptionLabel.numberOfLines = 1;
             }
             else
@@ -237,7 +241,7 @@
                 {
                     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
                     NSArray<NSString *> *param = item[@"param"];
-                    isActive = plugin && [[[plugin getTerrainMode] getKeyName] isEqualToString:param.firstObject];
+                    isActive = plugin && param.firstObject && [[plugin getTerrainMode] isIdentifiedBy:param.firstObject];
                     break;
                 }
                 default:

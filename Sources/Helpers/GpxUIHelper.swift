@@ -543,17 +543,17 @@ class GpxUIHelper: NSObject {
     }
 
     static func buildGradientChart(chart: LineChartView,
-                                   colorPalette: ColorPalette,
+                                   colorPalette: OsmAndShared.ColorPalette,
                                    valueFormatter: AxisValueFormatter) -> LineChartData {
         chart.xAxis.enabled = false
 
-        let colorValues = colorPalette.colorValues
+        let colorValues = colorPalette.colors.compactMap { $0 as? OsmAndShared.ColorPalette.ColorValue }
         var colors = [NSUIColor]()
         var entries = [ChartDataEntry]()
 
         for i in 0..<colorValues.count {
-            colors.append(NSUIColor(argb: colorValues[i].clr))
-            entries.append(ChartDataEntry(x: colorValues[i].val, y: 0))
+            colors.append(NSUIColor(argb: Int(colorValues[i].clr)))
+            entries.append(ChartDataEntry(x: Double(colorValues[i].value), y: 0))
         }
 
         let barDataSet = LineChartDataSet(entries: entries, label: "")

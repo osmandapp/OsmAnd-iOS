@@ -105,6 +105,8 @@
     
     NSString *_customId;
     BOOL _prevShowNextTurn;
+    NSLayoutConstraint *_shieldIconAspectRatioConstraint;
+    CGFloat _shieldIconAspectRatio;
 }
 
 static int stackViewLeadingDefaultValue = 2;
@@ -203,15 +205,6 @@ static int stackViewLeadingToRefViewPadding = 16;
     BOOL showTurn = !_turnView.isHidden && _turnView.subviews.count > 0;
     BOOL showExit = !_exitRefTextContainer.isHidden && _exitRefText.text.length > 0;
     BOOL showAddress = !_addressText.isHidden && _addressText.text.length > 0;
-    CGRect shieldFrame = _shieldIcon.frame;
-    if (showShield)
-    {
-        shieldFrame.size = _shieldIcon.image.size;
-        CGFloat height = h - 4;
-        CGFloat scaleFactor = height / shieldFrame.size.height;
-        shieldFrame.size = CGSizeMake(shieldFrame.size.width * scaleFactor, height);
-        _shieldIcon.frame = shieldFrame;
-    }
     CGRect exitRefFrame = _exitRefTextContainer.frame;
     
     self.stackViewLeadingConstraint.constant = stackViewLeadingDefaultValue;
@@ -232,7 +225,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;
     margin += _exitRefTextContainer.hidden ? 0 : _exitRefTextContainer.frame.size.width + 2;
-    margin += showShield ? shieldFrame.size.width + 2 : 0;
+    margin += showShield ? _shieldIcon.frame.size.width + 2 : 0;
     margin += showExit ? exitRefFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
     CGSize size = [OAUtilities calculateTextBounds:showAddress ? _addressText.text : @"" width:maxTextWidth height:h font:_textFont];
@@ -588,6 +581,19 @@ static int stackViewLeadingToRefViewPadding = 16;
             if([self setRoadShield:_shieldIcon shields:shields])
             {
                 _shieldIcon.hidden = NO;
+                CGSize imageSize = _shieldIcon.image.size;
+                if (imageSize.height > 0)
+                {
+                    CGFloat aspectRatio = imageSize.width / imageSize.height;
+                    if (aspectRatio != _shieldIconAspectRatio)
+                    {
+                        _shieldIconAspectRatioConstraint.active = NO;
+                        _shieldIconAspectRatioConstraint = [_shieldIcon.widthAnchor constraintEqualToAnchor:_shieldIcon.heightAnchor
+                                                                                                multiplier:aspectRatio];
+                        _shieldIconAspectRatioConstraint.active = YES;
+                        _shieldIconAspectRatio = aspectRatio;
+                    }
+                }
                 int idx = [streetName.text indexOf:@"»"];
                 if (idx > 0)
                     streetName.text = [streetName.text substringFromIndex:idx];

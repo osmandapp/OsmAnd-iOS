@@ -2837,7 +2837,6 @@ static char kMapSourceUpdateQueueKey;
     if (shouldApplyWeatherBandSettings)
         _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
     [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
-    [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
 
     if (shouldShowRecTrack)
         [self showRecGpxTrack:YES];
@@ -4309,19 +4308,7 @@ static char kMapSourceUpdateQueueKey;
         if (!helper.isPublicTransportMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (UIApplication.sharedApplication.isCarPlayConnected)
-                {
-                    if (UIApplication.sharedApplication.isCarPlayAppActive)
-                    {
-                        [[UIApplication sharedApplication].carPlaySceneDelegate showAlertWithTitle:error];
-                    }
-                }
-                else
-                {
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
-                    [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-                    [self presentViewController:alertController animated:YES completion:nil];
-                }
+                [AlertPresenter showRouteCalculationErrorAlert:error from:self];
             });
         }
     }

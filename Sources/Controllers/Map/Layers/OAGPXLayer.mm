@@ -33,7 +33,6 @@
 #import "OACompoundIconUtils.h"
 #import "OAObservable.h"
 #import "OAColoringType.h"
-#import "OAConcurrentCollections.h"
 #import "OAPointDescription.h"
 #import "OASymbolMapLayer+cpp.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -50,7 +49,7 @@ static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
 static const int START_ZOOM = 7;
 
-@interface OAGPXLayer ()
+@interface OAGPXLayer () <OASPaletteRepositoryListener>
 
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
 
@@ -69,12 +68,12 @@ static const int START_ZOOM = 7;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedWallColors;
     NSMutableDictionary<NSString *, NSNumber *> *_cachedTrackWidth;
-    OAConcurrentDictionary<NSString *, NSString *> *_updatedColorPaletteFiles;
-    
+
     NSOperationQueue *_splitLabelsQueue;
     NSObject* _splitLock;
     OAAtomicInteger *_splitCounter;
     QList<OsmAnd::PointI> _startFinishPoints;
+    QList<int> _startFinishExtraIds;
     QList<float> _startFinishPointsElevations;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
     OASRTMPlugin *_plugin;
@@ -104,14 +103,15 @@ static const int START_ZOOM = 7;
     _gpxFiles = [NSMutableDictionary dictionary];
     _cachedTracks = [NSMutableDictionary dictionary];
     _cachedTrackWidth = [NSMutableDictionary dictionary];
-    _updatedColorPaletteFiles = [[OAConcurrentDictionary alloc] init];
-    
+
     _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onColorPalettesFilesUpdated:)
-                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
-                                               object:nil];
+    [self.app.paletteRepository addListenerListener:self];
+}
+
+- (void)deinitLayer
+{
+    [self.app.paletteRepository removeListenerListener:self];
 }
 
 - (void) resetLayer
@@ -149,31 +149,47 @@ static const int START_ZOOM = 7;
     return YES;
 }
 
-- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+- (void)onPaletteChangedEvent:(OASPaletteChangeEvent *)event
 {
-    if (![notification.object isKindOfClass:NSDictionary.class])
+    if (![self isRoutePaletteChangeEvent:event])
         return;
+    
+    [self.mapViewController runWithRenderSync:^{
+        NSDictionary<NSString *, OASGpxFile *> *gpxFiles = [_gpxFiles copy];
+        [_cachedTracks removeAllObjects];
+        _cachedColors.clear();
+        _cachedWallColors.clear();
+        [self refreshGpxTracks:gpxFiles reset:YES];
+    }];
+}
 
-    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-    if (!colorPaletteFiles)
-        return;
-    BOOL refresh = NO;
-    for (NSString *colorPaletteFile in colorPaletteFiles)
+- (BOOL)isRoutePaletteChangeEvent:(OASPaletteChangeEvent *)event
+{
+    if ([event isKindOfClass:OASPaletteChangeEventRemoved.class])
     {
-        if ([colorPaletteFile hasPrefix:ColorPaletteHelper.routePrefix])
-        {
-            [_updatedColorPaletteFiles setObjectSync:colorPaletteFiles[colorPaletteFile] forKey:colorPaletteFile];
-            refresh = YES;
-        }
+        OASPaletteChangeEventRemoved *removed = (OASPaletteChangeEventRemoved *) event;
+        return [self isRoutePaletteCategoryId:removed.paletteId];
     }
-    if (refresh)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.mapViewController runWithRenderSync:^{
-                [self refreshGpxTracks:_gpxFiles reset:YES];
-            }];
-        });
-    }
+    
+    NSObject *item = nil;
+    if ([event isKindOfClass:OASPaletteChangeEventUpdated.class])
+        item = (NSObject *) ((OASPaletteChangeEventUpdated *) event).item;
+    else if ([event isKindOfClass:OASPaletteChangeEventAdded.class])
+        item = (NSObject *) ((OASPaletteChangeEventAdded *) event).item;
+    else if ([event isKindOfClass:OASPaletteChangeEventReplaced.class])
+        item = (NSObject *) ((OASPaletteChangeEventReplaced *) event).newItem;
+    else
+        return NO;
+    
+    return [item isKindOfClass:OASPaletteItemGradient.class]
+    && [self isRoutePaletteCategoryId:((OASPaletteItemGradient *) item).source.paletteId];
+}
+
+- (BOOL)isRoutePaletteCategoryId:(NSString *)paletteId
+{
+    return [paletteId isEqualToString:OASGradientPaletteCategory.speed.id]
+    || [paletteId isEqualToString:OASGradientPaletteCategory.altitude.id]
+    || [paletteId isEqualToString:OASGradientPaletteCategory.slope.id];
 }
 
 - (void) refreshGpxTracks:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles reset:(BOOL)reset
@@ -258,12 +274,28 @@ static const int START_ZOOM = 7;
         cachedTrack[@"gpxFile"] = gpxFile;
         cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
         cachedTrack[@"prev_coloring_type"] = dataWrapper.coloringType;
-        cachedTrack[@"prev_color_palette"] = dataWrapper.gradientPaletteName.length > 0 ? dataWrapper.gradientPaletteName : PaletteGradientColor.defaultName;
+        cachedTrack[@"prev_color_palette"] = dataWrapper.gradientPaletteName.length > 0 ? dataWrapper.gradientPaletteName : [OASPaletteConstants shared].DEFAULT_NAME;
         cachedTrack[@"prev_wall_coloring_type"] = @(dataWrapper.visualization3dWallColorType);
         _cachedTracks[filePath] = cachedTrack;
         _cachedColors[key] = QList<OsmAnd::FColorARGB>();
         _cachedWallColors[key] = QList<OsmAnd::FColorARGB>();
     }
+}
+
+- (OASColorPalette *)routeColorPalette:(OAColoringType *)type gradientPalette:(NSString *)gradientPalette fixedValues:(BOOL *)fixedValues
+{
+    if (fixedValues)
+        *fixedValues = NO;
+    
+    OASGradientPaletteCategory *category = [[type toGradientScaleType] toPaletteCategory];
+    OASPaletteItemGradient *paletteItem = category ? [[GradientPaletteHelper shared] paletteItemWithCategory:category name:gradientPalette] : nil;
+    if (!paletteItem)
+        return nil;
+    
+    if (fixedValues)
+        *fixedValues = [paletteItem isFixed];
+    
+    return [paletteItem getColorPalette];
 }
 
 - (void)configureCachedWallColorsFor:(OAColoringType *)type
@@ -280,17 +312,15 @@ static const int START_ZOOM = 7;
     }
     else
     {
-        ColorPalette *palette =
-            [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
-                                                 gradientPaletteName:gradientPalette];
-        if (!palette)
-            return;
+        BOOL fixedValues = NO;
+        OASColorPalette *palette = [self routeColorPalette:type gradientPalette:gradientPalette fixedValues:&fixedValues];
         OARouteColorize *routeColorize =
-            [[OARouteColorize alloc] initWithGpxFile:gpxFile
-                                            analysis:analysis ?: [gpxFile getAnalysisFileTimestamp:0]
-                                                type:[type toColorizationType]
-                                             palette:palette
-                                     maxProfileSpeed:0];
+        [[OARouteColorize alloc] initWithGpxFile:gpxFile
+                                        analysis:analysis ?: [gpxFile getAnalysisFileTimestamp:0]
+                                            type:[type toColorizationType]
+                                         palette:palette
+                                 maxProfileSpeed:(float)[[OAAppSettings sharedManager].applicationMode.get getMaxSpeed]
+                                     fixedValues:fixedValues];
         _cachedWallColors[key].clear();
         if (routeColorize)
             _cachedWallColors[key].append([routeColorize getResultQList]);
@@ -348,27 +378,16 @@ static const int START_ZOOM = 7;
                 type = OAColoringType.DEFAULT;
 
             OASGpxTrackAnalysis *analysis;
-            NSString *colorPaletteFile = @"";
-            if ([type isGradient])
-            {
-                colorPaletteFile =
-                    [ColorPaletteHelper getRoutePaletteFileName:(ColorizationType) [type toColorizationType]
-                                            gradientPaletteName:cachedTrack[@"prev_color_palette"]];
-            }
+            NSString *gradientPaletteName = dataWrapper.gradientPaletteName.length > 0 ? dataWrapper.gradientPaletteName : [OASPaletteConstants shared].DEFAULT_NAME;
             if ([type isGradient]
                 && (![cachedTrack[@"prev_coloring_type"] isEqualToString:dataWrapper.coloringType]
-                    || ![cachedTrack[@"prev_color_palette"] isEqualToString:dataWrapper.gradientPaletteName]
+                    || ![cachedTrack[@"prev_color_palette"] isEqualToString:gradientPaletteName]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
-                    || [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile]
                     || _cachedColors[qKey].isEmpty()))
             {
-                NSString *updatedColorPaletteValue = [_updatedColorPaletteFiles objectForKeySync:colorPaletteFile];
-                BOOL isColorPaletteDeleted = [updatedColorPaletteValue isEqualToString:ColorPaletteHelper.deletedFileKey];
-                [_updatedColorPaletteFiles removeObjectForKeySync:colorPaletteFile];
-
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = dataWrapper.coloringType;
-                cachedTrack[@"prev_color_palette"] = dataWrapper.gradientPaletteName.length == 0 || isColorPaletteDeleted ? PaletteGradientColor.defaultName : dataWrapper.gradientPaletteName;
+                cachedTrack[@"prev_color_palette"] = gradientPaletteName;
                 BOOL shouldCalculateColorCache = YES;
                 // check if we already have a cached array of wall color points that can be reused for route line color, provided that the coloring type matches
                 switch (dataWrapper.visualization3dWallColorType)
@@ -389,17 +408,15 @@ static const int START_ZOOM = 7;
                 if (shouldCalculateColorCache)
                 {
                     analysis = [gpxFile getAnalysisFileTimestamp:0];
-                    ColorPalette *palette =
-                        [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
-                                                             gradientPaletteName:cachedTrack[@"prev_color_palette"]];
-                    if (!palette)
-                        return;
+                    BOOL fixedValues = NO;
+                    OASColorPalette *palette = [self routeColorPalette:type gradientPalette:cachedTrack[@"prev_color_palette"] fixedValues:&fixedValues];
                     OARouteColorize *routeColorize =
-                        [[OARouteColorize alloc] initWithGpxFile:gpxFile
-                                                        analysis:analysis
-                                                            type:[type toColorizationType]
-                                                         palette:palette
-                                                 maxProfileSpeed:0];
+                    [[OARouteColorize alloc] initWithGpxFile:gpxFile
+                                                    analysis:analysis
+                                                        type:[type toColorizationType]
+                                                     palette:palette
+                                             maxProfileSpeed:(float)[[OAAppSettings sharedManager].applicationMode.get getMaxSpeed]
+                                                 fixedValues:fixedValues];
                     _cachedColors[qKey].clear();
                     if (routeColorize)
                         _cachedColors[qKey].append([routeColorize getResultQList]);
@@ -411,9 +428,9 @@ static const int START_ZOOM = 7;
             }
             else if ([type isRouteInfoAttribute]
                      && (![cachedTrack[@"prev_coloring_type"] isEqualToString:dataWrapper.coloringType]
-                         || ![cachedTrack[@"prev_color_palette"] isEqualToString:dataWrapper.gradientPaletteName]
-                        || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
-                        || _cachedColors[qKey].isEmpty()))
+                         || ![cachedTrack[@"prev_color_palette"] isEqualToString:gradientPaletteName]
+                         || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
+                         || _cachedColors[qKey].isEmpty()))
             {
                 OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpxFile];
                 auto segs = [routeImporter importRoute];
@@ -428,7 +445,7 @@ static const int START_ZOOM = 7;
                 }
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_SOLID);
                 cachedTrack[@"prev_coloring_type"] = dataWrapper.coloringType;
-                cachedTrack[@"prev_color_palette"] = dataWrapper.gradientPaletteName.length > 0 ? dataWrapper.gradientPaletteName : PaletteGradientColor.defaultName;
+                cachedTrack[@"prev_color_palette"] = gradientPaletteName;
                 _cachedColors[qKey].clear();
                 [self calculateSegmentsColor:_cachedColors[qKey]
                                     attrName:dataWrapper.coloringType
@@ -437,12 +454,12 @@ static const int START_ZOOM = 7;
             }
             else if ([type isSolidSingleColor]
                      && ([cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_NONE
-                         || ![cachedTrack[@"prev_color_palette"] isEqualToString:dataWrapper.gradientPaletteName]
+                         || ![cachedTrack[@"prev_color_palette"] isEqualToString:gradientPaletteName]
                          || !_cachedColors[qKey].isEmpty()))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = dataWrapper.coloringType;
-                cachedTrack[@"prev_color_palette"] = dataWrapper.gradientPaletteName.length > 0 ? dataWrapper.gradientPaletteName : PaletteGradientColor.defaultName;
+                cachedTrack[@"prev_color_palette"] = gradientPaletteName;
                 _cachedColors[qKey].clear();
             }
             
@@ -1154,7 +1171,7 @@ colorizationScheme:(int)colorizationScheme
                     else if (splitByTime)
                         stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
                     const auto colorARGB = [UIColorFromARGB(dataWrapper.color == 0 ? kDefaultTrackColor : dataWrapper.color) toFColorARGB];
-                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, splitElevation));
+                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, 0, splitElevation));
                 }
             }
             if (splitCounter == _splitCounter && !weakOperation.isCancelled)
@@ -1390,6 +1407,7 @@ colorizationScheme:(int)colorizationScheme
             _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
                                                                               UIScreen.mainScreen.scale,
                                                                               _startFinishPoints,
+                                                                              _startFinishExtraIds,
                                                                               _splitLabels,
                                                                               OsmAnd::SingleSkImage(startIcon),
                                                                               OsmAnd::SingleSkImage(finishIcon),

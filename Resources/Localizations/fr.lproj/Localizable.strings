@@ -4069,9 +4069,9 @@
 "gradient_input_invalid_value_warn" = "Veuillez saisir un nombre valide.";
 "value_cannot_be_edited_warn" = "Cette valeur ne peut pas être modifiée.";
 "unexpected_error_occurred_warn" = "Une erreur inattendue s'est produite.";
-"relative_gradient_point_m_summary" = "Couleur correspondant à la valeur maximale relevée sur la trace.";
-"relative_gradient_point_avg_summary" = "Couleur correspondant à la valeur moyenne de la trace.";
-"relative_gradient_point_min_summary" = "Couleur correspondant à la valeur minimale trouvée dans la trace.";
+"relative_gradient_point_m_summary" = "Couleur de la valeur maximale présente dans la trace.";
+"relative_gradient_point_avg_summary" = "Couleur de la valeur moyenne de la trace.";
+"relative_gradient_point_min_summary" = "Couleur de la valeur minimale présente dans la trace.";
 "shared_string_minimum" = "Minimum";
 "shared_string_ratio" = "ratio";
 "shared_string_percentage" = "pourcentage";
@@ -4079,7 +4079,7 @@
 "shared_string_value" = "Valeur";
 "gradient_range_type_fixed_summary" = "Les couleurs correspondent à des vitesses absolues précises (par exemple, 50 km/h).";
 "gradient_range_type_fixed" = "Valeurs fixes";
-"gradient_range_type_relative_summary" = "Les couleurs s'adaptent automatiquement en fonction de la plage minimale et maximale de la trace.";
+"gradient_range_type_relative_summary" = "Les couleurs s'adaptent automatiquement aux valeurs minimale et maximale de la trace.";
 "gradient_range_type_relative" = "Relatif";
 "edit_palette" = "Modifier la palette";
 "delete_palette" = "Supprimer la palette";

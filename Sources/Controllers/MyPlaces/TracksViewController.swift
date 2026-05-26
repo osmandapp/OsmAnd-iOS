@@ -18,7 +18,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
+final class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -35,7 +35,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
-    private let defaultBarButtonEdgeInset: CGFloat = 12
+    
+    weak var myPlacesDelegate: MyPlacesDelegate?
+    
     // TODO: Keys to enums
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -90,9 +92,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     private var routingHelper: OARoutingHelper
     private var gpxDB: OAGPXDatabase
     private var rootVC: OARootViewController
-    private var importHelper: OAGPXImportUIHelper
-    private var dateFormatter: DateFormatter
     private var smartFolderHelper: SmartFolderHelper
+    
+    private lazy var importHelper: OAGPXImportUIHelper = OAGPXImportUIHelper(hostViewController: self)
     
     private lazy var filterButton: UIButton = {
         var config = UIButton.Configuration.plain()
@@ -130,14 +132,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         routingHelper = OARoutingHelper.sharedInstance()
         gpxDB = OAGPXDatabase.sharedDb()
         smartFolderHelper = SharedLibSmartFolderHelper.shared
-        
-        dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        
-        importHelper = OAGPXImportUIHelper()
         super.init(coder: coder)
-        importHelper = OAGPXImportUIHelper(hostViewController: self)
     }
     
     private func onLoadFinished(folder: TrackFolder) {
@@ -194,7 +189,8 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupSearchController()
+        setupSearchControllerIfChildFolder()
+        definesPresentationContext = true
         reloadTableViewOnAppearIfNeeded()
     }
     
@@ -202,8 +198,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         if let asyncLoader {
             asyncLoader.cancel()
         }
-        tabBarController?.navigationItem.searchController = nil
-        navigationItem.searchController = nil
+        if !isRootFolder {
+            navigationItem.searchController = nil
+        }
         definesPresentationContext = false
         super.viewWillDisappear(animated)
     }
@@ -422,50 +419,49 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     private func setupNavbar() {
         if tableView.isEditing {
-            tabBarController?.navigationItem.hidesBackButton = true
-            navigationItem.hidesBackButton = true
-            let cancelButton = UIButton(type: .system)
-            if #available(iOS 26.0, *) {
-                cancelButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: defaultBarButtonEdgeInset, bottom: 0, right: defaultBarButtonEdgeInset);
-            }
-            cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
-            cancelButton.setImage(nil, for: .normal)
-            cancelButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
-            cancelButton.addTarget(self, action: #selector(onNavbarCancelButtonClicked), for: .touchUpInside)
-            tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
+            hideBackButton(true)
+            let cancelBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_cancel"), icon: nil, color: .label, action: #selector(onNavbarCancelButtonClicked), target: self, menu: nil)
+            cancelBarButton?.accessibilityLabel = localizedString("shared_string_cancel")
+            navigationController?.navigationBar.topItem?.leftBarButtonItem = cancelBarButton
+            navigationItem.leftBarButtonItem = cancelBarButton
         } else if isEditFilterActive {
-            tabBarController?.navigationItem.hidesBackButton = true
-            navigationItem.hidesBackButton = true
-            let editFilterCancelButton = UIButton(type: .system)
-            editFilterCancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
-            editFilterCancelButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
-            editFilterCancelButton.addTarget(self, action: #selector(onNavbarEditFilterCancelButtonClicked), for: .touchUpInside)
-            tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: editFilterCancelButton)
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: editFilterCancelButton)
-            let doneButton = UIButton(type: .system)
-            doneButton.setTitle(localizedString("shared_string_done"), for: .normal)
-            doneButton.titleLabel?.font = .preferredFont(forTextStyle: .body)
-            doneButton.addTarget(self, action: #selector(onNavbarDoneButtonClicked), for: .touchUpInside)
-            tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButton)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButton)
+            hideBackButton(true)
+            let editFilterCancelBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_cancel"), icon: nil, color: .label, action: #selector(onNavbarEditFilterCancelButtonClicked), target: self, menu: nil)
+            navigationController?.navigationBar.topItem?.leftBarButtonItem = editFilterCancelBarButton
+            navigationItem.leftBarButtonItem = editFilterCancelBarButton
+            let doneBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_done"), icon: nil, color: .label, action: #selector(onNavbarDoneButtonClicked), target: self, menu: nil)
+            navigationController?.navigationBar.topItem?.rightBarButtonItem = doneBarButton
+            navigationItem.rightBarButtonItem = doneBarButton
         } else {
-            tabBarController?.navigationItem.hidesBackButton = false
-            tabBarController?.navigationItem.leftBarButtonItem = nil
-            navigationItem.hidesBackButton = false
+            hideBackButton(false)
+            navigationController?.navigationBar.topItem?.leftBarButtonItem = nil
             navigationItem.leftBarButtonItem = nil
         }
         
-        configureNavigationBarAppearance()
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        tabBarController?.navigationItem.searchController = nil
-        navigationItem.searchController = nil
+        if !isRootFolder {
+            configureNavigationBarAppearance()
+            navigationController?.setNavigationBarHidden(false, animated: false)
+            navigationItem.searchController = nil
+        }
         if !isEditFilterActive {
             setupNavBarMenuButton()
         }
     }
     
-    func configureNavigationBarAppearance() {
+    private func hideBackButton(_ hide: Bool) {
+        if !isRootFolder {
+            navigationItem.hidesBackButton = hide
+        } else {
+            myPlacesDelegate?.showBackButton(!hide)
+        }
+    }
+    
+    private func setupSearchControllerIfChildFolder() {
+        guard !isRootFolder else { return }
+        setupSearchController()
+    }
+    
+    private func configureNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .navBarBgColorPrimary
@@ -489,7 +485,7 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     }
     
     private func updateNavigationBarTitle() {
-        var title: String = currentFolder?.getDirName(includingSubdirs: false) ?? localizedString("menu_my_trips")
+        var title: String = currentFolder?.getDirName(includingSubdirs: false) ?? localizedString("shared_string_gpx_tracks")
         if tableView.isEditing {
             let totalSelectedTracks = selectedTracks.count
             let totalSelectedFolders = selectedFolders.count
@@ -512,38 +508,34 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
             }
         } else if isRootFolder {
-            title = localizedString("menu_my_trips")
+            title = localizedString("shared_string_gpx_tracks")
         } else if isVisibleOnMapFolder {
             title = localizedString("tracks_on_map")
         } else if isSmartFolder {
             title = isEditFilterActive ? localizedString("edit_filter") : smartFolder.getDirName(includingSubdirs: false)
         }
         
-        tabBarController?.navigationItem.title = title
-        navigationItem.title = title
+        if !isRootFolder {
+            navigationItem.title = title
+        } else {
+            myPlacesDelegate?.updateTitle?(title, hideSubtitle: !isRootFolder || tableView.isEditing)
+        }
     }
     
     private func setupNavBarMenuButton() {
         var menuActions: [UIMenuElement] = []
         if !tableView.isEditing {
             if isSmartFolder {
-                let selectSmartFolderAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined.resizedMenuImage()) { [weak self] _ in
-                    self?.onNavbarSelectButtonClicked()
-                }
                 let refreshSmartFolderAction = UIAction(title: localizedString("shared_string_refresh"), image: .icCustomUpdate.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarRefreshSmartFolderButtonClicked()
                 }
                 let editFilterSmartFolderAction = UIAction(title: localizedString("edit_filter"), image: .icCustomParameters.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarEditFilterSmartFolderButtonClicked()
                 }
-                let selectSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectSmartFolderAction])
                 let refreshSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [refreshSmartFolderAction])
                 let editFilterSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [editFilterSmartFolderAction])
-                menuActions.append(contentsOf: [selectSmartFolderActionWithDivider, refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider])
+                menuActions.append(contentsOf: [refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider])
             } else {
-                let selectAction = UIAction(title: localizedString("shared_string_select"), image: .icCustomSelectOutlined.resizedMenuImage()) { [weak self] _ in
-                    self?.onNavbarSelectButtonClicked()
-                }
                 let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarAddFolderButtonClicked()
                 }
@@ -562,11 +554,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
                 }
                 let sortSubfoldersActions = createSortMenu(isSortingSubfolders: true)
                 
-                let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
                 let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: folderActions)
                 let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
                 let sortSubfoldersActionWithDivider = UIMenu(title: "", options: .displayInline, children: [sortSubfoldersActions])
-                menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
+                menuActions.append(contentsOf: [addFolderActionWithDivider, importActionWithDivider, sortSubfoldersActionWithDivider])
             }
         } else {
             let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomMapPinOutlined.resizedMenuImage()) { [weak self] _ in
@@ -605,9 +596,14 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         } else {
             color = .navBarTextColorPrimary
         }
-        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: .icNavbarOverflowMenuStroke, color: color, action: nil, target: self, menu: menu) {
-            navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
-            navigationItem.setRightBarButtonItems([navBarButton], animated: false)
+        if let selectBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_select"), icon: nil, color: color, action: #selector(onNavbarSelectButtonClicked), target: self, menu: nil) {
+            if #available(iOS 26.0, *) {
+                selectBarButton.style = .prominent
+                selectBarButton.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+            }
+            let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, selectBarButton], animated: false)
+            navigationItem.setRightBarButtonItems([actionsBarButton, selectBarButton], animated: false)
         }
     }
     
@@ -772,8 +768,12 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         let selectDeselectButton = UIBarButtonItem(title: title, style: .plain, target: self, action: action)
         let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.iconColorActive]
         selectDeselectButton.setTitleTextAttributes(attributes, for: .normal)
-        tabBarController?.toolbarItems = [selectDeselectButton]
-        toolbarItems = [selectDeselectButton]
+        let items = [selectDeselectButton]
+        if !isRootFolder {
+            toolbarItems = items
+        } else {
+            myPlacesDelegate?.updateToolbar?(with: items)
+        }
     }
     
     private func updateDistanceAndDirection(_ forceUpdate: Bool) {
@@ -815,14 +815,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        definesPresentationContext = true
         if #available(iOS 26.0, *) {
             if !OAUtilities.isIPad() {
-                tabBarController?.navigationItem.preferredSearchBarPlacement = .stacked
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
         }
-        tabBarController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         updateSearchController()
     }
@@ -879,23 +876,19 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         updateFilterButtonVisibility(filterIsActive: true)
         updateFilterButton()
         updateData()
-        tabBarController?.tabBar.isHidden = true
-        tabBarController?.navigationController?.setToolbarHidden(false, animated: true)
         navigationController?.setToolbarHidden(false, animated: true)
         configureToolbarForeSmartFolders()
         setupTableFooter()
     }
     
-    private func onNavbarSelectButtonClicked() {
+    @objc private func onNavbarSelectButtonClicked() {
         removeRefreshControl()
-        tableView.setEditing(true, animated: false)
+        setEdit(true)
         tableView.allowsMultipleSelectionDuringEditing = true
         updateData()
         setupNavbar()
         updateNavigationBarTitle()
         if !isSelectionModeInSearch {
-            tabBarController?.tabBar.isHidden = true
-            tabBarController?.navigationController?.setToolbarHidden(false, animated: true)
             navigationController?.setToolbarHidden(false, animated: true)
         }
 
@@ -939,6 +932,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
+    }
+    
+    private func setEdit(_ edit: Bool) {
+        tableView.setEditing(edit, animated: true)
+        myPlacesDelegate?.updateEditMode(edit)
     }
     
     @objc private func onNavbarImportButtonClicked() {
@@ -1113,17 +1111,15 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         selectedTracks.removeAll()
         selectedFolders.removeAll()
         addRefreshControl()
-        tableView.setEditing(false, animated: true)
+        setEdit(false)
         tableView.allowsMultipleSelectionDuringEditing = false
         isSelectionModeInSearch = false
         updateSortButtonAndMenu()
         updateData()
         setupNavbar()
         updateNavigationBarTitle()
-        setupSearchController()
-        tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
+        setupSearchControllerIfChildFolder()
         navigationController?.setToolbarHidden(true, animated: true)
-        tabBarController?.tabBar.isHidden = false
     }
     
     @objc private func onNavbarEditFilterCancelButtonClicked() {
@@ -1208,7 +1204,9 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     
     @objc private func onSelectToolbarButtonClicked() {
         isSelectionModeInSearch = true
-        searchController.isActive = false
+        if !isSearchActive {
+            searchController.isActive = false
+        }
         onNavbarSelectButtonClicked()
     }
     
@@ -1882,13 +1880,11 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         isEditFilterActive = false
         setupNavbar()
         updateNavigationBarTitle()
-        setupSearchController()
+        setupSearchControllerIfChildFolder()
         updateFilterButtonVisibility(filterIsActive: false)
         updateAllFoldersVCData(forceLoad: true)
         setupTableFooter()
-        tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
-        tabBarController?.tabBar.isHidden = false
     }
     
     private func handleDeletedGpxFile(gpxFile: KFile) {
@@ -2341,9 +2337,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             if let baseFilters = self.baseFilters {
                 self.baseFiltersResult?.values = baseFilters.getFilteredTrackItems()
                 self.isSearchTextFilterChanged = true
-                self.searchController.searchBar.text = (baseFilters.getFilterByType(.name) as? TextTrackFilter)?.value
-                self.isNameFiltered = !(self.searchController.searchBar.text?.isEmpty ?? true)
-                self.updateSearchController()
+                if let searchController = self.navigationItem.searchController {
+                    searchController.searchBar.text = (baseFilters.getFilterByType(.name) as? TextTrackFilter)?.value
+                    self.isNameFiltered = !(searchController.searchBar.text?.isEmpty ?? true)
+                }
                 self.generateData()
                 self.tableView.reloadData()
                 self.updateFilterButton()
@@ -2360,6 +2357,12 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
     // MARK: - UISearchResultsUpdating
     
     func updateSearchResults(for searchController: UISearchController) {
+        searchResults(for: searchController)
+    }
+    
+    // MARK: - MyPlacesSearchable
+    
+    func searchResults(for searchController: UISearchController) {
         if isSearchTextFilterChanged {
             isSearchTextFilterChanged = false
             return
@@ -2369,8 +2372,6 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             if !isFiltersInitialized && (searchController.searchBar.searchTextField.text?.isEmpty ?? true) {
                 isSearchActive = true
                 isNameFiltered = false
-                tabBarController?.tabBar.isHidden = true
-                tabBarController?.navigationController?.setToolbarHidden(false, animated: true)
                 navigationController?.setToolbarHidden(false, animated: true)
                 configureToolbar()
                 baseFilters = TracksSearchFilter(trackItems: rootFolder.getFlattenedTrackItems(), currentFolder: nil)
@@ -2390,14 +2391,16 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
             isFiltersInitialized = false
         }
         
-        updateSearchController()
+        if !isRootFolder {
+            updateSearchController()
+        } else {
+            myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
+        }
         updateFilterButtonVisibility(filterIsActive: isSearchActive)
         baseFiltersResult = baseFilters?.performFiltering()
         updateSortButtonAndMenu()
         updateData()
     }
-    
-    // MARK: - UISearchBarDelegate
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
@@ -2405,10 +2408,10 @@ final class TracksViewController: OACompoundViewController, UITableViewDelegate,
         baseFilters = nil
         baseFiltersResult = nil
         isFiltersInitialized = false
-        tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
-        tabBarController?.tabBar.isHidden = false
-        updateSearchController()
+        if !isRootFolder {
+            updateSearchController()
+        }
         updateFilterButtonVisibility(filterIsActive: isSearchActive)
         updateSortButtonAndMenu()
     }

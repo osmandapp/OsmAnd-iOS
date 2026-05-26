@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -10,32 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--My Places Tab Bar View Controller-->
-        <scene sceneID="hST-i3-dBw">
-            <objects>
-                <tabBarController id="pFL-rP-JjP" customClass="OAMyPlacesTabBarViewController" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ybk-iZ-4Ie">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" name="iconColorActive"/>
-                        <color key="selectedImageTintColor" name="iconColorActive"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="o7u-wO-gzA" kind="relationship" relationship="viewControllers" id="OcE-ny-Hd2"/>
-                        <segue destination="77n-Dz-gqh" kind="relationship" relationship="viewControllers" id="Qis-bF-hq5"/>
-                        <segue destination="Pg1-zp-xNx" kind="relationship" relationship="viewControllers" id="XZx-7g-Nyl"/>
-                        <segue destination="5lf-ib-SY3" kind="relationship" relationship="viewControllers" id="WSt-yO-vwE"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YDZ-w2-u08" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-642.38999999999999" y="-126.93333333333334"/>
-        </scene>
-        <!--Travel guides-->
+        <!--Saved Articles Tab View Controller-->
         <scene sceneID="H4P-Zr-3tv">
             <objects>
-                <viewController id="5lf-ib-SY3" customClass="SavedArticlesTabViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="SavedArticlesTabViewController" storyboardIdentifier="SavedArticlesTabViewController" id="5lf-ib-SY3" customClass="SavedArticlesTabViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4sR-lk-4Xy">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -60,7 +38,6 @@
                             <constraint firstAttribute="trailing" secondItem="lsw-2B-bAC" secondAttribute="trailing" id="tSu-F8-ojl"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_travel" id="3ay-iq-gNx"/>
                     <connections>
                         <outlet property="tableView" destination="lsw-2B-bAC" id="rnT-bC-wy8"/>
                     </connections>
@@ -69,10 +46,10 @@
             </objects>
             <point key="canvasLocation" x="971" y="730"/>
         </scene>
-        <!--OSM Edits-->
+        <!--Osm Edits List View Controller-->
         <scene sceneID="TNK-ML-Wew">
             <objects>
-                <viewController id="Pg1-zp-xNx" customClass="OAOsmEditsListViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="OAOsmEditsListViewController" storyboardIdentifier="OAOsmEditsListViewController" id="Pg1-zp-xNx" customClass="OAOsmEditsListViewController" sceneMemberID="viewController">
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="HiK-Id-V8n">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -117,7 +94,6 @@
                             <constraint firstAttribute="bottom" secondItem="zzn-bN-eNS" secondAttribute="bottom" id="wuc-uF-Aa9"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="OSM Edits" image="ic_tabbar_osm_edits" id="7TW-Hc-6pc"/>
                     <connections>
                         <outlet property="segmentContainerView" destination="7Bf-uz-mXb" id="QHd-js-DIo"/>
                         <outlet property="segmentControl" destination="erl-gB-7ba" id="FO5-Kz-Eaw"/>
@@ -128,10 +104,10 @@
             </objects>
             <point key="canvasLocation" x="-70" y="730"/>
         </scene>
-        <!--My Favorites-->
+        <!--Favorite List View Controller-->
         <scene sceneID="Icp-hR-oHC">
             <objects>
-                <viewController id="o7u-wO-gzA" customClass="OAFavoriteListViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="OAFavoriteListViewController" storyboardIdentifier="OAFavoriteListViewController" id="o7u-wO-gzA" customClass="OAFavoriteListViewController" sceneMemberID="viewController">
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="OPG-OS-sNg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -196,7 +172,6 @@
                             <constraint firstItem="eQR-uw-c2g" firstAttribute="leading" secondItem="OPG-OS-sNg" secondAttribute="leading" id="spP-sO-uqg"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="My Favorites" image="ic_tabbar_favorites" id="Hya-az-9dq"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="colorButton" destination="1NW-Oo-sgx" id="z31-Ul-0If"/>
@@ -239,7 +214,6 @@
                             <constraint firstAttribute="trailing" secondItem="npH-mS-lH3" secondAttribute="trailing" id="xBy-Nf-hUz"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_trips" id="3Z5-lB-D9o"/>
                     <connections>
                         <outlet property="tableView" destination="npH-mS-lH3" id="0dn-Dh-NsZ"/>
                     </connections>
@@ -254,10 +228,6 @@
         <image name="ic_delete_items" width="25" height="25"/>
         <image name="ic_export_items" width="25" height="25"/>
         <image name="ic_move_items" width="25" height="25"/>
-        <image name="ic_tabbar_favorites" width="31" height="28"/>
-        <image name="ic_tabbar_osm_edits" width="31" height="28"/>
-        <image name="ic_tabbar_travel" width="31" height="28"/>
-        <image name="ic_tabbar_trips" width="31" height="28"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -52,6 +52,10 @@ extension UIImage {
         let navBarImageSize: CGFloat = UIFontMetrics.default.scaledValue(for: OAUtilities.isiOSAppOnMac() ? 20 : 24)
         return OAUtilities.resize(self, newSize: CGSize(width: navBarImageSize, height: navBarImageSize))?.withRenderingMode(.alwaysTemplate)
     }
+    
+    @objc func resizedTemplateImage(with size: CGFloat) -> UIImage? {
+        OAUtilities.resize(self, newSize: CGSize(width: size, height: size))?.withRenderingMode(.alwaysTemplate)
+    }
 }
 
 extension NSMutableAttributedString {

@@ -316,26 +316,9 @@
     
     if ([item.key isEqualToString:@"open_edits"])
     {
-        UITabBarController *myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-
-        if (myPlacesViewController.viewControllers.count > kOSMEditsTabIndex)
-        {
-            UIViewController *targetVC = myPlacesViewController.viewControllers[kOSMEditsTabIndex];
-
-            if ([targetVC isKindOfClass:[OAOsmEditsListViewController class]])
-            {
-                [myPlacesViewController setSelectedIndex:kOSMEditsTabIndex];
-                
-                OAOsmEditsListViewController *osmEdits = (OAOsmEditsListViewController *)targetVC;
-                [osmEdits setShouldPopToParent:YES];
-                
-                [self.navigationController pushViewController:myPlacesViewController animated:YES];
-            }
-            else
-            {
-                NSLog(@"Error: View controller at index %ld in MyPlaces.storyboard is nil or has the wrong class.", (long)kOSMEditsTabIndex);
-            }
-        }
+        MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
+        [myPlacesViewController setSelectedTab:TabOsm];
+        [self.navigationController pushViewController:myPlacesViewController animated:YES];
     }
     else if ([item.key isEqualToString:@"edit_credentials"])
     {

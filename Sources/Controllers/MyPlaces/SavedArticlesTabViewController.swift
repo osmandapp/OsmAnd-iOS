@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
+final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, MyPlacesSearchable, UISearchBarDelegate {
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -16,18 +16,16 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
     var savedArticlesObserver: OAAutoObserverProxy?
     var isGpxReading = false
-    var searchController = UISearchController()
     var isSearchActive = false
     var isFiltered = false
     var searchText = ""
     var lastSelectedIndexPath: IndexPath?
+    weak var myPlacesDelegate: MyPlacesDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
-        tabBarController?.navigationItem.title = localizedString("shared_string_travel_guides")
-        setupSearchController()
+        definesPresentationContext = true
     }
     
     override func viewDidLoad() {
@@ -36,15 +34,8 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         startAsyncInit()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        setupSearchController()
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        tabBarController?.navigationItem.searchController = nil
-        navigationItem.searchController = nil
         definesPresentationContext = false
     }
     
@@ -97,39 +88,6 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
                 articleRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
             }
-        }
-    }
-    
-    func setupSearchController() {
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        if #available(iOS 26.0, *) {
-            if !OAUtilities.isIPad() {
-                tabBarController?.navigationItem.preferredSearchBarPlacement = .stacked
-                navigationItem.preferredSearchBarPlacement = .stacked
-            }
-        }
-        tabBarController?.navigationItem.searchController = searchController
-        navigationItem.searchController = searchController
-        updateSearchController()
-    }
-    
-    func updateSearchController() {
-        if isFiltered {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBg
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorTertiary
-        } else if isSearchActive {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-        } else {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
         }
     }
     
@@ -260,9 +218,9 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         }
     }
     
-    // MARK: UISearchResultsUpdating
+    // MARK: MyPlacesSearchable
     
-    func updateSearchResults(for searchController: UISearchController) {
+    func searchResults(for searchController: UISearchController) {
         if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
             isSearchActive = true
             isFiltered = false
@@ -274,17 +232,14 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             isSearchActive = false
             isFiltered = false
         }
-        updateSearchController()
+        myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         generateData()
         tableView.reloadData()
     }
     
-    // MARK: UISearchBarDelegate
-    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
         isFiltered = false
-        updateSearchController()
     }
     
     // MARK: TravelExploreViewControllerDelegate

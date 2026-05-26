@@ -1,5 +1,5 @@
 //
-//  CollapsibleTextWithButtonCell.swift
+//  WikipediaContextMenuCell.swift
 //  OsmAnd Maps
 //
 //  Created by Vitaliy Sova on 22.05.2026.
@@ -9,7 +9,17 @@
 import UIKit
 
 @objcMembers
-final class CollapsibleTextWithButtonCell: UITableViewCell {
+final class WikipediaContextMenuCell: UITableViewCell {
+    
+    // MARK: - Properties
+
+    private var text: String = ""
+    
+    var isExpanded = false
+    var maxCollapsedTextLength = 200
+    
+    private var onButtonAction: (() -> Void)?
+    var onExpandStateChange: ((Bool, WikipediaContextMenuCell) -> Void)?
 
     // MARK: - UI
     
@@ -35,48 +45,23 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
         
-        if #available(iOS 15.0, *) {
-            var config = UIButton.Configuration.plain()
-            config.baseForegroundColor = .buttonTextColorSecondary
-            config.background.strokeColor = UIColor.buttonOutlineColorSecondary
-            config.background.strokeWidth = 1
-            config.cornerStyle = .fixed
-            config.background.cornerRadius = 8
-            
-            config.imagePadding = Constants.buttonInset
-            config.contentInsets = NSDirectionalEdgeInsets(top: Constants.buttonInset / 2,
-                                                           leading: Constants.buttonInset,
-                                                           bottom: Constants.buttonInset / 2,
-                                                           trailing: Constants.buttonInset)
-            button.configuration = config
-        } else {
-            
-            button.setTitleColor(.buttonTextColorSecondary, for: .normal)
-            
-            button.cornerRadius = 8
-            button.borderWidth = 1
-            button.borderColor = UIColor.buttonOutlineColorSecondary
-            
-            button.contentHorizontalAlignment = .left
-            button.contentEdgeInsets = .init(top: 0, left: Constants.buttonInset * 1.5,
-                                             bottom: 0, right: Constants.buttonInset * 1.5)
-            
-            button.imageEdgeInsets = .init(top: 0, left: -Constants.buttonInset / 2, bottom: 0, right: Constants.buttonInset / 2)
-            button.titleEdgeInsets = .init(top: 0, left: Constants.buttonInset / 2, bottom: 0, right: -Constants.buttonInset / 2)
-        }
+        var config = UIButton.Configuration.plain()
+        config.baseForegroundColor = .buttonTextColorSecondary
+        config.background.strokeColor = UIColor.buttonOutlineColorSecondary
+        config.background.strokeWidth = 1
+        config.cornerStyle = .fixed
+        config.background.cornerRadius = 8
+        
+        config.imagePadding = Constants.buttonInset
+        config.contentInsets = NSDirectionalEdgeInsets(top: Constants.buttonInset / 2,
+                                                       leading: Constants.buttonInset,
+                                                       bottom: Constants.buttonInset / 2,
+                                                       trailing: Constants.buttonInset)
+        button.configuration = config
+
         
         return button
     }()
-
-    // MARK: - State
-
-    private var text: String = ""
-    
-    var isExpanded = false
-    var maxCollapsedTextLength = 200
-    
-    private var onButtonAction: (() -> Void)?
-    var onExpandStateChange: ((Bool, CollapsibleTextWithButtonCell) -> Void)?
 
     // MARK: - Init
 
@@ -122,7 +107,6 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
 
     private func setupActions() {
         actionButton.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
-        
         titleLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapText)))
     }
     
@@ -144,14 +128,12 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
                    buttonText: String,
                    icon: UIImage?,
                    onButtonAction: @escaping () -> Void) {
-        
         self.onButtonAction = onButtonAction
         
         self.text = text
-        
         titleLabel.attributedText = makeAttributedText(from: text)
-        
         actionButton.setTitle(buttonText, for: .normal)
+        
         if let icon {
             let resizedIcon = OAUtilities.resize(icon, newSize: .init(width: Constants.iconSize, height: Constants.iconSize))
             actionButton.setImage(resizedIcon, for: .normal)
@@ -159,7 +141,6 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
     }
     
     private func makeAttributedText(from text: String) -> NSAttributedString {
-
         if isExpanded || text.count <= maxCollapsedTextLength {
             return NSAttributedString(
                 string: text,
@@ -193,8 +174,8 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
         return result
     }
     
-    ///Used in legacy UITableView setups with manual row height calculation.
-    ///Returns the cell height based on Auto Layout fitting for a given width.
+    /// Used in legacy UITableView setups with manual row height calculation.
+    /// Returns the height of the cell calculated using Auto Layout for the given width.
     func calculateHeight(in width: CGFloat) -> CGFloat {
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
 
@@ -206,7 +187,7 @@ final class CollapsibleTextWithButtonCell: UITableViewCell {
     }
 }
 
-extension CollapsibleTextWithButtonCell {
+extension WikipediaContextMenuCell {
     private struct Constants {
         
         static let buttonInset: CGFloat = 16

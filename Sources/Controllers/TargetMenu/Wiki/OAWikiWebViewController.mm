@@ -167,6 +167,11 @@
                 _contentLocale = _poi.localizedContent.allKeys.firstObject;
                 _content = _poi.localizedContent[_contentLocale];
             }
+            
+            if (!_content)
+            {
+                _content = _poi.values[DESCRIPTION_TAG];
+            }
         }
     }
 

@@ -365,6 +365,24 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             description = pair.first;
     }
     
+    if (NSStringIsEmpty(description) && allowOnlineWiki)
+    {
+        // Fallback logic: used only when API does not provide a short description.
+        // If backend starts returning shortDescription, this path may no longer be executed.
+        NullablePair *pairDescription = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:DESCRIPTION_TAG map:filteredInfo];
+        if (pairDescription)
+        {
+            if (pairDescription.second && [pairDescription.second isKindOfClass:NSString.class])
+                locale = pairDescription.second;
+            
+            if (pairDescription.first && [pairDescription.first isKindOfClass:NSString.class])
+            {
+                description = pairDescription.first;
+                [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+            }
+        }
+    }
+    
     BOOL hasShortDescription = !NSStringIsEmpty(description);
     if (hasShortDescription)
     {
@@ -377,7 +395,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     
     if (!NSStringIsEmpty(description))
     {
-        NSString *labelText = [self getTrimmedDescription:description collapsed:NO];
         UIImage *icon = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
         
         NSString *buttonText;
@@ -398,7 +415,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             }
         }
         
-        OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:icon textPrefix:buttonText text:labelText hiddenUrl:wikipediaUrl collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderWikiShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
+        OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:icon textPrefix:buttonText text:description hiddenUrl:wikipediaUrl collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderWikiShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
         info.typeName = kShortDescriptionWikiRowType;
         
         [rows addObject:info];

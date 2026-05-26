@@ -632,7 +632,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             OAStreet *st1 = (OAStreet *) r1.object;
             OAStreet *st2 = (OAStreet *) r2.object;
             
-            return fabs(st1.latitude - st2.latitude) < 0.00001 && fabs(st1.longitude - st2.longitude) < 0.00001;
+            return [OAMapUtils areLocationEqual:st1.location l2:st2.location];
         }
         std::shared_ptr<const OsmAnd::Amenity> a1;
         if (r1.objectType == EOAObjectTypePoi)

@@ -290,7 +290,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 {
                     NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
                     cnt++;
-                    if (cnt >= limit)
+                    if (cnt > limit)
                         break;
                 }
                 NSLog(@"EXPECTED: ");

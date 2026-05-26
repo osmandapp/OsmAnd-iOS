@@ -794,6 +794,7 @@
                                           sr.objectType = EOAObjectTypeStreet;
                                           sr.localeRelatedObjectName = street->streetGroup->getName(lang, transliterate).toNSString();
                                           sr.relatedObject = [[OACity alloc] initWithCity:street->streetGroup];
+                                          sr.location = [(OAStreet *)sr.object getLocation];
                                       }
                                       else if (address->addressType == OsmAnd::AddressType::StreetGroup && ![OASearchCoreFactory isLastWordCityGroup:phrase])
                                       {
@@ -2285,7 +2286,7 @@
                 res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
                 res.priorityDistance = 0;
                 res.objectType = EOAObjectTypeStreetIntersection;
-                res.location = [OASearchCoreFactory getLocation:street->position31];
+                res.location = [(OAStreet *)res.object getLocation];
                 res.preferredZoom = PREFERRED_STREET_INTERSECTION_ZOOM;
                 [phrase countUnknownWordsMatchMainResult:res];
                 [resultMatcher publish:res];
@@ -2386,7 +2387,7 @@
             res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
             res.preferredZoom = PREFERRED_STREET_ZOOM;
             res.resourceId = sw.result.resourceId;
-            res.location = [OASearchCoreFactory getLocation:object->position31];
+            res.location = [(OAStreet *)res.object getLocation];
             res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
             //res.priorityDistance = 1;
             res.objectType = EOAObjectTypeStreet;

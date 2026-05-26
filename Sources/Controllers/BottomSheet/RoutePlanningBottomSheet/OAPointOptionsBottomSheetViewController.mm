@@ -333,20 +333,22 @@
         {
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
+            
+            UIImage *icon = [OAUtilities loadAssetOrMxIcon:item[@"img"]];
 
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
                 cell.textColorNormal = tintColor;
-                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.iconView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             }
             else
             {
                 BOOL isActiveCell =  [self isActiveCell:indexPath];
                 cell.iconColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
                 cell.textColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
-                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.iconView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }
         }

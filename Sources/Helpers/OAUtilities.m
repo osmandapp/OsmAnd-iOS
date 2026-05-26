@@ -2029,6 +2029,16 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return [UIImage mapSvgImageNamed:fullIconName];
 }
 
++ (UIImage *) loadAssetOrMxIcon:(NSString *)name
+{
+    UIImage *icon = [UIImage imageNamed:name];
+    if (!icon) {
+        icon = [OAUtilities getMxIcon:[name lowercaseString]];
+    }
+    
+    return icon;
+}
+
 + (UIImage *) getTintableImage:(UIImage *)image
 {
     if (image)

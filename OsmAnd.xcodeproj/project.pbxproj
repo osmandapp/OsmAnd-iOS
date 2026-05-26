@@ -1616,6 +1616,8 @@
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
 		CE2AAB2B2FBF281000A5D22E /* CancelableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */; };
+		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
+		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
@@ -5542,6 +5544,8 @@
 		CA4EDFFD2EBD6CFA86AF69F1 /* OADeleteOldFilesCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADeleteOldFilesCommand.h; sourceTree = "<group>"; };
 		CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableScrollView.swift; sourceTree = "<group>"; };
+		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
+		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
@@ -10063,7 +10067,9 @@
 				32AC14822D6DF0AB009BE64E /* ChipsCollectionHandler.swift */,
 				322B53912C78DBF8006B48B0 /* IconCollectionHandler.swift */,
 				4656BD2D2C482D0500B69928 /* PaletteCollectionHandler.swift */,
+				CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */,
 				32F3A6A92D5E1958008AE4CA /* PoiIconCollectionHandler.swift */,
+				CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */,
 				27EAAFB52EFAA30C00076E3E /* ButtonAppearanceIconCollectionHandler.swift */,
 				2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */,
 				2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */,
@@ -17873,6 +17879,7 @@
 				DA5A843126C563A800F274C7 /* OARouteTargetSelectionViewController.m in Sources */,
 				4617129E2B973C34000446F9 /* GlideUtils.swift in Sources */,
 				32D253B027F336C200324717 /* OACloudAccountCreateViewController.m in Sources */,
+				CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */,
 				FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */,
 				DA842ECF2A0BA2420030866E /* MapWidgetsFactory.swift in Sources */,
 				327B4AB0288F310700AF71AF /* OAFavoriteViewController.mm in Sources */,
@@ -18259,6 +18266,7 @@
 				467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */,
 				DA5A823126C563A700F274C7 /* OAImportSettingsViewController.mm in Sources */,
 				FAA650522ADD42C50020DCEA /* BLEBatterySensor.swift in Sources */,
+				CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */,
 				C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */,
 				DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */,
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,

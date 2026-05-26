@@ -426,7 +426,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         if (cell)
         {
             [cell.titleLabel setText:item[@"title"]];
-            [cell.leftIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+            
+            UIImage *icon = [OAUtilities loadAssetOrMxIcon:item[@"img"]];
+
+            [cell.leftIconView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
         return cell;
     }

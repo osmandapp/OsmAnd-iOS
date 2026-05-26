@@ -387,7 +387,11 @@ static int PROFILE_TRUCK = 1000;
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:self.getIconName];
+    UIImage *icon = [UIImage imageNamed:self.getIconName];
+    if (!icon) {
+        icon = [OAUtilities getMxIcon:[self.getIconName lowercaseString]];
+    }
+    return icon;
 }
 
 - (NSString *) getIconName

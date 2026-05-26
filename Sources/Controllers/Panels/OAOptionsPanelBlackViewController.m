@@ -168,11 +168,7 @@
         self.menuButtonExternalSensors.hidden = YES;
     }
     
-    NSArray<UIButton *> *bottomButtons = @[ self.menuButtonConfigureScreen,
-                                            self.menuButtonPlugins,
-                                            self.menuButtonSettings,
-                                            self.menuButtonHelp
-                                            ];
+    NSArray<UIButton *> *bottomButtons = [self bottomButtons];
     
     CALayer *bottomDiv = isExternalSensorsPluginEnabled ? _menuButtonExternalSensorsDiv : _menuButtonWeatherDiv;
     
@@ -230,6 +226,16 @@
     }
 }
 
+- (NSArray *)bottomButtons
+{
+    return @[
+        self.menuButtonConfigureScreen,
+        self.menuButtonPlugins,
+        self.menuButtonSettings,
+        self.menuButtonHelp
+    ];
+}
+
 - (void)applyingAppTheme
 {
     UIColor *divColor = [UIColor colorNamed:ACColorNameCustomSeparator];
@@ -244,34 +250,32 @@
 
 - (void)adjustButtonInsets:(UIButton *)btn
 {
-    UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-    UIEdgeInsets titleInsets = btn.titleEdgeInsets;
+    UIButtonConfiguration *config = btn.configuration;
+    NSDirectionalEdgeInsets cInsets = config.contentInsets;
     
     if ([btn isDirectionRTL])
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        contentInsets.left = [OAUtilities getLeftMargin];
-        contentInsets.right = 10;
-        titleInsets.left = 0;
-        titleInsets.right = 19;
+        cInsets.leading = 10;
+        cInsets.trailing = [OAUtilities getLeftMargin];
     }
     else
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        contentInsets.left = [OAUtilities getLeftMargin] + 10;
-        contentInsets.right = 0;
-        titleInsets.left = 19;
-        titleInsets.right = 0;
+        cInsets.leading = [OAUtilities getLeftMargin] + 10;
+        cInsets.trailing = 0;
     }
     
-    btn.contentEdgeInsets = contentInsets;
-    btn.titleEdgeInsets = titleInsets;
+    config.contentInsets = cInsets;
+    btn.configuration = config;
 }
 
 - (void)adjustContentBy:(CGFloat)bottomMargin btn:(UIButton *)btn {
-    UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-    contentInsets.bottom = bottomMargin;
-    btn.contentEdgeInsets = contentInsets;
+    UIButtonConfiguration *config = btn.configuration;
+    NSDirectionalEdgeInsets insets = config.contentInsets;
+    insets.bottom = bottomMargin + insets.top;
+    config.contentInsets = insets;
+    btn.configuration = config;
 }
 
 - (void) viewDidLoad
@@ -368,6 +372,37 @@
     [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:@"ic_custom_sensor"] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
+    
+    [self applyTableCellHighlightStyleToButtons];
+}
+
+- (void)applyTableCellHighlightStyleToButtons
+{
+    NSArray *buttons = [self bottomButtons];
+    
+    for (UIButton *button in _menuButtonsArray) {
+        BOOL isBottom = [buttons containsObject:button];
+        UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
+        config.imagePadding = 19;
+        config.titleLineBreakMode = NSLineBreakByTruncatingMiddle;
+        
+        
+        button.configuration = config;
+        button.configurationUpdateHandler = ^(UIButton *button) {
+            UIButtonConfiguration *updatedConfig = button.configuration;
+            UIBackgroundConfiguration *backgroundConfig = [UIBackgroundConfiguration listPlainCellConfiguration];
+            
+            if (button.isHighlighted) {
+                backgroundConfig.backgroundColor = [UIColor systemGray4Color];
+                button.tintColor = [[UIColor colorNamed:ACColorNameTextColorPrimary] colorWithAlphaComponent:0.7];
+            } else {
+                backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : [UIColor colorNamed:ACColorNameGroupBg];
+                button.tintColor =  [UIColor colorNamed:ACColorNameIconColorDefault];
+            }
+            updatedConfig.background = backgroundConfig;
+            button.configuration = updatedConfig;
+        };
+    }
 }
 
 - (void) didReceiveMemoryWarning

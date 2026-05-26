@@ -23,6 +23,10 @@
 #include <OsmAndCore/Map/HillshadeRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/HeightRasterMapLayerProvider.h>
 
+@interface OATerrainMapLayer () <OASPaletteRepositoryListener>
+
+@end
+
 @implementation OATerrainMapLayer
 {
     std::shared_ptr<OsmAnd::IMapLayerProvider> _layerProvider;
@@ -57,14 +61,12 @@
                                                  name:kNotificationSetProfileSetting
                                                object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onColorPalettesFilesUpdated:)
-                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
-                                               object:nil];
+    [self.app.paletteRepository addListenerListener:self];
 }
 
 - (void) deinitLayer
 {
+    [self.app.paletteRepository removeListenerListener:self];
     if (_verticalExaggerationScaleChangeObservable)
     {
         [_verticalExaggerationScaleChangeObservable detach];
@@ -166,31 +168,28 @@
     });
 }
 
-- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+- (void)onPaletteChangedEvent:(OASPaletteChangeEvent *)event
 {
-    if (![notification.object isKindOfClass:NSDictionary.class])
-        return;
-
-    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-    if (!colorPaletteFiles)
-        return;
-
     NSString *currentPaletteFile = [_terrainMode mainFile];
-    if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
+    if (currentPaletteFile.length == 0)
+        return;
+    
+    if (![[GradientPaletteHelper shared] isPaletteChangeEvent:event fileName:currentPaletteFile])
+        return;
+    
+    if ([event isKindOfClass:OASPaletteChangeEventRemoved.class])
     {
-        if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+        TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
+        if (defaultTerrainMode)
         {
-            TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
-            if (defaultTerrainMode)
-            {
-                _terrainMode = defaultTerrainMode;
-                [_plugin setTerrainMode:defaultTerrainMode];
-            }
+            _terrainMode = defaultTerrainMode;
+            [_plugin setTerrainMode:defaultTerrainMode];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateTerrainLayer];
-        });
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateTerrainLayer];
+    });
 }
 
 - (void)onVerticalExaggerationScaleChanged

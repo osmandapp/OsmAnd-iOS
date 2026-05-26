@@ -2110,7 +2110,7 @@
 "routing_attr_avoid_tunnels_name" = "Alagutak elkerülése";
 "logout_from_osmand_cloud_decsr" = "Kijelentkezik\? \nAz adatok biztonsági mentéséhez vagy visszaállításához újra be kell jelentkeznie.";
 "use_displayed_track_for_navigation" = "Szeretnéd a megjelenített útvonalat navigálásra használni?";
-"verification_code_missing" = "Nem kaptam hitelesítő kódot";
+"verification_code_missing" = "Nem kaptam meg az ellenőrző kódot";
 "map_widget_parking" = "Parkolás";
 "osm_live_payment_discount_descr" = "Takarítson meg ennyit: %@";
 "rendering_attr_depthContourWidth_name" = "Vonal vastagsága";
@@ -2286,7 +2286,7 @@
 "plugin_ski_descr" = "Télisportok helyszínein való navigációra tervezve: sífelvonók, sípályák és sífutópályák a nehézségi szintet jelző színes vonalakkal. Használatához engedélyezze ezt a bővítményt, valamint a „Térkép beállítása” menüpontban a „Tél és síelés” térképstílust.";
 "quick_action_navigation_voice_on" = "Hang némítása";
 "osm_editing_plugin_name" = "OpenStreetMap-szerkesztés";
-"auth_failed" = "Azonosítás nem sikerült";
+"auth_failed" = "Nem sikerült a hitelesítés";
 "add_point_after" = "Pont hozzáadása utána";
 "move_marker_bottom_sheet_title" = "A jelölő helyének módosításához mozgassa a térképet";
 "route_add_start_point" = "Kiindulási pont hozzáadása";
@@ -2438,7 +2438,7 @@
 "restart_is_required" = "A módosítás alkalmazásához újra kell indítani az alkalmazást.";
 "external_device_details_battery" = "Akkumulátor";
 "gitHub_discussion" = "GitHub vitafórum";
-"verify_account" = "Fiókjának hitelesítése";
+"verify_account" = "Fiók ellenőrzése";
 "upload_poi" = "Érdekes hely feltöltése";
 "no_widgets_descr" = "Adjon hozzá egy vagy több modult a rendelkezésre állók közül.";
 "map_widget_ant_bicycle_dist_desc" = "Megjeleníti a megtett távolságot";
@@ -2658,7 +2658,7 @@
 "map_widget_current_speed" = "Pillanatnyi sebesség";
 "announcement_time_descr" = "A különféle hangutasítások bemondásának időzítése függ az utasítás típusától, a jelenlegi navigációs sebességtől és az alapértelmezett navigációs sebességtől.";
 "map_widget_altitude_current_location" = "Magasság: jelenlegi hely";
-"verify_account_deletion_descr" = "A törlés előtt hitelesíteni kell a fiókját.\n\nAdja meg az e-mail-címet, amellyel regisztrált. A következő lépéshez egyszeri jelszót küld a rendszer.";
+"verify_account_deletion_descr" = "A törlés előtt ellenőrizni kell a fiókját.\n\nAdja meg az e-mail-címet, amellyel regisztrált. A következő lépéshez egyszeri jelszót küld a rendszer.";
 "disable_vertex_hillshade_3d" = "Vertex domborzatárnyékolás letiltása 3D-ben";
 "angular_measeurement" = "Szögmérés mértékegysége";
 "free_favorites_backup" = "Kedvencek biztonsági mentése ingyenesen";
@@ -4021,3 +4021,8 @@
 "show_expand_button" = "Kibontásgomb megjelenítése";
 "obd_alt_battery_voltage_desc" = "Megjeleníti a feszültségszintet az OBD-adapteren";
 "download_roads_only_maps" = "Csak-út térkép";
+"private_access_routing_req_short" = "Az úti cél magánterületen található. Engedélyezi a magánutak használatát?";
+"view_on_phone" = "Megtekintés a telefonon";
+"missing_maps_header" = "Hiányzó vagy elavult térképek";
+"missing_maps_description" = "Az útvonalhoz szükséges néhány offline térkép hiányzik vagy elavult. Töltse le vagy frissítse ezeket a térképeket.";
+"shared_string_allow" = "Engedélyezés";

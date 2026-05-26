@@ -97,6 +97,7 @@ static const CGFloat kTextMaxHeight = 150.0;
 static const NSInteger kTitleLimit = 60;
 
 static const NSInteger kOrderShortDescrRow = -10000;
+static const NSInteger kOrderDetailsRow = -104;
 static const NSInteger kOrderPhotoRow = -103;
 static const NSInteger kOrderMapillaryRow = -102;
 static const NSInteger kOrderWithinRow = -101;
@@ -104,7 +105,6 @@ static const NSInteger kOrderTravelGuides = -100;
 static const NSInteger kOrderTopInternalRow = 0;
 static const NSInteger kOrderDescriptionRow = 0;
 static const NSInteger kOrderInternalRow = 0;
-static const NSInteger kOrderDetailsRow = 0;
 static const NSInteger kOrderTitleRow = 0;
 static const NSInteger kOrderDateRow = 3;
 static const NSInteger kOrderCoommentRow = 4;

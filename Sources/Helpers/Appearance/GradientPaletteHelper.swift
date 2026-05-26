@@ -110,11 +110,18 @@ final class GradientPaletteHelper: NSObject {
     func renamePaletteItem(_ item: PaletteItemGradient, newName: String) -> PaletteItemGradient? {
         let category = item.properties.fileType.category
         let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard category.editable, item.isEditable, !trimmedName.isEmpty else { return nil }
+        guard category.editable, item.isEditable, !trimmedName.isEmpty, let palette = gradientPalette(id: item.source.paletteId) else { return nil }
         let newItem = PaletteUtils.shared.renameGradientPalette(item: item, newName: trimmedName)
+        guard !containsPaletteItem(withId: newItem.id, in: palette) else { return nil }
         repository.replacePaletteItem(paletteId: item.source.paletteId, oldItemId: item.id, newItem: newItem)
+        updateRenamedPaletteDependencies(from: item, to: newItem)
         updateExternalDependenciesIfNeeded(category: category)
         return newItem
+    }
+
+    func suggestedPaletteName(for draft: GradientDraft) -> String? {
+        guard let palette = gradientPalette(id: draft.fileType.category.id) else { return nil }
+        return PaletteUtils.shared.createGradientColor(palette: palette, fileType: draft.fileType, points: draft.points, noDataColor: draft.noDataColor.map { KotlinInt(integerLiteral: Int($0)) }).displayName
     }
 
     func showAddPaletteEditor(from viewController: UIViewController, paletteCategory: GradientPaletteCategory?, sourceView: UIView?) {
@@ -128,13 +135,11 @@ final class GradientPaletteHelper: NSObject {
         let rangeTypes = paletteCategory.getSupportedRangeTypes()
         if paletteCategory.isSupportDifferentRangeTypes(), rangeTypes.count > 1 {
             let message = rangeTypes.map {
-                let rangeState = GradientEditorRangeState(rangeType: $0)
-                return String(format: localizedString("ltr_or_rtl_combine_via_colon"), rangeState.title, rangeState.summary)
+                String(format: localizedString("ltr_or_rtl_combine_via_colon"), $0.getTitle(), $0.getSummary())
             }.joined(separator: "\n")
             let alert = UIAlertController(title: localizedString("add_palette"), message: message, preferredStyle: .actionSheet)
             for rangeType in rangeTypes {
-                let rangeState = GradientEditorRangeState(rangeType: rangeType)
-                alert.addAction(UIAlertAction(title: rangeState.title, style: .default) { [weak viewController] _ in
+                alert.addAction(UIAlertAction(title: rangeType.getTitle(), style: .default) { [weak viewController] _ in
                     guard let viewController, let fileType = paletteCategory.getFileType(rangeType: rangeType) else { return }
                     self.openGradientEditor(from: viewController, fileType: fileType)
                 })
@@ -166,6 +171,47 @@ final class GradientPaletteHelper: NSObject {
         TerrainMode.reloadTerrainModes()
     }
     
+    private func applyGradientEdits(_ draft: GradientDraft, newName: String?) -> PaletteItemGradient? {
+        guard let palette = gradientPalette(id: draft.fileType.category.id) else { return nil }
+        let noDataColor = draft.noDataColor.map { KotlinInt(integerLiteral: Int($0)) }
+        let resultItem: PaletteItemGradient
+        if let originalId = draft.originalId, let item = paletteItem(category: draft.fileType.category, name: originalId) {
+            resultItem = item.doCopy(id: item.id, displayName: item.displayName, source: item.source, isDefault: item.isDefault, isEditable: item.isEditable, historyIndex: item.historyIndex, lastUsedTime: item.lastUsedTime, points: draft.points, noDataColor: noDataColor, properties: item.properties)
+            repository.updatePaletteItem(item: resultItem)
+        } else {
+            let newItem = PaletteUtils.shared.createGradientColor(palette: palette, fileType: draft.fileType, points: draft.points, noDataColor: noDataColor)
+            resultItem = newName.map { PaletteUtils.shared.renameGradientPalette(item: newItem, newName: $0) } ?? newItem
+            guard !containsPaletteItem(withId: resultItem.id, in: palette) else { return nil }
+            repository.addPaletteItem(paletteId: palette.id, newItem: resultItem)
+        }
+
+        updateExternalDependenciesIfNeeded(category: draft.fileType.category)
+        return resultItem
+    }
+
+    private func updateRenamedPaletteDependencies(from oldItem: PaletteItemGradient, to newItem: PaletteItemGradient) {
+        let categoryId = oldItem.properties.fileType.category.id
+        for dataItem in GpxDbHelper.shared.getItems() {
+            guard dataItem.coloringType == categoryId, dataItem.gradientPaletteName == oldItem.id else { continue }
+            dataItem.gradientPaletteName = newItem.id
+            GpxDbHelper.shared.updateDataItem(item: dataItem)
+        }
+
+        let settings = OAAppSettings.sharedManager()
+        if settings.currentTrackColoringType.get().name == categoryId, settings.currentTrackGradientPalette.get() == oldItem.id {
+            settings.currentTrackGradientPalette.set(newItem.id)
+        }
+
+        for mode in OAApplicationMode.allPossibleValues() {
+            guard settings.routeColoringType.get(mode).name == categoryId, settings.routeGradientPalette.get(mode) == oldItem.id else { continue }
+            settings.routeGradientPalette.set(newItem.id, mode: mode)
+        }
+    }
+
+    private func containsPaletteItem(withId id: String, in palette: Palette.GradientCollection) -> Bool {
+        palette.items.contains { $0.id.lowercased() == id.lowercased() }
+    }
+
     private func gradientPalette(id: String) -> Palette.GradientCollection? {
         repository.getPalette(id: id) as? Palette.GradientCollection
     }
@@ -176,9 +222,22 @@ final class GradientPaletteHelper: NSObject {
     }
 
     private func openGradientEditor(from viewController: UIViewController, originalId: String? = nil, fileType: GradientFileType) {
-        let editor = GradientEditorViewController(originalId: originalId, fileType: fileType)
+        let editor = GradientEditorViewController(originalId: originalId, fileType: fileType) { [weak self, weak viewController] draft, newName in
+            guard let self, let paletteItem = self.applyGradientEdits(draft, newName: newName) else { return false }
+            self.applyPaletteEditorResult(paletteItem, replacing: draft.originalId, from: viewController)
+            return true
+        }
+
         let navigationController = UINavigationController(rootViewController: editor)
         navigationController.modalPresentationStyle = .fullScreen
         viewController.present(navigationController, animated: true)
+    }
+
+    private func applyPaletteEditorResult(_ paletteItem: PaletteItemGradient, replacing originalId: String?, from viewController: UIViewController?) {
+        if let itemsViewController = viewController as? ItemsCollectionViewController {
+            itemsViewController.applyPaletteEditorResult(paletteItem, replacing: originalId)
+        } else if let delegate = viewController as? ColorCollectionViewControllerDelegate {
+            delegate.selectPaletteItem?(paletteItem)
+        }
     }
 }

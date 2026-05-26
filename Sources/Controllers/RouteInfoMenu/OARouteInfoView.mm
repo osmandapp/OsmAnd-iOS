@@ -143,6 +143,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSString *_emission;
     BOOL _closePressed;
     LeftIconRightStackTitleDescriptionButtonView *_missingOrOutdatedMapsView;
+    BOOL _didShowMissingMapsAlertForCarPlay;
 }
 
 - (instancetype) init
@@ -1355,6 +1356,25 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     });
 }
 
+- (void)showMissingMapsAlertForCarPlayIfNeeded
+{
+    if (!UIApplication.sharedApplication.isCarPlayAppActive)
+        return;
+    
+    if (_didShowMissingMapsAlertForCarPlay)
+        return;
+
+    _didShowMissingMapsAlertForCarPlay = YES;
+
+    __weak __typeof(self) weakSelf = self;
+    [AlertPresenter showMissingMapsAlertOnDownloadMapsHandler:^{
+        [OAAppSettings sharedManager].ignoreMissingMaps = YES;
+        [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    } onViewOnPhoneHandler:^{
+        [weakSelf showRequiredMapsResourceViewControllerIfNeeded];
+    }];
+}
+
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1378,6 +1398,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         directionInfo = -1;
+        _didShowMissingMapsAlertForCarPlay = NO;
         _lastFastRoutingComplicationOrdinal = -1;
         // do not hide fragment (needed for use case entering Planning mode without destination)
     });
@@ -2425,6 +2446,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _potentiallyUsedMaps = result.potentiallyUsedMaps;
         _hasEmptyTransportRoute = NO;
         [self updateMenu];
+        [self showMissingMapsAlertForCarPlayIfNeeded];
     }
 }
 

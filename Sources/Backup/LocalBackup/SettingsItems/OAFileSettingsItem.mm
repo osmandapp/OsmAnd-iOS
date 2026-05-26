@@ -378,6 +378,12 @@
         case EOAFileSettingsItemFileSubtypeSrtmMap:
         case EOAFileSettingsItemFileSubtypeColorPalette:
         {
+            if (self.subtype == EOAFileSettingsItemFileSubtypeColorPalette)
+            {
+                NSString *paletteId = [[destFilePath lastPathComponent] stringByDeletingPathExtension];
+                if (paletteId.length > 0)
+                    [OsmAndApp.instance.paletteRepository invalidatePaletteId:paletteId];
+            }
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths(true);
             break;
         }

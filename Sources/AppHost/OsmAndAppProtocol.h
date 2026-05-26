@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
 
-@class OAApplicationMode, OADownloadsManager, OAWorldRegion, OALocationServices, OAMapViewState, OAAppData, OAObservable;
+@class OAApplicationMode, OADownloadsManager, OAWorldRegion, OALocationServices, OAMapViewState, OAAppData, OAObservable, OASPaletteRepository;
 
 @protocol OAAppearanceProtocol;
 
@@ -38,6 +38,7 @@
 
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;
+@property(readonly) OASPaletteRepository* paletteRepository;
 
 @property(readonly) OALocationServices* locationServices;
 

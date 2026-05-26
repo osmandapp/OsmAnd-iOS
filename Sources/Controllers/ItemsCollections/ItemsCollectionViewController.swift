@@ -746,6 +746,19 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         }
         present(alert, animated: true)
     }
+    
+    func applyPaletteEditorResult(_ paletteItem: PaletteItemGradient, replacing originalId: String?) {
+        guard let paletteItems else { return }
+        paletteItems.replaceAll(withObjectsSync: GradientPaletteHelper.shared.paletteItems(category: paletteItem.properties.fileType.category, sortMode: .lastUsedTime))
+        if originalId == nil || selectedPaletteItem?.id == originalId {
+            selectedPaletteItem = paletteItem
+            delegate?.selectPaletteItem?(paletteItem)
+        } else {
+            delegate?.reloadData?()
+        }
+
+        reloadData()
+    }
 }
 
 extension ItemsCollectionViewController: UISearchBarDelegate {

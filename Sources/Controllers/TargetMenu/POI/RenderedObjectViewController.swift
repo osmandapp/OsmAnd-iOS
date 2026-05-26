@@ -40,7 +40,7 @@ final class RenderedObjectViewController: OAPOIViewController {
     }
     
     override func getNameStr() -> String? {
-        let name =  provider.nameOnlyString()
+        let name = provider.nameOnlyString()
         
         if !name.isEmpty {
             return name

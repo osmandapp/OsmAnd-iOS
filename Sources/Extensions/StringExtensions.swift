@@ -87,3 +87,18 @@ extension String {
     }
     
 }
+
+extension String {
+    
+    var isStartingWithRTLChar: Bool {
+        guard let firstScalar = first?.unicodeScalars.first else {
+            return false
+        }
+
+        let direction = NSLocale.characterDirection(
+            forLanguage: String(firstScalar)
+        )
+
+        return direction == .rightToLeft
+    }
+}

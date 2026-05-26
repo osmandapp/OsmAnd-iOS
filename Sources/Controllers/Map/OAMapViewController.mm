@@ -1056,9 +1056,11 @@ static char kMapSourceUpdateQueueKey;
 
 - (BOOL) isLastMultiGesture
 {
-    return (_movingByGesture && !_zoomingByGesture && !_rotatingByGesture)
-    	|| (!_movingByGesture && _zoomingByGesture && !_rotatingByGesture)
-    	|| (!_movingByGesture && !_zoomingByGesture && _rotatingByGesture);
+    NSInteger activeGestures = (_movingByGesture ? 1 : 0)
+        + (_zoomingByGesture ? 1 : 0)
+        + (_rotatingByGesture ? 1 : 0)
+        + (_zoomingByTapGesture ? 1 : 0);
+    return activeGestures == 1;
 }
 
 - (void) storeTargetPosition:(UIGestureRecognizer *)recognizer scheduleRestore:(BOOL)scheduleRestore

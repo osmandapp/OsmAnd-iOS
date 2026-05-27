@@ -128,8 +128,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                 availableViewControllers[tab] = osmEditsViewController
             }
         case .travel:
-            if !availableViewControllers.contains(where: { $0.key == .travel }),
-               let travelGuidesViewController = storyboard.instantiateViewController(withIdentifier: "SavedArticlesTabViewController") as? SavedArticlesTabViewController {
+            if !availableViewControllers.contains(where: { $0.key == .travel }) {
+                let travelGuidesViewController = SavedArticlesTabViewController(frame: pageViewController.view.frame)
                 travelGuidesViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = travelGuidesViewController
             }

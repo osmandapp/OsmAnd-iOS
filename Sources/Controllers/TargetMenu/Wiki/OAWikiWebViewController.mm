@@ -170,7 +170,11 @@
             
             if (!_content)
             {
-                _content = _poi.values[DESCRIPTION_TAG];
+                NullablePair *pairDescription = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:_poi key:DESCRIPTION_TAG map:_poi.values];
+                if ([pairDescription.first isKindOfClass:NSString.class])
+                {
+                    _content = pairDescription.first;
+                }
             }
         }
     }

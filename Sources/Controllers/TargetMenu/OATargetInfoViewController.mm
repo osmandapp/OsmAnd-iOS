@@ -1362,10 +1362,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         
         NSInteger index = [_rows indexOfObject:info];
         
-        if (index != NSNotFound) {
-            
+        if (index != NSNotFound)
+        {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-            
             [OAWikiArticleHelper showWikiArticle:location
                                              url:url
                                       sourceView:[_tableView cellForRowAtIndexPath:indexPath]];

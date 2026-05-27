@@ -372,10 +372,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         NullablePair *pairDescription = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:self.poi key:DESCRIPTION_TAG map:filteredInfo];
         if (pairDescription)
         {
-            if (pairDescription.second && [pairDescription.second isKindOfClass:NSString.class])
+            if ([pairDescription.second isKindOfClass:NSString.class])
                 locale = pairDescription.second;
             
-            if (pairDescription.first && [pairDescription.first isKindOfClass:NSString.class])
+            if ([pairDescription.first isKindOfClass:NSString.class])
             {
                 description = pairDescription.first;
                 [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];

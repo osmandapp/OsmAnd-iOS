@@ -13,13 +13,13 @@ final class WikipediaContextMenuCell: UITableViewCell {
     
     // MARK: - Properties
 
-    private var text: String = ""
-    
     var isExpanded = false
     var maxCollapsedTextLength = 200
     
-    private var onButtonAction: (() -> Void)?
     var onExpandStateChange: ((Bool, WikipediaContextMenuCell) -> Void)?
+    
+    private var text: String = ""
+    private var onButtonAction: (() -> Void)?
 
     // MARK: - UI
     
@@ -52,14 +52,10 @@ final class WikipediaContextMenuCell: UITableViewCell {
         config.cornerStyle = .fixed
         config.background.cornerRadius = 8
         
-        config.imagePadding = Constants.buttonInset
-        config.contentInsets = NSDirectionalEdgeInsets(top: Constants.buttonInset / 2,
-                                                       leading: Constants.buttonInset,
-                                                       bottom: Constants.buttonInset / 2,
-                                                       trailing: Constants.buttonInset)
+        config.imagePadding = Constants.buttonContentInset.leading
+        config.contentInsets = Constants.buttonContentInset
         button.configuration = config
 
-        
         return button
     }()
 
@@ -97,7 +93,7 @@ final class WikipediaContextMenuCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: labelContainer.trailingAnchor),
 
-            actionButton.topAnchor.constraint(greaterThanOrEqualTo: labelContainer.bottomAnchor, constant: Constants.buttonTopInset),
+            actionButton.topAnchor.constraint(greaterThanOrEqualTo: labelContainer.bottomAnchor, constant: Constants.buttonTopOffset),
             actionButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.contentInset.leading),
             actionButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -Constants.contentInset.trailing),
             actionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.contentInset.bottom),
@@ -189,13 +185,12 @@ final class WikipediaContextMenuCell: UITableViewCell {
 
 extension WikipediaContextMenuCell {
     private struct Constants {
-        
-        static let buttonInset: CGFloat = 16
         static let buttonHeight: CGFloat = 36
-        static let buttonTopInset: CGFloat = 20
+        static let buttonTopOffset: CGFloat = 14
+        static let buttonContentInset: NSDirectionalEdgeInsets = .init(top: 6, leading: 12, bottom: 6, trailing: 16)
         
-        static let contentInset: NSDirectionalEdgeInsets = .init(top: 20, leading: 20, bottom: 16, trailing: 20)
+        static let contentInset: NSDirectionalEdgeInsets = .init(top: 14, leading: 20, bottom: 14, trailing: 20)
         
-        static let iconSize: CGFloat = 20
+        static let iconSize: CGFloat = 16
     }
 }

@@ -2023,10 +2023,13 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 + (UIImage *) getMxIcon:(NSString *)name
 {
     NSString *fullIconName = name;
-    if (![fullIconName hasPrefix:@"mx_"])
-        fullIconName = [@"mx_" stringByAppendingString:name];
+    if (fullIconName && ![fullIconName hasPrefix:@"mx_"])
+        fullIconName = [@"mx_" stringByAppendingString:fullIconName];
 
-    return [UIImage mapSvgImageNamed:fullIconName];
+    if (fullIconName)
+        return [UIImage mapSvgImageNamed:fullIconName];
+    else
+        return nil;
 }
 
 + (UIImage *) loadAssetOrMxIcon:(NSString *)name

@@ -93,7 +93,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
         }
         if let cell = cell {
             cell.titleLabel.text = appMode.toHumanString()
-            cell.leftIconView.image = UIImage.templateImageNamed(appMode.getIconName())
+            cell.leftIconView.image = appMode.getIcon()?.withRenderingMode(.alwaysTemplate)
             cell.leftIconView.tintColor = appMode.getProfileColor()
             let selected = appMode == self.appMode
             cell.accessoryType = selected ? .checkmark : .none

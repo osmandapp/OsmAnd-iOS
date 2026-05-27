@@ -43,7 +43,7 @@ final class WikipediaContextMenuCell: UITableViewCell {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
         
         var config = UIButton.Configuration.plain()
         config.baseForegroundColor = .buttonTextColorSecondary

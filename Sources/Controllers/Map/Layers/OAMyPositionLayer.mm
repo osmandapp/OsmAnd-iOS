@@ -248,7 +248,14 @@ typedef enum {
             [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(horizontalAccuracy)];
         });
 
-        _mapView.mapMarkersAnimator->cancelAnimations(marker);
+        BOOL hasOngoingPositionAnim = animationDuration <= 0
+            && _mapView.mapMarkersAnimator->getCurrentAnimation(marker, OsmAnd::Animator::AnimatedValue::Target) != nullptr;
+
+        if (!hasOngoingPositionAnim)
+            _mapView.mapMarkersAnimator->cancelAnimations(marker);
+        else
+            _mapView.mapMarkersAnimator->cancelCurrentAnimation(marker, OsmAnd::Animator::AnimatedValue::Azimuth);
+
         if (animationDuration > 0)
         {
             _mapView.mapMarkersAnimator->animatePositionTo(marker, target31, animationDuration,  OsmAnd::Animator::TimingFunction::Linear);
@@ -263,7 +270,7 @@ typedef enum {
                     _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, OsmAnd::Utilities::normalizedAngleDegrees(bearing), kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
             }
         }
-        else
+        else if (!hasOngoingPositionAnim)
         {
             marker->setPosition(target31);
             [_mapView setMyLocationCirclePosition:(target31)];
@@ -277,6 +284,19 @@ typedef enum {
             {
                 if (iconKey)
                     marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(bearing));
+            }
+        }
+        else
+        {
+            if (marker->model3D != nullptr)
+            {
+                _mapView.mapMarkersAnimator->animateModel3DDirectionTo(marker, OsmAnd::Utilities::normalizedAngleDegrees(bearing), kRotateAnimationTime, OsmAnd::Animator::TimingFunction::Linear);
+                [_mapView setMyLocationSectorDirection:(OsmAnd::Utilities::normalizedAngleDegrees(heading))];
+            }
+            else
+            {
+                if (iconKey)
+                    _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, OsmAnd::Utilities::normalizedAngleDegrees(bearing), kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
             }
         }
 

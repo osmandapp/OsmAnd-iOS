@@ -76,10 +76,8 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 - (instancetype)initWithPhrase:(OASearchPhrase *)sp;
 
 - (int) getFoundWordCount;
-- (double) getSearchDistanceRound:(CLLocation *)location;
-- (double) getSearchDistanceRound:(CLLocation *)location pd:(double)pd;
-- (double) getSearchDistanceFloored:(CLLocation *)location;
-- (double) getSearchDistanceFloored:(CLLocation *)location pd:(double)pd;
+- (double) getSearchDistance:(CLLocation *)location;
+- (double) getSearchDistance:(CLLocation *)location pd:(double)pd;
 
 - (double) getSumPhraseMatchWeight:(OASearchResult *)exactResult;
 - (int) getDepth;

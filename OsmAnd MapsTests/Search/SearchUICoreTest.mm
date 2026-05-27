@@ -78,7 +78,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     [OsmAndApp.instance addAbbrevationsToCommonWords];
     for (NSString *path in _filePaths)
     {
-        //if ([path.lastPathComponent isEqualToString:@"getmana.json"])
+        //if ([path.lastPathComponent isEqualToString:@"fuel_diesel.json"])
             [self testSearchCase:path];
     }
     NSLog(@"========================================");
@@ -386,11 +386,12 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 
 - (BOOL) sameToDuplicate:(NSString *)expected res:(OASearchResult *)res phrase:(OASearchPhrase *)phrase
 {
+    if (res == nil)
+        return NO;
     NSString * quotes1 = [expected substringFromIndex:[expected indexOf:@"["]].trim;
-    NSString * fullPresent = (res == nil) ? @"" : [self formatResult:NO res:res phrase:phrase];
+    NSString * fullPresent = [self formatResult:NO res:res phrase:phrase];
     NSString * quotes2 = [fullPresent substringFromIndex:[fullPresent indexOf:@"["]].trim;
-    if ([quotes1 containsString:@"LOCATION"]
-        && [quotes2 containsString:@"LOCATION"]
+    if (([quotes1 containsString:@"LOCATION"] || [quotes1 containsString:@"POI_TYPE"])
         && [quotes1 isEqual:quotes2])
     {
         return YES;

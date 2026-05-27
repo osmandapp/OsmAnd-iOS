@@ -1278,13 +1278,7 @@
             {
                 [order addObject:[self getStandardFilterId:p]];
             }
-            OACustomSearchPoiFilter *nearestPois = [[OACustomSearchPoiFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
-                return YES;
-            } emptyFunction:^BOOL{
-                return NO;
-            } getTypesFunction:^NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *{
-                return nil;
-            }];
+            OAPOIUIFilter *nearestPois = [[OAPOIUIFilter alloc] initWithName:@"Neareset POIs" filterId:@"nearest_pois" acceptedTypes:nil];
             [self setActivePoiFiltersByOrder:order];
             [self addCustomFilter:nearestPois priority:100];
         }
@@ -1990,7 +1984,12 @@
         [searchedPois addObject:poiID];
         if ([*poi isClosed])
             return NO;
-        
+
+        if (![phrase isAcceptPrivate] && [(*poi) isPrivateAccess])
+        {
+            return NO;
+        }
+
         if (poiAdditionals.count > 0)
         {
             BOOL found = NO;

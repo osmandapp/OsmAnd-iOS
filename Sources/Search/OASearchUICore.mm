@@ -151,14 +151,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         case EOASearchDistanceIfNotByName:
         {
             if (!c.sortByName) {
-                double s1F = [o1 getSearchDistanceFloored:c.loc];
-                double s2F = [o2 getSearchDistanceFloored:c.loc];
-                double s1R = [o1 getSearchDistanceRound:c.loc];
-                double s2R = [o2 getSearchDistanceRound:c.loc];
-                if (s1F == s2F || s1R == s2R)
+                double s1 = [o1 getSearchDistance:c.loc];
+                double s2 = [o2 getSearchDistance:c.loc];
+                if (s1 == s2)
                     break;
                 else
-                    return [OAUtilities compareDouble:fmax(s1F, s1R) y:fmax(s2F, s2R)];
+                    return [OAUtilities compareDouble:s1 y:s2];
             }
             break;
         }
@@ -202,14 +200,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             break;
         case EOACompareDistanceToParentSearchResult:
         {
-            double s1F = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistanceFloored:c.loc];
-            double s2F = o2.parentSearchResult == nil ? 0 : [o2.parentSearchResult getSearchDistanceFloored:c.loc];
-            double s1R = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistanceRound:c.loc];
-            double s2R = o2.parentSearchResult == nil ? 0 : [o2.parentSearchResult getSearchDistanceRound:c.loc];
-            if (s1F == s2F || s1R == s2R)
+            double s1 = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistance:c.loc];
+            double s2 = o2.parentSearchResult == nil ? 0 : [o2.parentSearchResult getSearchDistance:c.loc];
+            if (s1 == s2)
                 break;
             else
-                return [OAUtilities compareDouble:fmax(s1F, s1R) y:fmax(s2F, s2R)];
+                return [OAUtilities compareDouble:s1 y:s2];
         }
         case EOACompareByName:
         {
@@ -224,14 +220,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         }
         case EOACompareByDistance:
         {
-            double s1F = [o1 getSearchDistanceFloored:c.loc pd:1];
-            double s2F = [o2 getSearchDistanceFloored:c.loc pd:1];
-            double s1R = [o1 getSearchDistanceRound:c.loc pd:1];
-            double s2R = [o2 getSearchDistanceRound:c.loc pd:1];
-            if (s1F == s2F || s1R == s2R)
+            double s1 = [o1 getSearchDistance:c.loc pd:1];
+            double s2 = [o2 getSearchDistance:c.loc pd:1];
+            if (s1 == s2)
                 break;
             else
-                return [OAUtilities compareDouble:fmax(s1F, s1R) y:fmax(s2F, s2R)];
+                return [OAUtilities compareDouble:s1 y:s2];
         }
         case EOAAmenityLastAndSortBySubtype:
         {

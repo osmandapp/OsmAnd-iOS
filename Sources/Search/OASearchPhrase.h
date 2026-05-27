@@ -89,6 +89,8 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (BOOL) isEmptyQueryAllowed;
 - (BOOL) isSortByName;
 - (BOOL) isInAddressSearch;
+- (BOOL) isAcceptPrivate;
+- (void) setAcceptPrivate:(BOOL)acceptPrivate;
 
 - (OANameStringMatcher *) getMainUnknownNameStringMatcher;
 - (OANameStringMatcher *) getFirstUnknownNameStringMatcher;

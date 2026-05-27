@@ -75,6 +75,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ",
 
 @property (nonatomic) OAPOIBaseType *unselectedPoiType;
 @property (nonatomic) OARegionPriorityProvider *regionPriorityProvider;
+@property (nonatomic) BOOL acceptPrivate;
 
 @end
 
@@ -236,6 +237,7 @@ static NSComparator _OACommonWordsComparator = nil;
         {
             _regionPriorityProvider = [[OARegionPriorityProvider alloc] initWithPhrase:self];
         }
+        _acceptPrivate = NO;
     }
     return self;
 }
@@ -1162,6 +1164,15 @@ static NSComparator _OACommonWordsComparator = nil;
         return @([_regionPriorityProvider getRegionWeight:resId]);
     }
     return 0;
+}
+
+- (BOOL) isAcceptPrivate
+{
+    return _acceptPrivate;
+}
+- (void) setAcceptPrivate:(BOOL)acceptPrivate
+{
+    self.acceptPrivate = acceptPrivate;
 }
 
 @end

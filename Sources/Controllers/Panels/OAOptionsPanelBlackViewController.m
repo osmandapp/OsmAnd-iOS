@@ -251,30 +251,30 @@
 - (void)adjustButtonInsets:(UIButton *)btn
 {
     UIButtonConfiguration *config = btn.configuration;
-    NSDirectionalEdgeInsets cInsets = config.contentInsets;
+    NSDirectionalEdgeInsets contentInsets = config.contentInsets;
     
     if ([btn isDirectionRTL])
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        cInsets.leading = 10;
-        cInsets.trailing = [OAUtilities getLeftMargin];
+        contentInsets.leading = 10;
+        contentInsets.trailing = [OAUtilities getLeftMargin];
     }
     else
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        cInsets.leading = [OAUtilities getLeftMargin] + 10;
-        cInsets.trailing = 0;
+        contentInsets.leading = [OAUtilities getLeftMargin] + 10;
+        contentInsets.trailing = 0;
     }
     
-    config.contentInsets = cInsets;
+    config.contentInsets = contentInsets;
     btn.configuration = config;
 }
 
 - (void)adjustContentBy:(CGFloat)bottomMargin btn:(UIButton *)btn {
     UIButtonConfiguration *config = btn.configuration;
-    NSDirectionalEdgeInsets insets = config.contentInsets;
-    insets.bottom = bottomMargin + insets.top;
-    config.contentInsets = insets;
+    NSDirectionalEdgeInsets contentInsets = config.contentInsets;
+    contentInsets.bottom = bottomMargin + contentInsets.top;
+    config.contentInsets = contentInsets;
     btn.configuration = config;
 }
 
@@ -380,24 +380,27 @@
 {
     NSArray *buttons = [self bottomButtons];
     
-    for (UIButton *button in _menuButtonsArray) {
+    for (UIButton *button in _menuButtonsArray)
+    {
         BOOL isBottom = [buttons containsObject:button];
         UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
         config.imagePadding = 19;
         config.titleLineBreakMode = NSLineBreakByTruncatingMiddle;
-        
         
         button.configuration = config;
         button.configurationUpdateHandler = ^(UIButton *button) {
             UIButtonConfiguration *updatedConfig = button.configuration;
             UIBackgroundConfiguration *backgroundConfig = [UIBackgroundConfiguration listPlainCellConfiguration];
             
-            if (button.isHighlighted) {
+            if (button.isHighlighted)
+            {
                 backgroundConfig.backgroundColor = [UIColor systemGray4Color];
-                button.tintColor = [[UIColor colorNamed:ACColorNameTextColorPrimary] colorWithAlphaComponent:0.7];
-            } else {
+                updatedConfig.baseForegroundColor = [[UIColor colorNamed:ACColorNameTextColorPrimary] colorWithAlphaComponent:0.7];
+            }
+            else
+            {
                 backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : [UIColor colorNamed:ACColorNameGroupBg];
-                button.tintColor =  [UIColor colorNamed:ACColorNameIconColorDefault];
+                updatedConfig.baseForegroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             }
             updatedConfig.background = backgroundConfig;
             button.configuration = updatedConfig;

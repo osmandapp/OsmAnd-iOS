@@ -235,7 +235,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func unregisterNotificationsAndObservers() {
-        NotificationCenter.default.removeObserver(self)
         observers.forEach { $0.detach() }
     }
     

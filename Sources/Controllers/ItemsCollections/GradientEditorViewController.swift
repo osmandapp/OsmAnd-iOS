@@ -377,7 +377,14 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     
     @objc private func onAddStepPressed() {
         guard let state = GradientEditorAlgorithms.addStep(dataState) else { return }
-        applyState(state)
+        applyState(state, reloadStepsRow: false)
+        if let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? OAFoldersCell {
+            let selectedIndexPath = IndexPath(row: state.selectedIndex, section: 0)
+            cell.collectionView.setValues(stepValues(), withSelectedIndex: state.selectedIndex)
+            cell.collectionView.reloadData()
+            cell.collectionView.layoutIfNeeded()
+            cell.collectionView.scrollToItem(at: selectedIndexPath, at: .centeredHorizontally, animated: true)
+        }
     }
     
     @objc private func onColorCellButtonPressed(_: UIButton) {
@@ -437,7 +444,10 @@ extension GradientEditorViewController: OAFoldersCellDelegate {
         guard index != dataState.selectedIndex, index <= dataState.draft.points.count else { return }
         let state = EditorDataState(draft: dataState.draft, selectedIndex: index)
         updateSelectedColorItem(for: state)
-        applyState(state, addToHistory: false)
+        applyState(state, addToHistory: false, reloadStepsRow: false)
+        if let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? OAFoldersCell {
+            cell.collectionView.reloadData()
+        }
     }
 }
 

@@ -1752,15 +1752,17 @@ final class StarView: UIView {
     }
 
     private func performClick(at point: CGPoint) {
-        let clickRadius: CGFloat = 60
+        let clickRadius = pixelsToPoints(60)
         var bestObject: SkyObject?
+        var bestObjectDistance = CGFloat.greatestFiniteMagnitude
         for object in skyObjects where isObjectVisibleInSettings(object) {
             guard let objectPoint = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) else {
                 continue
             }
-            if hypot(point.x - objectPoint.x, point.y - objectPoint.y) < clickRadius {
+            let distance = hypot(point.x - objectPoint.x, point.y - objectPoint.y)
+            if distance < clickRadius && distance < bestObjectDistance {
                 bestObject = object
-                break
+                bestObjectDistance = distance
             }
         }
 

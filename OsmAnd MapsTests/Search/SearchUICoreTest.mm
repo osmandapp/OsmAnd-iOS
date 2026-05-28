@@ -78,7 +78,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     [OsmAndApp.instance addAbbrevationsToCommonWords];
     for (NSString *path in _filePaths)
     {
-        //if ([path.lastPathComponent isEqualToString:@"fuel_diesel.json"])
+        //if ([path.lastPathComponent isEqualToString:@"saintLys.json"])
             [self testSearchCase:path];
     }
     NSLog(@"========================================");
@@ -195,7 +195,10 @@ static BOOL TEST_EXTRA_RESULTS = YES;
         return;
     }
 
-    [OsmAndApp.instance installTestResources:obfFilePaths];
+    for (NSString * file in obfFilePaths)
+    {
+        [OsmAndApp.instance installTestResource:file];
+    }
 
     NSMutableArray<NSMutableArray<NSString *> *> *results = [NSMutableArray new];
     for (NSInteger i = 0; i < phrases.count; i++)

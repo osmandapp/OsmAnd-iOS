@@ -446,6 +446,7 @@
     _osmAndLiveUpdatedObservable = [[OAObservable alloc] init];
     LogStartup(@"observables initialized");
 
+    BOOL isTestInit = NSClassFromString(@"SearchUICoreTest") != nil;
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
@@ -456,7 +457,8 @@
                                                          QString::fromNSString(OAAppVersion.getVersion),
                                                          QString::fromNSString(@"https://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
-                                                         _webClient));
+                                                         _webClient,
+                                                         isTestInit));
     LogStartup(@"resources manager created");
 
     // Attach observables handlers
@@ -1146,6 +1148,7 @@
 {
     if(_resourcesManager == nullptr)
     {
+        bool isTestInit = true;
         _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                              _documentsDir.absolutePath(),
                                                              QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
@@ -1158,21 +1161,11 @@
                                                              QString::fromNSString(OAAppVersion.getVersion),
                                                              QString::fromNSString(@"https://download.osmand.net"),
                                                              QString::fromNSString([self generateIndexesUrl]),
-                                                             _webClient));
+                                                             _webClient, isTestInit));
     }
     
     const auto filePathQ = QString::fromNSString(filePath);
     return _resourcesManager->addLocalResource(filePathQ);
-}
-
-- (BOOL) installTestResources:(NSMutableArray<NSString *> *)obfFilePaths
-{
-    bool result = YES;
-    for (NSString * file in obfFilePaths)
-    {
-        result = [self installTestResource:file] && result;
-    }
-    return result;
 }
 
 - (BOOL) removeTestResource:(NSString *)filePath

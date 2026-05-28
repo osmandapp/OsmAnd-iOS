@@ -13,23 +13,35 @@ import Foundation
 final class StarMapARModeHelper {
     private let motionManager = CMMotionManager()
     private let queue = OperationQueue()
+    private let minAlpha = 0.03
+    private let maxAlpha = 0.3
+    private let jitterThresh = 0.5
+    private let moveThresh = 2.0
+    private var smoothedAzimuth = 0.0
+    private var smoothedAltitude = 45.0
 
     var onOrientationChanged: ((_ azimuth: Double, _ altitude: Double, _ roll: Double) -> Void)?
     var onUnavailable: (() -> Void)?
-    var isArModeEnabled = false
+    var onArModeChanged: ((_ enabled: Bool) -> Void)?
+    private(set) var isArModeEnabled = false
     private(set) var isRunning = false
+
+    init() {
+        queue.maxConcurrentOperationCount = 1
+    }
 
     func onResume() {
         if isArModeEnabled {
-            start()
+            _ = startMotionUpdates()
         }
     }
 
     func onPause() {
-        stop()
+        stopMotionUpdates()
     }
 
-    func updateGeomagneticField(location: CLLocation) {
+    func updateGeomagneticField(location _: CLLocation) {
+        // CoreMotion's true-north frame applies platform geomagnetic correction when available.
     }
 
     func toggleArMode() {
@@ -37,50 +49,101 @@ final class StarMapARModeHelper {
     }
 
     func toggleArMode(enable: Bool) {
-        isArModeEnabled = enable
+        guard isArModeEnabled != enable else {
+            return
+        }
+
         if enable {
-            start()
+            isArModeEnabled = true
+            if startMotionUpdates() {
+                onArModeChanged?(true)
+            }
         } else {
-            stop()
+            disableArMode()
         }
     }
 
-    func start() {
-        guard motionManager.isDeviceMotionAvailable else {
-            onUnavailable?()
-            return
+    private func startMotionUpdates() -> Bool {
+        guard motionManager.isDeviceMotionAvailable, let referenceFrame = preferredReferenceFrame() else {
+            handleUnavailable()
+            return false
         }
-        isArModeEnabled = true
+        guard !isRunning else {
+            return true
+        }
+
         isRunning = true
         motionManager.deviceMotionUpdateInterval = 1.0 / 30.0
-        motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: queue) { [weak self] motion, _ in
-            guard let self, let attitude = motion?.attitude else {
+        motionManager.startDeviceMotionUpdates(using: referenceFrame, to: queue) { [weak self] motion, _ in
+            guard let self, self.isRunning, self.isArModeEnabled, let attitude = motion?.attitude else {
                 return
             }
             let yaw = AstroUtils.normalizedDegrees(attitude.yaw * 180.0 / .pi)
             let pitch = attitude.pitch * 180.0 / .pi
             let roll = attitude.roll * 180.0 / .pi
             let altitude = max(-85, min(90, 90 + pitch))
+            let smoothed = self.smoothOrientation(azimuth: yaw, altitude: altitude)
             DispatchQueue.main.async {
-                self.onOrientationChanged?(yaw, altitude, roll)
+                self.onOrientationChanged?(smoothed.azimuth, smoothed.altitude, roll)
             }
         }
+
+        if !motionManager.isDeviceMotionActive {
+            handleUnavailable()
+            return false
+        }
+        return true
     }
 
-    func stop() {
+    private func disableArMode() {
         isArModeEnabled = false
+        stopMotionUpdates()
+        onArModeChanged?(false)
+    }
+
+    private func stopMotionUpdates() {
         isRunning = false
         motionManager.stopDeviceMotionUpdates()
     }
 
+    private func handleUnavailable() {
+        isArModeEnabled = false
+        stopMotionUpdates()
+        onUnavailable?()
+        onArModeChanged?(false)
+    }
+
+    private func preferredReferenceFrame() -> CMAttitudeReferenceFrame? {
+        let available = CMMotionManager.availableAttitudeReferenceFrames()
+        if available.contains(.xTrueNorthZVertical) {
+            return .xTrueNorthZVertical
+        }
+        if available.contains(.xMagneticNorthZVertical) {
+            return .xMagneticNorthZVertical
+        }
+        return nil
+    }
+
+    private func smoothOrientation(azimuth: Double, altitude: Double) -> (azimuth: Double, altitude: Double) {
+        let azimuthDelta = AstroUtils.shortestAngleDelta(from: smoothedAzimuth, to: azimuth)
+        let alphaAz = calculateAdaptiveAlpha(azimuthDelta)
+        smoothedAzimuth = AstroUtils.normalizedDegrees(smoothedAzimuth + azimuthDelta * alphaAz)
+
+        let altitudeDelta = altitude - smoothedAltitude
+        let alphaAlt = calculateAdaptiveAlpha(altitudeDelta)
+        smoothedAltitude += altitudeDelta * alphaAlt
+
+        return (smoothedAzimuth, smoothedAltitude)
+    }
+
     private func calculateAdaptiveAlpha(_ delta: Double) -> Double {
         let absDelta = abs(delta)
-        if absDelta > 30 {
-            return 0.35
+        if absDelta < jitterThresh {
+            return minAlpha
         }
-        if absDelta > 10 {
-            return 0.20
+        if absDelta > moveThresh {
+            return maxAlpha
         }
-        return 0.08
+        return minAlpha + (absDelta - jitterThresh) * (maxAlpha - minAlpha) / (moveThresh - jitterThresh)
     }
 }

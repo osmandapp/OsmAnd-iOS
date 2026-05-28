@@ -98,6 +98,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         super.viewWillAppear(animated)
         arModeHelper.onResume()
         cameraHelper.onResume()
+        if arModeHelper.isArModeEnabled {
+            updateArModeUI(true)
+        }
         if isTimeAutoUpdateEnabled {
             resetTime()
             scheduleAutoTimeUpdate()
@@ -423,8 +426,16 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         arModeHelper.onOrientationChanged = { [weak self] azimuth, altitude, roll in
             self?.starView.setCameraOrientation(azimuth: azimuth, altitude: altitude, roll: roll)
         }
+        arModeHelper.onArModeChanged = { [weak self] enabled in
+            guard let self else {
+                return
+            }
+            updateArModeUI(enabled)
+            if !enabled {
+                manualAzimuth = true
+            }
+        }
         arModeHelper.onUnavailable = { [weak self] in
-            self?.updateArModeUI(false)
             self?.showMessage(localizedString("astro_ar_unavailable"))
         }
         cameraHelper.onUnavailable = { [weak self] message in
@@ -438,7 +449,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             updateCameraUI(enabled)
             if enabled && !arModeHelper.isArModeEnabled {
                 arModeHelper.toggleArMode(enable: true)
-                updateArModeUI(arModeHelper.isArModeEnabled)
             }
         }
     }
@@ -470,7 +480,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             }
             if arModeHelper.isArModeEnabled {
                 arModeHelper.toggleArMode(enable: false)
-                updateArModeUI(false)
             }
             manualAzimuth = true
             compassButton.update(mapRotation: CGFloat(-azimuth))
@@ -694,7 +703,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func updateArModeUI(_ enabled: Bool) {
         arModeButton.active = enabled
         cameraButton.isHidden = !enabled || starView.is2DMode
-        if !enabled {
+        if enabled {
+            starView.isCameraMode = true
+            starView.setNeedsDisplay()
+        } else {
+            starView.roll = 0
+            starView.setNeedsDisplay()
             if cameraHelper.isCameraOverlayEnabled {
                 cameraHelper.toggleCameraOverlay()
             }
@@ -727,6 +741,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func updateStarMap(updateAzimuth: Bool = false) {
         let location = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation
+        if let location {
+            arModeHelper.updateGeomagneticField(location: location)
+        }
         let coordinate = location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
         starView.setObserverLocation(lat: coordinate.latitude, lon: coordinate.longitude, alt: location?.altitude ?? 0)
         if updateAzimuth && !arModeHelper.isArModeEnabled && !starView.is2DMode {
@@ -874,10 +891,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     @objc private func toggleARMode() {
         arModeHelper.toggleArMode()
-        updateArModeUI(arModeHelper.isArModeEnabled)
-        if !arModeHelper.isArModeEnabled {
-            manualAzimuth = true
-        }
     }
 
     @objc private func toggleCamera() {

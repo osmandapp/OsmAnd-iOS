@@ -282,6 +282,10 @@ final class StarView: UIView {
         skyObjects + constellations.map { $0 as SkyObject }
     }
 
+    private var screenScale: CGFloat {
+        window?.screen.scale ?? UIScreen.main.scale
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -722,6 +726,7 @@ final class StarView: UIView {
         if object.type == .SUN || object.type == .MOON {
             radius *= 0.5
         }
+        radius = pixelsToPoints(radius)
 
         color.setFill()
         context.fillEllipse(in: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
@@ -739,8 +744,9 @@ final class StarView: UIView {
             .foregroundColor: labelColor(for: object)
         ]
         let size = text.size(withAttributes: attributes)
-        let origin = CGPoint(x: point.x + radius + 5, y: point.y - size.height * 0.75)
-        let labelRect = CGRect(origin: origin, size: size).insetBy(dx: -5, dy: -5)
+        let origin = CGPoint(x: point.x + radius + pixelsToPoints(5), y: point.y - size.height * 0.75)
+        let labelPadding = pixelsToPoints(5)
+        let labelRect = CGRect(origin: origin, size: size).insetBy(dx: -labelPadding, dy: -labelPadding)
         let overlaps = occupiedRects.contains { $0.intersects(labelRect) }
         if !overlaps || object === selectedObject || object.showCelestialPath {
             text.draw(at: origin, withAttributes: attributes)
@@ -777,23 +783,27 @@ final class StarView: UIView {
         if settings.starMap.showCelestialPaths {
             for object in pinnedObjects where isObjectVisibleInSettings(object) || object === selectedObject {
                 if let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
-                    strokeCircle(at: point, radius: 25, color: UIColor(red: 1, green: 0.84, blue: 0, alpha: 1), width: 2, in: context)
+                    strokeCircle(at: point, radius: pixelsToPoints(25), color: UIColor(red: 1, green: 0.84, blue: 0, alpha: 1), width: pixelsToPoints(4), in: context)
                 }
             }
         }
 
         if let object = selectedObject,
            let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
-            strokeCircle(at: point, radius: 25, color: .red, width: 2, in: context)
+            strokeCircle(at: point, radius: pixelsToPoints(25), color: .red, width: pixelsToPoints(3), in: context)
         }
 
         if settings.starMap.showDirections {
             for object in trackableObjects where object.showDirection && isObjectVisibleInSettings(object) {
                 if let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
-                    strokeCircle(at: point, radius: 26, color: directionColor(object.colorIndex), width: 2, in: context)
+                    strokeCircle(at: point, radius: pixelsToPoints(26), color: directionColor(object.colorIndex), width: pixelsToPoints(3), in: context)
                 }
             }
         }
+    }
+
+    private func pixelsToPoints(_ pixels: CGFloat) -> CGFloat {
+        pixels / max(1, screenScale)
     }
 
     private func strokeCircle(at point: CGPoint, radius: CGFloat, color: UIColor, width: CGFloat, in context: CGContext) {

@@ -23,18 +23,6 @@ enum SkyObjectType: String, Codable, CaseIterable {
     case GALAXY_CLUSTER
     case CONSTELLATION
 
-    static let star = SkyObjectType.STAR
-    static let galaxy = SkyObjectType.GALAXY
-    static let blackHole = SkyObjectType.BLACK_HOLE
-    static let planet = SkyObjectType.PLANET
-    static let sun = SkyObjectType.SUN
-    static let moon = SkyObjectType.MOON
-    static let nebula = SkyObjectType.NEBULA
-    static let openCluster = SkyObjectType.OPEN_CLUSTER
-    static let globularCluster = SkyObjectType.GLOBULAR_CLUSTER
-    static let galaxyCluster = SkyObjectType.GALAXY_CLUSTER
-    static let constellation = SkyObjectType.CONSTELLATION
-
     var titleKey: String {
         switch self {
         case .STAR:
@@ -152,27 +140,6 @@ class SkyObject: NSObject {
     var targetAzimuth: Double
     var targetAltitude: Double
     var lastUpdateTime: Double
-    var article: AstroArticle?
-    var lineObjectIds: [String]
-
-    var distanceAu: Double {
-        get { distAu }
-        set { distAu = newValue }
-    }
-
-    var isDirection: Bool {
-        get { showDirection }
-        set { showDirection = newValue }
-    }
-
-    var isCelestialPath: Bool {
-        get { showCelestialPath }
-        set { showCelestialPath = newValue }
-    }
-
-    var displayName: String {
-        getDisplayName()
-    }
 
     override var hash: Int {
         id.hashValue
@@ -197,8 +164,7 @@ class SkyObject: NSObject {
          radius: Double? = nil,
          distance: Double? = nil,
          mass: Double? = nil,
-         localizedName: String? = nil,
-         lineObjectIds: [String] = []) {
+         localizedName: String? = nil) {
         self.id = id
         self.hip = hip
         self.catalogs = catalogs
@@ -227,7 +193,6 @@ class SkyObject: NSObject {
         self.targetAzimuth = 0
         self.targetAltitude = 0
         self.lastUpdateTime = -1
-        self.lineObjectIds = lineObjectIds
         super.init()
     }
 
@@ -246,7 +211,6 @@ class SkyObject: NSObject {
                      radius: Double? = nil,
                      distance: Double? = nil,
                      mass: Double? = nil,
-                     lineObjectIds: [String] = [],
                      localizedName: String? = nil) {
         self.init(id: id,
                   hip: hip ?? -1,
@@ -263,8 +227,7 @@ class SkyObject: NSObject {
                   radius: radius,
                   distance: distance,
                   mass: mass,
-                  localizedName: localizedName,
-                  lineObjectIds: lineObjectIds)
+                  localizedName: localizedName)
     }
 
     func niceName() -> String {

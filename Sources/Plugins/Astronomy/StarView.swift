@@ -262,7 +262,7 @@ final class StarView: UIView {
     }
 
     private var skyObjects: [SkyObject] {
-        (manualSkyObjects ?? viewModel?.positionedObjects ?? [])
+        (manualSkyObjects ?? viewModel?.skyObjects ?? [])
             .filter { $0.type != .CONSTELLATION }
             .sorted { $0.magnitude < $1.magnitude }
     }
@@ -580,7 +580,7 @@ final class StarView: UIView {
 
     private func rebuildObjectMap() {
         skyObjectMap.removeAll(keepingCapacity: true)
-        for object in (manualSkyObjects ?? viewModel?.positionedObjects ?? []) {
+        for object in (manualSkyObjects ?? viewModel?.skyObjects ?? []) {
             skyObjectMap[object.id] = object
             if !object.wid.isEmpty {
                 skyObjectMap[object.wid] = object
@@ -641,7 +641,7 @@ final class StarView: UIView {
             return
         }
 
-        let text = object.displayName
+        let text = object.getDisplayName()
         let font = UIFont.systemFont(ofSize: 13, weight: .regular)
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
@@ -651,7 +651,7 @@ final class StarView: UIView {
         let origin = CGPoint(x: point.x + radius + 5, y: point.y - size.height * 0.75)
         let labelRect = CGRect(origin: origin, size: size).insetBy(dx: -5, dy: -5)
         let overlaps = occupiedRects.contains { $0.intersects(labelRect) }
-        if !overlaps || object === selectedObject || object.isCelestialPath {
+        if !overlaps || object === selectedObject || object.showCelestialPath {
             text.draw(at: origin, withAttributes: attributes)
             occupiedRects.append(labelRect)
             occupiedRects.append(objectRect)
@@ -659,11 +659,11 @@ final class StarView: UIView {
     }
 
     private func shouldShowLabel(for object: SkyObject, zoomFactor: Double) -> Bool {
-        if object === selectedObject || (settings.starMap.showCelestialPaths && object.isCelestialPath) {
+        if object === selectedObject || (settings.starMap.showCelestialPaths && object.showCelestialPath) {
             return true
         }
         if object.type == .STAR {
-            if object.displayName.lowercased().hasPrefix("hip") {
+            if object.getDisplayName().lowercased().hasPrefix("hip") {
                 return false
             }
             let threshold = 5.0 - zoomFactor * 3.5
@@ -676,7 +676,7 @@ final class StarView: UIView {
         if object === selectedObject {
             return .red
         }
-        if settings.starMap.showCelestialPaths && object.isCelestialPath {
+        if settings.starMap.showCelestialPaths && object.showCelestialPath {
             return .yellow
         }
         return .lightGray
@@ -684,7 +684,7 @@ final class StarView: UIView {
 
     private func drawHighlights(in context: CGContext) {
         if settings.starMap.showCelestialPaths {
-            for object in skyObjects where object.isCelestialPath && isObjectVisibleInSettings(object) {
+            for object in skyObjects where object.showCelestialPath && isObjectVisibleInSettings(object) {
                 if let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
                     strokeCircle(at: point, radius: 25, color: UIColor(red: 1, green: 0.84, blue: 0, alpha: 1), width: 2, in: context)
                 }
@@ -697,7 +697,7 @@ final class StarView: UIView {
         }
 
         if settings.starMap.showDirections {
-            for object in skyObjects where object.isDirection && isObjectVisibleInSettings(object) {
+            for object in skyObjects where object.showDirection && isObjectVisibleInSettings(object) {
                 if let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
                     strokeCircle(at: point, radius: 26, color: directionColor(object.colorIndex), width: 2, in: context)
                 }
@@ -1015,9 +1015,9 @@ final class StarView: UIView {
             }
 
             let path = CGMutablePath()
-            for (firstId, secondId) in constellation.linePairs {
-                guard let first = skyObjectMap[firstId],
-                      let second = skyObjectMap[secondId],
+            for (firstId, secondId) in constellation.lines {
+                guard let first = skyObjectMap[String(firstId)],
+                      let second = skyObjectMap[String(secondId)],
                       let p1 = skyToScreen(azimuth: first.azimuth, altitude: first.altitude, allowLimitedOffScreen: true),
                       let p2 = skyToScreen(azimuth: second.azimuth, altitude: second.altitude, allowLimitedOffScreen: true) else {
                     continue
@@ -1304,7 +1304,7 @@ final class StarView: UIView {
 
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let radius = min(bounds.width, bounds.height) * 0.42
-        for object in skyObjects where object.isDirection && isObjectVisibleInSettings(object) {
+        for object in skyObjects where object.showDirection && isObjectVisibleInSettings(object) {
             guard let projected = skyToScreen(azimuth: object.azimuth, altitude: object.altitude, allowAnyOffScreen: true),
                   !bounds.contains(projected) else {
                 continue
@@ -1455,7 +1455,30 @@ final class StarView: UIView {
            object.magnitude > maxMagnitude {
             return false
         }
-        return settings.isObjectTypeVisible(object.type)
+        switch object.type {
+        case .STAR:
+            return settings.starMap.showStars
+        case .GALAXY:
+            return settings.starMap.showGalaxies
+        case .BLACK_HOLE:
+            return settings.starMap.showBlackHoles
+        case .SUN:
+            return settings.starMap.showSun
+        case .MOON:
+            return settings.starMap.showMoon
+        case .PLANET:
+            return settings.starMap.showPlanets
+        case .NEBULA:
+            return settings.starMap.showNebulae
+        case .OPEN_CLUSTER:
+            return settings.starMap.showOpenClusters
+        case .GLOBULAR_CLUSTER:
+            return settings.starMap.showGlobularClusters
+        case .GALAXY_CLUSTER:
+            return settings.starMap.showGalaxyClusters
+        case .CONSTELLATION:
+            return settings.starMap.showConstellations
+        }
     }
 
     private func directionColor(_ index: Int) -> UIColor {
@@ -1639,9 +1662,9 @@ final class StarView: UIView {
                     continue
                 }
 
-                for (firstId, secondId) in constellation.linePairs {
-                    guard let first = skyObjectMap[firstId],
-                          let second = skyObjectMap[secondId],
+                for (firstId, secondId) in constellation.lines {
+                    guard let first = skyObjectMap[String(firstId)],
+                          let second = skyObjectMap[String(secondId)],
                           let p1 = skyToScreen(azimuth: first.azimuth, altitude: first.altitude),
                           let p2 = skyToScreen(azimuth: second.azimuth, altitude: second.altitude) else {
                         continue

@@ -9,12 +9,8 @@
 import Foundation
 import UIKit
 
-struct AstronomyPluginSettings: Codable {
-    typealias Common = CommonConfig
-    typealias StarMap = StarMapConfig
-    typealias Direction = DirectionConfig
-
-    enum DirectionColor: Int, Codable, CaseIterable {
+struct AstronomyPluginSettings {
+    enum DirectionColor: Int, CaseIterable {
         case BLUE
         case GREEN
         case ORANGE
@@ -43,25 +39,24 @@ struct AstronomyPluginSettings: Codable {
         }
     }
 
-    struct FavoriteConfig: Codable, Equatable {
+    struct FavoriteConfig: Equatable {
         var id: String
     }
 
-    struct DirectionConfig: Codable, Equatable {
+    struct DirectionConfig: Equatable {
         var id: String
         var colorIndex: Int = 0
-        var objectId: String { id }
     }
 
-    struct CelestialPathConfig: Codable, Equatable {
+    struct CelestialPathConfig: Equatable {
         var id: String
     }
 
-    struct CommonConfig: Codable, Equatable {
+    struct CommonConfig: Equatable {
         var showRegularMap = false
     }
 
-    struct StarMapConfig: Codable, Equatable {
+    struct StarMapConfig: Equatable {
         var showAzimuthalGrid = true
         var showEquatorialGrid = false
         var showEclipticLine = false
@@ -89,11 +84,6 @@ struct AstronomyPluginSettings: Codable {
         var favorites: [FavoriteConfig] = []
         var directions: [DirectionConfig] = []
         var celestialPaths: [CelestialPathConfig] = []
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case common
-        case starMap = "star_map"
     }
 
     static let storageKey = "astronomy_settings"
@@ -222,33 +212,6 @@ struct AstronomyPluginSettings: Codable {
         starMap.celestialPaths.removeAll { $0.id == id }
         if starMap.celestialPaths.count != oldCount {
             save()
-        }
-    }
-
-    func isObjectTypeVisible(_ type: SkyObjectType) -> Bool {
-        switch type {
-        case .SUN:
-            return starMap.showSun
-        case .MOON:
-            return starMap.showMoon
-        case .PLANET:
-            return starMap.showPlanets
-        case .CONSTELLATION:
-            return starMap.showConstellations
-        case .STAR:
-            return starMap.showStars
-        case .GALAXY:
-            return starMap.showGalaxies
-        case .NEBULA:
-            return starMap.showNebulae
-        case .OPEN_CLUSTER:
-            return starMap.showOpenClusters
-        case .GLOBULAR_CLUSTER:
-            return starMap.showGlobularClusters
-        case .GALAXY_CLUSTER:
-            return starMap.showGalaxyClusters
-        case .BLACK_HOLE:
-            return starMap.showBlackHoles
         }
     }
 

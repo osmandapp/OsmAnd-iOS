@@ -13,9 +13,6 @@ final class Catalog: NSObject {
     let name: String
     let catalogId: String
 
-    var catalogWid: String { wid }
-    var catalogName: String { name }
-
     override var hash: Int {
         var hasher = Hasher()
         hasher.combine(wid)
@@ -29,10 +26,6 @@ final class Catalog: NSObject {
         self.name = name
         self.catalogId = catalogId
         super.init()
-    }
-
-    convenience init(catalogWid: String, catalogName: String, catalogId: String) {
-        self.init(wid: catalogWid, name: catalogName, catalogId: catalogId)
     }
 
     override func isEqual(_ object: Any?) -> Bool {

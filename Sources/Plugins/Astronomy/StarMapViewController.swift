@@ -480,7 +480,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func syncObjectsToStarView() {
-        starView.setSkyObjects(viewModel.positionedObjects)
+        starView.setSkyObjects(viewModel.skyObjects)
         starView.setConstellations(viewModel.constellations)
         starView.setNeedsDisplay()
     }
@@ -656,7 +656,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         if let object = viewModel.state.selectedObject {
             let altitude = String(format: "%.1f", object.altitude)
             let azimuth = String(format: "%.1f", object.azimuth)
-            timeLabel.text = "\(object.displayName)  alt \(altitude) deg, az \(azimuth) deg"
+            timeLabel.text = "\(object.getDisplayName())  alt \(altitude) deg, az \(azimuth) deg"
             timeLabel.isHidden = false
         } else if viewModel.state.dataSnapshot?.usedFallback == true {
             timeLabel.text = localizedString("astro_using_solar_system_fallback")
@@ -755,7 +755,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     func getTrackableObjects() -> [SkyObject] {
-        viewModel.positionedObjects + viewModel.constellations.map { $0 as SkyObject }
+        viewModel.skyObjects + viewModel.constellations.map { $0 as SkyObject }
     }
 
     func findTrackableObjectById(_ id: String) -> SkyObject? {

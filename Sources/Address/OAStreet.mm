@@ -9,8 +9,6 @@
 #import "OAStreet.h"
 #import "OACity.h"
 
-#include <OsmAndCore/Utilities.h>
-
 @interface OAStreet ()
 
 @property (nonatomic) EOAAddressType addressType;
@@ -40,9 +38,6 @@
     if (self)
     {
         self.street = street;
-        double lat = OsmAnd::Utilities::getLatitudeFromTile(24, street->position31.y >> 7);
-        double lon = OsmAnd::Utilities::getLongitudeFromTile(24, street->position31.x >> 7);
-        _location = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
     }
     return self;
 }
@@ -59,11 +54,6 @@
 -(NSString *)iconName
 {
     return @"ic_action_street_name";
-}
-
-- (CLLocation *)getLocation
-{
-    return self.location;
 }
 
 @end

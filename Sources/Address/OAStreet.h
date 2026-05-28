@@ -15,11 +15,9 @@
 @interface OAStreet : OAAddress
 
 @property (nonatomic, readonly) OACity *city;
-@property (nonatomic, readonly) CLLocation *location;
 
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::Street> street;
 
 - (instancetype)initWithStreet:(const std::shared_ptr<const OsmAnd::Street>&)street;
-- (CLLocation *)getLocation;
 
 @end

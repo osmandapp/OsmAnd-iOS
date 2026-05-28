@@ -132,6 +132,7 @@
 @interface OASearchCoreFactory ()
 
 + (CLLocation *) getLocation:(const OsmAnd::PointI)position31;
++ (CLLocation *) getLocation24Zoom:(const OsmAnd::PointI)position31;
 + (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno;
 + (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names nativeName:(const QString&)nativeName;
 + (BOOL) isLastWordCityGroup:(OASearchPhrase *)p;
@@ -794,7 +795,7 @@
                                           sr.objectType = EOAObjectTypeStreet;
                                           sr.localeRelatedObjectName = street->streetGroup->getName(lang, transliterate).toNSString();
                                           sr.relatedObject = [[OACity alloc] initWithCity:street->streetGroup];
-                                          sr.location = [(OAStreet *)sr.object getLocation];
+                                          sr.location = [OASearchCoreFactory getLocation24Zoom:street->position31];
                                       }
                                       else if (address->addressType == OsmAnd::AddressType::StreetGroup && ![OASearchCoreFactory isLastWordCityGroup:phrase])
                                       {
@@ -2243,7 +2244,7 @@
                 else
                 {
                     res.localeName = b->getName(lang, transliterate).toNSString();
-                    res.location = [OASearchCoreFactory getLocation:b->position31];
+                    res.location = [OASearchCoreFactory getLocation24Zoom:b->position31];
                 }
                 res.otherNames = [OANativeUtilities QListOfStringsToNSArray:b->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
                 res.object = [[OABuilding alloc] initWithBuilding:b];
@@ -2285,7 +2286,7 @@
                 res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
                 res.priorityDistance = 0;
                 res.objectType = EOAObjectTypeStreetIntersection;
-                res.location = [(OAStreet *)res.object getLocation];
+                res.location = [OASearchCoreFactory getLocation24Zoom:street->position31];
                 res.preferredZoom = PREFERRED_STREET_INTERSECTION_ZOOM;
                 [phrase countUnknownWordsMatchMainResult:res];
                 [resultMatcher publish:res];
@@ -2386,7 +2387,7 @@
             res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
             res.preferredZoom = PREFERRED_STREET_ZOOM;
             res.resourceId = sw.result.resourceId;
-            res.location = [(OAStreet *)res.object getLocation];
+            res.location = [OASearchCoreFactory getLocation24Zoom:object->position31];
             res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
             //res.priorityDistance = 1;
             res.objectType = EOAObjectTypeStreet;
@@ -2774,6 +2775,13 @@ static BOOL DISPLAY_DEFAULT_POI_TYPES = NO;
 {
     const OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(position31);
     return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+}
+
++ (CLLocation *) getLocation24Zoom:(const OsmAnd::PointI)position31
+{
+    double lat = OsmAnd::Utilities::getLatitudeFromTile(24, position31.y >> 7);
+    double lon = OsmAnd::Utilities::getLongitudeFromTile(24, position31.x >> 7);
+    return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
 }
 
 + (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno

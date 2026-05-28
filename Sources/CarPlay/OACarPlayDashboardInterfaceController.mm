@@ -88,6 +88,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     CPMapButton *_3DModeMapButton;
     BOOL _wasIn3DBeforePreview;
 
+    OADirectionsGridController *_directionsGridController;
+
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_map3DModeObserver;
     OANextDirectionInfo *_currentDirectionInfo;
@@ -130,7 +132,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
     [self enterBrowsingState];
     
-    [self.interfaceController setRootTemplate:_mapTemplate animated:YES completion:nil];
+    [self safeSetRootTemplate:_mapTemplate animated:YES];
 }
 
 - (void) onTripStartTriggered
@@ -235,14 +237,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void)openSearch
 {
-    OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
-    [directionsGrid present];
-    [directionsGrid openSearch];
+    _directionsGridController = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
+    [_directionsGridController present];
+    [_directionsGridController openSearch];
 }
 
 - (void)openNavigation {
-    OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
-    [directionsGrid present];
+    _directionsGridController = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
+    [_directionsGridController present];
 }
 
 - (void)onMap3dModeUpdated
@@ -282,21 +284,39 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPListItem *parkLocation = [[CPListItem alloc] initWithText:OALocalizedString(@"context_menu_item_add_parking_point") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking_location"]];
     parkLocation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [weakSelf saveParkingAtCurrentLocationWithCompletion:completion];
         }];
     };
     
     CPListItem *findParking = [[CPListItem alloc] initWithText:OALocalizedString(@"find_parking") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking"]];
     findParking.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [weakSelf openFindParkingWithCompletion:completion];
         }];
     };
     
     CPListItem *recalcRoute = [[CPListItem alloc] initWithText:OALocalizedString(@"recalculate_route") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_navigation"]];
     recalcRoute.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [[OARootViewController instance].mapPanel.mapActions recalculateRoute];
             if (completion)
                 completion();
@@ -305,7 +325,13 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPListItem *finishNavigation = [[CPListItem alloc] initWithText:OALocalizedString(@"finish_navigation") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_finish_flag"]];
     finishNavigation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [weakSelf stopNavigation];
             if (completion)
                 completion();
@@ -314,7 +340,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"arrived_at_destination") sections:@[[[CPListSection alloc] initWithItems:@[parkLocation, findParking, recalcRoute, finishNavigation]]]];
     
-    [self.interfaceController pushTemplate:listTemplate animated:YES completion:^(BOOL completed, NSError * _Nullable error) {}];
+    [self safePushTemplate:listTemplate animated:YES];
 }
 
 - (void)saveParkingAtCurrentLocationWithCompletion:(dispatch_block_t)completion

@@ -18,10 +18,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let magnitudeSliderWidth: CGFloat = 240
         static let transparencySliderHeight: CGFloat = 150
         static let bottomSheetHeight: CGFloat = 280
+        static let objectInfoSheetHeight: CGFloat = 420
         static let settingsSheetHeight: CGFloat = 520
         static let maxMagnitude: Double = 7.0
     }
     private var settings: AstronomyPluginSettings
+    private let dataProvider: AstroDataProvider
     private let viewModel: StarObjectsViewModel
 
     private let mainLayout = UIView()
@@ -63,15 +65,23 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var lastUpdatedAzimuth = -1.0
     private var bottomSheetController: UIViewController?
     private var bottomSheetHeightConstraint: NSLayoutConstraint?
+    private var mapLocationObserver: OAAutoObserverProxy?
 
     init(plugin: AstronomyPlugin) {
-        settings = AstronomyPluginSettings.load()
-        viewModel = StarObjectsViewModel(provider: plugin.dataProvider, settings: settings)
+        let loadedSettings = AstronomyPluginSettings.load()
+        let provider = plugin.dataProvider
+        settings = loadedSettings
+        dataProvider = provider
+        viewModel = StarObjectsViewModel(provider: provider, settings: loadedSettings)
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        mapLocationObserver?.detach()
     }
 
     override func viewDidLoad() {
@@ -487,6 +497,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.onViewAngleChangeListener = { [weak self] fov in
             self?.cameraHelper.updateCameraZoom(fov: fov)
         }
+
+        if let mapObservable = currentMapViewController()?.mapObservable {
+            mapLocationObserver = OAAutoObserverProxy(self,
+                                                      withHandler: #selector(onMapLocationChanged),
+                                                      andObserve: mapObservable)
+        }
     }
 
     private func syncObjectsToStarView() {
@@ -739,13 +755,34 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.showRedFilter = enabled
     }
 
-    private func updateStarMap(updateAzimuth: Bool = false) {
-        let location = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation
-        if let location {
-            arModeHelper.updateGeomagneticField(location: location)
+    private func currentMapViewController() -> OAMapViewController? {
+        OARootViewController.instance()?.mapPanel?.mapViewController
+    }
+
+    private func currentMapCenterLocation() -> CLLocation? {
+        currentMapViewController()?.getMapLocation()
+    }
+
+    @objc private func onMapLocationChanged() {
+        DispatchQueue.main.async { [weak self] in
+            self?.updateStarMap()
         }
-        let coordinate = location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
-        starView.setObserverLocation(lat: coordinate.latitude, lon: coordinate.longitude, alt: location?.altitude ?? 0)
+    }
+
+    private func updateStarMap(updateAzimuth: Bool = false) {
+        let deviceLocation = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation
+        if let deviceLocation {
+            arModeHelper.updateGeomagneticField(location: deviceLocation)
+        }
+
+        let mapLocation = currentMapCenterLocation()
+        let observerLocation = mapLocation ?? deviceLocation
+        let coordinate = observerLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        let altitude = mapLocation == nil ? observerLocation?.altitude ?? 0 : 0
+        starView.setObserverLocation(lat: coordinate.latitude, lon: coordinate.longitude, alt: altitude)
+        if selectedObject != nil {
+            updateTimeControls()
+        }
         if updateAzimuth && !arModeHelper.isArModeEnabled && !starView.is2DMode {
             setAzimuth(lastUpdatedAzimuth >= 0 ? lastUpdatedAzimuth : 0)
         }
@@ -808,14 +845,18 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             }
             controller = sheet
         } else {
-            let sheet = SkyObjectInfoFragment(object: object)
+            let sheet = SkyObjectInfoFragment(object: object,
+                                              date: currentDate,
+                                              observer: starView.observer,
+                                              dataProvider: dataProvider,
+                                              preferredLocale: OsmAndApp.swiftInstance()?.getLanguageCode())
             sheet.onClose = { [weak self] in
                 self?.hideBottomSheet()
             }
             controller = sheet
         }
 
-        setBottomSheetHeight(Layout.bottomSheetHeight)
+        setBottomSheetHeight(object is Constellation ? Layout.bottomSheetHeight : Layout.objectInfoSheetHeight)
         addChild(controller)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         bottomSheetContainer.addSubview(controller.view)

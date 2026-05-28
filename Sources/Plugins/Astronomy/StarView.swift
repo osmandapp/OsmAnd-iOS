@@ -317,7 +317,13 @@ final class StarView: UIView {
     }
 
     func setObserverLocation(lat: Double, lon: Double, alt: Double) {
+        let previousObserver = observer
         observer = Observer(latitude: lat, longitude: lon, height: alt)
+        if previousObserver.latitude != lat ||
+            previousObserver.longitude != lon ||
+            previousObserver.height != alt {
+            pathCache.removeAll()
+        }
         recalculatePositions(time: currentTime, updateTargets: false, force: true)
         setNeedsDisplay()
     }

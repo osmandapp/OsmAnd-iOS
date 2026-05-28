@@ -88,8 +88,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     CPMapButton *_3DModeMapButton;
     BOOL _wasIn3DBeforePreview;
 
-    OADirectionsGridController *_directionsGridController;
-
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_map3DModeObserver;
     OANextDirectionInfo *_currentDirectionInfo;
@@ -237,14 +235,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void)openSearch
 {
-    _directionsGridController = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
-    [_directionsGridController present];
-    [_directionsGridController openSearch];
+    OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
+    [directionsGrid present];
+    [directionsGrid openSearch];
 }
 
-- (void)openNavigation {
-    _directionsGridController = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
-    [_directionsGridController present];
+- (void)openNavigation
+{
+    OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
+    [directionsGrid present];
 }
 
 - (void)onMap3dModeUpdated

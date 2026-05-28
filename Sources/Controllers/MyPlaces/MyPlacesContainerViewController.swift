@@ -88,8 +88,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         setupSegments()
         initialSelectedTab()
         setupNavbar()
-        segmentContainerView.backgroundColor = .viewBg
-        pageViewController?.scrollView?.backgroundColor = .viewBg
+        segmentContainerView.backgroundColor = .clear
+        pageViewController?.scrollView?.backgroundColor = .clear
         view.backgroundColor = .viewBg
     }
     
@@ -116,8 +116,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                 availableViewControllers[tab] = favoritesViewController
             }
         case .tracks:
-            if !availableViewControllers.contains(where: { $0.key == .tracks }),
-               let tracksViewController = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
+            if !availableViewControllers.contains(where: { $0.key == .tracks }) {
+                let tracksViewController = TracksViewController(frame: pageViewController.view.frame, isRootFolder: true)
                 tracksViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = tracksViewController
             }

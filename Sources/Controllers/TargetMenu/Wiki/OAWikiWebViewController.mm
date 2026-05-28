@@ -167,6 +167,15 @@
                 _contentLocale = _poi.localizedContent.allKeys.firstObject;
                 _content = _poi.localizedContent[_contentLocale];
             }
+            
+            if (!_content)
+            {
+                NullablePair *pairDescription = [AmenityUIHelper getDescriptionWithPreferredLangWithAmenity:_poi key:DESCRIPTION_TAG map:_poi.values];
+                if ([pairDescription.first isKindOfClass:NSString.class])
+                {
+                    _content = pairDescription.first;
+                }
+            }
         }
     }
 

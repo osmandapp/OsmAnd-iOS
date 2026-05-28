@@ -37,13 +37,13 @@
     // override
 }
 
-- (void) handleTemplateOperation:(NSString *)operation completed:(BOOL)completed error:(NSError *)error
+- (void)handleTemplateOperation:(NSString *)operation completed:(BOOL)completed error:(NSError *)error
 {
     if (!completed || error)
         NSLog(@"[CarPlay] handleTemplateOperation %@ failed. completed=%@ error=%@", operation, completed ? @"YES" : @"NO", error);
 }
 
-- (void) safeSetRootTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated
+- (void)safeSetRootTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated
 {
     __weak __typeof(self) weakSelf = self;
 
@@ -56,7 +56,7 @@
     }];
 }
 
-- (void) safePushTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated
+- (void)safePushTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated
 {
     __weak __typeof(self) weakSelf = self;
 
@@ -69,7 +69,7 @@
     }];
 }
 
-- (void) safePopTemplateAnimated:(BOOL)animated completion:(nullable OACarPlayTemplateCompletion)completion
+- (void)safePopTemplateAnimated:(BOOL)animated completion:(nullable OACarPlayTemplateCompletion)completion
 {
     __weak __typeof(self) weakSelf = self;
 
@@ -84,7 +84,7 @@
     }];
 }
 
-- (void) safePopToRootTemplateAnimated:(BOOL)animated
+- (void)safePopToRootTemplateAnimated:(BOOL)animated
 {
     __weak __typeof(self) weakSelf = self;
 

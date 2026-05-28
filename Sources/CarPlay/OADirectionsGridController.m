@@ -92,5 +92,4 @@
     return @[btnHistory, btnSearch, btnCategories, btnFav, btnMarkers, btnTracks];
 }
 
-
 @end

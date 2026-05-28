@@ -162,11 +162,11 @@
             BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
             if (detailsObject)
             {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:nil];
             }
             else
             {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj];
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj renderedObject:nil];
             }
             break;
         }
@@ -179,7 +179,7 @@
                 BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
                 if (detailsObject)
                 {
-                    controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+                    controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
                 }
                 else
                 {
@@ -195,7 +195,7 @@
             BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
             if (detailsObject)
             {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
             }
             else
             {

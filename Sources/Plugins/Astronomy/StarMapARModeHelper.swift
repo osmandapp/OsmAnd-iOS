@@ -11,7 +11,7 @@ import CoreLocation
 import Foundation
 
 final class StarMapARModeHelper {
-    private let motionManager = CMMotionManager()
+    private var motionManager: CMMotionManager?
     private let queue = OperationQueue()
     private let minAlpha = 0.03
     private let maxAlpha = 0.3
@@ -28,6 +28,13 @@ final class StarMapARModeHelper {
 
     init() {
         queue.maxConcurrentOperationCount = 1
+    }
+
+    deinit {
+        onOrientationChanged = nil
+        onUnavailable = nil
+        onArModeChanged = nil
+        stopMotionUpdates(waitUntilFinished: true)
     }
 
     func onResume() {
@@ -64,6 +71,9 @@ final class StarMapARModeHelper {
     }
 
     private func startMotionUpdates() -> Bool {
+        let motionManager = self.motionManager ?? CMMotionManager()
+        self.motionManager = motionManager
+
         guard motionManager.isDeviceMotionAvailable, let referenceFrame = preferredReferenceFrame() else {
             handleUnavailable()
             return false
@@ -83,7 +93,10 @@ final class StarMapARModeHelper {
             let roll = attitude.roll * 180.0 / .pi
             let altitude = max(-85, min(90, 90 + pitch))
             let smoothed = self.smoothOrientation(azimuth: yaw, altitude: altitude)
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.isRunning, self.isArModeEnabled else {
+                    return
+                }
                 self.onOrientationChanged?(smoothed.azimuth, smoothed.altitude, roll)
             }
         }
@@ -101,9 +114,13 @@ final class StarMapARModeHelper {
         onArModeChanged?(false)
     }
 
-    private func stopMotionUpdates() {
+    private func stopMotionUpdates(waitUntilFinished: Bool = false) {
         isRunning = false
-        motionManager.stopDeviceMotionUpdates()
+        motionManager?.stopDeviceMotionUpdates()
+        queue.cancelAllOperations()
+        if waitUntilFinished, OperationQueue.current !== queue {
+            queue.waitUntilAllOperationsAreFinished()
+        }
     }
 
     private func handleUnavailable() {

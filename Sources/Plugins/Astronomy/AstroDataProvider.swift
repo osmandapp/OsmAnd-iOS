@@ -10,14 +10,6 @@ import Foundation
 import OsmAndShared
 import UIKit
 
-struct AstroDataSnapshot {
-    let objects: [SkyObject]
-    let constellations: [Constellation]
-    let catalogs: [String: Catalog]
-    let dbPath: String?
-    let usedFallback: Bool
-}
-
 class AstroDataProvider {
     private var cachedSkyObjects: [SkyObject]?
     private var cachedCatalogs: [Catalog]?
@@ -73,6 +65,9 @@ class AstroDataProvider {
             if let center = AstroUtils.calculateConstellationCenter(constellation, skyObjectMap: skyObjectMap) {
                 constellation.ra = center.0
                 constellation.dec = center.1
+            } else {
+                constellation.ra = 0
+                constellation.dec = 0
             }
         }
         cachedConstellations = constellations
@@ -81,17 +76,6 @@ class AstroDataProvider {
 
     func getAstroArticle(wikidataId: String, lang: String? = nil) -> AstroArticle? {
         getAstroArticleImpl(wikidataId: wikidataId, lang: lang)
-    }
-
-    func loadData(preferredLocale: String?) -> AstroDataSnapshot {
-        let objects = getSkyObjects(preferredLocale: preferredLocale)
-        let constellations = getConstellations(preferredLocale: preferredLocale)
-        let catalogs = Dictionary(uniqueKeysWithValues: getCatalogs().map { ($0.wid, $0) })
-        return AstroDataSnapshot(objects: objects,
-                                 constellations: constellations,
-                                 catalogs: catalogs,
-                                 dbPath: nil,
-                                 usedFallback: objects.isEmpty)
     }
 
     func clearCache() {

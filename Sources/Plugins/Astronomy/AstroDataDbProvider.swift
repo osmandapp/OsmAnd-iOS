@@ -16,27 +16,13 @@ final class AstroDataDbProvider: AstroDataProvider {
         static let astroDir = "astro"
         static let databaseName = "stars.db"
         static let databaseNameExtended = "stars-articles.stardb"
-    }
-
-    private var lastDbPath: String?
-    private var lastUsedFallback = false
-
-    override func loadData(preferredLocale: String?) -> AstroDataSnapshot {
-        let objects = getSkyObjects(preferredLocale: preferredLocale)
-        let constellations = getConstellations(preferredLocale: preferredLocale)
-        let catalogs = Dictionary(uniqueKeysWithValues: getCatalogs().map { ($0.wid, $0) })
-        return AstroDataSnapshot(objects: objects,
-                                 constellations: constellations,
-                                 catalogs: catalogs,
-                                 dbPath: lastDbPath,
-                                 usedFallback: lastUsedFallback)
+        static let queryChunkSize = 900
     }
 
     override func getSkyObjectsImpl(preferredLocale: String?) -> [SkyObject] {
         guard let db = openDatabase() else {
             var objects: [SkyObject] = []
             getPlanets(&objects)
-            lastUsedFallback = true
             return objects
         }
 
@@ -44,8 +30,8 @@ final class AstroDataDbProvider: AstroDataProvider {
         let rows = db.rows("""
         SELECT wikidata, name, type, ra, dec, mag, hip, radius, distance, mass, centerwid
         FROM Objects
-        WHERE type != 'constellations'
-        """)
+        WHERE type != ?
+        """, arguments: ["constellations"])
         for row in rows {
             guard let typeStr = row.string("type"),
                   var type = SkyObjectType.fromDbType(typeStr),
@@ -87,9 +73,6 @@ final class AstroDataDbProvider: AstroDataProvider {
 
         if objects.isEmpty {
             getPlanets(&objects)
-            lastUsedFallback = true
-        } else {
-            lastUsedFallback = false
         }
         return objects
     }
@@ -116,8 +99,8 @@ final class AstroDataDbProvider: AstroDataProvider {
         let rows = db.rows("""
         SELECT name, wikidata, lines
         FROM Objects
-        WHERE type = 'constellations'
-        """)
+        WHERE type = ?
+        """, arguments: ["constellations"])
         for row in rows {
             guard let name = row.string("name") else {
                 continue
@@ -145,8 +128,8 @@ final class AstroDataDbProvider: AstroDataProvider {
         let rows = db.rows("""
         SELECT wikidata, lang, title, extract, thumbnail_url, summary_json, mobile_html
         FROM Wikipedia
-        WHERE wikidata = '\(SQLiteDatabase.escape(wikidataId))'
-        """)
+        WHERE wikidata = ? AND (lang = ? OR lang = ?)
+        """, arguments: [wikidataId, bestLang, "en"])
 
         var bestArticle: AstroArticle?
         var enArticle: AstroArticle?
@@ -172,11 +155,9 @@ final class AstroDataDbProvider: AstroDataProvider {
     private func openDatabase() -> SQLiteDatabase? {
         for path in databaseLookupPaths() where FileManager.default.fileExists(atPath: path) {
             if let db = SQLiteDatabase(path: path) {
-                lastDbPath = path
                 return db
             }
         }
-        lastDbPath = nil
         return nil
     }
 
@@ -192,18 +173,30 @@ final class AstroDataDbProvider: AstroDataProvider {
     }
 
     private func loadLocalizedNames(db: SQLiteDatabase, preferredLocale: String?, objects: [SkyObject]) {
+        let wikidataIds = uniqueWikidataIds(from: objects)
+        guard !wikidataIds.isEmpty else {
+            return
+        }
+
         let targets = localePriorities(preferredLocale)
-        let rows = db.rows("SELECT wikidata, name, type FROM Names")
         var namesMap: [String: [String: String]] = [:]
-        for row in rows {
-            guard let wid = row.string("wikidata"),
-                  let name = row.string("name"),
-                  let type = row.string("type") else {
-                continue
-            }
-            let types = type.split(separator: ",").map { $0.trimmingCharacters(in: CharacterSet(charactersIn: " \"")) }
-            for target in types where targets.contains(target) {
-                namesMap[wid, default: [:]][target] = name
+        for chunk in chunked(wikidataIds, size: Constants.queryChunkSize) {
+            let placeholders = Array(repeating: "?", count: chunk.count).joined(separator: ",")
+            let rows = db.rows("""
+            SELECT wikidata, name, type
+            FROM Names
+            WHERE wikidata IN (\(placeholders))
+            """, arguments: chunk)
+            for row in rows {
+                guard let wid = row.string("wikidata"),
+                      let name = row.string("name"),
+                      let type = row.string("type") else {
+                    continue
+                }
+                let types = type.split(separator: ",").map { $0.trimmingCharacters(in: CharacterSet(charactersIn: " \"")) }
+                for target in types where targets.contains(target) {
+                    namesMap[wid, default: [:]][target] = name
+                }
             }
         }
 
@@ -221,19 +214,31 @@ final class AstroDataDbProvider: AstroDataProvider {
     }
 
     private func loadCatalogs(db: SQLiteDatabase, objects: [SkyObject]) {
+        let wikidataIds = uniqueWikidataIds(from: objects)
+        guard !wikidataIds.isEmpty else {
+            return
+        }
+
         let catalogs = Dictionary(uniqueKeysWithValues: getCatalogs().map { ($0.wid, $0) })
-        let rows = db.rows("SELECT catalogWid, catalogId, wikidataid FROM CatalogIds")
         var allCatalogsMap: [String: [Catalog]] = [:]
-        for row in rows {
-            guard let wikiId = row.string("wikidataid"),
-                  let catalogWid = row.string("catalogWid"),
-                  let catalogId = row.string("catalogId"),
-                  let baseCatalog = catalogs[catalogWid] else {
-                continue
+        for chunk in chunked(wikidataIds, size: Constants.queryChunkSize) {
+            let placeholders = Array(repeating: "?", count: chunk.count).joined(separator: ",")
+            let rows = db.rows("""
+            SELECT catalogWid, catalogId, wikidataid
+            FROM CatalogIds
+            WHERE wikidataid IN (\(placeholders))
+            """, arguments: chunk)
+            for row in rows {
+                guard let wikiId = row.string("wikidataid"),
+                      let catalogWid = row.string("catalogWid"),
+                      let catalogId = row.string("catalogId"),
+                      let baseCatalog = catalogs[catalogWid] else {
+                    continue
+                }
+                allCatalogsMap[wikiId, default: []].append(Catalog(wid: baseCatalog.wid,
+                                                                   name: baseCatalog.name,
+                                                                   catalogId: catalogId))
             }
-            allCatalogsMap[wikiId, default: []].append(Catalog(wid: baseCatalog.wid,
-                                                               name: baseCatalog.name,
-                                                               catalogId: catalogId))
         }
 
         for object in objects where !object.wid.isEmpty {
@@ -255,6 +260,21 @@ final class AstroDataDbProvider: AstroDataProvider {
     private func localePriorities(_ preferredLocale: String?) -> [String] {
         let lang = localeLanguage(preferredLocale)
         return [lang, "\(lang)wiki", "en", "enwiki", "mul"]
+    }
+
+    private func uniqueWikidataIds(from objects: [SkyObject]) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        for object in objects where !object.wid.isEmpty && seen.insert(object.wid).inserted {
+            result.append(object.wid)
+        }
+        return result
+    }
+
+    private func chunked<T>(_ values: [T], size: Int) -> [[T]] {
+        stride(from: 0, to: values.count, by: size).map {
+            Array(values[$0..<min($0 + size, values.count)])
+        }
     }
 }
 
@@ -322,6 +342,7 @@ private struct SQLiteRow {
 
 private final class SQLiteDatabase {
     private var handle: OpaquePointer?
+    private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
     init?(path: String) {
         guard sqlite3_open_v2(path, &handle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
@@ -336,13 +357,19 @@ private final class SQLiteDatabase {
         sqlite3_close(handle)
     }
 
-    func rows(_ sql: String) -> [SQLiteRow] {
+    func rows(_ sql: String, arguments: [String] = []) -> [SQLiteRow] {
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(handle, sql, -1, &statement, nil) == SQLITE_OK, let statement else {
             return []
         }
         defer {
             sqlite3_finalize(statement)
+        }
+
+        for (index, argument) in arguments.enumerated() {
+            guard sqlite3_bind_text(statement, Int32(index + 1), argument, -1, transient) == SQLITE_OK else {
+                return []
+            }
         }
 
         var result: [SQLiteRow] = []
@@ -359,10 +386,6 @@ private final class SQLiteDatabase {
             result.append(SQLiteRow(values: values))
         }
         return result
-    }
-
-    static func escape(_ value: String) -> String {
-        value.replacingOccurrences(of: "'", with: "''")
     }
 
     private func value(_ statement: OpaquePointer, index: Int32) -> SQLiteValue {

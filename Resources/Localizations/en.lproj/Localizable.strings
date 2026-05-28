@@ -4567,7 +4567,6 @@
 "astro_camera" = "Camera";
 "astro_camera_permission_denied" = "Camera access is needed to show the sky camera overlay.";
 "astro_camera_unavailable" = "Camera overlay is not available on this device.";
-"astro_using_solar_system_fallback" = "Astronomy database not found. Showing solar-system objects.";
 "astro_stars" = "Stars";
 "astro_star" = "Star";
 "astro_sun" = "Sun";

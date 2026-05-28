@@ -25,7 +25,6 @@
 		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
 		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
 		A5A5000A2F5000010000000A /* AstroUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500092F50000100000009 /* AstroUtils.swift */; };
-		A5A5000C2F5000010000000C /* StarChartState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5000B2F5000010000000B /* StarChartState.swift */; };
 		A5A5000E2F5000010000000E /* StarObjectsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5000D2F5000010000000D /* StarObjectsViewModel.swift */; };
 		A5A500102F50000100000010 /* StarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5000F2F5000010000000F /* StarView.swift */; };
 		A5A500122F50000100000012 /* StarMapARModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500112F50000100000011 /* StarMapARModeHelper.swift */; };
@@ -3814,7 +3813,6 @@
 		A5A500052F50000100000005 /* AstronomyPluginSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPluginSettings.swift; sourceTree = "<group>"; };
 		A5A500072F50000100000007 /* AstroDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDataProvider.swift; sourceTree = "<group>"; };
 		A5A500092F50000100000009 /* AstroUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroUtils.swift; sourceTree = "<group>"; };
-		A5A5000B2F5000010000000B /* StarChartState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarChartState.swift; sourceTree = "<group>"; };
 		A5A5000D2F5000010000000D /* StarObjectsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarObjectsViewModel.swift; sourceTree = "<group>"; };
 		A5A5000F2F5000010000000F /* StarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarView.swift; sourceTree = "<group>"; };
 		A5A500112F50000100000011 /* StarMapARModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapARModeHelper.swift; sourceTree = "<group>"; };
@@ -11286,7 +11284,6 @@
 				A5A500072F50000100000007 /* AstroDataProvider.swift */,
 				A5A500212F50000100000021 /* AstroDataDbProvider.swift */,
 				A5A500092F50000100000009 /* AstroUtils.swift */,
-				A5A5000B2F5000010000000B /* StarChartState.swift */,
 				A5A5000D2F5000010000000D /* StarObjectsViewModel.swift */,
 				A5A500232F50000100000023 /* AstroConfigureViewBottomSheet.swift */,
 				A5A500252F50000100000025 /* SkyObjectInfoBottomSheet.swift */,
@@ -17222,7 +17219,6 @@
 				A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */,
 				A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */,
 				A5A5000A2F5000010000000A /* AstroUtils.swift in Sources */,
-				A5A5000C2F5000010000000C /* StarChartState.swift in Sources */,
 				A5A5000E2F5000010000000E /* StarObjectsViewModel.swift in Sources */,
 				A5A500102F50000100000010 /* StarView.swift in Sources */,
 				A5A500122F50000100000012 /* StarMapARModeHelper.swift in Sources */,

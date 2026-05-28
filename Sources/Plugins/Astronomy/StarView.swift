@@ -201,6 +201,7 @@ final class StarView: UIView {
     private var occupiedRects: [CGRect] = []
     private var pathCache: [String: CelestialPathData] = [:]
     private var selectedConstellationId: String?
+    private var selectedObject: SkyObject?
     private var pinnedObjects = Set<SkyObject>()
     private var manualSkyObjects: [SkyObject]?
     private var manualConstellations: [Constellation]?
@@ -245,7 +246,7 @@ final class StarView: UIView {
 
     var currentTime: Time {
         get {
-            explicitCurrentTime ?? AstroUtils.astronomyTime(from: viewModel?.state.date ?? Date())
+            explicitCurrentTime ?? AstroUtils.astronomyTime(from: Date())
         }
         set {
             explicitCurrentTime = newValue
@@ -254,7 +255,7 @@ final class StarView: UIView {
 
     var observer: Observer {
         get {
-            explicitObserver ?? AstroUtils.observer(from: viewModel?.state.location)
+            explicitObserver ?? AstroUtils.observer(from: nil)
         }
         set {
             explicitObserver = newValue
@@ -269,10 +270,6 @@ final class StarView: UIView {
 
     private var constellations: [Constellation] {
         manualConstellations ?? viewModel?.constellations ?? []
-    }
-
-    private var selectedObject: SkyObject? {
-        viewModel?.state.selectedObject
     }
 
     override init(frame: CGRect) {
@@ -426,7 +423,7 @@ final class StarView: UIView {
             return
         }
         selectedConstellationId = nil
-        viewModel?.state.selectedObject = object
+        selectedObject = object
         if let object, center {
             setCenter(azimuth: object.azimuth, altitude: object.altitude, animate: animate)
         }
@@ -435,7 +432,7 @@ final class StarView: UIView {
 
     func setSelectedConstellation(_ constellation: Constellation?, center: Bool = false, animate: Bool = false) {
         selectedConstellationId = constellation?.id
-        viewModel?.state.selectedObject = constellation
+        selectedObject = constellation
         if let constellation, center {
             let centers = constellationCenters()
             if let center = centers[constellation.id] {
@@ -485,8 +482,6 @@ final class StarView: UIView {
 
     func setDateTime(_ time: Time, animate: Bool = true) {
         currentTime = time
-        let millis = time.toMillisecondsSince1970()
-        viewModel?.state.date = Date(timeIntervalSince1970: TimeInterval(Double(millis) / 1000.0))
         recalculatePositions(time: time, updateTargets: animate, force: true)
         if animate {
             for object in skyObjects {
@@ -1644,7 +1639,7 @@ final class StarView: UIView {
 
         if let bestObject {
             selectedConstellationId = nil
-            viewModel?.state.selectedObject = bestObject
+            selectedObject = bestObject
             setNeedsDisplay()
             delegate?.starView(self, didSelect: bestObject)
             onObjectClickListener?(bestObject)
@@ -1688,7 +1683,7 @@ final class StarView: UIView {
 
             if let bestConstellation {
                 selectedConstellationId = bestConstellation.id
-                viewModel?.state.selectedObject = bestConstellation
+                selectedObject = bestConstellation
                 setNeedsDisplay()
                 delegate?.starView(self, didSelect: bestConstellation)
                 onObjectClickListener?(nil)
@@ -1698,7 +1693,7 @@ final class StarView: UIView {
         }
 
         selectedConstellationId = nil
-        viewModel?.state.selectedObject = nil
+        selectedObject = nil
         setNeedsDisplay()
         delegate?.starView(self, didSelect: nil)
         onObjectClickListener?(nil)

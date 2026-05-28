@@ -53,6 +53,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private var autoTimeUpdateTimer: Timer?
     private var isTimeAutoUpdateEnabled = true
+    private var currentDate = Date()
     private var selectedObject: SkyObject?
     private var regularMapVisible = false
     private var previousAltitude = 45.0
@@ -602,7 +603,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateTime(_ date: Date, animate: Bool) {
-        viewModel.state.date = date
+        currentDate = date
         timeSelectionView.setDateTime(date)
         starView.setDateTime(AstroUtils.astronomyTime(from: date), animate: animate)
         updateTimeControls()
@@ -640,7 +641,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateTimeControls() {
-        let date = viewModel.state.date
+        let date = currentDate
         timeSelectionView.setDateTime(date)
         let calendar = Calendar.current
         let now = Date()
@@ -653,13 +654,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         timeControlButton.setTitle(formatter.string(from: date), for: .normal)
 
-        if let object = viewModel.state.selectedObject {
+        if let object = selectedObject {
             let altitude = String(format: "%.1f", object.altitude)
             let azimuth = String(format: "%.1f", object.azimuth)
             timeLabel.text = "\(object.getDisplayName())  alt \(altitude) deg, az \(azimuth) deg"
-            timeLabel.isHidden = false
-        } else if viewModel.state.dataSnapshot?.usedFallback == true {
-            timeLabel.text = localizedString("astro_using_solar_system_fallback")
             timeLabel.isHidden = false
         } else {
             timeLabel.isHidden = true
@@ -730,7 +728,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func updateStarMap(updateAzimuth: Bool = false) {
         let location = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation
         let coordinate = location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
-        viewModel.state.location = location
         starView.setObserverLocation(lat: coordinate.latitude, lon: coordinate.longitude, alt: location?.altitude ?? 0)
         if updateAzimuth && !arModeHelper.isArModeEnabled && !starView.is2DMode {
             setAzimuth(lastUpdatedAzimuth >= 0 ? lastUpdatedAzimuth : 0)
@@ -824,7 +821,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     func starView(_ starView: StarView, didSelect object: SkyObject?) {
-        viewModel.state.selectedObject = object
+        selectedObject = object
         updateTimeControls()
     }
 

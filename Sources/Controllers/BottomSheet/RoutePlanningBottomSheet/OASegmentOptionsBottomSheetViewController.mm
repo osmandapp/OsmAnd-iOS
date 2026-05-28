@@ -294,18 +294,16 @@
         {
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
-            
-            UIImage *icon = [OAUtilities loadAssetOrMxIcon:item[@"img"]];
-            
+             
             UIColor *tintColor = item[@"tintColor"];
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
-                cell.iconView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             }
             else
             {
-                cell.iconView.image = icon;
+                cell.iconView.image = [UIImage imageNamedOrMxIcon:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];

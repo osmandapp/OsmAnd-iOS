@@ -137,7 +137,7 @@
             NSString *imgName = item[@"img"];
             UIColor *imgColor = item[@"iconColor"];
             
-            UIImage *icon = [OAUtilities loadAssetOrMxIcon:imgName];
+            UIImage *icon = [UIImage imageNamedOrMxIcon:imgName];
             
             if (icon && imgColor)
             {

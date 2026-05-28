@@ -218,17 +218,15 @@
             cell.titleView.text = item[@"title"];
             cell.descrView.text = item[@"descr"];
             
-            UIImage *icon = [OAUtilities loadAssetOrMxIcon:item[@"img"]];
-            
             UIColor *tintColor = _routeAppMode && _routeAppMode != OAApplicationMode.DEFAULT ? _routeAppMode.getProfileColor : [UIColor colorNamed:ACColorNameIconColorSelected];
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
-                cell.iconView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             }
             else
             {
-                cell.iconView.image = icon;
+                cell.iconView.image = [UIImage imageNamedOrMxIcon:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
         }

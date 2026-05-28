@@ -67,16 +67,12 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
         categories.append(IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
     }
     
-    func initLastUsedCategory(isFirst: Bool) {
+    func initLastUsedCategory() {
         lastUsedIcons = getLastUsed()
         guard !categories.contains(where: { $0.key == lastUsedKey }), !lastUsedIcons.isEmpty else { return }
         let category = IconsAppearanceCategory(key: lastUsedKey, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
         
-        if isFirst {
-            categories.insert(category, at: 0)
-        } else {
-            categories.append(category)
-        }
+        categories.append(category)
         categoriesByKeyName[lastUsedKey] = category
     }
     

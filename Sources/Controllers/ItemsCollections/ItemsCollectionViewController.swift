@@ -123,6 +123,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+    
     override func registerCells() {
         switch collectionType {
         case .colorItems, .iconItems, .bigIconItems, .poiIconCategories, .profileIconCategories, .baseAppearanceCategories:
@@ -148,17 +152,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
         tableView.keyboardDismissMode = .onDrag
-        
-        switch collectionType {
-        case .colorizationPaletteItems,
-                .terrainPaletteItems,
-                .poiIconCategories,
-                .profileIconCategories,
-                .baseAppearanceCategories where inSearchMode:
-            tableView.separatorStyle = .singleLine
-        default:
-            tableView.separatorStyle = .none
-        }
+        tableView.separatorStyle = .none
         
         chipsCellScrollState = OACollectionViewCellState()
         tableView.reloadData()
@@ -268,15 +262,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     let section = data.createNewSection()
                     section.headerText = category.translatedName
                     section.addRow(from: [
-                        kCellTypeKey: OADividerCell.reuseIdentifier
-                        ]
-                    )
-                    section.addRow(from: [
                         kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
                         poiCategoryNameKey: category.key,
                         iconNamesKey: category.iconKeys
                     ])
-                    section.addRow(from: [kCellTypeKey: OADividerCell.reuseIdentifier])
                 }
             }
         } else {
@@ -321,6 +310,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                         setupIconCollectionCell(cell, indexPath: indexPath, iconNames: iconNames, poiCategoryKey: poiCategory)
                     }
                 }
+                
+                cell.contentView.backgroundColor = cell.backgroundColor
+                cell.contentView.layer.cornerRadius = 32
+                cell.contentView.layer.masksToBounds = true
+                cell.backgroundColor = .clear
                 
                 cell.rightActionButtonVisibility(false)
                 cell.collectionView.reloadData()

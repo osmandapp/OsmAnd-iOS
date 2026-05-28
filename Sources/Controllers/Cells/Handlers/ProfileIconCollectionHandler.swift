@@ -33,13 +33,14 @@ final class ProfileIconCollectionHandler: BasePoiIconCollectionHandler {
             categoriesByKeyName = Self.cachedCategoriesByKeyName
         }
 
+        initLastUsedCategory()
         sortCategories()
-        initLastUsedCategory(isFirst: true)
         initFilteredCategories()
     }
     
     override func sortCategories() {
-        sortCategoriesAndMoveKeyUp(ACTIVITIES_KEY)
+        sortCategoriesAndMoveKeyUp(lastUsedKey)
+        moveKeyUp(ACTIVITIES_KEY)
     }
     
     override func saveLastUsed(_ icons: [String]) {

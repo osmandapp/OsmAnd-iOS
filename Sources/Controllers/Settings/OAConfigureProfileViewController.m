@@ -427,7 +427,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         {
             [cell.titleLabel setText:item[@"title"]];
             
-            UIImage *icon = [OAUtilities loadAssetOrMxIcon:item[@"img"]];
+            UIImage *icon = [UIImage imageNamedOrMxIcon:item[@"img"]];
 
             [cell.leftIconView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }

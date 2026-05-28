@@ -133,6 +133,7 @@ static inline double normalizeDouble(double v)
 
 @interface UIImage (util)
 
++ (nullable UIImage *) imageNamedOrMxIcon:(nullable NSString *)name;
 + (nullable UIImage *) templateImageNamed:(nullable NSString *)imageName;
 + (nullable UIImage *) rtlImageNamed:(nullable NSString *)imageName;
 + (nullable UIImage *) svgImageNamed:(NSString *)path;
@@ -330,7 +331,6 @@ static inline double normalizeDouble(double v)
 + (NSArray<NSString *> *)arrayOfSpeedValues:(NSArray<NSNumber *> *) values mode:(OAApplicationMode *)mode;
 
 + (nullable UIImage *) getMxIcon:(NSString *)name;
-+ (nullable UIImage *) loadAssetOrMxIcon:(NSString *)name;
 + (nullable UIImage *) resizeImage:(nullable UIImage *)image newSize:(CGSize)newSize;
 + (BOOL) hasMapImage:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;

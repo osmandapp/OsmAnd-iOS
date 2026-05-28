@@ -660,7 +660,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
-    return [self createRightNavbarButton:title icon:[[OAUtilities loadAssetOrMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] action:action menu:menu];
+    return [self createRightNavbarButton:title icon:[UIImage templateImageNamed:iconName] action:action menu:menu];
 }
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title

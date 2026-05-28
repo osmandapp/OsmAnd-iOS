@@ -39,7 +39,7 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
             categoriesByKeyName = Self.cachedCategoriesByKeyName
         }
 
-        initLastUsedCategory(isFirst: false)
+        initLastUsedCategory()
         sortCategories()
         initFilteredCategories()
     }

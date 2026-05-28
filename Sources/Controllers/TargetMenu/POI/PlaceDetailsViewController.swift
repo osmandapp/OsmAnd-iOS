@@ -12,14 +12,18 @@
 final class PlaceDetailsViewController: OAPOIViewController {
     
     private var detailsObject: BaseDetailsObject?
+    private var renderedObject: OARenderedObject?
+    private var provider: RenderedObjectAmenityProvider!
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(poi: OAPOI, detailsObject: BaseDetailsObject) {
+    init(poi: OAPOI, detailsObject: BaseDetailsObject, renderedObject: OARenderedObject?) {
         super.init(poi: detailsObject.syntheticAmenity)
         self.detailsObject = detailsObject
+        self.renderedObject = renderedObject
+        self.provider = RenderedObjectAmenityProvider(detailsObject: detailsObject, renderedObject: renderedObject)
         setObject(detailsObject)
     }
     
@@ -38,6 +42,21 @@ final class PlaceDetailsViewController: OAPOIViewController {
         } else {
             super.setObject(object)
         }
+    }
+    
+    override func getNameStr() -> String? {
+        let name = provider.nameOnlyString()
+        
+        if !name.isEmpty {
+            return name
+        }
+        
+        return getTypeStr()
+    }
+
+    override func getTypeStr() -> String? {
+        let typeString = provider.typeString() { super.getTypeStr() }
+        return typeString ?? super.getTypeStr()
     }
     
     override func buildPhotosRow(_ rows: NSMutableArray) {
@@ -63,7 +82,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
             buildPhotosRow(rows)
         }
     }
-    
+
     private func buildDescription(amenities: [OAPOI], allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
         if let detailsObject, buildDescription(amenity: detailsObject.syntheticAmenity, allowOnlineWiki: false, rows: rows) {
             return true
@@ -190,7 +209,6 @@ final class PlaceDetailsViewController: OAPOIViewController {
         guard let mapPanel = OARootViewController.instance()?.mapPanel,
               let targetPoint = mapPanel.getCurrentTargetPoint() else { return }
 
-        targetPoint.title = amenity.nameLocalized ?? amenity.name
         targetPoint.icon = amenity.type?.icon()
 
         mapPanel.update(targetPoint)

@@ -577,9 +577,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 let editFilterSmartFolderAction = UIAction(title: localizedString("edit_filter"), image: .icCustomParameters.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarEditFilterSmartFolderButtonClicked()
                 }
+                let organizeByAction = UIAction(title: localizedString("organize_by"), image: .icCustomTracksOrganize.resizedMenuImage()) { [weak self] _ in
+                    self?.onNavbarOrganizeBySmartFolderButtonClicked()
+                }
                 let refreshSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [refreshSmartFolderAction])
                 let editFilterSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [editFilterSmartFolderAction])
-                menuActions.append(contentsOf: [refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider])
+                let organizeByActionWithDivider = UIMenu(title: "", options: .displayInline, children: [organizeByAction])
+                menuActions.append(contentsOf: [refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider, organizeByActionWithDivider])
             } else {
                 let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarAddFolderButtonClicked()
@@ -916,6 +920,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func onNavbarRefreshSmartFolderButtonClicked() {
         smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
         reloadTracks(forceLoad: true)
+    }
+
+    private func onNavbarOrganizeBySmartFolderButtonClicked() {
     }
     
     @objc private func onNavbarEditFilterSmartFolderButtonClicked() {

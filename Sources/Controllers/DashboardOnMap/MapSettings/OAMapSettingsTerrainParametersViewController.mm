@@ -1315,6 +1315,8 @@ static const NSInteger kElevationMaxMeters = 2000;
     OASGradientPaletteCategory *paletteCategory = [TerrainTypeWrapper toPaletteCategoryWithType:_terrainMode.type];
     if (paletteCategory)
         [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
+    if ([_basePaletteColorItem.id isEqualToString:_currentPaletteColorItem.id] && [[GradientPaletteHelper shared] indexOf:_currentPaletteColorItem in:[_sortedPaletteColorItems asArray]] == NSNotFound)
+        _basePaletteColorItem = paletteItem;
     NSInteger row = [[GradientPaletteHelper shared] indexOf:paletteItem in:[_sortedPaletteColorItems asArray]];
     if (row != NSNotFound)
         [self onCollectionItemSelected:[NSIndexPath indexPathForRow:row inSection:0] selectedItem:paletteItem collectionView:nil shouldDismiss:YES];

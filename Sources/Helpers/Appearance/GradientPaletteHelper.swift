@@ -65,6 +65,12 @@ final class GradientPaletteHelper: NSObject {
     func colorPalette(fileName: String?) -> OsmAndShared.ColorPalette? {
         paletteItem(fileName: fileName)?.getColorPalette()
     }
+
+    func refreshImportedPalette(fileName: String?) {
+        guard let category = paletteData(fileName: fileName)?.category else { return }
+        repository.invalidatePalette(id: category.id)
+        updateExternalDependenciesIfNeeded(category: category)
+    }
     
     func isPaletteChangeEvent(_ event: PaletteChangeEvent, fileName: String?) -> Bool {
         guard let paletteData = paletteData(fileName: fileName) else { return false }
@@ -85,6 +91,11 @@ final class GradientPaletteHelper: NSObject {
         }
         
         return false
+    }
+
+    func updatedTerrainPaletteFileName(_ event: PaletteChangeEvent) -> String? {
+        guard let updated = event as? PaletteChangeEvent.Updated, let item = updated.item as? PaletteItemGradient, item.properties.fileType.category.isTerrainRelated() else { return nil }
+        return item.source.fileName
     }
     
     func markPaletteItemAsUsed(_ item: PaletteItemGradient) {

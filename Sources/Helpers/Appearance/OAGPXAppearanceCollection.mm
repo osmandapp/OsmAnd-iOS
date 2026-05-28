@@ -247,7 +247,7 @@
 
 - (OASPaletteItemSolid *)defaultLineColorItem
 {
-    return [self solidItemsWithSortMode:OASPaletteSortMode.originalOrder].firstObject;
+    return [self findColorItemWithValue:(int)kDefaultTrackColor] ?: [self addNewSelectedColor:UIColorFromARGB((int)kDefaultTrackColor)];
 }
 
 - (OASPaletteItemSolid *)defaultPointColorItem

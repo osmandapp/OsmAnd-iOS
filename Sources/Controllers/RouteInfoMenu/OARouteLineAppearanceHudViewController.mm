@@ -490,7 +490,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [[OADayNightHelper instance] resetTempMode];
 
         [weakSelf updateRouteLayer:weakSelf.oldPreviewRouteLineInfo];
-        [weakSelf.mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
 
         if (weakSelf.delegate)
             [weakSelf.delegate onCloseAppearance];
@@ -506,7 +505,15 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         if (onComplete)
             onComplete();
 
-        [weakSelf.mapPanelViewController.mapViewController.mapLayers.routeMapLayer setPreviewRouteLineInfo:nil];
+        OARouteLayer *routeLayer = weakSelf.mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
+        OAPreviewRouteLineLayer *previewLayer = weakSelf.mapPanelViewController.mapViewController.mapLayers.routePreviewLayer;
+        [routeLayer setPreviewRouteLineInfo:nil];
+        [previewLayer setPreviewRouteLineInfo:nil];
+        [weakSelf.mapPanelViewController.mapViewController runWithRenderSync:^{
+            [routeLayer resetLayer];
+            [previewLayer resetLayer];
+            [routeLayer refreshRoute];
+        }];
 
         if (weakSelf.prevScreen == EOARouteLineAppearancePrevScreenSettings)
         {
@@ -1400,7 +1407,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [[OADayNightHelper instance] resetTempMode];
 
         [weakSelf updateRouteLayer:weakSelf.previewRouteLineInfo];
-        [weakSelf.mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
 
         if (weakSelf.delegate)
             [weakSelf.delegate onCloseAppearance];

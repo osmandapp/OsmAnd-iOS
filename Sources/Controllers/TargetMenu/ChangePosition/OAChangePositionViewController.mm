@@ -40,9 +40,6 @@
 
 #import <OsmAndCore/Utilities.h>
 
-#define kAdjustedViewportScale 1.5
-#define kRegularViewportScale 1.0
-
 @interface OAChangePositionViewController () <OAChangePositionModeDelegate>
 
 @end
@@ -71,7 +68,7 @@
         _mapView = mapPanel.mapViewController.mapView;
         _cachedX = _mapView.viewportXScale;
         _cachedY = _mapView.viewportYScale;
-        [mapPanel.mapViewController setViewportScaleY:kRegularViewportScale];
+        [mapPanel.mapViewController setViewportScaleY:kViewportScale];
         [self adjustViewport];
     }
     return self;
@@ -169,7 +166,18 @@
 
 - (void)adjustViewport
 {
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:[OAUtilities isLandscapeIpadAware] ? kAdjustedViewportScale : kRegularViewportScale];
+    CGFloat viewportXScale = kViewportScale;
+    if ([OAUtilities isLandscapeIpadAware])
+    {
+        CGFloat mapWidth = _mapView.bounds.size.width;
+        if (mapWidth <= 0)
+            mapWidth = DeviceScreenWidth;
+
+        CGFloat menuWidth = (OAUtilities.isIPad ? (OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad) : kInfoViewLanscapeWidth) + OAUtilities.getLeftMargin;
+        viewportXScale += menuWidth / mapWidth;
+    }
+
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:viewportXScale];
 }
 
 - (UIView *) getMiddleView
@@ -254,7 +262,7 @@
         return;
 
     _cachedY = _mapView.viewportYScale;
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleY:kRegularViewportScale];
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleY:kViewportScale];
 }
 
 - (void) applyLocalization

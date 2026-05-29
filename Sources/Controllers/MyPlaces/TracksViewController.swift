@@ -18,7 +18,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener {
+final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OAOrganizeTracksByDelegate {
     
     fileprivate var shouldReload = false
     
@@ -191,6 +191,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         
         sortMode = getTracksSortMode()
         sortModeForSearch = getSearchTracksSortMode()
+        if isSmartFolder {
+            DispatchQueue.global(qos: .background).async {
+                _ = OrganizeByCategory.entries
+            }
+        }
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
@@ -923,6 +928,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func onNavbarOrganizeBySmartFolderButtonClicked() {
+        let vc = OAOrganizeTracksByViewController(smartFolder: smartFolder)
+        vc.delegate = self
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+
+    func onOrganizeByParamsApplied() {
+        reloadTracks(forceLoad: true)
     }
     
     @objc private func onNavbarEditFilterSmartFolderButtonClicked() {

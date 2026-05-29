@@ -1622,6 +1622,9 @@
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
+		D71B9A8C2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift */; };
+		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
+		D71B9A902FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
 		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
 		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
@@ -5549,6 +5552,9 @@
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
+		D71B9A8B2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAOrganizeTracksByViewController.swift; sourceTree = "<group>"; };
+		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
+		D71B9A8F2FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAOrganizeByTypeCell.swift; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
 		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
 		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
@@ -12641,6 +12647,8 @@
 		DA5A7DC226C563A300F274C7 /* MyPlaces */ = {
 			isa = PBXGroup;
 			children = (
+				D71B9A8B2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift */,
+				D71B9A8F2FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift */,
 				DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */,
 				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
 				DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */,
@@ -14475,6 +14483,7 @@
 		FA45851C2C946046003A5AD7 /* SharedLibHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */,
 				FAA8F9052CC2843F008452CF /* TrackItemExtension.swift */,
 				FA5D19E02CC00B0E00E01A27 /* GPXDataItemGPXFileWrapper.swift */,
 				05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */,
@@ -17869,6 +17878,7 @@
 				DA5A818226C563A700F274C7 /* OAMapStyleAction.mm in Sources */,
 				DA5A843126C563A800F274C7 /* OARouteTargetSelectionViewController.m in Sources */,
 				4617129E2B973C34000446F9 /* GlideUtils.swift in Sources */,
+				D71B9A902FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift in Sources */,
 				32D253B027F336C200324717 /* OACloudAccountCreateViewController.m in Sources */,
 				FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */,
 				DA842ECF2A0BA2420030866E /* MapWidgetsFactory.swift in Sources */,
@@ -17939,6 +17949,7 @@
 				DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */,
 				DA69ED5C2A385B1B001022C7 /* WidgetPanelViewController.swift in Sources */,
 				FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */,
+				D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */,
 				DA5A816526C563A700F274C7 /* OAApplicationMode.m in Sources */,
 				FA6439EB2B051A5300331006 /* MeasurementFormatter+Extension.swift in Sources */,
 				C58923FD2D68914800EC5910 /* BaseMonitoringAction.swift in Sources */,
@@ -18360,6 +18371,7 @@
 				4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */,
 				321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
+				D71B9A8C2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,
 				DA5A81C926C563A700F274C7 /* OAPointIContainer.mm in Sources */,
 				DA5A83EB26C563A800F274C7 /* OAQuickSearchViewController.mm in Sources */,

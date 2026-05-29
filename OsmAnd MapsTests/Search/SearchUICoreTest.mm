@@ -78,7 +78,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     [OsmAndApp.instance addAbbrevationsToCommonWords];
     for (NSString *path in _filePaths)
     {
-        //if ([path.lastPathComponent isEqualToString:@"saintLys.json"])
+        //if ([path.lastPathComponent isEqualToString:@"Issue-11345-geo-Westbourne.json"])
             [self testSearchCase:path];
     }
     NSLog(@"========================================");
@@ -281,6 +281,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
             NSString *present = (res == nil) ? [NSString stringWithFormat:@"#MISSING %ld", i + 1] : [self formatResult:simpleTest res:res phrase:phrase];
             expected = [expected stringByReplacingOccurrencesOfString:@"\\'" withString:@"'"];
             present = [present stringByReplacingOccurrencesOfString:@"\\'" withString:@"'"];
+            expected = [expected stringByReplacingOccurrencesOfString:@"@" withString:@""];
 
             if ([expected caseInsensitiveCompare:present] != NSOrderedSame && ![self sameToDuplicate:result[i] res:res phrase:phrase])
             {

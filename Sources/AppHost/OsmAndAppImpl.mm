@@ -450,15 +450,14 @@
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                         _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
+                                                         _worldMiniBasemapFilename != nil && !isTestInit ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_hiddenMapsPath),
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString(OAAppVersion.getVersion),
                                                          QString::fromNSString(@"https://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
-                                                         _webClient,
-                                                         isTestInit));
+                                                         _webClient));
     LogStartup(@"resources manager created");
 
     // Attach observables handlers
@@ -1148,20 +1147,17 @@
 {
     if(_resourcesManager == nullptr)
     {
-        bool isTestInit = true;
         _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                              _documentsDir.absolutePath(),
                                                              QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                             _worldMiniBasemapFilename != nil
-                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                             : QString(),
+                                                             QString(),
                                                              QString::fromNSString(NSTemporaryDirectory()),
                                                              QString::fromNSString(_hiddenMapsPath),
                                                              QString::fromNSString(_cachePath),
                                                              QString::fromNSString(OAAppVersion.getVersion),
                                                              QString::fromNSString(@"https://download.osmand.net"),
                                                              QString::fromNSString([self generateIndexesUrl]),
-                                                             _webClient, isTestInit));
+                                                             _webClient));
     }
     
     const auto filePathQ = QString::fromNSString(filePath);

@@ -9,7 +9,7 @@
 import CoreLocation
 import UIKit
 
-final class StarMapViewController: UIViewController, StarViewDelegate, UIAdaptivePresentationControllerDelegate {
+final class StarMapViewController: UIViewController, StarViewDelegate {
     private enum Layout {
         static let contentPadding: CGFloat = 16
         static let buttonSize: CGFloat = 52
@@ -868,14 +868,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate, UIAdaptiv
         updateMapControlsVisibility()
     }
 
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        guard presentationController.presentedViewController === objectInfoNavigationController,
-              !isDismissingObjectInfoSheet else {
-            return
-        }
-        finishObjectInfoDismiss(clearSelection: true)
-    }
-
     private func showObjectInfo(_ object: SkyObject) {
         if let objectInfoController {
             objectInfoController.updateObjectInfo(object)
@@ -895,6 +887,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate, UIAdaptiv
             trackableObjects: { [weak self] in self?.getTrackableObjects() ?? [] },
             constellations: { [weak self] in self?.viewModel.constellations ?? [] },
             onClose: { [weak self] in self?.dismissObjectInfoSheet(clearSelection: true, animated: true) },
+            onDismissed: { [weak self] in
+                guard let self, !isDismissingObjectInfoSheet else {
+                    return
+                }
+                finishObjectInfoDismiss(clearSelection: true)
+            },
             onCenterObject: { [weak self] object in
                 self?.starView.setSelectedObject(object, center: true, animate: true)
             },
@@ -949,7 +947,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate, UIAdaptiv
         let controller = AstroContextMenuViewController(object: object, dependencies: dependencies)
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .pageSheet
-        navigationController.presentationController?.delegate = self
         navigationController.navigationBar.prefersLargeTitles = false
         if let sheet = navigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]

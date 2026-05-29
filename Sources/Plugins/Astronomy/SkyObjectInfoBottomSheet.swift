@@ -17,6 +17,7 @@ struct AstroContextMenuDependencies {
     let trackableObjects: () -> [SkyObject]
     let constellations: () -> [Constellation]
     let onClose: () -> Void
+    let onDismissed: () -> Void
     let onCenterObject: (SkyObject) -> Void
     let onFavoriteChanged: (SkyObject, Bool) -> Void
     let onDirectionChanged: (SkyObject, Bool) -> Int
@@ -26,7 +27,7 @@ struct AstroContextMenuDependencies {
     let onCatalogClick: (Catalog) -> Void
 }
 
-final class AstroContextMenuViewController: UIViewController, UIScrollViewDelegate, UITabBarDelegate {
+final class AstroContextMenuViewController: UIViewController, UIScrollViewDelegate, UITabBarDelegate, UISheetPresentationControllerDelegate {
     enum Tab: Int {
         case overview = 0
         case visibility = 1
@@ -124,6 +125,12 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         configureNavigationBar()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.sheetPresentationController?.delegate = self
+        syncTabBarVisibilityWithSheetDetent(animated: false)
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
@@ -208,6 +215,28 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         submitCards()
     }
 
+    private func setTabBarVisible(_ visible: Bool, animated: Bool) {
+        guard isViewLoaded else {
+            return
+        }
+        let updates = {
+            self.tabBarContainer.alpha = visible ? 1 : 0
+            self.tabBarContainer.isUserInteractionEnabled = visible
+            self.scrollView.contentInset.bottom = visible ? 96 : 16
+            self.scrollView.verticalScrollIndicatorInsets.bottom = visible ? 96 : 16
+        }
+        if animated {
+            UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction], animations: updates)
+        } else {
+            updates()
+        }
+    }
+
+    private func syncTabBarVisibilityWithSheetDetent(animated: Bool) {
+        setTabBarVisible(navigationController?.sheetPresentationController?.selectedDetentIdentifier == .large,
+                         animated: animated)
+    }
+
     private func setupView() {
         view.backgroundColor = AstroContextMenuTheme.pageBackground
 
@@ -290,8 +319,10 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         tabBar.setContentCompressionResistancePriority(.required, for: .vertical)
         tabBar.items = [overviewTabItem, visibilityTabItem, scheduleTabItem]
         tabBar.selectedItem = overviewTabItem
-        scrollView.contentInset.bottom = 96
-        scrollView.verticalScrollIndicatorInsets.bottom = 96
+        tabBarContainer.alpha = 0
+        tabBarContainer.isUserInteractionEnabled = false
+        scrollView.contentInset.bottom = 16
+        scrollView.verticalScrollIndicatorInsets.bottom = 16
     }
 
     private func applyTheme() {
@@ -755,6 +786,17 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         isProgrammaticTabScroll = false
         updateSelectedTabControls()
+    }
+
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+        guard sheetPresentationController === navigationController?.sheetPresentationController else {
+            return
+        }
+        setTabBarVisible(sheetPresentationController.selectedDetentIdentifier == .large, animated: true)
+    }
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        dependencies.onDismissed()
     }
 
     private func tabItem(for tab: Tab) -> UITabBarItem {

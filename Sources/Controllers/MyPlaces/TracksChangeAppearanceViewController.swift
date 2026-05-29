@@ -1020,7 +1020,7 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
         }
     }
     
-    func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
+    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
         guard let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return appearanceCollection.defaultLineColorItem() }
         if let colorsIndexPath = colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
             sortedColorItems.insert(newColorItem, at: 0)
@@ -1088,6 +1088,6 @@ extension TracksChangeAppearanceViewController: ColorCollectionViewControllerDel
 
 extension TracksChangeAppearanceViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        _ = addAndGetNewColorItem(viewController.selectedColor)
+        addAndGetNewColorItem(viewController.selectedColor)
     }
 }

@@ -8,15 +8,15 @@
 
 import UIKit
 
-private enum RowKey: String {
-    case gradientLegend
-    case gradientSteps
-    case gradientValue
-    case gradientNoDataDescription
-    case gradientColorTitle
-    case gradientColors
-    case gradientAllColors
-    case gradientRemoveStep
+private enum GradientEditorRow: String {
+    case legend
+    case steps
+    case value
+    case noDataDescription
+    case colorTitle
+    case colors
+    case allColors
+    case removeStep
 }
 
 @objcMembers
@@ -117,10 +117,10 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         let previewSection = tableData.createNewSection()
         let legendRow = previewSection.createNewRow()
         legendRow.cellType = GradientChartCell.reuseIdentifier
-        legendRow.key = RowKey.gradientLegend.rawValue
+        legendRow.key = GradientEditorRow.legend.rawValue
         let stepsRow = previewSection.createNewRow()
         stepsRow.cellType = OAFoldersCell.reuseIdentifier
-        stepsRow.key = RowKey.gradientSteps.rawValue
+        stepsRow.key = GradientEditorRow.steps.rawValue
         
         let valueSection = tableData.createNewSection()
         let units = selectedPoint.flatMap { editorBehaviour.isValueEditable($0) ? displayUnitsSymbol() : nil } ?? ""
@@ -128,32 +128,32 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         let valueRow = valueSection.createNewRow()
         if isNoDataSelected {
             valueRow.cellType = OASimpleTableViewCell.reuseIdentifier
-            valueRow.key = RowKey.gradientNoDataDescription.rawValue
+            valueRow.key = GradientEditorRow.noDataDescription.rawValue
             valueRow.descr = localizedString("gradient_no_data_point_summary")
         } else {
             valueRow.cellType = OAInputTableViewCell.reuseIdentifier
-            valueRow.key = RowKey.gradientValue.rawValue
-            valueSection.footerText = selectedPoint.flatMap { editorBehaviour.getSummary($0) } ?? ""
+            valueRow.key = GradientEditorRow.value.rawValue
+            valueSection.footerText = selectedPoint.flatMap { editorBehaviour.summary(for: $0) } ?? ""
         }
         
         let colorSection = tableData.createNewSection()
         let colorTitleRow = colorSection.createNewRow()
         colorTitleRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        colorTitleRow.key = RowKey.gradientColorTitle.rawValue
+        colorTitleRow.key = GradientEditorRow.colorTitle.rawValue
         colorTitleRow.title = localizedString("shared_string_color")
         let colorsRow = colorSection.createNewRow()
         colorsRow.cellType = OACollectionSingleLineTableViewCell.reuseIdentifier
-        colorsRow.key = RowKey.gradientColors.rawValue
+        colorsRow.key = GradientEditorRow.colors.rawValue
         colorsCollectionIndexPath = IndexPath(row: 1, section: 2)
         let allColorsRow = colorSection.createNewRow()
         allColorsRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        allColorsRow.key = RowKey.gradientAllColors.rawValue
+        allColorsRow.key = GradientEditorRow.allColors.rawValue
         allColorsRow.title = localizedString("shared_string_all_colors")
         
         let actionsSection = tableData.createNewSection()
         let removeStepRow = actionsSection.createNewRow()
         removeStepRow.cellType = OASearchMoreCell.reuseIdentifier
-        removeStepRow.key = RowKey.gradientRemoveStep.rawValue
+        removeStepRow.key = GradientEditorRow.removeStep.rawValue
         removeStepRow.title = localizedString("remove_step")
     }
     
@@ -204,7 +204,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
             cell.inputField.keyboardType = .numbersAndPunctuation
             cell.inputField.isEnabled = isEditable
             cell.inputField.inputAccessoryView = isEditable ? valueInputToolbar : nil
-            cell.inputField.text = isEditable ? GradientFormatter.formatValue(value: point.value, fileType: fileType, showUnits: false) : editorBehaviour.getStepLabel(point, fileType: fileType, useFullName: true)
+            cell.inputField.text = isEditable ? GradientFormatter.formatValue(value: point.value, fileType: fileType, showUnits: false) : editorBehaviour.stepLabel(for: point, fileType: fileType, useFullName: true)
             cell.inputField.removeTarget(nil, action: nil, for: .editingChanged)
             if isEditable {
                 cell.inputField.addTarget(self, action: #selector(onValueChanged(_:)), for: .editingChanged)
@@ -232,14 +232,14 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
             cell.leftIconVisibility(false)
-            let isColorTitle = item.key == RowKey.gradientColorTitle.rawValue
+            let isColorTitle = item.key == GradientEditorRow.colorTitle.rawValue
             cell.setCustomLeftSeparatorInset(isColorTitle)
             if isColorTitle {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: CGFloat.greatestFiniteMagnitude, bottom: 0, right: 0)
             } else {
                 cell.updateSeparatorInset()
             }
-            if item.key == RowKey.gradientNoDataDescription.rawValue {
+            if item.key == GradientEditorRow.noDataDescription.rawValue {
                 cell.selectionStyle = .none
                 cell.titleVisibility(false)
                 cell.descriptionVisibility(true)
@@ -252,7 +252,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
                 cell.textStackView.isHidden = false
                 cell.titleLabel.text = item.title
                 cell.titleLabel.textAlignment = .natural
-                if item.key == RowKey.gradientAllColors.rawValue {
+                if item.key == GradientEditorRow.allColors.rawValue {
                     cell.selectionStyle = .default
                     cell.titleLabel.textColor = .textColorActive
                 } else {
@@ -275,7 +275,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        if item.key == RowKey.gradientAllColors.rawValue {
+        if item.key == GradientEditorRow.allColors.rawValue {
             let selectedItem: Any = selectedColorItem ?? NSNull()
             let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorItems, items: sortedColorItems, selectedItem: selectedItem)
             colorCollectionVC.delegate = self
@@ -283,7 +283,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
                 colorCollectionVC.hostColorHandler = handler
             }
             navigationController?.pushViewController(colorCollectionVC, animated: true)
-        } else if item.key == RowKey.gradientRemoveStep.rawValue,
+        } else if item.key == GradientEditorRow.removeStep.rawValue,
                   let state = GradientEditorAlgorithms.removeStep(dataState, behaviour: editorBehaviour) {
             updateSelectedColorItem(for: state)
             applyState(state)
@@ -317,7 +317,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     
     private func stepValues() -> [[String: String]] {
         var values = dataState.draft.points.map {
-            ["title": editorBehaviour.getStepLabel($0, fileType: fileType)]
+            ["title": editorBehaviour.stepLabel(for: $0, fileType: fileType)]
         }
         
         if fileType.supportsNoData {
@@ -481,7 +481,7 @@ extension GradientEditorViewController: ColorCollectionViewControllerDelegate {
         onCollectionItemSelected(IndexPath(row: row, section: 0), selectedItem: colorItem, collectionView: nil, shouldDismiss: true)
     }
     
-    func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
+    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
         guard let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return appearanceCollection.defaultLineColorItem() }
         if let colorsCollectionIndexPath, let cell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let handler = cell.getCollectionHandler() as? OAColorCollectionHandler {
             sortedColorItems.insert(newColorItem, at: 0)
@@ -531,6 +531,6 @@ extension GradientEditorViewController: ColorCollectionViewControllerDelegate {
 
 extension GradientEditorViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        _ = addAndGetNewColorItem(viewController.selectedColor)
+        addAndGetNewColorItem(viewController.selectedColor)
     }
 }

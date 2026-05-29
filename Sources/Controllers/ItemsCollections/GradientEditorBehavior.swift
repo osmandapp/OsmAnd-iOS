@@ -12,8 +12,8 @@ protocol GradientEditorBehaviour {
     func isMandatoryPoint(_ point: OsmAndShared.GradientPoint) -> Bool
     func isValueEditable(_ point: OsmAndShared.GradientPoint) -> Bool
     func isRemoveEnabled(_ draft: GradientDraft, selectedIndex: Int) -> Bool
-    func getStepLabel(_ point: OsmAndShared.GradientPoint, fileType: GradientFileType, useFullName: Bool) -> String
-    func getSummary(_ point: OsmAndShared.GradientPoint) -> String?
+    func stepLabel(for point: OsmAndShared.GradientPoint, fileType: GradientFileType, useFullName: Bool) -> String
+    func summary(for point: OsmAndShared.GradientPoint) -> String?
 }
 
 final class FixedGradientBehaviour: GradientEditorBehaviour {
@@ -33,11 +33,11 @@ final class RelativeGradientBehaviour: GradientEditorBehaviour {
         return !isMandatoryPoint(point) && draft.points.count > 2 && selectedIndex != -1
     }
 
-    func getStepLabel(_ point: OsmAndShared.GradientPoint, fileType: GradientFileType, useFullName: Bool) -> String {
+    func stepLabel(for point: OsmAndShared.GradientPoint, fileType: GradientFileType, useFullName: Bool) -> String {
         RelativeConstants.valueOfRatio(point.value)?.name(useFullName: useFullName) ?? GradientFormatter.formatValue(value: point.value, fileType: fileType, showUnits: false)
     }
 
-    func getSummary(_ point: OsmAndShared.GradientPoint) -> String? {
+    func summary(for point: OsmAndShared.GradientPoint) -> String? {
         RelativeConstants.valueOfRatio(point.value)?.summary()
     }
 }
@@ -62,15 +62,15 @@ extension GradientEditorBehaviour {
         return !isMandatoryPoint(point) && draft.points.count > 2 && selectedIndex != -1
     }
 
-    func getStepLabel(_ point: OsmAndShared.GradientPoint, fileType: GradientFileType) -> String {
-        getStepLabel(point, fileType: fileType, useFullName: false)
+    func stepLabel(for point: OsmAndShared.GradientPoint, fileType: GradientFileType) -> String {
+        stepLabel(for: point, fileType: fileType, useFullName: false)
     }
 
-    func getStepLabel(_ point: OsmAndShared.GradientPoint, fileType: GradientFileType, useFullName: Bool) -> String {
+    func stepLabel(for point: OsmAndShared.GradientPoint, fileType: GradientFileType, useFullName: Bool) -> String {
         GradientFormatter.formatValue(value: point.value, fileType: fileType, showUnits: false)
     }
 
-    func getSummary(_ point: OsmAndShared.GradientPoint) -> String? {
+    func summary(for point: OsmAndShared.GradientPoint) -> String? {
         nil
     }
 }

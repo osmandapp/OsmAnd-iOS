@@ -725,7 +725,7 @@ extension MapSettingsBuildings3DParametersViewController: ColorCollectionViewCon
         }
     }
     
-    func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
+    @discardableResult func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
         guard settingsType == .color, let newColorItem = appearanceCollection.addNewSelectedColor(color) else { return appearanceCollection.defaultLineColorItem() }
         if let colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
             sortedColorItems.insert(newColorItem, at: 0)
@@ -776,11 +776,11 @@ extension MapSettingsBuildings3DParametersViewController: ColorCollectionViewCon
 extension MapSettingsBuildings3DParametersViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewController(_: UIColorPickerViewController, didSelect color: UIColor, continuously _: Bool) {
         guard settingsType == .color, OAUtilities.isiOSAppOnMac() else { return }
-        _ = addAndGetNewColorItem(color)
+        addAndGetNewColorItem(color)
     }
     
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         guard settingsType == .color else { return }
-        _ = addAndGetNewColorItem(viewController.selectedColor)
+        addAndGetNewColorItem(viewController.selectedColor)
     }
 }

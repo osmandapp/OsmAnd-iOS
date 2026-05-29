@@ -342,6 +342,7 @@
     for (UIButton *button in _menuButtonsArray) {
         button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         button.titleLabel.adjustsFontForContentSizeCategory = YES;
+        [button setTitleColor:[UIColor colorNamed:ACColorNameTextColorPrimary] forState:UIControlStateHighlighted];
     }
 
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
@@ -357,10 +358,10 @@
     [_menuButtonTravelGuides.layer addSublayer:_menuButtonTravelGuidesDiv];
     [_menuButtonExternalSensors.layer addSublayer:_menuButtonExternalSensorsDiv];
     
-    [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
-    [_menuButtonMyData setImage:[UIImage templateImageNamed:@"ic_custom_my_places.png"] forState:UIControlStateNormal];
+    [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map"] forState:UIControlStateNormal];
+    [_menuButtonMyData setImage:[UIImage templateImageNamed:@"left_menu_icon_my_places"] forState:UIControlStateNormal];
     [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:@"left_menu_icon_waypoints.png"] forState:UIControlStateNormal];
-    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:@"left_menu_icon_resources.png"] forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:@"left_menu_icon_download_map"] forState:UIControlStateNormal];
     [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:@"left_menu_configure_screen.png"] forState:UIControlStateNormal];
     [_menuButtonSettings setImage:[UIImage templateImageNamed:@"left_menu_icon_settings.png"] forState:UIControlStateNormal];
     [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
@@ -394,8 +395,8 @@
             
             if (button.isHighlighted)
             {
-                backgroundConfig.backgroundColor = [UIColor systemGray4Color];
-                updatedConfig.baseForegroundColor = [[UIColor colorNamed:ACColorNameTextColorPrimary] colorWithAlphaComponent:0.7];
+                backgroundConfig.backgroundColor = [UIColor colorNamed:ACColorNameSideMenuBGColorTap];
+                updatedConfig.baseForegroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
             }
             else
             {

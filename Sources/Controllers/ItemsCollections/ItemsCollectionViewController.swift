@@ -311,7 +311,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     }
                 }
                 
-                cell.contentView.backgroundColor = cell.backgroundColor
+                cell.contentView.backgroundColor = UIColor.groupBg;
                 cell.contentView.layer.cornerRadius = 32
                 cell.contentView.layer.masksToBounds = true
                 cell.backgroundColor = .clear

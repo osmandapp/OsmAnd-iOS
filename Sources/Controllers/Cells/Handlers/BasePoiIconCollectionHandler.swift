@@ -8,17 +8,16 @@
 
 @objcMembers
 class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
-    
-    var lastUsedIcons = [String]()
-    var groupIcons = [String]()
-    var profileIcons = [String]()
-    
-    let LAST_USED_ICONS_LIMIT = 12
+    let lastUsedIconsLimit = 12
     let POI_CATEGORIES_FILE = "poi_categories.json"
     let ORIGINAL_KEY = "original"
     let ACTIVITIES_KEY = "activities"
     let PROFILE_ICONS_KEY = "profile_icons"
     let SAMPLE_ICON_KEY = "ic_sample"
+    
+    var lastUsedIcons: [String] = []
+    var groupIcons: [String] = []
+    var profileIcons: [String] = []
     
     override init() {
         super.init()
@@ -29,57 +28,6 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
         super.setup()
         collectionType = .poiIconCategories
         selectCategory(categoriesByKeyName.keys.contains(lastUsedKey) ? lastUsedKey : specialKey)
-    }
-    
-    func initFilteredCategories() {
-        categories = categories.filter { $0.key != ORIGINAL_KEY }
-        categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
-    }
-    
-    override func setIconName(_ iconName: String) {
-        guard !iconName.isEmpty else { return }
-        for category in categories {
-            if allIconsVCDelegate == nil && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
-                setSelectedIndexPath(IndexPath(row: 0, section: 0))
-                selectCategory(category.key)
-                return
-            } else {
-                for j in 0 ..< category.iconKeys.count {
-                    if iconName == category.iconKeys[j] ||
-                        "mx_" + iconName == category.iconKeys[j] {
-                        selectCategory(category.key)
-                        setSelectedIndexPath(IndexPath(row: j, section: 0))
-                        return
-                    }
-                }
-            }
-        }
-        addIconToLastUsed(iconName)
-        setSelectedIndexPath(IndexPath(row: 0, section: 0))
-        selectCategory(lastUsedKey)
-    }
-    
-    func categoryNames() -> [String] {
-        categories.map { $0.key }
-    }
-    
-    func initOriginalCategory() {
-        categories.append(IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
-    }
-    
-    func initLastUsedCategory() {
-        lastUsedIcons = getLastUsed()
-        guard !categories.contains(where: { $0.key == lastUsedKey }), !lastUsedIcons.isEmpty else { return }
-        let category = IconsAppearanceCategory(key: lastUsedKey, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
-        
-        categories.append(category)
-        categoriesByKeyName[lastUsedKey] = category
-    }
-    
-    func addProfileIconsCategoryIfNeeded(categoryKey: String) {
-        if categoryKey == PROFILE_ICONS_KEY {
-            addProfileIconsCategory()
-        }
     }
     
     static func getProfileIconsList() -> [String] {
@@ -132,6 +80,59 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
         ]
     }
     
+    func initFilteredCategories() {
+        categories = categories.filter { $0.key != ORIGINAL_KEY }
+        categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
+    }
+    
+    override func setIconName(_ iconName: String) {
+        guard !iconName.isEmpty else { return }
+        
+        for category in categories {
+            let shouldSkipOriginal = allIconsVCDelegate == nil && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first })
+
+            if shouldSkipOriginal {
+                setSelectedIndexPath(IndexPath(row: 0, section: 0))
+                selectCategory(category.key)
+                return
+            } else {
+                for (index, key) in category.iconKeys.enumerated() {
+                    if iconName == category.iconKeys[index] || "mx_" + iconName == category.iconKeys[index] {
+                        selectCategory(category.key)
+                        setSelectedIndexPath(IndexPath(row: index, section: 0))
+                        return
+                    }
+                }
+            }
+        }
+        addIconToLastUsed(iconName)
+        setSelectedIndexPath(IndexPath(row: 0, section: 0))
+        selectCategory(lastUsedKey)
+    }
+    
+    func categoryNames() -> [String] {
+        categories.map { $0.key }
+    }
+    
+    func initOriginalCategory() {
+        categories.append(IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
+    }
+    
+    func initLastUsedCategory() {
+        lastUsedIcons = lastUsed()
+        guard !categories.contains(where: { $0.key == lastUsedKey }), !lastUsedIcons.isEmpty else { return }
+        let category = IconsAppearanceCategory(key: lastUsedKey, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+        
+        categories.append(category)
+        categoriesByKeyName[lastUsedKey] = category
+    }
+    
+    func addProfileIconsCategoryIfNeeded(categoryKey: String) {
+        if categoryKey == PROFILE_ICONS_KEY {
+            addProfileIconsCategory()
+        }
+    }
+
     func addProfileIconsCategory() {
         profileIcons = Self.getProfileIconsList()
 
@@ -156,10 +157,11 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
                 updateMenuElements(&bottomMenuElements, with: category)
             }
         }
-  
+        
         let topMenu = UIMenu(title: "", options: .displayInline, children: topMenuElements)
         let bottomMenu = UIMenu(title: "", options: .displayInline, children: bottomMenuElements)
-        return UIMenu(title: "", children: [topMenu, bottomMenu])
+        
+        return UIMenu.composedMenu(from: [topMenuElements, bottomMenuElements])
     }
     
     override func onMenuItemSelected(name: String) {
@@ -187,8 +189,8 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
             lastUsedIcons.remove(at: index)
         }
         lastUsedIcons.insert(iconKey, at: 0)
-        if lastUsedIcons.count > LAST_USED_ICONS_LIMIT {
-            lastUsedIcons = Array(lastUsedIcons[0..<LAST_USED_ICONS_LIMIT])
+        if lastUsedIcons.count > lastUsedIconsLimit {
+            lastUsedIcons = Array(lastUsedIcons.prefix(lastUsedIconsLimit))
         }
         if let lastUsedIconsIndex = categories.firstIndex(where: { $0.key == lastUsedKey }) {
             categories[lastUsedIconsIndex].iconKeys = lastUsedIcons
@@ -201,22 +203,20 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
             guard let self else { return }
             
             for category in self.categories {
-                var brokenIcons = [String]()
+                var brokenIcons: [String] = []
                 
-                for iconName in category.iconKeys {
-                    if Self.cachedIcons.object(forKey: iconName as NSString) == nil {
-                        var icon = UIImage.templateImageNamed(iconName)
-                        if icon == nil {
-                            icon = OAUtilities.getMxIcon(iconName.lowercased())
-                        }
-                        if icon == nil {
-                            icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
-                        }
-                        if let icon {
-                            Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
-                        } else {
-                            brokenIcons.append(iconName)
-                        }
+                for iconName in category.iconKeys where Self.cachedIcons.object(forKey: iconName as NSString) == nil {
+                    var icon = UIImage.templateImageNamed(iconName)
+                    if icon == nil {
+                        icon = OAUtilities.getMxIcon(iconName.lowercased())
+                    }
+                    if icon == nil {
+                        icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
+                    }
+                    if let icon {
+                        Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                    } else {
+                        brokenIcons.append(iconName)
                     }
                 }
                 
@@ -239,5 +239,5 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
 
     /// Returns the list of recently used icon identifiers.
     /// Subclasses should override this method and retrieve the data from their storage.
-    func getLastUsed() -> [String] { return [] }
+    func lastUsed() -> [String] { [] }
 }

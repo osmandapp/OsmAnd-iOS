@@ -47,7 +47,7 @@ final class ProfileIconCollectionHandler: BasePoiIconCollectionHandler {
         OAAppSettings.sharedManager().lastUsedProfileIcons.set(icons)
     }
     
-    override func getLastUsed() -> [String] {
+    override func lastUsed() -> [String] {
         return OAAppSettings.sharedManager().lastUsedProfileIcons.get()
     }
 }

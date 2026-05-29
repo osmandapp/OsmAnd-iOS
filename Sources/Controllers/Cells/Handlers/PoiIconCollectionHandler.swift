@@ -93,7 +93,7 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         OAAppSettings.sharedManager().lastUsedFavIcons.set(icons)
     }
     
-    override func getLastUsed() -> [String] {
+    override func lastUsed() -> [String] {
         return OAAppSettings.sharedManager().lastUsedFavIcons.get()
     }
 }

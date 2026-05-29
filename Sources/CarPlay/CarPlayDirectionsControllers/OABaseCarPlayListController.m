@@ -24,7 +24,7 @@
 - (void) present
 {
     _listTemplate = [[CPListTemplate alloc] initWithTitle:self.screenTitle sections:[self generateSections]];
-    [self.interfaceController pushTemplate:_listTemplate animated:YES completion:nil];
+    [self safePushTemplate:_listTemplate animated:YES];
 }
 
 - (NSArray<CPListSection *> *) generateSections

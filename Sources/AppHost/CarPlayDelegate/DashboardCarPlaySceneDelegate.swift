@@ -83,15 +83,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
         self.window = window
-        dashboardController.shortcutButtons = [
-            CPDashboardButton(titleVariants: [localizedString("shared_string_navigation")], subtitleVariants: [""], image: .icCarplayNavigation, handler: { _ in
-                guard let url = URL(string: "osmandmaps://navigation") else { return }
-                templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
-            }),
-            CPDashboardButton(titleVariants: [localizedString("address_search_desc")], subtitleVariants: [""], image: .icCarplaySearch, handler: { _ in
-                guard let url = URL(string: "osmandmaps://search") else { return }
-                templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
-            })]
+        dashboardController.shortcutButtons = createDashboardButtons(for: templateApplicationDashboardScene)
     }
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
@@ -102,5 +94,36 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
         mapVC = nil
         self.window = nil
         OARootViewController.instance()?.mapPanel.detachFromCarPlayWindow()
+    }
+    
+    private func createDashboardButtons(for scene: CPTemplateApplicationDashboardScene) -> [CPDashboardButton] {
+        let actions: [CarPlayDashboardAction] = [.navigation, .search]
+        
+        return actions.map { action in
+            let title: String
+            let image: UIImage
+            
+            switch action {
+            case .navigation:
+                title = localizedString("shared_string_navigation")
+                image = .icCarplayNavigation
+            case .search:
+                title = localizedString("address_search_desc")
+                image = .icCarplaySearch
+            }
+            
+            return CPDashboardButton(titleVariants: [title],
+                                     subtitleVariants: [""],
+                                     image: image) { _ in
+                guard let url = action.url else { return }
+                
+                Task {
+                    let success = await scene.open(url, options: nil)
+                    if !success {
+                        NSLog("[CarPlay] Failed to open URL: \(url)")
+                    }
+                }
+            }
+        }
     }
 }

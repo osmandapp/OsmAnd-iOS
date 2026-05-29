@@ -26,8 +26,8 @@ struct AstroContextMenuDependencies {
     let onCatalogClick: (Catalog) -> Void
 }
 
-final class AstroContextMenuViewController: UIViewController {
-    private enum Tab: Int {
+final class AstroContextMenuViewController: UIViewController, UIScrollViewDelegate {
+    enum Tab: Int {
         case overview = 0
         case visibility = 1
         case schedule = 2
@@ -66,19 +66,19 @@ final class AstroContextMenuViewController: UIViewController {
         onCatalogClick: { [weak self] catalog in self?.openCatalogSearch(catalog) }
     )
 
-    private let headerTitle = UILabel()
     private let headerType = UILabel()
-    private let closeButton = UIButton(type: .system)
     private let metricsContainer = UIView()
     private let actionsStack = UIStackView()
-    private let segmentedControl = UISegmentedControl(items: [
-        AstroContextMenuLocalizer.label("shared_string_overview", fallback: "Overview"),
-        AstroContextMenuLocalizer.label("gpx_visibility_txt", fallback: "Visibility"),
-        AstroContextMenuLocalizer.label("astronomy_schedule", fallback: "Schedule")
-    ])
     private let scrollView = UIScrollView()
+    private let contentStack = UIStackView()
     private let cardsStack = UIStackView()
+    private let floatingTabBar = AstroFloatingTabBar()
+    private lazy var overviewTabTitle = AstroContextMenuLocalizer.label("shared_string_overview", fallback: "Overview")
+    private lazy var visibilityTabTitle = AstroContextMenuLocalizer.label("gpx_visibility_txt", fallback: "Visibility")
+    private lazy var scheduleTabTitle = AstroContextMenuLocalizer.label("astronomy_schedule", fallback: "Schedule")
     private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
+    private var selectedTab: Tab = .overview
+    private var isProgrammaticTabScroll = false
 
     private let saveButton = UIButton(type: .system)
     private let locationButton = UIButton(type: .system)
@@ -104,9 +104,24 @@ final class AstroContextMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        applyTheme()
+        configureNavigationBar()
         bindControllerCallbacks()
         if let skyObject {
             updateObjectInfo(skyObject)
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            applyTheme()
+            cardsStack.arrangedSubviews.forEach { $0.setNeedsDisplay() }
         }
     }
 
@@ -175,37 +190,25 @@ final class AstroContextMenuViewController: UIViewController {
         submitCards()
     }
 
+    func onLocationChanged() {
+        guard let obj = skyObject,
+              isViewLoaded else {
+            return
+        }
+        updateMetrics(obj)
+        updateVisibilityCard(obj)
+        updateScheduleCard(obj, periodStartOverride: uiState.schedulePeriodStart)
+        submitCards()
+    }
+
     private func setupView() {
-        view.backgroundColor = UIColor(white: 0.03, alpha: 0.98)
-
-        let header = UIView()
-        header.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(header)
-
-        headerTitle.translatesAutoresizingMaskIntoConstraints = false
-        headerTitle.textColor = .white
-        headerTitle.font = .systemFont(ofSize: 21, weight: .bold)
-        headerTitle.numberOfLines = 2
-        header.addSubview(headerTitle)
+        view.backgroundColor = AstroContextMenuTheme.pageBackground
 
         headerType.translatesAutoresizingMaskIntoConstraints = false
-        headerType.textColor = UIColor(white: 0.72, alpha: 1)
-        headerType.font = .systemFont(ofSize: 14)
+        headerType.font = .systemFont(ofSize: 17)
         headerType.numberOfLines = 2
-        header.addSubview(headerType)
-
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.tintColor = .white
-        closeButton.backgroundColor = UIColor(white: 1, alpha: 0.10)
-        closeButton.layer.cornerRadius = 16
-        closeButton.addAction(UIAction { [weak self] _ in
-            self?.dependencies.onClose()
-        }, for: .touchUpInside)
-        header.addSubview(closeButton)
 
         metricsContainer.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(metricsContainer)
 
         actionsStack.axis = .horizontal
         actionsStack.alignment = .fill
@@ -216,79 +219,124 @@ final class AstroContextMenuViewController: UIViewController {
             configureActionButton($0)
             actionsStack.addArrangedSubview($0)
         }
-        view.addSubview(actionsStack)
-
-        segmentedControl.selectedSegmentIndex = Tab.overview.rawValue
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.addAction(UIAction { [weak self] _ in
-            self?.scrollToSelectedTab()
-        }, for: .valueChanged)
-        view.addSubview(segmentedControl)
 
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.alwaysBounceVertical = true
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
         view.addSubview(scrollView)
+
+        contentStack.axis = .vertical
+        contentStack.spacing = 12
+        contentStack.isLayoutMarginsRelativeArrangement = true
+        contentStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+        contentStack.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentStack)
+
+        contentStack.addArrangedSubview(headerType)
+        contentStack.addArrangedSubview(metricsContainer)
+        contentStack.addArrangedSubview(actionsStack)
 
         cardsStack.axis = .vertical
         cardsStack.spacing = 12
         cardsStack.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(cardsStack)
+        contentStack.addArrangedSubview(cardsStack)
+
+        setupTabBar()
+        view.addSubview(floatingTabBar)
+
+        let floatingTabBarWidthConstraint = floatingTabBar.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -72)
+        floatingTabBarWidthConstraint.priority = .defaultHigh
 
         NSLayoutConstraint.activate([
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            header.topAnchor.constraint(equalTo: view.topAnchor, constant: 14),
-
-            closeButton.trailingAnchor.constraint(equalTo: header.trailingAnchor),
-            closeButton.topAnchor.constraint(equalTo: header.topAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: 32),
-            closeButton.heightAnchor.constraint(equalToConstant: 32),
-
-            headerTitle.leadingAnchor.constraint(equalTo: header.leadingAnchor),
-            headerTitle.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -12),
-            headerTitle.topAnchor.constraint(equalTo: header.topAnchor),
-
-            headerType.leadingAnchor.constraint(equalTo: headerTitle.leadingAnchor),
-            headerType.trailingAnchor.constraint(equalTo: headerTitle.trailingAnchor),
-            headerType.topAnchor.constraint(equalTo: headerTitle.bottomAnchor, constant: 4),
-            headerType.bottomAnchor.constraint(equalTo: header.bottomAnchor),
-
-            metricsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
-            metricsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            metricsContainer.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 10),
             metricsContainer.heightAnchor.constraint(equalToConstant: 62),
+            actionsStack.heightAnchor.constraint(equalToConstant: 66),
 
-            actionsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            actionsStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            actionsStack.topAnchor.constraint(equalTo: metricsContainer.bottomAnchor, constant: 8),
-            actionsStack.heightAnchor.constraint(equalToConstant: 54),
+            floatingTabBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            floatingTabBar.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 32),
+            floatingTabBar.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -32),
+            floatingTabBar.widthAnchor.constraint(lessThanOrEqualToConstant: 320),
+            floatingTabBarWidthConstraint,
+            floatingTabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
+            floatingTabBar.heightAnchor.constraint(equalToConstant: 64),
 
-            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            segmentedControl.topAnchor.constraint(equalTo: actionsStack.bottomAnchor, constant: 12),
-            segmentedControl.heightAnchor.constraint(equalToConstant: 34),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            scrollView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 12),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
-
-            cardsStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            cardsStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            cardsStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            cardsStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            cardsStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
         ])
+    }
+
+    private func setupTabBar() {
+        floatingTabBar.translatesAutoresizingMaskIntoConstraints = false
+        floatingTabBar.configure(items: [
+            AstroFloatingTabBar.Item(tab: .overview, title: overviewTabTitle, systemImageName: "globe"),
+            AstroFloatingTabBar.Item(tab: .visibility, title: visibilityTabTitle, systemImageName: "telescope"),
+            AstroFloatingTabBar.Item(tab: .schedule, title: scheduleTabTitle, systemImageName: "calendar")
+        ])
+        floatingTabBar.onSelectTab = { [weak self] tab in
+            self?.selectTab(tab, scrollToSection: true)
+        }
+        floatingTabBar.setSelectedTab(.overview, animated: false)
+        scrollView.contentInset.bottom = 108
+        scrollView.verticalScrollIndicatorInsets.bottom = 108
+    }
+
+    private func applyTheme() {
+        view.backgroundColor = AstroContextMenuTheme.pageBackground
+        headerType.textColor = AstroContextMenuTheme.secondaryText
+        metricsContainer.backgroundColor = .clear
+        configureTabBarAppearance()
+        configureNavigationBar()
+        [saveButton, locationButton, directionButton, pathButton].forEach { button in
+            var config = button.configuration ?? UIButton.Configuration.filled()
+            config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
+            config.baseForegroundColor = AstroContextMenuTheme.activeIcon
+            button.configuration = config
+        }
+    }
+
+    private func configureNavigationBar() {
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .close,
+                                                            primaryAction: UIAction { [weak self] _ in
+                                                                self?.dependencies.onClose()
+                                                            })
+        navigationController?.navigationBar.prefersLargeTitles = false
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.titleTextAttributes = [.foregroundColor: AstroContextMenuTheme.primaryText]
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.tintColor = AstroContextMenuTheme.activeIcon
+    }
+
+    private func configureTabBarAppearance() {
+        floatingTabBar.applyTheme()
     }
 
     private func configureActionButton(_ button: UIButton) {
         var config = UIButton.Configuration.filled()
         config.imagePlacement = .top
         config.imagePadding = 3
-        config.baseBackgroundColor = UIColor(white: 1, alpha: 0.10)
-        config.baseForegroundColor = .white
-        config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 4, bottom: 6, trailing: 4)
+        config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
+        config.baseForegroundColor = AstroContextMenuTheme.activeIcon
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 4, bottom: 7, trailing: 4)
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .systemFont(ofSize: 15, weight: .regular)
+            return outgoing
+        }
         button.configuration = config
+        button.layer.cornerRadius = 8
+        button.clipsToBounds = true
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.minimumScaleFactor = 0.65
     }
@@ -475,8 +523,7 @@ final class AstroContextMenuViewController: UIViewController {
             updateVisibilityCard(skyObject)
         }
         submitCards()
-        segmentedControl.selectedSegmentIndex = Tab.visibility.rawValue
-        scrollToSelectedTab()
+        selectTab(.visibility, scrollToSection: true)
     }
 
     private func resetVisibilityToToday() {
@@ -514,6 +561,7 @@ final class AstroContextMenuViewController: UIViewController {
             }
             cardsStack.addArrangedSubview(view)
         }
+        updateSelectedTabControls()
     }
 
     private func toggleCatalogsExpanded() {
@@ -599,14 +647,25 @@ final class AstroContextMenuViewController: UIViewController {
         dependencies.onCatalogClick(catalog)
     }
 
-    private func scrollToSelectedTab() {
-        guard let tab = Tab(rawValue: segmentedControl.selectedSegmentIndex) else {
+    private func selectTab(_ tab: Tab, scrollToSection: Bool) {
+        selectedTab = tab
+        updateSelectedTabControls(animated: scrollToSection)
+        if scrollToSection {
+            scrollToTab(tab, animated: true)
+        }
+    }
+
+    private func scrollToTab(_ tab: Tab, animated: Bool = true) {
+        view.layoutIfNeeded()
+        isProgrammaticTabScroll = animated
+        guard tab != .overview else {
+            setScrollViewContentOffset(.zero, animated: animated)
             return
         }
         let key: AstroContextCardKey?
         switch tab {
         case .overview:
-            key = adapter.currentList.first?.key
+            key = nil
         case .visibility:
             key = .visibility
         case .schedule:
@@ -614,21 +673,71 @@ final class AstroContextMenuViewController: UIViewController {
         }
         guard let key,
               let target = cardViewsByKey[key] else {
+            isProgrammaticTabScroll = false
             return
         }
         let targetFrame = target.convert(target.bounds, to: scrollView)
-        scrollView.setContentOffset(CGPoint(x: 0, y: max(0, targetFrame.minY - 4)), animated: true)
+        let maxOffsetY = max(0, scrollView.contentSize.height - scrollView.bounds.height)
+        let targetY = min(maxOffsetY, max(0, targetFrame.minY - 8))
+        setScrollViewContentOffset(CGPoint(x: 0, y: targetY), animated: animated)
+    }
+
+    private func setScrollViewContentOffset(_ offset: CGPoint, animated: Bool) {
+        guard abs(scrollView.contentOffset.y - offset.y) > 0.5 else {
+            isProgrammaticTabScroll = false
+            return
+        }
+        scrollView.setContentOffset(offset, animated: animated)
+        if !animated {
+            isProgrammaticTabScroll = false
+        }
+    }
+
+    private func updateSelectedTabControls(animated: Bool = false) {
+        floatingTabBar.setSelectedTab(selectedTab, animated: animated)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard !isProgrammaticTabScroll else {
+            return
+        }
+        let y = scrollView.contentOffset.y + 16
+        let visibilityY = cardViewsByKey[.visibility].map { $0.convert($0.bounds, to: scrollView).minY }
+        let scheduleY = cardViewsByKey[.schedule].map { $0.convert($0.bounds, to: scrollView).minY }
+        let nextTab: Tab
+        if let scheduleY, y >= scheduleY - 24 {
+            nextTab = .schedule
+        } else if let visibilityY, y >= visibilityY - 24 {
+            nextTab = .visibility
+        } else {
+            nextTab = .overview
+        }
+        if nextTab != selectedTab {
+            selectedTab = nextTab
+            updateSelectedTabControls()
+        }
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isProgrammaticTabScroll = false
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        isProgrammaticTabScroll = false
+        updateSelectedTabControls()
     }
 
     private func resetOverviewStateForNewObject() {
-        segmentedControl.selectedSegmentIndex = Tab.overview.rawValue
+        selectedTab = .overview
+        updateSelectedTabControls()
         scrollView.setContentOffset(.zero, animated: false)
         uiState.catalogsExpanded = false
         uiState.galleryState = .collapsed
     }
 
     private func setTitle(_ name: String) {
-        headerTitle.text = name
+        title = name
+        navigationItem.title = name
     }
 
     private func createUiTimeFormatter() -> DateFormatter {
@@ -648,5 +757,168 @@ final class AstroContextMenuViewController: UIViewController {
 
     private func millis(_ date: Date) -> Int64 {
         Int64((date.timeIntervalSince1970 * 1000.0).rounded())
+    }
+}
+
+private final class AstroFloatingTabBar: UIView {
+    struct Item {
+        let tab: AstroContextMenuViewController.Tab
+        let title: String
+        let systemImageName: String
+    }
+
+    var onSelectTab: ((AstroContextMenuViewController.Tab) -> Void)?
+
+    private let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
+    private let selectedBackgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+    private let stackView = UIStackView()
+    private var buttonsByTab: [AstroContextMenuViewController.Tab: UIButton] = [:]
+    private var selectedBackgroundConstraints: [NSLayoutConstraint] = []
+    private var selectedTab: AstroContextMenuViewController.Tab = .overview
+    private let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(items: [Item]) {
+        stackView.arrangedSubviews.forEach {
+            stackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+        buttonsByTab.removeAll()
+
+        for item in items {
+            let button = makeButton(for: item)
+            buttonsByTab[item.tab] = button
+            stackView.addArrangedSubview(button)
+        }
+        setSelectedTab(selectedTab, animated: false)
+    }
+
+    func setSelectedTab(_ tab: AstroContextMenuViewController.Tab, animated: Bool) {
+        selectedTab = tab
+        updateButtons()
+        updateSelectedBackground(animated: animated)
+    }
+
+    func applyTheme() {
+        tintColor = AstroContextMenuTheme.activeIcon
+        layer.shadowColor = UIColor.black.cgColor
+        backgroundView.contentView.backgroundColor = AstroContextMenuTheme.pageBackground.withAlphaComponent(0.42)
+        selectedBackgroundView.contentView.backgroundColor = AstroContextMenuTheme.secondaryBackground.withAlphaComponent(0.72)
+        selectedBackgroundView.layer.borderColor = AstroContextMenuTheme.separator.currentMapThemeColor.cgColor
+        updateButtons()
+    }
+
+    private func setup() {
+        isOpaque = false
+        backgroundColor = .clear
+        layer.shadowOpacity = 0.16
+        layer.shadowRadius = 18
+        layer.shadowOffset = CGSize(width: 0, height: 8)
+
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.layer.cornerRadius = 32
+        backgroundView.layer.masksToBounds = true
+        addSubview(backgroundView)
+
+        selectedBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        selectedBackgroundView.isUserInteractionEnabled = false
+        selectedBackgroundView.layer.cornerRadius = 27
+        selectedBackgroundView.layer.masksToBounds = true
+        selectedBackgroundView.layer.borderWidth = 1 / UIScreen.main.scale
+        addSubview(selectedBackgroundView)
+
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(stackView)
+
+        NSLayoutConstraint.activate([
+            backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            backgroundView.topAnchor.constraint(equalTo: topAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
+        ])
+    }
+
+    private func makeButton(for item: Item) -> UIButton {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityLabel = item.title
+        button.accessibilityIdentifier = "astro_context_tab_\(item.tab.rawValue)"
+        button.setContentCompressionResistancePriority(.required, for: .vertical)
+        button.setContentHuggingPriority(.required, for: .vertical)
+
+        var config = UIButton.Configuration.plain()
+        config.title = item.title
+        config.image = UIImage(systemName: item.systemImageName, withConfiguration: symbolConfiguration)
+        config.imagePlacement = .top
+        config.imagePadding = 1
+        config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 2, bottom: 4, trailing: 2)
+        button.configuration = config
+
+        button.addAction(UIAction { [weak self] _ in
+            self?.onSelectTab?(item.tab)
+        }, for: .touchUpInside)
+        return button
+    }
+
+    private func updateButtons() {
+        for (tab, button) in buttonsByTab {
+            let isSelected = tab == selectedTab
+            var config = button.configuration ?? UIButton.Configuration.plain()
+            config.baseForegroundColor = isSelected ? AstroContextMenuTheme.activeIcon : AstroContextMenuTheme.primaryText
+            config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = .systemFont(ofSize: 11, weight: isSelected ? .semibold : .regular)
+                return outgoing
+            }
+            button.configuration = config
+            button.accessibilityTraits = isSelected ? [.button, .selected] : .button
+        }
+    }
+
+    private func updateSelectedBackground(animated: Bool) {
+        guard let selectedButton = buttonsByTab[selectedTab] else {
+            selectedBackgroundView.isHidden = true
+            return
+        }
+        selectedBackgroundView.isHidden = false
+        NSLayoutConstraint.deactivate(selectedBackgroundConstraints)
+        selectedBackgroundConstraints = [
+            selectedBackgroundView.leadingAnchor.constraint(equalTo: selectedButton.leadingAnchor, constant: 2),
+            selectedBackgroundView.trailingAnchor.constraint(equalTo: selectedButton.trailingAnchor, constant: -2),
+            selectedBackgroundView.topAnchor.constraint(equalTo: selectedButton.topAnchor),
+            selectedBackgroundView.bottomAnchor.constraint(equalTo: selectedButton.bottomAnchor)
+        ]
+        NSLayoutConstraint.activate(selectedBackgroundConstraints)
+        sendSubviewToBack(selectedBackgroundView)
+        sendSubviewToBack(backgroundView)
+
+        let changes = {
+            self.layoutIfNeeded()
+        }
+        if animated {
+            UIView.animate(withDuration: 0.22,
+                           delay: 0,
+                           options: [.beginFromCurrentState, .curveEaseOut],
+                           animations: changes)
+        } else {
+            changes()
+        }
     }
 }

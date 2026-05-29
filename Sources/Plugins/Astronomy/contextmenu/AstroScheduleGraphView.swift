@@ -27,6 +27,13 @@ final class AstroScheduleGraphView: UIView {
         setNeedsDisplay()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            setNeedsDisplay()
+        }
+    }
+
     override func draw(_ rect: CGRect) {
         guard let model,
               bounds.width > 0,
@@ -110,4 +117,3 @@ final class AstroScheduleGraphView: UIView {
         return values[startIndex] + (values[endIndex] - values[startIndex]) * t
     }
 }
-

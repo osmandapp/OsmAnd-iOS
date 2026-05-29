@@ -55,6 +55,13 @@ final class AstroVisibilityGraphView: UIView {
         model.map(syncCursorToReference)
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            setNeedsDisplay()
+        }
+    }
+
     override func draw(_ rect: CGRect) {
         guard let model,
               model.size >= 2,
@@ -171,37 +178,37 @@ final class AstroVisibilityGraphView: UIView {
 
     private func drawYAxisGridAndLabels(area: PlotArea) {
         let paragraph = NSMutableParagraphStyle()
-        paragraph.alignment = .right
+        paragraph.alignment = .left
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 10, weight: .medium),
-            .foregroundColor: UIColor(red: 0.32, green: 0.58, blue: 0.88, alpha: 1),
+            .font: UIFont.systemFont(ofSize: 12, weight: .medium),
+            .foregroundColor: AstroContextMenuTheme.activeText.currentMapThemeColor,
             .paragraphStyle: paragraph
         ]
-        for altitude in stride(from: -45, through: 90, by: 45) {
+        for altitude in stride(from: -30, through: 90, by: 15) {
             let y = yForAltitude(Double(altitude), area: area)
             let path = UIBezierPath()
             path.move(to: CGPoint(x: area.left, y: y))
             path.addLine(to: CGPoint(x: area.right, y: y))
-            (altitude == 0 ? UIColor(white: 1, alpha: 0.36) : UIColor(white: 1, alpha: 0.16)).setStroke()
-            path.lineWidth = altitude == 0 ? 1 : 0.5
+            AstroContextMenuTheme.resolvedSeparator.withAlphaComponent(altitude == 0 ? 0.65 : 0.45).setStroke()
+            path.lineWidth = altitude == 0 ? 1 : 0.75
             path.stroke()
             let text = "\(altitude)°" as NSString
-            text.draw(in: CGRect(x: 0, y: y - 7, width: area.left - 8, height: 14), withAttributes: attributes)
+            text.draw(in: CGRect(x: area.right + 8, y: y - 8, width: bounds.width - area.right - 8, height: 16), withAttributes: attributes)
         }
     }
 
     private func drawXAxisTicksAndLabels(area: PlotArea, model: AstroVisibilityGraphSnapshot) {
         let formatter = DateFormatter()
         formatter.timeZone = model.timeZone
-        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current) ?? "HH"
+        formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "ha", options: 0, locale: .current) ?? "ha"
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 10),
-            .foregroundColor: UIColor(white: 0.76, alpha: 1)
+            .font: UIFont.systemFont(ofSize: 12),
+            .foregroundColor: AstroContextMenuTheme.secondaryText.currentMapThemeColor
         ]
-        for hour in stride(from: 0, through: 24, by: 6) {
+        for hour in stride(from: 0, through: 24, by: 4) {
             let fraction = CGFloat(hour) / 24.0
             let x = area.left + area.width * fraction
-            UIColor(white: 1, alpha: 0.22).setStroke()
+            AstroContextMenuTheme.resolvedSeparator.setStroke()
             let tick = UIBezierPath()
             tick.move(to: CGPoint(x: x, y: area.bottom))
             tick.addLine(to: CGPoint(x: x, y: area.bottom + 5))
@@ -210,7 +217,9 @@ final class AstroVisibilityGraphView: UIView {
 
             let millis = model.startMillis + Int64(Double(model.endMillis - model.startMillis) * Double(fraction))
             let text = formatter.string(from: Date(timeIntervalSince1970: TimeInterval(millis) / 1000.0)) as NSString
-            text.draw(in: CGRect(x: x - 24, y: area.bottom + 8, width: 48, height: 16), withAttributes: attributes)
+            let width: CGFloat = 48
+            let left = min(bounds.width - width, max(0, x - width / 2))
+            text.draw(in: CGRect(x: left, y: area.bottom + 8, width: width, height: 18), withAttributes: attributes)
         }
     }
 
@@ -221,14 +230,14 @@ final class AstroVisibilityGraphView: UIView {
         let azimuth = interpolate(model.objectAzimuths, fraction: fraction)
         let point = CGPoint(x: clampedX, y: yForAltitude(altitude, area: area))
 
-        UIColor.white.withAlphaComponent(0.8).setStroke()
+        UIColor.white.withAlphaComponent(0.82).setStroke()
         let line = UIBezierPath()
         line.move(to: CGPoint(x: clampedX, y: area.top))
         line.addLine(to: CGPoint(x: clampedX, y: area.bottom))
         line.lineWidth = 1
         line.stroke()
 
-        UIColor.systemBlue.setFill()
+        AstroContextMenuTheme.primaryButton.currentMapThemeColor.setFill()
         UIColor.white.setStroke()
         let dot = UIBezierPath(ovalIn: CGRect(x: point.x - 4, y: point.y - 4, width: 8, height: 8))
         dot.fill()
@@ -248,7 +257,7 @@ final class AstroVisibilityGraphView: UIView {
         let size = (text as NSString).size(withAttributes: attributes)
         let markerX = min(area.right - size.width - 12, max(area.left + 6, clampedX - size.width / 2 - 6))
         let rect = CGRect(x: markerX, y: area.top + 8, width: size.width + 12, height: 24)
-        UIColor.black.withAlphaComponent(0.42).setFill()
+        UIColor.black.withAlphaComponent(0.46).setFill()
         UIBezierPath(roundedRect: rect, cornerRadius: 6).fill()
         (text as NSString).draw(in: rect.insetBy(dx: 6, dy: 5), withAttributes: attributes)
     }
@@ -285,8 +294,8 @@ final class AstroVisibilityGraphView: UIView {
     }
 
     private func yForAltitude(_ altitude: Double, area: PlotArea) -> CGFloat {
-        let clamped = max(-90.0, min(90.0, altitude))
-        let fraction = CGFloat((90.0 - clamped) / 180.0)
+        let clamped = max(-30.0, min(90.0, altitude))
+        let fraction = CGFloat((90.0 - clamped) / 120.0)
         return area.top + area.height * fraction
     }
 
@@ -308,11 +317,10 @@ final class AstroVisibilityGraphView: UIView {
         guard bounds.width > 90, bounds.height > 90 else {
             return nil
         }
-        return PlotArea(left: 42, top: 12, right: bounds.width - 12, bottom: bounds.height - 28)
+        return PlotArea(left: 0, top: 32, right: bounds.width - 44, bottom: bounds.height - 32)
     }
 
     private func areaContains(_ point: CGPoint, area: PlotArea) -> Bool {
         point.x >= area.left && point.x <= area.right && point.y >= area.top && point.y <= area.bottom
     }
 }
-

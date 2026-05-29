@@ -8,6 +8,28 @@
 
 import UIKit
 
+enum AstroContextMenuTheme {
+    static var pageBackground: UIColor { .viewBg }
+    static var cardBackground: UIColor { .groupBg }
+    static var secondaryBackground: UIColor { UIColor(named: "groupBgColorSecondary") ?? .viewBg }
+    static var actionBackground: UIColor { .contextMenuButtonBg }
+    static var iconButtonBackground: UIColor { UIColor(named: "iconButtonBgColor") ?? secondaryBackground }
+    static var primaryText: UIColor { .textColorPrimary }
+    static var secondaryText: UIColor { .textColorSecondary }
+    static var tertiaryText: UIColor { UIColor(named: "textColorTertiary") ?? .textColorSecondary }
+    static var activeText: UIColor { .textColorActive }
+    static var activeIcon: UIColor { .iconColorActive }
+    static var defaultIcon: UIColor { .iconColorDefault }
+    static var secondaryIcon: UIColor { .iconColorSecondary }
+    static var separator: UIColor { .customSeparator }
+    static var primaryButton: UIColor { .buttonBgColorPrimary }
+    static var secondaryButton: UIColor { .buttonBgColorSecondary }
+
+    static var resolvedSeparator: UIColor {
+        separator.currentMapThemeColor
+    }
+}
+
 final class AstroContextMenuAdapter {
     private let presentingController: UIViewController
     private let onDescriptionRead: (AstroDescriptionCardItem) -> Void
@@ -109,10 +131,10 @@ final class AstroCardContainerView: UIView {
 
     private func setup(title: String?, systemImageName: String?) {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = UIColor(white: 1, alpha: 0.08)
+        backgroundColor = AstroContextMenuTheme.cardBackground
         layer.cornerRadius = 8
         layer.borderWidth = 1
-        layer.borderColor = UIColor(white: 1, alpha: 0.08).cgColor
+        layer.borderColor = AstroContextMenuTheme.resolvedSeparator.cgColor
 
         stack.axis = .vertical
         stack.spacing = 12
@@ -126,7 +148,7 @@ final class AstroCardContainerView: UIView {
             row.spacing = 8
             if let systemImageName {
                 let imageView = UIImageView(image: UIImage(systemName: systemImageName))
-                imageView.tintColor = .systemBlue
+                imageView.tintColor = AstroContextMenuTheme.activeIcon
                 imageView.contentMode = .scaleAspectFit
                 imageView.widthAnchor.constraint(equalToConstant: 22).isActive = true
                 imageView.heightAnchor.constraint(equalToConstant: 22).isActive = true
@@ -135,8 +157,8 @@ final class AstroCardContainerView: UIView {
             if let title {
                 let label = UILabel()
                 label.text = title
-                label.textColor = .white
-                label.font = .systemFont(ofSize: 17, weight: .semibold)
+                label.textColor = AstroContextMenuTheme.primaryText
+                label.font = .systemFont(ofSize: 20, weight: .bold)
                 label.numberOfLines = 0
                 row.addArrangedSubview(label)
             }
@@ -150,5 +172,12 @@ final class AstroCardContainerView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14)
         ])
     }
-}
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            backgroundColor = AstroContextMenuTheme.cardBackground
+            layer.borderColor = AstroContextMenuTheme.resolvedSeparator.cgColor
+        }
+    }
+}

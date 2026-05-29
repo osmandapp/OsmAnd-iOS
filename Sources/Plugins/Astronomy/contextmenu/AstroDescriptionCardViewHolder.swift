@@ -11,14 +11,13 @@ import UIKit
 enum AstroDescriptionCardViewHolder {
     static func makeView(item: AstroDescriptionCardItem,
                          onReadClick: @escaping (AstroDescriptionCardItem) -> Void) -> UIView {
-        let card = AstroCardContainerView(title: AstroContextMenuLocalizer.label("shared_string_description", fallback: "Description"),
-                                          systemImageName: "doc.text")
+        let card = AstroCardContainerView()
 
         if !item.description.isEmpty {
             let description = UILabel()
             description.text = item.description
-            description.textColor = UIColor(white: 0.86, alpha: 1)
-            description.font = .systemFont(ofSize: 14)
+            description.textColor = AstroContextMenuTheme.primaryText
+            description.font = .systemFont(ofSize: 18)
             description.numberOfLines = 8
             card.stack.addArrangedSubview(description)
         }
@@ -27,7 +26,8 @@ enum AstroDescriptionCardViewHolder {
             var config = UIButton.Configuration.plain()
             config.image = UIImage(systemName: item.linkType == .wikidata ? "link" : "globe")
             config.imagePadding = 8
-            config.baseForegroundColor = .systemBlue
+            config.baseForegroundColor = AstroContextMenuTheme.activeText
+            config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
             if item.hasOfflineArticle && item.linkType == .wikipedia {
                 config.title = AstroContextMenuLocalizer.label("context_menu_read_full_article", fallback: "Read full article")
             } else {
@@ -45,4 +45,3 @@ enum AstroDescriptionCardViewHolder {
         return card
     }
 }
-

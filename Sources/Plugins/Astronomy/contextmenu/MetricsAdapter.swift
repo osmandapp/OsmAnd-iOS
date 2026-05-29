@@ -71,7 +71,7 @@ private final class MetricView: UIView {
 
     private func setup() {
         translatesAutoresizingMaskIntoConstraints = false
-        widthAnchor.constraint(greaterThanOrEqualToConstant: 96).isActive = true
+        widthAnchor.constraint(greaterThanOrEqualToConstant: 112).isActive = true
 
         let stack = UIStackView(arrangedSubviews: [valueLabel, titleLabel])
         stack.axis = .vertical
@@ -79,15 +79,15 @@ private final class MetricView: UIView {
         stack.spacing = 2
         stack.translatesAutoresizingMaskIntoConstraints = false
 
-        valueLabel.font = .systemFont(ofSize: 18, weight: .semibold)
-        valueLabel.textColor = .white
+        valueLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        valueLabel.textColor = AstroContextMenuTheme.activeText
         valueLabel.adjustsFontSizeToFitWidth = true
         valueLabel.minimumScaleFactor = 0.8
 
-        titleLabel.font = .systemFont(ofSize: 12, weight: .regular)
-        titleLabel.textColor = UIColor(white: 0.72, alpha: 1)
+        titleLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        titleLabel.textColor = AstroContextMenuTheme.secondaryText
 
-        divider.backgroundColor = UIColor(white: 1, alpha: 0.12)
+        divider.backgroundColor = AstroContextMenuTheme.separator
         divider.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stack)
@@ -95,8 +95,8 @@ private final class MetricView: UIView {
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 7),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7),
 
             divider.trailingAnchor.constraint(equalTo: trailingAnchor),
             divider.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -105,4 +105,3 @@ private final class MetricView: UIView {
         ])
     }
 }
-

@@ -20,13 +20,14 @@ enum AstroVisibilityCardViewHolder {
         header.spacing = 8
         let title = UILabel()
         title.text = item.titleText
-        title.textColor = .white
-        title.font = .systemFont(ofSize: 17, weight: .semibold)
+        title.textColor = AstroContextMenuTheme.primaryText
+        title.font = .systemFont(ofSize: 20, weight: .bold)
         title.numberOfLines = 0
         header.addArrangedSubview(title)
         if item.showResetButton {
             let resetButton = UIButton(type: .system)
             resetButton.setImage(UIImage(systemName: "calendar.badge.clock"), for: .normal)
+            resetButton.tintColor = AstroContextMenuTheme.activeIcon
             resetButton.accessibilityLabel = AstroContextMenuLocalizer.label("astro_visibility_show_today", fallback: "Show today")
             resetButton.addAction(UIAction { _ in onResetToToday() }, for: .touchUpInside)
             resetButton.widthAnchor.constraint(equalToConstant: 36).isActive = true
@@ -37,7 +38,7 @@ enum AstroVisibilityCardViewHolder {
 
         let graphView = AstroVisibilityGraphView()
         graphView.translatesAutoresizingMaskIntoConstraints = false
-        graphView.heightAnchor.constraint(equalToConstant: 220).isActive = true
+        graphView.heightAnchor.constraint(equalToConstant: 270).isActive = true
         graphView.submitGraph(item.graph, cursorReferenceTimeMillis: item.cursorReferenceTimeMillis)
         graphView.onCursorTimeChanged = onCursorTimeChanged
         card.stack.addArrangedSubview(graphView)
@@ -51,7 +52,7 @@ enum AstroVisibilityCardViewHolder {
                  time: item.riseTime,
                  symbol: "▲",
                  title: AstroContextMenuLocalizer.label("astro_rise", fallback: "Rise"),
-                 symbolColor: .white)
+                 symbolColor: AstroContextMenuTheme.activeIcon)
         addEvent(to: events,
                  time: item.culminationTime,
                  symbol: "●",
@@ -61,7 +62,7 @@ enum AstroVisibilityCardViewHolder {
                  time: item.setTime,
                  symbol: "▼",
                  title: AstroContextMenuLocalizer.label("astro_set", fallback: "Set"),
-                 symbolColor: .white)
+                 symbolColor: AstroContextMenuTheme.activeIcon)
         if !events.arrangedSubviews.isEmpty {
             card.stack.addArrangedSubview(events)
         }
@@ -69,14 +70,14 @@ enum AstroVisibilityCardViewHolder {
         if !item.locationText.isEmpty {
             let location = UILabel()
             location.text = item.locationText
-            location.textColor = UIColor(white: 0.72, alpha: 1)
-            location.font = .systemFont(ofSize: 13)
+            location.textColor = AstroContextMenuTheme.secondaryText
+            location.font = .systemFont(ofSize: 17)
             location.numberOfLines = 0
             let row = UIStackView(arrangedSubviews: [UIImageView(image: UIImage(systemName: "location")), location])
             row.axis = .horizontal
             row.alignment = .center
             row.spacing = 7
-            (row.arrangedSubviews.first as? UIImageView)?.tintColor = UIColor(white: 0.72, alpha: 1)
+            (row.arrangedSubviews.first as? UIImageView)?.tintColor = AstroContextMenuTheme.secondaryIcon
             row.arrangedSubviews.first?.widthAnchor.constraint(equalToConstant: 16).isActive = true
             card.stack.addArrangedSubview(row)
         }
@@ -101,14 +102,14 @@ enum AstroVisibilityCardViewHolder {
         symbolLabel.font = .systemFont(ofSize: 14, weight: .bold)
         let timeLabel = UILabel()
         timeLabel.text = time
-        timeLabel.textColor = .white
-        timeLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        timeLabel.textColor = AstroContextMenuTheme.activeText
+        timeLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         timeLabel.adjustsFontSizeToFitWidth = true
         timeLabel.minimumScaleFactor = 0.75
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.textColor = UIColor(white: 0.68, alpha: 1)
-        titleLabel.font = .systemFont(ofSize: 11)
+        titleLabel.textColor = AstroContextMenuTheme.secondaryText
+        titleLabel.font = .systemFont(ofSize: 14)
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.7
         block.addArrangedSubview(symbolLabel)
@@ -117,4 +118,3 @@ enum AstroVisibilityCardViewHolder {
         stack.addArrangedSubview(block)
     }
 }
-

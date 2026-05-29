@@ -17,6 +17,8 @@ enum AstroGalleryCardViewHolder {
                                           systemImageName: "photo.on.rectangle")
         let toggleButton = UIButton(type: .system)
         toggleButton.contentHorizontalAlignment = .leading
+        toggleButton.tintColor = AstroContextMenuTheme.activeIcon
+        toggleButton.setTitleColor(AstroContextMenuTheme.activeText, for: .normal)
         toggleButton.setTitle(toggleTitle(for: item.state), for: .normal)
         toggleButton.setImage(UIImage(systemName: toggleImageName(for: item.state)), for: .normal)
         toggleButton.addAction(UIAction { _ in onToggle(item.wid) }, for: .touchUpInside)
@@ -33,7 +35,7 @@ enum AstroGalleryCardViewHolder {
             if cards.isEmpty {
                 let emptyLabel = UILabel()
                 emptyLabel.text = AstroContextMenuLocalizer.label("shared_string_no_data", fallback: "No media")
-                emptyLabel.textColor = UIColor(white: 0.72, alpha: 1)
+                emptyLabel.textColor = AstroContextMenuTheme.secondaryText
                 emptyLabel.font = .systemFont(ofSize: 14)
                 card.stack.addArrangedSubview(emptyLabel)
             } else {
@@ -41,6 +43,8 @@ enum AstroGalleryCardViewHolder {
                 card.stack.addArrangedSubview(gallery)
                 let showAll = UIButton(type: .system)
                 showAll.setTitle(AstroContextMenuLocalizer.label("shared_string_show_all", fallback: "Show all"), for: .normal)
+                showAll.tintColor = AstroContextMenuTheme.activeIcon
+                showAll.setTitleColor(AstroContextMenuTheme.activeText, for: .normal)
                 showAll.addAction(UIAction { _ in
                     let controller = GalleryGridViewController()
                     controller.cards = cards
@@ -131,7 +135,7 @@ private final class AstroGalleryThumbnailView: UIControl {
     private func setup(card: AbstractCard) {
         widthAnchor.constraint(equalToConstant: 112).isActive = true
         heightAnchor.constraint(equalToConstant: 112).isActive = true
-        backgroundColor = UIColor(white: 1, alpha: 0.08)
+        backgroundColor = UIColor(named: "imagePlaceholderBgColor") ?? AstroContextMenuTheme.secondaryBackground
         layer.cornerRadius = 7
         clipsToBounds = true
 
@@ -148,7 +152,7 @@ private final class AstroGalleryThumbnailView: UIControl {
         guard let imageCard = card as? ImageCard,
               let url = URL(string: imageCard.imageUrl) else {
             imageView.image = UIImage(systemName: "photo")
-            imageView.tintColor = UIColor(white: 1, alpha: 0.45)
+            imageView.tintColor = AstroContextMenuTheme.secondaryIcon
             return
         }
         task = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
@@ -163,4 +167,3 @@ private final class AstroGalleryThumbnailView: UIControl {
         task?.resume()
     }
 }
-

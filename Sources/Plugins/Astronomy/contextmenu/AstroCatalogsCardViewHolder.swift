@@ -42,8 +42,8 @@ final class WrappingChipsView: UIView {
     func addChip(title: String, action: @escaping () -> Void) {
         var config = UIButton.Configuration.filled()
         config.title = title
-        config.baseBackgroundColor = UIColor(white: 1, alpha: 0.10)
-        config.baseForegroundColor = .systemBlue
+        config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
+        config.baseForegroundColor = AstroContextMenuTheme.activeText
         config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 11, bottom: 7, trailing: 11)
         let button = UIButton(configuration: config)
         button.layer.cornerRadius = 14
@@ -87,4 +87,3 @@ final class WrappingChipsView: UIView {
         return y + rowHeight
     }
 }
-

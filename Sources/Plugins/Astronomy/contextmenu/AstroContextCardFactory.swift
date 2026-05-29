@@ -20,10 +20,8 @@ final class AstroContextCardFactory {
         }
 
         var items: [AstroContextMenuItem] = []
-        if let knowledgeItem {
-            items.append(knowledgeItem)
-        }
-        if let descriptionItem = buildDescriptionCardItem(obj: skyObject, astroArticle: article) {
+        let descriptionItem = buildDescriptionCardItem(obj: skyObject, astroArticle: article)
+        if let descriptionItem {
             items.append(descriptionItem)
         }
         if !skyObject.catalogs.isEmpty {
@@ -32,6 +30,9 @@ final class AstroContextCardFactory {
         items.append(AstroGalleryCardItem(wid: skyObject.wid,
                                           showAllTitle: skyObject.niceName(),
                                           state: uiState.galleryState))
+        if let knowledgeItem, (knowledgeItem.state == .download || descriptionItem == nil) {
+            items.append(knowledgeItem)
+        }
         if let visibilityItem {
             items.append(visibilityItem)
         }
@@ -80,4 +81,3 @@ final class AstroContextCardFactory {
         return obj.hasMissingPrimaryName()
     }
 }
-

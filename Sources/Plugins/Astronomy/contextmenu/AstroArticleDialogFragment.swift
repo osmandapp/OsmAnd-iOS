@@ -44,10 +44,28 @@ final class AstroArticleDialogFragment: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.04, alpha: 1)
+        applyTheme()
         setupToolbar()
         setupWebView()
         populateArticle()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            applyTheme()
+            if !articleHtml.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                webView.loadHTMLString(createHtmlContent(), baseURL: nil)
+            }
+        }
+    }
+
+    private func applyTheme() {
+        view.backgroundColor = AstroContextMenuTheme.pageBackground
+        titleLabel.textColor = AstroContextMenuTheme.primaryText
+        readFullArticleButton.tintColor = .white
+        readFullArticleButton.backgroundColor = AstroContextMenuTheme.primaryButton
+        webView.backgroundColor = AstroContextMenuTheme.pageBackground
     }
 
     private func setupToolbar() {
@@ -56,7 +74,7 @@ final class AstroArticleDialogFragment: UIViewController {
         view.addSubview(toolbar)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.textColor = .white
+        titleLabel.textColor = AstroContextMenuTheme.primaryText
         titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
         titleLabel.numberOfLines = 2
         toolbar.addSubview(titleLabel)
@@ -64,7 +82,7 @@ final class AstroArticleDialogFragment: UIViewController {
         let closeButton = UIButton(type: .system)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.tintColor = .white
+        closeButton.tintColor = AstroContextMenuTheme.secondaryIcon
         closeButton.addAction(UIAction { [weak self] _ in
             self?.dismiss(animated: true)
         }, for: .touchUpInside)
@@ -74,7 +92,7 @@ final class AstroArticleDialogFragment: UIViewController {
         readFullArticleButton.setTitle(AstroContextMenuLocalizer.label("context_menu_read_full_article", fallback: "Read full article"), for: .normal)
         readFullArticleButton.setImage(UIImage(systemName: "globe"), for: .normal)
         readFullArticleButton.tintColor = .white
-        readFullArticleButton.backgroundColor = .systemBlue
+        readFullArticleButton.backgroundColor = AstroContextMenuTheme.primaryButton
         readFullArticleButton.layer.cornerRadius = 10
         readFullArticleButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
         readFullArticleButton.addAction(UIAction { [weak self] _ in
@@ -106,7 +124,7 @@ final class AstroArticleDialogFragment: UIViewController {
 
     private func setupWebView() {
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.backgroundColor = UIColor(white: 0.04, alpha: 1)
+        webView.backgroundColor = AstroContextMenuTheme.pageBackground
         webView.isOpaque = false
         webView.configuration.preferences.javaScriptEnabled = true
         view.addSubview(webView)
@@ -135,14 +153,17 @@ final class AstroArticleDialogFragment: UIViewController {
         let isRtl = Locale.characterDirection(forLanguage: article.lang) == .rightToLeft
         let bodyTag = isRtl ? "<body dir=\"rtl\">\n" : "<body>\n"
         let bodyContent = extractBodyContent(articleHtml)
+        let background = cssColor(AstroContextMenuTheme.pageBackground.currentMapThemeColor)
+        let text = cssColor(AstroContextMenuTheme.primaryText.currentMapThemeColor)
+        let link = cssColor(AstroContextMenuTheme.activeText.currentMapThemeColor)
         return """
         <!doctype html>
         <html>
         <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-        body { margin: 0; padding: 18px; background: #101014; color: #f3f3f5; font: -apple-system-body; }
-        a { color: #62a8ff; }
+        body { margin: 0; padding: 18px; background: \(background); color: \(text); font: -apple-system-body; }
+        a { color: \(link); }
         img { max-width: 100%; height: auto; }
         .main { overflow-wrap: anywhere; }
         </style>
@@ -167,6 +188,19 @@ final class AstroArticleDialogFragment: UIViewController {
             return html
         }
         return String(html[bodyRange])
+    }
+
+    private func cssColor(_ color: UIColor) -> String {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        return String(format: "rgba(%d, %d, %d, %.3f)",
+                      Int(red * 255.0),
+                      Int(green * 255.0),
+                      Int(blue * 255.0),
+                      alpha)
     }
 
     private func openFullArticle() {

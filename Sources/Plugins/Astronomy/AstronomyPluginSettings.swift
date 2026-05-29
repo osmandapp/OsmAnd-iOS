@@ -119,12 +119,25 @@ struct AstronomyPluginSettings {
     private static let keyCelestialPaths = "celestialPaths"
     private static let keyId = "id"
     private static let keyColorIndex = "colorIndex"
+    private static let storageQueue = DispatchQueue(label: "net.osmand.astronomy.settings")
 
     var common = CommonConfig()
     var starMap = StarMapConfig()
 
     static func load() -> AstronomyPluginSettings {
-        guard let root = settingsJson() else {
+        storageQueue.sync {
+            loadUnlocked()
+        }
+    }
+
+    func save() {
+        Self.storageQueue.sync {
+            Self.saveUnlocked(self)
+        }
+    }
+
+    private static func loadUnlocked() -> AstronomyPluginSettings {
+        guard let root = settingsJsonUnlocked() else {
             return AstronomyPluginSettings()
         }
         var settings = AstronomyPluginSettings()
@@ -133,12 +146,12 @@ struct AstronomyPluginSettings {
         return settings
     }
 
-    func save() {
+    private static func saveUnlocked(_ settings: AstronomyPluginSettings) {
         var root: [String: Any] = [:]
         root[Self.keyCommon] = [
-            Self.keyShowRegularMap: common.showRegularMap
+            Self.keyShowRegularMap: settings.common.showRegularMap
         ]
-        root[Self.keyStarMap] = Self.serializeStarMapConfig(starMap)
+        root[Self.keyStarMap] = Self.serializeStarMapConfig(settings.starMap)
         guard let data = try? JSONSerialization.data(withJSONObject: root),
               let string = String(data: data, encoding: .utf8) else {
             return
@@ -151,8 +164,12 @@ struct AstronomyPluginSettings {
     }
 
     mutating func setCommonConfig(_ config: CommonConfig) {
-        common = config
-        save()
+        self = Self.storageQueue.sync {
+            var settings = Self.loadUnlocked()
+            settings.common = config
+            Self.saveUnlocked(settings)
+            return settings
+        }
     }
 
     func getStarMapConfig() -> StarMapConfig {
@@ -160,62 +177,93 @@ struct AstronomyPluginSettings {
     }
 
     mutating func setStarMapConfig(_ config: StarMapConfig) {
-        starMap = config
-        save()
+        self = Self.storageQueue.sync {
+            var settings = Self.loadUnlocked()
+            settings.starMap = config
+            Self.saveUnlocked(settings)
+            return settings
+        }
+    }
+
+    @discardableResult
+    mutating func updateStarMapConfig(_ transform: (StarMapConfig) -> StarMapConfig) -> StarMapConfig {
+        let result = Self.storageQueue.sync {
+            var settings = Self.loadUnlocked()
+            let updated = transform(settings.starMap)
+            if updated != settings.starMap {
+                settings.starMap = updated
+                Self.saveUnlocked(settings)
+            }
+            return (settings, updated)
+        }
+        self = result.0
+        return result.1
     }
 
     mutating func addFavorite(id: String) {
-        if starMap.favorites.contains(where: { $0.id == id }) {
-            return
+        updateStarMapConfig { config in
+            guard !config.favorites.contains(where: { $0.id == id }) else {
+                return config
+            }
+            var updated = config
+            updated.favorites.append(FavoriteConfig(id: id))
+            return updated
         }
-        starMap.favorites.append(FavoriteConfig(id: id))
-        save()
     }
 
     mutating func removeFavorite(id: String) {
-        let oldCount = starMap.favorites.count
-        starMap.favorites.removeAll { $0.id == id }
-        if starMap.favorites.count != oldCount {
-            save()
+        updateStarMapConfig { config in
+            var updated = config
+            updated.favorites.removeAll { $0.id == id }
+            return updated
         }
     }
 
     mutating func addDirection(id: String) -> Int {
-        if let direction = starMap.directions.first(where: { $0.id == id }) {
-            return direction.colorIndex
+        var resultColor = 0
+        updateStarMapConfig { config in
+            if let direction = config.directions.first(where: { $0.id == id }) {
+                resultColor = direction.colorIndex
+                return config
+            }
+            let maxColor = config.directions.map(\.colorIndex).max() ?? -1
+            let nextColor = (maxColor + 1) % DirectionColor.allCases.count
+            resultColor = nextColor
+            var updated = config
+            updated.directions.append(DirectionConfig(id: id, colorIndex: nextColor))
+            return updated
         }
-        let maxColor = starMap.directions.map(\.colorIndex).max() ?? -1
-        let nextColor = (maxColor + 1) % DirectionColor.allCases.count
-        starMap.directions.append(DirectionConfig(id: id, colorIndex: nextColor))
-        save()
-        return nextColor
+        return resultColor
     }
 
     mutating func removeDirection(id: String) {
-        let oldCount = starMap.directions.count
-        starMap.directions.removeAll { $0.id == id }
-        if starMap.directions.count != oldCount {
-            save()
+        updateStarMapConfig { config in
+            var updated = config
+            updated.directions.removeAll { $0.id == id }
+            return updated
         }
     }
 
     mutating func addCelestialPath(id: String) {
-        if starMap.celestialPaths.contains(where: { $0.id == id }) {
-            return
+        updateStarMapConfig { config in
+            guard !config.celestialPaths.contains(where: { $0.id == id }) else {
+                return config
+            }
+            var updated = config
+            updated.celestialPaths.append(CelestialPathConfig(id: id))
+            return updated
         }
-        starMap.celestialPaths.append(CelestialPathConfig(id: id))
-        save()
     }
 
     mutating func removeCelestialPath(id: String) {
-        let oldCount = starMap.celestialPaths.count
-        starMap.celestialPaths.removeAll { $0.id == id }
-        if starMap.celestialPaths.count != oldCount {
-            save()
+        updateStarMapConfig { config in
+            var updated = config
+            updated.celestialPaths.removeAll { $0.id == id }
+            return updated
         }
     }
 
-    private static func settingsJson() -> [String: Any]? {
+    private static func settingsJsonUnlocked() -> [String: Any]? {
         guard let json = UserDefaults.standard.string(forKey: storageKey),
               !json.isEmpty,
               let data = json.data(using: .utf8),

@@ -34,6 +34,12 @@ final class StarView: UIView {
         var targetAltitude: Double
     }
 
+    private enum ViewAngleBounds {
+        static let min = 10.0
+        static let max = 150.0
+        static let max2D = 220.0
+    }
+
     weak var delegate: StarViewDelegate?
 
     var viewModel: StarObjectsViewModel? {
@@ -209,6 +215,9 @@ final class StarView: UIView {
     private var manualSkyObjects: [SkyObject]?
     private var manualConstellations: [Constellation]?
     private var constellationCenterCache: [String: ConstellationCenter] = [:]
+    private var maxViewAngle: Double {
+        settings.starMap.is2DMode ? ViewAngleBounds.max2D : ViewAngleBounds.max
+    }
     private var explicitCurrentTime: Time?
     private var explicitObserver: Observer?
     private var timeAnimationDisplayLink: CADisplayLink?
@@ -604,14 +613,6 @@ final class StarView: UIView {
         }
     }
 
-    func getMinZoom() -> Double {
-        settings.starMap.is2DMode ? 200 : 150
-    }
-
-    func getMaxZoom() -> Double {
-        150
-    }
-
     func setViewAngle(_ angle: Double) {
         updateViewAngle(angle)
     }
@@ -711,7 +712,7 @@ final class StarView: UIView {
             return
         }
 
-        let zoomFactor = max(0, min(1, (viewAngle - 10) / (settings.starMap.is2DMode ? 210 : 140)))
+        let zoomFactor = max(0, min(1, (viewAngle - ViewAngleBounds.min) / (maxViewAngle - ViewAngleBounds.min)))
         var color = object.color
         var baseSize: CGFloat = 15
         if object.type == .STAR && zoomFactor > 0.3 && object.magnitude > 2.5 {
@@ -1678,8 +1679,7 @@ final class StarView: UIView {
     }
 
     private func updateViewAngle(_ newAngle: Double, focus: CGPoint? = nil) {
-        let maxAngle = settings.starMap.is2DMode ? 220.0 : 150.0
-        let finalAngle = max(10.0, min(maxAngle, newAngle))
+        let finalAngle = max(ViewAngleBounds.min, min(maxViewAngle, newAngle))
         guard abs(viewAngle - finalAngle) > 0.001, bounds.width > 0, bounds.height > 0 else {
             return
         }

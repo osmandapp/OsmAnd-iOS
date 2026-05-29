@@ -296,8 +296,13 @@ final class SkyObjectInfoFragment: UIViewController {
 
     private func openArticle() {
         guard let articleUrl, let url = URL(string: articleUrl) else {
+            NSLog("Failed to open astronomy article: invalid URL %@", articleUrl ?? "nil")
             return
         }
-        UIApplication.shared.open(url)
+        UIApplication.shared.open(url, options: [:]) { success in
+            if !success {
+                NSLog("Failed to open astronomy article URL: %@", url.absoluteString)
+            }
+        }
     }
 }

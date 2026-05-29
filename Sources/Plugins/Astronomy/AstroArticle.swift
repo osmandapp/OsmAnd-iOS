@@ -16,7 +16,6 @@ final class AstroArticle: Equatable, Hashable {
     let thumbnailUrl: String?
     let summaryJson: String?
     private let mobileHtml: Data?
-
     private var mobileHtmlSize: Int? {
         mobileHtml?.count
     }
@@ -45,7 +44,11 @@ final class AstroArticle: Equatable, Hashable {
         guard let mobileHtml, !mobileHtml.isEmpty else {
             return nil
         }
-        return OAWikiArticleHelper.readArchiveString(mobileHtml)
+        let html = OAWikiArticleHelper.readArchiveString(mobileHtml)
+        if html == nil {
+            NSLog("Failed to decode astronomy article HTML archive for %@", wikidata)
+        }
+        return html
     }
 
     func getOnlineArticleUrl() -> String? {
@@ -92,7 +95,7 @@ final class AstroArticle: Equatable, Hashable {
             lhs.description == rhs.description &&
             lhs.thumbnailUrl == rhs.thumbnailUrl &&
             lhs.summaryJson == rhs.summaryJson &&
-            lhs.mobileHtmlSize == rhs.mobileHtmlSize
+            lhs.mobileHtml == rhs.mobileHtml
     }
 
     func hash(into hasher: inout Hasher) {
@@ -115,6 +118,6 @@ final class AstroArticle: Equatable, Hashable {
             description == other.description &&
             thumbnailUrl == other.thumbnailUrl &&
             summaryJson == other.summaryJson &&
-            mobileHtmlSize == other.mobileHtmlSize
+            mobileHtml == other.mobileHtml
     }
 }

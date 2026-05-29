@@ -541,45 +541,50 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func saveCommonSettings() {
-        settings.common = AstronomyPluginSettings.CommonConfig(showRegularMap: regularMapVisible)
-        settings.save()
+        settings.setCommonConfig(AstronomyPluginSettings.CommonConfig(showRegularMap: regularMapVisible))
     }
 
     private func saveStarMapSettings() {
-        var config = settings.starMap
-        config.showAzimuthalGrid = starView.showAzimuthalGrid
-        config.showEquatorialGrid = starView.showEquatorialGrid
-        config.showEclipticLine = starView.showEclipticLine
-        config.showMeridianLine = starView.showMeridianLine
-        config.showEquatorLine = starView.showEquatorLine
-        config.showGalacticLine = starView.showGalacticLine
-        config.showFavorites = starView.showFavorites
-        config.showDirections = starView.showDirections
-        config.showCelestialPaths = starView.showCelestialPaths
-        config.showRedFilter = starView.showRedFilter
-        config.showSun = starView.showSun
-        config.showMoon = starView.showMoon
-        config.showPlanets = starView.showPlanets
-        config.showConstellations = starView.showConstellations
-        config.showStars = starView.showStars
-        config.showGalaxies = starView.showGalaxies
-        config.showBlackHoles = starView.showBlackHoles
-        config.showNebulae = starView.showNebulae
-        config.showOpenClusters = starView.showOpenClusters
-        config.showGlobularClusters = starView.showGlobularClusters
-        config.showGalaxyClusters = starView.showGalaxyClusters
-        config.is2DMode = starView.is2DMode
-        config.showMagnitudeFilter = starView.showMagnitudeFilter || starView.magnitudeFilter != nil
-        config.magnitudeFilter = starView.magnitudeFilter
-        settings.starMap = config
-        settings.save()
+        settings.updateStarMapConfig { current in
+            var config = current
+            config.showAzimuthalGrid = starView.showAzimuthalGrid
+            config.showEquatorialGrid = starView.showEquatorialGrid
+            config.showEclipticLine = starView.showEclipticLine
+            config.showMeridianLine = starView.showMeridianLine
+            config.showEquatorLine = starView.showEquatorLine
+            config.showGalacticLine = starView.showGalacticLine
+            config.showFavorites = starView.showFavorites
+            config.showDirections = starView.showDirections
+            config.showCelestialPaths = starView.showCelestialPaths
+            config.showRedFilter = starView.showRedFilter
+            config.showSun = starView.showSun
+            config.showMoon = starView.showMoon
+            config.showPlanets = starView.showPlanets
+            config.showConstellations = starView.showConstellations
+            config.showStars = starView.showStars
+            config.showGalaxies = starView.showGalaxies
+            config.showBlackHoles = starView.showBlackHoles
+            config.showNebulae = starView.showNebulae
+            config.showOpenClusters = starView.showOpenClusters
+            config.showGlobularClusters = starView.showGlobularClusters
+            config.showGalaxyClusters = starView.showGalaxyClusters
+            config.is2DMode = starView.is2DMode
+            config.showMagnitudeFilter = starView.showMagnitudeFilter || starView.magnitudeFilter != nil
+            config.magnitudeFilter = starView.magnitudeFilter
+            return config
+        }
         viewModel.updateSettings(settings)
     }
 
     private func setStarMapSettings(_ config: AstronomyPluginSettings.StarMapConfig) {
-        settings.starMap = config
-        applySettings(config)
-        settings.save()
+        let updatedConfig = settings.updateStarMapConfig { current in
+            var updated = config
+            updated.favorites = current.favorites
+            updated.directions = current.directions
+            updated.celestialPaths = current.celestialPaths
+            return updated
+        }
+        applySettings(updatedConfig)
         viewModel.updateSettings(settings)
     }
 
@@ -954,9 +959,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     @objc private func magnitudeChanged() {
         starView.magnitudeFilter = Double(magnitudeSlider.value)
         starView.showMagnitudeFilter = true
-        settings.starMap.showMagnitudeFilter = true
-        settings.starMap.magnitudeFilter = starView.magnitudeFilter
-        settings.save()
+        settings.updateStarMapConfig { current in
+            var config = current
+            config.showMagnitudeFilter = true
+            config.magnitudeFilter = starView.magnitudeFilter
+            return config
+        }
         updateMagnitudeControls()
         starView.setNeedsDisplay()
     }

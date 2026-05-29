@@ -94,7 +94,8 @@ class AstroDataProvider {
             (Body.jupiter, AstroUtils.bodyColor(Body.jupiter), "Q319"),
             (Body.saturn, AstroUtils.bodyColor(Body.saturn), "Q193"),
             (Body.uranus, AstroUtils.bodyColor(Body.uranus), "Q324"),
-            (Body.neptune, AstroUtils.bodyColor(Body.neptune), "Q332")
+            (Body.neptune, AstroUtils.bodyColor(Body.neptune), "Q332"),
+            (Body.pluto, AstroUtils.bodyColor(Body.pluto), "Q339")
         ]
 
         for (body, color, wid) in planets {
@@ -131,11 +132,16 @@ class AstroDataProvider {
     }
 
     func parseLines(_ json: String?) -> [(Int, Int)] {
-        guard let json, !json.isEmpty, let data = json.data(using: .utf8) else {
+        guard let json, !json.isEmpty else {
+            return []
+        }
+        guard let data = json.data(using: .utf8) else {
+            NSLog("Error parsing constellation lines: %@", json)
             return []
         }
 
         guard let array = try? JSONSerialization.jsonObject(with: data) as? [[Int]] else {
+            NSLog("Error parsing constellation lines: %@", json)
             return []
         }
         return array.compactMap { segment in

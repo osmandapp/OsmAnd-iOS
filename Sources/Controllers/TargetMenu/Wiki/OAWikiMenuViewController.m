@@ -32,8 +32,7 @@ static const NSInteger kOrderContentRow = 1;
         contentRow.delegate = self;
         if (contentRow.isText && !NSStringIsEmpty(contentRow.text))
             self.additionalRows = @[contentRow];
-        self.leftControlButton = [[OATargetMenuControlButton alloc] init];
-        self.leftControlButton.title = OALocalizedString(@"context_menu_read_article");
+        self.leftControlButton = nil;
         self.rightControlButton = nil;
         self.downloadControlButton = nil;
     }

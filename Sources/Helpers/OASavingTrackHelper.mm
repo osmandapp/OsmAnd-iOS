@@ -108,6 +108,7 @@ static const NSInteger kDBVersion = 1;
     OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
     [_currentTrack setColorColor:color];
     [_currentTrack setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+    [_currentTrack setGradientColorPaletteGradientColorPaletteName:[settings.currentTrackGradientPalette get]];
     [_currentTrack setJoinSegmentIsJoinSegment:[settings.currentTrackIsJoinSegments get]];
 }
 
@@ -480,6 +481,7 @@ static const NSInteger kDBVersion = 1;
             OASInt *color = [[OASInt alloc] initWithInt:[settings.currentTrackColor get]];
             [gpxFile setColorColor:color];
             [gpxFile setColoringTypeColoringType:[settings.currentTrackColoringType get].name];
+            [gpxFile setGradientColorPaletteGradientColorPaletteName:[settings.currentTrackGradientPalette get]];
             [gpxFile setJoinSegmentIsJoinSegment:[settings.currentTrackIsJoinSegments get]];
             [self savePreselectedRouteActivity:gpxFile];
            
@@ -487,7 +489,6 @@ static const NSInteger kDBVersion = 1;
             /*
             auto getSplitType = [OAGPXDatabase splitTypeByName:[gpxFile getSplitType]];
             auto getSplitInterval = [gpxFile getSplitInterval];
-            current_track_gradient_palette
              */
             
             
@@ -538,6 +539,7 @@ static const NSInteger kDBVersion = 1;
     item.joinSegments = [settings.currentTrackIsJoinSegments get];
     item.verticalExaggerationScale = [settings.currentTrackVerticalExaggerationScale get];
     item.elevationMeters = [settings.currentTrackElevationMeters get];
+    item.gradientPaletteName = [settings.currentTrackGradientPalette get];
     
     item.visualization3dByType = (EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get];
     item.visualization3dWallColorType = (EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get];
@@ -545,7 +547,6 @@ static const NSInteger kDBVersion = 1;
     /* TODO: Track visualization settings are missing
     item.splitType = //[OAGPXDatabase splitTypeByName:[gpxFile getSplitType]];
     item.splitInterval = [settings.currentTrackSplitInterval get]; // [gpxFile getSplitInterval];
-    item.gradientPaletteName = [settings.currentTrackGradientPaletteName get];
      */
     [[OASGpxDbHelper shared] updateDataItemItem:item];
 }

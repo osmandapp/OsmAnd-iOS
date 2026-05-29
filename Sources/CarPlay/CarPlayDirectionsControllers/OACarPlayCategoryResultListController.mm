@@ -228,7 +228,7 @@
     CLLocation *loc = searchItem.getSearchResult.location;
     OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_POI name:[searchItem getName]];
     [self startNavigationGivenLocation:loc historyName:historyName];
-    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    [self safePopToRootTemplateAnimated:YES];
 
     if (completionBlock)
         completionBlock();

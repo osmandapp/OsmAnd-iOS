@@ -525,13 +525,13 @@
             cell.descView.text = [item[@"desc"] stringValue];
 
             if ([item.allKeys containsObject:@"colorPalette"]
-                && [item[@"colorPalette"] isKindOfClass:ColorPalette.class])
+                && [item[@"colorPalette"] isKindOfClass:OASColorPalette.class])
             {
                 cell.descView.numberOfLines = 1;
                 cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
                 cell.descView.lineBreakMode = NSLineBreakByTruncatingTail;
                 cell.iconView.layer.cornerRadius = 3;
-                ColorPalette *colorPalette = (ColorPalette *) item[@"colorPalette"];
+                OASColorPalette *colorPalette = (OASColorPalette *) item[@"colorPalette"];
                 [PaletteCollectionHandler applyGradientTo:cell.iconView
                                                      with:colorPalette];
             }

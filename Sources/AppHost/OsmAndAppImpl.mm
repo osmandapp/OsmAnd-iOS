@@ -102,6 +102,7 @@
     OAMapMode _mapMode;
     OAMapMode _prevMapMode;
 
+    OASPaletteRepository *_paletteRepository;
     OAResourcesInstaller* _resourcesInstaller;
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
@@ -1019,6 +1020,17 @@
 - (void)rescanUnmanagedStoragePaths
 {
     _resourcesManager->rescanUnmanagedStoragePaths();
+}
+
+- (OASPaletteRepository *)paletteRepository
+{
+    @synchronized (self)
+    {
+        if (!_paletteRepository)
+            _paletteRepository = [[OASPaletteRepository alloc] init];
+    }
+    
+    return _paletteRepository;
 }
 
 - (MAP_STR_STR) getDefaultAttributes

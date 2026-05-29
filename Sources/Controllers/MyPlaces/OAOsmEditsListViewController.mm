@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, UIScrollViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, MyPlacesSearchable, UIScrollViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *segmentContainerView;
@@ -59,15 +59,12 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     OAMultiselectableHeaderView *_headerView;
     
-    UIBarButtonItem *_deleteButton;
-    UIBarButtonItem *_uploadButton;
-    UISearchController *_searchController;
+    UIBarButtonItem *_selectButton;
     
-    BOOL _popToParent;
     BOOL _isSearchActive;
 }
 
-- (void)viewDidLoad 
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     _poiHelper = [OAPOIHelper sharedInstance];
@@ -88,44 +85,23 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _isSearchActive = NO;
 }
 
-- (void) setShouldPopToParent:(BOOL)shouldPop
-{
-    _popToParent = shouldPop;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    _deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_trash"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonPressed:)];
-    _uploadButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_upload_to_openstreetmap_outlined"] style:UIBarButtonItemStylePlain target:self action:@selector(uploadButtonPressed:)];
-    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
-    _deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
-    _uploadButton.accessibilityLabel = OALocalizedString(@"upload_to_openstreetmap");
-    self.tabBarController.navigationItem.title = OALocalizedString(@"osm_edits_title");
-    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    _searchController.searchResultsUpdater = self;
-    _searchController.searchBar.delegate = self;
-    _searchController.obscuresBackgroundDuringPresentation = NO;
-    self.tabBarController.navigationItem.searchController = _searchController;
-    if (@available(iOS 26.0, *))
-    {
-        if (![OAUtilities isIPad])
-            self.tabBarController.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
-    }
-    [self setupSearchController:NO filtered:NO];
+    _selectButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_select")
+                                                                   icon:nil
+                                                                  color:[UIColor labelColor]
+                                                                 action:@selector(selectButtonPressed:)
+                                                                 target:self
+                                                                   menu:nil];
+    _selectButton.accessibilityLabel = OALocalizedString(@"shared_string_select");
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_selectButton] animated:YES];
     self.definesPresentationContext = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (_searchController && !self.tabBarController.navigationItem.searchController)
-        self.tabBarController.navigationItem.searchController = _searchController;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -134,8 +110,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    self.tabBarController.navigationItem.searchController = nil;
-    self.navigationItem.searchController = nil;
     self.definesPresentationContext = NO;
 }
 
@@ -183,6 +157,35 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _data = [NSArray arrayWithArray:dataArr];
 }
 
+- (void)setupNavbar
+{
+    if ([_tableView isEditing])
+    {
+        [_myPlacesDelegate showBackButton:NO];
+        UIBarButtonItem *cancelBarButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_cancel")
+                                                                     icon:nil
+                                                                    color:[UIColor labelColor]
+                                                                   action:@selector(cancelButtonPressed:)
+                                                                   target:self
+                                                                     menu:nil];
+        cancelBarButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");
+        self.navigationController.navigationBar.topItem.leftBarButtonItem = cancelBarButton;
+        self.navigationItem.leftBarButtonItem = cancelBarButton;
+    }
+    else
+    {
+        [_myPlacesDelegate showBackButton:YES];
+        self.navigationController.navigationBar.topItem.leftBarButtonItem = nil;
+        self.navigationItem.leftBarButtonItem = nil;
+    }
+}
+
+- (void)setEdit:(BOOL)isEdit
+{
+    [_tableView setEditing:isEdit animated:YES];
+    [_myPlacesDelegate updateEditMode:isEdit];
+}
+
 -(NSString *)getDescription:(OAOsmPoint *)point
 {
     NSString *actionStr = point.getLocalizedAction;
@@ -216,29 +219,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             return OALocalizedString(@"osm_edits_notes");
         default:
             return nil;
-    }
-}
-
-- (void) setupSearchController:(BOOL)isSearchActive filtered:(BOOL)isFiltered
-{
-    if (isSearchActive)
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-    }
-    else if (isFiltered)
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
-    }
-    else
-    {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
 }
 
@@ -302,7 +282,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.tableView.isEditing)
+    if (_tableView.isEditing)
         return;
     NSDictionary *item = [self getItem:indexPath];
     OAOsmPoint *p = item[@"item"];
@@ -353,104 +333,84 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     }
 }
 
-- (IBAction)deleteButtonPressed:(id)sender {
-    [self.tableView beginUpdates];
-    BOOL shouldEdit = ![self.tableView isEditing];
-    
-    if (shouldEdit)
-    {
-        if (@available(iOS 16.0, *))
-            [_uploadButton setHidden:YES];
-        else
-            [_uploadButton setEnabled:NO];
-    }
-    else
-    {
-        if (@available(iOS 16.0, *))
-            [_uploadButton setHidden:NO];
-        else
-            [_uploadButton setEnabled:YES];
+- (IBAction)selectButtonPressed:(id)sender
+{
+    [self setEdit:YES];
+    [self setupNavbar];
+}
 
-        NSArray *indexes = [self.tableView indexPathsForSelectedRows];
-        if (indexes.count > 0)
-        {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
-                                        [NSString stringWithFormat:OALocalizedString(@"osm_confirm_bulk_delete"), indexes.count]
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                for (NSIndexPath *path in indexes)
+- (IBAction)deleteButtonPressed:(id)sender {
+    [_tableView beginUpdates];
+    BOOL shouldEdit = ![_tableView isEditing];
+    NSArray *indexes = [_tableView indexPathsForSelectedRows];
+    if (indexes.count > 0)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
+                                    [NSString stringWithFormat:OALocalizedString(@"osm_confirm_bulk_delete"), indexes.count]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            for (NSIndexPath *path in indexes)
+            {
+                NSDictionary *item = [self getItem:path];
+                OAOsmPoint *point = item[@"item"];
+                if (point)
                 {
-                    NSDictionary *item = [self getItem:path];
-                    OAOsmPoint *point = item[@"item"];
-                    if (point)
-                    {
-                        if (point.getGroup == EOAGroupPoi)
-                            [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
-                        else
-                            [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)point];
-                    }
+                    if (point.getGroup == EOAGroupPoi)
+                        [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
+                    else
+                        [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)point];
                 }
-                [self setupView];
-                [self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
-                [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
-            }]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
+            }
+            [self setupView];
+            [_tableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
+            [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
     }
-    [self.tableView setEditing:shouldEdit animated:YES];
-    [self.tableView endUpdates];
+    [self setEdit:shouldEdit];
+    [_tableView endUpdates];
 }
 
 - (IBAction)uploadButtonPressed:(id)sender {
-    [self.tableView beginUpdates];
-    BOOL shouldEdit = ![self.tableView isEditing];
-
-    if (shouldEdit)
-    {
-        if (@available(iOS 16.0, *))
-            [_deleteButton setHidden:YES];
-        else
-            [_deleteButton setEnabled:NO];
-    }
-    else
-    {
-        if (@available(iOS 16.0, *))
-            [_deleteButton setHidden:NO];
-        else
-            [_deleteButton setEnabled:YES];
-
-        NSArray *indexes = [self.tableView indexPathsForSelectedRows];
-        NSMutableArray *edits = [NSMutableArray new];
-        NSMutableArray *notes = [NSMutableArray new];
-        
-        for (NSIndexPath *indexPath in indexes)
-        {
-            OAOsmPoint *p = [self getItem:indexPath][@"item"];
-            if (p.getGroup == EOAGroupPoi)
-                [edits addObject:p];
-            else
-                [notes addObject:p];
-        }
-        if (edits.count > 0)
-        {
-            OAOsmUploadPOIViewController *editsBottomsheet = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:edits];
-            editsBottomsheet.delegate = self;
-            _pendingNotes = notes;
-            [[OARootViewController instance].mapPanel.navigationController pushViewController:editsBottomsheet animated:YES];
-            
-        }
-        else if (notes.count > 0)
-        {
-            _pendingNotes = nil;
-            OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
-            notesBottomsheet.delegate = self;
-            [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
-        }
+    [_tableView beginUpdates];
+    BOOL shouldEdit = ![_tableView isEditing];
     
+    NSArray *indexes = [_tableView indexPathsForSelectedRows];
+    NSMutableArray *edits = [NSMutableArray new];
+    NSMutableArray *notes = [NSMutableArray new];
+    
+    for (NSIndexPath *indexPath in indexes)
+    {
+        OAOsmPoint *p = [self getItem:indexPath][@"item"];
+        if (p.getGroup == EOAGroupPoi)
+            [edits addObject:p];
+        else
+            [notes addObject:p];
     }
-    [self.tableView setEditing:shouldEdit animated:YES];
-    [self.tableView endUpdates];
+    if (edits.count > 0)
+    {
+        OAOsmUploadPOIViewController *editsBottomsheet = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:edits];
+        editsBottomsheet.delegate = self;
+        _pendingNotes = notes;
+        [[OARootViewController instance].mapPanel.navigationController pushViewController:editsBottomsheet animated:YES];
+        
+    }
+    else if (notes.count > 0)
+    {
+        _pendingNotes = nil;
+        OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
+        notesBottomsheet.delegate = self;
+        [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
+    }
+    [self setEdit:shouldEdit];
+    [_tableView endUpdates];
+}
+
+- (IBAction)cancelButtonPressed:(id)sender
+{
+    [self setEdit:NO];
+    [self setupNavbar];
 }
 
 -(void) overflowButtonPressed:(UIButton *)sender
@@ -487,20 +447,20 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
     OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
     NSInteger section = headerView.section;
-    NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
+    NSInteger rowsCount = [_tableView numberOfRowsInSection:section];
     
-    [self.tableView beginUpdates];
+    [_tableView beginUpdates];
     if (value)
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+            [_tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
-    [self.tableView endUpdates];
+    [_tableView endUpdates];
 }
 
 // MARK: Keyboard Notifications
@@ -531,20 +491,17 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     } completion:nil];
 }
 
-// MARK: UISearchResultsUpdating
-
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+// MARK: - MyPlacesSearchable
+- (void)searchResultsFor:(UISearchController *)searchController
 {
     if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
     {
         _isSearchActive = YES;
-        [self setupSearchController:YES filtered:NO];
         [self setupView];
         [_tableView reloadData];
     }
     else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)
     {
-        [self setupSearchController:NO filtered:YES];
         NSMutableArray *filteredItems = [NSMutableArray array];
         NSArray *poi = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
         NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
@@ -588,19 +545,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     else
     {
         _isSearchActive = NO;
-        [self setupSearchController:NO filtered:NO];
         [self setupView];
         [_tableView reloadData];
     }
-}
-
-// MARK: UISearchBarDelegate
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-    searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-    searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    [_myPlacesDelegate updateSegmentedControlVisibility:!_isSearchActive];
 }
 
 #pragma mark - UIScrollViewDelegate

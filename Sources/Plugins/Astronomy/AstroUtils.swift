@@ -12,6 +12,8 @@ import OsmAndShared
 import UIKit
 
 enum AstroUtils {
+    private static let customStarLock = NSLock()
+
     static let solarSystemWikidataIds: [String: Body] = [
         "Q525": Body.sun,
         "Q405": Body.moon,
@@ -59,6 +61,104 @@ enum AstroUtils {
                                    ra: object.ra,
                                    dec: object.dec,
                                    refraction: Refraction.normal)
+    }
+
+    static func withCustomStar<T>(ra: Double, dec: Double, block: (Body) -> T) -> T {
+        customStarLock.lock()
+        defer { customStarLock.unlock() }
+        AstronomyKt.defineStar(body: Body.star1, ra: ra, dec: dec, distanceLightYears: 1000.0)
+        return block(Body.star1)
+    }
+
+    static func altitude(_ body: Body, at date: Date, observer: Observer) -> Double {
+        let time = astronomyTime(from: date)
+        let equatorial = AstronomyKt.equator(body: body,
+                                             time: time,
+                                             observer: observer,
+                                             equdate: EquatorEpoch.ofdate,
+                                             aberration: Aberration.corrected)
+        let horizontal = AstronomyKt.horizon(time: time,
+                                             observer: observer,
+                                             ra: equatorial.ra,
+                                             dec: equatorial.dec,
+                                             refraction: Refraction.normal)
+        return horizontal.altitude
+    }
+
+    static func altitude(_ object: SkyObject, at date: Date, observer: Observer) -> Double {
+        if let body = object.body {
+            return altitude(body, at: date, observer: observer)
+        }
+        return withCustomStar(ra: object.ra, dec: object.dec) { body in
+            altitude(body, at: date, observer: observer)
+        }
+    }
+
+    static func nextRiseSet(body: Body,
+                            startSearch: Date,
+                            observer: Observer,
+                            windowStart: Date? = nil,
+                            windowEnd: Date? = nil,
+                            limitDays: Double = 2.0) -> (rise: Date?, set: Date?) {
+        let searchStart = astronomyTime(from: startSearch)
+        let nextRise = AstronomyKt.searchRiseSet(body: body,
+                                                 observer: observer,
+                                                 direction: Direction.rise,
+                                                 startTime: searchStart,
+                                                 limitDays: limitDays,
+                                                 metersAboveGround: 0.0)
+        let nextSet = AstronomyKt.searchRiseSet(body: body,
+                                                observer: observer,
+                                                direction: Direction.set,
+                                                startTime: searchStart,
+                                                limitDays: limitDays,
+                                                metersAboveGround: 0.0)
+        return (filterRiseSetDate(date(from: nextRise), windowStart: windowStart, windowEnd: windowEnd),
+                filterRiseSetDate(date(from: nextSet), windowStart: windowStart, windowEnd: windowEnd))
+    }
+
+    static func nextRiseSet(object: SkyObject,
+                            startSearch: Date,
+                            observer: Observer,
+                            windowStart: Date? = nil,
+                            windowEnd: Date? = nil,
+                            limitDays: Double = 2.0) -> (rise: Date?, set: Date?) {
+        if let body = object.body {
+            return nextRiseSet(body: body,
+                               startSearch: startSearch,
+                               observer: observer,
+                               windowStart: windowStart,
+                               windowEnd: windowEnd,
+                               limitDays: limitDays)
+        }
+        return withCustomStar(ra: object.ra, dec: object.dec) { body in
+            nextRiseSet(body: body,
+                        startSearch: startSearch,
+                        observer: observer,
+                        windowStart: windowStart,
+                        windowEnd: windowEnd,
+                        limitDays: limitDays)
+        }
+    }
+
+    static func date(from time: Time?) -> Date? {
+        guard let time else {
+            return nil
+        }
+        return Date(timeIntervalSince1970: TimeInterval(time.toMillisecondsSince1970()) / 1000.0)
+    }
+
+    private static func filterRiseSetDate(_ date: Date?, windowStart: Date?, windowEnd: Date?) -> Date? {
+        guard let date else {
+            return nil
+        }
+        if let windowStart, date < windowStart {
+            return nil
+        }
+        if let windowEnd, date > windowEnd {
+            return nil
+        }
+        return date
     }
 
     static func bodyName(_ body: Body) -> String {

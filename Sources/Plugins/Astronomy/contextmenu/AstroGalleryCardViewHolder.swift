@@ -1,0 +1,166 @@
+//
+//  AstroGalleryCardViewHolder.swift
+//  OsmAnd Maps
+//
+//  Ported from Android AstroGalleryCardViewHolder.kt.
+//  Copyright (c) 2026 OsmAnd. All rights reserved.
+//
+
+import UIKit
+
+enum AstroGalleryCardViewHolder {
+    static func makeView(item: AstroGalleryCardItem,
+                         presentingController: UIViewController,
+                         onUpdateImage: @escaping () -> Void,
+                         onToggle: @escaping (String) -> Void) -> UIView {
+        let card = AstroCardContainerView(title: AstroContextMenuLocalizer.label("shared_string_photos", fallback: "Photos"),
+                                          systemImageName: "photo.on.rectangle")
+        let toggleButton = UIButton(type: .system)
+        toggleButton.contentHorizontalAlignment = .leading
+        toggleButton.setTitle(toggleTitle(for: item.state), for: .normal)
+        toggleButton.setImage(UIImage(systemName: toggleImageName(for: item.state)), for: .normal)
+        toggleButton.addAction(UIAction { _ in onToggle(item.wid) }, for: .touchUpInside)
+        card.stack.addArrangedSubview(toggleButton)
+
+        switch item.state {
+        case .collapsed:
+            break
+        case .loading:
+            let progress = UIActivityIndicatorView(style: .medium)
+            progress.startAnimating()
+            card.stack.addArrangedSubview(progress)
+        case .ready(let cards):
+            if cards.isEmpty {
+                let emptyLabel = UILabel()
+                emptyLabel.text = AstroContextMenuLocalizer.label("shared_string_no_data", fallback: "No media")
+                emptyLabel.textColor = UIColor(white: 0.72, alpha: 1)
+                emptyLabel.font = .systemFont(ofSize: 14)
+                card.stack.addArrangedSubview(emptyLabel)
+            } else {
+                let gallery = horizontalGallery(cards: cards, presentingController: presentingController)
+                card.stack.addArrangedSubview(gallery)
+                let showAll = UIButton(type: .system)
+                showAll.setTitle(AstroContextMenuLocalizer.label("shared_string_show_all", fallback: "Show all"), for: .normal)
+                showAll.addAction(UIAction { _ in
+                    let controller = GalleryGridViewController()
+                    controller.cards = cards
+                    controller.titleString = item.showAllTitle ?? ""
+                    presentingController.showMediumSheetViewController(viewController: controller, isLargeAvailable: true)
+                }, for: .touchUpInside)
+                card.stack.addArrangedSubview(showAll)
+            }
+        }
+        return card
+    }
+
+    private static func horizontalGallery(cards: [AbstractCard], presentingController: UIViewController) -> UIView {
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.heightAnchor.constraint(equalToConstant: 112).isActive = true
+
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 8
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            stack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            stack.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
+        ])
+
+        cards.prefix(10).forEach { card in
+            let thumbnail = AstroGalleryThumbnailView(card: card)
+            thumbnail.addAction {
+                let controller = GalleryGridViewController()
+                controller.cards = cards
+                controller.titleString = ""
+                presentingController.showMediumSheetViewController(viewController: controller, isLargeAvailable: true)
+            }
+            stack.addArrangedSubview(thumbnail)
+        }
+        return scrollView
+    }
+
+    private static func toggleTitle(for state: AstroGalleryState) -> String {
+        switch state {
+        case .collapsed:
+            return AstroContextMenuLocalizer.label("shared_string_show", fallback: "Show")
+        case .loading:
+            return AstroContextMenuLocalizer.label("shared_string_loading", fallback: "Loading")
+        case .ready:
+            return AstroContextMenuLocalizer.label("shared_string_collapse", fallback: "Collapse")
+        }
+    }
+
+    private static func toggleImageName(for state: AstroGalleryState) -> String {
+        switch state {
+        case .collapsed:
+            return "chevron.down"
+        case .loading:
+            return "hourglass"
+        case .ready:
+            return "chevron.up"
+        }
+    }
+}
+
+private final class AstroGalleryThumbnailView: UIControl {
+    private let imageView = UIImageView()
+    private var task: URLSessionDataTask?
+
+    init(card: AbstractCard) {
+        super.init(frame: .zero)
+        setup(card: card)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        task?.cancel()
+    }
+
+    func addAction(_ action: @escaping () -> Void) {
+        addAction(UIAction { _ in action() }, for: .touchUpInside)
+    }
+
+    private func setup(card: AbstractCard) {
+        widthAnchor.constraint(equalToConstant: 112).isActive = true
+        heightAnchor.constraint(equalToConstant: 112).isActive = true
+        backgroundColor = UIColor(white: 1, alpha: 0.08)
+        layer.cornerRadius = 7
+        clipsToBounds = true
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        addSubview(imageView)
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+
+        guard let imageCard = card as? ImageCard,
+              let url = URL(string: imageCard.imageUrl) else {
+            imageView.image = UIImage(systemName: "photo")
+            imageView.tintColor = UIColor(white: 1, alpha: 0.45)
+            return
+        }
+        task = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let data,
+                  let image = UIImage(data: data) else {
+                return
+            }
+            DispatchQueue.main.async {
+                self?.imageView.image = image
+            }
+        }
+        task?.resume()
+    }
+}
+

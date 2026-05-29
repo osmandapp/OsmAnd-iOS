@@ -1,0 +1,154 @@
+//
+//  AstroContextMenuAdapter.swift
+//  OsmAnd Maps
+//
+//  Ported from Android AstroContextMenuAdapter.kt.
+//  Copyright (c) 2026 OsmAnd. All rights reserved.
+//
+
+import UIKit
+
+final class AstroContextMenuAdapter {
+    private let presentingController: UIViewController
+    private let onDescriptionRead: (AstroDescriptionCardItem) -> Void
+    private let onGalleryToggle: (String) -> Void
+    private let onUpdateImage: () -> Void
+    private let onKnowledgeCardAction: () -> Void
+    private let onVisibilityResetToToday: () -> Void
+    private let onVisibilityCursorChanged: (Int64) -> Void
+    private let onScheduleResetPeriod: () -> Void
+    private let onScheduleShiftPeriod: (Int) -> Void
+    private let onScheduleSelectDate: (Date) -> Void
+    private let onCatalogsToggleExpanded: () -> Void
+    private let onCatalogClick: (Catalog) -> Void
+
+    private(set) var currentList: [AstroContextMenuItem] = []
+
+    init(presentingController: UIViewController,
+         onDescriptionRead: @escaping (AstroDescriptionCardItem) -> Void,
+         onGalleryToggle: @escaping (String) -> Void,
+         onUpdateImage: @escaping () -> Void,
+         onKnowledgeCardAction: @escaping () -> Void,
+         onVisibilityResetToToday: @escaping () -> Void,
+         onVisibilityCursorChanged: @escaping (Int64) -> Void,
+         onScheduleResetPeriod: @escaping () -> Void,
+         onScheduleShiftPeriod: @escaping (Int) -> Void,
+         onScheduleSelectDate: @escaping (Date) -> Void,
+         onCatalogsToggleExpanded: @escaping () -> Void,
+         onCatalogClick: @escaping (Catalog) -> Void) {
+        self.presentingController = presentingController
+        self.onDescriptionRead = onDescriptionRead
+        self.onGalleryToggle = onGalleryToggle
+        self.onUpdateImage = onUpdateImage
+        self.onKnowledgeCardAction = onKnowledgeCardAction
+        self.onVisibilityResetToToday = onVisibilityResetToToday
+        self.onVisibilityCursorChanged = onVisibilityCursorChanged
+        self.onScheduleResetPeriod = onScheduleResetPeriod
+        self.onScheduleShiftPeriod = onScheduleShiftPeriod
+        self.onScheduleSelectDate = onScheduleSelectDate
+        self.onCatalogsToggleExpanded = onCatalogsToggleExpanded
+        self.onCatalogClick = onCatalogClick
+    }
+
+    func submitItems(_ items: [AstroContextMenuItem], onCommitted: () -> Void = {}) {
+        currentList = items
+        onCommitted()
+    }
+
+    func getItemPosition(_ cardKey: AstroContextCardKey) -> Int {
+        currentList.firstIndex { $0.key == cardKey } ?? -1
+    }
+
+    func makeCardViews() -> [UIView] {
+        currentList.compactMap { item in
+            switch item.key {
+            case .description:
+                guard let item = item as? AstroDescriptionCardItem else { return nil }
+                return AstroDescriptionCardViewHolder.makeView(item: item, onReadClick: onDescriptionRead)
+            case .visibility:
+                guard let item = item as? AstroVisibilityCardItem else { return nil }
+                return AstroVisibilityCardViewHolder.makeView(item: item,
+                                                              onResetToToday: onVisibilityResetToToday,
+                                                              onCursorTimeChanged: onVisibilityCursorChanged)
+            case .schedule:
+                guard let item = item as? AstroScheduleCardItem else { return nil }
+                return AstroScheduleCardViewHolder.makeView(item: item,
+                                                            onResetPeriod: onScheduleResetPeriod,
+                                                            onShiftPeriod: onScheduleShiftPeriod,
+                                                            onSelectDate: onScheduleSelectDate)
+            case .catalogs:
+                guard let item = item as? AstroCatalogsCardItem else { return nil }
+                return AstroCatalogsCardViewHolder.makeView(item: item,
+                                                            onToggleExpanded: onCatalogsToggleExpanded,
+                                                            onCatalogClick: onCatalogClick)
+            case .knowledge:
+                guard let item = item as? AstroKnowledgeCardItem else { return nil }
+                return AstroKnowledgeCardViewHolder.makeView(item: item, onActionClick: onKnowledgeCardAction)
+            case .gallery:
+                guard let item = item as? AstroGalleryCardItem else { return nil }
+                return AstroGalleryCardViewHolder.makeView(item: item,
+                                                           presentingController: presentingController,
+                                                           onUpdateImage: onUpdateImage,
+                                                           onToggle: onGalleryToggle)
+            }
+        }
+    }
+}
+
+final class AstroCardContainerView: UIView {
+    let stack = UIStackView()
+
+    init(title: String? = nil, systemImageName: String? = nil) {
+        super.init(frame: .zero)
+        setup(title: title, systemImageName: systemImageName)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setup(title: String?, systemImageName: String?) {
+        translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = UIColor(white: 1, alpha: 0.08)
+        layer.cornerRadius = 8
+        layer.borderWidth = 1
+        layer.borderColor = UIColor(white: 1, alpha: 0.08).cgColor
+
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(stack)
+
+        if title != nil || systemImageName != nil {
+            let row = UIStackView()
+            row.axis = .horizontal
+            row.alignment = .center
+            row.spacing = 8
+            if let systemImageName {
+                let imageView = UIImageView(image: UIImage(systemName: systemImageName))
+                imageView.tintColor = .systemBlue
+                imageView.contentMode = .scaleAspectFit
+                imageView.widthAnchor.constraint(equalToConstant: 22).isActive = true
+                imageView.heightAnchor.constraint(equalToConstant: 22).isActive = true
+                row.addArrangedSubview(imageView)
+            }
+            if let title {
+                let label = UILabel()
+                label.text = title
+                label.textColor = .white
+                label.font = .systemFont(ofSize: 17, weight: .semibold)
+                label.numberOfLines = 0
+                row.addArrangedSubview(label)
+            }
+            stack.addArrangedSubview(row)
+        }
+
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14),
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 14),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14)
+        ])
+    }
+}
+

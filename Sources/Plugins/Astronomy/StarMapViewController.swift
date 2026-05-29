@@ -637,6 +637,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         timeSelectionView.setDateTime(date)
         starView.setDateTime(AstroUtils.astronomyTime(from: date), animate: animate)
         updateTimeControls()
+        (bottomSheetController as? AstroContextMenuViewController)?.onTimeChanged()
     }
 
     private func resetTime() {
@@ -842,26 +843,68 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func showObjectInfo(_ object: SkyObject) {
         hideBottomSheet(clearSelection: false)
 
-        let controller: UIViewController
-        if let constellation = object as? Constellation {
-            let sheet = ConstellationInfoFragment(constellation: constellation)
-            sheet.onClose = { [weak self] in
-                self?.hideBottomSheet()
+        let dependencies = AstroContextMenuDependencies(
+            currentDate: { [weak self] in self?.currentDate ?? Date() },
+            observer: { [weak self] in self?.starView.observer ?? AstroUtils.observer(from: nil) },
+            dataProvider: dataProvider,
+            preferredLocale: { OsmAndApp.swiftInstance()?.getLanguageCode() },
+            trackableObjects: { [weak self] in self?.getTrackableObjects() ?? [] },
+            constellations: { [weak self] in self?.viewModel.constellations ?? [] },
+            onClose: { [weak self] in self?.hideBottomSheet() },
+            onCenterObject: { [weak self] object in
+                self?.starView.setSelectedObject(object, center: true, animate: true)
+            },
+            onFavoriteChanged: { [weak self] object, enabled in
+                guard let self else { return }
+                if enabled {
+                    self.settings.addFavorite(id: object.id)
+                } else {
+                    self.settings.removeFavorite(id: object.id)
+                }
+                self.viewModel.updateSettings(self.settings)
+                self.starView.refreshObjects()
+            },
+            onDirectionChanged: { [weak self] object, enabled in
+                guard let self else { return object.colorIndex }
+                let colorIndex: Int
+                if enabled {
+                    colorIndex = self.settings.addDirection(id: object.id)
+                } else {
+                    self.settings.removeDirection(id: object.id)
+                    colorIndex = object.colorIndex
+                }
+                self.viewModel.updateSettings(self.settings)
+                self.starView.refreshObjects()
+                return colorIndex
+            },
+            onCelestialPathChanged: { [weak self] object, enabled in
+                guard let self else { return }
+                if enabled {
+                    self.settings.addCelestialPath(id: object.id)
+                } else {
+                    self.settings.removeCelestialPath(id: object.id)
+                }
+                self.viewModel.updateSettings(self.settings)
+                self.starView.refreshObjects()
+            },
+            onSetObjectPinned: { [weak self] object, pinned, forceUpdate in
+                self?.starView.setObjectPinned(object, pinned: pinned, forceUpdate: forceUpdate)
+            },
+            onRefreshObjects: { [weak self] in
+                guard let self else { return }
+                self.viewModel.updateSettings(self.settings)
+                self.starView.refreshObjects()
+            },
+            onCatalogClick: { catalog in
+                guard let url = URL(string: "https://www.wikidata.org/wiki/\(catalog.wid)") else {
+                    return
+                }
+                UIApplication.shared.open(url)
             }
-            controller = sheet
-        } else {
-            let sheet = SkyObjectInfoFragment(object: object,
-                                              date: currentDate,
-                                              observer: starView.observer,
-                                              dataProvider: dataProvider,
-                                              preferredLocale: OsmAndApp.swiftInstance()?.getLanguageCode())
-            sheet.onClose = { [weak self] in
-                self?.hideBottomSheet()
-            }
-            controller = sheet
-        }
+        )
+        let controller = AstroContextMenuViewController(object: object, dependencies: dependencies)
 
-        setBottomSheetHeight(object is Constellation ? Layout.bottomSheetHeight : Layout.objectInfoSheetHeight)
+        setBottomSheetHeight(view.bounds.height * 0.72)
         addChild(controller)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         bottomSheetContainer.addSubview(controller.view)

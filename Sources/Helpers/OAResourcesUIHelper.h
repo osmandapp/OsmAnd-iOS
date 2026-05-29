@@ -181,6 +181,7 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
                             selectedItems:(NSArray<OAResourceItem *> *)selectedItems
+                               sourceView:(UIView *)sourceView
                             onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                             onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
@@ -281,6 +282,8 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
                                            limit:(NSInteger)limit
                              skipIfOneDownloaded:(BOOL)skipIfOneDownloaded;
 
++ (BOOL)isIndexItemDownloadedOrDownloading:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion;
+
 + (CLLocationCoordinate2D) getMapLocation;
 
 + (void) clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete;
@@ -300,5 +303,10 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 
 + (void)onlineCalculateRequestWithRouteCalculationResult:(OARouteCalculationResult *)routeCalculationResult
                                               completion:(LocationArrayCallback)completion;
+
++ (BOOL)presentMapVariantConflictActionSheet:(OAResourceItem *)targetItem
+                                    sourceView:(UIView *)sourceView
+                                     onReplace:(dispatch_block_t)onReplace
+                                    onKeepBoth:(dispatch_block_t)onKeepBoth;
 
 @end

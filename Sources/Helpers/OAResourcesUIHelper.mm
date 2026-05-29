@@ -51,6 +51,50 @@
 
 typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
+/// Maintains pending map-variant deletion state for replace-after-install flow
+/// and observes download manager events to clear pending deletions on failure.
+@class OAResourcesReplacePendingObserver;
+
+/// Map variants grouped by resource identifier.
+/// Stored until installation completes successfully,
+/// after which obsolete variants are deleted.
+static NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *sPendingMapVariantDeletionsAfterInstall;
+/// Ensures replace-after-install observers are registered only once.
+static dispatch_once_t sReplaceAfterInstallObserverOnce;
+/// Observes download completion events for replace-after-install flow.
+static OAResourcesReplacePendingObserver *sReplacePendingObserver;
+/// Observes download failure events to cancel pending map-variant deletions.
+static OAAutoObserverProxy *sReplaceDownloadFailedObserver;
+
+/// Clears pending duplicate-map deletion state for the specified resource.
+static void OAClearPendingMapVariantDeletions(NSString *resourceId)
+{
+    NSLog(@"resourceId -- %@", resourceId);
+    if (resourceId.length == 0 || !sPendingMapVariantDeletionsAfterInstall)
+        return;
+    [sPendingMapVariantDeletionsAfterInstall removeObjectForKey:resourceId];
+}
+
+/// Holds download-failed observer for cross-type map replace (download-then-delete).
+@interface OAResourcesReplacePendingObserver : NSObject
+@end
+
+@implementation OAResourcesReplacePendingObserver
+
+/// Clears pending map-variant deletion if the replacement download failed.
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    NSLog(@"KEY -- %@", key);
+    if (![task.key hasPrefix:@"resource:"] || task.error == nil)
+        return;
+
+    NSString *resourceId = [task.key substringFromIndex:[@"resource:" length]];
+    OAClearPendingMapVariantDeletions(resourceId);
+}
+
+@end
+
 @interface OAResourceType()
 
 @property (nonatomic) OsmAndResourceType type;
@@ -1059,6 +1103,43 @@ includeHidden:(BOOL)includeHidden
     return downloadRegion.superregion != nil && [self.class isIndexItemDownloaded:type downloadRegion:downloadRegion.superregion res:res];
 }
 
++ (BOOL)isIndexItemDownloadedOrDownloading:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion
+{
+    if (!downloadRegion)
+        return NO;
+    // 1) уже установлен? (используем существующую проверку)
+    if ([self isIndexItemDownloaded:type downloadRegion:downloadRegion res:[NSMutableArray array]])
+        return YES;
+    // 2) сейчас скачивается? (без зависимости от OAManageResourcesViewController)
+    if ([self isIndexItemDownloading:type downloadRegion:downloadRegion])
+        return YES;
+    // 3) как и в существующей логике — проверяем superregion
+    return downloadRegion.superregion != nil && [self.class isIndexItemDownloadedOrDownloading:type downloadRegion:downloadRegion.superregion];
+}
+
++ (BOOL)isIndexItemDownloading:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion
+{
+    if (!downloadRegion)
+        return NO;
+    OAResourceGroupItem *groupItem = downloadRegion.groupItem;
+    if (!groupItem)
+        return NO;
+    NSArray<OAResourceItem *> *items = [groupItem getItems:type];
+    if (items.count == 0)
+        return NO;
+    OADownloadsManager *downloadsManager = [OsmAndApp instance].downloadsManager;
+    for (OAResourceItem *item in items)
+    {
+        if (!item.resourceId.isNull())
+        {
+            NSString *taskKey = [@"resource:" stringByAppendingString:item.resourceId.toNSString()];
+            if ([downloadsManager downloadTasksWithKey:taskKey].count > 0)
+                return YES;
+        }
+    }
+    return NO;
+}
+
 + (BOOL) addIndexItem:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion res:(NSMutableArray<OAResourceItem *>*)res
 {
     NSArray<OAResourceItem *> *otherIndexItems = [OAResourcesUIHelper requestMapDownloadInfo:@[downloadRegion] resourceTypes:@[[OAResourceType toValue:type]] isGroup:NO];
@@ -1496,7 +1577,21 @@ includeHidden:(BOOL)includeHidden
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
-        [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *duplicateMaps = [self pendingMapVariantDeletionsForItems:@[item]];
+        
+        if ([duplicateMaps count] > 0)
+        {
+            [self presentMapVariantConflictActionSheet:item sourceView:nil onReplace:^{
+                [self addPendingMapVariantDeletions:duplicateMaps];
+                [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            } onKeepBoth:^{
+                [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            }];
+        }
+        else
+        {
+            [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        }
     }
     else if (!silent)
     {
@@ -1525,6 +1620,7 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
                             selectedItems:(NSArray<OAResourceItem *> *)selectedItems
+                               sourceView:(UIView *)sourceView
                             onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                             onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
@@ -1574,7 +1670,21 @@ includeHidden:(BOOL)includeHidden
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
-        [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *duplicateMaps = [self pendingMapVariantDeletionsForItems:items];
+        
+        if ([duplicateMaps count] > 0)
+        {
+            [self presentMapVariantConflictActionSheet:multipleItem sourceView:sourceView onReplace:^{
+                [self addPendingMapVariantDeletions:duplicateMaps];
+                [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            } onKeepBoth:^{
+                [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            }];
+        }
+        else
+        {
+            [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        }
     }
     else
     {
@@ -2494,6 +2604,181 @@ includeHidden:(BOOL)includeHidden
     
     [task resume];
     [session finishTasksAndInvalidate];
+}
+
+//"duplicated_map" = "Duplicated map";
+//"duplicated_map_has_standard" = "You already have the standard map for %@. Downloading the road-only map will duplicate data and may degrade performance.";
+//"duplicated_map_has_road_only" = "You already have the road-only map for %@. Downloading the standard map will duplicate data and may degrade performance.";
+//"replace_with_road_only" = "Replace with Road-only";
+//"replace_with_standard" = "Replace with Standard";
+//"duplicated_map_multiple" = "You already have conflicting maps for %@. Downloading will duplicate data and may degrade performance.";
+
++ (BOOL)presentMapVariantConflictActionSheet:(OAResourceItem *)targetItem
+                                    sourceView:(UIView *)sourceView
+                                     onReplace:(dispatch_block_t)onReplace
+                                    onKeepBoth:(dispatch_block_t)onKeepBoth
+{
+    if (!targetItem || !targetItem.worldRegion)
+        return NO;
+
+    BOOL targetIsRoad = targetItem.resourceType == OsmAndResourceType::RoadMapRegion;
+    BOOL targetIsMap  = targetItem.resourceType == OsmAndResourceType::MapRegion;
+    if (!targetIsRoad && !targetIsMap)
+        return NO;
+    
+    NSString *resourceName = [self.class titleOfResourceType:targetItem.resourceType inRegion:targetItem.worldRegion withRegionName:YES withResourceType:NO];
+
+    NSString *messageKey = targetIsRoad
+        ? [NSString stringWithFormat:@"You already have the standard map for %@.\n\nDownloading the road-only map will duplicate data and may degrade performance.", resourceName]
+        : [NSString stringWithFormat:@"You already have the road-only map for %@.\n\nDownloading the standard map will duplicate data and may degrade performance.", resourceName];
+    
+    NSString *replaceButtonKey = targetIsRoad
+        ? @"Replace with Road-only"
+        : @"Replace with Standard";
+
+    UIAlertController *sheet = [UIAlertController alertControllerWithTitle:OALocalizedString(@"Duplicated map")
+                                                                   message:OALocalizedString(messageKey)
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+
+    [sheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(replaceButtonKey)
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(__unused UIAlertAction * _Nonnull action) {
+        if (onReplace) onReplace();
+    }]];
+
+    [sheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"keep_both")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(__unused UIAlertAction * _Nonnull action) {
+        if (onKeepBoth) onKeepBoth();
+    }]];
+
+    [sheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(__unused UIAlertAction * _Nonnull action) {
+        
+    }]];
+
+    UIPopoverPresentationController *popover = sheet.popoverPresentationController;
+    if (popover) {
+        UIView *anchorView = sourceView ?: [OARootViewController instance].view;
+        popover.sourceView = anchorView;
+        popover.sourceRect = anchorView.bounds;
+        popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    }
+
+    [[OARootViewController instance] presentViewController:sheet animated:YES completion:nil];
+    return YES;
+}
+
++ (void)registerMapVariantReplaceObserverIfNeeded
+{
+    dispatch_once(&sReplaceAfterInstallObserverOnce, ^{
+        sPendingMapVariantDeletionsAfterInstall = [NSMutableDictionary dictionary];
+        sReplacePendingObserver = [OAResourcesReplacePendingObserver new];
+        sReplaceDownloadFailedObserver = [[OAAutoObserverProxy alloc] initWith:sReplacePendingObserver
+                                                                     withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                      andObserve:[OsmAndApp instance].downloadsManager.completedObservable];
+
+        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
+                                                            object:nil
+                                                             queue:[NSOperationQueue mainQueue]
+                                                        usingBlock:^(NSNotification *note) {
+            id<OADownloadTask> task = note.object;
+            if (![task.key hasPrefix:@"resource:"])
+                return;
+
+            NSString *resourceId = [task.key substringFromIndex:[@"resource:" length]];
+            NSArray<OALocalResourceItem *> *toDelete = sPendingMapVariantDeletionsAfterInstall[resourceId];
+            if (toDelete.count == 0)
+                return;
+
+            [sPendingMapVariantDeletionsAfterInstall removeObjectForKey:resourceId];
+            [OAResourcesUIHelper deleteResourcesOf:toDelete progressHUD:nil executeAfterSuccess:nil];
+        }];
+
+        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstallationFailedNotification
+                                                            object:nil
+                                                             queue:[NSOperationQueue mainQueue]
+                                                        usingBlock:^(NSNotification *note) {
+            NSString *resourceId = note.object;
+            
+            if (resourceId.length > 0)
+                [sPendingMapVariantDeletionsAfterInstall removeObjectForKey:resourceId];
+        }];
+    });
+}
+
++ (void)addPendingMapVariantDeletions:(NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)variantMaps
+{
+    [self registerMapVariantReplaceObserverIfNeeded];
+    [sPendingMapVariantDeletionsAfterInstall addEntriesFromDictionary:variantMaps];
+}
+
++ (NSArray<OALocalResourceItem *> *)localVariantItemsForItem:(OARepositoryResourceItem *)targetItem alternativeType:(OsmAndResourceType)counterpartType
+{
+    NSMutableArray<OALocalResourceItem *> *result = [NSMutableArray array];
+
+    // Берем все items региона этого типа
+    NSArray<OAResourceItem *> *items = [self requestMapDownloadInfo:@[targetItem.worldRegion]
+                                                      resourceTypes:@[[OAResourceType toValue:counterpartType]]
+                                                            isGroup:NO];
+
+    NSString *targetRegionId = targetItem.worldRegion.regionId;
+
+    for (OAResourceItem *it in items)
+    {
+        if (!it.worldRegion || ![it.worldRegion.regionId isEqualToString:targetRegionId])
+            continue;
+
+        // Удаляем только локальные/устаревшие
+        if ([it isKindOfClass:OALocalResourceItem.class] || [it isKindOfClass:OAOutdatedResourceItem.class])
+            [result addObject:(OALocalResourceItem *)it];
+    }
+
+    return result;
+}
+
++ (OsmAndResourceType)oppositeMapTypeForResourceType:(OARepositoryResourceItem *)targetItem
+{
+    if (targetItem.resourceType == OsmAndResourceType::RoadMapRegion)
+        return OsmAndResourceType::MapRegion;
+    if (targetItem.resourceType == OsmAndResourceType::MapRegion)
+        return OsmAndResourceType::RoadMapRegion;
+    return (OsmAndResourceType)NSNotFound;
+}
+
++ (NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)pendingMapVariantDeletionsForItems:(NSArray<OAResourceItem *> *)items
+{
+    NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *pending = [NSMutableDictionary dictionary];
+
+    if (items.count == 0)
+        return pending;
+
+    for (OAResourceItem *item in items)
+    {
+        if (![item isKindOfClass:OARepositoryResourceItem.class])
+            continue;
+
+        OARepositoryResourceItem *targetItem = (OARepositoryResourceItem *)item;
+        if (!targetItem.worldRegion)
+            continue;
+
+        OsmAndResourceType counterpartType = [self oppositeMapTypeForResourceType:targetItem];
+        if (counterpartType == (OsmAndResourceType)NSNotFound)
+            continue;
+
+        NSArray<OALocalResourceItem *> *toDelete = [self localVariantItemsForItem:targetItem alternativeType:counterpartType];
+        if (toDelete.count == 0)
+            continue;
+
+        NSString *resourceId = targetItem.resourceId.toNSString();
+        if (resourceId.length == 0)
+            continue;
+
+        pending[resourceId] = [toDelete copy];
+    }
+    
+    return pending;
 }
 
 @end

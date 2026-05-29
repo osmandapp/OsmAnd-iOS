@@ -177,6 +177,8 @@ struct RegionResources
     NSArray<OAResourceItem *> *_multipleItems;
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
+    
+    UIView *_lastPressedCell;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -654,6 +656,7 @@ static BOOL _repositoryUpdated = NO;
 - (void) updateContent
 {
     NSLog(@"updateContent");
+    [_downloadingCellResourceHelper cleanCellCache];
     _doDataUpdate = YES;
     _customRegions = [OAPluginsHelper getCustomDownloadRegions];
     [self updateMultipleResources];
@@ -2943,6 +2946,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    _lastPressedCell = [tableView cellForRowAtIndexPath:indexPath];
     [self onCellClicked:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
@@ -3405,7 +3409,10 @@ static BOOL _repositoryUpdated = NO;
         [selectedResourceItems addObject:i.objcResourceItem];
 
     _multipleItems = selectedResourceItems;
-    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem selectedItems:selectedResourceItems onTaskCreated:^(id<OADownloadTask> task) {
+    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem
+                                             selectedItems:selectedResourceItems
+                                                sourceView:_lastPressedCell
+                                             onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
     } onTaskResumed:nil];
 }

@@ -74,7 +74,6 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private let cardsStack = UIStackView()
     private let tabBarContainer = UIView()
     private let tabBar = UITabBar()
-    private let tabSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
     private lazy var overviewTabItem = makeTabBarItem(title: AstroContextMenuLocalizer.label("shared_string_overview", fallback: "Overview"),
                                                       systemImageName: "globe",
                                                       tag: Tab.overview.rawValue)
@@ -266,7 +265,6 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             tabBar.leadingAnchor.constraint(equalTo: tabBarContainer.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: tabBarContainer.trailingAnchor),
             tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tabBar.heightAnchor.constraint(equalToConstant: 64),
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -287,11 +285,8 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         tabBarContainer.isOpaque = false
         tabBar.translatesAutoresizingMaskIntoConstraints = false
         tabBar.delegate = self
-        tabBar.itemPositioning = .fill
         tabBar.isTranslucent = true
         tabBar.isOpaque = false
-        tabBar.clipsToBounds = true
-        tabBar.layer.cornerRadius = 0
         tabBar.setContentCompressionResistancePriority(.required, for: .vertical)
         tabBar.items = [overviewTabItem, visibilityTabItem, scheduleTabItem]
         tabBar.selectedItem = overviewTabItem
@@ -330,53 +325,15 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func configureTabBarAppearance() {
-        tabBarContainer.backgroundColor = .clear
-        tabBar.backgroundColor = .clear
         tabBar.tintColor = AstroContextMenuTheme.activeIcon
         tabBar.unselectedItemTintColor = AstroContextMenuTheme.secondaryIcon
-        let appearance = UITabBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = .clear
-        appearance.shadowColor = .clear
-        appearance.backgroundEffect = UIBlurEffect(style: .systemChromeMaterial)
-        appearance.selectionIndicatorTintColor = .clear
-        appearance.selectionIndicatorImage = nil
-        appearance.stackedItemPositioning = .fill
-        appearance.stackedItemWidth = 0
-        appearance.stackedItemSpacing = 0
-        configureTabBarItemAppearance(appearance.stackedLayoutAppearance)
-        configureTabBarItemAppearance(appearance.inlineLayoutAppearance)
-        configureTabBarItemAppearance(appearance.compactInlineLayoutAppearance)
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = appearance
-        tabBar.backgroundImage = UIImage()
-        tabBar.shadowImage = UIImage()
-        tabBar.selectionIndicatorImage = UIImage()
-    }
-
-    private func configureTabBarItemAppearance(_ itemAppearance: UITabBarItemAppearance) {
-        let normalFont = UIFont.systemFont(ofSize: 11, weight: .regular)
-        let selectedFont = UIFont.systemFont(ofSize: 11, weight: .semibold)
-        itemAppearance.normal.iconColor = AstroContextMenuTheme.secondaryIcon
-        itemAppearance.normal.titleTextAttributes = [
-            .foregroundColor: AstroContextMenuTheme.secondaryText,
-            .font: normalFont
-        ]
-        itemAppearance.normal.titlePositionAdjustment = .zero
-        itemAppearance.selected.iconColor = AstroContextMenuTheme.activeIcon
-        itemAppearance.selected.titleTextAttributes = [
-            .foregroundColor: AstroContextMenuTheme.activeText,
-            .font: selectedFont
-        ]
-        itemAppearance.selected.titlePositionAdjustment = .zero
     }
 
     private func makeTabBarItem(title: String, systemImageName: String, tag: Int) -> UITabBarItem {
-        let image = UIImage(systemName: systemImageName, withConfiguration: tabSymbolConfiguration)
+        let image = UIImage(systemName: systemImageName)
         let item = UITabBarItem(title: title, image: image, selectedImage: image)
         item.tag = tag
         item.accessibilityLabel = title
-        item.imageInsets = UIEdgeInsets(top: 2, left: 0, bottom: -2, right: 0)
         return item
     }
 
@@ -770,7 +727,8 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard !isProgrammaticTabScroll else {
+        guard !isProgrammaticTabScroll,
+              scrollView.isDragging || scrollView.isDecelerating else {
             return
         }
         let y = scrollView.contentOffset.y + 16

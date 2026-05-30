@@ -29,12 +29,12 @@ enum AstroDescriptionCardViewHolder {
             config.baseForegroundColor = AstroContextMenuTheme.activeText
             config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
             if item.hasOfflineArticle && item.linkType == .wikipedia {
-                config.title = AstroContextMenuLocalizer.label("context_menu_read_full_article", fallback: "Read full article")
+                config.title = localizedString("context_menu_read_full_article")
             } else {
                 let targetName = item.linkType == .wikidata
-                    ? AstroContextMenuLocalizer.label("wikidata", fallback: "Wikidata")
-                    : AstroContextMenuLocalizer.label("shared_string_wikipedia", fallback: "Wikipedia")
-                let readOn = AstroContextMenuLocalizer.label("read_on", fallback: "Read on %@")
+                    ? localizedString("wikidata")
+                    : localizedString("shared_string_wikipedia")
+                let readOn = localizedString("read_on")
                 config.title = readOn.contains("%@") ? String(format: readOn, targetName) : "\(readOn) \(targetName)"
             }
             let button = UIButton(configuration: config)

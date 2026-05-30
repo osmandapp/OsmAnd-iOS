@@ -13,7 +13,7 @@ enum AstroGalleryCardViewHolder {
                          presentingController: UIViewController,
                          onUpdateImage: @escaping () -> Void,
                          onToggle: @escaping (String) -> Void) -> UIView {
-        let card = AstroCardContainerView(title: AstroContextMenuLocalizer.label("shared_string_photos", fallback: "Photos"),
+        let card = AstroCardContainerView(title: localizedString("online_photos"),
                                           systemImageName: "photo.on.rectangle")
         let toggleButton = UIButton(type: .system)
         toggleButton.contentHorizontalAlignment = .leading
@@ -34,7 +34,7 @@ enum AstroGalleryCardViewHolder {
         case .ready(let cards):
             if cards.isEmpty {
                 let emptyLabel = UILabel()
-                emptyLabel.text = AstroContextMenuLocalizer.label("shared_string_no_data", fallback: "No media")
+                emptyLabel.text = localizedString("no_photos_available")
                 emptyLabel.textColor = AstroContextMenuTheme.secondaryText
                 emptyLabel.font = .systemFont(ofSize: 14)
                 card.stack.addArrangedSubview(emptyLabel)
@@ -42,7 +42,7 @@ enum AstroGalleryCardViewHolder {
                 let gallery = horizontalGallery(cards: cards, presentingController: presentingController)
                 card.stack.addArrangedSubview(gallery)
                 let showAll = UIButton(type: .system)
-                showAll.setTitle(AstroContextMenuLocalizer.label("shared_string_show_all", fallback: "Show all"), for: .normal)
+                showAll.setTitle(localizedString("shared_string_show_all"), for: .normal)
                 showAll.tintColor = AstroContextMenuTheme.activeIcon
                 showAll.setTitleColor(AstroContextMenuTheme.activeText, for: .normal)
                 showAll.addAction(UIAction { _ in
@@ -91,11 +91,11 @@ enum AstroGalleryCardViewHolder {
     private static func toggleTitle(for state: AstroGalleryState) -> String {
         switch state {
         case .collapsed:
-            return AstroContextMenuLocalizer.label("shared_string_show", fallback: "Show")
+            return localizedString("shared_string_show")
         case .loading:
-            return AstroContextMenuLocalizer.label("shared_string_loading", fallback: "Loading")
+            return localizedString("shared_string_loading")
         case .ready:
-            return AstroContextMenuLocalizer.label("shared_string_collapse", fallback: "Collapse")
+            return localizedString("shared_string_collapse")
         }
     }
 

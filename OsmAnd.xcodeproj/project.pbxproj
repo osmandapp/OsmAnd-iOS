@@ -44,7 +44,6 @@
 		A5A5002E2F5000010000002E /* StarMapResetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002D2F5000010000002D /* StarMapResetButton.swift */; };
 		A5A500302F50000100000030 /* StarMapTimeControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */; };
 		A5A500322F50000100000032 /* StarCompassButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500312F50000100000031 /* StarCompassButton.swift */; };
-		A5A502012F51000100000101 /* AstroContextMenuLocalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501012F51000100000101 /* AstroContextMenuLocalizer.swift */; };
 		A5A502022F51000100000102 /* AstroContextMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501022F51000100000102 /* AstroContextMenuItem.swift */; };
 		A5A502032F51000100000103 /* AstroContextUiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501032F51000100000103 /* AstroContextUiState.swift */; };
 		A5A502042F51000100000104 /* MetricsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501042F51000100000104 /* MetricsAdapter.swift */; };
@@ -3855,7 +3854,6 @@
 		A5A5002D2F5000010000002D /* StarMapResetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapResetButton.swift; sourceTree = "<group>"; };
 		A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapTimeControlButton.swift; sourceTree = "<group>"; };
 		A5A500312F50000100000031 /* StarCompassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarCompassButton.swift; sourceTree = "<group>"; };
-		A5A501012F51000100000101 /* AstroContextMenuLocalizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuLocalizer.swift; sourceTree = "<group>"; };
 		A5A501022F51000100000102 /* AstroContextMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuItem.swift; sourceTree = "<group>"; };
 		A5A501032F51000100000103 /* AstroContextUiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextUiState.swift; sourceTree = "<group>"; };
 		A5A501042F51000100000104 /* MetricsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsAdapter.swift; sourceTree = "<group>"; };
@@ -11362,7 +11360,6 @@
 				A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */,
 				A5A501182F51000100000118 /* AstroContextMenuFragment.swift */,
 				A5A501022F51000100000102 /* AstroContextMenuItem.swift */,
-				A5A501012F51000100000101 /* AstroContextMenuLocalizer.swift */,
 				A5A501032F51000100000103 /* AstroContextUiState.swift */,
 				A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */,
 				A5A501142F51000100000114 /* AstroGalleryCardViewHolder.swift */,
@@ -17317,7 +17314,6 @@
 				A5A5002E2F5000010000002E /* StarMapResetButton.swift in Sources */,
 				A5A500302F50000100000030 /* StarMapTimeControlButton.swift in Sources */,
 				A5A500322F50000100000032 /* StarCompassButton.swift in Sources */,
-				A5A502012F51000100000101 /* AstroContextMenuLocalizer.swift in Sources */,
 				A5A502022F51000100000102 /* AstroContextMenuItem.swift in Sources */,
 				A5A502032F51000100000103 /* AstroContextUiState.swift in Sources */,
 				A5A502042F51000100000104 /* MetricsAdapter.swift in Sources */,

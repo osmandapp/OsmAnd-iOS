@@ -28,7 +28,7 @@ enum AstroVisibilityCardViewHolder {
             let resetButton = UIButton(type: .system)
             resetButton.setImage(UIImage(systemName: "calendar.badge.clock"), for: .normal)
             resetButton.tintColor = AstroContextMenuTheme.activeIcon
-            resetButton.accessibilityLabel = AstroContextMenuLocalizer.label("astro_visibility_show_today", fallback: "Show today")
+            resetButton.accessibilityLabel = localizedString("astro_visibility_show_today")
             resetButton.addAction(UIAction { _ in onResetToToday() }, for: .touchUpInside)
             resetButton.widthAnchor.constraint(equalToConstant: 36).isActive = true
             resetButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
@@ -51,17 +51,17 @@ enum AstroVisibilityCardViewHolder {
         addEvent(to: events,
                  time: item.riseTime,
                  symbol: "▲",
-                 title: AstroContextMenuLocalizer.label("astro_rise", fallback: "Rise"),
+                 title: localizedString("astro_rise"),
                  symbolColor: AstroContextMenuTheme.activeIcon)
         addEvent(to: events,
                  time: item.culminationTime,
                  symbol: "●",
-                 title: AstroContextMenuLocalizer.label("astro_culmination", fallback: "Culmination"),
+                 title: localizedString("astro_culmination"),
                  symbolColor: item.culminationColor)
         addEvent(to: events,
                  time: item.setTime,
                  symbol: "▼",
-                 title: AstroContextMenuLocalizer.label("astro_set", fallback: "Set"),
+                 title: localizedString("astro_set"),
                  symbolColor: AstroContextMenuTheme.activeIcon)
         if !events.arrangedSubviews.isEmpty {
             card.stack.addArrangedSubview(events)

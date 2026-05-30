@@ -89,7 +89,7 @@ final class AstroArticleDialogFragment: UIViewController {
         toolbar.addSubview(closeButton)
 
         readFullArticleButton.translatesAutoresizingMaskIntoConstraints = false
-        readFullArticleButton.setTitle(AstroContextMenuLocalizer.label("context_menu_read_full_article", fallback: "Read full article"), for: .normal)
+        readFullArticleButton.setTitle(localizedString("context_menu_read_full_article"), for: .normal)
         readFullArticleButton.setImage(UIImage(systemName: "globe"), for: .normal)
         readFullArticleButton.tintColor = .white
         readFullArticleButton.backgroundColor = AstroContextMenuTheme.primaryButton

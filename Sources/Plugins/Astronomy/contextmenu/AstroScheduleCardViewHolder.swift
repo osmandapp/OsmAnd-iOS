@@ -17,7 +17,7 @@ enum AstroScheduleCardViewHolder {
                          onResetPeriod: @escaping () -> Void,
                          onShiftPeriod: @escaping (Int) -> Void,
                          onSelectDate: @escaping (Date) -> Void) -> UIView {
-        let card = AstroCardContainerView(title: AstroContextMenuLocalizer.label("astronomy_schedule", fallback: "Schedule"),
+        let card = AstroCardContainerView(title: localizedString("astronomy_schedule"),
                                           systemImageName: "calendar")
 
         let nav = UIStackView()
@@ -47,7 +47,7 @@ enum AstroScheduleCardViewHolder {
 
         if item.showResetPeriodButton {
             let reset = UIButton(type: .system)
-            reset.setTitle(AstroContextMenuLocalizer.label("astro_schedule_show_current_week", fallback: "Show current week"), for: .normal)
+            reset.setTitle(localizedString("astro_schedule_show_current_week"), for: .normal)
             reset.tintColor = AstroContextMenuTheme.activeIcon
             reset.setTitleColor(AstroContextMenuTheme.activeText, for: .normal)
             reset.addAction(UIAction { _ in onResetPeriod() }, for: .touchUpInside)
@@ -56,7 +56,7 @@ enum AstroScheduleCardViewHolder {
 
         if item.days.contains(where: { $0.setDayOffset > 0 }) {
             let note = UILabel()
-            note.text = AstroContextMenuLocalizer.label("astro_schedule_next_day_note", fallback: "+1 means the set time is on the next day")
+            note.text = localizedString("astro_schedule_next_day_note")
             note.textColor = AstroContextMenuTheme.secondaryText
             note.font = .systemFont(ofSize: 15)
             note.numberOfLines = 0

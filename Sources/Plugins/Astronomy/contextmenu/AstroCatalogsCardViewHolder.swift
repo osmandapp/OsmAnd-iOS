@@ -14,7 +14,7 @@ enum AstroCatalogsCardViewHolder {
     static func makeView(item: AstroCatalogsCardItem,
                          onToggleExpanded: @escaping () -> Void,
                          onCatalogClick: @escaping (Catalog) -> Void) -> UIView {
-        let card = AstroCardContainerView(title: AstroContextMenuLocalizer.label("shared_string_catalogs", fallback: "Catalogs"),
+        let card = AstroCardContainerView(title: localizedString("astro_designations"),
                                           systemImageName: "tag")
         let chips = WrappingChipsView()
         let needShowMore = item.catalogs.count > maxVisible
@@ -26,8 +26,8 @@ enum AstroCatalogsCardViewHolder {
         }
         if needShowMore {
             chips.addChip(title: item.expanded
-                          ? AstroContextMenuLocalizer.label("shared_string_show_less", fallback: "Show less")
-                          : AstroContextMenuLocalizer.label("shared_string_ellipsis", fallback: "...")) {
+                          ? localizedString("shared_string_show_less")
+                          : localizedString("shared_string_ellipsis")) {
                 onToggleExpanded()
             }
         }

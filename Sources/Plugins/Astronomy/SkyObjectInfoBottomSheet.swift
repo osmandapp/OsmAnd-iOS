@@ -75,13 +75,13 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private let cardsStack = UIStackView()
     private let tabBarContainer = UIView()
     private let tabBar = UITabBar()
-    private lazy var overviewTabItem = makeTabBarItem(title: AstroContextMenuLocalizer.label("shared_string_overview", fallback: "Overview"),
+    private lazy var overviewTabItem = makeTabBarItem(title: localizedString("shared_string_overview"),
                                                       systemImageName: "globe",
                                                       tag: Tab.overview.rawValue)
-    private lazy var visibilityTabItem = makeTabBarItem(title: AstroContextMenuLocalizer.label("gpx_visibility_txt", fallback: "Visibility"),
+    private lazy var visibilityTabItem = makeTabBarItem(title: localizedString("gpx_visibility_txt"),
                                                         systemImageName: "telescope",
                                                         tag: Tab.visibility.rawValue)
-    private lazy var scheduleTabItem = makeTabBarItem(title: AstroContextMenuLocalizer.label("astronomy_schedule", fallback: "Schedule"),
+    private lazy var scheduleTabItem = makeTabBarItem(title: localizedString("astronomy_schedule"),
                                                       systemImageName: "calendar",
                                                       tag: Tab.schedule.rawValue)
     private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
@@ -393,26 +393,26 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func buildHeaderTypeText(_ obj: SkyObject) -> String {
-        let typeName = AstroContextMenuLocalizer.label(obj.type.titleKey, fallback: obj.type.localizedName)
+        let typeName = localizedString(obj.type.titleKey)
         let parentGroup: String
         if obj.type == .MOON {
-            parentGroup = AstroContextMenuLocalizer.label("astro_type_earth", fallback: "Earth")
+            parentGroup = localizedString("astro_type_earth")
         } else if obj.type.isSunSystem() {
-            parentGroup = AstroContextMenuLocalizer.label("astro_solar_system", fallback: "Solar system")
+            parentGroup = localizedString("astro_solar_system")
         } else if obj.type == .STAR,
                   let constellation = dependencies.constellations().first(where: { constellation in
                       constellation.lines.contains { segment in segment.0 == obj.hip || segment.1 == obj.hip }
                   }) {
             parentGroup = constellation.localizedName?.isEmpty == false ? constellation.localizedName ?? constellation.name : constellation.name
         } else {
-            parentGroup = AstroContextMenuLocalizer.label("astro_deep_sky", fallback: "Deep sky")
+            parentGroup = localizedString("astro_deep_sky")
         }
         return "\(typeName) • \(parentGroup)"
     }
 
     private func updateButtons(_ obj: SkyObject) {
         bindActionButton(saveButton,
-                         title: AstroContextMenuLocalizer.label("shared_string_save", fallback: "Save"),
+                         title: localizedString("shared_string_save"),
                          image: obj.isFavorite ? "bookmark.fill" : "bookmark") { [weak self] in
             guard let self else { return }
             obj.isFavorite.toggle()
@@ -420,14 +420,14 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             bindActionButtonsForCurrentObject()
         }
         bindActionButton(locationButton,
-                         title: AstroContextMenuLocalizer.label("astro_locate", fallback: "Locate"),
+                         title: localizedString("astro_locate"),
                          image: "location") { [weak self] in
             guard let self else { return }
             dependencies.onCenterObject(obj)
             bindActionButtonsForCurrentObject()
         }
         bindActionButton(directionButton,
-                         title: AstroContextMenuLocalizer.label("astro_direction", fallback: "Direction"),
+                         title: localizedString("astro_direction"),
                          image: obj.showDirection ? "target" : "scope") { [weak self] in
             guard let self else { return }
             obj.showDirection.toggle()
@@ -439,7 +439,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             bindActionButtonsForCurrentObject()
         }
         bindActionButton(pathButton,
-                         title: AstroContextMenuLocalizer.label("astro_path", fallback: "Path"),
+                         title: localizedString("astro_path"),
                          image: obj.showCelestialPath ? "point.topleft.down.curvedto.point.bottomright.up" : "point.topleft.down.to.point.bottomright.curvepath") { [weak self] in
             guard let self else { return }
             obj.showCelestialPath.toggle()
@@ -476,11 +476,11 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         let altitude = useTargetCoordinates ? obj.targetAltitude : obj.altitude
         var metrics: [MetricsAdapter.MetricUi] = [
             MetricsAdapter.MetricUi(value: String(format: "%.1f°", azimuth),
-                                    label: AstroContextMenuLocalizer.label("shared_string_azimuth", fallback: "Azimuth")),
+                                    label: localizedString("shared_string_azimuth")),
             MetricsAdapter.MetricUi(value: String(format: "%.1f°", altitude),
-                                    label: AstroContextMenuLocalizer.label("altitude", fallback: "Altitude")),
+                                    label: localizedString("altitude")),
             MetricsAdapter.MetricUi(value: String(format: "%.2f", obj.magnitude),
-                                    label: AstroContextMenuLocalizer.label("shared_string_magnitude", fallback: "Magnitude"))
+                                    label: localizedString("shared_string_magnitude"))
         ]
 
         let currentDate = dependencies.currentDate()
@@ -494,11 +494,11 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         let formatter = createUiTimeFormatter()
         if let rise = riseSet.rise {
             metrics.append(MetricsAdapter.MetricUi(value: formatter.string(from: rise),
-                                                   label: AstroContextMenuLocalizer.label("astro_rise", fallback: "Rise")))
+                                                   label: localizedString("astro_rise")))
         }
         if let set = riseSet.set {
             metrics.append(MetricsAdapter.MetricUi(value: formatter.string(from: set),
-                                                   label: AstroContextMenuLocalizer.label("astro_set", fallback: "Set")))
+                                                   label: localizedString("astro_set")))
         }
 
         metricsAdapter.submit(metrics)
@@ -680,7 +680,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
                 OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.wikipedia(), navController: navigation)
             }
         case .download:
-            OAUtilities.showToast(AstroContextMenuLocalizer.label("no_index_file_to_download", fallback: "No index file to download"),
+            OAUtilities.showToast(localizedString("no_index_file_to_download"),
                                   details: nil,
                                   duration: 4,
                                   in: view)

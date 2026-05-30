@@ -23,7 +23,7 @@ final class AstroVisibilityCardController {
     private(set) var setTime: String?
     private(set) var locationText = ""
     private(set) var culminationColor = UIColor.clear
-    private(set) var titleText = AstroContextMenuLocalizer.label("astro_today_visibility", fallback: "Today visibility")
+    private(set) var titleText = localizedString("astro_today_visibility")
     private(set) var showResetButton = false
     private(set) var cursorReferenceTimeMillis: Int64 = 0
 
@@ -55,7 +55,7 @@ final class AstroVisibilityCardController {
         self.cursorReferenceTimeMillis = cursorReferenceTimeMillis
         titleDateFormatter.timeZone = timeZone
         titleText = isTodayVisibility
-            ? AstroContextMenuLocalizer.label("astro_today_visibility", fallback: "Today visibility")
+            ? localizedString("astro_today_visibility")
             : titleDateFormatter.string(from: self.date)
         showResetButton = !isTodayVisibility
 
@@ -189,10 +189,8 @@ final class AstroVisibilityCardController {
     }
 
     private func formatCoordinates(latitude: Double, longitude: Double) -> String {
-        let latDir = AstroContextMenuLocalizer.label(latitude >= 0.0 ? "north_abbreviation" : "south_abbreviation",
-                                                    fallback: latitude >= 0.0 ? "N" : "S")
-        let lonDir = AstroContextMenuLocalizer.label(longitude >= 0.0 ? "east_abbreviation" : "west_abbreviation",
-                                                    fallback: longitude >= 0.0 ? "E" : "W")
+        let latDir = localizedString(latitude >= 0.0 ? "north_abbreviation" : "south_abbreviation")
+        let lonDir = localizedString(longitude >= 0.0 ? "east_abbreviation" : "west_abbreviation")
         return String(format: "%.2f° %@, %.2f° %@", abs(latitude), latDir, abs(longitude), lonDir)
     }
 

@@ -23,8 +23,8 @@ final class AstroKnowledgeBaseController {
         }
         return AstroKnowledgeCardItem(state: state,
                                       buttonTitle: state == .download
-                                        ? AstroContextMenuLocalizer.label("shared_string_download", fallback: "Download")
-                                        : AstroContextMenuLocalizer.label("shared_string_get", fallback: "Get"),
+                                        ? localizedString("shared_string_download")
+                                        : localizedString("shared_string_get"),
                                       actionEnabled: true)
     }
 
@@ -61,4 +61,3 @@ final class AstroKnowledgeBaseController {
             .appendingPathComponent(Self.knowledgeBaseFileName, isDirectory: false)
     }
 }
-

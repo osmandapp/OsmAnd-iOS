@@ -249,7 +249,7 @@ final class AstroVisibilityGraphView: UIView {
         formatter.timeZone = model.timeZone
         formatter.timeStyle = .short
         formatter.dateStyle = .none
-        let text = "\(formatter.string(from: Date(timeIntervalSince1970: TimeInterval(millis) / 1000.0)))  \(String(format: "%.1f°", altitude))  \(AstroContextMenuLocalizer.label("astro_az_short", fallback: "Az")) \(String(format: "%.0f°", azimuth))"
+        let text = "\(formatter.string(from: Date(timeIntervalSince1970: TimeInterval(millis) / 1000.0)))  \(String(format: "%.1f°", altitude))  \(localizedString("astro_az_short")) \(String(format: "%.0f°", azimuth))"
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 11, weight: .medium),
             .foregroundColor: UIColor.white

@@ -51,18 +51,18 @@ struct AstroKnowledgeCardItem: AstroContextMenuItem {
     func getTitle() -> String {
         switch state {
         case .upsell:
-            return AstroContextMenuLocalizer.label("astro_expand_your_universe_title", fallback: "Expand your universe")
+            return localizedString("astro_expand_your_universe_title")
         case .download:
-            return AstroContextMenuLocalizer.label("astro_offline_knowledge_base_title", fallback: "Offline knowledge base")
+            return localizedString("astro_offline_knowledge_base_title")
         }
     }
 
     func getDescription() -> String {
         switch state {
         case .upsell:
-            return AstroContextMenuLocalizer.label("astro_expand_your_universe_description", fallback: "Unlock astronomy articles and detailed object information.")
+            return localizedString("astro_expand_your_universe_description")
         case .download:
-            return AstroContextMenuLocalizer.label("astro_offline_knowledge_base_description", fallback: "Download stars articles to read astronomy details offline.")
+            return localizedString("astro_offline_knowledge_base_description")
         }
     }
 
@@ -144,4 +144,3 @@ struct AstroScheduleCardItem: AstroContextMenuItem {
     let showResetPeriodButton: Bool
     let key: AstroContextCardKey = .schedule
 }
-

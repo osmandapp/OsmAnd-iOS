@@ -167,25 +167,25 @@ enum AstroUtils {
 
     static func bodyDisplayName(_ body: Body) -> String {
         if body === Body.sun {
-            return localizedString("astro_sun")
+            return localizedString("astro_name_sun")
         } else if body === Body.moon {
-            return localizedString("astro_moon")
+            return localizedString("astro_name_moon")
         } else if body === Body.mercury {
-            return localizedString("astro_mercury")
+            return localizedString("astro_name_mercury")
         } else if body === Body.venus {
-            return localizedString("astro_venus")
+            return localizedString("astro_name_venus")
         } else if body === Body.mars {
-            return localizedString("astro_mars")
+            return localizedString("astro_name_mars")
         } else if body === Body.jupiter {
-            return localizedString("astro_jupiter")
+            return localizedString("astro_name_jupiter")
         } else if body === Body.saturn {
-            return localizedString("astro_saturn")
+            return localizedString("astro_name_saturn")
         } else if body === Body.uranus {
-            return localizedString("astro_uranus")
+            return localizedString("astro_name_uranus")
         } else if body === Body.neptune {
-            return localizedString("astro_neptune")
+            return localizedString("astro_name_neptune")
         } else if body === Body.pluto {
-            return localizedString("astro_pluto")
+            return localizedString("astro_name_pluto")
         } else {
             return body.name
         }

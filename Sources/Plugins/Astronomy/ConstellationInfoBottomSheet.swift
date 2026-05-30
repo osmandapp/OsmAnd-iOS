@@ -38,7 +38,7 @@ final class ConstellationInfoFragment: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.numberOfLines = 0
-        label.text = "\(constellation.niceName())\n\(localizedString("astro_constellations"))\n\(constellation.lines.count) lines"
+        label.text = "\(constellation.niceName())\n\(localizedString("astro_constellation"))\n\(localizedString("count_of_lines")): \(constellation.lines.count)"
         view.addSubview(closeButton)
         view.addSubview(label)
         NSLayoutConstraint.activate([

@@ -690,7 +690,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         if let object = selectedObject {
             let altitude = String(format: "%.1f", object.altitude)
             let azimuth = String(format: "%.1f", object.azimuth)
-            timeLabel.text = "\(object.getDisplayName())  alt \(altitude) deg, az \(azimuth) deg"
+            timeLabel.text = "\(object.getDisplayName())  \(localizedString("astro_alt_short")) \(altitude)°, \(localizedString("astro_az_short")) \(azimuth)°"
             timeLabel.isHidden = false
         } else {
             timeLabel.isHidden = true

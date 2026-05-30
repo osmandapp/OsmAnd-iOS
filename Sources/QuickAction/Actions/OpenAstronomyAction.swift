@@ -34,7 +34,7 @@ final class OpenAstronomyAction: OAQuickAction {
     }
 
     override func getText() -> String? {
-        localizedString("open_astronomy_action_description")
+        localizedString("star_map")
     }
 
     override func execute() {
@@ -47,4 +47,3 @@ final class OpenAstronomyAction: OAQuickAction {
         plugin.showStarMap()
     }
 }
-

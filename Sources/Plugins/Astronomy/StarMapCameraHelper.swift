@@ -33,7 +33,7 @@ final class StarMapCameraHelper {
         if isCameraOverlayEnabled, let hostView, let siblingView {
             if !startPreview(in: hostView, below: siblingView) {
                 disableCameraOverlay(notify: true)
-                onUnavailable?(localizedString("astro_camera_unavailable"))
+                onUnavailable?(localizedString("recording_camera_not_available"))
             } else {
                 starView?.isCameraMode = true
                 if let viewAngle = starView?.getViewAngle() {
@@ -106,7 +106,7 @@ final class StarMapCameraHelper {
 
     private func requestCameraOverlay() {
         guard let hostView, let siblingView else {
-            onUnavailable?(localizedString("astro_camera_unavailable"))
+            onUnavailable?(localizedString("recording_camera_not_available"))
             return
         }
 
@@ -122,12 +122,12 @@ final class StarMapCameraHelper {
                     if granted, !self.isCameraOverlayEnabled {
                         self.enableCameraOverlay(in: hostView, below: siblingView)
                     } else if !granted {
-                        self.onUnavailable?(localizedString("astro_camera_permission_denied"))
+                        self.onUnavailable?(localizedString("no_camera_permission"))
                     }
                 }
             }
         default:
-            onUnavailable?(localizedString("astro_camera_permission_denied"))
+            onUnavailable?(localizedString("no_camera_permission"))
         }
     }
 
@@ -136,7 +136,7 @@ final class StarMapCameraHelper {
             return
         }
         guard startPreview(in: hostView, below: siblingView) else {
-            onUnavailable?(localizedString("astro_camera_unavailable"))
+            onUnavailable?(localizedString("recording_camera_not_available"))
             return
         }
         isCameraOverlayEnabled = true

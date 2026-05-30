@@ -990,7 +990,7 @@ final class StarView: UIView {
                 if dec != 0 {
                     let ra = Double(bestRaIndex * equRaStepMin) / 60.0
                     let hor = AstronomyKt.horizon(time: currentTime, observer: observer, ra: ra, dec: Double(dec), refraction: Refraction.normal)
-                    drawGridLabel("\(dec) deg", azimuth: hor.azimuth, altitude: hor.altitude, align: .left, color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), in: context)
+                    drawGridLabel("\(dec)°", azimuth: hor.azimuth, altitude: hor.altitude, align: .left, color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), in: context)
                 }
             }
         }

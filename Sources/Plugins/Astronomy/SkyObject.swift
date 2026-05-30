@@ -61,9 +61,9 @@ enum SkyObjectType: String, Codable, CaseIterable {
         case .PLANET:
             return localizedString("astro_planets")
         case .SUN:
-            return localizedString("astro_sun")
+            return localizedString("astro_name_sun")
         case .MOON:
-            return localizedString("astro_moon")
+            return localizedString("astro_name_moon")
         case .NEBULA:
             return localizedString("astro_nebulae")
         case .OPEN_CLUSTER:

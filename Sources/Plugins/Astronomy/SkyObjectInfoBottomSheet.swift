@@ -73,7 +73,6 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private let scrollView = UIScrollView()
     private let contentStack = UIStackView()
     private let cardsStack = UIStackView()
-    private let tabBarContainer = UIView()
     private let tabBar = UITabBar()
     private lazy var overviewTabItem = makeTabBarItem(title: localizedString("shared_string_overview"),
                                                       iconName: overviewTabIconName(for: skyObject?.type),
@@ -137,6 +136,14 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             applyTheme()
             cardsStack.arrangedSubviews.forEach { $0.setNeedsDisplay() }
         }
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        let tabBarHeight = tabBar.bounds.height > 0 ? tabBar.bounds.height : 49
+        let bottomInset = tabBar.alpha > 0 ? tabBarHeight + view.safeAreaInsets.bottom + 16 : 16
+        scrollView.contentInset.bottom = bottomInset
+        scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
     }
 
     func updateObjectInfo(_ obj: SkyObject) {
@@ -221,10 +228,12 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             return
         }
         let updates = {
-            self.tabBarContainer.alpha = visible ? 1 : 0
-            self.tabBarContainer.isUserInteractionEnabled = visible
-            self.scrollView.contentInset.bottom = visible ? 96 : 16
-            self.scrollView.verticalScrollIndicatorInsets.bottom = visible ? 96 : 16
+            self.tabBar.alpha = visible ? 1 : 0
+            self.tabBar.isUserInteractionEnabled = visible
+            let tabBarHeight = self.tabBar.bounds.height > 0 ? self.tabBar.bounds.height : 49
+            let bottomInset = visible ? tabBarHeight + self.view.safeAreaInsets.bottom + 16 : 16
+            self.scrollView.contentInset.bottom = bottomInset
+            self.scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
         }
         if animated {
             UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction], animations: updates)
@@ -280,21 +289,15 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         contentStack.addArrangedSubview(cardsStack)
 
         setupTabBar()
-        view.addSubview(tabBarContainer)
-        tabBarContainer.addSubview(tabBar)
+        view.addSubview(tabBar)
 
         NSLayoutConstraint.activate([
             metricsContainer.heightAnchor.constraint(equalToConstant: 62),
             actionsStack.heightAnchor.constraint(equalToConstant: 66),
 
-            tabBarContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tabBarContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tabBarContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tabBarContainer.topAnchor.constraint(equalTo: tabBar.topAnchor),
-
-            tabBar.leadingAnchor.constraint(equalTo: tabBarContainer.leadingAnchor),
-            tabBar.trailingAnchor.constraint(equalTo: tabBarContainer.trailingAnchor),
-            tabBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -310,18 +313,15 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func setupTabBar() {
-        tabBarContainer.translatesAutoresizingMaskIntoConstraints = false
-        tabBarContainer.backgroundColor = .clear
-        tabBarContainer.isOpaque = false
         tabBar.translatesAutoresizingMaskIntoConstraints = false
         tabBar.delegate = self
         tabBar.isTranslucent = true
-        tabBar.isOpaque = false
         tabBar.setContentCompressionResistancePriority(.required, for: .vertical)
-        tabBar.items = [overviewTabItem, visibilityTabItem, scheduleTabItem]
+        tabBar.setItems([overviewTabItem, visibilityTabItem, scheduleTabItem], animated: false)
         tabBar.selectedItem = overviewTabItem
-        tabBarContainer.alpha = 0
-        tabBarContainer.isUserInteractionEnabled = false
+        tabBar.alpha = 0
+        tabBar.isUserInteractionEnabled = false
+        
         scrollView.contentInset.bottom = 16
         scrollView.verticalScrollIndicatorInsets.bottom = 16
     }
@@ -737,7 +737,6 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func scrollToTab(_ tab: Tab, animated: Bool = true) {
-        view.layoutIfNeeded()
         isProgrammaticTabScroll = animated
         guard tab != .overview else {
             setScrollViewContentOffset(.zero, animated: animated)
@@ -781,7 +780,6 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         }
         UIView.performWithoutAnimation {
             tabBar.selectedItem = item
-            tabBar.layoutIfNeeded()
         }
     }
 

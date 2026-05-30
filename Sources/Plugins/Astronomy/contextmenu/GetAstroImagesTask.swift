@@ -19,11 +19,15 @@ final class GetAstroImagesTask {
 
     let wikidataId: String
     weak var getImageCardsListener: GetImageCardsListener?
+    private let networkResponseListener: WikiCoreHelperNetworkResponseListener?
     private var workItem: DispatchWorkItem?
 
-    init(wikidataId: String, getImageCardsListener: GetImageCardsListener?) {
+    init(wikidataId: String,
+         getImageCardsListener: GetImageCardsListener?,
+         networkResponseListener: WikiCoreHelperNetworkResponseListener? = nil) {
         self.wikidataId = wikidataId
         self.getImageCardsListener = getImageCardsListener
+        self.networkResponseListener = networkResponseListener
     }
 
     func execute() {
@@ -32,7 +36,7 @@ final class GetAstroImagesTask {
             guard let self else {
                 return
             }
-            let images = WikiCoreHelper.shared.getAstroImageList(wikidataId: self.wikidataId, listener: nil)
+            let images = WikiCoreHelper.shared.getAstroImageList(wikidataId: self.wikidataId, listener: self.networkResponseListener)
             DispatchQueue.main.async { [weak self] in
                 guard let self, !(self.workItem?.isCancelled ?? true) else {
                     return

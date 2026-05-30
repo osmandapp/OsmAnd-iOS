@@ -194,13 +194,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupCompassAndLeftControls() {
-        addRoundButton(compassButton, systemName: "location.north.fill", accessibilityLabel: localizedString("map_widget_compass"))
+        addRoundButton(compassButton, accessibilityLabel: localizedString("map_widget_compass"))
         compassButton.onSingleTap = { [weak self] in self?.setAzimuth(0, animate: true) }
 
-        addRoundButton(arModeButton, systemName: "arkit", accessibilityLabel: localizedString("astro_ar"))
+        addRoundButton(arModeButton, iconName: "ic_action_view_in_ar", accessibilityLabel: localizedString("astro_ar"))
         arModeButton.addTarget(self, action: #selector(toggleARMode), for: .touchUpInside)
 
-        addRoundButton(cameraButton, systemName: "camera", accessibilityLabel: localizedString("astro_camera"))
+        addRoundButton(cameraButton, iconName: "ic_action_device_camera", accessibilityLabel: localizedString("astro_camera"))
         cameraButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
@@ -216,10 +216,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupRightControls() {
-        addRoundButton(closeButton, systemName: "xmark", accessibilityLabel: localizedString("shared_string_close"))
+        addRoundButton(closeButton, iconName: "ic_action_close", accessibilityLabel: localizedString("shared_string_close"))
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
-        addRoundButton(settingsButton, systemName: "square.stack.3d.up", accessibilityLabel: localizedString("shared_string_settings"))
+        addRoundButton(settingsButton, iconName: "ic_layer_top", accessibilityLabel: localizedString("shared_string_settings"))
         settingsButton.addTarget(self, action: #selector(showConfigureSheet), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
@@ -250,7 +250,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         stack.translatesAutoresizingMaskIntoConstraints = false
         timeControlCard.addSubview(stack)
 
-        timeControlButton.setImage(UIImage(systemName: "clock"), for: .normal)
+        timeControlButton.setImage(AstroIcon.template("ic_action_time"), for: .normal)
         timeControlButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         timeControlButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         timeControlButton.addTarget(self, action: #selector(toggleTimeSelection), for: .touchUpInside)
@@ -301,7 +301,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         filterStack.translatesAutoresizingMaskIntoConstraints = false
         magnitudeFilterButton.addSubview(filterStack)
 
-        magnitudeFilterIcon.image = UIImage(systemName: "sparkles")
+        magnitudeFilterIcon.image = AstroIcon.template("ic_action_sort_brightest")
         magnitudeFilterIcon.tintColor = .systemBlue
         magnitudeFilterIcon.contentMode = .scaleAspectFit
         magnitudeFilterIcon.widthAnchor.constraint(equalToConstant: 24).isActive = true
@@ -384,7 +384,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         transparencySlider.addTarget(self, action: #selector(transparencyChanged), for: .valueChanged)
         sliderContainer.addSubview(transparencySlider)
 
-        addRoundButton(resetFovButton, systemName: "arrow.counterclockwise", accessibilityLabel: localizedString("shared_string_reset"))
+        addRoundButton(resetFovButton, iconName: "ic_action_reset_to_default_dark", accessibilityLabel: localizedString("shared_string_reset"))
         resetFovButton.addTarget(self, action: #selector(resetFov), for: .touchUpInside)
         resetFovButton.isHidden = true
 
@@ -423,9 +423,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         ])
     }
 
-    private func addRoundButton(_ button: StarMapButton, systemName: String, accessibilityLabel: String) {
+    private func addRoundButton(_ button: StarMapButton, iconName: String? = nil, accessibilityLabel: String) {
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setIcon(systemName: systemName, accessibilityLabel: accessibilityLabel)
+        if let iconName {
+            button.setIcon(iconName: iconName, accessibilityLabel: accessibilityLabel)
+        } else {
+            button.accessibilityLabel = accessibilityLabel
+        }
         mapControlsContainer.addSubview(button)
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: Layout.buttonSize),

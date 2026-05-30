@@ -76,13 +76,13 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private let tabBarContainer = UIView()
     private let tabBar = UITabBar()
     private lazy var overviewTabItem = makeTabBarItem(title: localizedString("shared_string_overview"),
-                                                      systemImageName: "globe",
+                                                      iconName: overviewTabIconName(for: skyObject?.type),
                                                       tag: Tab.overview.rawValue)
     private lazy var visibilityTabItem = makeTabBarItem(title: localizedString("gpx_visibility_txt"),
-                                                        systemImageName: "telescope",
+                                                        iconName: "ic_action_telescope_colored",
                                                         tag: Tab.visibility.rawValue)
     private lazy var scheduleTabItem = makeTabBarItem(title: localizedString("astronomy_schedule"),
-                                                      systemImageName: "calendar",
+                                                      iconName: "ic_action_date_start",
                                                       tag: Tab.schedule.rawValue)
     private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
     private var selectedTab: Tab = .overview
@@ -165,6 +165,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
 
         article = dependencies.dataProvider?.getAstroArticle(wikidataId: obj.wid, lang: dependencies.preferredLocale())
         setTitle(obj.niceName())
+        updateOverviewTabIcon(for: obj.type)
         headerType.text = buildHeaderTypeText(obj)
 
         updateMetrics(obj)
@@ -293,7 +294,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
 
             tabBar.leadingAnchor.constraint(equalTo: tabBarContainer.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: tabBarContainer.trailingAnchor),
-            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tabBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -341,10 +342,11 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
 
     private func configureNavigationBar() {
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .close,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: AstroIcon.template("ic_action_close"),
                                                             primaryAction: UIAction { [weak self] _ in
                                                                 self?.dependencies.onClose()
-                                                            })
+                                                            },
+                                                            menu: nil)
         navigationController?.navigationBar.prefersLargeTitles = false
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
@@ -360,12 +362,38 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         tabBar.unselectedItemTintColor = AstroContextMenuTheme.secondaryIcon
     }
 
-    private func makeTabBarItem(title: String, systemImageName: String, tag: Int) -> UITabBarItem {
-        let image = UIImage(systemName: systemImageName)
+    private func makeTabBarItem(title: String, iconName: String, tag: Int) -> UITabBarItem {
+        let image = AstroIcon.template(iconName)
         let item = UITabBarItem(title: title, image: image, selectedImage: image)
         item.tag = tag
         item.accessibilityLabel = title
         return item
+    }
+
+    private func updateOverviewTabIcon(for type: SkyObjectType?) {
+        let image = AstroIcon.template(overviewTabIconName(for: type))
+        overviewTabItem.image = image
+        overviewTabItem.selectedImage = image
+    }
+
+    private func overviewTabIconName(for type: SkyObjectType?) -> String {
+        guard let type else {
+            return "ic_action_planet_outlined"
+        }
+        switch type {
+        case .SUN, .MOON, .PLANET:
+            return "ic_action_planet_outlined"
+        case .CONSTELLATION:
+            return "ic_action_constellations"
+        case .STAR:
+            return "ic_action_stars"
+        case .NEBULA:
+            return "ic_action_nebulas"
+        case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
+            return "ic_action_star_clusters"
+        case .GALAXY, .GALAXY_CLUSTER, .BLACK_HOLE:
+            return "ic_action_galaxy"
+        }
     }
 
     private func configureActionButton(_ button: UIButton) {
@@ -413,7 +441,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private func updateButtons(_ obj: SkyObject) {
         bindActionButton(saveButton,
                          title: localizedString("shared_string_save"),
-                         image: obj.isFavorite ? "bookmark.fill" : "bookmark") { [weak self] in
+                         image: obj.isFavorite ? "ic_action_bookmark_filled" : "ic_action_bookmark") { [weak self] in
             guard let self else { return }
             obj.isFavorite.toggle()
             dependencies.onFavoriteChanged(obj, obj.isFavorite)
@@ -421,14 +449,14 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         }
         bindActionButton(locationButton,
                          title: localizedString("astro_locate"),
-                         image: "location") { [weak self] in
+                         image: "ic_action_location_16") { [weak self] in
             guard let self else { return }
             dependencies.onCenterObject(obj)
             bindActionButtonsForCurrentObject()
         }
         bindActionButton(directionButton,
                          title: localizedString("astro_direction"),
-                         image: obj.showDirection ? "target" : "scope") { [weak self] in
+                         image: obj.showDirection ? "ic_action_target_direction_on" : "ic_action_target_direction_off") { [weak self] in
             guard let self else { return }
             obj.showDirection.toggle()
             if obj.showDirection {
@@ -440,7 +468,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         }
         bindActionButton(pathButton,
                          title: localizedString("astro_path"),
-                         image: obj.showCelestialPath ? "point.topleft.down.curvedto.point.bottomright.up" : "point.topleft.down.to.point.bottomright.curvepath") { [weak self] in
+                         image: obj.showCelestialPath ? "ic_action_target_path_on" : "ic_action_target_path_off") { [weak self] in
             guard let self else { return }
             obj.showCelestialPath.toggle()
             dependencies.onCelestialPathChanged(obj, obj.showCelestialPath)
@@ -459,11 +487,18 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private func bindActionButton(_ button: UIButton, title: String, image: String, action: @escaping () -> Void) {
         var config = button.configuration ?? UIButton.Configuration.filled()
         config.title = title
-        config.image = UIImage(systemName: image)
+        config.image = actionButtonImage(named: image)
         button.configuration = config
         let identifier = UIAction.Identifier("astro.context.action")
         button.removeAction(identifiedBy: identifier, for: .touchUpInside)
         button.addAction(UIAction(identifier: identifier) { _ in action() }, for: .touchUpInside)
+    }
+
+    private func actionButtonImage(named imageName: String) -> UIImage? {
+        if imageName == "ic_action_location_16" {
+            return AstroIcon.template(imageName, size: CGSize(width: 24, height: 24))
+        }
+        return AstroIcon.template(imageName)
     }
 
     private func updateMetrics(_ obj: SkyObject, useTargetCoordinates: Bool = false) {

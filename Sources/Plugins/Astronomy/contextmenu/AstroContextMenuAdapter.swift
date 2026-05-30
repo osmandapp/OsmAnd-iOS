@@ -120,16 +120,16 @@ final class AstroContextMenuAdapter {
 final class AstroCardContainerView: UIView {
     let stack = UIStackView()
 
-    init(title: String? = nil, systemImageName: String? = nil) {
+    init(title: String? = nil, iconName: String? = nil) {
         super.init(frame: .zero)
-        setup(title: title, systemImageName: systemImageName)
+        setup(title: title, iconName: iconName)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setup(title: String?, systemImageName: String?) {
+    private func setup(title: String?, iconName: String?) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = AstroContextMenuTheme.cardBackground
         layer.cornerRadius = 8
@@ -141,13 +141,13 @@ final class AstroCardContainerView: UIView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stack)
 
-        if title != nil || systemImageName != nil {
+        if title != nil || iconName != nil {
             let row = UIStackView()
             row.axis = .horizontal
             row.alignment = .center
             row.spacing = 8
-            if let systemImageName {
-                let imageView = UIImageView(image: UIImage(systemName: systemImageName))
+            if let iconName {
+                let imageView = UIImageView(image: AstroIcon.template(iconName))
                 imageView.tintColor = AstroContextMenuTheme.activeIcon
                 imageView.contentMode = .scaleAspectFit
                 imageView.widthAnchor.constraint(equalToConstant: 22).isActive = true

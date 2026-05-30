@@ -15,7 +15,7 @@ enum AstroCatalogsCardViewHolder {
                          onToggleExpanded: @escaping () -> Void,
                          onCatalogClick: @escaping (Catalog) -> Void) -> UIView {
         let card = AstroCardContainerView(title: localizedString("astro_designations"),
-                                          systemImageName: "tag")
+                                          iconName: "ic_action_book_info")
         let chips = WrappingChipsView()
         let needShowMore = item.catalogs.count > maxVisible
         let visible = !item.expanded && needShowMore ? Array(item.catalogs.prefix(maxVisible)) : item.catalogs

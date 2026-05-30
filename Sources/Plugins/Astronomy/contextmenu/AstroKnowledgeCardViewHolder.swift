@@ -16,8 +16,11 @@ enum AstroKnowledgeCardViewHolder {
         row.alignment = .top
         row.spacing = 12
 
-        let iconView = UIImageView(image: UIImage(systemName: item.getIconName()))
-        iconView.tintColor = AstroContextMenuTheme.activeIcon
+        let iconName = item.getIconName()
+        let iconView = UIImageView(image: AstroIcon.original(iconName) ?? AstroIcon.template(iconName))
+        if iconName != "ic_action_telescope_colored" && iconName != "ic_action_sky_map_download" {
+            iconView.tintColor = AstroContextMenuTheme.activeIcon
+        }
         iconView.contentMode = .scaleAspectFit
         iconView.widthAnchor.constraint(equalToConstant: 34).isActive = true
         iconView.heightAnchor.constraint(equalToConstant: 34).isActive = true

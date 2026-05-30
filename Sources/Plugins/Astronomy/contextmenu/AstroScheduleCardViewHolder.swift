@@ -18,7 +18,7 @@ enum AstroScheduleCardViewHolder {
                          onShiftPeriod: @escaping (Int) -> Void,
                          onSelectDate: @escaping (Date) -> Void) -> UIView {
         let card = AstroCardContainerView(title: localizedString("astronomy_schedule"),
-                                          systemImageName: "calendar")
+                                          iconName: "ic_action_date_start")
 
         let nav = UIStackView()
         nav.axis = .horizontal
@@ -26,11 +26,11 @@ enum AstroScheduleCardViewHolder {
         nav.spacing = 8
 
         let prev = UIButton(type: .system)
-        prev.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        prev.setImage(AstroIcon.template("ic_arrow_back")?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         prev.tintColor = AstroContextMenuTheme.activeIcon
         prev.addAction(UIAction { _ in onShiftPeriod(-AstroScheduleCardController.periodDays) }, for: .touchUpInside)
         let next = UIButton(type: .system)
-        next.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        next.setImage(AstroIcon.template("ic_arrow_forward")?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         next.tintColor = AstroContextMenuTheme.activeIcon
         next.addAction(UIAction { _ in onShiftPeriod(AstroScheduleCardController.periodDays) }, for: .touchUpInside)
         let range = UILabel()

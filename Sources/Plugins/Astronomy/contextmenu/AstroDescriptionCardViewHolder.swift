@@ -24,7 +24,7 @@ enum AstroDescriptionCardViewHolder {
 
         if item.linkType != nil && (item.readMoreUri != nil || item.hasOfflineArticle) {
             var config = UIButton.Configuration.plain()
-            config.image = UIImage(systemName: item.linkType == .wikidata ? "link" : "globe")
+            config.image = AstroIcon.template(item.linkType == .wikidata ? "ic_action_logo_wikidata" : "ic_plugin_wikipedia")
             config.imagePadding = 8
             config.baseForegroundColor = AstroContextMenuTheme.activeText
             config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)

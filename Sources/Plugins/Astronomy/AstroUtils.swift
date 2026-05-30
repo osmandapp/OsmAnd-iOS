@@ -11,6 +11,44 @@ import Foundation
 import OsmAndShared
 import UIKit
 
+enum AstroIcon {
+    static func template(_ name: String) -> UIImage? {
+        UIImage.templateImageNamed(name)
+    }
+
+    static func original(_ name: String) -> UIImage? {
+        UIImage(named: name)?.withRenderingMode(.alwaysOriginal)
+    }
+
+    static func template(_ name: String, size: CGSize) -> UIImage? {
+        guard let image = template(name) else {
+            return nil
+        }
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            image.withRenderingMode(.alwaysTemplate).draw(in: CGRect(origin: .zero, size: size))
+        }.withRenderingMode(.alwaysTemplate)
+    }
+
+    static func layeredTemplate(baseName: String,
+                                baseColor: UIColor,
+                                overlayName: String,
+                                overlayColor: UIColor,
+                                size: CGSize = CGSize(width: 24, height: 24)) -> UIImage? {
+        guard let base = template(baseName),
+              let overlay = template(overlayName) else {
+            return template(baseName)
+        }
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            base.withTintColor(baseColor, renderingMode: .alwaysOriginal).draw(in: CGRect(origin: .zero, size: size))
+            overlay.withTintColor(overlayColor, renderingMode: .alwaysOriginal).draw(in: CGRect(origin: .zero, size: size))
+        }.withRenderingMode(.alwaysOriginal)
+    }
+}
+
 enum AstroUtils {
     private static let customStarLock = NSLock()
 
@@ -235,24 +273,24 @@ enum AstroUtils {
 
     static func getObjectTypeIcon(_ type: SkyObjectType) -> String {
         switch type {
-        case .STAR:
-            return "ic_action_favorites"
-        case .GALAXY, .GALAXY_CLUSTER:
-            return "ic_action_planet"
-        case .BLACK_HOLE:
-            return "ic_action_target"
         case .SUN:
             return "ic_action_sun"
         case .MOON:
             return "ic_action_moon"
         case .PLANET:
-            return "ic_action_planet"
+            return "ic_action_ufo"
+        case .STAR:
+            return "ic_action_favorite"
+        case .GALAXY, .GALAXY_CLUSTER:
+            return "ic_world_globe_dark"
         case .NEBULA:
-            return "ic_action_cloud"
-        case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
-            return "ic_action_group"
+            return "ic_action_clouds"
+        case .BLACK_HOLE:
+            return "ic_action_circle"
         case .CONSTELLATION:
-            return "ic_action_telescope"
+            return "ic_action_celestial_path"
+        case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
+            return "ic_action_favorite"
         }
     }
 

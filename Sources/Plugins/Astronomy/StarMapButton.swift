@@ -45,8 +45,8 @@ class StarMapButton: UIButton {
         tintColor = color
     }
 
-    func setIcon(systemName: String, accessibilityLabel: String? = nil) {
-        setImage(UIImage(systemName: systemName), for: .normal)
+    func setIcon(iconName: String, accessibilityLabel: String? = nil) {
+        setImage(AstroIcon.template(iconName), for: .normal)
         self.accessibilityLabel = accessibilityLabel
     }
 }

@@ -99,7 +99,7 @@ final class AstroConfigureViewBottomSheet: UIViewController {
         titleRow.addArrangedSubview(UIView())
 
         let closeButton = UIButton(type: .system)
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        closeButton.setImage(AstroIcon.template("ic_action_close_rounded"), for: .normal)
         closeButton.tintColor = UIColor(white: 0.78, alpha: 1)
         closeButton.backgroundColor = UIColor(white: 0.12, alpha: 1)
         closeButton.layer.cornerRadius = 16
@@ -120,7 +120,7 @@ final class AstroConfigureViewBottomSheet: UIViewController {
     private func addTopActionCards() {
         let row = horizontalCardRow()
         row.addArrangedSubview(actionCard(title: config.is2DMode ? localizedString("map_2d") : localizedString("map_3d"),
-                                          systemName: config.is2DMode ? "map" : "globe.europe.africa",
+                                          iconName: config.is2DMode ? "ic_action_celestial_path" : "ic_action_globe_view",
                                           selected: !config.is2DMode) { [weak self] in
             guard let self else {
                 return
@@ -130,7 +130,7 @@ final class AstroConfigureViewBottomSheet: UIViewController {
             rebuildContent()
         })
         row.addArrangedSubview(actionCard(title: localizedString("shared_string_map"),
-                                          systemName: commonConfig.showRegularMap ? "map.fill" : "map",
+                                          iconName: commonConfig.showRegularMap ? "ic_map" : "ic_action_map_outlined",
                                           selected: commonConfig.showRegularMap) { [weak self] in
             guard let self else {
                 return
@@ -140,7 +140,7 @@ final class AstroConfigureViewBottomSheet: UIViewController {
             rebuildContent()
         })
         row.addArrangedSubview(actionCard(title: localizedString("red_filter"),
-                                          systemName: config.showRedFilter ? "circle.fill" : "circle",
+                                          icon: redFilterIcon(selected: config.showRedFilter),
                                           selected: config.showRedFilter) { [weak self] in
             guard let self else {
                 return
@@ -156,34 +156,34 @@ final class AstroConfigureViewBottomSheet: UIViewController {
         let section = sectionCard(title: localizedString("astro_visible_objects"))
         section.addArrangedSubview(gridRow([
             actionCard(title: localizedString("astro_solar_system"),
-                       systemName: "circle.grid.cross",
+                       iconName: "ic_action_planet_outlined",
                        selected: config.showSun && config.showMoon && config.showPlanets) { [weak self] in
                 self?.toggleSolarSystem()
             },
             actionCard(title: localizedString("astro_constellations"),
-                       systemName: "point.3.connected.trianglepath.dotted",
+                       iconName: "ic_action_constellations",
                        selected: config.showConstellations) { [weak self] in
                 self?.mutateConfig { $0.showConstellations.toggle() }
             },
             actionCard(title: localizedString("astro_stars"),
-                       systemName: "sparkles",
+                       iconName: "ic_action_stars",
                        selected: config.showStars) { [weak self] in
                 self?.mutateConfig { $0.showStars.toggle() }
             }
         ]))
         section.addArrangedSubview(gridRow([
             actionCard(title: localizedString("astro_nebulas"),
-                       systemName: "cloud",
+                       iconName: "ic_action_nebulas",
                        selected: config.showNebulae) { [weak self] in
                 self?.mutateConfig { $0.showNebulae.toggle() }
             },
             actionCard(title: localizedString("astro_star_clusters"),
-                       systemName: "circle.hexagongrid",
+                       iconName: "ic_action_star_clusters",
                        selected: config.showOpenClusters && config.showGlobularClusters) { [weak self] in
                 self?.toggleStarClusters()
             },
             actionCard(title: localizedString("astro_deep_sky"),
-                       systemName: "circle.dotted",
+                       iconName: "ic_action_galaxy",
                        selected: config.showGalaxies && config.showBlackHoles && config.showGalaxyClusters) { [weak self] in
                 self?.toggleDeepSky()
             }
@@ -194,17 +194,17 @@ final class AstroConfigureViewBottomSheet: UIViewController {
     private func addPersonalSection() {
         let section = sectionCard(title: localizedString("personal_category_name"))
         section.addArrangedSubview(switchRow(title: localizedString("astro_directions"),
-                                             systemName: "location.north.line",
+                                             iconName: "ic_action_target_direction_on",
                                              isOn: config.showDirections) { [weak self] checked in
             self?.mutateConfig { $0.showDirections = checked }
         })
         section.addArrangedSubview(switchRow(title: localizedString("favorites_item"),
-                                             systemName: "bookmark.fill",
+                                             iconName: "ic_action_bookmark_filled",
                                              isOn: config.showFavorites) { [weak self] checked in
             self?.mutateConfig { $0.showFavorites = checked }
         })
         section.addArrangedSubview(switchRow(title: localizedString("astro_daily_path"),
-                                             systemName: "point.topleft.down.curvedto.point.bottomright.up",
+                                             iconName: "ic_action_target_path_on",
                                              isOn: config.showCelestialPaths) { [weak self] checked in
             self?.mutateConfig { $0.showCelestialPaths = checked }
         })
@@ -214,32 +214,32 @@ final class AstroConfigureViewBottomSheet: UIViewController {
     private func addRenderingSection() {
         let section = sectionCard(title: localizedString("astro_rendering"))
         section.addArrangedSubview(switchRow(title: localizedString("azimuthal_grid"),
-                                             systemName: "scope",
+                                             iconName: "ic_action_azimuthal_grid",
                                              isOn: config.showAzimuthalGrid) { [weak self] checked in
             self?.mutateConfig { $0.showAzimuthalGrid = checked }
         })
         section.addArrangedSubview(switchRow(title: localizedString("meridian_line"),
-                                             systemName: "line.diagonal",
+                                             iconName: "ic_action_meridian_line",
                                              isOn: config.showMeridianLine) { [weak self] checked in
             self?.mutateConfig { $0.showMeridianLine = checked }
         })
         section.addArrangedSubview(switchRow(title: localizedString("equatorial_grid"),
-                                             systemName: "globe",
+                                             iconName: "ic_action_equatorial_grid",
                                              isOn: config.showEquatorialGrid) { [weak self] checked in
             self?.mutateConfig { $0.showEquatorialGrid = checked }
         })
         section.addArrangedSubview(switchRow(title: localizedString("ecliptic_line"),
-                                             systemName: "circle.lefthalf.filled",
+                                             iconName: "ic_action_eliptical_line",
                                              isOn: config.showEclipticLine) { [weak self] checked in
             self?.mutateConfig { $0.showEclipticLine = checked }
         })
         section.addArrangedSubview(switchRow(title: localizedString("equator_line"),
-                                             systemName: "circle.grid.cross",
+                                             iconName: "ic_action_galaxy_equator",
                                              isOn: config.showEquatorLine) { [weak self] checked in
             self?.mutateConfig { $0.showEquatorLine = checked }
         })
         section.addArrangedSubview(switchRow(title: localizedString("galactic_line"),
-                                             systemName: "scribble.variable",
+                                             iconName: "ic_action_galaxy_line",
                                              isOn: config.showGalacticLine) { [weak self] checked in
             self?.mutateConfig { $0.showGalacticLine = checked }
         })
@@ -284,7 +284,11 @@ final class AstroConfigureViewBottomSheet: UIViewController {
         return wrapper
     }
 
-    private func actionCard(title: String, systemName: String, selected: Bool, action: @escaping () -> Void) -> UIControl {
+    private func actionCard(title: String, iconName: String, selected: Bool, action: @escaping () -> Void) -> UIControl {
+        actionCard(title: title, icon: AstroIcon.template(iconName), selected: selected, action: action)
+    }
+
+    private func actionCard(title: String, icon: UIImage?, selected: Bool, action: @escaping () -> Void) -> UIControl {
         let control = UIControl()
         control.translatesAutoresizingMaskIntoConstraints = false
         control.backgroundColor = selected ? .systemBlue : UIColor(white: 0.12, alpha: 1)
@@ -301,15 +305,15 @@ final class AstroConfigureViewBottomSheet: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         control.addSubview(stack)
 
-        let icon = UIImageView(image: UIImage(systemName: systemName))
-        icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.tintColor = selected ? .white : .systemBlue
-        icon.contentMode = .scaleAspectFit
+        let iconView = UIImageView(image: icon)
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.tintColor = selected ? .white : .systemBlue
+        iconView.contentMode = .scaleAspectFit
         NSLayoutConstraint.activate([
-            icon.widthAnchor.constraint(equalToConstant: 22),
-            icon.heightAnchor.constraint(equalToConstant: 22)
+            iconView.widthAnchor.constraint(equalToConstant: 22),
+            iconView.heightAnchor.constraint(equalToConstant: 22)
         ])
-        stack.addArrangedSubview(icon)
+        stack.addArrangedSubview(iconView)
 
         let label = UILabel()
         label.text = title
@@ -328,7 +332,7 @@ final class AstroConfigureViewBottomSheet: UIViewController {
         return control
     }
 
-    private func switchRow(title: String, systemName: String, isOn: Bool, action: @escaping (Bool) -> Void) -> UIView {
+    private func switchRow(title: String, iconName: String, isOn: Bool, action: @escaping (Bool) -> Void) -> UIView {
         let row = UIControl()
         row.translatesAutoresizingMaskIntoConstraints = false
         row.backgroundColor = .clear
@@ -343,7 +347,7 @@ final class AstroConfigureViewBottomSheet: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         row.addSubview(stack)
 
-        let icon = UIImageView(image: UIImage(systemName: systemName))
+        let icon = UIImageView(image: AstroIcon.template(iconName))
         icon.translatesAutoresizingMaskIntoConstraints = false
         icon.tintColor = isOn ? .systemBlue : UIColor(white: 0.55, alpha: 1)
         icon.contentMode = .scaleAspectFit
@@ -375,6 +379,16 @@ final class AstroConfigureViewBottomSheet: UIViewController {
             stack.bottomAnchor.constraint(equalTo: row.bottomAnchor)
         ])
         return row
+    }
+
+    private func redFilterIcon(selected: Bool) -> UIImage? {
+        guard selected else {
+            return AstroIcon.template("ic_action_red_filter_off")
+        }
+        return AstroIcon.layeredTemplate(baseName: "ic_action_red_filter_base_on",
+                                         baseColor: .white,
+                                         overlayName: "ic_action_red_filter_overlay_on",
+                                         overlayColor: .systemRed)
     }
 
     private func mutateConfig(_ mutation: (inout AstronomyPluginSettings.StarMapConfig) -> Void) {

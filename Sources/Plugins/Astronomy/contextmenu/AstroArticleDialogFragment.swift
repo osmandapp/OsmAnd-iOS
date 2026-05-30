@@ -81,7 +81,7 @@ final class AstroArticleDialogFragment: UIViewController {
 
         let closeButton = UIButton(type: .system)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        closeButton.setImage(AstroIcon.template("ic_action_close"), for: .normal)
         closeButton.tintColor = AstroContextMenuTheme.secondaryIcon
         closeButton.addAction(UIAction { [weak self] _ in
             self?.dismiss(animated: true)
@@ -90,7 +90,7 @@ final class AstroArticleDialogFragment: UIViewController {
 
         readFullArticleButton.translatesAutoresizingMaskIntoConstraints = false
         readFullArticleButton.setTitle(localizedString("context_menu_read_full_article"), for: .normal)
-        readFullArticleButton.setImage(UIImage(systemName: "globe"), for: .normal)
+        readFullArticleButton.setImage(AstroIcon.template("ic_world_globe_dark"), for: .normal)
         readFullArticleButton.tintColor = .white
         readFullArticleButton.backgroundColor = AstroContextMenuTheme.primaryButton
         readFullArticleButton.layer.cornerRadius = 10

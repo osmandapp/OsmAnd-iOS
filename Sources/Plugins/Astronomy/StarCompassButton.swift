@@ -9,23 +9,8 @@
 import UIKit
 
 final class StarCompassButton: StarMapButton {
-    private static let arrowImage: UIImage = {
-        let size = CGSize(width: 28, height: 28)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { _ in
-            let path = UIBezierPath()
-            path.move(to: CGPoint(x: 14, y: 3))
-            path.addLine(to: CGPoint(x: 23, y: 24))
-            path.addLine(to: CGPoint(x: 14, y: 19))
-            path.addLine(to: CGPoint(x: 5, y: 24))
-            path.close()
-            UIColor.white.setFill()
-            path.fill()
-        }.withRenderingMode(.alwaysTemplate)
-    }()
-
     var onSingleTap: (() -> Void)?
-    private let arrowView = UIImageView(image: StarCompassButton.arrowImage)
+    private let arrowView = UIImageView(image: AstroIcon.template("ic_compass_white"))
     private var currentRotation: CGFloat = 0
 
     override init(frame: CGRect) {

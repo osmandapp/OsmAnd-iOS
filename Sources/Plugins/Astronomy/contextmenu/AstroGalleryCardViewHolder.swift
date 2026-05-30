@@ -14,13 +14,13 @@ enum AstroGalleryCardViewHolder {
                          onUpdateImage: @escaping () -> Void,
                          onToggle: @escaping (String) -> Void) -> UIView {
         let card = AstroCardContainerView(title: localizedString("online_photos"),
-                                          systemImageName: "photo.on.rectangle")
+                                          iconName: "ic_action_photo")
         let toggleButton = UIButton(type: .system)
         toggleButton.contentHorizontalAlignment = .leading
         toggleButton.tintColor = AstroContextMenuTheme.activeIcon
         toggleButton.setTitleColor(AstroContextMenuTheme.activeText, for: .normal)
         toggleButton.setTitle(toggleTitle(for: item.state), for: .normal)
-        toggleButton.setImage(UIImage(systemName: toggleImageName(for: item.state)), for: .normal)
+        toggleButton.setImage(AstroIcon.template(toggleIconName(for: item.state)), for: .normal)
         toggleButton.addAction(UIAction { _ in onToggle(item.wid) }, for: .touchUpInside)
         card.stack.addArrangedSubview(toggleButton)
 
@@ -99,14 +99,14 @@ enum AstroGalleryCardViewHolder {
         }
     }
 
-    private static func toggleImageName(for state: AstroGalleryState) -> String {
+    private static func toggleIconName(for state: AstroGalleryState) -> String {
         switch state {
         case .collapsed:
-            return "chevron.down"
+            return "ic_action_arrow_down"
         case .loading:
-            return "hourglass"
+            return "ic_action_time"
         case .ready:
-            return "chevron.up"
+            return "ic_action_arrow_up"
         }
     }
 }
@@ -151,7 +151,7 @@ private final class AstroGalleryThumbnailView: UIControl {
 
         guard let imageCard = card as? ImageCard,
               let url = URL(string: imageCard.imageUrl) else {
-            imageView.image = UIImage(systemName: "photo")
+            imageView.image = AstroIcon.template("ic_action_photo")
             imageView.tintColor = AstroContextMenuTheme.secondaryIcon
             return
         }

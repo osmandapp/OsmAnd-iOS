@@ -67,6 +67,9 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         onCatalogClick: { [weak self] catalog in self?.openCatalogSearch(catalog) }
     )
 
+    private let sheetHeaderView = UIView()
+    private let titleLabel = UILabel()
+    private let closeButton = UIButton(type: .close)
     private let headerType = UILabel()
     private let metricsContainer = UIView()
     private let actionsStack = UIStackView()
@@ -250,6 +253,25 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private func setupView() {
         view.backgroundColor = AstroContextMenuTheme.pageBackground
 
+        sheetHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(sheetHeaderView)
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.textColor = AstroContextMenuTheme.primaryText
+        titleLabel.lineBreakMode = .byTruncatingTail
+        titleLabel.numberOfLines = 1
+        titleLabel.accessibilityTraits = .header
+        sheetHeaderView.addSubview(titleLabel)
+
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.tintColor = AstroContextMenuTheme.primaryText
+        closeButton.accessibilityLabel = localizedString("shared_string_close")
+        closeButton.addAction(UIAction { [weak self] _ in
+            self?.dependencies.onClose()
+        }, for: .touchUpInside)
+        sheetHeaderView.addSubview(closeButton)
+
         headerType.translatesAutoresizingMaskIntoConstraints = false
         headerType.font = .systemFont(ofSize: 17)
         headerType.numberOfLines = 2
@@ -275,11 +297,12 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         contentStack.axis = .vertical
         contentStack.spacing = 12
         contentStack.isLayoutMarginsRelativeArrangement = true
-        contentStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+        contentStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentStack)
 
         contentStack.addArrangedSubview(headerType)
+        contentStack.setCustomSpacing(16, after: headerType)
         contentStack.addArrangedSubview(metricsContainer)
         contentStack.addArrangedSubview(actionsStack)
 
@@ -292,6 +315,20 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         view.addSubview(tabBar)
 
         NSLayoutConstraint.activate([
+            sheetHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sheetHeaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            sheetHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+
+            titleLabel.leadingAnchor.constraint(equalTo: sheetHeaderView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -16),
+            titleLabel.topAnchor.constraint(equalTo: sheetHeaderView.topAnchor, constant: 18),
+            titleLabel.bottomAnchor.constraint(equalTo: sheetHeaderView.bottomAnchor, constant: -4),
+
+            closeButton.trailingAnchor.constraint(equalTo: sheetHeaderView.trailingAnchor, constant: -16),
+            closeButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            closeButton.widthAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: 44),
+
             metricsContainer.heightAnchor.constraint(equalToConstant: 62),
             actionsStack.heightAnchor.constraint(equalToConstant: 66),
 
@@ -301,7 +338,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: sheetHeaderView.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
@@ -328,6 +365,8 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
 
     private func applyTheme() {
         view.backgroundColor = AstroContextMenuTheme.pageBackground
+        titleLabel.textColor = AstroContextMenuTheme.primaryText
+        closeButton.tintColor = AstroContextMenuTheme.primaryText
         headerType.textColor = AstroContextMenuTheme.secondaryText
         metricsContainer.backgroundColor = .clear
         configureTabBarAppearance()
@@ -341,20 +380,12 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func configureNavigationBar() {
+        title = nil
+        navigationItem.title = nil
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: AstroIcon.template("ic_action_close"),
-                                                            primaryAction: UIAction { [weak self] _ in
-                                                                self?.dependencies.onClose()
-                                                            },
-                                                            menu: nil)
-        navigationController?.navigationBar.prefersLargeTitles = false
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithDefaultBackground()
-        appearance.titleTextAttributes = [.foregroundColor: AstroContextMenuTheme.primaryText]
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.tintColor = AstroContextMenuTheme.activeIcon
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = nil
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     private func configureTabBarAppearance() {
@@ -852,8 +883,9 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func setTitle(_ name: String) {
-        title = name
-        navigationItem.title = name
+        title = nil
+        navigationItem.title = nil
+        titleLabel.text = name
     }
 
     private func createUiTimeFormatter() -> DateFormatter {

@@ -158,6 +158,10 @@ final class AstroDataDbProvider: AstroDataProvider {
                 return db
             }
         }
+        if let path = Bundle.main.path(forResource: "stars", ofType: "db", inDirectory: "Shipped"),
+           let db = SQLiteDatabase(path: path) {
+            return db
+        }
         return nil
     }
 

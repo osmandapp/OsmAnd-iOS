@@ -368,7 +368,7 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{
         OAResourceItem *item = [self getItem:indexPath];
-        if ([item isKindOfClass:OALocalResourceItem.class])
+        if ([item isKindOfClass:OALocalResourceItem.class] || item.isInstalled)
             [self.delegate onDetailsSelected:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }];
 }

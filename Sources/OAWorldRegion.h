@@ -79,6 +79,7 @@
 
 + (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
 
+- (BOOL)isMapCreatedByJoiningSubregionsForType:(NSNumber *)type;
 - (void)buildResourceGroupItem;
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type;
 - (BOOL)hasGroupItems;

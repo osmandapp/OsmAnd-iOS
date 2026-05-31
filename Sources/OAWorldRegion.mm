@@ -870,7 +870,17 @@
 
 - (BOOL)isRegionJoinRoadsItem:(OAResourceItem *)item
 {
-    return item.worldRegion.regionRoads && item.worldRegion.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
+    return item.resourceType == OsmAndResourceType::RoadMapRegion && [item.worldRegion isMapCreatedByJoiningSubregionsForType:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]];
+}
+
+- (BOOL)isMapCreatedByJoiningSubregionsForType:(NSNumber *)type
+{
+    OsmAndResourceType resourceType = [OAResourceType toResourceType:type isGroup:NO];
+    if (resourceType == OsmAndResourceType::MapRegion)
+        return self.regionJoinMap;
+    if (resourceType == OsmAndResourceType::RoadMapRegion)
+        return self.regionJoinRoads || self.regionJoinMap;  // как Android ROADS_FILE
+    return NO;
 }
 
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type

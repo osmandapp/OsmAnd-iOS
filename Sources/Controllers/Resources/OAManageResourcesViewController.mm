@@ -656,7 +656,6 @@ static BOOL _repositoryUpdated = NO;
 - (void) updateContent
 {
     NSLog(@"updateContent");
-    [_downloadingCellResourceHelper cleanCellCache];
     _doDataUpdate = YES;
     _customRegions = [OAPluginsHelper getCustomDownloadRegions];
     [self updateMultipleResources];
@@ -853,7 +852,7 @@ static BOOL _repositoryUpdated = NO;
                             [typesArray addObject:@((int) resource->type)];
                         break;
                     case OsmAndResourceType::RoadMapRegion:
-                        if (!region.regionJoinRoads)
+                        if (![region isMapCreatedByJoiningSubregionsForType:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]])
                             [typesArray addObject:@((int) resource->type)];
                         break;
                     case OsmAndResourceType::SrtmMapRegion:
@@ -999,16 +998,8 @@ static BOOL _repositoryUpdated = NO;
     [_regionMapItems addObjectsFromArray:regionMapArray];
 
     NSString *russiaRegionId = OsmAnd::WorldRegions::RussiaRegionId.toNSString();
-    NSString *australiaAndOceaniaRegionId = [NSString stringWithFormat:@"%@_australia", OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()];
-    NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
     
-    if ([self.region hasGroupItems]
-        && (([self.region getLevel] > 1 && _regionMapItems.count > 0)
-            || self.region.regionJoinMap
-            || self.region.regionJoinRoads
-            || [self.region.regionId hasPrefix:russiaRegionId]
-            || [self.region.regionId hasPrefix:unitedKingdomRegionId]
-            || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
+    if ([self.region hasGroupItems] && ([self.region getLevel] > 1 || [self.region.regionId hasPrefix:russiaRegionId]))
     {
         NSMutableArray<NSNumber *> *regionMapItemsTypes = [NSMutableArray new];
         for (OAResourceItem *resource in _regionMapItems)
@@ -1019,6 +1010,8 @@ static BOOL _repositoryUpdated = NO;
         for (NSNumber *type in regionMapItemsTypesInGroup)
         {
             OsmAndResourceType resourceType = [OAResourceType toResourceType:type isGroup:YES];
+            if (resourceType == OsmAndResourceType::RoadMapRegion && !self.region.regionRoads && ![self.region isMapCreatedByJoiningSubregionsForType:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]])
+                continue;
             if (resourceType != [OAResourceType unknownType])
             {
                 OAMultipleResourceItem *multipleResourceItem = [[OAMultipleResourceItem alloc] initWithType:resourceType items:[self.region.groupItem getItems:resourceType]];
@@ -1094,7 +1087,8 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL)shouldJoinRoadMapRegionItem:(OAResourceItem *)item inRegion:(OAWorldRegion *)region
 {
-    return region.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
+    return [region isMapCreatedByJoiningSubregionsForType:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
+            && item.resourceType == OsmAndResourceType::RoadMapRegion;
 }
 
 - (void) collectSubregionItems:(OAWorldRegion *)region
@@ -1939,7 +1933,7 @@ static BOOL _repositoryUpdated = NO;
     }
 }
 
-- (void) onItemClicked:(id)senderItem
+- (void) onItemClicked:(id)senderItem sourceView:(UIView *)sourceView
 {
     if ([senderItem isKindOfClass:OAMultipleResourceItem.class])
     {
@@ -1990,7 +1984,7 @@ static BOOL _repositoryUpdated = NO;
     }
     else
     {
-        [super onItemClicked:senderItem];
+        [super onItemClicked:senderItem sourceView:_lastPressedCell];
     }
 }
 
@@ -2941,6 +2935,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
+    _lastPressedCell = [tableView cellForRowAtIndexPath:indexPath];
     [self onCellClicked:indexPath];
 }
 
@@ -2981,25 +2976,25 @@ static BOOL _repositoryUpdated = NO;
 
         if ([item isKindOfClass:[OAMultipleResourceItem class]])
         {
-            [self onItemClicked:item];
+            [self onItemClicked:item sourceView:_lastPressedCell];
         }
         else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
         {
             if (((OAOutdatedResourceItem *) item).downloadTask != nil)
-                [self onItemClicked:item];
+                [self onItemClicked:item sourceView:_lastPressedCell];
             else
                 [self showDetailsOf:item];
         }
         else if ([item isKindOfClass:OACustomResourceItem.class])
         {
             if (((OACustomResourceItem *) item).downloadTask != nil)
-                [self onItemClicked:item];
+                [self onItemClicked:item sourceView:_lastPressedCell];
             else
                 [self showDetailsOfCustomItem:item];
         }
         else if (![item isKindOfClass:[OALocalResourceItem class]])
         {
-            [self onItemClicked:item];
+            [self onItemClicked:item sourceView:_lastPressedCell];
         }
         else if ([item isKindOfClass:OALocalResourceItem.class] && ((OAResourceItem *) item).resourceType == OsmAndResourceType::WeatherForecast)
         {

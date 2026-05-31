@@ -195,6 +195,13 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
                 completionHandler:(void(^)(UIAlertController *))completionHandler
                            silent:(BOOL)silent;
 
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
+                       sourceView:(UIView *)sourceView
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+                completionHandler:(void(^)(UIAlertController *))completionHandler
+                           silent:(BOOL)silent;
+
 + (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
@@ -281,8 +288,6 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
                                includeDownloaded:(BOOL)includeDownloaded
                                            limit:(NSInteger)limit
                              skipIfOneDownloaded:(BOOL)skipIfOneDownloaded;
-
-+ (BOOL)isIndexItemDownloadedOrDownloading:(OsmAndResourceType)type downloadRegion:(OAWorldRegion *)downloadRegion;
 
 + (CLLocationCoordinate2D) getMapLocation;
 

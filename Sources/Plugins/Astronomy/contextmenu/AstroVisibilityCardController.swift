@@ -6,6 +6,7 @@
 //  Copyright (c) 2026 OsmAnd. All rights reserved.
 //
 
+import CoreLocation
 import Foundation
 import OsmAndShared
 import UIKit
@@ -36,6 +37,7 @@ final class AstroVisibilityCardController {
     private var graphObserverLon = Double.nan
     private var graphObserverHeight = Double.nan
     private var computeWorkItem: DispatchWorkItem?
+    private var locationWorkItem: DispatchWorkItem?
     private let titleDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("EEEEMMMMd")
@@ -93,11 +95,13 @@ final class AstroVisibilityCardController {
         culminationColor = AstroChartColorPalette().colorForObjectAltitude(culmination.altitude ?? 0.0)
         maybeRecomputeGraph(skyObject: skyObject, observer: observer, date: self.date, timeZone: timeZone)
 
-        let locationKey = "\(observer.latitude),\(observer.longitude)"
+        let location = resolveLocationTarget(observer: observer)
+        let locationKey = String(format: "%.6f,%.6f", location.coordinate.latitude, location.coordinate.longitude)
         if lastLocationKey != locationKey || locationText.isEmpty {
             lastLocationKey = locationKey
-            locationText = formatCoordinates(latitude: observer.latitude, longitude: observer.longitude)
+            locationText = formatCoordinates(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             onDataChanged?()
+            requestLocationText(location: location, key: locationKey)
         }
     }
 
@@ -119,6 +123,8 @@ final class AstroVisibilityCardController {
     func cancelPendingWork() {
         computeWorkItem?.cancel()
         computeWorkItem = nil
+        locationWorkItem?.cancel()
+        locationWorkItem = nil
     }
 
     private func maybeRecomputeGraph(skyObject: SkyObject,
@@ -191,15 +197,75 @@ final class AstroVisibilityCardController {
     private func formatCoordinates(latitude: Double, longitude: Double) -> String {
         let latDir = localizedString(latitude >= 0.0 ? "north_abbreviation" : "south_abbreviation")
         let lonDir = localizedString(longitude >= 0.0 ? "east_abbreviation" : "west_abbreviation")
-        return String(format: "%.2f° %@, %.2f° %@", abs(latitude), latDir, abs(longitude), lonDir)
+        return String(format: "%.2f° %@, %.2f° %@",
+                      locale: Locale(identifier: "en_US_POSIX"),
+                      abs(latitude),
+                      latDir,
+                      abs(longitude),
+                      lonDir)
     }
 
     private func createTimeFormatter(timeZone: TimeZone) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.timeZone = timeZone
-        formatter.timeStyle = .short
-        formatter.dateStyle = .none
+        formatter.locale = .current
+        formatter.dateFormat = OAUtilities.is12HourTimeFormat() ? "h:mm a" : "HH:mm"
         return formatter
+    }
+
+    private func resolveLocationTarget(observer: Observer) -> CLLocation {
+        if let trackingUtilities = OAMapViewTrackingUtilities.instance(),
+           trackingUtilities.isMapLinkedToLocation(),
+           let lastKnownLocation = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation {
+            return lastKnownLocation
+        }
+        if let mapLocation = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() {
+            return mapLocation
+        }
+        return CLLocation(latitude: observer.latitude, longitude: observer.longitude)
+    }
+
+    private func requestLocationText(location: CLLocation, key: String) {
+        locationWorkItem?.cancel()
+        let coordinate = location.coordinate
+        let coords = formatCoordinates(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let mapPanel = OARootViewController.instance()?.mapPanel
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else {
+                return
+            }
+            let address = mapPanel?.findRoadName(byLat: coordinate.latitude, lon: coordinate.longitude)
+            let resolved = self.extractCity(address) ?? coords
+            DispatchQueue.main.async { [weak self] in
+                guard let self,
+                      !(self.locationWorkItem?.isCancelled ?? true),
+                      self.lastLocationKey == key else {
+                    return
+                }
+                let changed = self.locationText != resolved
+                self.locationText = resolved
+                self.locationWorkItem = nil
+                if changed {
+                    self.onDataChanged?()
+                }
+            }
+        }
+        locationWorkItem = workItem
+        DispatchQueue.global(qos: .userInitiated).async(execute: workItem)
+    }
+
+    private func extractCity(_ address: String?) -> String? {
+        guard var normalized = address?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !normalized.isEmpty else {
+            return nil
+        }
+        let nearPrefix = "\(localizedString("shared_string_near")) "
+        if normalized.hasPrefix(nearPrefix) {
+            normalized.removeFirst(nearPrefix.count)
+            normalized = normalized.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        let city = normalized.components(separatedBy: ",").last?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return city.isEmpty ? nil : city
     }
 
     private func normalizedDay(_ date: Date, timeZone: TimeZone) -> Date {

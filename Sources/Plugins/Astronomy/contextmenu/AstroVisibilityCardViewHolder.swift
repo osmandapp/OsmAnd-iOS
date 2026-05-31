@@ -12,16 +12,29 @@ enum AstroVisibilityCardViewHolder {
     static func makeView(item: AstroVisibilityCardItem,
                          onResetToToday: @escaping () -> Void,
                          onCursorTimeChanged: @escaping (Int64) -> Void) -> UIView {
-        let card = AstroCardContainerView()
+        let card = UIView()
+        card.translatesAutoresizingMaskIntoConstraints = false
+        card.backgroundColor = AstroContextMenuTheme.cardBackground
+        card.layer.cornerRadius = 12
+        card.layer.masksToBounds = true
+
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 0
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(stack)
 
         let header = UIStackView()
         header.axis = .horizontal
         header.alignment = .center
         header.spacing = 8
+        header.isLayoutMarginsRelativeArrangement = true
+        header.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: item.showResetButton ? 8 : 16)
+        header.heightAnchor.constraint(greaterThanOrEqualToConstant: 48).isActive = true
         let title = UILabel()
         title.text = item.titleText
         title.textColor = AstroContextMenuTheme.primaryText
-        title.font = .systemFont(ofSize: 20, weight: .bold)
+        title.font = .systemFont(ofSize: 16, weight: .bold)
         title.numberOfLines = 0
         header.addArrangedSubview(title)
         if item.showResetButton {
@@ -30,91 +43,140 @@ enum AstroVisibilityCardViewHolder {
             resetButton.tintColor = AstroContextMenuTheme.activeIcon
             resetButton.accessibilityLabel = localizedString("astro_visibility_show_today")
             resetButton.addAction(UIAction { _ in onResetToToday() }, for: .touchUpInside)
-            resetButton.widthAnchor.constraint(equalToConstant: 36).isActive = true
-            resetButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
+            resetButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+            resetButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
             header.addArrangedSubview(resetButton)
         }
-        card.stack.addArrangedSubview(header)
+        stack.addArrangedSubview(header)
 
         let graphView = AstroVisibilityGraphView()
         graphView.translatesAutoresizingMaskIntoConstraints = false
-        graphView.heightAnchor.constraint(equalToConstant: 270).isActive = true
+        graphView.heightAnchor.constraint(equalToConstant: 220).isActive = true
         graphView.submitGraph(item.graph, cursorReferenceTimeMillis: item.cursorReferenceTimeMillis)
         graphView.onCursorTimeChanged = onCursorTimeChanged
-        card.stack.addArrangedSubview(graphView)
+        stack.addArrangedSubview(graphView)
 
         let events = UIStackView()
         events.axis = .horizontal
         events.alignment = .fill
-        events.distribution = .fillEqually
-        events.spacing = 6
-        addEvent(to: events,
-                 time: item.riseTime,
-                 symbol: "▲",
-                 title: localizedString("astro_rise"),
-                 symbolColor: AstroContextMenuTheme.activeIcon)
-        addEvent(to: events,
-                 time: item.culminationTime,
-                 symbol: "●",
-                 title: localizedString("astro_culmination"),
-                 symbolColor: item.culminationColor)
-        addEvent(to: events,
-                 time: item.setTime,
-                 symbol: "▼",
-                 title: localizedString("astro_set"),
-                 symbolColor: AstroContextMenuTheme.activeIcon)
-        if !events.arrangedSubviews.isEmpty {
-            card.stack.addArrangedSubview(events)
+        events.distribution = .fill
+        events.spacing = 0
+        events.isLayoutMarginsRelativeArrangement = true
+        events.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 0, trailing: 16)
+        let rise = makeEvent(time: item.riseTime,
+                             symbol: "▲",
+                             title: localizedString("astro_rise"),
+                             symbolColor: AstroContextMenuTheme.activeIcon)
+        let culmination = makeEvent(time: item.culminationTime,
+                                    symbol: "●",
+                                    title: localizedString("astro_culmination"),
+                                    symbolColor: item.culminationColor)
+        let set = makeEvent(time: item.setTime,
+                            symbol: "▼",
+                            title: localizedString("astro_set"),
+                            symbolColor: AstroContextMenuTheme.activeIcon)
+        let eventViews = [rise, culmination, set].compactMap { $0 }
+        if !eventViews.isEmpty {
+            if let rise {
+                events.addArrangedSubview(rise)
+            }
+            if rise != nil && culmination != nil {
+                events.addArrangedSubview(makeDivider())
+            }
+            if let culmination {
+                events.addArrangedSubview(culmination)
+            }
+            if culmination != nil && set != nil {
+                events.addArrangedSubview(makeDivider())
+            }
+            if let set {
+                events.addArrangedSubview(set)
+            }
+            eventViews.dropFirst().forEach { $0.widthAnchor.constraint(equalTo: eventViews[0].widthAnchor).isActive = true }
+            stack.addArrangedSubview(events)
         }
 
         if !item.locationText.isEmpty {
             let location = UILabel()
             location.text = item.locationText
             location.textColor = AstroContextMenuTheme.secondaryText
-            location.font = .systemFont(ofSize: 17)
+            location.font = .systemFont(ofSize: 14)
             location.numberOfLines = 0
-            let row = UIStackView(arrangedSubviews: [UIImageView(image: AstroIcon.template("ic_action_marker_dark")), location])
+            let iconView = UIImageView(image: AstroIcon.template("ic_action_marker_dark"))
+            iconView.tintColor = AstroContextMenuTheme.secondaryIcon
+            iconView.contentMode = .scaleAspectFit
+            let row = UIStackView(arrangedSubviews: [iconView, location])
             row.axis = .horizontal
             row.alignment = .center
-            row.spacing = 7
-            (row.arrangedSubviews.first as? UIImageView)?.tintColor = AstroContextMenuTheme.secondaryIcon
-            row.arrangedSubviews.first?.widthAnchor.constraint(equalToConstant: 16).isActive = true
-            card.stack.addArrangedSubview(row)
+            row.spacing = 10
+            row.isLayoutMarginsRelativeArrangement = true
+            row.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 16, trailing: 16)
+            iconView.widthAnchor.constraint(equalToConstant: 20).isActive = true
+            iconView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            stack.addArrangedSubview(row)
         }
+
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
+            stack.topAnchor.constraint(equalTo: card.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor)
+        ])
         return card
     }
 
-    private static func addEvent(to stack: UIStackView,
-                                 time: String?,
-                                 symbol: String,
-                                 title: String,
-                                 symbolColor: UIColor) {
+    private static func makeEvent(time: String?,
+                                  symbol: String,
+                                  title: String,
+                                  symbolColor: UIColor) -> UIView? {
         guard let time, !time.isEmpty else {
-            return
+            return nil
         }
         let block = UIStackView()
         block.axis = .vertical
-        block.alignment = .center
+        block.alignment = .leading
         block.spacing = 3
-        let symbolLabel = UILabel()
-        symbolLabel.text = symbol
-        symbolLabel.textColor = symbolColor
-        symbolLabel.font = .systemFont(ofSize: 14, weight: .bold)
+        let valueRow = UIStackView()
+        valueRow.axis = .horizontal
+        valueRow.alignment = .center
+        valueRow.spacing = 6
         let timeLabel = UILabel()
         timeLabel.text = time
         timeLabel.textColor = AstroContextMenuTheme.activeText
-        timeLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        timeLabel.font = .systemFont(ofSize: 16, weight: .bold)
         timeLabel.adjustsFontSizeToFitWidth = true
         timeLabel.minimumScaleFactor = 0.75
+        let symbolLabel = UILabel()
+        symbolLabel.text = symbol
+        symbolLabel.textColor = symbolColor
+        symbolLabel.font = .systemFont(ofSize: 12, weight: .bold)
         let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.textColor = AstroContextMenuTheme.secondaryText
-        titleLabel.font = .systemFont(ofSize: 14)
+        titleLabel.font = .systemFont(ofSize: 12)
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.7
-        block.addArrangedSubview(symbolLabel)
-        block.addArrangedSubview(timeLabel)
+        valueRow.addArrangedSubview(timeLabel)
+        valueRow.addArrangedSubview(symbolLabel)
+        block.addArrangedSubview(valueRow)
         block.addArrangedSubview(titleLabel)
-        stack.addArrangedSubview(block)
+        return block
+    }
+
+    private static func makeDivider() -> UIView {
+        let divider = UIView()
+        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        let wrapper = UIView()
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.addSubview(divider)
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            wrapper.widthAnchor.constraint(equalToConstant: 17),
+            divider.centerXAnchor.constraint(equalTo: wrapper.centerXAnchor),
+            divider.topAnchor.constraint(equalTo: wrapper.topAnchor),
+            divider.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor)
+        ])
+        return wrapper
     }
 }

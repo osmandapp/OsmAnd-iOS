@@ -67,6 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) reopenContextMenu;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
+- (NSString *) findRoadNameByLat:(double)lat lon:(double)lon;
 - (BOOL) isRouteInfoVisible;
 - (void) processNoSymbolFound:(CLLocationCoordinate2D)coord forceHide:(BOOL)forceHide;
 

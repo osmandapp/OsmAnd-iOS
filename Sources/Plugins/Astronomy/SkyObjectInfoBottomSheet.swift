@@ -726,7 +726,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
               article.hasOfflineContent() else {
             return false
         }
-        return AstroArticleDialogFragment.showInstance(from: self, article: article)
+        return AstroArticleViewController.showInstance(from: self, article: article)
     }
 
     private func buildKnowledgeCardItem() -> AstroKnowledgeCardItem? {

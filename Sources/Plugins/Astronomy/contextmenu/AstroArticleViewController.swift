@@ -1,16 +1,16 @@
 //
-//  AstroArticleDialogFragment.swift
+//  AstroArticleViewController.swift
 //  OsmAnd Maps
 //
-//  Ported from Android AstroArticleDialogFragment.kt.
+//  Ported from the Android astronomy article dialog.
 //  Copyright (c) 2026 OsmAnd. All rights reserved.
 //
 
 import UIKit
 import WebKit
 
-final class AstroArticleDialogFragment: UIViewController {
-    static let tag = "AstroArticleDialogFragment"
+final class AstroArticleViewController: UIViewController {
+    static let tag = "AstroArticleViewController"
     private static let bodyContentRegex = try? NSRegularExpression(pattern: "<body[^>]*>([\\s\\S]*?)</body>",
                                                                    options: [.caseInsensitive])
 
@@ -37,8 +37,8 @@ final class AstroArticleDialogFragment: UIViewController {
     }
 
     static func showInstance(from viewController: UIViewController, article: AstroArticle) -> Bool {
-        let fragment = AstroArticleDialogFragment(article: article)
-        viewController.present(fragment, animated: true)
+        let viewControllerToPresent = AstroArticleViewController(article: article)
+        viewController.present(viewControllerToPresent, animated: true)
         return true
     }
 

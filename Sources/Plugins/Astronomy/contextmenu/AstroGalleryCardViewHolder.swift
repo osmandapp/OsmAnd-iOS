@@ -101,6 +101,7 @@ private final class AstroGalleryCardView: UIView {
 
         let arrowContainer = UIView()
         arrowContainer.translatesAutoresizingMaskIntoConstraints = false
+        arrowContainer.isUserInteractionEnabled = false
 
         [iconView, titleLabel, arrowContainer].forEach(headerButton.addSubview)
         arrowContainer.addSubview(arrowView)
@@ -193,11 +194,9 @@ private final class AstroGalleryCardView: UIView {
     }
 
     private func makeShowAllButton(cards: [ImageCard]) -> UIButton {
-        var config = UIButton.Configuration.filled()
+        var config = UIButton.Configuration.plain()
         config.title = localizedString("shared_string_show_all")
-        config.baseBackgroundColor = AstroContextMenuTheme.secondaryButton
         config.baseForegroundColor = AstroContextMenuTheme.activeText
-        config.cornerStyle = .capsule
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20)
 
         let button = UIButton(configuration: config)

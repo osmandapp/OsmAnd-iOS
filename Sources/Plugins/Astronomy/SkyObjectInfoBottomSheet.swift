@@ -788,7 +788,9 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             return
         }
         let targetFrame = target.convert(target.bounds, to: scrollView)
-        let maxOffsetY = max(0, scrollView.contentSize.height - scrollView.bounds.height)
+        let maxOffsetY = max(0, scrollView.contentSize.height
+                             + scrollView.adjustedContentInset.bottom
+                             - scrollView.bounds.height)
         let targetY = min(maxOffsetY, max(0, targetFrame.minY - 8))
         setScrollViewContentOffset(CGPoint(x: 0, y: targetY), animated: animated)
     }

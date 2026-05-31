@@ -62,6 +62,9 @@ final class AstroScheduleGraphView: UIView {
     }
 
     private func drawObjectVisibilityOverlay(_ model: AstroScheduleDayGraphSnapshot) {
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
         let objectBandHeight = min(CGFloat(16), bounds.height)
         let objectBandTop = (bounds.height - objectBandHeight) / 2
         let objectBandBottom = objectBandTop + objectBandHeight
@@ -71,10 +74,19 @@ final class AstroScheduleGraphView: UIView {
         }
 
         let renderSampleCount = min(sourceAltitudes.count, max(2, Int(bounds.width)))
+        let renderAltitudes = (0..<renderSampleCount).map { index in
+            let fraction = Double(index) / Double(renderSampleCount - 1)
+            return interpolate(sourceAltitudes, fraction: fraction)
+        }
+        let colors = renderAltitudes.map { palette.colorForPositiveObjectAltitude($0).cgColor } as CFArray
+        let positions = (0..<renderSampleCount).map { CGFloat($0) / CGFloat(renderSampleCount - 1) }
+        let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                  colors: colors,
+                                  locations: positions)
+
         var segmentStart = -1
         for index in 0..<renderSampleCount {
-            let fraction = Double(index) / Double(renderSampleCount - 1)
-            let altitude = interpolate(sourceAltitudes, fraction: fraction)
+            let altitude = renderAltitudes[index]
             let isVisible = altitude > 0
             if isVisible && segmentStart == -1 {
                 segmentStart = index
@@ -88,8 +100,22 @@ final class AstroScheduleGraphView: UIView {
             let rightRaw = sampleToX(segmentEnd, sampleCount: renderSampleCount)
             let right = rightRaw <= left ? min(bounds.width, left + 1) : rightRaw
             if right > left {
-                palette.colorForPositiveObjectAltitude(altitude).setFill()
-                UIBezierPath(rect: CGRect(x: left, y: objectBandTop, width: right - left, height: objectBandBottom - objectBandTop)).fill()
+                let segmentRect = CGRect(x: left,
+                                         y: objectBandTop,
+                                         width: right - left,
+                                         height: objectBandBottom - objectBandTop)
+                if let gradient {
+                    context.saveGState()
+                    context.clip(to: segmentRect)
+                    context.drawLinearGradient(gradient,
+                                               start: CGPoint(x: 0, y: objectBandTop),
+                                               end: CGPoint(x: bounds.width, y: objectBandTop),
+                                               options: [])
+                    context.restoreGState()
+                } else {
+                    palette.colorForPositiveObjectAltitude(altitude).setFill()
+                    UIBezierPath(rect: segmentRect).fill()
+                }
             }
             segmentStart = -1
         }

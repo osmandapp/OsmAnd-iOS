@@ -35,13 +35,15 @@ final class AstroScheduleCardController {
 
     private let dayLabelFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.setLocalizedDateFormatFromTemplate("EEEd")
+        formatter.locale = .current
+        formatter.dateFormat = "EEE, d"
         return formatter
     }()
 
     private let rangeFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.setLocalizedDateFormatFromTemplate("dMMM")
+        formatter.locale = .current
+        formatter.dateFormat = "d MMM"
         return formatter
     }()
 
@@ -73,9 +75,10 @@ final class AstroScheduleCardController {
             return
         }
 
-        let periodEnd = Calendar.current.date(byAdding: .day,
-                                              value: Self.periodDays - 1,
-                                              to: self.periodStart) ?? self.periodStart
+        let calendar = makeCalendar(timeZone: timeZone)
+        let periodEnd = calendar.date(byAdding: .day,
+                                      value: Self.periodDays - 1,
+                                      to: self.periodStart) ?? self.periodStart
         rangeLabel = "\(rangeFormatter.string(from: self.periodStart)) - \(rangeFormatter.string(from: periodEnd))"
         let computationMatchesState =
             lastObjectId == skyObject.id &&
@@ -145,8 +148,9 @@ final class AstroScheduleCardController {
                                     observer: Observer,
                                     periodStart: Date,
                                     timeZone: TimeZone) -> [AstroScheduleDayItem] {
-        (0..<Self.periodDays).map { offset in
-            let day = Calendar.current.date(byAdding: .day, value: offset, to: periodStart) ?? periodStart
+        let calendar = makeCalendar(timeZone: timeZone)
+        return (0..<Self.periodDays).map { offset in
+            let day = calendar.date(byAdding: .day, value: offset, to: periodStart) ?? periodStart
             return buildDayEntry(obj: obj, observer: observer, day: day, timeZone: timeZone)
         }
     }
@@ -197,15 +201,18 @@ final class AstroScheduleCardController {
     private func createTimeFormatter(timeZone: TimeZone) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.timeZone = timeZone
-        formatter.timeStyle = .short
-        formatter.dateStyle = .none
+        formatter.locale = .current
+        formatter.dateFormat = OAUtilities.is12HourTimeFormat() ? "h:mm a" : "HH:mm"
         return formatter
     }
 
     private func normalizedDay(_ date: Date, timeZone: TimeZone) -> Date {
+        makeCalendar(timeZone: timeZone).startOfDay(for: date)
+    }
+
+    private func makeCalendar(timeZone: TimeZone) -> Calendar {
         var calendar = Calendar.current
         calendar.timeZone = timeZone
-        return calendar.startOfDay(for: date)
+        return calendar
     }
 }
-

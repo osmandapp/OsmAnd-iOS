@@ -14,13 +14,12 @@ enum AstroCatalogsCardViewHolder {
     static func makeView(item: AstroCatalogsCardItem,
                          onToggleExpanded: @escaping () -> Void,
                          onCatalogClick: @escaping (Catalog) -> Void) -> UIView {
-        let card = AstroCardContainerView(title: localizedString("astro_designations"),
-                                          iconName: "ic_action_book_info")
+        let card = AstroCardContainerView(title: localizedString("astro_designations"))
         let chips = WrappingChipsView()
         let needShowMore = item.catalogs.count > maxVisible
         let visible = !item.expanded && needShowMore ? Array(item.catalogs.prefix(maxVisible)) : item.catalogs
         visible.forEach { catalog in
-            chips.addChip(title: catalog.catalogId.isEmpty ? catalog.name : catalog.catalogId) {
+            chips.addChip(title: catalog.catalogId) {
                 onCatalogClick(catalog)
             }
         }
@@ -44,9 +43,16 @@ final class WrappingChipsView: UIView {
         config.title = title
         config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
         config.baseForegroundColor = AstroContextMenuTheme.activeText
-        config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 11, bottom: 7, trailing: 11)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .systemFont(ofSize: 14)
+            outgoing.foregroundColor = AstroContextMenuTheme.activeText
+            return outgoing
+        }
         let button = UIButton(configuration: config)
-        button.layer.cornerRadius = 14
+        button.layer.cornerRadius = 19
+        button.layer.masksToBounds = true
         button.addAction(UIAction { _ in action() }, for: .touchUpInside)
         chips.append(button)
         addSubview(button)
@@ -54,7 +60,7 @@ final class WrappingChipsView: UIView {
     }
 
     override var intrinsicContentSize: CGSize {
-        CGSize(width: UIView.noIntrinsicMetric, height: layoutHeight(for: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width - 56))
+        CGSize(width: UIView.noIntrinsicMetric, height: layoutHeight(for: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width - 64))
     }
 
     override func layoutSubviews() {
@@ -69,10 +75,10 @@ final class WrappingChipsView: UIView {
         var x: CGFloat = 0
         var y: CGFloat = 0
         var rowHeight: CGFloat = 0
-        let spacing: CGFloat = 8
+        let spacing: CGFloat = 10
         for chip in chips {
-            let size = chip.sizeThatFits(CGSize(width: width, height: 32))
-            let chipSize = CGSize(width: min(width, max(44, size.width)), height: max(30, size.height))
+            let size = chip.sizeThatFits(CGSize(width: width, height: 38))
+            let chipSize = CGSize(width: min(width, ceil(size.width)), height: 38)
             if x > 0 && x + chipSize.width > width {
                 x = 0
                 y += rowHeight + spacing

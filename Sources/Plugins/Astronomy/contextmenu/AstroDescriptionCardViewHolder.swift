@@ -15,30 +15,63 @@ enum AstroDescriptionCardViewHolder {
 
         if !item.description.isEmpty {
             let description = UILabel()
-            description.text = item.description
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 5
+            paragraphStyle.lineBreakMode = .byTruncatingTail
+            description.attributedText = NSAttributedString(
+                string: item.description,
+                attributes: [
+                    .font: UIFont.systemFont(ofSize: 16),
+                    .foregroundColor: AstroContextMenuTheme.primaryText,
+                    .paragraphStyle: paragraphStyle
+                ])
             description.textColor = AstroContextMenuTheme.primaryText
-            description.font = .systemFont(ofSize: 18)
-            description.numberOfLines = 8
+            description.font = .systemFont(ofSize: 16)
+            description.numberOfLines = 3
+            description.lineBreakMode = .byTruncatingTail
             card.stack.addArrangedSubview(description)
         }
 
-        if item.linkType != nil && (item.readMoreUri != nil || item.hasOfflineArticle) {
+        if let linkType = item.linkType, item.readMoreUri != nil || item.hasOfflineArticle {
             var config = UIButton.Configuration.plain()
-            config.image = AstroIcon.template(item.linkType == .wikidata ? "ic_action_logo_wikidata" : "ic_plugin_wikipedia")
-            config.imagePadding = 8
-            config.baseForegroundColor = AstroContextMenuTheme.activeText
-            config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
-            if item.hasOfflineArticle && item.linkType == .wikipedia {
-                config.title = localizedString("context_menu_read_full_article")
+            config.image = AstroIcon.template(linkType == .wikidata ? "ic_action_logo_wikidata" : "ic_plugin_wikipedia")
+            config.imagePadding = 10
+            config.imageColorTransformer = UIConfigurationColorTransformer { _ in
+                AstroContextMenuTheme.defaultIcon
+            }
+            config.baseForegroundColor = AstroContextMenuTheme.secondaryText
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 14, bottom: 0, trailing: 14)
+            config.background.backgroundColor = .clear
+            config.background.cornerRadius = 6
+            config.background.strokeColor = AstroContextMenuTheme.separator
+            config.background.strokeWidth = 1
+
+            let opensOfflineArticle = item.hasOfflineArticle && linkType == .wikipedia
+            let text: String
+            let activeText: String
+            if opensOfflineArticle {
+                text = localizedString("context_menu_read_full_article")
+                activeText = text
             } else {
-                let targetName = item.linkType == .wikidata
+                let targetName = linkType == .wikidata
                     ? localizedString("wikidata")
                     : localizedString("shared_string_wikipedia")
                 let readOn = localizedString("read_on")
-                config.title = readOn.contains("%@") ? String(format: readOn, targetName) : "\(readOn) \(targetName)"
+                text = readOn.contains("%@") ? String(format: readOn, targetName) : "\(readOn) \(targetName)"
+                activeText = targetName
             }
+
+            var attributedTitle = AttributedString(text)
+            attributedTitle.font = .systemFont(ofSize: 16)
+            attributedTitle.foregroundColor = AstroContextMenuTheme.secondaryText
+            if let range = attributedTitle.range(of: activeText) {
+                attributedTitle[range].foregroundColor = AstroContextMenuTheme.activeText
+            }
+            config.attributedTitle = attributedTitle
+
             let button = UIButton(configuration: config)
             button.contentHorizontalAlignment = .leading
+            button.heightAnchor.constraint(greaterThanOrEqualToConstant: 48).isActive = true
             button.addAction(UIAction { _ in onReadClick(item) }, for: .touchUpInside)
             card.stack.addArrangedSubview(button)
         }

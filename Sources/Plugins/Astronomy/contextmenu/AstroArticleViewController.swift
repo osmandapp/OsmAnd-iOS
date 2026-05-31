@@ -11,19 +11,80 @@ import WebKit
 
 final class AstroArticleViewController: UIViewController {
     static let tag = "AstroArticleViewController"
+    private static let headerInner = """
+    <html><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="cleartype" content="on" />
+    <style>
+    {{css-file-content}}
+    </style>
+    </head>
+    """
+    private static let footerInner = """
+    <script>var coll = document.getElementsByTagName("H2");
+    var i;
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.querySelectorAll('img').forEach(function(img) {
+            img.onerror = function() {
+                this.style.display = 'none';
+                var caption = img.parentElement.nextElementSibling;
+                if (caption.className == "thumbnailcaption") {
+                    caption.style.display = 'none';
+                }
+            };
+        })
+    });
+    function scrollAnchor(id, title) {
+    openContent(title);
+    window.location.hash = id;}
+    function openContent(id) {
+        var doc = document.getElementById(id).parentElement;
+        doc.classList.toggle("active");
+        var content = doc.nextElementSibling;
+        content.style.display = "block";
+        collapseActive(doc);
+    }
+    function collapseActive(doc) {
+        var coll = document.getElementsByTagName("H2");
+        var i;
+        for (i = 0; i < coll.length; i++) {
+            var item = coll[i];
+            if (item != doc && item.classList.contains("active")) {
+                item.classList.toggle("active");
+                var content = item.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                }
+            }
+        }
+    }</script>
+    </body></html>
+    """
     private static let bodyContentRegex = try? NSRegularExpression(pattern: "<body[^>]*>([\\s\\S]*?)</body>",
                                                                    options: [.caseInsensitive])
 
     private let article: AstroArticle
-    private let articleHtml: String
+    private var articleHtml: String?
     private let webView = WKWebView(frame: .zero)
     private let titleLabel = UILabel()
+    private let emptyStateLabel = UILabel()
     private let readFullArticleButton = UIButton(type: .system)
     private var webViewClient: AstroArticleWebViewClient?
+    private var htmlLoadToken: UUID?
 
     init(article: AstroArticle) {
         self.article = article
-        self.articleHtml = article.getMobileHtmlString() ?? ""
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .pageSheet
         if let sheetPresentationController {
@@ -34,6 +95,10 @@ final class AstroArticleViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        htmlLoadToken = nil
     }
 
     static func showInstance(from viewController: UIViewController, article: AstroArticle) -> Bool {
@@ -54,8 +119,8 @@ final class AstroArticleViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
             applyTheme()
-            if !articleHtml.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                webView.loadHTMLString(createHtmlContent(), baseURL: nil)
+            if let articleHtml = articleHtml, !articleHtml.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                webView.loadHTMLString(createHtmlContent(articleHtml: articleHtml), baseURL: articleBaseURL())
             }
         }
     }
@@ -66,6 +131,7 @@ final class AstroArticleViewController: UIViewController {
         readFullArticleButton.tintColor = .white
         readFullArticleButton.backgroundColor = AstroContextMenuTheme.primaryButton
         webView.backgroundColor = AstroContextMenuTheme.pageBackground
+        emptyStateLabel.textColor = AstroContextMenuTheme.secondaryText
     }
 
     private func setupToolbar() {
@@ -128,53 +194,94 @@ final class AstroArticleViewController: UIViewController {
         webView.isOpaque = false
         webView.configuration.preferences.javaScriptEnabled = true
         view.addSubview(webView)
+
+        emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateLabel.text = localizedString("shared_string_unavailable")
+        emptyStateLabel.textAlignment = .center
+        emptyStateLabel.font = .systemFont(ofSize: 16)
+        emptyStateLabel.numberOfLines = 0
+        emptyStateLabel.isHidden = true
+        view.addSubview(emptyStateLabel)
+
         NSLayoutConstraint.activate([
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
-            webView.bottomAnchor.constraint(equalTo: readFullArticleButton.topAnchor, constant: -12)
+            webView.bottomAnchor.constraint(equalTo: readFullArticleButton.topAnchor, constant: -12),
+
+            emptyStateLabel.leadingAnchor.constraint(equalTo: webView.leadingAnchor, constant: 24),
+            emptyStateLabel.trailingAnchor.constraint(equalTo: webView.trailingAnchor, constant: -24),
+            emptyStateLabel.centerYAnchor.constraint(equalTo: webView.centerYAnchor)
         ])
     }
 
     private func populateArticle() {
         titleLabel.text = article.title
         let onlineArticleUrl = article.getOnlineArticleUrl()
-        webViewClient = AstroArticleWebViewClient(sourceView: webView, articleUrl: onlineArticleUrl)
+        webViewClient = AstroArticleWebViewClient(sourceView: webView, articleUrl: onlineArticleUrl, presenter: self)
         webView.navigationDelegate = webViewClient
 
         readFullArticleButton.isHidden = onlineArticleUrl?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty != false
-        guard !articleHtml.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return
-        }
-        webView.loadHTMLString(createHtmlContent(), baseURL: nil)
+        loadArticleHtml()
     }
 
-    private func createHtmlContent() -> String {
+    private func loadArticleHtml() {
+        let token = UUID()
+        htmlLoadToken = token
+        webView.isHidden = false
+        emptyStateLabel.isHidden = true
+
+        DispatchQueue.global(qos: .userInitiated).async { [article] in
+            let html = article.getMobileHtmlString()
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self, self.htmlLoadToken == token else {
+                    return
+                }
+                self.htmlLoadToken = nil
+                guard let html = html, !html.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    self.showEmptyState()
+                    return
+                }
+                self.articleHtml = html
+                self.webView.isHidden = false
+                self.emptyStateLabel.isHidden = true
+                self.webView.loadHTMLString(self.createHtmlContent(articleHtml: html), baseURL: self.articleBaseURL())
+            }
+        }
+    }
+
+    private func showEmptyState() {
+        webView.isHidden = true
+        emptyStateLabel.isHidden = false
+    }
+
+    private func createHtmlContent(articleHtml: String) -> String {
         let isRtl = Locale.characterDirection(forLanguage: article.lang) == .rightToLeft
         let bodyTag = isRtl ? "<body dir=\"rtl\">\n" : "<body>\n"
         let bodyContent = extractBodyContent(articleHtml)
-        let background = cssColor(AstroContextMenuTheme.pageBackground.currentMapThemeColor)
-        let text = cssColor(AstroContextMenuTheme.primaryText.currentMapThemeColor)
-        let link = cssColor(AstroContextMenuTheme.activeText.currentMapThemeColor)
+        let nightModeClass = ThemeManager.shared.isLightTheme() ? "" : " nightmode"
+        var header = Self.headerInner
+        let css = articleStyleCss()
+        header = header.replacingOccurrences(of: "{{css-file-content}}", with: css)
         return """
-        <!doctype html>
-        <html>
-        <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-        body { margin: 0; padding: 18px; background: \(background); color: \(text); font: -apple-system-body; }
-        a { color: \(link); }
-        img { max-width: 100%; height: auto; }
-        .main { overflow-wrap: anywhere; }
-        </style>
-        </head>
+        \(header)
         \(bodyTag)
-        <div class="main">
+        <div class="main\(nightModeClass)">
         \(bodyContent)
-        </div>
-        </body>
-        </html>
+        \(Self.footerInner)
         """
+    }
+
+    private func articleStyleCss() -> String {
+        guard let cssURL = Bundle.main.url(forResource: "article_style", withExtension: "css"),
+              let css = try? String(contentsOf: cssURL, encoding: .utf8) else {
+            return ""
+        }
+        return css.replacingOccurrences(of: "\n", with: " ")
+    }
+
+    private func articleBaseURL() -> URL? {
+        article.getOnlineArticleUrl().flatMap(URL.init(string:))
     }
 
     private func extractBodyContent(_ html: String) -> String {
@@ -188,19 +295,6 @@ final class AstroArticleViewController: UIViewController {
             return html
         }
         return String(html[bodyRange])
-    }
-
-    private func cssColor(_ color: UIColor) -> String {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return String(format: "rgba(%d, %d, %d, %.3f)",
-                      Int(red * 255.0),
-                      Int(green * 255.0),
-                      Int(blue * 255.0),
-                      alpha)
     }
 
     private func openFullArticle() {

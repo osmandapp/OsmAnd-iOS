@@ -157,7 +157,7 @@ final class AstroCardContainerView: UIView {
                 let label = UILabel()
                 label.text = title
                 label.textColor = AstroContextMenuTheme.primaryText
-                label.font = .systemFont(ofSize: 20, weight: .bold)
+                label.font = .systemFont(ofSize: 16, weight: .bold)
                 label.numberOfLines = 0
                 row.addArrangedSubview(label)
             }
@@ -165,10 +165,10 @@ final class AstroCardContainerView: UIView {
         }
 
         NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14),
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: 14),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -14)
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
         ])
     }
 

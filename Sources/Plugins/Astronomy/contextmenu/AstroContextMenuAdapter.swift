@@ -132,9 +132,8 @@ final class AstroCardContainerView: UIView {
     private func setup(title: String?, iconName: String?) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = AstroContextMenuTheme.cardBackground
-        layer.cornerRadius = 8
-        layer.borderWidth = 1
-        layer.borderColor = AstroContextMenuTheme.resolvedSeparator.cgColor
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
 
         stack.axis = .vertical
         stack.spacing = 12
@@ -177,7 +176,6 @@ final class AstroCardContainerView: UIView {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
             backgroundColor = AstroContextMenuTheme.cardBackground
-            layer.borderColor = AstroContextMenuTheme.resolvedSeparator.cgColor
         }
     }
 }

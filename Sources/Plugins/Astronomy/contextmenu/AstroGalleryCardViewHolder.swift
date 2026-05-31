@@ -59,8 +59,8 @@ private final class AstroGalleryCardView: UIView {
 
     private func setupView() {
         translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 8
-        layer.borderWidth = 1
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
 
         stack.axis = .vertical
         stack.spacing = 0
@@ -223,7 +223,6 @@ private final class AstroGalleryCardView: UIView {
 
     private func applyTheme() {
         backgroundColor = AstroContextMenuTheme.cardBackground
-        layer.borderColor = AstroContextMenuTheme.resolvedSeparator.cgColor
         iconView.tintColor = AstroContextMenuTheme.defaultIcon
         arrowView.tintColor = AstroContextMenuTheme.defaultIcon
         titleLabel.textColor = AstroContextMenuTheme.primaryText

@@ -166,11 +166,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     OAColorCollectionHandler *_colorCollectionHandler;
     BOOL _needToScrollToSelectedColor;
     
-    IconCollectionHandler *_profileIconCollectionHandler;
+    ProfileIconCollectionHandler *_profileIconCollectionHandler;
     IconCollectionHandler *_positionIconCollectionHandler;
     IconCollectionHandler *_locationIconCollectionHandler;
     
-    NSArray<NSString *> *_profileIconNames;
     NSArray<NSString *> *_customModelNames;
     NSArray<OALocationIcon *> *_locationIcons;
     NSArray<OALocationIcon *> *_navigationIcons;
@@ -448,8 +447,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
     [_colorCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
     
-    _profileIconNames = [PoiIconCollectionHandler getProfileIconsList];
-    _profileIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_profileIconNames] collectionView:nil];
+    _profileIconCollectionHandler = [[ProfileIconCollectionHandler alloc] init];
     _profileIconCollectionHandler.delegate = self;
     _profileIconCollectionHandler.hostVC = self;
     _profileIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
@@ -459,13 +457,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [_profileIconCollectionHandler setIconBackgroundSizeWithSize:36];
     [_profileIconCollectionHandler setIconSizeWithSize:24];
     [_profileIconCollectionHandler setSpacingWithSpacing:6];
-    NSString *iconName = _changedProfile.iconName;
-    if (!iconName || iconName.length == 0)
-        iconName = _profile.iconName;
-    NSInteger selectedIconIndex = [_profileIconNames indexOfObject:iconName];
-    if (selectedIconIndex == NSNotFound)
-        selectedIconIndex = 0;
-    [_profileIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
     
     _customModelNames = [Model3dHelper getCustomModelNames];
     _locationIcons = [self getlocationIcons];
@@ -484,7 +475,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [_positionIconCollectionHandler setItemSizeWithSize:156];
     [_positionIconCollectionHandler setIconBackgroundSizeWithSize:146];
     [_positionIconCollectionHandler setIconSizeWithSize:52];
-    selectedIconIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
+    NSInteger selectedIconIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
     [_positionIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
     
     _navigationIcons = [self getlocationIcons];
@@ -607,6 +598,9 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void) saveProfile
 {
     _profile = _changedProfile;
+    
+    [_profileIconCollectionHandler addIconToLastUsed:_profile.iconName];
+    
     if (_isNewProfile)
     {
         [self saveNewProfile];
@@ -781,9 +775,12 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             if ([item.key isEqualToString:kProfileIconCellKey])
             {
                 [_profileIconCollectionHandler setCollectionView:cell.collectionView];
+                [_profileIconCollectionHandler setIconName:_changedProfile.iconName];
                 [cell setCollectionHandler:_profileIconCollectionHandler];
+                [_profileIconCollectionHandler updateTopButtonName];
                 cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                [cell topButtonVisibility:YES];
             }
             else if ([item.key isEqualToString:kPositionIconCellKey])
             {

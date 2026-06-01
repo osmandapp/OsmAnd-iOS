@@ -16,6 +16,7 @@ import UIKit
     case bigIconItems
     case poiIconCategories
     case baseAppearanceCategories
+    case profileIconCategories
 }
 
 @objc protocol ColorCollectionViewControllerDelegate: AnyObject {
@@ -122,7 +123,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 self.iconItems = icons
                 self.selectedIconItem = selectedItem as? String
             }
-        case .poiIconCategories, .baseAppearanceCategories:
+        case .poiIconCategories, .profileIconCategories, .baseAppearanceCategories:
             if let categories = items as? [IconsAppearanceCategory] {
                 self.iconCategories = categories
                 self.selectedIconItem = selectedItem as? String
@@ -136,9 +137,13 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+    
     override func registerCells() {
         switch collectionType {
-        case .colorItems, .iconItems, .bigIconItems, .poiIconCategories, .baseAppearanceCategories:
+        case .colorItems, .iconItems, .bigIconItems, .poiIconCategories, .profileIconCategories, .baseAppearanceCategories:
             tableView.register(UINib(nibName: OACollectionSingleLineTableViewCell.reuseIdentifier, bundle: nil),
                                forCellReuseIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier)
             tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil),
@@ -161,16 +166,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
         tableView.keyboardDismissMode = .onDrag
-        
-        switch collectionType {
-        case .colorizationPaletteItems,
-             .terrainPaletteItems,
-             .poiIconCategories,
-             .baseAppearanceCategories where inSearchMode:
-            tableView.separatorStyle = .singleLine
-        default:
-            tableView.separatorStyle = .none
-        }
+        tableView.separatorStyle = .none
         
         chipsCellScrollState = OACollectionViewCellState()
         tableView.reloadData()
@@ -188,7 +184,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     tableView.scrollToRow(at: selectedIndexPath, at: .middle, animated: true)
                 }
             }
-        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories {
             setupSearch()
         }
     }
@@ -201,7 +197,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             return localizedString("shared_string_all_colors")
         case .iconItems, .bigIconItems:
             return localizedString("shared_string_all_icons")
-        case .poiIconCategories, .baseAppearanceCategories:
+        case .poiIconCategories, .profileIconCategories, .baseAppearanceCategories:
             return localizedString("select_icon_profile_dialog_title")
         }
     }
@@ -216,7 +212,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 addButton.accessibilityLabel = addButtonAccessibilityLabel
                 return [addButton]
             }
-        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories {
             if  !inSearchMode,
                 let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler,
                 let menu = poiIconsDelegate.buildTopButtonContextMenu(),
@@ -246,7 +242,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 iconNamesKey: iconItems
             ])
             colorCollectionIndexPath = IndexPath(row: Int(section.rowCount()) - 1, section: Int(data.sectionCount()) - 1)
-        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories {
             
             if inSearchMode {
                 tableView.separatorStyle = .singleLine
@@ -280,15 +276,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     let section = data.createNewSection()
                     section.headerText = category.translatedName
                     section.addRow(from: [
-                        kCellTypeKey: OADividerCell.reuseIdentifier
-                        ]
-                    )
-                    section.addRow(from: [
                         kCellTypeKey: OACollectionSingleLineTableViewCell.reuseIdentifier,
                         poiCategoryNameKey: category.key,
                         iconNamesKey: category.iconKeys
                     ])
-                    section.addRow(from: [kCellTypeKey: OADividerCell.reuseIdentifier])
                 }
             }
         } else {
@@ -323,7 +314,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier, for: indexPath) as? OACollectionSingleLineTableViewCell {
                 if collectionType == .colorItems {
                     setupColorCollectionCell(cell)
-                } else if collectionType == .iconItems || collectionType == .bigIconItems || collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
+                } else if collectionType == .iconItems || collectionType == .bigIconItems || collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories {
                     
                     if let chipsTitles = item.obj(forKey: chipsTitlesKey) as? [String],
                        let selectedIndex = item.obj(forKey: chipsSelectedIndexKey) as? Int {
@@ -333,6 +324,11 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                         setupIconCollectionCell(cell, indexPath: indexPath, iconNames: iconNames, poiCategoryKey: poiCategory)
                     }
                 }
+                
+                cell.contentView.backgroundColor = .groupBg
+                cell.contentView.layer.cornerRadius = 32
+                cell.contentView.layer.masksToBounds = true
+                cell.backgroundColor = .clear
                 
                 cell.rightActionButtonVisibility(false)
                 cell.collectionView.reloadData()
@@ -433,10 +429,12 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     private func setupIconCollectionCell(_ cell: OACollectionSingleLineTableViewCell, indexPath: IndexPath, iconNames: [String], poiCategoryKey: String?) {
-        if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
+        if collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories {
             var iconHandler: BaseAppearanceIconCollectionHandler
             if let customIconKeys = iconCategories.first(where: { $0.key == ButtonAppearanceIconCollectionHandler.customKey })?.iconKeys, collectionType == .baseAppearanceCategories {
                 iconHandler = ButtonAppearanceIconCollectionHandler(customIconKeys: customIconKeys)
+            } else if collectionType == .profileIconCategories {
+                iconHandler = ProfileIconCollectionHandler()
             } else {
                 iconHandler = PoiIconCollectionHandler()
             }
@@ -524,7 +522,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 delegate?.selectPaletteItem?(palette)
             }
             dismissWith(animated: true)
-        } else if (collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories) && inSearchMode {
+        } else if (collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories) && inSearchMode {
             if let searchIconName = item.iconName,
                 let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler {
                 selectedIconItem = searchIconName
@@ -799,7 +797,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
             if let selectedIconItem {
                 iconsDelegate?.selectIconName(selectedIconItem)
             }
-        } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
+        } else if collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories {
             if let baseIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler,
                let selectedName = selectedItem as? String {
                 

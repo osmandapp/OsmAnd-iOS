@@ -90,6 +90,8 @@
     OAAutoObserverProxy *_downloadTaskProgressObserver;
     OAAutoObserverProxy *_downloadTaskCompletedObserver;
     UIImage *_targetImage;
+    CGFloat _cachedXViewPort;
+    CGFloat _cachedYViewPort;
 }
 
 + (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
@@ -1081,11 +1083,18 @@
 
 - (void)adjustViewport
 {
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    OAMapRendererView *mapView = mapViewController.mapView;
+    if (_cachedXViewPort == 0)
+        _cachedXViewPort = mapView.viewportXScale;
+    if (_cachedYViewPort == 0 || mapView.viewportYScale != kViewportScale)
+        _cachedYViewPort = mapView.viewportYScale;
+    
     CGFloat viewportXScale = kViewportScale;
     if ([OAUtilities isLandscapeIpadAware])
     {
-        CGFloat mapWidth = [OARootViewController instance].mapPanel.mapViewController.mapView.bounds.size.width;
-        if (mapWidth <= 0.)
+        CGFloat mapWidth = mapView.bounds.size.width;
+        if (mapWidth <= 0)
             mapWidth = DeviceScreenWidth;
         
         CGFloat menuWidth = kInfoViewLandscapeWidth;
@@ -1096,7 +1105,17 @@
         viewportXScale += menuWidth / mapWidth;
     }
     
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:viewportXScale];
+    [mapViewController setViewportScaleX:viewportXScale y:kViewportScale];
+}
+
+- (void)restoreViewport
+{
+    if (_cachedXViewPort != 0 && _cachedYViewPort != 0)
+    {
+        [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedXViewPort y:_cachedYViewPort];
+        _cachedXViewPort = 0;
+        _cachedYViewPort = 0;
+    }
 }
 
 - (BOOL)hasControlButtons
@@ -1150,7 +1169,7 @@
 }
 - (void)onMenuDismissed
 {
-    // override
+    [self restoreViewport];
 }
 
 - (void)onMenuShown

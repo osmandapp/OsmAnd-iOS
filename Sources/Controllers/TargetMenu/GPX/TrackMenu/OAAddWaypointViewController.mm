@@ -47,15 +47,9 @@
 {
     OsmAndAppInstance _app;
     OAContextMenuLayer *_contextLayer;
-    OAMapRendererView *_mapView;
-
-    BOOL _isCurrentTrack;
     OAGpxWptItem *_movedPoint;
-    
     OASGpxFile *_currentGpx;
-    
-    CGFloat _cachedXViewPort;
-    CGFloat _cachedYViewPort;
+    BOOL _isCurrentTrack;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
@@ -70,10 +64,6 @@
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _contextLayer = _mapPanelViewController.mapViewController.mapLayers.contextMenuLayer;
         _targetMenuState = targetMenuState;
-        _mapView = _mapPanelViewController.mapViewController.mapView;
-        _cachedXViewPort = _mapView.viewportXScale;
-        _cachedYViewPort = _mapView.viewportYScale;
-        [_mapPanelViewController.mapViewController setViewportScaleY:kViewportScale];
         [self adjustViewport];
         [self commonInit];
     }
@@ -172,7 +162,7 @@
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
-    [_mapPanelViewController.mapViewController setViewportScaleX:_cachedXViewPort y:_cachedYViewPort];
+    [super onMenuDismissed];
 }
 
 - (void)onProfileSettingSet:(NSNotification *)notification
@@ -181,8 +171,7 @@
     if (notification.object != [OAAppSettings sharedManager].rotateMap)
         return;
 
-    _cachedYViewPort = _mapPanelViewController.mapViewController.mapView.viewportYScale;
-    [_mapPanelViewController.mapViewController setViewportScaleY:kViewportScale];
+    [self adjustViewport];
 }
 
 - (NSString *)getTypeStr

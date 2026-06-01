@@ -97,10 +97,10 @@ final class OsmEditsListViewController: UIViewController {
         cell.tintColor = .iconColorActive
     }
     
-    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, indexPath, headerItem) in
-        cell.sortButton.setImage(headerItem.sortMode.image, for: .normal)
-        cell.sortButton.menu = headerItem.menu
-    }
+//    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, indexPath, headerItem) in
+//        cell.sortButton.setImage(headerItem.sortMode.image, for: .normal)
+//        cell.sortButton.menu = headerItem.menu
+//    }
 
     // MARK: - Init
 
@@ -201,10 +201,10 @@ final class OsmEditsListViewController: UIViewController {
             guard let self else { return UICollectionViewCell() }
             switch item {
             case .sortHeader(let headerItem):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration,
-                                                                        for: indexPath,
-                                                                        item: headerItem)
-                return cell
+//                let cell = collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration,
+//                                                                        for: indexPath,
+//                                                                        item: headerItem)
+                return UICollectionViewCell()
             case .header(let headerItem):
                 let cell = collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration,
                                                                         for: indexPath,

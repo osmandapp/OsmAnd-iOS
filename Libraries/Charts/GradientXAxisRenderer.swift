@@ -8,7 +8,10 @@
 import Foundation
 
 final class GradientXAxisRenderer: ElevationXAxisRenderer {
-    
+    var highlightedValue: Double?
+    var activeBackgroundColor: NSUIColor?
+    var activeTextColor: NSUIColor = .white
+
     private let chartView: GradientChart
     
     init(_ chartView: GradientChart,
@@ -67,11 +70,26 @@ final class GradientXAxisRenderer: ElevationXAxisRenderer {
                 }
             }
 
+            var attrs = labelAttrs
+            let isHighlighted = highlightedValue.map { abs(axis.entries[i / 2] - $0) < 0.001 } ?? false
+            if isHighlighted {
+                attrs[.foregroundColor] = activeTextColor
+                if let activeBackgroundColor {
+                    let size = label.size(withAttributes: attrs)
+                    let rect = CGRect(x: x - size.width / 2.0 - 6.0, y: pos - 2.0, width: size.width + 12.0, height: size.height + 4.0)
+                    context.saveGState()
+                    context.setFillColor(activeBackgroundColor.cgColor)
+                    context.addPath(CGPath(roundedRect: rect, cornerWidth: 5.0, cornerHeight: 5.0, transform: nil))
+                    context.fillPath()
+                    context.restoreGState()
+                }
+            }
+
             drawLabel(context: context,
                       formattedLabel: label as String,
                       x: x,
                       y: pos,
-                      attributes: labelAttrs,
+                      attributes: attrs,
                       constrainedTo: labelMaxSize,
                       anchor: anchor,
                       angleRadians: labelRotationAngleRadians)

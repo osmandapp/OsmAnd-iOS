@@ -948,6 +948,8 @@
 "shared_string_deleting_complete" = "Deleting complete";
 "shared_string_colors" = "Colors";
 
+"dismiss_changes_descr" = "All changes will be dismissed.";
+"gpx_logging_no_data" = "No data";
 "gradient_no_data_point_summary" = "Color applied when data is missing or undefined.";
 "gradient_input_value_too_low_warn" = "Minimum allowed value is %@.";
 "gradient_input_value_too_high_warn" = "Maximum allowed value is %@.";

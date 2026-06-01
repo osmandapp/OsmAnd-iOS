@@ -80,8 +80,22 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     private var selectedColorItem: PaletteItemSolid?
     private var editColorIndexPath: IndexPath?
     private var isStartedNewColorAdding = false
-    
     private var colorCollectionHandler: OAColorCollectionHandler?
+    private var paletteCategory: GradientPaletteCategory? {
+        selectedPaletteItem?.properties.fileType.category ?? paletteItems?.asArray().compactMap { ($0 as? PaletteItemGradient)?.properties.fileType.category }.first
+    }
+    private var addButtonAccessibilityLabel: String? {
+        switch collectionType {
+        case .colorItems:
+            localizedString("shared_string_add_color")
+        case .colorizationPaletteItems:
+            localizedString("add_palette")
+        case .terrainPaletteItems where paletteCategory != .terrainHillshade:
+            localizedString("add_palette")
+        default:
+            nil
+        }
+    }
     
     init(collectionType: ColorCollectionType, items: Any, selectedItem: Any) {
         
@@ -197,9 +211,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        if collectionType == .colorItems {
+        if let addButtonAccessibilityLabel {
             if let addButton = createRightNavbarButton(nil, iconName: "ic_custom_add", action: #selector(onRightNavbarButtonPressed), menu: nil) {
-                addButton.accessibilityLabel = localizedString("shared_string_add_color")
+                addButton.accessibilityLabel = addButtonAccessibilityLabel
                 return [addButton]
             }
         } else if collectionType == .poiIconCategories || collectionType == .baseAppearanceCategories {
@@ -565,33 +579,66 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         colorPicker.popoverPresentationController?.sourceView = navigationItem.rightBarButtonItem?.customView
         navigationController?.present(colorPicker, animated: true)
     }
+
+    private func indexPath(for paletteItem: PaletteItemGradient) -> IndexPath? {
+        guard let paletteItems else { return nil }
+        let items = paletteItems.asArray().compactMap { $0 as? PaletteItemGradient }
+        let row = GradientPaletteHelper.shared.index(of: paletteItem, in: items)
+        return row == NSNotFound ? nil : IndexPath(row: row, section: 0)
+    }
     
     private func createPaletteMenu(for indexPath: IndexPath) -> UIMenu {
         guard let paletteItem = data.item(for: indexPath).obj(forKey: "palette") as? PaletteItemGradient else { return UIMenu(children: []) }
-        let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage(systemName: "doc.on.doc")?.resizedMenuImage()) { [weak self] _ in
-            guard let self else { return }
-            self.duplicateItem(fromContextMenu: indexPath)
+        let canEditPalette = !paletteItem.isDefault && paletteItem.properties.fileType.category != .terrainHillshade && paletteItem.isEditable
+        var menuElements = [UIMenuElement]()
+        if canEditPalette {
+            let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
+                guard let self else { return }
+                self.showRenamePaletteAlert(for: paletteItem)
+            }
+            menuElements.append(UIMenu(options: .displayInline, children: [renameAction]))
         }
         
-        if !paletteItem.isDefault {
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")?.resizedMenuImage(), attributes: .destructive) { [weak self] _ in
+        var editDuplicateActions = [UIMenuElement]()
+        if canEditPalette {
+            let editAction = UIAction(title: localizedString("shared_string_edit"), image: .icCustomAppearanceOutlined) { [weak self] _ in
                 guard let self else { return }
-                self.deleteItem(fromContextMenu: indexPath)
+                GradientPaletteHelper.shared.showEditPaletteEditor(from: self, paletteItem: paletteItem)
             }
-
-            let deleteMenu = UIMenu(options: .displayInline, children: [deleteAction])
-            return UIMenu(children: [duplicateAction, deleteMenu])
+            editDuplicateActions.append(editAction)
+        }
+        let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: .icCustomCopy) { [weak self] _ in
+            guard let self else { return }
+            guard let indexPath = self.indexPath(for: paletteItem) else { return }
+            self.duplicateItem(fromContextMenu: indexPath)
+        }
+        editDuplicateActions.append(duplicateAction)
+        menuElements.append(UIMenu(options: .displayInline, children: editDuplicateActions))
+        
+        if !paletteItem.isDefault {
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
+                guard let self else { return }
+                self.showDeletePaletteAlert(for: paletteItem)
+            }
+            menuElements.append(UIMenu(options: .displayInline, children: [deleteAction]))
         }
 
-        return UIMenu(children: [duplicateAction])
+        return UIMenu(children: menuElements)
     }
     
     // MARK: - Selectors
     
     override func onRightNavbarButtonPressed() {
-        isStartedNewColorAdding = true
-        if let selectedColorItem {
-            openColorPicker(with: selectedColorItem)
+        switch collectionType {
+        case .colorItems:
+            isStartedNewColorAdding = true
+            if let selectedColorItem {
+                openColorPicker(with: selectedColorItem)
+            }
+        case .colorizationPaletteItems, .terrainPaletteItems:
+            GradientPaletteHelper.shared.showAddPaletteEditor(from: self, paletteCategory: paletteCategory, sourceView: navigationItem.rightBarButtonItem?.customView)
+        default:
+            break
         }
     }
     
@@ -675,6 +722,51 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         tableView.reloadData()
         setupNavbarButtons()
     }
+    
+    private func showRenamePaletteAlert(for paletteItem: PaletteItemGradient) {
+        let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = paletteItem.displayName
+        }
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
+            guard let self, let newName = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+            guard !newName.isEmpty else {
+                OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: self.view)
+                return
+            }
+            guard let indexPath = self.indexPath(for: paletteItem), let renamedPaletteItem = GradientPaletteHelper.shared.renamePaletteItem(paletteItem, newName: newName) else { return }
+            self.renameItem(fromContextMenu: indexPath, oldItem: paletteItem, newItem: renamedPaletteItem)
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func showDeletePaletteAlert(for paletteItem: PaletteItemGradient) {
+        let alert = UIAlertController(title: "\(localizedString("delete_palette"))?", message: String(format: localizedString("delete_colors_palette_dialog_summary"), paletteItem.displayName), preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
+            guard let self, let indexPath = self.indexPath(for: paletteItem) else { return }
+            self.deleteItem(fromContextMenu: indexPath)
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        if let indexPath = indexPath(for: paletteItem), let cell = tableView.cellForRow(at: indexPath) {
+            alert.popoverPresentationController?.sourceView = cell
+            alert.popoverPresentationController?.sourceRect = cell.bounds
+        }
+        present(alert, animated: true)
+    }
+    
+    func applyPaletteEditorResult(_ paletteItem: PaletteItemGradient, replacing originalId: String?) {
+        guard let paletteItems else { return }
+        paletteItems.replaceAll(withObjectsSync: GradientPaletteHelper.shared.paletteItems(category: paletteItem.properties.fileType.category, sortMode: .lastUsedTime))
+        if originalId == nil || selectedPaletteItem?.id == originalId {
+            selectedPaletteItem = paletteItem
+            delegate?.selectPaletteItem?(paletteItem)
+        } else {
+            delegate?.reloadData?()
+        }
+
+        reloadData()
+    }
 }
 
 extension ItemsCollectionViewController: UISearchBarDelegate {
@@ -748,6 +840,22 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
 }
     
 extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
+    
+    func renameItem(fromContextMenu indexPath: IndexPath, oldItem: PaletteItemGradient, newItem: PaletteItemGradient) {
+        guard let paletteItems else { return }
+        paletteItems.removeObject(atIndexSync: UInt(indexPath.row))
+        paletteItems.insertObjectSync(newItem, at: UInt(indexPath.row))
+        data.removeRow(at: indexPath)
+        data.addRow(at: indexPath, row: generateRowData(for: newItem))
+        if selectedPaletteItem?.id == oldItem.id {
+            selectedPaletteItem = newItem
+            delegate?.selectPaletteItem?(newItem)
+        } else {
+            delegate?.reloadData?()
+        }
+        
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+    }
     
     func onContextMenuItemEdit(_ indexPath: IndexPath) {
         editColorIndexPath = indexPath

@@ -156,9 +156,6 @@ static const int START_ZOOM = 7;
     
     [self.mapViewController runWithRenderSync:^{
         NSDictionary<NSString *, OASGpxFile *> *gpxFiles = [_gpxFiles copy];
-        [_cachedTracks removeAllObjects];
-        _cachedColors.clear();
-        _cachedWallColors.clear();
         [self refreshGpxTracks:gpxFiles reset:YES];
     }];
 }
@@ -195,7 +192,12 @@ static const int START_ZOOM = 7;
 - (void) refreshGpxTracks:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles reset:(BOOL)reset
 {
     if (reset)
+    {
         [self resetLayer];
+        [_cachedTracks removeAllObjects];
+        _cachedColors.clear();
+        _cachedWallColors.clear();
+    }
 
     _gpxFiles = (NSMutableDictionary *)[gpxFiles mutableCopy];
     [self refreshCachedTracks];

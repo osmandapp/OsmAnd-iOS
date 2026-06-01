@@ -124,13 +124,13 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
     // MARK: - Instance Properties
 
-    private var isStarted = false
+    private var observersRegistered = false
 
     private var overlays: [ObjectIdentifier: OverlayWindow] = [:]
 
     private var recognizers = NSHashTable<PassiveTouchRecognizer>.weakObjects()
 
-    private var isReconciling = false
+    private var isUpdating = false
 
     private var isShowTouchesEnabled: Bool {
         OAAppSettings.sharedManager().showTouches.get()
@@ -151,13 +151,13 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
             }
             return
         }
-        start()
-        reconcile()
+        registerWindowObservers()
+        updateTouchIndicators()
     }
 
-    private func start() {
-        guard !isStarted else { return }
-        isStarted = true
+    private func registerWindowObservers() {
+        guard !observersRegistered else { return }
+        observersRegistered = true
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(onWindowsChanged),
                                                name: UIScene.didActivateNotification,
@@ -168,10 +168,10 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
                                                object: nil)
     }
 
-    private func reconcile() {
-        guard !isReconciling else { return }
-        isReconciling = true
-        defer { isReconciling = false }
+    private func updateTouchIndicators() {
+        guard !isUpdating else { return }
+        isUpdating = true
+        defer { isUpdating = false }
         guard isShowTouchesEnabled else {
             detachAll()
             return
@@ -226,7 +226,7 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
     }
 
     @objc private func onWindowsChanged() {
-        reconcile()
+        updateTouchIndicators()
     }
 
     // MARK: - UIGestureRecognizerDelegate

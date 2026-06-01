@@ -92,6 +92,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
     return self;
 }
 
+- (instancetype)initWithPoint:(OAOpenStreetMapPoint *)point
+{
+    return [self initWithEntity:[point getEntity]];
+}
+
 - (id<OAOpenStreetMapUtilsProtocol>) getEditingUtil
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;

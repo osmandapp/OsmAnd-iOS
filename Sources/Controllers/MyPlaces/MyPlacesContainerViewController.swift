@@ -51,7 +51,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             switch self {
             case .favorites: OAFavoriteListViewController.self
             case .tracks: TracksViewController.self
-            case .osm: OAOsmEditsListViewController.self
+            case .osm: OsmEditsListViewController.self
             case .travel: SavedArticlesTabViewController.self
             }
         }
@@ -73,6 +73,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     private var pageViewController: UIPageViewController?
     private var searchController: UISearchController?
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .default
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSegmentControl()
@@ -90,6 +94,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         setupNavbar()
         segmentContainerView.backgroundColor = .clear
         pageViewController?.scrollView?.backgroundColor = .clear
+        navigationController?.navigationBar.prefersLargeTitles = false
         view.backgroundColor = .viewBg
     }
     
@@ -122,8 +127,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                 availableViewControllers[tab] = tracksViewController
             }
         case .osm:
-            if !availableViewControllers.contains(where: { $0.key == .osm }),
-               let osmEditsViewController = storyboard.instantiateViewController(withIdentifier: "OAOsmEditsListViewController") as? OAOsmEditsListViewController {
+            if !availableViewControllers.contains(where: { $0.key == .osm }) {
+                let osmEditsViewController = OsmEditsListViewController(frame: pageViewController.view.frame)
                 osmEditsViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = osmEditsViewController
             }

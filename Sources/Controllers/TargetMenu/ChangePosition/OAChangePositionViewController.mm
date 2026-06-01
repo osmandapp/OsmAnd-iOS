@@ -164,26 +164,6 @@
     _doneButton.layer.cornerRadius = 9.;
 }
 
-- (void)adjustViewport
-{
-    CGFloat viewportXScale = kViewportScale;
-    if ([OAUtilities isLandscapeIpadAware])
-    {
-        CGFloat mapWidth = _mapView.bounds.size.width;
-        if (mapWidth <= 0)
-            mapWidth = DeviceScreenWidth;
-
-        CGFloat menuWidth = kInfoViewLandscapeWidth;
-        if (OAUtilities.isIPad)
-            menuWidth = OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
-        
-        menuWidth += OAUtilities.getLeftMargin;
-        viewportXScale += menuWidth / mapWidth;
-    }
-
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:viewportXScale];
-}
-
 - (UIView *) getMiddleView
 {
     return self.contentView;

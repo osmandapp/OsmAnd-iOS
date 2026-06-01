@@ -157,26 +157,6 @@
     } completion:nil];
 }
 
-- (void)adjustViewport
-{
-    CGFloat viewportXScale = kViewportScale;
-    if ([OAUtilities isLandscapeIpadAware])
-    {
-        CGFloat mapWidth = _mapView.bounds.size.width;
-        if (mapWidth <= 0.)
-            mapWidth = DeviceScreenWidth;
-
-        CGFloat menuWidth = kInfoViewLandscapeWidth;
-        if (OAUtilities.isIPad)
-            menuWidth = OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
-        
-        menuWidth += OAUtilities.getLeftMargin;
-        viewportXScale += menuWidth / mapWidth;
-    }
-
-    [_mapPanelViewController.mapViewController setViewportScaleX:viewportXScale];
-}
-
 - (void)onMenuShown
 {
     if (![OAUtilities isLandscapeIpadAware])

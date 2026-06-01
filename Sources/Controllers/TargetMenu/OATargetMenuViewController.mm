@@ -52,6 +52,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapRendererView.h"
 #import "OADownloadMapViewController.h"
 #import "OAPlugin.h"
 #import "OAWikipediaPlugin.h"
@@ -1076,6 +1077,26 @@
 - (BOOL)isLandscape
 {
     return OAUtilities.isLandscape;
+}
+
+- (void)adjustViewport
+{
+    CGFloat viewportXScale = kViewportScale;
+    if ([OAUtilities isLandscapeIpadAware])
+    {
+        CGFloat mapWidth = [OARootViewController instance].mapPanel.mapViewController.mapView.bounds.size.width;
+        if (mapWidth <= 0.)
+            mapWidth = DeviceScreenWidth;
+        
+        CGFloat menuWidth = kInfoViewLandscapeWidth;
+        if (OAUtilities.isIPad)
+            menuWidth = OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
+        
+        menuWidth += OAUtilities.getLeftMargin;
+        viewportXScale += menuWidth / mapWidth;
+    }
+    
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:viewportXScale];
 }
 
 - (BOOL)hasControlButtons

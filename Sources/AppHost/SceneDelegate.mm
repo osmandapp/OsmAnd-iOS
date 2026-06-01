@@ -29,7 +29,6 @@
 #import "OAAppDelegate.h"
 #import "OAFirstUsageWizardController.h"
 #import "StartupLogging.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>
@@ -196,7 +195,6 @@
 
             _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
             [_window makeKeyAndVisible];
-            [[OATouchIndicatorController shared] applyFromSettings];
             break;
         case AppLaunchEventSetupRoot:
             NSLog(@"AppLaunchEventSetupRoot");
@@ -217,7 +215,6 @@
 
     _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [_window makeKeyAndVisible];
-    [[OATouchIndicatorController shared] applyFromSettings];
 }
 
 - (void)configureServices

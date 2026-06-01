@@ -99,22 +99,22 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
     private final class PassiveTouchRecognizer: UIGestureRecognizer {
 
-        var onTouches: ((Set<UITouch>) -> Void)?
+        weak var overlay: OverlayWindow?
 
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-            onTouches?(touches)
+            overlay?.handle(touches)
         }
 
         override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-            onTouches?(touches)
+            overlay?.handle(touches)
         }
 
         override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-            onTouches?(touches)
+            overlay?.handle(touches)
         }
 
         override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
-            onTouches?(touches)
+            overlay?.handle(touches)
         }
     }
 
@@ -124,11 +124,17 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
     // MARK: - Instance Properties
 
-    private var isEnabled = false
+    private var isStarted = false
 
     private var overlays: [ObjectIdentifier: OverlayWindow] = [:]
 
-    private var recognizers: [PassiveTouchRecognizer] = []
+    private var recognizers = NSHashTable<PassiveTouchRecognizer>.weakObjects()
+
+    private var isReconciling = false
+
+    private var isShowTouchesEnabled: Bool {
+        OAAppSettings.sharedManager().showTouches.get()
+    }
 
     // MARK: - Initializers
 
@@ -138,61 +144,46 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
     // MARK: - Methods
 
-    func applyFromSettings() {
-        setEnabled(OAAppSettings.sharedManager().showTouches.get())
-    }
-
-    func setEnabled(_ enabled: Bool) {
-        guard enabled != isEnabled else { return }
-        isEnabled = enabled
-        if enabled {
-            startObserving()
-            attachToActiveScenes()
-        } else {
-            stopObserving()
-            detachAll()
+    func apply() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.apply()
+            }
+            return
         }
+        start()
+        reconcile()
     }
 
-    private func startObserving() {
+    private func start() {
+        guard !isStarted else { return }
+        isStarted = true
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onSceneChanged),
+                                               selector: #selector(onWindowsChanged),
                                                name: UIScene.didActivateNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onSceneChanged),
-                                               name: UIWindow.didBecomeKeyNotification,
+                                               selector: #selector(onWindowsChanged),
+                                               name: UIWindow.didBecomeVisibleNotification,
                                                object: nil)
     }
 
-    private func stopObserving() {
-        NotificationCenter.default.removeObserver(self, name: UIScene.didActivateNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIWindow.didBecomeKeyNotification, object: nil)
-    }
-
-    private func attachToActiveScenes() {
+    private func reconcile() {
+        guard !isReconciling else { return }
+        isReconciling = true
+        defer { isReconciling = false }
+        guard isShowTouchesEnabled else {
+            detachAll()
+            return
+        }
         for scene in UIApplication.shared.connectedScenes {
             guard let windowScene = scene as? UIWindowScene,
                   windowScene.activationState == .foregroundActive else { continue }
             let overlay = overlay(for: windowScene)
-            for window in windowScene.windows where window !== overlay {
+            for window in windowScene.windows where window.windowLevel == .normal {
                 attachRecognizer(to: window, overlay: overlay)
             }
         }
-    }
-
-    private func attachRecognizer(to window: UIWindow, overlay: OverlayWindow) {
-        guard !recognizers.contains(where: { $0.view === window }) else { return }
-        let recognizer = PassiveTouchRecognizer()
-        recognizer.cancelsTouchesInView = false
-        recognizer.delaysTouchesBegan = false
-        recognizer.delaysTouchesEnded = false
-        recognizer.delegate = self
-        recognizer.onTouches = { [weak overlay] touches in
-            overlay?.handle(touches)
-        }
-        window.addGestureRecognizer(recognizer)
-        recognizers.append(recognizer)
     }
 
     private func overlay(for windowScene: UIWindowScene) -> OverlayWindow {
@@ -204,17 +195,28 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
         overlay.isUserInteractionEnabled = false
         overlay.windowLevel = .statusBar + 100
         overlay.backgroundColor = .clear
-        overlay.isHidden = false
         overlays[key] = overlay
+        overlay.isHidden = false
         return overlay
     }
 
+    private func attachRecognizer(to window: UIWindow, overlay: OverlayWindow) {
+        guard !recognizers.allObjects.contains(where: { $0.view === window }) else { return }
+        let recognizer = PassiveTouchRecognizer()
+        recognizer.cancelsTouchesInView = false
+        recognizer.delaysTouchesBegan = false
+        recognizer.delaysTouchesEnded = false
+        recognizer.delegate = self
+        recognizer.overlay = overlay
+        window.addGestureRecognizer(recognizer)
+        recognizers.add(recognizer)
+    }
+
     private func detachAll() {
-        for recognizer in recognizers {
-            recognizer.onTouches = nil
+        for recognizer in recognizers.allObjects {
             recognizer.view?.removeGestureRecognizer(recognizer)
         }
-        recognizers.removeAll()
+        recognizers.removeAllObjects()
         for overlay in overlays.values {
             overlay.clear()
             overlay.isHidden = true
@@ -223,10 +225,8 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
         overlays.removeAll()
     }
 
-    @objc private func onSceneChanged() {
-        guard isEnabled else { return }
-        recognizers.removeAll { $0.view == nil }
-        attachToActiveScenes()
+    @objc private func onWindowsChanged() {
+        reconcile()
     }
 
     // MARK: - UIGestureRecognizerDelegate

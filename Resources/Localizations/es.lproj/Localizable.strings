@@ -4049,4 +4049,3 @@
 "terrain_shadows_footer_descr" = "El relieve 3D se activa automáticamente, ya que es necesario para representar las sombras del terreno";
 "rendering_attr_shellsStyle_name" = "Estilo de conchas";
 "rendering_attr_shellsStyle_description" = "Estilo de las conchas en el lecho marino";
-"show_touches" = "Mostrar toques";

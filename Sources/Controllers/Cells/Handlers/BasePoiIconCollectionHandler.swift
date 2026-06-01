@@ -19,6 +19,8 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
     var groupIcons: [String] = []
     var profileIcons: [String] = []
     
+    // MARK: - Init / lifecycle
+    
     override init() {
         super.init()
         setup()
@@ -29,6 +31,159 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
         collectionType = .poiIconCategories
         selectCategory(categoriesByKeyName.keys.contains(lastUsedKey) ? lastUsedKey : specialKey)
     }
+    
+    // MARK: - Override methods (group)
+    
+    override func setIconName(_ iconName: String) {
+        guard !iconName.isEmpty else { return }
+        
+        for category in categories {
+            let shouldSkipOriginal = allIconsVCDelegate == nil && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first })
+
+            if shouldSkipOriginal {
+                setSelectedIndexPath(IndexPath(row: 0, section: 0))
+                selectCategory(category.key)
+                return
+            } else {
+                for (index, iconKey) in category.iconKeys.enumerated() {
+                    if iconName == iconKey || "mx_" + iconName == iconKey {
+                        selectCategory(category.key)
+                        setSelectedIndexPath(IndexPath(row: index, section: 0))
+                        return
+                    }
+                }
+            }
+        }
+        addIconToLastUsed(iconName)
+        setSelectedIndexPath(IndexPath(row: 0, section: 0))
+        selectCategory(lastUsedKey)
+    }
+    
+    override func updateHostCellIfNeeded() {
+        super.updateHostCellIfNeeded()
+        updateHostCellIfNoIconCategory(selectedCatagoryKey == ORIGINAL_KEY)
+    }
+    
+    override func loadAllIconsData() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            
+            for category in self.categories {
+                var brokenIcons: [String] = []
+                
+                for iconName in category.iconKeys where Self.cachedIcons.object(forKey: iconName as NSString) == nil {
+                    let icon = UIImage.templateImageNamed(iconName)
+                    if let icon {
+                        Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
+                    } else {
+                        brokenIcons.append(iconName)
+                    }
+                }
+                
+                if !brokenIcons.isEmpty {
+                    let filteredIcons = category.iconKeys.filter { !brokenIcons.contains($0) }
+                    self.categoriesByKeyName[category.key]?.iconKeys = filteredIcons
+                    if category.key == lastUsedKey {
+                        lastUsedIcons = category.iconKeys
+                        saveLastUsed(lastUsedIcons)
+                    }
+                    getCollectionView()?.reloadData()
+                }
+            }
+        }
+    }
+    
+    override func buildTopButtonContextMenu() -> UIMenu? {
+        var topMenuElements = [UIMenuElement]()
+        var bottomMenuElements = [UIMenuElement]()
+        
+        for category in categories {
+            if category.key == ORIGINAL_KEY || category.key == lastUsedKey || category.key == specialKey {
+                updateMenuElements(&topMenuElements, with: category)
+            } else {
+                updateMenuElements(&bottomMenuElements, with: category)
+            }
+        }
+        
+        let topMenu = UIMenu(title: "", options: .displayInline, children: topMenuElements)
+        let bottomMenu = UIMenu(title: "", options: .displayInline, children: bottomMenuElements)
+        
+        return UIMenu.composedMenu(from: [topMenuElements, bottomMenuElements])
+    }
+    
+    override func onMenuItemSelected(name: String) {
+        guard !name.isEmpty else { return }
+        
+        if let allIconsVCDelegate {
+            allIconsVCDelegate.scrollToCategory(categoryKey: name)
+        } else {
+            if let category = categoriesByKeyName[name] {
+                selectCategory(name)
+                category.iconKeys.first.flatMap { selectIconName($0) }
+            }
+        }
+    }
+    
+    // MARK: - Public API
+    
+    func categoryNames() -> [String] {
+        categories.map { $0.key }
+    }
+    
+    func initOriginalCategory() {
+        categories.append(IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
+    }
+    
+    func initLastUsedCategory() {
+        lastUsedIcons = lastUsed()
+        guard !categories.contains(where: { $0.key == lastUsedKey }), !lastUsedIcons.isEmpty else { return }
+        let category = IconsAppearanceCategory(key: lastUsedKey, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
+        
+        categories.append(category)
+        categoriesByKeyName[lastUsedKey] = category
+    }
+    
+    func initFilteredCategories() {
+        categories = categories.filter { $0.key != ORIGINAL_KEY }
+        categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
+    }
+    
+    func addProfileIconsCategoryIfNeeded(categoryKey: String) {
+        if categoryKey == PROFILE_ICONS_KEY {
+            addProfileIconsCategory()
+        }
+    }
+    
+    func addProfileIconsCategory() {
+        profileIcons = Self.getProfileIconsList()
+
+        let profileIconsCategory = IconsAppearanceCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
+        categories.append(profileIconsCategory)
+        categoriesByKeyName[PROFILE_ICONS_KEY] = profileIconsCategory
+        sortCategories()
+    }
+    
+    func sortCategories() {
+        sortCategoriesAndMoveKeyUp(ORIGINAL_KEY)
+    }
+    
+    func addIconToLastUsed(_ iconKey: String) {
+        guard !iconKey.isEmpty else { return }
+        
+        if let index = lastUsedIcons.firstIndex(of: iconKey) {
+            lastUsedIcons.remove(at: index)
+        }
+        lastUsedIcons.insert(iconKey, at: 0)
+        if lastUsedIcons.count > lastUsedIconsLimit {
+            lastUsedIcons = Array(lastUsedIcons.prefix(lastUsedIconsLimit))
+        }
+        if let lastUsedIconsIndex = categories.firstIndex(where: { $0.key == lastUsedKey }) {
+            categories[lastUsedIconsIndex].iconKeys = lastUsedIcons
+        }
+        saveLastUsed(lastUsedIcons)
+    }
+
+    // MARK: - Persistence (abstract)
     
     /// Persists the list of recently used icon identifiers.
     /// Subclasses should override this method and provide their own storage implementation.
@@ -41,7 +196,11 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
     func lastUsed() -> [String] {
         fatalError("Subclasses must implement \(#function)")
     }
-    
+}
+
+// MARK: - Profile icons
+
+extension BasePoiIconCollectionHandler {
     static func getProfileIconsList() -> [String] {
         [
             "ic_world_globe_dark",
@@ -90,152 +249,5 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
             "ic_action_motorboat",
             "ic_action_light_aircraft"
         ]
-    }
-    
-    func initFilteredCategories() {
-        categories = categories.filter { $0.key != ORIGINAL_KEY }
-        categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
-    }
-    
-    override func setIconName(_ iconName: String) {
-        guard !iconName.isEmpty else { return }
-        
-        for category in categories {
-            let shouldSkipOriginal = allIconsVCDelegate == nil && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first })
-
-            if shouldSkipOriginal {
-                setSelectedIndexPath(IndexPath(row: 0, section: 0))
-                selectCategory(category.key)
-                return
-            } else {
-                for (index, key) in category.iconKeys.enumerated() {
-                    if iconName == category.iconKeys[index] || "mx_" + iconName == category.iconKeys[index] {
-                        selectCategory(category.key)
-                        setSelectedIndexPath(IndexPath(row: index, section: 0))
-                        return
-                    }
-                }
-            }
-        }
-        addIconToLastUsed(iconName)
-        setSelectedIndexPath(IndexPath(row: 0, section: 0))
-        selectCategory(lastUsedKey)
-    }
-    
-    func categoryNames() -> [String] {
-        categories.map { $0.key }
-    }
-    
-    func initOriginalCategory() {
-        categories.append(IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [], isTopCategory: true))
-    }
-    
-    func initLastUsedCategory() {
-        lastUsedIcons = lastUsed()
-        guard !categories.contains(where: { $0.key == lastUsedKey }), !lastUsedIcons.isEmpty else { return }
-        let category = IconsAppearanceCategory(key: lastUsedKey, translatedName: localizedString("shared_string_last_used"), iconKeys: lastUsedIcons, isTopCategory: true)
-        
-        categories.append(category)
-        categoriesByKeyName[lastUsedKey] = category
-    }
-    
-    func addProfileIconsCategoryIfNeeded(categoryKey: String) {
-        if categoryKey == PROFILE_ICONS_KEY {
-            addProfileIconsCategory()
-        }
-    }
-
-    func addProfileIconsCategory() {
-        profileIcons = Self.getProfileIconsList()
-
-        let profileIconsCategory = IconsAppearanceCategory(key: PROFILE_ICONS_KEY, translatedName: localizedString("profile_icons"), iconKeys: profileIcons, isTopCategory: true)
-        categories.append(profileIconsCategory)
-        categoriesByKeyName[PROFILE_ICONS_KEY] = profileIconsCategory
-        sortCategories()
-    }
-    
-    func sortCategories() {
-        sortCategoriesAndMoveKeyUp(ORIGINAL_KEY)
-    }
-    
-    override func buildTopButtonContextMenu() -> UIMenu? {
-        var topMenuElements = [UIMenuElement]()
-        var bottomMenuElements = [UIMenuElement]()
-        
-        for category in categories {
-            if category.key == ORIGINAL_KEY || category.key == lastUsedKey || category.key == specialKey {
-                updateMenuElements(&topMenuElements, with: category)
-            } else {
-                updateMenuElements(&bottomMenuElements, with: category)
-            }
-        }
-        
-        let topMenu = UIMenu(title: "", options: .displayInline, children: topMenuElements)
-        let bottomMenu = UIMenu(title: "", options: .displayInline, children: bottomMenuElements)
-        
-        return UIMenu.composedMenu(from: [topMenuElements, bottomMenuElements])
-    }
-    
-    override func onMenuItemSelected(name: String) {
-        guard !name.isEmpty else { return }
-        
-        if let allIconsVCDelegate {
-            allIconsVCDelegate.scrollToCategory(categoryKey: name)
-        } else {
-            if let category = categoriesByKeyName[name] {
-                selectCategory(name)
-                category.iconKeys.first.flatMap { selectIconName($0) }
-            }
-        }
-    }
-    
-    override func updateHostCellIfNeeded() {
-        super.updateHostCellIfNeeded()
-        updateHostCellIfNoIconCategory(selectedCatagoryKey == ORIGINAL_KEY)
-    }
-    
-    func addIconToLastUsed(_ iconKey: String) {
-        guard !iconKey.isEmpty else { return }
-        
-        if let index = lastUsedIcons.firstIndex(of: iconKey) {
-            lastUsedIcons.remove(at: index)
-        }
-        lastUsedIcons.insert(iconKey, at: 0)
-        if lastUsedIcons.count > lastUsedIconsLimit {
-            lastUsedIcons = Array(lastUsedIcons.prefix(lastUsedIconsLimit))
-        }
-        if let lastUsedIconsIndex = categories.firstIndex(where: { $0.key == lastUsedKey }) {
-            categories[lastUsedIconsIndex].iconKeys = lastUsedIcons
-        }
-        saveLastUsed(lastUsedIcons)
-    }
-    
-    override func loadAllIconsData() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            
-            for category in self.categories {
-                var brokenIcons: [String] = []
-                
-                for iconName in category.iconKeys where Self.cachedIcons.object(forKey: iconName as NSString) == nil {
-                    let icon = UIImage.templateImageNamed(iconName)
-                    if let icon {
-                        Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
-                    } else {
-                        brokenIcons.append(iconName)
-                    }
-                }
-                
-                if !brokenIcons.isEmpty {
-                    let filteredIcons = category.iconKeys.filter { !brokenIcons.contains($0) }
-                    self.categoriesByKeyName[category.key]?.iconKeys = filteredIcons
-                    if category.key == lastUsedKey {
-                        lastUsedIcons = category.iconKeys
-                        saveLastUsed(lastUsedIcons)
-                    }
-                    getCollectionView()?.reloadData()
-                }
-            }
-        }
     }
 }

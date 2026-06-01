@@ -262,7 +262,7 @@
 
 - (CGFloat)additionalContentOffset
 {
-    return [OAUtilities isLandscapeIpadAware] ? 0. : [self contentHeight];
+    return [OAUtilities isLandscapeIpadAware] ? 0 : [self contentHeight];
 }
 
 - (CGFloat)contentHeight

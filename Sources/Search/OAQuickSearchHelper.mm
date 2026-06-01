@@ -736,7 +736,8 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray<NSString *> *resIds = [NSMutableArray array];
     for (const auto& resource : app.resourcesManager->getLocalResources())
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion)
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion ||
+            resource->type == OsmAnd::ResourcesManager::ResourceType::Travel)
         {
             [resIds addObject:resource->id.toNSString()];
         }

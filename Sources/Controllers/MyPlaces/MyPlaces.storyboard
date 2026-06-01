@@ -9,64 +9,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Osm Edits List View Controller-->
-        <scene sceneID="TNK-ML-Wew">
-            <objects>
-                <viewController restorationIdentifier="OAOsmEditsListViewController" storyboardIdentifier="OAOsmEditsListViewController" id="Pg1-zp-xNx" customClass="OAOsmEditsListViewController" sceneMemberID="viewController">
-                    <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="HiK-Id-V8n">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="zzn-bN-eNS">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" name="viewBg"/>
-                                <color key="tintColor" name="iconColorActive"/>
-                                <color key="separatorColor" name="customSeparator"/>
-                            </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Bf-uz-mXb">
-                                <rect key="frame" x="0.0" y="96" width="414" height="44"/>
-                                <color key="backgroundColor" name="navBarBgColorPrimary"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="G2J-6c-im8"/>
-                                </constraints>
-                            </view>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="erl-gB-7ba">
-                                <rect key="frame" x="20" y="102.5" width="374" height="32"/>
-                                <segments>
-                                    <segment title="All"/>
-                                    <segment title="Edits"/>
-                                    <segment title="Notes"/>
-                                </segments>
-                                <connections>
-                                    <action selector="onSegmentChanged:" destination="Pg1-zp-xNx" eventType="valueChanged" id="kmy-67-FwR"/>
-                                </connections>
-                            </segmentedControl>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="g46-oF-81a"/>
-                        <color key="backgroundColor" name="viewBg"/>
-                        <constraints>
-                            <constraint firstItem="g46-oF-81a" firstAttribute="trailing" secondItem="erl-gB-7ba" secondAttribute="trailing" constant="20" id="3Fr-Yb-IPG"/>
-                            <constraint firstItem="zzn-bN-eNS" firstAttribute="top" secondItem="HiK-Id-V8n" secondAttribute="top" id="3lE-ez-Sjp"/>
-                            <constraint firstItem="erl-gB-7ba" firstAttribute="centerY" secondItem="7Bf-uz-mXb" secondAttribute="centerY" id="Amm-Yp-vkb"/>
-                            <constraint firstItem="7Bf-uz-mXb" firstAttribute="top" secondItem="g46-oF-81a" secondAttribute="top" id="Cqz-4g-ev8"/>
-                            <constraint firstItem="erl-gB-7ba" firstAttribute="leading" secondItem="g46-oF-81a" secondAttribute="leading" constant="20" id="HKx-oP-qrc"/>
-                            <constraint firstAttribute="trailing" secondItem="7Bf-uz-mXb" secondAttribute="trailing" id="LJO-zh-hG7"/>
-                            <constraint firstItem="7Bf-uz-mXb" firstAttribute="leading" secondItem="HiK-Id-V8n" secondAttribute="leading" id="epB-GJ-Cfa"/>
-                            <constraint firstAttribute="trailing" secondItem="zzn-bN-eNS" secondAttribute="trailing" id="i04-5w-23c"/>
-                            <constraint firstItem="zzn-bN-eNS" firstAttribute="leading" secondItem="HiK-Id-V8n" secondAttribute="leading" id="kw5-Xa-W8G"/>
-                            <constraint firstAttribute="bottom" secondItem="zzn-bN-eNS" secondAttribute="bottom" id="wuc-uF-Aa9"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="segmentContainerView" destination="7Bf-uz-mXb" id="QHd-js-DIo"/>
-                        <outlet property="segmentControl" destination="erl-gB-7ba" id="FO5-Kz-Eaw"/>
-                        <outlet property="tableView" destination="zzn-bN-eNS" id="jC2-mT-OP8"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="b2Q-rI-WY7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-70" y="730"/>
-        </scene>
         <!--Favorite List View Controller-->
         <scene sceneID="Icp-hR-oHC">
             <objects>
@@ -163,9 +105,6 @@
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="navBarBgColorPrimary">
-            <color red="1" green="0.53333333333333333" blue="0.0" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

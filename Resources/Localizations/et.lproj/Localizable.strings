@@ -128,7 +128,7 @@
 "map_widget_intermediate_distance" = "Vahepealne sihtkoht";
 "route_descr_destination" = "Sihtkoht";
 "monitoring_control_start" = "SALVESTA";
-"map_widget_altitude" = "Praeguse asukoha kõrgus";
+"map_widget_altitude" = "Praeguse asukoha kõrgus merepinnast";
 "map_widget_battery" = "Aku laetuse tase";
 "map_widget_plain_time" = "Praegune aeg";
 "map_widget_max_speed" = "Kiiruspiirang";
@@ -437,7 +437,7 @@
 "map_widget_average_speed" = "Keskmine kiirus";
 "gpx_avg_elev" = "Keskmine kõrgus";
 "gpx_elev_range" = "Kõrguse vahemik";
-"average_altitude" = "Keskmine kõrgus";
+"average_altitude" = "Keskmine kõrgus merepinnast";
 "altitude_range" = "Kõrgusevahe";
 "gpx_ascent" = "Tõus";
 "gpx_descent" = "Laskumine";
@@ -600,7 +600,7 @@
 "shared_string_type" = "Liik";
 "res_unknown" = "Teadmata";
 "shared_string_size" = "Suurus";
-"created_on" = "Loodud";
+"created_on" = "Loomise aeg";
 "res_update_all" = "Uuenda kõik";
 "res_updates_no_space" = "Puudub piisav vaba ruum %d uuenduse paidaldamiseks. %@ on vaja. Palun vabasta veidi ruumi.";
 "res_updates_avail_q" = "uuendus(t) on saadaval.";
@@ -972,7 +972,7 @@
 "shared_string_language" = "Keel";
 "you_searching" = "Otsid";
 "from_location" = "eemal";
-"show_alt_in_drive" = "Kuva kõrgus sõidurežiimis";
+"show_alt_in_drive" = "Kuva sõidurežiimis kõrgus merepinnast";
 "shared_string_get" = "Hangi";
 "srtm_plugin_disabled" = "Topograafia on keelatud";
 "prch_wiki_info" = "Vikipeedia lisamoodul võimaldab tasuta limiidi piires vikipeedia teavet nende kaartide kohta, millele sul on õigus, ostetud või alla laaditud kaartide piires.";
@@ -1514,7 +1514,7 @@
 "gpx_analyze" = "Analüüsi";
 "import_from_files" = "Impordi failidest";
 "map_update_warning" = "Kas sa soovid laadida paanid uuesti internetist?";
-"zoom_levels_difference_description" = "Suumitasemete suur arv võib suurendada allalaaditavat andmehulka.";
+"zoom_levels_difference_description" = "Suur erinevus suumitasemete vahel võib suurendada allalaaditud andmete mahtu.";
 "online_sources" = "Andmeallikad veebis";
 "select_online_source" = "Vali andmeallikas";
 "appearance_on_the_map" = "Välimus kaardil";
@@ -2183,7 +2183,7 @@
 "route_preferred_terrain_hilly" = "Mägise reljeefiga marsruudid.";
 "any_poi" = "Mistahes";
 "weather_temperature_celsius" = "Celsius";
-"altitude" = "Kõrgus";
+"altitude" = "Kõrgus merepinnast";
 "save_heading" = "Koos suunaga";
 "route_preferred_terrain_flat" = "Tasase reljeefiprofiiliga marsruudid. Teepikkus võib kasvada.";
 "map_settings_weather_precip" = "Sademed";
@@ -2623,7 +2623,7 @@
 "rotate_map_manual_opt" = "Pööra käsitsi";
 "rendering_value_caiScale_name" = "CAI alusel";
 "gitHub_discussion" = "Arutelu GitHubis";
-"report_an_issues" = "Teata probleemist";
+"report_an_issues" = "Teata veast või probleemist";
 "app_mode_moped" = "Mopeed";
 "tomorrow" = "Homme";
 "rendering_value_managerName_name" = "Haldaja nime alusel";
@@ -2802,7 +2802,7 @@
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "most_viewed" = "Enimvaadatud";
 "testFlight" = "TestFlight";
-"map_widget_altitude_current_location" = "Kõrgus: praegune asukoht";
+"map_widget_altitude_current_location" = "Kõrgus merepinnast: praegune asukoht";
 "external_device_status_disconnecting" = "Ühenduse katkestamine";
 "my_places_no_tracks_descr" = "Selles kaustas pole veel ühtegi rada.";
 "bluetooth_found_title" = "Leidsime: %d";
@@ -2982,7 +2982,7 @@
 "shared_string_deleting_complete" = "Kustutamine lõppes";
 "compass_always_hidden" = "Alati peidetud";
 "discard_filter_changes_prompt" = "Kas nullime kõik filtrid?";
-"max_altitude" = "Maksimaalne kõrgus";
+"max_altitude" = "Maksimaalne kõrgus merepinnast";
 "sensor_temperature_desc" = "Näitab temperatuuri sensori aluselt";
 "date_of_creation" = "Loomise kuupäev";
 "rendering_attr_OSMMapperAssistantFixme_name" = "„Vajab parandamist“ sildid";
@@ -3508,7 +3508,7 @@
 "trace_rendering_descr" = "Näita graafilise liidese kuvamis- ja teekonna juhatamise jõudlust.";
 "obd_throttle_position_desc" = "Näitab drosseliklapi asendit drosseli kestas.";
 "obd_engine_coolant_temp_desc" = "Näitab jahutusvedeliku temperatuuri";
-"simulate_obd" = "Simuleeri OBD andmeid";
+"simulate_obd" = "Simuleeri OBD-andmeid";
 "obd_fuel_left_km" = "Kütust jäänud (km)";
 "obd_ambient_air_temp_desc" = "Näitab temperatuuri väljaspool sõidukit.";
 "connect_obd_instructions_title" = "OsmAnd toetab Bluetoothi ühendusi OBD-II skänneritega.";
@@ -3614,7 +3614,23 @@
 "osm_live_payment_renews_3_years" = "Uueneb iga kolme aasta järel";
 "shared_string_litres" = "liitrit";
 "key_event_action_zoom_in" = "Suumi sisse";
-"altitude_metrics_description" = "Seadistab kõrguse mõõtühiku vidinate ja statistika jaoks.";
+"altitude_metrics_description" = "Seadistab Kõrgus merepinnast mõõtühiku vidinate ja statistika jaoks.";
 "quick_action_map_center_widget_descr" = "Nupp, mis võimaldab näidata või peita kaardi keskpunkti vidinat.";
 "key_event_category_map_interactions" = "Tegevused kaardiga";
 "x" = "X (varem Twitter)";
+"routing_attr_hazmat_category_usa_1_name" = "Lõhkeained";
+"routing_attr_hazmat_category_usa_2_name" = "Gaasid";
+"routing_attr_hazmat_category_usa_3_name" = "Kergestisüttivad vedelikud";
+"routing_attr_hazmat_category_usa_4_name" = "Kergestisüttivad tahked objektid";
+"routing_attr_hazmat_category_usa_5_name" = "Oksüdeerijad ja orgaanilised peroksiidid";
+"routing_attr_hazmat_category_usa_6_name" = "Mürgised ja nakkusohtlikud ained";
+"routing_attr_hazmat_category_usa_7_name" = "Radioaktiivsed ained";
+"routing_attr_hazmat_category_usa_8_name" = "Söövitavad ained";
+"routing_attr_hazmat_category_usa_9_name" = "Varia";
+"osmand_cloud_deleted_account_descr" = "Kasutajakonto ja kõik andmed on kustutatud teenusest „OsmAnd Cloud“.";
+"osmand_cloud_deleting_account_descr" = "Mõne hetke pärast saavad kõik andmed ja kasutajakonto teave kustutatud „OsmAnd Cloud“ teenusest?\n\nNutiseadmes olevad andmed jäävad puutumata.";
+"open_from_short" = "Alates";
+"open_till_short" = "Kuni";
+"elevation_profile_widget_desc" = "Näitab praeguse marsruudi kõrguste ja kaldenurkade profiili.";
+"map_widget_altitude_desc" = "Näita praeguse asukoha kõrgust või kaardi keskpunkti kõrgust merepinnast";
+"altitude_widget_desc" = "Näitab praeguse asukoha kõrgust merepinnast.";

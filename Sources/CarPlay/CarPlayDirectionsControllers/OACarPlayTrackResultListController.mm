@@ -132,7 +132,7 @@
                                                        useIntermediatePointsByDefault:NO
                                                                            showDialog:NO];
 
-    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    [self safePopToRootTemplateAnimated:YES];
     if (completionBlock)
         completionBlock();
 }

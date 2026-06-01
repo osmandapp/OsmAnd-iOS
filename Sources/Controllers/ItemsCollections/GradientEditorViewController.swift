@@ -8,6 +8,13 @@
 
 import UIKit
 
+private enum GradientEditorSection: Int {
+    case preview
+    case value
+    case color
+    case actions
+}
+
 private enum GradientEditorRow: String {
     case legend
     case steps
@@ -144,7 +151,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         let colorsRow = colorSection.createNewRow()
         colorsRow.cellType = OACollectionSingleLineTableViewCell.reuseIdentifier
         colorsRow.key = GradientEditorRow.colors.rawValue
-        colorsCollectionIndexPath = IndexPath(row: 1, section: 2)
+        colorsCollectionIndexPath = IndexPath(row: 1, section: GradientEditorSection.color.rawValue)
         let allColorsRow = colorSection.createNewRow()
         allColorsRow.cellType = OASimpleTableViewCell.reuseIdentifier
         allColorsRow.key = GradientEditorRow.allColors.rawValue
@@ -158,7 +165,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.section == 0 && indexPath.row == 1 ? 60 : UITableView.automaticDimension
+        indexPath.section == GradientEditorSection.preview.rawValue && indexPath.row == 1 ? 60 : UITableView.automaticDimension
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -337,19 +344,19 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         
         dataState = newState
         generateData()
-        var previewRows = [IndexPath(row: 0, section: 0)]
+        var previewRows = [IndexPath(row: 0, section: GradientEditorSection.preview.rawValue)]
         if reloadStepsRow {
-            previewRows.append(IndexPath(row: 1, section: 0))
+            previewRows.append(IndexPath(row: 1, section: GradientEditorSection.preview.rawValue))
         }
         tableView.reloadRows(at: previewRows, with: .none)
         if reloadValueSection {
-            tableView.reloadSections(IndexSet(integer: 1), with: .none)
+            tableView.reloadSections(IndexSet(integer: GradientEditorSection.value.rawValue), with: .none)
         }
         if reloadColorSection {
-            tableView.reloadSections(IndexSet(integer: 2), with: .none)
+            tableView.reloadSections(IndexSet(integer: GradientEditorSection.color.rawValue), with: .none)
         }
         if reloadActionsSection {
-            tableView.reloadSections(IndexSet(integer: 3), with: .none)
+            tableView.reloadSections(IndexSet(integer: GradientEditorSection.actions.rawValue), with: .none)
         }
     }
     
@@ -378,7 +385,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     @objc private func onAddStepPressed() {
         guard let state = GradientEditorAlgorithms.addStep(dataState) else { return }
         applyState(state, reloadStepsRow: false)
-        if let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? OAFoldersCell {
+        if let cell = tableView.cellForRow(at: IndexPath(row: 1, section: GradientEditorSection.preview.rawValue)) as? OAFoldersCell {
             let selectedIndexPath = IndexPath(row: state.selectedIndex, section: 0)
             cell.collectionView.setValues(stepValues(), withSelectedIndex: state.selectedIndex)
             cell.collectionView.reloadData()
@@ -445,7 +452,7 @@ extension GradientEditorViewController: OAFoldersCellDelegate {
         let state = EditorDataState(draft: dataState.draft, selectedIndex: index)
         updateSelectedColorItem(for: state)
         applyState(state, addToHistory: false, reloadStepsRow: false)
-        if let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? OAFoldersCell {
+        if let cell = tableView.cellForRow(at: IndexPath(row: 1, section: GradientEditorSection.preview.rawValue)) as? OAFoldersCell {
             cell.collectionView.reloadData()
         }
     }

@@ -2044,7 +2044,8 @@ typedef enum
         || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated)
         || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph
         || self.targetMenuView.targetPoint.type == OATargetTransportRouteDetails
-        || self.targetMenuView.targetPoint.type == OATargetChangePosition)
+        || self.targetMenuView.targetPoint.type == OATargetChangePosition
+        || self.targetMenuView.targetPoint.type == OATargetNewMovableWpt)
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];

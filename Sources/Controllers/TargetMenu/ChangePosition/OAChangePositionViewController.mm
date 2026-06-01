@@ -173,7 +173,11 @@
         if (mapWidth <= 0)
             mapWidth = DeviceScreenWidth;
 
-        CGFloat menuWidth = (OAUtilities.isIPad ? (OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad) : kInfoViewLanscapeWidth) + OAUtilities.getLeftMargin;
+        CGFloat menuWidth = kInfoViewLandscapeWidth;
+        if (OAUtilities.isIPad)
+            menuWidth = OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
+        
+        menuWidth += OAUtilities.getLeftMargin;
         viewportXScale += menuWidth / mapWidth;
     }
 

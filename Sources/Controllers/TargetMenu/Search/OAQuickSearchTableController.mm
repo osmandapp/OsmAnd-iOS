@@ -568,6 +568,7 @@
         }
         else
         {
+            cell.descriptionLabel.attributedText = nil;
             [cell.descriptionLabel setText:typeName];
             [cell descriptionVisibility:YES];
         }
@@ -653,7 +654,8 @@
                         cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
                         
                     }
-                    cell.descriptionLabel.text = [OAQuickSearchListItem getTypeName:res];
+                    cell.descriptionLabel.text = nil;
+                    cell.descriptionLabel.attributedText = [TracksSortModeHelper getTrackDescriptionWithTrack:dataItem sortMode:TracksSortModeLastModified includeFolderInfo:YES];
                     BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
                     cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
                     return cell;

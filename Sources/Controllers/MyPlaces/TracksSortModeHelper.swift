@@ -237,7 +237,7 @@ protocol SortableFolder {
     
     private static func appendFolderInfo(to attributedString: NSMutableAttributedString, track: GpxDataItem, defaultAttributes: [NSAttributedString.Key: Any]) {
         let folderName: String
-        if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(track.gpxFolderName), !capitalizedFolderName.isEmpty {
+        if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(shortFolderPath(track.gpxFolderName)), !capitalizedFolderName.isEmpty {
             folderName = capitalizedFolderName
         } else {
             folderName = localizedString("shared_string_gpx_tracks")
@@ -250,6 +250,15 @@ protocol SortableFolder {
         } else {
             attributedString.append(NSAttributedString(string: folderName, attributes: defaultAttributes))
         }
+    }
+    
+    private static func shortFolderPath(_ folderPath: String) -> String {
+        let pathComponents = folderPath.components(separatedBy: "/").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }
+        if pathComponents.count > 2 {
+            return "\(pathComponents[0]) / ... / \(pathComponents[pathComponents.count - 1])"
+        }
+        
+        return pathComponents.joined(separator: " / ")
     }
 }
 

@@ -30,6 +30,18 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
         selectCategory(categoriesByKeyName.keys.contains(lastUsedKey) ? lastUsedKey : specialKey)
     }
     
+    /// Persists the list of recently used icon identifiers.
+    /// Subclasses should override this method and provide their own storage implementation.
+    func saveLastUsed(_ icons: [String]) {
+        fatalError("Subclasses must implement \(#function)")
+    }
+
+    /// Returns the list of recently used icon identifiers.
+    /// Subclasses should override this method and retrieve the data from their storage.
+    func lastUsed() -> [String] {
+        fatalError("Subclasses must implement \(#function)")
+    }
+    
     static func getProfileIconsList() -> [String] {
         [
             "ic_world_globe_dark",
@@ -151,7 +163,7 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
         var bottomMenuElements = [UIMenuElement]()
         
         for category in categories {
-            if category.key == ORIGINAL_KEY || category.key == lastUsedKey || (category.key == specialKey) {
+            if category.key == ORIGINAL_KEY || category.key == lastUsedKey || category.key == specialKey {
                 updateMenuElements(&topMenuElements, with: category)
             } else {
                 updateMenuElements(&bottomMenuElements, with: category)
@@ -207,12 +219,6 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
                 
                 for iconName in category.iconKeys where Self.cachedIcons.object(forKey: iconName as NSString) == nil {
                     var icon = UIImage.templateImageNamed(iconName)
-                    if icon == nil {
-                        icon = OAUtilities.getMxIcon(iconName.lowercased())
-                    }
-                    if icon == nil {
-                        icon = OAUtilities.getMxIcon("mx_" + iconName.lowercased())
-                    }
                     if let icon {
                         Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
                     } else {
@@ -232,12 +238,4 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
             }
         }
     }
-    
-    /// Persists the list of recently used icon identifiers.
-    /// Subclasses should override this method and provide their own storage implementation.
-    func saveLastUsed(_ icons: [String]) {}
-
-    /// Returns the list of recently used icon identifiers.
-    /// Subclasses should override this method and retrieve the data from their storage.
-    func lastUsed() -> [String] { [] }
 }

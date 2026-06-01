@@ -204,10 +204,8 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     if (!imageName)
         return nil;
-    UIImage *image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    if (!image)
-        image = [OAUtilities getMxIcon:[imageName lowercaseString]];
-    return image;
+    
+    return [[self imageNamedOrMxIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 + (UIImage *) rtlImageNamed:(NSString *)imageName

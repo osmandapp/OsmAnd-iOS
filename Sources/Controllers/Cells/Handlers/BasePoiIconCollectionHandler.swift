@@ -218,7 +218,7 @@ class BasePoiIconCollectionHandler: BaseAppearanceIconCollectionHandler {
                 var brokenIcons: [String] = []
                 
                 for iconName in category.iconKeys where Self.cachedIcons.object(forKey: iconName as NSString) == nil {
-                    var icon = UIImage.templateImageNamed(iconName)
+                    let icon = UIImage.templateImageNamed(iconName)
                     if let icon {
                         Self.cachedIcons.setObject(icon, forKey: iconName as NSString)
                     } else {

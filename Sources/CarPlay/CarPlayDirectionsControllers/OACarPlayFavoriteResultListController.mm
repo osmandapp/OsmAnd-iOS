@@ -100,7 +100,7 @@
     }
     OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favoritePoint getName]];
     [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude] historyName:historyName];
-    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    [self safePopToRootTemplateAnimated:YES];
 
     if (completionBlock)
         completionBlock();

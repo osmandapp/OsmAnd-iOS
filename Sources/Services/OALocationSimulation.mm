@@ -256,14 +256,21 @@ static const float LOCATION_TIMEOUT = 1.5;
 - (NSArray *)useSimulationConstantSpeed:(float)speed current:(OASimulatedLocation *)current directions:(NSMutableArray<OASimulatedLocation *> *)directions meters:(float)meters intervalTime:(float)intervalTime coeff:(float)coeff
 {
     NSMutableArray *result = [NSMutableArray array];
-    if ([current distanceFromLocation:directions[0]] > meters)
+    float remaining = meters;
+    while (directions.count > 0 && remaining > 0)
     {
-        current = [[OASimulatedLocation alloc] initWithSimulatedLocation:[self middleLocation:current end:directions[0] meters:meters]];
-    }
-    else
-    {
-        current = [[OASimulatedLocation alloc] initWithSimulatedLocation:directions[0]];
-        [directions removeObjectAtIndex:0];
+        float distToNext = [current distanceFromLocation:directions[0]];
+        if (distToNext > remaining)
+        {
+            current = [[OASimulatedLocation alloc] initWithSimulatedLocation:[self middleLocation:current end:directions[0] meters:remaining]];
+            remaining = 0;
+        }
+        else
+        {
+            current = [[OASimulatedLocation alloc] initWithSimulatedLocation:directions[0]];
+            [directions removeObjectAtIndex:0];
+            remaining -= distToNext;
+        }
     }
     meters = speed * intervalTime * coeff;
     

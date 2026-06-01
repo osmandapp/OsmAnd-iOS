@@ -326,11 +326,11 @@ final class DeepLinkParser: NSObject {
         case .destinationsDirectionAppearance:
             router.openDestinationsDirectionAppearance()
         case .myPlacesFavorites:
-            router.openMyPlaces(tabClass: OAFavoriteListViewController.self)
+            router.openMyPlaces(tab: .favorites)
         case .myPlacesTracks:
-            router.openMyPlaces(tabClass: TracksViewController.self)
+            router.openMyPlaces(tab: .tracks)
         case .myPlacesOsmEdits:
-            router.openMyPlaces(tabClass: OAOsmEditsListViewController.self)
+            router.openMyPlaces(tab: .osm)
         case .mapsAndResources:
             router.openMapsAndResources()
         case .mapsAndResourcesLocal:

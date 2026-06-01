@@ -18,10 +18,15 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OATerrainMapLayerProvider.h"
+#include <OsmAndCore/GeoTiffCollection.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/SlopeRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/HillshadeRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/HeightRasterMapLayerProvider.h>
+
+@interface OATerrainMapLayer () <OASPaletteRepositoryListener>
+
+@end
 
 @implementation OATerrainMapLayer
 {
@@ -57,14 +62,12 @@
                                                  name:kNotificationSetProfileSetting
                                                object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onColorPalettesFilesUpdated:)
-                                                 name:ColorPaletteHelper.colorPalettesUpdatedNotification
-                                               object:nil];
+    [self.app.paletteRepository addListenerListener:self];
 }
 
 - (void) deinitLayer
 {
+    [self.app.paletteRepository removeListenerListener:self];
     if (_verticalExaggerationScaleChangeObservable)
     {
         [_verticalExaggerationScaleChangeObservable detach];
@@ -166,31 +169,40 @@
     });
 }
 
-- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
+- (void)onPaletteChangedEvent:(OASPaletteChangeEvent *)event
 {
-    if (![notification.object isKindOfClass:NSDictionary.class])
-        return;
-
-    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-    if (!colorPaletteFiles)
-        return;
-
     NSString *currentPaletteFile = [_terrainMode mainFile];
-    if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
+    BOOL isCurrentPaletteEvent = currentPaletteFile.length > 0 && [[GradientPaletteHelper shared] isPaletteChangeEvent:event fileName:currentPaletteFile];
+    NSString *updatedTerrainPaletteFile = [[GradientPaletteHelper shared] updatedTerrainPaletteFileName:event];
+    if (!isCurrentPaletteEvent && updatedTerrainPaletteFile.length == 0)
+        return;
+    
+    if (isCurrentPaletteEvent && [event isKindOfClass:OASPaletteChangeEventRemoved.class])
     {
-        if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
+        TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
+        if (defaultTerrainMode)
         {
-            TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
-            if (defaultTerrainMode)
+            _terrainMode = defaultTerrainMode;
+            [_plugin setTerrainMode:defaultTerrainMode];
+        }
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (updatedTerrainPaletteFile.length > 0)
+        {
+            auto geoTiffCollection = std::dynamic_pointer_cast<OsmAnd::GeoTiffCollection>(self.mapViewController.mapRendererEnv.geoTiffCollection);
+            if (geoTiffCollection)
             {
-                _terrainMode = defaultTerrainMode;
-                [_plugin setTerrainMode:defaultTerrainMode];
+                auto palettePath = QString::fromNSString([self.app.colorsPalettePath stringByAppendingPathComponent:updatedTerrainPaletteFile]);
+                geoTiffCollection->removeFileTilesFromCache(OsmAnd::GeoTiffCollection::RasterType::Slope, palettePath);
+                geoTiffCollection->removeFileTilesFromCache(OsmAnd::GeoTiffCollection::RasterType::Height, palettePath);
+                geoTiffCollection->removeFileTilesFromCache(OsmAnd::GeoTiffCollection::RasterType::Hillshade, palettePath);
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
+
+        if (isCurrentPaletteEvent)
             [self updateTerrainLayer];
-        });
-    }
+    });
 }
 
 - (void)onVerticalExaggerationScaleChanged

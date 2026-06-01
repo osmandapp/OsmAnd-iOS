@@ -2,7 +2,8 @@ import CarPlay
 
 @objc
 protocol CarPlayActionDelegate: NSObjectProtocol {
-    func showAlertWith(title: String)
+    func showAlertWith(title: String, completion: (() -> Void)?, presentationFailure: (() -> Void)?)
+    func showAlert(title: String, actions: [AlertActionConfig], presentationFailure: (() -> Void)?)
 }
 
 final class CarPlaySceneDelegate: UIResponder {
@@ -29,10 +30,20 @@ final class CarPlaySceneDelegate: UIResponder {
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard let str = URLContexts.first?.url.absoluteString else { return }
-        if str.contains("search") {
+        guard let url = URLContexts.first?.url,
+              let action = CarPlayDashboardAction(url: url) else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.handleDeepLink(action: action)
+        }
+    }
+    
+    private func handleDeepLink(action: CarPlayDashboardAction) {
+        NSLog("[CarPlay] CarPlaySceneDelegate handling deep link action: \(action.rawValue)")
+        
+        switch action {
+        case .search:
             carPlayDashboardController?.openSearch()
-        } else if str.contains("navigation") {
+        case .navigation:
             carPlayDashboardController?.openNavigation()
         }
     }
@@ -91,27 +102,27 @@ final class CarPlaySceneDelegate: UIResponder {
     private func addListeners() {
         guard let carPlayDashboardController else { return }
         guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
-
+        
         // Register as a route information listener
         if let infoListener = carPlayDashboardController as? OARouteInformationListener {
             routingHelper.add(infoListener)
         }
-
+        
         // Register for route calculation progress callbacks
         if let progressListener = carPlayDashboardController as? OARouteCalculationProgressCallback {
             routingHelper.add(progressListener)
         }
     }
-
+    
     private func removeListeners() {
         guard let carPlayDashboardController else { return }
         guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
-
+        
         // Unregister as a route information listener
         if let infoListener = carPlayDashboardController as? OARouteInformationListener {
             routingHelper.remove(infoListener)
         }
-
+        
         // Unregister route calculation progress callbacks
         if let progressListener = carPlayDashboardController as? OARouteCalculationProgressCallback {
             routingHelper.remove(progressListener)
@@ -181,17 +192,50 @@ extension CarPlaySceneDelegate: OAWidgetListener {
 }
 
 extension CarPlaySceneDelegate: CarPlayActionDelegate {
-    func showAlertWith(title: String) {
+    func showAlertWith(title: String, completion: (() -> Void)? = nil, presentationFailure: (() -> Void)? = nil) {
         guard let carPlayInterfaceController else {
+            presentationFailure?()
             return
         }
+        
         let okAction = CPAlertAction(title: localizedString("shared_string_ok"), style: .default) { _ in
-            carPlayInterfaceController.dismissTemplate(animated: true, completion: nil)
+            carPlayInterfaceController.dismissTemplate(animated: true) { _, _ in
+                completion?()
+            }
         }
         let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: [okAction])
         
         Task { @MainActor in
-            try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            do {
+                try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            } catch {
+                presentationFailure?()
+            }
+        }
+    }
+    
+    func showAlert(title: String, actions: [AlertActionConfig], presentationFailure: (() -> Void)? = nil) {
+        guard let carPlayInterfaceController else {
+            presentationFailure?()
+            return
+        }
+        
+        let cpActions = actions.map { config in
+            CPAlertAction(title: config.title, style: config.carPlayAlertStyle) { _ in
+                carPlayInterfaceController.dismissTemplate(animated: true) { _, _ in
+                    config.handler?()
+                }
+            }
+        }
+        
+        let alertTemplate = CPAlertTemplate(titleVariants: [title], actions: cpActions)
+        
+        Task { @MainActor in
+            do {
+                try await carPlayInterfaceController.presentTemplate(alertTemplate, animated: true)
+            } catch {
+                presentationFailure?()
+            }
         }
     }
 }

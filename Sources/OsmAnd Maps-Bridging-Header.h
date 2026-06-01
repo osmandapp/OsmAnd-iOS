@@ -7,6 +7,7 @@
 
 // Helpers
 #import "OAAppSettings.h"
+#import "OAColoringType.h"
 #import "OAColors.h"
 #import "OARouteStatistics.h"
 #import "OAUtilities.h"
@@ -206,7 +207,6 @@
 #import "OACloudIntroductionViewController.h"
 #import "OAHelpViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
-#import "OAMyPlacesTabBarViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OAOsmEditsListViewController.h"
 #import "OATripRecordingSettingsViewController.h"

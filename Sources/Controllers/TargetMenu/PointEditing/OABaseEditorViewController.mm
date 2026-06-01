@@ -53,8 +53,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     NSString *_selectedIconName;
 
     OAColorCollectionHandler *_colorCollectionHandler;
-    NSMutableArray<OAColorItem *> *_sortedColorItems;
-    OAColorItem *_selectedColorItem;
+    NSMutableArray<OASPaletteItemSolid *> *_sortedColorItems;
+    OASPaletteItemSolid *_selectedColorItem;
     BOOL _needToScrollToSelectedColor;
 
     ShapesCollectionHandler *_shapesCollectionHandler;
@@ -92,7 +92,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     self.editName = @"";
     self.editIconName = @"";
-    self.editColor = [[_appearanceCollection getDefaultPointColorItem] getColor];
+    self.editColor = UIColorFromARGB([_appearanceCollection defaultPointColorItem].colorInt);
     self.editBackgroundIconName = @"";
     _wasChanged = NO;
     _needToScrollToSelectedColor = YES;
@@ -264,16 +264,13 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             [cell setCollectionHandler:_colorCollectionHandler];
             _colorCollectionHandler.hostVCOpenColorPickerButton = cell.rightActionButton;
             cell.hostVC = self;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
-            if (selectedIndexPath.row == NSNotFound)
-                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
-            [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
+            [_colorCollectionHandler setSelectionItem:_selectedColorItem ?: [_appearanceCollection defaultPointColorItem]];
             [_colorCollectionHandler updateHostCellIfNeeded];
             cell.topLabel.text = item.title;
             [cell topButtonVisibility:!_isNewItem];
             cell.descriptionLabel.text = OALocalizedString(@"original_color_description");
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
             
@@ -281,8 +278,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             {
                 NSIndexPath *selectedIndexPath = [[cell getCollectionHandler] getSelectedIndexPath];
                 if (selectedIndexPath.row != NSNotFound
-                    && indexPath.section < [cell.collectionView numberOfSections]
-                    && selectedIndexPath.row < [cell.collectionView numberOfItemsInSection:indexPath.section]
+                    && selectedIndexPath.section < [cell.collectionView numberOfSections]
+                    && selectedIndexPath.row < [cell.collectionView numberOfItemsInSection:selectedIndexPath.section]
                     && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
                 {
                     [cell.collectionView scrollToItemAtIndexPath:selectedIndexPath
@@ -312,7 +309,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         cell.hostVC = self;
-        _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+        _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);
         [_poiIconCollectionHandler setCollectionView:cell.collectionView];
         [cell setCollectionHandler:_poiIconCollectionHandler];
         [_poiIconCollectionHandler updateHostCellIfNeeded];
@@ -347,7 +344,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = OALocalizedString(@"original_shape_description");
             cell.valueLabel.text = [item objForKey:@"value"];
-            cell.currentColor = _selectedColorItem.value;
+            cell.currentColor = _selectedColorItem.colorInt;
             cell.currentIcon = [item integerForKey:@"index"];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -422,7 +419,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
     _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-    _poiIconCollectionHandler.selectedIconColor = [_selectedColorItem getColor];
+    _poiIconCollectionHandler.selectedIconColor = self.editColor;
     
     OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
     if (group)
@@ -635,12 +632,19 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     }
     else if (collectionView == [_colorCollectionHandler getCollectionView])
     {
-        NSArray *data = [_colorCollectionHandler getData];
-        if (indexPath.section >= data.count || indexPath.row >= [data[indexPath.section] count])
-            return;
-        
-        _selectedColorItem = data[indexPath.section][indexPath.row];
-        self.editColor = [_selectedColorItem getColor];
+        if ([selectedItem isKindOfClass:OASPaletteItemSolid.class])
+        {
+            _selectedColorItem = (OASPaletteItemSolid *)selectedItem;
+        }
+        else
+        {
+            NSArray *data = [_colorCollectionHandler getData];
+            if (indexPath.section >= data.count || indexPath.row >= [data[indexPath.section] count])
+                return;
+
+            _selectedColorItem = data[indexPath.section][indexPath.row];
+        }
+        self.editColor = UIColorFromARGB(_selectedColorItem.colorInt);
         _needToScrollToSelectedColor = YES;
         if (_iconIndexPath && _shapeIndexPath && _iconIndexPath.section < self.tableView.numberOfSections && _shapeIndexPath.section < self.tableView.numberOfSections)
             [self.tableView reloadRowsAtIndexPaths:@[_iconIndexPath, _shapeIndexPath] withRowAnimation:UITableViewRowAnimationNone];

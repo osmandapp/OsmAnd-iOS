@@ -61,7 +61,7 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
 
     override func generateData() {
         var data = [(String, [TerrainMode])]()
-        for type in TerrainType.allCases where type != .terrainShadows {
+        for type in TerrainMode.TerrainType.allCases where type != .terrainShadows {
             var header = ""
             var modes = [TerrainMode]()
             for mode in TerrainMode.values where mode.type == type {
@@ -113,10 +113,9 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
         let mode = data[indexPath.section].1[indexPath.row]
 
         cell.leftIconView.layer.cornerRadius = 3
-        if let colorPalette = ColorPaletteHelper.shared.getGradientColorPalette(mode.mainFile()) {
-            PaletteCollectionHandler.applyGradient(to: cell.leftIconView,
-                                                   with: colorPalette)
-            cell.descriptionLabel.text = PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: true)
+        if let paletteItem = GradientPaletteHelper.shared.paletteItem(fileName: mode.mainFile()) {
+            PaletteCollectionHandler.applyGradient(to: cell.leftIconView, with: paletteItem.getColorPalette())
+            cell.descriptionLabel.text = PaletteCollectionHandler.createDescriptionForPalette(paletteItem)
             cell.descriptionLabel.numberOfLines = 1
         }
 
@@ -141,13 +140,11 @@ final class ActionAddTerrainColorSchemeViewController: OABaseNavbarViewControlle
         if let selectedItems = tableView.indexPathsForSelectedRows {
             for item in selectedItems {
                 let mode = data[item.section].1[item.row]
-                if let colorPalette = ColorPaletteHelper
-                    .shared
-                    .getGradientColorPalette(mode.mainFile()) {
+                if let paletteItem = GradientPaletteHelper.shared.paletteItem(fileName: mode.mainFile()) {
                     items.append([
                         "title": mode.getDefaultDescription(),
-                        "desc": PaletteCollectionHandler.createDescriptionForPalette(colorPalette, isTerrain: true),
-                        "colorPalette": colorPalette,
+                        "desc": PaletteCollectionHandler.createDescriptionForPalette(paletteItem),
+                        "colorPalette": paletteItem.getColorPalette(),
                         "palette": mode.getKeyName()
                     ])
                 }

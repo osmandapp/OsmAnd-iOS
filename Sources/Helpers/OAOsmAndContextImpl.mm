@@ -307,7 +307,13 @@ static NSString * const kGpxImportDir = @"import";
 
 - (OASAltitudeMetrics * _Nullable)getAltitudeMetric __attribute__((swift_name("getAltitudeMetric()")))
 {
-    return [OASAltitudeMetricsCompanion.companion fromMetricsConstantMc:[self getMetricSystem]];
+    EOAltitudeMetricsConstant altitudeMetric = OAAppSettings.sharedManager.altitudeMetric.get;
+    switch (altitudeMetric)
+    {
+        case METERS: return OASAltitudeMetrics.meters;
+        case FEET: return OASAltitudeMetrics.feet;
+        default: return nil;
+    }
 }
 
 - (BOOL)isGpxFileVisiblePath:(NSString *)path __attribute__((swift_name("isGpxFileVisible(path:)")))

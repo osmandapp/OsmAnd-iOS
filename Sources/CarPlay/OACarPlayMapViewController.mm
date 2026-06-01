@@ -111,6 +111,19 @@
     [self updateMapCenterPoint];
 }
 
+- (CGFloat)mapCenterX
+{
+    UIWindow *window = self.view.window;
+    if (!window)
+        return 1.0;
+
+    CGRect frame = window.safeAreaLayoutGuide.layoutFrame;
+    CGFloat centerPx = CGRectGetMidX(frame);
+    CGFloat normalized = centerPx / window.bounds.size.width;
+
+    return normalized * 2.0;
+}
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
     [super traitCollectionDidChange:previousTraitCollection];
@@ -149,7 +162,7 @@
     
     if (_isInNavigationMode)
     {
-        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:y];
+        [_mapVc setViewportForCarPlayScaleX:[self mapCenterX] y:y];
     }
     else
     {

@@ -147,7 +147,7 @@
     if (cell)
     {
         cell.titleLabel.text = mode.toHumanString;
-        cell.leftIconView.image = [UIImage templateImageNamed:[mode getIconName]];
+        cell.leftIconView.image = [[mode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = [mode getProfileColor];
 
         NSString *imageName = !isAllProfiles ? @"ic_custom_undo_button" : [mode isCustomProfile] ? @"ic_custom_delete" : @"ic_custom_delete_disable";

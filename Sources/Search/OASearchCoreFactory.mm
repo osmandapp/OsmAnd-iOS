@@ -319,57 +319,6 @@
     return NO;
 }
 
-//- (NSSet<NSString *> *)splitAddressSearchNames:(NSString *)name
-//{
-//    NSInteger prev = -1;
-//    NSMutableSet<NSString *> *namesToAdd = [NSMutableSet set];
-//    NSUInteger length = [name length];
-//
-//    for (NSUInteger i = 0; i <= length; i++)
-//    {
-//        unichar currentChar = (i < length) ? [name characterAtIndex:i] : 0;
-//        BOOL isHyphenNearNumber = NO;
-//        if (i != length && currentChar == '-')
-//        {
-//            BOOL nextIsDigit = (i + 1 < length) && isdigit([name characterAtIndex:i + 1]);
-//            BOOL prevIsDigit = (i > 0) && isdigit([name characterAtIndex:i - 1]);
-//            isHyphenNearNumber = nextIsDigit || prevIsDigit;
-//        }
-//        BOOL isDelimiter = NO;
-//        
-//        if (i == length)
-//        {
-//            isDelimiter = YES;
-//        }
-//        else
-//        {
-//            if (!isalpha(currentChar) && !isdigit(currentChar) && currentChar != '\'' && !isHyphenNearNumber)
-//            {
-//                isDelimiter = YES;
-//            }
-//        }
-//        
-//        if (isDelimiter)
-//        {
-//            if (prev != -1)
-//            {
-//                NSRange substringRange = NSMakeRange(prev, i - prev);
-//                NSString *substr = [name substringWithRange:substringRange];
-//                [namesToAdd addObject:[substr lowercaseString]];
-//                prev = -1;
-//            }
-//        }
-//        else
-//        {
-//            if (prev == -1)
-//            {
-//                prev = i;
-//            }
-//        }
-//    }
-//    return namesToAdd;
-//}
-
 @end
 
 @interface OATownCitiesCache ()

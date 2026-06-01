@@ -146,6 +146,7 @@ static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const batterySavingModeKey = @"batterySavingMode";
 static NSString * const enableMsaaForСarPlayKey = @"enableMsaaForСarPlayKey";
 static NSString * const showPrimitivesDebugInfoKey = @"showPrimitivesDebugInfoKey";
+static NSString * const showTouchesKey = @"showTouchesKey";
 
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
@@ -6673,6 +6674,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _showPrimitivesDebugInfo = [[[OACommonBoolean withKey:showPrimitivesDebugInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_showPrimitivesDebugInfo forKey:@"show_primitives_debug_info"];
+
+        _showTouches = [[[OACommonBoolean withKey:showTouchesKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_showTouches forKey:@"show_touches"];
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];

@@ -462,3 +462,4 @@
 "transport_stop" = "Stopp";
 "poi_filter_fuel" = "Drivstoff";
 "map_widget_distance" = "Avstand";
+"show_touches" = "Vis berøringar";

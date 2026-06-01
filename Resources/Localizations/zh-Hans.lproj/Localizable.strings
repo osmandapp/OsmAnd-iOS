@@ -2916,3 +2916,4 @@
 "shared_string_last_uphill" = "近期爬升";
 "shared_string_last_downhill" = "近期下降";
 "enable_3d_objects" = "3D 建筑";
+"show_touches" = "显示触摸";

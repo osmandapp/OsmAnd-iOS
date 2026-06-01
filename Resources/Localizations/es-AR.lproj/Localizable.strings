@@ -4067,3 +4067,4 @@
 "terrain_shadows_footer_descr" = "El relieve en 3D se activa automáticamente, ya que se necesita para dibujar las sombras del terreno";
 "download_roads_only_maps" = "Mapa sólo vial";
 "obd_alt_battery_voltage_desc" = "Muestra el nivel de voltaje en el adaptador OBD";
+"show_touches" = "Mostrar toques";

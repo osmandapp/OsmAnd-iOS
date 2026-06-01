@@ -3230,3 +3230,4 @@
 "obd_fuel_type" = "燃料タイプ";
 "obd_fuel_consumption" = "燃料消費量";
 "obd_fuel_consumption_rate_percent_hour" = "燃料消費率 %/h";
+"show_touches" = "タッチを表示";

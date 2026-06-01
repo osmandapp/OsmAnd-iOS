@@ -3607,3 +3607,4 @@
 "unit_volt" = "V";
 "obd_fuel_type_lpg" = "LPG";
 "obd_fuel_type_cng" = "CNG";
+"show_touches" = "Dokunuşları göster";

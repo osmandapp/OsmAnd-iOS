@@ -3486,3 +3486,4 @@
 "trace_rendering" = "معلومات تصحيح الأداء";
 "shared_string_normal" = "عادي";
 "shared_string_other" = "أخرى";
+"show_touches" = "إظهار اللمسات";

@@ -4086,3 +4086,4 @@
 "edit_palette" = "Uredi paletu";
 "delete_palette" = "Obriši paletu";
 "delete_colors_palette_dialog_summary" = "Da li ste sigurni da želite da obrišete %@ paletu?";
+"show_touches" = "Prikaži dodire";

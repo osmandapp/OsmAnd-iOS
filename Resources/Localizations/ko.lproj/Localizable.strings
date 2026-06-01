@@ -2648,3 +2648,4 @@
 "trace_rendering_descr" = "렌더링 성능을 나타냅니다";
 "shared_string_other" = "기타";
 "shared_string_normal" = "보통";
+"show_touches" = "터치 표시";

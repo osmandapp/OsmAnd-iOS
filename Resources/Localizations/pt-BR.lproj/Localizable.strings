@@ -4087,3 +4087,4 @@
 "missing_maps_header" = "Mapas ausentes ou desatualizados";
 "missing_maps_description" = "Alguns mapas off-line necessários para esta rota estão faltando ou não estão atualizados. Baixe ou atualize esses mapas.";
 "shared_string_allow" = "Permitir";
+"show_touches" = "Mostrar toques";

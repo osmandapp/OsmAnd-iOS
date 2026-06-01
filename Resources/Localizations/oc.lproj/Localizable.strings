@@ -2720,3 +2720,4 @@
 "map_widget_distance" = "Distància";
 "shared_string_view_all" = "Tot visualizar";
 "add_hidden_group_info" = "Lo ponch ajustat se tròba dins \"1%@\". Desamagar lo grop seleccionat per lo visualizar sus la mapa.";
+"show_touches" = "Mostrar los tòcs";

@@ -4084,3 +4084,4 @@
 "edit_palette" = "Modifier la palette";
 "delete_palette" = "Supprimer la palette";
 "delete_colors_palette_dialog_summary" = "Êtes-vous sûr de vouloir supprimer la palette %@ ?";
+"show_touches" = "Afficher les appuis";

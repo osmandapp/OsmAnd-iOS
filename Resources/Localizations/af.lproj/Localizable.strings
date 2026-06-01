@@ -409,3 +409,4 @@
 "trace_rendering_descr" = "Vertoon lewering prestasie";
 "trace_rendering" = "Die lewering van ontfouting inligting";
 "rendering_attr_hideWaterPolygons_description" = "Water";
+"show_touches" = "Wys aanrakings";

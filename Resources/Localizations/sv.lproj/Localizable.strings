@@ -4034,3 +4034,4 @@
 "has_vehicle_metrics" = "Med OBDII-data";
 "context_menu_read_full_article" = "Läs hela artikeln";
 "read_on" = "Läs på %@";
+"show_touches" = "Visa tryckningar";

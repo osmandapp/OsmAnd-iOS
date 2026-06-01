@@ -358,10 +358,10 @@
     [_menuButtonTravelGuides.layer addSublayer:_menuButtonTravelGuidesDiv];
     [_menuButtonExternalSensors.layer addSublayer:_menuButtonExternalSensorsDiv];
     
-    [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map"] forState:UIControlStateNormal];
-    [_menuButtonMyData setImage:[UIImage templateImageNamed:@"left_menu_icon_my_places"] forState:UIControlStateNormal];
+    [_menuButtonMaps setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMap] forState:UIControlStateNormal];
+    [_menuButtonMyData setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMyPlaces] forState:UIControlStateNormal];
     [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:@"left_menu_icon_waypoints.png"] forState:UIControlStateNormal];
-    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:@"left_menu_icon_download_map"] forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconDownloadMap] forState:UIControlStateNormal];
     [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:@"left_menu_configure_screen.png"] forState:UIControlStateNormal];
     [_menuButtonSettings setImage:[UIImage templateImageNamed:@"left_menu_icon_settings.png"] forState:UIControlStateNormal];
     [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];

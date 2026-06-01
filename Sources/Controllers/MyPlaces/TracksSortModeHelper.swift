@@ -253,7 +253,7 @@ protocol SortableFolder {
     }
     
     private static func shortFolderPath(_ folderPath: String) -> String {
-        let pathComponents = folderPath.components(separatedBy: "/").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }
+        let pathComponents = folderPath.split(separator: "/", omittingEmptySubsequences: true).map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         if pathComponents.count > 2 {
             return "\(pathComponents[0]) / ... / \(pathComponents[pathComponents.count - 1])"
         }

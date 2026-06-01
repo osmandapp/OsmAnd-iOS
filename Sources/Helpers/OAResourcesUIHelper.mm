@@ -1546,21 +1546,6 @@ includeHidden:(BOOL)includeHidden
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
-        NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *duplicateMaps = [self pendingMapVariantDeletionsForItems:@[item]];
-        
-        if ([duplicateMaps count] > 0)
-        {
-            [self presentMapVariantConflictActionSheet:item sourceView:nil onReplace:^{
-                [self addPendingMapVariantDeletions:duplicateMaps];
-                [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
-            } onKeepBoth:^{
-                [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
-            }];
-        }
-        else
-        {
-            [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
-        }
         [self handleMapVariantConflictsForItems:@[item]
                                      sourceView:nil
                                      targetItem:item
@@ -1576,7 +1561,14 @@ includeHidden:(BOOL)includeHidden
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            [self handleMapVariantConflictsForItems:@[item]
+                                         sourceView:nil
+                                         targetItem:item
+                                          onProceed:^{
+                [self.class startDownloadOfItem:item
+                                  onTaskCreated:onTaskCreated
+                                  onTaskResumed:onTaskResumed];
+            }];
         }]];
         
         if (completionHandler)

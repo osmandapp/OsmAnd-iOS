@@ -360,17 +360,17 @@
     
     [_menuButtonMaps setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMap] forState:UIControlStateNormal];
     [_menuButtonMyData setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMyPlaces] forState:UIControlStateNormal];
-    [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:@"left_menu_icon_waypoints.png"] forState:UIControlStateNormal];
+    [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconWaypoints] forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconDownloadMap] forState:UIControlStateNormal];
-    [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:@"left_menu_configure_screen.png"] forState:UIControlStateNormal];
-    [_menuButtonSettings setImage:[UIImage templateImageNamed:@"left_menu_icon_settings.png"] forState:UIControlStateNormal];
-    [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
-    [_menuButtonNavigation setImage:[UIImage templateImageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
+    [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:ACImageNameLeftMenuConfigureScreen] forState:UIControlStateNormal];
+    [_menuButtonSettings setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconSettings] forState:UIControlStateNormal];
+    [_menuButtonHelp setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconAbout] forState:UIControlStateNormal];
+    [_menuButtonNavigation setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconNavigation] forState:UIControlStateNormal];
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:ACImageNameIcCustomRoutes] forState:UIControlStateNormal];
-    [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
-    [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
-    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"ic_custom_backpack"] forState:UIControlStateNormal];
-    [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:@"ic_custom_sensor"] forState:UIControlStateNormal];
+    [_menuButtonWeather setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconUmbrella] forState:UIControlStateNormal];
+    [_menuButtonPlugins setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconPlugins] forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:ACImageNameIcCustomBackpack] forState:UIControlStateNormal];
+    [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:ACImageNameIcCustomSensor] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
     

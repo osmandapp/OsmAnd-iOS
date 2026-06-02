@@ -1470,8 +1470,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
 @property (nonatomic) OACommonString *currentTrackRouteActivity;
 
-@property (nonatomic) OACommonStringList *customTrackColors;
-@property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
 @property (nonatomic) OACommonStringList *lastUsedProfileIcons;
 

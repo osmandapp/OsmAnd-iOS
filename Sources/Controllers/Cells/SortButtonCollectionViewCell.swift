@@ -15,7 +15,6 @@ final class SortButtonCollectionViewCell: UICollectionViewListCell {
         let button = UIButton(configuration: config, primaryAction: nil)
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
-        button.contentHorizontalAlignment = .left
         return button
     }()
     

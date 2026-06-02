@@ -49,11 +49,12 @@ final class OsmEditsListViewController: UIViewController {
         case header(Header)
         case point(OsmPoint)
     }
+    
+    // MARK: - Properties
+    
+    private static let imageSize: CGFloat = 30
 
     weak var myPlacesDelegate: MyPlacesDelegate?
-
-    // MARK: - Properties
-    private static let imageSize: CGFloat = 30
     
     private var dataSource: DataSource!
     private var collectionView: UICollectionView!
@@ -241,15 +242,15 @@ final class OsmEditsListViewController: UIViewController {
                     if let poiEdit = osmEdit as? OAOpenStreetMapPoint {
                         let poiType = poiEdit.tag(from: poiTypeTag).lowercased()
                         points.append(OsmPoint(
-                            title: name.isEmpty ? getDescription(point: osmEdit) : name,
+                            title: name.isEmpty ? description(point: osmEdit) : name,
                             poiType: poiType,
-                            descr: getDescription(point: osmEdit),
+                            descr: description(point: osmEdit),
                             item: osmEdit
                         ))
                     } else {
                         points.append(OsmPoint(
                             title: name,
-                            descr: getDescription(point: osmEdit),
+                            descr: description(point: osmEdit),
                             item: osmEdit
                         ))
                     }
@@ -271,9 +272,9 @@ final class OsmEditsListViewController: UIViewController {
                         let name = point.getName()
                         
                         points.append(OsmPoint(
-                            title: name.isEmpty ? getDescription(point: point) : name,
+                            title: name.isEmpty ? description(point: point) : name,
                             poiType: poiType,
-                            descr: getDescription(point: point),
+                            descr: description(point: point),
                             item: point
                         ))
                     }
@@ -287,7 +288,7 @@ final class OsmEditsListViewController: UIViewController {
                 for point in sortedNotes {
                     points.append(OsmPoint(
                         title: point.getName(),
-                        descr: getDescription(point: point),
+                        descr: description(point: point),
                         item: point
                     ))
                 }
@@ -389,7 +390,7 @@ final class OsmEditsListViewController: UIViewController {
         MyPlacesSortMode.byTitle(settings.osmEditsSortMode.get())
     }
     
-    private func getDescription(point: OAOsmPoint) -> String {
+    private func description(point: OAOsmPoint) -> String {
         var action = point.getLocalizedAction()
         let type = OAOsmEditingPlugin.getCategory(point)
         if !type.isEmpty {
@@ -646,9 +647,11 @@ extension OsmEditsListViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let menuProvider: UIContextMenuActionProvider = { _ in
-            let uploadToOsm = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined.resizedMenuImage()) { _ in
-                guard let item = self.dataSource.itemIdentifier(for: indexPath),
+        let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
+            guard let self else { return nil }
+            let uploadToOsm = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined.resizedMenuImage()) { [weak self] _ in
+                guard let self,
+                      let item = self.dataSource.itemIdentifier(for: indexPath),
                       case .point(let osmPoint) = item else {
                     return
                 }
@@ -656,8 +659,9 @@ extension OsmEditsListViewController: UICollectionViewDelegate {
             }
             uploadToOsm.accessibilityLabel = localizedString("upload_to_osm_short")
 
-            let modify = UIAction(title: localizedString("shared_string_modify"), image: .icCustomEdit.resizedMenuImage()) { _ in
-                guard let item = self.dataSource.itemIdentifier(for: indexPath),
+            let modify = UIAction(title: localizedString("shared_string_modify"), image: .icCustomEdit.resizedMenuImage()) { [weak self] _ in
+                guard let self,
+                      let item = self.dataSource.itemIdentifier(for: indexPath),
                       case .point(let osmPoint) = item else {
                     return
                 }
@@ -665,8 +669,9 @@ extension OsmEditsListViewController: UICollectionViewDelegate {
             }
             modify.accessibilityLabel = localizedString("shared_string_modify")
 
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage()) { _ in
-                guard let item = self.dataSource.itemIdentifier(for: indexPath),
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage()) { [weak self] _ in
+                guard let self,
+                      let item = self.dataSource.itemIdentifier(for: indexPath),
                       case .point(let osmPoint) = item else {
                     return
                 }
@@ -731,15 +736,15 @@ extension OsmEditsListViewController: MyPlacesSearchable {
                         if let poiEdit = osmEdit as? OAOpenStreetMapPoint {
                             let poiType = poiEdit.tag(from: poiTypeTag).lowercased()
                             points.append(OsmPoint(
-                                title: name.isEmpty ? getDescription(point: osmEdit) : name,
+                                title: name.isEmpty ? description(point: osmEdit) : name,
                                 poiType: poiType,
-                                descr: getDescription(point: osmEdit),
+                                descr: description(point: osmEdit),
                                 item: osmEdit
                             ))
                         } else {
                             points.append(OsmPoint(
                                 title: name,
-                                descr: getDescription(point: osmEdit),
+                                descr: description(point: osmEdit),
                                 item: osmEdit
                             ))
                         }

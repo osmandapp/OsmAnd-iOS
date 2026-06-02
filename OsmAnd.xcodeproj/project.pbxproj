@@ -1625,6 +1625,7 @@
 		D71B9A8C2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift */; };
+		D7B765F82FCF2BC2004EE3E9 /* OAOrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B765F72FCF2BC2004EE3E9 /* OAOrganizeByStepSizeViewController.swift */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
 		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
 		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
@@ -5555,6 +5556,7 @@
 		D71B9A8B2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAOrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
 		D71B9A8F2FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAOrganizeByTypeCell.swift; sourceTree = "<group>"; };
+		D7B765F72FCF2BC2004EE3E9 /* OAOrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAOrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
 		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
 		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
@@ -12647,6 +12649,7 @@
 		DA5A7DC226C563A300F274C7 /* MyPlaces */ = {
 			isa = PBXGroup;
 			children = (
+				D7B765F72FCF2BC2004EE3E9 /* OAOrganizeByStepSizeViewController.swift */,
 				D71B9A8B2FC95D8500FBB0F3 /* OAOrganizeTracksByViewController.swift */,
 				D71B9A8F2FC99D5D00FBB0F3 /* OAOrganizeByTypeCell.swift */,
 				DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */,
@@ -17824,6 +17827,7 @@
 				C5C81F902E534595009D3439 /* OptionsMenuButtonState.swift in Sources */,
 				FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */,
 				FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */,
+				D7B765F82FCF2BC2004EE3E9 /* OAOrganizeByStepSizeViewController.swift in Sources */,
 				DA5A814C26C563A700F274C7 /* OACarPlayCategoryResultListController.mm in Sources */,
 				DA5A84F526C563A900F274C7 /* OADistanceDirection.mm in Sources */,
 				DA5A812C26C563A700F274C7 /* OAWaypointsMapLayerProvider.mm in Sources */,

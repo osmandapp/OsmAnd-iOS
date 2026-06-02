@@ -3,6 +3,7 @@ import OsmAndShared
 
 protocol OAOrganizeTracksByDelegate: AnyObject {
     func onOrganizeByParamsApplied()
+    func onOrganizeByRangeParamsApplied(type: OrganizeByType)
 }
 
 final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
@@ -102,13 +103,12 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         var config = UIButton.Configuration.filled()
         config.title = localizedString("shared_string_apply")
-        config.baseBackgroundColor = .menuButton
+        config.baseBackgroundColor = .systemBlue
         config.baseForegroundColor = .white
         config.cornerStyle = .capsule
-        config.background.strokeColor = .clear
-        config.background.strokeWidth = 0
         let button = UIButton(configuration: config)
         button.addTarget(self, action: #selector(onApplyButtonPressed), for: .touchUpInside)
+        button.sizeToFit()
         return [UIBarButtonItem(customView: button)]
     }
 
@@ -198,10 +198,12 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
             applyDirectly()
             return
         }
-        let params = OrganizeByRangeParams(type: type, stepSize: type.getDefaultStepInBaseUnits())
+        let existingParams = smartFolder.organizeByParams as? OrganizeByRangeParams
+        let stepSize = existingParams?.stepSize ?? type.getDefaultStepInBaseUnits()
+        let params = OrganizeByRangeParams(type: type, stepSize: stepSize)
         SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: params)
         dismiss(animated: true) { [weak self] in
-            self?.delegate?.onOrganizeByParamsApplied()
+            self?.delegate?.onOrganizeByRangeParamsApplied(type: type)
         }
     }
 

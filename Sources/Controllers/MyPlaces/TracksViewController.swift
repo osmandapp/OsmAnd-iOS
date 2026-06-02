@@ -18,7 +18,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OAOrganizeTracksByDelegate {
+final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OAOrganizeTracksByDelegate, OAOrganizeByStepSizeDelegate {
     
     fileprivate var shouldReload = false
     
@@ -936,6 +936,17 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     func onOrganizeByParamsApplied() {
+        reloadTracks(forceLoad: true)
+    }
+
+    func onOrganizeByRangeParamsApplied(type: OrganizeByType) {
+        reloadTracks(forceLoad: true)
+        let vc = OAOrganizeByStepSizeViewController(smartFolder: smartFolder, type: type)
+        vc.stepDelegate = self
+        present(vc, animated: true)
+    }
+
+    func onStepSizeChanged() {
         reloadTracks(forceLoad: true)
     }
     

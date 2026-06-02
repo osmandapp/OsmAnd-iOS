@@ -4573,3 +4573,7 @@
 "shared_string_avg_altitude" = "Avg. altitude";
 "shared_string_uphill" = "Uphill";
 "shared_string_downhill" = "Downhill";
+"set_step_size" = "Set step size";
+"set_step_size_summary" = "Choose a step size to group your tracks.";
+"shared_string_step" = "Step";
+"shared_string_unlock" = "Unlock";

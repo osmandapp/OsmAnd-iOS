@@ -48,6 +48,7 @@
 - (void) setResultCollection:(OASearchResultCollection *)resultCollection;
 - (void) refreshCustomPoiFilters;
 - (void) cancelSearch:(BOOL)sync;
+- (void)setResourcesForSearchUICore;
 
 - (void) searchCityLocations:(NSString *)text
           searchLocation:(CLLocation *)searchLocation

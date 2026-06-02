@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^OACarPlayTemplateCompletion)(BOOL completed, NSError * _Nullable error);
 
-API_AVAILABLE(ios(12.0))
 @interface OABaseCarPlayInterfaceController : NSObject
 
 @property (nonatomic, readonly) CPInterfaceController *interfaceController;

@@ -8,9 +8,34 @@
 
 import UIKit
 
-enum AstroKnowledgeCardViewHolder {
-    static func makeView(item: AstroKnowledgeCardItem, onActionClick: @escaping () -> Void) -> UIView {
-        let card = AstroCardContainerView()
+final class AstroKnowledgeCardView: AstroCardContainerView {
+    private let actionButton: UIButton
+    private var currentButtonTitle: String
+    private var currentActionEnabled: Bool
+
+    init(item: AstroKnowledgeCardItem, onActionClick: @escaping () -> Void) {
+        currentButtonTitle = item.buttonTitle
+        currentActionEnabled = item.actionEnabled
+        actionButton = UIButton(configuration: Self.makeButtonConfiguration(title: item.buttonTitle))
+        super.init()
+        setup(item: item, onActionClick: onActionClick)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func update(item: AstroKnowledgeCardItem) {
+        guard currentButtonTitle != item.buttonTitle || currentActionEnabled != item.actionEnabled else {
+            return
+        }
+        currentButtonTitle = item.buttonTitle
+        currentActionEnabled = item.actionEnabled
+        actionButton.configuration = Self.makeButtonConfiguration(title: item.buttonTitle)
+        actionButton.isEnabled = item.actionEnabled
+    }
+
+    private func setup(item: AstroKnowledgeCardItem, onActionClick: @escaping () -> Void) {
         let row = UIStackView()
         row.axis = .horizontal
         row.alignment = .top
@@ -42,16 +67,24 @@ enum AstroKnowledgeCardViewHolder {
         textStack.addArrangedSubview(title)
         textStack.addArrangedSubview(description)
         row.addArrangedSubview(textStack)
-        card.stack.addArrangedSubview(row)
+        stack.addArrangedSubview(row)
 
+        actionButton.isEnabled = item.actionEnabled
+        actionButton.addAction(UIAction { _ in onActionClick() }, for: .touchUpInside)
+        stack.addArrangedSubview(actionButton)
+    }
+
+    private static func makeButtonConfiguration(title: String) -> UIButton.Configuration {
         var config = UIButton.Configuration.filled()
-        config.title = item.buttonTitle
+        config.title = title
         config.baseBackgroundColor = AstroContextMenuTheme.primaryButton
         config.baseForegroundColor = .white
-        let button = UIButton(configuration: config)
-        button.isEnabled = item.actionEnabled
-        button.addAction(UIAction { _ in onActionClick() }, for: .touchUpInside)
-        card.stack.addArrangedSubview(button)
-        return card
+        return config
+    }
+}
+
+enum AstroKnowledgeCardViewHolder {
+    static func makeView(item: AstroKnowledgeCardItem, onActionClick: @escaping () -> Void) -> UIView {
+        AstroKnowledgeCardView(item: item, onActionClick: onActionClick)
     }
 }

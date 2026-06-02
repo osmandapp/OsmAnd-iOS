@@ -44,9 +44,17 @@ enum AstroGalleryState {
 
 struct AstroKnowledgeCardItem: AstroContextMenuItem {
     let state: AstroKnowledgeCardState
+    let resourceId: String?
+    let resourceItem: OAResourceSwiftItem?
+    let downloadTask: OADownloadTask?
+    let progress: Float?
     let buttonTitle: String
     let actionEnabled: Bool
     let key: AstroContextCardKey = .knowledge
+
+    var isDownloading: Bool {
+        downloadTask != nil
+    }
 
     func getTitle() -> String {
         switch state {

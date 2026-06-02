@@ -270,6 +270,11 @@
     return [OAResourceType toValue:cppType];
 }
 
++ (void)prepareResourcesData
+{
+    [OAManageResourcesViewController prepareData];
+}
+
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegionId:(NSString *)regionId resourceTypeNames:(NSArray<NSString *> *)resourceTypeNames
 {
     OAWorldRegion *region = [self worldRegionByScopeId:regionId];

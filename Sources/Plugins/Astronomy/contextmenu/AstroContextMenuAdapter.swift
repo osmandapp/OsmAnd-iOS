@@ -117,7 +117,7 @@ final class AstroContextMenuAdapter {
     }
 }
 
-final class AstroCardContainerView: UIView {
+class AstroCardContainerView: UIView {
     let stack = UIStackView()
 
     init(title: String? = nil, iconName: String? = nil) {

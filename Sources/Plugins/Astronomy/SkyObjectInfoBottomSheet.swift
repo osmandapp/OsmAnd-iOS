@@ -89,6 +89,14 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
     private var selectedTab: Tab = .overview
     private var isProgrammaticTabScroll = false
+    private var downloadTaskProgressObserver: OAAutoObserverProxy?
+    private var downloadTaskCompletedObserver: OAAutoObserverProxy?
+    private var localResourcesChangedObserver: OAAutoObserverProxy?
+    private var latestKnowledgeDownloadProgress: Float?
+    private var knowledgeDownloadProgressRenderScheduled = false
+    private var lastRenderedKnowledgeDownloadButtonTitle: String?
+    private var displayedKnowledgeDownloadActive = false
+    private let knowledgeDownloadButtonRefreshInterval: TimeInterval = 0.5
 
     private let saveButton = UIButton(type: .system)
     private let locationButton = UIButton(type: .system)
@@ -106,6 +114,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     deinit {
+        detachDownloadObservers()
         galleryLoader.cancel()
         visibilityController.cancelPendingWork()
         scheduleController.cancelPendingWork()
@@ -117,6 +126,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         applyTheme()
         configureNavigationBar()
         bindControllerCallbacks()
+        setupDownloadObservers()
         if let skyObject {
             updateObjectInfo(skyObject)
         }
@@ -673,7 +683,14 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             }
             cardsStack.addArrangedSubview(view)
         }
+        syncDisplayedKnowledgeCardState()
         updateSelectedTabControls()
+    }
+
+    private func syncDisplayedKnowledgeCardState() {
+        let item = adapter.currentList.compactMap { $0 as? AstroKnowledgeCardItem }.first
+        displayedKnowledgeDownloadActive = item?.isDownloading == true
+        lastRenderedKnowledgeDownloadButtonTitle = item?.buttonTitle
     }
 
     private func toggleCatalogsExpanded() {
@@ -746,13 +763,220 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
                 OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.wikipedia(), navController: navigation)
             }
         case .download:
-            OAUtilities.showToast(localizedString("no_index_file_to_download"),
-                                  details: nil,
-                                  duration: 4,
-                                  in: view)
+            guard let item = knowledgeBaseController.findDownloadItem() else {
+                knowledgeBaseController.ensureIndexesLoaded()
+                OAResourcesUISwiftHelper.prepareResourcesData()
+                guard let item = knowledgeBaseController.findDownloadItem() else {
+                    OAUtilities.showToast(localizedString("no_index_file_to_download"),
+                                          details: nil,
+                                          duration: 4,
+                                          in: view)
+                    submitCards()
+                    return
+                }
+                startKnowledgeBaseDownload(item)
+                return
+            }
+            if knowledgeBaseController.findActiveDownload(resourceItem: item) != nil {
+                cancelKnowledgeBaseDownload(item)
+            } else {
+                startKnowledgeBaseDownload(item)
+            }
         case nil:
             break
         }
+    }
+
+    private func startKnowledgeBaseDownload(_ item: OAResourceSwiftItem) {
+        item.refreshDownloadTask()
+        if item.isOutdatedItem() {
+            OAResourcesUISwiftHelper.offerDownloadAndUpdate(of: item, onTaskCreated: { [weak self] task in
+                self?.onKnowledgeDownloadTaskStarted(task)
+            }, onTaskResumed: { [weak self] task in
+                self?.onKnowledgeDownloadTaskStarted(task)
+            })
+        } else {
+            OAResourcesUISwiftHelper.offerDownloadAndInstall(of: item, onTaskCreated: { [weak self] task in
+                self?.onKnowledgeDownloadTaskStarted(task)
+            }, onTaskResumed: { [weak self] task in
+                self?.onKnowledgeDownloadTaskStarted(task)
+            }, completionHandler: { [weak self] alert in
+                self?.presentKnowledgeDownloadAlert(alert)
+            })
+        }
+    }
+
+    private func onKnowledgeDownloadTaskStarted(_ task: OADownloadTask?) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else {
+                return
+            }
+            latestKnowledgeDownloadProgress = task?.progressCompleted
+            guard !displayedKnowledgeDownloadActive else {
+                scheduleKnowledgeDownloadProgressRender()
+                return
+            }
+            submitCards()
+        }
+    }
+
+    private func cancelKnowledgeBaseDownload(_ item: OAResourceSwiftItem) {
+        guard let task = knowledgeBaseController.findActiveDownload(resourceItem: item) else {
+            submitCards()
+            return
+        }
+        let rawTitle = item.title() ?? ""
+        let itemTitle = rawTitle.isEmpty ? localizedString("astronomy_map") : rawTitle
+        let message = [
+            String(format: localizedString("res_cancel_inst_q"), itemTitle),
+            localizedString("data_will_be_lost"),
+            localizedString("proceed_q")
+        ].joined(separator: " ")
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_no"), style: .cancel))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
+            task.stop()
+            DispatchQueue.main.async { [weak self] in
+                self?.latestKnowledgeDownloadProgress = nil
+                self?.knowledgeDownloadProgressRenderScheduled = false
+                self?.submitCards()
+            }
+        })
+        presentKnowledgeDownloadAlert(alert)
+    }
+
+    private func presentKnowledgeDownloadAlert(_ alert: UIAlertController?) {
+        guard let alert else {
+            return
+        }
+        DispatchQueue.main.async { [weak self] in
+            guard let self,
+                  self.isViewLoaded,
+                  self.view.window != nil else {
+                return
+            }
+            self.present(alert, animated: true)
+        }
+    }
+
+    private func setupDownloadObservers() {
+        guard let app = OsmAndApp.swiftInstance() else {
+            return
+        }
+        downloadTaskProgressObserver = OAAutoObserverProxy(self,
+                                                           withHandler: #selector(onKnowledgeDownloadTaskProgressChanged),
+                                                           andObserve: app.downloadsManager.progressCompletedObservable)
+        downloadTaskCompletedObserver = OAAutoObserverProxy(self,
+                                                            withHandler: #selector(onKnowledgeDownloadTaskFinished),
+                                                            andObserve: app.downloadsManager.completedObservable)
+        localResourcesChangedObserver = OAAutoObserverProxy(self,
+                                                            withHandler: #selector(onLocalResourcesChanged),
+                                                            andObserve: app.localResourcesChangedObservable)
+    }
+
+    private func detachDownloadObservers() {
+        downloadTaskProgressObserver?.detach()
+        downloadTaskProgressObserver = nil
+        downloadTaskCompletedObserver?.detach()
+        downloadTaskCompletedObserver = nil
+        localResourcesChangedObserver?.detach()
+        localResourcesChangedObserver = nil
+    }
+
+    @objc private func onKnowledgeDownloadTaskProgressChanged(observer: Any, key: Any, value: Any) {
+        guard isKnowledgeDownloadNotification(key: key),
+              let progress = knowledgeDownloadProgressValue(from: value) else {
+            return
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.latestKnowledgeDownloadProgress = progress
+            self?.scheduleKnowledgeDownloadProgressRender()
+        }
+    }
+
+    @objc private func onKnowledgeDownloadTaskFinished(observer: Any, key: Any, value: Any) {
+        guard isKnowledgeDownloadNotification(key: key) else {
+            return
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.onKnowledgeBaseResourceChanged()
+        }
+    }
+
+    @objc private func onLocalResourcesChanged(observer: Any, key: Any, value: Any) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self,
+                  self.isViewLoaded,
+                  self.view.window != nil else {
+                return
+            }
+            self.onKnowledgeBaseResourceChanged()
+        }
+    }
+
+    private func isKnowledgeDownloadNotification(key: Any) -> Bool {
+        guard let task = key as? OADownloadTask,
+              let taskKey = task.key else {
+            return false
+        }
+        return taskKey == AstroKnowledgeBaseController.resourceTaskKey
+    }
+
+    private func onKnowledgeBaseResourceChanged() {
+        latestKnowledgeDownloadProgress = nil
+        knowledgeDownloadProgressRenderScheduled = false
+        OAResourcesUISwiftHelper.onDownldedResourceInstalled()
+        if knowledgeBaseController.isDownloaded() {
+            knowledgeBaseController.resetIndexesReloadFlag()
+            (OAPluginsHelper.getPlugin(AstronomyPlugin.self) as? AstronomyPlugin)?.clearCachedData()
+            dependencies.onRefreshObjects()
+            if let skyObject {
+                article = dependencies.dataProvider?.getAstroArticle(wikidataId: skyObject.wid,
+                                                                      lang: dependencies.preferredLocale())
+            }
+        }
+        submitCards()
+    }
+
+    private func knowledgeDownloadProgressValue(from value: Any) -> Float? {
+        if let number = value as? NSNumber {
+            return number.floatValue
+        }
+        if let progress = value as? Float {
+            return progress
+        }
+        if let progress = value as? Double {
+            return Float(progress)
+        }
+        return nil
+    }
+
+    private func scheduleKnowledgeDownloadProgressRender() {
+        guard isViewLoaded,
+              view.window != nil else {
+            return
+        }
+        guard !knowledgeDownloadProgressRenderScheduled else {
+            return
+        }
+        knowledgeDownloadProgressRenderScheduled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + knowledgeDownloadButtonRefreshInterval) { [weak self] in
+            guard let self else {
+                return
+            }
+            knowledgeDownloadProgressRenderScheduled = false
+            updateKnowledgeDownloadButton(progressOverride: latestKnowledgeDownloadProgress)
+        }
+    }
+
+    private func updateKnowledgeDownloadButton(progressOverride: Float? = nil) {
+        guard let knowledgeView = cardViewsByKey[.knowledge] as? AstroKnowledgeCardView,
+              let item = knowledgeBaseController.buildCardItem(progressOverride: progressOverride),
+              lastRenderedKnowledgeDownloadButtonTitle != item.buttonTitle else {
+            return
+        }
+        lastRenderedKnowledgeDownloadButtonTitle = item.buttonTitle
+        knowledgeView.update(item: item)
     }
 
     private func openCatalogSearch(_ catalog: Catalog) {

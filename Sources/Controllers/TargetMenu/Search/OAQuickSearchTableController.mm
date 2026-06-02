@@ -350,7 +350,7 @@
                     if ([poi isRouteArticle] && [self showTravelArticle:poi])
                     {
                         if (delegate)
-                            [delegate didCloseSearch];
+                            [delegate closeSearch];
                         return;
                     }
                     [self.class goToPoint:poi searchResult:searchResult preferredZoom:searchResult.preferredZoom];

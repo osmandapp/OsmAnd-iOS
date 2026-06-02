@@ -1946,7 +1946,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)didCloseSearch
+- (void)closeSearch
 {
     [self hideToolbar];
     [self dismissViewControllerAnimated:YES completion:nil];

@@ -214,7 +214,7 @@
     {
         OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
         OAApplicationMode *mode = profileItem.appMode;
-        [rowData setObj:[UIImage templateImageNamed:[mode getIconName]] forKey:@"icon"];
+        [rowData setObj:[[mode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forKey:@"icon"];
     }
     else
     {

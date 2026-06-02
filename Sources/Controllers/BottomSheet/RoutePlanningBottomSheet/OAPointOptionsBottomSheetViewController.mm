@@ -333,7 +333,7 @@
         {
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
-
+            
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)
             {

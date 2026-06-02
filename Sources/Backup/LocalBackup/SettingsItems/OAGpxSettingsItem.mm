@@ -187,6 +187,7 @@
     {
         gpx.color = _appearanceInfo.color;
         gpx.coloringType = _appearanceInfo.coloringType;
+        gpx.gradientPaletteName = _appearanceInfo.gradientPaletteName;
         gpx.width = _appearanceInfo.width;
         gpx.showArrows = _appearanceInfo.showArrows;
         gpx.showStartFinish = _appearanceInfo.showStartFinish;
@@ -201,7 +202,7 @@
         
         [[OAGPXDatabase sharedDb] updateDataItem:gpx];
         if (gpx.color != 0)
-            [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
+            [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:(int)gpx.color];
     }
     else
     {

@@ -17,6 +17,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAGpxWptItem.h"
+#import "OANativeUtilities.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPointDescription.h"
@@ -46,13 +47,9 @@
 {
     OsmAndAppInstance _app;
     OAContextMenuLayer *_contextLayer;
-
-    BOOL _isCurrentTrack;
     OAGpxWptItem *_movedPoint;
-    
     OASGpxFile *_currentGpx;
-    
-    CGFloat _cachedYViewPort;
+    BOOL _isCurrentTrack;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
@@ -67,8 +64,7 @@
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _contextLayer = _mapPanelViewController.mapViewController.mapLayers.contextMenuLayer;
         _targetMenuState = targetMenuState;
-        _cachedYViewPort = _mapPanelViewController.mapViewController.mapView.viewportYScale;
-        [_mapPanelViewController.mapViewController setViewportScaleY:kViewportScale];
+        [self adjustViewport];
         [self commonInit];
     }
     return self;
@@ -108,6 +104,11 @@
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
 
+    OsmAnd::LatLon latLon(_movedPoint.point.position.latitude, _movedPoint.point.position.longitude);
+    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    OAMapViewController *mapVC = _mapPanelViewController.mapViewController;
+    [mapVC goToPosition:point andZoom:mapVC.mapView.zoomLevel animated:NO];
+
     [_contextLayer enterChangePositionMode:_movedPoint];
     _contextLayer.changePositionDelegate = self;
 
@@ -142,6 +143,7 @@
             [OAUtilities setMaskTo:weakSelf.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         else
             weakSelf.contentView.layer.mask = nil;
+        [weakSelf adjustViewport];
     } completion:nil];
 }
 
@@ -160,7 +162,7 @@
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
-    [_mapPanelViewController.mapViewController setViewportScaleY:_cachedYViewPort];
+    [super onMenuDismissed];
 }
 
 - (void)onProfileSettingSet:(NSNotification *)notification
@@ -169,8 +171,7 @@
     if (notification.object != [OAAppSettings sharedManager].rotateMap)
         return;
 
-    _cachedYViewPort = _mapPanelViewController.mapViewController.mapView.viewportYScale;
-    [_mapPanelViewController.mapViewController setViewportScaleY:kViewportScale];
+    [self adjustViewport];
 }
 
 - (NSString *)getTypeStr
@@ -230,7 +231,7 @@
 
 - (CGFloat)additionalContentOffset
 {
-    return [OAUtilities isLandscapeIpadAware] ? 0. : [self contentHeight];
+    return [OAUtilities isLandscapeIpadAware] ? 0 : [self contentHeight];
 }
 
 - (CGFloat)contentHeight

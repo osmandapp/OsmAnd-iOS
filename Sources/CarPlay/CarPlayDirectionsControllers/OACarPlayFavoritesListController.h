@@ -11,7 +11,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-API_AVAILABLE(ios(12.0))
 @interface OACarPlayFavoritesListController : OABaseCarPlayListController
 
 @end

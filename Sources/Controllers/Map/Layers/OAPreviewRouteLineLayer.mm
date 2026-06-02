@@ -160,7 +160,7 @@
 
 - (void)onPaletteChangedEvent:(OASPaletteChangeEvent *)event
 {
-    if (![_routeColoringType isGradient])
+    if (!_previewRouteLineInfo || ![_routeColoringType isGradient])
         return;
     
     OASGradientPaletteCategory *category = [[_routeColoringType toGradientScaleType] toPaletteCategory];
@@ -586,6 +586,9 @@
 
 - (void) refreshRoute:(OsmAnd::AreaI)area
 {
+    if (!_previewRouteLineInfo)
+        return;
+
     [self refreshCenterIcon];
     _locationMarker->setPosition(area.center());
     _locationMarker->setIsHidden(false);

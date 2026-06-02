@@ -57,6 +57,7 @@ final class AstroKnowledgeBaseController {
 
     private func knowledgeBaseFileUrl() -> URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
+            .appendingPathComponent(RESOURCES_DIR, isDirectory: true)
             .appendingPathComponent("astro", isDirectory: true)
             .appendingPathComponent(Self.knowledgeBaseFileName, isDirectory: false)
     }

@@ -48,7 +48,7 @@ final class AstronomyPlugin: OAPlugin {
         OARootViewController.instance().present(controller, animated: true)
     }
 
-    func clearCachedData() {
+    @objc func clearCachedData() {
         dataProvider.clearCache()
     }
 }

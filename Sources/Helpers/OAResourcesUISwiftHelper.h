@@ -38,7 +38,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
     EOAOAResourceSwiftItemTypeGpxFile,
     EOAOAResourceSwiftItemTypeSqliteFile,
     EOAOAResourceSwiftItemTypeWeatherForecast,
-    EOAOAResourceSwiftItemTypeTravel
+    EOAOAResourceSwiftItemTypeTravel,
+    EOAOAResourceSwiftItemTypeStarMap
 };
 
 

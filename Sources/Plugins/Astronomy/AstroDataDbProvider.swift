@@ -169,7 +169,7 @@ final class AstroDataDbProvider: AstroDataProvider {
         guard let documentsPath = OsmAndApp.swiftInstance()?.documentsPath else {
             return []
         }
-        let astroDir = documentsPath.appendingPathComponent(Constants.astroDir)
+        let astroDir = documentsPath.appendingPathComponent(RESOURCES_DIR).appendingPathComponent(Constants.astroDir)
         return [
             astroDir.appendingPathComponent(Constants.databaseNameExtended),
             astroDir.appendingPathComponent(Constants.databaseName)

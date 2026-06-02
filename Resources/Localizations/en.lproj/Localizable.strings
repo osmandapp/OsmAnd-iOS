@@ -4554,6 +4554,7 @@
 
 "astronomy_plugin_name" = "Astronomy";
 "astronomy_plugin_description" = "Star charts, 3D star map";
+"astronomy_map" = "Astronomy Map";
 "star_map" = "Star map";
 "astro_configure_view" = "Configure view";
 "astro_visible_objects" = "Visible objects";

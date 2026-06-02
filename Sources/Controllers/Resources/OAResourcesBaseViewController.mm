@@ -356,6 +356,12 @@ static BOOL dataInvalidated = NO;
         {
             OARepositoryResourceItem* item = (OARepositoryResourceItem *)item_;
             
+            if (item.resourceType == OsmAndResourceType::StarMap && ![OAIAPHelper isOsmAndProAvailable])
+            {
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:nil navController:self.navigationController];
+                return;
+            }
+
             if (item.resource && [item isFree])
                 return [self offerDownloadAndInstallOf:item];
             
@@ -391,7 +397,7 @@ static BOOL dataInvalidated = NO;
             {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
             }
-            else if ([item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && ![OAPluginsHelper isEnabled:OAWikipediaPlugin.class])
+            else if (item.resourceType != OsmAndResourceType::StarMap && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && ![OAPluginsHelper isEnabled:OAWikipediaPlugin.class])
             {
                 if ([_iapHelper.wiki isPurchased])
                     [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];

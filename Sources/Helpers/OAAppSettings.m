@@ -392,8 +392,6 @@ static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentT
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
 static NSString * const currentTrackRouteActivityKey = @"currentTrackRouteActivityKey";
 
-static NSString * const customTrackColorsKey = @"customTrackColors";
-static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
 static NSString * const lastUsedProfileIconsKey = @"lastUsedProfileIcons";
 
@@ -6633,8 +6631,6 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
         [_currentTrackRouteActivity setModeDefaultValue:@"adventure_motorcycling" mode:OAApplicationMode.MOTORCYCLE];
         
-        _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
-        _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedProfileIcons = [[[OACommonStringList withKey:lastUsedProfileIconsKey defValue:@[]] makeGlobal] makeShared];
 
@@ -6654,8 +6650,6 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
         [_profilePreferences setObject:_currentTrackRouteActivity forKey:@"current_track_route_activity"];
         
-        [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
-        [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
         [_globalPreferences setObject:_lastUsedProfileIcons forKey:@"last_used_profile_icons"];
 

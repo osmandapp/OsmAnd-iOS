@@ -75,15 +75,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
 
 - (long)getEstimatedSize
 {
-    NSInteger count = 0;
-    NSMapTable<NSString *, OACommonPreference *> *prefs = [OAAppSettings.sharedManager getRegisteredPreferences];
-    for (NSString *key in prefs.keyEnumerator)
-    {
-        OACommonPreference *setting = [prefs objectForKey:key];
-        if ([self isExportAvailableForPreference:setting])
-            count++;
-    }
-    return count * APPROXIMATE_PREFERENCE_SIZE_BYTES;
+    return OAAppSettings.sharedManager.getGlobalPreferences.count * APPROXIMATE_PREFERENCE_SIZE_BYTES;
 }
 
 - (OASettingsItemReader *)getReader
@@ -113,6 +105,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
 
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     if ([key isEqualToString:@"available_application_modes"])
     {
         NSMutableArray<NSString *> *appModesKeys = [[value componentsSeparatedByString:@","] mutableCopy];
@@ -127,13 +120,9 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
 
         value = [[appModesKeys componentsJoinedByString:@","] stringByAppendingString:@","];
     }
-    else if ([key isEqualToString:@"enabled_plugins"])
+    else if ([key isEqualToString:@"enabled_plugins"] && [[OAAppSettings sharedManager] getGlobalPreference:key].shared)
     {
-        OACommonPreference *pref = [self preferenceForKey:key];
-        if (!pref || !pref.shared)
-            return;
-
-        NSArray<NSString *> *enabledPlugins = [[pref toStringValue:nil] componentsSeparatedByString:@","];
+        NSArray<NSString *> *enabledPlugins = [[[settings getGlobalPreference:key] toStringValue:nil] componentsSeparatedByString:@","];
         NSArray<NSString *> *androidEnabledPlugins = [value componentsSeparatedByString:@","];
         for (NSString *iosPluginId in enabledPlugins)
         {
@@ -154,30 +143,9 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         return;
     }
 
-    OACommonPreference *setting = [self preferenceForKey:key];
-    if (setting && [self isImportAvailableForPreference:setting])
-        [setting setValueFromString:value appMode:nil];
-}
-
-// Аналог OsmandSettings.isExportAvailableForPref()
-- (BOOL)isExportAvailableForPreference:(OACommonPreference *)setting
-{
-    if ([setting.key isEqualToString:@"application_mode"])
-        return YES;
-    return setting.global && setting.shared;
-}
-
-// Аналог GlobalSettingsItem.readPreferenceFromJson()
-- (BOOL)isImportAvailableForPreference:(OACommonPreference *)setting
-{
-    if ([setting.key isEqualToString:@"application_mode"])
-        return YES;
-    return setting.global && setting.shared;
-}
-
-- (nullable OACommonPreference *)preferenceForKey:(NSString *)key
-{
-    return [OAAppSettings.sharedManager getPreferenceByKey:key];
+    OACommonPreference *pref = [settings getPreferenceByKey:key];
+    if (pref && pref.shared)
+        [pref setValueFromString:value appMode:nil];
 }
 
 // MARK: OASettingsItemWriter
@@ -188,9 +156,6 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     for (NSString *key in prefs.keyEnumerator)
     {
         OACommonPreference *setting = [prefs objectForKey:key];
-        if (![self isExportAvailableForPreference:setting])
-                    continue;
-        
         if ([key isEqualToString:@"enabled_plugins"])
         {
             NSString *stringValue = [setting toStringValue:nil];
@@ -213,7 +178,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
             }
             json[key] = correctedValue;
         }
-        else if (setting.global)
+        else if (setting.shared && setting.global)
         {
             NSString *stringValue = [setting toStringValue:nil];
             if (stringValue)
@@ -269,23 +234,10 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
 
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
 
-    void (^applySettings)(void) = ^{
-        [settings enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL *stop) {
-            [self.item readPreferenceFromJson:key value:obj];
-        }];
-    };
-    // Apply prefs on main (Android: GlobalSettingsItem.runInUIThread). Required for preference listeners
-    // (SmartFolderHelper / track_filters_settings_pref). Block background until main apply completes.
-    if ([NSThread isMainThread]) {
-        applySettings();
-    } else {
-        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            applySettings();
-            dispatch_semaphore_signal(sem);
-        });
-        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-    }
+    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [self.item readPreferenceFromJson:key value:obj];
+    }];
+
     self.item.read = YES;
     return YES;
 }

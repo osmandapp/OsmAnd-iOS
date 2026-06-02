@@ -378,7 +378,6 @@ final class OsmEditsListViewController: UIViewController {
             self.updateSortMode(sortType)
             self.sortMode = savedSortMode()
             applySnapshot()
-            refreshData()
         }
     }
 
@@ -647,34 +646,25 @@ extension OsmEditsListViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let item = dataSource.itemIdentifier(for: indexPath), case .point(let osmPoint) = item else {
+            return nil
+        }
         let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
             guard let self else { return nil }
             let uploadToOsm = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined.resizedMenuImage()) { [weak self] _ in
-                guard let self,
-                      let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .point(let osmPoint) = item else {
-                    return
-                }
+                guard let self else { return }
                 self.upload(osmPoint.item)
             }
             uploadToOsm.accessibilityLabel = localizedString("upload_to_osm_short")
 
             let modify = UIAction(title: localizedString("shared_string_modify"), image: .icCustomEdit.resizedMenuImage()) { [weak self] _ in
-                guard let self,
-                      let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .point(let osmPoint) = item else {
-                    return
-                }
+                guard let self else { return }
                 self.modify(osmPoint.item)
             }
             modify.accessibilityLabel = localizedString("shared_string_modify")
 
             let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage()) { [weak self] _ in
-                guard let self,
-                      let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .point(let osmPoint) = item else {
-                    return
-                }
+                guard let self else { return }
                 self.delete(osmPoint.item)
             }
             deleteAction.accessibilityLabel = localizedString("shared_string_delete")
@@ -720,7 +710,7 @@ extension OsmEditsListViewController: MyPlacesSearchable {
         if searchController.isActive && searchText.isEmpty {
             isSearchActive = true
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
-            refreshData()
+            applySnapshot()
         } else if searchController.isActive && !searchText.isEmpty {
             var snapshot = Snapshot()
             let poi = OAOsmEditsDBHelper.sharedDatabase().getOpenstreetmapPoints()
@@ -758,7 +748,7 @@ extension OsmEditsListViewController: MyPlacesSearchable {
         } else {
             isSearchActive = false
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
-            refreshData()
+            applySnapshot()
         }
         myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
     }

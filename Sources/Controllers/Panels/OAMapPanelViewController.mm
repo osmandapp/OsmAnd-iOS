@@ -2987,7 +2987,7 @@ typedef enum
     }];
 }
 
-- (void)showWaypointOnMap:(double)latitude longitude:(double)longitude
+- (void)showWaypointOnMapWithLatitude:(double)latitude longitude:(double)longitude
 {
     _targetLatitude = latitude;
     _targetLongitude = longitude;

@@ -2990,7 +2990,7 @@
     else
         bottomInset = (viewSize.height - self.scrollableView.frame.size.height) / 2 + self.scrollableView.frame.size.height - self.groupsButtonContainerView.frame.size.height;
     
-    [self.mapPanelViewController showWaypointOnMap:lat longitude:lon];
+    [self.mapPanelViewController showWaypointOnMapWithLatitude:lat longitude:lon];
     
     Point31 targetPoint = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
     [self.mapViewController correctPosition:targetPoint

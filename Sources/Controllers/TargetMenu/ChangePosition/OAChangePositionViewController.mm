@@ -40,9 +40,6 @@
 
 #import <OsmAndCore/Utilities.h>
 
-#define kAdjustedViewportScale 1.5
-#define kRegularViewportScale 1.0
-
 @interface OAChangePositionViewController () <OAChangePositionModeDelegate>
 
 @end
@@ -55,9 +52,6 @@
     
     OAContextMenuLayer *_contextLayer;
     OAMapRendererView *_mapView;
-    
-    CGFloat _cachedX;
-    CGFloat _cachedY;
 }
 
 -(instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint
@@ -69,9 +63,6 @@
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         _contextLayer = mapPanel.mapViewController.mapLayers.contextMenuLayer;
         _mapView = mapPanel.mapViewController.mapView;
-        _cachedX = _mapView.viewportXScale;
-        _cachedY = _mapView.viewportYScale;
-        [mapPanel.mapViewController setViewportScaleY:kRegularViewportScale];
         [self adjustViewport];
     }
     return self;
@@ -167,11 +158,6 @@
     _doneButton.layer.cornerRadius = 9.;
 }
 
-- (void)adjustViewport
-{
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:[OAUtilities isLandscapeIpadAware] ? kAdjustedViewportScale : kRegularViewportScale];
-}
-
 - (UIView *) getMiddleView
 {
     return self.contentView;
@@ -187,9 +173,9 @@
     return twoButtonsBottmomSheetHeight;
 }
 
-- (CGFloat) additionalContentOffset
+- (CGFloat)additionalContentOffset
 {
-    return [OAUtilities isLandscapeIpadAware] ? 0. : [self contentHeight];
+    return [OAUtilities isLandscapeIpadAware] ? 0 : [self contentHeight];
 }
 
 - (NSString *)getCommonTypeStr
@@ -235,7 +221,7 @@
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedX y:_cachedY];
+    [super onMenuDismissed];
 }
 
 - (void)onMenuShown
@@ -253,8 +239,7 @@
     if (notification.object != [OAAppSettings sharedManager].rotateMap)
         return;
 
-    _cachedY = _mapView.viewportYScale;
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleY:kRegularViewportScale];
+    [self adjustViewport];
 }
 
 - (void) applyLocalization

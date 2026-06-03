@@ -3946,3 +3946,4 @@
 "trip_recording_moving_time_widget_description" = "Mostra il tempo di percorrenza attualmente registrato, o il tempo dell'ultima salita e dell'ultima discesa.";
 "trip_recording_moving_time" = "Tempo di percorrenza";
 "gradient_range_type_relative_summary" = "Scala di colori basata automaticamente sul range min/max della traccia.";
+"remove_step" = "Elimina passaggio";

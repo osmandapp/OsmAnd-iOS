@@ -10,7 +10,7 @@
 #import "OATargetMenuViewController.h"
 #import "OATargetPoint.h"
 
-#define kInfoViewLanscapeWidth 320.0
+#define kInfoViewLandscapeWidth 320.0
 #define kOATargetPointButtonsViewHeight 82.0
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75

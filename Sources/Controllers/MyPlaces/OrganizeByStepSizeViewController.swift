@@ -1,16 +1,21 @@
 import UIKit
 import OsmAndShared
 
-protocol OAOrganizeByStepSizeDelegate: AnyObject {
+protocol OrganizeByStepSizeDelegate: AnyObject {
     func onStepSizeChanged()
 }
 
-final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
+final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
 
-    // MARK: - Type Properties
+    // MARK: - Private Types
 
-    private static let sliderRowKey = "slider"
-    private static let stepValueKey = "stepValue"
+    private enum RowKey: String {
+        case slider
+    }
+
+    private enum DataKey: String {
+        case stepValue
+    }
 
     // MARK: - Instance Properties
 
@@ -19,8 +24,10 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
     private let displayUnits: any MeasurementUnit
     private let stepRange: Limits
     private var currentDisplayValue: Float
+    private let initialParams: OrganizeByParams?
+    private var changesApplied = false
 
-    weak var stepDelegate: OAOrganizeByStepSizeDelegate?
+    weak var stepDelegate: OrganizeByStepSizeDelegate?
 
     // MARK: - Initializers
 
@@ -29,6 +36,7 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
         self.type = type
         self.displayUnits = type.getDisplayUnits()
         self.stepRange = type.stepRange!
+        self.initialParams = smartFolder.organizeByParams
 
         let existingBase: Double
         if let rangeParams = smartFolder.organizeByParams as? OrganizeByRangeParams {
@@ -52,6 +60,8 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
         tableView.rowHeight = UITableView.automaticDimension
         if let button = navigationItem.leftBarButtonItem?.customView as? UIButton {
             button.tintColor = .textColorPrimary
+            button.removeTarget(nil, action: nil, for: .allEvents)
+            button.addTarget(self, action: #selector(onClosePressed), for: .touchUpInside)
         }
     }
 
@@ -102,19 +112,19 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
         let section = tableData.createNewSection()
         let row = section.createNewRow()
         row.cellType = TopBottomValuesSliderTableViewCell.reuseIdentifier
-        row.key = Self.sliderRowKey
+        row.key = RowKey.slider.rawValue
         row.title = localizedString("shared_string_step")
-        row.setObj(currentDisplayValue as Any, forKey: Self.stepValueKey)
+        row.setObj(currentDisplayValue as Any, forKey: DataKey.stepValue.rawValue)
     }
 
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
-        guard item.key == Self.sliderRowKey,
+        guard item.key == RowKey.slider.rawValue,
               let cell = tableView.dequeueReusableCell(
                 withIdentifier: TopBottomValuesSliderTableViewCell.reuseIdentifier
               ) as? TopBottomValuesSliderTableViewCell,
-              let value = item.obj(forKey: Self.stepValueKey) as? Float else { return nil }
+              let value = item.obj(forKey: DataKey.stepValue.rawValue) as? Float else { return nil }
 
         let unitSymbol = displayUnits.getSymbol()
         let minVal = (stepRange.min as? NSNumber).map { Float(truncating: $0) } ?? 0
@@ -127,7 +137,6 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
 
         cell.topLeftLabel.text = item.title
         cell.topLeftLabel.font = .preferredFont(forTextStyle: .body)
-
         cell.topRightLabel.text = "\(Int(value)) \(unitSymbol)"
         cell.topRightLabel.textColor = .textColorSecondary
 
@@ -147,6 +156,12 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
         return cell
     }
 
+    private func saveCurrentStep() {
+        let stepInBase = displayUnits.toBase(value: Double(currentDisplayValue))
+        let params = OrganizeByRangeParams(type: type, stepSize: stepInBase)
+        SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: params)
+    }
+
     @objc private func onSliderChanged(_ sender: UISlider) {
         currentDisplayValue = sender.value
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? TopBottomValuesSliderTableViewCell {
@@ -157,7 +172,15 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
     }
 
     @objc private func onConfirmPressed() {
+        changesApplied = true
         saveCurrentStep()
+        dismiss(animated: true) { [weak self] in
+            self?.stepDelegate?.onStepSizeChanged()
+        }
+    }
+
+    @objc private func onClosePressed() {
+        SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: initialParams)
         dismiss(animated: true) { [weak self] in
             self?.stepDelegate?.onStepSizeChanged()
         }
@@ -169,11 +192,5 @@ final class OAOrganizeByStepSizeViewController: OABaseNavbarViewController {
             with: OAFeature.advanced_WIDGETS(),
             navController: navigationController
         )
-    }
-
-    private func saveCurrentStep() {
-        let stepInBase = displayUnits.toBase(value: Double(currentDisplayValue))
-        let params = OrganizeByRangeParams(type: type, stepSize: stepInBase)
-        SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: params)
     }
 }

@@ -64,20 +64,15 @@ final class OAOrganizeByTypeCell: UITableViewCell {
 
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minHeight)
         ])
-
     }
 
-    func configure(title: String?, iconName: String?, isSelected: Bool, isLocked: Bool) {
+    func configure(title: String?, icon: UIImage?, isSelected: Bool, isLocked: Bool) {
         separatorInset = UIEdgeInsets(top: 0, left: Self.leadingInset + Self.checkmarkSize + Self.gap + Self.iconSize + Self.gap, bottom: 0, right: Self.leadingInset)
         titleLabel.text = title
         titleLabel.textColor = .textColorPrimary
 
-        if let iconName {
-            iconView.image = .templateImageNamed(iconName)
-            iconView.tintColor = isSelected ? .iconColorActive : .iconColorDefault
-        } else {
-            iconView.image = nil
-        }
+        iconView.image = icon
+        iconView.tintColor = isSelected ? .iconColorActive : .iconColorDefault
 
         checkmarkView.image = isSelected ? .templateImageNamed("ic_checkmark_default") : nil
         checkmarkView.tintColor = .iconColorActive

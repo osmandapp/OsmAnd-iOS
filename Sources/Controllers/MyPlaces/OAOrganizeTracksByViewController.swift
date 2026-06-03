@@ -2,25 +2,29 @@ import UIKit
 import OsmAndShared
 
 protocol OAOrganizeTracksByDelegate: AnyObject {
-    func onOrganizeByParamsApplied()
     func onOrganizeByRangeParamsApplied(type: OrganizeByType)
+    func onOrganizeByParamsApplied()
 }
 
 final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
 
-    // MARK: - Type Properties
-
-    private static let noneCellKey = "none"
-    private static let typeCellKey = "type"
-    private static let isSelectedKey = "isSelected"
-    private static let isLockedKey = "isLocked"
-
     // MARK: - Private Types
 
+    private enum RowKey: String {
+        case none
+        case type
+    }
+
+    private enum DataKey: String {
+        case type
+        case isSelected
+        case isLocked
+    }
+
     private struct RowData {
-        let key: String
+        let key: RowKey
         let title: String
-        let iconName: String
+        let image: UIImage?
         let type: OrganizeByType?
         let isSelected: Bool
         let isLocked: Bool
@@ -119,10 +123,10 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
         let noneSection = tableData.createNewSection()
         let noneRow = noneSection.createNewRow()
         noneRow.cellType = OAOrganizeByTypeCell.cellReuseIdentifier
-        noneRow.key = Self.noneCellKey
+        noneRow.key = RowKey.none.rawValue
         noneRow.title = localizedString("shared_string_none")
-        noneRow.iconName = "ic_custom_list"
-        noneRow.setObj(selectedType == nil, forKey: Self.isSelectedKey)
+        noneRow.setObj(UIImage.templateImageNamed("ic_custom_list") as Any, forKey: DataKey.type.rawValue)
+        noneRow.setObj(selectedType == nil, forKey: DataKey.isSelected.rawValue)
 
         let proAvailable = OAIAPHelper.isOsmAndProAvailable()
         for category in OrganizeByCategory.entries {
@@ -133,12 +137,12 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
             for type in types {
                 let row = section.createNewRow()
                 row.cellType = OAOrganizeByTypeCell.cellReuseIdentifier
-                row.key = Self.typeCellKey
+                row.key = RowKey.type.rawValue
                 row.title = type.getName()
-                row.iconName = type.iosIconName
-                row.setObj(type, forKey: Self.typeCellKey)
-                row.setObj(selectedType == type, forKey: Self.isSelectedKey)
-                row.setObj(type.isPro && !proAvailable, forKey: Self.isLockedKey)
+                row.setObj(type.image as Any, forKey: DataKey.type.rawValue)
+                row.setObj(type, forKey: RowKey.type.rawValue)
+                row.setObj(selectedType == type, forKey: DataKey.isSelected.rawValue)
+                row.setObj(type.isPro && !proAvailable, forKey: DataKey.isLocked.rawValue)
             }
         }
     }
@@ -150,9 +154,9 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: OAOrganizeByTypeCell.cellReuseIdentifier) as? OAOrganizeByTypeCell else { return nil }
         cell.configure(
             title: item.title,
-            iconName: item.iconName,
-            isSelected: item.bool(forKey: Self.isSelectedKey),
-            isLocked: item.bool(forKey: Self.isLockedKey)
+            icon: item.obj(forKey: DataKey.type.rawValue) as? UIImage,
+            isSelected: item.bool(forKey: DataKey.isSelected.rawValue),
+            isLocked: item.bool(forKey: DataKey.isLocked.rawValue)
         )
         return cell
     }
@@ -160,29 +164,21 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
 
-        if item.key == Self.noneCellKey {
+        if item.key == RowKey.none.rawValue {
             selectedType = nil
             generateData()
             tableView.reloadData()
             return
         }
 
-        guard let type = item.obj(forKey: Self.typeCellKey) as? OrganizeByType else { return }
-        if item.bool(forKey: Self.isLockedKey) {
+        guard let type = item.obj(forKey: RowKey.type.rawValue) as? OrganizeByType else { return }
+        if item.bool(forKey: DataKey.isLocked.rawValue) {
             openChoosePlan()
             return
         }
         selectedType = type
         generateData()
         tableView.reloadData()
-    }
-
-    @objc private func onApplyButtonPressed() {
-        guard let type = selectedType, type.isRangeRelated() else {
-            applyDirectly()
-            return
-        }
-        applyAndOpenStepSize()
     }
 
     private func applyDirectly() {
@@ -213,7 +209,6 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
         DispatchQueue.global(qos: .default).async { [weak self] in
             guard let self else { return }
             let currentType = folder.getOrganizeByType()
-            _ = OrganizeByCategory.entries
             let sections = self.buildSections(proAvailable: proAvailable, selectedType: currentType)
             DispatchQueue.main.async {
                 self.prefetchedType = currentType
@@ -240,9 +235,9 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
         var sections: [SectionData] = []
 
         let noneRow = RowData(
-            key: Self.noneCellKey,
+            key: .none,
             title: localizedString("shared_string_none"),
-            iconName: "ic_custom_list",
+            image: .templateImageNamed("ic_custom_list"),
             type: nil,
             isSelected: selectedType == nil,
             isLocked: false
@@ -255,9 +250,9 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
             var rows: [RowData] = []
             for type in types {
                 rows.append(RowData(
-                    key: Self.typeCellKey,
+                    key: .type,
                     title: type.getName(),
-                    iconName: type.iosIconName,
+                    image: type.image,
                     type: type,
                     isSelected: selectedType == type,
                     isLocked: type.isPro && !proAvailable
@@ -277,15 +272,23 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
             for rowData in sectionData.rows {
                 let row = section.createNewRow()
                 row.cellType = OAOrganizeByTypeCell.cellReuseIdentifier
-                row.key = rowData.key
+                row.key = rowData.key.rawValue
                 row.title = rowData.title
-                row.iconName = rowData.iconName
+                row.setObj(rowData.image as Any, forKey: DataKey.type.rawValue)
                 if let type = rowData.type {
-                    row.setObj(type, forKey: Self.typeCellKey)
+                    row.setObj(type, forKey: RowKey.type.rawValue)
                 }
-                row.setObj(rowData.isSelected, forKey: Self.isSelectedKey)
-                row.setObj(rowData.isLocked, forKey: Self.isLockedKey)
+                row.setObj(rowData.isSelected, forKey: DataKey.isSelected.rawValue)
+                row.setObj(rowData.isLocked, forKey: DataKey.isLocked.rawValue)
             }
         }
+    }
+
+    @objc private func onApplyButtonPressed() {
+        guard let type = selectedType, type.isRangeRelated() else {
+            applyDirectly()
+            return
+        }
+        applyAndOpenStepSize()
     }
 }

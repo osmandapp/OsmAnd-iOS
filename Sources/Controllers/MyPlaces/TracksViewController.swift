@@ -18,7 +18,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OAOrganizeTracksByDelegate, OAOrganizeByStepSizeDelegate {
+final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OAOrganizeTracksByDelegate, OrganizeByStepSizeDelegate {
     
     fileprivate var shouldReload = false
     
@@ -30,6 +30,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
     fileprivate var isSmartFolder = false
+    private var organizedGroup: OrganizedTracksGroup?
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
@@ -40,6 +41,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
     private let tracksSmartFolderKey = "tracksSmartFolderKey"
+    private let organizedGroupKey = "organizedGroupKey"
     private let emptyFilterFolderKey = "emptyFilterFolderKey"
     private let emptySmartFolderKey = "emptySmartFolderKey"
     private let trackKey = "trackKey"
@@ -156,6 +158,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func onLoadFinished(folder: TrackFolder) {
         rootFolder = folder
         currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
+        organizedGroup = nil
         onRefreshEnd()
         updateSearchResultsWithFilteredTracks()
         updateData()
@@ -402,17 +405,51 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     }
                 }
                 
-                let gpxItems = isSmartFolder ? smartFolder.getTrackItems().compactMap { $0.dataItem } : currentTrackFolder.getTrackItems().compactMap { $0.dataItem }
-                if isSmartFolder && !isEditFilterActive && gpxItems.isEmpty {
-                    let emptySmartFolderBannerRow = mainSection.createNewRow()
-                    emptySmartFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
-                    emptySmartFolderBannerRow.key = emptySmartFolderKey
-                    emptySmartFolderBannerRow.title = localizedString("empty_smart_folder_title")
-                    emptySmartFolderBannerRow.descr = localizedString("empty_smart_folder_descr")
-                    emptySmartFolderBannerRow.iconName = "ic_custom_folder_open"
-                    emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
-                    emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
+                if isSmartFolder {
+                    if let group = organizedGroup {
+                        let gpxItems = group.getTrackItems().compactMap { $0.dataItem }
+                        let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode)
+                        for trackItem in sortedTracks {
+                            createRowFor(track: trackItem, section: mainSection)
+                        }
+                    } else if !isEditFilterActive && smartFolder.organizeByParams != nil {
+                        let groups = smartFolder.getOrganizedTrackItems()
+                        if groups.isEmpty {
+                            let gpxItems = smartFolder.getTrackItems().compactMap { $0.dataItem }
+                            if gpxItems.isEmpty {
+                                let emptySmartFolderBannerRow = mainSection.createNewRow()
+                                emptySmartFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
+                                emptySmartFolderBannerRow.key = emptySmartFolderKey
+                                emptySmartFolderBannerRow.title = localizedString("empty_smart_folder_title")
+                                emptySmartFolderBannerRow.descr = localizedString("empty_smart_folder_descr")
+                                emptySmartFolderBannerRow.iconName = "ic_custom_folder_open"
+                                emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
+                                emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
+                            } else {
+                                TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode).forEach { createRowFor(track: $0, section: mainSection) }
+                            }
+                        } else {
+                            for group in groups {
+                                createRowFor(organizedGroup: group, section: mainSection)
+                            }
+                        }
+                    } else {
+                        let gpxItems = smartFolder.getTrackItems().compactMap { $0.dataItem }
+                        if !isEditFilterActive && gpxItems.isEmpty {
+                            let emptySmartFolderBannerRow = mainSection.createNewRow()
+                            emptySmartFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
+                            emptySmartFolderBannerRow.key = emptySmartFolderKey
+                            emptySmartFolderBannerRow.title = localizedString("empty_smart_folder_title")
+                            emptySmartFolderBannerRow.descr = localizedString("empty_smart_folder_descr")
+                            emptySmartFolderBannerRow.iconName = "ic_custom_folder_open"
+                            emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
+                            emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
+                        } else {
+                            TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode).forEach { createRowFor(track: $0, section: mainSection) }
+                        }
+                    }
                 } else {
+                    let gpxItems = currentTrackFolder.getTrackItems().compactMap { $0.dataItem }
                     let sortedTracks = TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode)
                     for trackItem in sortedTracks {
                         createRowFor(track: trackItem, section: mainSection)
@@ -449,6 +486,17 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
     
+    fileprivate func createRowFor(organizedGroup: OrganizedTracksGroup, section: OATableSectionData) {
+        let row = section.createNewRow()
+        row.cellType = OASimpleTableViewCell.reuseIdentifier
+        row.key = organizedGroupKey
+        row.title = organizedGroup.getName()
+        row.descr = String(format: localizedString("folder_tracks_count"), organizedGroup.getTrackItems().count)
+        row.iconName = organizedGroup.getIconName()
+        row.setObj(UIColor.iconColorSelected, forKey: colorKey)
+        row.setObj(organizedGroup, forKey: organizedGroupKey)
+    }
+
     fileprivate func createRowFor(track: GpxDataItem, section: OATableSectionData) {
         let trackRow = section.createNewRow()
         let fileName = track.gpxFileName
@@ -482,6 +530,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let doneBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_done"), icon: nil, color: .label, action: #selector(onNavbarDoneButtonClicked), target: self, menu: nil)
             navigationController?.navigationBar.topItem?.rightBarButtonItem = doneBarButton
             navigationItem.rightBarButtonItem = doneBarButton
+        } else if organizedGroup != nil {
+            hideBackButton(true)
+            let backButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "chevron.left"), color: .label, action: #selector(onNavbarOrganizedGroupBackButtonClicked), target: self, menu: nil)
+            navigationController?.navigationBar.topItem?.leftBarButtonItem = backButton
+            navigationItem.leftBarButtonItem = backButton
         } else {
             hideBackButton(false)
             navigationController?.navigationBar.topItem?.leftBarButtonItem = nil
@@ -562,7 +615,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         } else if isVisibleOnMapFolder {
             title = localizedString("tracks_on_map")
         } else if isSmartFolder {
-            title = isEditFilterActive ? localizedString("edit_filter") : smartFolder.getDirName(includingSubdirs: false)
+            if let group = organizedGroup {
+                title = group.getName()
+            } else {
+                title = isEditFilterActive ? localizedString("edit_filter") : smartFolder.getDirName(includingSubdirs: false)
+            }
         }
         
         if !isRootFolder {
@@ -576,19 +633,23 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         var menuActions: [UIMenuElement] = []
         if !tableView.isEditing {
             if isSmartFolder {
+                let isGeneralView = organizedGroup == nil
                 let refreshSmartFolderAction = UIAction(title: localizedString("shared_string_refresh"), image: .icCustomUpdate.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarRefreshSmartFolderButtonClicked()
                 }
-                let editFilterSmartFolderAction = UIAction(title: localizedString("edit_filter"), image: .icCustomParameters.resizedMenuImage()) { [weak self] _ in
-                    self?.onNavbarEditFilterSmartFolderButtonClicked()
-                }
-                let organizeByAction = UIAction(title: localizedString("organize_by"), image: .icCustomTracksOrganize.resizedMenuImage()) { [weak self] _ in
-                    self?.onNavbarOrganizeBySmartFolderButtonClicked()
-                }
                 let refreshSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [refreshSmartFolderAction])
-                let editFilterSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [editFilterSmartFolderAction])
-                let organizeByActionWithDivider = UIMenu(title: "", options: .displayInline, children: [organizeByAction])
-                menuActions.append(contentsOf: [refreshSmartFolderActionWithDivider, editFilterSmartFolderActionWithDivider, organizeByActionWithDivider])
+                menuActions.append(refreshSmartFolderActionWithDivider)
+                if isGeneralView {
+                    let editFilterSmartFolderAction = UIAction(title: localizedString("edit_filter"), image: .icCustomParameters.resizedMenuImage()) { [weak self] _ in
+                        self?.onNavbarEditFilterSmartFolderButtonClicked()
+                    }
+                    let organizeByAction = UIAction(title: localizedString("organize_by"), image: .icCustomTracksOrganize.resizedMenuImage()) { [weak self] _ in
+                        self?.onNavbarOrganizeBySmartFolderButtonClicked()
+                    }
+                    let editFilterSmartFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [editFilterSmartFolderAction])
+                    let organizeByActionWithDivider = UIMenu(title: "", options: .displayInline, children: [organizeByAction])
+                    menuActions.append(contentsOf: [editFilterSmartFolderActionWithDivider, organizeByActionWithDivider])
+                }
             } else {
                 let addFolderAction = UIAction(title: localizedString("add_folder"), image: .icCustomFolderAddOutlined.resizedMenuImage()) { [weak self] _ in
                     self?.onNavbarAddFolderButtonClicked()
@@ -922,6 +983,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     // MARK: - Navbar Toolbar Actions
     
+    private func leaveOrganizedGroup() {
+        organizedGroup = nil
+        updateNavigationBarTitle()
+        setupNavbar()
+        generateData()
+        tableView.reloadData()
+    }
+
     private func onNavbarRefreshSmartFolderButtonClicked() {
         smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
         reloadTracks(forceLoad: true)
@@ -941,9 +1010,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
 
     func onOrganizeByRangeParamsApplied(type: OrganizeByType) {
         reloadTracks(forceLoad: true)
-        let vc = OAOrganizeByStepSizeViewController(smartFolder: smartFolder, type: type)
+        let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type)
         vc.stepDelegate = self
-        present(vc, animated: true)
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
     }
 
     func onStepSizeChanged() {
@@ -1188,6 +1258,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
     
+    @objc private func onNavbarOrganizedGroupBackButtonClicked() {
+        leaveOrganizedGroup()
+    }
+
     @objc private func onNavbarCancelButtonClicked() {
         selectedTracks.removeAll()
         selectedFolders.removeAll()
@@ -2175,6 +2249,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             } else if item.key == tracksSmartFolderKey {
                 guard let title = item.title else { return }
                 showTracksViewControllerForSmartFolder(withName: title)
+            } else if item.key == organizedGroupKey {
+                if let group = item.obj(forKey: organizedGroupKey) as? OrganizedTracksGroup {
+                    organizedGroup = group
+                    updateNavigationBarTitle()
+                    setupNavbar()
+                    generateData()
+                    tableView.reloadData()
+                }
             } else if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
                    let track = rootFolder.getFlattenedTrackItems().first(where: { $0.gpxFilePath == trackPath }),

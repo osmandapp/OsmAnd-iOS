@@ -4086,3 +4086,5 @@
 "edit_palette" = "Rediger palet";
 "delete_palette" = "Slet palet";
 "delete_colors_palette_dialog_summary" = "Er du sikker på, at du vil slette paletten %@?";
+"dismiss_changes_descr" = "Alle ændringer vil blive afvist.";
+"gpx_logging_no_data" = "Ingen data";

@@ -4040,3 +4040,6 @@
 "download_roads_only_maps" = "只有道路的地圖";
 "terrain_shadows_descr" = "套用到 3D 地形的即時動態陰影，在最小的效能影響下突顯地景地理形狀。";
 "shared_string_ratio" = "比例";
+"add_palette" = "新增色盤";
+"dismiss_changes_descr" = "所有變動都會被放棄。";
+"gpx_logging_no_data" = "沒有資料";

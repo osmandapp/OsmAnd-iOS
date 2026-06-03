@@ -214,6 +214,8 @@
 		2717D3B52DBBA2F800B7BD22 /* ShapesAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */; };
 		2717D3B72DBBA3C500B7BD22 /* ShapesCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */; };
 		2717D3D22DC8D8A600B7BD22 /* BaseAppearanceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */; };
+		271A5C442FCDE1D700C27411 /* SortButtonCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271A5C432FCDE1D700C27411 /* SortButtonCollectionViewCell.swift */; };
+		271A5C462FCDE26D00C27411 /* OsmEditsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271A5C452FCDE26D00C27411 /* OsmEditsListViewController.swift */; };
 		271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */; };
 		27291B612EE81169005D0B0A /* PreviewImageViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */; };
 		27291B622EE81169005D0B0A /* PreviewImageViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */; };
@@ -3710,6 +3712,8 @@
 		2717D3B42DBBA2F100B7BD22 /* ShapesAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesAppearanceCategory.swift; sourceTree = "<group>"; };
 		2717D3B62DBBA3BC00B7BD22 /* ShapesCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapesCollectionHandler.swift; sourceTree = "<group>"; };
 		2717D3D12DC8D8A600B7BD22 /* BaseAppearanceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceCategory.swift; sourceTree = "<group>"; };
+		271A5C432FCDE1D700C27411 /* SortButtonCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortButtonCollectionViewCell.swift; sourceTree = "<group>"; };
+		271A5C452FCDE26D00C27411 /* OsmEditsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmEditsListViewController.swift; sourceTree = "<group>"; };
 		271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceByTapViewController.swift; sourceTree = "<group>"; };
 		27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewImageViewTableViewCell.swift; sourceTree = "<group>"; };
 		27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreviewImageViewTableViewCell.xib; sourceTree = "<group>"; };
@@ -9450,6 +9454,8 @@
 				DA83601923449C69003374B5 /* ic_custom_options@3x.png */,
 				DAF3450B22F4481C009E2EB6 /* ic_custom_osm_note_resolved@2x.png */,
 				DAF3453822F44828009E2EB6 /* ic_custom_osm_note_resolved@3x.png */,
+				DABA3DC422686E6D005BB777 /* ic_custom_overflow_menu@2x.png */,
+				DABA3DCB22686E6F005BB777 /* ic_custom_overflow_menu@3x.png */,
 				DAC0279122A1566500D1689E /* ic_custom_overlay_map@2x.png */,
 				DAC0279022A1566500D1689E /* ic_custom_overlay_map@3x.png */,
 				8AE0194424505C8B00DA5C33 /* ic_custom_parking@2x.png */,
@@ -12299,6 +12305,8 @@
 				277987B72E7AB48B00607516 /* KeyAssignmentTableViewCell.swift */,
 				27C6D5AE2E7AE36600695D5B /* KeyTableViewCell.swift */,
 				27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */,
+				CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */,
+				271A5C432FCDE1D700C27411 /* SortButtonCollectionViewCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -12640,6 +12648,7 @@
 				C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */,
 				C57693162D66159200E4F772 /* AppearanceData.swift */,
 				C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */,
+				271A5C452FCDE26D00C27411 /* OsmEditsListViewController.swift */,
 				27E3429B2FADD420008416B6 /* MyPlacesContainerViewController.swift */,
 				27E342A12FADE450008416B6 /* MyPlacesContainerViewController.xib */,
 			);
@@ -13395,7 +13404,6 @@
 				DA5A7FB226C563A500F274C7 /* OABottomSheetViewController.h */,
 				DA5A7FB726C563A500F274C7 /* OABottomSheetViewController.mm */,
 				DA5A7FE326C563A500F274C7 /* OABottomSheetViewController.xib */,
-				DA5A7FC626C563A500F274C7 /* OsmEditingBottomSheet */,
 				DA5A7FBF26C563A500F274C7 /* ProfileSelectionBottomSheet */,
 				DA5A7FB326C563A500F274C7 /* PublicTransportOptionsBottomSheet */,
 				DA5A7FE026C563A500F274C7 /* QuickActionBottomSheet */,
@@ -17877,6 +17885,7 @@
 				DA5A82E326C563A800F274C7 /* OATargetInfoCollapsableCoordinatesViewCell.m in Sources */,
 				326087092F324B290038A34B /* PoiAdditionalUiRule.swift in Sources */,
 				DA4ABF212876DA6800B996EF /* OAMarkersSettingsItem.mm in Sources */,
+				271A5C462FCDE26D00C27411 /* OsmEditsListViewController.swift in Sources */,
 				DA9A2C3726FF0F4D00BEC681 /* OAColoringType.mm in Sources */,
 				DA5A81FD26C563A700F274C7 /* OAFeatureCardRow.m in Sources */,
 				FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */,
@@ -18383,6 +18392,7 @@
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
 				C57245D92CDF3B70004F1F19 /* TracksSortModeHelper.swift in Sources */,
 				DA5A845426C563A900F274C7 /* OARouteLayer.mm in Sources */,
+				271A5C442FCDE1D700C27411 /* SortButtonCollectionViewCell.swift in Sources */,
 				DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */,
 				46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */,
 				DA591EAC28D9EB1B0068CAC7 /* OATableSectionData.m in Sources */,

@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(OAEntity *) getEntity;
 -(NSString *) getComment;
-- (NSString *)tagFrom:(NSString *)tag;
+- (nullable NSString *)tagFrom:(NSString *)tag;
 
 -(void) setEntity:(OAEntity *)entity;
 -(void) setComment:(NSString *)comment;

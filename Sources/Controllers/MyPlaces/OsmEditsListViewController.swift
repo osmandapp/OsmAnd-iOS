@@ -2,7 +2,7 @@
 //  OsmEditsListViewController.swift
 //  OsmAnd Maps
 //
-//  Created by Vladyslav Lysenko on 27.05.2026.
+//  Created by Vladyslav Lysenko on 01.06.2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
@@ -49,11 +49,12 @@ final class OsmEditsListViewController: UIViewController {
         case header(Header)
         case point(OsmPoint)
     }
+    
+    // MARK: - Properties
+    
+    private static let imageSize: CGFloat = 30
 
     weak var myPlacesDelegate: MyPlacesDelegate?
-
-    // MARK: - Properties
-    private static let imageSize: CGFloat = 30
     
     private var dataSource: DataSource!
     private var collectionView: UICollectionView!
@@ -97,10 +98,10 @@ final class OsmEditsListViewController: UIViewController {
         cell.tintColor = .iconColorActive
     }
     
-//    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, indexPath, headerItem) in
-//        cell.sortButton.setImage(headerItem.sortMode.image, for: .normal)
-//        cell.sortButton.menu = headerItem.menu
-//    }
+    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, indexPath, headerItem) in
+        cell.sortButton.setImage(headerItem.sortMode.image, for: .normal)
+        cell.sortButton.menu = headerItem.menu
+    }
 
     // MARK: - Init
 
@@ -201,10 +202,10 @@ final class OsmEditsListViewController: UIViewController {
             guard let self else { return UICollectionViewCell() }
             switch item {
             case .sortHeader(let headerItem):
-//                let cell = collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration,
-//                                                                        for: indexPath,
-//                                                                        item: headerItem)
-                return UICollectionViewCell()
+                let cell = collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration,
+                                                                        for: indexPath,
+                                                                        item: headerItem)
+                return cell
             case .header(let headerItem):
                 let cell = collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration,
                                                                         for: indexPath,
@@ -239,17 +240,17 @@ final class OsmEditsListViewController: UIViewController {
                     let name = osmEdit.getName()
                     
                     if let poiEdit = osmEdit as? OAOpenStreetMapPoint {
-                        let poiType = poiEdit.tag(from: poiTypeTag).lowercased()
+                        let poiType = poiEdit.tag(from: poiTypeTag)?.lowercased()
                         points.append(OsmPoint(
-                            title: name.isEmpty ? getDescription(point: osmEdit) : name,
+                            title: name.isEmpty ? description(point: osmEdit) : name,
                             poiType: poiType,
-                            descr: getDescription(point: osmEdit),
+                            descr: description(point: osmEdit),
                             item: osmEdit
                         ))
                     } else {
                         points.append(OsmPoint(
                             title: name,
-                            descr: getDescription(point: osmEdit),
+                            descr: description(point: osmEdit),
                             item: osmEdit
                         ))
                     }
@@ -267,13 +268,13 @@ final class OsmEditsListViewController: UIViewController {
                 var points: [OsmPoint] = []
                 for point in sortedPoi {
                     if let point = point as? OAOpenStreetMapPoint {
-                        let poiType = point.tag(from: poiTypeTag).lowercased()
+                        let poiType = point.tag(from: poiTypeTag)?.lowercased()
                         let name = point.getName()
                         
                         points.append(OsmPoint(
-                            title: name.isEmpty ? getDescription(point: point) : name,
+                            title: name.isEmpty ? description(point: point) : name,
                             poiType: poiType,
-                            descr: getDescription(point: point),
+                            descr: description(point: point),
                             item: point
                         ))
                     }
@@ -287,7 +288,7 @@ final class OsmEditsListViewController: UIViewController {
                 for point in sortedNotes {
                     points.append(OsmPoint(
                         title: point.getName(),
-                        descr: getDescription(point: point),
+                        descr: description(point: point),
                         item: point
                     ))
                 }
@@ -377,7 +378,6 @@ final class OsmEditsListViewController: UIViewController {
             self.updateSortMode(sortType)
             self.sortMode = savedSortMode()
             applySnapshot()
-            refreshData()
         }
     }
 
@@ -389,7 +389,7 @@ final class OsmEditsListViewController: UIViewController {
         MyPlacesSortMode.byTitle(settings.osmEditsSortMode.get())
     }
     
-    private func getDescription(point: OAOsmPoint) -> String {
+    private func description(point: OAOsmPoint) -> String {
         var action = point.getLocalizedAction()
         let type = OAOsmEditingPlugin.getCategory(point)
         if !type.isEmpty {
@@ -646,30 +646,25 @@ extension OsmEditsListViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let menuProvider: UIContextMenuActionProvider = { _ in
-            let uploadToOsm = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined.resizedMenuImage()) { _ in
-                guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .point(let osmPoint) = item else {
-                    return
-                }
+        guard let item = dataSource.itemIdentifier(for: indexPath), case .point(let osmPoint) = item else {
+            return nil
+        }
+        let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
+            guard let self else { return nil }
+            let uploadToOsm = UIAction(title: localizedString("upload_to_osm_short"), image: .icCustomUploadToOpenstreetmapOutlined.resizedMenuImage()) { [weak self] _ in
+                guard let self else { return }
                 self.upload(osmPoint.item)
             }
             uploadToOsm.accessibilityLabel = localizedString("upload_to_osm_short")
 
-            let modify = UIAction(title: localizedString("shared_string_modify"), image: .icCustomEdit.resizedMenuImage()) { _ in
-                guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .point(let osmPoint) = item else {
-                    return
-                }
+            let modify = UIAction(title: localizedString("shared_string_modify"), image: .icCustomEdit.resizedMenuImage()) { [weak self] _ in
+                guard let self else { return }
                 self.modify(osmPoint.item)
             }
             modify.accessibilityLabel = localizedString("shared_string_modify")
 
-            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage()) { _ in
-                guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .point(let osmPoint) = item else {
-                    return
-                }
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage()) { [weak self] _ in
+                guard let self else { return }
                 self.delete(osmPoint.item)
             }
             deleteAction.accessibilityLabel = localizedString("shared_string_delete")
@@ -715,7 +710,7 @@ extension OsmEditsListViewController: MyPlacesSearchable {
         if searchController.isActive && searchText.isEmpty {
             isSearchActive = true
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
-            refreshData()
+            applySnapshot()
         } else if searchController.isActive && !searchText.isEmpty {
             var snapshot = Snapshot()
             let poi = OAOsmEditsDBHelper.sharedDatabase().getOpenstreetmapPoints()
@@ -729,17 +724,17 @@ extension OsmEditsListViewController: MyPlacesSearchable {
                     let nameTagRange = name.range(of: searchText, options: .caseInsensitive)
                     if nameTagRange != nil {
                         if let poiEdit = osmEdit as? OAOpenStreetMapPoint {
-                            let poiType = poiEdit.tag(from: poiTypeTag).lowercased()
+                            let poiType = poiEdit.tag(from: poiTypeTag)?.lowercased()
                             points.append(OsmPoint(
-                                title: name.isEmpty ? getDescription(point: osmEdit) : name,
+                                title: name.isEmpty ? description(point: osmEdit) : name,
                                 poiType: poiType,
-                                descr: getDescription(point: osmEdit),
+                                descr: description(point: osmEdit),
                                 item: osmEdit
                             ))
                         } else {
                             points.append(OsmPoint(
                                 title: name,
-                                descr: getDescription(point: osmEdit),
+                                descr: description(point: osmEdit),
                                 item: osmEdit
                             ))
                         }
@@ -753,7 +748,7 @@ extension OsmEditsListViewController: MyPlacesSearchable {
         } else {
             isSearchActive = false
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
-            refreshData()
+            applySnapshot()
         }
         myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
     }

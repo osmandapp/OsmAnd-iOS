@@ -2541,7 +2541,7 @@ includeHidden:(BOOL)includeHidden
                                targetItem:(OAResourceItem *)targetItem
                                 onProceed:(dispatch_block_t)onProceed
 {
-    NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *duplicateMaps = [self pendingMapVariantDeletionsForItems:items];
+    NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *duplicateMaps = [self getLocalResourcesToDeleteFor:items];
     
     if (duplicateMaps.count > 0)
     {
@@ -2637,12 +2637,12 @@ includeHidden:(BOOL)includeHidden
     }];
 }
 
-+ (NSArray<OALocalResourceItem *> *)localVariantItemsForItem:(OARepositoryResourceItem *)targetItem alternativeType:(OsmAndResourceType)counterpartType
++ (NSArray<OALocalResourceItem *> *)getLocalItemsFor:(OARepositoryResourceItem *)targetItem oppositeType:(OsmAndResourceType)oppositeType
 {
     NSMutableArray<OALocalResourceItem *> *result = [NSMutableArray array];
 
     NSArray<OAResourceItem *> *items = [self requestMapDownloadInfo:@[targetItem.worldRegion]
-                                                      resourceTypes:@[[OAResourceType toValue:counterpartType]]
+                                                      resourceTypes:@[[OAResourceType toValue:oppositeType]]
                                                             isGroup:NO];
 
     NSString *targetRegionId = targetItem.worldRegion.regionId;
@@ -2668,7 +2668,7 @@ includeHidden:(BOOL)includeHidden
     return OsmAndResourceType::Unknown;
 }
 
-+ (NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)pendingMapVariantDeletionsForItems:(NSArray<OAResourceItem *> *)items
++ (NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)getLocalResourcesToDeleteFor:(NSArray<OAResourceItem *> *)items
 {
     NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *pending = [NSMutableDictionary dictionary];
 
@@ -2688,7 +2688,7 @@ includeHidden:(BOOL)includeHidden
         if (oppositeType == OsmAndResourceType::Unknown)
             continue;
 
-        NSArray<OALocalResourceItem *> *toDelete = [self localVariantItemsForItem:targetItem alternativeType:oppositeType];
+        NSArray<OALocalResourceItem *> *toDelete = [self getLocalItemsFor:targetItem oppositeType:oppositeType];
         if (toDelete.count == 0)
             continue;
 

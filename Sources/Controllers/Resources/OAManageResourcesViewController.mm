@@ -177,8 +177,6 @@ struct RegionResources
     NSArray<OAResourceItem *> *_multipleItems;
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
-    
-    UIView *_lastPressedCell;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -1018,6 +1016,8 @@ static BOOL _repositoryUpdated = NO;
         for (NSNumber *type in regionMapItemsTypesInGroup)
         {
             OsmAndResourceType resourceType = [OAResourceType toResourceType:type isGroup:YES];
+            if ([self.region.regionId hasPrefix:russiaRegionId] && resourceType == OsmAndResourceType::RoadMapRegion)
+                continue;
             if (resourceType != [OAResourceType unknownType])
             {
                 OAMultipleResourceItem *multipleResourceItem = [[OAMultipleResourceItem alloc] initWithType:resourceType items:[self.region.groupItem getItems:resourceType]];
@@ -1093,8 +1093,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL)shouldJoinRoadMapRegionItem:(OAResourceItem *)item inRegion:(OAWorldRegion *)region
 {
-    return [region isMapCreatedByJoiningSubregions:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
-            && item.resourceType == OsmAndResourceType::RoadMapRegion;
+    return (region.regionJoinRoads || region.regionJoinMap) && item.resourceType == OsmAndResourceType::RoadMapRegion;
 }
 
 - (void) collectSubregionItems:(OAWorldRegion *)region
@@ -1939,6 +1938,20 @@ static BOOL _repositoryUpdated = NO;
     }
 }
 
+- (UITableViewCell *) getVisibleCellFor:(OAResourceItem *)item
+{
+    for (UITableViewCell *cell in self.tableView.visibleCells)
+    {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        id rowItem = [self getItemByIndexPath:indexPath];
+        if ([rowItem isKindOfClass:OASearchResult.class])
+            rowItem = ((OASearchResult *)rowItem).relatedObject;
+        if (rowItem == item)
+            return cell;
+    }
+    return nil;
+}
+
 - (void) onItemClicked:(id)senderItem sourceView:(UIView *)sourceView
 {
     if ([senderItem isKindOfClass:OAMultipleResourceItem.class])
@@ -1990,7 +2003,7 @@ static BOOL _repositoryUpdated = NO;
     }
     else
     {
-        [super onItemClicked:senderItem sourceView:_lastPressedCell];
+        [super onItemClicked:senderItem sourceView:[self getVisibleCellFor:senderItem]];
     }
 }
 
@@ -2941,13 +2954,11 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    _lastPressedCell = [tableView cellForRowAtIndexPath:indexPath];
     [self onCellClicked:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    _lastPressedCell = [tableView cellForRowAtIndexPath:indexPath];
     [self onCellClicked:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
@@ -2982,25 +2993,25 @@ static BOOL _repositoryUpdated = NO;
 
         if ([item isKindOfClass:[OAMultipleResourceItem class]])
         {
-            [self onItemClicked:item sourceView:_lastPressedCell];
+            [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
         }
         else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
         {
             if (((OAOutdatedResourceItem *) item).downloadTask != nil)
-                [self onItemClicked:item sourceView:_lastPressedCell];
+                [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
             else
                 [self showDetailsOf:item];
         }
         else if ([item isKindOfClass:OACustomResourceItem.class])
         {
             if (((OACustomResourceItem *) item).downloadTask != nil)
-                [self onItemClicked:item sourceView:_lastPressedCell];
+                [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
             else
                 [self showDetailsOfCustomItem:item];
         }
         else if (![item isKindOfClass:[OALocalResourceItem class]])
         {
-            [self onItemClicked:item sourceView:_lastPressedCell];
+            [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
         }
         else if ([item isKindOfClass:OALocalResourceItem.class] && ((OAResourceItem *) item).resourceType == OsmAndResourceType::WeatherForecast)
         {
@@ -3412,7 +3423,7 @@ static BOOL _repositoryUpdated = NO;
     _multipleItems = selectedResourceItems;
     [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem
                                              selectedItems:selectedResourceItems
-                                                sourceView:_lastPressedCell
+                                                sourceView:[self getVisibleCellFor:item.objcResourceItem]
                                              onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
     } onTaskResumed:nil];

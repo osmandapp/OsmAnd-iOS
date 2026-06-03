@@ -170,7 +170,7 @@
 "shared_string_open" = "Ouvert";
 "time_closed" = "Fermé";
 "local_indexes_cat_backup" = "Désactivé";
-"shared_string_show_all" = "AFFICHER TOUT";
+"shared_string_show_all" = "Afficher tout";
 "est_travel_time" = "Temps de voyage estimé";
 "pedestrian" = "Piéton";
 "go_to_downloads" = "Accéder aux téléchargements";
@@ -4084,3 +4084,5 @@
 "edit_palette" = "Modifier la palette";
 "delete_palette" = "Supprimer la palette";
 "delete_colors_palette_dialog_summary" = "Êtes-vous sûr de vouloir supprimer la palette %@ ?";
+"dismiss_changes_descr" = "Toutes les modifications seront annulées.";
+"gpx_logging_no_data" = "Aucune donnée";

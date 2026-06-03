@@ -240,7 +240,7 @@ final class OsmEditsListViewController: UIViewController {
                     let name = osmEdit.getName()
                     
                     if let poiEdit = osmEdit as? OAOpenStreetMapPoint {
-                        let poiType = poiEdit.tag(from: poiTypeTag).lowercased()
+                        let poiType = poiEdit.tag(from: poiTypeTag)?.lowercased()
                         points.append(OsmPoint(
                             title: name.isEmpty ? description(point: osmEdit) : name,
                             poiType: poiType,
@@ -268,7 +268,7 @@ final class OsmEditsListViewController: UIViewController {
                 var points: [OsmPoint] = []
                 for point in sortedPoi {
                     if let point = point as? OAOpenStreetMapPoint {
-                        let poiType = point.tag(from: poiTypeTag).lowercased()
+                        let poiType = point.tag(from: poiTypeTag)?.lowercased()
                         let name = point.getName()
                         
                         points.append(OsmPoint(
@@ -724,7 +724,7 @@ extension OsmEditsListViewController: MyPlacesSearchable {
                     let nameTagRange = name.range(of: searchText, options: .caseInsensitive)
                     if nameTagRange != nil {
                         if let poiEdit = osmEdit as? OAOpenStreetMapPoint {
-                            let poiType = poiEdit.tag(from: poiTypeTag).lowercased()
+                            let poiType = poiEdit.tag(from: poiTypeTag)?.lowercased()
                             points.append(OsmPoint(
                                 title: name.isEmpty ? description(point: osmEdit) : name,
                                 poiType: poiType,

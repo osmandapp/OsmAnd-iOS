@@ -1814,6 +1814,7 @@
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
 "folder_tracks_count" = "%d tracks";
+"folder_one_track" = "1 track";
 
 "delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";
@@ -4576,6 +4577,8 @@
 "shared_string_avg_altitude" = "Avg. altitude";
 "shared_string_uphill" = "Uphill";
 "shared_string_downhill" = "Downhill";
+"sort_highest_first" = "Highest first";
+"sort_lowest_first" = "Lowest first";
 "set_step_size" = "Set step size";
 "set_step_size_summary" = "Choose a step size to group your tracks.";
 "shared_string_step" = "Step";

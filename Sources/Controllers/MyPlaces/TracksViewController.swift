@@ -429,7 +429,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                                 TracksSortModeHelper.sortTracksWithMode(gpxItems, mode: sortMode).forEach { createRowFor(track: $0, section: mainSection) }
                             }
                         } else {
-                            for group in groups {
+                            let sortedGroups = sortOrganizedGroups(groups)
+                            for group in sortedGroups {
                                 createRowFor(organizedGroup: group, section: mainSection)
                             }
                         }
@@ -464,6 +465,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
     
+    fileprivate func formattedTracksCount(_ count: Int) -> String {
+        count == 1 ? localizedString("folder_one_track") : String(format: localizedString("folder_tracks_count"), count)
+    }
+
     fileprivate func createRowFor(folder: SortableFolder, section: OATableSectionData) {
         let folderRow = section.createNewRow()
         let folderName = folder.getDirName(includingSubdirs: false)
@@ -491,7 +496,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         row.cellType = OASimpleTableViewCell.reuseIdentifier
         row.key = organizedGroupKey
         row.title = organizedGroup.getName()
-        row.descr = String(format: localizedString("folder_tracks_count"), organizedGroup.getTrackItems().count)
+        row.descr = formattedTracksCount(organizedGroup.getTrackItems().count)
         row.iconName = organizedGroup.getIconName()
         row.setObj(UIColor.iconColorSelected, forKey: colorKey)
         row.setObj(organizedGroup, forKey: organizedGroupKey)
@@ -836,8 +841,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func getTotalTracksStatistics() -> String {
         let folderAnalysis: TrackFolderAnalysis
         if isSmartFolder {
-            guard let smartFolder = smartFolder else { return "" }
-            folderAnalysis = smartFolder.getFolderAnalysis()
+            if let group = organizedGroup {
+                folderAnalysis = group.getFolderAnalysis()
+            } else {
+                guard let smartFolder = smartFolder else { return "" }
+                folderAnalysis = smartFolder.getFolderAnalysis()
+            }
         } else {
             guard let analysis = getTrackFolderByPath(currentFolderPath)?.getFolderAnalysis() else { return "" }
             folderAnalysis = analysis
@@ -987,6 +996,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         organizedGroup = nil
         updateNavigationBarTitle()
         setupNavbar()
+        updateSortButtonAndMenu()
         generateData()
         tableView.reloadData()
     }
@@ -2254,6 +2264,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     organizedGroup = group
                     updateNavigationBarTitle()
                     setupNavbar()
+                    updateSortButtonAndMenu()
                     generateData()
                     tableView.reloadData()
                 }
@@ -2356,6 +2367,38 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 }
                 let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
                 return UIMenu(title: "", image: nil, children: [secondButtonsSection, thirdButtonsSection, lastButtonsSection])
+            }
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
+        } else if item.key == organizedGroupKey {
+            guard let group = item.obj(forKey: organizedGroupKey) as? OrganizedTracksGroup else { return nil }
+            let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
+                guard let self else { return nil }
+                let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { [weak self] _ in
+                    guard let self else { return }
+                    self.organizedGroup = group
+                    self.updateNavigationBarTitle()
+                    self.setupNavbar()
+                    self.generateData()
+                    self.tableView.reloadData()
+                }
+                let showOnMapAction = UIAction(title: localizedString("show_all_tracks"), image: .icCustomMapPinOutlined.resizedMenuImage()) { [weak self] _ in
+                    guard let self else { return }
+                    let tracksToShow = group.getTrackItems().compactMap { $0.gpxFilePath }.filter { !self.settings.mapSettingVisibleGpx.contains($0) }
+                    if !tracksToShow.isEmpty {
+                        self.settings.showGpx(tracksToShow, update: true)
+                    }
+                    self.updateAllFoldersVCData(forceLoad: false)
+                }
+                let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined.resizedMenuImage()) { [weak self] _ in
+                    guard let self else { return }
+                    let exportFilePaths = group.getTrackItems().compactMap { $0.path }
+                    let vc = OAExportItemsViewController(tracks: exportFilePaths)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+                let detailsSection = UIMenu(title: "", options: .displayInline, children: [detailsAction])
+                let mapSection = UIMenu(title: "", options: .displayInline, children: [showOnMapAction])
+                let exportSection = UIMenu(title: "", options: .displayInline, children: [exportAction])
+                return UIMenu(title: "", image: nil, children: [detailsSection, mapSection, exportSection])
             }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
         } else if item.key == trackKey || item.key == recordingTrackKey {
@@ -2614,7 +2657,75 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
 }
 
 extension TracksViewController {
+    private func isShowingOrganizedGroups() -> Bool {
+        isSmartFolder && organizedGroup == nil && smartFolder?.organizeByParams != nil
+    }
+
+    private func sortOrganizedGroups(_ groups: [OrganizedTracksGroup]) -> [OrganizedTracksGroup] {
+        switch sortMode {
+        case .nameAZ:
+            return groups.sorted { $0.getName().localizedCaseInsensitiveCompare($1.getName()) == .orderedAscending }
+        case .nameZA:
+            return groups.sorted { $0.getName().localizedCaseInsensitiveCompare($1.getName()) == .orderedDescending }
+        case .longestDistanceFirst:
+            return groups.sorted { $0.getComparisonValue() > $1.getComparisonValue() }
+        case .shortestDistanceFirst:
+            return groups.sorted { $0.getComparisonValue() < $1.getComparisonValue() }
+        default:
+            return groups
+        }
+    }
+
+    private func createOrganizedGroupsSortMenu() -> UIMenu {
+        let isNumeric = smartFolder?.getOrganizeByType()?.getTrackSortScope() == TracksSortScope.organizedByValue
+
+        let nameAZAction = UIAction(
+            title: localizedString("track_sort_az"),
+            image: TracksSortMode.nameAZ.image?.resizedMenuImage(),
+            state: sortMode == .nameAZ ? .on : .off
+        ) { [weak self] _ in
+            self?.applySortModeForGroups(.nameAZ)
+        }
+
+        if isNumeric {
+            let highestAction = UIAction(
+                title: localizedString("sort_highest_first"),
+                image: .icCustomSortLongToShort?.resizedMenuImage(),
+                state: sortMode == .longestDistanceFirst ? .on : .off
+            ) { [weak self] _ in
+                self?.applySortModeForGroups(.longestDistanceFirst)
+            }
+            let lowestAction = UIAction(
+                title: localizedString("sort_lowest_first"),
+                image: .icCustomSortShortToLong?.resizedMenuImage(),
+                state: sortMode == .shortestDistanceFirst ? .on : .off
+            ) { [weak self] _ in
+                self?.applySortModeForGroups(.shortestDistanceFirst)
+            }
+            return UIMenu(title: "", children: [nameAZAction, highestAction, lowestAction])
+        } else {
+            let nameZAAction = UIAction(
+                title: localizedString("track_sort_za"),
+                image: TracksSortMode.nameZA.image?.resizedMenuImage(),
+                state: sortMode == .nameZA ? .on : .off
+            ) { [weak self] _ in
+                self?.applySortModeForGroups(.nameZA)
+            }
+            return UIMenu(title: "", children: [nameAZAction, nameZAAction])
+        }
+    }
+
+    private func applySortModeForGroups(_ mode: TracksSortMode) {
+        setTracksSortMode(mode, isSortingSubfolders: false)
+        sortMode = getTracksSortMode()
+        updateSortButtonAndMenu()
+        updateData()
+    }
+
     private func createSortMenu(isSortingSubfolders: Bool) -> UIMenu {
+        if !isSortingSubfolders && isShowingOrganizedGroups() {
+            return createOrganizedGroupsSortMenu()
+        }
         let sortingOptions = UIMenu(options: .displayInline, children: [
             createAction(for: .nearest, isSortingSubfolders: isSortingSubfolders),
             createAction(for: .lastModified, isSortingSubfolders: isSortingSubfolders)
@@ -2665,8 +2776,21 @@ extension TracksViewController {
         }
     }
     
+    private func sortButtonImage() -> UIImage? {
+        if isSearchActive || isSelectionModeInSearch { return sortModeForSearch.image }
+        if isShowingOrganizedGroups() {
+            switch sortMode {
+            case .longestDistanceFirst: return .icCustomSortLongToShort
+            case .shortestDistanceFirst: return .icCustomSortShortToLong
+            case .nameZA: return TracksSortMode.nameZA.image
+            default: return TracksSortMode.nameAZ.image
+            }
+        }
+        return sortMode.image
+    }
+
     private func updateSortButtonAndMenu() {
-        sortButton.setImage(isSearchActive || isSelectionModeInSearch ? sortModeForSearch.image : sortMode.image, for: .normal)
+        sortButton.setImage(sortButtonImage(), for: .normal)
         sortButton.menu = createSortMenu(isSortingSubfolders: false)
     }
 }

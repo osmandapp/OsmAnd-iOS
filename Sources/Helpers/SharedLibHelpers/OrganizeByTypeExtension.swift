@@ -11,7 +11,7 @@ extension OrganizeByType {
         case .yearOfCreation:    return .templateImageNamed("ic_custom_calendar_month")
         case .monthAndYear:      return .templateImageNamed("ic_custom_calendar_month")
         case .nearestCity:       return .templateImageNamed("ic_custom_city")
-        case .country:           return .templateImageNamed("ic_custom_internet")
+        case .country:           return .templateImageNamed("ic_custom_globe")
         case .maxSpeed:          return .templateImageNamed("ic_custom_speed_max")
         case .avgSpeed:          return .templateImageNamed("ic_custom_speed_average")
         case .maxAltitude:       return .templateImageNamed("ic_custom_altitude_max")

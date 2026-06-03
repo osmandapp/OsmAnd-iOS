@@ -4086,3 +4086,4 @@
 "delete_colors_palette_dialog_summary" = "Êtes-vous sûr de vouloir supprimer la palette %@ ?";
 "dismiss_changes_descr" = "Toutes les modifications seront annulées.";
 "gpx_logging_no_data" = "Aucune donnée";
+"show_touches" = "Afficher les détails";

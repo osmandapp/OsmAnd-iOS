@@ -1007,6 +1007,13 @@
 "hud_no_movement" = "No movement";
 
 // Favorites
+"shared_string_pinned" = "Pinned";
+"delete_groups_confirmation" = "Delete groups?";
+"add_to_track" = "Add to track";
+"unpin_folder" = "Unpin folder";
+"pin_folder" = "Pin folder";
+"favorite_search_empty_state_description" = "Adjust your search or filters to see if that helps";
+"favorites_empty_folder_description" = "This folder doesn\’t have any points yet.";
 "shared_string_color" = "Color";
 "fav_colors" = "Colors";
 "shared_string_name" = "Name";

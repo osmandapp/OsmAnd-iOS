@@ -146,7 +146,8 @@
 {
     _searchTemplate = [[CPSearchTemplate alloc] init];
     _searchTemplate.delegate = self;
-    [self.interfaceController pushTemplate:_searchTemplate animated:YES completion:nil];
+    [[CarPlayService shared] prepareSearchUICoreForIfNeeded];
+    [self safePushTemplate:_searchTemplate animated:YES];
 }
 
 - (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler
@@ -171,7 +172,7 @@
     {
         CLLocation *loc = searchItem.getSearchResult.location;
         [self startNavigationGivenLocation:loc historyName:nil];
-        [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+        [self safePopToRootTemplateAnimated:YES];
     }
 }
 
@@ -468,7 +469,7 @@
 - (void)searchTemplateSearchButtonPressed:(CPSearchTemplate *)searchTemplate
 {
     [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
-    [self.interfaceController pushTemplate:_resultsListTemplate animated:YES completion:nil];
+    [self safePushTemplate:_resultsListTemplate animated:YES];
 }
 
 

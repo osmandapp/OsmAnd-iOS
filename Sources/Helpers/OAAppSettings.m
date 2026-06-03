@@ -146,6 +146,7 @@ static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const batterySavingModeKey = @"batterySavingMode";
 static NSString * const enableMsaaForСarPlayKey = @"enableMsaaForСarPlayKey";
 static NSString * const showPrimitivesDebugInfoKey = @"showPrimitivesDebugInfoKey";
+static NSString * const showTouchesKey = @"showTouchesKey";
 
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
@@ -392,9 +393,8 @@ static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentT
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
 static NSString * const currentTrackRouteActivityKey = @"currentTrackRouteActivityKey";
 
-static NSString * const customTrackColorsKey = @"customTrackColors";
-static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
+static NSString * const lastUsedProfileIconsKey = @"lastUsedProfileIcons";
 
 static NSString * const gpsStatusAppKey = @"gpsStatusApp";
 
@@ -6632,9 +6632,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
         [_currentTrackRouteActivity setModeDefaultValue:@"adventure_motorcycling" mode:OAApplicationMode.MOTORCYCLE];
         
-        _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
-        _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
+        _lastUsedProfileIcons = [[[OACommonStringList withKey:lastUsedProfileIconsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
         [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
@@ -6652,9 +6651,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
         [_profilePreferences setObject:_currentTrackRouteActivity forKey:@"current_track_route_activity"];
         
-        [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
-        [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
+        [_globalPreferences setObject:_lastUsedProfileIcons forKey:@"last_used_profile_icons"];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
         [_globalPreferences setObject:_gpsStatusApp forKey:@"gps_status_app"];
@@ -6673,6 +6671,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _showPrimitivesDebugInfo = [[[OACommonBoolean withKey:showPrimitivesDebugInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_showPrimitivesDebugInfo forKey:@"show_primitives_debug_info"];
+
+        _showTouches = [[[OACommonBoolean withKey:showTouchesKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_showTouches forKey:@"show_touches"];
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];

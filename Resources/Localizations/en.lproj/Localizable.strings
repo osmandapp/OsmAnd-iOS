@@ -948,6 +948,8 @@
 "shared_string_deleting_complete" = "Deleting complete";
 "shared_string_colors" = "Colors";
 
+"dismiss_changes_descr" = "All changes will be dismissed.";
+"gpx_logging_no_data" = "No data";
 "gradient_no_data_point_summary" = "Color applied when data is missing or undefined.";
 "gradient_input_value_too_low_warn" = "Minimum allowed value is %@.";
 "gradient_input_value_too_high_warn" = "Maximum allowed value is %@.";
@@ -1848,6 +1850,7 @@
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 "battery_saving_mode" = "Battery saving mode";
 "enable_msaa_carplay" = "Enable MSAA for CarPlay";
+"show_touches" = "Show touches";
 "visualizing_button_grid" = "Map button grid";
 "efficient_grid" = "Efficient grid";
 "slots" = "Slots";

@@ -411,7 +411,7 @@ static double const TILT_ANIMATION_TIME = 0.4;
     NSTimeInterval movingTime;
     if (animateMyLocation)
     {
-        movingTime = timeDiff;
+        movingTime = MAX(timeDiff, NAV_ANIMATION_TIME);
     }
     else
     {

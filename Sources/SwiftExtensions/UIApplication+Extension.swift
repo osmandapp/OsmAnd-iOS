@@ -79,9 +79,11 @@ extension UIApplication {
     ///
     /// This means the app is visible and interactable on the CarPlay display.
     @objc var isCarPlayAppActive: Bool {
-        connectedScenes.contains {
-            $0.session.configuration.name == Constants.carPlayConfiguration &&
-            $0.activationState == .foregroundActive
+        safelyCheckConnectedScenes {
+            connectedScenes.contains {
+                $0.session.configuration.name == Constants.carPlayConfiguration &&
+                $0.activationState == .foregroundActive
+            }
         }
     }
     

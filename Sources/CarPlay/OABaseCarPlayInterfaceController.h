@@ -11,9 +11,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CPInterfaceController, CPListItem, CPListTemplate, CPListSection, OAPointDescription;
+@class CPInterfaceController, CPListItem, CPListTemplate, CPListSection, CPTemplate, OAPointDescription;
 
-API_AVAILABLE(ios(12.0))
+typedef void (^OACarPlayTemplateCompletion)(BOOL completed, NSError * _Nullable error);
+
 @interface OABaseCarPlayInterfaceController : NSObject
 
 @property (nonatomic, readonly) CPInterfaceController *interfaceController;
@@ -21,6 +22,11 @@ API_AVAILABLE(ios(12.0))
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController;
 
 - (void) present;
+
+- (void)safeSetRootTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated;
+- (void)safePushTemplate:(CPTemplate *)cpTemplate animated:(BOOL)animated;
+- (void)safePopTemplateAnimated:(BOOL)animated completion:(nullable OACarPlayTemplateCompletion)completion;
+- (void)safePopToRootTemplateAnimated:(BOOL)animated;
 
 - (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(nullable OAPointDescription *)historyName;
 

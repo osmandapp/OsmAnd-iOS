@@ -240,7 +240,7 @@
                     else
                         item[@"description"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_hint"), routingProfile];
                     
-                    item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
+                    item[@"icon"] = [UIImage imageNamedOrMxIcon:modeBean.iconName];
                     item[@"iconColor"] = [modeBean getProfileColor];
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }

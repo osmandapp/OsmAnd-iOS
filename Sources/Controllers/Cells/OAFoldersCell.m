@@ -9,11 +9,22 @@
 #import "OAFoldersCell.h"
 #import "OAFoldersCollectionView.h"
 
+@interface OAFoldersCell ()
+
+@property (weak, nonatomic) IBOutlet UIView *rightActionContainerView;
+
+@end
+
 @implementation OAFoldersCell
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+}
+
+- (void)rightActionButtonVisibility:(BOOL)show
+{
+    self.rightActionContainerView.hidden = !show;
 }
 
 @end

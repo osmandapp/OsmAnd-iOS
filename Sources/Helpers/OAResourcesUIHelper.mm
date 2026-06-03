@@ -51,51 +51,6 @@
 
 typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
-#pragma mark - Map Variant Replacement State
-/// Maintains pending map-variant deletion state for replace-after-install flow
-/// and observes download manager events to clear pending deletions on failure.
-@class OAResourcesReplacePendingObserver;
-
-/// Map variants grouped by resource identifier.
-/// Stored until installation completes successfully,
-/// after which obsolete variants are deleted.
-static NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *sPendingMapVariantDeletionsAfterInstall;
-/// Ensures replace-after-install observers are registered only once.
-static dispatch_once_t sReplaceAfterInstallObserverOnce;
-/// Observes download completion events for replace-after-install flow.
-static OAResourcesReplacePendingObserver *sReplacePendingObserver;
-/// Observes download failure events to cancel pending map-variant deletions.
-static OAAutoObserverProxy *sReplaceDownloadFailedObserver;
-
-/// Clears pending duplicate-map deletion state for the specified resource.
-static void OAClearPendingMapVariantDeletions(NSString *resourceId)
-{
-    NSLog(@"resourceId -- %@", resourceId);
-    if (resourceId.length == 0 || !sPendingMapVariantDeletionsAfterInstall)
-        return;
-    [sPendingMapVariantDeletionsAfterInstall removeObjectForKey:resourceId];
-}
-
-/// Holds download-failed observer for cross-type map replace (download-then-delete).
-@interface OAResourcesReplacePendingObserver : NSObject
-@end
-
-@implementation OAResourcesReplacePendingObserver
-
-/// Clears pending map-variant deletion if the replacement download failed.
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-    NSLog(@"KEY -- %@", key);
-    if (![task.key hasPrefix:@"resource:"] || task.error == nil)
-        return;
-
-    NSString *resourceId = [task.key substringFromIndex:[@"resource:" length]];
-    OAClearPendingMapVariantDeletions(resourceId);
-}
-
-@end
-
 @interface OAResourceType()
 
 @property (nonatomic) OsmAndResourceType type;
@@ -2606,13 +2561,6 @@ includeHidden:(BOOL)includeHidden
     }
 }
 
-//"duplicated_map" = "Duplicated map";
-//"duplicated_map_has_standard" = "You already have the standard map for %@. Downloading the road-only map will duplicate data and may degrade performance.";
-//"duplicated_map_has_road_only" = "You already have the road-only map for %@. Downloading the standard map will duplicate data and may degrade performance.";
-//"replace_with_road_only" = "Replace with Road-only";
-//"replace_with_standard" = "Replace with Standard";
-//"duplicated_map_multiple" = "You already have conflicting maps for %@. Downloading will duplicate data and may degrade performance.";
-
 + (BOOL)presentMapVariantConflictActionSheet:(OAResourceItem *)targetItem
                                     sourceView:(UIView *)sourceView
                                      onReplace:(dispatch_block_t)onReplace
@@ -2674,55 +2622,25 @@ includeHidden:(BOOL)includeHidden
     return YES;
 }
 
-+ (void)registerMapVariantReplaceObserverIfNeeded
-{
-    dispatch_once(&sReplaceAfterInstallObserverOnce, ^{
-        sPendingMapVariantDeletionsAfterInstall = [NSMutableDictionary dictionary];
-        sReplacePendingObserver = [OAResourcesReplacePendingObserver new];
-        sReplaceDownloadFailedObserver = [[OAAutoObserverProxy alloc] initWith:sReplacePendingObserver
-                                                                     withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
-                                                                      andObserve:[OsmAndApp instance].downloadsManager.completedObservable];
-
-        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstalledNotification
-                                                            object:nil
-                                                             queue:[NSOperationQueue mainQueue]
-                                                        usingBlock:^(NSNotification *note) {
-            id<OADownloadTask> task = note.object;
-            if (![task.key hasPrefix:@"resource:"])
-                return;
-
-            NSString *resourceId = [task.key substringFromIndex:[@"resource:" length]];
-            NSArray<OALocalResourceItem *> *toDelete = sPendingMapVariantDeletionsAfterInstall[resourceId];
-            if (toDelete.count == 0)
-                return;
-
-            [sPendingMapVariantDeletionsAfterInstall removeObjectForKey:resourceId];
-            [OAResourcesUIHelper deleteResourcesOf:toDelete progressHUD:nil executeAfterSuccess:nil];
-        }];
-
-        [[NSNotificationCenter defaultCenter] addObserverForName:OAResourceInstallationFailedNotification
-                                                            object:nil
-                                                             queue:[NSOperationQueue mainQueue]
-                                                        usingBlock:^(NSNotification *note) {
-            NSString *resourceId = note.object;
-            
-            if (resourceId.length > 0)
-                [sPendingMapVariantDeletionsAfterInstall removeObjectForKey:resourceId];
-        }];
-    });
-}
-
 + (void)addPendingMapVariantDeletions:(NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)variantMaps
 {
-    [self registerMapVariantReplaceObserverIfNeeded];
-    [sPendingMapVariantDeletionsAfterInstall addEntriesFromDictionary:variantMaps];
+    [variantMaps enumerateKeysAndObjectsUsingBlock:^(NSString *key,
+                                                     NSArray<OALocalResourceItem *> *items,
+                                                     BOOL *stop) {
+        NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:items.count];
+        for (OALocalResourceItem *item in items)
+        {
+            [mapped addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
+        }
+        
+        [MapVariantReplacementManager.shared storePendingDeletion:mapped for:key];
+    }];
 }
 
 + (NSArray<OALocalResourceItem *> *)localVariantItemsForItem:(OARepositoryResourceItem *)targetItem alternativeType:(OsmAndResourceType)counterpartType
 {
     NSMutableArray<OALocalResourceItem *> *result = [NSMutableArray array];
 
-    // Берем все items региона этого типа
     NSArray<OAResourceItem *> *items = [self requestMapDownloadInfo:@[targetItem.worldRegion]
                                                       resourceTypes:@[[OAResourceType toValue:counterpartType]]
                                                             isGroup:NO];
@@ -2734,7 +2652,6 @@ includeHidden:(BOOL)includeHidden
         if (!it.worldRegion || ![it.worldRegion.regionId isEqualToString:targetRegionId])
             continue;
 
-        // Удаляем только локальные/устаревшие
         if ([it isKindOfClass:OALocalResourceItem.class] || [it isKindOfClass:OAOutdatedResourceItem.class])
             [result addObject:(OALocalResourceItem *)it];
     }
@@ -2748,7 +2665,7 @@ includeHidden:(BOOL)includeHidden
         return OsmAndResourceType::MapRegion;
     if (targetItem.resourceType == OsmAndResourceType::MapRegion)
         return OsmAndResourceType::RoadMapRegion;
-    return (OsmAndResourceType)NSNotFound;
+    return OsmAndResourceType::Unknown;
 }
 
 + (NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)pendingMapVariantDeletionsForItems:(NSArray<OAResourceItem *> *)items
@@ -2767,11 +2684,11 @@ includeHidden:(BOOL)includeHidden
         if (!targetItem.worldRegion)
             continue;
 
-        OsmAndResourceType counterpartType = [self oppositeMapTypeForResourceType:targetItem];
-        if (counterpartType == (OsmAndResourceType)NSNotFound)
+        OsmAndResourceType oppositeType = [self oppositeMapTypeForResourceType:targetItem];
+        if (oppositeType == OsmAndResourceType::Unknown)
             continue;
 
-        NSArray<OALocalResourceItem *> *toDelete = [self localVariantItemsForItem:targetItem alternativeType:counterpartType];
+        NSArray<OALocalResourceItem *> *toDelete = [self localVariantItemsForItem:targetItem alternativeType:oppositeType];
         if (toDelete.count == 0)
             continue;
 

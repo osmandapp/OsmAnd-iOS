@@ -62,6 +62,7 @@
 #import "OACommonTypes.h"
 #import "OABaseCollectionHandler.h"
 #import "OAResourcesUISwiftHelper.h"
+#import "OAResourcesInstaller.h"
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentAdapter.h"
 #import "OATravelLocalDataDbHelper.h"

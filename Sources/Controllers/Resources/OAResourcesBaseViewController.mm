@@ -283,7 +283,7 @@ static BOOL dataInvalidated = NO;
     BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
     dispatch_block_t onComplete_ = ^{
         if (!isWeatherForecast)
-            [item.worldRegion.superregion updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
+            [self.region.superregion updateGroupItems:self.region type:[OAResourceType toValue:item.resourceType]];
 
         if (onComplete)
             onComplete();
@@ -503,7 +503,7 @@ static BOOL dataInvalidated = NO;
                 }
             }
             if (foundRegion)
-                [foundRegion.superregion updateGroupItems:foundRegion type:[OAResourceType toValue:resource->type]];
+                [self.region updateGroupItems:foundRegion type:[OAResourceType toValue:resource->type]];
         }
         
         id<OADownloadTask> nextTask = nil;

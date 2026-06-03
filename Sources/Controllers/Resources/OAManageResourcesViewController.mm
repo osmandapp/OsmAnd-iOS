@@ -852,7 +852,7 @@ static BOOL _repositoryUpdated = NO;
                             [typesArray addObject:@((int) resource->type)];
                         break;
                     case OsmAndResourceType::RoadMapRegion:
-                        if (![region isMapCreatedByJoiningSubregionsForType:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]])
+                        if (!region.regionJoinMap && !region.regionJoinRoads)
                             [typesArray addObject:@((int) resource->type)];
                         break;
                     case OsmAndResourceType::SrtmMapRegion:
@@ -998,8 +998,16 @@ static BOOL _repositoryUpdated = NO;
     [_regionMapItems addObjectsFromArray:regionMapArray];
 
     NSString *russiaRegionId = OsmAnd::WorldRegions::RussiaRegionId.toNSString();
+    NSString *australiaAndOceaniaRegionId = [NSString stringWithFormat:@"%@_australia", OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()];
+    NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
     
-    if ([self.region hasGroupItems] && ([self.region getLevel] > 1 || [self.region.regionId hasPrefix:russiaRegionId]))
+    if ([self.region hasGroupItems]
+        && (([self.region getLevel] > 1 && _regionMapItems.count > 0)
+            || self.region.regionJoinMap
+            || self.region.regionJoinRoads
+            || [self.region.regionId hasPrefix:russiaRegionId]
+            || [self.region.regionId hasPrefix:unitedKingdomRegionId]
+            || [self.region.regionId hasPrefix:australiaAndOceaniaRegionId]))
     {
         NSMutableArray<NSNumber *> *regionMapItemsTypes = [NSMutableArray new];
         for (OAResourceItem *resource in _regionMapItems)
@@ -1010,8 +1018,6 @@ static BOOL _repositoryUpdated = NO;
         for (NSNumber *type in regionMapItemsTypesInGroup)
         {
             OsmAndResourceType resourceType = [OAResourceType toResourceType:type isGroup:YES];
-            if (resourceType == OsmAndResourceType::RoadMapRegion && !self.region.regionRoads && ![self.region isMapCreatedByJoiningSubregionsForType:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]])
-                continue;
             if (resourceType != [OAResourceType unknownType])
             {
                 OAMultipleResourceItem *multipleResourceItem = [[OAMultipleResourceItem alloc] initWithType:resourceType items:[self.region.groupItem getItems:resourceType]];
@@ -1087,7 +1093,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL)shouldJoinRoadMapRegionItem:(OAResourceItem *)item inRegion:(OAWorldRegion *)region
 {
-    return [region isMapCreatedByJoiningSubregionsForType:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
+    return [region isMapCreatedByJoiningSubregions:[OAResourceType toValue:OsmAndResourceType::RoadMapRegion]]
             && item.resourceType == OsmAndResourceType::RoadMapRegion;
 }
 

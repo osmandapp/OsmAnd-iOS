@@ -309,9 +309,4 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (void)onlineCalculateRequestWithRouteCalculationResult:(OARouteCalculationResult *)routeCalculationResult
                                               completion:(LocationArrayCallback)completion;
 
-+ (BOOL)presentMapVariantConflictActionSheet:(OAResourceItem *)targetItem
-                                    sourceView:(UIView *)sourceView
-                                     onReplace:(dispatch_block_t)onReplace
-                                    onKeepBoth:(dispatch_block_t)onKeepBoth;
-
 @end

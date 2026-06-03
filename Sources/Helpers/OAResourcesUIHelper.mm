@@ -1502,7 +1502,7 @@ includeHidden:(BOOL)includeHidden
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self handleMapVariantConflictsForItems:@[item]
-                                     sourceView:nil
+                                     sourceView:sourceView
                                      targetItem:item
                                       onProceed:^{
             [self.class startDownloadOfItem:item
@@ -2608,6 +2608,7 @@ includeHidden:(BOOL)includeHidden
     if (popover) {
         if (sourceView)
         {
+            popover.sourceView = sourceView;
             popover.sourceRect = sourceView.bounds;
             popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
         }

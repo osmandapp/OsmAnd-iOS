@@ -4009,7 +4009,7 @@
 "shared_string_dynamic" = "Динамічний";
 "shared_string_tinted" = "Тоноване";
 "background_opacity_description" = "Прозорий колір прозоріший, що дозволяє побачити вміст під ним. Тонований колір збільшує непрозорість і додає більше контрасту.";
-"trip_recording_moving_time" = "Час переїзду";
+"trip_recording_moving_time" = "Час переміщення";
 "trip_recording_moving_time_widget_description" = "Показує поточний час руху або час останнього підйому та спуску.";
 "context_menu_item_add_parking_point" = "Позначити місцем паркування";
 "find_parking" = "Знайти паркінг";
@@ -4018,3 +4018,10 @@
 "free_custom_color_description" = "Налаштуйте 3D-будівлі під будь-який колір. Ідеально підходить для узгодження з темою карти або підвищення контрастності.";
 "buildings_3d_visibility_description" = "Налаштуйте прозорість 3D-об’єктів на карті.";
 "shared_string_alt_name" = "Альтернативне ім'я";
+"open_from_short" = "Від";
+"relative_gradient_point_m_summary" = "Колір для максимального значення, знайденого на треку.";
+"relative_gradient_point_avg_summary" = "Колір для середнього значення треку.";
+"relative_gradient_point_min_summary" = "Колір для мінімального значення, знайденого на треку.";
+"shared_string_minimum" = "Мінімум";
+"remove_step" = "Видалити крок";
+"gradient_range_type_relative_summary" = "Кольори масштабуються автоматично на основі мінімального/максимального діапазону треку.";

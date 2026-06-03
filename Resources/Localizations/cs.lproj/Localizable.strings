@@ -4055,9 +4055,9 @@
 "shared_string_percentage" = "procenta";
 "remove_step" = "Odebrat krok";
 "shared_string_value" = "Hodnota";
-"gradient_range_type_fixed_summary" = "Barvy jsou přiřazeny specifickým absolutním počtem (např. 50 km/h).";
+"gradient_range_type_fixed_summary" = "Barvy jsou přiřazeny specifickým absolutním číslům (např. 50 km/h).";
 "gradient_range_type_fixed" = "Pevné hodnoty";
-"gradient_range_type_relative_summary" = "Barevná škála je automaticky na základě min/max rozsahu stopy.";
+"gradient_range_type_relative_summary" = "Barvy se škálují automaticky na základě min/max rozsahu stopy.";
 "gradient_range_type_relative" = "Relativní";
 "edit_palette" = "Upravit paletu";
 "delete_palette" = "Odstranit paletu";

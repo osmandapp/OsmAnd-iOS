@@ -8,7 +8,6 @@
 
 #import "OABaseCarPlayInterfaceController.h"
 
-API_AVAILABLE(ios(12.0))
 @interface OACarPlayAddressSearchController : OABaseCarPlayInterfaceController
 
 @end

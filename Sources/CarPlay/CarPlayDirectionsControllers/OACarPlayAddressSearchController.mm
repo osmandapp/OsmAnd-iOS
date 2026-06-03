@@ -146,6 +146,7 @@
 {
     _searchTemplate = [[CPSearchTemplate alloc] init];
     _searchTemplate.delegate = self;
+    [[CarPlayService shared] prepareSearchUICoreForIfNeeded];
     [self safePushTemplate:_searchTemplate animated:YES];
 }
 

@@ -1117,6 +1117,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *batterySavingMode;
 @property (nonatomic) OACommonBoolean *enableMsaaForСarPlay;
 @property (nonatomic) OACommonBoolean *showPrimitivesDebugInfo;
+@property (nonatomic) OACommonBoolean *showTouches;
 @property (nonatomic) OACommonInteger *appModeOrder;
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;
@@ -1471,8 +1472,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
 @property (nonatomic) OACommonString *currentTrackRouteActivity;
 
-@property (nonatomic) OACommonStringList *customTrackColors;
-@property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
 @property (nonatomic) OACommonStringList *lastUsedProfileIcons;
 

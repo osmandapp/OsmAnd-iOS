@@ -12,7 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OASearchResult;
 
-API_AVAILABLE(ios(12.0))
 @interface OACarPlayCategoryResultListController : OABaseCarPlayListController
 
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController searchResult:(OASearchResult *)sr;

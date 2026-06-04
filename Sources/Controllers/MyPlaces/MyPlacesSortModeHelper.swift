@@ -34,16 +34,20 @@
 
 @objcMembers
 final class MyPlacesSortModeHelper: NSObject {
-    @objc static func defaultSortMode() -> MyPlacesSortMode {
+    static func defaultTravelGuidesSortMode() -> MyPlacesSortMode {
         .lastModified
     }
     
-    @objc static func defaultSortModeTitle() -> String {
-        title(for: defaultSortMode())
+    static func defaultTravelGuidesSortModeTitle() -> String {
+        title(for: defaultTravelGuidesSortMode())
     }
     
-    @objc static private func title(for mode: MyPlacesSortMode) -> String {
-        mode.title
+    static func defaultOsmEditsSortMode() -> MyPlacesSortMode {
+        .nameAZ
+    }
+    
+    static func defaultOsmEditsSortModeTitle() -> String {
+        title(for: defaultOsmEditsSortMode())
     }
     
     static func sortTravelGuidesWithMode(_ travelGuides: [TravelArticle], mode: MyPlacesSortMode) -> [TravelArticle] {
@@ -52,5 +56,17 @@ final class MyPlacesSortModeHelper: NSObject {
         case .nameAZ: travelGuides.sorted { ($0.title ?? "").localizedCaseInsensitiveCompare($1.title ?? "") == .orderedAscending }
         case .nameZA: travelGuides.sorted { ($0.title ?? "").localizedCaseInsensitiveCompare($1.title ?? "") == .orderedDescending }
         }
+    }
+    
+    static func sortOsmEditsWithMode(_ osmEdits: [OAOsmPoint], mode: MyPlacesSortMode) -> [OAOsmPoint] {
+        switch mode {
+        case .nameAZ: osmEdits.sorted { ($0.getName()).localizedCaseInsensitiveCompare($1.getName()) == .orderedAscending }
+        case .nameZA: osmEdits.sorted { ($0.getName()).localizedCaseInsensitiveCompare($1.getName()) == .orderedDescending }
+        default: []
+        }
+    }
+    
+    private static func title(for mode: MyPlacesSortMode) -> String {
+        mode.title
     }
 }

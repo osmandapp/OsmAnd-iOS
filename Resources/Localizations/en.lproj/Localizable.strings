@@ -1836,6 +1836,9 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
+"delete_changes" = "Delete changes";
+"osm_edits_delete_item_confirmation" = "Are you sure you want to delete %ld edit?";
+"osm_edits_delete_items_confirmation" = "Are you sure you want to delete %ld edits?";
 
 "routing_algorithm" = "Routing algorithm";
 "auto_zoom" = "Autozoom";

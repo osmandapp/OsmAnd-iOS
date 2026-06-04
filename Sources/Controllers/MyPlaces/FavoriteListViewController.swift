@@ -314,17 +314,14 @@ final class FavoriteListViewController: UIViewController {
 
     private func configureToolbar() {
         let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-
+        let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-
         let shareButton = UIBarButtonItem(image: .icCustomExportOutlined, style: .plain, target: self, action: #selector(shareButtonClicked))
         let moveButton = UIBarButtonItem(image: .icCustomFolderMoveOutlined, style: .plain, target: self, action: #selector(moveButtonClicked))
-
+        let actionsButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), style: .plain, target: self, action: #selector(actionsButtonClicked))
         let deleteButton = UIBarButtonItem(image: .icCustomTrashOutlined, style: .plain, target: self, action: #selector(deleteButtonClicked))
         deleteButton.tintColor = .iconColorDisruptive
-
-        let items = [shareButton, fixedSpacer, moveButton, flexibleSpacer, deleteButton]
-        
+        let items = [shareButton, fixedSpacer, moveButton, actionsFixedSpacer, actionsButton, flexibleSpacer, deleteButton]
         if screenMode.isRoot {
             myPlacesDelegate?.updateToolbar?(with: items)
         } else {
@@ -662,6 +659,10 @@ final class FavoriteListViewController: UIViewController {
 //            self?.setEdit(false)
 //            self?.applySnapshot(animatingDifferences: true)
 //        }
+    }
+
+    @objc private func actionsButtonClicked(_ sender: Any) {
+        // TODO
     }
 
     @objc private func deleteButtonClicked(_ sender: Any) {

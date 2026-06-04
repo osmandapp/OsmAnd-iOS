@@ -2017,7 +2017,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         return;
     
     MultipleValuesViewController *controller = [[MultipleValuesViewController alloc] initWithTitle:localizedString(@"phone")
-                                                                                            values:parsedPhones
+                                                                                           phones:parsedPhones
                                                                                      lineBreakMode:NSLineBreakByTruncatingTail
                                                                                           onSelect:^(NSString * _Nonnull selectedPhone) {
         NSURL *phoneURL = [NSURL URLWithString:[@"tel://" stringByAppendingString:selectedPhone]];

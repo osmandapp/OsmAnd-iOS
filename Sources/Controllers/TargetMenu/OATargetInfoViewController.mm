@@ -1764,8 +1764,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             else if (urls.count > 1)
             {
                 MultipleValuesViewController *controller = [[MultipleValuesViewController alloc] initWithTitle:localizedString(@"shared_string_url")
-                                                                                                        values:urls
-                                                                                                 lineBreakMode:NSLineBreakByTruncatingMiddle
+                                                                                                          urls:urls
                                                                                                       onSelect:^(NSString * _Nonnull selectedURL) {
                     [OAUtilities callUrl:selectedURL];
                 }];

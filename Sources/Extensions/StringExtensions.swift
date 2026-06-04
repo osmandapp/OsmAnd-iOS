@@ -102,3 +102,50 @@ extension String {
         return direction == .rightToLeft
     }
 }
+
+extension NSString {
+
+    /// Extracts valid URLs from the string.
+    ///
+    /// Commas, semicolons, spaces, and newlines are treated as separators.
+    /// URLs without a scheme are normalized by prepending `https://`.
+    ///
+    /// - Returns: An array of normalized URL strings. Invalid URLs are ignored.
+    ///
+    /// Examples:
+    /// ```swift
+    /// "google.com, apple.com; https://osmand.net".extractValidURLs()
+    /// // ["https://google.com", "https://apple.com", "https://osmand.net"]
+    /// ```
+    ///
+    /// - Returns: An array of normalized URL strings. Invalid URLs are ignored.
+   @objc func extractValidURLs() -> [String] {
+        guard length > 0 else { return [] }
+//ftp://ftpaamp.aires-marines.fr/PACOMM/Volet4_MARSAC/Rapport/13_PresentationProjetPilote_MARSAC_CRMM.pdf
+        let normalized = replacingOccurrences(of: ",", with: " ")
+            .replacingOccurrences(of: ";", with: " ")
+
+        return normalized
+            .components(separatedBy: .whitespacesAndNewlines)
+            .compactMap { part in
+                let trimmed = part.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                guard !trimmed.isEmpty else { return nil }
+
+                let urlString: String
+                if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
+                    urlString = trimmed
+                } else {
+                    urlString = "https://\(trimmed)"
+                }
+
+                guard let components = URLComponents(string: urlString),
+                      let host = components.host,
+                      !host.isEmpty else {
+                    return nil
+                }
+
+                return urlString
+            }
+    }
+}

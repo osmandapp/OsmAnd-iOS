@@ -1,8 +1,8 @@
 import UIKit
 
-final class OAOrganizeByTypeCell: UITableViewCell {
+final class OrganizeByTypeCell: UITableViewCell {
 
-    static let cellReuseIdentifier = "OAOrganizeByTypeCell"
+    static let cellReuseIdentifier = "OrganizeByTypeCell"
 
     static let minHeight: CGFloat = 52
     private static let leadingInset: CGFloat = 16
@@ -13,7 +13,7 @@ final class OAOrganizeByTypeCell: UITableViewCell {
 
     private let checkmarkView = UIImageView()
     private let iconView = UIImageView()
-    let titleLabel = UILabel()
+    private let titleLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

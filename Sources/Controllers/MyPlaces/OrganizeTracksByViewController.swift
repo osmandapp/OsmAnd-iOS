@@ -1,12 +1,12 @@
 import UIKit
 import OsmAndShared
 
-protocol OAOrganizeTracksByDelegate: AnyObject {
+protocol OrganizeTracksByDelegate: AnyObject {
     func onOrganizeByRangeParamsApplied(type: OrganizeByType)
     func onOrganizeByParamsApplied()
 }
 
-final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
+final class OrganizeTracksByViewController: OABaseNavbarViewController {
 
     // MARK: - Private Types
 
@@ -16,7 +16,7 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
     }
 
     private enum DataKey: String {
-        case type
+        case image
         case isSelected
         case isLocked
     }
@@ -39,7 +39,7 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
 
     private let smartFolder: SmartFolder
 
-    weak var delegate: OAOrganizeTracksByDelegate?
+    weak var delegate: OrganizeTracksByDelegate?
 
     private var selectedType: OrganizeByType?
     private var isInitialLoad = true
@@ -63,7 +63,7 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = OAOrganizeByTypeCell.minHeight
+        tableView.estimatedRowHeight = OrganizeByTypeCell.minHeight
         if let button = navigationItem.leftBarButtonItem?.customView as? UIButton {
             button.tintColor = .textColorPrimary
         }
@@ -79,21 +79,15 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
     }
 
     override func registerCells() {
-        tableView.register(OAOrganizeByTypeCell.self, forCellReuseIdentifier: OAOrganizeByTypeCell.cellReuseIdentifier)
+        tableView.register(OrganizeByTypeCell.self, forCellReuseIdentifier: OrganizeByTypeCell.cellReuseIdentifier)
     }
 
     override func getTitle() -> String {
         localizedString("organize_by")
     }
 
-    override func getTableHeaderDescriptionAttr() -> NSAttributedString {
-        NSAttributedString(
-            string: localizedString("organize_by_summary"),
-            attributes: [
-                .font: UIFont.systemFont(ofSize: 16, weight: .regular),
-                .foregroundColor: UIColor.textColorSecondary as Any
-            ]
-        )
+    override func getTableHeaderDescription() -> String {
+        localizedString("organize_by_summary")
     }
 
     override func getCustomIconForLeftNavbarButton() -> UIImage? {
@@ -110,6 +104,7 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
         config.baseBackgroundColor = .systemBlue
         config.baseForegroundColor = .white
         config.cornerStyle = .capsule
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         let button = UIButton(configuration: config)
         button.addTarget(self, action: #selector(onApplyButtonPressed), for: .touchUpInside)
         button.sizeToFit()
@@ -122,10 +117,10 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
 
         let noneSection = tableData.createNewSection()
         let noneRow = noneSection.createNewRow()
-        noneRow.cellType = OAOrganizeByTypeCell.cellReuseIdentifier
+        noneRow.cellType = OrganizeByTypeCell.cellReuseIdentifier
         noneRow.key = RowKey.none.rawValue
         noneRow.title = localizedString("shared_string_none")
-        noneRow.setObj(UIImage.templateImageNamed("ic_custom_list") as Any, forKey: DataKey.type.rawValue)
+        noneRow.setObj(UIImage.templateImageNamed("ic_custom_list") as Any, forKey: DataKey.image.rawValue)
         noneRow.setObj(selectedType == nil, forKey: DataKey.isSelected.rawValue)
 
         let proAvailable = OAIAPHelper.isOsmAndProAvailable()
@@ -136,10 +131,10 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
             section.headerText = category.getName()
             for type in types {
                 let row = section.createNewRow()
-                row.cellType = OAOrganizeByTypeCell.cellReuseIdentifier
+                row.cellType = OrganizeByTypeCell.cellReuseIdentifier
                 row.key = RowKey.type.rawValue
                 row.title = type.getName()
-                row.setObj(type.image as Any, forKey: DataKey.type.rawValue)
+                row.setObj(type.image as Any, forKey: DataKey.image.rawValue)
                 row.setObj(type, forKey: RowKey.type.rawValue)
                 row.setObj(selectedType == type, forKey: DataKey.isSelected.rawValue)
                 row.setObj(type.isPro && !proAvailable, forKey: DataKey.isLocked.rawValue)
@@ -151,10 +146,10 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: OAOrganizeByTypeCell.cellReuseIdentifier) as? OAOrganizeByTypeCell else { return nil }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OrganizeByTypeCell.cellReuseIdentifier) as? OrganizeByTypeCell else { return nil }
         cell.configure(
             title: item.title,
-            icon: item.obj(forKey: DataKey.type.rawValue) as? UIImage,
+            icon: item.obj(forKey: DataKey.image.rawValue) as? UIImage,
             isSelected: item.bool(forKey: DataKey.isSelected.rawValue),
             isLocked: item.bool(forKey: DataKey.isLocked.rawValue)
         )
@@ -189,11 +184,7 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
         }
     }
 
-    private func applyAndOpenStepSize() {
-        guard let type = selectedType else {
-            applyDirectly()
-            return
-        }
+    private func applyAndOpenStepSize(type: OrganizeByType) {
         let existingParams = smartFolder.organizeByParams as? OrganizeByRangeParams
         let stepSize = existingParams?.stepSize ?? type.getDefaultStepInBaseUnits()
         let params = OrganizeByRangeParams(type: type, stepSize: stepSize)
@@ -271,10 +262,10 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
             section.headerText = sectionData.headerText ?? ""
             for rowData in sectionData.rows {
                 let row = section.createNewRow()
-                row.cellType = OAOrganizeByTypeCell.cellReuseIdentifier
+                row.cellType = OrganizeByTypeCell.cellReuseIdentifier
                 row.key = rowData.key.rawValue
                 row.title = rowData.title
-                row.setObj(rowData.image as Any, forKey: DataKey.type.rawValue)
+                row.setObj(rowData.image as Any, forKey: DataKey.image.rawValue)
                 if let type = rowData.type {
                     row.setObj(type, forKey: RowKey.type.rawValue)
                 }
@@ -289,6 +280,6 @@ final class OAOrganizeTracksByViewController: OABaseNavbarViewController {
             applyDirectly()
             return
         }
-        applyAndOpenStepSize()
+        applyAndOpenStepSize(type: type)
     }
 }

@@ -18,7 +18,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OAOrganizeTracksByDelegate, OrganizeByStepSizeDelegate {
+final class TracksViewController: UITableViewController, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASelectTrackFolderDelegate, MapSettingsGpxViewControllerDelegate, MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, FilterChangedListener, OrganizeTracksByDelegate, OrganizeByStepSizeDelegate {
     
     fileprivate var shouldReload = false
     
@@ -465,7 +465,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
     
-    fileprivate func formattedTracksCount(_ count: Int) -> String {
+    private func formattedTracksCount(_ count: Int) -> String {
         count == 1 ? localizedString("folder_one_track") : String(format: localizedString("folder_tracks_count"), count)
     }
 
@@ -487,18 +487,18 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             folderRow.iconName = "ic_custom_folder_smart"
             let tracksCount = smartFolder.getTrackItems().count
             folderRow.setObj(tracksCount, forKey: tracksCountKey)
-            folderRow.descr = String(format: localizedString("folder_tracks_count"), tracksCount)
+            folderRow.descr = formattedTracksCount(tracksCount)
         }
     }
     
-    fileprivate func createRowFor(organizedGroup: OrganizedTracksGroup, section: OATableSectionData) {
+    private func createRowFor(organizedGroup: OrganizedTracksGroup, section: OATableSectionData) {
         let row = section.createNewRow()
         row.cellType = OASimpleTableViewCell.reuseIdentifier
         row.key = organizedGroupKey
         row.title = organizedGroup.getName()
         row.descr = formattedTracksCount(organizedGroup.getTrackItems().count)
-        row.iconName = organizedGroup.getIconName()
-        row.setObj(UIColor.iconColorSelected, forKey: colorKey)
+        row.iconName = organizedGroup.getType().iconName
+        row.setObj(UIColor.iconColorActive, forKey: colorKey)
         row.setObj(organizedGroup, forKey: organizedGroupKey)
     }
 
@@ -992,6 +992,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     // MARK: - Navbar Toolbar Actions
     
+    private func enterOrganizedGroup(_ group: OrganizedTracksGroup) {
+        organizedGroup = group
+        updateNavigationBarTitle()
+        setupNavbar()
+        updateSortButtonAndMenu()
+        generateData()
+        tableView.reloadData()
+    }
+
     private func leaveOrganizedGroup() {
         organizedGroup = nil
         updateNavigationBarTitle()
@@ -1007,7 +1016,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func onNavbarOrganizeBySmartFolderButtonClicked() {
-        let vc = OAOrganizeTracksByViewController(smartFolder: smartFolder)
+        let vc = OrganizeTracksByViewController(smartFolder: smartFolder)
         vc.delegate = self
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
@@ -1015,11 +1024,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     func onOrganizeByParamsApplied() {
+        smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
+        updateData()
         reloadTracks(forceLoad: true)
     }
 
     func onOrganizeByRangeParamsApplied(type: OrganizeByType) {
-        reloadTracks(forceLoad: true)
         let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type)
         vc.stepDelegate = self
         let nav = UINavigationController(rootViewController: vc)
@@ -1027,6 +1037,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     func onStepSizeChanged() {
+        smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
+        updateData()
         reloadTracks(forceLoad: true)
     }
     
@@ -2261,12 +2273,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 showTracksViewControllerForSmartFolder(withName: title)
             } else if item.key == organizedGroupKey {
                 if let group = item.obj(forKey: organizedGroupKey) as? OrganizedTracksGroup {
-                    organizedGroup = group
-                    updateNavigationBarTitle()
-                    setupNavbar()
-                    updateSortButtonAndMenu()
-                    generateData()
-                    tableView.reloadData()
+                    enterOrganizedGroup(group)
                 }
             } else if item.key == trackKey {
                 if let trackPath = item.obj(forKey: pathKey) as? String,
@@ -2374,12 +2381,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
                 guard let self else { return nil }
                 let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { [weak self] _ in
-                    guard let self else { return }
-                    self.organizedGroup = group
-                    self.updateNavigationBarTitle()
-                    self.setupNavbar()
-                    self.generateData()
-                    self.tableView.reloadData()
+                    self?.enterOrganizedGroup(group)
                 }
                 let showOnMapAction = UIAction(title: localizedString("show_all_tracks"), image: .icCustomMapPinOutlined.resizedMenuImage()) { [weak self] _ in
                     guard let self else { return }
@@ -2690,14 +2692,14 @@ extension TracksViewController {
         if isNumeric {
             let highestAction = UIAction(
                 title: localizedString("sort_highest_first"),
-                image: .icCustomSortLongToShort?.resizedMenuImage(),
+                image: .icCustomSortLongToShort.resizedMenuImage(),
                 state: sortMode == .longestDistanceFirst ? .on : .off
             ) { [weak self] _ in
                 self?.applySortModeForGroups(.longestDistanceFirst)
             }
             let lowestAction = UIAction(
                 title: localizedString("sort_lowest_first"),
-                image: .icCustomSortShortToLong?.resizedMenuImage(),
+                image: .icCustomSortShortToLong.resizedMenuImage(),
                 state: sortMode == .shortestDistanceFirst ? .on : .off
             ) { [weak self] _ in
                 self?.applySortModeForGroups(.shortestDistanceFirst)

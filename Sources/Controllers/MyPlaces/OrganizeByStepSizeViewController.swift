@@ -25,7 +25,6 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     private let stepRange: Limits
     private var currentDisplayValue: Float
     private let initialParams: OrganizeByParams?
-    private var changesApplied = false
 
     weak var stepDelegate: OrganizeByStepSizeDelegate?
 
@@ -35,7 +34,10 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         self.smartFolder = smartFolder
         self.type = type
         self.displayUnits = type.getDisplayUnits()
-        self.stepRange = type.stepRange!
+        guard let range = type.stepRange else {
+            fatalError("OrganizeByStepSizeViewController requires a range-related OrganizeByType")
+        }
+        self.stepRange = range
         self.initialParams = smartFolder.organizeByParams
 
         let existingBase: Double
@@ -172,7 +174,6 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     }
 
     @objc private func onConfirmPressed() {
-        changesApplied = true
         saveCurrentStep()
         dismiss(animated: true) { [weak self] in
             self?.stepDelegate?.onStepSizeChanged()

@@ -428,10 +428,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
+            cell.accessoryType = [item.key isEqualToString:@"relief3D"] ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
             cell.titleLabel.text = item.title;
             cell.valueLabel.text = [item stringForKey:@"value"];
             [cell leftIconVisibility:item.iconName.length > 0];

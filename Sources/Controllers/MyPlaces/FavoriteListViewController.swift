@@ -12,6 +12,15 @@ import UniformTypeIdentifiers
 private enum ScreenMode {
     case root
     case folder(FavoriteFolderRow, previousTitle: String)
+    
+    var isRoot: Bool {
+        switch self {
+        case .root:
+            return true
+        case .folder:
+            return false
+        }
+    }
 }
 
 private enum FavoriteFolderSection: Hashable {
@@ -235,6 +244,8 @@ final class FavoriteListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigation()
+        navigationController?.setToolbarHidden(true, animated: false)
+        configureToolbar()
         applySnapshot()
     }
 
@@ -251,13 +262,11 @@ final class FavoriteListViewController: UIViewController {
 
     private func configureNavigation() {
         navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationController?.setToolbarHidden(true, animated: false)
         navigationController?.navigationBar.prefersLargeTitles = false
         configureNavigationButtons()
         configureSearchVisibility()
         updateNavigationBarTitle()
         updateSegmentedControlVisibility()
-        myPlacesDelegate?.updateToolbar?(with: nil)
     }
 
     private func configureNavigationButtons() {
@@ -301,6 +310,26 @@ final class FavoriteListViewController: UIViewController {
 
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = collectionView.isEditing ? nil : subfolderSearchController
+    }
+
+    private func configureToolbar() {
+        let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+
+        let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+
+        let shareButton = UIBarButtonItem(image: .icCustomExportOutlined, style: .plain, target: self, action: #selector(shareButtonClicked))
+        let moveButton = UIBarButtonItem(image: .icCustomFolderMoveOutlined, style: .plain, target: self, action: #selector(moveButtonClicked))
+
+        let deleteButton = UIBarButtonItem(image: .icCustomTrashOutlined, style: .plain, target: self, action: #selector(deleteButtonClicked))
+        deleteButton.tintColor = .iconColorDisruptive
+
+        let items = [shareButton, fixedSpacer, moveButton, flexibleSpacer, deleteButton]
+        
+        if screenMode.isRoot {
+            myPlacesDelegate?.updateToolbar?(with: items)
+        } else {
+            toolbarItems = items
+        }
     }
 
     private func updateNavigationBarTitle() {
@@ -450,6 +479,7 @@ final class FavoriteListViewController: UIViewController {
         collectionView.reloadData()
         myPlacesDelegate?.updateEditMode(isEdit)
         configureNavigation()
+        navigationController?.setToolbarHidden(!isEdit, animated: true)
     }
 
     private func makeFolderContextMenu(for folder: FavoriteFolderRow, indexPath: IndexPath) -> UIMenu {
@@ -544,6 +574,37 @@ final class FavoriteListViewController: UIViewController {
         present(alert, animated: true)
     }
 
+    private func shareItems(_ selectedItems: [IndexPath], sourceView: UIView) {
+        if selectedItems.isEmpty {
+            let alert = UIAlertController(
+                title: "",
+                message: localizedString("fav_export_select"),
+                preferredStyle: .alert
+            )
+
+            let defaultAction = UIAlertAction(
+                title: localizedString("shared_string_ok"),
+                style: .default,
+                handler: nil
+            )
+
+            alert.addAction(defaultAction)
+            present(alert, animated: true, completion: nil)
+            return
+        }
+
+        // TODO
+//        guard let favoritesUrl = OAFavoriteFoldersBridge.shareFavoriteItems(bridgeItems(for: selectedItems)) else { return }
+//        showActivity(
+//            [favoritesUrl],
+//            sourceView: sourceView,
+//            barButtonItem: nil,
+//            completionWithItemsHandler: {
+//                try? FileManager.default.removeItem(at: favoritesUrl)
+//            }
+//        )
+    }
+
     private func menuImage(_ name: String) -> UIImage? {
         UIImage(named: name)?.resizedMenuImage()
     }
@@ -573,6 +634,69 @@ final class FavoriteListViewController: UIViewController {
 
     @objc private func favoriteDataDidChange() {
         applySnapshot(animatingDifferences: true)
+    }
+
+    @objc private func shareButtonClicked(_ sender: Any) {
+        // TODO
+//        guard let items = collectionView.indexPathsForSelectedItems else {
+//            return
+//        }
+//        let sourceView = sender as? UIView ?? collectionView
+//        shareItems(items, sourceView: sourceView)
+//        setEdit(false)
+//        applySnapshot()
+    }
+
+    @objc private func moveButtonClicked(_ sender: Any) {
+        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else {
+            let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: localizedString("shared_string_ok"), style: .default)
+            alert.addAction(defaultAction)
+            present(alert, animated: true)
+            return
+        }
+
+        // TODO
+        //guard let navigationController else { return }
+//        OAFavoriteFoldersBridge.openFavoriteItemsMove(bridgeItems(for: selectedItems), navigationController: navigationController) { [weak self] in
+//            self?.setEdit(false)
+//            self?.applySnapshot(animatingDifferences: true)
+//        }
+    }
+
+    @objc private func deleteButtonClicked(_ sender: Any) {
+        if collectionView.indexPathsForSelectedItems?.isEmpty == true {
+            let alert = UIAlertController(title: nil, message: localizedString("fav_select_remove"), preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: localizedString("ok"), style: .default)
+            alert.addAction(defaultAction)
+            present(alert, animated: true)
+            return
+        }
+
+        let alert = UIAlertController(
+            title: nil,
+            message: localizedString("fav_remove_q"),
+            preferredStyle: .alert
+        )
+
+        let yesButton = UIAlertAction(
+            title: localizedString("shared_string_yes"),
+            style: .default
+        ) { _ in
+            // TODO
+            //self?.removeSelectedFavoriteItems()
+        }
+
+        let cancelButton = UIAlertAction(
+            title: localizedString("shared_string_no"),
+            style: .cancel,
+            handler: nil
+        )
+
+        alert.addAction(yesButton)
+        alert.addAction(cancelButton)
+
+        present(alert, animated: true, completion: nil)
     }
 }
 

@@ -54,6 +54,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonPlugins;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonTravelGuides;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonExternalSensors;
+@property (strong, nonatomic) UIButton *menuButtonStarMap;
 
 @end
 
@@ -71,6 +72,7 @@
     CALayer *_menuButtonMapsAndResourcesDiv;
     CALayer *_menuButtonTravelGuidesDiv;
     CALayer *_menuButtonExternalSensorsDiv;
+    CALayer *_menuButtonStarMapDiv;
     
     NSArray<CALayer *> *_menuButtonDivArray;
     NSArray<UIButton *> *_menuButtonsArray;
@@ -125,11 +127,15 @@
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
     BOOL isWeatherPluginEnabled = [[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled];
+    BOOL isAstronomyPluginEnabled = [[OAPluginsHelper getPlugin:AstronomyPlugin.class] isEnabled];
 
     if (isWeatherPluginEnabled)
         _menuButtonWeatherDiv.hidden = NO;
     else
         _menuButtonPlanRouteDiv.hidden = NO;
+
+    if (isAstronomyPluginEnabled)
+        _menuButtonStarMapDiv.hidden = NO;
     
     BOOL isExternalSensorsPluginEnabled = [[OAPluginsHelper getPlugin:OAExternalSensorsPlugin.class] isEnabled];
     
@@ -157,6 +163,16 @@
     {
         self.menuButtonWeather.hidden = YES;
     }
+
+    if (isAstronomyPluginEnabled)
+    {
+        self.menuButtonStarMap.hidden = NO;
+        [topButtons addObject:self.menuButtonStarMap];
+    }
+    else
+    {
+        self.menuButtonStarMap.hidden = YES;
+    }
     
     if (isExternalSensorsPluginEnabled)
     {
@@ -174,7 +190,7 @@
                                             self.menuButtonHelp
                                             ];
     
-    CALayer *bottomDiv = isExternalSensorsPluginEnabled ? _menuButtonExternalSensorsDiv : _menuButtonWeatherDiv;
+    CALayer *bottomDiv = isExternalSensorsPluginEnabled ? _menuButtonExternalSensorsDiv : (isAstronomyPluginEnabled ? _menuButtonStarMapDiv : (isWeatherPluginEnabled ? _menuButtonWeatherDiv : _menuButtonPlanRouteDiv));
     
     NSInteger buttonsCount = topButtons.count + bottomButtons.count;
     CGFloat buttonsHeight = buttonHeight * buttonsCount;
@@ -274,12 +290,27 @@
     btn.contentEdgeInsets = contentInsets;
 }
 
+- (UIButton *)createMenuButtonWithAction:(SEL)action
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+    button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+    [button setTitleColor:[UIColor colorNamed:ACColorNameTextColorPrimary] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateHighlighted];
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
 
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.navigationController.delegate = self;
+    self.menuButtonStarMap = [self createMenuButtonWithAction:@selector(starMapButtonClicked:)];
+    [self.scrollView addSubview:self.menuButtonStarMap];
 
     _menuButtonMapsDiv = [[CALayer alloc] init];
     _menuButtonMyDataDiv = [[CALayer alloc] init];
@@ -293,6 +324,7 @@
     _menuButtonPluginsDiv = [[CALayer alloc] init];
     _menuButtonTravelGuidesDiv = [[CALayer alloc] init];
     _menuButtonExternalSensorsDiv = [[CALayer alloc] init];
+    _menuButtonStarMapDiv = [[CALayer alloc] init];
     
     _menuButtonDivArray = @[_menuButtonMapsDiv,
                             _menuButtonMyDataDiv,
@@ -305,7 +337,8 @@
                             _menuButtonSettingsDiv,
                             _menuButtonPluginsDiv,
                             _menuButtonTravelGuidesDiv,
-                            _menuButtonExternalSensorsDiv];
+                            _menuButtonExternalSensorsDiv,
+                            _menuButtonStarMapDiv];
     
     _menuButtonsArray = @[_menuButtonMaps,
                             _menuButtonMyData,
@@ -319,7 +352,8 @@
                             _menuButtonWeather,
                             _menuButtonPlugins,
                             _menuButtonTravelGuides,
-                            _menuButtonExternalSensors];
+                            _menuButtonExternalSensors,
+                            _menuButtonStarMap];
     
     [_menuButtonMaps setTitle:OALocalizedString(@"configure_map") forState:UIControlStateNormal];
     [_menuButtonMyData setTitle:OALocalizedString(@"shared_string_my_places") forState:UIControlStateNormal];
@@ -334,6 +368,7 @@
     [_menuButtonPlugins setTitle:OALocalizedString(@"plugins_menu_group") forState:UIControlStateNormal];
     [_menuButtonTravelGuides setTitle:OALocalizedString(@"travel_guides_beta") forState:UIControlStateNormal];
     [_menuButtonExternalSensors setTitle:OALocalizedString(@"external_sensors_plugin_name") forState:UIControlStateNormal];
+    [_menuButtonStarMap setTitle:OALocalizedString(@"star_map") forState:UIControlStateNormal];
     
     for (UIButton *button in _menuButtonsArray) {
         button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -352,6 +387,7 @@
     [_menuButtonPlugins.layer addSublayer:_menuButtonPluginsDiv];
     [_menuButtonTravelGuides.layer addSublayer:_menuButtonTravelGuidesDiv];
     [_menuButtonExternalSensors.layer addSublayer:_menuButtonExternalSensorsDiv];
+    [_menuButtonStarMap.layer addSublayer:_menuButtonStarMapDiv];
     
     [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
     [_menuButtonMyData setImage:[UIImage templateImageNamed:@"ic_custom_my_places.png"] forState:UIControlStateNormal];
@@ -366,6 +402,7 @@
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
     [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"ic_custom_backpack"] forState:UIControlStateNormal];
     [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:@"ic_custom_sensor"] forState:UIControlStateNormal];
+    [_menuButtonStarMap setImage:[UIImage templateImageNamed:@"ic_action_telescope"] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
 }
@@ -412,6 +449,13 @@
 {
     [self.sidePanelController toggleLeftPanel:self];
     [[OARootViewController instance].mapPanel.hudViewController changeWeatherToolbarVisible];
+}
+
+- (IBAction)starMapButtonClicked:(id)sender
+{
+    [self.sidePanelController toggleLeftPanel:self];
+    AstronomyPlugin *plugin = (AstronomyPlugin *)[OAPluginsHelper getEnabledPlugin:AstronomyPlugin.class];
+    [plugin showStarMap];
 }
 
 - (IBAction) configureScreenButtonClicked:(id)sender

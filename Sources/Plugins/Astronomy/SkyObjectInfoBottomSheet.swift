@@ -760,7 +760,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         switch knowledgeBaseController.currentState() {
         case .upsell:
             if let navigation = navigationController ?? OARootViewController.instance().navigationController {
-                OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.wikipedia(), navController: navigation)
+                OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.astronomy(), navController: navigation)
             }
         case .download:
             guard let item = knowledgeBaseController.findDownloadItem() else {

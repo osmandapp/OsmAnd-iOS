@@ -50,7 +50,7 @@ final class AstroKnowledgeBaseController {
     }
 
     func hasAccess() -> Bool {
-        OAIAPHelper.isOsmAndProAvailable()
+        OAIAPHelper.isOsmAndProAvailable() || OAIAPHelper.isMapsPlusAvailable()
     }
 
     func isDownloaded() -> Bool {

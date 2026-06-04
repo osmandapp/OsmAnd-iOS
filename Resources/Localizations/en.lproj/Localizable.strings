@@ -4555,6 +4555,7 @@
 "astronomy_plugin_name" = "Astronomy";
 "astronomy_plugin_description" = "Star charts, 3D star map";
 "astronomy_map" = "Astronomy Map";
+"purchases_feature_desc_astronomy" = "Explore the night sky with an offline map and celestial catalog. Plan observations using smart visibility graphs, daily schedules, and an interactive AR mode.";
 "star_map" = "Star map";
 "astro_configure_view" = "Configure view";
 "astro_visible_objects" = "Visible objects";

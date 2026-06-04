@@ -1524,6 +1524,7 @@
 "ltr_or_rtl_combine_via_per" = "%@ per %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 
+"shared_string_beta" = "Beta";
 "of" = "%d of %d";
 "downloaded_bytes" = "%@ of %@";
 

@@ -10,7 +10,6 @@ import UIKit
 
 @objc(AstronomyPlugin)
 final class AstronomyPlugin: OAPlugin {
-    static let pluginId = "osmand.astronomy"
     let dataProvider: AstroDataDbProvider
 
     override init() {
@@ -19,19 +18,19 @@ final class AstronomyPlugin: OAPlugin {
     }
 
     override func getId() -> String? {
-        Self.pluginId
+        kInAppId_Addon_Astronomy
     }
 
     override func isEnabled() -> Bool {
-        true
+        super.isEnabled() && (OAIAPHelper.isOsmAndProAvailable() || OAIAPHelper.isMapsPlusAvailable())
     }
 
     override func getName() -> String {
-        localizedString("astronomy_plugin_name")
+        String(format: localizedString("ltr_or_rtl_combine_with_brackets"), localizedString("astronomy_plugin_name"), localizedString("shared_string_beta"))
     }
 
     override func getDescription() -> String {
-        localizedString("astronomy_plugin_description")
+        localizedString("purchases_feature_desc_astronomy")
     }
 
     override func getLogoResourceId() -> String? {

@@ -122,6 +122,30 @@
 
 @end
 
+@interface OAFavoriteGroupCreationHandler : NSObject
+
+@property (nonatomic, copy) NSString *parentGroupName;
+@property (nonatomic, copy, nullable) void (^completion)(void);
+
+@end
+
+@implementation OAFavoriteGroupCreationHandler
+
+- (void)addNewItemWithName:(NSString *)name iconName:(NSString *)iconName color:(UIColor *)color backgroundIconName:(NSString *)backgroundIconName
+{
+    NSString *trimmedName = [(name ?: @"") stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+    NSString *groupName = self.parentGroupName.length > 0 && trimmedName.length > 0 ? [NSString stringWithFormat:@"%@/%@", self.parentGroupName, trimmedName] : trimmedName;
+    if (groupName.length == 0 || [OAFavoritesHelper getGroupByName:groupName])
+        return;
+    
+    [OAFavoritesHelper addFavoriteGroup:groupName color:color iconName:iconName backgroundIconName:backgroundIconName];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
+    if (self.completion)
+        self.completion();
+}
+
+@end
+
 @implementation OAFavoritePointBridgeItem
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite
@@ -209,6 +233,21 @@
     return items.copy;
 }
 
++ (void)openNewFavoriteGroupEditorWithParentGroupName:(nullable NSString *)parentGroupName navigationController:(UINavigationController *)navigationController completion:(void (^ _Nullable)(void))completion
+{
+    if (!navigationController)
+        return;
+    
+    OAFavoriteGroupEditorViewController *viewController = [[OAFavoriteGroupEditorViewController alloc] initWithNew];
+    OAFavoriteGroupCreationHandler *handler = [[OAFavoriteGroupCreationHandler alloc] init];
+    handler.parentGroupName = parentGroupName ?: @"";
+    handler.completion = completion;
+    viewController.delegate = (id<OAEditorDelegate>) handler;
+    objc_setAssociatedObject(viewController, @selector(openNewFavoriteGroupEditorWithParentGroupName:navigationController:completion:), handler, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    UINavigationController *modalNavigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [navigationController presentViewController:modalNavigationController animated:YES completion:nil];
+}
+
 + (void)openFavoritePointWithIdentifier:(NSString *)identifier
 {
     OAFavoriteItem *favorite = [self favoritePointWithIdentifier:identifier];
@@ -223,6 +262,7 @@
     OARootViewController *rootViewController = [OARootViewController instance];
     [rootViewController.navigationController.view.layer addAnimation:transition forKey:nil];
     [rootViewController.navigationController popToRootViewControllerAnimated:NO];
+    [rootViewController.navigationController setNavigationBarHidden:YES animated:NO];
     [rootViewController.mapPanel openTargetViewWithFavorite:favorite pushed:YES];
 }
 

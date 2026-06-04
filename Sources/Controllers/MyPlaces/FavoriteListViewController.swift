@@ -146,6 +146,10 @@ final class FavoriteListViewController: UIViewController {
             previousTitle
         }
     }
+    private var parentGroupName: String? {
+        guard case .folder(let folder, _) = screenMode, !folder.groupName.isEmpty else { return nil }
+        return folder.groupName
+    }
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
@@ -417,16 +421,24 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func makeActionsMenu() -> UIMenu {
-        let importAction = UIAction(title: localizedString("shared_string_import"), image: menuImage("ic_custom_import_outlined")) { [weak self] _ in
+        let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined.resizedMenuImage()) { [weak self] _ in
+            guard let self, let navigationController = self.navigationController else { return }
+            OAFavoriteFoldersBridge.openNewFavoriteGroupEditor(withParentGroupName: self.parentGroupName, navigationController: navigationController) { [weak self] in
+                self?.applySnapshot(animatingDifferences: true)
+            }
+        }
+        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined.resizedMenuImage()) { [weak self] _ in
             guard let self else { return }
-            let gpxType = UTType(filenameExtension: "gpx") ?? UTType(importedAs: "com.topografix.gpx", conformingTo: .xml)
+            let gpxType = UTType(importedAs: "com.topografix.gpx", conformingTo: .xml)
             let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [gpxType], asCopy: true)
             documentPicker.allowsMultipleSelection = false
             documentPicker.delegate = self
             present(documentPicker, animated: true)
         }
-
-        return UIMenu(title: "", options: .displayInline, children: [importAction])
+        
+        let addFolderSection = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
+        let importSection = UIMenu(title: "", options: .displayInline, children: [importAction])
+        return UIMenu(title: "", children: [addFolderSection, importSection])
     }
 
     private func setEdit(_ isEdit: Bool) {

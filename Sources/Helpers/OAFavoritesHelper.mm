@@ -1228,6 +1228,14 @@ static NSOperationQueue *_favQueue;
 
 @end
 
+@interface OAFavoriteGroup ()
+
+- (void)updateMissingAppearanceFromPoint:(OAFavoriteItem *)point;
+- (void)applyMissingAppearanceToPoint:(OAFavoriteItem *)point;
++ (BOOL)isBaseFavoriteOrPersonalGroup:(NSString *)name;
+
+@end
+
 @implementation OAFavoriteGroup
 
 - (instancetype)init
@@ -1302,7 +1310,35 @@ static NSOperationQueue *_favQueue;
 
 - (void) addPoint:(OAFavoriteItem *)point
 {
+    [self updateMissingAppearanceFromPoint:point];
     [_points addObject:point];
+}
+
+- (void)updateMissingAppearanceFromPoint:(OAFavoriteItem *)point
+{
+    UIColor *pointColor = [point getInternalColor];
+    if ((_color == nil || [_color toRGBNumber] == 0) && pointColor)
+        _color = pointColor;
+
+    NSString *pointIcon = [point getInternalIcon];
+    if (_iconName.length == 0 && pointIcon.length > 0)
+        _iconName = pointIcon;
+
+    NSString *pointBackground = [point getInternalBackgroundIcon];
+    if (_backgroundType.length == 0 && pointBackground.length > 0)
+        _backgroundType = pointBackground;
+}
+
+- (void)applyMissingAppearanceToPoint:(OAFavoriteItem *)point
+{
+    if (_color != nil && [_color toRGBNumber] != 0 && ![point getInternalColor])
+        [point setColor:_color];
+
+    if (_iconName.length > 0 && [point getInternalIcon].length == 0)
+        [point setIcon:_iconName];
+
+    if (_backgroundType.length > 0 && [point getInternalBackgroundIcon].length == 0)
+        [point setBackgroundIcon:_backgroundType];
 }
 
 - (UIColor *) color
@@ -1321,6 +1357,11 @@ static NSOperationQueue *_favQueue;
 + (BOOL) isPersonal:(NSString *)name
 {
     return [name isEqualToString:kPersonalCategory];
+}
+
++ (BOOL)isBaseFavoriteOrPersonalGroup:(NSString *)name
+{
+    return name.length == 0 || [self isPersonal:name];
 }
 
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
@@ -1374,17 +1415,20 @@ static NSOperationQueue *_favQueue;
 {
     OAFavoriteGroup *favoriteGroup = [[OAFavoriteGroup alloc] init];
     favoriteGroup.name = pointsGroup.name;
-    favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
+    favoriteGroup.color = pointsGroup.color != 0 ? UIColorFromRGB(pointsGroup.color) : nil;
     favoriteGroup.iconName = pointsGroup.iconName;
     favoriteGroup.backgroundType = pointsGroup.backgroundType;
-    favoriteGroup.isPinned = pointsGroup.isPinned.boolValue;
+    favoriteGroup.isPinned = pointsGroup.isPinned ? pointsGroup.isPinned.boolValue : [self isBaseFavoriteOrPersonalGroup:favoriteGroup.name ?: @""];
     for (OASWptPt *point in pointsGroup.points)
     {
-        [favoriteGroup.points addObject:[OAFavoriteItem fromWpt:point
-                                                       category:nil]];
+        OAFavoriteItem *favorite = [OAFavoriteItem fromWpt:point category:nil];
+        [favoriteGroup applyMissingAppearanceToPoint:favorite];
+        [favoriteGroup addPoint:favorite];
     }
+    
     if (favoriteGroup.points && favoriteGroup.points.count > 0)
         favoriteGroup.isVisible = favoriteGroup.points[0].isVisible;
+    
     return favoriteGroup;
 }
 

@@ -1630,8 +1630,12 @@ includeHidden:(BOOL)includeHidden
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
-    BOOL isMapRegion = resourceInRepository->type == OsmAnd::ResourcesManager::ResourceType::MapRegion;
-    BOOL isRoadMapRegion = resourceInRepository->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion;
+    if (!resourceInRepository)
+        return;
+    
+    const auto resourceType = resourceInRepository->type;
+    BOOL isMapRegion = resourceType == OsmAnd::ResourcesManager::ResourceType::MapRegion;
+    BOOL isRoadMapRegion = resourceType == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion;
     BOOL isFree = resourceInRepository && (resourceInRepository->free || isMapRegion || isRoadMapRegion);
     if (!isFree && ![self.class checkIfUpdateEnabled:item.worldRegion])
         return;
@@ -2541,6 +2545,22 @@ includeHidden:(BOOL)includeHidden
                                targetItem:(OAResourceItem *)targetItem
                                 onProceed:(dispatch_block_t)onProceed
 {
+    if (!targetItem || !targetItem.worldRegion)
+    {
+        if (onProceed)
+            onProceed();
+        return;
+    }
+
+    BOOL targetIsRoad = targetItem.resourceType == OsmAndResourceType::RoadMapRegion;
+    BOOL targetIsMap  = targetItem.resourceType == OsmAndResourceType::MapRegion;
+    if (!targetIsRoad && !targetIsMap)
+    {
+        if (onProceed)
+            onProceed();
+        return;
+    }
+    
     NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *duplicateMaps = [self getLocalResourcesToDeleteFor:items];
     
     if (duplicateMaps.count > 0)
@@ -2561,31 +2581,22 @@ includeHidden:(BOOL)includeHidden
     }
 }
 
-+ (BOOL)presentMapVariantConflictActionSheet:(OAResourceItem *)targetItem
++ (void)presentMapVariantConflictActionSheet:(OAResourceItem *)targetItem
                                     sourceView:(UIView *)sourceView
                                      onReplace:(dispatch_block_t)onReplace
                                     onKeepBoth:(dispatch_block_t)onKeepBoth
 {
     if (!targetItem || !targetItem.worldRegion)
-        return NO;
+        return;
 
     BOOL targetIsRoad = targetItem.resourceType == OsmAndResourceType::RoadMapRegion;
-    BOOL targetIsMap  = targetItem.resourceType == OsmAndResourceType::MapRegion;
-    if (!targetIsRoad && !targetIsMap)
-        return NO;
     
     NSString *resourceName = [self.class titleOfResourceType:targetItem.resourceType inRegion:targetItem.worldRegion withRegionName:YES withResourceType:NO];
+    NSString *messageKey = targetIsRoad ? @"map_variant_has_standard_download_road_message" : @"map_variant_has_road_download_standard_message";
+    NSString *replaceButtonKey = targetIsRoad ? @"map_variant_replace_with_road_only" : @"map_variant_replace_with_standard";
 
-    NSString *messageKey = targetIsRoad
-        ? [NSString stringWithFormat:@"You already have the standard map for %@.\n\nDownloading the road-only map will duplicate data and may degrade performance.", resourceName]
-        : [NSString stringWithFormat:@"You already have the road-only map for %@.\n\nDownloading the standard map will duplicate data and may degrade performance.", resourceName];
-    
-    NSString *replaceButtonKey = targetIsRoad
-        ? @"Replace with Road-only"
-        : @"Replace with Standard";
-
-    UIAlertController *sheet = [UIAlertController alertControllerWithTitle:OALocalizedString(@"Duplicated map")
-                                                                   message:OALocalizedString(messageKey)
+    UIAlertController *sheet = [UIAlertController alertControllerWithTitle:OALocalizedString(@"map_variant_duplicate_title")
+                                                                   message:[NSString stringWithFormat:OALocalizedString(messageKey), resourceName]
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
 
     [sheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(replaceButtonKey)
@@ -2615,12 +2626,12 @@ includeHidden:(BOOL)includeHidden
         else
         {
             UIView *anchorView = [OARootViewController instance].view;
+            popover.sourceView = anchorView;
             popover.sourceRect = CGRectMake(CGRectGetMidX(anchorView.bounds), CGRectGetMidY(anchorView.bounds), 1, 1);
             popover.permittedArrowDirections = 0;
         }
     }
     [[OARootViewController instance] presentViewController:sheet animated:YES completion:nil];
-    return YES;
 }
 
 + (void)addPendingMapVariantDeletions:(NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)variantMaps

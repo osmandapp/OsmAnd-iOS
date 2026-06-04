@@ -4557,3 +4557,9 @@
 "missing_maps_header" = "Missing or outdated maps";
 "missing_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "shared_string_allow" = "Allow";
+
+"map_variant_duplicate_title" = "Duplicated map";
+"map_variant_has_standard_download_road_message" = "You already have the standard map for %@.\n\nDownloading the road-only map will duplicate data and may degrade performance.";
+"map_variant_has_road_download_standard_message" = "You already have the road-only map for %@.\n\nDownloading the standard map will duplicate data and may degrade performance.";
+"map_variant_replace_with_road_only" = "Replace with Road-only";
+"map_variant_replace_with_standard" = "Replace with Standard";

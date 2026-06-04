@@ -1938,7 +1938,7 @@ static BOOL _repositoryUpdated = NO;
     }
 }
 
-- (UITableViewCell *) getVisibleCellFor:(OAResourceItem *)item
+- (UITableViewCell *) visibleCellForItem:(OAResourceItem *)item
 {
     for (UITableViewCell *cell in self.tableView.visibleCells)
     {
@@ -2003,7 +2003,7 @@ static BOOL _repositoryUpdated = NO;
     }
     else
     {
-        [super onItemClicked:senderItem sourceView:[self getVisibleCellFor:senderItem]];
+        [super onItemClicked:senderItem sourceView:[self visibleCellForItem:senderItem]];
     }
 }
 
@@ -2993,25 +2993,25 @@ static BOOL _repositoryUpdated = NO;
 
         if ([item isKindOfClass:[OAMultipleResourceItem class]])
         {
-            [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
+            [self onItemClicked:item sourceView:[self visibleCellForItem:item]];
         }
         else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
         {
             if (((OAOutdatedResourceItem *) item).downloadTask != nil)
-                [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
+                [self onItemClicked:item sourceView:[self visibleCellForItem:item]];
             else
                 [self showDetailsOf:item];
         }
         else if ([item isKindOfClass:OACustomResourceItem.class])
         {
             if (((OACustomResourceItem *) item).downloadTask != nil)
-                [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
+                [self onItemClicked:item sourceView:[self visibleCellForItem:item]];
             else
                 [self showDetailsOfCustomItem:item];
         }
         else if (![item isKindOfClass:[OALocalResourceItem class]])
         {
-            [self onItemClicked:item sourceView:[self getVisibleCellFor:item]];
+            [self onItemClicked:item sourceView:[self visibleCellForItem:item]];
         }
         else if ([item isKindOfClass:OALocalResourceItem.class] && ((OAResourceItem *) item).resourceType == OsmAndResourceType::WeatherForecast)
         {
@@ -3423,7 +3423,7 @@ static BOOL _repositoryUpdated = NO;
     _multipleItems = selectedResourceItems;
     [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem
                                              selectedItems:selectedResourceItems
-                                                sourceView:[self getVisibleCellFor:item.objcResourceItem]
+                                                sourceView:[self visibleCellForItem:item.objcResourceItem]
                                              onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
     } onTaskResumed:nil];

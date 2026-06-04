@@ -4067,3 +4067,6 @@
 "missing_maps_header" = "Chybějící nebo zastaralé mapy";
 "missing_maps_description" = "Některé offline mapy potřebné pro tuto trasu chybí nebo nejsou aktuální. Stáhněte si nebo aktualizujte tyto mapy.";
 "shared_string_allow" = "Povolit";
+"dismiss_changes_descr" = "Všechny změny budou zamítnuty.";
+"gpx_logging_no_data" = "Bez dat";
+"show_touches" = "Zobrazit detaily";

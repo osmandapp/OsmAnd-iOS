@@ -6,7 +6,7 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-enum MultipleValuesValueKind {
+enum MultipleValueKind {
     case generic
     case url
     case phone
@@ -16,7 +16,7 @@ struct MultipleValuesConfiguration {
     let title: String
     let values: [String]
     let onSelect: (String) -> Void
-    var valueKind: MultipleValuesValueKind = .generic
+    var valueKind: MultipleValueKind = .generic
     var lineBreakMode: NSLineBreakMode = .byTruncatingTail
 }
 
@@ -57,6 +57,10 @@ final class MultipleValuesViewController: OABaseNavbarViewController {
     
     override func getTitle() -> String {
         configuration.title
+    }
+    
+    override func systemLeftBarButtonItem() -> UIBarButtonItem {
+        UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closePressed))
     }
     
     override func tableStyle() -> UITableView.Style {
@@ -105,10 +109,6 @@ final class MultipleValuesViewController: OABaseNavbarViewController {
             linkRow.title = $0
             linkRow.setObj($0, forKey: linkKey)
         }
-    }
-    
-    override func systemLeftBarButtonItem() -> UIBarButtonItem {
-        UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closePressed))
     }
     
     private func configureSheet() {

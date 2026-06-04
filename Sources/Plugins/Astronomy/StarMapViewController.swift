@@ -103,7 +103,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             self?.updateTimeControls()
         }
         viewModel.load(preferredLocale: OsmAndApp.swiftInstance()?.getLanguageCode())
-        resetTime()
+        setTimeAutoUpdateEnabled(true)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -114,8 +114,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             updateArModeUI(true)
         }
         if isTimeAutoUpdateEnabled {
-            resetTime()
-            scheduleAutoTimeUpdate()
+            syncCurrentTimeForAutoUpdate(animate: true)
         }
     }
 
@@ -257,6 +256,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         stack.addArrangedSubview(timeControlButton)
 
         resetTimeButton.addTarget(self, action: #selector(resetTimeButtonPressed), for: .touchUpInside)
+        resetTimeButton.isHidden = true
         resetTimeButton.widthAnchor.constraint(equalToConstant: Layout.smallButtonSize).isActive = true
         resetTimeButton.heightAnchor.constraint(equalToConstant: Layout.smallButtonSize).isActive = true
         stack.addArrangedSubview(resetTimeButton)
@@ -646,16 +646,19 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         objectInfoController?.onTimeChanged()
     }
 
-    private func resetTime() {
-        updateTime(Date(), animate: true)
+    private func syncCurrentTimeForAutoUpdate(animate: Bool) {
+        guard isTimeAutoUpdateEnabled else {
+            return
+        }
+        updateTime(Date(), animate: animate)
+        scheduleAutoTimeUpdate()
     }
 
     private func setTimeAutoUpdateEnabled(_ enabled: Bool) {
         isTimeAutoUpdateEnabled = enabled
         resetTimeButton.isHidden = enabled
         if enabled {
-            resetTime()
-            scheduleAutoTimeUpdate()
+            syncCurrentTimeForAutoUpdate(animate: true)
         } else {
             stopAutoTimeUpdate()
         }
@@ -667,9 +670,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         guard isTimeAutoUpdateEnabled else {
             return
         }
-        autoTimeUpdateTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            self?.resetTime()
+        let now = Date()
+        let nextMinute = Calendar.current.dateInterval(of: .minute, for: now)?.end ?? now.addingTimeInterval(60)
+        let delay = max(0.1, nextMinute.timeIntervalSince(now))
+        let timer = Timer(timeInterval: delay, repeats: false) { [weak self] _ in
+            self?.syncCurrentTimeForAutoUpdate(animate: true)
         }
+        autoTimeUpdateTimer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
 
     private func stopAutoTimeUpdate() {

@@ -1997,36 +1997,36 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return [[input componentsSeparatedByCharactersInSet: doNotWant] componentsJoinedByString: @""];
 }
 
-+ (void) callPhone:(NSString *)phonesString
++ (void)callPhone:(NSString *)phonesString
 {
-    NSArray* phones = [phonesString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;."]];
-    NSMutableArray *parsedPhones = [NSMutableArray array];
+    if (phonesString.length == 0)
+        return;
+    
+    NSArray *phones = [phonesString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;"]];
+    NSMutableArray<NSString *> *parsedPhones = [NSMutableArray array];
+    
     for (NSString *phone in phones)
     {
-        NSString *p = [OAUtilities stripNonDigits:phone];
-        [parsedPhones addObject:p];
+        NSString *result = [OAUtilities stripNonDigits:phone];
+        
+        if (result.length > 0)
+            [parsedPhones addObject:result];
     }
     
-    NSMutableArray *images = [NSMutableArray array];
-    for (int i = 0; i <parsedPhones.count; i++)
-        [images addObject:@"ic_phone_number"];
+    if (parsedPhones.count == 0)
+        return;
     
-    [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"make_call")
-                                               titleIcon:@"ic_custom_info"
-                                             cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                   selectableItemsTitles:parsedPhones
-                                   selectableItemsImages:images
-                                      selectColpletition:^(NSInteger selectedIndex) {
-                                            for (int i = 0; i < parsedPhones.count; i++)
-                                            {
-                                                if (selectedIndex == i)
-                                                {
-                                                    NSString *p = parsedPhones[i];
-                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]] options:@{} completionHandler:nil];
-                                                    break;
-                                                }
-                                            }
+    MultipleValuesViewController *controller = [[MultipleValuesViewController alloc] initWithTitle:localizedString(@"phone")
+                                                                                            values:parsedPhones
+                                                                                     lineBreakMode:NSLineBreakByTruncatingTail
+                                                                                          onSelect:^(NSString * _Nonnull selectedPhone) {
+        NSURL *phoneURL = [NSURL URLWithString:[@"tel://" stringByAppendingString:selectedPhone]];
+        if ([[UIApplication sharedApplication] canOpenURL:phoneURL])
+            [[UIApplication sharedApplication] openURL:phoneURL options:@{} completionHandler:nil];
     }];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [OARootViewController.instance presentViewController:navigationController animated:YES completion:nil];
 }
 
 + (UIImage *) getMxIcon:(NSString *)name

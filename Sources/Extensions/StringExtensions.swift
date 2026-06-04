@@ -119,9 +119,15 @@ extension NSString {
     /// ```
     ///
     /// - Returns: An array of normalized URL strings. Invalid URLs are ignored.
-   @objc func extractValidURLs() -> [String] {
+    @objc func extractValidURLs() -> [String] {
         guard length > 0 else { return [] }
-//ftp://ftpaamp.aires-marines.fr/PACOMM/Volet4_MARSAC/Rapport/13_PresentationProjetPilote_MARSAC_CRMM.pdf
+
+        let trimmedInput = trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedInput.containsURLSeparator,
+           let url = Self.normalizedURLString(from: trimmedInput) {
+            return [url]
+        }
+
         let normalized = replacingOccurrences(of: ",", with: " ")
             .replacingOccurrences(of: ";", with: " ")
 
@@ -132,20 +138,31 @@ extension NSString {
 
                 guard !trimmed.isEmpty else { return nil }
 
-                let urlString: String
-                if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
-                    urlString = trimmed
-                } else {
-                    urlString = "https://\(trimmed)"
-                }
-
-                guard let components = URLComponents(string: urlString),
-                      let host = components.host,
-                      !host.isEmpty else {
-                    return nil
-                }
-
-                return urlString
+                return Self.normalizedURLString(from: trimmed)
             }
+    }
+
+    private static func normalizedURLString(from value: String) -> String? {
+        guard !value.isEmpty else { return nil }
+
+        if value.range(of: "^[A-Za-z][A-Za-z0-9+.-]*:", options: .regularExpression) != nil {
+            guard URL(string: value) != nil else { return nil }
+            return value
+        }
+
+        let urlString = "https://\(value)"
+        guard let components = URLComponents(string: urlString),
+              let host = components.host,
+              !host.isEmpty else {
+            return nil
+        }
+
+        return urlString
+    }
+}
+
+private extension String {
+    var containsURLSeparator: Bool {
+        rangeOfCharacter(from: CharacterSet(charactersIn: ",;").union(.whitespacesAndNewlines)) != nil
     }
 }

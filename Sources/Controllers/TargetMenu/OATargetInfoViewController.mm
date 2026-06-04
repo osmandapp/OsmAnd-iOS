@@ -1757,9 +1757,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         else
         {
             NSString *inputString = NSStringIsEmpty(info.hiddenUrl) ? info.text : info.hiddenUrl;
-            inputString = @"ftp://ftpaamp.aires-marines.fr/PACOMM/Volet4_MARSAC/Rapport/13_PresentationProjetPilote_MARSAC_CRMM.pdf";
             NSArray<NSString *> *urls = [inputString extractValidURLs];
-            
+     
             if (urls.count == 1)
                 [OAUtilities callUrl:urls.firstObject];
             else if (urls.count > 1)

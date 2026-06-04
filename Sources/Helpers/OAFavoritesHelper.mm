@@ -582,6 +582,15 @@ static NSOperationQueue *_favQueue;
         [self saveCurrentPointsIntoFile];
 }
 
++ (void)updateGroup:(OAFavoriteGroup *)group
+             pinned:(BOOL)pinned
+    saveImmediately:(BOOL)saveImmediately
+{
+    group.isPinned = pinned;
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
+}
+
 + (void) saveCurrentPointsIntoFile
 {
     [self saveCurrentPointsIntoFile:YES];
@@ -913,6 +922,7 @@ static NSOperationQueue *_favQueue;
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
         favoriteGroup.isVisible = ![pointsGroup isHidden];
+        favoriteGroup.isPinned = pointsGroup.isPinned.boolValue;
     }
 }
 
@@ -1244,6 +1254,7 @@ static NSOperationQueue *_favQueue;
     return ([self.name isEqualToString:otherGroup.name] &&
             [self.color isEqual:otherGroup.color] &&
             self.isVisible == otherGroup.isVisible &&
+            self.isPinned == otherGroup.isPinned &&
             [self.iconName isEqualToString:otherGroup.iconName] &&
             [self.backgroundType isEqualToString:otherGroup.backgroundType] &&
             [self.points isEqualToArray:otherGroup.points]);
@@ -1340,7 +1351,8 @@ static NSOperationQueue *_favQueue;
 {
     NSString *mxPrefix = @"mx_";
     _iconName = [self removePrefix:mxPrefix fromValue:_iconName];
-    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber hidden:!_isVisible];
+    OASBoolean *pinned = _isPinned ? [OASBoolean numberWithBool:YES] : nil;
+    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber hidden:!_isVisible pinned:pinned];
     NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     
     for (OAFavoriteItem *point in _points)
@@ -1365,6 +1377,7 @@ static NSOperationQueue *_favQueue;
     favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
     favoriteGroup.iconName = pointsGroup.iconName;
     favoriteGroup.backgroundType = pointsGroup.backgroundType;
+    favoriteGroup.isPinned = pointsGroup.isPinned.boolValue;
     for (OASWptPt *point in pointsGroup.points)
     {
         [favoriteGroup.points addObject:[OAFavoriteItem fromWpt:point
@@ -1380,6 +1393,7 @@ static NSOperationQueue *_favQueue;
 - (id) copyWithZone:(NSZone *)zone
 {
     OAFavoriteGroup *clone = [[OAFavoriteGroup alloc] initWithPoints:_points name:_name isVisible:_isVisible color:_color];
+    clone.isPinned = _isPinned;
     clone.iconName = _iconName;
     clone.backgroundType = _backgroundType;
     return clone;

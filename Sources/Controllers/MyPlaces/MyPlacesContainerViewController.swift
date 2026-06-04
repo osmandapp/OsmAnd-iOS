@@ -49,7 +49,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         
         var controllerType: AnyClass {
             switch self {
-            case .favorites: OAFavoriteListViewController.self
+            case .favorites: FavoriteListViewController.self
             case .tracks: TracksViewController.self
             case .osm: OsmEditsListViewController.self
             case .travel: SavedArticlesTabViewController.self
@@ -112,11 +112,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     func viewController(for tab: Tab) -> UIViewController? {
         guard let pageViewController else { return nil }
-        let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
         switch tab {
         case .favorites:
-            if !availableViewControllers.contains(where: { $0.key == .favorites }),
-               let favoritesViewController = storyboard.instantiateViewController(withIdentifier: "OAFavoriteListViewController") as? OAFavoriteListViewController {
+            if !availableViewControllers.contains(where: { $0.key == .favorites }) {
+                let favoritesViewController = FavoriteListViewController(frame: pageViewController.view.frame)
                 favoritesViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = favoritesViewController
             }

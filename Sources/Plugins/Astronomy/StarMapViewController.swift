@@ -17,8 +17,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let magnitudeButtonHeight: CGFloat = 76
         static let magnitudeSliderWidth: CGFloat = 240
         static let transparencySliderHeight: CGFloat = 150
-        static let bottomSheetHeight: CGFloat = 280
-        static let settingsSheetHeight: CGFloat = 520
         static let maxMagnitude: Double = 7.0
     }
     private var settings: AstronomyPluginSettings
@@ -47,7 +45,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private let closeButton = StarMapButton()
     private let settingsButton = StarMapButton()
     private let compassButton = StarCompassButton()
-    private let bottomSheetContainer = UIView()
 
     private let arModeHelper = StarMapARModeHelper()
     private let cameraHelper = StarMapCameraHelper()
@@ -62,11 +59,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var previousViewAngle = 150.0
     private var manualAzimuth = true
     private var lastUpdatedAzimuth = -1.0
-    private var bottomSheetController: UIViewController?
-    private var bottomSheetHeightConstraint: NSLayoutConstraint?
     private var objectInfoController: AstroContextMenuViewController?
     private var objectInfoNavigationController: UINavigationController?
     private var isDismissingObjectInfoSheet = false
+    private var configureSheetController: AstroConfigureViewBottomSheet?
+    private var configureSheetNavigationController: UINavigationController?
+    private var isDismissingConfigureSheet = false
     private var mapLocationObserver: OAAutoObserverProxy?
 
     init(plugin: AstronomyPlugin) {
@@ -136,15 +134,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         mainLayout.translatesAutoresizingMaskIntoConstraints = false
         starView.translatesAutoresizingMaskIntoConstraints = false
         mapControlsContainer.translatesAutoresizingMaskIntoConstraints = false
-        bottomSheetContainer.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(mainLayout)
         mainLayout.addSubview(starView)
         mainLayout.addSubview(mapControlsContainer)
-        view.addSubview(bottomSheetContainer)
-
-        let bottomSheetHeightConstraint = bottomSheetContainer.heightAnchor.constraint(equalToConstant: Layout.bottomSheetHeight)
-        self.bottomSheetHeightConstraint = bottomSheetHeightConstraint
 
         NSLayoutConstraint.activate([
             mainLayout.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -160,19 +153,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             mapControlsContainer.leadingAnchor.constraint(equalTo: mainLayout.leadingAnchor),
             mapControlsContainer.trailingAnchor.constraint(equalTo: mainLayout.trailingAnchor),
             mapControlsContainer.topAnchor.constraint(equalTo: mainLayout.topAnchor),
-            mapControlsContainer.bottomAnchor.constraint(equalTo: mainLayout.bottomAnchor),
-
-            bottomSheetContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomSheetContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomSheetContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            bottomSheetHeightConstraint
+            mapControlsContainer.bottomAnchor.constraint(equalTo: mainLayout.bottomAnchor)
         ])
-
-        bottomSheetContainer.backgroundColor = .viewBg
-        bottomSheetContainer.layer.cornerRadius = 24
-        bottomSheetContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        bottomSheetContainer.layer.masksToBounds = true
-        bottomSheetContainer.isHidden = true
     }
 
     private func setupControls() {
@@ -518,6 +500,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func applySettings(_ config: AstronomyPluginSettings.StarMapConfig) {
+        let shouldApply2DMode = starView.is2DMode != config.is2DMode
         starView.showAzimuthalGrid = config.showAzimuthalGrid
         starView.showEquatorialGrid = config.showEquatorialGrid
         starView.showEclipticLine = config.showEclipticLine
@@ -541,7 +524,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.showPlanets = config.showPlanets
         starView.showMagnitudeFilter = config.showMagnitudeFilter || config.magnitudeFilter != nil
         starView.magnitudeFilter = config.magnitudeFilter
-        apply2DMode(config.is2DMode)
+        if shouldApply2DMode {
+            apply2DMode(config.is2DMode)
+        }
         updateRedMode(config.showRedFilter)
         updateMagnitudeControls()
     }
@@ -816,7 +801,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateMapControlsVisibility() {
-        mapControlsContainer.isHidden = !bottomSheetContainer.isHidden || objectInfoController != nil
+        mapControlsContainer.isHidden = objectInfoController != nil || configureSheetController != nil
     }
 
     private func clearSelectedObject() {
@@ -840,20 +825,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func hideBottomSheet(clearSelection: Bool) {
         dismissObjectInfoSheet(clearSelection: clearSelection, animated: false)
-        bottomSheetController?.willMove(toParent: nil)
-        bottomSheetController?.view.removeFromSuperview()
-        bottomSheetController?.removeFromParent()
-        bottomSheetController = nil
-        bottomSheetContainer.isHidden = true
+        dismissConfigureSheet(animated: false)
         if clearSelection {
             clearSelectedObject()
         }
         updateMapControlsVisibility()
-    }
-
-    private func setBottomSheetHeight(_ height: CGFloat) {
-        let maxHeight = max(Layout.bottomSheetHeight, view.bounds.height * 0.72)
-        bottomSheetHeightConstraint?.constant = min(height, maxHeight)
     }
 
     private func dismissObjectInfoSheet(clearSelection: Bool, animated: Bool) {
@@ -877,6 +853,27 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         if clearSelection {
             clearSelectedObject()
         }
+        updateMapControlsVisibility()
+    }
+
+    private func dismissConfigureSheet(animated: Bool) {
+        guard let navigationController = configureSheetNavigationController else {
+            if configureSheetController != nil {
+                finishConfigureSheetDismiss()
+            }
+            return
+        }
+        isDismissingConfigureSheet = true
+        navigationController.dismiss(animated: animated) { [weak self] in
+            guard let self else { return }
+            isDismissingConfigureSheet = false
+            finishConfigureSheetDismiss()
+        }
+    }
+
+    private func finishConfigureSheetDismiss() {
+        configureSheetController = nil
+        configureSheetNavigationController = nil
         updateMapControlsVisibility()
     }
 
@@ -990,6 +987,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc private func showConfigureSheet() {
+        if configureSheetController != nil {
+            configureSheetNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
+                self?.configureSheetNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
+            }
+            updateMapControlsVisibility()
+            return
+        }
         hideBottomSheet(clearSelection: false)
 
         let sheet = AstroConfigureViewBottomSheet()
@@ -1003,23 +1007,33 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             self?.updateRegularMapVisibility(config.showRegularMap)
             self?.saveCommonSettings()
         }
+        sheet.onRedFilterChanged = { [weak self] enabled in
+            self?.applyRedFilter(enabled: enabled)
+        }
         sheet.onClose = { [weak self] in
-            self?.hideBottomSheet(clearSelection: false)
+            self?.dismissConfigureSheet(animated: true)
+        }
+        sheet.onDismissed = { [weak self] in
+            guard let self, !isDismissingConfigureSheet else {
+                return
+            }
+            finishConfigureSheetDismiss()
         }
 
-        setBottomSheetHeight(Layout.settingsSheetHeight)
-        addChild(sheet)
-        sheet.view.translatesAutoresizingMaskIntoConstraints = false
-        bottomSheetContainer.addSubview(sheet.view)
-        NSLayoutConstraint.activate([
-            sheet.view.leadingAnchor.constraint(equalTo: bottomSheetContainer.leadingAnchor),
-            sheet.view.trailingAnchor.constraint(equalTo: bottomSheetContainer.trailingAnchor),
-            sheet.view.topAnchor.constraint(equalTo: bottomSheetContainer.topAnchor),
-            sheet.view.bottomAnchor.constraint(equalTo: bottomSheetContainer.bottomAnchor)
-        ])
-        sheet.didMove(toParent: self)
-        bottomSheetController = sheet
-        bottomSheetContainer.isHidden = false
+        let navigationController = UINavigationController(rootViewController: sheet)
+        navigationController.modalPresentationStyle = .pageSheet
+        navigationController.navigationBar.prefersLargeTitles = false
+        if let sheetPresentationController = navigationController.sheetPresentationController {
+            sheetPresentationController.detents = [.medium(), .large()]
+            sheetPresentationController.selectedDetentIdentifier = .medium
+            sheetPresentationController.prefersGrabberVisible = true
+            sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheetPresentationController.preferredCornerRadius = 24
+            sheetPresentationController.largestUndimmedDetentIdentifier = .medium
+        }
+        configureSheetController = sheet
+        configureSheetNavigationController = navigationController
+        present(navigationController, animated: true)
         updateMapControlsVisibility()
     }
 

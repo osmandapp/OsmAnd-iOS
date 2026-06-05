@@ -8,33 +8,104 @@
 
 import UIKit
 
-final class AstroConfigureViewBottomSheet: UIViewController {
+final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentationControllerDelegate {
     var config = AstronomyPluginSettings.StarMapConfig()
     var commonConfig = AstronomyPluginSettings.CommonConfig()
     var onConfigChanged: ((AstronomyPluginSettings.StarMapConfig) -> Void)?
     var onCommonConfigChanged: ((AstronomyPluginSettings.CommonConfig) -> Void)?
+    var onRedFilterChanged: ((Bool) -> Void)?
     var onClose: (() -> Void)?
+    var onDismissed: (() -> Void)?
+
+    private enum Layout {
+        static let contentPadding: CGFloat = 16
+        static let contentPaddingSmall: CGFloat = 12
+        static let contentPaddingMedium: CGFloat = 9
+        static let contentPaddingMinimal: CGFloat = 2
+        static let headerTitleRowHeight: CGFloat = 56
+        static let sectionCornerRadius: CGFloat = 12
+        static let closeButtonSize: CGFloat = 48
+        static let closeCircleSize: CGFloat = 32
+        static let closeIconSize: CGFloat = 24
+    }
 
     private let scrollView = UIScrollView()
     private let contentStack = UIStackView()
+    private let topCard = UIView()
+    private let topCardStack = UIStackView()
+    private let topButtonsRow = UIStackView()
+    private let visibleObjectsGridContent = UIStackView()
+    private let personalContent = UIStackView()
+    private let renderingContent = UIStackView()
+
+    private weak var redFilterCard: AstroActionCard?
+    private var themeRenderActions: [() -> Void] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.03, alpha: 0.97)
         setupScrollView()
-        rebuildContent()
+        setupContent()
+        bindMapActions()
+        bindVisibleObjects()
+        bindSwitchRows()
+        applyTheme()
+        configureNavigationBar()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.sheetPresentationController?.delegate = self
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true else {
+            return
+        }
+        applyTheme()
+        themeRenderActions.forEach { $0() }
+        applyRedFilter(enabled: config.showRedFilter)
+    }
+
+    func applyRedFilter(enabled: Bool) {
+        config.showRedFilter = enabled
+        if let redFilterCard {
+            renderToggleCard(card: redFilterCard,
+                             checked: enabled,
+                             drawableEnabled: redFilterIcon(selected: true),
+                             drawableDisabled: redFilterIcon(selected: false),
+                             titleResEnabled: "red_filter")
+        }
+    }
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        onDismissed?()
+    }
+
+    private func configureNavigationBar() {
+        title = nil
+        navigationItem.title = nil
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = nil
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     private func setupScrollView() {
+        view.addSubview(scrollView)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.alwaysBounceVertical = true
         scrollView.showsVerticalScrollIndicator = true
-        view.addSubview(scrollView)
+        scrollView.addSubview(contentStack)
 
         contentStack.axis = .vertical
-        contentStack.spacing = 12
+        contentStack.spacing = Layout.contentPadding
         contentStack.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -45,340 +116,595 @@ final class AstroConfigureViewBottomSheet: UIViewController {
             contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             contentStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -16),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
             contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
         ])
     }
 
-    private func rebuildContent() {
-        contentStack.arrangedSubviews.forEach { view in
-            contentStack.removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
+    private func setupContent() {
+        setupTopCard()
+        contentStack.addArrangedSubview(topCard)
+        contentStack.addArrangedSubview(sectionCard(title: localizedString("personal_category_name"),
+                                                    contentStack: personalContent))
+        contentStack.addArrangedSubview(sectionCard(title: localizedString("astro_rendering"),
+                                                    contentStack: renderingContent))
+    }
+
+    private func setupTopCard() {
+        topCard.translatesAutoresizingMaskIntoConstraints = false
+        topCard.layer.cornerRadius = Layout.sectionCornerRadius
+        topCard.layer.masksToBounds = true
+        topCard.addSubview(topCardStack)
+
+        topCardStack.axis = .vertical
+        topCardStack.spacing = 0
+        topCardStack.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            topCardStack.leadingAnchor.constraint(equalTo: topCard.leadingAnchor),
+            topCardStack.trailingAnchor.constraint(equalTo: topCard.trailingAnchor),
+            topCardStack.topAnchor.constraint(equalTo: topCard.topAnchor),
+            topCardStack.bottomAnchor.constraint(equalTo: topCard.bottomAnchor)
+        ])
 
         addHeader()
-        addTopActionCards()
-        addVisibleObjectsSection()
-        addPersonalSection()
-        addRenderingSection()
+        setupTopButtonsRow()
+        topCardStack.addArrangedSubview(topButtonsRow)
+        topCardStack.addArrangedSubview(divider())
+        addVisibleObjectsTitle()
+        setupVisibleObjectsGrid()
+        topCardStack.addArrangedSubview(visibleObjectsGridContent)
     }
 
     private func addHeader() {
         let header = UIStackView()
         header.axis = .vertical
-        header.spacing = 4
-        header.layoutMargins = UIEdgeInsets(top: 6, left: 16, bottom: 0, right: 8)
-        header.isLayoutMarginsRelativeArrangement = true
+        header.spacing = Layout.contentPaddingMinimal
 
-        let handle = UIView()
-        handle.backgroundColor = UIColor(white: 0.65, alpha: 0.75)
-        handle.layer.cornerRadius = 1
-        handle.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            handle.widthAnchor.constraint(equalToConstant: 28),
-            handle.heightAnchor.constraint(equalToConstant: 2)
-        ])
-
-        let handleRow = UIStackView()
-        handleRow.alignment = .center
-        handleRow.addArrangedSubview(UIView())
-        handleRow.addArrangedSubview(handle)
-        handleRow.addArrangedSubview(UIView())
-        header.addArrangedSubview(handleRow)
-
-        let titleRow = UIStackView()
-        titleRow.axis = .horizontal
-        titleRow.alignment = .center
-        titleRow.spacing = 12
-
+        let titleRow = UIView()
         let title = UILabel()
         title.text = localizedString("astro_configure_view")
-        title.textColor = .white
+        title.textColor = .textColorPrimary
         title.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        titleRow.addArrangedSubview(title)
-        titleRow.addArrangedSubview(UIView())
+        title.adjustsFontForContentSizeCategory = false
+        title.translatesAutoresizingMaskIntoConstraints = false
 
-        let closeButton = UIButton(type: .system)
-        closeButton.setImage(AstroIcon.template("ic_action_close_rounded"), for: .normal)
-        closeButton.tintColor = UIColor(white: 0.78, alpha: 1)
-        closeButton.backgroundColor = UIColor(white: 0.12, alpha: 1)
-        closeButton.layer.cornerRadius = 16
-        closeButton.addAction(UIAction { [weak self] _ in
-            self?.onClose?()
-        }, for: .touchUpInside)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        let closeButton = makeCloseButton()
+        titleRow.addSubview(title)
+        titleRow.addSubview(closeButton)
+
         NSLayoutConstraint.activate([
-            closeButton.widthAnchor.constraint(equalToConstant: 32),
-            closeButton.heightAnchor.constraint(equalToConstant: 32)
+            titleRow.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.headerTitleRowHeight),
+            title.leadingAnchor.constraint(equalTo: titleRow.leadingAnchor, constant: Layout.contentPadding),
+            title.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -Layout.contentPaddingSmall),
+            title.centerYAnchor.constraint(equalTo: titleRow.centerYAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: titleRow.trailingAnchor, constant: -4),
+            closeButton.centerYAnchor.constraint(equalTo: titleRow.centerYAnchor),
+            closeButton.widthAnchor.constraint(equalToConstant: Layout.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: Layout.closeButtonSize)
         ])
-        titleRow.addArrangedSubview(closeButton)
+
         header.addArrangedSubview(titleRow)
-
-        contentStack.addArrangedSubview(header)
+        topCardStack.addArrangedSubview(header)
     }
 
-    private func addTopActionCards() {
-        let row = horizontalCardRow()
-        row.addArrangedSubview(actionCard(title: config.is2DMode ? localizedString("map_2d") : localizedString("map_3d"),
-                                          iconName: config.is2DMode ? "ic_action_celestial_path" : "ic_action_globe_view",
-                                          selected: !config.is2DMode) { [weak self] in
-            guard let self else {
-                return
-            }
-            config.is2DMode.toggle()
-            onConfigChanged?(config)
-            rebuildContent()
-        })
-        row.addArrangedSubview(actionCard(title: localizedString("shared_string_map"),
-                                          iconName: commonConfig.showRegularMap ? "ic_map" : "ic_action_map_outlined",
-                                          selected: commonConfig.showRegularMap) { [weak self] in
-            guard let self else {
-                return
-            }
-            commonConfig.showRegularMap.toggle()
-            onCommonConfigChanged?(commonConfig)
-            rebuildContent()
-        })
-        row.addArrangedSubview(actionCard(title: localizedString("red_filter"),
-                                          icon: redFilterIcon(selected: config.showRedFilter),
-                                          selected: config.showRedFilter) { [weak self] in
-            guard let self else {
-                return
-            }
-            config.showRedFilter.toggle()
-            onConfigChanged?(config)
-            rebuildContent()
-        })
-        contentStack.addArrangedSubview(row)
-    }
-
-    private func addVisibleObjectsSection() {
-        let section = sectionCard(title: localizedString("astro_visible_objects"))
-        section.addArrangedSubview(gridRow([
-            actionCard(title: localizedString("astro_solar_system"),
-                       iconName: "ic_action_planet_outlined",
-                       selected: config.showSun && config.showMoon && config.showPlanets) { [weak self] in
-                self?.toggleSolarSystem()
-            },
-            actionCard(title: localizedString("astro_constellations"),
-                       iconName: "ic_action_constellations",
-                       selected: config.showConstellations) { [weak self] in
-                self?.mutateConfig { $0.showConstellations.toggle() }
-            },
-            actionCard(title: localizedString("astro_stars"),
-                       iconName: "ic_action_stars",
-                       selected: config.showStars) { [weak self] in
-                self?.mutateConfig { $0.showStars.toggle() }
-            }
-        ]))
-        section.addArrangedSubview(gridRow([
-            actionCard(title: localizedString("astro_nebulas"),
-                       iconName: "ic_action_nebulas",
-                       selected: config.showNebulae) { [weak self] in
-                self?.mutateConfig { $0.showNebulae.toggle() }
-            },
-            actionCard(title: localizedString("astro_star_clusters"),
-                       iconName: "ic_action_star_clusters",
-                       selected: config.showOpenClusters && config.showGlobularClusters) { [weak self] in
-                self?.toggleStarClusters()
-            },
-            actionCard(title: localizedString("astro_deep_sky"),
-                       iconName: "ic_action_galaxy",
-                       selected: config.showGalaxies && config.showBlackHoles && config.showGalaxyClusters) { [weak self] in
-                self?.toggleDeepSky()
-            }
-        ]))
-        contentStack.addArrangedSubview(section)
-    }
-
-    private func addPersonalSection() {
-        let section = sectionCard(title: localizedString("personal_category_name"))
-        section.addArrangedSubview(switchRow(title: localizedString("astro_directions"),
-                                             iconName: "ic_action_target_direction_on",
-                                             isOn: config.showDirections) { [weak self] checked in
-            self?.mutateConfig { $0.showDirections = checked }
-        })
-        section.addArrangedSubview(switchRow(title: localizedString("favorites_item"),
-                                             iconName: "ic_action_bookmark_filled",
-                                             isOn: config.showFavorites) { [weak self] checked in
-            self?.mutateConfig { $0.showFavorites = checked }
-        })
-        section.addArrangedSubview(switchRow(title: localizedString("astro_daily_path"),
-                                             iconName: "ic_action_target_path_on",
-                                             isOn: config.showCelestialPaths) { [weak self] checked in
-            self?.mutateConfig { $0.showCelestialPaths = checked }
-        })
-        contentStack.addArrangedSubview(section)
-    }
-
-    private func addRenderingSection() {
-        let section = sectionCard(title: localizedString("astro_rendering"))
-        section.addArrangedSubview(switchRow(title: localizedString("azimuthal_grid"),
-                                             iconName: "ic_action_azimuthal_grid",
-                                             isOn: config.showAzimuthalGrid) { [weak self] checked in
-            self?.mutateConfig { $0.showAzimuthalGrid = checked }
-        })
-        section.addArrangedSubview(switchRow(title: localizedString("meridian_line"),
-                                             iconName: "ic_action_meridian_line",
-                                             isOn: config.showMeridianLine) { [weak self] checked in
-            self?.mutateConfig { $0.showMeridianLine = checked }
-        })
-        section.addArrangedSubview(switchRow(title: localizedString("equatorial_grid"),
-                                             iconName: "ic_action_equatorial_grid",
-                                             isOn: config.showEquatorialGrid) { [weak self] checked in
-            self?.mutateConfig { $0.showEquatorialGrid = checked }
-        })
-        section.addArrangedSubview(switchRow(title: localizedString("ecliptic_line"),
-                                             iconName: "ic_action_eliptical_line",
-                                             isOn: config.showEclipticLine) { [weak self] checked in
-            self?.mutateConfig { $0.showEclipticLine = checked }
-        })
-        section.addArrangedSubview(switchRow(title: localizedString("equator_line"),
-                                             iconName: "ic_action_galaxy_equator",
-                                             isOn: config.showEquatorLine) { [weak self] checked in
-            self?.mutateConfig { $0.showEquatorLine = checked }
-        })
-        section.addArrangedSubview(switchRow(title: localizedString("galactic_line"),
-                                             iconName: "ic_action_galaxy_line",
-                                             isOn: config.showGalacticLine) { [weak self] checked in
-            self?.mutateConfig { $0.showGalacticLine = checked }
-        })
-        contentStack.addArrangedSubview(section)
-    }
-
-    private func horizontalCardRow() -> UIStackView {
-        let row = UIStackView()
-        row.axis = .horizontal
-        row.distribution = .fillEqually
-        row.spacing = 12
-        row.layoutMargins = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-        row.isLayoutMarginsRelativeArrangement = true
-        return row
-    }
-
-    private func gridRow(_ cards: [UIView]) -> UIStackView {
-        let row = UIStackView()
-        row.axis = .horizontal
-        row.distribution = .fillEqually
-        row.spacing = 12
-        for card in cards {
-            row.addArrangedSubview(card)
-        }
-        return row
-    }
-
-    private func sectionCard(title: String) -> UIStackView {
-        let wrapper = UIStackView()
-        wrapper.axis = .vertical
-        wrapper.spacing = 10
-        wrapper.layoutMargins = UIEdgeInsets(top: 14, left: 16, bottom: 16, right: 16)
-        wrapper.isLayoutMarginsRelativeArrangement = true
-        wrapper.backgroundColor = UIColor(white: 0.07, alpha: 1)
-        wrapper.layer.cornerRadius = 12
-
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.textColor = .white
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        wrapper.addArrangedSubview(titleLabel)
-        return wrapper
-    }
-
-    private func actionCard(title: String, iconName: String, selected: Bool, action: @escaping () -> Void) -> UIControl {
-        actionCard(title: title, icon: AstroIcon.template(iconName), selected: selected, action: action)
-    }
-
-    private func actionCard(title: String, icon: UIImage?, selected: Bool, action: @escaping () -> Void) -> UIControl {
+    private func makeCloseButton() -> UIControl {
         let control = UIControl()
         control.translatesAutoresizingMaskIntoConstraints = false
-        control.backgroundColor = selected ? .systemBlue : UIColor(white: 0.12, alpha: 1)
-        control.layer.cornerRadius = 10
-        control.layer.borderWidth = selected ? 0 : 1
-        control.layer.borderColor = UIColor(white: 0.24, alpha: 1).cgColor
-        control.addAction(UIAction { _ in action() }, for: .touchUpInside)
+        control.addAction(UIAction { [weak self] _ in
+            self?.onClose?()
+        }, for: .touchUpInside)
 
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.spacing = 6
-        stack.isUserInteractionEnabled = false
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        control.addSubview(stack)
+        let circle = UIView()
+        circle.backgroundColor = .viewBg
+        circle.layer.cornerRadius = Layout.closeCircleSize / 2
+        circle.isUserInteractionEnabled = false
+        circle.translatesAutoresizingMaskIntoConstraints = false
 
-        let iconView = UIImageView(image: icon)
-        iconView.translatesAutoresizingMaskIntoConstraints = false
-        iconView.tintColor = selected ? .white : .systemBlue
-        iconView.contentMode = .scaleAspectFit
-        NSLayoutConstraint.activate([
-            iconView.widthAnchor.constraint(equalToConstant: 22),
-            iconView.heightAnchor.constraint(equalToConstant: 22)
-        ])
-        stack.addArrangedSubview(iconView)
+        let imageView = UIImageView(image: AstroIcon.template("ic_action_close_rounded"))
+        imageView.tintColor = .iconColorDefault
+        imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
 
-        let label = UILabel()
-        label.text = title
-        label.textColor = selected ? .white : UIColor(white: 0.88, alpha: 1)
-        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        stack.addArrangedSubview(label)
+        control.addSubview(circle)
+        control.addSubview(imageView)
 
         NSLayoutConstraint.activate([
-            control.heightAnchor.constraint(equalToConstant: 66),
-            stack.leadingAnchor.constraint(equalTo: control.leadingAnchor, constant: 6),
-            stack.trailingAnchor.constraint(equalTo: control.trailingAnchor, constant: -6),
-            stack.centerYAnchor.constraint(equalTo: control.centerYAnchor)
+            circle.centerXAnchor.constraint(equalTo: control.centerXAnchor),
+            circle.centerYAnchor.constraint(equalTo: control.centerYAnchor),
+            circle.widthAnchor.constraint(equalToConstant: Layout.closeCircleSize),
+            circle.heightAnchor.constraint(equalToConstant: Layout.closeCircleSize),
+            imageView.centerXAnchor.constraint(equalTo: control.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: control.centerYAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: Layout.closeIconSize),
+            imageView.heightAnchor.constraint(equalToConstant: Layout.closeIconSize)
         ])
+
         return control
     }
 
-    private func switchRow(title: String, iconName: String, isOn: Bool, action: @escaping (Bool) -> Void) -> UIView {
-        let row = UIControl()
-        row.translatesAutoresizingMaskIntoConstraints = false
-        row.backgroundColor = .clear
-        row.addAction(UIAction { _ in
-            action(!isOn)
+    private func setupTopButtonsRow() {
+        topButtonsRow.axis = .horizontal
+        topButtonsRow.distribution = .fillEqually
+        topButtonsRow.spacing = Layout.contentPaddingSmall
+        topButtonsRow.layoutMargins = UIEdgeInsets(top: Layout.contentPaddingMedium,
+                                                   left: Layout.contentPadding,
+                                                   bottom: Layout.contentPadding,
+                                                   right: Layout.contentPadding)
+        topButtonsRow.isLayoutMarginsRelativeArrangement = true
+    }
+
+    private func addVisibleObjectsTitle() {
+        let container = UIView()
+        let title = UILabel()
+        title.text = localizedString("astro_visible_objects")
+        title.textColor = .textColorPrimary
+        title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(title)
+
+        NSLayoutConstraint.activate([
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
+            title.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: Layout.contentPadding),
+            title.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -Layout.contentPadding),
+            title.topAnchor.constraint(equalTo: container.topAnchor, constant: Layout.contentPaddingSmall),
+            title.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -Layout.contentPaddingSmall)
+        ])
+
+        topCardStack.addArrangedSubview(container)
+    }
+
+    private func setupVisibleObjectsGrid() {
+        visibleObjectsGridContent.axis = .vertical
+        visibleObjectsGridContent.spacing = Layout.contentPaddingSmall
+        visibleObjectsGridContent.layoutMargins = UIEdgeInsets(top: 0,
+                                                               left: Layout.contentPadding,
+                                                               bottom: Layout.contentPadding,
+                                                               right: Layout.contentPadding)
+        visibleObjectsGridContent.isLayoutMarginsRelativeArrangement = true
+    }
+
+    private func bindMapActions() {
+        bindToggleMapActionCard(
+            card: addActionCard(to: topButtonsRow),
+            drawableEnabled: AstroIcon.template("ic_action_globe_view"),
+            drawableDisabled: AstroIcon.template("ic_action_celestial_path"),
+            titleResEnabled: "map_3d",
+            titleResDisabled: "map_2d",
+            isChecked: { [weak self] in
+                guard let self else {
+                    return false
+                }
+                return !config.is2DMode
+            },
+            toggle: { [weak self] enabled3d in
+                guard let self else {
+                    return
+                }
+                config.is2DMode = !enabled3d
+                onConfigChanged?(config)
+            }
+        )
+
+        bindToggleMapActionCard(
+            card: addActionCard(to: topButtonsRow),
+            drawableEnabled: AstroIcon.template("ic_map"),
+            drawableDisabled: AstroIcon.template("ic_action_map_outlined"),
+            titleResEnabled: "shared_string_map",
+            isChecked: { [weak self] in
+                self?.commonConfig.showRegularMap ?? false
+            },
+            toggle: { [weak self] regularMap in
+                guard let self else {
+                    return
+                }
+                commonConfig.showRegularMap = regularMap
+                onCommonConfigChanged?(commonConfig)
+            }
+        )
+
+        let redCard = addActionCard(to: topButtonsRow)
+        redFilterCard = redCard
+        bindToggleMapActionCard(
+            card: redCard,
+            drawableEnabled: redFilterIcon(selected: true),
+            drawableDisabled: redFilterIcon(selected: false),
+            titleResEnabled: "red_filter",
+            isChecked: { [weak self] in
+                self?.config.showRedFilter ?? false
+            },
+            toggle: { [weak self] checked in
+                guard let self else {
+                    return
+                }
+                config.showRedFilter = checked
+                if let onRedFilterChanged {
+                    onRedFilterChanged(checked)
+                } else {
+                    onConfigChanged?(config)
+                }
+            }
+        )
+    }
+
+    private func bindVisibleObjects() {
+        visibleObjectsGridContent.addArrangedSubview(gridRow([
+            bindToggleAstroCard(
+                card: AstroActionCard(),
+                iconName: "ic_action_planet_outlined",
+                titleRes: "astro_solar_system",
+                isChecked: { c in c.showSun && c.showMoon && c.showPlanets },
+                toggle: { c in
+                    let allOn = c.showSun && c.showMoon && c.showPlanets
+                    let newValue = !allOn
+                    var updated = c
+                    updated.showSun = newValue
+                    updated.showMoon = newValue
+                    updated.showPlanets = newValue
+                    return updated
+                }
+            ),
+            bindToggleAstroCard(
+                card: AstroActionCard(),
+                iconName: "ic_action_constellations",
+                titleRes: "astro_constellations",
+                isChecked: { $0.showConstellations },
+                toggle: { c in
+                    var updated = c
+                    updated.showConstellations.toggle()
+                    return updated
+                }
+            ),
+            bindToggleAstroCard(
+                card: AstroActionCard(),
+                iconName: "ic_action_stars",
+                titleRes: "astro_stars",
+                isChecked: { $0.showStars },
+                toggle: { c in
+                    var updated = c
+                    updated.showStars.toggle()
+                    return updated
+                }
+            )
+        ]))
+
+        visibleObjectsGridContent.addArrangedSubview(gridRow([
+            bindToggleAstroCard(
+                card: AstroActionCard(),
+                iconName: "ic_action_nebulas",
+                titleRes: "astro_nebulas",
+                isChecked: { $0.showNebulae },
+                toggle: { c in
+                    var updated = c
+                    updated.showNebulae.toggle()
+                    return updated
+                }
+            ),
+            bindToggleAstroCard(
+                card: AstroActionCard(),
+                iconName: "ic_action_star_clusters",
+                titleRes: "astro_star_clusters",
+                isChecked: { c in c.showOpenClusters && c.showGlobularClusters },
+                toggle: { c in
+                    let allOn = c.showOpenClusters && c.showGlobularClusters
+                    let newValue = !allOn
+                    var updated = c
+                    updated.showOpenClusters = newValue
+                    updated.showGlobularClusters = newValue
+                    return updated
+                }
+            ),
+            bindToggleAstroCard(
+                card: AstroActionCard(),
+                iconName: "ic_action_galaxy",
+                titleRes: "astro_deep_sky",
+                isChecked: { c in c.showGalaxies && c.showBlackHoles && c.showGalaxyClusters },
+                toggle: { c in
+                    let allOn = c.showGalaxies && c.showBlackHoles && c.showGalaxyClusters
+                    let newValue = !allOn
+                    var updated = c
+                    updated.showGalaxies = newValue
+                    updated.showBlackHoles = newValue
+                    updated.showGalaxyClusters = newValue
+                    return updated
+                }
+            )
+        ]))
+    }
+
+    private func bindSwitchRows() {
+        let current = config
+
+        addSwitchRow(
+            parent: personalContent,
+            iconName: "ic_action_target_direction_on",
+            titleRes: "astro_directions",
+            checked: current.showDirections,
+            smallItem: false
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showDirections = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: personalContent,
+            iconName: "ic_action_bookmark_filled",
+            titleRes: "favorites_item",
+            checked: current.showFavorites,
+            smallItem: false
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showFavorites = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: personalContent,
+            iconName: "ic_action_target_path_on",
+            titleRes: "astro_daily_path",
+            checked: current.showCelestialPaths,
+            showDivider: false,
+            smallItem: false
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showCelestialPaths = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: renderingContent,
+            iconName: "ic_action_azimuthal_grid",
+            titleRes: "azimuthal_grid",
+            checked: current.showAzimuthalGrid
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showAzimuthalGrid = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: renderingContent,
+            iconName: "ic_action_meridian_line",
+            titleRes: "meridian_line",
+            checked: current.showMeridianLine
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showMeridianLine = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: renderingContent,
+            iconName: "ic_action_equatorial_grid",
+            titleRes: "equatorial_grid",
+            checked: current.showEquatorialGrid
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showEquatorialGrid = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: renderingContent,
+            iconName: "ic_action_eliptical_line",
+            titleRes: "ecliptic_line",
+            checked: current.showEclipticLine
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showEclipticLine = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: renderingContent,
+            iconName: "ic_action_galaxy_equator",
+            titleRes: "equator_line",
+            checked: current.showEquatorLine,
+            showDivider: false
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showEquatorLine = checked
+            applyConfigChange(updated)
+        }
+
+        addSwitchRow(
+            parent: renderingContent,
+            iconName: "ic_action_galaxy_line",
+            titleRes: "galactic_line",
+            checked: current.showGalacticLine,
+            showDivider: false
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showGalacticLine = checked
+            applyConfigChange(updated)
+        }
+    }
+
+    private func renderToggleCard(
+        card: AstroActionCard,
+        checked: Bool,
+        drawableEnabled: UIImage?,
+        drawableDisabled: UIImage? = nil,
+        titleResEnabled: String,
+        titleResDisabled: String? = nil
+    ) {
+        let icon = checked ? drawableEnabled : (drawableDisabled ?? drawableEnabled)
+        let titleRes = checked ? titleResEnabled : (titleResDisabled ?? titleResEnabled)
+        card.render(checked: checked, icon: icon, title: localizedString(titleRes))
+    }
+
+    private func bindToggleMapActionCard(
+        card: AstroActionCard,
+        drawableEnabled: UIImage?,
+        drawableDisabled: UIImage? = nil,
+        titleResEnabled: String,
+        titleResDisabled: String? = nil,
+        isChecked: @escaping () -> Bool,
+        toggle: @escaping (Bool) -> Void
+    ) {
+        let render: () -> Void = { [weak self, weak card] in
+            guard let self, let card else {
+                return
+            }
+            renderToggleCard(card: card,
+                             checked: isChecked(),
+                             drawableEnabled: drawableEnabled,
+                             drawableDisabled: drawableDisabled,
+                             titleResEnabled: titleResEnabled,
+                             titleResDisabled: titleResDisabled)
+        }
+
+        render()
+        themeRenderActions.append(render)
+
+        card.addAction(UIAction { _ in
+            let newValue = !isChecked()
+            toggle(newValue)
+            render()
+        }, for: .touchUpInside)
+    }
+
+    private func bindToggleAstroCard(
+        card: AstroActionCard,
+        iconName: String,
+        titleRes: String,
+        isChecked: @escaping (AstronomyPluginSettings.StarMapConfig) -> Bool,
+        toggle: @escaping (AstronomyPluginSettings.StarMapConfig) -> AstronomyPluginSettings.StarMapConfig
+    ) -> AstroActionCard {
+        let render: () -> Void = { [weak self, weak card] in
+            guard let self, let card else {
+                return
+            }
+            renderToggleCard(card: card,
+                             checked: isChecked(config),
+                             drawableEnabled: AstroIcon.template(iconName),
+                             titleResEnabled: titleRes)
+        }
+
+        render()
+        themeRenderActions.append(render)
+
+        card.addAction(UIAction { [weak self, weak card] _ in
+            guard let self else {
+                return
+            }
+            let newConfig = toggle(config)
+            applyConfigChange(newConfig)
+            if let card {
+                renderToggleCard(card: card,
+                                 checked: isChecked(newConfig),
+                                 drawableEnabled: AstroIcon.template(iconName),
+                                 titleResEnabled: titleRes)
+            }
         }, for: .touchUpInside)
 
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.spacing = 12
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        row.addSubview(stack)
+        return card
+    }
 
-        let icon = UIImageView(image: AstroIcon.template(iconName))
-        icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.tintColor = isOn ? .systemBlue : UIColor(white: 0.55, alpha: 1)
-        icon.contentMode = .scaleAspectFit
-        NSLayoutConstraint.activate([
-            icon.widthAnchor.constraint(equalToConstant: 24),
-            icon.heightAnchor.constraint(equalToConstant: 24)
-        ])
-        stack.addArrangedSubview(icon)
+    private func addSwitchRow(
+        parent: UIStackView,
+        iconName: String,
+        titleRes: String,
+        checked: Bool,
+        showDivider: Bool = true,
+        smallItem: Bool = true,
+        onToggle: @escaping (Bool) -> Void
+    ) {
+        let row = AstroSwitchRow(iconName: iconName,
+                                 title: localizedString(titleRes),
+                                 checked: checked,
+                                 showDivider: showDivider,
+                                 smallItem: smallItem,
+                                 onToggle: onToggle)
+        parent.addArrangedSubview(row)
+    }
 
-        let label = UILabel()
-        label.text = title
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        stack.addArrangedSubview(label)
-        stack.addArrangedSubview(UIView())
+    private func setupSwitchItemIcon(_ imageView: UIImageView, iconName: String, isChecked: Bool) {
+        imageView.image = AstroIcon.template(iconName)
+        imageView.tintColor = isChecked ? .iconColorActive : .iconColorDefault
+    }
 
-        let toggle = UISwitch()
-        toggle.isOn = isOn
-        toggle.addAction(UIAction { _ in
-            action(toggle.isOn)
-        }, for: .valueChanged)
-        stack.addArrangedSubview(toggle)
+    private func addActionCard(to row: UIStackView) -> AstroActionCard {
+        let card = AstroActionCard()
+        row.addArrangedSubview(card)
+        return card
+    }
 
-        NSLayoutConstraint.activate([
-            row.heightAnchor.constraint(equalToConstant: 48),
-            stack.leadingAnchor.constraint(equalTo: row.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: row.trailingAnchor),
-            stack.topAnchor.constraint(equalTo: row.topAnchor),
-            stack.bottomAnchor.constraint(equalTo: row.bottomAnchor)
-        ])
+    private func gridRow(_ cards: [UIView]) -> UIStackView {
+        let row = UIStackView(arrangedSubviews: cards)
+        row.axis = .horizontal
+        row.distribution = .fillEqually
+        row.spacing = Layout.contentPaddingSmall
         return row
+    }
+
+    private func sectionCard(title: String, contentStack sectionContentStack: UIStackView) -> UIStackView {
+        let wrapper = UIStackView()
+        wrapper.axis = .vertical
+        wrapper.spacing = 0
+        wrapper.backgroundColor = .groupBg
+        wrapper.layer.cornerRadius = Layout.sectionCornerRadius
+        wrapper.layer.masksToBounds = true
+
+        let titleContainer = UIView()
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.textColor = .textColorPrimary
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleContainer.addSubview(titleLabel)
+
+        NSLayoutConstraint.activate([
+            titleContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
+            titleLabel.leadingAnchor.constraint(equalTo: titleContainer.leadingAnchor, constant: Layout.contentPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: titleContainer.trailingAnchor, constant: -Layout.contentPadding),
+            titleLabel.topAnchor.constraint(equalTo: titleContainer.topAnchor, constant: Layout.contentPaddingSmall),
+            titleLabel.bottomAnchor.constraint(equalTo: titleContainer.bottomAnchor, constant: -Layout.contentPaddingSmall)
+        ])
+
+        sectionContentStack.axis = .vertical
+        sectionContentStack.spacing = 0
+
+        wrapper.addArrangedSubview(titleContainer)
+        wrapper.addArrangedSubview(sectionContentStack)
+        return wrapper
+    }
+
+    private func divider() -> UIView {
+        let divider = UIView()
+        divider.backgroundColor = .customSeparator
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        divider.heightAnchor.constraint(equalToConstant: AstroConfigureTheme.separatorHeight).isActive = true
+        return divider
     }
 
     private func redFilterIcon(selected: Bool) -> UIImage? {
@@ -386,40 +712,237 @@ final class AstroConfigureViewBottomSheet: UIViewController {
             return AstroIcon.template("ic_action_red_filter_off")
         }
         return AstroIcon.layeredTemplate(baseName: "ic_action_red_filter_base_on",
-                                         baseColor: .white,
+                                         baseColor: .iconColorActive,
                                          overlayName: "ic_action_red_filter_overlay_on",
                                          overlayColor: .systemRed)
     }
 
-    private func mutateConfig(_ mutation: (inout AstronomyPluginSettings.StarMapConfig) -> Void) {
-        mutation(&config)
-        onConfigChanged?(config)
-        rebuildContent()
+    private func applyConfigChange(_ newConfig: AstronomyPluginSettings.StarMapConfig) {
+        config = newConfig
+        onConfigChanged?(newConfig)
     }
 
-    private func toggleSolarSystem() {
-        let newValue = !(config.showSun && config.showMoon && config.showPlanets)
-        mutateConfig {
-            $0.showSun = newValue
-            $0.showMoon = newValue
-            $0.showPlanets = newValue
+    private func applyTheme() {
+        view.backgroundColor = .viewBg
+        scrollView.backgroundColor = .viewBg
+        topCard.backgroundColor = .groupBg
+    }
+}
+
+private enum AstroConfigureTheme {
+    static var separatorHeight: CGFloat {
+        1 / UIScreen.main.scale
+    }
+
+    static var actionTileBackground: UIColor {
+        UIColor(named: "groupBgColorSecondary") ?? .buttonBgColorSecondary
+    }
+
+    static var actionTileSelectedBackground: UIColor {
+        UIColor(named: "cellBgColorSelected") ?? .buttonBgColorTertiary
+    }
+}
+
+private final class AstroActionCard: UIControl {
+    private let iconView = UIImageView()
+    private let titleLabel = UILabel()
+    private var checked = false
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+        applyStyle()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override var isHighlighted: Bool {
+        didSet {
+            alpha = isHighlighted ? 0.65 : 1
         }
     }
 
-    private func toggleStarClusters() {
-        let newValue = !(config.showOpenClusters && config.showGlobularClusters)
-        mutateConfig {
-            $0.showOpenClusters = newValue
-            $0.showGlobularClusters = newValue
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            applyStyle()
         }
     }
 
-    private func toggleDeepSky() {
-        let newValue = !(config.showGalaxies && config.showBlackHoles && config.showGalaxyClusters)
-        mutateConfig {
-            $0.showGalaxies = newValue
-            $0.showBlackHoles = newValue
-            $0.showGalaxyClusters = newValue
+    func render(checked: Bool, icon: UIImage?, title: String) {
+        self.checked = checked
+        iconView.image = icon
+        titleLabel.text = title
+        applyStyle()
+    }
+
+    private func setupView() {
+        translatesAutoresizingMaskIntoConstraints = false
+        layer.cornerRadius = 6
+        layer.masksToBounds = true
+
+        iconView.contentMode = .scaleAspectFit
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.isUserInteractionEnabled = false
+
+        titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 2
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.8
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.isUserInteractionEnabled = false
+
+        addSubview(iconView)
+        addSubview(titleLabel)
+
+        NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: 66),
+            iconView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            iconView.widthAnchor.constraint(equalToConstant: 24),
+            iconView.heightAnchor.constraint(equalToConstant: 24),
+            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 4),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -4),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+        ])
+    }
+
+    private func applyStyle() {
+        backgroundColor = checked ? AstroConfigureTheme.actionTileSelectedBackground : AstroConfigureTheme.actionTileBackground
+        layer.borderWidth = 2
+        layer.borderColor = checked ? UIColor.iconColorActive.cgColor : UIColor.clear.cgColor
+        iconView.tintColor = .iconColorActive
+        titleLabel.textColor = .iconColorActive
+    }
+}
+
+private final class AstroSwitchRow: UIControl {
+    private let iconName: String
+    private let iconView = UIImageView()
+    private let titleLabel = UILabel()
+    private let switcher = UISwitch()
+    private let dividerView = UIView()
+    private let onToggle: (Bool) -> Void
+    private var checked: Bool
+
+    init(iconName: String,
+         title: String,
+         checked: Bool,
+         showDivider: Bool,
+         smallItem: Bool,
+         onToggle: @escaping (Bool) -> Void) {
+        self.iconName = iconName
+        self.checked = checked
+        self.onToggle = onToggle
+        super.init(frame: .zero)
+        setupView(title: title, checked: checked, showDivider: showDivider, smallItem: smallItem)
+        applyStyle()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override var isHighlighted: Bool {
+        didSet {
+            alpha = isHighlighted ? 0.65 : 1
         }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
+            applyStyle()
+        }
+    }
+
+    private func setupView(title: String, checked: Bool, showDivider: Bool, smallItem: Bool) {
+        translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .clear
+        addAction(UIAction { [weak self] _ in
+            self?.toggleFromRow()
+        }, for: .touchUpInside)
+
+        let contentView = UIView()
+        contentView.isUserInteractionEnabled = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(contentView)
+
+        iconView.image = AstroIcon.template(iconName)
+        iconView.contentMode = .scaleAspectFit
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+
+        titleLabel.text = title
+        titleLabel.textColor = .textColorPrimary
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.8
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        switcher.isOn = checked
+        switcher.translatesAutoresizingMaskIntoConstraints = false
+        switcher.addAction(UIAction { [weak self] _ in
+            self?.switchChanged()
+        }, for: .valueChanged)
+
+        dividerView.backgroundColor = .customSeparator
+        dividerView.isHidden = !showDivider
+        dividerView.translatesAutoresizingMaskIntoConstraints = false
+
+        contentView.addSubview(iconView)
+        contentView.addSubview(titleLabel)
+        addSubview(switcher)
+        addSubview(dividerView)
+
+        let dividerHeight = showDivider ? AstroConfigureTheme.separatorHeight : 0
+
+        NSLayoutConstraint.activate([
+            heightAnchor.constraint(equalToConstant: smallItem ? 48 : 56),
+            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: dividerView.topAnchor),
+            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 72),
+            dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            dividerView.heightAnchor.constraint(equalToConstant: dividerHeight),
+            iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            iconView.widthAnchor.constraint(equalToConstant: 24),
+            iconView.heightAnchor.constraint(equalToConstant: 24),
+            switcher.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            switcher.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 32),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: switcher.leadingAnchor, constant: -32),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+    }
+
+    private func toggleFromRow() {
+        setChecked(!checked, sendAction: true)
+    }
+
+    private func switchChanged() {
+        setChecked(switcher.isOn, sendAction: true)
+    }
+
+    private func setChecked(_ checked: Bool, sendAction: Bool) {
+        self.checked = checked
+        switcher.setOn(checked, animated: true)
+        applyStyle()
+        if sendAction {
+            onToggle(checked)
+        }
+    }
+
+    private func applyStyle() {
+        iconView.image = AstroIcon.template(iconName)
+        iconView.tintColor = checked ? .iconColorActive : .iconColorDefault
+        titleLabel.textColor = .textColorPrimary
+        dividerView.backgroundColor = .customSeparator
     }
 }

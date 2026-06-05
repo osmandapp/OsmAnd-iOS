@@ -96,8 +96,11 @@ final class MultipleValuesViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         guard let value = item.obj(forKey: linkKey) as? String else { return }
-        
-        configuration.onSelect(value)
+
+        let onSelect = configuration.onSelect
+        dismiss(animated: true) {
+            onSelect(value)
+        }
     }
     
     override func generateData() {

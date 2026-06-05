@@ -96,7 +96,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var observers: [OAAutoObserverProxy] = []
     
     private lazy var importHelper: OAGPXImportUIHelper = OAGPXImportUIHelper(hostViewController: self)
-    
+
     private lazy var filterButton: UIButton = {
         var config = UIButton.Configuration.plain()
         config.imagePadding = 16
@@ -136,7 +136,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         super.init(coder: coder)
     }
     
-    init(isRootFolder: Bool) {
+    init(isRootFolder: Bool, isSmartFolder: Bool = false) {
         app = OsmAndApp.swiftInstance()
         settings = OAAppSettings.sharedManager()
         savingHelper = OASavingTrackHelper.sharedInstance()
@@ -146,8 +146,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         routingHelper = OARoutingHelper.sharedInstance()
         gpxDB = OAGPXDatabase.sharedDb()
         smartFolderHelper = SharedLibSmartFolderHelper.shared
-        super.init(style: isRootFolder ? .insetGrouped : .grouped)
+        super.init(style: (isRootFolder || isSmartFolder) ? .insetGrouped : .grouped)
         self.isRootFolder = isRootFolder
+        self.isSmartFolder = isSmartFolder
     }
     
     convenience init(frame: CGRect, isRootFolder: Bool) {
@@ -194,11 +195,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         
         sortMode = getTracksSortMode()
         sortModeForSearch = getSearchTracksSortMode()
-        if isSmartFolder {
-            DispatchQueue.global(qos: .background).async {
-                _ = OrganizeByCategory.entries
-            }
-        }
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
@@ -497,7 +493,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         row.key = organizedGroupKey
         row.title = organizedGroup.getName()
         row.descr = formattedTracksCount(organizedGroup.getTrackItems().count)
-        row.iconName = organizedGroup.getType().iconName
+        if organizedGroup.getType() == .activity {
+            row.icon = UIImage.mapSvgImageNamed("mx_\(organizedGroup.getIconName())") ?? .templateImageNamed("ic_custom_activity")
+        } else {
+            row.iconName = organizedGroup.getType().iconName
+        }
         row.setObj(UIColor.iconColorActive, forKey: colorKey)
         row.setObj(organizedGroup, forKey: organizedGroupKey)
     }
@@ -570,24 +570,27 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func configureNavigationBarAppearance() {
+        let backgroundColor: UIColor = isSmartFolder ? .viewBg : .navBarBgColorPrimary
+        let titleColor: UIColor = isSmartFolder ? .textColorPrimary : .navBarTextColorPrimary
+
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .navBarBgColorPrimary
-        appearance.shadowColor = .navBarBgColorPrimary
-        appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: UIColor.navBarTextColorPrimary]
-        
+        appearance.backgroundColor = backgroundColor
+        appearance.shadowColor = backgroundColor
+        appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: titleColor]
+
         let blurAppearance = UINavigationBarAppearance()
         blurAppearance.backgroundEffect = UIBlurEffect(style: .regular)
-        blurAppearance.backgroundColor = .navBarBgColorPrimary
-        blurAppearance.shadowColor = .navBarBgColorPrimary
-        blurAppearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: UIColor.navBarTextColorPrimary]
-        
+        blurAppearance.backgroundColor = backgroundColor
+        blurAppearance.shadowColor = backgroundColor
+        blurAppearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: titleColor]
+
         navigationController?.navigationBar.standardAppearance = blurAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         if #available(iOS 26.0, *) {
             navigationController?.navigationBar.tintColor = .label
         } else {
-            navigationController?.navigationBar.tintColor = .navBarTextColorPrimary
+            navigationController?.navigationBar.tintColor = titleColor
         }
         navigationController?.navigationBar.prefersLargeTitles = false
     }
@@ -729,7 +732,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func setupHeaderView() -> UIView? {
         let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
-        headerView.backgroundColor = isRootFolder ? .clear : .groupBg
+        headerView.backgroundColor = (isRootFolder || isSmartFolder) ? .clear : .groupBg
         headerView.addSubview(filterButton)
         headerView.addSubview(sortButton)
         filterButton.translatesAutoresizingMaskIntoConstraints = false
@@ -812,7 +815,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         
         let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: .preferredFont(forTextStyle: .footnote), textColor: .textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
-        footer.backgroundColor = isRootFolder ? .clear : .groupBg
+        footer.backgroundColor = (isRootFolder || isSmartFolder) ? .clear : .groupBg
         for subview in footer.subviews {
             if let label = subview as? UILabel {
                 label.textAlignment = .center
@@ -949,6 +952,10 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func updateSearchController() {
+        if isSmartFolder {
+            searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
+            return
+        }
         if isNameFiltered {
             searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
             searchController.searchBar.searchTextField.backgroundColor = .groupBg
@@ -1024,22 +1031,49 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     func onOrganizeByParamsApplied() {
-        smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
-        updateData()
-        reloadTracks(forceLoad: true)
+        reloadAfterOrganizeByChange()
     }
 
-    func onOrganizeByRangeParamsApplied(type: OrganizeByType) {
-        let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type)
+    func onOrganizeByRangeParamsApplied(type: OrganizeByType, originalParams: OrganizeByParams?) {
+        reloadAfterOrganizeByChange()
+        let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type, originalParams: originalParams)
         vc.stepDelegate = self
         let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 20
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        }
         present(nav, animated: true)
     }
 
     func onStepSizeChanged() {
+        reloadAfterOrganizeByChange()
+    }
+
+    private func reloadAfterOrganizeByChange() {
+        if let name = smartFolder?.getName(), let refreshed = smartFolderHelper.getSmartFolder(name: name) {
+            smartFolder = refreshed
+        }
+        resetSortModeForOrganizeByChange()
         smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
         updateData()
-        reloadTracks(forceLoad: true)
+    }
+
+    private func resetSortModeForOrganizeByChange() {
+        let newMode: TracksSortMode
+        if smartFolder.organizeByParams != nil {
+            let isNumeric = smartFolder?.getOrganizeByType()?.getTrackSortScope() == TracksSortScope.organizedByValue
+            newMode = isNumeric ? .shortestDistanceFirst : .nameAZ
+        } else {
+            newMode = TracksSortModeHelper.getDefaultSortMode(for: smartFolder.getId())
+        }
+        setTracksSortMode(newMode, isSortingSubfolders: false)
+        sortMode = newMode
+        updateSortButtonAndMenu()
     }
     
     @objc private func onNavbarEditFilterSmartFolderButtonClicked() {
@@ -2037,12 +2071,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func showTracksViewControllerForSmartFolder(withName name: String) {
         let smartFolder = smartFolderHelper.getSmartFolder(name: name)
-        let vc = TracksViewController(isRootFolder: false)
+        let vc = TracksViewController(isRootFolder: false, isSmartFolder: true)
         vc.smartFolder = smartFolder
         vc.rootFolder = rootFolder
         vc.currentFolder = currentFolder
         vc.visibleTracksFolder = visibleTracksFolder
-        vc.isSmartFolder = true
         vc.hostVCDelegate = self
         show(vc)
     }
@@ -2168,7 +2201,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     cell.descriptionLabel.text = item.descr
                 }
                 cell.accessoryType = tableView.isEditing ? .none : .disclosureIndicator
-                if let iconName = item.iconName {
+                if let icon = item.icon {
+                    cell.leftIconView.image = icon
+                } else if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage.templateImageNamed(iconName)
                 } else {
                     cell.leftIconView.image = nil
@@ -2380,16 +2415,16 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             guard let group = item.obj(forKey: organizedGroupKey) as? OrganizedTracksGroup else { return nil }
             let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
                 guard let self else { return nil }
-                let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { [weak self] _ in
-                    self?.enterOrganizedGroup(group)
-                }
                 let showOnMapAction = UIAction(title: localizedString("show_all_tracks"), image: .icCustomMapPinOutlined.resizedMenuImage()) { [weak self] _ in
                     guard let self else { return }
                     let tracksToShow = group.getTrackItems().compactMap { $0.gpxFilePath }.filter { !self.settings.mapSettingVisibleGpx.contains($0) }
                     if !tracksToShow.isEmpty {
                         self.settings.showGpx(tracksToShow, update: true)
                     }
-                    self.updateAllFoldersVCData(forceLoad: false)
+                    if let vc = MapSettingsGpxViewController() {
+                        vc.delegate = self
+                        show(vc)
+                    }
                 }
                 let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined.resizedMenuImage()) { [weak self] _ in
                     guard let self else { return }
@@ -2397,10 +2432,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     let vc = OAExportItemsViewController(tracks: exportFilePaths)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
-                let detailsSection = UIMenu(title: "", options: .displayInline, children: [detailsAction])
                 let mapSection = UIMenu(title: "", options: .displayInline, children: [showOnMapAction])
                 let exportSection = UIMenu(title: "", options: .displayInline, children: [exportAction])
-                return UIMenu(title: "", image: nil, children: [detailsSection, mapSection, exportSection])
+                return UIMenu(title: "", image: nil, children: [mapSection, exportSection])
             }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
         } else if item.key == trackKey || item.key == recordingTrackKey {
@@ -2681,14 +2715,6 @@ extension TracksViewController {
     private func createOrganizedGroupsSortMenu() -> UIMenu {
         let isNumeric = smartFolder?.getOrganizeByType()?.getTrackSortScope() == TracksSortScope.organizedByValue
 
-        let nameAZAction = UIAction(
-            title: localizedString("track_sort_az"),
-            image: TracksSortMode.nameAZ.image?.resizedMenuImage(),
-            state: sortMode == .nameAZ ? .on : .off
-        ) { [weak self] _ in
-            self?.applySortModeForGroups(.nameAZ)
-        }
-
         if isNumeric {
             let highestAction = UIAction(
                 title: localizedString("sort_highest_first"),
@@ -2704,8 +2730,15 @@ extension TracksViewController {
             ) { [weak self] _ in
                 self?.applySortModeForGroups(.shortestDistanceFirst)
             }
-            return UIMenu(title: "", children: [nameAZAction, highestAction, lowestAction])
+            return UIMenu(title: "", children: [highestAction, lowestAction])
         } else {
+            let nameAZAction = UIAction(
+                title: localizedString("track_sort_az"),
+                image: TracksSortMode.nameAZ.image?.resizedMenuImage(),
+                state: sortMode == .nameAZ ? .on : .off
+            ) { [weak self] _ in
+                self?.applySortModeForGroups(.nameAZ)
+            }
             let nameZAAction = UIAction(
                 title: localizedString("track_sort_za"),
                 image: TracksSortMode.nameZA.image?.resizedMenuImage(),

@@ -25,12 +25,16 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     private let stepRange: Limits
     private var currentDisplayValue: Float
     private let initialParams: OrganizeByParams?
+    private var isExplicitlyDismissed = false
+    private var previewWorkItem: DispatchWorkItem?
+
+    private static let previewDebounceInterval: TimeInterval = 0.15
 
     weak var stepDelegate: OrganizeByStepSizeDelegate?
 
     // MARK: - Initializers
 
-    init(smartFolder: SmartFolder, type: OrganizeByType) {
+    init(smartFolder: SmartFolder, type: OrganizeByType, originalParams: OrganizeByParams?) {
         self.smartFolder = smartFolder
         self.type = type
         self.displayUnits = type.getDisplayUnits()
@@ -38,7 +42,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
             fatalError("OrganizeByStepSizeViewController requires a range-related OrganizeByType")
         }
         self.stepRange = range
-        self.initialParams = smartFolder.organizeByParams
+        self.initialParams = originalParams
 
         let existingBase: Double
         if let rangeParams = smartFolder.organizeByParams as? OrganizeByRangeParams {
@@ -46,7 +50,10 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         } else {
             existingBase = type.getDefaultStepInBaseUnits()
         }
-        self.currentDisplayValue = Float(type.getDisplayUnits().fromBase(value: existingBase))
+        let rawDisplayValue = Float(Int(type.getDisplayUnits().fromBase(value: existingBase)))
+        let minDisplayValue = (range.min as? NSNumber).map { Float(truncating: $0) } ?? rawDisplayValue
+        let maxDisplayValue = (range.max as? NSNumber).map { Float(truncating: $0) } ?? rawDisplayValue
+        self.currentDisplayValue = min(max(rawDisplayValue, minDisplayValue), maxDisplayValue)
 
         super.init()
     }
@@ -60,11 +67,11 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableView.automaticDimension
-        if let button = navigationItem.leftBarButtonItem?.customView as? UIButton {
-            button.tintColor = .textColorPrimary
-            button.removeTarget(nil, action: nil, for: .allEvents)
-            button.addTarget(self, action: #selector(onClosePressed), for: .touchUpInside)
-        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.presentationController?.delegate = self
     }
 
     override func registerCells() {
@@ -75,38 +82,39 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         localizedString("set_step_size")
     }
 
-    override func getTableHeaderDescription() -> String {
-        localizedString("set_step_size_summary")
+    override func getTableHeaderDescription() -> String { "" }
+
+    override func getTableHeaderDescriptionAttr() -> NSAttributedString? {
+        let text = localizedString("set_step_size_summary")
+        return NSAttributedString(string: text, attributes: [
+            .font: UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.textColorSecondary
+        ])
     }
 
-    override func getCustomIconForLeftNavbarButton() -> UIImage? {
-        .templateImageNamed("ic_navbar_close")
+    override func systemLeftBarButtonItem() -> UIBarButtonItem? {
+        UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(onClosePressed))
     }
 
     override func tableStyle() -> UITableView.Style {
         .insetGrouped
     }
 
-    override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        let proAvailable = OAIAPHelper.isOsmAndProAvailable()
-        var config = UIButton.Configuration.filled()
-        config.baseBackgroundColor = .systemBlue
-        config.baseForegroundColor = .white
-        config.cornerStyle = .capsule
-        if proAvailable {
-            config.image = .templateImageNamed("ic_checkmark_default")
-            config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+    override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
+        let isApplicable = !type.isPro || OAIAPHelper.isOsmAndProAvailable()
+        if isApplicable {
+            return [NavbarBlueButton.circleBarButtonItem(
+                image: .templateImageNamed("ic_checkmark_default"),
+                target: self,
+                action: #selector(onConfirmPressed)
+            )]
         } else {
-            config.title = localizedString("shared_string_unlock")
+            return [NavbarBlueButton.pillBarButtonItem(
+                title: localizedString("shared_string_unlock"),
+                target: self,
+                action: #selector(onUnlockPressed)
+            )]
         }
-        let button = UIButton(configuration: config)
-        button.addTarget(
-            self,
-            action: proAvailable ? #selector(onConfirmPressed) : #selector(onUnlockPressed),
-            for: .touchUpInside
-        )
-        button.sizeToFit()
-        return [UIBarButtonItem(customView: button)]
     }
 
     override func generateData() {
@@ -145,7 +153,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         cell.slider.minimumValue = minVal
         cell.slider.maximumValue = maxVal
         cell.slider.value = value
-        cell.slider.tintColor = .iconColorActive
+        cell.slider.tintColor = .systemBlue
         cell.slider.maximumTrackTintColor = .sliderLineBg
         cell.slider.removeTarget(self, action: nil, for: .valueChanged)
         cell.slider.addTarget(self, action: #selector(onSliderChanged(_:)), for: .valueChanged)
@@ -158,33 +166,61 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         return cell
     }
 
-    private func saveCurrentStep() {
-        let stepInBase = displayUnits.toBase(value: Double(currentDisplayValue))
-        let params = OrganizeByRangeParams(type: type, stepSize: stepInBase)
-        SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: params)
+    private func makeCurrentParams() -> OrganizeByRangeParams {
+        let stepInBase = displayUnits.toBase(value: Double(Int(currentDisplayValue)))
+        return OrganizeByRangeParams(type: type, stepSize: stepInBase)
     }
 
-    @objc private func onSliderChanged(_ sender: UISlider) {
-        currentDisplayValue = sender.value
-        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? TopBottomValuesSliderTableViewCell {
-            cell.topRightLabel.text = "\(Int(sender.value)) \(displayUnits.getSymbol())"
+    private func applyStepInMemory() {
+        smartFolder.setOrganizeByParams(organizeByParams: makeCurrentParams())
+    }
+
+    private func persistCurrentStep() {
+        let params = makeCurrentParams()
+        SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: params)
+        smartFolder.setOrganizeByParams(organizeByParams: params)
+    }
+
+    private func schedulePreviewUpdate() {
+        previewWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.applyStepInMemory()
+            self.stepDelegate?.onStepSizeChanged()
         }
-        saveCurrentStep()
+        previewWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.previewDebounceInterval, execute: workItem)
+    }
+
+    private func performCancel() {
+        previewWorkItem?.cancel()
+        SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: initialParams)
+        smartFolder.setOrganizeByParams(organizeByParams: initialParams)
         stepDelegate?.onStepSizeChanged()
     }
 
-    @objc private func onConfirmPressed() {
-        saveCurrentStep()
-        dismiss(animated: true) { [weak self] in
-            self?.stepDelegate?.onStepSizeChanged()
+    @objc private func onSliderChanged(_ sender: UISlider) {
+        let rounded = sender.value.rounded()
+        sender.value = rounded
+        currentDisplayValue = rounded
+        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? TopBottomValuesSliderTableViewCell {
+            cell.topRightLabel.text = "\(Int(rounded)) \(displayUnits.getSymbol())"
         }
+        schedulePreviewUpdate()
+    }
+
+    @objc private func onConfirmPressed() {
+        isExplicitlyDismissed = true
+        previewWorkItem?.cancel()
+        persistCurrentStep()
+        stepDelegate?.onStepSizeChanged()
+        dismiss(animated: true)
     }
 
     @objc private func onClosePressed() {
-        SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: initialParams)
-        dismiss(animated: true) { [weak self] in
-            self?.stepDelegate?.onStepSizeChanged()
-        }
+        isExplicitlyDismissed = true
+        performCancel()
+        dismiss(animated: true)
     }
 
     @objc private func onUnlockPressed() {
@@ -193,5 +229,14 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
             with: OAFeature.advanced_WIDGETS(),
             navController: navigationController
         )
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+
+extension OrganizeByStepSizeViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        guard !isExplicitlyDismissed else { return }
+        performCancel()
     }
 }

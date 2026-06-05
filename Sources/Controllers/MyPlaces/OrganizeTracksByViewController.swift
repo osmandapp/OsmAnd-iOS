@@ -2,7 +2,7 @@ import UIKit
 import OsmAndShared
 
 protocol OrganizeTracksByDelegate: AnyObject {
-    func onOrganizeByRangeParamsApplied(type: OrganizeByType)
+    func onOrganizeByRangeParamsApplied(type: OrganizeByType, originalParams: OrganizeByParams?)
     func onOrganizeByParamsApplied()
 }
 
@@ -42,16 +42,13 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
     weak var delegate: OrganizeTracksByDelegate?
 
     private var selectedType: OrganizeByType?
-    private var isInitialLoad = true
-    private var prefetchedSections: [SectionData]?
-    private var prefetchedType: OrganizeByType?
 
     // MARK: - Initializers
 
     init(smartFolder: SmartFolder) {
         self.smartFolder = smartFolder
         super.init()
-        prefetchDataInBackground()
+        selectedType = smartFolder.getOrganizeByType()
     }
 
     required init?(coder: NSCoder) {
@@ -69,15 +66,6 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        guard isInitialLoad else { return }
-        isInitialLoad = false
-        if let sections = prefetchedSections {
-            applyLoadedData(type: prefetchedType, sections: sections)
-        }
-    }
-
     override func registerCells() {
         tableView.register(OrganizeByTypeCell.self, forCellReuseIdentifier: OrganizeByTypeCell.cellReuseIdentifier)
     }
@@ -86,8 +74,14 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         localizedString("organize_by")
     }
 
-    override func getTableHeaderDescription() -> String {
-        localizedString("organize_by_summary")
+    override func getTableHeaderDescription() -> String { "" }
+
+    override func getTableHeaderDescriptionAttr() -> NSAttributedString? {
+        let text = localizedString("organize_by_summary")
+        return NSAttributedString(string: text, attributes: [
+            .font: UIFont.systemFont(ofSize: 16, weight: .regular),
+            .foregroundColor: UIColor.textColorSecondary
+        ])
     }
 
     override func getCustomIconForLeftNavbarButton() -> UIImage? {
@@ -98,48 +92,18 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         .insetGrouped
     }
 
-    override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        var config = UIButton.Configuration.filled()
-        config.title = localizedString("shared_string_apply")
-        config.baseBackgroundColor = .systemBlue
-        config.baseForegroundColor = .white
-        config.cornerStyle = .capsule
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: #selector(onApplyButtonPressed), for: .touchUpInside)
-        button.sizeToFit()
-        return [UIBarButtonItem(customView: button)]
+    override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
+        [NavbarBlueButton.pillBarButtonItem(
+            title: localizedString("shared_string_apply"),
+            target: self,
+            action: #selector(onApplyButtonPressed)
+        )]
     }
 
     override func generateData() {
-        tableData.clearAllData()
-        guard !isInitialLoad else { return }
-
-        let noneSection = tableData.createNewSection()
-        let noneRow = noneSection.createNewRow()
-        noneRow.cellType = OrganizeByTypeCell.cellReuseIdentifier
-        noneRow.key = RowKey.none.rawValue
-        noneRow.title = localizedString("shared_string_none")
-        noneRow.setObj(UIImage.templateImageNamed("ic_custom_list") as Any, forKey: DataKey.image.rawValue)
-        noneRow.setObj(selectedType == nil, forKey: DataKey.isSelected.rawValue)
-
         let proAvailable = OAIAPHelper.isOsmAndProAvailable()
-        for category in OrganizeByCategory.entries {
-            let types = OrganizeByType.companion.valuesOf(category: category)
-            guard !types.isEmpty else { continue }
-            let section = tableData.createNewSection()
-            section.headerText = category.getName()
-            for type in types {
-                let row = section.createNewRow()
-                row.cellType = OrganizeByTypeCell.cellReuseIdentifier
-                row.key = RowKey.type.rawValue
-                row.title = type.getName()
-                row.setObj(type.image as Any, forKey: DataKey.image.rawValue)
-                row.setObj(type, forKey: RowKey.type.rawValue)
-                row.setObj(selectedType == type, forKey: DataKey.isSelected.rawValue)
-                row.setObj(type.isPro && !proAvailable, forKey: DataKey.isLocked.rawValue)
-            }
-        }
+        let sections = buildSections(proAvailable: proAvailable, selectedType: selectedType)
+        populateTableData(sections)
     }
 
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -153,6 +117,9 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
             isSelected: item.bool(forKey: DataKey.isSelected.rawValue),
             isLocked: item.bool(forKey: DataKey.isLocked.rawValue)
         )
+        cell.onProBadgeTapped = { [weak self] in
+            self?.openChoosePlan()
+        }
         return cell
     }
 
@@ -167,10 +134,6 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         }
 
         guard let type = item.obj(forKey: RowKey.type.rawValue) as? OrganizeByType else { return }
-        if item.bool(forKey: DataKey.isLocked.rawValue) {
-            openChoosePlan()
-            return
-        }
         selectedType = type
         generateData()
         tableView.reloadData()
@@ -179,42 +142,26 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
     private func applyDirectly() {
         let params: OrganizeByParams? = selectedType.map { OrganizeByParams(type: $0) }
         SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: params)
-        dismiss(animated: true) { [weak self] in
-            self?.delegate?.onOrganizeByParamsApplied()
-        }
+        smartFolder.setOrganizeByParams(organizeByParams: params)
+        delegate?.onOrganizeByParamsApplied()
+        dismiss(animated: true)
     }
 
     private func applyAndOpenStepSize(type: OrganizeByType) {
-        let existingParams = smartFolder.organizeByParams as? OrganizeByRangeParams
-        let stepSize = existingParams?.stepSize ?? type.getDefaultStepInBaseUnits()
+        let originalParams = smartFolder.organizeByParams
+        let stepSize: Double
+        if let existingRange = originalParams as? OrganizeByRangeParams, existingRange.type == type {
+            stepSize = existingRange.stepSize
+        } else {
+            stepSize = type.getDefaultStepInBaseUnits()
+        }
         let params = OrganizeByRangeParams(type: type, stepSize: stepSize)
         SharedLibSmartFolderHelper.shared.setOrganizeByParams(folderId: smartFolder.getId(), params: params)
+        smartFolder.setOrganizeByParams(organizeByParams: params)
         dismiss(animated: true) { [weak self] in
-            self?.delegate?.onOrganizeByRangeParamsApplied(type: type)
-        }
-    }
-
-    private func prefetchDataInBackground() {
-        let folder = smartFolder
-        let proAvailable = OAIAPHelper.isOsmAndProAvailable()
-        DispatchQueue.global(qos: .default).async { [weak self] in
             guard let self else { return }
-            let currentType = folder.getOrganizeByType()
-            let sections = self.buildSections(proAvailable: proAvailable, selectedType: currentType)
-            DispatchQueue.main.async {
-                self.prefetchedType = currentType
-                self.prefetchedSections = sections
-                if !self.isInitialLoad {
-                    self.applyLoadedData(type: currentType, sections: sections)
-                }
-            }
+            self.delegate?.onOrganizeByRangeParamsApplied(type: type, originalParams: originalParams)
         }
-    }
-
-    private func applyLoadedData(type: OrganizeByType?, sections: [SectionData]) {
-        selectedType = type
-        populateTableData(sections)
-        tableView.reloadData()
     }
 
     private func openChoosePlan() {
@@ -276,10 +223,18 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
     }
 
     @objc private func onApplyButtonPressed() {
-        guard let type = selectedType, type.isRangeRelated() else {
+        guard let type = selectedType else {
             applyDirectly()
             return
         }
-        applyAndOpenStepSize(type: type)
+        if type.isRangeRelated() {
+            applyAndOpenStepSize(type: type)
+            return
+        }
+        if type.isPro, !OAIAPHelper.isOsmAndProAvailable() {
+            openChoosePlan()
+            return
+        }
+        applyDirectly()
     }
 }

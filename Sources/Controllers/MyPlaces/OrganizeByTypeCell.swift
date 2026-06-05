@@ -15,6 +15,8 @@ final class OrganizeByTypeCell: UITableViewCell {
     private let iconView = UIImageView()
     private let titleLabel = UILabel()
 
+    var onProBadgeTapped: (() -> Void)?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
@@ -78,7 +80,19 @@ final class OrganizeByTypeCell: UITableViewCell {
         checkmarkView.tintColor = .iconColorActive
 
         accessoryType = .none
-        accessoryView = isLocked ? UIImageView(image: .icPaymentLabelPro) : nil
+        if isLocked {
+            let proBadgeButton = UIButton(type: .custom)
+            proBadgeButton.setImage(.icPaymentLabelPro, for: .normal)
+            proBadgeButton.sizeToFit()
+            proBadgeButton.addTarget(self, action: #selector(proBadgeButtonPressed), for: .touchUpInside)
+            accessoryView = proBadgeButton
+        } else {
+            accessoryView = nil
+        }
         selectionStyle = .default
+    }
+
+    @objc private func proBadgeButtonPressed() {
+        onProBadgeTapped?()
     }
 }

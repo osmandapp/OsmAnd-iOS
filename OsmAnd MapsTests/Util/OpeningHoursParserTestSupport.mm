@@ -41,14 +41,6 @@ NSString *normalizeString(const std::string &value) {
     return [NSString stringWithUTF8String:value.c_str()] ?: @"";
 }
 
-std::vector<std::string> defaultWeekdays() {
-    return {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"};
-}
-
-std::vector<std::string> defaultMonths() {
-    return {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-}
-
 } // namespace
 
 @implementation OpeningHoursParserTestSupport {
@@ -70,22 +62,17 @@ std::vector<std::string> defaultMonths() {
 + (void)configureLocalizedNamesLocaleIdentifier:(NSString *)localizedNamesLocaleIdentifier
                          timeLocaleIdentifier:(NSString *)timeLocaleIdentifier
                    twelveHourFormattingEnabled:(BOOL)enabled {
-    NSString *namesLocaleIdentifier = localizedNamesLocaleIdentifier;
+    NSString *namesLocaleIdentifier = localizedNamesLocaleIdentifier ?: @"en_US";
     NSString *formattingLocaleIdentifier = timeLocaleIdentifier;
     [OAExternalTimeFormatter setLocale:formattingLocaleIdentifier];
     OpeningHoursParser::setExternalTimeFormatterCallback([OAExternalTimeFormatter getExternalTimeFormatterCallback]);
     OpeningHoursParser::setTwelveHourFormattingEnabled(enabled);
     OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
 
-    if (namesLocaleIdentifier.length > 0) {
-        [OAExternalTimeFormatter setLocale:namesLocaleIdentifier];
-        OpeningHoursParser::setLocalizedDaysOfWeek([OAExternalTimeFormatter getLocalizedWeekdays]);
-        OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
-        [OAExternalTimeFormatter setLocale:formattingLocaleIdentifier];
-    } else {
-        OpeningHoursParser::setLocalizedDaysOfWeek(defaultWeekdays());
-        OpeningHoursParser::setLocalizedMonths(defaultMonths());
-    }
+    [OAExternalTimeFormatter setLocale:namesLocaleIdentifier];
+    OpeningHoursParser::setLocalizedDaysOfWeek([OAExternalTimeFormatter getLocalizedWeekdays]);
+    OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
+    [OAExternalTimeFormatter setLocale:formattingLocaleIdentifier];
 }
 
 - (instancetype)initWithOpeningHoursString:(NSString *)openingHoursString {

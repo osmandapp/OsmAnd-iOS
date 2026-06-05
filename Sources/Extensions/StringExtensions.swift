@@ -122,17 +122,8 @@ extension NSString {
     @objc func extractValidURLs() -> [String] {
         guard length > 0 else { return [] }
 
-        let trimmedInput = trimmingCharacters(in: .whitespacesAndNewlines)
-        if !trimmedInput.containsURLSeparator,
-           let url = Self.normalizedURLString(from: trimmedInput) {
-            return [url]
-        }
-
-        let normalized = replacingOccurrences(of: ",", with: " ")
-            .replacingOccurrences(of: ";", with: " ")
-
-        return normalized
-            .components(separatedBy: .whitespacesAndNewlines)
+        return trimmingCharacters(in: .whitespacesAndNewlines)
+            .splitIntoURLCandidates()
             .compactMap { part in
                 let trimmed = part.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -162,7 +153,50 @@ extension NSString {
 }
 
 private extension String {
-    var containsURLSeparator: Bool {
-        rangeOfCharacter(from: CharacterSet(charactersIn: ",;").union(.whitespacesAndNewlines)) != nil
+    private var startsWithURLToken: Bool {
+        range(of: "^[A-Za-z][A-Za-z0-9+.-]*:", options: .regularExpression) != nil
+            || range(of: "^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)+", options: .regularExpression) != nil
+    }
+    
+    func splitIntoURLCandidates() -> [String] {
+        guard !isEmpty else { return [] }
+
+        var result: [String] = []
+        var startIndex = startIndex
+        var currentIndex = startIndex
+
+        while currentIndex < endIndex {
+            if self[currentIndex].isURLSeparator,
+               let nextTokenIndex = indexOfNextURLToken(after: currentIndex) {
+                result.append(String(self[startIndex..<currentIndex]))
+                startIndex = nextTokenIndex
+                currentIndex = nextTokenIndex
+            } else {
+                currentIndex = index(after: currentIndex)
+            }
+        }
+
+        result.append(String(self[startIndex..<endIndex]))
+        return result
+    }
+
+    private func indexOfNextURLToken(after separatorIndex: Index) -> Index? {
+        var index = self.index(after: separatorIndex)
+        while index < endIndex, self[index].isURLSeparator {
+            index = self.index(after: index)
+        }
+
+        guard index < endIndex,
+              String(self[index...]).startsWithURLToken else {
+            return nil
+        }
+
+        return index
+    }
+}
+
+private extension Character {
+    var isURLSeparator: Bool {
+        self == "," || self == ";" || isWhitespace
     }
 }

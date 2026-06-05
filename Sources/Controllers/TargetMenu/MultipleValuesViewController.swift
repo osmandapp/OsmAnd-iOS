@@ -125,7 +125,16 @@ final class MultipleValuesViewController: OABaseNavbarViewController {
 
 // MARK: - Accessibility
 extension MultipleValuesViewController {
-    
+
+    private var valueAccessibilityTraits: UIAccessibilityTraits {
+        switch configuration.valueKind {
+        case .url:
+            .link
+        case .generic, .phone:
+            .button
+        }
+    }
+
     private func accessibilityLabel(for value: String) -> String {
         switch configuration.valueKind {
         case .generic:
@@ -153,14 +162,5 @@ extension MultipleValuesViewController {
             .filter { $0.isNumber || $0 == "+" }
             .map(String.init)
             .joined(separator: " ")
-    }
-
-    private var valueAccessibilityTraits: UIAccessibilityTraits {
-        switch configuration.valueKind {
-        case .url:
-            .link
-        case .generic, .phone:
-            .button
-        }
     }
 }

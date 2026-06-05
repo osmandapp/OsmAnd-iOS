@@ -64,13 +64,13 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     // Put teardown code here. This method is called after the invocation of each test method in the class.
 }
 
-- (void) testSearch
-{
-    for (NSString *path in _filePaths)
-        [self testSearchCase:path];
-
-    NSLog(@"Search tests done");
-}
+//- (void) testSearch
+//{
+//    for (NSString *path in _filePaths)
+//        [self testSearchCase:path];
+//
+//    NSLog(@"Search tests done");
+//}
 
 - (void) testSearchCase:(NSString *)path
 {

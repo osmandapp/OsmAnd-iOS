@@ -4087,3 +4087,6 @@
 "dismiss_changes_descr" = "Toutes les modifications seront annulées.";
 "gpx_logging_no_data" = "Aucune donnée";
 "show_touches" = "Afficher les détails";
+"delete_changes" = "Supprimer les modifications";
+"osm_edits_delete_item_confirmation" = "Êtes-vous sûr de vouloir supprimer la modification %ld ?";
+"osm_edits_delete_items_confirmation" = "Êtes-vous sûr de vouloir supprimer %ld modifications ?";

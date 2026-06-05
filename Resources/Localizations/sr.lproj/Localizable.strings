@@ -4088,3 +4088,9 @@
 "edit_palette" = "Уреди палету";
 "delete_palette" = "Обриши палету";
 "delete_colors_palette_dialog_summary" = "Да ли сте сигурни да желите да обришете %@ палету?";
+"dismiss_changes_descr" = "Све промене ће бити одбачене.";
+"gpx_logging_no_data" = "Нема података";
+"delete_changes" = "Обриши измене";
+"osm_edits_delete_item_confirmation" = "Да ли сте сигурни да желите да обришете %ld измену?";
+"osm_edits_delete_items_confirmation" = "Да ли сте сигурни да желите да обришете %ld измене?";
+"show_touches" = "Прикажи додире";

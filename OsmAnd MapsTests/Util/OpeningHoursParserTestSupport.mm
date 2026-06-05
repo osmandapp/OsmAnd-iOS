@@ -48,31 +48,12 @@ NSString *normalizeString(const std::string &value) {
 }
 
 + (void)configureLocaleIdentifier:(NSString *)localeIdentifier twelveHourFormattingEnabled:(BOOL)enabled {
-    [self configureLocalizedNamesLocaleIdentifier:localeIdentifier
-                               timeLocaleIdentifier:localeIdentifier
-                         twelveHourFormattingEnabled:enabled];
-}
-
-+ (void)configureTimeLocaleIdentifier:(NSString *)timeLocaleIdentifier twelveHourFormattingEnabled:(BOOL)enabled {
-    [self configureLocalizedNamesLocaleIdentifier:nil
-                               timeLocaleIdentifier:timeLocaleIdentifier
-                         twelveHourFormattingEnabled:enabled];
-}
-
-+ (void)configureLocalizedNamesLocaleIdentifier:(NSString *)localizedNamesLocaleIdentifier
-                         timeLocaleIdentifier:(NSString *)timeLocaleIdentifier
-                   twelveHourFormattingEnabled:(BOOL)enabled {
-    NSString *namesLocaleIdentifier = localizedNamesLocaleIdentifier ?: @"en_US";
-    NSString *formattingLocaleIdentifier = timeLocaleIdentifier;
-    [OAExternalTimeFormatter setLocale:formattingLocaleIdentifier];
+    [OAExternalTimeFormatter setLocale:localeIdentifier];
     OpeningHoursParser::setExternalTimeFormatterCallback([OAExternalTimeFormatter getExternalTimeFormatterCallback]);
     OpeningHoursParser::setTwelveHourFormattingEnabled(enabled);
     OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
-
-    [OAExternalTimeFormatter setLocale:namesLocaleIdentifier];
     OpeningHoursParser::setLocalizedDaysOfWeek([OAExternalTimeFormatter getLocalizedWeekdays]);
     OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
-    [OAExternalTimeFormatter setLocale:formattingLocaleIdentifier];
 }
 
 - (instancetype)initWithOpeningHoursString:(NSString *)openingHoursString {

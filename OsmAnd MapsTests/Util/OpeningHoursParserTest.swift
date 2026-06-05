@@ -467,32 +467,32 @@ final class OpeningHoursParserTest: XCTestCase {
         assertInfo("25.03.2025 18:50", hours: hours, equals: "Will open on 9:00 AM Thu.")
     }
 
-//    func testAmPm() {
-//        configure(localeIdentifier: "en_US", twelveHour: true)
-//
-//        var hours = makeHours("Mo-Fr: 9:00-13:00, 14:00-18:00")
-//        assertInfo("15.01.2018 08:00", hours: hours, equals: "Will open at 9:00 AM")
-//        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open until 1:00 PM")
-//        assertInfo("15.01.2018 12:00", hours: hours, equals: "Will close at 1:00 PM")
-//        assertInfo("15.01.2018 13:10", hours: hours, equals: "Will open at 2:00 PM")
-//        assertInfo("15.01.2018 14:00", hours: hours, equals: "Open until 6:00 PM")
-//        assertInfo("15.01.2018 16:00", hours: hours, equals: "Will close at 6:00 PM")
-//        assertInfo("15.01.2018 18:10", hours: hours, equals: "Will open tomorrow at 9:00 AM")
-//
-//        hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
-//        assertAssembled(hours, equals: "Mon-Fri 4:30-10:00 AM, 7:30 AM-11:00 PM; Sat, Sun, PH 1:30-11:00 PM", localized: true)
-//
-//        hours = makeHours("Mo-Fr 00:00-12:00, 12:00-24:00;")
-//        assertAssembled(hours, equals: "Mon-Fri 12:00 AM-12:00 PM, 12:00 PM-12:00 AM", localized: true)
-//
-//        configure(localeIdentifier: "zh", twelveHour: true)
-//        hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
-//        assertAssembled(hours, equals: "周一-周五 4:30-10:00, 07:30-23:00; 周六, 周日, ph 1:30-23:00", localized: true)
-//
-//        configure(localeIdentifier: "ar", twelveHour: true)
-//        hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
-//        assertAssembled(hours, equals: "اثنين-جمعة 4:30-10:00 ص, 7:30 ص-11:00 م; سبت, أحد, PH 1:30-11:00 م", localized: true)
-//    }
+    func testAmPm() {
+        configure(localeIdentifier: "en_US", twelveHour: true)
+
+        var hours = makeHours("Mo-Fr: 9:00-13:00, 14:00-18:00")
+        assertInfo("15.01.2018 08:00", hours: hours, equals: "Will open at 9:00 AM")
+        assertInfo("15.01.2018 09:00", hours: hours, equals: "Open until 1:00 PM")
+        assertInfo("15.01.2018 12:00", hours: hours, equals: "Will close at 1:00 PM")
+        assertInfo("15.01.2018 13:10", hours: hours, equals: "Will open at 2:00 PM")
+        assertInfo("15.01.2018 14:00", hours: hours, equals: "Open until 6:00 PM")
+        assertInfo("15.01.2018 16:00", hours: hours, equals: "Will close at 6:00 PM")
+        assertInfo("15.01.2018 18:10", hours: hours, equals: "Will open tomorrow at 9:00 AM")
+
+        hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
+        assertAssembled(hours, equals: "Mon-Fri 4:30-10:00 AM, 7:30 AM-11:00 PM; Sat, Sun, PH 1:30-11:00 PM", localized: true)
+
+        hours = makeHours("Mo-Fr 00:00-12:00, 12:00-24:00;")
+        assertAssembled(hours, equals: "Mon-Fri 12:00 AM-12:00 PM, 12:00 PM-12:00 AM", localized: true)
+
+        configure(localeIdentifier: "zh", twelveHour: true)
+        hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
+        assertAssembled(hours, equals: "周一-周五 4:30-10:00, 07:30-23:00; 周六, 周日, ph 1:30-23:00", localized: true)
+
+        configure(localeIdentifier: "ar", twelveHour: true)
+        hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
+        assertAssembled(hours, equals: "اثنين-جمعة 4:30-10:00 ص, 7:30 ص-11:00 م; سبت, أحد, PH 1:30-11:00 م", localized: true)
+    }
 
     func testYearFormats() {
         var hours = makeHours("2024 Jan-Dec")

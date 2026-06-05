@@ -356,15 +356,15 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (favoriteGroups.count > 0)
         myPlacesItems[OAExportSettingsType.FAVORITES] = favoriteGroups;
     
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSArray<OAGpxFileInfo *> *gpxInfoList = [OAGPXUIHelper getSortedGPXFilesInfo:OsmAndApp.instance.gpxPath selectedGpxList:nil absolutePath:YES];
+    NSArray<OASGpxDataItem *> *gpxInfoList = [OAGPXDatabase.sharedDb getDataItems];
     if (gpxInfoList.count > 0)
     {
-        NSMutableArray<NSString *> *files = [NSMutableArray new];
-        for (OAGpxFileInfo *gpxInfo in gpxInfoList)
+        NSMutableArray<NSString *> *files = [NSMutableArray arrayWithCapacity:gpxInfoList.count];
+        for (OASGpxDataItem *gpxInfo in gpxInfoList)
         {
-            if ([fileManager fileExistsAtPath:gpxInfo.fileName])
-                [files addObject:gpxInfo.fileName];
+            NSString *path = gpxInfo.file.absolutePath;
+            if (path.length > 0)
+                [files addObject:path];
         }
         if (files.count > 0)
             myPlacesItems[OAExportSettingsType.TRACKS] = files;

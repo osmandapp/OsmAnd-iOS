@@ -294,7 +294,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [self updateAvailableMaps];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onColorPalettesFilesUpdated:) name:ColorPaletteHelper.colorPalettesUpdatedNotification object:nil];
 }
 
 - (void)deinitView
@@ -302,37 +301,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
-- (void)onColorPalettesFilesUpdated:(NSNotification *)notification
-{
-    if (![notification.object isKindOfClass:NSDictionary.class] || ![_plugin isTerrainLayerEnabled])
-        return;
-
-    NSDictionary<NSString *, NSString *> *colorPaletteFiles = (NSDictionary *) notification.object;
-    if (!colorPaletteFiles)
-        return;
-
-    NSString *currentPaletteFile = [_terrainMode mainFile];
-    if ([colorPaletteFiles.allKeys containsObject:currentPaletteFile])
-    {
-        if ([colorPaletteFiles[currentPaletteFile] isEqualToString:ColorPaletteHelper.deletedFileKey])
-        {
-            TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
-            if (defaultTerrainMode)
-                _terrainMode = defaultTerrainMode;
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self initData];
-            [UIView transitionWithView:self.tblView
-                              duration:0.35f
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^(void)
-             {
-                [self.tblView reloadData];
-            }
-                            completion:nil];
-        });
-    }
-}
 - (void)onRotation
 {
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
@@ -460,10 +428,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
+            cell.accessoryType = [item.key isEqualToString:@"relief3D"] ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
             cell.titleLabel.text = item.title;
             cell.valueLabel.text = [item stringForKey:@"value"];
             [cell leftIconVisibility:item.iconName.length > 0];
@@ -595,15 +563,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameChartTextColorAxisX]];
 
-        ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPalette:[_terrainMode mainFile]];
-        if (!colorPalette)
+        OASGradientPaletteCategory *paletteCategory = [TerrainTypeWrapper toPaletteCategoryWithType:_terrainMode.type];
+        OASColorPalette *colorPalette = [[GradientPaletteHelper shared] colorPaletteWithFileName:[_terrainMode mainFile]];
+        if (!colorPalette || !paletteCategory)
             return cell;
 
-        cell.chartView.data =
-            [GpxUIHelper buildGradientChartWithChart:cell.chartView
-                                        colorPalette:colorPalette
-                                      valueFormatter:[GradientUiHelper getGradientTypeFormatterForTerrainType:_terrainMode.type
-                                                                                                     analysis:nil]];
+        cell.chartView.data = [GpxUIHelper buildGradientChartWithChart:cell.chartView colorPalette:colorPalette valueFormatter:[GradientFormatter getAxisFormatterWithPaletteCategory:paletteCategory]];
         [cell.chartView notifyDataSetChanged];
         [cell.chartView setNeedsDisplay];
         return cell;

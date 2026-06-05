@@ -196,7 +196,7 @@
     }
     OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:[historyItem getPointDescriptionType] typeName:historyItem.typeName name:historyItem.name];
     [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:historyItem.latitude longitude:historyItem.longitude] historyName:historyName];
-    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    [self safePopToRootTemplateAnimated:YES];
 
     if (completionBlock)
         completionBlock();

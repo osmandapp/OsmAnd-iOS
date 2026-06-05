@@ -40,7 +40,7 @@
 
 @interface OAOptionsPanelBlackViewController () <UINavigationControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet CancelableScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMaps;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyWaypoints;
@@ -168,11 +168,7 @@
         self.menuButtonExternalSensors.hidden = YES;
     }
     
-    NSArray<UIButton *> *bottomButtons = @[ self.menuButtonConfigureScreen,
-                                            self.menuButtonPlugins,
-                                            self.menuButtonSettings,
-                                            self.menuButtonHelp
-                                            ];
+    NSArray<UIButton *> *bottomButtons = [self bottomButtons];
     
     CALayer *bottomDiv = isExternalSensorsPluginEnabled ? _menuButtonExternalSensorsDiv : _menuButtonWeatherDiv;
     
@@ -230,6 +226,16 @@
     }
 }
 
+- (NSArray *)bottomButtons
+{
+    return @[
+        self.menuButtonConfigureScreen,
+        self.menuButtonPlugins,
+        self.menuButtonSettings,
+        self.menuButtonHelp
+    ];
+}
+
 - (void)applyingAppTheme
 {
     UIColor *divColor = [UIColor colorNamed:ACColorNameCustomSeparator];
@@ -244,34 +250,32 @@
 
 - (void)adjustButtonInsets:(UIButton *)btn
 {
-    UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-    UIEdgeInsets titleInsets = btn.titleEdgeInsets;
+    UIButtonConfiguration *config = btn.configuration;
+    NSDirectionalEdgeInsets contentInsets = config.contentInsets;
     
     if ([btn isDirectionRTL])
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        contentInsets.left = [OAUtilities getLeftMargin];
-        contentInsets.right = 10;
-        titleInsets.left = 0;
-        titleInsets.right = 19;
+        contentInsets.leading = 10;
+        contentInsets.trailing = [OAUtilities getLeftMargin];
     }
     else
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        contentInsets.left = [OAUtilities getLeftMargin] + 10;
-        contentInsets.right = 0;
-        titleInsets.left = 19;
-        titleInsets.right = 0;
+        contentInsets.leading = [OAUtilities getLeftMargin] + 10;
+        contentInsets.trailing = 0;
     }
     
-    btn.contentEdgeInsets = contentInsets;
-    btn.titleEdgeInsets = titleInsets;
+    config.contentInsets = contentInsets;
+    btn.configuration = config;
 }
 
 - (void)adjustContentBy:(CGFloat)bottomMargin btn:(UIButton *)btn {
-    UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-    contentInsets.bottom = bottomMargin;
-    btn.contentEdgeInsets = contentInsets;
+    UIButtonConfiguration *config = btn.configuration;
+    NSDirectionalEdgeInsets contentInsets = config.contentInsets;
+    contentInsets.bottom = bottomMargin + contentInsets.top;
+    config.contentInsets = contentInsets;
+    btn.configuration = config;
 }
 
 - (void) viewDidLoad
@@ -338,6 +342,7 @@
     for (UIButton *button in _menuButtonsArray) {
         button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         button.titleLabel.adjustsFontForContentSizeCategory = YES;
+        [button setTitleColor:[UIColor colorNamed:ACColorNameTextColorPrimary] forState:UIControlStateHighlighted];
     }
 
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
@@ -353,21 +358,55 @@
     [_menuButtonTravelGuides.layer addSublayer:_menuButtonTravelGuidesDiv];
     [_menuButtonExternalSensors.layer addSublayer:_menuButtonExternalSensorsDiv];
     
-    [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
-    [_menuButtonMyData setImage:[UIImage templateImageNamed:@"ic_custom_my_places.png"] forState:UIControlStateNormal];
-    [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:@"left_menu_icon_waypoints.png"] forState:UIControlStateNormal];
-    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:@"left_menu_icon_resources.png"] forState:UIControlStateNormal];
-    [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:@"left_menu_configure_screen.png"] forState:UIControlStateNormal];
-    [_menuButtonSettings setImage:[UIImage templateImageNamed:@"left_menu_icon_settings.png"] forState:UIControlStateNormal];
-    [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
-    [_menuButtonNavigation setImage:[UIImage templateImageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
+    [_menuButtonMaps setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMap] forState:UIControlStateNormal];
+    [_menuButtonMyData setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMyPlaces] forState:UIControlStateNormal];
+    [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconWaypoints] forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconDownloadMap] forState:UIControlStateNormal];
+    [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:ACImageNameLeftMenuConfigureScreen] forState:UIControlStateNormal];
+    [_menuButtonSettings setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconSettings] forState:UIControlStateNormal];
+    [_menuButtonHelp setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconAbout] forState:UIControlStateNormal];
+    [_menuButtonNavigation setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconNavigation] forState:UIControlStateNormal];
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:ACImageNameIcCustomRoutes] forState:UIControlStateNormal];
-    [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
-    [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
-    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"ic_custom_backpack"] forState:UIControlStateNormal];
-    [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:@"ic_custom_sensor"] forState:UIControlStateNormal];
+    [_menuButtonWeather setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconUmbrella] forState:UIControlStateNormal];
+    [_menuButtonPlugins setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconPlugins] forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:ACImageNameIcCustomBackpack] forState:UIControlStateNormal];
+    [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:ACImageNameIcCustomSensor] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
+    
+    [self applyTableCellHighlightStyleToButtons];
+}
+
+- (void)applyTableCellHighlightStyleToButtons
+{
+    NSArray *buttons = [self bottomButtons];
+    
+    for (UIButton *button in _menuButtonsArray)
+    {
+        BOOL isBottom = [buttons containsObject:button];
+        UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
+        config.imagePadding = 19;
+        config.titleLineBreakMode = NSLineBreakByTruncatingMiddle;
+        
+        button.configuration = config;
+        button.configurationUpdateHandler = ^(UIButton *button) {
+            UIButtonConfiguration *updatedConfig = button.configuration;
+            UIBackgroundConfiguration *backgroundConfig = [UIBackgroundConfiguration listPlainCellConfiguration];
+            
+            if (button.isHighlighted)
+            {
+                backgroundConfig.backgroundColor = [UIColor colorNamed:ACColorNameSideMenuBGColorTap];
+                updatedConfig.baseForegroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            }
+            else
+            {
+                backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : [UIColor colorNamed:ACColorNameGroupBg];
+                updatedConfig.baseForegroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            }
+            updatedConfig.background = backgroundConfig;
+            button.configuration = updatedConfig;
+        };
+    }
 }
 
 - (void) didReceiveMemoryWarning
@@ -385,8 +424,7 @@
 - (IBAction) myDataButtonClicked:(id)sender
 {
     [OAAnalyticsHelper logEvent:@"my_places_open"];
-    UIViewController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+    [[OARootViewController instance].navigationController pushViewController:[[MyPlacesContainerViewController alloc] init] animated:YES];
 }
 
 - (IBAction) myDestinationsButtonClicked:(id)sender

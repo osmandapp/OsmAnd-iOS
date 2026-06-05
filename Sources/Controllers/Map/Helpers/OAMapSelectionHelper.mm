@@ -732,7 +732,7 @@ static int TILE_SIZE = 256;
     result.objectLatLon = latLon;
     
     OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:poi];
-    NSString *trackName = [poi getGpxFileName:nil];
+    
     if (filename)
     {
         travelGpx.file = filename;

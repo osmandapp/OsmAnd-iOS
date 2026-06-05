@@ -146,6 +146,7 @@ static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const batterySavingModeKey = @"batterySavingMode";
 static NSString * const enableMsaaForСarPlayKey = @"enableMsaaForСarPlayKey";
 static NSString * const showPrimitivesDebugInfoKey = @"showPrimitivesDebugInfoKey";
+static NSString * const showTouchesKey = @"showTouchesKey";
 
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
@@ -250,6 +251,8 @@ static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation
 static NSString * const customWidgetKeys = @"custom_widgets_keys";
 static NSString * const tracksSortModesKey = @"tracks_tabs_sort_modes";
 static NSString * const searchTracksSortModesKey = @"search_tracks_sort_mode";
+static NSString * const travelGuidesSortModeKey = @"travel_guides_tabs_sort_mode";
+static NSString * const osmEditsSortModeKey = @"osm_edits_tabs_sort_mode";
 static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
@@ -378,9 +381,7 @@ static NSString * const lastUpdatesCardRefreshKey = @"lastUpdatesCardRefresh";
 
 static NSString * const currentTrackColorKey = @"currentTrackColor";
 static NSString * const currentTrackColoringTypeKey = @"currentTrackColoringType";
-static NSString * const currentTrackSpeedGradientPaletteKey = @"currentTrackSpeedGradientPalette";
-static NSString * const currentTrackAltitudeGradientPaletteKey = @"currentTrackAltitudeGradientPalette";
-static NSString * const currentTrackSlopeGradientPaletteKey = @"currentTrackSlopeGradientPalette";
+static NSString * const currentTrackGradientPaletteKey = @"current_track_gradient_palette";
 static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
@@ -393,10 +394,8 @@ static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentT
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
 static NSString * const currentTrackRouteActivityKey = @"currentTrackRouteActivityKey";
 
-static NSString * const customTrackColorsKey = @"customTrackColors";
-static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
-static NSString * const gradientPalettesKey = @"gradient_color_palettes";
+static NSString * const lastUsedProfileIconsKey = @"lastUsedProfileIcons";
 
 static NSString * const gpsStatusAppKey = @"gpsStatusApp";
 
@@ -1209,6 +1208,21 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         return ColorizationTypeSlope;
     else
         return ColorizationTypeNone;
+}
+
+- (OASGradientPaletteCategory *)toPaletteCategory
+{
+    switch (self.gst)
+    {
+        case EOAGradientScaleTypeSpeed:
+            return OASGradientPaletteCategory.speed;
+        case EOAGradientScaleTypeAltitude:
+            return OASGradientPaletteCategory.altitude;
+        case EOAGradientScaleTypeSlope:
+            return OASGradientPaletteCategory.slope;
+        default:
+            return nil;
+    }
 }
 
 @end
@@ -6070,6 +6084,12 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeTitleFor:nil]];
         [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
+        
+        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeTitle]];
+        [_globalPreferences setObject:_travelGuidesSortMode forKey:travelGuidesSortModeKey];
+        
+        _osmEditsSortMode = [OACommonString withKey:osmEditsSortModeKey defValue:[MyPlacesSortModeHelper defaultOsmEditsSortModeTitle]];
+               [_globalPreferences setObject:_osmEditsSortMode forKey:osmEditsSortModeKey];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
@@ -6235,7 +6255,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
 
-        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:PaletteGradientColor.defaultName];
+        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:[OASPaletteConstants shared].DEFAULT_NAME];
         [_profilePreferences setObject:_routeGradientPalette forKey:routeGradientPaletteKey];
 
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
@@ -6589,9 +6609,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         _currentTrackColor = [[[OACommonInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
         _currentTrackColoringType = [[[OACommonColoringType withKey:currentTrackColoringTypeKey defValue:OAColoringType.TRACK_SOLID values:[OAColoringType getTrackColoringTypes]] makeGlobal] makeShared];
-        _currentTrackSpeedGradientPalette = [[[OACommonString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
-        _currentTrackAltitudeGradientPalette = [[[OACommonString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
-        _currentTrackSlopeGradientPalette = [[[OACommonString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
+        _currentTrackGradientPalette = [[[OACommonString withKey:currentTrackGradientPaletteKey defValue:[OASPaletteConstants shared].DEFAULT_NAME] makeGlobal] makeShared];
         _currentTrackWidth = [[[OACommonString withKey:currentTrackWidthKey defValue:@""] makeGlobal] makeShared];
         
         _currentTrackShowArrows = [[[OACommonBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
@@ -6616,17 +6634,14 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_currentTrackRouteActivity setModeDefaultValue:@"horse_riding" mode:OAApplicationMode.HORSE];
         [_currentTrackRouteActivity setModeDefaultValue:@"motor_scooter" mode:OAApplicationMode.MOPED];
         [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
+        [_currentTrackRouteActivity setModeDefaultValue:@"adventure_motorcycling" mode:OAApplicationMode.MOTORCYCLE];
         
-        _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
-        _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
-        _gradientPalettes = [[[OACommonString withKey:gradientPalettesKey defValue:nil] makeGlobal] makeShared];
+        _lastUsedProfileIcons = [[[OACommonStringList withKey:lastUsedProfileIconsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
         [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
-        [_globalPreferences setObject:_currentTrackSpeedGradientPalette forKey:@"current_track_speed_gradient_palette"];
-        [_globalPreferences setObject:_currentTrackAltitudeGradientPalette forKey:@"current_track_altitude_gradient_palette"];
-        [_globalPreferences setObject:_currentTrackSlopeGradientPalette forKey:@"current_track_slope_gradient_palette"];
+        [_globalPreferences setObject:_currentTrackGradientPalette forKey:currentTrackGradientPaletteKey];
         [_globalPreferences setObject:_currentTrackWidth forKey:@"current_track_width"];
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
@@ -6640,10 +6655,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
         [_profilePreferences setObject:_currentTrackRouteActivity forKey:@"current_track_route_activity"];
         
-        [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
-        [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
-        [_globalPreferences setObject:_gradientPalettes forKey:gradientPalettesKey];
+        [_globalPreferences setObject:_lastUsedProfileIcons forKey:@"last_used_profile_icons"];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
         [_globalPreferences setObject:_gpsStatusApp forKey:@"gps_status_app"];
@@ -6662,6 +6675,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _showPrimitivesDebugInfo = [[[OACommonBoolean withKey:showPrimitivesDebugInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_showPrimitivesDebugInfo forKey:@"show_primitives_debug_info"];
+
+        _showTouches = [[[OACommonBoolean withKey:showTouchesKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_showTouches forKey:@"show_touches"];
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];

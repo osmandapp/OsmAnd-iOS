@@ -240,7 +240,7 @@ double const buildings3DAlphaDefValue = 0.5;
 
 - (BOOL)is3DMapsEnabled
 {
-    return [self isHeightmapEnabled] && ([_enable3dMapsPref get] || [[TerrainMode byKey:[_terrainModeTypePref get]] isTerrainShadows]);
+    return ([self isHeightmapEnabled] && [_enable3dMapsPref get]) || [[TerrainMode byKey:[_terrainModeTypePref get]] isTerrainShadows];
 }
 
 - (BOOL)isHillshadeMode

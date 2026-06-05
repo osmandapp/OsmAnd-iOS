@@ -192,11 +192,20 @@ static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation UIImage (util)
 
++ (UIImage *) imageNamedOrMxIcon:(NSString *)name
+{
+    UIImage *icon = [UIImage imageNamed:name];
+    if (!icon)
+        icon = [OAUtilities getMxIcon:[name lowercaseString]];
+    return icon;
+}
+
 + (UIImage *) templateImageNamed:(NSString *)imageName
 {
     if (!imageName)
         return nil;
-    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
+    return [[self imageNamedOrMxIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 + (UIImage *) rtlImageNamed:(NSString *)imageName
@@ -2023,10 +2032,13 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 + (UIImage *) getMxIcon:(NSString *)name
 {
     NSString *fullIconName = name;
-    if (![fullIconName hasPrefix:@"mx_"])
-        fullIconName = [@"mx_" stringByAppendingString:name];
+    if (fullIconName && ![fullIconName hasPrefix:@"mx_"])
+        fullIconName = [@"mx_" stringByAppendingString:fullIconName];
 
-    return [UIImage mapSvgImageNamed:fullIconName];
+    if (fullIconName)
+        return [UIImage mapSvgImageNamed:fullIconName];
+    else
+        return nil;
 }
 
 + (UIImage *) getTintableImage:(UIImage *)image

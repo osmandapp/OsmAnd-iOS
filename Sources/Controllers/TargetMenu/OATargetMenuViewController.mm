@@ -52,6 +52,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapRendererView.h"
 #import "OADownloadMapViewController.h"
 #import "OAPlugin.h"
 #import "OAWikipediaPlugin.h"
@@ -89,6 +90,8 @@
     OAAutoObserverProxy *_downloadTaskProgressObserver;
     OAAutoObserverProxy *_downloadTaskCompletedObserver;
     UIImage *_targetImage;
+    CGFloat _cachedXViewPort;
+    CGFloat _cachedYViewPort;
 }
 
 + (OATargetMenuViewController *)createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
@@ -162,11 +165,11 @@
             BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
             if (detailsObject)
             {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:nil];
             }
             else
             {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj];
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:targetPoint.targetObj renderedObject:nil];
             }
             break;
         }
@@ -179,7 +182,7 @@
                 BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
                 if (detailsObject)
                 {
-                    controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+                    controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
                 }
                 else
                 {
@@ -195,7 +198,7 @@
             BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:selectedObject];
             if (detailsObject)
             {
-                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject];
+                controller = [[PlaceDetailsViewController alloc] initWithPoi:targetPoint.targetObj detailsObject:detailsObject renderedObject:targetPoint.targetObj];
             }
             else
             {
@@ -1078,6 +1081,43 @@
     return OAUtilities.isLandscape;
 }
 
+- (void)adjustViewport
+{
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    OAMapRendererView *mapView = mapViewController.mapView;
+    if (_cachedXViewPort == 0)
+        _cachedXViewPort = mapView.viewportXScale;
+    if (_cachedYViewPort == 0 || mapView.viewportYScale != kViewportScale)
+        _cachedYViewPort = mapView.viewportYScale;
+    
+    CGFloat viewportXScale = kViewportScale;
+    if ([OAUtilities isLandscapeIpadAware])
+    {
+        CGFloat mapWidth = mapView.bounds.size.width;
+        if (mapWidth <= 0)
+            mapWidth = DeviceScreenWidth;
+        
+        CGFloat menuWidth = kInfoViewLandscapeWidth;
+        if (OAUtilities.isIPad)
+            menuWidth = OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
+        
+        menuWidth += OAUtilities.getLeftMargin;
+        viewportXScale += menuWidth / mapWidth;
+    }
+    
+    [mapViewController setViewportScaleX:viewportXScale y:kViewportScale];
+}
+
+- (void)restoreViewport
+{
+    if (_cachedXViewPort != 0 && _cachedYViewPort != 0)
+    {
+        [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedXViewPort y:_cachedYViewPort];
+        _cachedXViewPort = 0;
+        _cachedYViewPort = 0;
+    }
+}
+
 - (BOOL)hasControlButtons
 {
     return self.leftControlButton || self.rightControlButton;
@@ -1129,7 +1169,7 @@
 }
 - (void)onMenuDismissed
 {
-    // override
+    [self restoreViewport];
 }
 
 - (void)onMenuShown

@@ -37,7 +37,7 @@
 - (void) present
 {
     _gridTemplate = [[CPGridTemplate alloc] initWithTitle:OALocalizedString(@"select_route_finish_on_map") gridButtons:[self generateGridButtons]];
-    [self.interfaceController pushTemplate:_gridTemplate animated:YES completion:nil];
+    [self safePushTemplate:_gridTemplate animated:YES];
 }
 
 - (void)openSearch {
@@ -64,8 +64,7 @@
     CPGridButton *btnSearch = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"address_search_desc")]
                                                                     image:[UIImage imageNamed:@"ic_carplay_search"]
                                                                   handler:^(CPGridButton * _Nonnull barButton) {
-        _searchController = [[OACarPlayAddressSearchController alloc] initWithInterfaceController:self.interfaceController];
-        [_searchController present];
+        [self openSearch];
     }];
 
     CPGridButton *btnMarkers = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"map_markers")]

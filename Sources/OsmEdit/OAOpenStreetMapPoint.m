@@ -56,6 +56,11 @@
     return _comment;
 }
 
+- (NSString *)tagFrom:(NSString *)tag
+{
+    return [[self getEntity] getTagFromString:tag];
+}
+
 -(void) setEntity:(OAEntity *)entity
 {
     _entity = entity;

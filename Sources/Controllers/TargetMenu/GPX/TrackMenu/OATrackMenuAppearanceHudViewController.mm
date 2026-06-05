@@ -107,15 +107,12 @@ static const NSInteger kColorsSection = 1;
 @property (nonatomic) BOOL forceHiding;
 @property (nonatomic) OsmAndAppInstance app;
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
-@property (nonatomic) OAColorItem *baseColorItem;
-@property (nonatomic) OAColorItem *selectedColorItem;
-@property (nonatomic) BOOL isNewColorSelected;
-@property (nonatomic) BOOL isDefaultColorRestored;
+@property (nonatomic) OASPaletteItemSolid *baseColorItem;
+@property (nonatomic) OASPaletteItemSolid *selectedColorItem;
 @property (nonatomic) OABackupGpx *backupGpxItem;
-@property (nonatomic) GradientColorsCollection *gradientColorsCollection;
-@property (nonatomic) PaletteColor *selectedPaletteColorItem;
+@property (nonatomic) OASPaletteItemGradient *selectedPaletteColorItem;
 @property (nonatomic) NSIndexPath *colorsCollectionIndexPath;
-@property (nonatomic) OAConcurrentArray<PaletteColor *> *sortedPaletteColorItems;
+@property (nonatomic) OAConcurrentArray<OASPaletteItemGradient *> *sortedPaletteColorItems;
 @property (nonatomic) NSIndexPath *paletteLegendIndexPath;
 @property (nonatomic) NSIndexPath *paletteNameIndexPath;
 @property (nonatomic) NSArray<OAGPXTableSectionData *> *tableData;
@@ -127,7 +124,7 @@ static const NSInteger kColorsSection = 1;
     OATrackAppearanceItem *_selectedItem;
     NSArray<OATrackAppearanceItem *> *_availableColoringTypes;
 
-    NSMutableArray<OAColorItem *> *_sortedColorItems;
+    NSMutableArray<OASPaletteItemSolid *> *_sortedColorItems;
     NSIndexPath *_editColorIndexPath;
 
     OAGPXTrackWidth *_selectedWidth;
@@ -188,23 +185,17 @@ static const NSInteger kColorsSection = 1;
         : OAColoringType.TRACK_SOLID;
     
     _selectedRouteAttributesString = [type isRouteInfoAttribute] ? [type getName:coloringType] : nil;
-    
-    _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [type toColorizationType]];
 
     [self setOldValues];
     [self updateAllValues];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onCollectionDeleted:)
-                                                 name:ColorsCollection.collectionDeletedNotification
+                                             selector:@selector(productPurchased:)
+                                                 name:OAIAPProductPurchasedNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onCollectionCreated:)
-                                                 name:ColorsCollection.collectionCreatedNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onCollectionUpdated:)
-                                                 name:ColorsCollection.collectionUpdatedNotification
+                                             selector:@selector(productsRestored:)
+                                                 name:OAIAPProductsRestoredNotification
                                                object:nil];
 }
 
@@ -442,14 +433,17 @@ static const NSInteger kColorsSection = 1;
 {
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[self getGPXColor]];
     if (!_selectedColorItem)
-        _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
+        _selectedColorItem = [_appearanceCollection defaultLineColorItem];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
     _baseColorItem = _selectedColorItem;
 
-    [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
-    _selectedPaletteColorItem = [_gradientColorsCollection getPaletteColorByName:[self getGPXGradientPaletteName]];
+    OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:[self getGPXColoringType]];
+    OASGradientPaletteCategory *paletteCategory = [[currentType toGradientScaleType] toPaletteCategory];
+    NSArray<OASPaletteItemGradient *> *paletteItems = paletteCategory ? [[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime] : @[];
+    [_sortedPaletteColorItems replaceAllWithObjectsSync:paletteItems];
+    _selectedPaletteColorItem = paletteCategory ? [[GradientPaletteHelper shared] paletteItemOrDefaultWithCategory:paletteCategory name:[self getGPXGradientPaletteName]] : nil;
     if (!_selectedPaletteColorItem)
-        _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
+        _selectedPaletteColorItem = paletteItems.firstObject;
 
     _selectedWidth = [_appearanceCollection getWidthForValue:[self getGPXWidth]];
     if (!_selectedWidth)
@@ -469,8 +463,6 @@ static const NSInteger kColorsSection = 1;
                   (unsigned long)[_selectedSplit.values count]);
         }
     }
-
-    OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:[self getGPXColoringType]];
 
     NSMutableArray<OATrackAppearanceItem *> *items = [NSMutableArray array];
     for (OAColoringType *coloringType in [OAColoringType getTrackColoringTypes])
@@ -638,7 +630,7 @@ static const NSInteger kColorsSection = 1;
     return [OAGPXTableCellData withData:@{
         kTableKey: @"paletteName",
         kCellType: [OASimpleTableViewCell getCellIdentifier],
-        kCellTitle: [_selectedPaletteColorItem toHumanString],
+        kCellTitle: _selectedPaletteColorItem.displayName ?: @"",
         kCellTintColor: UIColorFromRGB(color_extra_text_gray)
     }];
 }
@@ -1476,11 +1468,11 @@ static const NSInteger kColorsSection = 1;
     if (![currentColoringType isEqualToString:backupColoringType])
         return YES;
     
-    if (_baseColorItem.value != _selectedColorItem.value)
+    if (_baseColorItem.colorInt != _selectedColorItem.colorInt)
         return YES;
     
-    NSString *currentGradientName = [self getGPXGradientPaletteName].length > 0 ? [self getGPXGradientPaletteName] : [[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0 ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @"";
-    NSString *backupGradientName = _backupGpxItem.gradientPaletteName.length > 0 ? _backupGpxItem.gradientPaletteName : [[_gradientColorsCollection getDefaultGradientPalette] paletteName].length > 0 ? [[_gradientColorsCollection getDefaultGradientPalette] paletteName] : @"";
+    NSString *currentGradientName = [self getGPXGradientPaletteName].length > 0 ? [self getGPXGradientPaletteName] : [OASPaletteConstants shared].DEFAULT_NAME;
+    NSString *backupGradientName = _backupGpxItem.gradientPaletteName.length > 0 ? _backupGpxItem.gradientPaletteName : [OASPaletteConstants shared].DEFAULT_NAME;
     if (![currentGradientName isEqualToString:backupGradientName])
         return YES;
     
@@ -1530,9 +1522,6 @@ static const NSInteger kColorsSection = 1;
 {
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        if (weakSelf.isDefaultColorRestored)
-            [[OAGPXDatabase sharedDb] save];
-
         if (weakSelf.reopeningTrackMenuState)
         {
             [weakSelf restoreOldValues];
@@ -1566,11 +1555,11 @@ static const NSInteger kColorsSection = 1;
     [super forceHide];
 }
 
-- (void)openColorPickerWithColor:(OAColorItem *)colorItem
+- (void)openColorPickerWithColor:(OASPaletteItemSolid *)colorItem
 {
     UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
     colorViewController.delegate = self;
-    colorViewController.selectedColor = [colorItem getColor];
+    colorViewController.selectedColor = UIColorFromARGB(colorItem.colorInt);
     [self.navigationController presentViewController:colorViewController animated:YES completion:nil];
 }
 
@@ -1610,8 +1599,10 @@ static const NSInteger kColorsSection = 1;
 {
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        if (weakSelf.isNewColorSelected)
+        if ([weakSelf isSelectedTypeSolid])
             [weakSelf.appearanceCollection selectColor:weakSelf.selectedColorItem];
+        else if ([weakSelf isSelectedTypeGradient] && weakSelf.selectedPaletteColorItem)
+            [[GradientPaletteHelper shared] markPaletteItemAsUsed:weakSelf.selectedPaletteColorItem];
 
         if (weakSelf.isCurrentTrack)
         {
@@ -1790,44 +1781,40 @@ static const NSInteger kColorsSection = 1;
     }
     else if ([cellData.type isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OACollectionSingleLineTableViewCell *cell =
-            [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
-        BOOL isRightActionButtonVisible = [self isSelectedTypeSolid];
+        OACollectionSingleLineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
+        BOOL isSolidColorSelected = [self isSelectedTypeSolid];
+        BOOL isGradientColorSelected = [self isSelectedTypeGradient];
+        BOOL isRightActionButtonVisible = isSolidColorSelected || isGradientColorSelected;
         [cell rightActionButtonVisibility:isRightActionButtonVisible];
-        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:@"ic_custom_add"] : nil
-                                forState:UIControlStateNormal];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
         cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
-        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(@"shared_string_add_color") : nil;
+        cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(isSolidColorSelected ? @"shared_string_add_color" : @"add_palette") : nil;
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-        if (isRightActionButtonVisible)
-        {
-            [cell.rightActionButton addTarget:self
-                                       action:@selector(onCellButtonPressed:)
-                             forControlEvents:UIControlEventTouchUpInside];
-        }
-
-        if ([self isSelectedTypeSolid])
+        if (isSolidColorSelected)
         {
             OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
-            NSInteger selectedIndex = [_sortedColorItems indexOfObject:_selectedColorItem];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_sortedColorItems indexOfObject:[_appearanceCollection getDefaultLineColorItem]];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
-            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
-            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            colorHandler.hostVC = self;
+            NSInteger selectedIndex = [_appearanceCollection indexOfColorItem:_selectedColorItem items:_sortedColorItems];
+            if (selectedIndex != NSNotFound)
+                [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
             [cell setCollectionHandler:colorHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onColorCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.delegate = self;
         }
-        else if ([self isSelectedTypeGradient])
+        else if (isGradientColorSelected)
         {
             PaletteCollectionHandler *paletteHandler = [[PaletteCollectionHandler alloc] initWithData:@[[_sortedPaletteColorItems asArray]] collectionView:cell.collectionView];
             paletteHandler.delegate = self;
-            NSInteger selectedIndex = [_sortedPaletteColorItems indexOfObjectSync:_selectedPaletteColorItem];
-            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [_sortedPaletteColorItems indexOfObjectSync:[_gradientColorsCollection getDefaultGradientPalette]];
+            NSInteger selectedIndex = [[GradientPaletteHelper shared] indexOf:_selectedPaletteColorItem in:[_sortedPaletteColorItems asArray]];
+            OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
+            OASPaletteItemGradient *defaultPaletteItem = paletteCategory ? [[GradientPaletteHelper shared] defaultPaletteItemWithCategory:paletteCategory] : nil;
+            selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [[GradientPaletteHelper shared] indexOf:defaultPaletteItem in:[_sortedPaletteColorItems asArray]];
             selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             [paletteHandler setSelectedIndexPath:selectedIndexPath];
             [cell setCollectionHandler:paletteHandler];
+            [cell.rightActionButton addTarget:self action:@selector(onPaletteCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 0);
             [cell configureTopOffset:12];
             [cell configureBottomOffset:12];
@@ -2069,20 +2056,15 @@ static const NSInteger kColorsSection = 1;
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
                                      labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
 
-        ColorPalette *colorPalette;
-        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
-        {
-            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
-            colorPalette = paletteColor.colorPalette;
-        }
+        OASColorPalette *colorPalette = [_selectedPaletteColorItem getColorPalette];
         if (!colorPalette)
             return cell;
 
-        cell.chartView.data =
-            [GpxUIHelper buildGradientChartWithChart:cell.chartView
-                                        colorPalette:colorPalette
-                                      valueFormatter:[GradientUiHelper getGradientTypeFormatter:_gradientColorsCollection.gradientType
-                                                                                       analysis:self.analysis]];
+        OASGradientFileType *fileType = _selectedPaletteColorItem.properties.fileType;
+        if ([_selectedPaletteColorItem isFixed])
+            colorPalette = [GradientFormatter getAdjustedPaletteWithOriginalPalette:colorPalette analysis:self.analysis fileType:fileType];
+
+        cell.chartView.data = [GpxUIHelper buildGradientChartWithChart:cell.chartView colorPalette:colorPalette valueFormatter:[GradientFormatter getAxisFormatterWithFileType:fileType analysis:self.analysis]];
         [cell.chartView notifyDataSetChanged];
         [cell.chartView setNeedsDisplay];
         return cell;
@@ -2378,7 +2360,7 @@ static const NSInteger kColorsSection = 1;
     else if ([tableData.key isEqualToString:@"paletteName"])
     {
         [tableData setData:@{
-            kCellTitle: [_selectedPaletteColorItem toHumanString]
+            kCellTitle: _selectedPaletteColorItem.displayName ?: @""
         }];
     }
 }
@@ -2549,7 +2531,7 @@ static const NSInteger kColorsSection = 1;
         }
         else if ([self isSelectedTypeGradient])
         {
-            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorizationPaletteItems items:_gradientColorsCollection selectedItem:_selectedPaletteColorItem];
+            colorCollectionViewController = [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorizationPaletteItems items:[_sortedPaletteColorItems asArray] selectedItem:_selectedPaletteColorItem];
         }
 
         if (colorCollectionViewController)
@@ -2682,14 +2664,19 @@ static const NSInteger kColorsSection = 1;
     if (!selectedItem)
         return;
     
+    NSString *previousColoringType = [self getGPXColoringType];
+    NSString *previousPaletteName = [self getGPXGradientPaletteName];
     _selectedItem = selectedItem;
     if ([self isSelectedTypeGradient])
     {
-        _gradientColorsCollection = [[GradientColorsCollection alloc] initWithColorizationType:(ColorizationType) [_selectedItem.coloringType toColorizationType]];
-        [_sortedPaletteColorItems replaceAllWithObjectsSync:[_gradientColorsCollection getPaletteColors]];
-        _selectedPaletteColorItem = [_gradientColorsCollection getDefaultGradientPalette];
+        OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
+        NSArray<OASPaletteItemGradient *> *paletteItems = paletteCategory ? [[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime] : @[];
+        [_sortedPaletteColorItems replaceAllWithObjectsSync:paletteItems];
+        NSString *paletteName = [_selectedItem.coloringType.name isEqualToString:previousColoringType] ? previousPaletteName : [OASPaletteConstants shared].DEFAULT_NAME;
+        _selectedPaletteColorItem = paletteCategory ? [[GradientPaletteHelper shared] paletteItemOrDefaultWithCategory:paletteCategory name:paletteName] : nil;
+        NSString *selectedPaletteName = _selectedPaletteColorItem ? _selectedPaletteColorItem.id : [OASPaletteConstants shared].DEFAULT_NAME;
         if (!self.isCurrentTrack)
-            self.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
+            self.gpx.gradientPaletteName = selectedPaletteName;
     }
 
     NSString *coloringType = [self isSelectedTypeAttribute] ? _selectedItem.attrName : _selectedItem.coloringType.name;
@@ -2704,7 +2691,7 @@ static const NSInteger kColorsSection = 1;
     {
         [self.doc setColoringTypeColoringType:coloringType];
         if ([self isSelectedTypeGradient])
-            [self.doc setGradientColorPaletteGradientColorPaletteName:PaletteGradientColor.defaultName];
+            [self.doc setGradientColorPaletteGradientColorPaletteName:_selectedPaletteColorItem ? _selectedPaletteColorItem.id : [OASPaletteConstants shared].DEFAULT_NAME];
         [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
     else
@@ -2730,149 +2717,15 @@ static const NSInteger kColorsSection = 1;
 
 #pragma mark - Selectors
 
-- (void)onCellButtonPressed:(UIButton *)sender
+- (void)onColorCellButtonPressed:(UIButton *)sender
 {
     [self onRightActionButtonPressed:sender.tag];
 }
 
-- (void)onCollectionDeleted:(NSNotification *)notification
+- (void)onPaletteCellButtonPressed:(UIButton *)sender
 {
-    if (![notification.object isKindOfClass:NSArray.class])
-        return;
-    
-    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
-    PaletteGradientColor *currentGradientPaletteColor;
-    if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
-        currentGradientPaletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
-    else
-        return;
-    
-    auto currentIndex = [_sortedPaletteColorItems indexOfObjectSync:currentGradientPaletteColor];
-    NSMutableArray<NSIndexPath *> *indexPathsToDelete = [NSMutableArray array];
-    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
-    {
-        NSInteger index = [_sortedPaletteColorItems indexOfObjectSync:paletteColor];
-        if (index != NSNotFound)
-        {
-            [_sortedPaletteColorItems removeObjectSync:paletteColor];
-            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:index inSection:0]];
-            if (index == currentIndex)
-                _isDefaultColorRestored = YES;
-        }
-    }
-    
-    if (indexPathsToDelete.count > 0 && [self isSelectedTypeGradient] && _colorsCollectionIndexPath)
-    {
-        __weak __typeof(self) weakSelf = self;
-        [self.tableView performBatchUpdates:^{
-            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.colorsCollectionIndexPath];
-            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
-            [handler removeItems:indexPathsToDelete];
-        } completion:^(BOOL finished) {
-            if (weakSelf.isDefaultColorRestored)
-            {
-               
-                weakSelf.backupGpxItem.gradientPaletteName = PaletteGradientColor.defaultName;
-                if (weakSelf.isCurrentTrack)
-                    [weakSelf.doc setGradientColorPaletteGradientColorPaletteName:PaletteGradientColor.defaultName];
-                else
-                    weakSelf.gpx.gradientPaletteName = PaletteGradientColor.defaultName;
-                weakSelf.selectedPaletteColorItem = [weakSelf.gradientColorsCollection getDefaultGradientPalette];
-                
-                NSMutableArray *indexPaths = [NSMutableArray array];
-                if (weakSelf.paletteLegendIndexPath)
-                    [indexPaths addObject:weakSelf.paletteLegendIndexPath];
-                if (weakSelf.paletteNameIndexPath)
-                {
-                    [weakSelf updateData:weakSelf.tableData[weakSelf.paletteNameIndexPath.section].subjects[weakSelf.paletteNameIndexPath.row]];
-                    [indexPaths addObject:weakSelf.paletteNameIndexPath];
-                }
-                if (indexPaths.count > 0)
-                {
-                    [weakSelf.tableView reloadRowsAtIndexPaths:indexPaths
-                                              withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-            }
-        }];
-    }
-}
-
-- (void)onCollectionCreated:(NSNotification *)notification
-{
-    if (![notification.object isKindOfClass:NSArray.class])
-        return;
-    
-    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
-    NSMutableArray<NSIndexPath *> *indexPathsToInsert = [NSMutableArray array];
-    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
-    {
-        NSInteger index = [paletteColor getIndex] - 1;
-        NSIndexPath *indexPath;
-        if (index < [_sortedPaletteColorItems countSync])
-        {
-            indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-            [_sortedPaletteColorItems insertObjectSync:paletteColor atIndex:index];
-        }
-        else
-        {
-            indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems countSync] inSection:0];
-            [_sortedPaletteColorItems addObjectSync:paletteColor];
-        }
-        [indexPathsToInsert addObject:indexPath];
-    }
-    
-    if (indexPathsToInsert.count > 0 && [self isSelectedTypeGradient] && _colorsCollectionIndexPath)
-    {
-        __weak __typeof(self) weakSelf = self;
-        [self.tableView performBatchUpdates:^{
-            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.colorsCollectionIndexPath];
-            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
-            for (NSIndexPath *indexPath in indexPathsToInsert)
-            {
-                [handler insertItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
-                        atIndexPath:indexPath];
-            }
-        } completion:nil];
-    }
-}
-
-- (void)onCollectionUpdated:(NSNotification *)notification
-{
-    if (![notification.object isKindOfClass:NSArray.class])
-        return;
-    
-    NSArray<PaletteGradientColor *> *gradientPaletteColor = (NSArray<PaletteGradientColor *> *) notification.object;
-    NSMutableArray<NSIndexPath *> *indexPathsToUpdate = [NSMutableArray array];
-    BOOL currentPaletteColor;
-    for (PaletteGradientColor *paletteColor in gradientPaletteColor)
-    {
-        if ([_sortedPaletteColorItems containsObjectSync:paletteColor])
-        {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteColor] inSection:0];
-            [indexPathsToUpdate addObject:indexPath];
-            if (paletteColor == _selectedPaletteColorItem)
-                currentPaletteColor = YES;
-        }
-    }
-    
-    if (indexPathsToUpdate.count > 0 && [self isSelectedTypeGradient] && _colorsCollectionIndexPath)
-    {
-        __weak __typeof(self) weakSelf = self;
-        [self.tableView performBatchUpdates:^{
-            OACollectionSingleLineTableViewCell *colorCell = [weakSelf.tableView cellForRowAtIndexPath:weakSelf.colorsCollectionIndexPath];
-            OABaseCollectionHandler *handler = [colorCell getCollectionHandler];
-            for (NSIndexPath *indexPath in indexPathsToUpdate)
-            {
-                [handler replaceItem:[weakSelf.sortedPaletteColorItems objectAtIndexSync:indexPath.row]
-                         atIndexPath:indexPath];
-                if (currentPaletteColor && _paletteLegendIndexPath)
-                {
-                    [weakSelf.tableView reloadRowsAtIndexPaths:@[_paletteLegendIndexPath]
-                                              withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-            }
-        } completion:nil];
-    }
+    OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
+    [[GradientPaletteHelper shared] showAddPaletteEditorFrom:self paletteCategory:paletteCategory sourceView:sender];
 }
 
 #pragma mark - OACollectionTableViewCellDelegate
@@ -2887,19 +2740,56 @@ static const NSInteger kColorsSection = 1;
 
 #pragma mark - ColorCollectionViewControllerDelegate
 
-- (void)selectColorItem:(OAColorItem *)colorItem
+- (void)reloadData
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+    if (![self isSelectedTypeGradient])
+        return;
+
+    OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
+    if (!paletteCategory)
+        return;
+    
+    NSArray<OASPaletteItemGradient *> *paletteItems = [[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime];
+    [_sortedPaletteColorItems replaceAllWithObjectsSync:paletteItems];
+    if (_selectedPaletteColorItem && [[GradientPaletteHelper shared] indexOf:_selectedPaletteColorItem in:paletteItems] == NSNotFound)
+        _selectedPaletteColorItem = [[GradientPaletteHelper shared] defaultPaletteItemWithCategory:paletteCategory] ?: paletteItems.firstObject;
+    
+    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+    if (_colorsCollectionIndexPath)
+        [indexPaths addObject:_colorsCollectionIndexPath];
+    if (_paletteNameIndexPath)
+    {
+        [self updateData:_tableData[_paletteNameIndexPath.section].subjects[_paletteNameIndexPath.row]];
+        [indexPaths addObject:_paletteNameIndexPath];
+    }
+    if (indexPaths.count > 0)
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)selectPaletteItem:(PaletteColor *)paletteItem
+- (void)selectColorItem:(OASPaletteItemSolid *)colorItem
 {
-    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedPaletteColorItems indexOfObjectSync:paletteItem] inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+    _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+    NSInteger index = [_appearanceCollection indexOfColorItem:colorItem items:_sortedColorItems];
+    if (index != NSNotFound)
+        [self onCollectionItemSelected:[NSIndexPath indexPathForRow:index inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
 }
 
-- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
+- (void)selectPaletteItem:(OASPaletteItemGradient *)paletteItem
 {
-    OAColorItem *newColorItem = [_appearanceCollection addNewSelectedColor:color];
+    OASGradientPaletteCategory *paletteCategory = [[_selectedItem.coloringType toGradientScaleType] toPaletteCategory];
+    if (paletteCategory)
+        [_sortedPaletteColorItems replaceAllWithObjectsSync:[[GradientPaletteHelper shared] paletteItemsWithCategory:paletteCategory sortMode:OASPaletteSortMode.lastUsedTime]];
+    NSInteger index = [[GradientPaletteHelper shared] indexOf:paletteItem in:[_sortedPaletteColorItems asArray]];
+    if (index != NSNotFound)
+        [self onCollectionItemSelected:[NSIndexPath indexPathForRow:index inSection:0] selectedItem:nil collectionView:nil shouldDismiss:YES];
+}
+
+- (OASPaletteItemSolid *)addAndGetNewColorItem:(UIColor *)color
+{
+    OASPaletteItemSolid *newColorItem = [_appearanceCollection addNewSelectedColor:color];
+    if (!newColorItem)
+        return nil;
+
     if (_colorsCollectionIndexPath)
     {
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
@@ -2911,25 +2801,32 @@ static const NSInteger kColorsSection = 1;
     return newColorItem;
 }
 
-- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
+- (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color
 {
     if (_colorsCollectionIndexPath)
     {
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
-        [_appearanceCollection changeColor:colorItem newColor:color];
-        [colorHandler replaceOldColor:indexPath];
+        NSInteger index = [_appearanceCollection indexOfColorItem:colorItem items:_sortedColorItems];
+        OASPaletteItemSolid *newColorItem = [_appearanceCollection changeColor:colorItem newColor:color];
+        if (index != NSNotFound && newColorItem)
+        {
+            _sortedColorItems[index] = newColorItem;
+            if ([_appearanceCollection isSameColorItem:_selectedColorItem secondItem:colorItem])
+                [self onCollectionItemSelected:[NSIndexPath indexPathForRow:index inSection:0] selectedItem:newColorItem collectionView:nil shouldDismiss:NO];
+            [self.tableView reloadRowsAtIndexPaths:@[_colorsCollectionIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
 }
 
-- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
+- (OASPaletteItemSolid *)duplicateColorItem:(OASPaletteItemSolid *)colorItem
 {
-    OAColorItem *duplicatedColorItem = [_appearanceCollection duplicateColor:colorItem];
+    OASPaletteItemSolid *duplicatedColorItem = [_appearanceCollection duplicateColor:colorItem];
     if (_colorsCollectionIndexPath)
     {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        NSInteger index = [_appearanceCollection indexOfColorItem:colorItem items:_sortedColorItems];
+        if (index == NSNotFound || !duplicatedColorItem)
+            return duplicatedColorItem;
+
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
         [_sortedColorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
 
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
@@ -2940,16 +2837,23 @@ static const NSInteger kColorsSection = 1;
     return duplicatedColorItem;
 }
 
-- (void)deleteColorItem:(OAColorItem *)colorItem
+- (void)deleteColorItem:(OASPaletteItemSolid *)colorItem
 {
     if (_colorsCollectionIndexPath)
     {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        NSInteger index = [_appearanceCollection indexOfColorItem:colorItem items:_sortedColorItems];
+        if (index == NSNotFound)
+            return;
+
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+        BOOL isSelectedColorDeleted = [_appearanceCollection isSameColorItem:_selectedColorItem secondItem:colorItem];
         [_appearanceCollection deleteColor:colorItem];
         [_sortedColorItems removeObjectAtIndex:indexPath.row];
-
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorsCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        if (isSelectedColorDeleted)
+            [colorHandler setSelectedIndexPath:nil];
+
         [colorHandler removeColor:indexPath];
     }
 }
@@ -2961,25 +2865,24 @@ static const NSInteger kColorsSection = 1;
     NSString *paletteName = @"";
     if ([self isSelectedTypeSolid])
     {
-        _isNewColorSelected = YES;
-        _selectedColorItem = _sortedColorItems[indexPath.row];
+        OASPaletteItemSolid *selectedColorItem = [selectedItem isKindOfClass:OASPaletteItemSolid.class] ? (OASPaletteItemSolid *)selectedItem : _sortedColorItems[indexPath.row];
+        _selectedColorItem = selectedColorItem;
         if (!self.isCurrentTrack)
-            self.gpx.color = _selectedColorItem.value;
+            self.gpx.color = _selectedColorItem.colorInt;
         if (_wholeFolderTracks)
         {
             for (OASGpxDataItem *track in _wholeFolderTracks)
             {
-                track.color = _selectedColorItem.value;
+                track.color = _selectedColorItem.colorInt;
             }
         }
     }
     else if ([self isSelectedTypeGradient])
     {
-        _selectedPaletteColorItem = [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];
-        if ([_selectedPaletteColorItem isKindOfClass:PaletteGradientColor.class])
+        _selectedPaletteColorItem = [selectedItem isKindOfClass:OASPaletteItemGradient.class] ? (OASPaletteItemGradient *)selectedItem : [_sortedPaletteColorItems objectAtIndexSync:indexPath.row];
+        if (_selectedPaletteColorItem)
         {
-            PaletteGradientColor *paletteColor = (PaletteGradientColor *) _selectedPaletteColorItem;
-            paletteName = paletteColor.paletteName;
+            paletteName = _selectedPaletteColorItem.id;
            
             if (!self.isCurrentTrack)
                 self.gpx.gradientPaletteName = paletteName;
@@ -3006,7 +2909,7 @@ static const NSInteger kColorsSection = 1;
     if (self.isCurrentTrack)
     {
         if ([self isSelectedTypeSolid]) {
-            OASInt *color = [[OASInt alloc] initWithInt:(int)_selectedColorItem.value];
+            OASInt *color = [[OASInt alloc] initWithInt:(int)_selectedColorItem.colorInt];
             [self.doc setColorColor:color];
         }
         else if ([self isSelectedTypeGradient])
@@ -3057,7 +2960,7 @@ static const NSInteger kColorsSection = 1;
 {
     if (_editColorIndexPath)
     {
-        if (![[_sortedColorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
+        if (_sortedColorItems[_editColorIndexPath.row].colorInt != (int32_t)[viewController.selectedColor toARGBNumber])
         {
             [self changeColorItem:_sortedColorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
         }
@@ -3067,6 +2970,26 @@ static const NSInteger kColorsSection = 1;
     {
         [self addAndGetNewColorItem:viewController.selectedColor];
     }
+}
+
+#pragma mark - OAIAPProductNotification
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
+}
+
+- (void)productsRestored:(NSNotification *)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf generateData];
+        [weakSelf.tableView reloadData];
+    });
 }
 
 @end

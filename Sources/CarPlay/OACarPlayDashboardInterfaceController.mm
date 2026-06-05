@@ -48,6 +48,9 @@ static NSString * const kUnitsYd = OALocalizedString(@"yard");
 static NSString * const kUnitsFt = OALocalizedString(@"foot");
 static NSString * const kUnitsNm = OALocalizedString(@"nm");
 
+static const CGFloat kTurnArrowSize = 16.0;
+static const CGFloat kTurnArrowRenderSize = 32.0;
+
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
     EOACarPlayButtonTypePanMap,
@@ -127,7 +130,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
     [self enterBrowsingState];
     
-    [self.interfaceController setRootTemplate:_mapTemplate animated:YES completion:nil];
+    [self safeSetRootTemplate:_mapTemplate animated:YES];
 }
 
 - (void) onTripStartTriggered
@@ -237,7 +240,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [directionsGrid openSearch];
 }
 
-- (void)openNavigation {
+- (void)openNavigation
+{
     OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
     [directionsGrid present];
 }
@@ -279,21 +283,39 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPListItem *parkLocation = [[CPListItem alloc] initWithText:OALocalizedString(@"context_menu_item_add_parking_point") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking_location"]];
     parkLocation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [weakSelf saveParkingAtCurrentLocationWithCompletion:completion];
         }];
     };
     
     CPListItem *findParking = [[CPListItem alloc] initWithText:OALocalizedString(@"find_parking") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_parking"]];
     findParking.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [weakSelf openFindParkingWithCompletion:completion];
         }];
     };
     
     CPListItem *recalcRoute = [[CPListItem alloc] initWithText:OALocalizedString(@"recalculate_route") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_navigation"]];
     recalcRoute.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [[OARootViewController instance].mapPanel.mapActions recalculateRoute];
             if (completion)
                 completion();
@@ -302,7 +324,13 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPListItem *finishNavigation = [[CPListItem alloc] initWithText:OALocalizedString(@"finish_navigation") detailText:nil image:[UIImage templateImageNamed:@"ic_custom_finish_flag"]];
     finishNavigation.handler = ^(id<CPSelectableListItem> item, dispatch_block_t completion) {
-        [weakSelf.interfaceController popTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+        [weakSelf safePopTemplateAnimated:YES completion:^(BOOL completed, NSError * _Nullable error) {
+            if (!completed || error)
+            {
+                if (completion)
+                    completion();
+                return;
+            }
             [weakSelf stopNavigation];
             if (completion)
                 completion();
@@ -311,7 +339,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPListTemplate *listTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"arrived_at_destination") sections:@[[[CPListSection alloc] initWithItems:@[parkLocation, findParking, recalcRoute, finishNavigation]]]];
     
-    [self.interfaceController pushTemplate:listTemplate animated:YES completion:^(BOOL completed, NSError * _Nullable error) {}];
+    [self safePushTemplate:listTemplate animated:YES];
 }
 
 - (void)saveParkingAtCurrentLocationWithCompletion:(dispatch_block_t)completion
@@ -852,9 +880,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     [drawable setTurnImminent:nextNextDirInfo.imminent
                             deviatedFromRoute:deviatedFromRoute];
                     drawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
-                    CGFloat size = MAX(drawable.pathForTurn.bounds.origin.x + drawable.pathForTurn.bounds.size.width,
-                                       drawable.pathForTurn.bounds.origin.y + drawable.pathForTurn.bounds.size.height);
-                    drawable.frame = CGRectMake(0, 0, size, size);
+                    drawable.frame = CGRectMake(0, 0, kTurnArrowRenderSize, kTurnArrowRenderSize);
                     [drawable setNeedsDisplay];
                     nextTurnImage = [drawable toUIImage];
                     secondaryManeuver = [[CPManeuver alloc] init];
@@ -880,7 +906,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     {
                         NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
                         attachment.image = [OAUtilities resizeImage:nextTurnImage
-                                                            newSize:CGSizeMake(16, 16)];
+                                                            newSize:CGSizeMake(kTurnArrowSize, kTurnArrowSize)];
                         [attributedString appendAttributedString:
                             [NSAttributedString attributedStringWithAttachment:attachment]];
                     }

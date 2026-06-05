@@ -54,7 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer;
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint;
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
@@ -196,18 +196,21 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void) updatePoiLayer;
 - (OAPOILayer *) getMapPoiLayer;
 
+- (OATargetPoint *)osmEditsTargetPoint:(id)obj touchLocation:(nullable CLLocation *)touchLocation;
+
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
 - (BOOL) updateMetadata:(nullable OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 
+// Synchronously commits a short renderer/view mutation on the main thread.
+// Do not perform file I/O, DB/cache/network work, dispatch_sync, or notifications here.
 - (void) runWithRenderSync:(nullable void (^)(void))runnable;
 - (void) updateLayer:(NSString *)layerId;
 
 - (nullable UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
 - (nullable NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
-- (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(nullable NSDictionary<NSString *, NSString*> *) additionalSettings;
 

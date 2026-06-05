@@ -166,11 +166,10 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     OAColorCollectionHandler *_colorCollectionHandler;
     BOOL _needToScrollToSelectedColor;
     
-    IconCollectionHandler *_profileIconCollectionHandler;
+    ProfileIconCollectionHandler *_profileIconCollectionHandler;
     IconCollectionHandler *_positionIconCollectionHandler;
     IconCollectionHandler *_locationIconCollectionHandler;
     
-    NSArray<NSString *> *_profileIconNames;
     NSArray<NSString *> *_customModelNames;
     NSArray<OALocationIcon *> *_locationIcons;
     NSArray<OALocationIcon *> *_navigationIcons;
@@ -249,8 +248,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
     _profile.locationIcon = [baseModeForNewProfile.getLocationIcon name];
     _profile.navigationIcon = [baseModeForNewProfile.getNavigationIcon name];
-    _profile.viewAngleVisibility = [baseModeForNewProfile getViewAngleVisibility];
-    _profile.locationRadiusVisibility = [baseModeForNewProfile getLocationRadiusVisibility];
+    _profile.viewAngleVisibility = (int)[baseModeForNewProfile getViewAngleVisibility];
+    _profile.locationRadiusVisibility = (int)[baseModeForNewProfile getLocationRadiusVisibility];
     _profile.locationIconSize = [baseModeForNewProfile getLocationIconSize];
     _profile.courseIconSize = [baseModeForNewProfile getCourseIconSize];
 }
@@ -437,20 +436,18 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void) prepareData
 {
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    NSMutableArray<OAColorItem *> *sortedColorItems = [NSMutableArray arrayWithArray:[appearanceCollection getAvailableColorsSortingByLastUsed]];
+    OASPaletteItemSolid *selectedColorItem = [appearanceCollection getColorItemWithValue:[UIColorFromRGB([_changedProfile profileColor]) toARGBNumber]];
+    NSMutableArray<OASPaletteItemSolid *> *sortedColorItems = [NSMutableArray arrayWithArray:[appearanceCollection getAvailableColorsSortingByLastUsed]];
     _colorCollectionHandler =  [[OAColorCollectionHandler alloc] initWithData:@[sortedColorItems] collectionView:nil];
     _colorCollectionHandler.delegate = self;
     _colorCollectionHandler.hostVC = self;
+
+    NSInteger selectedIndex = [appearanceCollection indexOfColorItem:selectedColorItem items:sortedColorItems];
+    selectedIndex = selectedIndex != NSNotFound ? selectedIndex : [appearanceCollection indexOfColorItem:[appearanceCollection defaultPointColorItem] items:sortedColorItems];
+    selectedIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
+    [_colorCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]];
     
-    UIColor *selectedColor = selectedColor = UIColorFromRGB([_changedProfile profileColor]);
-    OAColorItem * selectedColorItem = [appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
-    NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[[_colorCollectionHandler getData][0] indexOfObject:selectedColorItem] inSection:0];
-    if (selectedIndexPath.row == NSNotFound)
-        selectedIndexPath = [NSIndexPath indexPathForRow:[[_colorCollectionHandler getData][0] indexOfObject:[appearanceCollection getDefaultPointColorItem]] inSection:0];
-    [_colorCollectionHandler setSelectedIndexPath:selectedIndexPath];
-    
-    _profileIconNames = [PoiIconCollectionHandler getProfileIconsList];
-    _profileIconCollectionHandler = [[IconCollectionHandler alloc] initWithData:@[_profileIconNames] collectionView:nil];
+    _profileIconCollectionHandler = [[ProfileIconCollectionHandler alloc] init];
     _profileIconCollectionHandler.delegate = self;
     _profileIconCollectionHandler.hostVC = self;
     _profileIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
@@ -460,13 +457,6 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [_profileIconCollectionHandler setIconBackgroundSizeWithSize:36];
     [_profileIconCollectionHandler setIconSizeWithSize:24];
     [_profileIconCollectionHandler setSpacingWithSpacing:6];
-    NSString *iconName = _changedProfile.iconName;
-    if (!iconName || iconName.length == 0)
-        iconName = _profile.iconName;
-    NSInteger selectedIconIndex = [_profileIconNames indexOfObject:iconName];
-    if (selectedIconIndex == NSNotFound)
-        selectedIconIndex = 0;
-    [_profileIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
     
     _customModelNames = [Model3dHelper getCustomModelNames];
     _locationIcons = [self getlocationIcons];
@@ -485,7 +475,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     [_positionIconCollectionHandler setItemSizeWithSize:156];
     [_positionIconCollectionHandler setIconBackgroundSizeWithSize:146];
     [_positionIconCollectionHandler setIconSizeWithSize:52];
-    selectedIconIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
+    NSInteger selectedIconIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
     [_positionIconCollectionHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:selectedIconIndex inSection:0]];
     
     _navigationIcons = [self getlocationIcons];
@@ -608,6 +598,9 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 - (void) saveProfile
 {
     _profile = _changedProfile;
+    
+    [_profileIconCollectionHandler addIconToLastUsed:_profile.iconName];
+    
     if (_isNewProfile)
     {
         [self saveNewProfile];
@@ -746,7 +739,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         {
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -782,9 +775,12 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             if ([item.key isEqualToString:kProfileIconCellKey])
             {
                 [_profileIconCollectionHandler setCollectionView:cell.collectionView];
+                [_profileIconCollectionHandler setIconName:_changedProfile.iconName];
                 [cell setCollectionHandler:_profileIconCollectionHandler];
+                [_profileIconCollectionHandler updateTopButtonName];
                 cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                [cell topButtonVisibility:YES];
             }
             else if ([item.key isEqualToString:kPositionIconCellKey])
             {
@@ -812,7 +808,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             }
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
             [cell.collectionView reloadData];
@@ -981,10 +977,15 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 {
     if (collectionView == [_colorCollectionHandler getCollectionView])
     {
+        OASPaletteItemSolid *colorItem = [selectedItem isKindOfClass:OASPaletteItemSolid.class] ? (OASPaletteItemSolid *)selectedItem : [_colorCollectionHandler getSelectedItem];
+        if (!colorItem)
+            return;
+
         _hasChangesBeenMade = YES;
         _needToScrollToSelectedColor = YES;
         _changedProfile.color = -1;
-        _changedProfile.customColor = (int)[_colorCollectionHandler getData][0][indexPath.row].value;
+        _changedProfile.customColor = (int)colorItem.colorInt;
+        [[OAGPXAppearanceCollection sharedInstance] selectColor:colorItem];
         
         _locationIconImages = [self getlocationIconImages];
         _navigationIconImages = [self getlocationIconImages];
@@ -1031,7 +1032,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 - (void) onViewAngleUpdatedWithNewValue:(NSInteger)newValue
 {
-    _changedProfile.viewAngleVisibility = newValue;
+    _changedProfile.viewAngleVisibility = (int)newValue;
     [self generateData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -1040,7 +1041,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 
 - (void) onLocationRadiusUpdatedWithNewValue:(NSInteger)newValue
 {
-    _changedProfile.locationRadiusVisibility = newValue;
+    _changedProfile.locationRadiusVisibility = (int)newValue;
     [self generateData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOptionsSectionIndex] withRowAnimation:UITableViewRowAnimationNone];
 }

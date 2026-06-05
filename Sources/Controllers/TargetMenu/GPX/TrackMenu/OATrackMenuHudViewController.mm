@@ -73,6 +73,7 @@
 #import "OAFavoriteItem.h"
 #import "OAEditGroupViewController.h"
 #import "OAButton.h"
+#import "OANativeUtilities.h"
 
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
@@ -2486,6 +2487,13 @@
             [cell.iconView setImage:cellData.leftIcon];
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
+            cell.showWaypointImageView.image = [UIImage templateImageNamed:ACImageNameIcCustomLocationMarkerOutlined];
+            cell.showWaypointImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.showWaypointButton.accessibilityLabel = [NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), cellData.title];
+            [cell.showWaypointButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+            cell.showWaypointButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.showWaypointButton addTarget:self action:@selector(showWaypoint:) forControlEvents:UIControlEventTouchUpInside];
+            [cell setShowWaypointButtonVisiblity:YES];
 
             cell.directionIconView.transform =
                     CGAffineTransformMakeRotation([cellData.values[@"float_value_direction"] floatValue]);
@@ -2962,6 +2970,37 @@
     {
         [_uiBuilder onButtonPressed:cellData sourceView:button];
     }
+}
+
+- (BOOL)showWaypoint:(id)sender
+{
+    UIButton *btn = (UIButton *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag & 0x3FF inSection:btn.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    OAGpxWptItem *gpxWptItem = cellData.values[@"waypoint"];
+    double lat = gpxWptItem.point.lat;
+    double lon = gpxWptItem.point.lon;
+    CGSize viewSize = self.view.bounds.size;
+    BOOL isLandscaped = [OAUtilities isLandscapeIpadAware];
+    CGFloat bottomInset = 0;
+    CGFloat leftInset = 0;
+    
+    if (isLandscaped)
+        leftInset = (viewSize.width - self.scrollableView.frame.size.width) / 2 + self.scrollableView.frame.size.width - kCorrectionMinLeftSpace;
+    else
+        bottomInset = (viewSize.height - self.scrollableView.frame.size.height) / 2 + self.scrollableView.frame.size.height - self.groupsButtonContainerView.frame.size.height;
+    
+    [self.mapPanelViewController goToTargetPoint:lat longitude:lon];
+    
+    Point31 targetPoint = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+    [self.mapViewController correctPosition:targetPoint
+                           originalCenter31:targetPoint
+                                  leftInset:leftInset
+                                bottomInset:bottomInset
+                                 centerBBox:NO
+                                   animated:NO];
+    
+    return NO;
 }
 
 - (void)segmentChanged:(id)sender

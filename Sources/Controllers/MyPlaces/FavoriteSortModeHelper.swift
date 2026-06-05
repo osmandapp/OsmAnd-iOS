@@ -48,8 +48,8 @@ protocol FavoriteSortablePoint {
         case .lastModified: return .icCustomLastModified
         case .nameAZ: return .icCustomSortNameAscending
         case .nameZA: return .icCustomSortNameDescending
-        case .nearest: return UIImage.templateImageNamed("ic_custom_sort_near") ?? .icCustomNearby
-        case .farthest: return UIImage.templateImageNamed("ic_custom_sort_far") ?? .icCustomNearby
+        case .nearest: return .icCustomSortNear
+        case .farthest: return .icCustomSortFar
         case .newestDateFirst: return .icCustomSortDateNewest
         case .oldestDateFirst: return .icCustomSortDateOldest
         }

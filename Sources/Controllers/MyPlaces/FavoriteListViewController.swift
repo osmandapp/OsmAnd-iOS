@@ -506,7 +506,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func makeSortAction(for sortMode: FavoriteSortMode) -> UIAction {
-        UIAction(title: sortMode.title, image: sortMode.image?.resizedMenuImage(), state: currentSortMode == sortMode ? .on : .off) { [weak self] _ in
+        UIAction(title: sortMode.title, image: sortMode.image, state: currentSortMode == sortMode ? .on : .off) { [weak self] _ in
             self?.setFavoriteSortMode(sortMode)
         }
     }

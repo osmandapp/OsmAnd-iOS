@@ -12,15 +12,6 @@ import UniformTypeIdentifiers
 private enum ScreenMode {
     case root
     case folder(FavoriteFolderRow, previousTitle: String)
-    
-    var isRoot: Bool {
-        switch self {
-        case .root:
-            return true
-        case .folder:
-            return false
-        }
-    }
 }
 
 private enum FavoriteFolderSection: Hashable {
@@ -41,11 +32,13 @@ private enum FavoriteFolderSection: Hashable {
 }
 
 private enum FavoriteListSection: Hashable {
+    case backupBanner
     case folderSection(FavoriteFolderSection)
     case content
 }
 
 private enum FavoriteListItem: Hashable {
+    case backupBanner
     case header(FavoriteFolderSection)
     case folder(FavoriteFolderRow)
     case favorite(FavoritePointRow)
@@ -125,16 +118,23 @@ final class FavoriteListViewController: UIViewController {
 
     weak var myPlacesDelegate: MyPlacesDelegate?
 
-    private static let imageSize: CGFloat = 30
+    private static let imageSize: CGFloat = 30.0
+    private static let favoriteIconSize: CGFloat = 36.0
     private static let navigationTitleFontSize: CGFloat = 17.0
     private static let navigationTitleMaximumSize: CGFloat = 22.0
     private static let navigationSubtitleFontSize: CGFloat = 12.0
     private static let navigationSubtitleMaximumSize: CGFloat = 18.0
+    private static let rowContentInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 0.0, bottom: 12.0, trailing: 0.0)
+    private static let wasClosedFreeBackupFavoritesBannerKey = "wasClosedFreeBackupFavoritesBanner"
 
     private let screenMode: ScreenMode
+    private var layoutSections: [FavoriteListSection] = []
 
     private var searchText = ""
     private var isSearchActive = false
+    private var isAvailablePaymentBanner: Bool {
+        isRootFolder && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
+    }
     private var isRootFolder: Bool {
         guard case .root = screenMode else { return false }
         return true
@@ -181,8 +181,25 @@ final class FavoriteListViewController: UIViewController {
         cell.accessories = [.outlineDisclosure(options: disclosureOptions)]
         cell.tintColor = .iconColorActive
     }
+    private lazy var backupBannerCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        guard let self, let banner = Bundle.main.loadNibNamed("FreeBackupBanner", owner: self)?.first as? FreeBackupBanner else { return }
+        banner.configure(bannerType: .favorite)
+        banner.didOsmAndCloudButtonAction = { [weak self] in
+            self?.navigationController?.pushViewController(OACloudIntroductionViewController(), animated: true)
+        }
+        banner.didCloseButtonAction = { [weak self] in
+            self?.closeFreeBackupBanner()
+        }
+        banner.translatesAutoresizingMaskIntoConstraints = false
+        cell.contentView.addSubview(banner)
+        let fittingWidth = cell.contentView.bounds.width > 0.0 ? cell.contentView.bounds.width : cell.bounds.width
+        NSLayoutConstraint.activate([banner.topAnchor.constraint(equalTo: cell.contentView.topAnchor), banner.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor), banner.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)])
+        NSLayoutConstraint.activate([banner.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor), banner.heightAnchor.constraint(equalToConstant: self.backupBannerHeight(banner, fittingWidth: fittingWidth))])
+    }
     private lazy var folderCellRegistration = CellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
         var content = cell.defaultContentConfiguration()
+        content.directionalLayoutMargins = Self.rowContentInsets
         content.image = UIImage.templateImageNamed(folder.iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
         content.imageProperties.tintColor = folder.iconColor
         content.text = folder.title
@@ -195,7 +212,8 @@ final class FavoriteListViewController: UIViewController {
     }
     private lazy var favoriteCellRegistration = CellRegistration<FavoritePointRow> { cell, _, favorite in
         var content = cell.defaultContentConfiguration()
-        content.image = favorite.icon
+        content.directionalLayoutMargins = Self.rowContentInsets
+        content.image = OAUtilities.resize(favorite.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
         content.text = favorite.title
         content.textProperties.color = favorite.titleColor
         content.textProperties.font = favorite.titleFont
@@ -235,10 +253,12 @@ final class FavoriteListViewController: UIViewController {
         configureCollectionView()
         definesPresentationContext = true
         NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(productPurchased), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -255,9 +275,12 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func createLayout() -> UICollectionViewLayout {
-        var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        configuration.headerMode = isRootFolder ? .firstItemInSection : .none
-        return UICollectionViewCompositionalLayout.list(using: configuration)
+        UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+            var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            let section = self?.layoutSections.indices.contains(sectionIndex) == true ? self?.layoutSections[sectionIndex] : nil
+            configuration.headerMode = self?.isRootFolder == true && section != .backupBanner ? .firstItemInSection : .none
+            return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
+        }
     }
 
     private func configureNavigation() {
@@ -286,7 +309,7 @@ final class FavoriteListViewController: UIViewController {
         } else {
             let selectButton = UIBarButtonItem(title: localizedString("shared_string_select"), style: .plain, target: self, action: #selector(selectButtonPressed))
             selectButton.accessibilityLabel = localizedString("shared_string_select")
-            let actionsButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: makeActionsMenu())
+            let actionsButton = UIBarButtonItem(image: .icNavbarOverflowMenuOutlined, menu: makeActionsMenu())
             actionsButton.accessibilityLabel = localizedString("shared_string_actions")
             targetNavigationItem?.leftBarButtonItem = nil
             targetNavigationItem?.rightBarButtonItems = [actionsButton, selectButton]
@@ -318,11 +341,11 @@ final class FavoriteListViewController: UIViewController {
         let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let shareButton = UIBarButtonItem(image: .icCustomExportOutlined, style: .plain, target: self, action: #selector(shareButtonClicked))
         let moveButton = UIBarButtonItem(image: .icCustomFolderMoveOutlined, style: .plain, target: self, action: #selector(moveButtonClicked))
-        let actionsButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), style: .plain, target: self, action: #selector(actionsButtonClicked))
+        let actionsButton = UIBarButtonItem(image: .icNavbarOverflowMenuOutlined, style: .plain, target: self, action: #selector(actionsButtonClicked))
         let deleteButton = UIBarButtonItem(image: .icCustomTrashOutlined, style: .plain, target: self, action: #selector(deleteButtonClicked))
         deleteButton.tintColor = .iconColorDisruptive
         let items = [shareButton, fixedSpacer, moveButton, actionsFixedSpacer, actionsButton, flexibleSpacer, deleteButton]
-        if screenMode.isRoot {
+        if isRootFolder {
             myPlacesDelegate?.updateToolbar?(with: items)
         } else {
             toolbarItems = items
@@ -353,11 +376,14 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func makeDataSource() -> DataSource {
+        let backupBannerCellRegistration = backupBannerCellRegistration
         let folderCellRegistration = folderCellRegistration
         let favoriteCellRegistration = favoriteCellRegistration
         let headerCellRegistration = headerCellRegistration
         return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
+            case .backupBanner:
+                return collectionView.dequeueConfiguredReusableCell(using: backupBannerCellRegistration, for: indexPath, item: item)
             case .header(let section):
                 return collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration, for: indexPath, item: section)
             case .folder(let folder):
@@ -380,8 +406,20 @@ final class FavoriteListViewController: UIViewController {
     private func applyRootSnapshot(animatingDifferences: Bool) {
         let foldersBySection = favoriteFoldersBySection()
         let folderSections = rootSections(foldersBySection: foldersBySection)
+        let isPaymentBannerVisible = isAvailablePaymentBanner
         var snapshot = Snapshot()
-        snapshot.appendSections(folderSections.map { .folderSection($0) })
+        var sections = folderSections.map { FavoriteListSection.folderSection($0) }
+        if isPaymentBannerVisible {
+            sections.insert(.backupBanner, at: 0)
+        }
+        
+        layoutSections = sections
+        collectionView.collectionViewLayout.invalidateLayout()
+        snapshot.appendSections(sections)
+        if isPaymentBannerVisible {
+            snapshot.appendItems([.backupBanner], toSection: .backupBanner)
+        }
+        
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
         folderSections.forEach { section in
             let headerItem = FavoriteListItem.header(section)
@@ -398,6 +436,8 @@ final class FavoriteListViewController: UIViewController {
         let folders = directFavoriteFolders(parentGroupName: folder.groupName).filter { matchesSearch($0.title) }
         let favorites = OAFavoriteFoldersBridge.favoritePoints(forGroupName: folder.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.subtitle) }
         var snapshot = Snapshot()
+        layoutSections = [.content]
+        collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections([.content])
         snapshot.appendItems(folders.map(FavoriteListItem.folder), toSection: .content)
         snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
@@ -424,6 +464,20 @@ final class FavoriteListViewController: UIViewController {
         }
 
         return sections
+    }
+
+    private func backupBannerHeight(_ banner: FreeBackupBanner, fittingWidth: CGFloat) -> CGFloat {
+        let fallbackWidth = collectionView.bounds.width - collectionView.layoutMargins.left - collectionView.layoutMargins.right
+        let bannerWidth = fittingWidth > 0.0 ? fittingWidth : fallbackWidth
+        let textWidth = max(0.0, bannerWidth - CGFloat(banner.leadingTrailingOffset))
+        let titleHeight = OAUtilities.calculateTextBounds(banner.titleLabel.text ?? "", width: textWidth, font: banner.titleLabel.font).height
+        let descriptionHeight = OAUtilities.calculateTextBounds(banner.descriptionLabel.text ?? "", width: textWidth, font: banner.descriptionLabel.font).height
+        return ceil(CGFloat(banner.defaultFrameHeight) + titleHeight + descriptionHeight)
+    }
+    
+    private func closeFreeBackupBanner() {
+        UserDefaults.standard.set(true, forKey: Self.wasClosedFreeBackupFavoritesBannerKey)
+        applySnapshot(animatingDifferences: true)
     }
 
     private func directFavoriteFolders(parentGroupName: String?) -> [FavoriteFolderRow] {
@@ -619,10 +673,12 @@ final class FavoriteListViewController: UIViewController {
             for item in 0..<collectionView.numberOfItems(inSection: section) {
                 let indexPath = IndexPath(item: item, section: section)
                 guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
-                if case .header = itemIdentifier {
+                switch itemIdentifier {
+                case .backupBanner, .header:
                     continue
+                case .folder, .favorite:
+                    collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
                 }
-                collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             }
         }
 
@@ -631,6 +687,12 @@ final class FavoriteListViewController: UIViewController {
 
     @objc private func favoriteDataDidChange() {
         applySnapshot(animatingDifferences: true)
+    }
+
+    @objc private func productPurchased() {
+        DispatchQueue.main.async { [weak self] in
+            self?.applySnapshot(animatingDifferences: true)
+        }
     }
 
     @objc private func shareButtonClicked(_ sender: Any) {
@@ -719,7 +781,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 return
             }
             OAFavoriteFoldersBridge.openFavoritePoint(withIdentifier: favorite.identifier)
-        case .header:
+        case .backupBanner, .header:
             break
         }
 

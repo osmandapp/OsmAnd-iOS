@@ -8,6 +8,36 @@
 
 import UIKit
 
+enum StarMapControlTheme {
+    static func resolved(_ color: UIColor, nightMode: Bool) -> UIColor {
+        nightMode ? color.dark : color.light
+    }
+
+    static func defaultBackground(nightMode: Bool, alpha: CGFloat) -> UIColor {
+        resolved(.mapButtonBgColorDefault, nightMode: nightMode).withAlphaComponent(alpha)
+    }
+
+    static func activeBackground(alpha: CGFloat = 1) -> UIColor {
+        UIColor.mapButtonBgColorActive.withAlphaComponent(alpha)
+    }
+
+    static func foreground(active: Bool, nightMode: Bool) -> UIColor {
+        active ? .white : resolved(.mapButtonIconColorDefault, nightMode: nightMode)
+    }
+
+    static func textColor(nightMode: Bool) -> UIColor {
+        resolved(.textColorPrimary, nightMode: nightMode)
+    }
+
+    static func borderWidth(active: Bool, nightMode: Bool) -> CGFloat {
+        active ? 0 : (nightMode ? 2 : 0)
+    }
+
+    static var borderColor: UIColor {
+        UIColor(rgb: color_on_map_icon_border_color)
+    }
+}
+
 class StarMapButton: UIButton {
     var active = false {
         didSet { updateTheme() }
@@ -34,11 +64,13 @@ class StarMapButton: UIButton {
     }
 
     func updateTheme() {
-        tintColor = active ? .white : .systemBlue
-        backgroundColor = nightMode ? UIColor(white: 0.08, alpha: 0.86) : UIColor(white: 1.0, alpha: 0.86)
+        tintColor = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
+        backgroundColor = active
+            ? StarMapControlTheme.activeBackground()
+            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.86)
         layer.cornerRadius = min(bounds.width, bounds.height) / 2.0
-        layer.borderWidth = active ? 0 : 1
-        layer.borderColor = UIColor(white: nightMode ? 0.35 : 0.75, alpha: 1).cgColor
+        layer.borderWidth = StarMapControlTheme.borderWidth(active: active, nightMode: nightMode)
+        layer.borderColor = StarMapControlTheme.borderColor.cgColor
     }
 
     func setColorFilter(_ color: UIColor) {

@@ -13,7 +13,7 @@ final class StarMapTimeControlButton: StarMapButton {
         backgroundColor = .clear
         layer.borderWidth = 0
         layer.cornerRadius = 0
-        tintColor = active ? .white : .systemBlue
+        tintColor = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
         setTitleColor(tintColor, for: .normal)
     }
 }

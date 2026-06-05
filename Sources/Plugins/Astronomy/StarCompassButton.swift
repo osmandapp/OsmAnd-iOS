@@ -38,7 +38,7 @@ final class StarCompassButton: StarMapButton {
     override func updateTheme() {
         super.updateTheme()
         setImage(nil, for: .normal)
-        arrowView.tintColor = active ? .white : .systemBlue
+        arrowView.tintColor = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
         arrowView.transform = CGAffineTransform(rotationAngle: currentRotation * .pi / 180.0)
     }
 

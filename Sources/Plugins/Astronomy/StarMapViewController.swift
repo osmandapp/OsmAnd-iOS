@@ -17,6 +17,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let magnitudeButtonHeight: CGFloat = 76
         static let magnitudeSliderWidth: CGFloat = 240
         static let transparencySliderHeight: CGFloat = 150
+        static let regularMapHeight: CGFloat = 300
+        static let regularMapHeightLandscape: CGFloat = 110
         static let maxMagnitude: Double = 7.0
     }
     private var settings: AstronomyPluginSettings
@@ -25,6 +27,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private let mainLayout = UIView()
     private let starView = StarView()
+    private let regularMapContainer = UIView()
     private let mapControlsContainer = StarMapControlsContainer()
     private let timeSelectionView = DateTimeSelectionView()
     private let timeControlCard = UIView()
@@ -66,6 +69,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var configureSheetController: AstroConfigureViewBottomSheet?
     private var configureSheetNavigationController: UINavigationController?
     private var isDismissingConfigureSheet = false
+    private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
 
@@ -85,6 +89,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     deinit {
         mapLocationObserver?.detach()
         dayNightModeObserver?.detach()
+        restoreRegularMapIfNeeded(refresh: false)
     }
 
     override func viewDidLoad() {
@@ -109,6 +114,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if regularMapVisible {
+            attachRegularMapIfNeeded()
+        }
         arModeHelper.onResume()
         cameraHelper.onResume()
         if arModeHelper.isArModeEnabled {
@@ -126,21 +134,31 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         arModeHelper.onPause()
         cameraHelper.onPause()
         starView.isCameraMode = false
+        restoreRegularMapIfNeeded(refresh: true)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateRegularMapLayout()
+        layoutRegularMapRenderer()
         cameraHelper.layoutPreview()
     }
 
     private func setupLayout() {
         mainLayout.translatesAutoresizingMaskIntoConstraints = false
         starView.translatesAutoresizingMaskIntoConstraints = false
+        regularMapContainer.translatesAutoresizingMaskIntoConstraints = false
+        regularMapContainer.clipsToBounds = true
+        regularMapContainer.isUserInteractionEnabled = false
         mapControlsContainer.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(mainLayout)
         mainLayout.addSubview(starView)
+        mainLayout.addSubview(regularMapContainer)
         mainLayout.addSubview(mapControlsContainer)
+
+        let regularMapHeightConstraint = regularMapContainer.heightAnchor.constraint(equalToConstant: 0)
+        self.regularMapHeightConstraint = regularMapHeightConstraint
 
         NSLayoutConstraint.activate([
             mainLayout.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -151,7 +169,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             starView.leadingAnchor.constraint(equalTo: mainLayout.leadingAnchor),
             starView.trailingAnchor.constraint(equalTo: mainLayout.trailingAnchor),
             starView.topAnchor.constraint(equalTo: mainLayout.topAnchor),
-            starView.bottomAnchor.constraint(equalTo: mainLayout.bottomAnchor),
+            starView.bottomAnchor.constraint(equalTo: regularMapContainer.topAnchor),
+
+            regularMapContainer.leadingAnchor.constraint(equalTo: mainLayout.leadingAnchor),
+            regularMapContainer.trailingAnchor.constraint(equalTo: mainLayout.trailingAnchor),
+            regularMapContainer.bottomAnchor.constraint(equalTo: mainLayout.bottomAnchor),
+            regularMapHeightConstraint,
 
             mapControlsContainer.leadingAnchor.constraint(equalTo: mainLayout.leadingAnchor),
             mapControlsContainer.trailingAnchor.constraint(equalTo: mainLayout.trailingAnchor),
@@ -588,8 +611,13 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func updateRegularMapVisibility(_ visible: Bool) {
         regularMapVisible = visible
-        additionalSafeAreaInsets.bottom = 0
         starView.settings.common.showRegularMap = visible
+        updateRegularMapLayout()
+        if visible {
+            attachRegularMapIfNeeded()
+        } else {
+            restoreRegularMapIfNeeded(refresh: true)
+        }
         starView.setNeedsDisplay()
     }
 
@@ -782,6 +810,55 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func updateRedMode(_ enabled: Bool) {
         starView.showRedFilter = enabled
+    }
+
+    private func regularMapHeight() -> CGFloat {
+        view.bounds.width > view.bounds.height ? Layout.regularMapHeightLandscape : Layout.regularMapHeight
+    }
+
+    private func updateRegularMapLayout() {
+        let height = regularMapVisible ? regularMapHeight() : 0
+        if regularMapHeightConstraint?.constant != height {
+            regularMapHeightConstraint?.constant = height
+        }
+        if additionalSafeAreaInsets.bottom != height {
+            additionalSafeAreaInsets.bottom = height
+        }
+    }
+
+    private func attachRegularMapIfNeeded() {
+        guard regularMapVisible,
+              let mapPanel = OARootViewController.instance()?.mapPanel else {
+            return
+        }
+        let mapViewController = mapPanel.mapViewController
+        updateRegularMapLayout()
+        view.layoutIfNeeded()
+        if mapViewController.parent !== self {
+            mapPanel.doMapReuse(self, destinationView: regularMapContainer)
+        }
+        layoutRegularMapRenderer()
+        mapPanel.refreshMap(true)
+    }
+
+    private func restoreRegularMapIfNeeded(refresh: Bool) {
+        guard let mapPanel = OARootViewController.instance()?.mapPanel else {
+            return
+        }
+        mapPanel.restoreMapAfterReuseIfNeeded()
+        if refresh {
+            mapPanel.refreshMap(true)
+        }
+    }
+
+    private func layoutRegularMapRenderer() {
+        guard regularMapVisible,
+              let mapView = currentMapViewController()?.view,
+              mapView.superview === regularMapContainer else {
+            return
+        }
+        mapView.frame = regularMapContainer.bounds
+        mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
 
     private func currentMapViewController() -> OAMapViewController? {

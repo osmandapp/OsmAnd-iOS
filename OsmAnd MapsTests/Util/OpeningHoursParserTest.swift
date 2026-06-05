@@ -485,11 +485,11 @@ final class OpeningHoursParserTest: XCTestCase {
         hours = makeHours("Mo-Fr 00:00-12:00, 12:00-24:00;")
         assertAssembled(hours, equals: "Mon-Fri 12:00 AM-12:00 PM, 12:00 PM-12:00 AM", localized: true)
 
-        configure(localizedNamesLocaleIdentifier: nil, timeLocaleIdentifier: "zh_HK", twelveHour: true)
+        configure(timeLocaleIdentifier: "zh_HK", twelveHour: true)
         hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
         assertAssembled(hours, equals: "Mo-Fr 上午4:30-10:00, 上午7:30-下午11:00; Sa, Su, PH 下午1:30-11:00", localized: true)
 
-        configure(localizedNamesLocaleIdentifier: nil, timeLocaleIdentifier: "ar_SA", twelveHour: true)
+        configure(timeLocaleIdentifier: "ar_SA", twelveHour: true)
         hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
         assertAssembled(hours, equals: "Mo-Fr ٤:٣٠-١٠:٠٠ ص, ٧:٣٠ ص-١١:٠٠ م; Sa, Su, PH ١:٣٠-١١:٠٠ م", localized: true)
     }
@@ -590,6 +590,10 @@ final class OpeningHoursParserTest: XCTestCase {
 
     private func configure(localeIdentifier: String?, twelveHour: Bool) {
         OpeningHoursParserTestSupport.configureLocaleIdentifier(localeIdentifier, twelveHourFormattingEnabled: twelveHour)
+    }
+
+    private func configure(timeLocaleIdentifier: String?, twelveHour: Bool) {
+        OpeningHoursParserTestSupport.configureTimeLocaleIdentifier(timeLocaleIdentifier, twelveHourFormattingEnabled: twelveHour)
     }
 
     private func configure(localizedNamesLocaleIdentifier: String?, timeLocaleIdentifier: String?, twelveHour: Bool) {

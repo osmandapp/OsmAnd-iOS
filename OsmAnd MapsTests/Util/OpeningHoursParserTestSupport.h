@@ -6,6 +6,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithOpeningHoursString:(NSString *)openingHoursString;
 + (void)configureLocaleIdentifier:(nullable NSString *)localeIdentifier twelveHourFormattingEnabled:(BOOL)enabled;
++ (void)configureTimeLocaleIdentifier:(nullable NSString *)timeLocaleIdentifier twelveHourFormattingEnabled:(BOOL)enabled;
 + (void)configureLocalizedNamesLocaleIdentifier:(nullable NSString *)localizedNamesLocaleIdentifier
                          timeLocaleIdentifier:(nullable NSString *)timeLocaleIdentifier
                    twelveHourFormattingEnabled:(BOOL)enabled;

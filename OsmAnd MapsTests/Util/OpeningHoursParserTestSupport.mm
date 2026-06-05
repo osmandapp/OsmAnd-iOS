@@ -61,6 +61,12 @@ std::vector<std::string> defaultMonths() {
                          twelveHourFormattingEnabled:enabled];
 }
 
++ (void)configureTimeLocaleIdentifier:(NSString *)timeLocaleIdentifier twelveHourFormattingEnabled:(BOOL)enabled {
+    [self configureLocalizedNamesLocaleIdentifier:nil
+                               timeLocaleIdentifier:timeLocaleIdentifier
+                         twelveHourFormattingEnabled:enabled];
+}
+
 + (void)configureLocalizedNamesLocaleIdentifier:(NSString *)localizedNamesLocaleIdentifier
                          timeLocaleIdentifier:(NSString *)timeLocaleIdentifier
                    twelveHourFormattingEnabled:(BOOL)enabled {

@@ -489,7 +489,7 @@ final class OpeningHoursParserTest: XCTestCase {
         hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
         assertAssembled(hours, equals: "周一-周五 4:30-10:00, 07:30-23:00; 周六, 周日, ph 1:30-23:00", localized: true)
 
-        configure(localeIdentifier: "ar-u-nu-arab", twelveHour: true)
+        configure(localeIdentifier: "ar", twelveHour: true)
         hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
         assertAssembled(hours, equals: "Mo-Fr ٤:٣٠-١٠:٠٠ ص, ٧:٣٠ ص-١١:٠٠ م; Sa, Su, PH ١:٣٠-١١:٠٠ م", localized: true)
     }

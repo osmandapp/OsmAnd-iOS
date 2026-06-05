@@ -35,6 +35,7 @@ private enum FavoriteListSection: Hashable {
     case backupBanner
     case folderSection(FavoriteFolderSection)
     case content
+    case statsFooter
 }
 
 private enum FavoriteListItem: Hashable {
@@ -42,6 +43,7 @@ private enum FavoriteListItem: Hashable {
     case header(FavoriteFolderSection)
     case folder(FavoriteFolderRow)
     case favorite(FavoritePointRow)
+    case statsFooter(FavoriteFolderStats)
 }
 
 private struct FavoriteFolderRow: Hashable {
@@ -111,6 +113,24 @@ private struct FavoritePointRow: Hashable {
     }
 }
 
+private struct FavoriteFolderStats: Hashable {
+    let foldersCount: Int
+    let pointsCount: Int
+    let fileSize: Int64
+
+    var text: String {
+        var parts: [String] = []
+        if foldersCount > 0 {
+            parts.append("\(localizedString("shared_string_folders").lowercased()) \(foldersCount)")
+        }
+
+        parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(pointsCount)")
+        parts.append("\(localizedString("shared_string_size").lowercased()) \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))")
+        let text = parts.joined(separator: ", ") + "."
+        return text.prefix(1).uppercased() + String(text.dropFirst())
+    }
+}
+
 final class FavoriteListViewController: UIViewController {
     private typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
@@ -125,6 +145,7 @@ final class FavoriteListViewController: UIViewController {
     private static let navigationSubtitleFontSize: CGFloat = 12.0
     private static let navigationSubtitleMaximumSize: CGFloat = 18.0
     private static let rowContentInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 0.0, bottom: 12.0, trailing: 0.0)
+    private static let statsFooterInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 20.0, bottom: 12.0, trailing: 20.0)
     private static let wasClosedFreeBackupFavoritesBannerKey = "wasClosedFreeBackupFavoritesBanner"
 
     private let screenMode: ScreenMode
@@ -208,9 +229,10 @@ final class FavoriteListViewController: UIViewController {
         content.secondaryText = "\(localizedString("points_count")) \(folder.pointsCount)"
         content.secondaryTextProperties.color = .textColorSecondary
         cell.contentConfiguration = content
+        cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
         cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
     }
-    private lazy var favoriteCellRegistration = CellRegistration<FavoritePointRow> { cell, _, favorite in
+    private lazy var favoriteCellRegistration = CellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
         var content = cell.defaultContentConfiguration()
         content.directionalLayoutMargins = Self.rowContentInsets
         content.image = OAUtilities.resize(favorite.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
@@ -220,7 +242,23 @@ final class FavoriteListViewController: UIViewController {
         content.secondaryText = favorite.subtitle
         content.secondaryTextProperties.color = .textColorSecondary
         cell.contentConfiguration = content
+        cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
         cell.accessories = [.multiselect()]
+    }
+    private lazy var statsFooterCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, FavoriteFolderStats> { cell, _, stats in
+        cell.backgroundColor = .clear
+        cell.contentView.backgroundColor = .clear
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = .textColorSecondary
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.text = stats.text
+        label.translatesAutoresizingMaskIntoConstraints = false
+        cell.contentView.addSubview(label)
+        NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: Self.statsFooterInsets.top), label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.statsFooterInsets.leading), label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.statsFooterInsets.trailing), label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -Self.statsFooterInsets.bottom)])
     }
     private lazy var subfolderSearchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -276,11 +314,29 @@ final class FavoriteListViewController: UIViewController {
 
     private func createLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+            guard let self else { return nil }
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-            let section = self?.layoutSections.indices.contains(sectionIndex) == true ? self?.layoutSections[sectionIndex] : nil
-            configuration.headerMode = self?.isRootFolder == true && section != .backupBanner ? .firstItemInSection : .none
+            let section = self.layoutSections.indices.contains(sectionIndex) ? self.layoutSections[sectionIndex] : nil
+            if section == .statsFooter {
+                return self.statsFooterLayoutSection()
+            }
+
+            configuration.headerMode = self.isRootFolder && section != .backupBanner ? .firstItemInSection : .none
             return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
         }
+    }
+
+    private func statsFooterLayoutSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(64.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
+        return NSCollectionLayoutSection(group: group)
+    }
+
+    private func listCellBackgroundConfiguration() -> UIBackgroundConfiguration {
+        var configuration = UIBackgroundConfiguration.listGroupedCell()
+        configuration.backgroundColor = .groupBg
+        return configuration
     }
 
     private func configureNavigation() {
@@ -380,6 +436,7 @@ final class FavoriteListViewController: UIViewController {
         let folderCellRegistration = folderCellRegistration
         let favoriteCellRegistration = favoriteCellRegistration
         let headerCellRegistration = headerCellRegistration
+        let statsFooterCellRegistration = statsFooterCellRegistration
         return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
             case .backupBanner:
@@ -390,6 +447,8 @@ final class FavoriteListViewController: UIViewController {
                 return collectionView.dequeueConfiguredReusableCell(using: folderCellRegistration, for: indexPath, item: folder)
             case .favorite(let favorite):
                 return collectionView.dequeueConfiguredReusableCell(using: favoriteCellRegistration, for: indexPath, item: favorite)
+            case .statsFooter(let stats):
+                return collectionView.dequeueConfiguredReusableCell(using: statsFooterCellRegistration, for: indexPath, item: stats)
             }
         }
     }
@@ -404,22 +463,32 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func applyRootSnapshot(animatingDifferences: Bool) {
-        let foldersBySection = favoriteFoldersBySection()
+        let allFolders = favoriteFolders()
+        let foldersBySection = favoriteFoldersBySection(folders: allFolders)
         let folderSections = rootSections(foldersBySection: foldersBySection)
         let isPaymentBannerVisible = isAvailablePaymentBanner
+        let stats = folderStats(allFolders: allFolders, currentGroupName: nil)
         var snapshot = Snapshot()
         var sections = folderSections.map { FavoriteListSection.folderSection($0) }
         if isPaymentBannerVisible {
             sections.insert(.backupBanner, at: 0)
         }
-        
+
+        if stats != nil {
+            sections.append(.statsFooter)
+        }
+
         layoutSections = sections
         collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections(sections)
         if isPaymentBannerVisible {
             snapshot.appendItems([.backupBanner], toSection: .backupBanner)
         }
-        
+
+        if let stats {
+            snapshot.appendItems([.statsFooter(stats)], toSection: .statsFooter)
+        }
+
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
         folderSections.forEach { section in
             let headerItem = FavoriteListItem.header(section)
@@ -433,19 +502,25 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func applyFolderSnapshot(folder: FavoriteFolderRow, animatingDifferences: Bool) {
-        let folders = directFavoriteFolders(parentGroupName: folder.groupName).filter { matchesSearch($0.title) }
+        let allFolders = favoriteFolders()
+        let folders = directFavoriteFolders(allFolders, parentGroupName: folder.groupName).filter { matchesSearch($0.title) }
         let favorites = OAFavoriteFoldersBridge.favoritePoints(forGroupName: folder.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.subtitle) }
+        let stats = folderStats(allFolders: allFolders, currentGroupName: folder.groupName)
         var snapshot = Snapshot()
-        layoutSections = [.content]
+        layoutSections = stats == nil ? [.content] : [.content, .statsFooter]
         collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections([.content])
+        snapshot.appendSections(layoutSections)
         snapshot.appendItems(folders.map(FavoriteListItem.folder), toSection: .content)
         snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
+        if let stats {
+            snapshot.appendItems([.statsFooter(stats)], toSection: .statsFooter)
+        }
+
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 
-    private func favoriteFoldersBySection() -> [FavoriteFolderSection: [FavoriteFolderRow]] {
-        let folders = directFavoriteFolders(parentGroupName: nil).filter { matchesSearch($0.title) }
+    private func favoriteFoldersBySection(folders allFolders: [FavoriteFolderRow]) -> [FavoriteFolderSection: [FavoriteFolderRow]] {
+        let folders = directFavoriteFolders(allFolders, parentGroupName: nil).filter { matchesSearch($0.title) }
         return [.pinned: folders.filter { $0.isPinned }, .visible: folders.filter { $0.isVisible && !$0.isPinned }, .hidden: folders.filter { !$0.isVisible && !$0.isPinned }]
     }
 
@@ -474,17 +549,37 @@ final class FavoriteListViewController: UIViewController {
         let descriptionHeight = OAUtilities.calculateTextBounds(banner.descriptionLabel.text ?? "", width: textWidth, font: banner.descriptionLabel.font).height
         return ceil(CGFloat(banner.defaultFrameHeight) + titleHeight + descriptionHeight)
     }
-    
+
+    private func folderStats(allFolders: [FavoriteFolderRow], currentGroupName: String?) -> FavoriteFolderStats? {
+        guard !isSearchActive else { return nil }
+        guard let currentGroupName else {
+            let pointsCount = allFolders.reduce(0) { $0 + $1.pointsCount }
+            guard !allFolders.isEmpty || pointsCount > 0 else { return nil }
+            let fileSize = allFolders.reduce(Int64(0)) { $0 + OAFavoriteFoldersBridge.favoriteGroupSize(forGroupName: $1.groupName) }
+            return FavoriteFolderStats(foldersCount: allFolders.count, pointsCount: pointsCount, fileSize: fileSize)
+        }
+
+        let nestedFolders = allFolders.filter { isNestedFolder($0.groupName, in: currentGroupName) }
+        let groupNames = [currentGroupName] + nestedFolders.map(\.groupName)
+        let currentPointsCount = allFolders.first { $0.groupName == currentGroupName }?.pointsCount ?? 0
+        let pointsCount = currentPointsCount + nestedFolders.reduce(0) { $0 + $1.pointsCount }
+        guard !nestedFolders.isEmpty || pointsCount > 0 else { return nil }
+        let fileSize = groupNames.reduce(Int64(0)) { $0 + OAFavoriteFoldersBridge.favoriteGroupSize(forGroupName: $1) }
+        return FavoriteFolderStats(foldersCount: nestedFolders.count, pointsCount: pointsCount, fileSize: fileSize)
+    }
+
     private func closeFreeBackupBanner() {
         UserDefaults.standard.set(true, forKey: Self.wasClosedFreeBackupFavoritesBannerKey)
         applySnapshot(animatingDifferences: true)
     }
 
-    private func directFavoriteFolders(parentGroupName: String?) -> [FavoriteFolderRow] {
+    private func directFavoriteFolders(_ folders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoriteFolderRow] {
+        folders.filter { isDirectFolder($0.groupName, parentGroupName: parentGroupName) }.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+    }
+
+    private func favoriteFolders() -> [FavoriteFolderRow] {
         OAFavoriteFoldersBridge.favoriteFolders()
             .map { FavoriteFolderRow(item: $0) }
-            .filter { isDirectFolder($0.groupName, parentGroupName: parentGroupName) }
-            .sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
     }
 
     private func isDirectFolder(_ groupName: String, parentGroupName: String?) -> Bool {
@@ -493,6 +588,11 @@ final class FavoriteListViewController: UIViewController {
         guard groupName.hasPrefix(parentGroupName + "/") else { return false }
         let childPath = groupName.dropFirst(parentGroupName.count + 1)
         return !childPath.isEmpty && !childPath.contains("/")
+    }
+
+    private func isNestedFolder(_ groupName: String, in parentGroupName: String) -> Bool {
+        guard !parentGroupName.isEmpty else { return false }
+        return groupName.hasPrefix(parentGroupName + "/")
     }
 
     private func matchesSearch(_ text: String?) -> Bool {
@@ -674,7 +774,7 @@ final class FavoriteListViewController: UIViewController {
                 let indexPath = IndexPath(item: item, section: section)
                 guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
                 switch itemIdentifier {
-                case .backupBanner, .header:
+                case .backupBanner, .header, .statsFooter:
                     continue
                 case .folder, .favorite:
                     collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -781,7 +881,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 return
             }
             OAFavoriteFoldersBridge.openFavoritePoint(withIdentifier: favorite.identifier)
-        case .backupBanner, .header:
+        case .backupBanner, .header, .statsFooter:
             break
         }
 

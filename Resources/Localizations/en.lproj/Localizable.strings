@@ -4122,6 +4122,7 @@
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
 "root_folder" = "Root folder";
+"shared_string_folders" = "Folders";
 "all_folders" = "All folders";
 "copy_as_new_folder" = "Copy as new folder";
 "add_to_a_folder" = "Add to a folder";

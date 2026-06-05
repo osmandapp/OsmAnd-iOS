@@ -233,6 +233,13 @@
     return items.copy;
 }
 
++ (long long)favoriteGroupSizeForGroupName:(NSString *)groupName
+{
+    NSString *filePath = [OsmAndApp.instance favoritesStorageFilename:groupName ?: @""];
+    NSDictionary<NSFileAttributeKey, id> *attributes = [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:nil];
+    return [attributes[NSFileSize] longLongValue];
+}
+
 + (void)openNewFavoriteGroupEditorWithParentGroupName:(nullable NSString *)parentGroupName navigationController:(UINavigationController *)navigationController completion:(void (^ _Nullable)(void))completion
 {
     if (!navigationController)

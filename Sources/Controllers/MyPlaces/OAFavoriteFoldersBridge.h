@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;
++ (long long)favoriteGroupSizeForGroupName:(NSString *)groupName;
 + (void)openFavoritePointWithIdentifier:(NSString *)identifier;
 + (void)openNewFavoriteGroupEditorWithParentGroupName:(nullable NSString *)parentGroupName navigationController:(UINavigationController *)navigationController completion:(void (^ _Nullable)(void))completion;
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible;

@@ -2,7 +2,14 @@ import UIKit
 
 final class NavbarBlueButton: UIButton {
 
-    private static let buttonHeight: CGFloat = 44
+    private static var buttonHeight: CGFloat {
+        if #available(iOS 26.0, *) {
+            return 44
+        } else {
+            return 30
+        }
+    }
+
     private static let pillHorizontalInset: CGFloat = 14
 
     override var intrinsicContentSize: CGSize {

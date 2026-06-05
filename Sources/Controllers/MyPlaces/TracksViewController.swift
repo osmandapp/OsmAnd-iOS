@@ -717,7 +717,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if #available(iOS 26.0, *) {
             color = .label
         } else {
-            color = .navBarTextColorPrimary
+            color = isSmartFolder ? .textColorPrimary : .navBarTextColorPrimary
         }
         if let selectBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_select"), icon: nil, color: color, action: #selector(onNavbarSelectButtonClicked), target: self, menu: nil) {
             if #available(iOS 26.0, *) {

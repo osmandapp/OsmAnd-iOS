@@ -12,6 +12,24 @@ static NSLocale *_usingLocale;
 
 @implementation OAExternalTimeFormatter
 
++ (NSLocale *)localeUsingLatinDigits
+{
+    NSString *localeIdentifier = _usingLocale.localeIdentifier;
+    if (localeIdentifier.length == 0)
+        return _usingLocale;
+
+    NSMutableDictionary *components =
+        [[NSLocale componentsFromLocaleIdentifier:localeIdentifier] mutableCopy];
+
+    if (!components)
+        return _usingLocale;
+
+    components[@"numbers"] = @"latn";
+
+    localeIdentifier = [NSLocale localeIdentifierFromComponents:components];
+    return [NSLocale localeWithLocaleIdentifier:localeIdentifier];
+}
+
 + (std::function<std::string (int, int, bool)> ) getExternalTimeFormatterCallback
 {
     return formattingCallback;
@@ -33,7 +51,7 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
     if (appendAmPM)
     {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setLocale:_usingLocale];
+        [formatter setLocale:[self localeUsingLatinDigits]];
         [formatter setDateStyle:NSDateFormatterNoStyle];
         [formatter setTimeStyle:NSDateFormatterShortStyle];
         return [formatter stringFromDate:date];
@@ -41,7 +59,7 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
     else
     {
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-        [formatter setLocale:_usingLocale];
+        [formatter setLocale:[self localeUsingLatinDigits]];
         [formatter setDateFormat:@"h:mm"];
         return [formatter stringFromDate:date];
     }

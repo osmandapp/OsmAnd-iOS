@@ -149,7 +149,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.translatesAutoresizingMaskIntoConstraints = false
         regularMapContainer.translatesAutoresizingMaskIntoConstraints = false
         regularMapContainer.clipsToBounds = true
-        regularMapContainer.isUserInteractionEnabled = false
         mapControlsContainer.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(mainLayout)
@@ -834,6 +833,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         let mapViewController = mapPanel.mapViewController
         updateRegularMapLayout()
         view.layoutIfNeeded()
+        mapViewController.setSingleTapContextMenuGestureEnabled(false)
         if mapViewController.parent !== self {
             mapPanel.doMapReuse(self, destinationView: regularMapContainer)
         }
@@ -845,6 +845,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             return
         }
+        mapPanel.mapViewController.setSingleTapContextMenuGestureEnabled(true)
         mapPanel.restoreMapAfterReuseIfNeeded()
         if refresh {
             mapPanel.refreshMap(true)

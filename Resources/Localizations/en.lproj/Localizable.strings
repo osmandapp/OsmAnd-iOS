@@ -648,6 +648,8 @@
 "shared_string_subfolders_in" = "Subfolders in";
 "shared_string_sorted_by" = "is sorted by:";
 "shared_string_nearest" = "Nearest";
+"distance_nearest" = "Nearest first";
+"distance_farthest" = "Farthest first";
 "track_sort_az" = "Name A - Z";
 "track_sort_za" = "Name Z - A";
 "newest_date_first" = "Newest date first";

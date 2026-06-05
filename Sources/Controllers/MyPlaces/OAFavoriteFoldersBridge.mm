@@ -17,7 +17,6 @@
 #import "OALocationServices.h"
 #import "OAMapPanelViewController.h"
 #import "OAOpenAddTrackViewController.h"
-#import "OAOsmAndFormatter.h"
 #import "OAPointDescription.h"
 #import "OARootViewController.h"
 #import "OASavingTrackHelper.h"
@@ -33,13 +32,13 @@
 
 @interface OAFavoriteFolderBridgeItem ()
 
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index;
+- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize;
 
 @end
 
 @implementation OAFavoriteFolderBridgeItem
 
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index
+- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize
 {
     self = [super init];
     if (self)
@@ -52,6 +51,8 @@
         _isVisible = group.isVisible;
         _isPinned = group.isPinned;
         _color = group.color;
+        _lastModifiedDate = lastModifiedDate;
+        _fileSize = fileSize;
     }
     
     return self;
@@ -62,9 +63,7 @@
 @interface OAFavoritePointBridgeItem ()
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
-+ (NSString *)subtitleForFavorite:(OAFavoriteItem *)favorite;
-+ (NSString *)formattedDistanceForFavorite:(OAFavoriteItem *)favorite;
-+ (NSString *)formattedDate:(NSDate *)date;
++ (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite;
 
 @end
 
@@ -73,6 +72,8 @@
 + (NSArray<OAFavoriteItem *> *)sortedFavoritePoints:(NSArray<OAFavoriteItem *> *)points;
 + (NSArray<OAFavoriteItem *> *)sortedFavoritePointsForGroup:(OAFavoriteGroup *)group;
 + (NSArray<OAFavoriteGroup *> *)favoriteGroupsInsideOrEqualToGroupName:(NSString *)groupName;
++ (nullable NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName;
++ (NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)favoriteStorageAttributesForGroups:(NSArray<OAFavoriteGroup *> *)groups;
 + (OAFavoriteItem *)favoritePointWithIdentifier:(NSString *)identifier;
 + (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName;
 + (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName;
@@ -156,7 +157,9 @@
         _identifier = [favorite getKey] ?: @"";
         _groupName = [favorite getCategory] ?: @"";
         _title = [favorite getDisplayName] ?: @"";
-        _subtitle = [self.class subtitleForFavorite:favorite];
+        _address = [favorite getAddress];
+        _distance = [self.class distanceForFavorite:favorite];
+        _timestampDate = [favorite getTimestamp];
         _icon = [favorite getCompositeIcon];
         _isVisible = [favorite isVisible];
     }
@@ -164,25 +167,7 @@
     return self;
 }
 
-+ (NSString *)subtitleForFavorite:(OAFavoriteItem *)favorite
-{
-    NSMutableArray<NSString *> *parts = [NSMutableArray array];
-    NSString *distance = [self formattedDistanceForFavorite:favorite];
-    if (distance.length > 0)
-        [parts addObject:distance];
-    
-    NSString *address = [favorite getAddress];
-    if (address.length > 0)
-        [parts addObject:address];
-    
-    NSDate *timestamp = [favorite getTimestamp];
-    if (timestamp)
-        [parts addObject:[self formattedDate:timestamp]];
-    
-    return parts.count > 0 ? [parts componentsJoinedByString:@" • "] : nil;
-}
-
-+ (NSString *)formattedDistanceForFavorite:(OAFavoriteItem *)favorite
++ (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite
 {
     CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
     if (!location || !favorite.favorite)
@@ -192,20 +177,7 @@
     const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
     const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
     const auto distance = OsmAnd::Utilities::distance(location.coordinate.longitude, location.coordinate.latitude, favoriteLon, favoriteLat);
-    return [OAOsmAndFormatter getFormattedDistance:distance];
-}
-
-+ (NSString *)formattedDate:(NSDate *)date
-{
-    static NSDateFormatter *dateFormatter = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateStyle = NSDateFormatterShortStyle;
-        dateFormatter.timeStyle = NSDateFormatterNoStyle;
-    });
-    
-    return [dateFormatter stringFromDate:date];
+    return @(distance);
 }
 
 @end
@@ -215,9 +187,14 @@
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders
 {
     NSArray<OAFavoriteGroup *> *groups = [OAFavoritesHelper getFavoriteGroups] ?: @[];
+    NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *fileAttributesByGroupName = [self favoriteStorageAttributesForGroups:groups];
     NSMutableArray<OAFavoriteFolderBridgeItem *> *folders = [NSMutableArray arrayWithCapacity:groups.count];
     [groups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger index, BOOL * _Nonnull stop) {
-        [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index]];
+        NSString *groupName = group.name ?: @"";
+        NSDictionary<NSFileAttributeKey, id> *fileAttributes = fileAttributesByGroupName[groupName];
+        NSDate *lastModifiedDate = [self lastModifiedDateForGroupName:groupName groups:groups fileAttributesByGroupName:fileAttributesByGroupName];
+        long long fileSize = [fileAttributes[NSFileSize] longLongValue];
+        [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize]];
     }];
     
     return folders.copy;
@@ -231,13 +208,6 @@
         [items addObject:[[OAFavoritePointBridgeItem alloc] initWithFavorite:point]];
     
     return items.copy;
-}
-
-+ (long long)favoriteGroupSizeForGroupName:(NSString *)groupName
-{
-    NSString *filePath = [OsmAndApp.instance favoritesStorageFilename:groupName ?: @""];
-    NSDictionary<NSFileAttributeKey, id> *attributes = [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:nil];
-    return [attributes[NSFileSize] longLongValue];
 }
 
 + (void)openNewFavoriteGroupEditorWithParentGroupName:(nullable NSString *)parentGroupName navigationController:(UINavigationController *)navigationController completion:(void (^ _Nullable)(void))completion
@@ -480,6 +450,46 @@
 + (NSArray<OAFavoriteItem *> *)sortedFavoritePointsForGroup:(OAFavoriteGroup *)group
 {
     return [self sortedFavoritePoints:group.points ?: @[]];
+}
+
++ (nullable NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName
+{
+    NSDate *lastModifiedDate = nil;
+    NSString *parentGroupName = groupName ?: @"";
+    for (OAFavoriteGroup *favoriteGroup in groups)
+    {
+        NSString *currentGroupName = favoriteGroup.name ?: @"";
+        if (![self isGroupName:currentGroupName insideOrEqualToGroupName:parentGroupName])
+            continue;
+
+        NSDate *fileModifiedDate = (NSDate *)fileAttributesByGroupName[currentGroupName][NSFileModificationDate];
+        if (fileModifiedDate && (!lastModifiedDate || [fileModifiedDate compare:lastModifiedDate] == NSOrderedDescending))
+            lastModifiedDate = fileModifiedDate;
+
+        for (OAFavoriteItem *point in favoriteGroup.points)
+        {
+            NSDate *timestamp = [point getTimestamp];
+            if (timestamp && (!lastModifiedDate || [timestamp compare:lastModifiedDate] == NSOrderedDescending))
+                lastModifiedDate = timestamp;
+        }
+    }
+
+    return lastModifiedDate;
+}
+
++ (NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)favoriteStorageAttributesForGroups:(NSArray<OAFavoriteGroup *> *)groups
+{
+    NSMutableDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *result = [NSMutableDictionary dictionaryWithCapacity:groups.count];
+    for (OAFavoriteGroup *group in groups)
+    {
+        NSString *groupName = group.name ?: @"";
+        NSString *filePath = [OsmAndApp.instance favoritesStorageFilename:groupName];
+        NSDictionary<NSFileAttributeKey, id> *attributes = [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:nil];
+        if (attributes)
+            result[groupName] = attributes;
+    }
+
+    return result.copy;
 }
 
 + (NSArray<OAFavoriteGroup *> *)favoriteGroupsInsideOrEqualToGroupName:(NSString *)groupName

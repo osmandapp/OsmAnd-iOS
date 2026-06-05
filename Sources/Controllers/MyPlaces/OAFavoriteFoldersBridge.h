@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isVisible;
 @property (nonatomic, readonly) BOOL isPinned;
 @property (nonatomic, readonly, nullable) UIColor *color;
+@property (nonatomic, readonly, nullable) NSDate *lastModifiedDate;
+@property (nonatomic, readonly) long long fileSize;
 
 - (instancetype)init NS_UNAVAILABLE;
 
@@ -31,7 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *identifier;
 @property (nonatomic, readonly) NSString *groupName;
 @property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly, nullable) NSString *subtitle;
+@property (nonatomic, readonly, nullable) NSString *address;
+@property (nonatomic, readonly, nullable) NSNumber *distance;
+@property (nonatomic, readonly, nullable) NSDate *timestampDate;
 @property (nonatomic, readonly, nullable) UIImage *icon;
 @property (nonatomic, readonly) BOOL isVisible;
 
@@ -43,7 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;
-+ (long long)favoriteGroupSizeForGroupName:(NSString *)groupName;
 + (void)openFavoritePointWithIdentifier:(NSString *)identifier;
 + (void)openNewFavoriteGroupEditorWithParentGroupName:(nullable NSString *)parentGroupName navigationController:(UINavigationController *)navigationController completion:(void (^ _Nullable)(void))completion;
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible;

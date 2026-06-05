@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 import UniformTypeIdentifiers
 
 private enum ScreenMode {
@@ -32,6 +33,7 @@ private enum FavoriteFolderSection: Hashable {
 }
 
 private enum FavoriteListSection: Hashable {
+    case sortHeader
     case backupBanner
     case folderSection(FavoriteFolderSection)
     case content
@@ -39,6 +41,7 @@ private enum FavoriteListSection: Hashable {
 }
 
 private enum FavoriteListItem: Hashable {
+    case sortHeader(FavoriteSortMode)
     case backupBanner
     case header(FavoriteFolderSection)
     case folder(FavoriteFolderRow)
@@ -46,7 +49,7 @@ private enum FavoriteListItem: Hashable {
     case statsFooter(FavoriteFolderStats)
 }
 
-private struct FavoriteFolderRow: Hashable {
+private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     let identifier: String
     let groupName: String
     let title: String
@@ -54,6 +57,8 @@ private struct FavoriteFolderRow: Hashable {
     let isVisible: Bool
     let isPinned: Bool
     let color: UIColor?
+    let lastModified: Date?
+    let fileSize: Int64
 
     var iconName: String {
         isVisible ? "ic_custom_folder" : "ic_custom_folder_hidden_outlined"
@@ -80,6 +85,8 @@ private struct FavoriteFolderRow: Hashable {
         isVisible = item.isVisible
         isPinned = item.isPinned
         color = item.color
+        lastModified = item.lastModifiedDate
+        fileSize = item.fileSize
     }
 
     private static func title(for groupName: String, fallback: String) -> String {
@@ -88,10 +95,12 @@ private struct FavoriteFolderRow: Hashable {
     }
 }
 
-private struct FavoritePointRow: Hashable {
+private struct FavoritePointRow: Hashable, FavoriteSortablePoint {
     let identifier: String
     let title: String
-    let subtitle: String?
+    let address: String?
+    let distance: CLLocationDistance?
+    let timestamp: Date?
     let icon: UIImage?
     let isVisible: Bool
 
@@ -107,7 +116,9 @@ private struct FavoritePointRow: Hashable {
     init(item: OAFavoritePointBridgeItem) {
         identifier = item.identifier
         title = item.title
-        subtitle = item.subtitle
+        address = item.address
+        distance = item.distance?.doubleValue
+        timestamp = item.timestampDate
         icon = item.icon
         isVisible = item.isVisible
     }
@@ -140,6 +151,8 @@ final class FavoriteListViewController: UIViewController {
 
     private static let imageSize: CGFloat = 30.0
     private static let favoriteIconSize: CGFloat = 36.0
+    private static let sortHeaderHeight: CGFloat = 44.0
+    private static let sortHeaderLeadingInset: CGFloat = 16.0
     private static let navigationTitleFontSize: CGFloat = 17.0
     private static let navigationTitleMaximumSize: CGFloat = 22.0
     private static let navigationSubtitleFontSize: CGFloat = 12.0
@@ -149,12 +162,13 @@ final class FavoriteListViewController: UIViewController {
     private static let wasClosedFreeBackupFavoritesBannerKey = "wasClosedFreeBackupFavoritesBanner"
 
     private let screenMode: ScreenMode
-    private var layoutSections: [FavoriteListSection] = []
+    private let settings = OAAppSettings.sharedManager()
 
+    private var layoutSections: [FavoriteListSection] = []
     private var searchText = ""
     private var isSearchActive = false
     private var isAvailablePaymentBanner: Bool {
-        isRootFolder && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
+        isRootFolder && !isSearchActive && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
     }
     private var isRootFolder: Bool {
         guard case .root = screenMode else { return false }
@@ -180,6 +194,12 @@ final class FavoriteListViewController: UIViewController {
         guard case .folder(let folder, _) = screenMode, !folder.groupName.isEmpty else { return nil }
         return folder.groupName
     }
+    private var currentSortMode: FavoriteSortMode {
+        isSearchActive ? searchFavoriteSortMode() : favoriteSortMode()
+    }
+    private var currentSortEntryId: String {
+        parentGroupName ?? ""
+    }
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
@@ -201,6 +221,10 @@ final class FavoriteListViewController: UIViewController {
         let disclosureOptions = UICellAccessory.OutlineDisclosureOptions(style: .header)
         cell.accessories = [.outlineDisclosure(options: disclosureOptions)]
         cell.tintColor = .iconColorActive
+    }
+    private lazy var sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortMode> { [weak self] cell, _, sortMode in
+        cell.sortButton.setImage(sortMode.image, for: .normal)
+        cell.sortButton.menu = self?.makeSortMenu()
     }
     private lazy var backupBannerCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
@@ -239,7 +263,7 @@ final class FavoriteListViewController: UIViewController {
         content.text = favorite.title
         content.textProperties.color = favorite.titleColor
         content.textProperties.font = favorite.titleFont
-        content.secondaryText = favorite.subtitle
+        content.secondaryText = favorite.address
         content.secondaryTextProperties.color = .textColorSecondary
         cell.contentConfiguration = content
         cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
@@ -285,6 +309,11 @@ final class FavoriteListViewController: UIViewController {
         super.init(coder: coder)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .viewBg
@@ -292,11 +321,6 @@ final class FavoriteListViewController: UIViewController {
         definesPresentationContext = true
         NotificationCenter.default.addObserver(self, selector: #selector(favoriteDataDidChange), name: .favoriteImportViewControllerDidDismiss, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(productPurchased), name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -317,13 +341,29 @@ final class FavoriteListViewController: UIViewController {
             guard let self else { return nil }
             var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             let section = self.layoutSections.indices.contains(sectionIndex) ? self.layoutSections[sectionIndex] : nil
+            if section == .sortHeader {
+                return self.sortHeaderLayoutSection()
+            }
+
             if section == .statsFooter {
                 return self.statsFooterLayoutSection()
             }
 
-            configuration.headerMode = self.isRootFolder && section != .backupBanner ? .firstItemInSection : .none
+            if case .folderSection = section, self.isRootFolder {
+                configuration.headerMode = .firstItemInSection
+            }
+
             return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
         }
+    }
+
+    private func sortHeaderLayoutSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(Self.sortHeaderHeight))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets.leading = Self.sortHeaderLeadingInset
+        return section
     }
 
     private func statsFooterLayoutSection() -> NSCollectionLayoutSection {
@@ -431,7 +471,48 @@ final class FavoriteListViewController: UIViewController {
         myPlacesDelegate?.updateSegmentedControlVisibility(isRootFolder && !collectionView.isEditing && !isSearchActive)
     }
 
+    private func favoriteSortMode() -> FavoriteSortMode {
+        let sortModes = settings.getFavoriteSortModes()
+        guard let sortModeTitle = sortModes[currentSortEntryId] else { return FavoriteSortModeHelper.defaultSortMode() }
+        return FavoriteSortMode.byTitle(sortModeTitle)
+    }
+
+    private func searchFavoriteSortMode() -> FavoriteSortMode {
+        let sortModeTitle = settings.searchFavoriteSortMode.get()
+        return FavoriteSortMode.byTitle(sortModeTitle)
+    }
+
+    private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {
+        if isSearchActive {
+            settings.searchFavoriteSortMode.set(sortMode.title)
+        } else {
+            var sortModes = settings.getFavoriteSortModes()
+            sortModes[currentSortEntryId] = sortMode.title
+            settings.saveFavoriteSortModes(sortModes)
+        }
+
+        applySnapshot(animatingDifferences: false)
+    }
+
+    private func makeSortMenu() -> UIMenu {
+        let modes: [FavoriteSortMode] = !isRootFolder || isSearchActive ? [.nameAZ, .nameZA, .nearest, .farthest, .newestDateFirst, .oldestDateFirst] : [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst]
+        let groups: [[FavoriteSortMode]] = [[.lastModified], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst], [.nearest, .farthest]]
+        let sections = groups.compactMap { group -> UIMenu? in
+            let actions = group.filter { modes.contains($0) }.map { makeSortAction(for: $0) }
+            return actions.isEmpty ? nil : UIMenu(options: .displayInline, children: actions)
+        }
+
+        return UIMenu(title: "", children: sections)
+    }
+
+    private func makeSortAction(for sortMode: FavoriteSortMode) -> UIAction {
+        UIAction(title: sortMode.title, image: sortMode.image?.resizedMenuImage(), state: currentSortMode == sortMode ? .on : .off) { [weak self] _ in
+            self?.setFavoriteSortMode(sortMode)
+        }
+    }
+
     private func makeDataSource() -> DataSource {
+        let sortHeaderCellRegistration = sortHeaderCellRegistration
         let backupBannerCellRegistration = backupBannerCellRegistration
         let folderCellRegistration = folderCellRegistration
         let favoriteCellRegistration = favoriteCellRegistration
@@ -439,6 +520,8 @@ final class FavoriteListViewController: UIViewController {
         let statsFooterCellRegistration = statsFooterCellRegistration
         return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
+            case .sortHeader(let sortMode):
+                return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: sortMode)
             case .backupBanner:
                 return collectionView.dequeueConfiguredReusableCell(using: backupBannerCellRegistration, for: indexPath, item: item)
             case .header(let section):
@@ -464,16 +547,17 @@ final class FavoriteListViewController: UIViewController {
 
     private func applyRootSnapshot(animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
-        let foldersBySection = favoriteFoldersBySection(folders: allFolders)
+        let foldersBySection = favoriteFoldersBySection(folders: allFolders).mapValues { FavoriteSortModeHelper.sortFoldersWithMode($0, mode: currentSortMode) }
         let folderSections = rootSections(foldersBySection: foldersBySection)
         let isPaymentBannerVisible = isAvailablePaymentBanner
         let stats = folderStats(allFolders: allFolders, currentGroupName: nil)
         var snapshot = Snapshot()
-        var sections = folderSections.map { FavoriteListSection.folderSection($0) }
+        var sections: [FavoriteListSection] = [.sortHeader]
         if isPaymentBannerVisible {
-            sections.insert(.backupBanner, at: 0)
+            sections.append(.backupBanner)
         }
 
+        sections.append(contentsOf: folderSections.map { FavoriteListSection.folderSection($0) })
         if stats != nil {
             sections.append(.statsFooter)
         }
@@ -481,6 +565,7 @@ final class FavoriteListViewController: UIViewController {
         layoutSections = sections
         collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections(sections)
+        snapshot.appendItems([.sortHeader(currentSortMode)], toSection: .sortHeader)
         if isPaymentBannerVisible {
             snapshot.appendItems([.backupBanner], toSection: .backupBanner)
         }
@@ -503,13 +588,14 @@ final class FavoriteListViewController: UIViewController {
 
     private func applyFolderSnapshot(folder: FavoriteFolderRow, animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
-        let folders = directFavoriteFolders(allFolders, parentGroupName: folder.groupName).filter { matchesSearch($0.title) }
-        let favorites = OAFavoriteFoldersBridge.favoritePoints(forGroupName: folder.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.subtitle) }
+        let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
+        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoriteFoldersBridge.favoritePoints(forGroupName: folder.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.address) }, mode: currentSortMode)
         let stats = folderStats(allFolders: allFolders, currentGroupName: folder.groupName)
         var snapshot = Snapshot()
-        layoutSections = stats == nil ? [.content] : [.content, .statsFooter]
+        layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
         collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections(layoutSections)
+        snapshot.appendItems([.sortHeader(currentSortMode)], toSection: .sortHeader)
         snapshot.appendItems(folders.map(FavoriteListItem.folder), toSection: .content)
         snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
         if let stats {
@@ -555,16 +641,16 @@ final class FavoriteListViewController: UIViewController {
         guard let currentGroupName else {
             let pointsCount = allFolders.reduce(0) { $0 + $1.pointsCount }
             guard !allFolders.isEmpty || pointsCount > 0 else { return nil }
-            let fileSize = allFolders.reduce(Int64(0)) { $0 + OAFavoriteFoldersBridge.favoriteGroupSize(forGroupName: $1.groupName) }
+            let fileSize = allFolders.reduce(Int64(0)) { $0 + $1.fileSize }
             return FavoriteFolderStats(foldersCount: allFolders.count, pointsCount: pointsCount, fileSize: fileSize)
         }
 
         let nestedFolders = allFolders.filter { isNestedFolder($0.groupName, in: currentGroupName) }
-        let groupNames = [currentGroupName] + nestedFolders.map(\.groupName)
-        let currentPointsCount = allFolders.first { $0.groupName == currentGroupName }?.pointsCount ?? 0
+        let currentFolder = allFolders.first { $0.groupName == currentGroupName }
+        let currentPointsCount = currentFolder?.pointsCount ?? 0
         let pointsCount = currentPointsCount + nestedFolders.reduce(0) { $0 + $1.pointsCount }
         guard !nestedFolders.isEmpty || pointsCount > 0 else { return nil }
-        let fileSize = groupNames.reduce(Int64(0)) { $0 + OAFavoriteFoldersBridge.favoriteGroupSize(forGroupName: $1) }
+        let fileSize = (currentFolder?.fileSize ?? 0) + nestedFolders.reduce(Int64(0)) { $0 + $1.fileSize }
         return FavoriteFolderStats(foldersCount: nestedFolders.count, pointsCount: pointsCount, fileSize: fileSize)
     }
 
@@ -574,7 +660,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func directFavoriteFolders(_ folders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoriteFolderRow] {
-        folders.filter { isDirectFolder($0.groupName, parentGroupName: parentGroupName) }.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+        folders.filter { isDirectFolder($0.groupName, parentGroupName: parentGroupName) }
     }
 
     private func favoriteFolders() -> [FavoriteFolderRow] {
@@ -725,37 +811,6 @@ final class FavoriteListViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    private func shareItems(_ selectedItems: [IndexPath], sourceView: UIView) {
-        if selectedItems.isEmpty {
-            let alert = UIAlertController(
-                title: "",
-                message: localizedString("fav_export_select"),
-                preferredStyle: .alert
-            )
-
-            let defaultAction = UIAlertAction(
-                title: localizedString("shared_string_ok"),
-                style: .default,
-                handler: nil
-            )
-
-            alert.addAction(defaultAction)
-            present(alert, animated: true, completion: nil)
-            return
-        }
-
-        // TODO
-//        guard let favoritesUrl = OAFavoriteFoldersBridge.shareFavoriteItems(bridgeItems(for: selectedItems)) else { return }
-//        showActivity(
-//            [favoritesUrl],
-//            sourceView: sourceView,
-//            barButtonItem: nil,
-//            completionWithItemsHandler: {
-//                try? FileManager.default.removeItem(at: favoritesUrl)
-//            }
-//        )
-    }
-
     private func menuImage(_ name: String) -> UIImage? {
         UIImage(named: name)?.resizedMenuImage()
     }
@@ -774,7 +829,7 @@ final class FavoriteListViewController: UIViewController {
                 let indexPath = IndexPath(item: item, section: section)
                 guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
                 switch itemIdentifier {
-                case .backupBanner, .header, .statsFooter:
+                case .sortHeader, .backupBanner, .header, .statsFooter:
                     continue
                 case .folder, .favorite:
                     collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -796,14 +851,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     @objc private func shareButtonClicked(_ sender: Any) {
-        // TODO
-//        guard let items = collectionView.indexPathsForSelectedItems else {
-//            return
-//        }
-//        let sourceView = sender as? UIView ?? collectionView
-//        shareItems(items, sourceView: sourceView)
-//        setEdit(false)
-//        applySnapshot()
+        // Selection export will be connected with selected favorites model.
     }
 
     @objc private func moveButtonClicked(_ sender: Any) {
@@ -815,16 +863,11 @@ final class FavoriteListViewController: UIViewController {
             return
         }
 
-        // TODO
-        //guard let navigationController else { return }
-//        OAFavoriteFoldersBridge.openFavoriteItemsMove(bridgeItems(for: selectedItems), navigationController: navigationController) { [weak self] in
-//            self?.setEdit(false)
-//            self?.applySnapshot(animatingDifferences: true)
-//        }
+        // Selection move will be connected with selected favorites model.
     }
 
     @objc private func actionsButtonClicked(_ sender: Any) {
-        // TODO
+        // Selection actions menu will be connected with selected favorites model.
     }
 
     @objc private func deleteButtonClicked(_ sender: Any) {
@@ -846,8 +889,7 @@ final class FavoriteListViewController: UIViewController {
             title: localizedString("shared_string_yes"),
             style: .default
         ) { _ in
-            // TODO
-            //self?.removeSelectedFavoriteItems()
+            // Selection delete will be connected with selected favorites model.
         }
 
         let cancelButton = UIAlertAction(
@@ -881,7 +923,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 return
             }
             OAFavoriteFoldersBridge.openFavoritePoint(withIdentifier: favorite.identifier)
-        case .backupBanner, .header, .statsFooter:
+        case .sortHeader, .backupBanner, .header, .statsFooter:
             break
         }
 

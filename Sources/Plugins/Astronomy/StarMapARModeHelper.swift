@@ -11,6 +11,17 @@ import CoreLocation
 import Foundation
 
 final class StarMapARModeHelper {
+    private enum MotionUnavailableReason: String {
+        case deviceMotionUnavailable
+        case referenceFrameUnavailable
+        case motionStartFailed
+    }
+
+    private enum CoreMotionErrorCode {
+        static let deviceRequiresMovement = 101
+        static let trueNorthNotAvailable = 102
+    }
+
     private var motionManager: CMMotionManager?
     private let queue = OperationQueue()
     private let minAlpha = 0.03
@@ -19,6 +30,7 @@ final class StarMapARModeHelper {
     private let moveThresh = 2.0
     private var smoothedAzimuth = 0.0
     private var smoothedAltitude = 45.0
+    private var activeReferenceFrame: CMAttitudeReferenceFrame?
 
     var onOrientationChanged: ((_ azimuth: Double, _ altitude: Double, _ roll: Double) -> Void)?
     var onUnavailable: (() -> Void)?
@@ -70,22 +82,38 @@ final class StarMapARModeHelper {
         }
     }
 
-    private func startMotionUpdates() -> Bool {
+    private func startMotionUpdates(using referenceFrame: CMAttitudeReferenceFrame? = nil) -> Bool {
         let motionManager = self.motionManager ?? CMMotionManager()
         self.motionManager = motionManager
 
-        guard motionManager.isDeviceMotionAvailable, let referenceFrame = preferredReferenceFrame() else {
-            handleUnavailable()
+        guard motionManager.isDeviceMotionAvailable else {
+            handleUnavailable(.deviceMotionUnavailable)
             return false
         }
-        guard !isRunning else {
+        guard let referenceFrame = referenceFrame ?? preferredReferenceFrame() else {
+            handleUnavailable(.referenceFrameUnavailable)
+            return false
+        }
+        guard !isRunning || activeReferenceFrame != referenceFrame else {
             return true
         }
 
+        if isRunning {
+            stopMotionUpdates()
+        }
+        activeReferenceFrame = referenceFrame
         isRunning = true
         motionManager.deviceMotionUpdateInterval = 1.0 / 30.0
-        motionManager.startDeviceMotionUpdates(using: referenceFrame, to: queue) { [weak self] motion, _ in
-            guard let self, self.isRunning, self.isArModeEnabled, let attitude = motion?.attitude else {
+        motionManager.showsDeviceMovementDisplay = true
+        motionManager.startDeviceMotionUpdates(using: referenceFrame, to: queue) { [weak self] motion, error in
+            guard let self else {
+                return
+            }
+            if let error {
+                self.handleMotionError(error)
+                return
+            }
+            guard self.isRunning, self.isArModeEnabled, let attitude = motion?.attitude else {
                 return
             }
             let yaw = AstroUtils.normalizedDegrees(attitude.yaw * 180.0 / .pi)
@@ -100,11 +128,6 @@ final class StarMapARModeHelper {
                 self.onOrientationChanged?(smoothed.azimuth, smoothed.altitude, roll)
             }
         }
-
-        if !motionManager.isDeviceMotionActive {
-            handleUnavailable()
-            return false
-        }
         return true
     }
 
@@ -116,6 +139,7 @@ final class StarMapARModeHelper {
 
     private func stopMotionUpdates(waitUntilFinished: Bool = false) {
         isRunning = false
+        activeReferenceFrame = nil
         motionManager?.stopDeviceMotionUpdates()
         queue.cancelAllOperations()
         if waitUntilFinished, OperationQueue.current !== queue {
@@ -123,20 +147,75 @@ final class StarMapARModeHelper {
         }
     }
 
-    private func handleUnavailable() {
+    private func handleUnavailable(_ reason: MotionUnavailableReason) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.handleUnavailable(reason)
+            }
+            return
+        }
+#if DEBUG
+        print("StarMapARModeHelper unavailable: \(reason.rawValue)")
+#endif
         isArModeEnabled = false
         stopMotionUpdates()
         onUnavailable?()
         onArModeChanged?(false)
     }
 
-    private func preferredReferenceFrame() -> CMAttitudeReferenceFrame? {
-        let available = CMMotionManager.availableAttitudeReferenceFrames()
-        if available.contains(.xTrueNorthZVertical) {
-            return .xTrueNorthZVertical
+    private func handleMotionError(_ error: Error) {
+        let nsError = error as NSError
+#if DEBUG
+        print("StarMapARModeHelper motion error: \(nsError.domain) \(nsError.code)")
+#endif
+        guard isRunning, isArModeEnabled else {
+            return
         }
-        if available.contains(.xMagneticNorthZVertical) {
-            return .xMagneticNorthZVertical
+        guard nsError.domain == CMErrorDomain else {
+            handleUnavailable(.motionStartFailed)
+            return
+        }
+
+        switch nsError.code {
+        case CoreMotionErrorCode.deviceRequiresMovement:
+            return
+        case CoreMotionErrorCode.trueNorthNotAvailable:
+            restartMotionUpdatesWithFallback()
+        default:
+            handleUnavailable(.motionStartFailed)
+        }
+    }
+
+    private func restartMotionUpdatesWithFallback() {
+        let currentFrame = activeReferenceFrame
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.isArModeEnabled else {
+                return
+            }
+            guard let fallback = self.preferredReferenceFrame(excluding: currentFrame) else {
+                self.handleUnavailable(.referenceFrameUnavailable)
+                return
+            }
+            _ = self.startMotionUpdates(using: fallback)
+        }
+    }
+
+    private func preferredReferenceFrame(excluding excludedFrame: CMAttitudeReferenceFrame? = nil) -> CMAttitudeReferenceFrame? {
+        let available = CMMotionManager.availableAttitudeReferenceFrames()
+        let preferredFrames: [CMAttitudeReferenceFrame] = [
+            .xTrueNorthZVertical,
+            .xMagneticNorthZVertical,
+            .xArbitraryCorrectedZVertical,
+            .xArbitraryZVertical
+        ]
+        for frame in preferredFrames {
+            if let excludedFrame, frame == excludedFrame {
+                continue
+            }
+            guard available.contains(frame) else {
+                continue
+            }
+            return frame
         }
         return nil
     }

@@ -17,3 +17,5 @@
 "NSCalendarsUsageDescription" = "OsmAnd would like to create a calendar event for vehicle pick-up notification.";
 
 "NSCameraUsageDescription" = "Camera access is needed to show the sky camera overlay in Astronomy.";
+
+"NSMotionUsageDescription" = "OsmAnd needs motion access to orient the astronomy sky map with device movement.";

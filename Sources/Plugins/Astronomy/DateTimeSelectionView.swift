@@ -33,18 +33,15 @@ final class DateTimeSelectionView: UIView {
     }
 
     private func initViews() {
-        backgroundColor = UIColor(white: 1.0, alpha: 0.94)
-        layer.cornerRadius = 16
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.18
-        layer.shadowRadius = 8
-        layer.shadowOffset = CGSize(width: 0, height: 3)
+        backgroundColor = UIColor.black.withAlphaComponent(0.67)
+        layer.cornerRadius = 0
+        layer.shadowOpacity = 0
 
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.spacing = 8
-        stack.layoutMargins = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
+        stack.spacing = 4
+        stack.layoutMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         stack.isLayoutMarginsRelativeArrangement = true
         stack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stack)
@@ -52,6 +49,7 @@ final class DateTimeSelectionView: UIView {
         addColumn(.year, to: stack)
         addColumn(.month, to: stack)
         addColumn(.day, to: stack)
+        stack.setCustomSpacing(8, after: stack.arrangedSubviews[2])
         addColumn(.hour, to: stack)
         addColumn(.minute, to: stack)
 
@@ -75,8 +73,8 @@ final class DateTimeSelectionView: UIView {
         column.addArrangedSubview(up)
 
         let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont.monospacedDigitSystemFont(ofSize: 17, weight: .semibold)
+        label.textColor = .white
+        label.font = UIFont.monospacedDigitSystemFont(ofSize: 18, weight: .bold)
         label.textAlignment = .center
         label.widthAnchor.constraint(greaterThanOrEqualToConstant: field == .year ? 52 : 32).isActive = true
         labels[field] = label
@@ -91,10 +89,10 @@ final class DateTimeSelectionView: UIView {
 
     private func makeStepButton(iconName: String) -> UIButton {
         let button = UIButton(type: .system)
-        button.tintColor = .systemBlue
+        button.tintColor = .white
         button.setImage(AstroIcon.template(iconName), for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         return button
     }
 

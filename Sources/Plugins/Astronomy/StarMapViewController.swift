@@ -240,7 +240,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func setupTimeControls() {
         let nightMode = OADayNightHelper.instance().isNightMode()
         timeControlCard.translatesAutoresizingMaskIntoConstraints = false
-        timeControlCard.backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.92)
+        timeControlCard.backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 1)
         timeControlCard.layer.cornerRadius = Layout.buttonSize / 2
         timeControlCard.layer.shadowColor = UIColor.black.cgColor
         timeControlCard.layer.shadowOpacity = 0.16
@@ -734,7 +734,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         let active = !timeSelectionView.isHidden
         timeControlCard.backgroundColor = active
             ? StarMapControlTheme.activeBackground()
-            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 0.92)
+            : StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: 1)
         timeControlButton.nightMode = nightMode
         resetTimeButton.nightMode = nightMode
         timeControlButton.active = active

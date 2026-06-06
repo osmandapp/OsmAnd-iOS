@@ -10,7 +10,7 @@ import UIKit
 
 final class StarCompassButton: StarMapButton {
     var onSingleTap: (() -> Void)?
-    private let arrowView = UIImageView(image: AstroIcon.template("ic_compass_white"))
+    private let arrowView = UIImageView(image: AstroIcon.original("ic_compass_white"))
     private var currentRotation: CGFloat = 0
 
     override init(frame: CGRect) {
@@ -38,7 +38,6 @@ final class StarCompassButton: StarMapButton {
     override func updateTheme() {
         super.updateTheme()
         setImage(nil, for: .normal)
-        arrowView.tintColor = StarMapControlTheme.foreground(active: active, nightMode: nightMode)
         arrowView.transform = CGAffineTransform(rotationAngle: currentRotation * .pi / 180.0)
     }
 

@@ -25,6 +25,10 @@ enum StarMapControlTheme {
         active ? .white : resolved(.mapButtonIconColorDefault, nightMode: nightMode)
     }
 
+    static func activeForeground(nightMode: Bool) -> UIColor {
+        resolved(.mapButtonIconColorActive, nightMode: nightMode)
+    }
+
     static func textColor(nightMode: Bool) -> UIColor {
         resolved(.textColorPrimary, nightMode: nightMode)
     }

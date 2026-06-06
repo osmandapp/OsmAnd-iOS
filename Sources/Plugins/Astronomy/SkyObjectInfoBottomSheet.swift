@@ -89,6 +89,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
     private var selectedTab: Tab = .overview
     private var isProgrammaticTabScroll = false
+    private var redFilterEnabled = false
     private var downloadTaskProgressObserver: OAAutoObserverProxy?
     private var downloadTaskCompletedObserver: OAAutoObserverProxy?
     private var localResourcesChangedObserver: OAAutoObserverProxy?
@@ -130,6 +131,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         if let skyObject {
             updateObjectInfo(skyObject)
         }
+        applyRedFilter(enabled: redFilterEnabled)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -148,6 +150,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
             applyTheme()
             cardsStack.arrangedSubviews.forEach { $0.setNeedsDisplay() }
+            applyRedFilter(enabled: redFilterEnabled)
         }
     }
 
@@ -197,6 +200,14 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             galleryLoader.startLoading(obj.wid)
         }
         submitCards()
+    }
+
+    func applyRedFilter(enabled: Bool) {
+        redFilterEnabled = enabled
+        guard isViewLoaded else {
+            return
+        }
+        AstroRedFilter.apply(enabled, to: view)
     }
 
     func onTimeChanged() {

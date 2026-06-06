@@ -9,6 +9,7 @@
 import CoreLocation
 import Foundation
 import OsmAndShared
+import QuartzCore
 import UIKit
 
 enum AstroIcon {
@@ -46,6 +47,66 @@ enum AstroIcon {
             base.withTintColor(baseColor, renderingMode: .alwaysOriginal).draw(in: CGRect(origin: .zero, size: size))
             overlay.withTintColor(overlayColor, renderingMode: .alwaysOriginal).draw(in: CGRect(origin: .zero, size: size))
         }.withRenderingMode(.alwaysOriginal)
+    }
+}
+
+private final class AstroRedFilterOverlayView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        isUserInteractionEnabled = false
+        backgroundColor = .red
+        layer.compositingFilter = "multiplyBlendMode"
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = superview?.layer.cornerRadius ?? 0
+        layer.masksToBounds = layer.cornerRadius > 0
+    }
+}
+
+enum AstroRedFilter {
+    private static let overlayTag = 0xA570
+
+    static func apply(_ enabled: Bool, to views: UIView?...) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for view in views {
+            apply(enabled, to: view)
+        }
+        CATransaction.commit()
+    }
+
+    private static func apply(_ enabled: Bool, to view: UIView?) {
+        guard let view else {
+            return
+        }
+        if enabled {
+            let overlay: AstroRedFilterOverlayView
+            if let existing = view.viewWithTag(overlayTag) as? AstroRedFilterOverlayView {
+                overlay = existing
+            } else {
+                overlay = AstroRedFilterOverlayView(frame: view.bounds)
+                overlay.tag = overlayTag
+                overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                view.addSubview(overlay)
+            }
+            overlay.frame = view.bounds
+            overlay.setNeedsLayout()
+            overlay.layoutIfNeeded()
+            view.bringSubviewToFront(overlay)
+        } else {
+            view.viewWithTag(overlayTag)?.removeFromSuperview()
+        }
     }
 }
 

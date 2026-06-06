@@ -809,6 +809,20 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func updateRedMode(_ enabled: Bool) {
         starView.showRedFilter = enabled
+        AstroRedFilter.apply(enabled,
+                             to: timeControlCard,
+                             timeSelectionView,
+                             arModeButton,
+                             cameraButton,
+                             resetFovButton,
+                             magnitudeFilterButton,
+                             magnitudeSliderCard,
+                             compassButton,
+                             closeButton,
+                             settingsButton,
+                             sliderContainer)
+        objectInfoController?.applyRedFilter(enabled: enabled)
+        configureSheetController?.applyRedFilter(enabled: enabled)
     }
 
     private func regularMapHeight() -> CGFloat {
@@ -1062,6 +1076,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             }
         )
         let controller = AstroContextMenuViewController(object: object, dependencies: dependencies)
+        controller.applyRedFilter(enabled: starView.showRedFilter)
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .pageSheet
         navigationController.navigationBar.prefersLargeTitles = false

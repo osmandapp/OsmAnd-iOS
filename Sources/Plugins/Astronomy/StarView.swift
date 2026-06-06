@@ -59,6 +59,7 @@ final class StarView: UIView {
                     panY = 0
                 }
             }
+            updateRedFilter()
             setNeedsDisplay()
         }
     }
@@ -443,6 +444,7 @@ final class StarView: UIView {
     }
 
     func updateRedFilter() {
+        AstroRedFilter.apply(settings.starMap.showRedFilter, to: self)
         setNeedsDisplay()
     }
 
@@ -667,10 +669,6 @@ final class StarView: UIView {
         drawHighlights(in: context)
         drawDirectionArrows(in: context)
 
-        if settings.starMap.showRedFilter {
-            UIColor(red: 0.65, green: 0.0, blue: 0.0, alpha: 0.34).setFill()
-            UIRectFillUsingBlendMode(bounds, .multiply)
-        }
         context.restoreGState()
     }
 

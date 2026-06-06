@@ -50,6 +50,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         bindSwitchRows()
         applyTheme()
         configureNavigationBar()
+        applyRedFilter(enabled: config.showRedFilter)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -80,6 +81,9 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
                              drawableEnabled: redFilterIcon(selected: true),
                              drawableDisabled: redFilterIcon(selected: false),
                              titleResEnabled: "red_filter")
+        }
+        if isViewLoaded {
+            AstroRedFilter.apply(enabled, to: view)
         }
     }
 

@@ -71,6 +71,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
+    private var screenOrientationObserver: NSObjectProtocol?
 
     init(plugin: AstronomyPlugin) {
         let loadedSettings = AstronomyPluginSettings.load()
@@ -88,6 +89,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     deinit {
         mapLocationObserver?.detach()
         dayNightModeObserver?.detach()
+        if let screenOrientationObserver {
+            NotificationCenter.default.removeObserver(screenOrientationObserver)
+        }
         restoreRegularMapIfNeeded(refresh: false)
     }
 
@@ -499,6 +503,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         dayNightModeObserver = OAAutoObserverProxy(self,
                                                    withHandler: #selector(onDayNightModeChanged),
                                                    andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
+        screenOrientationObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name(ScreenOrientationHelper.screenOrientationChangedKey),
+                                                                           object: nil,
+                                                                           queue: .main) { [weak self] _ in
+            self?.cameraHelper.layoutPreview()
+        }
     }
 
     private func syncObjectsToStarView() {

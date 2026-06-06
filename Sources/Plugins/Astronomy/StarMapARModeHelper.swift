@@ -266,11 +266,11 @@ final class StarMapARModeHelper {
     private func screenVector(forDeviceVector vector: Vector3) -> (x: Double, y: Double) {
         switch ScreenOrientationHelper.sharedInstance.getCurrentInterfaceOrientation() {
         case .landscapeLeft:
-            return (x: vector.y, y: -vector.x)
+            return (x: -vector.y, y: vector.x)
         case .portraitUpsideDown:
             return (x: -vector.x, y: -vector.y)
         case .landscapeRight:
-            return (x: -vector.y, y: vector.x)
+            return (x: vector.y, y: -vector.x)
         default:
             return (x: vector.x, y: vector.y)
         }

@@ -45,7 +45,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private let magnitudeSlider = UISlider()
     private let magnitudeSliderTitle = UILabel()
     private let magnitudeSliderValue = UILabel()
-    private let timeLabel = UILabel()
     private let closeButton = StarMapButton()
     private let settingsButton = StarMapButton()
     private let compassButton = StarCompassButton()
@@ -189,7 +188,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         setupTimeControls()
         setupMagnitudeControls()
         setupCameraControls()
-        setupBottomSheetLabel()
         updateMapControlThemes()
     }
 
@@ -409,25 +407,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
             resetFovButton.centerXAnchor.constraint(equalTo: sliderContainer.centerXAnchor),
             resetFovButton.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: 8)
-        ])
-    }
-
-    private func setupBottomSheetLabel() {
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.textColor = .white
-        timeLabel.font = UIFont.systemFont(ofSize: 13, weight: .medium)
-        timeLabel.numberOfLines = 2
-        timeLabel.textAlignment = .center
-        timeLabel.backgroundColor = UIColor(white: 0.02, alpha: 0.68)
-        timeLabel.layer.cornerRadius = 8
-        timeLabel.layer.masksToBounds = true
-        timeLabel.isHidden = true
-        mapControlsContainer.addSubview(timeLabel)
-        NSLayoutConstraint.activate([
-            timeLabel.leadingAnchor.constraint(greaterThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            timeLabel.trailingAnchor.constraint(lessThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            timeLabel.centerXAnchor.constraint(equalTo: mapControlsContainer.centerXAnchor),
-            timeLabel.bottomAnchor.constraint(equalTo: timeControlCard.topAnchor, constant: -12)
         ])
     }
 
@@ -718,14 +697,6 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         timeControlButton.setTitle(formatter.string(from: date), for: .normal)
 
-        if let object = selectedObject {
-            let altitude = String(format: "%.1f", object.altitude)
-            let azimuth = String(format: "%.1f", object.azimuth)
-            timeLabel.text = "\(object.getDisplayName())  \(localizedString("astro_alt_short")) \(altitude)°, \(localizedString("astro_az_short")) \(azimuth)°"
-            timeLabel.isHidden = false
-        } else {
-            timeLabel.isHidden = true
-        }
         updateTimeControlTheme()
     }
 

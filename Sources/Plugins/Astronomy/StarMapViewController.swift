@@ -210,6 +210,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
         addRoundButton(cameraButton, iconName: "ic_action_device_camera", accessibilityLabel: localizedString("astro_camera"))
         cameraButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
+        cameraButton.isHidden = true
 
         NSLayoutConstraint.activate([
             compassButton.leadingAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.leadingAnchor, constant: Layout.contentPadding),
@@ -398,11 +399,15 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         resetFovButton.addTarget(self, action: #selector(resetFov), for: .touchUpInside)
         resetFovButton.isHidden = true
 
+        let cameraSliderTopConstraint = sliderContainer.topAnchor.constraint(equalTo: cameraButton.bottomAnchor, constant: Layout.contentPadding)
+        cameraSliderTopConstraint.priority = .defaultHigh
+
         NSLayoutConstraint.activate([
             sliderContainer.widthAnchor.constraint(equalToConstant: Layout.buttonSize),
             sliderContainer.heightAnchor.constraint(equalToConstant: Layout.transparencySliderHeight),
             sliderContainer.centerXAnchor.constraint(equalTo: cameraButton.centerXAnchor),
-            sliderContainer.topAnchor.constraint(equalTo: cameraButton.bottomAnchor, constant: Layout.contentPadding),
+            cameraSliderTopConstraint,
+            sliderContainer.topAnchor.constraint(greaterThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
 
             transparencySlider.centerXAnchor.constraint(equalTo: sliderContainer.centerXAnchor),
             transparencySlider.centerYAnchor.constraint(equalTo: sliderContainer.centerYAnchor),
@@ -410,7 +415,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             transparencySlider.heightAnchor.constraint(equalToConstant: 40),
 
             resetFovButton.centerXAnchor.constraint(equalTo: sliderContainer.centerXAnchor),
-            resetFovButton.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: 8)
+            resetFovButton.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: 8),
+            resetFovButton.bottomAnchor.constraint(lessThanOrEqualTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding)
         ])
     }
 

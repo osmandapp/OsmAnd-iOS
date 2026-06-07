@@ -358,18 +358,89 @@ final class StarView: UIView {
         setNeedsDisplay()
     }
 
-    private func animateTo(azimuth: Double, altitude: Double, targetViewAngle: Double? = nil) {
+    private func setCenter(azimuth: Double,
+                           altitude: Double,
+                           at targetPoint: CGPoint,
+                           animate: Bool = false,
+                           targetViewAngle: Double? = nil) {
+        guard bounds.width > 0, bounds.height > 0 else {
+            if animate {
+                animateTo(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
+            } else {
+                setCenterState(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
+            }
+            return
+        }
+
+        let finalViewAngle = boundedViewAngle(targetViewAngle ?? viewAngle)
+        if settings.starMap.is2DMode {
+            let targetPan = CGPoint(x: targetPoint.x - bounds.midX,
+                                    y: targetPoint.y - bounds.midY)
+            if animate {
+                animateTo(azimuth: azimuth,
+                          altitude: altitude,
+                          targetViewAngle: targetViewAngle,
+                          targetPan: targetPan)
+            } else {
+                setCenterState(azimuth: azimuth, altitude: altitude, targetViewAngle: targetViewAngle)
+                panX = targetPan.x
+                panY = targetPan.y
+                setNeedsDisplay()
+            }
+            return
+        }
+
+        let screenOffsetX = Double(targetPoint.x - bounds.midX)
+        let screenOffsetY = Double(targetPoint.y - bounds.midY)
+        let rollRad = roll * .pi / 180.0
+        let unrotatedX = screenOffsetX * cos(rollRad) + screenOffsetY * sin(rollRad)
+        let unrotatedY = -screenOffsetX * sin(rollRad) + screenOffsetY * cos(rollRad)
+        let scale = finalViewAngle / Double(max(bounds.width, 1))
+        let targetAzimuth = normalizedDegrees(azimuth - unrotatedX * scale)
+        let targetAltitude = max(-90, min(90, altitude + unrotatedY * scale))
+        if animate {
+            animateTo(azimuth: targetAzimuth, altitude: targetAltitude, targetViewAngle: targetViewAngle)
+        } else {
+            setCenterState(azimuth: targetAzimuth, altitude: targetAltitude, targetViewAngle: targetViewAngle)
+        }
+    }
+
+    private func setCenterState(azimuth: Double, altitude: Double, targetViewAngle: Double? = nil) {
+        centerAzimuth = normalizedDegrees(azimuth)
+        centerAltitude = max(-90, min(90, altitude))
+        if let targetViewAngle {
+            viewAngle = boundedViewAngle(targetViewAngle)
+            onViewAngleChangeListener?(viewAngle)
+        }
+        setNeedsDisplay()
+    }
+
+    private func boundedViewAngle(_ angle: Double) -> Double {
+        max(ViewAngleBounds.min, min(maxViewAngle, angle))
+    }
+
+    private func animateTo(azimuth: Double,
+                           altitude: Double,
+                           targetViewAngle: Double? = nil,
+                           targetPan: CGPoint? = nil) {
         let startAz = centerAzimuth
         let startAlt = centerAltitude
         let startAngle = viewAngle
+        let startPanX = panX
+        let startPanY = panY
         let targetAlt = max(-90, min(90, altitude))
+        let boundedTargetViewAngle = targetViewAngle.map { boundedViewAngle($0) }
         UIView.animate(withDuration: 0.5,
                        delay: 0,
                        options: [.curveEaseOut, .allowUserInteraction]) {
             self.centerAzimuth = self.interpolateAngle(start: startAz, end: azimuth, fraction: 1)
             self.centerAltitude = startAlt + (targetAlt - startAlt)
-            if let targetViewAngle {
-                self.viewAngle = startAngle + (targetViewAngle - startAngle)
+            if let boundedTargetViewAngle {
+                self.viewAngle = startAngle + (boundedTargetViewAngle - startAngle)
+            }
+            if let targetPan {
+                self.panX = startPanX + (targetPan.x - startPanX)
+                self.panY = startPanY + (targetPan.y - startPanY)
             }
             self.setNeedsDisplay()
             self.layoutIfNeeded()
@@ -482,6 +553,23 @@ final class StarView: UIView {
         setNeedsDisplay()
     }
 
+    func setSelectedObject(_ object: SkyObject?, centerAt targetPoint: CGPoint, animate: Bool = false) {
+        if let constellation = object as? Constellation {
+            setSelectedConstellation(constellation, centerAt: targetPoint, animate: animate)
+            return
+        }
+        selectedConstellationId = nil
+        selectedConstellationStarIds.removeAll()
+        selectedObject = object
+        if let object {
+            if object.azimuth == 0 && object.altitude == 0 {
+                calculatePosition(object)
+            }
+            setCenter(azimuth: object.azimuth, altitude: object.altitude, at: targetPoint, animate: animate)
+        }
+        setNeedsDisplay()
+    }
+
     func setSelectedConstellation(_ constellation: Constellation?, center: Bool = false, animate: Bool = false) {
         selectedConstellationId = constellation?.id
         selectedObject = constellation
@@ -505,6 +593,32 @@ final class StarView: UIView {
                     setCenter(azimuth: center.azimuth, altitude: center.altitude)
                     setViewAngle(targetAngle)
                 }
+            }
+        }
+        setNeedsDisplay()
+    }
+
+    func setSelectedConstellation(_ constellation: Constellation?, centerAt targetPoint: CGPoint, animate: Bool = false) {
+        selectedConstellationId = constellation?.id
+        selectedObject = constellation
+        selectedConstellationStarIds.removeAll()
+        for (first, second) in constellation?.lines ?? [] {
+            selectedConstellationStarIds.insert(first)
+            selectedConstellationStarIds.insert(second)
+        }
+        for object in skyObjects where selectedConstellationStarIds.contains(object.hip) {
+            calculatePosition(object, time: currentTime, updateTargets: false)
+            object.azimuth = object.targetAzimuth
+            object.altitude = object.targetAltitude
+        }
+        if let constellation {
+            let centers = constellationCenters()
+            if let center = centers[constellation.id] {
+                setCenter(azimuth: center.azimuth,
+                          altitude: center.altitude,
+                          at: targetPoint,
+                          animate: animate,
+                          targetViewAngle: targetViewAngle(for: constellation, center: center))
             }
         }
         setNeedsDisplay()

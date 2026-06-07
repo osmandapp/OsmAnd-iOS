@@ -998,13 +998,18 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         updateMapControlsVisibility()
     }
 
-    private func showObjectInfo(_ object: SkyObject) {
+    private func showObjectInfo(_ object: SkyObject, centerInVisibleMapOnPresentation: Bool = false) {
         if let objectInfoController {
             objectInfoController.updateObjectInfo(object)
             objectInfoNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
                 self?.objectInfoNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
             }
             updateMapControlsVisibility()
+            if centerInVisibleMapOnPresentation {
+                DispatchQueue.main.async { [weak self] in
+                    self?.centerObjectInVisibleStarMap(object, animate: true)
+                }
+            }
             return
         }
         hideBottomSheet(clearSelection: false)
@@ -1024,7 +1029,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 finishObjectInfoDismiss(clearSelection: true)
             },
             onCenterObject: { [weak self] object in
-                self?.starView.setSelectedObject(object, center: true, animate: true)
+                self?.centerObjectInVisibleStarMap(object, animate: true)
             },
             onFavoriteChanged: { [weak self] object, enabled in
                 guard let self else { return }
@@ -1086,8 +1091,33 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         objectInfoController = controller
         objectInfoNavigationController = navigationController
-        present(navigationController, animated: true)
+        present(navigationController, animated: true) { [weak self] in
+            guard centerInVisibleMapOnPresentation else {
+                return
+            }
+            self?.centerObjectInVisibleStarMap(object, animate: true)
+        }
         updateMapControlsVisibility()
+    }
+
+    private func visibleStarMapTargetPoint() -> CGPoint {
+        view.layoutIfNeeded()
+        let starFrame = starView.convert(starView.bounds, to: view)
+        var visibleFrame = starFrame
+        if let sheetView = objectInfoNavigationController?.view, !sheetView.isHidden {
+            let sheetFrame = sheetView.convert(sheetView.bounds, to: view)
+            let visibleBottom = min(visibleFrame.maxY, max(visibleFrame.minY, sheetFrame.minY))
+            visibleFrame.size.height = max(0, visibleBottom - visibleFrame.minY)
+        }
+        guard visibleFrame.width > 0, visibleFrame.height > 0 else {
+            return CGPoint(x: starView.bounds.midX, y: starView.bounds.midY)
+        }
+        let targetInView = CGPoint(x: visibleFrame.midX, y: visibleFrame.midY)
+        return view.convert(targetInView, to: starView)
+    }
+
+    private func centerObjectInVisibleStarMap(_ object: SkyObject, animate: Bool) {
+        starView.setSelectedObject(object, centerAt: visibleStarMapTargetPoint(), animate: animate)
     }
 
     private func showMessage(_ message: String) {
@@ -1104,8 +1134,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func handleSearchObjectSelected(_ obj: SkyObject) {
         manualAzimuth = true
         selectedObject = obj
-        starView.setSelectedObject(obj, center: true, animate: true)
-        showObjectInfo(obj)
+        starView.setSelectedObject(obj)
+        showObjectInfo(obj, centerInVisibleMapOnPresentation: true)
     }
 
     @objc func showSearchDialog() {

@@ -30,6 +30,12 @@
 		A5A500122F50000100000012 /* StarMapARModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500112F50000100000011 /* StarMapARModeHelper.swift */; };
 		A5A500142F50000100000014 /* StarMapCameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500132F50000100000013 /* StarMapCameraHelper.swift */; };
 		A5A500162F50000100000016 /* StarMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500152F50000100000015 /* StarMapViewController.swift */; };
+		A5A504012F51000200000401 /* StarMapSearchPreparedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503012F51000200000301 /* StarMapSearchPreparedData.swift */; };
+		A5A504022F51000200000402 /* StarMapSearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503022F51000200000302 /* StarMapSearchState.swift */; };
+		A5A504032F51000200000403 /* StarMapSearchHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503032F51000200000303 /* StarMapSearchHelper.swift */; };
+		A5A504042F51000200000404 /* StarMapSearchResultsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */; };
+		A5A504052F51000200000405 /* StarMapCatalogsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */; };
+		A5A504062F51000200000406 /* StarMapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503062F51000200000306 /* StarMapSearchViewController.swift */; };
 		A5A500182F50000100000018 /* OpenAstronomyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500172F50000100000017 /* OpenAstronomyAction.swift */; };
 		A5A5001A2F5000010000001A /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500192F50000100000019 /* Catalog.swift */; };
 		A5A5001C2F5000010000001C /* AstroArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5001B2F5000010000001B /* AstroArticle.swift */; };
@@ -3854,6 +3860,12 @@
 		A5A5002D2F5000010000002D /* StarMapResetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapResetButton.swift; sourceTree = "<group>"; };
 		A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapTimeControlButton.swift; sourceTree = "<group>"; };
 		A5A500312F50000100000031 /* StarCompassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarCompassButton.swift; sourceTree = "<group>"; };
+		A5A503012F51000200000301 /* StarMapSearchPreparedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchPreparedData.swift; sourceTree = "<group>"; };
+		A5A503022F51000200000302 /* StarMapSearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchState.swift; sourceTree = "<group>"; };
+		A5A503032F51000200000303 /* StarMapSearchHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchHelper.swift; sourceTree = "<group>"; };
+		A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchResultsAdapter.swift; sourceTree = "<group>"; };
+		A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapCatalogsAdapter.swift; sourceTree = "<group>"; };
+		A5A503062F51000200000306 /* StarMapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchViewController.swift; sourceTree = "<group>"; };
 		A5A501022F51000100000102 /* AstroContextMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuItem.swift; sourceTree = "<group>"; };
 		A5A501032F51000100000103 /* AstroContextUiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextUiState.swift; sourceTree = "<group>"; };
 		A5A501042F51000100000104 /* MetricsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsAdapter.swift; sourceTree = "<group>"; };
@@ -11335,6 +11347,7 @@
 				A5A500252F50000100000025 /* SkyObjectInfoBottomSheet.swift */,
 				A5A500272F50000100000027 /* ConstellationInfoBottomSheet.swift */,
 				A5A501002F51000100000100 /* contextmenu */,
+				A5A503202F51000200000320 /* search */,
 				A5A500292F50000100000029 /* DateTimeSelectionView.swift */,
 				A5A5002B2F5000010000002B /* StarMapButton.swift */,
 				A5A5002D2F5000010000002D /* StarMapResetButton.swift */,
@@ -11346,6 +11359,19 @@
 				A5A500152F50000100000015 /* StarMapViewController.swift */,
 			);
 			path = Astronomy;
+			sourceTree = "<group>";
+		};
+		A5A503202F51000200000320 /* search */ = {
+			isa = PBXGroup;
+			children = (
+				A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */,
+				A5A503012F51000200000301 /* StarMapSearchPreparedData.swift */,
+				A5A503032F51000200000303 /* StarMapSearchHelper.swift */,
+				A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */,
+				A5A503022F51000200000302 /* StarMapSearchState.swift */,
+				A5A503062F51000200000306 /* StarMapSearchViewController.swift */,
+			);
+			path = search;
 			sourceTree = "<group>";
 		};
 		A5A501002F51000100000100 /* contextmenu */ = {
@@ -17301,6 +17327,12 @@
 				A5A500122F50000100000012 /* StarMapARModeHelper.swift in Sources */,
 				A5A500142F50000100000014 /* StarMapCameraHelper.swift in Sources */,
 				A5A500162F50000100000016 /* StarMapViewController.swift in Sources */,
+				A5A504012F51000200000401 /* StarMapSearchPreparedData.swift in Sources */,
+				A5A504022F51000200000402 /* StarMapSearchState.swift in Sources */,
+				A5A504032F51000200000403 /* StarMapSearchHelper.swift in Sources */,
+				A5A504042F51000200000404 /* StarMapSearchResultsAdapter.swift in Sources */,
+				A5A504052F51000200000405 /* StarMapCatalogsAdapter.swift in Sources */,
+				A5A504062F51000200000406 /* StarMapSearchViewController.swift in Sources */,
 				A5A5001A2F5000010000001A /* Catalog.swift in Sources */,
 				A5A5001C2F5000010000001C /* AstroArticle.swift in Sources */,
 				A5A5001E2F5000010000001E /* SkyObject.swift in Sources */,

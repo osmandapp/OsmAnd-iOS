@@ -126,6 +126,17 @@ enum AstroUtils {
         "Q339": Body.pluto
     ]
 
+    struct Twilight {
+        let sunrise: Date?
+        let sunset: Date?
+        let civilDawn: Date?
+        let civilDusk: Date?
+        let nauticalDawn: Date?
+        let nauticalDusk: Date?
+        let astroDawn: Date?
+        let astroDusk: Date?
+    }
+
     static func astronomyTime(from date: Date) -> Time {
         Time.companion.fromMillisecondsSince1970(millis: Int64(date.timeIntervalSince1970 * 1000.0))
     }
@@ -245,6 +256,51 @@ enum AstroUtils {
             return nil
         }
         return Date(timeIntervalSince1970: TimeInterval(time.toMillisecondsSince1970()) / 1000.0)
+    }
+
+    static func computeTwilight(startLocal: Date,
+                                endLocal: Date,
+                                observer: Observer,
+                                timeZone: TimeZone) -> Twilight {
+        func findAlt(direction: Direction, degrees: Double) -> Date? {
+            let startTime = astronomyTime(from: startLocal)
+            let time = AstronomyKt.searchAltitude(body: Body.sun,
+                                                  observer: observer,
+                                                  direction: direction,
+                                                  startTime: startTime,
+                                                  limitDays: 2.0,
+                                                  altitude: degrees)
+            return date(from: time)
+        }
+        let searchStart = astronomyTime(from: startLocal)
+        let sunrise = AstronomyKt.searchRiseSet(body: Body.sun,
+                                                observer: observer,
+                                                direction: Direction.rise,
+                                                startTime: searchStart,
+                                                limitDays: 2.0,
+                                                metersAboveGround: 0.0)
+        let sunset = AstronomyKt.searchRiseSet(body: Body.sun,
+                                               observer: observer,
+                                               direction: Direction.set,
+                                               startTime: searchStart,
+                                               limitDays: 2.0,
+                                               metersAboveGround: 0.0)
+        return Twilight(sunrise: date(from: sunrise),
+                        sunset: date(from: sunset),
+                        civilDawn: findAlt(direction: .rise, degrees: -6.0),
+                        civilDusk: findAlt(direction: .set, degrees: -6.0),
+                        nauticalDawn: findAlt(direction: .rise, degrees: -12.0),
+                        nauticalDusk: findAlt(direction: .set, degrees: -12.0),
+                        astroDawn: findAlt(direction: .rise, degrees: -18.0),
+                        astroDusk: findAlt(direction: .set, degrees: -18.0))
+    }
+
+    static func formatLocalTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .none
+        formatter.timeZone = .current
+        return formatter.string(from: date)
     }
 
     private static func filterRiseSetDate(_ date: Date?, windowStart: Date?, windowEnd: Date?) -> Date? {

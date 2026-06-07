@@ -7,6 +7,7 @@
 //
 
 import CoreLocation
+import OsmAndShared
 import UIKit
 
 final class StarMapViewController: UIViewController, StarViewDelegate {
@@ -22,6 +23,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let maxMagnitude: Double = 7.0
     }
     private var settings: AstronomyPluginSettings
+    private let plugin: AstronomyPlugin
     private let dataProvider: AstroDataProvider
     private let viewModel: StarObjectsViewModel
 
@@ -47,6 +49,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private let magnitudeSliderValue = UILabel()
     private let closeButton = StarMapButton()
     private let settingsButton = StarMapButton()
+    private let searchButton = StarMapButton()
     private let compassButton = StarCompassButton()
 
     private let arModeHelper = StarMapARModeHelper()
@@ -68,6 +71,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var configureSheetController: AstroConfigureViewBottomSheet?
     private var configureSheetNavigationController: UINavigationController?
     private var isDismissingConfigureSheet = false
+    private var searchViewController: StarMapSearchViewController?
     private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
@@ -76,6 +80,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     init(plugin: AstronomyPlugin) {
         let loadedSettings = AstronomyPluginSettings.load()
         let provider = plugin.dataProvider
+        self.plugin = plugin
         settings = loadedSettings
         dataProvider = provider
         viewModel = StarObjectsViewModel(provider: provider, settings: loadedSettings)
@@ -212,6 +217,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         cameraButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
         cameraButton.isHidden = true
 
+        addRoundButton(searchButton, iconName: "ic_action_search_dark", accessibilityLabel: localizedString("shared_string_search"))
+        searchButton.addTarget(self, action: #selector(showSearchDialog), for: .touchUpInside)
+
         NSLayoutConstraint.activate([
             compassButton.leadingAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.leadingAnchor, constant: Layout.contentPadding),
             compassButton.topAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
@@ -220,7 +228,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             arModeButton.topAnchor.constraint(equalTo: compassButton.bottomAnchor, constant: Layout.contentPadding),
 
             cameraButton.centerXAnchor.constraint(equalTo: arModeButton.centerXAnchor),
-            cameraButton.topAnchor.constraint(equalTo: arModeButton.bottomAnchor, constant: Layout.contentPadding)
+            cameraButton.topAnchor.constraint(equalTo: arModeButton.bottomAnchor, constant: Layout.contentPadding),
+
+            searchButton.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
+            searchButton.bottomAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding)
         ])
     }
 
@@ -788,6 +799,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         resetFovButton.nightMode = nightMode
         closeButton.nightMode = nightMode
         settingsButton.nightMode = nightMode
+        searchButton.nightMode = nightMode
         compassButton.nightMode = nightMode
         resetTimeButton.nightMode = nightMode
         timeControlButton.nightMode = nightMode
@@ -804,6 +816,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                              magnitudeFilterButton,
                              magnitudeSliderCard,
                              compassButton,
+                             searchButton,
                              closeButton,
                              settingsButton,
                              sliderContainer)
@@ -1054,11 +1067,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 self.viewModel.updateSettings(self.settings)
                 self.starView.refreshObjects()
             },
-            onCatalogClick: { catalog in
-                guard let url = URL(string: "https://www.wikidata.org/wiki/\(catalog.wid)") else {
-                    return
-                }
-                UIApplication.shared.open(url)
+            onCatalogClick: { [weak self] catalog in
+                self?.showSearchDialog(initialCatalogWid: catalog.wid)
             }
         )
         let controller = AstroContextMenuViewController(object: object, dependencies: dependencies)
@@ -1089,6 +1099,56 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     func starView(_ starView: StarView, didSelect object: SkyObject?) {
         selectedObject = object
         updateTimeControls()
+    }
+
+    private func handleSearchObjectSelected(_ obj: SkyObject) {
+        manualAzimuth = true
+        selectedObject = obj
+        starView.setSelectedObject(obj, center: true, animate: true)
+        showObjectInfo(obj)
+    }
+
+    @objc func showSearchDialog() {
+        showSearchDialog(initialCatalogWid: nil)
+    }
+
+    func showSearchDialog(initialCatalogWid: String? = nil) {
+        clearPreviousSearchDialog()
+        let controller = StarMapSearchViewController.newInstance(initialCatalogWid: initialCatalogWid,
+                                                                 parent: self,
+                                                                 plugin: plugin)
+        controller.onObjectSelected = { [weak self] obj in
+            self?.handleSearchObjectSelected(obj)
+        }
+        controller.applyRedFilter(enabled: starView.showRedFilter)
+        searchViewController = controller
+        let presentingController = presentedViewController ?? self
+        presentingController.present(controller, animated: true)
+    }
+
+    private func clearPreviousSearchDialog() {
+        searchViewController?.dismiss(animated: false)
+        searchViewController = nil
+    }
+
+    func getSearchableObjects() -> [SkyObject] {
+        getTrackableObjects()
+    }
+
+    func getSearchObserver() -> Observer {
+        starView.observer
+    }
+
+    func getSearchCurrentDate() -> Date {
+        currentDate
+    }
+
+    func getSearchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
+        settings.starMap
+    }
+
+    func isSearchRedFilterEnabled() -> Bool {
+        starView.showRedFilter
     }
 
     @objc private func close() {

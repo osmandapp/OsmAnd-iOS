@@ -19,7 +19,7 @@ final class MapVariantReplacementManager: NSObject {
     /// Stored until installation completes successfully,
     /// after which obsolete variants are deleted.
     private var pendingDeletions: [String: [OAResourceSwiftItem]] = [:]
-
+    private let syncQueue = DispatchQueue(label: "MapVariantReplacementManager.queue")
     private var downloadFailedObserver: OAAutoObserverProxy?
 
     // MARK: - Initialization
@@ -33,16 +33,22 @@ final class MapVariantReplacementManager: NSObject {
     // MARK: - Public API
 
     func storePendingDeletion(_ resources: [OAResourceSwiftItem], for resourceId: String) {
-        pendingDeletions[resourceId] = resources
+        syncQueue.sync {
+            self.pendingDeletions[resourceId] = resources
+        }
     }
 
     private func clearPendingDeletion(for resourceId: String) {
         guard !resourceId.isEmpty else { return }
-        pendingDeletions.removeValue(forKey: resourceId)
+        syncQueue.sync {
+            _ = self.pendingDeletions.removeValue(forKey: resourceId)
+        }
     }
 
     private func pendingDeletion(for resourceId: String) -> [OAResourceSwiftItem]? {
-        pendingDeletions[resourceId]
+        syncQueue.sync {
+            pendingDeletions[resourceId]
+        }
     }
 
     // MARK: - Private

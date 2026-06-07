@@ -517,9 +517,9 @@ static BOOL dataInvalidated = NO;
         }
         else
         {
-            BOOL isTypeMapOrRoadOnly = resource->type == OsmAndResourceType::MapRegion || resource->type == OsmAndResourceType::RoadMapRegion;
-            if ((resource != nullptr && isTypeMapOrRoadOnly)
-                || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"]))
+            BOOL isTypeMap = resource != nullptr && resource->type == OsmAndResourceType::MapRegion;
+            BOOL isTypeRoadOnly = resource != nullptr && resource->type == OsmAndResourceType::RoadMapRegion;
+            if ((isTypeMap || isTypeRoadOnly) || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"]))
                 [_app.data.mapLayerChangeObservable notifyEvent];
         }
         

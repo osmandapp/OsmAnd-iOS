@@ -1938,7 +1938,7 @@ static BOOL _repositoryUpdated = NO;
     }
 }
 
-- (UITableViewCell *) visibleCellForItem:(OAResourceItem *)item
+- (UITableViewCell *)visibleCellForItem:(OAResourceItem *)item
 {
     for (UITableViewCell *cell in self.tableView.visibleCells)
     {

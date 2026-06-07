@@ -1458,7 +1458,7 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
-    [OAResourcesUIHelper offerDownloadAndInstallOf:item sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:nil silent:silent];
+    [OAResourcesUIHelper offerDownloadAndInstallOf:item sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:silent];
 }
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent

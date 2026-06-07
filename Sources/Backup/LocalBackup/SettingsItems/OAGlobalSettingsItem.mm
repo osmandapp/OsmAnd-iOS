@@ -143,19 +143,18 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         return;
     }
 
-    OACommonPreference *pref = [settings getPreferenceByKey:key];
-    if (pref && pref.shared)
-        [pref setValueFromString:value appMode:nil];
+    if ([settings getGlobalPreference:key].shared)
+        [settings setGlobalPreference:value key:key];
 }
 
 // MARK: OASettingsItemWriter
 
 - (void)writeItemsToJson:(id)json
 {
-    NSMapTable<NSString *, OACommonPreference *> *prefs = [OAAppSettings.sharedManager getRegisteredPreferences];
-    for (NSString *key in prefs.keyEnumerator)
+    NSMapTable<NSString *, OACommonPreference *> *globalPreferences = [OAAppSettings.sharedManager getPreferences:YES];
+    for (NSString *key in globalPreferences.keyEnumerator)
     {
-        OACommonPreference *setting = [prefs objectForKey:key];
+        OACommonPreference *setting = [globalPreferences objectForKey:key];
         if ([key isEqualToString:@"enabled_plugins"])
         {
             NSString *stringValue = [setting toStringValue:nil];
@@ -178,7 +177,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
             }
             json[key] = correctedValue;
         }
-        else if (setting.shared && setting.global)
+        else if (setting.shared)
         {
             NSString *stringValue = [setting toStringValue:nil];
             if (stringValue)

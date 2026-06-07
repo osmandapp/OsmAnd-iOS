@@ -9,70 +9,80 @@
 import UIKit
 
 final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITableViewDelegate {
-    var visibleEntries: [StarMapSearchEntry]
+    struct Snapshot {
+        let entries: [StarMapSearchEntry]
+        let categoryPreset: StarMapSearchCategoryFilter?
+        let infoHeaderCategory: StarMapSearchCategoryFilter?
+        let useExploreRowLayout: Bool
+
+        static let empty = Snapshot(entries: [],
+                                    categoryPreset: nil,
+                                    infoHeaderCategory: nil,
+                                    useExploreRowLayout: false)
+    }
+
+    private var snapshot: Snapshot
     private let nightMode: Bool
     private let widToDisplayName: () -> [String: String]
-    private let shouldShowInfoHeader: () -> Bool
-    private let useExploreRowLayout: () -> Bool
-    private let categoryPresetProvider: () -> StarMapSearchCategoryFilter?
     private let eventTextProvider: (StarMapSearchEntry) -> NSAttributedString
     private let onScroll: (UIScrollView) -> Void
     private let onEntrySelected: (StarMapSearchEntry) -> Void
     private lazy var resultFormatter = StarMapSearchResultFormatter(nightMode: nightMode,
                                                                     widToDisplayName: widToDisplayName,
-                                                                    categoryPresetProvider: categoryPresetProvider,
                                                                     eventTextProvider: eventTextProvider)
 
     init(nightMode: Bool,
-         visibleEntries: [StarMapSearchEntry],
+         snapshot: Snapshot,
          widToDisplayName: @escaping () -> [String: String],
-         shouldShowInfoHeader: @escaping () -> Bool,
-         useExploreRowLayout: @escaping () -> Bool,
-         categoryPresetProvider: @escaping () -> StarMapSearchCategoryFilter?,
          eventTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
          onScroll: @escaping (UIScrollView) -> Void,
          onEntrySelected: @escaping (StarMapSearchEntry) -> Void) {
         self.nightMode = nightMode
-        self.visibleEntries = visibleEntries
+        self.snapshot = snapshot
         self.widToDisplayName = widToDisplayName
-        self.shouldShowInfoHeader = shouldShowInfoHeader
-        self.useExploreRowLayout = useExploreRowLayout
-        self.categoryPresetProvider = categoryPresetProvider
         self.eventTextProvider = eventTextProvider
         self.onScroll = onScroll
         self.onEntrySelected = onEntrySelected
         super.init()
     }
 
+    func submitSnapshot(_ snapshot: Snapshot) {
+        self.snapshot = snapshot
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        visibleEntries.count + (shouldShowInfoHeader() ? 1 : 0)
+        snapshot.entries.count + (snapshot.infoHeaderCategory != nil ? 1 : 0)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if shouldShowInfoHeader() && indexPath.row == 0 {
+        if let infoHeaderCategory = snapshot.infoHeaderCategory, indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: Self.infoReuseIdentifier) as? StarMapSearchInfoCell
                 ?? StarMapSearchInfoCell(reuseIdentifier: Self.infoReuseIdentifier)
-            bindInfo(cell)
+            bindInfo(cell, category: infoHeaderCategory)
             return cell
         }
-        if useExploreRowLayout() {
+        let entry = getEntryForPosition(indexPath.row)
+        if snapshot.useExploreRowLayout {
             let cell = tableView.dequeueReusableCell(withIdentifier: Self.exploreReuseIdentifier) as? StarMapSearchExploreCell
                 ?? StarMapSearchExploreCell(reuseIdentifier: Self.exploreReuseIdentifier)
-            bindExploreResult(cell, entry: getEntryForPosition(indexPath.row))
+            bindExploreResult(cell, entry: entry)
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: Self.itemReuseIdentifier) as? StarMapSearchObjectCell
             ?? StarMapSearchObjectCell(reuseIdentifier: Self.itemReuseIdentifier)
-        bindResult(cell, entry: getEntryForPosition(indexPath.row))
+        bindResult(cell, entry: entry)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if shouldShowInfoHeader() && indexPath.row == 0 {
+        if snapshot.infoHeaderCategory != nil && indexPath.row == 0 {
             return
         }
-        onEntrySelected(getEntryForPosition(indexPath.row))
+        guard let entry = getEntryForSelection(indexPath.row) else {
+            return
+        }
+        onEntrySelected(entry)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -80,27 +90,35 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     }
 
     private func getEntryForPosition(_ position: Int) -> StarMapSearchEntry {
-        let entryIndex = shouldShowInfoHeader() ? position - 1 : position
-        return visibleEntries[entryIndex]
+        snapshot.entries[getEntryIndexForPosition(position)]
     }
 
-    private func bindInfo(_ cell: StarMapSearchInfoCell) {
-        guard let presetCategory = categoryPresetProvider() else {
-            return
+    private func getEntryForSelection(_ position: Int) -> StarMapSearchEntry? {
+        let entryIndex = getEntryIndexForPosition(position)
+        guard snapshot.entries.indices.contains(entryIndex) else {
+            return nil
         }
-        cell.configure(icon: AstroIcon.template(getCategoryIconRes(presetCategory)),
+        return snapshot.entries[entryIndex]
+    }
+
+    private func getEntryIndexForPosition(_ position: Int) -> Int {
+        snapshot.infoHeaderCategory != nil ? position - 1 : position
+    }
+
+    private func bindInfo(_ cell: StarMapSearchInfoCell, category: StarMapSearchCategoryFilter) {
+        cell.configure(icon: AstroIcon.template(getCategoryIconRes(category)),
                        iconTintColor: StarMapControlTheme.activeForeground(nightMode: nightMode),
-                       text: localizedString(getCategoryInfoTextRes(presetCategory)))
+                       text: localizedString(getCategoryInfoTextRes(category)))
     }
 
     private func bindResult(_ cell: StarMapSearchObjectCell, entry: StarMapSearchEntry) {
-        cell.configure(title: entry.displayName, subtitle: resultFormatter.buildSubtitle(entry))
-        resultFormatter.bindIcon(cell.objectIconView, entry: entry)
+        cell.configure(title: entry.displayName, subtitle: resultFormatter.buildSubtitle(entry, categoryPreset: snapshot.categoryPreset))
+        resultFormatter.bindIcon(cell.objectIconView, entry: entry, categoryPreset: snapshot.categoryPreset)
     }
 
     private func bindExploreResult(_ cell: StarMapSearchExploreCell, entry: StarMapSearchEntry) {
-        cell.configure(title: entry.displayName, subtitle: resultFormatter.buildSubtitle(entry))
-        resultFormatter.bindIcon(cell.rowIconView, entry: entry)
+        cell.configure(title: entry.displayName, subtitle: resultFormatter.buildSubtitle(entry, categoryPreset: snapshot.categoryPreset))
+        resultFormatter.bindIcon(cell.rowIconView, entry: entry, categoryPreset: snapshot.categoryPreset)
     }
 
     private static let infoReuseIdentifier = "StarMapSearchInfoCell"
@@ -333,27 +351,24 @@ private extension NSAttributedString {
 private final class StarMapSearchResultFormatter {
     private let nightMode: Bool
     private let widToDisplayName: () -> [String: String]
-    private let categoryPresetProvider: () -> StarMapSearchCategoryFilter?
     private let eventTextProvider: (StarMapSearchEntry) -> NSAttributedString
 
     init(nightMode: Bool,
          widToDisplayName: @escaping () -> [String: String],
-         categoryPresetProvider: @escaping () -> StarMapSearchCategoryFilter?,
          eventTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString) {
         self.nightMode = nightMode
         self.widToDisplayName = widToDisplayName
-        self.categoryPresetProvider = categoryPresetProvider
         self.eventTextProvider = eventTextProvider
     }
 
-    func bindIcon(_ iconView: UIImageView?, entry: StarMapSearchEntry) {
-        let iconCategory = categoryPresetProvider() ?? entry.category
+    func bindIcon(_ iconView: UIImageView?, entry: StarMapSearchEntry, categoryPreset: StarMapSearchCategoryFilter?) {
+        let iconCategory = categoryPreset ?? entry.category
         iconView?.image = AstroIcon.template(getCategoryIconRes(iconCategory))
         iconView?.tintColor = StarMapSearchLightPalette.defaultIcon
     }
 
-    func buildSubtitle(_ entry: StarMapSearchEntry) -> NSAttributedString {
-        let descriptorText = buildDescriptor(entry)
+    func buildSubtitle(_ entry: StarMapSearchEntry, categoryPreset: StarMapSearchCategoryFilter?) -> NSAttributedString {
+        let descriptorText = buildDescriptor(entry, categoryPreset: categoryPreset)
         let result = NSMutableAttributedString(string: descriptorText)
         if entry.objectRef.type == .CONSTELLATION {
             result.append(NSAttributedString(string: " • "))
@@ -366,10 +381,10 @@ private final class StarMapSearchResultFormatter {
         return result
     }
 
-    private func buildDescriptor(_ entry: StarMapSearchEntry) -> String {
+    private func buildDescriptor(_ entry: StarMapSearchEntry, categoryPreset: StarMapSearchCategoryFilter?) -> String {
         let obj = entry.objectRef
         let parentName = resolveParentName(obj)
-        switch categoryPresetProvider() {
+        switch categoryPreset {
         case .CONSTELLATIONS:
             return localizedString("astro_type_constellation")
         case .STARS:

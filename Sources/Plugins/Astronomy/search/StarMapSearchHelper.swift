@@ -34,25 +34,38 @@ final class StarMapSearchHelper {
 
     func getVisibleTonight(_ entry: StarMapSearchEntry) -> Bool {
         cacheLock.lock()
-        defer { cacheLock.unlock() }
         if entry.visibleTonightCalculated {
+            cacheLock.unlock()
             return entry.isVisibleTonight
         }
         if let cachedVisibleTonight = visibleTonightCache[entry.objectRef.id] {
             entry.isVisibleTonight = cachedVisibleTonight
             entry.visibleTonightCalculated = true
+            cacheLock.unlock()
             return cachedVisibleTonight
         }
+        let context = computationContext
+        cacheLock.unlock()
+
         let riseSet = AstroUtils.nextRiseSet(object: entry.objectRef,
-                                             startSearch: computationContext.dusk,
-                                             observer: computationContext.observer,
-                                             windowStart: computationContext.dusk,
-                                             windowEnd: computationContext.dawn)
-        let visibleAtDusk = AstroUtils.altitude(entry.objectRef, at: computationContext.dusk, observer: computationContext.observer) > 0
-        entry.isVisibleTonight = visibleAtDusk || riseSet.rise != nil || riseSet.set != nil
+                                             startSearch: context.dusk,
+                                             observer: context.observer,
+                                             windowStart: context.dusk,
+                                             windowEnd: context.dawn)
+        let visibleAtDusk = AstroUtils.altitude(entry.objectRef, at: context.dusk, observer: context.observer) > 0
+        let isVisibleTonight = visibleAtDusk || riseSet.rise != nil || riseSet.set != nil
+
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+        if let cachedVisibleTonight = visibleTonightCache[entry.objectRef.id] {
+            entry.isVisibleTonight = cachedVisibleTonight
+            entry.visibleTonightCalculated = true
+            return cachedVisibleTonight
+        }
+        entry.isVisibleTonight = isVisibleTonight
         entry.visibleTonightCalculated = true
-        visibleTonightCache[entry.objectRef.id] = entry.isVisibleTonight
-        return entry.isVisibleTonight
+        visibleTonightCache[entry.objectRef.id] = isVisibleTonight
+        return isVisibleTonight
     }
 
     func getRiseSortValue(_ entry: StarMapSearchEntry) -> Int64 {
@@ -88,7 +101,32 @@ final class StarMapSearchHelper {
         return replaceEventArrowWithIcon(eventText)
     }
 
+    func preloadRiseSet(_ entries: ArraySlice<StarMapSearchEntry>) {
+        for entry in entries {
+            ensureRiseSet(entry)
+        }
+    }
+
     private func ensureRiseSet(_ entry: StarMapSearchEntry) {
+        cacheLock.lock()
+        if entry.riseSetCalculated {
+            cacheLock.unlock()
+            return
+        }
+        if let cachedRiseSet = riseSetCache[entry.objectRef.id] {
+            entry.nextRise = cachedRiseSet.nextRise
+            entry.nextSet = cachedRiseSet.nextSet
+            entry.riseSetCalculated = true
+            cacheLock.unlock()
+            return
+        }
+        let context = computationContext
+        cacheLock.unlock()
+
+        let riseSet = AstroUtils.nextRiseSet(object: entry.objectRef,
+                                             startSearch: context.now,
+                                             observer: context.observer)
+
         cacheLock.lock()
         defer { cacheLock.unlock() }
         if entry.riseSetCalculated {
@@ -100,9 +138,6 @@ final class StarMapSearchHelper {
             entry.riseSetCalculated = true
             return
         }
-        let riseSet = AstroUtils.nextRiseSet(object: entry.objectRef,
-                                             startSearch: computationContext.now,
-                                             observer: computationContext.observer)
         entry.nextRise = riseSet.rise
         entry.nextSet = riseSet.set
         entry.riseSetCalculated = true

@@ -78,18 +78,15 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private lazy var searchAdapter = StarMapSearchResultsAdapter(
         nightMode: nightMode,
-        visibleEntries: visibleEntries,
+        snapshot: .empty,
         widToDisplayName: { [weak self] in self?.widToDisplayName ?? [:] },
-        shouldShowInfoHeader: { [weak self] in self?.shouldShowInfoHeader() ?? false },
-        useExploreRowLayout: { [weak self] in self?.isMyDataMode() ?? false },
-        categoryPresetProvider: { [weak self] in self?.searchState.categoryPreset() },
         eventTextProvider: { [weak self] entry in self?.searchHelper.resolveEventText(entry) ?? NSAttributedString(string: "") },
         onScroll: { [weak self] scrollView in self?.onResultsScrolled(scrollView) },
         onEntrySelected: { [weak self] entry in self?.onSearchEntrySelected(entry) }
     )
     private lazy var catalogsAdapter = StarMapCatalogsAdapter(
         nightMode: nightMode,
-        visibleEntries: visibleCatalogEntries,
+        snapshot: .empty,
         onScroll: { [weak self] scrollView in self?.onResultsScrolled(scrollView) },
         onCatalogSelected: { [weak self] entry in self?.onCatalogSelected(entry) }
     )
@@ -158,12 +155,14 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private var redFilterEnabled = false
     private var browseTitleContainerHeightConstraint: NSLayoutConstraint?
     private var pendingBrowseScrollOffsetRestore: CGPoint?
+    private var isFilteringResults = false
 
     var onObjectSelected: ((SkyObject) -> Void)?
 
     static let TAG = "StarMapSearchDialog"
     private static let FEATURED_CATALOGS_COUNT = 5
     private static let EXPLORE_SECTION_BACKGROUND_TAG = 0xA571
+    private static let RISE_SET_PRELOAD_COUNT = 32
     private static let FEATURED_CATALOG_WIDS = [
         "Q14530",
         "Q857461",
@@ -956,6 +955,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private func openFullSearch(_ quickPresetType: StarMapSearchQuickPresetType, catalogWid: String?) {
         searchState.prepareForExploreEntry(quickPresetType, catalogWid: catalogWid)
         currentFullSearchMode = searchState.shouldOpenInBrowseMode() ? .BROWSE : .INPUT
+        prepareForFreshResultLoad()
         applyMode(.FULL_SEARCH, requestKeyboard: currentFullSearchMode == .INPUT)
         applyFiltersAndSort(scrollToTop: true)
     }
@@ -1259,15 +1259,29 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func updateResultsAdapter() {
         if shouldShowCatalogEntries() {
-            catalogsAdapter.visibleEntries = visibleCatalogEntries
+            catalogsAdapter.submitSnapshot(StarMapCatalogsAdapter.Snapshot(entries: visibleCatalogEntries))
             searchRecycler.dataSource = catalogsAdapter
             searchRecycler.delegate = catalogsAdapter
         } else {
-            searchAdapter.visibleEntries = visibleEntries
+            let categoryPreset = searchState.categoryPreset()
+            searchAdapter.submitSnapshot(StarMapSearchResultsAdapter.Snapshot(entries: visibleEntries,
+                                                                              categoryPreset: categoryPreset,
+                                                                              infoHeaderCategory: shouldShowInfoHeader() ? categoryPreset : nil,
+                                                                              useExploreRowLayout: isMyDataMode()))
             searchRecycler.dataSource = searchAdapter
             searchRecycler.delegate = searchAdapter
         }
         searchRecycler.reloadData()
+    }
+
+    private func prepareForFreshResultLoad() {
+        isFilteringResults = true
+        if shouldShowCatalogEntries() {
+            visibleCatalogEntries.removeAll()
+        } else {
+            visibleEntries.removeAll()
+        }
+        updateResultsAdapter()
     }
 
     private func getCurrentResultsCount() -> Int {
@@ -1283,6 +1297,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         normalizeTypeFilterForCurrentPreset()
         let requestId = filterAndSortRequestId + 1
         filterAndSortRequestId = requestId
+        isFilteringResults = true
         let stateSnapshot = searchState.snapshot()
         let isCatalogsMode = shouldShowCatalogEntries()
         let preparedEntriesSnapshot = preparedEntries
@@ -1309,7 +1324,6 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
                         return
                     }
                     visibleCatalogEntries = filteredCatalogs
-                    catalogsAdapter.visibleEntries = filteredCatalogs
                     updateResultsAdapter()
                     finishApplyFilters(scrollToTop: scrollToTop, requestId: requestId)
                 }
@@ -1322,6 +1336,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
                     setSortValueProvider: self.searchHelper.getSetSortValue,
                     insertionOrderProvider: { entry in insertionOrderById[entry.objectRef.id] }
                 )
+                self.searchHelper.preloadRiseSet(filteredEntries.prefix(Self.RISE_SET_PRELOAD_COUNT))
                 DispatchQueue.main.async { [weak self] in
                     guard let self,
                           viewIfLoaded?.window != nil,
@@ -1329,7 +1344,6 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
                         return
                     }
                     visibleEntries = filteredEntries
-                    searchAdapter.visibleEntries = filteredEntries
                     updateResultsAdapter()
                     finishApplyFilters(scrollToTop: scrollToTop, requestId: requestId)
                 }
@@ -1344,6 +1358,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         } else if scrollToTop {
             resetSearchRecyclerScrollPosition()
         }
+        isFilteringResults = false
         updateEmptyStateVisibility()
         updateBrowseTitleCollapse(scrollOffset: currentSearchScrollOffset(), animated: false)
         if requestId == filterAndSortRequestId {
@@ -1485,6 +1500,11 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func updateEmptyStateVisibility() {
+        if isFilteringResults {
+            emptyStateContainer.isHidden = true
+            searchRecycler.isHidden = false
+            return
+        }
         let shouldShowEmptyState = currentMode == .FULL_SEARCH && getCurrentResultsCount() == 0
         emptyStateContainer.isHidden = !shouldShowEmptyState
         searchRecycler.isHidden = shouldShowEmptyState

@@ -16,36 +16,49 @@ struct StarMapCatalogEntry {
 }
 
 final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableViewDelegate {
-    var visibleEntries: [StarMapCatalogEntry]
+    struct Snapshot {
+        let entries: [StarMapCatalogEntry]
+
+        static let empty = Snapshot(entries: [])
+    }
+
+    private var snapshot: Snapshot
     private let nightMode: Bool
     private let onScroll: (UIScrollView) -> Void
     private let onCatalogSelected: (StarMapCatalogEntry) -> Void
 
     init(nightMode: Bool,
-         visibleEntries: [StarMapCatalogEntry],
+         snapshot: Snapshot,
          onScroll: @escaping (UIScrollView) -> Void,
          onCatalogSelected: @escaping (StarMapCatalogEntry) -> Void) {
         self.nightMode = nightMode
-        self.visibleEntries = visibleEntries
+        self.snapshot = snapshot
         self.onScroll = onScroll
         self.onCatalogSelected = onCatalogSelected
         super.init()
     }
 
+    func submitSnapshot(_ snapshot: Snapshot) {
+        self.snapshot = snapshot
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        visibleEntries.count
+        snapshot.entries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Self.reuseIdentifier) as? StarMapCatalogCell
             ?? StarMapCatalogCell(reuseIdentifier: Self.reuseIdentifier)
-        bind(cell, entry: visibleEntries[indexPath.row], isLastItem: indexPath.row == visibleEntries.count - 1)
+        bind(cell, entry: snapshot.entries[indexPath.row], isLastItem: indexPath.row == snapshot.entries.count - 1)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        onCatalogSelected(visibleEntries[indexPath.row])
+        guard snapshot.entries.indices.contains(indexPath.row) else {
+            return
+        }
+        onCatalogSelected(snapshot.entries[indexPath.row])
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

@@ -114,6 +114,25 @@ final class BaseDetailsObject: NSObject {
         return true
     }
 
+    func addObjectIfWikiOnline(_ object: Any) {
+        guard isSupportedObjectType(object) else { return }
+        
+        if let detailsObject = object as? BaseDetailsObject {
+            for obj in detailsObject.objects {
+                addObjectIfWikiOnline(obj)
+            }
+        } else if isWikiOnline(object) {
+            addObject(object)
+        }
+    }
+    
+    private func isWikiOnline(_ object: Any) -> Bool {
+        if let amenity = object as? OAPOI {
+            return amenity.getAdditionalInfo(IS_WIKI_ONLINE_TAG) != nil
+        }
+        return false
+    }
+    
     private func getWikidata(_ object: Any) -> String? {
         if let amenity = object as? OAPOI {
             return amenity.getWikidata()

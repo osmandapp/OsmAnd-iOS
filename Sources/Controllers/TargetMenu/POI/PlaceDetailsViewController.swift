@@ -65,8 +65,9 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     override func buildDescription(_ rows: NSMutableArray) {
+        let allowOnlineWiki = OAAppSettings().wikiDataSourceType.get() == .online
         let wikiAmenities = getWikiAmenities()
-        var hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: false, rows: rows)
+        var hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: allowOnlineWiki, rows: rows)
         
         if !hasDescription {
             let filteredInfo = infoBundle.getFilteredLocalizedInfo()
@@ -84,7 +85,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     private func buildDescription(amenities: [OAPOI], allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
-        if let detailsObject, buildDescription(amenity: detailsObject.syntheticAmenity, allowOnlineWiki: false, rows: rows) {
+        if let detailsObject, buildDescription(amenity: detailsObject.syntheticAmenity, allowOnlineWiki: allowOnlineWiki, rows: rows) {
             return true
         }
         

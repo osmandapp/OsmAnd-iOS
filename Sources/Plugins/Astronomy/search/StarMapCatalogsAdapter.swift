@@ -18,13 +18,16 @@ struct StarMapCatalogEntry {
 final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableViewDelegate {
     var visibleEntries: [StarMapCatalogEntry]
     private let nightMode: Bool
+    private let onScroll: (UIScrollView) -> Void
     private let onCatalogSelected: (StarMapCatalogEntry) -> Void
 
     init(nightMode: Bool,
          visibleEntries: [StarMapCatalogEntry],
+         onScroll: @escaping (UIScrollView) -> Void,
          onCatalogSelected: @escaping (StarMapCatalogEntry) -> Void) {
         self.nightMode = nightMode
         self.visibleEntries = visibleEntries
+        self.onScroll = onScroll
         self.onCatalogSelected = onCatalogSelected
         super.init()
     }
@@ -43,6 +46,10 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         onCatalogSelected(visibleEntries[indexPath.row])
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        onScroll(scrollView)
     }
 
     private func bind(_ cell: StarMapCatalogCell, entry: StarMapCatalogEntry, isLastItem: Bool) {

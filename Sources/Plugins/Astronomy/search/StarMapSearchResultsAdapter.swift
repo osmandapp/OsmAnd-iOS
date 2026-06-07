@@ -16,6 +16,7 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     private let useExploreRowLayout: () -> Bool
     private let categoryPresetProvider: () -> StarMapSearchCategoryFilter?
     private let eventTextProvider: (StarMapSearchEntry) -> NSAttributedString
+    private let onScroll: (UIScrollView) -> Void
     private let onEntrySelected: (StarMapSearchEntry) -> Void
     private lazy var resultFormatter = StarMapSearchResultFormatter(nightMode: nightMode,
                                                                     widToDisplayName: widToDisplayName,
@@ -29,6 +30,7 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
          useExploreRowLayout: @escaping () -> Bool,
          categoryPresetProvider: @escaping () -> StarMapSearchCategoryFilter?,
          eventTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
+         onScroll: @escaping (UIScrollView) -> Void,
          onEntrySelected: @escaping (StarMapSearchEntry) -> Void) {
         self.nightMode = nightMode
         self.visibleEntries = visibleEntries
@@ -37,6 +39,7 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
         self.useExploreRowLayout = useExploreRowLayout
         self.categoryPresetProvider = categoryPresetProvider
         self.eventTextProvider = eventTextProvider
+        self.onScroll = onScroll
         self.onEntrySelected = onEntrySelected
         super.init()
     }
@@ -70,6 +73,10 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
             return
         }
         onEntrySelected(getEntryForPosition(indexPath.row))
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        onScroll(scrollView)
     }
 
     private func getEntryForPosition(_ position: Int) -> StarMapSearchEntry {

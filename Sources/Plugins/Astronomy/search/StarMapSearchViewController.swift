@@ -44,6 +44,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private struct CatalogsBackState {
         let query: String
         let sortMode: StarMapSearchSortMode
+        let scrollOffset: CGPoint
     }
 
     private struct ExploreRowConfig {
@@ -64,6 +65,8 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         static let toolbarButtonTouchTarget: CGFloat = 56
         static let toolbarButtonLeadingInset: CGFloat = 0
         static let toolbarButtonTrailingInset: CGFloat = 16
+        static let browseTitleExpandedHeight: CGFloat = 64
+        static let browseTitleCollapseDistance: CGFloat = 56
         static let inputHeaderHeight: CGFloat = 88
         static let myDataTabsHeight: CGFloat = 56
     }
@@ -81,11 +84,13 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         useExploreRowLayout: { [weak self] in self?.isMyDataMode() ?? false },
         categoryPresetProvider: { [weak self] in self?.searchState.categoryPreset() },
         eventTextProvider: { [weak self] entry in self?.searchHelper.resolveEventText(entry) ?? NSAttributedString(string: "") },
+        onScroll: { [weak self] scrollView in self?.onResultsScrolled(scrollView) },
         onEntrySelected: { [weak self] entry in self?.onSearchEntrySelected(entry) }
     )
     private lazy var catalogsAdapter = StarMapCatalogsAdapter(
         nightMode: nightMode,
         visibleEntries: visibleCatalogEntries,
+        onScroll: { [weak self] scrollView in self?.onResultsScrolled(scrollView) },
         onCatalogSelected: { [weak self] entry in self?.onCatalogSelected(entry) }
     )
     private lazy var searchPreparedDataFactory = StarMapSearchPreparedDataFactory(dataProvider: dataProvider, nightMode: nightMode)
@@ -151,6 +156,8 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private var dismissOnBrowseBack = false
     private var pendingInitialCatalogWid: String?
     private var redFilterEnabled = false
+    private var browseTitleContainerHeightConstraint: NSLayoutConstraint?
+    private var pendingBrowseScrollOffsetRestore: CGPoint?
 
     var onObjectSelected: ((SkyObject) -> Void)?
 
@@ -330,12 +337,15 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         browseTitleContainer.translatesAutoresizingMaskIntoConstraints = false
         browseTitleContainer.backgroundColor = appBarBackgroundColor()
+        browseTitleContainer.clipsToBounds = true
         browseTitleContainer.addSubview(titleLabel)
+        let titleContainerHeight = browseTitleContainer.heightAnchor.constraint(equalToConstant: Layout.browseTitleExpandedHeight)
+        browseTitleContainerHeightConstraint = titleContainerHeight
         NSLayoutConstraint.activate([
+            titleContainerHeight,
             titleLabel.leadingAnchor.constraint(equalTo: browseTitleContainer.leadingAnchor, constant: Layout.contentPadding),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: browseTitleContainer.trailingAnchor, constant: -Layout.contentPadding),
-            titleLabel.topAnchor.constraint(equalTo: browseTitleContainer.topAnchor, constant: Layout.smallPadding),
-            titleLabel.bottomAnchor.constraint(equalTo: browseTitleContainer.bottomAnchor, constant: -Layout.contentPadding)
+            titleLabel.topAnchor.constraint(equalTo: browseTitleContainer.topAnchor, constant: Layout.smallPadding)
         ])
 
         setupBrowseToolbar()
@@ -973,10 +983,82 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func updateBrowseHeaderLayout() {
         let compactHeader = isMyDataMode()
-        browseTitleContainer.isHidden = compactHeader || currentFullSearchMode == .INPUT
-        toolbarTitleLabel.isHidden = !compactHeader || currentFullSearchMode == .INPUT
-        browseSearchButton.isHidden = compactHeader || currentFullSearchMode == .INPUT
+        let inputMode = currentFullSearchMode == .INPUT
+        let collapsibleHeader = shouldUseCollapsibleBrowseTitle()
+        browseTitleContainer.isHidden = inputMode || !collapsibleHeader
+        toolbarTitleLabel.isHidden = inputMode || (!compactHeader && !collapsibleHeader)
+        browseSearchButton.isHidden = inputMode || compactHeader
+        if compactHeader {
+            toolbarTitleLabel.alpha = 1
+            titleLabel.alpha = 0
+            titleLabel.transform = .identity
+            browseTitleContainerHeightConstraint?.constant = 0
+        } else if collapsibleHeader {
+            updateBrowseTitleCollapse(scrollOffset: currentSearchScrollOffset(), animated: false)
+        }
         updateMyDataTabs()
+    }
+
+    private func shouldUseCollapsibleBrowseTitle() -> Bool {
+        currentMode == .FULL_SEARCH && currentFullSearchMode == .BROWSE && !isMyDataMode()
+    }
+
+    private func currentSearchScrollOffset() -> CGFloat {
+        max(0, searchRecycler.contentOffset.y + searchRecycler.adjustedContentInset.top)
+    }
+
+    private func onResultsScrolled(_ scrollView: UIScrollView) {
+        guard shouldUseCollapsibleBrowseTitle() else {
+            return
+        }
+        let offset = max(0, scrollView.contentOffset.y + scrollView.adjustedContentInset.top)
+        updateBrowseTitleCollapse(scrollOffset: offset, animated: false)
+    }
+
+    private func updateBrowseTitleCollapse(scrollOffset: CGFloat, animated: Bool) {
+        guard shouldUseCollapsibleBrowseTitle() else {
+            return
+        }
+        let progress = min(1, max(0, scrollOffset / Layout.browseTitleCollapseDistance))
+        let largeTitleAlpha = max(0, 1 - progress * 1.35)
+        let toolbarTitleAlpha = min(1, max(0, (progress - 0.2) / 0.8))
+        let titleTranslation = -Layout.browseTitleExpandedHeight * 0.35 * progress
+        let applyChanges = { [self] in
+            browseTitleContainerHeightConstraint?.constant = Layout.browseTitleExpandedHeight * (1 - progress)
+            titleLabel.alpha = largeTitleAlpha
+            titleLabel.transform = CGAffineTransform(translationX: 0, y: titleTranslation)
+            toolbarTitleLabel.alpha = toolbarTitleAlpha
+            view.layoutIfNeeded()
+        }
+        if animated {
+            UIView.animate(withDuration: 0.18, delay: 0, options: [.beginFromCurrentState, .curveEaseOut], animations: applyChanges)
+        } else {
+            applyChanges()
+        }
+    }
+
+    private func resetBrowseTitleCollapseState(scrollToTop: Bool) {
+        pendingBrowseScrollOffsetRestore = nil
+        if scrollToTop {
+            resetSearchRecyclerScrollPosition()
+        }
+        browseTitleContainerHeightConstraint?.constant = Layout.browseTitleExpandedHeight
+        titleLabel.alpha = 1
+        titleLabel.transform = .identity
+        toolbarTitleLabel.alpha = isMyDataMode() ? 1 : 0
+    }
+
+    private func resetSearchRecyclerScrollPosition() {
+        let topOffset = CGPoint(x: 0, y: -searchRecycler.adjustedContentInset.top)
+        restoreSearchRecyclerScrollPosition(topOffset)
+    }
+
+    private func restoreSearchRecyclerScrollPosition(_ contentOffset: CGPoint) {
+        let topOffset = CGPoint(x: contentOffset.x, y: max(contentOffset.y, -searchRecycler.adjustedContentInset.top))
+        if searchRecycler.contentOffset != topOffset {
+            searchRecycler.setContentOffset(topOffset, animated: false)
+        }
+        updateBrowseTitleCollapse(scrollOffset: currentSearchScrollOffset(), animated: false)
     }
 
     private func isMyDataMode() -> Bool {
@@ -1003,6 +1085,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func showExploreMode() {
+        resetBrowseTitleCollapseState(scrollToTop: true)
         view.backgroundColor = StarMapSearchLightPalette.listBackground
         exploreContainer.isHidden = false
         fullSearchContainer.isHidden = true
@@ -1010,7 +1093,10 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         view.endEditing(true)
     }
 
-    private func showBrowseMode() {
+    private func showBrowseMode(resetCollapseState: Bool = true) {
+        if resetCollapseState {
+            resetBrowseTitleCollapseState(scrollToTop: true)
+        }
         exploreContainer.isHidden = true
         fullSearchContainer.isHidden = false
         currentFullSearchMode = .BROWSE
@@ -1034,6 +1120,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func showInputMode(_ presentation: InputPresentation, requestKeyboard: Bool) {
+        resetBrowseTitleCollapseState(scrollToTop: true)
         exploreContainer.isHidden = true
         fullSearchContainer.isHidden = false
         currentFullSearchMode = .INPUT
@@ -1095,7 +1182,9 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         searchState.query = backState.query
         searchState.sortMode = backState.sortMode
         currentFullSearchMode = .BROWSE
-        showBrowseMode()
+        pendingBrowseScrollOffsetRestore = backState.scrollOffset
+        showBrowseMode(resetCollapseState: false)
+        restoreSearchRecyclerScrollPosition(backState.scrollOffset)
         applyFiltersAndSort(scrollToTop: false)
         return true
     }
@@ -1249,10 +1338,14 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func finishApplyFilters(scrollToTop: Bool, requestId: Int) {
-        if scrollToTop && getCurrentResultsCount() > 0 {
-            searchRecycler.setContentOffset(.zero, animated: false)
+        if let restoredScrollOffset = pendingBrowseScrollOffsetRestore {
+            pendingBrowseScrollOffsetRestore = nil
+            restoreSearchRecyclerScrollPosition(restoredScrollOffset)
+        } else if scrollToTop {
+            resetSearchRecyclerScrollPosition()
         }
         updateEmptyStateVisibility()
+        updateBrowseTitleCollapse(scrollOffset: currentSearchScrollOffset(), animated: false)
         if requestId == filterAndSortRequestId {
             updateSortProgressVisibility(false)
         }
@@ -1497,7 +1590,9 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func onCatalogSelected(_ entry: StarMapCatalogEntry) {
-        catalogsBackState = CatalogsBackState(query: searchState.query, sortMode: searchState.sortMode)
+        catalogsBackState = CatalogsBackState(query: searchState.query,
+                                              sortMode: searchState.sortMode,
+                                              scrollOffset: searchRecycler.contentOffset)
         openFullSearch(.CATALOG_WID, catalogWid: entry.catalog.wid)
     }
 

@@ -34,6 +34,17 @@ final class StarView: UIView {
         var targetAltitude: Double
     }
 
+    private struct FocusAnimation {
+        let startAzimuth: Double
+        let targetAzimuth: Double
+        let startAltitude: Double
+        let targetAltitude: Double
+        let startViewAngle: Double
+        let targetViewAngle: Double
+        let startPan: CGPoint
+        let targetPan: CGPoint?
+    }
+
     private enum ViewAngleBounds {
         static let min = 10.0
         static let max = 150.0
@@ -224,6 +235,10 @@ final class StarView: UIView {
     private var timeAnimationDisplayLink: CADisplayLink?
     private var timeAnimationStartTime: CFTimeInterval = 0
     private let timeAnimationDuration: CFTimeInterval = 0.4
+    private var focusAnimationDisplayLink: CADisplayLink?
+    private var focusAnimationStartTime: CFTimeInterval = 0
+    private let focusAnimationDuration: CFTimeInterval = 0.5
+    private var focusAnimation: FocusAnimation?
     private var onObjectClickListener: ((SkyObject?) -> Void)?
     private var onConstellationClickListener: ((Constellation?) -> Void)?
 
@@ -303,6 +318,7 @@ final class StarView: UIView {
 
     deinit {
         timeAnimationDisplayLink?.invalidate()
+        focusAnimationDisplayLink?.invalidate()
     }
 
     required init?(coder: NSCoder) {
@@ -321,6 +337,7 @@ final class StarView: UIView {
     }
 
     func resetView() {
+        cancelFocusAnimation()
         centerAzimuth = 180
         centerAltitude = 45
         viewAngle = 60
@@ -353,6 +370,7 @@ final class StarView: UIView {
             animateTo(azimuth: azimuth, altitude: altitude)
             return
         }
+        cancelFocusAnimation()
         centerAzimuth = normalizedDegrees(azimuth)
         centerAltitude = max(-90, min(90, altitude))
         setNeedsDisplay()
@@ -406,6 +424,7 @@ final class StarView: UIView {
     }
 
     private func setCenterState(azimuth: Double, altitude: Double, targetViewAngle: Double? = nil) {
+        cancelFocusAnimation()
         centerAzimuth = normalizedDegrees(azimuth)
         centerAltitude = max(-90, min(90, altitude))
         if let targetViewAngle {
@@ -423,30 +442,56 @@ final class StarView: UIView {
                            altitude: Double,
                            targetViewAngle: Double? = nil,
                            targetPan: CGPoint? = nil) {
-        let startAz = centerAzimuth
-        let startAlt = centerAltitude
-        let startAngle = viewAngle
-        let startPanX = panX
-        let startPanY = panY
-        let targetAlt = max(-90, min(90, altitude))
-        let boundedTargetViewAngle = targetViewAngle.map { boundedViewAngle($0) }
-        UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       options: [.curveEaseOut, .allowUserInteraction]) {
-            self.centerAzimuth = self.interpolateAngle(start: startAz, end: azimuth, fraction: 1)
-            self.centerAltitude = startAlt + (targetAlt - startAlt)
-            if let boundedTargetViewAngle {
-                self.viewAngle = startAngle + (boundedTargetViewAngle - startAngle)
-            }
-            if let targetPan {
-                self.panX = startPanX + (targetPan.x - startPanX)
-                self.panY = startPanY + (targetPan.y - startPanY)
-            }
-            self.setNeedsDisplay()
-            self.layoutIfNeeded()
-        } completion: { _ in
-            self.onAnimationFinished?()
+        cancelFocusAnimation()
+        focusAnimation = FocusAnimation(startAzimuth: centerAzimuth,
+                                        targetAzimuth: normalizedDegrees(azimuth),
+                                        startAltitude: centerAltitude,
+                                        targetAltitude: max(-90, min(90, altitude)),
+                                        startViewAngle: viewAngle,
+                                        targetViewAngle: targetViewAngle.map { boundedViewAngle($0) } ?? viewAngle,
+                                        startPan: CGPoint(x: panX, y: panY),
+                                        targetPan: targetPan)
+        focusAnimationStartTime = CACurrentMediaTime()
+        let displayLink = CADisplayLink(target: self, selector: #selector(handleFocusAnimationFrame(_:)))
+        focusAnimationDisplayLink = displayLink
+        displayLink.add(to: .main, forMode: .common)
+    }
+
+    private func cancelFocusAnimation() {
+        focusAnimationDisplayLink?.invalidate()
+        focusAnimationDisplayLink = nil
+        focusAnimation = nil
+    }
+
+    @objc private func handleFocusAnimationFrame(_ displayLink: CADisplayLink) {
+        guard let animation = focusAnimation else {
+            cancelFocusAnimation()
+            return
         }
+
+        let rawFraction = min(1.0, max(0.0, (displayLink.timestamp - focusAnimationStartTime) / focusAnimationDuration))
+        let fraction = 1.0 - pow(1.0 - rawFraction, 2.0)
+        applyFocusAnimation(animation, fraction: fraction)
+        if rawFraction >= 1 {
+            applyFocusAnimation(animation, fraction: 1)
+            cancelFocusAnimation()
+            onAnimationFinished?()
+        }
+    }
+
+    private func applyFocusAnimation(_ animation: FocusAnimation, fraction: Double) {
+        centerAzimuth = interpolateAngle(start: animation.startAzimuth, end: animation.targetAzimuth, fraction: fraction)
+        centerAltitude = animation.startAltitude + (animation.targetAltitude - animation.startAltitude) * fraction
+        viewAngle = animation.startViewAngle + (animation.targetViewAngle - animation.startViewAngle) * fraction
+        if let targetPan = animation.targetPan {
+            let cgFraction = CGFloat(fraction)
+            panX = animation.startPan.x + (targetPan.x - animation.startPan.x) * cgFraction
+            panY = animation.startPan.y + (targetPan.y - animation.startPan.y) * cgFraction
+        }
+        if abs(animation.targetViewAngle - animation.startViewAngle) > 0.001 {
+            onViewAngleChangeListener?(viewAngle)
+        }
+        setNeedsDisplay()
     }
 
     func getAltitude() -> Double {
@@ -468,6 +513,7 @@ final class StarView: UIView {
         if animate {
             animateTo(azimuth: azimuth, altitude: centerAltitude)
         } else {
+            cancelFocusAnimation()
             centerAzimuth = normalizedDegrees(azimuth)
             setNeedsDisplay()
         }
@@ -1796,6 +1842,7 @@ final class StarView: UIView {
             return
         }
 
+        cancelFocusAnimation()
         let focusPoint = focus ?? CGPoint(x: bounds.midX, y: bounds.midY)
         if settings.starMap.is2DMode {
             let oldTan = tan(viewAngle * .pi / 180.0 / 4.0)
@@ -1822,6 +1869,7 @@ final class StarView: UIView {
         let point = recognizer.location(in: self)
         switch recognizer.state {
         case .began:
+            cancelFocusAnimation()
             lastTouchPoint = point
             isPanning = false
         case .changed:
@@ -1852,6 +1900,7 @@ final class StarView: UIView {
         guard recognizer.state == .changed || recognizer.state == .ended else {
             return
         }
+        cancelFocusAnimation()
         updateViewAngle(viewAngle / Double(recognizer.scale), focus: recognizer.location(in: self))
         recognizer.scale = 1
     }
@@ -1860,6 +1909,7 @@ final class StarView: UIView {
         guard !isPanning else {
             return
         }
+        cancelFocusAnimation()
         performClick(at: recognizer.location(in: self))
     }
 

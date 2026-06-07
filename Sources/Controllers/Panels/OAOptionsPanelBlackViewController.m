@@ -73,7 +73,7 @@
     CALayer *_menuButtonTravelGuidesDiv;
     CALayer *_menuButtonExternalSensorsDiv;
     CALayer *_menuButtonStarMapDiv;
-    
+
     NSArray<CALayer *> *_menuButtonDivArray;
     NSArray<UIButton *> *_menuButtonsArray;
 
@@ -90,6 +90,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self updateLayout];
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:[OsmAndApp instance].data.weatherChangeObservable];
@@ -106,7 +107,19 @@
     }
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OAPluginsHelperPluginStateChangedNotification object:nil];
+}
+
 - (void)onWeatherChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateLayout];
+    });
+}
+
+- (void)onPluginsChanged:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateLayout];
@@ -311,6 +324,10 @@
     self.navigationController.delegate = self;
     self.menuButtonStarMap = [self createMenuButtonWithAction:@selector(starMapButtonClicked:)];
     [self.scrollView addSubview:self.menuButtonStarMap];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onPluginsChanged:)
+                                                 name:OAPluginsHelperPluginStateChangedNotification
+                                               object:nil];
 
     _menuButtonMapsDiv = [[CALayer alloc] init];
     _menuButtonMyDataDiv = [[CALayer alloc] init];

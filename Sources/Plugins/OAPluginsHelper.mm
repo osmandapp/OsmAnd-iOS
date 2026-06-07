@@ -36,6 +36,10 @@
 #import "OAOnlinePlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 
+NSNotificationName const OAPluginsHelperPluginStateChangedNotification = @"OAPluginsHelperPluginStateChangedNotification";
+NSString * const OAPluginsHelperPluginIdKey = @"pluginId";
+NSString * const OAPluginsHelperPluginEnabledKey = @"enabled";
+
 @implementation OAPluginsHelper
 
 static NSMutableArray<OAPlugin *> *allPlugins;
@@ -74,6 +78,10 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     if (recreateControls)
         [OARootViewController.instance.mapPanel.hudViewController.mapInfoController recreateAllControls];
     [plugin updateLayers];
+    [[NSNotificationCenter defaultCenter] postNotificationName:OAPluginsHelperPluginStateChangedNotification
+                                                        object:plugin
+                                                      userInfo:@{ OAPluginsHelperPluginIdKey : [plugin getId] ?: @"",
+                                                                  OAPluginsHelperPluginEnabledKey : @(enable) }];
 
     return YES;
 }

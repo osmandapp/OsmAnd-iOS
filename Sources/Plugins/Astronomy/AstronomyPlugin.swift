@@ -38,10 +38,6 @@ final class AstronomyPlugin: OAPlugin {
         "ic_action_telescope"
     }
 
-    override func getQuickActionTypes() -> [QuickActionType] {
-        [OpenAstronomyAction.getType()]
-    }
-
     @objc func showStarMap() {
         let controller = StarMapViewController(plugin: self)
         controller.modalPresentationStyle = .fullScreen

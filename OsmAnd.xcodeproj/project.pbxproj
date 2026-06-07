@@ -36,7 +36,6 @@
 		A5A504042F51000200000404 /* StarMapSearchResultsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */; };
 		A5A504052F51000200000405 /* StarMapCatalogsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */; };
 		A5A504062F51000200000406 /* StarMapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503062F51000200000306 /* StarMapSearchViewController.swift */; };
-		A5A500182F50000100000018 /* OpenAstronomyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500172F50000100000017 /* OpenAstronomyAction.swift */; };
 		A5A5001A2F5000010000001A /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500192F50000100000019 /* Catalog.swift */; };
 		A5A5001C2F5000010000001C /* AstroArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5001B2F5000010000001B /* AstroArticle.swift */; };
 		A5A5001E2F5000010000001E /* SkyObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5001D2F5000010000001D /* SkyObject.swift */; };
@@ -3829,7 +3828,6 @@
 		27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollUpAction.swift; sourceTree = "<group>"; };
 		27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScrollDownAction.swift; sourceTree = "<group>"; };
 		27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherAction.swift; sourceTree = "<group>"; };
-		A5A500172F50000100000017 /* OpenAstronomyAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAstronomyAction.swift; sourceTree = "<group>"; };
 		27D33B602E7473A900AD4F70 /* RouteAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteAction.swift; sourceTree = "<group>"; };
 		27DC2A892EE5F2320051B247 /* SwitchVisibilityMapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchVisibilityMapButtonState.swift; sourceTree = "<group>"; };
 		27DC2A8D2EE6CA160051B247 /* DefaultMapButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMapButtonViewController.swift; sourceTree = "<group>"; };
@@ -11735,7 +11733,6 @@
 				27D33B582E745D3700AD4F70 /* MapScrollUpAction.swift */,
 				27D33B5A2E745F6D00AD4F70 /* MapScrollDownAction.swift */,
 				27D33B5E2E74622A00AD4F70 /* OpenWeatherAction.swift */,
-				A5A500172F50000100000017 /* OpenAstronomyAction.swift */,
 				27D33B602E7473A900AD4F70 /* RouteAction.swift */,
 			);
 			path = Actions;
@@ -17369,7 +17366,6 @@
 				A5A502162F51000100000116 /* AstroVisibilityCardViewHolder.swift in Sources */,
 				A5A502172F51000100000117 /* AstroScheduleCardViewHolder.swift in Sources */,
 				A5A502182F51000100000118 /* AstroContextMenuFragment.swift in Sources */,
-				A5A500182F50000100000018 /* OpenAstronomyAction.swift in Sources */,
 				DA5A824926C563A700F274C7 /* OAAutoCenterMapViewController.m in Sources */,
 				DA5A855F26C563A900F274C7 /* OALocationPointWrapper.mm in Sources */,
 				DA5A81AE26C563A700F274C7 /* OASearchResultMatcher.mm in Sources */,

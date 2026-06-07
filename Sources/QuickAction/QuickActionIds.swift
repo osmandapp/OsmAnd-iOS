@@ -89,5 +89,4 @@ enum QuickActionIds: Int {
     case showHideCoordinatesGridAction = 78
     case showHideWeatherLayersActionId = 80
     case showHideWindAnimationLayerActionId = 81
-    case openAstronomyActionId = 82
 }

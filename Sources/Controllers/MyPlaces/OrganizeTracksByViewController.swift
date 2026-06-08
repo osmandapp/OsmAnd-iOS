@@ -185,7 +185,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
                     image: type.image,
                     type: type,
                     isSelected: selectedType == type,
-                    isLocked: type.isPro && !proAvailable
+                    isLocked: type.isLockedBehindPro && !proAvailable
                 ))
             }
             sections.append(SectionData(headerText: category.getName(), rows: rows))
@@ -223,7 +223,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
             applyAndOpenStepSize(type: type)
             return
         }
-        if type.isPro, !OAIAPHelper.isOsmAndProAvailable() {
+        if type.isLockedBehindPro, !OAIAPHelper.isOsmAndProAvailable() {
             openChoosePlan()
             return
         }

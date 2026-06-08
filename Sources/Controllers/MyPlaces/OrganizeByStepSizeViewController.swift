@@ -222,10 +222,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
 
     @objc private func onUnlockPressed() {
         guard let navigationController else { return }
-        OAChoosePlanHelper.showChoosePlanScreen(
-            with: OAFeature.advanced_WIDGETS(),
-            navController: navigationController
-        )
+        OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
     }
 }
 

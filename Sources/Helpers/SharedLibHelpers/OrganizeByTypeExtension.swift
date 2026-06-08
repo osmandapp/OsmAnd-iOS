@@ -2,6 +2,13 @@ import UIKit
 import OsmAndShared
 
 extension OrganizeByType {
+    var isLockedBehindPro: Bool {
+        switch self {
+        case .length: return false
+        default: return isPro
+        }
+    }
+
     var iconName: String {
         switch self {
         case .activity:          return "ic_custom_activity"

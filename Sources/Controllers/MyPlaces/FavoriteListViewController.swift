@@ -49,6 +49,12 @@ private enum FavoriteListItem: Hashable {
 }
 
 private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
+    private static let subtitleDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM"
+        return formatter
+    }()
+
     let bridgeItem: OAFavoriteFolderBridgeItem
 
     var title: String {
@@ -67,6 +73,12 @@ private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
         bridgeItem.lastModifiedDate
     }
     
+    var subtitle: String {
+        let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
+        guard let lastModified else { return pointsText + "." }
+        return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText) + "."
+    }
+
     var iconName: String {
         isVisible ? "ic_custom_folder" : "ic_custom_folder_hidden_outlined"
     }
@@ -86,11 +98,6 @@ private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
 
     init(item: OAFavoriteFolderBridgeItem) {
         bridgeItem = item
-    }
-
-    private static func title(for groupName: String, fallback: String) -> String {
-        guard !groupName.isEmpty else { return fallback }
-        return groupName.components(separatedBy: "/").last ?? fallback
     }
 }
 
@@ -253,12 +260,13 @@ final class FavoriteListViewController: UIViewController {
     private lazy var folderCellRegistration = CellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
         var content = cell.defaultContentConfiguration()
         content.directionalLayoutMargins = Self.rowContentInsets
-        content.image = UIImage.templateImageNamed(folder.iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
+        let iconName = self?.isRootFolder == true && folder.isPinned ? "ic_custom_folder_pin" : folder.iconName
+        content.image = UIImage.templateImageNamed(iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
         content.imageProperties.tintColor = folder.iconColor
         content.text = folder.title
         content.textProperties.color = folder.titleColor
         content.textProperties.font = folder.titleFont
-        content.secondaryText = "\(localizedString("points_count")) \(folder.bridgeItem.pointsCount)"
+        content.secondaryText = folder.subtitle
         content.secondaryTextProperties.color = .textColorSecondary
         cell.contentConfiguration = content
         cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
@@ -600,7 +608,7 @@ final class FavoriteListViewController: UIViewController {
     private func applyFolderSnapshot(folder: FavoriteFolderRow, animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
         let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
-        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoriteFoldersBridge.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
+        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesSwiftHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
         let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
         var snapshot = Snapshot()
         layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
@@ -652,16 +660,15 @@ final class FavoriteListViewController: UIViewController {
         guard let currentGroupName else {
             let pointsCount = allFolders.reduce(0) { $0 + $1.bridgeItem.pointsCount }
             guard !allFolders.isEmpty || pointsCount > 0 else { return nil }
-            let fileSize = allFolders.reduce(Int64(0)) { $0 + OAFavoritesSwiftHelper.favoriteGroupSize(forGroupName: $1.bridgeItem.groupName) }
+            let fileSize = allFolders.reduce(Int64(0)) { $0 + $1.bridgeItem.fileSize }
             return FavoriteFolderStats(foldersCount: allFolders.count, pointsCount: Int(pointsCount), fileSize: fileSize)
         }
 
         let nestedFolders = allFolders.filter { isNestedFolder($0.bridgeItem.groupName, in: currentGroupName) }
-        let groupNames = [currentGroupName] + nestedFolders.map(\.bridgeItem.groupName)
-        let currentPointsCount = allFolders.first { $0.bridgeItem.groupName == currentGroupName }?.bridgeItem.pointsCount ?? 0
-        let pointsCount = currentPointsCount + nestedFolders.reduce(0) { $0 + $1.bridgeItem.pointsCount }
+        let currentFolder = allFolders.first { $0.bridgeItem.groupName == currentGroupName }
+        let pointsCount = currentFolder?.bridgeItem.subtreePointsCount ?? nestedFolders.reduce(0) { $0 + $1.bridgeItem.pointsCount }
         guard !nestedFolders.isEmpty || pointsCount > 0 else { return nil }
-        let fileSize = groupNames.reduce(Int64(0)) { $0 + OAFavoritesSwiftHelper.favoriteGroupSize(forGroupName: $1) }
+        let fileSize = (currentFolder?.bridgeItem.fileSize ?? 0) + nestedFolders.reduce(Int64(0)) { $0 + $1.bridgeItem.fileSize }
         return FavoriteFolderStats(foldersCount: nestedFolders.count, pointsCount: Int(pointsCount), fileSize: fileSize)
     }
 
@@ -1069,7 +1076,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 configureToolbar()
                 return
             }
-            OAFavoriteFoldersBridge.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
+            OAFavoritesSwiftHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
         case .sortHeader, .backupBanner, .header, .statsFooter:
             break
         }

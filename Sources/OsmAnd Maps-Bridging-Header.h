@@ -113,7 +113,6 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmNotePoint.h"
-#import "OAFavoriteFoldersBridge.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

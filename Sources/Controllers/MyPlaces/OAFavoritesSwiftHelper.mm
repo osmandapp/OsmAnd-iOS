@@ -17,7 +17,6 @@
 #import "OALocationServices.h"
 #import "OAMapPanelViewController.h"
 #import "OAOpenAddTrackViewController.h"
-#import "OAOsmAndFormatter.h"
 #import "OAPointDescription.h"
 #import "OARootViewController.h"
 #import "OASavingTrackHelper.h"
@@ -30,9 +29,16 @@
 
 #include <OsmAndCore/Utilities.h>
 
+@interface OAFavoriteFolderBridgeItem ()
+
+- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize subtreePointsCount:(NSUInteger)subtreePointsCount;
++ (NSString *)titleForGroupName:(NSString *)groupName;
+
+@end
+
 @implementation OAFavoriteFolderBridgeItem
 
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize
+- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize subtreePointsCount:(NSUInteger)subtreePointsCount
 {
     self = [super init];
     if (self)
@@ -40,8 +46,9 @@
         NSString *groupName = group.name ?: @"";
         _identifier = [NSString stringWithFormat:@"%@-%lu", groupName, (unsigned long)index];
         _groupName = groupName;
-        _title = [OAFavoriteGroup getDisplayName:groupName] ?: groupName;
+        _title = [self.class titleForGroupName:groupName];
         _pointsCount = group.points.count;
+        _subtreePointsCount = subtreePointsCount;
         _isVisible = group.isVisible;
         _isPinned = group.isPinned;
         _color = group.color;
@@ -52,13 +59,17 @@
     return self;
 }
 
++ (NSString *)titleForGroupName:(NSString *)groupName
+{
+    NSString *lastComponent = [[groupName componentsSeparatedByString:@"/"] lastObject] ?: groupName;
+    return [OAFavoriteGroup getDisplayName:lastComponent] ?: lastComponent;
+}
+
 @end
 
 @interface OAFavoritePointBridgeItem ()
 
-+ (NSString *)subtitleForFavorite:(OAFavoriteItem *)favorite;
-+ (NSString *)formattedDistanceForFavorite:(OAFavoriteItem *)favorite;
-+ (NSString *)formattedDate:(NSDate *)date;
++ (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite;
 
 @end
 
@@ -95,50 +106,6 @@
     return @(distance);
 }
 
-+ (NSString *)subtitleForFavorite:(OAFavoriteItem *)favorite
-{
-    NSMutableArray<NSString *> *parts = [NSMutableArray array];
-    NSString *distance = [self formattedDistanceForFavorite:favorite];
-    if (distance.length > 0)
-        [parts addObject:distance];
-
-    NSString *address = [favorite getAddress];
-    if (address.length > 0)
-        [parts addObject:address];
-
-    NSDate *timestamp = [favorite getTimestamp];
-    if (timestamp)
-        [parts addObject:[self formattedDate:timestamp]];
-
-    return parts.count > 0 ? [parts componentsJoinedByString:@" • "] : nil;
-}
-
-+ (NSString *)formattedDistanceForFavorite:(OAFavoriteItem *)favorite
-{
-    CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
-    if (!location || !favorite.favorite)
-        return nil;
-
-    const auto &favoritePosition31 = favorite.favorite->getPosition31();
-    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-    const auto distance = OsmAnd::Utilities::distance(location.coordinate.longitude, location.coordinate.latitude, favoriteLon, favoriteLat);
-    return [OAOsmAndFormatter getFormattedDistance:distance];
-}
-
-+ (NSString *)formattedDate:(NSDate *)date
-{
-    static NSDateFormatter *dateFormatter = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateStyle = NSDateFormatterShortStyle;
-        dateFormatter.timeStyle = NSDateFormatterNoStyle;
-    });
-
-    return [dateFormatter stringFromDate:date];
-}
-
 @end
 
 @interface OAFavoritesSwiftHelper ()
@@ -146,6 +113,7 @@
 + (NSArray<OAFavoriteItem *> *)sortedFavoritePoints:(NSArray<OAFavoriteItem *> *)points;
 + (NSArray<OAFavoriteItem *> *)sortedFavoritePointsForGroup:(OAFavoriteGroup *)group;
 + (NSArray<OAFavoriteGroup *> *)favoriteGroupsInsideOrEqualToGroupName:(NSString *)groupName;
++ (NSUInteger)subtreePointsCountForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups;
 + (OAFavoriteItem *)favoritePointWithIdentifier:(NSString *)identifier;
 + (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName;
 + (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName;
@@ -171,7 +139,8 @@
         NSDictionary<NSFileAttributeKey, id> *fileAttributes = fileAttributesByGroupName[groupName];
         NSDate *lastModifiedDate = [self lastModifiedDateForGroupName:groupName groups:groups fileAttributesByGroupName:fileAttributesByGroupName];
         long long fileSize = [fileAttributes[NSFileSize] longLongValue];
-        [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize]];
+        NSUInteger subtreePointsCount = [self subtreePointsCountForGroupName:groupName groups:groups];
+        [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize subtreePointsCount:subtreePointsCount]];
     }];
     
     return [folders copy];
@@ -185,13 +154,6 @@
         [items addObject:[[OAFavoritePointBridgeItem alloc] initWithFavorite:point]];
 
     return items.copy;
-}
-
-+ (long long)favoriteGroupSizeForGroupName:(NSString *)groupName
-{
-    NSString *filePath = [OsmAndApp.instance favoritesStorageFilename:groupName ?: @""];
-    NSDictionary<NSFileAttributeKey, id> *attributes = [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:nil];
-    return [attributes[NSFileSize] longLongValue];
 }
 
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible
@@ -708,6 +670,19 @@
     }
 
     return lastModifiedDate;
+}
+
++ (NSUInteger)subtreePointsCountForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups
+{
+    NSUInteger pointsCount = 0;
+    NSString *parentGroupName = groupName ?: @"";
+    for (OAFavoriteGroup *favoriteGroup in groups)
+    {
+        if ([self isGroupName:favoriteGroup.name ?: @"" insideOrEqualToGroupName:parentGroupName])
+            pointsCount += favoriteGroup.points.count;
+    }
+    
+    return pointsCount;
 }
 
 + (NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)favoriteStorageAttributesForGroups:(NSArray<OAFavoriteGroup *> *)groups

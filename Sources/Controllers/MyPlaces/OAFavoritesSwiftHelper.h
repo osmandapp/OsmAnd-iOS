@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAEditGroupViewController, OAFavoriteGroupEditorViewController, OAOpenAddTrackViewController, UIColor, UIImage, OAFavoriteGroup, OAFavoriteItem, OASGpxUtilitiesPointsGroup;
+@class UIColor, UIImage, OAFavoriteItem, OASGpxUtilitiesPointsGroup;
 
 @interface OAFavoriteFolderBridgeItem : NSObject
 
@@ -18,13 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *groupName;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) NSUInteger pointsCount;
+@property (nonatomic, readonly) NSUInteger subtreePointsCount;
 @property (nonatomic, readonly) BOOL isVisible;
 @property (nonatomic, readonly) BOOL isPinned;
 @property (nonatomic, readonly, nullable) UIColor *color;
 @property (nonatomic, readonly, nullable) NSDate *lastModifiedDate;
 @property (nonatomic, readonly) long long fileSize;
-
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize;
 
 @end
 
@@ -40,7 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isVisible;
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
-+ (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite;
 
 @end
 
@@ -48,7 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;
-+ (long long)favoriteGroupSizeForGroupName:(NSString *)groupName;
 
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible;
 + (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned;
@@ -80,4 +77,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

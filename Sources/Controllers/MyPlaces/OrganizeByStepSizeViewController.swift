@@ -9,6 +9,10 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
 
     // MARK: - Private Types
 
+    private enum Section: Int {
+        case main
+    }
+
     private enum RowKey: String {
         case slider
     }
@@ -87,7 +91,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     override func getTableHeaderDescriptionAttr() -> NSAttributedString? {
         let text = localizedString("set_step_size_summary")
         return NSAttributedString(string: text, attributes: [
-            .font: UIFont.systemFont(ofSize: 16),
+            .font: UIFont.preferredFont(forTextStyle: .body),
             .foregroundColor: UIColor.textColorSecondary
         ])
     }
@@ -203,7 +207,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         let rounded = sender.value.rounded()
         sender.value = rounded
         currentDisplayValue = rounded
-        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? TopBottomValuesSliderTableViewCell {
+        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: Section.main.rawValue)) as? TopBottomValuesSliderTableViewCell {
             cell.topRightLabel.text = "\(Int(rounded)) \(displayUnits.getSymbol())"
         }
         schedulePreviewUpdate()

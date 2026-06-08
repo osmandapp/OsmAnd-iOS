@@ -37,10 +37,9 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
 
     // MARK: - Instance Properties
 
-    private let smartFolder: SmartFolder
-
     weak var delegate: OrganizeTracksByDelegate?
 
+    private let smartFolder: SmartFolder
     private var selectedType: OrganizeByType?
 
     // MARK: - Initializers
@@ -79,7 +78,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
     override func getTableHeaderDescriptionAttr() -> NSAttributedString? {
         let text = localizedString("organize_by_summary")
         return NSAttributedString(string: text, attributes: [
-            .font: UIFont.systemFont(ofSize: 16, weight: .regular),
+            .font: UIFont.preferredFont(forTextStyle: .body),
             .foregroundColor: UIColor.textColorSecondary
         ])
     }
@@ -128,13 +127,10 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
 
         if item.key == RowKey.none.rawValue {
             selectedType = nil
-            generateData()
-            tableView.reloadData()
-            return
+        } else {
+            guard let type = item.obj(forKey: RowKey.type.rawValue) as? OrganizeByType else { return }
+            selectedType = type
         }
-
-        guard let type = item.obj(forKey: RowKey.type.rawValue) as? OrganizeByType else { return }
-        selectedType = type
         generateData()
         tableView.reloadData()
     }

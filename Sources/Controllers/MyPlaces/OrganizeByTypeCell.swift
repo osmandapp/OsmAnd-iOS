@@ -11,6 +11,8 @@ final class OrganizeByTypeCell: UITableViewCell {
     private static let gap: CGFloat = 8
     private static let verticalPadding: CGFloat = 12
 
+    var onProBadgeTapped: (() -> Void)?
+
     private let checkmarkView = UIImageView()
     private let iconView = UIImageView()
     private let titleLabel = UILabel()
@@ -22,8 +24,6 @@ final class OrganizeByTypeCell: UITableViewCell {
         button.addTarget(self, action: #selector(proBadgeButtonPressed), for: .touchUpInside)
         return button
     }()
-
-    var onProBadgeTapped: (() -> Void)?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

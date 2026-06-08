@@ -27,8 +27,8 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     private let type: OrganizeByType
     private let displayUnits: any MeasurementUnit
     private let stepRange: Limits
-    private var currentDisplayValue: Float
     private let initialParams: OrganizeByParams?
+    private var currentDisplayValue: Float
     private var isExplicitlyDismissed = false
     private var previewWorkItem: DispatchWorkItem?
 

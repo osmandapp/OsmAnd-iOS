@@ -30,8 +30,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
     fileprivate var isSmartFolder = false
-    private var organizedGroup: OrganizedTracksGroup?
-    fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
+    fileprivate var currentFolderPath = ""
+    private var organizedGroup: OrganizedTracksGroup?   // in format: "rec/new folder"
     
     fileprivate weak var hostVCDelegate: TrackListUpdatableDelegate?
     
@@ -997,8 +997,32 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         return rootFolder.getFlattenedSubFolders().first(where: { $0.getDirFile().path().hasSuffix(path) }) ?? rootFolder
     }
     
+    func onOrganizeByParamsApplied() {
+        reloadAfterOrganizeByChange()
+    }
+
+    func onOrganizeByRangeParamsApplied(type: OrganizeByType, originalParams: OrganizeByParams?) {
+        reloadAfterOrganizeByChange()
+        let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type, originalParams: originalParams)
+        vc.stepDelegate = self
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 20
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        }
+        present(nav, animated: true)
+    }
+
+    func onStepSizeChanged() {
+        reloadAfterOrganizeByChange()
+    }
+
     // MARK: - Navbar Toolbar Actions
-    
+
     private func enterOrganizedGroup(_ group: OrganizedTracksGroup) {
         organizedGroup = group
         updateNavigationBarTitle()
@@ -1028,30 +1052,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let nav = UINavigationController(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
-    }
-
-    func onOrganizeByParamsApplied() {
-        reloadAfterOrganizeByChange()
-    }
-
-    func onOrganizeByRangeParamsApplied(type: OrganizeByType, originalParams: OrganizeByParams?) {
-        reloadAfterOrganizeByChange()
-        let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type, originalParams: originalParams)
-        vc.stepDelegate = self
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .pageSheet
-        if let sheet = nav.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 20
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        }
-        present(nav, animated: true)
-    }
-
-    func onStepSizeChanged() {
-        reloadAfterOrganizeByChange()
     }
 
     private func reloadAfterOrganizeByChange() {

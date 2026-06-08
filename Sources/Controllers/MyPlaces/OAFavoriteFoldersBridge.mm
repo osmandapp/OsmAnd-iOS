@@ -27,45 +27,10 @@
 #import "OsmAndSharedWrapper.h"
 #import <objc/runtime.h>
 #import <QuartzCore/QuartzCore.h>
+#import "OAFavoritesSwiftHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAFavoriteFolderBridgeItem ()
-
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize;
-
-@end
-
-@implementation OAFavoriteFolderBridgeItem
-
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize
-{
-    self = [super init];
-    if (self)
-    {
-        NSString *groupName = group.name ?: @"";
-        _identifier = [NSString stringWithFormat:@"%@-%lu", groupName, (unsigned long)index];
-        _groupName = groupName;
-        _title = [OAFavoriteGroup getDisplayName:groupName] ?: groupName;
-        _pointsCount = group.points.count;
-        _isVisible = group.isVisible;
-        _isPinned = group.isPinned;
-        _color = group.color;
-        _lastModifiedDate = lastModifiedDate;
-        _fileSize = fileSize;
-    }
-    
-    return self;
-}
-
-@end
-
-@interface OAFavoritePointBridgeItem ()
-
-- (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
-+ (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite;
-
-@end
 
 @interface OAFavoriteFoldersBridge ()
 
@@ -143,41 +108,6 @@
     [OAFavoritesHelper saveCurrentPointsIntoFile];
     if (self.completion)
         self.completion();
-}
-
-@end
-
-@implementation OAFavoritePointBridgeItem
-
-- (instancetype)initWithFavorite:(OAFavoriteItem *)favorite
-{
-    self = [super init];
-    if (self)
-    {
-        _identifier = [favorite getKey] ?: @"";
-        _groupName = [favorite getCategory] ?: @"";
-        _title = [favorite getDisplayName] ?: @"";
-        _address = [favorite getAddress];
-        _distance = [self.class distanceForFavorite:favorite];
-        _timestampDate = [favorite getTimestamp];
-        _icon = [favorite getCompositeIcon];
-        _isVisible = [favorite isVisible];
-    }
-    
-    return self;
-}
-
-+ (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite
-{
-    CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
-    if (!location || !favorite.favorite)
-        return nil;
-    
-    const auto &favoritePosition31 = favorite.favorite->getPosition31();
-    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-    const auto distance = OsmAnd::Utilities::distance(location.coordinate.longitude, location.coordinate.latitude, favoriteLon, favoriteLat);
-    return @(distance);
 }
 
 @end

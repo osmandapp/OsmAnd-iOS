@@ -4117,6 +4117,7 @@
 "original_icon_description" = "Each point retains its individual icon.";
 "original_color_description" = "Each point retains its individual color.";
 "original_shape_description" = "Each point retains its individual shape.";
+"add_to" = "Add to";
 
 "my_places_no_tracks_title_root" = "You don’t have track files";
 "my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";

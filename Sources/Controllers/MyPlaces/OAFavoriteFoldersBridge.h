@@ -10,38 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class UIColor, UIImage, UINavigationController, UIView, UIViewController;
-
-@interface OAFavoriteFolderBridgeItem : NSObject
-
-@property (nonatomic, readonly) NSString *identifier;
-@property (nonatomic, readonly) NSString *groupName;
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) NSUInteger pointsCount;
-@property (nonatomic, readonly) BOOL isVisible;
-@property (nonatomic, readonly) BOOL isPinned;
-@property (nonatomic, readonly, nullable) UIColor *color;
-@property (nonatomic, readonly, nullable) NSDate *lastModifiedDate;
-@property (nonatomic, readonly) long long fileSize;
-
-- (instancetype)init NS_UNAVAILABLE;
-
-@end
-
-@interface OAFavoritePointBridgeItem : NSObject
-
-@property (nonatomic, readonly) NSString *identifier;
-@property (nonatomic, readonly) NSString *groupName;
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly, nullable) NSString *address;
-@property (nonatomic, readonly, nullable) NSNumber *distance;
-@property (nonatomic, readonly, nullable) NSDate *timestampDate;
-@property (nonatomic, readonly, nullable) UIImage *icon;
-@property (nonatomic, readonly) BOOL isVisible;
-
-- (instancetype)init NS_UNAVAILABLE;
-
-@end
+@class UIColor, UIImage, UINavigationController, UIView, UIViewController, OAFavoritePointBridgeItem, OAFavoriteFolderBridgeItem;
 
 @interface OAFavoriteFoldersBridge : NSObject
 
@@ -59,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)addFavoriteGroupToMapMarkers:(NSString *)groupName;
 + (void)openFavoriteGroupAddToTrack:(NSString *)groupName navigationController:(UINavigationController *)navigationController;
 + (void)addFavoriteGroupToNavigation:(NSString *)groupName;
++ (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName;
++ (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(NSString *)gpxFileName;
 
 @end
 

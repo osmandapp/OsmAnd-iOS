@@ -2,8 +2,6 @@ import UIKit
 
 final class OrganizeByTypeCell: UITableViewCell {
 
-    static let cellReuseIdentifier = "OrganizeByTypeCell"
-
     static let minHeight: CGFloat = 52
     private static let leadingInset: CGFloat = 16
     private static let checkmarkSize: CGFloat = 20

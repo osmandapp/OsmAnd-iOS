@@ -623,8 +623,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         } else if isVisibleOnMapFolder {
             title = localizedString("tracks_on_map")
         } else if isSmartFolder {
-            if let group = organizedGroup {
-                title = group.getName()
+            if let organizedGroup {
+                title = organizedGroup.getName()
             } else {
                 title = isEditFilterActive ? localizedString("edit_filter") : smartFolder.getDirName(includingSubdirs: false)
             }
@@ -844,8 +844,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func getTotalTracksStatistics() -> String {
         let folderAnalysis: TrackFolderAnalysis
         if isSmartFolder {
-            if let group = organizedGroup {
-                folderAnalysis = group.getFolderAnalysis()
+            if let organizedGroup {
+                folderAnalysis = organizedGroup.getFolderAnalysis()
             } else {
                 guard let smartFolder = smartFolder else { return "" }
                 folderAnalysis = smartFolder.getFolderAnalysis()
@@ -1005,7 +1005,17 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         reloadAfterOrganizeByChange()
         let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type, originalParams: originalParams)
         vc.stepDelegate = self
-        let nav = UINavigationController(rootViewController: vc)
+        showMediumSheetViewController(vc)
+    }
+
+    func onStepSizeChanged() {
+        reloadAfterOrganizeByChange()
+    }
+
+    // MARK: - Navbar Toolbar Actions
+
+    private func showMediumSheetViewController(_ viewController: UIViewController) {
+        let nav = UINavigationController(rootViewController: viewController)
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -1016,12 +1026,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         present(nav, animated: true)
     }
-
-    func onStepSizeChanged() {
-        reloadAfterOrganizeByChange()
-    }
-
-    // MARK: - Navbar Toolbar Actions
 
     private func enterOrganizedGroup(_ group: OrganizedTracksGroup) {
         organizedGroup = group

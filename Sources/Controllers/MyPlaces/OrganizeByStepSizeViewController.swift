@@ -105,8 +105,8 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     }
 
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
-        let isApplicable = !type.isPro || OAIAPHelper.isOsmAndProAvailable()
-        if isApplicable {
+        let isFeatureAccessible = !type.isPro || OAIAPHelper.isOsmAndProAvailable()
+        if isFeatureAccessible {
             let image = UIImage.templateImageNamed("ic_checkmark_default")?.withTintColor(.white, renderingMode: .alwaysOriginal)
             return [UIBarButtonItem(image: image, style: .done, target: self, action: #selector(onConfirmPressed))]
         } else {

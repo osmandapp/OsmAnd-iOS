@@ -66,7 +66,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
     }
 
     override func registerCells() {
-        tableView.register(OrganizeByTypeCell.self, forCellReuseIdentifier: OrganizeByTypeCell.cellReuseIdentifier)
+        tableView.register(OrganizeByTypeCell.self, forCellReuseIdentifier: OrganizeByTypeCell.reuseIdentifier)
     }
 
     override func getTitle() -> String {
@@ -105,7 +105,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: OrganizeByTypeCell.cellReuseIdentifier) as? OrganizeByTypeCell else { return nil }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OrganizeByTypeCell.reuseIdentifier) as? OrganizeByTypeCell else { return nil }
         cell.configure(
             title: item.title,
             icon: item.obj(forKey: DataKey.image.rawValue) as? UIImage,
@@ -167,7 +167,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         let noneRow = RowData(
             key: .none,
             title: localizedString("shared_string_none"),
-            image: .templateImageNamed("ic_custom_list"),
+            image: .icCustomList,
             type: nil,
             isSelected: selectedType == nil,
             isLocked: false
@@ -201,7 +201,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
             section.headerText = sectionData.headerText ?? ""
             for rowData in sectionData.rows {
                 let row = section.createNewRow()
-                row.cellType = OrganizeByTypeCell.cellReuseIdentifier
+                row.cellType = OrganizeByTypeCell.reuseIdentifier
                 row.key = rowData.key.rawValue
                 row.title = rowData.title
                 row.setObj(rowData.image as Any, forKey: DataKey.image.rawValue)

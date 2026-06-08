@@ -2434,7 +2434,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 }
                 let mapSection = UIMenu(title: "", options: .displayInline, children: [showOnMapAction])
                 let exportSection = UIMenu(title: "", options: .displayInline, children: [exportAction])
-                return UIMenu(title: "", image: nil, children: [mapSection, exportSection])
+                let composedMenu = UIMenu(title: "", image: nil, children: [mapSection, exportSection])
+                return composedMenu
             }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
         } else if item.key == trackKey || item.key == recordingTrackKey {

@@ -19,7 +19,7 @@ protocol FavoriteSortableFolder {
 protocol FavoriteSortablePoint {
     var title: String { get }
     var distance: CLLocationDistance? { get }
-    var timestamp: Date? { get }
+    var lastModified: Date? { get }
 }
 
 @objc enum FavoriteSortMode: Int, CaseIterable {
@@ -62,11 +62,11 @@ protocol FavoriteSortablePoint {
 
 @objc final class FavoriteSortModeHelper: NSObject {
     static func sortFoldersWithMode<Folder: FavoriteSortableFolder>(_ folders: [Folder], mode: FavoriteSortMode) -> [Folder] {
-        stableSorted(folders) { compareFolders($0, $1, mode: mode) }
+        folders.sorted { compareFolders($0, $1, mode: mode) == .orderedAscending }
     }
 
     static func sortFavoritePointsWithMode<Point: FavoriteSortablePoint>(_ points: [Point], mode: FavoriteSortMode) -> [Point] {
-        stableSorted(points) { compareFavoritePoints($0, $1, mode: mode) }
+        points.sorted { compareFavoritePoints($0, $1, mode: mode) == .orderedAscending }
     }
 
     static func defaultSortMode() -> FavoriteSortMode {
@@ -92,9 +92,9 @@ protocol FavoriteSortablePoint {
         case .oldestDateFirst:
             return compareDates(lhs.lastModified, rhs.lastModified, newestFirst: false, lhsTitle: lhs.title, rhsTitle: rhs.title)
         case .nameAZ:
-            return lhs.title.localizedCaseInsensitiveCompare(rhs.title)
+            return compareTitles(lhs.title, rhs.title)
         case .nameZA:
-            return rhs.title.localizedCaseInsensitiveCompare(lhs.title)
+            return compareTitles(rhs.title, lhs.title)
         case .nearest, .farthest:
             return .orderedSame
         }
@@ -103,55 +103,48 @@ protocol FavoriteSortablePoint {
     private static func compareFavoritePoints<Point: FavoriteSortablePoint>(_ lhs: Point, _ rhs: Point, mode: FavoriteSortMode) -> ComparisonResult {
         switch mode {
         case .nameAZ:
-            return lhs.title.localizedCaseInsensitiveCompare(rhs.title)
+            return compareTitles(lhs.title, rhs.title)
         case .nameZA:
-            return rhs.title.localizedCaseInsensitiveCompare(lhs.title)
+            return compareTitles(rhs.title, lhs.title)
         case .nearest:
             return compareDistances(lhs.distance, rhs.distance, nearestFirst: true, lhsTitle: lhs.title, rhsTitle: rhs.title)
         case .farthest:
             return compareDistances(lhs.distance, rhs.distance, nearestFirst: false, lhsTitle: lhs.title, rhsTitle: rhs.title)
-        case .newestDateFirst:
-            return compareDates(lhs.timestamp, rhs.timestamp, newestFirst: true, lhsTitle: lhs.title, rhsTitle: rhs.title)
+        case .lastModified, .newestDateFirst:
+            return compareDates(lhs.lastModified, rhs.lastModified, newestFirst: true, lhsTitle: lhs.title, rhsTitle: rhs.title)
         case .oldestDateFirst:
-            return compareDates(lhs.timestamp, rhs.timestamp, newestFirst: false, lhsTitle: lhs.title, rhsTitle: rhs.title)
-        case .lastModified:
-            return .orderedSame
+            return compareDates(lhs.lastModified, rhs.lastModified, newestFirst: false, lhsTitle: lhs.title, rhsTitle: rhs.title)
         }
     }
 
     private static func compareDates(_ lhs: Date?, _ rhs: Date?, newestFirst: Bool, lhsTitle: String, rhsTitle: String) -> ComparisonResult {
-        switch (lhs, rhs) {
-        case let (lhs?, rhs?) where lhs != rhs:
+        if let lhs, let rhs, lhs != rhs {
             return newestFirst ? rhs.compare(lhs) : lhs.compare(rhs)
-        case (_?, nil):
+        } else if lhs != nil {
             return .orderedAscending
-        case (nil, _?):
+        } else if rhs != nil {
             return .orderedDescending
-        default:
-            return lhsTitle.localizedCaseInsensitiveCompare(rhsTitle)
         }
+
+        return compareTitles(lhsTitle, rhsTitle)
     }
 
     private static func compareDistances(_ lhs: CLLocationDistance?, _ rhs: CLLocationDistance?, nearestFirst: Bool, lhsTitle: String, rhsTitle: String) -> ComparisonResult {
-        switch (lhs, rhs) {
-        case let (lhs?, rhs?) where lhs != rhs:
+        if let lhs, let rhs, lhs != rhs {
             if nearestFirst {
                 return lhs < rhs ? .orderedAscending : .orderedDescending
             }
             return lhs > rhs ? .orderedAscending : .orderedDescending
-        case (_?, nil):
+        } else if lhs != nil {
             return .orderedAscending
-        case (nil, _?):
+        } else if rhs != nil {
             return .orderedDescending
-        default:
-            return lhsTitle.localizedCaseInsensitiveCompare(rhsTitle)
         }
+
+        return compareTitles(lhsTitle, rhsTitle)
     }
 
-    private static func stableSorted<Element>(_ elements: [Element], by comparator: (Element, Element) -> ComparisonResult) -> [Element] {
-        elements.enumerated().sorted { lhs, rhs in
-            let result = comparator(lhs.element, rhs.element)
-            return result == .orderedSame ? lhs.offset < rhs.offset : result == .orderedAscending
-        }.map(\.element)
+    private static func compareTitles(_ lhs: String, _ rhs: String) -> ComparisonResult {
+        lhs.localizedCaseInsensitiveCompare(rhs)
     }
 }

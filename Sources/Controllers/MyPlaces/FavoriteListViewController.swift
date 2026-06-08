@@ -105,7 +105,7 @@ private struct FavoritePointRow: Hashable, FavoriteSortablePoint {
         bridgeItem.distance?.doubleValue
     }
     
-    var timestamp: Date? {
+    var lastModified: Date? {
         bridgeItem.timestampDate
     }
 
@@ -506,7 +506,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func makeSortMenu() -> UIMenu {
-        let modes: [FavoriteSortMode] = !isRootFolder || isSearchActive ? [.nameAZ, .nameZA, .nearest, .farthest, .newestDateFirst, .oldestDateFirst] : [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst]
+        let modes: [FavoriteSortMode] = isRootFolder && !isSearchActive ? [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst] : FavoriteSortMode.allCases
         let groups: [[FavoriteSortMode]] = [[.lastModified], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst], [.nearest, .farthest]]
         let sections = groups.compactMap { group -> UIMenu? in
             let actions = group.filter { modes.contains($0) }.map { makeSortAction(for: $0) }

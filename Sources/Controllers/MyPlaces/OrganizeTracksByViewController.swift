@@ -92,11 +92,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
     }
 
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
-        [NavbarBlueButton.pillBarButtonItem(
-            title: localizedString("shared_string_apply"),
-            target: self,
-            action: #selector(onApplyButtonPressed)
-        )]
+        return [UIBarButtonItem(title: localizedString("shared_string_apply"), style: .done, target: self, action: #selector(onApplyButtonPressed))]
     }
 
     override func generateData() {

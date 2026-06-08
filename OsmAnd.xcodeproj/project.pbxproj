@@ -1626,7 +1626,6 @@
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
-		D53E5F00B86CB8D33849DD54 /* NavbarBlueButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FA15812FC0F58807A8D728 /* NavbarBlueButton.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
@@ -4648,7 +4647,6 @@
 		46FB65B62A8BBC2000A21850 /* CoordinatesBaseWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesBaseWidget.swift; sourceTree = "<group>"; };
 		46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesMapCenterWidget.swift; sourceTree = "<group>"; };
 		46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidgetUtils.swift; sourceTree = "<group>"; };
-		64FA15812FC0F58807A8D728 /* NavbarBlueButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavbarBlueButton.swift; sourceTree = "<group>"; };
 		780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@2x.png"; path = "Resources/Icons/ic_custom_safari@2x.png"; sourceTree = "<group>"; };
 		780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@3x.png"; path = "Resources/Icons/ic_custom_safari@3x.png"; sourceTree = "<group>"; };
 		780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_empty_state_contour_lines@3x.png"; path = "Resources/Icons/img_empty_state_contour_lines@3x.png"; sourceTree = "<group>"; };
@@ -12675,7 +12673,6 @@
 				D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */,
 				D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */,
 				D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */,
-				64FA15812FC0F58807A8D728 /* NavbarBlueButton.swift */,
 				DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */,
 				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
 				DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */,
@@ -17908,7 +17905,6 @@
 				DA5A843126C563A800F274C7 /* OARouteTargetSelectionViewController.m in Sources */,
 				4617129E2B973C34000446F9 /* GlideUtils.swift in Sources */,
 				D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */,
-				D53E5F00B86CB8D33849DD54 /* NavbarBlueButton.swift in Sources */,
 				32D253B027F336C200324717 /* OACloudAccountCreateViewController.m in Sources */,
 				CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */,
 				FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */,

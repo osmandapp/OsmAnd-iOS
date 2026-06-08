@@ -107,17 +107,10 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
         let isApplicable = !type.isPro || OAIAPHelper.isOsmAndProAvailable()
         if isApplicable {
-            return [NavbarBlueButton.circleBarButtonItem(
-                image: .templateImageNamed("ic_checkmark_default"),
-                target: self,
-                action: #selector(onConfirmPressed)
-            )]
+            let image = UIImage.templateImageNamed("ic_checkmark_default")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+            return [UIBarButtonItem(image: image, style: .done, target: self, action: #selector(onConfirmPressed))]
         } else {
-            return [NavbarBlueButton.pillBarButtonItem(
-                title: localizedString("shared_string_unlock"),
-                target: self,
-                action: #selector(onUnlockPressed)
-            )]
+            return [UIBarButtonItem(title: localizedString("shared_string_unlock"), style: .done, target: self, action: #selector(onUnlockPressed))]
         }
     }
 

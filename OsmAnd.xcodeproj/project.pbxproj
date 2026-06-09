@@ -220,6 +220,8 @@
 		27291B612EE81169005D0B0A /* PreviewImageViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */; };
 		27291B622EE81169005D0B0A /* PreviewImageViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */; };
 		272AFB9B2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */; };
+		272AFBAC2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272AFBAA2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift */; };
+		272AFBAD2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 272AFBAB2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib */; };
 		274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */; };
 		274167492E4DF5840051DD4B /* TopTextViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167482E4DF5840051DD4B /* TopTextViewState.swift */; };
 		2745FEF72F3A1207004F6AB4 /* PreviewImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2745FEF62F3A1207004F6AB4 /* PreviewImageView.swift */; };
@@ -3734,6 +3736,8 @@
 		27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreviewImageViewTableViewCell.xib; sourceTree = "<group>"; };
 		272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesSwiftHelper.h; sourceTree = "<group>"; };
 		272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesSwiftHelper.mm; sourceTree = "<group>"; };
+		272AFBAA2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateCollectionViewCell.swift; sourceTree = "<group>"; };
+		272AFBAB2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyStateCollectionViewCell.xib; sourceTree = "<group>"; };
 		274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseWidgetView+Extension.swift"; sourceTree = "<group>"; };
 		274167482E4DF5840051DD4B /* TopTextViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTextViewState.swift; sourceTree = "<group>"; };
 		2745FEF62F3A1207004F6AB4 /* PreviewImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewImageView.swift; sourceTree = "<group>"; };
@@ -12346,6 +12350,7 @@
 				27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */,
 				CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */,
 				271A5C432FCDE1D700C27411 /* SortButtonCollectionViewCell.swift */,
+				272AFBAA2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -12356,6 +12361,7 @@
 		DA5A7BB626C563A100F274C7 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				272AFBAB2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib */,
 				2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */,
 				27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */,
 				27E8D9F02ED4688D00F98462 /* SegmentButtonsSliderTableViewCell.xib */,
@@ -16807,6 +16813,7 @@
 				8476E2E81F6C1EEC00EC274F /* map_start_point@3x.png in Resources */,
 				462545AB28D3688900637964 /* ic_custom_cross_buy_colored_day@3x.png in Resources */,
 				DA5A841226C563A800F274C7 /* OAGPXWptListViewController.xib in Resources */,
+				272AFBAD2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib in Resources */,
 				DA2EC62D29FBBE0200ECEB37 /* warnings_tunnel@3x.png in Resources */,
 				8476E2AA1F6C1EEC00EC274F /* map_default_location_view_angle@2x.png in Resources */,
 				0A8D1A1126FBA1750042444C /* ic_small_descent@2x.png in Resources */,
@@ -17652,6 +17659,7 @@
 				FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */,
 				C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
+				272AFBAC2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift in Sources */,
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,
 				468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,

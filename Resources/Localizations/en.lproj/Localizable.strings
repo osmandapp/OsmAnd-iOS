@@ -1071,6 +1071,10 @@
 "folders_delete_confirmation_title" = "Delete %ld folders?";
 "favorites_delete_confirmation_message" = "This action cannot be undone.";
 "mixed_delete_confirmation_message" = "This will delete %ld folders and %ld points. This action cannot be undone.";
+"empty_state_favourites" = "Add Favorites";
+"empty_state_favourites_desc" = "Import Favorites or add them by marking points on the map.";
+"tracks_empty_folder" = "Empty folder";
+"tracks_empty_folder_description" = "This folder doesn’t have any points yet.";
 
 "favorite_friends_category" = "Friends";
 "favorite_places_category" = "Places";

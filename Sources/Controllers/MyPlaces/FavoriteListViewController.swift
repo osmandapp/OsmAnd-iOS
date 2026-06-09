@@ -37,6 +37,7 @@ private enum FavoriteListSection: Hashable {
     case folderSection(FavoriteFolderSection)
     case content
     case statsFooter
+    case emptyState
 }
 
 private enum FavoriteListItem: Hashable {
@@ -46,6 +47,7 @@ private enum FavoriteListItem: Hashable {
     case folder(FavoriteFolderRow)
     case favorite(FavoritePointRow)
     case statsFooter(FavoriteFolderStats)
+    case emptyState
 }
 
 private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
@@ -302,6 +304,15 @@ final class FavoriteListViewController: UIViewController {
         cell.contentView.addSubview(label)
         NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: Self.statsFooterInsets.top), label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.statsFooterInsets.leading), label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.statsFooterInsets.trailing), label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -Self.statsFooterInsets.bottom)])
     }
+    private lazy var emptyStateCellRegistration = UICollectionView.CellRegistration<EmptyStateCollectionViewCell, Void>(cellNib: UINib(nibName: EmptyStateCollectionViewCell.reuseIdentifier, bundle: nil)) { [weak self] cell, _, _ in
+        guard let self else { return }
+        let isRootFolder = self.isRootFolder
+        cell.configure(image: isRootFolder ? .icCustomFavorites : .icCustomFolderOpen,
+                       title: localizedString(isRootFolder ? "empty_state_favourites" : "tracks_empty_folder"),
+                       description: localizedString(isRootFolder ? "empty_state_favourites_desc" : "tracks_empty_folder_description"))
+        cell.button.setTitle(localizedString("shared_string_import"), for: .normal)
+        cell.button.addTarget(self, action: #selector(self.importButtonClicked), for: .touchUpInside)
+    }
     private lazy var subfolderSearchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -552,6 +563,7 @@ final class FavoriteListViewController: UIViewController {
         let favoriteCellRegistration = favoriteCellRegistration
         let headerCellRegistration = headerCellRegistration
         let statsFooterCellRegistration = statsFooterCellRegistration
+        let emptyStateCellRegistration = emptyStateCellRegistration
         return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
             case .sortHeader(let sortMode):
@@ -566,6 +578,8 @@ final class FavoriteListViewController: UIViewController {
                 return collectionView.dequeueConfiguredReusableCell(using: favoriteCellRegistration, for: indexPath, item: favorite)
             case .statsFooter(let stats):
                 return collectionView.dequeueConfiguredReusableCell(using: statsFooterCellRegistration, for: indexPath, item: stats)
+            case .emptyState:
+                return collectionView.dequeueConfiguredReusableCell(using: emptyStateCellRegistration, for: indexPath, item: ())
             }
         }
     }
@@ -581,11 +595,20 @@ final class FavoriteListViewController: UIViewController {
 
     private func applyRootSnapshot(animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
+        var snapshot = Snapshot()
+        if allFolders.isEmpty {
+            layoutSections = []
+            collectionView.collectionViewLayout.invalidateLayout()
+            snapshot.appendSections([.emptyState])
+            snapshot.appendItems([.emptyState])
+            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            return
+        }
+        
         let foldersBySection = favoriteFoldersBySection(folders: allFolders).mapValues { FavoriteSortModeHelper.sortFoldersWithMode($0, mode: currentSortMode) }
         let folderSections = rootSections(foldersBySection: foldersBySection)
         let isPaymentBannerVisible = isAvailablePaymentBanner
         let stats = folderStats(allFolders: allFolders, currentGroupName: nil)
-        var snapshot = Snapshot()
         var sections: [FavoriteListSection] = [.sortHeader]
         if isPaymentBannerVisible {
             sections.append(.backupBanner)
@@ -624,8 +647,16 @@ final class FavoriteListViewController: UIViewController {
         let allFolders = favoriteFolders()
         let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
         let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesSwiftHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
-        let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
         var snapshot = Snapshot()
+        if favorites.isEmpty && folders.isEmpty {
+            layoutSections = []
+            collectionView.collectionViewLayout.invalidateLayout()
+            snapshot.appendSections([.emptyState])
+            snapshot.appendItems([.emptyState])
+            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            return
+        }
+        let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
         layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
         collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections(layoutSections)
@@ -783,13 +814,8 @@ final class FavoriteListViewController: UIViewController {
         let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
             self?.openNewFavoriteGroupEditor()
         }
-        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
-            guard let self else { return }
-            let gpxType = UTType(importedAs: "com.topografix.gpx", conformingTo: .xml)
-            let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [gpxType], asCopy: true)
-            documentPicker.allowsMultipleSelection = false
-            documentPicker.delegate = self
-            present(documentPicker, animated: true)
+        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined.resizedMenuImage()) { [weak self] _ in
+            self?.openPickerToImport()
         }
         
         let addFolderSection = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
@@ -985,7 +1011,7 @@ final class FavoriteListViewController: UIViewController {
                 return folder.bridgeItem
             case .favorite(let favorite):
                 return favorite.bridgeItem
-            case .backupBanner, .header, .statsFooter, .sortHeader:
+            case .backupBanner, .header, .statsFooter, .sortHeader, .emptyState:
                 return nil
             }
         }
@@ -1093,6 +1119,14 @@ final class FavoriteListViewController: UIViewController {
         let modalNavigationController = UINavigationController(rootViewController: colorController)
         navigationController.present(modalNavigationController, animated: true)
     }
+    
+    private func openPickerToImport() {
+        let gpxType = UTType(importedAs: "com.topografix.gpx", conformingTo: .xml)
+        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [gpxType], asCopy: true)
+        documentPicker.allowsMultipleSelection = false
+        documentPicker.delegate = self
+        present(documentPicker, animated: true)
+    }
 
     @objc private func selectButtonPressed() {
         setEdit(true)
@@ -1108,7 +1142,7 @@ final class FavoriteListViewController: UIViewController {
                 let indexPath = IndexPath(item: item, section: section)
                 guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
                 switch itemIdentifier {
-                case .sortHeader, .backupBanner, .header, .statsFooter:
+                case .sortHeader, .backupBanner, .header, .statsFooter, .emptyState:
                     continue
                 case .folder, .favorite:
                     collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -1186,6 +1220,10 @@ final class FavoriteListViewController: UIViewController {
 
         present(alert, animated: true, completion: nil)
     }
+    
+    @objc private func importButtonClicked(_ sender: Any) {
+        openPickerToImport()
+    }
 }
 
 extension FavoriteListViewController: UICollectionViewDelegate {
@@ -1208,7 +1246,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 return
             }
             OAFavoritesSwiftHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
-        case .sortHeader, .backupBanner, .header, .statsFooter:
+        case .sortHeader, .backupBanner, .header, .statsFooter, .emptyState:
             break
         }
 

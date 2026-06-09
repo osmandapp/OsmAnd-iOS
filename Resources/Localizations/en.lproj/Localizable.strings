@@ -4566,3 +4566,6 @@
 
 "import_tracks_cancel_title" = "Cancel import?";
 "import_tracks_cancel_descr" = "If you close now, your track selections will not be imported.";
+"import_tracks_descr_one" = "The file %@ contains 1 separate track. Select the one you want to import.";
+"import_tracks_descr_other" = "The file %@ contains %d separate tracks. Select the ones you want to import.";
+"import_tracks_as_one_track" = "Import as one track";

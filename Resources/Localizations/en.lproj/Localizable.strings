@@ -1066,6 +1066,11 @@
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
+"favorites_delete_confirmation_title" = "Delete %ld favorites?";
+"items_delete_confirmation_title" = "Delete %ld items?";
+"folders_delete_confirmation_title" = "Delete %ld folders?";
+"favorites_delete_confirmation_message" = "This action cannot be undone.";
+"mixed_delete_confirmation_message" = "This will delete %ld folders and %ld points. This action cannot be undone.";
 
 "favorite_friends_category" = "Friends";
 "favorite_places_category" = "Places";

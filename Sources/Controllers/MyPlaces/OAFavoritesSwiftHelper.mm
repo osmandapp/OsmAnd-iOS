@@ -17,6 +17,8 @@
 #import "OALocationServices.h"
 #import "OAMapPanelViewController.h"
 #import "OAOpenAddTrackViewController.h"
+#import "OADefaultFavorite.h"
+#import "OAOsmAndFormatter.h"
 #import "OAPointDescription.h"
 #import "OARootViewController.h"
 #import "OASavingTrackHelper.h"
@@ -26,6 +28,7 @@
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
 #import <QuartzCore/QuartzCore.h>
+#import "OAObservable.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -172,6 +175,50 @@
         return;
 
     [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:YES];
+}
+
++ (void)setFavoriteGroupsVisible:(NSArray<NSString *> *)groupNames visible:(BOOL)visible
+{
+    if (groupNames.count == 0)
+        return;
+
+    BOOL changed = NO;
+    NSMutableSet<NSString *> *handledGroupNames = [NSMutableSet set];
+    for (NSString *groupName in groupNames)
+    {
+        OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
+        if (!group)
+            continue;
+
+        [handledGroupNames addObject:groupName];
+        [OAFavoritesHelper updateGroup:group visible:visible saveImmediately:NO];
+        changed = YES;
+    }
+
+    if (changed)
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
+}
+
++ (void)setFavoriteGroupsPinned:(NSArray<NSString *> *)groupNames pinned:(BOOL)pinned
+{
+    if (groupNames.count == 0)
+        return;
+
+    BOOL changed = NO;
+    NSMutableSet<NSString *> *handledGroupNames = [NSMutableSet set];
+    for (NSString *groupName in groupNames)
+    {
+        OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
+        if (!group)
+            continue;
+
+        [handledGroupNames addObject:groupName];
+        [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:NO];
+        changed = YES;
+    }
+
+    if (changed)
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
 + (BOOL)addFavoriteGroup:(NSString *)name
@@ -322,6 +369,61 @@
         [groupNames addObject:@""];
 
     return [groupNames copy];
+}
+
++ (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex
+{
+    if (favoriteItems.count == 0)
+        return;
+
+    NSArray<OAFavoriteColor *> *builtinColors = [OADefaultFavorite builtinColors];
+    if (colorIndex < 0 || colorIndex >= builtinColors.count)
+        return;
+
+    UIColor *color = builtinColors[colorIndex].color;
+    BOOL changed = NO;
+    NSMutableSet<NSString *> *changedPointKeys = [NSMutableSet set];
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
+            continue;
+
+        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
+        OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
+        if (!group)
+            continue;
+
+        group.color = color;
+        changed = YES;
+    }
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+            continue;
+
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
+        if (!favorite)
+            continue;
+
+        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
+        if ([changedPointKeys containsObject:pointKey])
+            continue;
+
+        [favorite setColor:color];
+        [changedPointKeys addObject:pointKey];
+        changed = YES;
+
+        OAFavoriteGroup *group = [self favoriteGroupWithName:[favorite getCategory]];
+        OAFavoriteItem *firstPoint = group.points.firstObject;
+        if (firstPoint && ([[firstPoint getKey] isEqualToString:pointKey]))
+            group.color = color;
+    }
+
+    if (changed)
+        [OAFavoritesHelper saveCurrentPointsIntoFile];;
 }
 
 + (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName
@@ -565,6 +667,69 @@
     }
 }
 
++ (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems
+{
+    if (favoriteItems.count == 0)
+        return;
+
+    NSMutableArray<OAFavoriteItem *> *itemsToAdd = [NSMutableArray array];
+    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
+            continue;
+
+        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
+        OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
+        if (!group)
+            continue;
+
+        for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
+        {
+            NSString *pointKey = [favorite getKey];
+            if (pointKey.length > 0 && [addedPointKeys containsObject:pointKey])
+                continue;
+
+            if (pointKey.length > 0)
+                [addedPointKeys addObject:pointKey];
+            [itemsToAdd addObject:favorite];
+        }
+    }
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+            continue;
+
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
+        if (!favorite)
+            continue;
+
+        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
+        if ([addedPointKeys containsObject:pointKey])
+            continue;
+
+        if (pointKey.length > 0)
+            [addedPointKeys addObject:pointKey];
+        [itemsToAdd addObject:favorite];
+    }
+
+    if (itemsToAdd.count == 0)
+        return;
+
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    for (OAFavoriteItem *favorite in itemsToAdd)
+    {
+        CLLocation *location = [self locationForFavorite:favorite];
+        if (!location)
+            continue;
+
+        [mapPanel addMapMarker:location.coordinate.latitude lon:location.coordinate.longitude description:[favorite getDisplayName]];
+    }
+}
+
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName
 {
     NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:[self favoriteGroupWithName:groupName]];
@@ -622,6 +787,160 @@
 
         OAPointDescription *description = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favorite getDisplayName]];
         BOOL isDestination = index == points.count - 1;
+        [targetPointsHelper navigateToPoint:location updateRoute:isDestination intermediate:isDestination ? -1 : (int)index historyName:description];
+    }
+
+    OARootViewController *rootViewController = [OARootViewController instance];
+    [rootViewController.navigationController popToRootViewControllerAnimated:YES];
+    [rootViewController.mapPanel showRouteInfo];
+}
+
++ (void)addFavoriteItemsToTrack:(NSArray *)favoriteItems gpxFileName:(nullable NSString *)gpxFileName
+{
+    if (favoriteItems.count == 0)
+        return;
+
+    NSMutableArray<OAFavoriteItem *> *itemsToAdd = [NSMutableArray array];
+    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
+            continue;
+
+        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
+        OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
+        if (!group)
+            continue;
+
+        for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
+        {
+            NSString *pointKey = [favorite getKey];
+            if (pointKey.length > 0 && [addedPointKeys containsObject:pointKey])
+                continue;
+
+            if (pointKey.length > 0)
+                [addedPointKeys addObject:pointKey];
+            [itemsToAdd addObject:favorite];
+        }
+    }
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+            continue;
+
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
+        if (!favorite)
+            continue;
+
+        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
+        if ([addedPointKeys containsObject:pointKey])
+            continue;
+
+        if (pointKey.length > 0)
+            [addedPointKeys addObject:pointKey];
+        [itemsToAdd addObject:favorite];
+    }
+
+    if (itemsToAdd.count == 0)
+        return;
+
+    if (gpxFileName.length == 0)
+    {
+        OASavingTrackHelper *savingTrackHelper = [OASavingTrackHelper sharedInstance];
+        for (OAFavoriteItem *favorite in itemsToAdd)
+            [savingTrackHelper addWpt:[favorite toWpt]];
+
+        if (![OAAppSettings.sharedManager.mapSettingShowRecordingTrack get])
+            [OAAppSettings.sharedManager.mapSettingShowRecordingTrack set:YES];
+        return;
+    }
+
+    OAGPXDatabase *gpxDatabase = OAGPXDatabase.sharedDb;
+    OASGpxDataItem *dataItem = [gpxDatabase getGPXItem:gpxFileName];
+    if (!dataItem)
+        dataItem = [gpxDatabase getGPXItemByFileName:gpxFileName];
+    if (!dataItem)
+        return;
+
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:dataItem.file];
+    if (!gpxFile)
+        return;
+
+    for (OAFavoriteItem *favorite in itemsToAdd)
+        [gpxFile addPointPoint:[favorite toWpt]];
+
+    [OASGpxUtilities.shared writeGpxFileFile:dataItem.file gpxFile:gpxFile];
+    [gpxDatabase updateDataItem:dataItem];
+    [OASelectedGPXHelper.instance markTrackForReload:dataItem.file.absolutePath];
+    [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
+}
+
++ (void)addFavoriteItemsToNavigation:(NSArray *)favoriteItems
+{
+    if (favoriteItems.count == 0)
+        return;
+
+    NSMutableArray<OAFavoriteItem *> *itemsToAdd = [NSMutableArray array];
+    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
+            continue;
+
+        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
+        OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
+        if (!group)
+            continue;
+
+        for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
+        {
+            NSString *pointKey = [favorite getKey];
+            if (pointKey.length > 0 && [addedPointKeys containsObject:pointKey])
+                continue;
+
+            if (pointKey.length > 0)
+                [addedPointKeys addObject:pointKey];
+            [itemsToAdd addObject:favorite];
+        }
+    }
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+            continue;
+
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
+        if (!favorite)
+            continue;
+
+        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
+        if ([addedPointKeys containsObject:pointKey])
+            continue;
+
+        if (pointKey.length > 0)
+            [addedPointKeys addObject:pointKey];
+        [itemsToAdd addObject:favorite];
+    }
+
+    if (itemsToAdd.count == 0)
+        return;
+
+    OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
+    [targetPointsHelper clearAllPoints:NO];
+    for (NSUInteger index = 0; index < itemsToAdd.count; index++)
+    {
+        OAFavoriteItem *favorite = itemsToAdd[index];
+        CLLocation *location = [self locationForFavorite:favorite];
+        if (!location)
+            continue;
+
+        OAPointDescription *description = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favorite getDisplayName]];
+        BOOL isDestination = index == itemsToAdd.count - 1;
         [targetPointsHelper navigateToPoint:location updateRoute:isDestination intermediate:isDestination ? -1 : (int)index historyName:description];
     }
 

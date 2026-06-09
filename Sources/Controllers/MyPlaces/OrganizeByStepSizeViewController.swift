@@ -23,6 +23,8 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
 
     // MARK: - Instance Properties
 
+    private static let previewDebounceInterval: TimeInterval = 0.15
+
     private let smartFolder: SmartFolder
     private let type: OrganizeByType
     private let displayUnits: any MeasurementUnit
@@ -31,8 +33,6 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     private var currentDisplayValue: Float
     private var isExplicitlyDismissed = false
     private var previewWorkItem: DispatchWorkItem?
-
-    private static let previewDebounceInterval: TimeInterval = 0.15
 
     weak var stepDelegate: OrganizeByStepSizeDelegate?
 

@@ -279,7 +279,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     else if ([item.key isEqualToString:kShowTouchesKey])
     {
         [[OAAppSettings sharedManager].showTouches set:sender.isOn];
-        [[OATouchIndicatorController shared] apply];
+        [[TouchIndicatorController shared] apply];
     }
     else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
         [[OAAppSettings sharedManager].simulateOBDData set:sender.isOn];

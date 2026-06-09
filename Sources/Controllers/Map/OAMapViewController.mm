@@ -1063,9 +1063,24 @@ static char kMapSourceUpdateQueueKey;
     return activeGestures == 1;
 }
 
-- (BOOL) isMapGestureInProgress
+- (BOOL)isGestureRecognizerActive:(UIGestureRecognizer *)recognizer
 {
-    return _movingByGesture || _zoomingByGesture || _rotatingByGesture || _zoomingByTapGesture;
+    return recognizer.state == UIGestureRecognizerStateBegan
+        || recognizer.state == UIGestureRecognizerStateChanged
+        || recognizer.state == UIGestureRecognizerStateEnded;
+}
+
+- (BOOL)isMapGestureInProgress
+{
+    return _movingByGesture
+        || _zoomingByGesture
+        || _rotatingByGesture
+        || _zoomingByTapGesture
+        || [self isGestureRecognizerActive:_grMove]
+        || [self isGestureRecognizerActive:_grZoom]
+        || [self isGestureRecognizerActive:_grRotate]
+        || [self isGestureRecognizerActive:_grZoomDoubleTap]
+        || [self isGestureRecognizerActive:_grElevation];
 }
 
 - (void) storeTargetPosition:(UIGestureRecognizer *)recognizer scheduleRestore:(BOOL)scheduleRestore

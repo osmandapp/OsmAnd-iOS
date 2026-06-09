@@ -8,7 +8,7 @@
 import UIKit
 
 @objcMembers
-final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
+final class TouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
     // MARK: - Subtypes
 
@@ -120,7 +120,7 @@ final class OATouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
     // MARK: - Type Properties
 
-    static let shared = OATouchIndicatorController()
+    static let shared = TouchIndicatorController()
 
     // MARK: - Instance Properties
 

@@ -1005,7 +1005,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         reloadAfterOrganizeByChange()
         let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type, originalParams: originalParams)
         vc.stepDelegate = self
-        showMediumSheetViewController(vc)
+        showMediumSheetViewController(vc, isLargeAvailable: true)
     }
 
     func onStepSizeChanged() {
@@ -1013,19 +1013,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     // MARK: - Navbar Toolbar Actions
-
-    private func showMediumSheetViewController(_ viewController: UIViewController) {
-        let nav = UINavigationController(rootViewController: viewController)
-        nav.modalPresentationStyle = .pageSheet
-        if let sheet = nav.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 20
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        }
-        present(nav, animated: true)
-    }
 
     private func enterOrganizedGroup(_ group: OrganizedTracksGroup) {
         organizedGroup = group

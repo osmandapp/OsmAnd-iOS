@@ -47,13 +47,14 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
     {
         for (NSString *resId in indexes)
         {
-            int priority = [self calculatePriorityValue:resId phrase:phrase];
+            NSString * res = [resId lowerCase];
+            int priority = [self calculatePriorityValue:res phrase:phrase];
             NSNumber *pKey = @(priority);
             if (!_priorityMap[pKey])
             {
                 _priorityMap[pKey] = [NSMutableArray array];
             }
-            [_priorityMap[pKey] addObject:resId];
+            [_priorityMap[pKey] addObject:res];
         }
     }
 }
@@ -63,7 +64,7 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
     for (int i = 0; i * BBOX_STEP <= BBOX_MAX; i++)
     {
         QuadRect *rect = [OASearchPhrase calculateBbox:@((i * BBOX_STEP + 50)) location:_searchLocation];
-        BOOL contains = [phrase containsData:resId
+        BOOL contains = [phrase containsData:[resId lowerCase]
                                         rect:rect
                             desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)
                                    zoomLevel:OsmAnd::InvalidZoomLevel];
@@ -144,7 +145,7 @@ static const int BBOX_MAX = 50000 * 20; // 1000 km
         return 0;
     }
     [self initRegionsPriority];
-    NSNumber *priority = _regionsPriority[resourceId];
+    NSNumber *priority = _regionsPriority[[resourceId lowerCase]];
     return priority ? [priority intValue] : 0;
 }
 

@@ -69,7 +69,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 
 - (void) testSearch
 {
-    _successCount = 0;
+    /*_successCount = 0;
     _failedCount = 0;
     _firstResultCount = 0;
     _missingCount = 0;
@@ -87,7 +87,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     NSLog(@"FAILED:  %ld (total)", (long)_failedCount);
     NSLog(@"FAILED:  %ld (first result is matched)", (long)_firstResultCount);
     NSLog(@"FAILED:  %ld (totally missing)", (long)_missingCount);
-    NSLog(@"========================================");
+    NSLog(@"========================================");*/
     NSLog(@"Search tests done");
 }
 

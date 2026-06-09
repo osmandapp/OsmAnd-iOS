@@ -270,7 +270,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             [cell topButtonVisibility:!_isNewItem];
             cell.descriptionLabel.text = OALocalizedString(@"original_color_description");
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
             

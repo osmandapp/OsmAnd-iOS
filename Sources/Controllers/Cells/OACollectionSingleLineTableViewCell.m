@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *topMarginStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *bottomMarginStackView;
+@property (weak, nonatomic) IBOutlet UIView *rightActionDividerView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 
@@ -126,6 +127,12 @@
         [self removeGestureRecognizer:_tapRecognizer];
         _tapRecognizer = nil;
     }
+}
+
+- (void)rightActionDividerVisibility:(BOOL)show
+{
+    self.rightActionDividerView.hidden = !show;
+    [self.collectionStackView setCustomSpacing:show ? 0. : UIStackViewSpacingUseDefault afterView:self.collectionView];
 }
 
 - (void)collectionStackViewVisibility:(BOOL)show

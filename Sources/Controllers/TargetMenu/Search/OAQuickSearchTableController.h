@@ -18,6 +18,7 @@
 @required
 - (void) didSelectResult:(OASearchResult *)result;
 - (void) didShowOnMap:(OASearchResult *)result;
+- (void)closeSearch;
 
 @end
 

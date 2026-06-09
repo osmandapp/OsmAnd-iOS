@@ -51,8 +51,7 @@ final class ChangeTracksAppearanceTask: NSObject {
             settings.currentTrackColor.set(Int32(color))
         }
         if let coloringType: String = data.getParameter(for: GpxParameter.coloringType) {
-            let requiredValue = ColoringType.companion.requireValueOf(purpose: ColoringPurpose.track, name: coloringType)
-            settings.currentTrackColoringType.set(Int32(requiredValue.ordinal))
+            settings.currentTrackColoringType.set(OAColoringType.getNonNullTrackColoringType(byName: coloringType))
             if let routeInfoAttribute = ColoringType.companion.getRouteInfoAttribute(name: coloringType) {
                 settings.routeInfoAttribute.set(routeInfoAttribute)
             }

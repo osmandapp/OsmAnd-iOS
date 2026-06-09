@@ -210,6 +210,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (OATargetMenuViewControllerState *)getCurrentState;
 
 - (BOOL)isLandscape;
+- (void)adjustViewport;
 
 - (NSArray<OATransportStopRoute *> *)getSubTransportStopRoutes:(BOOL)nearby;
 - (NSArray<OATransportStopRoute *> *)getLocalTransportStopRoutes;

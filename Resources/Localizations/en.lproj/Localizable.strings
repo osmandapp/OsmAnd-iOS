@@ -948,6 +948,8 @@
 "shared_string_deleting_complete" = "Deleting complete";
 "shared_string_colors" = "Colors";
 
+"dismiss_changes_descr" = "All changes will be dismissed.";
+"gpx_logging_no_data" = "No data";
 "gradient_no_data_point_summary" = "Color applied when data is missing or undefined.";
 "gradient_input_value_too_low_warn" = "Minimum allowed value is %@.";
 "gradient_input_value_too_high_warn" = "Maximum allowed value is %@.";
@@ -1834,6 +1836,9 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
+"delete_changes" = "Delete changes";
+"osm_edits_delete_item_confirmation" = "Are you sure you want to delete %ld edit?";
+"osm_edits_delete_items_confirmation" = "Are you sure you want to delete %ld edits?";
 
 "routing_algorithm" = "Routing algorithm";
 "auto_zoom" = "Autozoom";
@@ -1848,6 +1853,7 @@
 "osmand_depelopment_use_3d_icons" = "Use 3D location position icons";
 "battery_saving_mode" = "Battery saving mode";
 "enable_msaa_carplay" = "Enable MSAA for CarPlay";
+"show_touches" = "Show touches";
 "visualizing_button_grid" = "Map button grid";
 "efficient_grid" = "Efficient grid";
 "slots" = "Slots";
@@ -4563,3 +4569,6 @@
 "map_variant_has_road_download_standard_message" = "You already have the road-only map for %@.\n\nDownloading the standard map will duplicate data and may degrade performance.";
 "map_variant_replace_with_road_only" = "Replace with Road-only";
 "map_variant_replace_with_standard" = "Replace with Standard";
+
+"shared_string_url" = "URL";
+

@@ -248,36 +248,40 @@ typedef enum {
             [OARootViewController.instance.mapPanel.mapViewController.mapLayers.myPositionLayer setMyLocationCircleRadius:(horizontalAccuracy)];
         });
 
-        _mapView.mapMarkersAnimator->cancelAnimations(marker);
-        if (animationDuration > 0)
+        BOOL isAnimatedMove = animationDuration > 0;
+        BOOL targetAnimRunning = _mapView.mapMarkersAnimator->getCurrentAnimation(marker, OsmAnd::Animator::AnimatedValue::Target) != nullptr;
+        BOOL keepRunningTargetAnim = !isAnimatedMove && targetAnimRunning;
+        BOOL shouldAnimateAzimuth = isAnimatedMove || keepRunningTargetAnim;
+
+        double bearingDir = OsmAnd::Utilities::normalizedAngleDegrees(bearing);
+        double headingDir = OsmAnd::Utilities::normalizedAngleDegrees(heading);
+
+        if (isAnimatedMove)
         {
+            _mapView.mapMarkersAnimator->cancelCurrentAnimation(marker, OsmAnd::Animator::AnimatedValue::Target);
             _mapView.mapMarkersAnimator->animatePositionTo(marker, target31, animationDuration,  OsmAnd::Animator::TimingFunction::Linear);
-            if (marker->model3D != nullptr)
-            {
-                _mapView.mapMarkersAnimator->animateModel3DDirectionTo(marker, OsmAnd::Utilities::normalizedAngleDegrees(bearing), kRotateAnimationTime, OsmAnd::Animator::TimingFunction::Linear);
-                [_mapView setMyLocationSectorDirection:(OsmAnd::Utilities::normalizedAngleDegrees(heading))];
-            }
-            else
-            {
-                if (iconKey)
-                    _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, OsmAnd::Utilities::normalizedAngleDegrees(bearing), kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
-            }
         }
-        else
+        else if (!keepRunningTargetAnim)
         {
             marker->setPosition(target31);
             [_mapView setMyLocationCirclePosition:(target31)];
+        }
 
-            if (marker->model3D != nullptr)
-            {
-                marker->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(bearing));
-                [_mapView setMyLocationSectorDirection:(OsmAnd::Utilities::normalizedAngleDegrees(heading))];
-            }
+        _mapView.mapMarkersAnimator->cancelCurrentAnimation(marker, OsmAnd::Animator::AnimatedValue::Azimuth);
+        if (marker->model3D != nullptr)
+        {
+            if (shouldAnimateAzimuth)
+                _mapView.mapMarkersAnimator->animateModel3DDirectionTo(marker, bearingDir, kRotateAnimationTime, OsmAnd::Animator::TimingFunction::Linear);
             else
-            {
-                if (iconKey)
-                    marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(bearing));
-            }
+                marker->setModel3DDirection(bearingDir);
+            [_mapView setMyLocationSectorDirection:(headingDir)];
+        }
+        else if (iconKey)
+        {
+            if (shouldAnimateAzimuth)
+                _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, bearingDir, kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
+            else
+                marker->setOnMapSurfaceIconDirection(iconKey, bearingDir);
         }
 
         if (visible && marker->isHidden())

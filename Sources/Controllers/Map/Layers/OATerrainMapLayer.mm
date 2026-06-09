@@ -18,6 +18,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OATerrainMapLayerProvider.h"
+#include <OsmAndCore/GeoTiffCollection.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/SlopeRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/HillshadeRasterMapLayerProvider.h>
@@ -105,7 +106,7 @@
         {
             [self.mapView resetProviderFor:self.layerIndex];
         }
-        [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
+        [self.mapView setElevationScaleFactor:[_plugin isHeightmapEnabled] ? self.app.data.verticalExaggerationScale : kExaggerationDefScale];
         return YES;
     }
     return NO;
@@ -171,13 +172,12 @@
 - (void)onPaletteChangedEvent:(OASPaletteChangeEvent *)event
 {
     NSString *currentPaletteFile = [_terrainMode mainFile];
-    if (currentPaletteFile.length == 0)
+    BOOL isCurrentPaletteEvent = currentPaletteFile.length > 0 && [[GradientPaletteHelper shared] isPaletteChangeEvent:event fileName:currentPaletteFile];
+    NSString *updatedTerrainPaletteFile = [[GradientPaletteHelper shared] updatedTerrainPaletteFileName:event];
+    if (!isCurrentPaletteEvent && updatedTerrainPaletteFile.length == 0)
         return;
     
-    if (![[GradientPaletteHelper shared] isPaletteChangeEvent:event fileName:currentPaletteFile])
-        return;
-    
-    if ([event isKindOfClass:OASPaletteChangeEventRemoved.class])
+    if (isCurrentPaletteEvent && [event isKindOfClass:OASPaletteChangeEventRemoved.class])
     {
         TerrainMode *defaultTerrainMode = [TerrainMode getDefaultMode:_terrainMode.type];
         if (defaultTerrainMode)
@@ -188,7 +188,20 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateTerrainLayer];
+        if (updatedTerrainPaletteFile.length > 0)
+        {
+            auto geoTiffCollection = std::dynamic_pointer_cast<OsmAnd::GeoTiffCollection>(self.mapViewController.mapRendererEnv.geoTiffCollection);
+            if (geoTiffCollection)
+            {
+                auto palettePath = QString::fromNSString([self.app.colorsPalettePath stringByAppendingPathComponent:updatedTerrainPaletteFile]);
+                geoTiffCollection->removeFileTilesFromCache(OsmAnd::GeoTiffCollection::RasterType::Slope, palettePath);
+                geoTiffCollection->removeFileTilesFromCache(OsmAnd::GeoTiffCollection::RasterType::Height, palettePath);
+                geoTiffCollection->removeFileTilesFromCache(OsmAnd::GeoTiffCollection::RasterType::Hillshade, palettePath);
+            }
+        }
+
+        if (isCurrentPaletteEvent)
+            [self updateTerrainLayer];
     });
 }
 

@@ -136,14 +136,17 @@
         {
             NSString *imgName = item[@"img"];
             UIColor *imgColor = item[@"iconColor"];
-            if (imgName && imgColor)
+            
+            UIImage *icon = [UIImage imageNamedOrMxIcon:imgName];
+            
+            if (icon && imgColor)
             {
-                cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+                cell.leftIconView.image = [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.leftIconView.tintColor = imgColor;
             }
-            else if (imgName)
+            else if (icon)
             {
-                cell.leftIconView.image = [UIImage imageNamed:imgName];
+                cell.leftIconView.image = icon;
                 cell.leftIconView.tintColor = nil;
             }
             

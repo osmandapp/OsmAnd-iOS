@@ -9,7 +9,7 @@
 #import "OACompoundViewController.h"
 #import "OAOsmPoint.h"
 
-@class OAEntity, OAEntityInfo, OAEditPOIData;
+@class OAEntity, OAEntityInfo, OAEditPOIData, OAOpenStreetMapPoint;
 
 @protocol OAOpenStreetMapUtilsProtocol;
 
@@ -52,6 +52,7 @@
 
 -(id) initWithLat:(double)latitude lon:(double)longitude;
 -(id) initWithEntity:(OAEntity *)entity;
+- (instancetype)initWithPoint:(OAOpenStreetMapPoint *)point;
 
 @end
 

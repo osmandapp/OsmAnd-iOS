@@ -56,6 +56,14 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                     </collectionView>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NcR-tK-PF2" userLabel="Right Action Divider">
+                                        <rect key="frame" x="0.0" y="1.5" width="1" height="42"/>
+                                        <color key="backgroundColor" name="customSeparator"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="42" id="4iH-Ia-NAC"/>
+                                            <constraint firstAttribute="width" constant="1" id="Wy4-CY-mNz"/>
+                                        </constraints>
+                                    </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W16-m3-jDw" userLabel="Right Action Button">
                                         <rect key="frame" x="337" y="4.6666666666666643" width="36" height="36"/>
                                         <color key="backgroundColor" name="buttonBgColorTertiary"/>
@@ -129,6 +137,7 @@
                 <outlet property="contentOutsideStackViewVertical" destination="Pde-Gp-UrD" id="xiC-Ve-Sf5"/>
                 <outlet property="rightActionButton" destination="W16-m3-jDw" id="Qgy-3m-aET"/>
                 <outlet property="rightActionButtonRigthPaddingView" destination="sJ8-Pd-b5X" id="ZQw-RT-2f9"/>
+                <outlet property="rightActionDividerView" destination="NcR-tK-PF2" id="wBz-Iv-m7e"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>
             </connections>
             <point key="canvasLocation" x="69" y="-11"/>
@@ -138,6 +147,9 @@
         <image name="ic_custom_add.png" width="30" height="30"/>
         <namedColor name="buttonBgColorTertiary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

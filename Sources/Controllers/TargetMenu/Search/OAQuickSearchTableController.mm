@@ -236,6 +236,26 @@
         [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO showFullMenu:NO];
 }
 
+- (BOOL)showTravelArticle:(OAPOI *)poi
+{
+    NSString *routeId = [poi getRouteId];
+    if (routeId.length == 0)
+        return NO;
+    
+    NSArray<NSString *> *locales = [[poi getSupportedContentLocales] allObjects] ?: @[];
+    NSString *lang = [LocaleHelper getPreferredNameLocale:locales] ?: [OAUtilities currentLang];
+
+    OATravelArticleIdentifier *identifier = [[OATravelArticleIdentifier alloc] initWithFile:nil
+                                                                                        lat:poi.latitude
+                                                                                        lon:poi.longitude
+                                                                                      title:nil
+                                                                                    routeId:routeId
+                                                                                routeSource:nil];
+    OATravelArticleDialogViewController *vc = [[OATravelArticleDialogViewController alloc] initWithArticleId:identifier lang:lang];
+    [OARootViewController.instance.navigationController pushViewController:vc animated:YES];
+    return YES;
+}
+
 - (BOOL) isShowResult
 {
     return _showResult;
@@ -327,6 +347,12 @@
                 OAPOI *poi = (OAPOI *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
+                    if ([poi isRouteArticle] && [self showTravelArticle:poi])
+                    {
+                        if (delegate)
+                            [delegate closeSearch];
+                        return;
+                    }
                     [self.class goToPoint:poi searchResult:searchResult preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
@@ -568,6 +594,7 @@
         }
         else
         {
+            cell.descriptionLabel.attributedText = nil;
             [cell.descriptionLabel setText:typeName];
             [cell descriptionVisibility:YES];
         }
@@ -653,7 +680,8 @@
                         cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
                         
                     }
-                    cell.descriptionLabel.text = [OAQuickSearchListItem getTypeName:res];
+                    cell.descriptionLabel.text = nil;
+                    cell.descriptionLabel.attributedText = [TracksSortModeHelper getTrackDescriptionWithTrack:dataItem sortMode:TracksSortModeLastModified includeFolderInfo:YES];
                     BOOL isVisible = [[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:dataItem.gpxFilePath];
                     cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
                     return cell;

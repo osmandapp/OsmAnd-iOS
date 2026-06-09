@@ -127,6 +127,10 @@ class BaseAppearanceIconCollectionHandler: IconCollectionHandler {
             return a.translatedName < b.translatedName
         }
         
+        moveKeyUp(key)
+    }
+    
+    func moveKeyUp(_ key: String) {
         if let index = categories.firstIndex(where: { $0.key == key }) {
             let original = categories.remove(at: index)
             categories.insert(original, at: 0)

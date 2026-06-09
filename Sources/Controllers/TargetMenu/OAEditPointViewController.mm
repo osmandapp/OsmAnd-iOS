@@ -797,7 +797,7 @@
         {
             cell.topLabel.text = item[@"title"];
             [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [_colorCollectionHandler setSelectionItem:_selectedColorItem];
             [cell.collectionView reloadData];

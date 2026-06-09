@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,21 +28,76 @@
                             <inset key="sectionInset" minX="0.0" minY="6" maxX="0.0" maxY="6"/>
                         </collectionViewFlowLayout>
                     </collectionView>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vYQ-vX-ZxQ" userLabel="Right Action Container">
+                        <rect key="frame" x="349" y="0.0" width="65" height="48"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1O1-Eo-wqf" userLabel="Right Action Divider">
+                                <rect key="frame" x="0.0" y="3" width="1" height="42"/>
+                                <color key="backgroundColor" name="customSeparator"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="llf-v7-7eT"/>
+                                    <constraint firstAttribute="width" constant="1" id="xBq-sL-Gw8"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zdi-Io-AaC" userLabel="Right Action Button">
+                                <rect key="frame" x="15" y="6" width="36" height="36"/>
+                                <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="71U-Vu-zLQ"/>
+                                    <constraint firstAttribute="width" constant="36" id="M0q-nq-VSn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <state key="normal" image="ic_custom_add.png"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="18"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" name="groupBg"/>
+                        <constraints>
+                            <constraint firstItem="1O1-Eo-wqf" firstAttribute="leading" secondItem="vYQ-vX-ZxQ" secondAttribute="leading" id="Grz-r1-zmN"/>
+                            <constraint firstItem="1O1-Eo-wqf" firstAttribute="centerY" secondItem="vYQ-vX-ZxQ" secondAttribute="centerY" id="OX3-yg-ZVc"/>
+                            <constraint firstItem="Zdi-Io-AaC" firstAttribute="centerY" secondItem="vYQ-vX-ZxQ" secondAttribute="centerY" id="ZdP-Pj-G3f"/>
+                            <constraint firstItem="Zdi-Io-AaC" firstAttribute="leading" secondItem="1O1-Eo-wqf" secondAttribute="trailing" constant="14" id="eVY-iG-RPf"/>
+                            <constraint firstAttribute="trailing" secondItem="Zdi-Io-AaC" secondAttribute="trailing" constant="14" id="j5q-fS-xcW"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="GgU-uD-f9j" firstAttribute="top" secondItem="gpb-vD-0cL" secondAttribute="top" id="1V3-7t-MrR"/>
                     <constraint firstAttribute="bottom" secondItem="GgU-uD-f9j" secondAttribute="bottom" id="77E-qo-XoF"/>
                     <constraint firstAttribute="trailing" secondItem="GgU-uD-f9j" secondAttribute="trailing" id="Gwh-Pb-LXZ"/>
+                    <constraint firstItem="vYQ-vX-ZxQ" firstAttribute="top" secondItem="gpb-vD-0cL" secondAttribute="top" id="N3p-uF-Je1"/>
+                    <constraint firstAttribute="bottom" secondItem="vYQ-vX-ZxQ" secondAttribute="bottom" id="PCe-eF-4SI"/>
+                    <constraint firstAttribute="trailing" secondItem="vYQ-vX-ZxQ" secondAttribute="trailing" id="XbR-vM-sJI"/>
                     <constraint firstItem="GgU-uD-f9j" firstAttribute="leading" secondItem="gpb-vD-0cL" secondAttribute="leading" id="YYM-QM-2Ys"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="collectionView" destination="GgU-uD-f9j" id="lqs-4m-UtL"/>
+                <outlet property="rightActionButton" destination="Zdi-Io-AaC" id="Ynt-mw-Qjs"/>
+                <outlet property="rightActionContainerView" destination="vYQ-vX-ZxQ" id="66q-T9-RKX"/>
             </connections>
             <point key="canvasLocation" x="-389" y="-16"/>
         </tableViewCell>
     </objects>
     <resources>
+        <image name="ic_custom_add.png" width="30" height="30"/>
+        <namedColor name="buttonBgColorTertiary">
+            <color red="0.88627450980392153" green="0.85098039215686272" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

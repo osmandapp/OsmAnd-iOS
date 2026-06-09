@@ -1946,6 +1946,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)closeSearch
+{
+    [self hideToolbar];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - OAAddressTableDelegate
 
 - (void) reloadAddressData
@@ -1995,7 +2001,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-        [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate preferredZoom:item.preferredZoom];
+        [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ?: @"" transliterate:transliterate preferredZoom:item.preferredZoom];
     }
     else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)
     {

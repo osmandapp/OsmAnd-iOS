@@ -7,6 +7,7 @@
 
 // Helpers
 #import "OAAppSettings.h"
+#import "OAColoringType.h"
 #import "OAColors.h"
 #import "OARouteStatistics.h"
 #import "OAUtilities.h"
@@ -104,6 +105,11 @@
 #import "OAOpeningHoursParser.h"
 #import "OAMapSource.h"
 #import "OAPoiUIFilterDataProviderWrapper.h"
+#import "OAOsmPoint.h"
+#import "OAOsmEditsDBHelper.h"
+#import "OAOsmBugsDBHelper.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OAOsmNotePoint.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -208,11 +214,13 @@
 #import "OAHelpViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
 #import "OAFavoriteListViewController.h"
-#import "OAOsmEditsListViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
+#import "OAOsmNoteViewController.h"
+#import "OAOsmEditingViewController.h"
+#import "OAOsmUploadPOIViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

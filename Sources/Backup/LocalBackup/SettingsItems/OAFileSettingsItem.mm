@@ -383,6 +383,8 @@
                 NSString *paletteId = [[destFilePath lastPathComponent] stringByDeletingPathExtension];
                 if (paletteId.length > 0)
                     [OsmAndApp.instance.paletteRepository invalidatePaletteId:paletteId];
+
+                [[GradientPaletteHelper shared] refreshImportedPaletteWithFileName:destFilePath.lastPathComponent];
             }
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths(true);
             break;

@@ -3426,7 +3426,7 @@
 		FAD8489A2CAD6F950018AF92 /* WptPtExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD848992CAD6F950018AF92 /* WptPtExtension.swift */; };
 		FAD848A02CAE9FDD0018AF92 /* GpxFileExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */; };
 		FADD74092FC0433400004A51 /* RenderedObjectAmenityProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD74082FC0433400004A51 /* RenderedObjectAmenityProvider.swift */; };
-		FADEC0DE000000000000A001 /* OATouchIndicatorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADEC0DE000000000000A002 /* OATouchIndicatorController.swift */; };
+		FADEC0DE000000000000A001 /* TouchIndicatorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADEC0DE000000000000A002 /* TouchIndicatorController.swift */; };
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
 		FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */; };
@@ -8209,7 +8209,7 @@
 		FAD848992CAD6F950018AF92 /* WptPtExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WptPtExtension.swift; sourceTree = "<group>"; };
 		FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxFileExtension.swift; sourceTree = "<group>"; };
 		FADD74082FC0433400004A51 /* RenderedObjectAmenityProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderedObjectAmenityProvider.swift; sourceTree = "<group>"; };
-		FADEC0DE000000000000A002 /* OATouchIndicatorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATouchIndicatorController.swift; sourceTree = "<group>"; };
+		FADEC0DE000000000000A002 /* TouchIndicatorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchIndicatorController.swift; sourceTree = "<group>"; };
 		FADFF8872C885AFD00F68E4F /* OsmAndSharedWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OsmAndSharedWrapper.h; sourceTree = "<group>"; };
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
@@ -8468,7 +8468,7 @@
 			children = (
 				FA1FC6BE2EA1285E00A60962 /* BLEScannerViewController.swift */,
 				FA9F416E2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift */,
-				FADEC0DE000000000000A002 /* OATouchIndicatorController.swift */,
+				FADEC0DE000000000000A002 /* TouchIndicatorController.swift */,
 				C5AD0F152EAA60E3006FB675 /* ButtonGridVisualizationSettingsViewController.swift */,
 				32119B4E2847D7F7005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.h */,
 				32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm */,
@@ -18091,7 +18091,7 @@
 				DA5A82F326C563A800F274C7 /* OATargetPointViewCell.mm in Sources */,
 				DA5A845226C563A900F274C7 /* OAMapLayers.mm in Sources */,
 				FA9F416F2E6F10B7001A49E9 /* ImageCacheInfoViewController.swift in Sources */,
-				FADEC0DE000000000000A001 /* OATouchIndicatorController.swift in Sources */,
+				FADEC0DE000000000000A001 /* TouchIndicatorController.swift in Sources */,
 				C5983E1C2EFD6B75003F2639 /* WikipediaLanguagesViewController.swift in Sources */,
 				DA4ABEEB2876DA5D00B996EF /* OASettingsCategoryItems.m in Sources */,
 				FA29F6152F96117E00257B88 /* GeocoderService.swift in Sources */,

@@ -49,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible;
 + (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned;
++ (void)setFavoriteGroupsVisible:(NSArray<NSString *> *)groupNames visible:(BOOL)visible;
++ (void)setFavoriteGroupsPinned:(NSArray<NSString *> *)groupNames pinned:(BOOL)pinned;
 + (BOOL)addFavoriteGroup:(NSString *)name
          parentGroupName:(nullable NSString *)parentGroupName
                 iconName:(nullable NSString *)iconName
@@ -58,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName;
 + (void)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName;
 + (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems;
++ (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex;
 
 + (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName;
 + (NSArray<NSString *> *)favoriteGroupsToMoveForGroupName:(NSString *)groupName;
@@ -71,8 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)openFavoritePointWithIdentifier:(NSString *)identifier;
 + (void)addFavoriteGroupToMapMarkers:(NSString *)groupName;
++ (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems;
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName;
 + (void)addFavoriteGroupToNavigation:(NSString *)groupName;
++ (void)addFavoriteItemsToTrack:(NSArray *)favoriteItems gpxFileName:(nullable NSString *)gpxFileName;
++ (void)addFavoriteItemsToNavigation:(NSArray *)favoriteItems;
 
 @end
 

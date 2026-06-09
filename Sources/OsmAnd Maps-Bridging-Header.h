@@ -67,6 +67,7 @@
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoritesSwiftHelper.h"
 #import "OAOpenAddTrackViewController.h"
+#import "OAEditColorViewController.h"
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentAdapter.h"
 #import "OATravelLocalDataDbHelper.h"

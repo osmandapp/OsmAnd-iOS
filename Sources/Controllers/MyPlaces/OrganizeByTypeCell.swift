@@ -75,7 +75,11 @@ final class OrganizeByTypeCell: UITableViewCell {
     }
 
     func configure(title: String?, icon: UIImage?, isSelected: Bool, isLocked: Bool) {
-        separatorInset = UIEdgeInsets(top: 0, left: Self.leadingInset + Self.checkmarkSize + Self.gap + Self.iconSize + Self.gap, bottom: 0, right: Self.leadingInset)
+        let leadingInset = Self.leadingInset
+        let checkmarkSize = Self.checkmarkSize
+        let iconSize = Self.iconSize
+        let gap = Self.gap
+        separatorInset = UIEdgeInsets(top: 0, left: leadingInset + checkmarkSize + gap + iconSize + gap, bottom: 0, right: leadingInset)
         titleLabel.text = title
         titleLabel.textColor = .textColorPrimary
 

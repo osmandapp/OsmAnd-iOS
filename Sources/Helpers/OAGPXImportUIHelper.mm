@@ -287,20 +287,35 @@ static UIViewController *parentController;
         NSString *fileName = [_importUrl.path lastPathComponent];
         // 123/_2024-07-30_.gpx
         NSString *importDestFilepath = [_importGpxPath stringByAppendingPathComponent:fileName];
-        if ([[OAGPXDatabase sharedDb] containsGPXItem:importDestFilepath])
-        {
-            if (showAlerts)
-            {
-                [self showImportGpxAlert:OALocalizedString(@"import_tracks")
-                                 message:OALocalizedString(@"gpx_import_already_exists")
-                       cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
-                       otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]
-                             openGpxView:openGpxView];
-            }
+        
+        NSInteger tracksCount = _doc.tracks.count;
+        if (tracksCount > 1 && tracksCount < 50) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                ImportTracksViewController *vc = [[ImportTracksViewController alloc]initWithGpxFile:_doc fileName:fileName selectedFolderPath:importDestFilepath importURL:_importUrl openGpxView:openGpxView completion:nil];
+                OARootViewController *root = [OARootViewController instance];
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [root.navigationController presentViewController:nav animated:YES completion:nil];
+            });
+            return;
         }
         else
         {
-            item = [self doImport];
+            if ([[OAGPXDatabase sharedDb] containsGPXItem:importDestFilepath])
+            {
+                if (showAlerts)
+                {
+                    [self showImportGpxAlert:OALocalizedString(@"import_tracks")
+                                     message:OALocalizedString(@"gpx_import_already_exists")
+                           cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
+                           otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]
+                                 openGpxView:openGpxView];
+                }
+            }
+            else
+            {
+                item = [self doImport];
+            }
         }
     }
     else

@@ -4563,3 +4563,6 @@
 "missing_maps_header" = "Missing or outdated maps";
 "missing_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "shared_string_allow" = "Allow";
+
+"import_tracks_cancel_title" = "Cancel import?";
+"import_tracks_cancel_descr" = "If you close now, your track selections will not be imported.";

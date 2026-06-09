@@ -6,6 +6,7 @@
 #pragma clang diagnostic ignored "-Wnullability-completeness"
 
 // Helpers
+#import "OAAppVersion.h"
 #import "OAAppSettings.h"
 #import "OAColoringType.h"
 #import "OAColors.h"

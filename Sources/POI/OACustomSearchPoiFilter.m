@@ -32,6 +32,11 @@
     return nil; // override
 }
 
+- (OASearchSortType) getDefaultSearchType
+{
+    return OASearchSortTypeUnknown; // override
+}
+
 -(instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction
 {
     return [super initWithAcceptFunc:aFunction emptyFunction:eFunction getTypesFunction:tFunction];

@@ -89,6 +89,8 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (BOOL) isEmptyQueryAllowed;
 - (BOOL) isSortByName;
 - (BOOL) isInAddressSearch;
+- (BOOL) isAcceptPrivate;
+- (void) setAcceptPrivate:(BOOL)acceptPrivate;
 
 - (OANameStringMatcher *) getMainUnknownNameStringMatcher;
 - (OANameStringMatcher *) getFirstUnknownNameStringMatcher;
@@ -123,6 +125,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 + (NSMutableArray<NSString *> *) stripBracesArray:(NSMutableArray<NSString *> *)names;
 + (NSString *) ALLDELIMITERS;
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
+- (NSString *) selectMainUnknownWordToSearchQt:(QStringList)searchWords;
 - (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel;
 - (NSNumber *) getRegionPriority:(NSString *) resId;
 

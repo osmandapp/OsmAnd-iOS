@@ -1063,6 +1063,26 @@ static char kMapSourceUpdateQueueKey;
     return activeGestures == 1;
 }
 
+- (BOOL)isGestureRecognizerActive:(UIGestureRecognizer *)recognizer
+{
+    return recognizer.state == UIGestureRecognizerStateBegan
+        || recognizer.state == UIGestureRecognizerStateChanged
+        || recognizer.state == UIGestureRecognizerStateEnded;
+}
+
+- (BOOL)isMapGestureInProgress
+{
+    return _movingByGesture
+        || _zoomingByGesture
+        || _rotatingByGesture
+        || _zoomingByTapGesture
+        || [self isGestureRecognizerActive:_grMove]
+        || [self isGestureRecognizerActive:_grZoom]
+        || [self isGestureRecognizerActive:_grRotate]
+        || [self isGestureRecognizerActive:_grZoomDoubleTap]
+        || [self isGestureRecognizerActive:_grElevation];
+}
+
 - (void) storeTargetPosition:(UIGestureRecognizer *)recognizer scheduleRestore:(BOOL)scheduleRestore
 {
     if (![self isTargetChanged])
@@ -1733,7 +1753,7 @@ static char kMapSourceUpdateQueueKey;
     
     BOOL accepted = longPress && recognizer.state == UIGestureRecognizerStateBegan;
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
-    if (accepted)
+    if (accepted && ![self isMapGestureInProgress])
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;

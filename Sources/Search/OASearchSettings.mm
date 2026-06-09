@@ -26,6 +26,7 @@
 @property (nonatomic) BOOL pEmptyQueryAllowed;
 @property (nonatomic) BOOL pSortByName;
 @property (nonatomic) BOOL pAddressSearch;
+@property (nonatomic) OASearchSortType pSortType;
 
 @end
 
@@ -66,6 +67,7 @@
             self.pEmptyQueryAllowed = s.pEmptyQueryAllowed;
             self.pSortByName = s.pSortByName;
             self.pAddressSearch = s.pAddressSearch;
+            self.pSortType = [s getSortType];
         }
     }
     return self;
@@ -273,6 +275,17 @@
         s.pSearchTypes = searchTypes;
     }
     return s;
+}
+
+- (OASearchSortType) getSortType
+{
+    return self.pSortType;
+}
+
+- (OASearchSettings *) setSortType:(OASearchSortType)sortType
+{
+    self.pSortType = sortType;
+    return self;
 }
 
 @end

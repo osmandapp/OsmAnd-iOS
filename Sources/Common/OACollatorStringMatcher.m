@@ -9,6 +9,7 @@
 #import "OACollatorStringMatcher.h"
 #import "OAUtilities.h"
 #import "OAArabicNormalizer.h"
+#import "OASearchAlgorithms.h"
 
 static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch | NSDiacriticInsensitiveSearch;
 static NSCharacterSet * _APOSTROPHES;
@@ -65,7 +66,7 @@ static NSCharacterSet * _APOSTROPHES;
 {
     if (fullName != nil && [fullName rangeOfString:@"-"].location != NSNotFound)
     {
-        NSString *stringWithoutHyphen = [fullName stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        NSString *stringWithoutHyphen = [self replaceHyphen:fullName replacement:@("")];
         if ([self.class cmatches:stringWithoutHyphen part:part mode:mode])
         {
             return YES;
@@ -158,7 +159,9 @@ static NSCharacterSet * _APOSTROPHES;
     // FUTURE: This is not effective code, it runs on each comparision
     // It would be more efficient to normalize all strings in file and normalize search string before collator
     theStart = [self alignChars:theStart];
+    theStart = [self replaceHyphen:theStart replacement:@(" ")];
     NSString *searchIn = [self lowercaseAndAlignChars:fullTextP];
+    searchIn = [self replaceHyphen:searchIn replacement:@(" ")];
     NSInteger searchInLength = searchIn.length;
     
     NSInteger startLength = theStart.length;
@@ -191,7 +194,7 @@ static NSCharacterSet * _APOSTROPHES;
     {
         for (int i = 1; i <= searchInLength - startLength; i++)
         {
-            if ([self.class isSpace:[searchIn characterAtIndex:i - 1]] && ![self.class isSpace:[searchIn characterAtIndex:i]])
+            if ([self isWordStart:searchIn index:i part:theStart])
             {
                 if ([[searchIn substringWithRange:NSMakeRange(i, startLength)] compare:theStart options:comparisonOptions] == NSOrderedSame)
                 {
@@ -204,7 +207,7 @@ static NSCharacterSet * _APOSTROPHES;
                     }
                     else
                     {
-                        return true;
+                        return YES;
                     }
                 }
             }
@@ -221,6 +224,23 @@ static NSCharacterSet * _APOSTROPHES;
     return ![[NSCharacterSet letterCharacterSet] characterIsMember:c] && ![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:c];
 }
 
++ (BOOL)isWordStart:(NSString *)searchIn index:(int)index part:(NSString *)part
+{
+    if (![self isSpace:[searchIn characterAtIndex:index - 1]])
+    {
+        return NO;
+    }
+
+    unichar current = [searchIn characterAtIndex:index];
+    if (![self isSpace:current])
+    {
+        return YES;
+    }
+    return (current == '-' && part.length > 1 &&
+            [part characterAtIndex:0] == '-' &&
+            [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[part characterAtIndex:1]]);
+}
+
 + (NSString *) lowercaseAndAlignChars:(NSString *)fullText
 {
     fullText = fullText.lowerCase;
@@ -233,21 +253,14 @@ static NSCharacterSet * _APOSTROPHES;
     if ([OAArabicNormalizer isSpecialArabic:fullText]) {
         fullText = [OAArabicNormalizer normalize:fullText] ?: fullText;
     }
-    fullText = [self removeApostrophes:fullText];
-    int i;
-    while( (i = [fullText indexOf:@"ß"] ) != -1 ) {
-        fullText = [NSString stringWithFormat:@"%@ss%@", [fullText substringToIndex:i], [fullText substringFromIndex:i+1]];
-    }
+    fullText = [OASearchAlgorithms removeApostrophes:fullText];
+    fullText = [OASearchAlgorithms replaceGermanSS:fullText];
     return fullText;
 }
 
-+ (NSString *) removeApostrophes:(NSString *)input
++ (NSString *) replaceHyphen:(NSString *)text replacement:(NSString *)replacement
 {
-    if (!input)
-    {
-        return nil;
-    }
-    return [[input componentsSeparatedByCharactersInSet:_APOSTROPHES] componentsJoinedByString:@""];
+    return [text stringByReplacingOccurrencesOfString:@"-" withString:replacement];
 }
 
 @end

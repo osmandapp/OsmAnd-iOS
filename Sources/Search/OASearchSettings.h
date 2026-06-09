@@ -14,6 +14,14 @@
 
 @class OAObjectType;
 
+typedef NS_ENUM(NSInteger, OASearchSortType)
+{
+    OASearchSortTypeUnknown = -1,
+    OASearchSortTypeByRelevance = 0,
+    OASearchSortTypeOnlyByDistance = 1,
+    OASearchSortTypeIgnoreDistance = 2
+};
+
 @interface OASearchSettings : NSObject
 
 - (instancetype)initWithSettings:(OASearchSettings *)s;
@@ -49,5 +57,7 @@
 - (void) setRegions:(OAWorldRegion *)regions;
 
 + (OASearchSettings *) parseJSON:(NSDictionary *)json;
+- (OASearchSortType) getSortType;
+- (OASearchSettings *) setSortType:(OASearchSortType)sortType;
 
 @end

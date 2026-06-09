@@ -47,27 +47,27 @@ final class OrganizeByTypeCell: UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
 
-        let lead = Self.leadingInset
-        let cSize = Self.checkmarkSize
-        let iSize = Self.iconSize
+        let leadingInset = Self.leadingInset
+        let checkmarkSize = Self.checkmarkSize
+        let iconSize = Self.iconSize
         let gap = Self.gap
-        let vPad = Self.verticalPadding
+        let verticalPadding = Self.verticalPadding
 
         NSLayoutConstraint.activate([
-            checkmarkView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: lead),
+            checkmarkView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: leadingInset),
             checkmarkView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            checkmarkView.widthAnchor.constraint(equalToConstant: cSize),
-            checkmarkView.heightAnchor.constraint(equalToConstant: cSize),
+            checkmarkView.widthAnchor.constraint(equalToConstant: checkmarkSize),
+            checkmarkView.heightAnchor.constraint(equalToConstant: checkmarkSize),
 
             iconView.leadingAnchor.constraint(equalTo: checkmarkView.trailingAnchor, constant: gap),
             iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: iSize),
-            iconView.heightAnchor.constraint(equalToConstant: iSize),
+            iconView.widthAnchor.constraint(equalToConstant: iconSize),
+            iconView.heightAnchor.constraint(equalToConstant: iconSize),
 
             titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: gap),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -lead),
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: vPad),
-            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -vPad),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -leadingInset),
+            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: verticalPadding),
+            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -verticalPadding),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minHeight)

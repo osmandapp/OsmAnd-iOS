@@ -4580,3 +4580,4 @@
 "missing_maps_header" = "Missing or outdated maps";
 "missing_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "shared_string_allow" = "Allow";
+"shared_string_url" = "URL";

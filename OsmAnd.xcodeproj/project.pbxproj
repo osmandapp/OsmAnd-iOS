@@ -1633,6 +1633,8 @@
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
+		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
+		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
 		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
 		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
@@ -3390,6 +3392,7 @@
 		FAAAADDC2F3DD27E008B8744 /* IconMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAADDB2F3DD27E008B8744 /* IconMetrics.swift */; };
 		FAAAADDE2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAADDD2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift */; };
 		FAACFF1E2FC84AD9002D765A /* CarPlayDashboardAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACFF1D2FC84AD9002D765A /* CarPlayDashboardAction.swift */; };
+		FAACFF222FC9B42B002D765A /* MultipleValuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACFF212FC9B42B002D765A /* MultipleValuesViewController.swift */; };
 		FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */; };
 		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAB302A92DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */; };
@@ -5571,6 +5574,7 @@
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
+		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
 		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
 		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
@@ -8167,6 +8171,7 @@
 		FAAAADDB2F3DD27E008B8744 /* IconMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconMetrics.swift; sourceTree = "<group>"; };
 		FAAAADDD2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMCircularShadowProcessor.swift; sourceTree = "<group>"; };
 		FAACFF1D2FC84AD9002D765A /* CarPlayDashboardAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayDashboardAction.swift; sourceTree = "<group>"; };
+		FAACFF212FC9B42B002D765A /* MultipleValuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleValuesViewController.swift; sourceTree = "<group>"; };
 		FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupMonitor.swift; sourceTree = "<group>"; };
 		FAAD725E2E1BEF5F000807A0 /* StartupLogging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartupLogging.h; sourceTree = "<group>"; };
 		FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
@@ -12717,6 +12722,7 @@
 		DA5A7DE626C563A300F274C7 /* TargetMenu */ = {
 			isa = PBXGroup;
 			children = (
+				FAACFF212FC9B42B002D765A /* MultipleValuesViewController.swift */,
 				FA4C57042D491EB900438A5C /* CardsViewController.swift */,
 				FAE3A5772D47BCA700E97159 /* OACollapsableView.h */,
 				FAE3A5782D47BCA700E97159 /* OACollapsableView.m */,
@@ -14081,6 +14087,7 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
 				FAB6243D2E0953580048965E /* Managers */,
 				DA80DAA8251E0C0C008E6267 /* Router */,
@@ -14646,6 +14653,14 @@
 				FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */,
 			);
 			path = BluetoothDisableView;
+			sourceTree = "<group>";
+		};
+		FA7EA4082FD2ACF700509B01 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		FA82B9172E74197A00A250F1 /* ImageLoading */ = {
@@ -17964,6 +17979,7 @@
 				DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */,
 				DA5A854E26C563A900F274C7 /* OAGPXUIHelper.mm in Sources */,
 				DA5A83B626C563A800F274C7 /* OAActionAddCategoryViewController.mm in Sources */,
+				FAACFF222FC9B42B002D765A /* MultipleValuesViewController.swift in Sources */,
 				8AE943B327A28BE900961319 /* OAWeatherRasterLayer.mm in Sources */,
 				FA1D6DAE2DCE04710080E374 /* VehicleMetricsPlugin.swift in Sources */,
 				DA5A813B26C563A700F274C7 /* OAOsmMapUtils.mm in Sources */,
@@ -18673,9 +18689,11 @@
 			files = (
 				D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */,
 				D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */,
+				D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */,
 				FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
+				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

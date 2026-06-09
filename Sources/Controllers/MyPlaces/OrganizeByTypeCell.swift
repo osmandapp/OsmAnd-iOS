@@ -33,10 +33,12 @@ final class OrganizeByTypeCell: UITableViewCell {
     }
 
     private func setupLayout() {
+        checkmarkView.isAccessibilityElement = false
         checkmarkView.contentMode = .scaleAspectFit
         checkmarkView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(checkmarkView)
 
+        iconView.isAccessibilityElement = false
         iconView.contentMode = .scaleAspectFit
         iconView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(iconView)
@@ -92,6 +94,9 @@ final class OrganizeByTypeCell: UITableViewCell {
         accessoryType = .none
         accessoryView = isLocked ? proBadgeButton : nil
         selectionStyle = .default
+
+        accessibilityTraits = isSelected ? [.button, .selected] : .button
+        proBadgeButton.accessibilityLabel = localizedString("shared_string_unlock")
     }
 
     @objc private func proBadgeButtonPressed() {

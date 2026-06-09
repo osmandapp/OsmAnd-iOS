@@ -150,6 +150,8 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         cell.slider.minimumValue = minVal
         cell.slider.maximumValue = maxVal
         cell.slider.value = value
+        cell.slider.accessibilityLabel = item.title
+        cell.slider.accessibilityValue = "\(Int(value)) \(unitSymbol)"
         cell.slider.tintColor = .systemBlue
         cell.slider.maximumTrackTintColor = .sliderLineBg
         cell.slider.removeTarget(self, action: nil, for: .valueChanged)
@@ -201,7 +203,9 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         sender.value = rounded
         currentDisplayValue = rounded
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: Section.main.rawValue)) as? TopBottomValuesSliderTableViewCell {
-            cell.topRightLabel.text = "\(Int(rounded)) \(displayUnits.getSymbol())"
+            let formattedValue = "\(Int(rounded)) \(displayUnits.getSymbol())"
+            cell.topRightLabel.text = formattedValue
+            cell.slider.accessibilityValue = formattedValue
         }
         schedulePreviewUpdate()
     }

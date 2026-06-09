@@ -62,6 +62,7 @@ final class OrganizeTracksByViewController: OABaseNavbarViewController {
         tableView.estimatedRowHeight = OrganizeByTypeCell.minHeight
         if let button = navigationItem.leftBarButtonItem?.customView as? UIButton {
             button.tintColor = .textColorPrimary
+            button.accessibilityLabel = localizedString("shared_string_close")
         }
     }
 

@@ -447,10 +447,11 @@
     _osmAndLiveUpdatedObservable = [[OAObservable alloc] init];
     LogStartup(@"observables initialized");
 
+    BOOL isTestInit = NSClassFromString(@"SearchUICoreTest") != nil;
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                         _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
+                                                         _worldMiniBasemapFilename != nil && !isTestInit ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_hiddenMapsPath),
                                                          QString::fromNSString(_cachePath),
@@ -1161,9 +1162,7 @@
         _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                              _documentsDir.absolutePath(),
                                                              QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                             _worldMiniBasemapFilename != nil
-                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                             : QString(),
+                                                             QString(),
                                                              QString::fromNSString(NSTemporaryDirectory()),
                                                              QString::fromNSString(_hiddenMapsPath),
                                                              QString::fromNSString(_cachePath),

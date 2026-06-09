@@ -93,6 +93,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (NSString *) getNameTokenOpen;
 - (NSObject *) getIconResource;
 - (OAResultMatcher<OAPOI *> *)wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (OASearchSortType) getDefaultSearchType;
 - (NSString *) getName;
 - (NSString *) getGeneratedName:(int)chars;
 - (NSSet<NSString *> *) getAcceptedSubtypes:(OAPOICategory *)type;

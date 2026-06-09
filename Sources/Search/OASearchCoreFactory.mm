@@ -62,6 +62,7 @@
 #include <OsmAndCore/Search/CommonWords.h>
 #include <GeographicLib/GeoCoords.hpp>
 #include <OsmAndCore/CollatorStringMatcher.h>
+#include <OsmAndCore/SearchAlgorithms.h>
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
 
@@ -131,6 +132,7 @@
 @interface OASearchCoreFactory ()
 
 + (CLLocation *) getLocation:(const OsmAnd::PointI)position31;
++ (CLLocation *) getLocation24Zoom:(const OsmAnd::PointI)position31;
 + (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno;
 + (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names nativeName:(const QString&)nativeName;
 + (BOOL) isLastWordCityGroup:(OASearchPhrase *)p;
@@ -317,63 +319,13 @@
     return NO;
 }
 
-- (NSSet<NSString *> *)splitAddressSearchNames:(NSString *)name
-{
-    NSInteger prev = -1;
-    NSMutableSet<NSString *> *namesToAdd = [NSMutableSet set];
-    NSUInteger length = [name length];
-
-    for (NSUInteger i = 0; i <= length; i++)
-    {
-        unichar currentChar = (i < length) ? [name characterAtIndex:i] : 0;
-        BOOL isHyphenNearNumber = NO;
-        if (i != length && currentChar == '-')
-        {
-            BOOL nextIsDigit = (i + 1 < length) && isdigit([name characterAtIndex:i + 1]);
-            BOOL prevIsDigit = (i > 0) && isdigit([name characterAtIndex:i - 1]);
-            isHyphenNearNumber = nextIsDigit || prevIsDigit;
-        }
-        BOOL isDelimiter = NO;
-        
-        if (i == length)
-        {
-            isDelimiter = YES;
-        }
-        else
-        {
-            if (!isalpha(currentChar) && !isdigit(currentChar) && currentChar != '\'' && !isHyphenNearNumber)
-            {
-                isDelimiter = YES;
-            }
-        }
-        
-        if (isDelimiter)
-        {
-            if (prev != -1)
-            {
-                NSRange substringRange = NSMakeRange(prev, i - prev);
-                NSString *substr = [name substringWithRange:substringRange];
-                [namesToAdd addObject:[substr lowercaseString]];
-                prev = -1;
-            }
-        }
-        else
-        {
-            if (prev == -1)
-            {
-                prev = i;
-            }
-        }
-    }
-    return namesToAdd;
-}
-
 @end
 
 @interface OATownCitiesCache ()
 {
 @public
     NSMutableSet<NSString *> *_townCitiesInit;
+    QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
     std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
     std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _boundariesQR;
 }
@@ -423,6 +375,16 @@
     _boundariesQR->query(area, result);
 }
 
+- (void) saveStreetGroupResourceId:(std::shared_ptr<const OsmAnd::StreetGroup>)streetGroup resId:(QString)resId
+{
+    _streetGroupResourceIds.insert(streetGroup, resId);
+}
+
+- (QString) getResourceIdByStreetGroup:(std::shared_ptr<const OsmAnd::StreetGroup>)streetGroup
+{
+    return _streetGroupResourceIds.value(streetGroup);
+}
+
 @end
 
 
@@ -438,7 +400,6 @@
     int MAX_ADRESS_RESULTS_BY_REGIONS;
 
     OATownCitiesCache *_townCitiesCache;
-    QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
     OASearchStreetByCityAPI *_cityApi;
     OASearchBuildingAndIntersectionsByStreetAPI *_streetsApi;
     BOOL _longDistance;
@@ -558,7 +519,7 @@
             for (const auto& c : l)
             {
                 auto city = std::static_pointer_cast<const OsmAnd::StreetGroup>(c);
-                _streetGroupResourceIds.insert(city, rId);
+                [_townCitiesCache saveStreetGroupResourceId:city resId:rId];
                 OsmAnd::LatLon cl = OsmAnd::Utilities::convert31ToLatLon(city->position31);
                 int y = OsmAnd::Utilities::get31TileNumberY(cl.latitude);
                 int x = OsmAnd::Utilities::get31TileNumberX(cl.longitude);
@@ -576,7 +537,7 @@
             for (const auto& c : l2)
             {
                 auto city = std::static_pointer_cast<const OsmAnd::StreetGroup>(c);
-                _streetGroupResourceIds.insert(city, rId);
+                [_townCitiesCache saveStreetGroupResourceId:city resId:rId];
                 OsmAnd::AreaI qr(city->position31.y, city->position31.x, city->position31.y, city->position31.x);
                 if (city->bbox31.size() >= 4)
                 {
@@ -596,13 +557,14 @@
         int limit = 0;
         for (const auto& c : cacheResArray)
         {
+            QString resourceId = [_townCitiesCache getResourceIdByStreetGroup:c];
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.object = [[OACity alloc] initWithCity:c];
-            res.resourceId = _streetGroupResourceIds.value(c).toNSString();
+            res.resourceId = resourceId.toNSString();
             res.localeName = c->getName(QString::fromNSString([[phrase getSettings] getLang]), [[phrase getSettings] isTransliterate]).toNSString();
             res.otherNames = [OANativeUtilities QListOfStringsToNSArray:c->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
 
-            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
+            const auto& r = app.resourcesManager->getLocalResource(resourceId);
             if (r)
             {
                 const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
@@ -630,21 +592,23 @@
     }
 }
 
+- (BOOL) hasNonNumericLeftUnknownSearchWord:(OASearchResult *)res
+{
+    for (NSString * leftUnknownSearchWord in [res filterUnknownSearchWord:nil])
+    {
+        BOOL isNumber2Letters = OsmAnd::CommonWords::isNumber2Letters(QString::fromNSString(leftUnknownSearchWord));
+        if (!isNumber2Letters)
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (void) searchByName:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:EOAObjectTypePostcode exclusive:YES])
     {
-        NSString *wordToSearch = [phrase getUnknownWordToSearch];
-
-        if (wordToSearch.length == 0)
-            return;
-        
-        NSSet<NSString *> * wordToSearchSplit = [self splitAddressSearchNames:wordToSearch];
-        if (wordToSearchSplit.count > 1)
-        {
-            wordToSearch = [phrase selectMainUnknownWordToSearch:[NSMutableArray arrayWithArray:[wordToSearchSplit allObjects]]];
-        }
-
         OsmAndAppInstance app = [OsmAndApp instance];
 
         QString lang = QString::fromNSString([[phrase getSettings] getLang]);
@@ -682,7 +646,14 @@
                                                       }));
 
         const std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>(new OsmAnd::AddressesByNameSearch::Criteria);
-        
+
+        NSString *wordToSearch = [phrase getUnknownWordToSearch];
+        QString qWordToSearch = QString::fromNSString(wordToSearch);
+        QStringList wordToSearchSplit = OsmAnd::SearchAlgorithms::splitAndNormalize(qWordToSearch);
+        if (wordToSearchSplit.size() > 1)
+        {
+            wordToSearch = [phrase selectMainUnknownWordToSearch:[OANativeUtilities QListOfStringsToNSArray:wordToSearchSplit]];
+        }
         searchCriteria->name = QString::fromNSString([wordToSearch lowerCase]);
         searchCriteria->includeStreets = true;
         searchCriteria->matcherMode = [phrase isMainUnknownSearchWordComplete] ? OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE : OsmAnd::StringMatcherMode::CHECK_STARTS_FROM_SPACE;
@@ -690,6 +661,7 @@
         OASearchWord * lastWord = [phrase getLastSelectedWord];
         if (locSpecified)
         {
+            QuadRect * rect;
             if (lastWord != nil && lastWord.result != nil && [lastWord.result.object isKindOfClass:OACity.class])
             {
                 OACity * c = (OACity *) lastWord.result.object;
@@ -699,17 +671,23 @@
                     int w = (bb[2] - bb[0]) / 3, h = (bb[3] - bb[1]) / 3; // enlarge for 1234 Golden Pond Road Woodhull
                     int left = bb[0] - w,  top = bb[1] - h, right = bb[2] + w, bottom = bb[3] + h;
                     searchCriteria->bbox31 = OsmAnd::AreaI(top, left, bottom, right);
+                    rect = [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
                 }
                 else
                 {
                     NSString * cityType = [OACity getTypeStr:c.type];
-                    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([OACity getRadius:cityType] * 3, c.city->position31);
+                    CGFloat radius = [OACity getRadius:cityType] * 3;
+                    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, c.city->position31);
+                    rect = [OASearchPhrase calculateBbox:@(radius) location:[[CLLocation alloc] initWithLatitude:c.latitude longitude:c.longitude]];
                 }
             }
             else
             {
-                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:maxRadius], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+                int radius = [phrase getRadiusSearch:maxRadius];
+                searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+                rect = [OASearchPhrase calculateBbox:@(radius) location:loc];
             }
+            offlineIndexes = [phrase getOfflineIndexesWithRect:rect dataType:P_DATA_TYPE_ADDRESS];
         }
 
         int lastRegionPriority = 0;
@@ -766,6 +744,7 @@
                                           sr.objectType = EOAObjectTypeStreet;
                                           sr.localeRelatedObjectName = street->streetGroup->getName(lang, transliterate).toNSString();
                                           sr.relatedObject = [[OACity alloc] initWithCity:street->streetGroup];
+                                          sr.location = [OASearchCoreFactory getLocation24Zoom:street->position31];
                                       }
                                       else if (address->addressType == OsmAnd::AddressType::StreetGroup && ![OASearchCoreFactory isLastWordCityGroup:phrase])
                                       {
@@ -879,7 +858,7 @@
                         {
                             newParentSearchResult = cityResult;
                         }
-                        else
+                        else if ([self hasNonNumericLeftUnknownSearchWord:res])
                         {
                             QList<std::shared_ptr<const OsmAnd::StreetGroup>> cacheResArray;
                             QuadRect * bbox = [OASearchPhrase calculateBbox:@(1000) location:res.location];
@@ -1249,13 +1228,7 @@
             {
                 [order addObject:[self getStandardFilterId:p]];
             }
-            OACustomSearchPoiFilter *nearestPois = [[OACustomSearchPoiFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
-                return YES;
-            } emptyFunction:^BOOL{
-                return NO;
-            } getTypesFunction:^NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *{
-                return nil;
-            }];
+            OAPOIUIFilter *nearestPois = [[OAPOIUIFilter alloc] initWithName:@"Neareset POIs" filterId:@"nearest_pois" acceptedTypes:nil];
             [self setActivePoiFiltersByOrder:order];
             [self addCustomFilter:nearestPois priority:100];
         }
@@ -1961,7 +1934,12 @@
         [searchedPois addObject:poiID];
         if ([*poi isClosed])
             return NO;
-        
+
+        if (![phrase isAcceptPrivate] && [(*poi) isPrivateAccess])
+        {
+            return NO;
+        }
+
         if (poiAdditionals.count > 0)
         {
             BOOL found = NO;
@@ -2164,7 +2142,7 @@
             if (r)
             {
                 const auto& dataInterface = obfsCollection->obtainDataInterface({r});
-                bool res = dataInterface->preloadBuildings({std::const_pointer_cast<OsmAnd::Street>(s)}, ctrl);
+                bool res = dataInterface->preloadBuildingsAndIntersections(std::const_pointer_cast<OsmAnd::Street>(s), ctrl);
                 if (res)
                 {
                     const auto& ms = std::const_pointer_cast<OsmAnd::Street>(s);
@@ -2215,7 +2193,7 @@
                 else
                 {
                     res.localeName = b->getName(lang, transliterate).toNSString();
-                    res.location = [OASearchCoreFactory getLocation:b->position31];
+                    res.location = [OASearchCoreFactory getLocation24Zoom:b->position31];
                 }
                 res.otherNames = [OANativeUtilities QListOfStringsToNSArray:b->getOtherNames(TRUE, QString::fromNSString(res.localeName))];
                 res.object = [[OABuilding alloc] initWithBuilding:b];
@@ -2244,21 +2222,20 @@
                     continue;
                 
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+                res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName];
+                res.localeName = street->getName(lang, transliterate).toNSString();
+                res.object = [[OAStreet alloc] initWithStreet:street];
                 if (![self matchAddressName:phrase prevRes:nil res:res fullMatch:false])
                 {
                     continue;
                 }
-                
-                res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames nativeName:street->nativeName];
-                res.localeName = street->getName(lang, transliterate).toNSString();
-                res.object = [[OAStreet alloc] initWithStreet:street];
                 res.resourceId = resId;
                 res.relatedObject = [[OAStreet alloc] initWithStreet:s];
                 res.priority = priority + 1;
                 res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
                 res.priorityDistance = 0;
                 res.objectType = EOAObjectTypeStreetIntersection;
-                res.location = [OASearchCoreFactory getLocation:street->position31];
+                res.location = [OASearchCoreFactory getLocation24Zoom:street->position31];
                 res.preferredZoom = PREFERRED_STREET_INTERSECTION_ZOOM;
                 [phrase countUnknownWordsMatchMainResult:res];
                 [resultMatcher publish:res];
@@ -2359,7 +2336,7 @@
             res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
             res.preferredZoom = PREFERRED_STREET_ZOOM;
             res.resourceId = sw.result.resourceId;
-            res.location = [OASearchCoreFactory getLocation:object->position31];
+            res.location = [OASearchCoreFactory getLocation24Zoom:object->position31];
             res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
             //res.priorityDistance = 1;
             res.objectType = EOAObjectTypeStreet;
@@ -2747,6 +2724,13 @@ static BOOL DISPLAY_DEFAULT_POI_TYPES = NO;
 {
     const OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(position31);
     return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+}
+
++ (CLLocation *) getLocation24Zoom:(const OsmAnd::PointI)position31
+{
+    double lat = OsmAnd::Utilities::getLatitudeFromTile(24, position31.y >> 7);
+    double lon = OsmAnd::Utilities::getLongitudeFromTile(24, position31.x >> 7);
+    return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
 }
 
 + (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno

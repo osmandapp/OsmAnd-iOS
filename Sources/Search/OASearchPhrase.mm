@@ -22,6 +22,8 @@
 #import "OAMapUtils.h"
 #import "OAArabicNormalizer.h"
 #import "OARegionPriorityProvider.h"
+#import "OASearchAlgorithms.h"
+#import "OACustomSearchPoiFilter.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -73,6 +75,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ",
 
 @property (nonatomic) OAPOIBaseType *unselectedPoiType;
 @property (nonatomic) OARegionPriorityProvider *regionPriorityProvider;
+@property (nonatomic) BOOL acceptPrivate;
 
 @end
 
@@ -234,17 +237,18 @@ static NSComparator _OACommonWordsComparator = nil;
         {
             _regionPriorityProvider = [[OARegionPriorityProvider alloc] initWithPhrase:self];
         }
+        _acceptPrivate = NO;
     }
     return self;
 }
 
 - (OASearchPhrase *) generateNewPhrase:(NSString *)text settings:(OASearchSettings *)settings
 {
-    NSString *textToSearch = [self normalizeSearchText:text];
+    NSString *textToSearch = [OASearchAlgorithms canonicalizePunctuation:text];
     NSMutableArray<OASearchWord *> *leftWords = [NSMutableArray arrayWithArray:_words];
     NSString *thisTxt = [self getText:YES];
     NSMutableArray<OASearchWord *> *foundWords = [NSMutableArray new];
-    thisTxt = [self normalizeSearchText:thisTxt];
+    thisTxt = [OASearchAlgorithms canonicalizePunctuation:thisTxt];
     if ([textToSearch hasPrefix:thisTxt])
     {
         // string is longer
@@ -264,31 +268,24 @@ static NSComparator _OACommonWordsComparator = nil;
             break;
         }
     }
-    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];
-}
-
-- (NSString *) normalizeSearchText:(NSString *)s
-{
-    BOOL norm = NO;
-    for (NSInteger i = 0; i < s.length && !norm; i++)
+    OASearchSettings *finalSettings = settings;
+    for (OASearchWord *w in foundWords)
     {
-        unichar uc = (unichar)[s characterAtIndex:i];
-        NSString *ch = [NSString stringWithCharacters:&uc length:1];
-        for (NSInteger j = 0; j < CHARS_TO_NORMALIZE_KEY.count; j++) {
-            if ([ch isEqualToString:CHARS_TO_NORMALIZE_KEY[j]]) {
-                norm = true;
-                break;
+        if (w.result != nil && [w.result.object isKindOfClass:OACustomSearchPoiFilter.class])
+        {
+            OACustomSearchPoiFilter * specialSorting = (OACustomSearchPoiFilter *) w.result.object;
+            OASearchSortType sortType = [specialSorting getDefaultSearchType];
+            if (sortType != OASearchSortTypeUnknown)
+            {
+                if (finalSettings == settings)
+                {
+                    finalSettings = [[OASearchSettings alloc] initWithSettings:settings];
+                }
+                [finalSettings setSortType:sortType];
             }
         }
     }
-    if (!norm)
-        return s;
-
-    for (NSInteger k = 0; k < CHARS_TO_NORMALIZE_KEY.count; k++)
-    {
-        s = [s stringByReplacingOccurrencesOfString:CHARS_TO_NORMALIZE_KEY[k] withString:CHARS_TO_NORMALIZE_VALUE[k]];
-    }
-    return s;
+    return [self createNewSearchPhrase:finalSettings fullText:text foundWords:foundWords textToSearch:textToSearch];
 }
 
 - (int) countWords:(NSString *)word
@@ -1167,6 +1164,15 @@ static NSComparator _OACommonWordsComparator = nil;
         return @([_regionPriorityProvider getRegionWeight:resId]);
     }
     return 0;
+}
+
+- (BOOL) isAcceptPrivate
+{
+    return _acceptPrivate;
+}
+- (void) setAcceptPrivate:(BOOL)acceptPrivate
+{
+    self.acceptPrivate = acceptPrivate;
 }
 
 @end

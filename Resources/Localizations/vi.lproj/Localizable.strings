@@ -2516,3 +2516,17 @@
 "relief_smoothness_factor_descr" = "Địa hình ưa thích: bằng phẳng hoặc dốc.";
 "shared_string_start_time" = "Thời gian bắt đầu";
 "shared_string_end_time" = "Thời gian kết thúc";
+"remove_step" = "Loại bỏ bậc thang";
+"shared_string_time_moving" = "Thời gian di chuyển";
+"routing_attr_driving_style_name" = "Cách lái xe";
+"routing_attr_relief_smoothness_factor_name" = "Chọn độ biến động của độ cao";
+"routing_attr_height_obstacles_name" = "Dùng dữ liệu độ cao";
+"rendering_attr_depthContours_description" = "Hiện đường đồng mức và các điểm độ sâu.";
+"rendering_attr_contourDensity_description" = "Mật độ đường đồng mức";
+"rendering_attr_contourDensity_name" = "Mật độ đường đồng mức";
+"rendering_attr_contourWidth_description" = "Độ dày đường đồng mức";
+"rendering_attr_contourWidth_name" = "Độ dày được đồng mức";
+"routing_attr_allow_motorway_name" = "Dùng đường cao tốc";
+"routing_attr_allow_motorway_description" = "Cho phép đường cao tốc.";
+"upload_poi" = "Tải lên POI";
+"navigation_over_track" = "Bắt đầu điều hướng dọc theo hành trình?";

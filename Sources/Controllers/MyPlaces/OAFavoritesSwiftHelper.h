@@ -57,23 +57,19 @@ NS_ASSUME_NONNULL_BEGIN
                    color:(nullable UIColor *)color
       backgroundIconName:(nullable NSString *)backgroundIconName;
 + (void)renameFavoriteGroup:(NSString *)groupName newName:(NSString *)newName;
-+ (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName;
 + (void)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName;
 + (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems;
 + (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex;
 
 + (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName;
-+ (NSArray<NSString *> *)favoriteGroupsToMoveForGroupName:(NSString *)groupName;
 + (BOOL)canUseGroupWithName:(NSString *)groupName;
 
-+ (nullable NSURL *)shareFavoriteGroupName:(NSString *)groupName;
 + (nullable NSURL *)shareFavoriteItems:(NSArray *)favoriteItems;
 
 + (BOOL)deleteFavoriteGroup:(NSString *)groupName;
 + (BOOL)deleteFavoriteItems:(NSArray *)favoriteItems;
 
 + (void)openFavoritePointWithIdentifier:(NSString *)identifier;
-+ (void)addFavoriteGroupToMapMarkers:(NSString *)groupName;
 + (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems;
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName;
 + (void)addFavoriteGroupToNavigation:(NSString *)groupName;

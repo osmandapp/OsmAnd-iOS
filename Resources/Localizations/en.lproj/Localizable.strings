@@ -4134,6 +4134,7 @@
 "my_places_no_tracks_title" = "Empty folder";
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
+"favorite_confirm_delete_group" = "Delete \"%1$@\" group and all included points (%2$lu)?";
 "root_folder" = "Root folder";
 "shared_string_folders" = "Folders";
 "all_folders" = "All folders";

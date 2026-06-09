@@ -123,6 +123,7 @@
 + (OAFavoriteItem *)favoritePointWithIdentifier:(NSString *)identifier;
 + (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName;
 + (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName;
++ (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName;
 + (BOOL)isGroupName:(NSString *)groupName insideOrEqualToGroupName:(NSString *)parentGroupName;
 + (NSString *)groupNameByMovingGroupName:(NSString *)groupName toParentGroupName:(NSString *)parentGroupName;
 + (NSString *)suffixForGroupName:(NSString *)groupName parentGroupName:(NSString *)parentGroupName;
@@ -437,40 +438,10 @@
     return group ? [group toPointsGroup] : nil;
 }
 
-+ (NSArray<NSString *> *)favoriteGroupsToMoveForGroupName:(NSString *)groupName
-{
-    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-    if (!group)
-        return nil;
-
-    NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
-    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
-    {
-        NSString *favoriteGroupName = favoriteGroup.name ?: @"";
-        if (![self isGroupName:favoriteGroupName insideOrEqualToGroupName:group.name ?: @""])
-            [groupNames addObject:favoriteGroupName];
-    }
-
-    if (![groupNames containsObject:@""])
-        [groupNames addObject:@""];
-    
-    return [groupNames copy];
-}
-
 + (BOOL)canUseGroupWithName:(NSString *)groupName
 {
     OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
     return group && group.points.count > 0;
-}
-
-+ (nullable NSURL *)shareFavoriteGroupName:(NSString *)groupName
-{
-    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-    if (!group)
-        return nil;
-
-    OAFavoriteGroup *groupToShare = [self favoriteGroupForSharingGroup:group points:group.points.copy];
-    return [self fileURLForSharingFavoriteGroups:@[groupToShare]];
 }
 
 + (nullable NSURL *)shareFavoriteItems:(NSArray *)favoriteItems
@@ -653,23 +624,6 @@
     [rootViewController.mapPanel openTargetViewWithFavorite:favorite pushed:YES];
 }
 
-+ (void)addFavoriteGroupToMapMarkers:(NSString *)groupName
-{
-    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-    if (!group)
-        return;
-
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
-    {
-        CLLocation *location = [self locationForFavorite:favorite];
-        if (!location)
-            continue;
-
-        [mapPanel addMapMarker:location.coordinate.latitude lon:location.coordinate.longitude description:[favorite getDisplayName]];
-    }
-}
-
 + (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems
 {
     if (favoriteItems.count == 0)
@@ -735,7 +689,8 @@
 
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName
 {
-    NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:[self favoriteGroupWithName:groupName]];
+    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
+    NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:group];
     if (points.count == 0)
         return;
 
@@ -761,9 +716,7 @@
     if (!gpxFile)
         return;
 
-    for (OAFavoriteItem *favorite in points)
-        [gpxFile addPointPoint:[favorite toWpt]];
-
+    [gpxFile addPointsGroupGroup:[group toPointsGroup]];
     [OASGpxUtilities.shared writeGpxFileFile:dataItem.file gpxFile:gpxFile];
     [gpxDatabase updateDataItem:dataItem];
     [OASelectedGPXHelper.instance markTrackForReload:dataItem.file.absolutePath];

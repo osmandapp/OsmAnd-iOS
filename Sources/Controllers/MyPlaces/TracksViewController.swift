@@ -1005,7 +1005,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         reloadAfterOrganizeByChange()
         let vc = OrganizeByStepSizeViewController(smartFolder: smartFolder, type: type, originalParams: originalParams)
         vc.stepDelegate = self
-        showMediumSheetViewController(vc, isLargeAvailable: true)
+        showMediumSheetViewController(viewController: vc, isLargeAvailable: true)
     }
 
     func onStepSizeChanged() {

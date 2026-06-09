@@ -1018,7 +1018,10 @@ static NSOperationQueue *_favQueue;
     }
     
     if (!isNewFavorite)
+    {
+        [self recalculateCachedFavPoints];
         [self saveCurrentPointsIntoFile];
+    }
     
     return YES;
 }
@@ -1392,7 +1395,7 @@ static NSOperationQueue *_favQueue;
 {
     NSString *mxPrefix = @"mx_";
     _iconName = [self removePrefix:mxPrefix fromValue:_iconName];
-    OASBoolean *pinned = _isPinned ? [OASBoolean numberWithBool:YES] : nil;
+    OASBoolean *pinned = [OASBoolean numberWithBool:_isPinned];
     OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber hidden:!_isVisible pinned:pinned];
     NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     

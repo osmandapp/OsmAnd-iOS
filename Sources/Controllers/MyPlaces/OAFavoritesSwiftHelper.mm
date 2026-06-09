@@ -15,12 +15,15 @@
 #import "OAGPXDatabase.h"
 #import "OAIndexConstants.h"
 #import "OALocationServices.h"
+#import "OAMapActions.h"
 #import "OAMapPanelViewController.h"
+#import "OAObservable.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAOsmAndFormatter.h"
 #import "OAPointDescription.h"
 #import "OARootViewController.h"
+#import "OARTargetPoint.h"
 #import "OASavingTrackHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OATargetPointsHelper.h"
@@ -763,7 +766,8 @@
 
     [OASGpxUtilities.shared writeGpxFileFile:dataItem.file gpxFile:gpxFile];
     [gpxDatabase updateDataItem:dataItem];
-    [OASelectedGPXHelper.instance markTrackForReload:[OAUtilities getGpxShortPath:dataItem.file.absolutePath]];
+    [OASelectedGPXHelper.instance markTrackForReload:dataItem.file.absolutePath];
+    [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
 }
 
 + (void)addFavoriteGroupToNavigation:(NSString *)groupName
@@ -773,26 +777,13 @@
         return;
 
     NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:group];
-    if (points.count == 0)
-        return;
-
-    OATargetPointsHelper *targetPointsHelper = OATargetPointsHelper.sharedInstance;
-    [targetPointsHelper clearAllPoints:NO];
-    for (NSUInteger index = 0; index < points.count; index++)
+    NSMutableArray<OAFavoritePointBridgeItem *> *items = [NSMutableArray arrayWithCapacity:points.count];
+    for (OAFavoriteItem *point in points)
     {
-        OAFavoriteItem *favorite = points[index];
-        CLLocation *location = [self locationForFavorite:favorite];
-        if (!location)
-            continue;
-
-        OAPointDescription *description = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favorite getDisplayName]];
-        BOOL isDestination = index == points.count - 1;
-        [targetPointsHelper navigateToPoint:location updateRoute:isDestination intermediate:isDestination ? -1 : (int)index historyName:description];
+        [items addObject:[[OAFavoritePointBridgeItem alloc] initWithFavorite:point]];
     }
 
-    OARootViewController *rootViewController = [OARootViewController instance];
-    [rootViewController.navigationController popToRootViewControllerAnimated:YES];
-    [rootViewController.mapPanel showRouteInfo];
+    [self addFavoriteItemsToNavigation:items];
 }
 
 + (void)addFavoriteItemsToTrack:(NSArray *)favoriteItems gpxFileName:(nullable NSString *)gpxFileName
@@ -930,23 +921,32 @@
     if (itemsToAdd.count == 0)
         return;
 
-    OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
-    [targetPointsHelper clearAllPoints:NO];
-    for (NSUInteger index = 0; index < itemsToAdd.count; index++)
+    NSMutableArray<OARTargetPoint *> *targetPoints = [NSMutableArray arrayWithCapacity:itemsToAdd.count];
+    for (OAFavoriteItem *favorite in itemsToAdd)
     {
-        OAFavoriteItem *favorite = itemsToAdd[index];
         CLLocation *location = [self locationForFavorite:favorite];
         if (!location)
             continue;
 
         OAPointDescription *description = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favorite getDisplayName]];
-        BOOL isDestination = index == itemsToAdd.count - 1;
-        [targetPointsHelper navigateToPoint:location updateRoute:isDestination intermediate:isDestination ? -1 : (int)index historyName:description];
+        OARTargetPoint *targetPoint = [OARTargetPoint create:location name:description];
+        if (targetPoint)
+            [targetPoints addObject:targetPoint];
     }
 
+    if (targetPoints.count == 0)
+        return;
+
+    OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
+    [targetPointsHelper clearAllPoints:NO];
+    [targetPointsHelper reorderAllTargetPoints:targetPoints updateRoute:NO];
     OARootViewController *rootViewController = [OARootViewController instance];
     [rootViewController.navigationController popToRootViewControllerAnimated:YES];
-    [rootViewController.mapPanel showRouteInfo];
+    [rootViewController.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil
+                                                                      from:nil
+                                                                  fromName:nil
+                                            useIntermediatePointsByDefault:YES
+                                                                showDialog:YES];
 }
 
 + (NSArray<OAFavoriteItem *> *)sortedFavoritePoints:(NSArray<OAFavoriteItem *> *)points

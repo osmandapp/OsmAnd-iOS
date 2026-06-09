@@ -160,6 +160,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
     if (_gpxFile && _gpxFile.pointsGroups.count > 0)
     {
         // IOS-214
+        [self normalizeSingleNestedFavoriteGroupIfNeeded];
         if (![self isFavoritesValid])
             return;
 
@@ -182,6 +183,29 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 }
 
 #pragma mark - Additions
+
+- (void)normalizeSingleNestedFavoriteGroupIfNeeded
+{
+    NSArray<NSString *> *groupKeys = _gpxFile.pointsGroups.allKeys;
+    if (groupKeys.count != 1)
+        return;
+
+    NSString *groupKey = groupKeys.firstObject;
+    OASGpxUtilitiesPointsGroup *pointsGroup = _gpxFile.pointsGroups[groupKey];
+    NSString *groupName = pointsGroup.name ?: groupKey;
+    NSArray<NSString *> *components = [groupName componentsSeparatedByString:@"/"];
+    if (components.count < 2)
+        return;
+
+    NSString *targetGroupName = components.lastObject;
+    if (targetGroupName.length == 0)
+        return;
+
+    for (OASWptPt *point in pointsGroup.points)
+    {
+        point.category = targetGroupName;
+    }
+}
 
 - (BOOL)isFavoritesValid
 {

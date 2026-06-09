@@ -262,7 +262,7 @@ final class FavoriteListViewController: UIViewController {
     private lazy var folderCellRegistration = CellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
         var content = cell.defaultContentConfiguration()
         content.directionalLayoutMargins = Self.rowContentInsets
-        let iconName = self?.isRootFolder == true && folder.isPinned ? "ic_custom_folder_pin" : folder.iconName
+        let iconName = folder.isPinned ? "ic_custom_folder_pin" : folder.iconName
         content.image = UIImage.templateImageNamed(iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
         content.imageProperties.tintColor = folder.iconColor
         content.text = folder.title
@@ -492,9 +492,9 @@ final class FavoriteListViewController: UIViewController {
         myPlacesDelegate?.updateSegmentedControlVisibility(isRootFolder && !collectionView.isEditing && !isSearchActive)
     }
 
-    private func favoriteSortMode() -> FavoriteSortMode {
+    private func favoriteSortMode(entryId: String? = nil) -> FavoriteSortMode {
         let sortModes = settings.getFavoriteSortModes()
-        guard let sortModeTitle = sortModes[currentSortEntryId] else { return FavoriteSortModeHelper.defaultSortMode() }
+        guard let sortModeTitle = sortModes[entryId ?? currentSortEntryId] else { return FavoriteSortModeHelper.defaultSortMode() }
         return FavoriteSortMode.byTitle(sortModeTitle)
     }
 
@@ -513,6 +513,19 @@ final class FavoriteListViewController: UIViewController {
         }
 
         applySnapshot(animatingDifferences: false)
+    }
+
+    private func clearFavoriteSortModes(forGroupNames groupNames: [String]) {
+        var sortModes = settings.getFavoriteSortModes()
+        let keysToRemove = sortModes.keys.filter { key in
+            groupNames.contains { groupName in
+                key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + "/"))
+            }
+        }
+
+        guard !keysToRemove.isEmpty else { return }
+        keysToRemove.forEach { sortModes.removeValue(forKey: $0) }
+        settings.saveFavoriteSortModes(sortModes)
     }
 
     private func makeSortMenu() -> UIMenu {
@@ -760,11 +773,17 @@ final class FavoriteListViewController: UIViewController {
         navigationController.present(modalNavigationController, animated: true)
     }
 
+    private func favoritePointRows(forGroupName groupName: String) -> [FavoritePointRow] {
+        let sortMode = isSearchActive ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
+        let favorites = OAFavoritesSwiftHelper.favoritePoints(forGroupName: groupName).map { FavoritePointRow(item: $0) }
+        return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
+    }
+
     private func makeActionsMenu() -> UIMenu {
-        let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined.resizedMenuImage()) { [weak self] _ in
+        let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
             self?.openNewFavoriteGroupEditor()
         }
-        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined.resizedMenuImage()) { [weak self] _ in
+        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
             guard let self else { return }
             let gpxType = UTType(importedAs: "com.topografix.gpx", conformingTo: .xml)
             let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [gpxType], asCopy: true)
@@ -791,56 +810,59 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func makeFolderContextMenu(for folder: FavoriteFolderRow, indexPath: IndexPath) -> UIMenu {
-        let showHideAction = UIAction(title: localizedString(folder.isVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: menuImage(folder.isVisible ? "ic_custom_hide_outlined" : "ic_custom_show_outlined")) { [weak self] _ in
+        let showHideAction = UIAction(title: localizedString(folder.isVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: folder.isVisible ? .icCustomHideOutlined : .icCustomShowOutlined) { [weak self] _ in
+            guard let self else { return }
             OAFavoritesSwiftHelper.setFavoriteGroupVisible(folder.bridgeItem.groupName, visible: !folder.isVisible)
-            self?.applySnapshot(animatingDifferences: true)
+            self.applySnapshot(animatingDifferences: true)
         }
-        let pinAction = UIAction(title: localizedString(folder.isPinned ? "unpin_folder" : "pin_folder"), image: menuImage("ic_custom_map_pin_outlined")) { [weak self] _ in
+        let pinAction = UIAction(title: localizedString(folder.isPinned ? "unpin_folder" : "pin_folder"), image: folder.isPinned ? .icCustomDrawingPinDisable : .icCustomDrawingPin) { [weak self] _ in
+            guard let self else { return }
             OAFavoritesSwiftHelper.setFavoriteGroupPinned(folder.bridgeItem.groupName, pinned: !folder.isPinned)
-            self?.applySnapshot(animatingDifferences: true)
+            self.applySnapshot(animatingDifferences: true)
         }
         let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [showHideAction, pinAction])
 
-        let renameAction = UIAction(title: localizedString("shared_string_rename"), image: menuImage("ic_custom_edit")) { [weak self] _ in
-            self?.showRenameAlert(for: folder)
+        let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
+            guard let self else { return }
+            self.showRenameAlert(for: folder)
         }
-        let defaultAppearanceAction = UIAction(title: localizedString("default_appearance"), image: menuImage("ic_custom_appearance_outlined")) { [weak self] _ in
-            self?.openFavoriteGroupAppearance(folder.bridgeItem.groupName)
+        let defaultAppearanceAction = UIAction(title: localizedString("default_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
+            guard let self else { return }
+            self.openFavoriteGroupAppearance(folder.bridgeItem.groupName)
         }
         let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction, defaultAppearanceAction])
 
-        let shareAction = UIAction(title: localizedString("shared_string_share"), image: menuImage("ic_custom_export_outlined")) { [weak self] _ in
+        let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { [weak self] _ in
             guard let self else { return }
             let sourceView: UIView = self.collectionView.cellForItem(at: indexPath) ?? self.collectionView
             guard let favoritesUrl = OAFavoritesSwiftHelper.shareFavoriteGroupName(folder.bridgeItem.groupName) else { return }
-            showActivity(
-                [favoritesUrl],
-                sourceView: sourceView,
-                barButtonItem: nil,
-                completionWithItemsHandler: {
-                    try? FileManager.default.removeItem(at: favoritesUrl)
-                }
-            )
+            showActivity([favoritesUrl], sourceView: sourceView, barButtonItem: nil, completionWithItemsHandler: {
+                try? FileManager.default.removeItem(at: favoritesUrl)
+            })
         }
-        let moveAction = UIAction(title: localizedString("shared_string_move"), image: menuImage("ic_custom_folder_move_outlined")) { [weak self] _ in
-            self?.openFavoriteGroupMove(folder.bridgeItem.groupName)
+        let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
+            guard let self else { return }
+            self.openFavoriteGroupMove(folder.bridgeItem.groupName)
         }
         let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: folder.bridgeItem.groupName.isEmpty ? [shareAction] : [shareAction, moveAction])
 
-        let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: menuImage("ic_custom_map_pin_outlined")) { _ in
+        let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
             OAFavoritesSwiftHelper.addFavoriteGroup(toMapMarkers: folder.bridgeItem.groupName)
         }
-        let trackAction = UIAction(title: localizedString("add_to_a_track"), image: menuImage("ic_custom_trip")) { [weak self] _ in
-            self?.openFavoriteGroupAddToTrack(folder.bridgeItem.groupName)
+        let trackAction = UIAction(title: localizedString("add_to_a_track"), image: .icCustomTrip) { [weak self] _ in
+            guard let self else { return }
+            self.openFavoriteGroupAddToTrack(folder.bridgeItem.groupName)
         }
-        let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: menuImage("ic_custom_navigation_outlined")) { _ in
-            OAFavoritesSwiftHelper.addFavoriteGroup(toNavigation: folder.bridgeItem.groupName)
+        let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { [weak self] _ in
+            guard let self else { return }
+            OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: self.favoritePointRows(forGroupName: folder.bridgeItem.groupName).map { $0.bridgeItem })
         }
-        let addToMenu = UIMenu(title: localizedString("shared_string_add"), image: menuImage("ic_custom_add"), children: [mapMarkersAction, trackAction, navigationAction])
+        let addToMenu = UIMenu(title: localizedString("shared_string_add"), image: .icCustomAdd, children: [mapMarkersAction, trackAction, navigationAction])
         let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
 
-        let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: menuImage("ic_custom_trash_outlined"), attributes: .destructive) { [weak self] _ in
-            self?.showDeleteAlert(for: folder)
+        let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
+            guard let self else { return }
+            self.showDeleteAlert(for: folder)
         }
         let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
 
@@ -875,13 +897,15 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func showDeleteAlert(for folder: FavoriteFolderRow) {
-        let alert = UIAlertController(title: nil, message: localizedString("fav_remove_q"), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .destructive) { [weak self] _ in
-            OAFavoritesSwiftHelper.deleteFavoriteGroup(folder.bridgeItem.groupName)
+        let message = String(format: localizedString("permanent_delete_warning"), "\"\(folder.title)\"")
+        let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
+            guard OAFavoritesSwiftHelper.deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
+            self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])
             self?.applySnapshot(animatingDifferences: true)
         })
 
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_no"), style: .cancel))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
     }
 
@@ -917,7 +941,12 @@ final class FavoriteListViewController: UIViewController {
 
     private func removeSelectedFavoriteItems() {
         let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
-        OAFavoritesSwiftHelper.deleteFavoriteItems(bridgeItems(for: selectedIndexPaths))
+        let items = bridgeItems(for: selectedIndexPaths)
+        let groupNames = items.compactMap { ($0 as? OAFavoriteFolderBridgeItem)?.groupName }
+        if OAFavoritesSwiftHelper.deleteFavoriteItems(items) {
+            clearFavoriteSortModes(forGroupNames: groupNames)
+        }
+
         setEdit(false)
         applySnapshot(animatingDifferences: true)
     }
@@ -942,7 +971,6 @@ final class FavoriteListViewController: UIViewController {
             return localizedString("favorites_delete_confirmation_message")
         }
 
-        let folderGroupNames = folders.map(\.groupName)
         let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
         let pointsCount = folderPointsCount + points.count
 
@@ -1125,8 +1153,8 @@ final class FavoriteListViewController: UIViewController {
     }
 
     @objc private func deleteButtonClicked(_ sender: Any) {
-        guard let indexPathItems = collectionView.indexPathsForSelectedItems else { return }
-        if indexPathItems.isEmpty {
+        let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
+        if selectedIndexPaths.isEmpty {
             let alert = UIAlertController(title: nil, message: localizedString("fav_select_remove"), preferredStyle: .alert)
             let defaultAction = UIAlertAction(title: localizedString("ok"), style: .default)
             alert.addAction(defaultAction)
@@ -1134,7 +1162,7 @@ final class FavoriteListViewController: UIViewController {
             return
         }
 
-        let selectedBridgeItems = bridgeItems(for: indexPathItems)
+        let selectedBridgeItems = bridgeItems(for: selectedIndexPaths)
         let title = deleteConfirmationTitle(for: selectedBridgeItems)
         let message = deleteConfirmationMessage(for: selectedBridgeItems)
 

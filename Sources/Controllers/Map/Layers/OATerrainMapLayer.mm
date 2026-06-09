@@ -106,7 +106,7 @@
         {
             [self.mapView resetProviderFor:self.layerIndex];
         }
-        [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
+        [self.mapView setElevationScaleFactor:[_plugin isHeightmapEnabled] ? self.app.data.verticalExaggerationScale : kExaggerationDefScale];
         return YES;
     }
     return NO;

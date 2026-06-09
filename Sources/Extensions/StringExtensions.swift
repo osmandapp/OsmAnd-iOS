@@ -102,3 +102,101 @@ extension String {
         return direction == .rightToLeft
     }
 }
+
+extension NSString {
+
+    /// Extracts valid URLs from the string.
+    ///
+    /// Commas, semicolons, spaces, and newlines are treated as separators.
+    /// URLs without a scheme are normalized by prepending `https://`.
+    ///
+    /// - Returns: An array of normalized URL strings. Invalid URLs are ignored.
+    ///
+    /// Examples:
+    /// ```swift
+    /// "google.com, apple.com; https://osmand.net".extractValidURLs()
+    /// // ["https://google.com", "https://apple.com", "https://osmand.net"]
+    /// ```
+    ///
+    /// - Returns: An array of normalized URL strings. Invalid URLs are ignored.
+    @objc func extractValidURLs() -> [String] {
+        guard length > 0 else { return [] }
+
+        return trimmingCharacters(in: .whitespacesAndNewlines)
+            .splitIntoURLCandidates()
+            .compactMap { part in
+                let trimmed = part.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                guard !trimmed.isEmpty else { return nil }
+
+                return Self.normalizedURLString(from: trimmed)
+            }
+    }
+
+    private static func normalizedURLString(from value: String) -> String? {
+        guard !value.isEmpty else { return nil }
+
+        if value.range(of: "^[A-Za-z][A-Za-z0-9+.-]*:", options: .regularExpression) != nil {
+            guard URL(string: value) != nil else { return nil }
+            return value
+        }
+
+        let urlString = "https://\(value)"
+        guard let components = URLComponents(string: urlString),
+              let host = components.host,
+              !host.isEmpty else {
+            return nil
+        }
+
+        return urlString
+    }
+}
+
+private extension String {
+    private var startsWithURLToken: Bool {
+        range(of: "^[A-Za-z][A-Za-z0-9+.-]*:", options: .regularExpression) != nil
+            || range(of: "^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)+", options: .regularExpression) != nil
+    }
+    
+    func splitIntoURLCandidates() -> [String] {
+        guard !isEmpty else { return [] }
+
+        var result: [String] = []
+        var startIndex = startIndex
+        var currentIndex = startIndex
+
+        while currentIndex < endIndex {
+            if self[currentIndex].isURLSeparator,
+               let nextTokenIndex = indexOfNextURLToken(after: currentIndex) {
+                result.append(String(self[startIndex..<currentIndex]))
+                startIndex = nextTokenIndex
+                currentIndex = nextTokenIndex
+            } else {
+                currentIndex = index(after: currentIndex)
+            }
+        }
+
+        result.append(String(self[startIndex..<endIndex]))
+        return result
+    }
+
+    private func indexOfNextURLToken(after separatorIndex: Index) -> Index? {
+        var index = self.index(after: separatorIndex)
+        while index < endIndex, self[index].isURLSeparator {
+            index = self.index(after: index)
+        }
+
+        guard index < endIndex,
+              String(self[index...]).startsWithURLToken else {
+            return nil
+        }
+
+        return index
+    }
+}
+
+private extension Character {
+    var isURLSeparator: Bool {
+        self == "," || self == ";" || isWhitespace
+    }
+}

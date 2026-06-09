@@ -487,11 +487,25 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
     }
     
+    private func organizedGroupTitle(_ group: OrganizedTracksGroup) -> String {
+        guard let rangeParams = smartFolder?.organizeByParams as? OrganizeByRangeParams else {
+            return group.getName()
+        }
+        let type = group.getType()
+        let units = type.getDisplayUnits()
+        let startBase = group.getComparisonValue()
+        let endBase = startBase + rangeParams.stepSize
+        let from = Int(units.fromBase(value: startBase).rounded())
+        let to = Int(units.fromBase(value: endBase).rounded())
+        let symbol = units.getSymbol()
+        return "\(from)–\(to) \(symbol)"
+    }
+
     private func createRowFor(organizedGroup: OrganizedTracksGroup, section: OATableSectionData) {
         let row = section.createNewRow()
         row.cellType = OASimpleTableViewCell.reuseIdentifier
         row.key = organizedGroupKey
-        row.title = organizedGroup.getName()
+        row.title = organizedGroupTitle(organizedGroup)
         row.descr = formattedTracksCount(organizedGroup.getTrackItems().count)
         if organizedGroup.getType() == .activity {
             row.icon = UIImage.mapSvgImageNamed("mx_\(organizedGroup.getIconName())") ?? .templateImageNamed("ic_custom_activity")
@@ -2621,7 +2635,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         
         if !isRootFolder {
             updateSearchController()
-        } else {
+        }
+        
+        if isRootFolder {
             myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         }
         updateFilterButtonVisibility(filterIsActive: isSearchActive)

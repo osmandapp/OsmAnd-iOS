@@ -2983,6 +2983,11 @@ static char kMapSourceUpdateQueueKey;
     return _mapLayers.poiLayer;
 }
 
+- (OATargetPoint *)osmEditsTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
+{
+    return [_mapLayers.osmEditsLayer getTargetPoint:obj touchLocation:touchLocation];
+}
+
 - (void) onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{

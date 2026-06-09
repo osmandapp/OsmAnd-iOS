@@ -4049,3 +4049,9 @@
 "gradient_range_type_relative" = "Viszonylagos";
 "delete_colors_palette_dialog_summary" = "Biztosan törli a(z) %@ nevű palettát?";
 "remove_step" = "Lépés eltávolítása";
+"dismiss_changes_descr" = "Minden módosítás el lesz vetve.";
+"gpx_logging_no_data" = "Nincsenek adatok";
+"show_touches" = "Érintések megjelenítése";
+"delete_changes" = "Módosítások törlése";
+"osm_edits_delete_item_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
+"osm_edits_delete_items_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";

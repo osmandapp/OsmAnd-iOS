@@ -485,13 +485,13 @@ final class OpeningHoursParserTest: XCTestCase {
         hours = makeHours("Mo-Fr 00:00-12:00, 12:00-24:00;")
         assertAssembled(hours, equals: "Mon-Fri 12:00 AM-12:00 PM, 12:00 PM-12:00 AM", localized: true)
 
-        configure(localeIdentifier: "zh", twelveHour: true)
+        configure(localeIdentifier: "zh_HK", twelveHour: true)
         hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
-        assertAssembled(hours, equals: "周一-周五 4:30-10:00, 07:30-23:00; 周六, 周日, ph 1:30-23:00", localized: true)
+        assertAssembled(hours, equals: "週一-週五 上午4:30-10:00, 上午7:30-下午11:00; 週六, 週日, PH 下午1:30-11:00", localized: true)
 
-        configure(localeIdentifier: "ar", twelveHour: true)
+        configure(localeIdentifier: "ar_SA", twelveHour: true)
         hours = makeHours("Mo-Fr 04:30-10:00, 07:30-23:00; Sa, Su, PH 13:30-23:00")
-        assertAssembled(hours, equals: "اثنين-جمعة 4:30-10:00 ص, 7:30 ص-11:00 م; سبت, أحد, PH 1:30-11:00 م", localized: true)
+        assertAssembled(hours, equals: "اثنين-جمعة ٤:٣٠-١٠:٠٠ ص, ٧:٣٠ ص-١١:٠٠ م; سبت, أحد, PH ١:٣٠-١١:٠٠ م", localized: true)
     }
 
     func testYearFormats() {

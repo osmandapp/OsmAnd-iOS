@@ -8,6 +8,7 @@
 
 #import "OASearchPoiTypeFilter.h"
 #import "OAResultMatcher.h"
+#import "OASearchSettings.h"
 
 @class OAPOI;
 
@@ -21,5 +22,6 @@
 - (OAResultMatcher<OAPOI *> *) wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher;
 
 - (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
+- (OASearchSortType) getDefaultSearchType;
 
 @end

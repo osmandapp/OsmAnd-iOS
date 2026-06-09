@@ -26,13 +26,15 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OAUtilities.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
 #import "OASwitchTableViewCell.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
-@interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
+@interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate, UIDocumentPickerDelegate>
 
 @end
 
@@ -50,6 +52,7 @@ NSString *const kEnableMsaaKey = @"kEnableMsaaKey";
 NSString *const kShowTouchesKey = @"kShowTouchesKey";
 NSString *const kVisualizingButtonGridKey = @"kVisualizingButtonGridKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
+NSString *const kAisTrackerSimulationKey = @"kAisTrackerSimulationKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
@@ -68,6 +71,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
 - (void)registerNotifications
 {
     [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
+    [self addNotification:@"OAAisSimulationStatusChanged" selector:@selector(onAisSimulationStatusChanged:)];
 }
 
 #pragma mark - Base UI
@@ -110,6 +114,25 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         kCellTitleKey : OALocalizedString(@"simulate_obd"),
         @"isOn" : @([[OAAppSettings sharedManager].simulateOBDData get])
     }];
+
+    OAAisTrackerPlugin *aisPlugin = (OAAisTrackerPlugin *)[OAPluginsHelper getPlugin:OAAisTrackerPlugin.class];
+    if (aisPlugin)
+    {
+        NSString *simulationDescription = aisPlugin.simulationFileName ?: @"";
+        if (aisPlugin.simulationStatusText.length > 0)
+        {
+            simulationDescription = simulationDescription.length > 0
+                ? [NSString stringWithFormat:@"%@ • %@", simulationDescription, aisPlugin.simulationStatusText]
+                : aisPlugin.simulationStatusText;
+        }
+        [simulationSection addRowFromDictionary:@{
+            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellKeyKey : kAisTrackerSimulationKey,
+            kCellTitleKey : OALocalizedString(@"ais_load_data"),
+            kCellDescrKey : simulationDescription,
+            @"actionBlock" : (^void(){ [weakSelf openAisSimulationFilePicker]; })
+        }];
+    }
     
     [_data addSection:simulationSection];
     
@@ -319,6 +342,18 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     [self showViewController:vc];
 }
 
+- (void)openAisSimulationFilePicker
+{
+    NSArray<UTType *> *contentTypes = @[
+        UTTypePlainText,
+        UTTypeText
+    ];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
+}
+
 - (void)openProPlanScreen
 {
     if (![OAIAPHelper isOsmAndProAvailable])
@@ -339,6 +374,38 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
 {
     [self generateData];
     [self.tableView reloadData];
+}
+
+- (void)onAisSimulationStatusChanged:(NSNotification *)notification
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+#pragma mark - UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+
+    OAAisTrackerPlugin *aisPlugin = (OAAisTrackerPlugin *)[OAPluginsHelper getPlugin:OAAisTrackerPlugin.class];
+    if (!aisPlugin)
+        return;
+
+    NSURL *url = urls.firstObject;
+    if (![aisPlugin isEnabled])
+        [OAPluginsHelper enablePlugin:aisPlugin enable:YES recreateControls:NO];
+    [aisPlugin startAisSimulation:url];
+    [OsmAndApp.instance.data.mapLayersConfiguration setLayer:@"ais_tracker_layer" Visibility:YES];
+    [OARootViewController.instance.mapPanel.mapViewController updateLayer:@"ais_tracker_layer"];
+    [self generateData];
+    [self.tableView reloadData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIView *toastView = self.view.window ?: OARootViewController.instance.view;
+        NSString *details = aisPlugin.simulationStatusText.length > 0 ? aisPlugin.simulationStatusText : url.lastPathComponent;
+        [OAUtilities showToast:@"AIS simulation" details:details duration:5 inView:toastView];
+    });
 }
 
 @end

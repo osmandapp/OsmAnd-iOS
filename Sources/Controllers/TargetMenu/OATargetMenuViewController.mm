@@ -54,6 +54,7 @@
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OADownloadMapViewController.h"
+#import "OAAisObjectViewController.h"
 #import "OAPlugin.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOI.h"
@@ -210,6 +211,12 @@
         case OATargetLocation:
         {
             controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
+            break;
+        }
+
+        case OATargetAisObject:
+        {
+            controller = [[OAAisObjectViewController alloc] initWithAisObject:targetPoint.targetObj];
             break;
         }
             

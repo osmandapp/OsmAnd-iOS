@@ -57,6 +57,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc;
 
 - (void) setLocationFromSimulation:(CLLocation *)location;
+- (void) setLocationFromNMEA:(CLLocation *)location;
 - (BOOL) isInLocationSimulation;
 
 - (void)resume;

@@ -2486,6 +2486,7 @@ typedef enum
         case OATargetTurn:
         case OATargetMyLocation:
         case OATargetLocation:
+        case OATargetAisObject:
         case OATargetRenderedObject:
         case OATargetBaseDetailsObject:
         {

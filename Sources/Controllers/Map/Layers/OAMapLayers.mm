@@ -14,6 +14,7 @@
 #import "OAPlugin.h"
 #import "OAPluginsHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAAisTrackerLayer.h"
 
 @implementation OAMapLayers
 {
@@ -74,6 +75,9 @@
     
     _travelSelectionLayer = [[OATravelSelectionLayer alloc] initWithMapViewController:_mapViewController baseOrder:190000];
     [self addLayer:_travelSelectionLayer];
+
+    _aisTrackerLayer = [[OAAisTrackerLayer alloc] initWithMapViewController:_mapViewController baseOrder:-118000 pointsOrder:-160000];
+    [self addLayer:_aisTrackerLayer];
 
     _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:200000 pointsOrder:-150000];
     [self addLayer:_routeMapLayer];

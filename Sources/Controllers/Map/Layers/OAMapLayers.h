@@ -35,6 +35,8 @@
 #import "OANetworkRouteSelectionLayer.h"
 #import "OATravelSelectionLayer.h"
 
+@class OAAisTrackerLayer;
+
 @class OAMapViewController;
 
 @interface OAMapLayers : NSObject
@@ -55,6 +57,7 @@
 @property (nonatomic, readonly) OARulerByTapControlLayer *rulerByTapControlLayer;
 @property (nonatomic, readonly) OANetworkRouteSelectionLayer *networkRouteSelectionLayer;
 @property (nonatomic, readonly) OATravelSelectionLayer *travelSelectionLayer;
+@property (nonatomic, readonly) OAAisTrackerLayer *aisTrackerLayer;
 
 @property (nonatomic) NSDate *weatherDate;
 @property (nonatomic, readonly) OAWeatherRasterLayer *weatherLayerLow;
@@ -77,6 +80,7 @@
 - (void) createLayers;
 - (void) destroyLayers;
 - (NSArray<OAMapLayer *> *) getLayers;
+- (void) addLayer:(OAMapLayer *)layer;
 
 - (void) resetLayers;
 - (void) updateLayers;

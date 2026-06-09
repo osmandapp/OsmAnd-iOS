@@ -2531,6 +2531,47 @@
 @end
 
 
+@implementation OAAisTrackerProduct
+
+- (instancetype)init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Ais_Tracker];
+    if (self)
+    {
+        self.free = YES;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (NSString *)productIconName
+{
+    return @"ic_plugin_nautical";
+}
+
+- (NSString *)productScreenshotName
+{
+    return @"img_plugin_nautical.jpg";
+}
+
+- (NSString *)localizedTitle
+{
+    return OALocalizedString(@"plugin_ais_tracker_name");
+}
+
+- (NSString *)localizedDescription
+{
+    return OALocalizedString(@"plugin_ais_tracker_description");
+}
+
+- (NSString *)localizedDescriptionExt
+{
+    return OALocalizedString(@"plugin_ais_tracker_description");
+}
+
+@end
+
+
 @implementation OACarPlayProduct
 
 - (instancetype) init
@@ -2859,6 +2900,7 @@
 @property (nonatomic) OAProduct *weather;
 @property (nonatomic) OAProduct *sensors;
 @property (nonatomic) OAProduct *vehicleMetrics;
+@property (nonatomic) OAProduct *aisTracker;
 @property (nonatomic) OAProduct *carplay;
 @property (nonatomic) OAProduct *osmandDevelopment;
 
@@ -2910,6 +2952,7 @@
         self.weather = [[OAWeatherProduct alloc] init];
         self.sensors = [[OAExternalSensorsProduct alloc] init];
         self.vehicleMetrics = [OAVehicleMetricsProduct new];
+        self.aisTracker = [OAAisTrackerProduct new];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
 
@@ -2935,6 +2978,7 @@
                              self.weather,
                              self.sensors,
                              self.vehicleMetrics,
+                             self.aisTracker,
                              self.osmandDevelopment
         ];
 

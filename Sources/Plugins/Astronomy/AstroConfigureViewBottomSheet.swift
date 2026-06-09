@@ -422,21 +422,6 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: personalContent,
-            iconName: "ic_action_target_direction_on",
-            titleRes: "astro_directions",
-            checked: current.showDirections,
-            smallItem: false
-        ) { [weak self] checked in
-            guard let self else {
-                return
-            }
-            var updated = config
-            updated.showDirections = checked
-            applyConfigChange(updated)
-        }
-
-        addSwitchRow(
-            parent: personalContent,
             iconName: "ic_action_bookmark_filled",
             titleRes: "favorites_item",
             checked: current.showFavorites,
@@ -447,6 +432,21 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
             }
             var updated = config
             updated.showFavorites = checked
+            applyConfigChange(updated)
+        }
+        
+        addSwitchRow(
+            parent: personalContent,
+            iconName: "ic_action_target_direction_on",
+            titleRes: "astro_directions",
+            checked: current.showDirections,
+            smallItem: false
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showDirections = checked
             applyConfigChange(updated)
         }
 

@@ -18,7 +18,6 @@
 #import "OAShapesTableViewCell.h"
 #import "OASelectFavoriteGroupViewController.h"
 #import "OAReplaceFavoriteViewController.h"
-#import "OAFolderCardsCell.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAGpxWptItem.h"
@@ -765,8 +764,7 @@
         OAFolderCardsCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAFolderCardsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFolderCardsCell getCellIdentifier] owner:self options:nil];
-            cell = nib[0];
+            cell = [[OAFolderCardsCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[OAFolderCardsCell getCellIdentifier]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
             cell.cellIndex = indexPath;

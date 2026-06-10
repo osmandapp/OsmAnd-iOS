@@ -131,8 +131,8 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OARightIconTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
-        addCell(OAFolderCardsCell.reuseIdentifier)
-//        tableView.register(FolderCardsCell.self, forCellReuseIdentifier: FolderCardsCell.reuseIdentifier)
+//        addCell(FolderCardsCell.reuseIdentifier)
+        tableView.register(FolderCardsCell.self, forCellReuseIdentifier: FolderCardsCell.reuseIdentifier)
         // когда будет готова:
         // addCell(ImportTrackTableViewCell.reuseIdentifier)
     }
@@ -181,14 +181,14 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         selectGroupsRow.cellType = OAValueTableViewCell.reuseIdentifier
         selectGroupsRow.key = ImportTracksRowKey.selectGroups.rawValue
         selectGroupsRow.title = localizedString("select_group")
-        selectGroupsRow.descr = folderDisplayName(for: selectedFolderPath)
+        selectGroupsRow.descr = folderNames[safe: selectedFolderIndex]
 
         let chipsRow = folderSection.createNewRow()
-        chipsRow.cellType = OAFolderCardsCell.reuseIdentifier
+        chipsRow.cellType = FolderCardsCell.reuseIdentifier
         chipsRow.key = ImportTracksRowKey.folderChips.rawValue
         chipsRow.setObj(folderNames, forKey: "values")
-        chipsRow.setObj(folderTrackCounts(), forKey: "sizes")  // опционально, см. ниже
-        chipsRow.setObj(selectedFolderIndex, forKey: "selectedValue")  // без +1
+        chipsRow.setObj(folderTrackCounts(), forKey: "sizes")
+        chipsRow.setObj(selectedFolderIndex, forKey: "selectedValue")
         chipsRow.setObj(localizedString("add_folder"), forKey: "addButtonTitle")
     }
     
@@ -254,8 +254,8 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             cell.separatorInset = .init(top: 0, left: .greatestFiniteMagnitude, bottom: 0, right: 0)
             return cell
 
-        case OAFolderCardsCell.reuseIdentifier:
-            let cell = tableView.dequeueReusableCell(withIdentifier: OAFolderCardsCell.reuseIdentifier, for: indexPath) as! OAFolderCardsCell
+        case FolderCardsCell.reuseIdentifier:
+            let cell = tableView.dequeueReusableCell(withIdentifier: FolderCardsCell.reuseIdentifier, for: indexPath) as! FolderCardsCell
             cell.selectionStyle = .none
             cell.delegate = self
             cell.cellIndex = indexPath
@@ -265,7 +265,8 @@ final class ImportTracksViewController: OABaseButtonsViewController {
                            colors: nil,
                            hidden: nil,
                            addButtonTitle: item.string(forKey: "addButtonTitle") ?? localizedString("add_folder"),
-                           withSelectedIndex: Int32(item.integer(forKey: "selectedValue")))
+                           withSelectedIndex: Int32(item.integer(forKey: "selectedValue")),
+                           addButtonPosition: .beginning)
             return cell
 
         default:
@@ -442,9 +443,12 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
     
     private func showSelectFolderScreen() {
-//        let vc = OASelectTrackFolderViewController(selectedFolderName: folderDisplayName(for: selectedFolderPath))
-//        vc.delegate = self
-//        navigationController?.pushViewController(vc, animated: true)
+        guard let vc = OASelectTrackFolderViewController(selectedFolderName: folderDisplayName(for: selectedFolderPath)) else {
+            return
+        }
+        vc.delegate = self
+        let navController = UINavigationController(rootViewController: vc)
+        present(navController, animated: true)
     }
     
     private func showAddFolderScreen() {
@@ -559,9 +563,9 @@ extension ImportTracksViewController: CollectTracksListener {
     }
 }
 
-// MARK: - OAFolderCardsCellDelegate
+// MARK: - FolderCardsCellDelegate
 
-extension ImportTracksViewController: OAFolderCardsCellDelegate {
+extension ImportTracksViewController: FolderCardsCellDelegate {
     func onItemSelected(_ index: Int) {
         guard folderNames.indices.contains(index) else { return }
         selectedFolderIndex = index
@@ -571,5 +575,40 @@ extension ImportTracksViewController: OAFolderCardsCellDelegate {
     }
     func onAddFolderButtonPressed() {
         showAddFolderScreen()
+    }
+}
+
+// MARK: - OASelectTrackFolderDelegate
+
+extension ImportTracksViewController: OASelectTrackFolderDelegate {
+    func onFolderSelected(_ selectedFolderName: String?) {
+        guard let selectedFolderName else { return }
+//        let validFolders = selectedFolders.filter { smartFolderHelper.getSmartFolder(name: $0) == nil }
+//        if !selectedTracks.isEmpty || !validFolders.isEmpty {
+//            let fullRelativeFolders = validFolders.map { folderName -> String in
+//                var trimmedPath = currentFolderPath.hasPrefix("/") ? String(currentFolderPath.dropFirst()) : currentFolderPath
+//                trimmedPath = trimmedPath.appendingPathComponent(folderName)
+//                return trimmedPath
+//            }
+//            performMove(toFolder: selectedFolderName, tracks: selectedTracks, folders: fullRelativeFolders)
+//        } else if let track = selectedTrack {
+//            performMove(toFolder: selectedFolderName, tracks: [track], folders: nil)
+//        } else if let folderPath = selectedFolderPath {
+//            performMove(toFolder: selectedFolderName, tracks: nil, folders: [folderPath])
+//        }
+//        
+//        updateAllFoldersVCData(forceLoad: true)
+    }
+    
+    func onFolderAdded(_ addedFolderName: String) {
+//        let newFolderPath = getAbsolutePath(addedFolderName)
+//        if !FileManager.default.fileExists(atPath: newFolderPath) {
+//            do {
+//                try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
+//                onFolderSelected(addedFolderName)
+//            } catch let error {
+//                debugPrint(error)
+//            }
+//        }
     }
 }

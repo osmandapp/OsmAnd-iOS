@@ -16,7 +16,6 @@
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OAValueTableViewCell.h"
-#import "OAFolderCardsCell.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
@@ -386,8 +385,7 @@
         OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFolderCardsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFolderCardsCell getCellIdentifier] owner:self options:nil];
-            cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
+            cell = [[OAFolderCardsCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[OAFolderCardsCell getCellIdentifier]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
             cell.cellIndex = indexPath;

@@ -13,6 +13,7 @@ import Network
     case connected
     case failed
 }
+// NOTE: for test tcp 153.44.253.27 5631
 
 final class AisNmeaConnection {
     var onLocation: ((CLLocation) -> Void)?

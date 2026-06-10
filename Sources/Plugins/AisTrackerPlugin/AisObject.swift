@@ -97,6 +97,18 @@ final class AisObject: NSObject {
         msgTypes.sorted().map(String.init).joined(separator: ", ")
     }
 
+    func hasMessageType(_ type: Int) -> Bool {
+        msgTypes.contains(type)
+    }
+
+    var hasImoMessage: Bool {
+        hasMessageType(5)
+    }
+
+    var hasShipTypeMessage: Bool {
+        hasMessageType(5) || hasMessageType(19) || hasMessageType(24)
+    }
+
     var location: CLLocation? {
         guard hasPosition else { return nil }
         return CLLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude),
@@ -106,6 +118,27 @@ final class AisObject: NSObject {
                           course: cog == AisObjectConstants.invalidCog ? -1 : cog,
                           speed: sog == AisObjectConstants.invalidSog ? -1 : sog * 1852.0 / 3600.0,
                           timestamp: lastUpdate)
+    }
+
+    @objc var debugSummary: String {
+        let position = hasPosition
+            ? String(format: "%.6f,%.6f", latitude, longitude)
+            : "none"
+        let age = Date().timeIntervalSince(lastUpdate)
+        return String(format: "mmsi=%d msg=%d msgs=%@ class=%@ shipType=%d rest=%@ movable=%@ nav=%d sog=%.1f cog=%.1f heading=%d pos=%@ age=%.1fs",
+                      mmsi,
+                      msgType,
+                      messageTypesString,
+                      objectClassDebugName,
+                      shipType,
+                      isVesselAtRest ? "yes" : "no",
+                      isMovable ? "yes" : "no",
+                      navStatus,
+                      sog,
+                      cog,
+                      heading,
+                      position,
+                      age)
     }
 
     var currentLocation: CLLocation? {
@@ -413,4 +446,30 @@ final class AisObject: NSObject {
             }
         }
     }
+
+    private var objectClassDebugName: String {
+        switch objectClass {
+        case .vessel: return "vessel"
+        case .vesselSport: return "vesselSport"
+        case .vesselFast: return "vesselFast"
+        case .vesselPassenger: return "vesselPassenger"
+        case .vesselFreight: return "vesselFreight"
+        case .vesselCommercial: return "vesselCommercial"
+        case .vesselAuthorities: return "vesselAuthorities"
+        case .vesselSar: return "vesselSar"
+        case .vesselOther: return "vesselOther"
+        case .landStation: return "landStation"
+        case .airplane: return "airplane"
+        case .sart: return "sart"
+        case .aton: return "aton"
+        case .atonVirtual: return "atonVirtual"
+        case .invalid: return "invalid"
+        }
+    }
+}
+
+func aisDebugLog(_ message: @autoclosure () -> String) {
+#if DEBUG
+    NSLog("[AIS] %@", message())
+#endif
 }

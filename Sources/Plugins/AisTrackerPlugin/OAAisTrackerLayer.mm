@@ -5,6 +5,7 @@
 #import "OATargetPoint.h"
 #import "OAPointDescription.h"
 #import "Localization.h"
+#import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -18,93 +19,167 @@
 #define kAisTrackerLayerId @"ais_tracker_layer"
 
 static const int kAisTrackerStartZoom = 6;
+static const CGFloat kAisBaseIconSize = 48.0;
+static const CGFloat kAisDirectionLineStartIconFactor = 0.42;
 static int kAisIconKeyStorage;
 static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStorage;
 
-@interface OAAisObjectRenderData : NSObject
+#ifdef DEBUG
+#define OAAisLayerLog(format, ...) NSLog((@"[AIS][Layer] " format), ##__VA_ARGS__)
+#else
+#define OAAisLayerLog(format, ...)
+#endif
+
+static NSString *OAAisObjectTitle(AisObject *object)
+{
+    return [NSString stringWithFormat:OALocalizedString(@"ais_object_with_mmsi"), (long)object.mmsi];
+}
+
+@interface AisObjectDrawable : NSObject
 
 @property (nonatomic) AisObject *object;
+@property (nonatomic, copy) NSString *renderKey;
 
 - (instancetype)initWithObject:(AisObject *)object;
-- (BOOL)hasRenderData;
-- (void)createRenderDataWithBaseOrder:(int)baseOrder
-                    markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
-                 vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
-- (void)updateRenderDataWithMapView:(OAMapRendererView *)mapView
-                              plugin:(OAAisTrackerPlugin *)plugin;
-- (void)clearRenderDataFromMarkersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
-                       vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
+- (instancetype)initWithObject:(AisObject *)object
+                      textScale:(CGFloat)textScale
+           displayDensityFactor:(CGFloat)displayDensityFactor;
+- (void)set:(AisObject *)object;
+- (void)setTextScale:(CGFloat)textScale
+ displayDensityFactor:(CGFloat)displayDensityFactor;
+- (BOOL)hasAisRenderData;
+- (NSString *)currentRenderKey;
+- (int)renderGroupId;
+- (OsmAnd::PointI)markerLocation;
+- (void)createAisRenderDataWithBaseOrder:(int)baseOrder
+                       markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
+                    vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
+- (void)updateAisRenderDataWithMapView:(OAMapRendererView *)mapView
+                                plugin:(OAAisTrackerPlugin *)plugin;
+- (void)clearAisRenderDataFromMarkersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
+                          vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
 
 @end
 
-@implementation OAAisObjectRenderData
+@implementation AisObjectDrawable
 {
     std::shared_ptr<OsmAnd::MapMarker> _activeMarker;
     std::shared_ptr<OsmAnd::MapMarker> _restMarker;
     std::shared_ptr<OsmAnd::MapMarker> _lostMarker;
     std::shared_ptr<OsmAnd::VectorLine> _directionLine;
+    CGFloat _textScale;
+    CGFloat _displayDensityFactor;
 }
 
 - (instancetype)initWithObject:(AisObject *)object
 {
+    return [self initWithObject:object textScale:1.0 displayDensityFactor:UIScreen.mainScreen.scale];
+}
+
+- (instancetype)initWithObject:(AisObject *)object
+                      textScale:(CGFloat)textScale
+           displayDensityFactor:(CGFloat)displayDensityFactor
+{
     self = [super init];
     if (self)
+    {
         _object = object;
+        [self setTextScale:textScale displayDensityFactor:displayDensityFactor];
+    }
     return self;
 }
 
-- (BOOL)hasRenderData
+- (void)set:(AisObject *)object
+{
+    _object = object;
+}
+
+- (void)setTextScale:(CGFloat)textScale
+ displayDensityFactor:(CGFloat)displayDensityFactor
+{
+    _textScale = textScale > 0 ? textScale : 1.0;
+    _displayDensityFactor = MAX(1.0, displayDensityFactor);
+}
+
+- (BOOL)hasAisRenderData
 {
     return _activeMarker && _restMarker && _lostMarker && _directionLine;
 }
 
-- (void)createRenderDataWithBaseOrder:(int)baseOrder
-                    markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
-                 vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection
+- (NSString *)currentRenderKey
+{
+    return [NSString stringWithFormat:@"surface-v3-%@-%d", [self iconResourceNameForType:_object.objectClass], (int)std::round([self iconSize] * 100.0)];
+}
+
+- (int)renderGroupId
+{
+    return (int)_object.mmsi;
+}
+
+- (OsmAnd::PointI)markerLocation
+{
+    CLLocation *location = _object.location;
+    if (!location)
+        return OsmAnd::PointI(0, 0);
+    return OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
+                          OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude));
+}
+
+- (void)createAisRenderDataWithBaseOrder:(int)baseOrder
+                       markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
+                    vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection
 {
     if (!markersCollection || !vectorLinesCollection)
         return;
 
     OsmAnd::MapMarkerBuilder markerBuilder;
+    OsmAnd::PointI markerLocation = [self markerLocation];
     markerBuilder
+        .setGroupId([self renderGroupId])
+        .setMarkerId(0)
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(baseOrder + 10)
+        .setBaseOrder(baseOrder)
         .setIsHidden(true)
+        .setPosition(markerLocation)
+        .setUpdateAfterCreated(true)
         .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage([self iconImageForState:0]));
     _activeMarker = markerBuilder.buildAndAddToCollection(markersCollection);
 
     markerBuilder
+        .setMarkerId(1)
         .clearOnMapSurfaceIcons()
         .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage([self iconImageForState:1]));
     _restMarker = markerBuilder.buildAndAddToCollection(markersCollection);
 
     markerBuilder
+        .setMarkerId(2)
         .clearOnMapSurfaceIcons()
         .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage([self iconImageForState:2]));
     _lostMarker = markerBuilder.buildAndAddToCollection(markersCollection);
 
     QVector<OsmAnd::PointI> points;
-    points.push_back(OsmAnd::PointI(0, 0));
-    points.push_back(OsmAnd::PointI(1, 1));
+    points.push_back(markerLocation);
+    points.push_back(OsmAnd::PointI(markerLocation.x + 1, markerLocation.y + 1));
 
     OsmAnd::VectorLineBuilder lineBuilder;
     lineBuilder
-        .setLineId(_object.mmsi)
-        .setBaseOrder(baseOrder + 9)
+        .setLineId((int)_object.mmsi)
+        .setBaseOrder(baseOrder + 10)
         .setIsHidden(true)
-        .setLineWidth(6.0f)
+        .setLineWidth(6.0)
         .setApproximationEnabled(false)
         .setFillColor(OsmAnd::FColorARGB(1.0f, 0.0f, 0.0f, 0.0f))
         .setPoints(points);
     _directionLine = lineBuilder.buildAndAddToCollection(vectorLinesCollection);
 
-    [self updateRenderDataWithMapView:nil plugin:nil];
+    _renderKey = [self currentRenderKey];
+    [self updateAisRenderDataWithMapView:nil plugin:nil];
 }
 
-- (void)updateRenderDataWithMapView:(OAMapRendererView *)mapView
-                              plugin:(OAAisTrackerPlugin *)plugin
+- (void)updateAisRenderDataWithMapView:(OAMapRendererView *)mapView
+                                plugin:(OAAisTrackerPlugin *)plugin
 {
-    if (![self hasRenderData])
+    if (![self hasAisRenderData])
         return;
 
     const OsmAnd::ZoomLevel zoom = mapView ? mapView.zoomLevel : OsmAnd::ZoomLevel::MinZoomLevel;
@@ -113,17 +188,19 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
         _activeMarker->setIsHidden(true);
         _restMarker->setIsHidden(true);
         _lostMarker->setIsHidden(true);
-        _directionLine->setIsHidden(true);
+        if (_directionLine)
+            _directionLine->setIsHidden(true);
         return;
     }
 
-    CLLocation *location = _object.currentLocation ?: _object.location;
+    CLLocation *location = _object.location;
     if (!location)
     {
         _activeMarker->setIsHidden(true);
         _restMarker->setIsHidden(true);
         _lostMarker->setIsHidden(true);
-        _directionLine->setIsHidden(true);
+        if (_directionLine)
+            _directionLine->setIsHidden(true);
         return;
     }
 
@@ -136,10 +213,8 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     BOOL cpaWarning = plugin ? [plugin hasCpaWarningFor:_object] : NO;
     UIColor *uiColor = cpaWarning ? UIColor.redColor : [self colorForType:_object.objectClass];
     OsmAnd::ColorARGB iconColor = [uiColor toColorARGB];
-    OsmAnd::FColorARGB lineColor = [uiColor toFColorARGB];
     _activeMarker->setOnSurfaceIconModulationColor(iconColor);
     _restMarker->setOnSurfaceIconModulationColor(iconColor);
-    _directionLine->setFillColor(lineColor);
 
     _activeMarker->setIsHidden(vesselAtRest || lostTimeout);
     _restMarker->setIsHidden(!vesselAtRest);
@@ -151,34 +226,39 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
         _activeMarker->setOnMapSurfaceIconDirection(kAisIconKey, rotation);
         _lostMarker->setOnMapSurfaceIconDirection(kAisIconKey, rotation);
     }
-
-    OsmAnd::PointI markerLocation(OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
-                                  OsmAnd::Utilities::get31TileNumberY(location.coordinate.latitude));
+    OsmAnd::PointI markerLocation = [self markerLocation];
     _activeMarker->setPosition(markerLocation);
     _restMarker->setPosition(markerLocation);
     _lostMarker->setPosition(markerLocation);
 
-    if (drawDirectionLine)
+    if (drawDirectionLine && _directionLine)
     {
-        int inverseZoom = (int)OsmAnd::ZoomLevel::MaxZoomLevel - (int)zoom;
-        double lineLength = speedFactor * std::pow(2.0, inverseZoom) * 34.0 * 0.75;
+        int inverseZoom = (int)mapView.maxZoom - (int)zoom;
+        double zoomFactor = std::pow(2.0, inverseZoom);
+        CGFloat iconSize = [self iconSize];
+        double lineLength = speedFactor * zoomFactor * iconSize * 0.75;
+        double lineStartOffset = std::min(lineLength * 0.8, zoomFactor * iconSize * kAisDirectionLineStartIconFactor);
         double theta = rotation * M_PI / 180.0;
+        int startDx = (int)ceil(-sin(theta) * lineStartOffset);
+        int startDy = (int)ceil(cos(theta) * lineStartOffset);
         int dx = (int)ceil(-sin(theta) * lineLength);
         int dy = (int)ceil(cos(theta) * lineLength);
 
         QVector<OsmAnd::PointI> points;
-        points.push_back(markerLocation);
+        points.push_back(OsmAnd::PointI(markerLocation.x + startDx, markerLocation.y + startDy));
         points.push_back(OsmAnd::PointI(markerLocation.x + dx, markerLocation.y + dy));
         _directionLine->setPoints(points);
     }
-    _directionLine->setIsHidden(!drawDirectionLine);
+    if (_directionLine)
+        _directionLine->setIsHidden(!drawDirectionLine);
 }
 
-- (void)clearRenderDataFromMarkersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
-                       vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection
+- (void)clearAisRenderDataFromMarkersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
+                          vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection
 {
     if (markersCollection)
     {
+        markersCollection->removeMarkersByGroupId([self renderGroupId]);
         if (_activeMarker)
             markersCollection->removeMarker(_activeMarker);
         if (_restMarker)
@@ -187,36 +267,64 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
             markersCollection->removeMarker(_lostMarker);
     }
     if (vectorLinesCollection && _directionLine)
+    {
+        _directionLine->setIsHidden(true);
         vectorLinesCollection->removeLine(_directionLine);
+    }
 
     _activeMarker.reset();
     _restMarker.reset();
     _lostMarker.reset();
     _directionLine.reset();
+    _renderKey = nil;
 }
 
 - (sk_sp<SkImage>)iconImageForState:(NSInteger)state
 {
-    CGFloat scale = UIScreen.mainScreen.scale;
-    CGSize size = CGSizeMake(34.0, 34.0);
-    UIGraphicsBeginImageContextWithOptions(size, NO, scale);
-    CGRect bounds = CGRectInset(CGRectMake(0, 0, size.width, size.height), 4, 4);
+    CGFloat iconSize = [self iconSize];
+    if (state != 1)
+    {
+        NSString *resourceName = state == 2 ? @"c_mx_ais_vessel_cross" : [self iconResourceNameForType:_object.objectClass];
+        sk_sp<SkImage> image = [OANativeUtilities skImageFromSvgResource:resourceName width:iconSize height:iconSize];
+        if (image)
+            return image;
+    }
+
+    CGSize size = CGSizeMake(iconSize, iconSize);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 1.0);
+    CGFloat sizeFactor = iconSize / 72.0;
+    CGRect bounds = CGRectInset(CGRectMake(0, 0, size.width, size.height), 6 * sizeFactor, 6 * sizeFactor);
+
+    UIColor *baseColor = state == 2
+        ? [UIColor colorWithWhite:0.75 alpha:1.0]
+        : UIColor.whiteColor;
+    UIColor *strokeColor = state == 2
+        ? [UIColor colorWithWhite:0.47 alpha:1.0]
+        : [UIColor colorWithWhite:0.37 alpha:1.0];
 
     UIBezierPath *path;
     if (state == 1)
     {
-        path = [UIBezierPath bezierPathWithOvalInRect:bounds];
+        UIBezierPath *outer = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(bounds, 1, 1)];
+        [[UIColor darkGrayColor] setFill];
+        [outer fill];
+        path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(bounds, 4 * sizeFactor, 4 * sizeFactor)];
     }
     else if (_object.objectClass == AisObjTypeAton || _object.objectClass == AisObjTypeAtonVirtual)
     {
-        path = [UIBezierPath bezierPathWithOvalInRect:bounds];
+        path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMinY(bounds))];
+        [path addLineToPoint:CGPointMake(CGRectGetMaxX(bounds), CGRectGetMidY(bounds))];
+        [path addLineToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds))];
+        [path addLineToPoint:CGPointMake(CGRectGetMinX(bounds), CGRectGetMidY(bounds))];
+        [path closePath];
     }
     else if ([_object isMovable])
     {
         path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMinY(bounds))];
         [path addLineToPoint:CGPointMake(CGRectGetMaxX(bounds), CGRectGetMaxY(bounds))];
-        [path addLineToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds) - 6)];
+        [path addLineToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds) - 9 * sizeFactor)];
         [path addLineToPoint:CGPointMake(CGRectGetMinX(bounds), CGRectGetMaxY(bounds))];
         [path closePath];
     }
@@ -225,27 +333,44 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
         path = [UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:4];
     }
 
-    [UIColor.whiteColor setFill];
-    [UIColor.whiteColor setStroke];
-    path.lineWidth = 2;
+    [baseColor setFill];
+    [strokeColor setStroke];
+    path.lineWidth = 4 * sizeFactor;
     [path fill];
     [path stroke];
+
+    if (_object.objectClass == AisObjTypeAtonVirtual && state != 1)
+    {
+        UIBezierPath *plus = [UIBezierPath bezierPath];
+        [plus moveToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMinY(bounds) + 12 * sizeFactor)];
+        [plus addLineToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMaxY(bounds) - 12 * sizeFactor)];
+        [plus moveToPoint:CGPointMake(CGRectGetMinX(bounds) + 12 * sizeFactor, CGRectGetMidY(bounds))];
+        [plus addLineToPoint:CGPointMake(CGRectGetMaxX(bounds) - 12 * sizeFactor, CGRectGetMidY(bounds))];
+        [strokeColor setStroke];
+        plus.lineWidth = 3 * sizeFactor;
+        [plus stroke];
+    }
 
     if (state == 2)
     {
         UIBezierPath *cross = [UIBezierPath bezierPath];
-        [cross moveToPoint:CGPointMake(CGRectGetMinX(bounds) + 2, CGRectGetMinY(bounds) + 2)];
-        [cross addLineToPoint:CGPointMake(CGRectGetMaxX(bounds) - 2, CGRectGetMaxY(bounds) - 2)];
-        [cross moveToPoint:CGPointMake(CGRectGetMaxX(bounds) - 2, CGRectGetMinY(bounds) + 2)];
-        [cross addLineToPoint:CGPointMake(CGRectGetMinX(bounds) + 2, CGRectGetMaxY(bounds) - 2)];
+        [cross moveToPoint:CGPointMake(CGRectGetMinX(bounds) + 2 * sizeFactor, CGRectGetMinY(bounds) + 2 * sizeFactor)];
+        [cross addLineToPoint:CGPointMake(CGRectGetMaxX(bounds) - 2 * sizeFactor, CGRectGetMaxY(bounds) - 2 * sizeFactor)];
+        [cross moveToPoint:CGPointMake(CGRectGetMaxX(bounds) - 2 * sizeFactor, CGRectGetMinY(bounds) + 2 * sizeFactor)];
+        [cross addLineToPoint:CGPointMake(CGRectGetMinX(bounds) + 2 * sizeFactor, CGRectGetMaxY(bounds) - 2 * sizeFactor)];
         [UIColor.blackColor setStroke];
-        cross.lineWidth = 3;
+        cross.lineWidth = 3 * sizeFactor;
         [cross stroke];
     }
 
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return [OANativeUtilities skImageFromCGImage:image.CGImage];
+}
+
+- (CGFloat)iconSize
+{
+    return kAisBaseIconSize * _textScale * _displayDensityFactor;
 }
 
 - (UIColor *)colorForType:(AisObjType)type
@@ -267,6 +392,19 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
         case AisObjTypeAtonVirtual: return [UIColor colorWithRed:0.92 green:0.82 blue:0.14 alpha:1.0];
         case AisObjTypeLandStation: return [UIColor colorWithRed:0.45 green:0.45 blue:0.45 alpha:1.0];
         default: return [UIColor colorWithRed:0.04 green:0.62 blue:0.72 alpha:1.0];
+    }
+}
+
+- (NSString *)iconResourceNameForType:(AisObjType)type
+{
+    switch (type)
+    {
+        case AisObjTypeLandStation: return @"c_mx_ais_land";
+        case AisObjTypeAirplane: return @"c_mx_ais_plane";
+        case AisObjTypeSart: return @"c_mx_ais_sar";
+        case AisObjTypeAton: return @"c_mx_ais_aton";
+        case AisObjTypeAtonVirtual: return @"c_mx_ais_aton_virt";
+        default: return @"c_mx_ais_vessel";
     }
 }
 
@@ -296,11 +434,15 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
 @implementation OAAisTrackerLayer
 {
     OAAisTrackerPlugin *_plugin;
-    NSMutableDictionary<NSNumber *, OAAisObjectRenderData *> *_objectRenderData;
+    NSMutableDictionary<NSNumber *, AisObjectDrawable *> *_objectDrawables;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _vectorLinesCollection;
     id _objectsObserver;
+    id _objectReceivedObserver;
+    id _objectRemovedObserver;
     BOOL _collectionsAdded;
+    CGFloat _textScale;
+    CGFloat _displayDensityFactor;
 }
 
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
@@ -309,7 +451,9 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     if (self)
     {
         _plugin = (OAAisTrackerPlugin *)[OAPluginsHelper getPlugin:OAAisTrackerPlugin.class];
-        _objectRenderData = [NSMutableDictionary dictionary];
+        _objectDrawables = [NSMutableDictionary dictionary];
+        _textScale = [OAAisTrackerLayer currentTextScale];
+        _displayDensityFactor = MAX(1.0, mapViewController.displayDensityFactor);
     }
     return self;
 }
@@ -319,9 +463,56 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     return kAisTrackerLayerId;
 }
 
+- (OAAisTrackerPlugin *)plugin
+{
+    if (!_plugin)
+        _plugin = (OAAisTrackerPlugin *)[OAPluginsHelper getPlugin:OAAisTrackerPlugin.class];
+    return _plugin;
+}
+
+- (void)ensureObjectDrawables
+{
+    if (!_objectDrawables)
+        _objectDrawables = [NSMutableDictionary dictionary];
+}
+
++ (CGFloat)currentTextScale
+{
+    CGFloat textScale = [[OAAppSettings sharedManager].textSize get];
+    return textScale > 0 ? textScale : 1.0;
+}
+
+- (CGFloat)currentDisplayDensityFactor
+{
+    CGFloat displayDensityFactor = self.mapViewController.displayDensityFactor;
+    if (displayDensityFactor <= 0)
+        displayDensityFactor = UIScreen.mainScreen.scale;
+    return MAX(1.0, displayDensityFactor);
+}
+
+- (CGFloat)currentIconSize
+{
+    return kAisBaseIconSize * _textScale * _displayDensityFactor;
+}
+
+- (BOOL)updateScaleCache
+{
+    CGFloat textScale = [OAAisTrackerLayer currentTextScale];
+    CGFloat displayDensityFactor = [self currentDisplayDensityFactor];
+    BOOL changed = fabs(_textScale - textScale) > 0.0001 || fabs(_displayDensityFactor - displayDensityFactor) > 0.0001;
+    if (changed)
+    {
+        _textScale = textScale;
+        _displayDensityFactor = displayDensityFactor;
+    }
+    return changed;
+}
+
 - (void)initLayer
 {
     [super initLayer];
+    [self ensureObjectDrawables];
+    [self updateScaleCache];
     [self resetCollections];
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
@@ -331,7 +522,43 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
                                                                        object:nil
                                                                         queue:NSOperationQueue.mainQueue
                                                                    usingBlock:^(NSNotification * _Nonnull note) {
-        [weakSelf reloadObjects];
+        OAAisTrackerLayer *strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        if ([note.object isKindOfClass:OAAisTrackerPlugin.class])
+            strongSelf->_plugin = note.object;
+        [strongSelf cleanupResources];
+        if ([strongSelf isVisible])
+        {
+            [strongSelf addCollectionsToRenderer];
+            [strongSelf reloadObjects];
+        }
+    }];
+    _objectReceivedObserver = [NSNotificationCenter.defaultCenter addObserverForName:@"OAAisObjectReceived"
+                                                                              object:nil
+                                                                               queue:NSOperationQueue.mainQueue
+                                                                          usingBlock:^(NSNotification * _Nonnull note) {
+        OAAisTrackerLayer *strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        if ([note.object isKindOfClass:OAAisTrackerPlugin.class])
+            strongSelf->_plugin = note.object;
+        AisObject *object = note.userInfo[@"object"];
+        if ([object isKindOfClass:AisObject.class])
+            [strongSelf onAisObjectReceived:object];
+    }];
+    _objectRemovedObserver = [NSNotificationCenter.defaultCenter addObserverForName:@"OAAisObjectRemoved"
+                                                                             object:nil
+                                                                              queue:NSOperationQueue.mainQueue
+                                                                         usingBlock:^(NSNotification * _Nonnull note) {
+        OAAisTrackerLayer *strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        if ([note.object isKindOfClass:OAAisTrackerPlugin.class])
+            strongSelf->_plugin = note.object;
+        AisObject *object = note.userInfo[@"object"];
+        if ([object isKindOfClass:AisObject.class])
+            [strongSelf onAisObjectRemoved:object];
     }];
 }
 
@@ -342,13 +569,23 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
         [NSNotificationCenter.defaultCenter removeObserver:_objectsObserver];
         _objectsObserver = nil;
     }
+    if (_objectReceivedObserver)
+    {
+        [NSNotificationCenter.defaultCenter removeObserver:_objectReceivedObserver];
+        _objectReceivedObserver = nil;
+    }
+    if (_objectRemovedObserver)
+    {
+        [NSNotificationCenter.defaultCenter removeObserver:_objectRemovedObserver];
+        _objectRemovedObserver = nil;
+    }
     [self cleanupResources];
     [super deinitLayer];
 }
 
 - (BOOL)isVisible
 {
-    return [_plugin isEnabled];
+    return [[self plugin] isActiveForCurrentProfile];
 }
 
 - (void)show
@@ -367,6 +604,13 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     if (![super updateLayer])
         return NO;
 
+    BOOL scaleChanged = [self updateScaleCache];
+    if (scaleChanged)
+    {
+        OAAisLayerLog(@"scale changed textScale=%.2f density=%.2f iconSize=%.1f", _textScale, _displayDensityFactor, [self currentIconSize]);
+        [self cleanupResources];
+    }
+
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
     if ([self isVisible])
@@ -383,6 +627,11 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
 
 - (void)onMapFrameRendered
 {
+    if (![self isVisible])
+    {
+        [self removeCollectionsFromRenderer];
+        return;
+    }
     [self updateRenderData];
 }
 
@@ -422,12 +671,21 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
 
 - (void)cleanupResources
 {
-    [self removeCollectionsFromRenderer];
-    if (_markersCollection)
-        _markersCollection->removeAllMarkers();
-    if (_vectorLinesCollection)
-        _vectorLinesCollection->removeAllLines();
-    [_objectRenderData removeAllObjects];
+    [self.mapViewController runWithRenderSync:^{
+        if (_markersCollection)
+            _markersCollection->removeAllMarkers();
+        if (_vectorLinesCollection)
+            _vectorLinesCollection->removeAllLines();
+        if (_collectionsAdded)
+        {
+            if (_markersCollection)
+                [self.mapView removeKeyedSymbolsProvider:_markersCollection];
+            if (_vectorLinesCollection)
+                [self.mapView removeKeyedSymbolsProvider:_vectorLinesCollection];
+            _collectionsAdded = NO;
+        }
+    }];
+    [_objectDrawables removeAllObjects];
     [self resetCollections];
 }
 
@@ -443,7 +701,10 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
 
 - (void)reloadObjectsSync
 {
-    NSArray<AisObject *> *objects = [_plugin getAisObjects];
+    [self ensureObjectDrawables];
+    [self updateScaleCache];
+    OAAisTrackerPlugin *plugin = [self plugin];
+    NSArray<AisObject *> *objects = [plugin getAisObjects];
     NSMutableSet<NSNumber *> *visibleMmsi = [NSMutableSet set];
     for (AisObject *object in objects)
     {
@@ -452,26 +713,85 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
 
         NSNumber *key = @(object.mmsi);
         [visibleMmsi addObject:key];
-        OAAisObjectRenderData *renderData = _objectRenderData[key];
-        if (!renderData)
+        AisObjectDrawable *drawable = _objectDrawables[key];
+        if (!drawable)
         {
-            renderData = [[OAAisObjectRenderData alloc] initWithObject:object];
-            _objectRenderData[key] = renderData;
+            drawable = [[AisObjectDrawable alloc] initWithObject:object textScale:_textScale displayDensityFactor:_displayDensityFactor];
+            _objectDrawables[key] = drawable;
         }
-        renderData.object = object;
-        if (![renderData hasRenderData])
-            [renderData createRenderDataWithBaseOrder:self.baseOrder markersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-        [renderData updateRenderDataWithMapView:self.mapView plugin:_plugin];
+        [drawable setTextScale:_textScale displayDensityFactor:_displayDensityFactor];
+        [drawable set:object];
+        if ([drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]])
+            [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
+        if (![drawable hasAisRenderData])
+            [drawable createAisRenderDataWithBaseOrder:self.baseOrder markersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
+        [drawable updateAisRenderDataWithMapView:self.mapView plugin:plugin];
     }
 
-    for (NSNumber *key in [_objectRenderData.allKeys copy])
+    for (NSNumber *key in [_objectDrawables.allKeys copy])
     {
         if (![visibleMmsi containsObject:key])
         {
-            [_objectRenderData[key] clearRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
-            [_objectRenderData removeObjectForKey:key];
+            [_objectDrawables[key] clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
+            [_objectDrawables removeObjectForKey:key];
         }
     }
+    [plugin updateSimulationRenderedObjects:_objectDrawables.count];
+}
+
+- (void)onAisObjectReceived:(AisObject *)object
+{
+    if (![self isVisible] || !object.hasPosition)
+        return;
+
+    OAAisLayerLog(@"receive %@", object.debugSummary);
+    [self addCollectionsToRenderer];
+    [self.mapViewController runWithRenderSync:^{
+        [self updateAisObjectSync:object];
+    }];
+}
+
+- (void)onAisObjectRemoved:(AisObject *)object
+{
+    if (!object)
+        return;
+
+    [self.mapViewController runWithRenderSync:^{
+        NSNumber *key = @(object.mmsi);
+        AisObjectDrawable *drawable = _objectDrawables[key];
+        OAAisLayerLog(@"remove hasDrawable=%@ drawables=%lu %@", drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, object.debugSummary);
+        if (drawable)
+        {
+            [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
+            [_objectDrawables removeObjectForKey:key];
+        }
+        [[self plugin] updateSimulationRenderedObjects:_objectDrawables.count];
+    }];
+}
+
+- (void)updateAisObjectSync:(AisObject *)object
+{
+    [self ensureObjectDrawables];
+    [self updateScaleCache];
+    NSNumber *key = @(object.mmsi);
+    AisObjectDrawable *drawable = _objectDrawables[key];
+    if (!drawable)
+    {
+        drawable = [[AisObjectDrawable alloc] initWithObject:object textScale:_textScale displayDensityFactor:_displayDensityFactor];
+        _objectDrawables[key] = drawable;
+    }
+    [drawable setTextScale:_textScale displayDensityFactor:_displayDensityFactor];
+    [drawable set:object];
+    BOOL recreated = [drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]];
+    if (recreated)
+        [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
+    if (![drawable hasAisRenderData])
+        [drawable createAisRenderDataWithBaseOrder:self.baseOrder markersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
+    [drawable updateAisRenderDataWithMapView:self.mapView plugin:[self plugin]];
+    int groupMarkers = _markersCollection ? _markersCollection->getMarkersCountByGroupId((int)object.mmsi) : 0;
+    int linesCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
+    OAAisLayerLog(@"update recreated=%@ drawables=%lu groupMarkers=%d lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, groupMarkers, linesCount, object.debugSummary);
+    [[self plugin] updateSimulationRenderedObjects:_objectDrawables.count];
 }
 
 - (void)updateRenderData
@@ -479,8 +799,18 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     if (![self isVisible])
         return;
 
-    for (NSNumber *key in _objectRenderData)
-        [_objectRenderData[key] updateRenderDataWithMapView:self.mapView plugin:_plugin];
+    if ([self updateScaleCache])
+    {
+        OAAisLayerLog(@"scale changed textScale=%.2f density=%.2f iconSize=%.1f", _textScale, _displayDensityFactor, [self currentIconSize]);
+        [self cleanupResources];
+        [self addCollectionsToRenderer];
+        [self reloadObjects];
+        return;
+    }
+
+    OAAisTrackerPlugin *plugin = [self plugin];
+    for (NSNumber *key in _objectDrawables)
+        [_objectDrawables[key] updateAisRenderDataWithMapView:self.mapView plugin:plugin];
 }
 
 #pragma mark - OAContextMenuProvider
@@ -491,15 +821,17 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
         return nil;
 
     AisObject *object = obj;
-    CLLocation *location = object.currentLocation ?: object.location;
+    CLLocation *location = object.location;
     if (!location)
         return nil;
 
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.type = OATargetAisObject;
     targetPoint.targetObj = object;
-    targetPoint.title = object.title;
-    targetPoint.titleSecond = [self objectTypeName:object.objectClass];
+    targetPoint.title = OAAisObjectTitle(object);
+    targetPoint.titleSecond = nil;
+    targetPoint.titleAddress = object.navStatusString.length > 0 ? object.navStatusString : nil;
+    targetPoint.shouldFetchAddress = NO;
     targetPoint.location = location.coordinate;
     targetPoint.icon = [UIImage imageNamed:@"ic_plugin_nautical"];
     targetPoint.sortIndex = OATargetAisObject;
@@ -522,7 +854,7 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     if (![obj isKindOfClass:AisObject.class] || !((AisObject *)obj).hasPosition)
         return nil;
     AisObject *object = obj;
-    return object.currentLocation ?: object.location;
+    return object.location;
 }
 
 - (OAPointDescription *)getObjectName:(id)obj
@@ -530,7 +862,7 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     if (![obj isKindOfClass:AisObject.class])
         return nil;
     AisObject *object = obj;
-    return [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION typeName:OALocalizedString(@"plugin_ais_tracker_name") name:object.title];
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION typeName:OALocalizedString(@"ais_type_object") name:OAAisObjectTitle(object)];
 }
 
 - (BOOL)showMenuAction:(id)object
@@ -554,7 +886,9 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
         return;
 
     CGPoint point = result.point;
-    int radius = MAX(28, (int)([self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER));
+    [self updateScaleCache];
+    int iconRadius = (int)ceil([self currentIconSize] * 0.55);
+    int radius = MAX(iconRadius, (int)([self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER));
     QList<OsmAnd::PointI> touchPolygon31 =
         [OANativeUtilities getPolygon31FromScreenAreaLeft:point.x - radius
                                                       top:point.y - radius
@@ -563,17 +897,25 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
     if (touchPolygon31.isEmpty())
         return;
 
-    for (AisObject *object in [_plugin getAisObjects])
+    NSArray<AisObject *> *objects = [[self plugin] getAisObjects];
+    BOOL collected = NO;
+    for (AisObject *object in objects)
     {
-        CLLocation *location = object.currentLocation ?: object.location;
+        CLLocation *location = object.location;
         if (!location)
             continue;
 
         if ([OANativeUtilities isPointInsidePolygonLat:location.coordinate.latitude
                                                    lon:location.coordinate.longitude
                                              polygon31:touchPolygon31])
+        {
             [result collect:object provider:self];
+            collected = YES;
+            OAAisLayerLog(@"hit-test collect radius=%d %@", radius, object.debugSummary);
+        }
     }
+    if (!collected)
+        OAAisLayerLog(@"hit-test miss radius=%d objects=%lu point=(%.1f, %.1f)", radius, (unsigned long)objects.count, point.x, point.y);
 }
 
 - (NSString *)objectTypeName:(AisObjType)type

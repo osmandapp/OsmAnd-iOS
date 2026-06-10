@@ -2501,6 +2501,7 @@
 "ais_type_virtual_aid_to_navigation" = "Virtual aid to navigation";
 "ais_type_other_vessel" = "Other vessel";
 "ais_type_object" = "AIS object";
+"ais_object_with_mmsi" = "AIS object with MMSI %ld";
 "ais_unknown" = "unknown";
 "ais_not_specified" = "not specified";
 "ais_ship_type_wig" = "Wing in ground (WIG)";

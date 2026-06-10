@@ -257,6 +257,7 @@
 #import "OAFoldersCell.h"
 #import "OAShapesTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
+#import "OAFolderCardsCell.h"
 
 
 // Views

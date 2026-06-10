@@ -3799,3 +3799,9 @@
 "relative_gradient_point_m_summary" = "Χρώμα για την μέγιστη τιμή που υπάρχει στο ίχνος.";
 "relative_gradient_point_avg_summary" = "Χρώμα για την μέση τιμή του ίχνους.";
 "relative_gradient_point_min_summary" = "Χρώμα για την ελάχιστη τιμή που υπάρχει στο ίχνος.";
+"liquid_glass" = "Liquid Glass";
+"private_access_routing_req_short" = "Ο προορισμός είναι σε ιδιωτική περιοχή. Να επιτραπεί η χρήση ιδιωτικών δρόμων;";
+"view_on_phone" = "Προβολή στο Τηλέφωνο";
+"missing_maps_header" = "Ελλιπείς ή ξεπερασμένοι χάρτες";
+"missing_maps_description" = "Κάποιοι χάρτες εκτός σύνδεσης που απαιτούνται για αυτή την διαδρομή λείπουν ή δεν είναι ενημερωμένοι. Παρακαλούμε κατεβάστε ή ενημερώστε αυτούς τους χάρτες.";
+"shared_string_allow" = "Επιτρέπω";

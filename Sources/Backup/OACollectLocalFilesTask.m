@@ -44,7 +44,7 @@
 
 - (void) execute
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         
         NSMutableArray<OALocalFile *> *result = [NSMutableArray array];
         _infos = [_dbHelper getUploadedFileInfoMap];

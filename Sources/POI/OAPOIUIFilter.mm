@@ -58,6 +58,7 @@
 @property (nonatomic) NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes;
 @property (nonatomic) NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesOrigin;
 @property (nonatomic) NSMapTable<NSString *, OAPOIType *> *poiAdditionals;
+@property (nonatomic) BOOL isNearbyPoi;
 
 @end
 
@@ -92,6 +93,7 @@
         isStandardFilter = YES;
         filterId = STD_PREFIX;
         _dataProvider = [[PoiUIFilterDataProvider alloc] initWithFilter:self];
+        _isNearbyPoi = NO;
     }
     return self;
 }
@@ -313,6 +315,7 @@
         [acceptedTypes setObject:[OAPOIBaseType nullSet] forKey:t];
 
     distanceToSearchValues = @[@0.5, @1, @2, @5, @10, @20, @50, @100];
+    _isNearbyPoi = YES;
 }
 
 - (BOOL) isSearchFurtherAvailable
@@ -925,6 +928,11 @@
     } cancelledFunc:^BOOL{
         return matcher && [matcher isCancelled];
     }];
+}
+
+- (OASearchSortType) getDefaultSearchType
+{
+    return _isNearbyPoi ? OASearchSortTypeOnlyByDistance : OASearchSortTypeUnknown;
 }
 
 - (NSString *) getName

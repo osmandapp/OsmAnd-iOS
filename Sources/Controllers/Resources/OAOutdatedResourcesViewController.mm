@@ -527,7 +527,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
     if (item == nil)
         return;
 
-    [self onItemClicked:item];
+    [self onItemClicked:item sourceView:nil];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -541,7 +541,7 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
         id item = _resourcesItems[indexPath.row];
 
         if (item != nil)
-            [self onItemClicked:item];
+            [self onItemClicked:item sourceView:nil];
     }
     else if (indexPath.section == _updatesSection && indexPath.row == _weatherForecastsRow)
     {

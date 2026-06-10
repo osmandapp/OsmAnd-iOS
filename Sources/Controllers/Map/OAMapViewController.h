@@ -54,7 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer;
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint;
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
@@ -195,6 +195,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) updatePoiLayer;
 - (OAPOILayer *) getMapPoiLayer;
+
+- (OATargetPoint *)osmEditsTargetPoint:(id)obj touchLocation:(nullable CLLocation *)touchLocation;
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;

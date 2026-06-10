@@ -134,6 +134,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+    BOOL _isFetchingNearestPoi;
 }
 
 - (instancetype)init
@@ -527,6 +528,9 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 {
     if (OARowsContainKey(rows, @"nearest_poi"))
         return;
+    
+    if (_isFetchingNearestPoi)
+        return;
 
     OAPOI *poi = [self getTargetObj];
     if (![poi isKindOfClass:OAPOI.class] || ![self showNearestPoi])
@@ -541,7 +545,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         [self addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
         return;
     }
-
+    _isFetchingNearestPoi = YES;
     __weak __typeof(self) weakSelf = self;
     [self fetchNearestPoi:poi filter:filter completion:^(NSArray<OAPOI *> *results) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -555,6 +559,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
             [strongSelf addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
             [strongSelf updateInfoRows];
         }
+        strongSelf->_isFetchingNearestPoi = NO;
     }];
 }
 
@@ -1751,7 +1756,21 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         }
         else
         {
-            [OAUtilities callUrl:NSStringIsEmpty(info.hiddenUrl) ? info.text : info.hiddenUrl];
+            NSString *inputString = NSStringIsEmpty(info.hiddenUrl) ? info.text : info.hiddenUrl;
+            NSArray<NSString *> *urls = [inputString extractValidURLs];
+     
+            if (urls.count == 1)
+                [OAUtilities callUrl:urls.firstObject];
+            else if (urls.count > 1)
+            {
+                MultipleValuesViewController *controller = [[MultipleValuesViewController alloc] initWithTitle:localizedString(@"shared_string_url")
+                                                                                                          urls:urls
+                                                                                                      onSelect:^(NSString * _Nonnull selectedURL) {
+                    [OAUtilities callUrl:selectedURL];
+                }];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+                [self.navController presentViewController:navigationController animated:YES completion:nil];
+            }
         }
     }
     else if (info.isText && info.moreText)

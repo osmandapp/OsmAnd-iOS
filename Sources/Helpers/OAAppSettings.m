@@ -252,6 +252,7 @@ static NSString * const customWidgetKeys = @"custom_widgets_keys";
 static NSString * const tracksSortModesKey = @"tracks_tabs_sort_modes";
 static NSString * const searchTracksSortModesKey = @"search_tracks_sort_mode";
 static NSString * const travelGuidesSortModeKey = @"travel_guides_tabs_sort_mode";
+static NSString * const osmEditsSortModeKey = @"osm_edits_tabs_sort_mode";
 static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
@@ -6093,8 +6094,11 @@ static NSString *kOfflineKey = @"OFFLINE";
         _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeTitleFor:nil]];
         [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
         
-        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultSortModeTitle]];
+        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeTitle]];
         [_globalPreferences setObject:_travelGuidesSortMode forKey:travelGuidesSortModeKey];
+        
+        _osmEditsSortMode = [OACommonString withKey:osmEditsSortModeKey defValue:[MyPlacesSortModeHelper defaultOsmEditsSortModeTitle]];
+               [_globalPreferences setObject:_osmEditsSortMode forKey:osmEditsSortModeKey];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];

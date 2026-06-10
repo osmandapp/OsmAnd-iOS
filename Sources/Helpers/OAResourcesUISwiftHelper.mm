@@ -415,7 +415,7 @@
     {
         [items addObject:item.objcResourceItem];
     }
-    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:multipleItem.objcResourceItem selectedItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:multipleItem.objcResourceItem selectedItems:items sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
 }
 
 + (void)deleteResourcesOf:(NSArray<OAResourceSwiftItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block

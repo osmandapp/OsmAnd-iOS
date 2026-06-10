@@ -3352,7 +3352,7 @@
 "resting_position_icon_summary" = "Icona visualizzata quando non ti stai muovendo.";
 "resting_position" = "Posizione di riposo";
 "mile_per_hour" = "mi/h";
-"shared_string_ok" = "Ok";
+"shared_string_ok" = "OK";
 "offline_wikivoyage" = "Wikivoyage offline";
 "srtm_plugin_name" = "Topografia";
 "short_location_on_map" = "Lat %@ \nLon %@";

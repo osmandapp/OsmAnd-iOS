@@ -1814,6 +1814,7 @@
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
 "folder_tracks_count" = "%d tracks";
+"folder_one_track" = "1 track";
 
 "delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";
@@ -1836,6 +1837,9 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
+"delete_changes" = "Delete changes";
+"osm_edits_delete_item_confirmation" = "Are you sure you want to delete %ld edit?";
+"osm_edits_delete_items_confirmation" = "Are you sure you want to delete %ld edits?";
 
 "routing_algorithm" = "Routing algorithm";
 "auto_zoom" = "Autozoom";
@@ -4560,3 +4564,35 @@
 "missing_maps_header" = "Missing or outdated maps";
 "missing_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "shared_string_allow" = "Allow";
+
+"map_variant_duplicate_title" = "Duplicated map";
+"map_variant_has_standard_download_road_message" = "You already have the standard map for %@.\n\nDownloading the road-only map will duplicate data and may degrade performance.";
+"map_variant_has_road_download_standard_message" = "You already have the road-only map for %@.\n\nDownloading the standard map will duplicate data and may degrade performance.";
+"map_variant_replace_with_road_only" = "Replace with Road-only";
+"map_variant_replace_with_standard" = "Replace with Standard";
+
+"organize_by" = "Organize by";
+"organize_by_summary" = "Automatically organize your tracks into groups based on a selected parameter like activity, speed, or location.";
+"group_general" = "General";
+"group_date_time" = "Date & Time";
+"group_altitude_elevation" = "Altitude and elevation";
+"group_sensors" = "Sensors";
+"shared_string_length" = "Length";
+"year_of_creation" = "Year of creation";
+"month_year_creation" = "Month and Year of creation";
+"nearest_city" = "Nearest city";
+"organize_by_max_speed" = "Max. speed";
+"avg_speed" = "Avg. speed";
+"organize_by_max_altitude" = "Max. altitude";
+"shared_string_avg_altitude" = "Avg. altitude";
+"shared_string_uphill" = "Uphill";
+"shared_string_downhill" = "Downhill";
+"sort_highest_first" = "Highest first";
+"sort_lowest_first" = "Lowest first";
+"set_step_size" = "Set step size";
+"set_step_size_summary" = "Choose a step size to group your tracks.";
+"shared_string_step" = "Step";
+"shared_string_unlock" = "Unlock";
+
+"shared_string_url" = "URL";
+

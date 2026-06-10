@@ -4086,3 +4086,9 @@
 "edit_palette" = "Uredi paletu";
 "delete_palette" = "Obriši paletu";
 "delete_colors_palette_dialog_summary" = "Da li ste sigurni da želite da obrišete %@ paletu?";
+"dismiss_changes_descr" = "Sve promene će biti odbačene.";
+"gpx_logging_no_data" = "Nema podataka";
+"delete_changes" = "Obriši izmene";
+"osm_edits_delete_item_confirmation" = "Da li ste sigurni da želite da obrišete %ld izmenu?";
+"osm_edits_delete_items_confirmation" = "Da li ste sigurni da želite da obrišete %ld izmene?";
+"show_touches" = "Prikaži dodire";

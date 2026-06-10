@@ -3907,7 +3907,7 @@
 "ios_release_5_4" = "• Added \"Terrain shadows\" visualization type\n
 • Completely redesigned the \"My Places\" user interface, adding subfolders for Favorites and more convenient actions\n
 • Added support for Road-only maps\n
-• Expanded profile customization by adding support for all POI icons\n"
+• Expanded profile customization by adding support for all POI icons\n
 • Added bicycle width setting to avoid narrow cycleways\n
 • Added OBD-II adapter voltage widget\n
 • Improved performance for managing a large number of favorites\n

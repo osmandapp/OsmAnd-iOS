@@ -1157,6 +1157,7 @@ final class FavoriteListViewController: UIViewController {
         }
 
         updateNavigationBarTitle()
+        configureToolbar()
     }
 
     @objc private func favoriteDataDidChange() {

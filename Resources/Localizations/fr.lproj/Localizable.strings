@@ -4101,7 +4101,7 @@
 "organize_by" = "Trier par";
 "organize_by_summary" = "Regroupez automatiquement vos parcours en fonction d'un paramètre de votre choix, tel que l'activité, la vitesse ou la localisation.";
 "group_general" = "Généralités";
-"group_date_time" = "Date & Heure";
+"group_date_time" = "Date & heure";
 "group_altitude_elevation" = "Altitude et dénivelé";
 "group_sensors" = "Capteurs";
 "shared_string_length" = "Longueur";
@@ -4114,8 +4114,8 @@
 "shared_string_avg_altitude" = "Altitude moyenne";
 "shared_string_uphill" = "En montée";
 "shared_string_downhill" = "En descente";
-"sort_highest_first" = "Les mieux classés en premier";
-"sort_lowest_first" = "Du moins cher au plus cher";
+"sort_highest_first" = "Plus grand en premier";
+"sort_lowest_first" = "Plus petit en premier";
 "set_step_size" = "Définir la taille du pas";
 "set_step_size_summary" = "Choisissez une étape pour regrouper vos traces.";
 "shared_string_step" = "Étape";

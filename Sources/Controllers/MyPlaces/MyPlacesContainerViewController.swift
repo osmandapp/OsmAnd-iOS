@@ -12,6 +12,7 @@ protocol MyPlacesDelegate: AnyObject {
     func updateSegmentedControlVisibility(_ isVisible: Bool)
     func updateEditMode(_ edit: Bool)
     @objc optional func updateTitle(_ title: String, hideSubtitle: Bool)
+    @objc optional func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool)
     @objc optional func updateToolbar(with items: [UIBarButtonItem]?)
 }
 
@@ -200,10 +201,14 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func setupNavbarTitle(_ title: String, hideSubtitle: Bool) {
+        setupNavbarTitle(title, subtitle: localizedString("shared_string_my_places"), hideSubtitle: hideSubtitle)
+    }
+
+    private func setupNavbarTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
         navigationItem.setStackViewWithTitle(title,
                                              titleColor: .textColorPrimary,
                                              titleFont: .scaledSystemFont(ofSize: 17.0, weight: .semibold, maximumSize: 22.0),
-                                             subtitle: hideSubtitle ? "" : localizedString("shared_string_my_places"),
+                                             subtitle: hideSubtitle ? "" : subtitle,
                                              subtitleColor: .textColorSecondary,
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
@@ -303,6 +308,10 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     
     func updateTitle(_ title: String, hideSubtitle: Bool) {
         setupNavbarTitle(title, hideSubtitle: hideSubtitle)
+    }
+
+    func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
+        setupNavbarTitle(title, subtitle: subtitle, hideSubtitle: hideSubtitle)
     }
     
     func updateToolbar(with items: [UIBarButtonItem]?) {

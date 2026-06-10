@@ -496,10 +496,15 @@ final class FavoriteListViewController: UIViewController {
 
     private func updateNavigationBarTitle() {
         if collectionView.isEditing {
-            let selectedItemsCount = collectionView.indexPathsForSelectedItems?.count ?? 0
-            let itemText = localizedString(selectedItemsCount > 1 ? "shared_string_items" : "shared_string_item").lowercased()
-            let title = selectedItemsCount == 0 ? localizedString("select_items") : "\(selectedItemsCount) \(itemText)"
-            setNavigationTitle(title, subtitle: "", hideSubtitle: true)
+            let selectedItems = bridgeItems(for: collectionView.indexPathsForSelectedItems ?? [])
+            guard !selectedItems.isEmpty else {
+                setNavigationTitle("", subtitle: "", hideSubtitle: true)
+                return
+            }
+            
+            let pointsCount = selectedFavoritePointsCount(for: selectedItems)
+            let subtitle = "\(pointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
+            setNavigationTitle("\(selectedItems.count)", subtitle: subtitle, hideSubtitle: false)
         } else {
             setNavigationTitle(normalTitle, subtitle: normalSubtitle, hideSubtitle: false)
         }
@@ -507,7 +512,9 @@ final class FavoriteListViewController: UIViewController {
 
     private func setNavigationTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
         if isRootFolder {
-            myPlacesDelegate?.updateTitle?(title, hideSubtitle: hideSubtitle)
+            if myPlacesDelegate?.updateTitle?(title, subtitle: subtitle, hideSubtitle: hideSubtitle) == nil {
+                myPlacesDelegate?.updateTitle?(title, hideSubtitle: hideSubtitle)
+            }
         } else {
             navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
         }
@@ -1007,6 +1014,12 @@ final class FavoriteListViewController: UIViewController {
         let pointsCount = folderPointsCount + points.count
 
         return String(format: localizedString("mixed_delete_confirmation_message"), folders.count, pointsCount)
+    }
+
+    private func selectedFavoritePointsCount(for selectedItems: [Any]) -> Int {
+        let folderPointsCount = selectedItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }.reduce(0) { $0 + Int($1.subtreePointsCount) }
+        let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
+        return folderPointsCount + pointsCount
     }
 
     private func bridgeItems(for indexPaths: [IndexPath]) -> [Any] {

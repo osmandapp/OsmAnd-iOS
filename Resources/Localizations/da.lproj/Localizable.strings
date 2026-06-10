@@ -4092,3 +4092,4 @@
 "osm_edits_delete_item_confirmation" = "Er du sikker på, at du vil slette %ld redigering?";
 "osm_edits_delete_items_confirmation" = "Er du sikker på, at du vil slette %ld redigeringer?";
 "show_touches" = "Vis berøringer";
+"shared_string_url" = "URL";

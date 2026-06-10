@@ -12,13 +12,15 @@ import OsmAndShared
 final class ImportTrackItem: Hashable {
     let index: Int
     let name: String
-    let gpxFile: GpxFile          // один track из исходного файла
+    let gpxFile: GpxFile
+    var analysis: GpxTrackAnalysis?
+    var statisticsCells: [OAGPXTableCellData] = []
     var selectedPoints: [WptPt] = []
     var suggestedPoints: [WptPt] = []
+    var previewImage: UIImage?
+    var isPreviewLoading = false
+    var bitmapDrawer: TrackBitmapDrawer?
 
-    // preview — позже
-    // var previewImage: UIImage?
-    
     init(index: Int, name: String, gpxFile: GpxFile, selectedPoints: [WptPt], suggestedPoints: [WptPt]) {
         self.index = index
         self.name = name
@@ -26,7 +28,7 @@ final class ImportTrackItem: Hashable {
         self.selectedPoints = selectedPoints
         self.suggestedPoints = suggestedPoints
     }
-
+  
     static func == (lhs: ImportTrackItem, rhs: ImportTrackItem) -> Bool {
         lhs.index == rhs.index
     }
@@ -36,49 +38,55 @@ final class ImportTrackItem: Hashable {
     }
 }
 
-private enum ImportTracksRowKey: String {
-    case infoDescr
-    case importAsOne
-    case track
-    case selectGroups
-    case folderChips
-}
-
-private enum ImportTracksRowObjKey {
-    static let importTrackItem = "importTrackItem"
-    static let isSelected = "isSelected"
-    static let tracksCount = "tracksCount"
-    static let chipsValues = "values"
-    static let chipsSelectedIndex = "selectedValue"
-}
-
 @objc protocol ImportTracksViewControllerDelegate: AnyObject {
     @objc optional func importTracksViewControllerDidFinishImport(_ controller: ImportTracksViewController, success: Bool)
     @objc optional func importTracksViewController(_ controller: ImportTracksViewController, didSaveTrack success: Bool, gpxFile: GpxFile)
 }
 
 final class ImportTracksViewController: OABaseButtonsViewController {
+    private enum RowKey: String {
+        case infoDescr
+        case importAsOne
+        case trackHeader
+        case trackPreview
+        case trackStats
+        case trackWaypoints
+        case selectGroups
+        case folderChips
+    }
+
+    private enum RowObjKey {
+        static let importTrackItem = "importTrackItem"
+        static let tracksCount = "tracksCount"
+        static let attributedTitleKey = "attributedTitle"
+        static let statisticsCells = "statisticsCells"
+        
+        static let foldersValues = "values"
+        static let foldersSizes = "sizes"
+        static let foldersSelectedValue = "selectedValue"
+        static let foldersAddButtonTitle = "addButtonTitle"
+    }
+    
     weak var delegate: ImportTracksViewControllerDelegate?
     
-    private let attributedTitleKey = "attributedTitle"
-    
+    // Input
     private let gpxFile: GpxFile
     private let fileName: String
     private var selectedFolderPath: String
     private let importURL: URL?
     private let openGpxView: Bool
     private var importCompletion: ((Bool) -> Void)?
-    
+    // Tracks
     private var trackItems: [ImportTrackItem] = []
     private var selectedTracks: Set<ImportTrackItem> = []
     private var isCollectingTracks = false
     private var isSavingTracks = false
     private var collectTracksTask: CollectTracksTask?
-    
+    private let trackPreviewManager = TrackPreviewManager()
+    // Folders
     private var folderNames: [String] = []
     private var selectedFolderIndex: Int = 0
     private let foldersScrollState = OACollectionViewCellState()
-    
     // UI
     private let progressStackView = UIStackView()
     private let progressIndicator = UIActivityIndicatorView(style: .medium)
@@ -112,6 +120,10 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        trackPreviewManager.cancelAll(trackItems)
+    }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -129,12 +141,10 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
-        addCell(OARightIconTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
-//        addCell(FolderCardsCell.reuseIdentifier)
+        addCell(OAImageDescTableViewCell.reuseIdentifier)
         tableView.register(FolderCardsCell.self, forCellReuseIdentifier: FolderCardsCell.reuseIdentifier)
-        // когда будет готова:
-        // addCell(ImportTrackTableViewCell.reuseIdentifier)
+        tableView.register(TrackStatsTableCell.self, forCellReuseIdentifier: TrackStatsTableCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -142,54 +152,76 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
         guard !trackItems.isEmpty else { return }
 
-        // Section 0 — Info
+        // Info
         let infoSection = tableData.createNewSection()
 
         let descrRow = infoSection.createNewRow()
         descrRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        descrRow.key = ImportTracksRowKey.infoDescr.rawValue
-        descrRow.setObj(makeImportTracksDescription(fileName: fileName, tracksCount: trackItems.count), forKey: attributedTitleKey)
+        descrRow.key = RowKey.infoDescr.rawValue
+        descrRow.setObj(makeImportTracksDescription(fileName: fileName, tracksCount: trackItems.count), forKey: RowObjKey.attributedTitleKey)
 
         let importAsOneRow = infoSection.createNewRow()
         importAsOneRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        importAsOneRow.key = ImportTracksRowKey.importAsOne.rawValue
+        importAsOneRow.key = RowKey.importAsOne.rawValue
         importAsOneRow.title = localizedString("import_as_one_track")
 
-        // Section 1 — Tracks
+        // Tracks
         for item in trackItems {
+            // Header
             let section = tableData.createNewSection()
             let row = section.createNewRow()
-            row.cellType = OARightIconTableViewCell.reuseIdentifier // v1; потом ImportTrackTableViewCell
-            row.key = ImportTracksRowKey.track.rawValue
+            row.cellType = OASimpleTableViewCell.reuseIdentifier
+            row.key = RowKey.trackHeader.rawValue
             row.title = item.name
-            row.descr = String(
-                format: localizedString("ltr_or_rtl_combine_via_dash"),
-                localizedString("shared_string_gpx_track"),
-                "\(item.index + 1)/\(trackItems.count)"
-            )
-            row.setObj(item, forKey: ImportTracksRowObjKey.importTrackItem)
-            row.setObj(selectedTracks.contains(item), forKey: ImportTracksRowObjKey.isSelected)
-            row.setObj(trackItems.count, forKey: ImportTracksRowObjKey.tracksCount)
+            let ofPart = String(format: localizedString("ltr_or_rtl_combine_via_of"), item.index, trackItems.count)
+            row.descr = String(format: localizedString("ltr_or_rtl_combine_via_space"), localizedString("shared_string_gpx_track"), ofPart)
+            row.setObj(item, forKey: RowObjKey.importTrackItem)
+            row.setObj(trackItems.count, forKey: RowObjKey.tracksCount)
+            
+            // Preview
+            let previewRow = section.createNewRow()
+            previewRow.cellType = OAImageDescTableViewCell.reuseIdentifier
+            previewRow.key = RowKey.trackPreview.rawValue
+            previewRow.setObj(item, forKey: RowObjKey.importTrackItem)
+            
+            // Stats
+            if !item.statisticsCells.isEmpty {
+                let statsRow = section.createNewRow()
+                statsRow.cellType = TrackStatsTableCell.reuseIdentifier
+                statsRow.key = RowKey.trackStats.rawValue
+                statsRow.setObj(item.statisticsCells, forKey: RowObjKey.statisticsCells)
+                statsRow.setObj(item, forKey: RowObjKey.importTrackItem)
+            }
+            
+            let selectedPoints = item.selectedPoints.count
+            let totalPoints = gpxFile.getPointsList().count
+            let pointsRow = section.createNewRow()
+            pointsRow.cellType = OAValueTableViewCell.reuseIdentifier
+            pointsRow.key = RowKey.trackWaypoints.rawValue
+            pointsRow.title = localizedString("shared_string_waypoints")
+            pointsRow.descr = "\(selectedPoints)/\(totalPoints)"
+            pointsRow.icon = .icCustomFolder
+            pointsRow.iconTintColor = .iconColorActive
         }
 
-        // Section 2 — Folder
+        // Folders
         let folderSection = tableData.createNewSection()
         folderSection.headerText = localizedString("plan_route_folder")
         folderSection.footerText = localizedString("import_tracks_folders_footer")
 
         let selectGroupsRow = folderSection.createNewRow()
         selectGroupsRow.cellType = OAValueTableViewCell.reuseIdentifier
-        selectGroupsRow.key = ImportTracksRowKey.selectGroups.rawValue
+        selectGroupsRow.key = RowKey.selectGroups.rawValue
         selectGroupsRow.title = localizedString("select_group")
         selectGroupsRow.descr = folderNames[safe: selectedFolderIndex]
 
         let chipsRow = folderSection.createNewRow()
         chipsRow.cellType = FolderCardsCell.reuseIdentifier
-        chipsRow.key = ImportTracksRowKey.folderChips.rawValue
-        chipsRow.setObj(folderNames, forKey: "values")
-        chipsRow.setObj(folderTrackCounts(), forKey: "sizes")
-        chipsRow.setObj(selectedFolderIndex, forKey: "selectedValue")
-        chipsRow.setObj(localizedString("add_folder"), forKey: "addButtonTitle")
+        chipsRow.key = RowKey.folderChips.rawValue
+        chipsRow.setObj(folderNames, forKey: RowObjKey.foldersValues)
+        chipsRow.setObj(folderTrackCounts(), forKey: RowObjKey.foldersSizes)
+        chipsRow.setObj(selectedFolderIndex, forKey: RowObjKey.foldersSelectedValue)
+        chipsRow.setObj(localizedString("add_folder"), forKey: RowObjKey.foldersAddButtonTitle)
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -197,49 +229,41 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
         switch item.cellType {
         case OASimpleTableViewCell.reuseIdentifier:
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: OASimpleTableViewCell.reuseIdentifier,
-                for: indexPath
-            ) as! OASimpleTableViewCell
-            cell.selectionStyle = .none
-            cell.leftIconVisibility(false)
-            cell.descriptionVisibility(false)
-            if item.key == ImportTracksRowKey.infoDescr.rawValue, let attributed = item.obj(forKey: attributedTitleKey) as? NSAttributedString {
-                cell.titleLabel.attributedText = attributed
-            } else if item.key == ImportTracksRowKey.importAsOne.rawValue {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+            cell.setCustomLeftSeparatorInset(true)
+            
+            if item.key == RowKey.infoDescr.rawValue,
+                let attributed = item.obj(forKey: RowObjKey.attributedTitleKey) as? NSAttributedString {
+                cell.descriptionLabel.attributedText = attributed
+                cell.leftIconVisibility(false)
+                cell.descriptionVisibility(true)
+                cell.titleVisibility(false)
+                hideSeparator(for: cell, false)
+                cell.selectionStyle = .none
+            } else if item.key == RowKey.importAsOne.rawValue {
                 cell.titleLabel.text = item.title
                 cell.titleLabel.textColor = .textColorActive
-            } else {
-                cell.titleLabel.text = item.title
-                cell.titleLabel.textColor = .textColorPrimary
-            }
-            cell.titleLabel.numberOfLines = 0
-            cell.setCustomLeftSeparatorInset(true)
-            cell.separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
-            
-            return cell
-
-        case OARightIconTableViewCell.reuseIdentifier:
-            let cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier, for: indexPath) as! OARightIconTableViewCell
-
-            if item.key == ImportTracksRowKey.importAsOne.rawValue {
-                cell.titleLabel.text = item.title
-                cell.descriptionLabel.text = nil
+                cell.leftIconVisibility(false)
+                cell.titleVisibility(true)
                 cell.descriptionVisibility(false)
-                cell.titleLabel.textColor = .iconColorActive
-                cell.accessoryType = .none
-            } else if item.key == ImportTracksRowKey.track.rawValue {
-                let selected = item.bool(forKey: ImportTracksRowObjKey.isSelected)
+                hideSeparator(for: cell, true)
+                cell.selectionStyle = .default
+            } else if item.key == RowKey.trackHeader.rawValue,
+                      let track = item.obj(forKey: RowObjKey.importTrackItem) as? ImportTrackItem {
+                let selected = selectedTracks.contains(track)
                 cell.titleLabel.text = item.title
-                cell.descriptionLabel.text = item.descr
-                cell.descriptionVisibility(true)
                 cell.titleLabel.textColor = .textColorPrimary
-                cell.leftIconView.image = UIImage.templateImageNamed(
-                    selected ? "ic_action_done" : "ic_action_unchecked"
-                )
+                cell.descriptionLabel.text = item.descr
+                cell.leftIconView.image = selected ? .icCustomDone : .icCustomCheckboxUnselected
                 cell.leftIconView.tintColor = selected ? .iconColorActive : .iconColorSecondary
-                cell.accessoryType = .disclosureIndicator
+                cell.leftIconVisibility(true)
+                cell.titleVisibility(true)
+                cell.descriptionVisibility(true)
+                hideSeparator(for: cell, true)
+                cell.selectionStyle = .default
             }
+            cell.textStackView.isHidden = false
+            
             return cell
 
         case OAValueTableViewCell.reuseIdentifier:
@@ -251,7 +275,13 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             cell.leftIconVisibility(false)
             cell.accessoryType = .disclosureIndicator
             cell.setCustomLeftSeparatorInset(true)
-            cell.separatorInset = .init(top: 0, left: .greatestFiniteMagnitude, bottom: 0, right: 0)
+            hideSeparator(for: cell, true)
+            
+            if item.key == RowKey.trackWaypoints.rawValue {
+                cell.leftIconVisibility(true)
+                cell.leftIconView.image = item.icon
+                cell.leftIconView.tintColor = item.iconTintColor
+            }
             return cell
 
         case FolderCardsCell.reuseIdentifier:
@@ -260,13 +290,54 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             cell.delegate = self
             cell.cellIndex = indexPath
             cell.state = foldersScrollState
-            cell.setValues(item.obj(forKey: "values") as? [String] ?? [],
-                           sizes: item.obj(forKey: "sizes") as? [NSNumber],
+            cell.setValues(item.obj(forKey: RowObjKey.foldersValues) as? [String] ?? [],
+                           sizes: item.obj(forKey: RowObjKey.foldersSizes) as? [NSNumber],
                            colors: nil,
                            hidden: nil,
-                           addButtonTitle: item.string(forKey: "addButtonTitle") ?? localizedString("add_folder"),
-                           withSelectedIndex: Int32(item.integer(forKey: "selectedValue")),
+                           addButtonTitle: item.string(forKey: RowObjKey.foldersAddButtonTitle) ?? localizedString("add_folder"),
+                           withSelectedIndex: Int32(item.integer(forKey: RowObjKey.foldersSelectedValue)),
                            addButtonPosition: .beginning)
+            return cell
+            
+        case TrackStatsTableCell.reuseIdentifier:
+            let cell = tableView.dequeueReusableCell(withIdentifier: TrackStatsTableCell.reuseIdentifier, for: indexPath) as! TrackStatsTableCell
+            cell.selectionStyle = .none
+            cell.backgroundColor = .groupBg
+            if let statisticsCells = item.obj(forKey: RowObjKey.statisticsCells) as? [OAGPXTableCellData] {
+                cell.configure(statistics: statisticsCells)
+            }
+            hideSeparator(for: cell, false)
+            return cell
+            
+        case OAImageDescTableViewCell.reuseIdentifier:
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAImageDescTableViewCell.reuseIdentifier, for: indexPath) as! OAImageDescTableViewCell
+
+            cell.selectionStyle = .none
+            cell.backgroundColor = .groupBg
+            cell.descView.isHidden = true
+            cell.imageBottomToLabelConstraint.priority = .defaultLow
+            cell.imageBottomConstraint.priority = .required
+            cell.imageBottomConstraint.constant = 0
+            cell.imageTopConstraint.constant = 0
+            cell.iconView.contentMode = .scaleAspectFill
+            cell.iconView.clipsToBounds = true
+            cell.iconView.layer.cornerRadius = 10
+            cell.iconViewHeight.constant = 96
+
+            guard let trackItem = item.obj(forKey: RowObjKey.importTrackItem) as? ImportTrackItem else {
+                return cell
+            }
+
+            if let image = trackItem.previewImage {
+                cell.activityIndicatorView.stopAnimating()
+                cell.activityIndicatorView.isHidden = true
+                cell.iconView.image = image
+            } else {
+                cell.iconView.image = nil
+                cell.activityIndicatorView.isHidden = false
+                cell.activityIndicatorView.startAnimating()
+            }
+            hideSeparator(for: cell, true)
             return cell
 
         default:
@@ -277,23 +348,42 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         switch item.key {
-        case ImportTracksRowKey.importAsOne.rawValue:
-            importAsOneTrack() // SaveGpxAsyncTask — позже
-        case ImportTracksRowKey.track.rawValue:
-            guard let trackItem = item.obj(forKey: ImportTracksRowObjKey.importTrackItem) as? ImportTrackItem else { return }
+        case RowKey.importAsOne.rawValue:
+            importAsOneTrackAction()
+        case RowKey.trackHeader.rawValue:
+            guard let trackItem = item.obj(forKey: RowObjKey.importTrackItem) as? ImportTrackItem else { return }
             if selectedTracks.contains(trackItem) {
                 selectedTracks.remove(trackItem)
             } else {
                 selectedTracks.insert(trackItem)
             }
             updateButtonsState()
-            generateData()
             tableView.reloadData()
-        case ImportTracksRowKey.selectGroups.rawValue:
-            showSelectFolderScreen()
+        case RowKey.selectGroups.rawValue:
+            showSelectFolderScreenAction()
         default:
             break
         }
+    }
+    
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+    
+    override func getCustomHeight(forHeader section: Int) -> CGFloat {
+        let headerText = tableData.sectionData(for: UInt(section)).headerText
+        if !headerText.isEmpty {
+            return UITableView.automaticDimension
+        }
+        return 0
+    }
+    
+    override func getCustomHeight(forFooter section: Int) -> CGFloat {
+        let headerText = tableData.sectionData(for: UInt(section)).footerText
+        if !headerText.isEmpty {
+            return UITableView.automaticDimension
+        }
+        return 16
     }
     
     // MARK: - NavBar
@@ -307,7 +397,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
     
     override func onLeftNavbarButtonPressed() {
-        showExitConfirmation()
+        showExitConfirmationAction()
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]? {
@@ -317,7 +407,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         let allSelected = selectedTracks.count == trackItems.count
         let title = localizedString(allSelected ? "shared_string_deselect_all" : "shared_string_select_all")
         guard let button = OABaseNavbarViewController.createRightNavbarButton(title, icon: nil, color: .label,
-                                                                              action: #selector(onSelectAllNavbarButtonPressed),
+                                                                              action: #selector(onSelectAllAction),
                                                                               target: self, menu: nil) else {
             return []
         }
@@ -329,6 +419,16 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         super.updateNavbar()
         if let button = getLeftNavbarButton().customView as? UIButton {
             button.tintColor = .label
+        }
+    }
+    
+    private func updateSelectAllButtonTitle() {
+        let allSelected = !trackItems.isEmpty && selectedTracks.count == trackItems.count
+        let title = localizedString(allSelected ? "shared_string_deselect_all" : "shared_string_select_all")
+        if let button = navigationItem.rightBarButtonItems?.first?.customView as? UIButton {
+            button.setTitle(title, for: .normal)
+            button.sizeToFit()
+            button.accessibilityLabel = title
         }
     }
     
@@ -349,7 +449,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
     
     override func onTopButtonPressed() {
-        importSelectedTracks()
+        importSelectedTracksAction()
     }
     
     // MARK: - Setup
@@ -391,21 +491,22 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         tableView.isHidden = progressVisible
         topButton.isHidden = progressVisible
         separatorBottomView.isHidden = progressVisible
-        setupNavbarButtons()
     }
     
     private func collectTracks() {
-        collectTracksTask = CollectTracksTask(
-            gpxFile: gpxFile,
-            fileName: fileName,
-            listener: self
-        )
+        collectTracksTask = CollectTracksTask(gpxFile: gpxFile, fileName: fileName, listener: self)
         collectTracksTask?.execute()
+    }
+    
+    private func updateButtonsState() {
+        topButton.isEnabled = !selectedTracks.isEmpty
+        updateBottomButtons()
+        updateSelectAllButtonTitle()
     }
 
     // MARK: - Actions
     
-    @objc private func onSelectAllNavbarButtonPressed() {
+    @objc private func onSelectAllAction() {
         if selectedTracks.count == trackItems.count {
             selectedTracks.removeAll()
         } else {
@@ -415,16 +516,15 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         tableView.reloadData()
     }
     
-    private func importSelectedTracks() {
+    private func importSelectedTracksAction() {
         // SaveTracksTask
     }
     
-    private func importAsOneTrack() {
-        
+    private func importAsOneTrackAction() {
     }
     
     @objc
-    private func showExitConfirmation() {
+    private func showExitConfirmationAction() {
         let alert = UIAlertController(title: localizedString("import_tracks_cancel_title"),
                                       message: localizedString("import_tracks_cancel_descr"),
                                       preferredStyle: .alert)
@@ -436,13 +536,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         present(alert, animated: true)
     }
     
-    private func updateButtonsState() {
-        topButton.isEnabled = !selectedTracks.isEmpty
-        updateBottomButtons()
-        updateNavbar()
-    }
-    
-    private func showSelectFolderScreen() {
+    private func showSelectFolderScreenAction() {
         guard let vc = OASelectTrackFolderViewController(selectedFolderName: folderDisplayName(for: selectedFolderPath)) else {
             return
         }
@@ -451,13 +545,18 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         present(navController, animated: true)
     }
     
-    private func showAddFolderScreen() {
-//        let vc = OAAddTrackFolderViewController()
-//        vc.delegate = self
-//        navigationController?.pushViewController(vc, animated: true)
+    private func showAddFolderScreenAction() {
+        let vc = OAAddTrackFolderViewController()
+        vc.delegate = self
+        present(vc, animated: true)
     }
     
     // MARK: - Helpers methods
+    
+    private func hideSeparator(for cell: UITableViewCell, _ isHide: Bool) {
+        let inset = max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+        cell.separatorInset = .init(top: 0, left: isHide ? inset : 16, bottom: 0, right: isHide ? -inset : 16)
+    }
     
     private func makeImportTracksDescription(fileName: String, tracksCount: Int) -> NSAttributedString {
         let text: String
@@ -467,7 +566,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             text = String(format: localizedString("import_tracks_descr_other"), fileName, tracksCount)
         }
 
-        let baseFont = UIFont.preferredFont(forTextStyle: .body)
+        let baseFont = UIFont.preferredFont(forTextStyle: .subheadline)
         let activeColor = UIColor.textColorActive
 
         let result = NSMutableAttributedString(
@@ -512,17 +611,6 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         }
         return gpxPath.appendingPathComponent(name)
     }
-
-    private func getFoldersChipsValues() -> [[String: String]] {
-        var values: [[String: String]] = [[
-            "title": localizedString("add_folder"),
-            "img": "ic_action_plus"
-        ]]
-        for name in folderNames {
-            values.append(["title": name, "img": "ic_custom_folder"])
-        }
-        return values
-    }
     
     private func folderTrackCounts() -> [NSNumber] {
         let gpxPath = OsmAndApp.swiftInstance().gpxPath ?? ""
@@ -541,6 +629,20 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             return NSNumber(value: count)
         }
     }
+
+    private func reloadPreviewRow(for item: ImportTrackItem) {
+        for section in 0..<tableData.sectionCount() {
+            for row in 0..<tableData.rowCount(section) {
+                let indexPath = IndexPath(row: Int(row), section: Int(section))
+                let rowItem = tableData.item(for: indexPath)
+                guard rowItem.key == RowKey.trackPreview.rawValue,
+                      let trackItem = rowItem.obj(forKey: RowObjKey.importTrackItem) as? ImportTrackItem,
+                      trackItem.index == item.index else { continue }
+                tableView.reloadRows(at: [indexPath], with: .none)
+                return
+            }
+        }
+    }
 }
 
 // MARK: - CollectTracksListener
@@ -556,10 +658,21 @@ extension ImportTracksViewController: CollectTracksListener {
         isCollectingTracks = false
         trackItems = items
         selectedTracks = Set(items)
+        for item in trackItems {
+            if let analysis = item.analysis {
+                item.statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false) as? [OAGPXTableCellData] ?? []
+            }
+        }
         updateProgress()
+        updateNavbar()
         updateButtonsState()
         generateData()
         tableView.reloadData()
+        
+        let params = MapDrawParams.importTrackPreviewParams(size: .init(width: tableView.bounds.width - 64, height: 96))
+        trackPreviewManager.startPreviews(for: items, params: params) { [weak self] item in
+            self?.reloadPreviewRow(for: item)
+        }
     }
 }
 
@@ -574,7 +687,7 @@ extension ImportTracksViewController: FolderCardsCellDelegate {
         tableView.reloadData()
     }
     func onAddFolderButtonPressed() {
-        showAddFolderScreen()
+        showAddFolderScreenAction()
     }
 }
 
@@ -610,5 +723,11 @@ extension ImportTracksViewController: OASelectTrackFolderDelegate {
 //                debugPrint(error)
 //            }
 //        }
+    }
+}
+
+extension ImportTracksViewController: OAAddTrackFolderDelegate {
+    func onTrackFolderAdded(_ folderName: String) {
+        print(folderName)
     }
 }

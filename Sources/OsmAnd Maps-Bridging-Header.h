@@ -110,6 +110,7 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmNotePoint.h"
+#import "OATrackPreviewMapRenderer.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -221,6 +222,7 @@
 #import "OAOsmNoteViewController.h"
 #import "OAOsmEditingViewController.h"
 #import "OAOsmUploadPOIViewController.h"
+#import "OAAddTrackFolderViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -257,6 +259,7 @@
 #import "OAFoldersCell.h"
 #import "OAShapesTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
+#import "OAImageDescTableViewCell.h"
 
 
 // Views

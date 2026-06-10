@@ -15,7 +15,6 @@ protocol CollectTracksListener: AnyObject {
 }
 
 final class CollectTracksTask: OAAsyncTask {
-
     private let gpxFile: GpxFile
     private let fileName: String
     private weak var listener: CollectTracksListener?
@@ -42,27 +41,35 @@ final class CollectTracksTask: OAAsyncTask {
             guard !track.isGeneralTrack() else { continue }
 
             let trackFile = GpxFile(author: gpxAuthor())
-            (trackFile.tracks as? NSMutableArray)?.add(track)
+            trackFile.tracks.add(track)
 
             copyAppearance(from: gpxFile, track: track, to: trackFile)
-            trackFile.metadata = OsmAndShared.Metadata.init(source: gpxFile.metadata)
+            let metadata = OsmAndShared.Metadata.init(source: gpxFile.metadata)
+            metadata.name = nil
+            trackFile.metadata = metadata
 
-            var trackName = track.name
-            if trackName == nil || trackName!.isEmpty {
-                trackName = String(
-                    format: localizedString("ltr_or_rtl_combine_via_dash"),
-                    baseName,
-                    "\(index)"
-                )
+            var trackName = track.name ?? ""
+            if trackName.isEmpty {
+                trackName = String(format: localizedString("ltr_or_rtl_combine_via_dash"), baseName, "\(index + 1)")
             }
-
-            items.append(ImportTrackItem(
+            
+            let analysis = trackFile.getAnalysis(
+                fileTimestamp: 0,
+                fromDistance: nil,
+                toDistance: nil,
+                pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser()
+            )
+            
+            let item = ImportTrackItem(
                 index: index,
-                name: trackName!,
+                name: trackName,
                 gpxFile: trackFile,
                 selectedPoints: [],
                 suggestedPoints: []
-            ))
+            )
+            item.analysis = analysis
+
+            items.append(item)
         }
 
         for point in gpxFile.getPointsList() {

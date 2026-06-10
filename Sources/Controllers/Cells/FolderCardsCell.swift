@@ -125,17 +125,15 @@ final class FolderCardsCell: UITableViewCell {
         selectedFolderIndex = Int(index)
         
         let folderItems: [Item] = values.enumerated().map { i, title in
-            let sizeNumber = (sizes != nil && i < sizes!.count) ? sizes![i] : nil
+            let sizeNumber = sizes?[safe: i]
             let sizeString = sizeNumber.map { "\($0.intValue)" } ?? ""
             
-            var color = (colors != nil && i < colors!.count && colors![i] != nil)
-            ? colors![i]
-            : UIColor(named: "iconColorActive")!
+            var color = colors?[safe: i] ?? .iconColorActive
             
-            let visible = (hidden != nil && i < hidden!.count) ? !hidden![i].boolValue : true
+            let visible = hidden?[safe: i]?.boolValue ?? true
             let imageName = visible ? "ic_custom_folder" : "ic_custom_folder_hidden_outlined"
             if !visible {
-                color = UIColor(named: "iconColorSecondary")!
+                color = .iconColorSecondary
             }
             
             return Item(title: title,

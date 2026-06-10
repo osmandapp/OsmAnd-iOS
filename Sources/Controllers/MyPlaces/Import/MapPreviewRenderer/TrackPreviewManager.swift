@@ -1,0 +1,56 @@
+//
+//  TrackPreviewManager.swift
+//  OsmAnd Maps
+//
+//  Created by Vitaliy Sova on 10.06.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
+
+import UIKit
+
+final class TrackPreviewDrawerListener: MapBitmapDrawerListener {
+    private weak var item: ImportTrackItem?
+    private let onUpdate: (ImportTrackItem) -> Void
+
+    init(item: ImportTrackItem, onUpdate: @escaping (ImportTrackItem) -> Void) {
+        self.item = item
+        self.onUpdate = onUpdate
+    }
+
+    func onBitmapDrawn(image: UIImage) {
+        guard let item else { return }
+        item.previewImage = image
+        item.isPreviewLoading = false
+        onUpdate(item)
+    }
+}
+
+final class TrackPreviewManager {
+    private var listeners: [ImportTrackItem: TrackPreviewDrawerListener] = [:]
+
+    func startPreviews(for items: [ImportTrackItem], params: MapDrawParams, onUpdate: @escaping (ImportTrackItem) -> Void) {
+        for item in items {
+            guard item.previewImage == nil, item.bitmapDrawer == nil else { continue }
+
+            let drawer = TrackBitmapDrawer(params: params, gpxFile: item.gpxFile)
+            drawer.defaultTrackColor = Int32(bitPattern: UInt32(truncatingIfNeeded: kDefaultTrackColor))
+
+            let listener = TrackPreviewDrawerListener(item: item) { onUpdate($0) }
+            listeners[item] = listener
+            drawer.addListener(listener)
+            item.bitmapDrawer = drawer
+            item.isPreviewLoading = true
+            drawer.initAndDraw()
+        }
+    }
+
+    func cancelAll(_ items: [ImportTrackItem]) {
+        OATrackPreviewMapRenderer.shared().cancelAll()
+        OATrackPreviewRenderer.shared.cancelAll()
+        for item in items {
+            item.bitmapDrawer?.isDrawingAllowed = false
+            item.bitmapDrawer = nil
+            listeners[item] = nil
+        }
+    }
+}

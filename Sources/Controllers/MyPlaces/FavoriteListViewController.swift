@@ -41,13 +41,18 @@ private enum FavoriteListSection: Hashable {
 }
 
 private enum FavoriteListItem: Hashable {
-    case sortHeader(FavoriteSortMode)
+    case sortHeader(FavoriteSortHeader)
     case backupBanner
     case header(FavoriteFolderSection)
     case folder(FavoriteFolderRow)
     case favorite(FavoritePointRow)
     case statsFooter(FavoriteFolderStats)
     case emptyState
+}
+
+private struct FavoriteSortHeader: Hashable {
+    let sortMode: FavoriteSortMode
+    let includesDistanceSortModes: Bool
 }
 
 private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
@@ -181,8 +186,12 @@ final class FavoriteListViewController: UIViewController {
 
     private var searchText = ""
     private var isSearchActive = false
+    private var isSelectionModeInSearch = false
+    private var isSearchResultsMode: Bool {
+        isSearchActive || isSelectionModeInSearch
+    }
     private var isAvailablePaymentBanner: Bool {
-        isRootFolder && !isSearchActive && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
+        isRootFolder && !isSearchResultsMode && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
     }
     private var isRootFolder: Bool {
         guard case .root = screenMode else { return false }
@@ -208,8 +217,15 @@ final class FavoriteListViewController: UIViewController {
         guard case .folder(let folder, _) = screenMode, !folder.bridgeItem.groupName.isEmpty else { return nil }
         return folder.bridgeItem.groupName
     }
+    private var searchParentGroupName: String? {
+        guard case .folder(let folder, _) = screenMode else { return nil }
+        return folder.bridgeItem.groupName
+    }
     private var currentSortMode: FavoriteSortMode {
-        isSearchActive ? searchFavoriteSortMode() : favoriteSortMode()
+        isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode()
+    }
+    private var currentSortHeader: FavoriteSortHeader {
+        FavoriteSortHeader(sortMode: currentSortMode, includesDistanceSortModes: isSearchResultsMode || !isRootFolder)
     }
     private var currentSortEntryId: String {
         parentGroupName ?? ""
@@ -236,9 +252,9 @@ final class FavoriteListViewController: UIViewController {
         cell.accessories = [.outlineDisclosure(options: disclosureOptions)]
         cell.tintColor = .iconColorActive
     }
-    private lazy var sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortMode> { [weak self] cell, _, sortMode in
-        cell.sortButton.setImage(sortMode.image, for: .normal)
-        cell.sortButton.menu = self?.makeSortMenu()
+    private lazy var sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortHeader> { [weak self] cell, _, sortHeader in
+        cell.sortButton.setImage(sortHeader.sortMode.image, for: .normal)
+        cell.sortButton.menu = self?.makeSortMenu(includesDistanceSortModes: sortHeader.includesDistanceSortModes)
     }
     private lazy var backupBannerCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
@@ -301,6 +317,16 @@ final class FavoriteListViewController: UIViewController {
     }
     private lazy var emptyStateCellRegistration = UICollectionView.CellRegistration<EmptyStateCollectionViewCell, Void>(cellNib: UINib(nibName: EmptyStateCollectionViewCell.reuseIdentifier, bundle: nil)) { [weak self] cell, _, _ in
         guard let self else { return }
+        cell.button.removeTarget(nil, action: nil, for: .touchUpInside)
+        if self.isSearchResultsMode {
+            cell.configure(image: UIImage.templateImageNamed("ic_custom_search") ?? .icCustomFavorites,
+                           title: localizedString("no_search_results"),
+                           description: localizedString("favorite_search_empty_state_description"))
+            cell.button.setTitle(localizedString("shared_string_clear_all"), for: .normal)
+            cell.button.addTarget(self, action: #selector(self.clearSearchButtonClicked), for: .touchUpInside)
+            return
+        }
+
         let isRootFolder = self.isRootFolder
         cell.configure(image: isRootFolder ? .icCustomFavorites : .icCustomFolderOpen,
                        title: localizedString(isRootFolder ? "empty_state_favourites" : "tracks_empty_folder"),
@@ -436,8 +462,9 @@ final class FavoriteListViewController: UIViewController {
         if collectionView.isEditing {
             let cancelButton = UIBarButtonItem(title: localizedString("shared_string_cancel"), style: .plain, target: self, action: #selector(cancelButtonPressed))
             cancelButton.accessibilityLabel = localizedString("shared_string_cancel")
-            let selectAllButton = UIBarButtonItem(title: localizedString("shared_string_select_all"), style: .plain, target: self, action: #selector(selectAllButtonPressed))
-            selectAllButton.accessibilityLabel = localizedString("shared_string_select_all")
+            let selectAllTitle = localizedString(areAllSelectableItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
+            let selectAllButton = UIBarButtonItem(title: selectAllTitle, style: .plain, target: self, action: #selector(selectAllButtonPressed))
+            selectAllButton.accessibilityLabel = selectAllTitle
             targetNavigationItem?.leftBarButtonItem = cancelButton
             targetNavigationItem?.rightBarButtonItems = [selectAllButton]
             if isRootFolder {
@@ -475,6 +502,13 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func configureToolbar() {
+        guard !isSearchActive || collectionView.isEditing else {
+            if hasSearchResults() {
+                configureSearchToolbar()
+            }
+            return
+        }
+
         let isSelected = collectionView.indexPathsForSelectedItems?.isEmpty == false
         let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
@@ -492,6 +526,23 @@ final class FavoriteListViewController: UIViewController {
         } else {
             toolbarItems = items
         }
+    }
+
+    private func configureSearchToolbar() {
+        let selectButton = UIBarButtonItem(title: localizedString("shared_string_select"), style: .plain, target: self, action: #selector(searchSelectButtonPressed))
+        selectButton.accessibilityLabel = localizedString("shared_string_select")
+        let items = [selectButton]
+        if isRootFolder {
+            myPlacesDelegate?.updateToolbar?(with: items)
+        } else {
+            toolbarItems = items
+        }
+    }
+
+    private func updateSelectionUI() {
+        updateNavigationBarTitle()
+        configureNavigationButtons()
+        configureToolbar()
     }
 
     private func updateNavigationBarTitle() {
@@ -521,7 +572,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func updateSegmentedControlVisibility() {
-        myPlacesDelegate?.updateSegmentedControlVisibility(isRootFolder && !collectionView.isEditing && !isSearchActive)
+        myPlacesDelegate?.updateSegmentedControlVisibility(isRootFolder && !collectionView.isEditing && !isSearchResultsMode)
     }
 
     private func favoriteSortMode(entryId: String? = nil) -> FavoriteSortMode {
@@ -536,7 +587,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {
-        if isSearchActive {
+        if isSearchResultsMode {
             settings.searchFavoriteSortMode.set(sortMode.title)
         } else {
             var sortModes = settings.getFavoriteSortModes()
@@ -560,8 +611,8 @@ final class FavoriteListViewController: UIViewController {
         settings.saveFavoriteSortModes(sortModes)
     }
 
-    private func makeSortMenu() -> UIMenu {
-        let modes: [FavoriteSortMode] = isRootFolder && !isSearchActive ? [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst] : FavoriteSortMode.allCases
+    private func makeSortMenu(includesDistanceSortModes: Bool) -> UIMenu {
+        let modes: [FavoriteSortMode] = includesDistanceSortModes ? FavoriteSortMode.allCases : [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst]
         let groups: [[FavoriteSortMode]] = [[.lastModified], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst], [.nearest, .farthest]]
         let sections = groups.compactMap { group -> UIMenu? in
             let actions = group.filter { modes.contains($0) }.map { makeSortAction(for: $0) }
@@ -587,8 +638,8 @@ final class FavoriteListViewController: UIViewController {
         let emptyStateCellRegistration = emptyStateCellRegistration
         return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
-            case .sortHeader(let sortMode):
-                return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: sortMode)
+            case .sortHeader(let sortHeader):
+                return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: sortHeader)
             case .backupBanner:
                 return collectionView.dequeueConfiguredReusableCell(using: backupBannerCellRegistration, for: indexPath, item: item)
             case .header(let section):
@@ -616,6 +667,11 @@ final class FavoriteListViewController: UIViewController {
 
     private func applyRootSnapshot(animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
+        if isSearchResultsMode {
+            applySearchSnapshot(allFolders: allFolders, parentGroupName: nil, animatingDifferences: animatingDifferences)
+            return
+        }
+
         var snapshot = Snapshot()
         if allFolders.isEmpty {
             layoutSections = []
@@ -643,7 +699,7 @@ final class FavoriteListViewController: UIViewController {
         layoutSections = sections
         collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections(sections)
-        snapshot.appendItems([.sortHeader(currentSortMode)], toSection: .sortHeader)
+        snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
         if isPaymentBannerVisible {
             snapshot.appendItems([.backupBanner], toSection: .backupBanner)
         }
@@ -666,6 +722,11 @@ final class FavoriteListViewController: UIViewController {
 
     private func applyFolderSnapshot(folder: FavoriteFolderRow, animatingDifferences: Bool) {
         let allFolders = favoriteFolders()
+        if isSearchResultsMode {
+            applySearchSnapshot(allFolders: allFolders, parentGroupName: folder.bridgeItem.groupName, animatingDifferences: animatingDifferences)
+            return
+        }
+
         let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
         let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesSwiftHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
         var snapshot = Snapshot()
@@ -681,13 +742,33 @@ final class FavoriteListViewController: UIViewController {
         layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
         collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections(layoutSections)
-        snapshot.appendItems([.sortHeader(currentSortMode)], toSection: .sortHeader)
+        snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
         snapshot.appendItems(folders.map(FavoriteListItem.folder), toSection: .content)
         snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
         if let stats {
             snapshot.appendItems([.statsFooter(stats)], toSection: .statsFooter)
         }
 
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+    }
+
+    private func applySearchSnapshot(allFolders: [FavoriteFolderRow], parentGroupName: String?, animatingDifferences: Bool) {
+        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(searchFavoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName), mode: currentSortMode)
+        var snapshot = Snapshot()
+        if favorites.isEmpty {
+            layoutSections = []
+            collectionView.collectionViewLayout.invalidateLayout()
+            snapshot.appendSections([.emptyState])
+            snapshot.appendItems([.emptyState])
+            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            return
+        }
+
+        layoutSections = [.sortHeader, .content]
+        collectionView.collectionViewLayout.invalidateLayout()
+        snapshot.appendSections(layoutSections)
+        snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
+        snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 
@@ -702,7 +783,7 @@ final class FavoriteListViewController: UIViewController {
             sections.append(.pinned)
         }
 
-        if !isSearchActive || !(foldersBySection[.visible] ?? []).isEmpty {
+        if !isSearchResultsMode || !(foldersBySection[.visible] ?? []).isEmpty {
             sections.append(.visible)
         }
 
@@ -723,7 +804,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func folderStats(allFolders: [FavoriteFolderRow], currentGroupName: String?) -> FavoriteFolderStats? {
-        guard !isSearchActive else { return nil }
+        guard !isSearchResultsMode else { return nil }
         guard let currentGroupName else {
             let pointsCount = allFolders.reduce(0) { $0 + $1.bridgeItem.pointsCount }
             guard !allFolders.isEmpty || pointsCount > 0 else { return nil }
@@ -768,7 +849,52 @@ final class FavoriteListViewController: UIViewController {
 
     private func matchesSearch(_ text: String?) -> Bool {
         guard !searchText.isEmpty else { return true }
-        return text?.localizedCaseInsensitiveContains(searchText) ?? false
+        return text?.range(of: searchText, options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive], locale: Locale.current) != nil
+    }
+
+    private func hasSearchResults() -> Bool {
+        !searchFavoritePointRows(allFolders: favoriteFolders(), parentGroupName: searchParentGroupName).isEmpty
+    }
+
+    private func shouldHideSearchToolbar() -> Bool {
+        !collectionView.isEditing && (!isSearchActive || !hasSearchResults())
+    }
+
+    private func searchFavoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
+        favoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName).filter { matchesSearch($0.title) }
+    }
+
+    private func clearSearchControllerText() {
+        if isRootFolder {
+            navigationController?.navigationBar.topItem?.searchController?.searchBar.text = ""
+        } else {
+            subfolderSearchController.searchBar.text = ""
+        }
+    }
+
+    private func selectableIndexPaths() -> [IndexPath] {
+        var indexPaths: [IndexPath] = []
+        for section in 0..<collectionView.numberOfSections {
+            for item in 0..<collectionView.numberOfItems(inSection: section) {
+                let indexPath = IndexPath(item: item, section: section)
+                guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
+                switch itemIdentifier {
+                case .folder, .favorite:
+                    indexPaths.append(indexPath)
+                case .sortHeader, .backupBanner, .header, .statsFooter, .emptyState:
+                    continue
+                }
+            }
+        }
+
+        return indexPaths
+    }
+
+    private func areAllSelectableItemsSelected() -> Bool {
+        let selectableIndexPaths = selectableIndexPaths()
+        guard !selectableIndexPaths.isEmpty else { return false }
+        let selectedIndexPaths = Set(collectionView.indexPathsForSelectedItems ?? [])
+        return selectableIndexPaths.allSatisfy { selectedIndexPaths.contains($0) }
     }
 
     private func openNewFavoriteGroupEditor() {
@@ -816,16 +942,26 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func favoritePointRows(forGroupName groupName: String) -> [FavoritePointRow] {
-        let sortMode = isSearchActive ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
+        let sortMode = isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
         let favorites = OAFavoritesSwiftHelper.favoritePoints(forGroupName: groupName).map { FavoritePointRow(item: $0) }
         return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
+    }
+
+    private func favoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
+        allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesSwiftHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName).map { FavoritePointRow(item: $0) } }
+    }
+
+    private func isSearchGroup(_ groupName: String, parentGroupName: String?) -> Bool {
+        guard let parentGroupName else { return true }
+        guard !parentGroupName.isEmpty else { return groupName.isEmpty }
+        return groupName == parentGroupName || isNestedFolder(groupName, in: parentGroupName)
     }
 
     private func makeActionsMenu() -> UIMenu {
         let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
             self?.openNewFavoriteGroupEditor()
         }
-        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined.resizedMenuImage()) { [weak self] _ in
+        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
             self?.openPickerToImport()
         }
         
@@ -835,8 +971,12 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func setEdit(_ isEdit: Bool) {
+        let shouldResetSearchSelection = !isEdit && isSelectionModeInSearch
         if !isEdit {
             collectionView.indexPathsForSelectedItems?.forEach { collectionView.deselectItem(at: $0, animated: false) }
+            isSelectionModeInSearch = false
+            isSearchActive = false
+            searchText = ""
         }
 
         collectionView.isEditing = isEdit
@@ -844,6 +984,10 @@ final class FavoriteListViewController: UIViewController {
         myPlacesDelegate?.updateEditMode(isEdit)
         configureNavigation()
         navigationController?.setToolbarHidden(!isEdit, animated: true)
+        if shouldResetSearchSelection {
+            clearSearchControllerText()
+            applySnapshot(animatingDifferences: false)
+        }
     }
 
     private func makeFolderContextMenu(for folder: FavoriteFolderRow, indexPath: IndexPath) -> UIMenu {
@@ -1151,26 +1295,32 @@ final class FavoriteListViewController: UIViewController {
         setEdit(true)
     }
 
+    @objc private func searchSelectButtonPressed() {
+        isSelectionModeInSearch = true
+        isSearchActive = false
+        if isRootFolder {
+            let searchController = navigationController?.navigationBar.topItem?.searchController
+            searchController?.isActive = false
+        } else {
+            subfolderSearchController.isActive = false
+        }
+
+        selectButtonPressed()
+    }
+
     @objc private func cancelButtonPressed() {
         setEdit(false)
     }
 
     @objc private func selectAllButtonPressed() {
-        for section in 0..<collectionView.numberOfSections {
-            for item in 0..<collectionView.numberOfItems(inSection: section) {
-                let indexPath = IndexPath(item: item, section: section)
-                guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
-                switch itemIdentifier {
-                case .sortHeader, .backupBanner, .header, .statsFooter, .emptyState:
-                    continue
-                case .folder, .favorite:
-                    collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-                }
-            }
+        let selectableIndexPaths = selectableIndexPaths()
+        if areAllSelectableItemsSelected() {
+            selectableIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: false) }
+        } else {
+            selectableIndexPaths.forEach { collectionView.selectItem(at: $0, animated: false, scrollPosition: []) }
         }
 
-        updateNavigationBarTitle()
-        configureToolbar()
+        updateSelectionUI()
     }
 
     @objc private func favoriteDataDidChange() {
@@ -1244,6 +1394,14 @@ final class FavoriteListViewController: UIViewController {
     @objc private func importButtonClicked(_ sender: Any) {
         openPickerToImport()
     }
+
+    @objc private func clearSearchButtonClicked(_ sender: Any) {
+        searchText = ""
+        clearSearchControllerText()
+        configureToolbar()
+        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
+        applySnapshot(animatingDifferences: false)
+    }
 }
 
 extension FavoriteListViewController: UICollectionViewDelegate {
@@ -1252,8 +1410,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
         switch item {
         case .folder(let folder):
             if collectionView.isEditing {
-                updateNavigationBarTitle()
-                configureToolbar()
+                updateSelectionUI()
                 return
             }
             let viewController = FavoriteListViewController(frame: view.bounds, screenMode: .folder(folder, previousTitle: normalTitle))
@@ -1261,8 +1418,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
             navigationController?.pushViewController(viewController, animated: true)
         case .favorite(let favorite):
             if collectionView.isEditing {
-                updateNavigationBarTitle()
-                configureToolbar()
+                updateSelectionUI()
                 return
             }
             OAFavoritesSwiftHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
@@ -1275,8 +1431,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard collectionView.isEditing else { return }
-        updateNavigationBarTitle()
-        configureToolbar()
+        updateSelectionUI()
     }
 
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -1297,15 +1452,23 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
 
     func searchResults(for searchController: UISearchController) {
         isSearchActive = searchController.isActive
-        searchText = searchController.searchBar.searchTextField.text ?? ""
+        if isSearchActive || !isSelectionModeInSearch {
+            searchText = searchController.searchBar.searchTextField.text ?? ""
+        }
         updateSegmentedControlVisibility()
+        configureToolbar()
+        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
         applySnapshot(animatingDifferences: false)
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
-        searchText = ""
+        if !isSelectionModeInSearch {
+            searchText = ""
+        }
         updateSegmentedControlVisibility()
+        configureToolbar()
+        navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
     }
 }

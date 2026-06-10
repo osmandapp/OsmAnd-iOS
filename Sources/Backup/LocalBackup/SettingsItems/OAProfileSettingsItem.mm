@@ -304,13 +304,15 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
                                                                     error:nil];
                 [defaults setObject:data forKey:modeKey];
 
-                [[NSNotificationQueue defaultQueue] enqueueNotification:
-                 [NSNotification notificationWithName:kNotificationSetProfileSetting
-                                               object:self
-                                             userInfo:nil]
-                                                           postingStyle:NSPostASAP
-                                                           coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
-                                                               forModes:nil];
+                executeOnMainThread(^{
+                    [[NSNotificationQueue defaultQueue] enqueueNotification:
+                     [NSNotification notificationWithName:kNotificationSetProfileSetting
+                                                   object:self
+                                                 userInfo:nil]
+                                                               postingStyle:NSPostASAP
+                                                               coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
+                                                                   forModes:nil];
+                });
             }
             else
             {

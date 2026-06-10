@@ -1691,7 +1691,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    executeOnMainThread(^{
         NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
         [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
     });
@@ -1882,7 +1882,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    executeOnMainThread(^{
         NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
         [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
     });
@@ -4283,7 +4283,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    executeOnMainThread(^{
         NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
         [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
     });

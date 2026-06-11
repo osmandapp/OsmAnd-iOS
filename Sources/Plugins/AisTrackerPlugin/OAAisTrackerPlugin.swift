@@ -26,19 +26,25 @@ final class OAAisTrackerPlugin: OAPlugin {
 
     private let connection = AisNmeaConnection()
     private let decoder = AisMessageDecoder()
+    private let aisDecoderQueue = DispatchQueue(label: "com.app.ais.decoder", qos: .userInitiated)
+    
+    private var applicationModeObserver: OAAutoObserverProxy?
+    
     private lazy var simulationProvider = AisSimulationProvider(plugin: self)
     private lazy var aisDataManager = AisDataManager(plugin: self)
+    
     private(set) var connectionState: AisNmeaConnectionState = .disconnected
     private(set) var lastLocation: CLLocation?
     private(set) var fakeOwnLocation: CLLocation?
     private(set) var simulationFileName: String?
     private(set) var simulationStatusText: String?
+    private(set) var lastMessageReceived = Date.distantPast
+    
     private var simulationSentences = 0
     private var simulationDecoded = 0
     private var simulationObjects = 0
     private var simulationReceivedObjects = 0
     private var simulationRenderedObjects = 0
-    private(set) var lastMessageReceived = Date.distantPast
 
     override init() {
         protocolPref = OAAppSettings.sharedManager().registerIntPreference(Self.protocolPrefId, defValue: Int32(AisNmeaProtocol.udp.rawValue))
@@ -62,6 +68,13 @@ final class OAAisTrackerPlugin: OAPlugin {
         connection.onSentence = { [weak self] sentence in
             self?.handleAisSentence(sentence)
         }
+        applicationModeObserver = OAAutoObserverProxy(self,
+                                                      withHandler: #selector(onApplicationModeChanged),
+                                                      andObserve: OsmAndApp.swiftInstance().applicationModeChangedObservable)
+    }
+
+    deinit {
+        applicationModeObserver?.detach()
     }
 
     override func getId() -> String {
@@ -86,16 +99,16 @@ final class OAAisTrackerPlugin: OAPlugin {
 
     override func initPlugin() -> Bool {
         let result = super.initPlugin()
-        restartConnection()
+        updateConnectionForCurrentProfile()
         return result
     }
 
     override func setEnabled(_ enabled: Bool) {
         super.setEnabled(enabled)
         if enabled {
-            restartConnection()
+            updateConnectionForCurrentProfile()
         } else {
-            connection.stop()
+            stopAisNetworkListener()
         }
     }
 
@@ -187,7 +200,10 @@ final class OAAisTrackerPlugin: OAPlugin {
     }
 
     func restartConnection() {
-        guard isEnabled() else { return }
+        guard isActiveForCurrentProfile() else {
+            stopAisNetworkListener()
+            return
+        }
         aisDataManager.startUpdates()
         let proto = AisNmeaProtocol(rawValue: Int(protocolPref.get())) ?? .udp
         switch proto {
@@ -201,6 +217,16 @@ final class OAAisTrackerPlugin: OAPlugin {
     func stopAisNetworkListener() {
         connection.stop()
         aisDataManager.stopUpdates()
+    }
+
+    private func updateConnectionForCurrentProfile() {
+        if isActiveForCurrentProfile() {
+            if !connection.isRunning {
+                restartConnection()
+            }
+        } else {
+            stopAisNetworkListener()
+        }
     }
 
     func fakeOwnPosition(_ location: CLLocation?) {
@@ -225,7 +251,7 @@ final class OAAisTrackerPlugin: OAPlugin {
     func getAisObjects() -> [AisObject] {
         aisDataManager.objects
     }
-
+    // FIXME: cache for objectLostTimeoutPref shipLostTimeoutPref cpaWarningTimePref cpaWarningDistancePref
     func maxObjectAgeInMinutes() -> Int {
         max(1, Int(objectLostTimeoutPref.get()))
     }
@@ -342,10 +368,37 @@ final class OAAisTrackerPlugin: OAPlugin {
             OsmAndApp.swiftInstance().locationServices?.setLocationFromNMEA(location)
         }
     }
+    
+//    private func handleAisSentence(_ sentence: String) {
+//        Task {
+//            guard let object = await decoder.decode(sentence: sentence) else { return }
+//            
+//            await MainActor.run {
+//                self.aisDataManager.onAisObjectReceived(object)
+//            }
+//        }
+//    }
 
+//    private func handleAisSentence(_ sentence: String) {
+//        guard let object = decoder.decode(sentence: sentence) else { return }
+//        aisDataManager.onAisObjectReceived(object)
+//    }
+    
     private func handleAisSentence(_ sentence: String) {
-        guard let object = decoder.decode(sentence: sentence) else { return }
-        aisDataManager.onAisObjectReceived(object)
+        aisDecoderQueue.async { [weak self] in
+            guard let self else { return }
+            
+            guard let object = decoder.decode(sentence: sentence) else { return }
+            
+            DispatchQueue.main.async {
+                self.aisDataManager.onAisObjectReceived(object)
+            }
+        }
+    }
+
+    @objc private func onApplicationModeChanged() {
+        updateConnectionForCurrentProfile()
+       // updateLayers()
     }
 
     private func updateSimulationStatusText() {

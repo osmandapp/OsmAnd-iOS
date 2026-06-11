@@ -13,7 +13,8 @@ import Network
     case connected
     case failed
 }
-// NOTE: for test tcp 153.44.253.27 5631
+
+// NOTE: for test: tcp 153.44.253.27 5631
 
 final class AisNmeaConnection {
     var onLocation: ((CLLocation) -> Void)?
@@ -28,6 +29,9 @@ final class AisNmeaConnection {
     private var shouldReconnect = false
     private var host = ""
     private var port: UInt16 = 0
+    var isRunning: Bool {
+        listener != nil || connection != nil || shouldReconnect
+    }
 
     func startUDP(port: UInt16) {
         stop()
@@ -35,7 +39,11 @@ final class AisNmeaConnection {
         do {
             let params = NWParameters.udp
             params.allowLocalEndpointReuse = true
-            let listener = try NWListener(using: params, on: NWEndpoint.Port(rawValue: port)!)
+            guard let endpointPort = NWEndpoint.Port(rawValue: port) else {
+                updateState(.failed)
+                return
+            }
+            let listener = try NWListener(using: params, on: endpointPort)
             self.listener = listener
             listener.newConnectionHandler = { [weak self] connection in
                 self?.receiveDatagrams(connection)
@@ -81,7 +89,11 @@ final class AisNmeaConnection {
 
     private func connectTCP() {
         updateState(.connecting)
-        let nwConnection = NWConnection(host: NWEndpoint.Host(host), port: NWEndpoint.Port(rawValue: port)!, using: .tcp)
+        guard let endpointPort = NWEndpoint.Port(rawValue: port) else {
+            updateState(.failed)
+            return
+        }
+        let nwConnection = NWConnection(host: NWEndpoint.Host(host), port: endpointPort, using: .tcp)
         connection = nwConnection
         nwConnection.stateUpdateHandler = { [weak self] state in
             switch state {

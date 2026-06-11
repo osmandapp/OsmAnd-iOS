@@ -1,4 +1,3 @@
-import Foundation
 
 extension Notification.Name {
     static let aisObjectReceived = Notification.Name("OAAisObjectReceived")
@@ -15,13 +14,13 @@ final class AisDataManager: NSObject {
     private var objectsByMmsi: [Int: AisObject] = [:]
     private var cleanupTimer: Timer?
 
+    var objects: [AisObject] {
+        Array(objectsByMmsi.values)
+    }
+    
     init(plugin: OAAisTrackerPlugin) {
         self.plugin = plugin
         super.init()
-    }
-
-    var objects: [AisObject] {
-        Array(objectsByMmsi.values)
     }
 
     func startUpdates() {

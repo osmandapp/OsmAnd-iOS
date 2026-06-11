@@ -85,7 +85,7 @@ final class AisMessageSimulationListener {
 
 @objcMembers
 final class AisSimulationProvider: NSObject {
-    private static let simulatedLatency: TimeInterval = 0.1
+    private static let simulatedLatency: TimeInterval = 0.01
 
     private weak var plugin: OAAisTrackerPlugin?
     private var listener: AisMessageSimulationListener?

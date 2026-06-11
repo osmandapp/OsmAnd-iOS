@@ -10,13 +10,28 @@ final class AisMessageDecoder {
     private var fragments: [String: FragmentBuffer] = [:]
 
     func decode(sentence: String) -> AisObject? {
+        // Remove leading/trailing whitespaces and newlines.
         let trimmed = sentence.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmed.hasPrefix("!AI") || trimmed.hasPrefix("!BS") else { return nil }
-        let noChecksum = trimmed.split(separator: "*", maxSplits: 1).first.map(String.init) ?? trimmed
+
+        // Strip an optional NMEA TAG block, e.g. `\s:2573267,c:1781087503*0A\!BSVDM...`.
+        let cleanSentence: String
+        if let lastBackslashIndex = trimmed.lastIndex(of: "\\") {
+            cleanSentence = String(trimmed[trimmed.index(after: lastBackslashIndex)...])
+        } else {
+            cleanSentence = trimmed
+        }
+
+        // !AIVDM is a mobile AIS station; !BSVDM is a base AIS station.
+        guard cleanSentence.hasPrefix("!AI") || cleanSentence.hasPrefix("!BS") else { return nil }
+
+        let noChecksum = cleanSentence.split(separator: "*", maxSplits: 1).first.map(String.init) ?? cleanSentence
+
         let fields = noChecksum.split(separator: ",", omittingEmptySubsequences: false).map(String.init)
         guard fields.count >= 7 else { return nil }
+
         let talker = fields[0]
         guard talker.hasSuffix("VDM") || talker.hasSuffix("VDO") else { return nil }
+
         guard let total = Int(fields[1]), let number = Int(fields[2]) else { return nil }
         let sequentialId = fields[3]
         let channel = fields[4]
@@ -28,12 +43,18 @@ final class AisMessageDecoder {
         if total > 1 {
             let key = "\(sequentialId)-\(channel)"
             var buffer = fragments[key] ?? FragmentBuffer(total: total, payloads: [:], fillBits: fillBits)
+
             buffer.payloads[number] = payload
             buffer.fillBits = fillBits
             fragments[key] = buffer
+
             guard buffer.payloads.count == total else { return nil }
-            completePayload = (1...total).compactMap { buffer.payloads[$0] }.joined()
+
+            let orderedPayloads = (1...total).compactMap { buffer.payloads[$0] }
+            guard orderedPayloads.count == total else { return nil }
+            completePayload = orderedPayloads.joined()
             completeFillBits = buffer.fillBits
+
             fragments.removeValue(forKey: key)
         } else {
             completePayload = payload
@@ -42,7 +63,9 @@ final class AisMessageDecoder {
 
         let bits = AisBitReader(payload: completePayload)
         bits.dropLast(completeFillBits)
+
         guard let msgType = bits.uint(0, 6) else { return nil }
+
         switch msgType {
         case 1, 2, 3:
             return decodePositionReport(bits: bits, msgType: msgType)

@@ -129,12 +129,14 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
             chooseProtocol()
         case .host:
             editString(title: localizedString("ais_address_nmea_server"), message: descriptionText(for: row), value: plugin.hostPref.get()) { [weak self] value in
+                let value = value.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard self?.isValidIPv4(value) == true else {
                     self?.showValidationError(localizedString("ais_error_ipv4_only"))
-                    return
+                    return false
                 }
                 self?.plugin.hostPref.set(value)
                 self?.plugin.restartConnection()
+                return true
             }
         case .tcpPort:
             editPort(title: localizedString("ais_port_nmea_server"), message: descriptionText(for: row), value: Int(plugin.tcpPortPref.get())) { [weak self] value in
@@ -201,7 +203,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         present(alert, animated: true)
     }
 
-    private func editString(title: String, message: String?, value: String, onSave: @escaping (String) -> Void) {
+    private func editString(title: String, message: String?, value: String, onSave: @escaping (String) -> Bool) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.text = value
@@ -210,8 +212,9 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         }
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         alert.addAction(UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak alert, weak self] _ in
-            onSave(alert?.textFields?.first?.text ?? value)
-            self?.tableView.reloadData()
+            if onSave(alert?.textFields?.first?.text ?? value) {
+                self?.tableView.reloadData()
+            }
         })
         present(alert, animated: true)
     }
@@ -220,8 +223,10 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         editString(title: title, message: message, value: "\(value)") { text in
             if let port = Int(text), port >= 0, port <= 65535 {
                 onSave(port)
+                return true
             } else {
                 self.showValidationError(localizedString("ais_error_port_only"))
+                return false
             }
         }
     }
@@ -338,9 +343,11 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
     }
 
     private func showValidationError(_ message: String) {
-        let alert = UIAlertController(title: localizedString("shared_string_error"), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
-        present(alert, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            let alert = UIAlertController(title: localizedString("shared_string_error"), message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
+            self?.present(alert, animated: true)
+        }
     }
 
     @objc private func reloadStatus() {

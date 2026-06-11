@@ -512,7 +512,6 @@ static NSString *OAAisObjectTitle(AisObject *object)
 {
     [super initLayer];
     [self ensureObjectDrawables];
-    [self updateScaleCache];
     [self resetCollections];
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
@@ -627,6 +626,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
 
 - (void)onMapFrameRendered
 {
+    NSLog(@"onMapFrameRendered");
     if (![self isVisible])
     {
         [self removeCollectionsFromRenderer];
@@ -634,6 +634,11 @@ static NSString *OAAisObjectTitle(AisObject *object)
     }
     [self updateRenderData];
 }
+
+//- (void)onMapFrameAnimatorsUpdated
+//{
+//    NSLog(@"onMapFrameAnimatorsUpdated");
+//}
 
 - (void)resetCollections
 {
@@ -702,7 +707,6 @@ static NSString *OAAisObjectTitle(AisObject *object)
 - (void)reloadObjectsSync
 {
     [self ensureObjectDrawables];
-    [self updateScaleCache];
     OAAisTrackerPlugin *plugin = [self plugin];
     NSArray<AisObject *> *objects = [plugin getAisObjects];
     NSMutableSet<NSNumber *> *visibleMmsi = [NSMutableSet set];
@@ -772,7 +776,6 @@ static NSString *OAAisObjectTitle(AisObject *object)
 - (void)updateAisObjectSync:(AisObject *)object
 {
     [self ensureObjectDrawables];
-    [self updateScaleCache];
     NSNumber *key = @(object.mmsi);
     AisObjectDrawable *drawable = _objectDrawables[key];
     if (!drawable)
@@ -799,14 +802,14 @@ static NSString *OAAisObjectTitle(AisObject *object)
     if (![self isVisible])
         return;
 
-    if ([self updateScaleCache])
-    {
-        OAAisLayerLog(@"scale changed textScale=%.2f density=%.2f iconSize=%.1f", _textScale, _displayDensityFactor, [self currentIconSize]);
-        [self cleanupResources];
-        [self addCollectionsToRenderer];
-        [self reloadObjects];
-        return;
-    }
+//    if ([self updateScaleCache])
+//    {
+//        OAAisLayerLog(@"scale changed textScale=%.2f density=%.2f iconSize=%.1f", _textScale, _displayDensityFactor, [self currentIconSize]);
+//        [self cleanupResources];
+//        [self addCollectionsToRenderer];
+//        [self reloadObjects];
+//        return;
+//    }
 
     OAAisTrackerPlugin *plugin = [self plugin];
     for (NSNumber *key in _objectDrawables)
@@ -835,7 +838,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
     targetPoint.location = location.coordinate;
     targetPoint.icon = [UIImage imageNamed:@"ic_plugin_nautical"];
     targetPoint.sortIndex = OATargetAisObject;
-    targetPoint.centerMap = YES;
+    targetPoint.centerMap = NO;
     return targetPoint;
 }
 
@@ -886,7 +889,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
         return;
 
     CGPoint point = result.point;
-    [self updateScaleCache];
+    //[self updateScaleCache];
     int iconRadius = (int)ceil([self currentIconSize] * 0.55);
     int radius = MAX(iconRadius, (int)([self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER));
     QList<OsmAnd::PointI> touchPolygon31 =

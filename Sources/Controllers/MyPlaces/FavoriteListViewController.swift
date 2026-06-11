@@ -181,9 +181,10 @@ final class FavoriteListViewController: UIViewController {
     private var groupController: OAEditGroupViewController?
     private var colorController: OAEditColorViewController?
     private var favoriteItemsToMove: [Any]?
+    private var favoriteGroupAppearanceGroupName: String?
+    private var favoriteGroupAppearanceEditor: OAFavoriteGroupEditorViewController?
     private var addToTrackGroupName: String?
     private var addToTrackFavoriteItems: [Any]?
-
     private var searchText = ""
     private var isSearchActive = false
     private var isSelectionModeInSearch = false
@@ -602,13 +603,57 @@ final class FavoriteListViewController: UIViewController {
         var sortModes = settings.getFavoriteSortModes()
         let keysToRemove = sortModes.keys.filter { key in
             groupNames.contains { groupName in
-                key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + "/"))
+                isFavoriteSortModeKey(key, insideOrEqualTo: groupName)
             }
         }
 
         guard !keysToRemove.isEmpty else { return }
         keysToRemove.forEach { sortModes.removeValue(forKey: $0) }
         settings.saveFavoriteSortModes(sortModes)
+    }
+
+    private func renameFavoriteSortModeKeys(from oldGroupName: String, to newGroupName: String, existingGroupNames: Set<String>? = nil) {
+        guard !oldGroupName.isEmpty, oldGroupName != newGroupName else { return }
+        let groupNames = existingGroupNames ?? Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
+        guard !groupNames.contains(oldGroupName), groupNames.contains(newGroupName) else { return }
+        var sortModes = settings.getFavoriteSortModes()
+        let keysToRename = sortModes.keys.filter { isFavoriteSortModeKey($0, insideOrEqualTo: oldGroupName) }
+        guard !keysToRename.isEmpty else { return }
+        keysToRename.forEach { key in
+            if let value = sortModes.removeValue(forKey: key) {
+                sortModes[newGroupName + String(key.dropFirst(oldGroupName.count))] = value
+            }
+        }
+        
+        settings.saveFavoriteSortModes(sortModes)
+    }
+
+    private func updateFavoriteSortModeKeysAfterMove(_ favoriteItems: [Any], toGroupName targetGroupName: String) {
+        let groupNames = Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
+        favoriteItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }.forEach { folder in
+            let oldGroupName = folder.groupName
+            let folderName = oldGroupName.split(separator: "/").last.map(String.init) ?? oldGroupName
+            let newGroupName = targetGroupName.isEmpty ? folderName : "\(targetGroupName)/\(folderName)"
+            renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName, existingGroupNames: groupNames)
+        }
+    }
+
+    private func createFavoriteMoveTargetGroupIfNeeded(_ groupName: String, favoriteItems: [Any]) {
+        let folders = favoriteItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }
+        guard !folders.isEmpty, !folders.contains(where: { isFavoriteSortModeKey(groupName, insideOrEqualTo: $0.groupName) }) else { return }
+        var existingGroupNames = Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
+        var parentGroupName = ""
+        for folderName in groupName.split(separator: "/").map(String.init) {
+            let newGroupName = parentGroupName.isEmpty ? folderName : "\(parentGroupName)/\(folderName)"
+            if !existingGroupNames.contains(newGroupName), OAFavoritesSwiftHelper.addFavoriteGroup(folderName, parentGroupName: parentGroupName.isEmpty ? nil : parentGroupName, iconName: nil, color: nil, backgroundIconName: nil) {
+                existingGroupNames.insert(newGroupName)
+            }
+            parentGroupName = newGroupName
+        }
+    }
+
+    private func isFavoriteSortModeKey(_ key: String, insideOrEqualTo groupName: String) -> Bool {
+        key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + "/"))
     }
 
     private func makeSortMenu(includesDistanceSortModes: Bool) -> UIMenu {
@@ -906,6 +951,8 @@ final class FavoriteListViewController: UIViewController {
 
     private func openFavoriteGroupAppearance(_ groupName: String) {
         guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesSwiftHelper.pointsGroup(forGroupName: groupName)) else { return }
+        favoriteGroupAppearanceGroupName = groupName
+        favoriteGroupAppearanceEditor = viewController
         viewController.delegate = self
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -1056,8 +1103,10 @@ final class FavoriteListViewController: UIViewController {
         let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
         let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
             guard let text = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
-            let newGroupName = self?.groupName(folder.bridgeItem.groupName, replacingLastComponentWith: text) ?? text
-            OAFavoritesSwiftHelper.renameFavoriteGroup(folder.bridgeItem.groupName, newName: newGroupName)
+            let oldGroupName = folder.bridgeItem.groupName
+            let newGroupName = self?.groupName(oldGroupName, replacingLastComponentWith: text) ?? text
+            OAFavoritesSwiftHelper.renameFavoriteGroup(oldGroupName, newName: newGroupName)
+            self?.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
             self?.applySnapshot(animatingDifferences: true)
         }
 
@@ -1502,7 +1551,9 @@ extension FavoriteListViewController: OAEditGroupViewControllerDelegate {
 
         let targetGroupName = groupController.groupName ?? ""
         guard let favoriteItemsToMove else { return }
+        createFavoriteMoveTargetGroupIfNeeded(targetGroupName, favoriteItems: favoriteItemsToMove)
         OAFavoritesSwiftHelper.moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
+        updateFavoriteSortModeKeysAfterMove(favoriteItemsToMove, toGroupName: targetGroupName)
         setEdit(false)
         applySnapshot(animatingDifferences: true)
     }
@@ -1531,6 +1582,12 @@ extension FavoriteListViewController: OAEditorDelegate {
     }
 
     func onEditorUpdated() {
+        if let oldGroupName = favoriteGroupAppearanceGroupName, let newGroupName = favoriteGroupAppearanceEditor?.editName {
+            renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
+        }
+        
+        favoriteGroupAppearanceGroupName = nil
+        favoriteGroupAppearanceEditor = nil
         applySnapshot(animatingDifferences: true)
     }
 

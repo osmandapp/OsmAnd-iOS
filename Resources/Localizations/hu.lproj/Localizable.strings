@@ -4055,3 +4055,4 @@
 "delete_changes" = "Módosítások törlése";
 "osm_edits_delete_item_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
 "osm_edits_delete_items_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
+"shared_string_url" = "Webcím";

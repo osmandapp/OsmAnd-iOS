@@ -4090,3 +4090,4 @@
 "delete_changes" = "Supprimer les modifications";
 "osm_edits_delete_item_confirmation" = "Êtes-vous sûr de vouloir supprimer la modification %ld ?";
 "osm_edits_delete_items_confirmation" = "Êtes-vous sûr de vouloir supprimer %ld modifications ?";
+"shared_string_url" = "URL";

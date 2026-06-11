@@ -168,22 +168,71 @@ static NSOperationQueue *_favQueue;
     return [OASGpxUtilities.shared loadGpxFileFile:favoriteGPXFile];
 }
 
++ (void)addParentGroupNamesForGroupName:(NSString *)groupName toSet:(NSMutableOrderedSet<NSString *> *)parentGroupNames
+{
+    if (groupName.length == 0 || ![groupName containsString:@"/"])
+        return;
+    
+    NSString *parentGroupName = @"";
+    NSArray<NSString *> *components = [groupName componentsSeparatedByString:@"/"];
+    for (NSUInteger i = 0; i + 1 < components.count; i++)
+    {
+        NSString *component = components[i];
+        if (component.length == 0)
+            continue;
+        
+        parentGroupName = parentGroupName.length == 0 ? component : [parentGroupName stringByAppendingFormat:@"/%@", component];
+        [parentGroupNames addObject:parentGroupName];
+    }
+}
+
++ (void)createMissingParentGroupsForGpx:(OASGpxFile *)gpxFile
+{
+    NSMutableOrderedSet<NSString *> *parentGroupNames = [NSMutableOrderedSet orderedSet];
+    for (OASGpxUtilitiesPointsGroup *pointsGroup in gpxFile.pointsGroups.allValues)
+    {
+        for (OASWptPt *point in pointsGroup.points)
+        {
+            [self addParentGroupNamesForGroupName:point.category toSet:parentGroupNames];
+        }
+    }
+    
+    for (NSString *groupName in parentGroupNames)
+    {
+        if (groupName.length == 0 || _flatGroups[groupName])
+            continue;
+        
+        OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:groupName isVisible:YES color:nil];
+        _flatGroups[group.name] = group;
+        _favoriteGroups = [_favoriteGroups arrayByAddingObject:group];
+    }
+}
+
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile
 {
     NSString *defCategory = @"";
     OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
+    [self createMissingParentGroupsForGpx:gpxFile];
     NSArray<OASGpxUtilitiesPointsGroup *> *pointsGroups = gpxFile.pointsGroups.allValues;
+    BOOL favoritesImported = NO;
     for (OASGpxUtilitiesPointsGroup *pointsGroup in pointsGroups)
     {
         NSArray<OAFavoriteItem *> *favorites = [self wptAsFavorites:pointsGroup.points defaultCategory:defCategory];
         [self checkDuplicateNames:favorites];
         [self deleteFavorites:favorites.copy saveImmediately:NO];
-        [self addFavorites:favorites lookupAddress:YES sortAndSave:pointsGroup == pointsGroups.lastObject pointsGroup:pointsGroup];
+        if ([self addFavorites:favorites lookupAddress:YES sortAndSave:NO pointsGroup:pointsGroup])
+            favoritesImported = YES;
         for (OAFavoriteItem *favorite in favorites)
         {
             if (plugin && favorite.specialPointType == OASpecialPointType.PARKING)
                 [plugin updateParkingPoint:favorite];
         }
+    }
+
+    if (favoritesImported)
+    {
+        [self sortAll];
+        [self saveCurrentPointsIntoFile];
     }
 }
 

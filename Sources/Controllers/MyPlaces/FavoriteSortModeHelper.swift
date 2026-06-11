@@ -54,6 +54,10 @@ protocol FavoriteSortablePoint {
         case .oldestDateFirst: return .icCustomSortDateOldest
         }
     }
+    
+    var isDateOriented: Bool {
+        self == .newestDateFirst || self == .oldestDateFirst
+    }
 
     static func byTitle(_ title: String) -> FavoriteSortMode {
         allCases.first { $0.title == title } ?? .nameAZ

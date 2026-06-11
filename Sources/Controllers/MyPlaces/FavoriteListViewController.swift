@@ -185,9 +185,14 @@ final class FavoriteListViewController: UIViewController {
     private var favoriteGroupAppearanceEditor: OAFavoriteGroupEditorViewController?
     private var addToTrackGroupName: String?
     private var addToTrackFavoriteItems: [Any]?
+    private var pointToShare: OAFavoritePointBridgeItem?
     private var searchText = ""
     private var isSearchActive = false
     private var isSelectionModeInSearch = false
+    private var isDecelerating = false
+    private var lastDistanceDirectionUpdate: TimeInterval = 0.0
+    private var locationUpdateObserver: OAAutoObserverProxy?
+    private var headingUpdateObserver: OAAutoObserverProxy?
     private var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
@@ -293,10 +298,12 @@ final class FavoriteListViewController: UIViewController {
         content.directionalLayoutMargins = Self.rowContentInsets
         content.image = OAUtilities.resize(favorite.bridgeItem.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
         content.text = favorite.title
+        content.textProperties.numberOfLines = 2
         content.textProperties.color = favorite.titleColor
         content.textProperties.font = favorite.titleFont
-        content.secondaryText = favorite.bridgeItem.address
+        content.secondaryAttributedText = self?.favoriteSecondaryAttributedText(for: favorite, includesGroupName: self?.isSearchResultsMode == true)
         content.secondaryTextProperties.color = .textColorSecondary
+        content.secondaryTextProperties.numberOfLines = 1
         cell.contentConfiguration = content
         cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
         cell.accessories = [.multiselect()]
@@ -335,6 +342,7 @@ final class FavoriteListViewController: UIViewController {
         cell.button.setTitle(localizedString("shared_string_import"), for: .normal)
         cell.button.addTarget(self, action: #selector(self.importButtonClicked), for: .touchUpInside)
     }
+
     private lazy var subfolderSearchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -345,6 +353,144 @@ final class FavoriteListViewController: UIViewController {
     }()
     private lazy var dataSource: DataSource = makeDataSource()
 
+    private func favoriteSecondaryAttributedText(for favorite: FavoritePointRow, includesGroupName: Bool) -> NSAttributedString {
+        let font = UIFont.systemFont(ofSize: 15)
+        let directionAttributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: UIColor.textColorDirectionActive
+        ]
+        let secondaryAttributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: UIColor.textColorSecondary
+        ]
+
+        let result = NSMutableAttributedString()
+        let date = favorite.lastModified.map { DateFormatter.detailsDateFormatter.string(from: $0) }
+        let groupName = favorite.bridgeItem.groupName.isEmpty ? localizedString("shared_string_favorites") : favorite.bridgeItem.groupName
+
+        if currentSortMode.isDateOriented {
+            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
+            appendFavoriteDistance(favorite,
+                                   to: result,
+                                   font: font,
+                                   directionAttributes: directionAttributes,
+                                   separatorAttributes: secondaryAttributes)
+            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
+        } else {
+            appendFavoriteDistance(favorite,
+                                   to: result,
+                                   font: font,
+                                   directionAttributes: directionAttributes,
+                                   separatorAttributes: secondaryAttributes)
+            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
+            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
+        }
+        if includesGroupName {
+            appendFavoriteSecondaryText(groupName, to: result, attributes: secondaryAttributes)
+        }
+
+        return result
+    }
+
+    private func appendFavoriteSecondaryText(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
+        guard let text, !text.isEmpty else { return }
+        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: attributes)
+        result.append(NSAttributedString(string: text, attributes: attributes))
+    }
+
+    private func appendFavoriteDistance(_ favorite: FavoritePointRow,
+                                        to result: NSMutableAttributedString,
+                                        font: UIFont,
+                                        directionAttributes: [NSAttributedString.Key: Any],
+                                        separatorAttributes: [NSAttributedString.Key: Any]) {
+        guard let distance = favorite.distance, let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) else { return }
+        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: separatorAttributes)
+        if let directionIcon = favoriteDirectionIcon(tintColor: .iconColorDirectionActive) {
+            let rotatedDirectionIcon = rotatedFavoriteDirectionIcon(directionIcon, radians: favorite.bridgeItem.direction)
+            let attachment = NSTextAttachment()
+            attachment.image = rotatedDirectionIcon
+            attachment.bounds = CGRect(x: 0.0,
+                                       y: (font.capHeight - rotatedDirectionIcon.size.height) / 2.0,
+                                       width: rotatedDirectionIcon.size.width,
+                                       height: rotatedDirectionIcon.size.height)
+            result.append(NSAttributedString(attachment: attachment))
+        }
+        result.append(NSAttributedString(string: formattedDistance, attributes: directionAttributes))
+    }
+
+    private func appendFavoriteSecondarySeparatorIfNeeded(to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
+        guard result.length > 0 else { return }
+        result.append(NSAttributedString(string: " • ", attributes: attributes))
+    }
+
+    private func favoriteDirectionIcon(tintColor: UIColor) -> UIImage? {
+        let size = UIFontMetrics.default.scaledValue(for: 18.0)
+        return OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(tintColor)
+    }
+
+    private func rotatedFavoriteDirectionIcon(_ image: UIImage, radians: CGFloat) -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = image.scale
+        format.opaque = false
+        let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
+        return renderer.image { context in
+            let rect = CGRect(origin: CGPoint(x: -image.size.width / 2.0, y: -image.size.height / 2.0),
+                              size: image.size)
+            context.cgContext.translateBy(x: image.size.width / 2.0, y: image.size.height / 2.0)
+            context.cgContext.rotate(by: radians)
+            image.draw(in: rect)
+        }
+    }
+
+    private func registerDistanceAndDirectionObservers() {
+        unregisterDistanceAndDirectionObservers()
+        let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
+        let updateDistanceAndDirectionSelector = #selector(updateDistanceAndDirection as () -> Void)
+        locationUpdateObserver = OAAutoObserverProxy(self,
+                                                     withHandler: updateDistanceAndDirectionSelector,
+                                                     andObserve: app.locationServices.updateLocationObserver)
+        headingUpdateObserver = OAAutoObserverProxy(self,
+                                                    withHandler: updateDistanceAndDirectionSelector,
+                                                    andObserve: app.locationServices.updateHeadingObserver)
+    }
+
+    private func unregisterDistanceAndDirectionObservers() {
+        locationUpdateObserver?.detach()
+        locationUpdateObserver = nil
+        headingUpdateObserver?.detach()
+        headingUpdateObserver = nil
+    }
+
+    @objc private func updateDistanceAndDirection() {
+        updateDistanceAndDirection(false)
+    }
+
+    private func updateDistanceAndDirection(_ forceUpdate: Bool) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.updateDistanceAndDirection(forceUpdate)
+            }
+            return
+        }
+
+        guard !collectionView.isEditing
+                && !isDecelerating
+                && OsmAndApp.swiftInstance().locationServices.lastKnownLocation != nil
+                && dataSource.snapshot().itemIdentifiers.contains(where: { item in
+                    if case .favorite = item {
+                        return true
+                    }
+                    return false
+                }) else {
+            return
+        }
+
+        let currentTime = Date.now.timeIntervalSince1970
+        guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
+        lastDistanceDirectionUpdate = currentTime
+        applySnapshot(animatingDifferences: false)
+    }
+    
     convenience init(frame: CGRect) {
         self.init(frame: frame, screenMode: .root)
     }
@@ -361,6 +507,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     deinit {
+        unregisterDistanceAndDirectionObservers()
         NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
         NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
@@ -376,14 +523,19 @@ final class FavoriteListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        isDecelerating = false
         definesPresentationContext = true
         configureNavigation()
         navigationController?.setToolbarHidden(true, animated: false)
         configureToolbar()
         applySnapshot()
+        registerDistanceAndDirectionObservers()
+        updateDistanceAndDirection(true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        unregisterDistanceAndDirectionObservers()
+        isDecelerating = false
         if !isRootFolder {
             navigationItem.searchController = nil
             navigationController?.setNavigationBarHidden(true, animated: false)
@@ -1099,6 +1251,51 @@ final class FavoriteListViewController: UIViewController {
         return UIMenu(title: "", children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, fourthButtonsSection, lastButtonsSection].filter { !$0.children.isEmpty })
     }
 
+    private func makePointContextMenu(for point: FavoritePointRow, indexPath: IndexPath) -> UIMenu {
+        let editAction = UIAction(title: localizedString("shared_string_edit"), image: .icCustomEdit) { [weak self] _ in
+            guard let self, let viewController = OAFavoritesSwiftHelper.editPointViewController(forFavoritePoint: point.bridgeItem) else { return }
+            viewController.delegate = self
+            let navigationController = UINavigationController(rootViewController: viewController)
+            self.navigationController?.present(navigationController, animated: true)
+        }
+        let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [editAction])
+
+        let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
+            guard let self else { return }
+            self.openFavoriteItemsMove([point.bridgeItem])
+        }
+        let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { [weak self] _ in
+            guard let self,
+                  let sourceView: UIView = self.collectionView.cellForItem(at: indexPath) else {
+                return
+            }
+            
+            self.shareFavoritePoint(point.bridgeItem, sourceView: sourceView)
+        }
+        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [moveAction, shareAction])
+
+        let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
+            OAFavoritesSwiftHelper.addFavoriteItems(toMapMarkers: [point.bridgeItem])
+        }
+        let trackAction = UIAction(title: localizedString("shared_string_gpx_track"), image: .icCustomTrip) { [weak self] _ in
+            guard let self else { return }
+            self.openFavoriteItemsAddToTrack([point.bridgeItem])
+        }
+        let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { _ in
+            OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: [point.bridgeItem])
+        }
+        let addToMenu = UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: [mapMarkersAction, trackAction, navigationAction])
+        let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
+
+        let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
+            guard let self else { return }
+            self.showFavoriteDeleteAlert(for: point)
+        }
+        let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
+
+        return UIMenu(title: "", children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, lastButtonsSection])
+    }
+
     private func showRenameAlert(for folder: FavoriteFolderRow) {
         let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
         let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
@@ -1139,6 +1336,81 @@ final class FavoriteListViewController: UIViewController {
 
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
+    }
+
+    private func showFavoriteDeleteAlert(for favorite: FavoritePointRow) {
+        let title = String(format: localizedString("delete_favorite_confirmation_title"), favorite.title)
+        let alert = UIAlertController(title: title, message: localizedString("favorites_delete_confirmation_message"), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
+            guard OAFavoritesSwiftHelper.deleteFavoritePoint(favorite.bridgeItem) else { return }
+            self?.applySnapshot(animatingDifferences: true)
+        })
+
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func shareFavoritePoint(_ point: OAFavoritePointBridgeItem, sourceView: UIView) {
+        pointToShare = point
+        let items = favoritePointShareItems(for: point)
+        guard !items.isEmpty else {
+            pointToShare = nil
+            return
+        }
+        showActivity(items,
+                     applicationActivities: favoritePointShareActivities(),
+                     excludedActivityTypes: nil,
+                     sourceView: sourceView,
+                     barButtonItem: nil) { [weak self] in
+            self?.pointToShare = nil
+        }
+    }
+
+    private func favoritePointShareItems(for point: OAFavoritePointBridgeItem) -> [Any] {
+        var items: [Any] = []
+        let sharingText = NSMutableString()
+        appendFavoritePointShareLine(point.title, to: sharingText)
+        appendFavoritePointShareLine(point.displayGroupName, to: sharingText)
+        appendFavoritePointShareLine(point.itemDescription, to: sharingText)
+        appendFavoritePointCoordinatesAndURL(to: sharingText, point: point)
+        if let url = URL(string: OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: point)) {
+            items.append(ShareLinkItem(url: url, title: point.title, icon: point.icon))
+        }
+        if sharingText.length > 0 {
+            items.append(sharingText)
+        }
+        return items
+    }
+
+    private func appendFavoritePointShareLine(_ line: String?, to sharingText: NSMutableString) {
+        guard let line, !line.isEmpty else { return }
+        if sharingText.length > 0 {
+            sharingText.append("\n")
+        }
+        sharingText.append(line)
+    }
+
+    private func appendFavoritePointCoordinatesAndURL(to sharingText: NSMutableString, point: OAFavoritePointBridgeItem) {
+        let geoURLString = OAFavoritesSwiftHelper.geoURLString(forFavoritePoint: point)
+        if !geoURLString.isEmpty {
+            sharingText.append("\n")
+            sharingText.append("Location: \(geoURLString)")
+        }
+
+        let shareURLString = OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: point)
+        if !shareURLString.isEmpty {
+            sharingText.append("\n")
+            sharingText.append(shareURLString)
+        }
+    }
+
+    private func favoritePointShareActivities() -> [UIActivity] {
+        let activities: [OAShareMenuActivityType] = [.clipboard, .copyAddress, .copyPOIName, .copyCoordinates, .geo]
+        return activities.compactMap { type in
+            let activity = OAShareMenuActivity(type: type)
+            activity?.delegate = self
+            return activity
+        }
     }
 
     private func shareItems(for sourceView: UIView) {
@@ -1484,13 +1756,68 @@ extension FavoriteListViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard !collectionView.isEditing else { return nil }
-        guard let item = dataSource.itemIdentifier(for: indexPath), case .folder(let folder) = item else { return nil }
+        guard !collectionView.isEditing, let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
-            self?.makeFolderContextMenu(for: folder, indexPath: indexPath)
+            guard let self else { return nil }
+            switch item {
+            case .folder(let folder):
+                return self.makeFolderContextMenu(for: folder, indexPath: indexPath)
+            case .favorite(let favorite):
+                return self.makePointContextMenu(for: favorite, indexPath: indexPath)
+            default:
+                return nil
+            }
         }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isDecelerating = true
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard !decelerate else { return }
+        isDecelerating = false
+        updateDistanceAndDirection(true)
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        isDecelerating = false
+        updateDistanceAndDirection(true)
+    }
+}
+
+extension FavoriteListViewController: OAShareMenuDelegate {
+    func onCopy(_ type: OAShareMenuActivityType) {
+        guard let pointToShare else { return }
+        switch type {
+        case .clipboard:
+            copyFavoritePointShareText(OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: pointToShare))
+        case .copyAddress:
+            if let address = pointToShare.address, !address.isEmpty {
+                copyFavoritePointShareText(address)
+            } else {
+                OAUtilities.showToast(localizedString("no_address_found"), details: nil, duration: 4, in: view)
+            }
+        case .copyPOIName:
+            if !pointToShare.title.isEmpty {
+                copyFavoritePointShareText(pointToShare.title)
+            } else {
+                OAUtilities.showToast(localizedString("toast_empty_name_error"), details: nil, duration: 4, in: view)
+            }
+        case .copyCoordinates:
+            copyFavoritePointShareText(OAFavoritesSwiftHelper.formattedCoordinates(forFavoritePoint: pointToShare))
+        case .geo:
+            copyFavoritePointShareText(OAFavoritesSwiftHelper.geoURLString(forFavoritePoint: pointToShare))
+        default:
+            break
+        }
+    }
+
+    private func copyFavoritePointShareText(_ text: String) {
+        UIPasteboard.general.string = text
+        OAUtilities.showToast(localizedString("copied_to_clipboard"), details: text, duration: 4, in: view)
     }
 }
 
@@ -1617,6 +1944,12 @@ extension FavoriteListViewController: OAEditorDelegate {
 
     func deleteColorItem(_ colorItem: PaletteItemSolid) {
         appearanceCollection.deleteColor(colorItem)
+    }
+}
+
+extension FavoriteListViewController: OAEditPointViewControllerDelegate {
+    func saveTapped() {
+        applySnapshot()
     }
 }
 

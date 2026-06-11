@@ -1076,6 +1076,7 @@
 "empty_state_favourites_desc" = "Import Favorites or add them by marking points on the map.";
 "tracks_empty_folder" = "Empty folder";
 "tracks_empty_folder_description" = "This folder doesn’t have any points yet.";
+"delete_favorite_confirmation_title" = "Delete \"%@\"?";
 
 "favorite_friends_category" = "Friends";
 "favorite_places_category" = "Places";

@@ -9,6 +9,7 @@
 #import "OAFavoritesSwiftHelper.h"
 #import "OAAppSettings.h"
 #import "OAEditGroupViewController.h"
+#import "OAEditPointViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoritesHelper.h"
@@ -16,6 +17,8 @@
 #import "OAIndexConstants.h"
 #import "OALocationServices.h"
 #import "OAMapActions.h"
+#import "OAMapRendererView.h"
+#import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAObservable.h"
 #import "OAOpenAddTrackViewController.h"
@@ -76,6 +79,7 @@
 @interface OAFavoritePointBridgeItem ()
 
 + (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite;
++ (CGFloat)directionForFavorite:(OAFavoriteItem *)favorite;
 
 @end
 
@@ -90,7 +94,13 @@
         _groupName = [favorite getCategory] ?: @"";
         _title = [favorite getDisplayName] ?: @"";
         _address = [favorite getAddress];
+        _displayGroupName = [favorite getCategoryDisplayName] ?: @"";
+        _itemDescription = [favorite getDescription];
+        _encodedNameForLink = [[favorite getName] escapeUrl] ?: @"";
         _distance = [self.class distanceForFavorite:favorite];
+        _direction = [self.class directionForFavorite:favorite];
+        _latitude = [favorite getLatitude];
+        _longitude = [favorite getLongitude];
         _timestampDate = [favorite getTimestamp];
         _icon = [favorite getCompositeIcon];
         _isVisible = [favorite isVisible];
@@ -112,6 +122,22 @@
     return @(distance);
 }
 
++ (CGFloat)directionForFavorite:(OAFavoriteItem *)favorite
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    CLLocation *location = app.locationServices.lastKnownLocation;
+    if (!location || !favorite.favorite)
+        return favorite.direction;
+
+    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection = location.speed >= 1 && location.course >= 0.0 ? location.course : newHeading;
+    const auto &favoritePosition31 = favorite.favorite->getPosition31();
+    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+    CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
+    return OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+}
+
 @end
 
 @interface OAFavoritesSwiftHelper ()
@@ -131,6 +157,7 @@
 + (OAFavoriteGroup *)favoriteGroupForSharingGroup:(OAFavoriteGroup *)group points:(NSArray<OAFavoriteItem *> *)points;
 + (nullable NSURL *)fileURLForSharingFavoriteGroups:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
 + (CLLocation *)locationForFavorite:(OAFavoriteItem *)favorite;
++ (int)currentMapZoomLevel;
 
 @end
 
@@ -161,6 +188,37 @@
         [items addObject:[[OAFavoritePointBridgeItem alloc] initWithFavorite:point]];
 
     return items.copy;
+}
+
++ (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+{
+    NSMutableArray<NSString *> *query = [NSMutableArray array];
+    if (favoriteItem.encodedNameForLink.length > 0)
+        [query addObject:[NSString stringWithFormat:@"name=%@", favoriteItem.encodedNameForLink]];
+
+    NSString *pin = [NSString stringWithFormat:@"%.6f%%2C%.6f", favoriteItem.latitude, favoriteItem.longitude];
+    [query addObject:[NSString stringWithFormat:@"pin=%@", pin]];
+
+    int zoom = [self currentMapZoomLevel];
+    NSString *queryPart = [query componentsJoinedByString:@"&"];
+    NSString *fragment = [NSString stringWithFormat:@"%d/%.4f/%.4f", zoom, favoriteItem.latitude, favoriteItem.longitude];
+    return [NSString stringWithFormat:@"%@?%@#%@", kSharePoiBaseUrl, queryPart, fragment];
+}
+
++ (NSString *)geoURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+{
+    return [OAUtilities buildGeoUrl:favoriteItem.latitude
+                          longitude:favoriteItem.longitude
+                               zoom:[self currentMapZoomLevel]
+                              label:favoriteItem.title];
+}
+
++ (NSString *)formattedCoordinatesForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+{
+    NSInteger format = [OAAppSettings.sharedManager.settingGeoFormat get];
+    return [OAOsmAndFormatter getFormattedCoordinatesWithLat:favoriteItem.latitude
+                                                         lon:favoriteItem.longitude
+                                                outputFormat:format];
 }
 
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible
@@ -537,6 +595,16 @@
     return [OAFavoritesHelper deleteFavoriteGroups:groupsToDelete andFavoritesItems:nil];
 }
 
++ (BOOL)deleteFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+{
+    OAFavoriteItem *favorite = [self favoritePointWithIdentifier:favoriteItem.identifier];
+    if (!favorite)
+        return NO;
+
+    [OAFavoritesHelper deleteFavorites:@[favorite] saveImmediately:YES];
+    return YES;
+}
+
 + (BOOL)deleteFavoriteItems:(NSArray *)favoriteItems
 {
     if (favoriteItems.count == 0)
@@ -602,8 +670,17 @@
     if (groupsToDelete.count == 0 && itemsToDelete.count == 0)
         return NO;
 
-    return [OAFavoritesHelper deleteFavoriteGroups:groupsToDelete.count > 0 ? groupsToDelete : nil
-                                andFavoritesItems:itemsToDelete.count > 0 ? itemsToDelete : nil];
+    BOOL didDelete = NO;
+    if (groupsToDelete.count > 0)
+        didDelete = [OAFavoritesHelper deleteFavoriteGroups:groupsToDelete andFavoritesItems:nil] || didDelete;
+
+    if (itemsToDelete.count > 0)
+    {
+        [OAFavoritesHelper deleteFavorites:itemsToDelete saveImmediately:YES];
+        didDelete = YES;
+    }
+
+    return didDelete;
 }
 
 + (void)openFavoritePointWithIdentifier:(NSString *)identifier
@@ -622,6 +699,15 @@
     [rootViewController.navigationController popToRootViewControllerAnimated:NO];
     [rootViewController.navigationController setNavigationBarHidden:YES animated:NO];
     [rootViewController.mapPanel openTargetViewWithFavorite:favorite pushed:YES];
+}
+
++ (OAEditPointViewController *)editPointViewControllerForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
+{
+    OAFavoriteItem *favorite = [self favoritePointWithIdentifier:favoriteItem.identifier];
+    if (!favorite)
+        return nil;
+
+    return [[OAEditPointViewController alloc] initWithFavorite:favorite];
 }
 
 + (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems
@@ -775,7 +861,8 @@
             continue;
 
         OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
-        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
+        OAFavoriteItem *favorite = [self standaloneFavoritePoint:[self favoritePointWithIdentifier:pointItem.identifier]];
+
         if (!favorite)
             continue;
 
@@ -1105,6 +1192,18 @@
         return nil;
 
     return [[CLLocation alloc] initWithLatitude:[favorite getLatitude] longitude:[favorite getLongitude]];
+}
+
++ (int)currentMapZoomLevel
+{
+    return [OARootViewController instance].mapPanel.mapViewController.mapView.zoomLevel;
+}
+
++ (OAFavoriteItem *)standaloneFavoritePoint:(OAFavoriteItem *)favorite
+{
+    OASWptPt *point = [favorite toWpt];
+    point.category = nil;
+    return [OAFavoriteItem fromWpt:point category:@""];
 }
 
 @end

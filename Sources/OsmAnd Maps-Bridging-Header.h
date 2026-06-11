@@ -115,6 +115,7 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmNotePoint.h"
+#import "OAShareMenuActivity.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -226,6 +227,7 @@
 #import "OAOsmNoteViewController.h"
 #import "OAOsmEditingViewController.h"
 #import "OAOsmUploadPOIViewController.h"
+#import "OAEditPointViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

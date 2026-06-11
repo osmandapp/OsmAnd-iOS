@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class UIColor, UIImage, OAFavoriteItem, OASGpxUtilitiesPointsGroup;
+@class UIColor, UIImage, OAFavoriteItem, OASGpxUtilitiesPointsGroup, OAEditPointViewController;
 
 @interface OAFavoriteFolderBridgeItem : NSObject
 
@@ -33,7 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *groupName;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly, nullable) NSString *address;
+@property (nonatomic, readonly) NSString *displayGroupName;
+@property (nonatomic, readonly, nullable) NSString *itemDescription;
+@property (nonatomic, readonly) NSString *encodedNameForLink;
 @property (nonatomic, readonly, nullable) NSNumber *distance;
+@property (nonatomic, readonly) CGFloat direction;
+@property (nonatomic, readonly) double latitude;
+@property (nonatomic, readonly) double longitude;
 @property (nonatomic, readonly, nullable) NSDate *timestampDate;
 @property (nonatomic, readonly, nullable) UIImage *icon;
 @property (nonatomic, readonly) BOOL isVisible;
@@ -46,6 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;
++ (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
++ (NSString *)geoURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
++ (NSString *)formattedCoordinatesForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
 
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible;
 + (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned;
@@ -67,9 +76,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSURL *)shareFavoriteItems:(NSArray *)favoriteItems;
 
 + (BOOL)deleteFavoriteGroup:(NSString *)groupName;
++ (BOOL)deleteFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
 + (BOOL)deleteFavoriteItems:(NSArray *)favoriteItems;
 
 + (void)openFavoritePointWithIdentifier:(NSString *)identifier;
++ (nullable OAEditPointViewController *)editPointViewControllerForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
 + (void)addFavoriteItemsToMapMarkers:(NSArray *)favoriteItems;
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName;
 + (void)addFavoriteGroupToNavigation:(NSString *)groupName;

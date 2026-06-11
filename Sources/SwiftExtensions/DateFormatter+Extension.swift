@@ -30,4 +30,12 @@ extension DateFormatter {
         formatter.dateFormat = "HH:mm:ss"
         return formatter
     }()
+    
+    // 09.09.2013
+    static let detailsDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.timeZone = .current
+        formatter.dateFormat = "dd.MM.yyyy"
+        return formatter
+    }()
 }

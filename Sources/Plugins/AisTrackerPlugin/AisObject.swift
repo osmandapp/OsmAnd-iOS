@@ -52,6 +52,8 @@ enum AisObjectConstants {
 @objcMembers
 final class AisObject: NSObject {
     let mmsi: Int
+    let cpa = AisCpa()
+    
     private(set) var msgType: Int
     private(set) var msgTypes = Set<Int>()
     private(set) var timestamp = 0
@@ -81,15 +83,6 @@ final class AisObject: NSObject {
     private(set) var destination: String?
     private(set) var objectClass: AisObjType = .invalid
     private(set) var lastUpdate = Date()
-    let cpa = AisCpa()
-
-    init(mmsi: Int, msgType: Int) {
-        self.mmsi = mmsi
-        self.msgType = msgType
-        super.init()
-        msgTypes.insert(msgType)
-        updateObjectClass()
-    }
 
     var hasPosition: Bool {
         latitude != AisObjectConstants.invalidLat && longitude != AisObjectConstants.invalidLon
@@ -127,83 +120,14 @@ final class AisObject: NSObject {
                           speed: sog == AisObjectConstants.invalidSog ? -1 : sog * 1852.0 / 3600.0,
                           timestamp: lastUpdate)
     }
-
-    @objc var debugSummary: String {
-        let position = hasPosition
-            ? String(format: "%.6f,%.6f", latitude, longitude)
-            : "none"
-        let age = Date().timeIntervalSince(lastUpdate)
-        return String(format: "mmsi=%d msg=%d msgs=%@ class=%@ shipType=%d rest=%@ movable=%@ nav=%d sog=%.1f cog=%.1f heading=%d pos=%@ age=%.1fs",
-                      mmsi,
-                      msgType,
-                      messageTypesString,
-                      objectClassDebugName,
-                      shipType,
-                      isVesselAtRest ? "yes" : "no",
-                      isMovable ? "yes" : "no",
-                      navStatus,
-                      sog,
-                      cog,
-                      heading,
-                      position,
-                      age)
-    }
-
+    
     var currentLocation: CLLocation? {
         guard let location else { return nil }
         let ageHours = Date().timeIntervalSince(lastUpdate) / 3600.0
         return AisTrackerHelper.newPosition(from: location, ageHours: ageHours)
     }
-
-    func merge(_ other: AisObject) {
-        msgType = other.msgType
-        msgTypes.insert(other.msgType)
-        if other.timestamp != 0 { timestamp = other.timestamp }
-        if other.imo != 0 { imo = other.imo }
-        if other.shipType != AisObjectConstants.invalidShipType { shipType = other.shipType }
-        if other.dimensionToBow != AisObjectConstants.invalidDimension { dimensionToBow = other.dimensionToBow }
-        if other.dimensionToStern != AisObjectConstants.invalidDimension { dimensionToStern = other.dimensionToStern }
-        if other.dimensionToPort != AisObjectConstants.invalidDimension { dimensionToPort = other.dimensionToPort }
-        if other.dimensionToStarboard != AisObjectConstants.invalidDimension { dimensionToStarboard = other.dimensionToStarboard }
-        if other.etaMonth != AisObjectConstants.invalidEta { etaMonth = other.etaMonth }
-        if other.etaDay != AisObjectConstants.invalidEta { etaDay = other.etaDay }
-        if other.etaHour != AisObjectConstants.invalidEtaHour { etaHour = other.etaHour }
-        if other.etaMinute != AisObjectConstants.invalidEtaMin { etaMinute = other.etaMinute }
-        if other.altitude != AisObjectConstants.invalidAltitude { altitude = other.altitude }
-        if other.aidType != AisObjectConstants.unspecifiedAidType { aidType = other.aidType }
-        if other.draught != AisObjectConstants.invalidDraught { draught = other.draught }
-        if other.hasPosition {
-            latitude = other.latitude
-            longitude = other.longitude
-        }
-        if let value = other.callSign { callSign = value }
-        if let value = other.shipName { shipName = value }
-        if let value = other.destination { destination = value }
-
-        if [1, 2, 3, 18, 19, 27].contains(other.msgType) {
-            heading = other.heading
-        }
-        if [1, 2, 3, 27].contains(other.msgType) {
-            navStatus = other.navStatus
-            maneuverIndicator = other.maneuverIndicator
-            rot = other.rot
-        }
-        if [1, 2, 3, 9, 18, 19, 27].contains(other.msgType) {
-            cog = other.cog
-            sog = other.sog
-        }
-        lastUpdate = Date()
-        updateObjectClass()
-    }
-
-    func isLost(maxAgeMinutes: Int) -> Bool {
-        Date().timeIntervalSince(lastUpdate) / 60.0 > Double(maxAgeMinutes)
-    }
-
-    func signalLost(maxAgeMinutes: Int) -> Bool {
-        isLost(maxAgeMinutes: maxAgeMinutes) && isMovable && !isVesselAtRest
-    }
-
+    
+    
     var isMovable: Bool {
         switch objectClass {
         case .vessel, .vesselSport, .vesselFast, .vesselPassenger, .vesselFreight, .vesselCommercial, .vesselAuthorities, .vesselSar, .vesselOther, .airplane:
@@ -352,6 +276,84 @@ final class AisObject: NSObject {
         default: return "\(aidType)"
         }
     }
+    
+    @objc var debugSummary: String {
+        let position = hasPosition
+            ? String(format: "%.6f,%.6f", latitude, longitude)
+            : "none"
+        let age = Date().timeIntervalSince(lastUpdate)
+        return String(format: "mmsi=%d msg=%d msgs=%@ class=%@ shipType=%d rest=%@ movable=%@ nav=%d sog=%.1f cog=%.1f heading=%d pos=%@ age=%.1fs",
+                      mmsi,
+                      msgType,
+                      messageTypesString,
+                      objectClassDebugName,
+                      shipType,
+                      isVesselAtRest ? "yes" : "no",
+                      isMovable ? "yes" : "no",
+                      navStatus,
+                      sog,
+                      cog,
+                      heading,
+                      position,
+                      age)
+    }
+    
+    init(mmsi: Int, msgType: Int) {
+        self.mmsi = mmsi
+        self.msgType = msgType
+        super.init()
+        msgTypes.insert(msgType)
+        updateObjectClass()
+    }
+
+    func merge(_ other: AisObject) {
+        msgType = other.msgType
+        msgTypes.insert(other.msgType)
+        if other.timestamp != 0 { timestamp = other.timestamp }
+        if other.imo != 0 { imo = other.imo }
+        if other.shipType != AisObjectConstants.invalidShipType { shipType = other.shipType }
+        if other.dimensionToBow != AisObjectConstants.invalidDimension { dimensionToBow = other.dimensionToBow }
+        if other.dimensionToStern != AisObjectConstants.invalidDimension { dimensionToStern = other.dimensionToStern }
+        if other.dimensionToPort != AisObjectConstants.invalidDimension { dimensionToPort = other.dimensionToPort }
+        if other.dimensionToStarboard != AisObjectConstants.invalidDimension { dimensionToStarboard = other.dimensionToStarboard }
+        if other.etaMonth != AisObjectConstants.invalidEta { etaMonth = other.etaMonth }
+        if other.etaDay != AisObjectConstants.invalidEta { etaDay = other.etaDay }
+        if other.etaHour != AisObjectConstants.invalidEtaHour { etaHour = other.etaHour }
+        if other.etaMinute != AisObjectConstants.invalidEtaMin { etaMinute = other.etaMinute }
+        if other.altitude != AisObjectConstants.invalidAltitude { altitude = other.altitude }
+        if other.aidType != AisObjectConstants.unspecifiedAidType { aidType = other.aidType }
+        if other.draught != AisObjectConstants.invalidDraught { draught = other.draught }
+        if other.hasPosition {
+            latitude = other.latitude
+            longitude = other.longitude
+        }
+        if let value = other.callSign { callSign = value }
+        if let value = other.shipName { shipName = value }
+        if let value = other.destination { destination = value }
+
+        if [1, 2, 3, 18, 19, 27].contains(other.msgType) {
+            heading = other.heading
+        }
+        if [1, 2, 3, 27].contains(other.msgType) {
+            navStatus = other.navStatus
+            maneuverIndicator = other.maneuverIndicator
+            rot = other.rot
+        }
+        if [1, 2, 3, 9, 18, 19, 27].contains(other.msgType) {
+            cog = other.cog
+            sog = other.sog
+        }
+        lastUpdate = Date()
+        updateObjectClass()
+    }
+
+    func isLost(maxAgeMinutes: Int) -> Bool {
+        Date().timeIntervalSince(lastUpdate) / 60.0 > Double(maxAgeMinutes)
+    }
+
+    func signalLost(maxAgeMinutes: Int) -> Bool {
+        isLost(maxAgeMinutes: maxAgeMinutes) && isMovable && !isVesselAtRest
+    }
 
     func applyPosition(timestamp: Int, navStatus: Int, maneuverIndicator: Int, heading: Int, cog: Double, sog: Double, lat: Double, lon: Double, rot: Double) {
         self.timestamp = timestamp
@@ -454,7 +456,7 @@ final class AisObject: NSObject {
             }
         }
     }
-
+    
     private var objectClassDebugName: String {
         switch objectClass {
         case .vessel: return "vessel"
@@ -476,10 +478,6 @@ final class AisObject: NSObject {
     }
 }
 
-func aisDebugLog(_ message: @autoclosure () -> String) {
-    guard let plugin = OAPluginsHelper.getPlugin(AisTrackerPlugin.self) as? AisTrackerPlugin,
-          plugin.isDebugLoggingEnabled() else {
-        return
-    }
-    NSLog("[AIS] %@", message())
+func aisDebugLog(_ message: String) {
+    AisLogger.shared.log(message)
 }

@@ -14,6 +14,7 @@
 #import "OAPointDescription.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
+#import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -29,6 +30,7 @@
 static const int kAisTrackerStartZoom = 6;
 static const CGFloat kAisBaseIconSize = 48.0;
 static const CGFloat kAisDirectionLineStartIconFactor = 0.42;
+static const float kAisRenderZoomEpsilon = 0.02f;
 static const NSTimeInterval kAisViewportRenderUpdateInterval = 0.2;
 static int kAisIconKeyStorage;
 static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStorage;
@@ -36,25 +38,6 @@ static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStora
 static NSString *OAAisObjectTitle(AisObject *object)
 {
     return [NSString stringWithFormat:OALocalizedString(@"ais_object_with_mmsi"), (long)object.mmsi];
-}
-
-static BOOL OAAisDebugLoggingEnabled()
-{
-    AisTrackerPlugin *plugin = (AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class];
-    return plugin && [plugin isDebugLoggingEnabled];
-}
-
-static void OAAisLayerLog(NSString *format, ...) NS_FORMAT_FUNCTION(1, 2);
-static void OAAisLayerLog(NSString *format, ...)
-{
-    if (!OAAisDebugLoggingEnabled())
-        return;
-
-    va_list args;
-    va_start(args, format);
-    NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
-    va_end(args);
-    NSLog(@"[AIS][Layer] %@", message);
 }
 
 @interface AisObjectDrawable : NSObject
@@ -70,9 +53,12 @@ static void OAAisLayerLog(NSString *format, ...)
 - (void)setTextScale:(CGFloat)textScale
  displayDensityFactor:(CGFloat)displayDensityFactor;
 - (BOOL)hasAisRenderData;
+- (BOOL)hasAnyAisRenderData;
+- (int)renderGroupId;
 - (NSString *)currentRenderKey;
 - (OsmAnd::PointI)markerLocation;
 - (void)setAisRenderDataHidden:(BOOL)hidden;
+- (void)setAisMarkersUpdateAfterCreated;
 - (void)createAisRenderDataWithBaseOrder:(int)baseOrder
                        markersCollection:(const std::shared_ptr<OsmAnd::MapMarkersCollection> &)markersCollection
                     vectorLinesCollection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)vectorLinesCollection;
@@ -91,6 +77,7 @@ static void OAAisLayerLog(NSString *format, ...)
     std::shared_ptr<OsmAnd::VectorLine> _directionLine;
     CGFloat _textScale;
     CGFloat _displayDensityFactor;
+    int _baseOrder;
 }
 
 - (instancetype)initWithObject:(AisObject *)object
@@ -116,8 +103,7 @@ static void OAAisLayerLog(NSString *format, ...)
     _object = object;
 }
 
-- (void)setTextScale:(CGFloat)textScale
- displayDensityFactor:(CGFloat)displayDensityFactor
+- (void)setTextScale:(CGFloat)textScale displayDensityFactor:(CGFloat)displayDensityFactor
 {
     _textScale = textScale > 0 ? textScale : 1.0;
     _displayDensityFactor = MAX(1.0, displayDensityFactor);
@@ -126,6 +112,16 @@ static void OAAisLayerLog(NSString *format, ...)
 - (BOOL)hasAisRenderData
 {
     return _activeMarker && _restMarker && _lostMarker && _directionLine;
+}
+
+- (BOOL)hasAnyAisRenderData
+{
+    return _activeMarker || _restMarker || _lostMarker || _directionLine;
+}
+
+- (int)renderGroupId
+{
+    return (int)_object.mmsi;
 }
 
 - (NSString *)currentRenderKey
@@ -152,6 +148,17 @@ static void OAAisLayerLog(NSString *format, ...)
         _lostMarker->setIsHidden(hidden);
     if (_directionLine)
         _directionLine->setIsHidden(hidden);
+    [self setAisMarkersUpdateAfterCreated];
+}
+
+- (void)setAisMarkersUpdateAfterCreated
+{
+    if (_activeMarker)
+        _activeMarker->setUpdateAfterCreated(true);
+    if (_restMarker)
+        _restMarker->setUpdateAfterCreated(true);
+    if (_lostMarker)
+        _lostMarker->setUpdateAfterCreated(true);
 }
 
 - (void)createAisRenderDataWithBaseOrder:(int)baseOrder
@@ -161,24 +168,39 @@ static void OAAisLayerLog(NSString *format, ...)
     if (!markersCollection || !vectorLinesCollection)
         return;
 
+    [self clearAisRenderDataFromMarkersCollection:markersCollection vectorLinesCollection:vectorLinesCollection];
+    _baseOrder = baseOrder;
+
+    sk_sp<SkImage> activeIcon = [self iconImageForState:0];
+    sk_sp<SkImage> restIcon = [self iconImageForState:1];
+    sk_sp<SkImage> lostIcon = [self iconImageForState:2];
+    if (!activeIcon || !restIcon || !lostIcon)
+        return;
+
     OsmAnd::MapMarkerBuilder markerBuilder;
     OsmAnd::PointI markerLocation = [self markerLocation];
     markerBuilder
+        .setGroupId([self renderGroupId])
+        .setMarkerId(0)
         .setBaseOrder(baseOrder)
         .setIsHidden(true)
+        .setUpdateAfterCreated(true)
         .setPosition(markerLocation)
-        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage([self iconImageForState:0]));
+        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage(activeIcon));
     _activeMarker = markerBuilder.buildAndAddToCollection(markersCollection);
 
     markerBuilder
+        .setMarkerId(1)
         .clearOnMapSurfaceIcons()
-        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage([self iconImageForState:1]));
+        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage(restIcon));
     _restMarker = markerBuilder.buildAndAddToCollection(markersCollection);
 
     markerBuilder
+        .setMarkerId(2)
         .clearOnMapSurfaceIcons()
-        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage([self iconImageForState:2]));
+        .addOnMapSurfaceIcon(kAisIconKey, OsmAnd::SingleSkImage(lostIcon));
     _lostMarker = markerBuilder.buildAndAddToCollection(markersCollection);
+    [self setAisMarkersUpdateAfterCreated];
 
     QVector<OsmAnd::PointI> points;
     points.push_back(markerLocation);
@@ -186,7 +208,7 @@ static void OAAisLayerLog(NSString *format, ...)
 
     OsmAnd::VectorLineBuilder lineBuilder;
     lineBuilder
-        .setLineId((int)_object.mmsi)
+        .setLineId([self renderGroupId])
         .setBaseOrder(baseOrder + 10)
         .setIsHidden(true)
         .setLineWidth(6.0)
@@ -196,6 +218,11 @@ static void OAAisLayerLog(NSString *format, ...)
     _directionLine = lineBuilder.buildAndAddToCollection(vectorLinesCollection);
 
     _renderKey = [self currentRenderKey];
+    if (![self hasAisRenderData])
+    {
+        [self clearAisRenderDataFromMarkersCollection:markersCollection vectorLinesCollection:vectorLinesCollection];
+        return;
+    }
     [self updateAisRenderDataWithMapView:nil plugin:nil];
 }
 
@@ -251,14 +278,15 @@ static void OAAisLayerLog(NSString *format, ...)
     _activeMarker->setPosition(markerLocation);
     _restMarker->setPosition(markerLocation);
     _lostMarker->setPosition(markerLocation);
+    [self setAisMarkersUpdateAfterCreated];
 
     if (drawDirectionLine && _directionLine)
     {
-        int inverseZoom = (int)mapView.maxZoom - (int)zoom;
+        double inverseZoom = mapView.maxZoom - mapView.zoom;
         double zoomFactor = std::pow(2.0, inverseZoom);
         CGFloat iconSize = [self iconSize];
-        double lineLength = speedFactor * zoomFactor * iconSize * 0.75;
-        double lineStartOffset = std::min(lineLength * 0.8, zoomFactor * iconSize * kAisDirectionLineStartIconFactor);
+        double lineStartOffset = zoomFactor * iconSize * kAisDirectionLineStartIconFactor;
+        double lineLength = std::max(speedFactor * zoomFactor * iconSize * 0.75, lineStartOffset + zoomFactor * iconSize * 0.25);
         double theta = rotation * M_PI / 180.0;
         int startDx = (int)ceil(-sin(theta) * lineStartOffset);
         int startDy = (int)ceil(cos(theta) * lineStartOffset);
@@ -279,6 +307,7 @@ static void OAAisLayerLog(NSString *format, ...)
 {
     if (markersCollection)
     {
+        markersCollection->removeMarkersByGroupId([self renderGroupId]);
         if (_activeMarker)
             markersCollection->removeMarker(_activeMarker);
         if (_restMarker)
@@ -286,10 +315,22 @@ static void OAAisLayerLog(NSString *format, ...)
         if (_lostMarker)
             markersCollection->removeMarker(_lostMarker);
     }
-    if (vectorLinesCollection && _directionLine)
+    if (vectorLinesCollection)
     {
-        _directionLine->setIsHidden(true);
-        vectorLinesCollection->removeLine(_directionLine);
+        const int lineId = [self renderGroupId];
+        for (const auto& line : vectorLinesCollection->getLines())
+        {
+            if (line && line->lineId == lineId)
+            {
+                line->setIsHidden(true);
+                vectorLinesCollection->removeLine(line);
+            }
+        }
+        if (_directionLine)
+        {
+            _directionLine->setIsHidden(true);
+            vectorLinesCollection->removeLine(_directionLine);
+        }
     }
 
     _activeMarker.reset();
@@ -472,6 +513,7 @@ static void OAAisLayerLog(NSString *format, ...)
     BOOL _hasLastRenderViewport;
     OsmAnd::AreaI _lastRenderBBox31;
     int _lastRenderZoom;
+    float _lastRenderSurfaceZoom;
     NSTimeInterval _lastViewportRenderUpdateTime;
 }
 
@@ -486,6 +528,7 @@ static void OAAisLayerLog(NSString *format, ...)
         _displayDensityFactor = MAX(1.0, mapViewController.displayDensityFactor);
         _hasLastRenderViewport = NO;
         _lastRenderZoom = -1;
+        _lastRenderSurfaceZoom = -1.0f;
         _lastViewportRenderUpdateTime = 0;
     }
     return self;
@@ -638,10 +681,7 @@ static void OAAisLayerLog(NSString *format, ...)
 
     BOOL scaleChanged = [self updateScaleCache];
     if (scaleChanged)
-    {
-        OAAisLayerLog(@"scale changed textScale=%.2f density=%.2f iconSize=%.1f", _textScale, _displayDensityFactor, [self currentIconSize]);
         [self cleanupResources];
-    }
 
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
@@ -657,19 +697,19 @@ static void OAAisLayerLog(NSString *format, ...)
     return YES;
 }
 
-//- (void)onMapFrameRendered
-//{
-//    if (![self isVisible])
-//    {
-//        [self removeCollectionsFromRenderer];
-//        _hasLastRenderViewport = NO;
-//        _lastViewportRenderUpdateTime = 0;
-//        return;
-//    }
-//    if (![self shouldUpdateRenderDataForViewport])
-//        return;
-//    [self updateRenderData];
-//}
+- (void)onMapFrameRendered
+{
+    if (![self isVisible])
+    {
+        [self removeCollectionsFromRenderer];
+        _hasLastRenderViewport = NO;
+        _lastViewportRenderUpdateTime = 0;
+        return;
+    }
+    if (![self shouldUpdateRenderDataForViewport])
+        return;
+    [self updateRenderData];
+}
 
 
 - (void)resetCollections
@@ -759,7 +799,9 @@ static void OAAisLayerLog(NSString *format, ...)
         }
         [drawable setTextScale:_textScale displayDensityFactor:_displayDensityFactor];
         [drawable set:object];
-        if ([drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]])
+        BOOL renderKeyChanged = [drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]];
+        BOOL partialRenderData = [drawable hasAnyAisRenderData] && ![drawable hasAisRenderData];
+        if (renderKeyChanged || partialRenderData)
             [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
         if (![drawable hasAisRenderData])
             [drawable createAisRenderDataWithBaseOrder:self.baseOrder markersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
@@ -781,8 +823,7 @@ static void OAAisLayerLog(NSString *format, ...)
 {
     if (![self isVisible] || !object.hasPosition)
         return;
-
-    OAAisLayerLog(@"receive %@", object.debugSummary);
+    [[AisLogger shared] log:[NSString stringWithFormat:@"receive %@", object.debugSummary]];
     [self addCollectionsToRenderer];
     [self.mapViewController runWithRenderSync:^{
         [self updateAisObjectSync:object];
@@ -797,7 +838,8 @@ static void OAAisLayerLog(NSString *format, ...)
     [self.mapViewController runWithRenderSync:^{
         NSNumber *key = @(object.mmsi);
         AisObjectDrawable *drawable = _objectDrawables[key];
-        OAAisLayerLog(@"remove hasDrawable=%@ drawables=%lu %@", drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, object.debugSummary);
+        [[AisLogger shared] log:[NSString stringWithFormat:@"remove hasDrawable=%@ drawables=%lu %@",
+                                 drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, object.debugSummary]];
         if (drawable)
         {
             [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
@@ -819,14 +861,17 @@ static void OAAisLayerLog(NSString *format, ...)
     }
     [drawable setTextScale:_textScale displayDensityFactor:_displayDensityFactor];
     [drawable set:object];
-    BOOL recreated = [drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]];
+    BOOL renderKeyChanged = [drawable hasAisRenderData] && ![drawable.renderKey isEqualToString:[drawable currentRenderKey]];
+    BOOL partialRenderData = [drawable hasAnyAisRenderData] && ![drawable hasAisRenderData];
+    BOOL recreated = renderKeyChanged || partialRenderData;
     if (recreated)
         [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
     if (![drawable hasAisRenderData])
         [drawable createAisRenderDataWithBaseOrder:self.baseOrder markersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
     [drawable updateAisRenderDataWithMapView:self.mapView plugin:[self plugin]];
     int linesCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
-    OAAisLayerLog(@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, object.debugSummary);
+
+    [[AisLogger shared] log:[NSString stringWithFormat:@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, object.debugSummary]];
     [[self plugin] updateSimulationRenderedObjects:_objectDrawables.count];
 }
 
@@ -848,19 +893,23 @@ static void OAAisLayerLog(NSString *format, ...)
 
     const OsmAnd::AreaI visibleBBox31 = [mapView getVisibleBBox31];
     const int zoom = (int)mapView.zoomLevel;
+    const float surfaceZoom = mapView.zoom;
+    const BOOL surfaceZoomChanged = std::fabs(_lastRenderSurfaceZoom - surfaceZoom) > kAisRenderZoomEpsilon;
     if (!_hasLastRenderViewport
         || _lastRenderZoom != zoom
+        || surfaceZoomChanged
         || _lastRenderBBox31.left() != visibleBBox31.left()
         || _lastRenderBBox31.top() != visibleBBox31.top()
         || _lastRenderBBox31.right() != visibleBBox31.right()
         || _lastRenderBBox31.bottom() != visibleBBox31.bottom())
     {
         NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-        if (_hasLastRenderViewport && now - _lastViewportRenderUpdateTime < kAisViewportRenderUpdateInterval)
+        if (!surfaceZoomChanged && _hasLastRenderViewport && now - _lastViewportRenderUpdateTime < kAisViewportRenderUpdateInterval)
             return NO;
 
         _lastRenderBBox31 = visibleBBox31;
         _lastRenderZoom = zoom;
+        _lastRenderSurfaceZoom = surfaceZoom;
         _hasLastRenderViewport = YES;
         _lastViewportRenderUpdateTime = now;
         return YES;
@@ -888,7 +937,9 @@ static void OAAisLayerLog(NSString *format, ...)
     targetPoint.titleAddress = object.navStatusString.length > 0 ? object.navStatusString : nil;
     targetPoint.shouldFetchAddress = NO;
     targetPoint.location = location.coordinate;
-    targetPoint.icon = [UIImage imageNamed:@"ic_plugin_nautical"];
+    
+    targetPoint.icon = [[UIImage imageNamed:ACImageNameIcActionSailBoatDark]
+                        imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     targetPoint.sortIndex = OATargetAisObject;
     targetPoint.centerMap = NO;
     return targetPoint;
@@ -953,7 +1004,6 @@ static void OAAisLayerLog(NSString *format, ...)
         return;
 
     NSArray<AisObject *> *objects = [[self plugin] getAisObjects];
-    BOOL collected = NO;
     for (AisObject *object in objects)
     {
         CLLocation *location = object.location;
@@ -965,12 +1015,8 @@ static void OAAisLayerLog(NSString *format, ...)
                                              polygon31:touchPolygon31])
         {
             [result collect:object provider:self];
-            collected = YES;
-            OAAisLayerLog(@"hit-test collect radius=%d %@", radius, object.debugSummary);
         }
     }
-    if (!collected)
-        OAAisLayerLog(@"hit-test miss radius=%d objects=%lu point=(%.1f, %.1f)", radius, (unsigned long)objects.count, point.x, point.y);
 }
 
 - (NSString *)objectTypeName:(AisObjType)type

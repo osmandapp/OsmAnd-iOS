@@ -21,7 +21,6 @@ final class AisTrackerPlugin: OAPlugin {
     static let shipLostTimeoutPrefId = "ais_ship_lost_timeout"
     static let cpaWarningTimePrefId = "ais_cpa_warning_time"
     static let cpaWarningDistancePrefId = "ais_cpa_warning_distance"
-   
 
     let protocolPref: OACommonInteger
     let hostPref: OACommonString
@@ -67,9 +66,6 @@ final class AisTrackerPlugin: OAPlugin {
         cpaWarningDistancePref = OAAppSettings.sharedManager().registerFloatPreference(Self.cpaWarningDistancePrefId, defValue: 1.0)
         super.init()
 
-        connection.isDebugLoggingEnabled = { [weak self] in
-            self?.isDebugLoggingEnabled() ?? false
-        }
         connection.onStateChanged = { [weak self] state in
             self?.connectionState = state
             NotificationCenter.default.post(name: .aisNmeaConnectionStateChanged, object: self)
@@ -147,10 +143,6 @@ final class AisTrackerPlugin: OAPlugin {
     func isActiveForCurrentProfile() -> Bool {
         isEnabled() && OAAppSettings.sharedManager().applicationMode.get().isDerivedRouting(from: .boat())
     }
-
-//    func isDebugLoggingEnabled() -> Bool {
-//        debugLoggingPref.get()
-//    }
 
     func startAisSimulation(_ fileURL: URL) {
         simulationFileName = fileURL.lastPathComponent

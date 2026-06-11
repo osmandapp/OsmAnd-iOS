@@ -6,13 +6,17 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-
+@objcMembers
 final class AisLogger: NSObject {
     
     static let shared = AisLogger()
     static let debugLoggingPrefId = "ais_debug_logging"
     
-    var isEnabled = true
+    var isEnabled: Bool {
+        didSet {
+            debugLoggingPref.set(isEnabled)
+        }
+    }
     
     private let debugLoggingPref: OACommonBoolean
     
@@ -21,12 +25,9 @@ final class AisLogger: NSObject {
         isEnabled = debugLoggingPref.get()
     }
     
-    func log(_ message: String,
-             file: String = #fileID,
-             function: String = #function,
-             line: Int = #line) {
+    func log(_ message: String) {
         guard isEnabled else { return }
         
-        print("[AIS] \(message) (\(file):\(line) \(function))")
+        print("[AIS] \(message)")
     }
 }

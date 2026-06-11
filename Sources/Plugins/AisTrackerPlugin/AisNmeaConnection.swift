@@ -15,16 +15,12 @@ import Network
 }
 
 @objc enum AisNmeaConnectionState: Int {
-    case disconnected
-    case connecting
-    case connected
-    case failed
+    case disconnected, connecting, connected, failed
 }
 
 // NOTE: for test: tcp 153.44.253.27 5631
 
 final class AisNmeaConnection {
-    var isDebugLoggingEnabled: (() -> Bool)?
     var onLocation: ((CLLocation) -> Void)?
     var onSentence: ((String) -> Void)?
     var onStateChanged: ((AisNmeaConnectionState) -> Void)?
@@ -37,19 +33,20 @@ final class AisNmeaConnection {
     private var shouldReconnect = false
     private var host = ""
     private var port: UInt16 = 0
+    
     var isRunning: Bool {
         listener != nil || connection != nil || shouldReconnect
     }
 
     func startUDP(port: UInt16) {
         stop()
-        log("start UDP port=\(port)")
+        AisLogger.shared.log("[AisNmeaConnection] start UDP port=\(port)")
         updateState(.connecting)
         do {
             let params = NWParameters.udp
             params.allowLocalEndpointReuse = true
             guard let endpointPort = NWEndpoint.Port(rawValue: port) else {
-                log("UDP start failed: invalid port \(port)")
+                AisLogger.shared.log("[AisNmeaConnection] UDP start failed: invalid port \(port)")
                 updateState(.failed)
                 return
             }
@@ -114,21 +111,22 @@ final class AisNmeaConnection {
         let nwConnection = NWConnection(host: NWEndpoint.Host(host), port: endpointPort, using: .tcp)
         connection = nwConnection
         nwConnection.stateUpdateHandler = { [weak self] state in
-            self?.log("TCP state=\(state)")
+            guard let self else { return }
+            log("TCP state=\(state)")
             switch state {
             case .ready:
-                self?.updateState(.connected)
-                self?.receiveStream(nwConnection)
+                updateState(.connected)
+                receiveStream(nwConnection)
             case .failed(let error):
-                self?.log("TCP failed error=\(error)")
-                self?.updateState(.failed)
-                self?.scheduleReconnect()
+                log("TCP failed error=\(error)")
+                updateState(.failed)
+                scheduleReconnect()
             case .waiting(let error):
-                self?.log("TCP waiting error=\(error)")
-                self?.updateState(.failed)
-                self?.scheduleReconnect()
+                log("TCP waiting error=\(error)")
+                updateState(.failed)
+                scheduleReconnect()
             case .cancelled:
-                self?.updateState(.disconnected)
+                updateState(.disconnected)
             default:
                 break
             }
@@ -231,9 +229,8 @@ final class AisNmeaConnection {
         }
         return cleanSentence.split(separator: ",", maxSplits: 1).first.map(String.init) ?? "unknown"
     }
-
-    private func log(_ message: @autoclosure () -> String) {
-        guard isDebugLoggingEnabled?() == true else { return }
-        NSLog("[AIS][AisNmeaConnection] %@", message())
+    
+    private func log(_ message: String) {
+        AisLogger.shared.log("[AisNmeaConnection] \(message)")
     }
 }

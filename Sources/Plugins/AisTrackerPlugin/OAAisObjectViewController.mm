@@ -53,7 +53,8 @@ static const NSInteger kAisRowHeight = 50;
 
 - (UIImage *)getIcon
 {
-    return [UIImage imageNamed:@"ic_plugin_nautical"];
+    return [[UIImage imageNamed:ACImageNameIcActionSailBoatDark]
+            imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
 
 - (NSString *)getTypeStr
@@ -109,6 +110,7 @@ static const NSInteger kAisRowHeight = 50;
     _menuRows = rows;
     _aisValueRowKeys = [NSMutableSet set];
     [super buildMenu:rows];
+}
 
 - (void)buildPluginRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {

@@ -123,7 +123,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     if (aisPlugin)
     {
         OATableSectionData *aisSection = [OATableSectionData sectionData];
-        aisSection.headerText =  OALocalizedString(@"plugin_ais_tracker_name");
+        aisSection.headerText = OALocalizedString(@"plugin_ais_tracker_name");
         
         NSString *simulationDescription = aisPlugin.simulationFileName ?: @"";
         if (aisPlugin.simulationStatusText.length > 0)
@@ -144,7 +144,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
             kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
             kCellKeyKey : kAisTrackerDebugLoggingKey,
             kCellTitleKey : @"AIS logging",
-            @"isOn" : @([aisPlugin.debugLoggingPref get])
+            @"isOn" : @([AisLogger shared].isEnabled)
         }];
         [_data addSection:aisSection];
     }
@@ -324,8 +324,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     }
     else if ([item.key isEqualToString:kAisTrackerDebugLoggingKey])
     {
-        AisTrackerPlugin *aisPlugin = (AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class];
-        [aisPlugin.debugLoggingPref set:sender.isOn];
+        [AisLogger shared].isEnabled = sender.isOn;
     }
     else if ([item.key isEqualToString:kTraceRenderingKey])
     {

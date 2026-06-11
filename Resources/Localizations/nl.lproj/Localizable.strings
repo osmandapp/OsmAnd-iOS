@@ -513,7 +513,7 @@
 "shared_string_select_all" = "Selecteer alles";
 "create_custom_poi" = "Eigen filter maken";
 "selected_categories" = "Gekozen categorieën";
-"new_filter_desc" = "Geen een naam aan het nieuwe filter. Deze naam wordt aan de lijst Categorieën toegevoegd.";
+"new_filter_desc" = "Geef een naam aan het nieuwe filter. Deze wordt aan de 'Categorie' tab toegevoegd.";
 "edit_filter" = "Bewerk filter";
 "edit_filter_save_as_menu_item" = "Bewaar als";
 "delete_filter" = "Wis filter";

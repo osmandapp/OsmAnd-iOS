@@ -135,6 +135,10 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 
     BOOL _otherCardsReady;
     BOOL _isFetchingNearestPoi;
+    BOOL _rowUpdatesDeferred;
+    BOOL _pendingRowUpdate;
+    BOOL _detailRowsDeferred;
+    BOOL _pendingDetailRowsBuild;
 }
 
 - (instancetype)init
@@ -162,8 +166,41 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     [self updateInfoRows];
 }
 
+- (void)setRowUpdatesDeferred:(BOOL)deferred
+{
+    if (_rowUpdatesDeferred == deferred)
+        return;
+
+    _rowUpdatesDeferred = deferred;
+    if (!deferred && _pendingRowUpdate)
+    {
+        _pendingRowUpdate = NO;
+        [self updateInfoRows];
+    }
+}
+
+- (void)setDetailRowsDeferred:(BOOL)deferred
+{
+    _detailRowsDeferred = deferred;
+}
+
+- (void)buildDeferredDetailRows
+{
+    if (!_pendingDetailRowsBuild)
+        return;
+
+    _pendingDetailRowsBuild = NO;
+    _detailRowsDeferred = NO;
+    [self rebuildRows];
+}
+
 - (void) updateInfoRows
 {
+    if (_rowUpdatesDeferred)
+    {
+        _pendingRowUpdate = YES;
+        return;
+    }
     [self sortInfoRows];
     _calculatedWidth = 0;
     [self.tableView reloadData];
@@ -266,7 +303,14 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 
     if (_showTitleIfTruncated)
         [self buildTitleRow:rows];
-    
+
+    if (_detailRowsDeferred)
+    {
+        _pendingDetailRowsBuild = YES;
+        [self updateInfoRows];
+        return;
+    }
+
     [self buildWithinRow:rows];
     [self buildNearestRows:rows];
     

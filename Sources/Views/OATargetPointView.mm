@@ -886,16 +886,23 @@ static const NSInteger _buttonsCount = 4;
             frame.origin.y = 0;
         }
         
-        [UIView animateWithDuration:0.3 animations:^{
-            
+        [self.customController setRowUpdatesDeferred:YES];
+        [UIView animateWithDuration:0.15 animations:^{
+
             self.frame = frame;
-            
+
         } completion:^(BOOL finished) {
             if (onComplete)
                 onComplete();
-            
+
             if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
                 [self.menuViewDelegate targetViewEnableMapInteraction];
+
+            OATargetMenuViewController *controller = self.customController;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [controller setRowUpdatesDeferred:NO];
+                [controller buildDeferredDetailRows];
+            });
         }];
     }
     else
@@ -913,6 +920,8 @@ static const NSInteger _buttonsCount = 4;
 
         if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
             [self.menuViewDelegate targetViewEnableMapInteraction];
+
+        [self.customController buildDeferredDetailRows];
     }
 
     [self startLocationUpdate];

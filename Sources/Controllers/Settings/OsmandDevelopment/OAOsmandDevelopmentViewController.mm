@@ -53,6 +53,7 @@ NSString *const kShowTouchesKey = @"kShowTouchesKey";
 NSString *const kVisualizingButtonGridKey = @"kVisualizingButtonGridKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kAisTrackerSimulationKey = @"kAisTrackerSimulationKey";
+NSString *const kAisTrackerDebugLoggingKey = @"kAisTrackerDebugLoggingKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
 NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
@@ -115,9 +116,15 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         @"isOn" : @([[OAAppSettings sharedManager].simulateOBDData get])
     }];
 
-    OAAisTrackerPlugin *aisPlugin = (OAAisTrackerPlugin *)[OAPluginsHelper getPlugin:OAAisTrackerPlugin.class];
+    AisTrackerPlugin *aisPlugin = (AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class];
+    
+    [_data addSection:simulationSection];
+
     if (aisPlugin)
     {
+        OATableSectionData *aisSection = [OATableSectionData sectionData];
+        aisSection.headerText =  OALocalizedString(@"plugin_ais_tracker_name");
+        
         NSString *simulationDescription = aisPlugin.simulationFileName ?: @"";
         if (aisPlugin.simulationStatusText.length > 0)
         {
@@ -125,16 +132,22 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
                 ? [NSString stringWithFormat:@"%@ • %@", simulationDescription, aisPlugin.simulationStatusText]
                 : aisPlugin.simulationStatusText;
         }
-        [simulationSection addRowFromDictionary:@{
+        [aisSection addRowFromDictionary:@{
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellKeyKey : kAisTrackerSimulationKey,
             kCellTitleKey : OALocalizedString(@"ais_load_data"),
             kCellDescrKey : simulationDescription,
             @"actionBlock" : (^void(){ [weakSelf openAisSimulationFilePicker]; })
         }];
+        
+        [aisSection addRowFromDictionary:@{
+            kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+            kCellKeyKey : kAisTrackerDebugLoggingKey,
+            kCellTitleKey : @"AIS logging",
+            @"isOn" : @([aisPlugin.debugLoggingPref get])
+        }];
+        [_data addSection:aisSection];
     }
-    
-    [_data addSection:simulationSection];
     
     OATableSectionData *renderingSection = [OATableSectionData sectionData];
     renderingSection.headerText = OALocalizedString(@"shared_string_appearance");
@@ -309,6 +322,11 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         if (!sender.isOn)
             [[DeviceHelper shared] disconnectOBDSimulator];
     }
+    else if ([item.key isEqualToString:kAisTrackerDebugLoggingKey])
+    {
+        AisTrackerPlugin *aisPlugin = (AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class];
+        [aisPlugin.debugLoggingPref set:sender.isOn];
+    }
     else if ([item.key isEqualToString:kTraceRenderingKey])
     {
         [[OAAppSettings sharedManager].debugRenderingInfo set:sender.isOn];
@@ -389,7 +407,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     if (urls.count == 0)
         return;
 
-    OAAisTrackerPlugin *aisPlugin = (OAAisTrackerPlugin *)[OAPluginsHelper getPlugin:OAAisTrackerPlugin.class];
+    AisTrackerPlugin *aisPlugin = (AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class];
     if (!aisPlugin)
         return;
 

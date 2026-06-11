@@ -10,7 +10,7 @@ extension Notification.Name {
 final class AisDataManager: NSObject {
     private static let objectLimit = 200
 
-    private weak var plugin: OAAisTrackerPlugin?
+    private weak var plugin: AisTrackerPlugin?
     private var objectsByMmsi: [Int: AisObject] = [:]
     private var cleanupTimer: Timer?
 
@@ -18,7 +18,7 @@ final class AisDataManager: NSObject {
         Array(objectsByMmsi.values)
     }
     
-    init(plugin: OAAisTrackerPlugin) {
+    init(plugin: AisTrackerPlugin) {
         self.plugin = plugin
         super.init()
     }
@@ -56,7 +56,7 @@ final class AisDataManager: NSObject {
         if objectsByMmsi.count >= Self.objectLimit {
             removeOldestObject()
         }
-        aisDebugLog("data \(event) total=\(objectsByMmsi.count) \(object.debugSummary)")
+        aisDebugLog("[AisDataManager] data \(event) total=\(objectsByMmsi.count) \(object.debugSummary)")
         plugin?.onAisObjectReceived(object)
     }
 
@@ -66,7 +66,7 @@ final class AisDataManager: NSObject {
         let removed = objectsByMmsi.values.filter { $0.isLost(maxAgeMinutes: maxAge) }
         for object in removed {
             objectsByMmsi.removeValue(forKey: object.mmsi)
-            aisDebugLog("data remove-lost maxAge=\(maxAge)m total=\(objectsByMmsi.count) \(object.debugSummary)")
+            aisDebugLog("[AisDataManager] data remove-lost maxAge=\(maxAge)m total=\(objectsByMmsi.count) \(object.debugSummary)")
             plugin.onAisObjectRemoved(object)
         }
         if !removed.isEmpty {
@@ -77,7 +77,7 @@ final class AisDataManager: NSObject {
     private func removeOldestObject() {
         guard let oldest = objectsByMmsi.values.min(by: { $0.lastUpdate < $1.lastUpdate }) else { return }
         objectsByMmsi.removeValue(forKey: oldest.mmsi)
-        aisDebugLog("data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(oldest.debugSummary)")
+        aisDebugLog("[AisDataManager] data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(oldest.debugSummary)")
         plugin?.onAisObjectRemoved(oldest)
     }
 }

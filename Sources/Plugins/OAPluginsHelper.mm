@@ -100,7 +100,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
     [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
     [allPlugins addObject:[[OAExternalSensorsPlugin alloc] init]];
-    [allPlugins addObject:[OAAisTrackerPlugin new]];
+    [allPlugins addObject:[AisTrackerPlugin new]];
     [allPlugins addObject:[VehicleMetricsPlugin new]];
     [allPlugins addObject:[[OAOsmandDevelopmentPlugin alloc] init]];
 

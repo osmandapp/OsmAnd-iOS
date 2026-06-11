@@ -119,7 +119,7 @@ static const NSInteger kAisRowHeight = 50;
 - (void)buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSInteger order = kAisRowStartOrder;
-    OAAisTrackerPlugin *plugin = (OAAisTrackerPlugin *)[OAPluginsHelper getPlugin:OAAisTrackerPlugin.class];
+    AisTrackerPlugin *plugin = (AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class];
     if (plugin)
         [plugin updateCpaFor:_object];
 

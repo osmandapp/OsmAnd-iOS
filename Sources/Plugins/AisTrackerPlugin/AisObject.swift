@@ -469,7 +469,9 @@ final class AisObject: NSObject {
 }
 
 func aisDebugLog(_ message: @autoclosure () -> String) {
-#if DEBUG
+    guard let plugin = OAPluginsHelper.getPlugin(AisTrackerPlugin.self) as? AisTrackerPlugin,
+          plugin.isDebugLoggingEnabled() else {
+        return
+    }
     NSLog("[AIS] %@", message())
-#endif
 }

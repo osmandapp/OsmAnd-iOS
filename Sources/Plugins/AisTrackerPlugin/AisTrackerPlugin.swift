@@ -13,8 +13,7 @@ final class AisTrackerPlugin: OAPlugin {
     static let shipLostTimeoutPrefId = "ais_ship_lost_timeout"
     static let cpaWarningTimePrefId = "ais_cpa_warning_time"
     static let cpaWarningDistancePrefId = "ais_cpa_warning_distance"
-    static let aisConnectLoggingPrefId = "ais_connect_logging"
-    static let layerDebugLoggingPrefId = "ais_layer_debug_logging"
+    static let debugLoggingPrefId = "ais_debug_logging"
 
     let protocolPref: OACommonInteger
     let hostPref: OACommonString
@@ -25,8 +24,7 @@ final class AisTrackerPlugin: OAPlugin {
     let shipLostTimeoutPref: OACommonInteger
     let cpaWarningTimePref: OACommonInteger
     let cpaWarningDistancePref: OACommonDouble
-    let aisConnectLoggingPref: OACommonBoolean
-    let layerDebugLoggingPref: OACommonBoolean
+    let debugLoggingPref: OACommonBoolean
 
     private let connection = AisNmeaConnection()
     private let decoder = AisMessageDecoder()
@@ -60,12 +58,11 @@ final class AisTrackerPlugin: OAPlugin {
         shipLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.shipLostTimeoutPrefId, defValue: 4)
         cpaWarningTimePref = OAAppSettings.sharedManager().registerIntPreference(Self.cpaWarningTimePrefId, defValue: 0)
         cpaWarningDistancePref = OAAppSettings.sharedManager().registerFloatPreference(Self.cpaWarningDistancePrefId, defValue: 1.0)
-        aisConnectLoggingPref = OAAppSettings.sharedManager().registerBooleanPreference(Self.aisConnectLoggingPrefId, defValue: false)
-        layerDebugLoggingPref = OAAppSettings.sharedManager().registerBooleanPreference(Self.layerDebugLoggingPrefId, defValue: false)
+        debugLoggingPref = OAAppSettings.sharedManager().registerBooleanPreference(Self.debugLoggingPrefId, defValue: false)
         super.init()
 
-        connection.isConnectLoggingEnabled = { [weak self] in
-            self?.isConnectLoggingEnabled() ?? false
+        connection.isDebugLoggingEnabled = { [weak self] in
+            self?.isDebugLoggingEnabled() ?? false
         }
         connection.onStateChanged = { [weak self] state in
             self?.connectionState = state
@@ -145,12 +142,8 @@ final class AisTrackerPlugin: OAPlugin {
         isEnabled() && OAAppSettings.sharedManager().applicationMode.get().isDerivedRouting(from: .boat())
     }
 
-    func isConnectLoggingEnabled() -> Bool {
-        aisConnectLoggingPref.get()
-    }
-
-    func isLayerDebugLoggingEnabled() -> Bool {
-        layerDebugLoggingPref.get()
+    func isDebugLoggingEnabled() -> Bool {
+        debugLoggingPref.get()
     }
 
     func startAisSimulation(_ fileURL: URL) {
@@ -413,11 +406,6 @@ final class AisTrackerPlugin: OAPlugin {
         }
     }
 
-    @objc private func onApplicationModeChanged() {
-        updateConnectionForCurrentProfile()
-       // updateLayers()
-    }
-
     private func updateSimulationStatusText() {
         var parts = [
             "sentences \(simulationSentences)",
@@ -443,6 +431,10 @@ final class AisTrackerPlugin: OAPlugin {
         let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLon)
         let degrees = atan2(y, x) * 180 / .pi
         return fmod(degrees + 360, 360)
+    }
+    
+    @objc private func onApplicationModeChanged() {
+        updateConnectionForCurrentProfile()
     }
 }
 

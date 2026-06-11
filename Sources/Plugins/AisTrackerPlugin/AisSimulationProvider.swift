@@ -2,20 +2,21 @@ import CoreLocation
 import Foundation
 
 final class AisMessageSimulationListener {
-    private weak var plugin: OAAisTrackerPlugin?
+    private weak var plugin: AisTrackerPlugin?
     private let fileURL: URL
     private let latency: TimeInterval
     private let queue = DispatchQueue(label: "net.osmand.ais.simulation.listener")
+    private let lock = NSLock()
     private var cancelled = false
 
-    init(plugin: OAAisTrackerPlugin, fileURL: URL, latency: TimeInterval) {
+    init(plugin: AisTrackerPlugin, fileURL: URL, latency: TimeInterval) {
         self.plugin = plugin
         self.fileURL = fileURL
         self.latency = latency
     }
 
     func start() {
-        cancelled = false
+        setCancelled(false)
         queue.async { [weak self] in
             guard let self else { return }
             let hasSecurityScopedAccess = self.fileURL.startAccessingSecurityScopedResource()
@@ -34,10 +35,13 @@ final class AisMessageSimulationListener {
             let stats = self.collectStats(sentences: sentences)
             self.postStatus(sentences: stats.sentences, decoded: stats.decoded, objects: stats.objects, error: nil)
             for sentence in sentences {
-                if self.cancelled {
+                if self.isCancelled {
                     return
                 }
                 Thread.sleep(forTimeInterval: self.latency)
+                if self.isCancelled {
+                    return
+                }
                 DispatchQueue.main.async { [weak self] in
                     self?.plugin?.handleSimulatedNmeaSentence(sentence)
                 }
@@ -46,9 +50,19 @@ final class AisMessageSimulationListener {
     }
 
     func stop() {
-        queue.async { [weak self] in
-            self?.cancelled = true
-        }
+        setCancelled(true)
+    }
+
+    private var isCancelled: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return cancelled
+    }
+
+    private func setCancelled(_ cancelled: Bool) {
+        lock.lock()
+        self.cancelled = cancelled
+        lock.unlock()
     }
 
     private func collectStats(sentences: [String]) -> (sentences: Int, decoded: Int, objects: Int) {
@@ -85,12 +99,12 @@ final class AisMessageSimulationListener {
 
 @objcMembers
 final class AisSimulationProvider: NSObject {
-    private static let simulatedLatency: TimeInterval = 0.01
+    private static let simulatedLatency: TimeInterval = 0.1
 
-    private weak var plugin: OAAisTrackerPlugin?
+    private weak var plugin: AisTrackerPlugin?
     private var listener: AisMessageSimulationListener?
 
-    init(plugin: OAAisTrackerPlugin) {
+    init(plugin: AisTrackerPlugin) {
         self.plugin = plugin
         super.init()
     }

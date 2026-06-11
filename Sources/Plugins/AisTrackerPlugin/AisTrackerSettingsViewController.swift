@@ -35,13 +35,13 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         case cpaWarningDistance
     }
 
-    private let plugin: OAAisTrackerPlugin
+    private let plugin: AisTrackerPlugin
     private let objectLostTimeoutValues = [3, 5, 7, 10, 12, 15, 20]
     private let shipLostTimeoutValues = [2, 3, 4, 5, 7, 10, 15, 100]
     private let cpaWarningTimeValues = [0, 1, 5, 10, 20, 30, 60]
     private let cpaWarningDistanceValues = [0.02, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]
 
-    init(plugin: OAAisTrackerPlugin) {
+    init(plugin: AisTrackerPlugin) {
         self.plugin = plugin
         super.init()
     }

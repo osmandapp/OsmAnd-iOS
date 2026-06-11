@@ -1,3 +1,11 @@
+//
+//  OAAisObjectViewController.m
+//  OsmAnd
+//
+//  Created by Oleksandr Panchenko on 11.06.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
+
 #import "OAAisObjectViewController.h"
 #import "OAAmenityInfoRow.h"
 #import "OAPluginsHelper.h"
@@ -10,12 +18,6 @@
 
 static const NSInteger kAisRowStartOrder = 100;
 static const NSInteger kAisRowHeight = 50;
-
-#ifdef DEBUG
-#define OAAisMenuLog(format, ...) NSLog((@"[AIS][Menu] " format), ##__VA_ARGS__)
-#else
-#define OAAisMenuLog(format, ...)
-#endif
 
 @implementation OAAisObjectViewController
 {
@@ -33,7 +35,6 @@ static const NSInteger kAisRowHeight = 50;
         self.location = CLLocationCoordinate2DMake(object.latitude, object.longitude);
         self.showTitleIfTruncated = NO;
         self.customOnlinePhotosPosition = YES;
-        OAAisMenuLog(@"init %@", object.debugSummary);
     }
     return self;
 }
@@ -43,7 +44,6 @@ static const NSInteger kAisRowHeight = 50;
     [super viewDidLoad];
     [self.tableView registerNib:[UINib nibWithNibName:[OAValueTableViewCell reuseIdentifier] bundle:nil]
           forCellReuseIdentifier:[OAValueTableViewCell reuseIdentifier]];
-    OAAisMenuLog(@"viewDidLoad table=%@ height=%.1f %@", self.tableView ? @"yes" : @"no", [self contentHeight], _object.debugSummary);
 }
 
 - (id)getTargetObj
@@ -109,8 +109,6 @@ static const NSInteger kAisRowHeight = 50;
     _menuRows = rows;
     _aisValueRowKeys = [NSMutableSet set];
     [super buildMenu:rows];
-    OAAisMenuLog(@"buildMenu rows=%lu height=%.1f %@", (unsigned long)rows.count, [self contentHeight], _object.debugSummary);
-}
 
 - (void)buildPluginRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
@@ -179,7 +177,6 @@ static const NSInteger kAisRowHeight = 50;
     [self addRow:rows key:@"last_update" prefix:@"Last Update" text:[self formatLastUpdate] order:order++];
     if (_object.messageTypesString.length > 0)
         [self addRow:rows key:@"message_types" prefix:@"Message Type(s)" text:_object.messageTypesString order:order++];
-    OAAisMenuLog(@"buildInternal rows=%lu %@", (unsigned long)rows.count, _object.debugSummary);
 }
 
 - (BOOL)needBuildCoordinatesRow

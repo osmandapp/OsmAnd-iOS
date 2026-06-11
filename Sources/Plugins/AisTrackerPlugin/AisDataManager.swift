@@ -1,3 +1,10 @@
+//
+//  AisDataManager.swift
+//  OsmAnd
+//
+//  Created by Oleksandr Panchenko on 11.06.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
 
 extension Notification.Name {
     static let aisObjectReceived = Notification.Name("OAAisObjectReceived")

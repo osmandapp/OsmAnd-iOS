@@ -1,3 +1,11 @@
+//
+//  AisTrackerPlugin.swift
+//  OsmAnd
+//
+//  Created by Oleksandr Panchenko on 11.06.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
+
 import CoreLocation
 import UIKit
 
@@ -13,7 +21,7 @@ final class AisTrackerPlugin: OAPlugin {
     static let shipLostTimeoutPrefId = "ais_ship_lost_timeout"
     static let cpaWarningTimePrefId = "ais_cpa_warning_time"
     static let cpaWarningDistancePrefId = "ais_cpa_warning_distance"
-    static let debugLoggingPrefId = "ais_debug_logging"
+   
 
     let protocolPref: OACommonInteger
     let hostPref: OACommonString
@@ -24,7 +32,6 @@ final class AisTrackerPlugin: OAPlugin {
     let shipLostTimeoutPref: OACommonInteger
     let cpaWarningTimePref: OACommonInteger
     let cpaWarningDistancePref: OACommonDouble
-    let debugLoggingPref: OACommonBoolean
 
     private let connection = AisNmeaConnection()
     private let decoder = AisMessageDecoder()
@@ -58,7 +65,6 @@ final class AisTrackerPlugin: OAPlugin {
         shipLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.shipLostTimeoutPrefId, defValue: 4)
         cpaWarningTimePref = OAAppSettings.sharedManager().registerIntPreference(Self.cpaWarningTimePrefId, defValue: 0)
         cpaWarningDistancePref = OAAppSettings.sharedManager().registerFloatPreference(Self.cpaWarningDistancePrefId, defValue: 1.0)
-        debugLoggingPref = OAAppSettings.sharedManager().registerBooleanPreference(Self.debugLoggingPrefId, defValue: false)
         super.init()
 
         connection.isDebugLoggingEnabled = { [weak self] in
@@ -142,9 +148,9 @@ final class AisTrackerPlugin: OAPlugin {
         isEnabled() && OAAppSettings.sharedManager().applicationMode.get().isDerivedRouting(from: .boat())
     }
 
-    func isDebugLoggingEnabled() -> Bool {
-        debugLoggingPref.get()
-    }
+//    func isDebugLoggingEnabled() -> Bool {
+//        debugLoggingPref.get()
+//    }
 
     func startAisSimulation(_ fileURL: URL) {
         simulationFileName = fileURL.lastPathComponent

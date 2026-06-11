@@ -35,16 +35,18 @@ final class CollectTracksTask: OAAsyncTask {
         let baseName = fileName.deletingPathExtension()
         let tracks = gpxFile.tracks as? [Track] ?? []
 
+        let author = gpxAuthor()
+        
         for (index, track) in tracks.enumerated() {
             if isCancelled() { return items }
 
             guard !track.isGeneralTrack() else { continue }
 
-            let trackFile = GpxFile(author: gpxAuthor())
+            let trackFile = GpxFile(author: author)
             trackFile.tracks.add(track)
 
             copyAppearance(from: gpxFile, track: track, to: trackFile)
-            let metadata = OsmAndShared.Metadata.init(source: gpxFile.metadata)
+            let metadata = OsmAndShared.Metadata(source: gpxFile.metadata)
             metadata.name = nil
             trackFile.metadata = metadata
 
@@ -131,7 +133,11 @@ final class CollectTracksTask: OAAsyncTask {
         let mapUtils = KMapUtils.shared
 
         for item in items {
+            if isCancelled() { return nil }
+            
             for wpt in item.gpxFile.getAllSegmentsPoints() {
+                if isCancelled() { return nil }
+                
                 let distance = mapUtils.getDistance(
                     lat1: point.getLatitude(),
                     lon1: point.getLongitude(),

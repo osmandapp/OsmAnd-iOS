@@ -260,7 +260,8 @@
 #import "OAShapesTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OAImageDescTableViewCell.h"
-
+#import "OAPointWithRegionTableViewCell.h"
+#import "OAGpxWptItem.h"
 
 // Views
 #import "OASegmentedSlider.h"

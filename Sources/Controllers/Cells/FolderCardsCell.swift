@@ -45,6 +45,7 @@ final class FolderCardsCell: UITableViewCell {
     @objc var cellIndex = IndexPath(row: 0, section: 0)
 
     var addButtonPosition: FolderCardsAddButtonPosition = .end
+    var iconDefaultColor: UIColor = .iconColorActive
 
     @objc let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -128,9 +129,10 @@ final class FolderCardsCell: UITableViewCell {
             let sizeNumber = sizes?[safe: i]
             let sizeString = sizeNumber.map { "\($0.intValue)" } ?? ""
             
-            var color = colors?[safe: i] ?? .iconColorActive
+            var color = colors?[safe: i] ?? iconDefaultColor
             
-            let visible = hidden?[safe: i]?.boolValue ?? true
+            let isHidden = hidden?[safe: i]?.boolValue ?? false
+            let visible = !isHidden
             let imageName = visible ? "ic_custom_folder" : "ic_custom_folder_hidden_outlined"
             if !visible {
                 color = .iconColorSecondary
@@ -146,7 +148,7 @@ final class FolderCardsCell: UITableViewCell {
         
         let addItem = Item(title: addButtonTitle,
                            size: "",
-                           color: UIColor(named: "iconColorActive")!,
+                           color: .iconColorActive,
                            imageName: "ic_custom_add",
                            hidden: false,
                            kind: .add)
@@ -184,6 +186,13 @@ final class FolderCardsCell: UITableViewCell {
             }
             collectionView.contentOffset = loadedOffset
         }
+    }
+    
+    @objc func scrollToFolder(at folderIndex: Int, animated: Bool) {
+        let indexPath = IndexPath(row: collectionIndex(forFolderIndex: folderIndex), section: 0)
+        guard indexPath.row < collectionView.numberOfItems(inSection: 0),
+              !collectionView.indexPathsForVisibleItems.contains(indexPath) else { return }
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
     }
 
     // MARK: - Mapping folder index <-> collection index
@@ -223,11 +232,20 @@ final class FolderCardsCell: UITableViewCell {
     }
 
     private func calculateOffset(forFolderIndex folderIndex: Int) -> CGPoint {
-        let index = collectionIndex(forFolderIndex: folderIndex)
+        let index: Int
+        switch addButtonPosition {
+        case .end:
+            index = collectionIndex(forFolderIndex: folderIndex)
+        case .beginning:
+            index = folderIndex
+        }
         var selectedOffset = CGFloat(index) * (Layout.cellWidth + Layout.margin)
         let fullLength = CGFloat(items.count) * (Layout.cellWidth + Layout.margin)
-        let screenWidth = UIScreen.main.bounds.width
-        let maxOffset = fullLength - screenWidth + Layout.margin * 3
+        let screenWidth = OAUtilities.calculateScreenWidth()
+        var maxOffset = fullLength - screenWidth + Layout.margin * 3
+        if maxOffset < 0 {
+            maxOffset = 0
+        }
         if selectedOffset > maxOffset {
             selectedOffset = maxOffset
         }

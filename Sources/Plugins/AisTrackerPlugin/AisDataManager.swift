@@ -15,6 +15,7 @@ final class AisDataManager: NSObject {
     private static let objectLimit = 200
 
     private weak var plugin: AisTrackerPlugin?
+    
     private var objectsByMmsi: [Int: AisObject] = [:]
     private var cleanupTimer: Timer?
 

@@ -53,20 +53,22 @@ final class AisNmeaConnection {
             let listener = try NWListener(using: params, on: endpointPort)
             self.listener = listener
             listener.newConnectionHandler = { [weak self] connection in
-                self?.log("UDP connection accepted endpoint=\(connection.endpoint)")
-                self?.receiveDatagrams(connection)
-                connection.start(queue: self?.queue ?? DispatchQueue.global())
+                guard let self else { return }
+                log("UDP connection accepted endpoint=\(connection.endpoint)")
+                receiveDatagrams(connection)
+                connection.start(queue: queue)
             }
             listener.stateUpdateHandler = { [weak self] state in
-                self?.log("UDP listener state=\(state)")
+                guard let self else { return }
+                log("UDP listener state=\(state)")
                 switch state {
                 case .ready:
-                    self?.updateState(.connected)
+                    updateState(.connected)
                 case .failed(let error):
-                    self?.log("UDP listener failed error=\(error)")
-                    self?.updateState(.failed)
+                    log("UDP listener failed error=\(error)")
+                    updateState(.failed)
                 case .cancelled:
-                    self?.updateState(.disconnected)
+                    updateState(.disconnected)
                 default:
                     break
                 }
@@ -151,16 +153,17 @@ final class AisNmeaConnection {
 
     private func receiveDatagrams(_ connection: NWConnection) {
         connection.receiveMessage { [weak self] data, _, isComplete, error in
+            guard let self else { return }
             if let error {
-                self?.log("UDP receive error=\(error)")
+                log("UDP receive error=\(error)")
             }
             if let data, let text = String(data: data, encoding: .ascii) {
-                self?.log("UDP datagram bytes=\(data.count) complete=\(isComplete)")
-                self?.consume(text)
+                log("UDP datagram bytes=\(data.count) complete=\(isComplete)")
+                consume(text)
             } else if let data {
-                self?.log("UDP datagram ignored: non-ascii bytes=\(data.count)")
+                log("UDP datagram ignored: non-ascii bytes=\(data.count)")
             }
-            self?.receiveDatagrams(connection)
+            receiveDatagrams(connection)
         }
     }
 

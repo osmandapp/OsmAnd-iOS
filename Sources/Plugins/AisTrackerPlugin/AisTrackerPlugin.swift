@@ -123,6 +123,7 @@ final class AisTrackerPlugin: OAPlugin {
         if enabled {
             updateConnectionForCurrentProfile()
         } else {
+            clearSimulationObjects()
             stopAisNetworkListener()
         }
     }
@@ -135,6 +136,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     override func disable() {
+        clearSimulationObjects()
         connection.stop()
         super.disable()
     }
@@ -152,6 +154,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func startAisSimulation(_ fileURL: URL) {
+        guard isEnabled() else { return }
         simulationFileName = fileURL.lastPathComponent
         simulationSentences = 0
         simulationDecoded = 0

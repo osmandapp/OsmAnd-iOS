@@ -56,7 +56,8 @@ final class AisMessageSimulationListener {
                     return
                 }
                 DispatchQueue.main.async { [weak self] in
-                    self?.plugin?.handleSimulatedNmeaSentence(sentence)
+                    guard let plugin = self?.plugin, plugin.isEnabled() else { return }
+                    plugin.handleSimulatedNmeaSentence(sentence)
                 }
             }
         }
@@ -118,7 +119,7 @@ final class AisSimulationProvider: NSObject {
 
     func startAisSimulation(_ fileURL: URL) {
         stopAisSimulation()
-        guard let plugin else { return }
+        guard let plugin, plugin.isEnabled() else { return }
         plugin.prepareAisSimulation()
         let listener = AisMessageSimulationListener(plugin: plugin,
                                                     fileURL: fileURL,
@@ -133,6 +134,7 @@ final class AisSimulationProvider: NSObject {
     }
 
     func initFakePosition() {
+        guard plugin?.isEnabled() == true else { return }
         let fake = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 50.76077, longitude: 7.08747),
                               altitude: 0,
                               horizontalAccuracy: 5,
@@ -173,6 +175,7 @@ final class AisSimulationProvider: NSObject {
     }
 
     func initTestPassengerShip() {
+        guard plugin?.isEnabled() == true else { return }
         let position = AisObject(mmsi: 34568, msgType: 1)
         position.applyPosition(timestamp: 20, navStatus: 0, maneuverIndicator: 1, heading: 320, cog: 320, sog: 8.4, lat: 50.738, lon: 7.099, rot: 0)
         plugin?.handleSimulatedAisObject(position)
@@ -182,6 +185,7 @@ final class AisSimulationProvider: NSObject {
     }
 
     func initTestSailingBoat() {
+        guard plugin?.isEnabled() == true else { return }
         let position = AisObject(mmsi: 454011, msgType: 18)
         position.applyPosition(timestamp: 20,
                                navStatus: AisObjectConstants.invalidNavStatus,
@@ -199,6 +203,7 @@ final class AisSimulationProvider: NSObject {
     }
 
     func initTestLandStation() {
+        guard plugin?.isEnabled() == true else { return }
         let station = AisObject(mmsi: 878121, msgType: 4)
         station.applyBaseStation(lat: 50.736, lon: 7.100)
         plugin?.handleSimulatedAisObject(station)
@@ -209,12 +214,14 @@ final class AisSimulationProvider: NSObject {
     }
 
     func initTestAircraft() {
+        guard plugin?.isEnabled() == true else { return }
         let aircraft = AisObject(mmsi: 910323, msgType: 9)
         aircraft.applyAircraft(timestamp: 15, altitude: 65, cog: 180.5, sog: 55.0, lat: 50.734, lon: 7.102)
         plugin?.handleSimulatedAisObject(aircraft)
     }
 
     func initTestLawEnforcement() {
+        guard plugin?.isEnabled() == true else { return }
         let position = AisObject(mmsi: 34569, msgType: 1)
         position.applyPosition(timestamp: 20, navStatus: 5, maneuverIndicator: 1, heading: 15, cog: 25, sog: 8.4, lat: 50.739, lon: 7.0931, rot: 0)
         plugin?.handleSimulatedAisObject(position)

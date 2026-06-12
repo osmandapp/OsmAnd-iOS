@@ -7,7 +7,6 @@
 //
 
 import CoreLocation
-import Foundation
 
 @objc enum AisObjType: Int {
     case vessel
@@ -96,10 +95,6 @@ final class AisObject: NSObject {
 
     var messageTypesString: String {
         msgTypes.sorted().map(String.init).joined(separator: ", ")
-    }
-
-    func hasMessageType(_ type: Int) -> Bool {
-        msgTypes.contains(type)
     }
 
     var hasImoMessage: Bool {
@@ -304,6 +299,10 @@ final class AisObject: NSObject {
         super.init()
         msgTypes.insert(msgType)
         updateObjectClass()
+    }
+    
+    func hasMessageType(_ type: Int) -> Bool {
+        msgTypes.contains(type)
     }
 
     func merge(_ other: AisObject) {

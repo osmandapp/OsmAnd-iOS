@@ -18,6 +18,21 @@ import Network
     case disconnected, connecting, connected, failed
 }
 
+extension AisNmeaConnectionState: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .disconnected:
+            return "disconnected"
+        case .connecting:
+            return "connecting"
+        case .connected:
+            return "connected"
+        case .failed:
+            return "failed"
+        }
+    }
+}
+
 // NOTE: for test: tcp 153.44.253.27 5631
 
 final class AisNmeaConnection {

@@ -972,7 +972,6 @@ static NSString *OAAisObjectTitle(AisObject *object)
         return;
 
     CGPoint point = result.point;
-    //[self updateScaleCache];
     int iconRadius = (int)ceil([self currentIconSize] * 0.55);
     int radius = MAX(iconRadius, (int)([self getScaledTouchRadius:[self getDefaultRadiusPoi]] * TOUCH_RADIUS_MULTIPLIER));
     QList<OsmAnd::PointI> touchPolygon31 =

@@ -62,10 +62,6 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadStatus), name: .aisNmeaLocationReceived, object: plugin)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     override func getTitle() -> String {
         localizedString("plugin_ais_tracker_name")
     }

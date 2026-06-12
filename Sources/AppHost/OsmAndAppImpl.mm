@@ -1191,10 +1191,12 @@
 {
     NSMutableArray<NSString *> *regionNames = [NSMutableArray array];
     [self parseRegionNames:_worldRegion result:regionNames];
+    QStringList qRegionNames;
     for (NSString * region in regionNames)
     {
-        OsmAnd::CommonWords::addRegionName(QString::fromNSString(region));
+        qRegionNames.append(QString::fromNSString(region));
     }
+    OsmAnd::CommonWords::addAllRegions(qRegionNames);
 }
 
 - (void)parseRegionNames:(OAWorldRegion *)region result:(NSMutableArray<NSString *> *)result

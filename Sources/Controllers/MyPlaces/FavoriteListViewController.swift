@@ -21,12 +21,9 @@ private enum FavoriteFolderSection: Hashable {
 
     var title: String {
         switch self {
-        case .pinned:
-            localizedString("shared_string_pinned")
-        case .visible:
-            localizedString("shared_string_visible")
-        case .hidden:
-            localizedString("shared_string_hidden")
+        case .pinned: localizedString("shared_string_pinned")
+        case .visible: localizedString("shared_string_visible")
+        case .hidden: localizedString("shared_string_hidden")
         }
     }
 }
@@ -64,21 +61,13 @@ private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
 
     let bridgeItem: OAFavoriteFolderBridgeItem
 
-    var title: String {
-        bridgeItem.title
-    }
+    var title: String { bridgeItem.title }
     
-    var isVisible: Bool {
-        bridgeItem.isVisible
-    }
+    var isVisible: Bool { bridgeItem.isVisible }
     
-    var isPinned: Bool {
-        bridgeItem.isPinned
-    }
+    var isPinned: Bool { bridgeItem.isPinned }
     
-    var lastModified: Date? {
-        bridgeItem.lastModifiedDate
-    }
+    var lastModified: Date? { bridgeItem.lastModifiedDate }
     
     var subtitle: String {
         let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
@@ -111,17 +100,11 @@ private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
 private struct FavoritePointRow: Hashable, FavoriteSortablePoint {
     let bridgeItem: OAFavoritePointBridgeItem
     
-    var title: String {
-        bridgeItem.title
-    }
+    var title: String { bridgeItem.title }
     
-    var distance: CLLocationDistance? {
-        bridgeItem.distance?.doubleValue
-    }
+    var distance: CLLocationDistance? { bridgeItem.distance?.doubleValue }
     
-    var lastModified: Date? {
-        bridgeItem.timestampDate
-    }
+    var lastModified: Date? { bridgeItem.timestampDate }
 
     var titleColor: UIColor {
         bridgeItem.isVisible ? .textColorPrimary : .textColorSecondary
@@ -206,18 +189,14 @@ final class FavoriteListViewController: UIViewController {
     }
     private var normalTitle: String {
         switch screenMode {
-        case .root:
-            localizedString("shared_string_favorites")
-        case .folder(let folder, _):
-            folder.title
+        case .root: localizedString("shared_string_favorites")
+        case .folder(let folder, _): folder.title
         }
     }
     private var normalSubtitle: String {
         switch screenMode {
-        case .root:
-            localizedString("shared_string_my_places")
-        case .folder(_, let previousTitle):
-            previousTitle
+        case .root: localizedString("shared_string_my_places")
+        case .folder(_, let previousTitle): previousTitle
         }
     }
     private var parentGroupName: String? {
@@ -1030,8 +1009,7 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func favoriteFolders() -> [FavoriteFolderRow] {
-        OAFavoritesSwiftHelper.favoriteFolders()
-            .map { FavoriteFolderRow(item: $0) }
+        OAFavoritesSwiftHelper.favoriteFolders().map { FavoriteFolderRow(item: $0) }
     }
 
     private func isDirectFolder(_ groupName: String, parentGroupName: String?) -> Bool {
@@ -1081,7 +1059,7 @@ final class FavoriteListViewController: UIViewController {
                 switch itemIdentifier {
                 case .folder, .favorite:
                     indexPaths.append(indexPath)
-                case .sortHeader, .backupBanner, .header, .statsFooter, .emptyState:
+                default:
                     continue
                 }
             }
@@ -1507,7 +1485,7 @@ final class FavoriteListViewController: UIViewController {
                 return folder.bridgeItem
             case .favorite(let favorite):
                 return favorite.bridgeItem
-            case .backupBanner, .header, .statsFooter, .sortHeader, .emptyState:
+            default:
                 return nil
             }
         }
@@ -1755,7 +1733,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 return
             }
             OAFavoritesSwiftHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
-        case .sortHeader, .backupBanner, .header, .statsFooter, .emptyState:
+        default:
             break
         }
 

@@ -38,13 +38,6 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAFavoriteFolderBridgeItem ()
-
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize subtreePointsCount:(NSUInteger)subtreePointsCount;
-+ (NSString *)titleForGroupName:(NSString *)groupName;
-
-@end
-
 @implementation OAFavoriteFolderBridgeItem
 
 - (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize subtreePointsCount:(NSUInteger)subtreePointsCount
@@ -73,13 +66,6 @@
     NSString *lastComponent = [[groupName componentsSeparatedByString:@"/"] lastObject] ?: groupName;
     return [OAFavoriteGroup getDisplayName:lastComponent] ?: lastComponent;
 }
-
-@end
-
-@interface OAFavoritePointBridgeItem ()
-
-+ (nullable NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite;
-+ (CGFloat)directionForFavorite:(OAFavoriteItem *)favorite;
 
 @end
 
@@ -137,27 +123,6 @@
     CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
     return OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
 }
-
-@end
-
-@interface OAFavoritesSwiftHelper ()
-
-+ (NSArray<OAFavoriteItem *> *)sortedFavoritePoints:(NSArray<OAFavoriteItem *> *)points;
-+ (NSArray<OAFavoriteItem *> *)sortedFavoritePointsForGroup:(OAFavoriteGroup *)group;
-+ (NSArray<OAFavoriteGroup *> *)favoriteGroupsInsideOrEqualToGroupName:(NSString *)groupName;
-+ (NSUInteger)subtreePointsCountForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups;
-+ (OAFavoriteItem *)favoritePointWithIdentifier:(NSString *)identifier;
-+ (OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName;
-+ (BOOL)renameFavoriteGroupTreeFromGroupName:(NSString *)sourceGroupName toGroupName:(NSString *)targetGroupName;
-+ (BOOL)moveFavoriteGroup:(NSString *)groupName toGroupName:(NSString *)targetGroupName;
-+ (BOOL)isGroupName:(NSString *)groupName insideOrEqualToGroupName:(NSString *)parentGroupName;
-+ (NSString *)groupNameByMovingGroupName:(NSString *)groupName toParentGroupName:(NSString *)parentGroupName;
-+ (NSString *)suffixForGroupName:(NSString *)groupName parentGroupName:(NSString *)parentGroupName;
-+ (NSString *)lastComponentForGroupName:(NSString *)groupName;
-+ (OAFavoriteGroup *)favoriteGroupForSharingGroup:(OAFavoriteGroup *)group points:(NSArray<OAFavoriteItem *> *)points;
-+ (nullable NSURL *)fileURLForSharingFavoriteGroups:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
-+ (CLLocation *)locationForFavorite:(OAFavoriteItem *)favorite;
-+ (int)currentMapZoomLevel;
 
 @end
 
@@ -510,7 +475,7 @@
     return group && group.points.count > 0;
 }
 
-+ (nullable NSURL *)shareFavoriteItems:(NSArray *)favoriteItems
++ (NSURL *)shareFavoriteItems:(NSArray *)favoriteItems
 {
     if (favoriteItems.count == 0)
         return nil;
@@ -1014,7 +979,7 @@
     return [self sortedFavoritePoints:group.points ?: @[]];
 }
 
-+ (nullable NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName
++ (NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName
 {
     NSDate *lastModifiedDate = nil;
     NSString *parentGroupName = groupName ?: @"";
@@ -1173,7 +1138,7 @@
     return groupToShare;
 }
 
-+ (nullable NSURL *)fileURLForSharingFavoriteGroups:(NSArray<OAFavoriteGroup *> *)favoriteGroups
++ (NSURL *)fileURLForSharingFavoriteGroups:(NSArray<OAFavoriteGroup *> *)favoriteGroups
 {
     if (favoriteGroups.count == 0)
         return nil;

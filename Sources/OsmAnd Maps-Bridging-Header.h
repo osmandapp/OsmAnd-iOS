@@ -219,7 +219,6 @@
 #import "OACloudIntroductionViewController.h"
 #import "OAHelpViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
-#import "OAFavoriteListViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAPluginDetailsViewController.h"

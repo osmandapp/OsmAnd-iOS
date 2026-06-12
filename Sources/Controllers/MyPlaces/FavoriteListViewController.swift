@@ -1634,6 +1634,7 @@ final class FavoriteListViewController: UIViewController {
 
     @objc private func cancelButtonPressed() {
         setEdit(false)
+        configureToolbar()
     }
 
     @objc private func selectAllButtonPressed() {

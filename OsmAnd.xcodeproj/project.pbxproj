@@ -2511,7 +2511,6 @@
 		DA5A83AE26C563A800F274C7 /* OASubscriptionCancelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DBD26C563A300F274C7 /* OASubscriptionCancelViewController.xib */; };
 		DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DBF26C563A300F274C7 /* OASubscriptionCancelViewController.mm */; };
 		DA5A83B126C563A800F274C7 /* OAWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DC026C563A300F274C7 /* OAWebViewController.m */; };
-		DA5A83B226C563A800F274C7 /* MyPlaces.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */; };
 		DA5A83B526C563A800F274C7 /* OAActionAddProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCB26C563A300F274C7 /* OAActionAddProfileViewController.m */; };
 		DA5A83B626C563A800F274C7 /* OAActionAddCategoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCD26C563A300F274C7 /* OAActionAddCategoryViewController.mm */; };
 		DA5A83B726C563A800F274C7 /* OAFloatingButtonsHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCE26C563A300F274C7 /* OAFloatingButtonsHudViewController.mm */; };
@@ -2540,7 +2539,6 @@
 		DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */; };
 		DA5A83D926C563A800F274C7 /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */; };
 		DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0726C563A300F274C7 /* OASelectFavoriteGroupViewController.mm */; };
-		DA5A83DD26C563A800F274C7 /* OAFavoriteListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */; };
 		DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */; };
 		DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */; };
 		DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */; };
@@ -6919,7 +6917,6 @@
 		DA5A7DBF26C563A300F274C7 /* OASubscriptionCancelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionCancelViewController.mm; sourceTree = "<group>"; };
 		DA5A7DC026C563A300F274C7 /* OAWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWebViewController.m; sourceTree = "<group>"; };
 		DA5A7DC126C563A300F274C7 /* OASubscriptionCancelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscriptionCancelViewController.h; sourceTree = "<group>"; };
-		DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MyPlaces.storyboard; sourceTree = "<group>"; };
 		DA5A7DC826C563A300F274C7 /* OASuperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASuperViewController.h; sourceTree = "<group>"; };
 		DA5A7DC926C563A300F274C7 /* OABaseScrollableHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseScrollableHudViewController.h; sourceTree = "<group>"; };
 		DA5A7DCB26C563A300F274C7 /* OAActionAddProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAActionAddProfileViewController.m; sourceTree = "<group>"; };
@@ -6963,13 +6960,11 @@
 		DA5A7DFC26C563A300F274C7 /* OATargetDestinationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATargetDestinationViewController.m; sourceTree = "<group>"; };
 		DA5A7DFD26C563A300F274C7 /* OATargetDestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATargetDestinationViewController.xib; sourceTree = "<group>"; };
 		DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReplaceFavoriteViewController.mm; sourceTree = "<group>"; };
-		DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoriteListViewController.h; sourceTree = "<group>"; };
 		DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteImportViewController.mm; sourceTree = "<group>"; };
 		DA5A7E0726C563A300F274C7 /* OASelectFavoriteGroupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectFavoriteGroupViewController.mm; sourceTree = "<group>"; };
 		DA5A7E0826C563A300F274C7 /* OASelectFavoriteGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectFavoriteGroupViewController.h; sourceTree = "<group>"; };
 		DA5A7E0926C563A300F274C7 /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoriteImportViewController.h; sourceTree = "<group>"; };
 		DA5A7E0A26C563A300F274C7 /* OAReplaceFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAReplaceFavoriteViewController.h; sourceTree = "<group>"; };
-		DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteListViewController.mm; sourceTree = "<group>"; };
 		DA5A7E0D26C563A300F274C7 /* OARouteBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteBaseViewController.h; sourceTree = "<group>"; };
 		DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditGroupViewController.mm; sourceTree = "<group>"; };
 		DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
@@ -12687,9 +12682,6 @@
 				D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */,
 				D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */,
 				D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */,
-				DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */,
-				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
-				DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */,
 				C5EB56ED2FD18B8A00D01657 /* FavoriteListViewController.swift */,
 				C58ACDE02FD2D6E8004E34C9 /* FavoriteSortModeHelper.swift */,
 				272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */,
@@ -15682,7 +15674,6 @@
 				DAF50C6C299BB269006AAF2E /* routes.addon.render.xml in Resources */,
 				DA86607D2268A2870041F57D /* ic_custom_remove@3x.png in Resources */,
 				DA2F091D2217FF75006C7F05 /* ic_action_add_osm_note@2x.png in Resources */,
-				DA5A83B226C563A800F274C7 /* MyPlaces.storyboard in Resources */,
 				156E91BF24499CE300B181BA /* ic_custom_direction_device@3x.png in Resources */,
 				0A7C7F302703955200F779E4 /* ic_custom_track_line_thin@2x.png in Resources */,
 				DA80D9A32716CC1800445DAF /* map_track_point_finish@2x.png in Resources */,
@@ -17352,7 +17343,6 @@
 				DAEDAAA12865A0F100CE54D0 /* OAGenerateBackupInfoTask.m in Sources */,
 				32839A372AF0F911007B5057 /* WikiImageCacheHelper.swift in Sources */,
 				4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */,
-				DA5A83DD26C563A800F274C7 /* OAFavoriteListViewController.mm in Sources */,
 				FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */,
 				DA5A81C626C563A700F274C7 /* OACollatorStringMatcher.m in Sources */,
 				DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */,

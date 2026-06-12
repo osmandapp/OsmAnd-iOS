@@ -82,6 +82,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var selectedTracks: [GpxDataItem] = []
     private var selectedFolders: [String] = []
     
+    private var pendingDeepLinkFolderPath: String?
+    
     private var app: OsmAndAppProtocol
     private var settings: OAAppSettings
     private var savingHelper: OASavingTrackHelper
@@ -854,6 +856,50 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     @objc private func updateDistanceAndDirection() {
         updateDistanceAndDirection(false)
+    }
+    
+    // MARK: - DeepLink
+    
+    func setPendingDeepLink(_ selectedFolderPath: String) {
+        pendingDeepLinkFolderPath = selectedFolderPath
+    }
+    
+    private func handlePendingDeepLinkIfNeeded() {
+        guard let absolutePath = pendingDeepLinkFolderPath else { return }
+        pendingDeepLinkFolderPath = nil
+        
+        let gpxPath = app.gpxPath ?? ""
+        if absolutePath.isEmpty || absolutePath == gpxPath { return }
+        
+        guard let subfolder = rootFolder.getFlattenedSubFolders().first(where: {
+            $0.getDirFile().path() == absolutePath
+        }) else { return }
+        
+        let vc = TracksViewController(isRootFolder: false)
+        vc.currentFolder = subfolder
+        vc.currentFolderPath = subfolder.relativePath
+        vc.rootFolder = rootFolder
+        vc.visibleTracksFolder = visibleTracksFolder
+        vc.hostVCDelegate = self
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func navigateToFolderAfterImport(_ absolutePath: String?) {
+        let gpxPath = app.gpxPath ?? ""
+
+        if absolutePath == nil || absolutePath?.isEmpty == true || absolutePath == gpxPath {
+            pendingDeepLinkFolderPath = nil
+            updateAllFoldersVCData(forceLoad: true)
+            return
+        }
+        
+        pendingDeepLinkFolderPath = absolutePath
+        
+        guard rootFolder.getFlattenedSubFolders().contains(where: {
+            $0.getDirFile().path() == absolutePath
+        }) else { return }
+        
+        handlePendingDeepLinkIfNeeded()
     }
     
     // MARK: - Data
@@ -2446,6 +2492,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
         onLoadFinished(folder: folder)
+        handlePendingDeepLinkIfNeeded()
     }
     
     func tracksLoaded(folder: TrackFolder) {

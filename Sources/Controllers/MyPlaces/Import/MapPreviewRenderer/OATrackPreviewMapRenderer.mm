@@ -14,6 +14,8 @@
 #import "OANativeUtilities.h"
 
 #import "OsmAndSharedWrapper.h"
+#import "OAUtilities.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -185,36 +187,51 @@
             }
         }
 
-        UIColor *lineColor = [self colorFromARGB:trackColor];
-        UIBezierPath *path = [UIBezierPath bezierPath];
-        path.lineWidth = 4.0 * density;
-        path.lineJoinStyle = kCGLineJoinRound;
-        path.lineCapStyle = kCGLineCapRound;
+        NSArray<OASTrkSegment *> *segments = [TrackPreviewColorHelper previewSegmentsFor:gpxFile];
 
-        for (OASTrack *track in gpxFile.tracks)
+        const CGFloat lineWidth = 4.0 * density;
+
+        for (OASTrkSegment *segment in segments)
         {
-            for (OASTrkSegment *segment in track.segments)
+            if (self->_cancelled)
+                return;
+
+            int segColor = [TrackPreviewColorHelper resolvedColorWithGpxFile:gpxFile
+                                                                     segment:segment
+                                                                defaultColor:trackColor];
+            UIColor *lineColor = UIColorFromARGB(segColor);
+
+            UIBezierPath *path = [UIBezierPath bezierPath];
+            path.lineWidth = lineWidth;
+            path.lineJoinStyle = kCGLineJoinRound;
+            path.lineCapStyle = kCGLineCapRound;
+
+            BOOL first = YES;
+            for (OASWptPt *point in segment.points)
             {
-                BOOL first = YES;
-                for (OASWptPt *point in segment.points)
+                CGPoint p = CGPointMake(
+                    OsmAnd::Utilities::getTileNumberX(zoom, point.lon) * tileSize - leftPx,
+                    OsmAnd::Utilities::getTileNumberY(zoom, point.lat) * tileSize - topPx);
+                if (first)
                 {
-                    CGPoint p = CGPointMake(
-                        OsmAnd::Utilities::getTileNumberX(zoom, point.lon) * tileSize - leftPx,
-                        OsmAnd::Utilities::getTileNumberY(zoom, point.lat) * tileSize - topPx);
-                    if (first)
-                    {
-                        [path moveToPoint:p];
-                        first = NO;
-                    }
-                    else
-                    {
-                        [path addLineToPoint:p];
-                    }
+                    [path moveToPoint:p];
+                    first = NO;
+                }
+                else
+                {
+                    [path addLineToPoint:p];
                 }
             }
+
+            if (!first)
+            {
+                [lineColor setStroke];
+                [path stroke];
+            }
         }
-        [lineColor setStroke];
-        [path stroke];
+        
+        int pointsColor = [TrackPreviewColorHelper resolvedColorWithGpxFile:gpxFile segment:nil defaultColor:trackColor];
+        UIColor *waypointColor = UIColorFromARGB(pointsColor);
 
         const CGFloat radius = 5.0 * density;
         for (OASWptPt *point in [gpxFile getPointsList])
@@ -224,7 +241,7 @@
                 OsmAnd::Utilities::getTileNumberY(zoom, point.lat) * tileSize - topPx);
             CGRect circle = CGRectMake(p.x - radius, p.y - radius, radius * 2, radius * 2);
             UIBezierPath *dot = [UIBezierPath bezierPathWithOvalInRect:circle];
-            [lineColor setFill];
+            [waypointColor setFill];
             [dot fill];
             [[UIColor whiteColor] setStroke];
             dot.lineWidth = 1.5 * density;
@@ -233,15 +250,6 @@
     }];
 
     return [UIImage imageWithCGImage:result.CGImage scale:density orientation:UIImageOrientationUp];
-}
-
-- (UIColor *)colorFromARGB:(int)argb
-{
-    CGFloat a = ((argb >> 24) & 0xFF) / 255.0;
-    return [UIColor colorWithRed:((argb >> 16) & 0xFF) / 255.0
-                           green:((argb >> 8) & 0xFF) / 255.0
-                            blue:(argb & 0xFF) / 255.0
-                           alpha:a > 0 ? a : 1.0];
 }
 
 @end

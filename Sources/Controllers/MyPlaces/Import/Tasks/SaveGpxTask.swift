@@ -40,8 +40,12 @@ final class SaveGpxTask: OAAsyncTask {
     
     private var fm: FileManager { FileManager.default }
 
-    init(gpxFile: GpxFile, destinationDir: String, fileName: String,
-         overwrite: Bool, importURL: URL?, listener: SaveImportedGpxListener?) {
+    init(gpxFile: GpxFile,
+         destinationDir: String,
+         fileName: String,
+         overwrite: Bool,
+         importURL: URL?,
+         listener: SaveImportedGpxListener?) {
         
         self.gpxFile = gpxFile
         self.destinationDir = destinationDir
@@ -65,7 +69,6 @@ final class SaveGpxTask: OAAsyncTask {
             )
         }
 
-        let fm = FileManager.default
         do {
             try fm.createDirectory(atPath: destinationDir, withIntermediateDirectories: true)
         } catch {
@@ -110,10 +113,10 @@ final class SaveGpxTask: OAAsyncTask {
         listener?.gpxSavingFinished(warning: result.warning)
     }
 
-    // MARK: - Android SaveGpxAsyncTask parity
+    // MARK: - Private
 
     private func resolveDestinationPath() -> String {
-        var name = normalizedFileName(fileName)
+        var name = Self.normalizedFileName(fileName)
 
         if name.isEmpty {
             let pt = gpxFile.findPointToShow()
@@ -134,22 +137,7 @@ final class SaveGpxTask: OAAsyncTask {
         return destPath
     }
 
-    private func normalizedFileName(_ raw: String) -> String {
-        var name = raw
-        let lower = name.lowercased()
-        if lower.hasSuffix(".kml") { name = String(name.dropLast(4)) }
-        else if lower.hasSuffix(".kmz") { name = String(name.dropLast(4)) }
-        else if lower.hasSuffix(".zip") { name = String(name.dropLast(4)) }
-
-        if !name.lowercased().hasSuffix(Self.gpxExtension) {
-            name += Self.gpxExtension
-        }
-        return name
-    }
-
     private func saveFile(to destPath: String) -> String? {
-        let fm = FileManager.default
-
         if overwrite, fm.fileExists(atPath: destPath) {
             try? fm.removeItem(atPath: destPath)
             if let item = OAGPXDatabase.sharedDb().getGPXItem(destPath) {
@@ -165,8 +153,7 @@ final class SaveGpxTask: OAAsyncTask {
                 return error.localizedDescription
             }
         }
-
-        // 2) copy из importURL (document picker / inbox)
+        
         if let importURL, fm.fileExists(atPath: importURL.path) {
             do {
                 try fm.copyItem(at: URL(fileURLWithPath: importURL.path), to: URL(fileURLWithPath: destPath))
@@ -176,7 +163,6 @@ final class SaveGpxTask: OAAsyncTask {
             }
         }
 
-        // 3) write GPX
         let file = KFile(filePath: destPath)
         if let exception = GpxUtilities.shared.writeGpxFile(file: file, gpxFile: gpxFile) {
             return exception.message ?? localizedString("error_reading_gpx")
@@ -198,14 +184,14 @@ final class SaveGpxTask: OAAsyncTask {
     // MARK: - Static helpers
     
     static func plannedDestinationPath(destinationDir: String, fileName: String) -> String {
-        var name = rawNormalizedFileName(fileName)
+        var name = normalizedFileName(fileName)
         if name.isEmpty {
             name = "import\(gpxExtension)"
         }
         return (destinationDir as NSString).appendingPathComponent(name)
     }
 
-    private static func rawNormalizedFileName(_ raw: String) -> String {
+    private static func normalizedFileName(_ raw: String) -> String {
         var name = raw
         let lower = name.lowercased()
         if lower.hasSuffix(".kml") || lower.hasSuffix(".kmz") || lower.hasSuffix(".zip") {

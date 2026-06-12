@@ -24,11 +24,12 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
     }
 
     required init?(coder: NSCoder) {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        super.init(coder: coder)
-        setup()
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        collectionView.contentOffset.x = -collectionView.contentInset.left
     }
 
     private func setup() {
@@ -57,32 +58,9 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
         ])
     }
 
-    func configure(gpxFile: GpxFile) {
-        let analysis = gpxFile.getAnalysis(fileTimestamp: 0,
-                                           fromDistance: nil,
-                                           toDistance: nil,
-                                           pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser())
-        
-        statisticsData = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false) as? [OAGPXTableCellData] ?? []
-        collectionView.contentOffset.x = -collectionView.contentInset.left
-        collectionView.reloadData()
-    }
-    
     func configure(statistics: [OAGPXTableCellData]) {
         statisticsData = statistics
-        collectionView.contentOffset.x = -collectionView.contentInset.left
         collectionView.reloadData()
-    }
-
-    static func hasStatistics(for gpxFile: GpxFile) -> Bool {
-        let analysis = gpxFile.getAnalysis(
-            fileTimestamp: 0,
-            fromDistance: nil,
-            toDistance: nil,
-            pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser()
-        )
-        let cells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false) as? [OAGPXTableCellData] ?? []
-        return !cells.isEmpty
     }
 
     // MARK: - UICollectionView

@@ -33,7 +33,7 @@ final class TrackPreviewManager {
             guard item.previewImage == nil, item.bitmapDrawer == nil else { continue }
 
             let drawer = TrackBitmapDrawer(params: params, gpxFile: item.gpxFile)
-            drawer.defaultTrackColor = Int32(bitPattern: UInt32(truncatingIfNeeded: kDefaultTrackColor))
+            drawer.defaultTrackColor = TrackPreviewColorHelper.appDefaultTrackColor()
 
             let listener = TrackPreviewDrawerListener(item: item) { onUpdate($0) }
             listeners[item] = listener
@@ -46,7 +46,7 @@ final class TrackPreviewManager {
 
     func cancelAll(_ items: [ImportTrackItem]) {
         OATrackPreviewMapRenderer.shared().cancelAll()
-        OATrackPreviewRenderer.shared.cancelAll()
+        TrackStubPreviewRenderer.shared.cancelAll()
         for item in items {
             item.bitmapDrawer?.isDrawingAllowed = false
             item.bitmapDrawer = nil

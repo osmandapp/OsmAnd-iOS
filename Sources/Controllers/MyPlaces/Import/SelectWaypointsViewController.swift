@@ -61,7 +61,6 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
     
     // MARK: - Init
     
-//    @objc(initWithTrack:allPoints:)
     init(track: ImportTrackItem, allPoints: [WptPt]) {
         self.track = track
         self.allPoints = allPoints
@@ -126,10 +125,10 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
         descrRow.key = RowKey.infoDescr.rawValue
         descrRow.setObj(makeTopDescription(fileName: track.name), forKey: RowObjKey.attributedTitleKey)
 
-        let importAsOneRow = infoSection.createNewRow()
-        importAsOneRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        importAsOneRow.key = RowKey.selectNearest.rawValue
-        importAsOneRow.title = localizedString("auto_select_nearest_points")
+        let selectNearest = infoSection.createNewRow()
+        selectNearest.cellType = OASimpleTableViewCell.reuseIdentifier
+        selectNearest.key = RowKey.selectNearest.rawValue
+        selectNearest.title = localizedString("auto_select_nearest_points")
         
         // Points
         for group in groups {
@@ -197,6 +196,7 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
             cell.arrowIconView.tintColor = .iconColorActive
             cell.arrowIconView.image = .templateImageNamed(expanded ? "ic_custom_arrow_down" : "ic_custom_arrow_up")
             cell.selectionButton.setImage(groupSelectionImage(group), for: .normal)
+            cell.selectionButton.tintColor = .iconColorActive
             cell.openCloseGroupButton.tag = tag
             cell.openCloseGroupButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.openCloseGroupButton.addTarget(self, action: #selector(openCloseGroupAction(_:)), for: .touchUpInside)
@@ -227,10 +227,15 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
             } else {
                 cell.setDirection("")
             }
-            let bgView = UIView()
-            bgView.backgroundColor = cell.backgroundColor
-            cell.selectedBackgroundView = bgView
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 66, bottom: 0, right: 0)
+            cell.contentView.backgroundColor = .groupBg
+            if cell.selectedBackgroundView == nil {
+                let bgView = UIView()
+                bgView.backgroundColor = .groupBg
+                cell.selectedBackgroundView = bgView
+            } else {
+                cell.selectedBackgroundView?.backgroundColor = .groupBg
+            }
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 66, bottom: 0, right: 16)
             cell.setNeedsUpdateConstraints()
             return cell
         default:
@@ -305,7 +310,7 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
 
     override func getCustomIconForLeftNavbarButton() -> UIImage? {
         guard let image = UIImage.templateImageNamed("ic_navbar_close") else { return nil }
-        return OAUtilities.resize(image, newSize: CGSize(width: 24, height: 24))
+        return OAUtilities.resize(image, newSize: CGSize(width: 24, height: 24))?.withRenderingMode(.alwaysTemplate)
     }
     
     override func getCustomAccessibilityForLeftNavbarButton() -> String? {
@@ -331,6 +336,11 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
         guard let item = navigationItem.rightBarButtonItems?.first else { return }
         item.title = title
         item.accessibilityLabel = title
+    }
+    
+    override func updateNavbar() {
+        super.updateNavbar()
+        (getLeftNavbarButton()?.customView as? UIButton)?.tintColor = .label
     }
     
     // MARK: - Bottom buttons
@@ -429,8 +439,8 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
     private func makeTopDescription(fileName: String) -> NSAttributedString {
         let text: String = String(format: localizedString("selected_waypoints_descr"), fileName)
 
-        let baseFont = UIFont.preferredFont(forTextStyle: .subheadline)
-        let boldFont = UIFont.systemFont(ofSize: baseFont.pointSize, weight: .bold)
+        let baseFont = UIFont.preferredFont(forTextStyle: .body)
+        let boldFont = UIFont.systemFont(ofSize: baseFont.pointSize, weight: .semibold)
         
         let result = NSMutableAttributedString(string: text, attributes: [.font: baseFont,
                                                                           .foregroundColor: UIColor.textColorPrimary])
@@ -523,6 +533,8 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
             tableView.reloadRows(at: [.init(row: 0, section: indexPath.section)], with: .none)
         }
     }
+    
+    // MARK: - Distance And Direction
     
     private func updateWaypointDistanceAndDirection(for item: OAGpxWptItem) {
         guard let point = item.point, let location = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation else {

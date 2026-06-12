@@ -9,6 +9,36 @@
 import UIKit
 import OsmAndShared
 
+protocol MapBitmapDrawerListener: AnyObject {
+    func onBitmapDrawing()
+    func onBitmapDrawn(_ success: Bool)
+    func onBitmapDrawn(image: UIImage)
+}
+
+extension MapBitmapDrawerListener {
+    func onBitmapDrawing() {}
+    func onBitmapDrawn(_ success: Bool) {}
+}
+
+@objcMembers
+final class MapDrawParams: NSObject {
+    let density: Float
+    let widthPixels: Int
+    let heightPixels: Int
+
+    init(density: Float, widthPixels: Int, heightPixels: Int) {
+        self.density = density
+        self.widthPixels = widthPixels
+        self.heightPixels = heightPixels
+    }
+
+    static func importTrackPreviewParams(size: CGSize) -> MapDrawParams {
+        MapDrawParams(density: Float(UIScreen.main.scale),
+                      widthPixels: max(1, Int(size.width)),
+                      heightPixels: max(1, Int(size.height)))
+    }
+}
+
 class MapBitmapDrawer {
     let params: MapDrawParams
     var isDrawingAllowed = true
@@ -55,18 +85,13 @@ final class TrackBitmapDrawer: MapBitmapDrawer {
         notifyDrawing()
         guard isDrawingAllowed else { return }
 
-        var color = defaultTrackColor
-        if color == 0 {
-            color = Int32(bitPattern: UInt32(truncatingIfNeeded: kDefaultTrackColor))
-        }
+        let color = defaultTrackColor != 0 ? defaultTrackColor : TrackPreviewColorHelper.appDefaultTrackColor()
 
-        OATrackPreviewMapRenderer.shared().renderGpxFile(
-            gpxFile,
-            widthPx: params.widthPixels,
-            heightPx: params.heightPixels,
-            density: params.density,
-            trackColor: color
-        ) { [weak self] image in
+        OATrackPreviewMapRenderer.shared().renderGpxFile(gpxFile,
+                                                         widthPx: params.widthPixels,
+                                                         heightPx: params.heightPixels,
+                                                         density: params.density,
+                                                         trackColor: color) { [weak self] image in
             guard let self, self.isDrawingAllowed else { return }
             if let image {
                 self.notifyDrawn(true)
@@ -78,7 +103,7 @@ final class TrackBitmapDrawer: MapBitmapDrawer {
     }
 
     private func renderStub(color: Int32) {
-        OATrackPreviewRenderer.shared.renderGpxFile(gpxFile, params: params, trackColor: color) { [weak self] image in
+        TrackStubPreviewRenderer.shared.renderGpxFile(gpxFile, params: params, trackColor: color) { [weak self] image in
             guard let self, self.isDrawingAllowed else { return }
             self.notifyDrawn(image != nil)
             if let image {

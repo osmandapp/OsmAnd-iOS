@@ -57,7 +57,6 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
     private enum RowObjKey {
         static let importTrackItem = "importTrackItem"
-        static let tracksCount = "tracksCount"
         static let attributedTitleKey = "attributedTitle"
         static let statisticsCells = "statisticsCells"
         
@@ -74,7 +73,6 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     private let fileName: String
     private var selectedFolderPath: String
     private let importURL: URL?
-    private let openGpxView: Bool
     private var importCompletion: ((Bool) -> Void)?
     // Tracks
     private var trackItems: [ImportTrackItem] = []
@@ -88,6 +86,8 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     private var collectTracksTask: CollectTracksTask?
     private var saveAsOneTrackTask: SaveGpxTask?
     private var saveTracksTask: SaveTracksTask?
+    // Save
+    private var successfulSaveCount = 0
     // Folders
     private var folderNames: [String] = []
     private var selectedFolderIndex: Int = 0
@@ -99,12 +99,11 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     
     // MARK: - Init
     
-    @objc(initWithGpxFile:fileName:selectedFolderPath:importURL:openGpxView:completion:)
-    init(gpxFile: GpxFile, fileName: String, selectedFolderPath: String?, importURL: URL?, openGpxView: Bool, completion: ((Bool) -> Void)?) {
+    @objc(initWithGpxFile:fileName:selectedFolderPath:importURL:completion:)
+    init(gpxFile: GpxFile, fileName: String, selectedFolderPath: String?, importURL: URL?, completion: ((Bool) -> Void)?) {
         self.gpxFile = gpxFile
         self.fileName = fileName
         self.importURL = importURL
-        self.openGpxView = openGpxView
         self.importCompletion = completion
         
         if let selectedFolderPath, !selectedFolderPath.isEmpty {
@@ -122,7 +121,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     
     @available(*, unavailable)
     override init() {
-        fatalError("Use init(gpxFile:fileName:selectedFolderPath:importURL:openGpxView:completion:)")
+        fatalError("Use init(gpxFile:fileName:selectedFolderPath:importURL:completion:)")
     }
     
     required init?(coder: NSCoder) {
@@ -185,7 +184,6 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             let ofPart = String(format: localizedString("ltr_or_rtl_combine_via_of"), item.index, trackItems.count)
             row.descr = String(format: localizedString("ltr_or_rtl_combine_via_space"), localizedString("shared_string_gpx_track"), ofPart)
             row.setObj(item, forKey: RowObjKey.importTrackItem)
-            row.setObj(trackItems.count, forKey: RowObjKey.tracksCount)
             
             // Preview
             let previewRow = section.createNewRow()
@@ -201,7 +199,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
                 statsRow.setObj(item.statisticsCells, forKey: RowObjKey.statisticsCells)
                 statsRow.setObj(item, forKey: RowObjKey.importTrackItem)
             }
-            
+            //Waypoints
             let selectedPoints = item.selectedPoints.count
             let totalPoints = gpxFile.getPointsList().count
             let pointsRow = section.createNewRow()
@@ -253,6 +251,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             } else if item.key == RowKey.importAsOne.rawValue {
                 cell.titleLabel.text = item.title
                 cell.titleLabel.textColor = .textColorActive
+                cell.titleLabel.font = .preferredFont(forTextStyle: .body)
                 cell.leftIconVisibility(false)
                 cell.titleVisibility(true)
                 cell.descriptionVisibility(false)
@@ -263,6 +262,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
                 let selected = selectedTracks.contains(track)
                 cell.titleLabel.text = item.title
                 cell.titleLabel.textColor = .textColorPrimary
+                cell.titleLabel.font = .preferredFont(forTextStyle: .headline)
                 cell.descriptionLabel.text = item.descr
                 cell.leftIconView.image = selected ? .icCustomDone : .icCustomCheckboxUnselected
                 cell.leftIconView.tintColor = selected ? .iconColorActive : .iconColorSecondary
@@ -414,7 +414,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     
     override func getCustomIconForLeftNavbarButton() -> UIImage? {
         guard let image = UIImage.templateImageNamed("ic_navbar_close") else { return nil }
-        return OAUtilities.resize(image, newSize: CGSize(width: 24, height: 24))
+        return OAUtilities.resize(image, newSize: CGSize(width: 24, height: 24))?.withRenderingMode(.alwaysTemplate)
     }
     
     override func getCustomAccessibilityForLeftNavbarButton() -> String? {
@@ -440,6 +440,11 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         guard let item = navigationItem.rightBarButtonItems?.first else { return }
         item.title = title
         item.accessibilityLabel = title
+    }
+    
+    override func updateNavbar() {
+        super.updateNavbar()
+        (getLeftNavbarButton()?.customView as? UIButton)?.tintColor = .label
     }
     
     // MARK: - Bottom buttons
@@ -558,12 +563,8 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
     
     private func startSaveAsOneTrack(overwrite: Bool) {
-        isSavingTracks = true
-        updateProgress()
-        updateNavbar()
-
         saveAsOneTrackTask = SaveGpxTask(
-            gpxFile: gpxFile,              // ← весь файл, не trackItems
+            gpxFile: gpxFile,
             destinationDir: selectedFolderPath,
             fileName: fileName,
             overwrite: overwrite,
@@ -589,23 +590,13 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
     
     private func showFileExistsAlert(onChoice: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(title: localizedString("file_already_exists"), // или "import_tracks"
+        let alert = UIAlertController(title: localizedString("import_tracks"),
                                       message: localizedString("gpx_import_already_exists"),
                                       preferredStyle: .alert)
-        // Replace = overwrite (как Android replace_button)
-        alert.addAction(UIAlertAction(
-            title: localizedString("gpx_overwrite"),
-            style: .destructive
-        ) { _ in onChoice(true) })
-        // Duplicate = новое имя (overwrite: false → createNewFileName в SaveGpxTask)
-        alert.addAction(UIAlertAction(
-            title: localizedString("gpx_add_new"),
-            style: .default
-        ) { _ in onChoice(false) })
-        alert.addAction(UIAlertAction(
-            title: localizedString("shared_string_cancel"),
-            style: .cancel
-        ))
+        
+        alert.addAction(UIAlertAction(title: localizedString("gpx_overwrite"), style: .destructive) { _ in onChoice(true) })
+        alert.addAction(UIAlertAction(title: localizedString("gpx_add_new"), style: .default) { _ in onChoice(false) })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
     }
     
@@ -614,6 +605,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             return
         }
         vc.delegate = self
+        vc.suggestedFolderName = suggestedFolderNameFromFile()
         let navController = UINavigationController(rootViewController: vc)
         present(navController, animated: true)
     }
@@ -621,6 +613,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     private func showAddFolderScreenAction() {
         let vc = OAAddTrackFolderViewController()
         vc.delegate = self
+        vc.suggestedFolderName = suggestedFolderNameFromFile()
         let navController = UINavigationController(rootViewController: vc)
         present(navController, animated: true)
     }
@@ -629,6 +622,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         let vc = SelectWaypointsViewController(track: track, allPoints: gpxFile.getPointsList())
         vc.delegate = self
         let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true)
     }
     
@@ -647,7 +641,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             text = String(format: localizedString("import_tracks_descr_other"), fileName, tracksCount)
         }
 
-        let baseFont = UIFont.preferredFont(forTextStyle: .subheadline)
+        let baseFont = UIFont.preferredFont(forTextStyle: .body)
         let activeColor = UIColor.textColorActive
 
         let result = NSMutableAttributedString(
@@ -766,6 +760,12 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         applyFolderSelection(named: name)
     }
     
+    private func suggestedFolderNameFromFile() -> String {
+        (fileName as NSString).deletingPathExtension
+    }
+    
+    // MARK: - Post import
+    
     private func showSaveError(_ message: String) {
         OAUtilities.showToast(
             nil,
@@ -783,25 +783,26 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
 
     private func finishImportSuccessfully() {
-        // Document picker / inbox — как OAGPXImportUIHelper.doImport
         if let importURL {
             OAUtilities.denyAccess(toFile: importURL.path, removeFromInbox: true)
         }
 
         notifyImportFinished(success: true)
 
-        dismiss(animated: true) { [weak self] in
+        dismiss(animated: true) {
+            DispatchQueue.main.async {
+                self.handlePostImportNavigation()
+            }
             NotificationCenter.default.post(name: NSNotification.Name.OAGPXImportUIHelperDidFinishImport, object: nil)
-            self?.handlePostImportNavigation()
         }
     }
 
     private func handlePostImportNavigation() {
-        if openGpxView {
+        if successfulSaveCount <= 1 {
             openSavedTrackOnMap()
+        } else {
+            openMyPlacesTracksFolder()
         }
-        // Android dismissAndOpenTracks открывает My Places только если пользователь не там.
-        // На iOS достаточно notification — TracksViewController сам reload.
     }
 
     private func openSavedTrackOnMap() {
@@ -810,7 +811,12 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
         let trackItem = TrackItem(file: dataItem.file)
         trackItem.dataItem = dataItem
+        OARootViewController.instance().navigationController?.popToRootViewController(animated: false)
         OARootViewController.instance().mapPanel.openTargetView(withGPX: trackItem)
+    }
+    
+    private func openMyPlacesTracksFolder() {
+        DeepLinkAppRouter(rootViewController: OARootViewController.instance()).openMyPlacesTracks(inFolder: selectedFolderPath)
     }
 }
 
@@ -902,6 +908,7 @@ extension ImportTracksViewController: SaveImportedGpxListener {
         isSavingTracks = true
         updateProgress()
         updateNavbar()
+        successfulSaveCount = 0
     }
 
     func gpxSaved(error: String?, savedPath: String?) {
@@ -909,6 +916,7 @@ extension ImportTracksViewController: SaveImportedGpxListener {
             debugPrint("Save GPX error:", error)
             return
         }
+        successfulSaveCount += 1
         lastSavedPath = savedPath
     }
 
@@ -920,7 +928,8 @@ extension ImportTracksViewController: SaveImportedGpxListener {
         updateNavbar()
         if let warning {
             showSaveError(warning)
+        } else {
+            finishImportSuccessfully()
         }
-        finishImportSuccessfully()
     }
 }

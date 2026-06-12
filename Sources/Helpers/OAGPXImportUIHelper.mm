@@ -288,10 +288,10 @@ static UIViewController *parentController;
         // 123/_2024-07-30_.gpx
         NSString *importDestFilepath = [_importGpxPath stringByAppendingPathComponent:fileName];
         
-        NSInteger tracksCount = _doc.tracks.count;
+        NSInteger tracksCount = _doc.getTracksCount;
         if (tracksCount > 1 && tracksCount < 50) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                ImportTracksViewController *vc = [[ImportTracksViewController alloc]initWithGpxFile:_doc fileName:fileName selectedFolderPath:importDestFilepath importURL:_importUrl openGpxView:openGpxView completion:nil];
+                ImportTracksViewController *vc = [[ImportTracksViewController alloc]initWithGpxFile:_doc fileName:fileName selectedFolderPath:importDestFilepath importURL:_importUrl completion:nil];
                 OARootViewController *root = [OARootViewController instance];
                 UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
                 nav.modalPresentationStyle = UIModalPresentationFullScreen;

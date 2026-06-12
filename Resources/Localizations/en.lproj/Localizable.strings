@@ -4570,6 +4570,8 @@
 "import_tracks_descr_other" = "The file %@ contains %d separate tracks. Select the ones you want to import.";
 "import_as_one_track" = "Import as one track";
 "import_tracks_folders_footer" = "Select a destination folder for the imported tracks.";
+"error_reading_gpx" = "Could not read GPX data.";
+"sd_dir_not_accessible" = "The storage folder on the memory card is not accessible!";
 
 "shared_string_url" = "URL";
 

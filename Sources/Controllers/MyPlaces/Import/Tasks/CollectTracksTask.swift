@@ -46,6 +46,7 @@ final class CollectTracksTask: OAAsyncTask {
             trackFile.tracks.add(track)
 
             copyAppearance(from: gpxFile, track: track, to: trackFile)
+            trackFile.recalculateProcessPoint()
             let metadata = OsmAndShared.Metadata(source: gpxFile.metadata)
             metadata.name = nil
             trackFile.metadata = metadata

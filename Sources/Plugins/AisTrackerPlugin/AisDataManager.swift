@@ -7,9 +7,6 @@
 //
 
 extension Notification.Name {
-    static let aisObjectReceived = Notification.Name("OAAisObjectReceived")
-    static let aisObjectRemoved = Notification.Name("OAAisObjectRemoved")
-    static let aisObjectsChanged = Notification.Name("OAAisObjectsChanged")
     static let aisSimulationStatusChanged = Notification.Name("OAAisSimulationStatusChanged")
 }
 
@@ -45,7 +42,7 @@ final class AisDataManager: NSObject {
     func cleanupResources() {
         stopUpdates()
         objectsByMmsi.removeAll()
-        NotificationCenter.default.post(name: .aisObjectsChanged, object: plugin)
+        plugin?.onAisObjectsChanged()
     }
 
     func onAisObjectReceived(_ ais: AisObject) {
@@ -75,9 +72,6 @@ final class AisDataManager: NSObject {
             objectsByMmsi.removeValue(forKey: object.mmsi)
             aisDebugLog("[AisDataManager] data remove-lost maxAge=\(maxAge)m total=\(objectsByMmsi.count) \(object.debugSummary)")
             plugin.onAisObjectRemoved(object)
-        }
-        if !removed.isEmpty {
-            NotificationCenter.default.post(name: .aisObjectsChanged, object: plugin)
         }
     }
 

@@ -303,12 +303,22 @@ final class AisTrackerPlugin: OAPlugin {
             }
         }
         aisDebugLog("plugin received withPosition=\(getAisObjects().filter(\.hasPosition).count) \(object.debugSummary)")
-        NotificationCenter.default.post(name: .aisObjectReceived, object: self, userInfo: ["object": object])
+        DispatchQueue.main.async {
+            OAAisTrackerLayerBridge.onAisObjectReceived(object)
+        }
     }
 
     func onAisObjectRemoved(_ object: AisObject) {
         aisDebugLog("plugin removed \(object.debugSummary)")
-        NotificationCenter.default.post(name: .aisObjectRemoved, object: self, userInfo: ["object": object])
+        DispatchQueue.main.async {
+            OAAisTrackerLayerBridge.onAisObjectRemoved(object)
+        }
+    }
+
+    func onAisObjectsChanged() {
+        DispatchQueue.main.async {
+            OAAisTrackerLayerBridge.reloadAisObjects()
+        }
     }
 
     func hasCpaWarning(for object: AisObject) -> Bool {
@@ -385,21 +395,6 @@ final class AisTrackerPlugin: OAPlugin {
             OsmAndApp.swiftInstance().locationServices?.setLocationFromNMEA(location)
         }
     }
-    
-//    private func handleAisSentence(_ sentence: String) {
-//        Task {
-//            guard let object = await decoder.decode(sentence: sentence) else { return }
-//            
-//            await MainActor.run {
-//                self.aisDataManager.onAisObjectReceived(object)
-//            }
-//        }
-//    }
-
-//    private func handleAisSentence(_ sentence: String) {
-//        guard let object = decoder.decode(sentence: sentence) else { return }
-//        aisDataManager.onAisObjectReceived(object)
-//    }
     
     private func handleAisSentence(_ sentence: String) {
         aisDecoderQueue.async { [weak self] in

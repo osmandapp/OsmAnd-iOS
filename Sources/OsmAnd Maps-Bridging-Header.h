@@ -156,6 +156,7 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAAisTrackerLayerBridge.h"
 #import "OAPOILayer.h"
 #import "OABaseNavbarViewController.h"
 #import "OABaseButtonsViewController.h"

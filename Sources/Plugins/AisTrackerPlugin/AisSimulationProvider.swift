@@ -7,7 +7,6 @@
 //
 
 import CoreLocation
-import Foundation
 
 final class AisMessageSimulationListener {
     private weak var plugin: AisTrackerPlugin?
@@ -16,6 +15,12 @@ final class AisMessageSimulationListener {
     private let queue = DispatchQueue(label: "net.osmand.ais.simulation.listener")
     private let lock = NSLock()
     private var cancelled = false
+    
+    private var isCancelled: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return cancelled
+    }
 
     init(plugin: AisTrackerPlugin, fileURL: URL, latency: TimeInterval) {
         self.plugin = plugin
@@ -59,12 +64,6 @@ final class AisMessageSimulationListener {
 
     func stop() {
         setCancelled(true)
-    }
-
-    private var isCancelled: Bool {
-        lock.lock()
-        defer { lock.unlock() }
-        return cancelled
     }
 
     private func setCancelled(_ cancelled: Bool) {

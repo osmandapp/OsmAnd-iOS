@@ -1373,6 +1373,7 @@
 		9F4844B32FD0000100484401 /* OAAisTrackerLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844B22FD0000100484401 /* OAAisTrackerLayer.mm */; };
 		9F4844B52FD0000100484401 /* AisTrackerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844B42FD0000100484401 /* AisTrackerHelper.swift */; };
 		9F4844B82FD0000100484401 /* OAAisObjectViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844B72FD0000100484401 /* OAAisObjectViewController.mm */; };
+		9F4844C22FD0000100484401 /* OAAisTrackerLayerBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
 		B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */; };
@@ -5133,6 +5134,8 @@
 		9F4844B42FD0000100484401 /* AisTrackerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerHelper.swift; sourceTree = "<group>"; };
 		9F4844B62FD0000100484401 /* OAAisObjectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAisObjectViewController.h; sourceTree = "<group>"; };
 		9F4844B72FD0000100484401 /* OAAisObjectViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAisObjectViewController.mm; sourceTree = "<group>"; };
+		9F4844C02FD0000100484401 /* OAAisTrackerLayerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAisTrackerLayerBridge.h; sourceTree = "<group>"; };
+		9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAisTrackerLayerBridge.mm; sourceTree = "<group>"; };
 		ADA2D9C11AEC31EA6BB2AF2C /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
 		B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectionCollapsableCell.h; sourceTree = "<group>"; };
@@ -10423,6 +10426,8 @@
 				9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */,
 				9F4844B12FD0000100484401 /* OAAisTrackerLayer.h */,
 				9F4844B22FD0000100484401 /* OAAisTrackerLayer.mm */,
+				9F4844C02FD0000100484401 /* OAAisTrackerLayerBridge.h */,
+				9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */,
 				9F4844B62FD0000100484401 /* OAAisObjectViewController.h */,
 				9F4844B72FD0000100484401 /* OAAisObjectViewController.mm */,
 			);
@@ -18025,6 +18030,7 @@
 				9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */,
 				9F4844B32FD0000100484401 /* OAAisTrackerLayer.mm in Sources */,
 				9F4844B52FD0000100484401 /* AisTrackerHelper.swift in Sources */,
+				9F4844C22FD0000100484401 /* OAAisTrackerLayerBridge.mm in Sources */,
 				9F4844B82FD0000100484401 /* OAAisObjectViewController.mm in Sources */,
 				DA5A813B26C563A700F274C7 /* OAOsmMapUtils.mm in Sources */,
 				DA5A856026C563A900F274C7 /* OARTargetPoint.mm in Sources */,

@@ -534,9 +534,6 @@ static NSString *OAAisObjectTitle(AisObject *object)
     NSMutableDictionary<NSNumber *, AisObjectDrawable *> *_objectDrawables;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _vectorLinesCollection;
-    id _objectsObserver;
-    id _objectReceivedObserver;
-    id _objectRemovedObserver;
     BOOL _collectionsAdded;
     CGFloat _textScale;
     CGFloat _displayDensityFactor;
@@ -622,68 +619,10 @@ static NSString *OAAisObjectTitle(AisObject *object)
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
 
-    __weak OAAisTrackerLayer *weakSelf = self;
-    _objectsObserver = [NSNotificationCenter.defaultCenter addObserverForName:@"OAAisObjectsChanged"
-                                                                       object:nil
-                                                                        queue:NSOperationQueue.mainQueue
-                                                                   usingBlock:^(NSNotification * _Nonnull note) {
-        OAAisTrackerLayer *strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        if ([note.object isKindOfClass:AisTrackerPlugin.class])
-            strongSelf->_plugin = note.object;
-        [strongSelf cleanupResources];
-        if ([strongSelf isVisible])
-        {
-            [strongSelf addCollectionsToRenderer];
-            [strongSelf reloadObjects];
-        }
-    }];
-    _objectReceivedObserver = [NSNotificationCenter.defaultCenter addObserverForName:@"OAAisObjectReceived"
-                                                                              object:nil
-                                                                               queue:NSOperationQueue.mainQueue
-                                                                          usingBlock:^(NSNotification * _Nonnull note) {
-        OAAisTrackerLayer *strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        if ([note.object isKindOfClass:AisTrackerPlugin.class])
-            strongSelf->_plugin = note.object;
-        AisObject *object = note.userInfo[@"object"];
-        if ([object isKindOfClass:AisObject.class])
-            [strongSelf onAisObjectReceived:object];
-    }];
-    _objectRemovedObserver = [NSNotificationCenter.defaultCenter addObserverForName:@"OAAisObjectRemoved"
-                                                                             object:nil
-                                                                              queue:NSOperationQueue.mainQueue
-                                                                         usingBlock:^(NSNotification * _Nonnull note) {
-        OAAisTrackerLayer *strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        if ([note.object isKindOfClass:AisTrackerPlugin.class])
-            strongSelf->_plugin = note.object;
-        AisObject *object = note.userInfo[@"object"];
-        if ([object isKindOfClass:AisObject.class])
-            [strongSelf onAisObjectRemoved:object];
-    }];
 }
 
 - (void)deinitLayer
 {
-    if (_objectsObserver)
-    {
-        [NSNotificationCenter.defaultCenter removeObserver:_objectsObserver];
-        _objectsObserver = nil;
-    }
-    if (_objectReceivedObserver)
-    {
-        [NSNotificationCenter.defaultCenter removeObserver:_objectReceivedObserver];
-        _objectReceivedObserver = nil;
-    }
-    if (_objectRemovedObserver)
-    {
-        [NSNotificationCenter.defaultCenter removeObserver:_objectRemovedObserver];
-        _objectRemovedObserver = nil;
-    }
     [self cleanupResources];
     [super deinitLayer];
 }
@@ -797,6 +736,16 @@ static NSString *OAAisObjectTitle(AisObject *object)
     _hasLastRenderViewport = NO;
     _lastViewportRenderUpdateTime = 0;
     [self resetCollections];
+}
+
+- (void)reloadAisObjects
+{
+    [self cleanupResources];
+    if ([self isVisible])
+    {
+        [self addCollectionsToRenderer];
+        [self reloadObjects];
+    }
 }
 
 - (void)reloadObjects

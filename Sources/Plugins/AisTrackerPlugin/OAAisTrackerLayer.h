@@ -9,6 +9,12 @@
 #import "OAMapLayer.h"
 #import "OAContextMenuProvider.h"
 
+@class AisObject;
+
 @interface OAAisTrackerLayer : OAMapLayer<OAContextMenuProvider>
+
+- (void)reloadAisObjects;
+- (void)onAisObjectReceived:(AisObject *)object;
+- (void)onAisObjectRemoved:(AisObject *)object;
 
 @end

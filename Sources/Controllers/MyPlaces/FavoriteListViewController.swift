@@ -189,8 +189,9 @@ final class FavoriteListViewController: UIViewController {
     private var searchText = ""
     private var isSearchActive = false
     private var isSelectionModeInSearch = false
-    private var isDecelerating = false
     private var lastDistanceDirectionUpdate: TimeInterval = 0.0
+    private var isContextMenuVisible = false
+    private var shouldReloadCollectionView = false
     private var locationUpdateObserver: OAAutoObserverProxy?
     private var headingUpdateObserver: OAAutoObserverProxy?
     private var isSearchResultsMode: Bool {
@@ -473,8 +474,12 @@ final class FavoriteListViewController: UIViewController {
             return
         }
 
+        if isContextMenuVisible {
+            shouldReloadCollectionView = true
+            return
+        }
+
         guard !collectionView.isEditing
-                && !isDecelerating
                 && OsmAndApp.swiftInstance().locationServices.lastKnownLocation != nil
                 && dataSource.snapshot().itemIdentifiers.contains(where: { item in
                     if case .favorite = item {
@@ -523,7 +528,6 @@ final class FavoriteListViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        isDecelerating = false
         definesPresentationContext = true
         configureNavigation()
         navigationController?.setToolbarHidden(true, animated: false)
@@ -535,7 +539,6 @@ final class FavoriteListViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         unregisterDistanceAndDirectionObservers()
-        isDecelerating = false
         if !isRootFolder {
             navigationItem.searchController = nil
             navigationController?.setNavigationBarHidden(true, animated: false)
@@ -1755,6 +1758,22 @@ extension FavoriteListViewController: UICollectionViewDelegate {
         updateSelectionUI()
     }
 
+    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        isContextMenuVisible = true
+        return nil
+    }
+
+    func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
+        animator?.addCompletion { [weak self] in
+            guard let self else { return }
+            self.isContextMenuVisible = false
+            if self.shouldReloadCollectionView {
+                self.shouldReloadCollectionView = false
+                self.updateDistanceAndDirection(true)
+            }
+        }
+    }
+
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         guard !collectionView.isEditing, let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
@@ -1770,21 +1789,6 @@ extension FavoriteListViewController: UICollectionViewDelegate {
         }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
-    }
-
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        isDecelerating = true
-    }
-
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard !decelerate else { return }
-        isDecelerating = false
-        updateDistanceAndDirection(true)
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        isDecelerating = false
-        updateDistanceAndDirection(true)
     }
 }
 

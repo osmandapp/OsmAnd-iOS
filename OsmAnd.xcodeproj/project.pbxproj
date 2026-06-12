@@ -8379,6 +8379,17 @@
 			path = ExternalInputDevice;
 			sourceTree = "<group>";
 		};
+		275ED6502FDC5AA60088D42B /* FavoriteListViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C5EB56ED2FD18B8A00D01657 /* FavoriteListViewController.swift */,
+				C58ACDE02FD2D6E8004E34C9 /* FavoriteSortModeHelper.swift */,
+				272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */,
+				272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */,
+			);
+			path = FavoriteListViewController;
+			sourceTree = "<group>";
+		};
 		2783B4342E66E68F00682723 /* Devices */ = {
 			isa = PBXGroup;
 			children = (
@@ -12682,10 +12693,7 @@
 				D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */,
 				D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */,
 				D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */,
-				C5EB56ED2FD18B8A00D01657 /* FavoriteListViewController.swift */,
-				C58ACDE02FD2D6E8004E34C9 /* FavoriteSortModeHelper.swift */,
-				272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */,
-				272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */,
+				275ED6502FDC5AA60088D42B /* FavoriteListViewController */,
 				327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */,
 				C50E32812CA3FBDF00EEC41F /* TracksFiltersViewController.swift */,
 				C50E32832CA57DDB00EEC41F /* TracksFilterDetailsViewController.swift */,

@@ -24,9 +24,10 @@
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <cmath>
+#include <string>
+#include <unordered_map>
 
-#define kAisTrackerLayerId @"ais_tracker_layer"
-
+static NSString * const kAisTrackerLayerId = @"ais_tracker_layer";
 static const int kAisTrackerStartZoom = 6;
 static const CGFloat kAisBaseIconSize = 48.0;
 static const CGFloat kAisDirectionLineStartIconFactor = 0.42;
@@ -34,6 +35,26 @@ static const float kAisRenderZoomEpsilon = 0.02f;
 static const NSTimeInterval kAisViewportRenderUpdateInterval = 0.2;
 static int kAisIconKeyStorage;
 static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStorage;
+static std::unordered_map<std::string, sk_sp<SkImage>> kAisImagesCache;
+
+static std::string OAAisImageCacheKey(NSString *prefix, NSString *name, CGFloat iconSize)
+{
+    NSString *key = [NSString stringWithFormat:@"%@:%@:%d", prefix, name, (int)std::round(iconSize * 100.0)];
+    return std::string(key.UTF8String);
+}
+
+static sk_sp<SkImage> OAAisCachedSvgImage(NSString *resourceName, CGFloat iconSize)
+{
+    std::string key = OAAisImageCacheKey(@"svg", resourceName, iconSize);
+    const auto cachedImage = kAisImagesCache.find(key);
+    if (cachedImage != kAisImagesCache.end())
+        return cachedImage->second;
+
+    sk_sp<SkImage> image = [OANativeUtilities skImageFromSvgResource:resourceName width:iconSize height:iconSize];
+    if (image)
+        kAisImagesCache[key] = image;
+    return image;
+}
 
 static NSString *OAAisObjectTitle(AisObject *object)
 {
@@ -346,10 +367,16 @@ static NSString *OAAisObjectTitle(AisObject *object)
     if (state != 1)
     {
         NSString *resourceName = state == 2 ? @"c_mx_ais_vessel_cross" : [self iconResourceNameForType:_object.objectClass];
-        sk_sp<SkImage> image = [OANativeUtilities skImageFromSvgResource:resourceName width:iconSize height:iconSize];
+        sk_sp<SkImage> image = OAAisCachedSvgImage(resourceName, iconSize);
         if (image)
             return image;
     }
+
+    NSString *drawnKeyName = [NSString stringWithFormat:@"%ld:%ld", (long)state, (long)_object.objectClass];
+    std::string drawnKey = OAAisImageCacheKey(@"drawn", drawnKeyName, iconSize);
+    const auto cachedImage = kAisImagesCache.find(drawnKey);
+    if (cachedImage != kAisImagesCache.end())
+        return cachedImage->second;
 
     CGSize size = CGSizeMake(iconSize, iconSize);
     UIGraphicsBeginImageContextWithOptions(size, NO, 1.0);
@@ -426,7 +453,10 @@ static NSString *OAAisObjectTitle(AisObject *object)
 
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return [OANativeUtilities skImageFromCGImage:image.CGImage];
+    sk_sp<SkImage> skImage = [OANativeUtilities skImageFromCGImage:image.CGImage];
+    if (skImage)
+        kAisImagesCache[drawnKey] = skImage;
+    return skImage;
 }
 
 - (CGFloat)iconSize
@@ -678,10 +708,12 @@ static NSString *OAAisObjectTitle(AisObject *object)
 {
     if (![super updateLayer])
         return NO;
-
     BOOL scaleChanged = [self updateScaleCache];
     if (scaleChanged)
+    {
+        kAisImagesCache.clear();
         [self cleanupResources];
+    }
 
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
@@ -701,9 +733,8 @@ static NSString *OAAisObjectTitle(AisObject *object)
 {
     if (![self isVisible])
     {
-        [self removeCollectionsFromRenderer];
-        _hasLastRenderViewport = NO;
-        _lastViewportRenderUpdateTime = 0;
+        kAisImagesCache.clear();
+        [self cleanupResources];
         return;
     }
     if (![self shouldUpdateRenderDataForViewport])

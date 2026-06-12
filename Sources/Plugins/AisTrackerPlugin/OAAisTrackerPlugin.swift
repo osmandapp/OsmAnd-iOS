@@ -95,7 +95,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     override func getDescription() -> String {
-        localizedString("plugin_ais_tracker_description")
+        localizedString("plugin_ais_tracker_description") + "\n\n" + localizedString("plugin_ais_tracker_disclaimer")
     }
 
     override func getLogoResourceId() -> String? {

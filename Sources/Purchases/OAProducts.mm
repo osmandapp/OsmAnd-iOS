@@ -2551,7 +2551,7 @@
 
 - (NSString *)productScreenshotName
 {
-    return @"img_plugin_nautical.jpg";
+    return @"ais_map";
 }
 
 - (NSString *)localizedTitle
@@ -2566,7 +2566,9 @@
 
 - (NSString *)localizedDescriptionExt
 {
-    return OALocalizedString(@"plugin_ais_tracker_description");
+    return [NSString stringWithFormat:@"%@\n\n%@",
+            OALocalizedString(@"plugin_ais_tracker_description"),
+            OALocalizedString(@"plugin_ais_tracker_disclaimer")];
 }
 
 @end

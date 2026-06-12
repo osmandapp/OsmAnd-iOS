@@ -1193,6 +1193,10 @@ final class FavoriteListViewController: UIViewController {
     }
 
     private func makeFolderContextMenu(for folder: FavoriteFolderRow, indexPath: IndexPath) -> UIMenu {
+        let folderFavoriteItem: [Any] = [folder.bridgeItem]
+        let subtreeFavoriteItems: [Any] = favoritePointRows(allFolders: favoriteFolders(), parentGroupName: folder.bridgeItem.groupName).map { $0.bridgeItem }
+        let hasFavoritePoints = !subtreeFavoriteItems.isEmpty
+        let hasDirectFavoritePoints = folder.bridgeItem.pointsCount > 0
         let showHideAction = UIAction(title: localizedString(folder.isVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: folder.isVisible ? .icCustomHideOutlined : .icCustomShowOutlined) { [weak self] _ in
             guard let self else { return }
             OAFavoritesSwiftHelper.setFavoriteGroupVisible(folder.bridgeItem.groupName, visible: !folder.isVisible)
@@ -1227,21 +1231,26 @@ final class FavoriteListViewController: UIViewController {
             guard let self else { return }
             self.openFavoriteItemsMove([folder.bridgeItem])
         }
-        let thirdButtons: [UIMenuElement] = (folder.bridgeItem.pointsCount > 0 ? [shareAction] : []) + (folder.bridgeItem.groupName.isEmpty ? [] : [moveAction])
+        let thirdButtons: [UIMenuElement] = (hasFavoritePoints ? [shareAction] : []) + (folder.bridgeItem.groupName.isEmpty ? [] : [moveAction])
         let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: thirdButtons)
 
         let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
-            OAFavoritesSwiftHelper.addFavoriteItems(toMapMarkers: [folder.bridgeItem])
+            OAFavoritesSwiftHelper.addFavoriteItems(toMapMarkers: hasDirectFavoritePoints ? folderFavoriteItem : subtreeFavoriteItems)
         }
         let trackAction = UIAction(title: localizedString("add_to_a_track"), image: .icCustomTrip) { [weak self] _ in
             guard let self else { return }
-            self.openFavoriteGroupAddToTrack(folder.bridgeItem.groupName)
+            if hasDirectFavoritePoints {
+                self.openFavoriteGroupAddToTrack(folder.bridgeItem.groupName)
+            } else {
+                self.openFavoriteItemsAddToTrack(subtreeFavoriteItems)
+            }
         }
         let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { [weak self] _ in
             guard let self else { return }
-            OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: self.favoritePointRows(forGroupName: folder.bridgeItem.groupName).map { $0.bridgeItem })
+            let directFavoriteItems: [Any] = self.favoritePointRows(forGroupName: folder.bridgeItem.groupName).map { $0.bridgeItem }
+            OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: hasDirectFavoritePoints ? directFavoriteItems : subtreeFavoriteItems)
         }
-        let addToActions: [UIMenuElement] = folder.bridgeItem.pointsCount > 0 ? [mapMarkersAction, trackAction, navigationAction] : []
+        let addToActions: [UIMenuElement] = hasFavoritePoints ? [mapMarkersAction, trackAction, navigationAction] : []
         let fourthButtons: [UIMenuElement] = addToActions.isEmpty ? [] : [UIMenu(title: localizedString("shared_string_add"), image: .icCustomAdd, children: addToActions)]
         let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: fourthButtons)
 
@@ -1599,7 +1608,6 @@ final class FavoriteListViewController: UIViewController {
         }
 
         guard let navigationController else { return }
-
         let colorController = OAEditColorViewController()
         colorController.delegate = self
         self.colorController = colorController

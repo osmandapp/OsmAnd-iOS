@@ -223,11 +223,16 @@
 
 + (void)setFavoriteGroupVisible:(NSString *)groupName visible:(BOOL)visible
 {
-    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-    if (!group)
+    NSArray<OAFavoriteGroup *> *groups = [self favoriteGroupsInsideOrEqualToGroupName:groupName];
+    if (groups.count == 0)
         return;
 
-    [OAFavoritesHelper updateGroup:group visible:visible saveImmediately:YES];
+    for (OAFavoriteGroup *group in groups)
+    {
+        [OAFavoritesHelper updateGroup:group visible:visible saveImmediately:NO];
+    }
+
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
 + (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned
@@ -248,13 +253,16 @@
     NSMutableSet<NSString *> *handledGroupNames = [NSMutableSet set];
     for (NSString *groupName in groupNames)
     {
-        OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-        if (!group)
-            continue;
+        for (OAFavoriteGroup *group in [self favoriteGroupsInsideOrEqualToGroupName:groupName])
+        {
+            NSString *currentGroupName = group.name ?: @"";
+            if ([handledGroupNames containsObject:currentGroupName])
+                continue;
 
-        [handledGroupNames addObject:groupName];
-        [OAFavoritesHelper updateGroup:group visible:visible saveImmediately:NO];
-        changed = YES;
+            [handledGroupNames addObject:currentGroupName];
+            [OAFavoritesHelper updateGroup:group visible:visible saveImmediately:NO];
+            changed = YES;
+        }
     }
 
     if (changed)

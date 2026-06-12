@@ -56,7 +56,7 @@ protocol FavoriteSortablePoint {
     }
     
     var isDateOriented: Bool {
-        self == .newestDateFirst || self == .oldestDateFirst
+        self == .lastModified || self == .newestDateFirst || self == .oldestDateFirst
     }
 
     static func byTitle(_ title: String) -> FavoriteSortMode {

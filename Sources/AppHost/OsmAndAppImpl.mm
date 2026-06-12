@@ -693,7 +693,6 @@
     // Load world regions
     [self loadWorldRegions];
     [self addRegionNamesToCommonWords];
-    [self addAbbrevationsToCommonWords];
     LogStartup(@"world regions loaded");
 
     [OAManageResourcesViewController prepareData];
@@ -1195,19 +1194,6 @@
     for (NSString * region in regionNames)
     {
         OsmAnd::CommonWords::addRegionName(QString::fromNSString(region));
-    }
-}
-
-- (void) addAbbrevationsToCommonWords
-{
-    NSDictionary * abbreviations = [OAAbbreviations getAbbreviations];
-    for (id key in abbreviations)
-    {
-        int indx = OsmAnd::CommonWords::getCommonGeocoding(QString::fromNSString(abbreviations[key]).toLower());
-        if (indx != -1)
-        {
-            OsmAnd::CommonWords::insertCommonWord(QString::fromNSString(key).toLower(), indx);
-        }
     }
 }
 

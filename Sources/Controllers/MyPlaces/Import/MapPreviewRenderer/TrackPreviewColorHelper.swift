@@ -11,32 +11,32 @@ import OsmAndShared
 
 @objcMembers
 final class TrackPreviewColorHelper: NSObject {
-    
+
     static func appDefaultTrackColor() -> Int32 {
-        let color = Int32(OAAppSettings.sharedManager().currentTrackColor.get())
-        if color != 0 { return color }
+        let settingsColor = Int32(OAAppSettings.sharedManager().currentTrackColor.get())
+        if settingsColor != 0 { return settingsColor }
         return Int32(bitPattern: UInt32(truncatingIfNeeded: kDefaultTrackColor))
     }
-    
+
     static func resolvedColor(gpxFile: GpxFile, segment: TrkSegment?, defaultColor: Int32) -> Int32 {
-        let def = defaultColor != 0 ? defaultColor : appDefaultTrackColor()
-        
-        if let segment {
-            let segColor = segment.getColor(defColor: 0)?.intValue ?? 0
-            if segColor != 0 { return Int32(segColor) }
+        let fallbackColor = defaultColor != 0 ? defaultColor : appDefaultTrackColor()
+
+        if let segment, let segmentColor = segment.getColor(defColor: 0)?.intValue, segmentColor != 0 {
+            return Int32(segmentColor)
         }
-        
-        if let track = (gpxFile.tracks as? [Track])?.first {
-            let trackColor = track.getColor(defColor: 0)?.intValue ?? 0
-            if trackColor != 0 { return Int32(trackColor) }
+
+        if let track = (gpxFile.tracks as? [Track])?.first,
+           let trackColor = track.getColor(defColor: 0)?.intValue, trackColor != 0 {
+            return Int32(trackColor)
         }
-        
-        let fileColor = gpxFile.getColor(defColor: 0)?.intValue ?? 0
-        if fileColor != 0 { return Int32(fileColor) }
-        
-        return def
+
+        if let fileColor = gpxFile.getColor(defColor: 0)?.intValue, fileColor != 0 {
+            return Int32(fileColor)
+        }
+
+        return fallbackColor
     }
-    
+
     static func previewSegments(for gpxFile: GpxFile) -> [TrkSegment] {
         if let processed = gpxFile.processedPointsToDisplay, !processed.isEmpty {
             return processed

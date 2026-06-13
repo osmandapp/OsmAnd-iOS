@@ -33,9 +33,11 @@ final class MapDrawParams: NSObject {
     }
 
     static func importTrackPreviewParams(size: CGSize) -> MapDrawParams {
-        MapDrawParams(density: Float(UIScreen.main.scale),
-                      widthPixels: max(1, Int(size.width)),
-                      heightPixels: max(1, Int(size.height)))
+        MapDrawParams(
+            density: Float(UIScreen.main.scale),
+            widthPixels: max(1, Int(size.width)),
+            heightPixels: max(1, Int(size.height))
+        )
     }
 }
 
@@ -50,9 +52,8 @@ class MapBitmapDrawer {
     }
 
     func addListener(_ listener: MapBitmapDrawerListener) {
-        if !listeners.contains(where: { $0 === listener }) {
-            listeners.append(listener)
-        }
+        guard !listeners.contains(where: { $0 === listener }) else { return }
+        listeners.append(listener)
     }
 
     func removeListener(_ listener: MapBitmapDrawerListener) {
@@ -85,25 +86,30 @@ final class TrackBitmapDrawer: MapBitmapDrawer {
         notifyDrawing()
         guard isDrawingAllowed else { return }
 
-        let color = defaultTrackColor != 0 ? defaultTrackColor : TrackPreviewColorHelper.appDefaultTrackColor()
-
-        OATrackPreviewMapRenderer.shared().renderGpxFile(gpxFile,
-                                                         widthPx: params.widthPixels,
-                                                         heightPx: params.heightPixels,
-                                                         density: params.density,
-                                                         trackColor: color) { [weak self] image in
+        let trackColor = resolvedTrackColor()
+        OATrackPreviewMapRenderer.shared().renderGpxFile(
+            gpxFile,
+            widthPx: params.widthPixels,
+            heightPx: params.heightPixels,
+            density: params.density,
+            trackColor: trackColor
+        ) { [weak self] image in
             guard let self, self.isDrawingAllowed else { return }
             if let image {
                 self.notifyDrawn(true)
                 self.notifyDrawn(image: image)
             } else {
-                self.renderStub(color: color)
+                self.drawStubPreview(trackColor: trackColor)
             }
         }
     }
 
-    private func renderStub(color: Int32) {
-        TrackStubPreviewRenderer.shared.renderGpxFile(gpxFile, params: params, trackColor: color) { [weak self] image in
+    private func resolvedTrackColor() -> Int32 {
+        defaultTrackColor != 0 ? defaultTrackColor : TrackPreviewColorHelper.appDefaultTrackColor()
+    }
+
+    private func drawStubPreview(trackColor: Int32) {
+        TrackStubPreviewRenderer.shared.renderGpxFile(gpxFile, params: params, trackColor: trackColor) { [weak self] image in
             guard let self, self.isDrawingAllowed else { return }
             self.notifyDrawn(image != nil)
             if let image {

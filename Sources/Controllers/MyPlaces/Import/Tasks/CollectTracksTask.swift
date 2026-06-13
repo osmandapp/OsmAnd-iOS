@@ -31,57 +31,18 @@ final class CollectTracksTask: OAAsyncTask {
     }
 
     override func doInBackground() -> Any? {
-        var items: [ImportTrackItem] = []
         let baseName = fileName.deletingPathExtension()
         let tracks = gpxFile.tracks as? [Track] ?? []
-
         let author = gpxAuthor()
-        
+        var items: [ImportTrackItem] = []
+
         for (index, track) in tracks.enumerated() {
             if isCancelled() { return items }
-
             guard !track.isGeneralTrack() else { continue }
-
-            let trackFile = GpxFile(author: author)
-            trackFile.tracks.add(track)
-
-            copyAppearance(from: gpxFile, track: track, to: trackFile)
-            trackFile.recalculateProcessPoint()
-            let metadata = OsmAndShared.Metadata(source: gpxFile.metadata)
-            metadata.name = nil
-            trackFile.metadata = metadata
-
-            var trackName = track.name ?? ""
-            if trackName.isEmpty {
-                trackName = String(format: localizedString("ltr_or_rtl_combine_via_dash"), baseName, "\(index)")
-            }
-            
-            let analysis = trackFile.getAnalysis(
-                fileTimestamp: 0,
-                fromDistance: nil,
-                toDistance: nil,
-                pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser()
-            )
-            
-            let item = ImportTrackItem(
-                index: index,
-                name: trackName,
-                gpxFile: trackFile,
-                selectedPoints: [],
-                suggestedPoints: []
-            )
-            item.analysis = analysis
-
-            items.append(item)
+            items.append(makeImportTrackItem(from: track, at: index, baseName: baseName, author: author))
         }
 
-        for point in gpxFile.getPointsList() {
-            if isCancelled() { return items }
-            guard let item = findNearestTrack(for: point, items: items) else { continue }
-            item.selectedPoints.append(point)
-            item.suggestedPoints.append(point)
-        }
-
+        assignWaypoints(from: gpxFile, to: &items)
         return items
     }
 
@@ -90,7 +51,63 @@ final class CollectTracksTask: OAAsyncTask {
         listener?.tracksCollectionFinished(items)
     }
 
-    // MARK: - Private
+    // MARK: - Track building
+
+    private func makeImportTrackItem(
+        from track: Track,
+        at index: Int,
+        baseName: String,
+        author: String
+    ) -> ImportTrackItem {
+        let trackFile = makeSingleTrackGpxFile(from: track, author: author)
+        let trackName = resolvedTrackName(for: track, index: index, baseName: baseName)
+        let analysis = trackFile.getAnalysis(
+            fileTimestamp: 0,
+            fromDistance: nil,
+            toDistance: nil,
+            pointsAnalyzer: PlatformUtil.shared.getTrackPointsAnalyser()
+        )
+
+        let item = ImportTrackItem(
+            index: index,
+            name: trackName,
+            gpxFile: trackFile,
+            selectedPoints: [],
+            suggestedPoints: []
+        )
+        item.analysis = analysis
+        return item
+    }
+
+    private func makeSingleTrackGpxFile(from track: Track, author: String) -> GpxFile {
+        let trackFile = GpxFile(author: author)
+        trackFile.tracks.add(track)
+        copyAppearance(from: gpxFile, track: track, to: trackFile)
+        trackFile.recalculateProcessPoint()
+
+        let metadata = OsmAndShared.Metadata(source: gpxFile.metadata)
+        metadata.name = nil
+        trackFile.metadata = metadata
+        return trackFile
+    }
+
+    private func resolvedTrackName(for track: Track, index: Int, baseName: String) -> String {
+        if let name = track.name, !name.isEmpty {
+            return name
+        }
+        return String(format: localizedString("ltr_or_rtl_combine_via_dash"), baseName, "\(index)")
+    }
+
+    private func assignWaypoints(from sourceFile: GpxFile, to items: inout [ImportTrackItem]) {
+        for point in sourceFile.getPointsList() {
+            if isCancelled() { return }
+            guard let nearestItem = findNearestTrack(for: point, in: items) else { continue }
+            nearestItem.selectedPoints.append(point)
+            nearestItem.suggestedPoints.append(point)
+        }
+    }
+
+    // MARK: - Helpers
 
     private func gpxAuthor() -> String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
@@ -128,29 +145,28 @@ final class CollectTracksTask: OAAsyncTask {
         target.setElevationMeters(elevation: source.getElevationMeters())
     }
 
-    private func findNearestTrack(for point: WptPt, items: [ImportTrackItem]) -> ImportTrackItem? {
-        var nearest: ImportTrackItem?
+    private func findNearestTrack(for point: WptPt, in items: [ImportTrackItem]) -> ImportTrackItem? {
+        var nearestItem: ImportTrackItem?
         var minDistance = Double.greatestFiniteMagnitude
-        let mapUtils = KMapUtils.shared
 
         for item in items {
             if isCancelled() { return nil }
-            
-            for wpt in item.gpxFile.getAllSegmentsPoints() {
+
+            for waypoint in item.gpxFile.getAllSegmentsPoints() {
                 if isCancelled() { return nil }
-                
-                let distance = mapUtils.getDistance(
+
+                let distance = KMapUtils.shared.getDistance(
                     lat1: point.getLatitude(),
                     lon1: point.getLongitude(),
-                    lat2: wpt.getLatitude(),
-                    lon2: wpt.getLongitude()
+                    lat2: waypoint.getLatitude(),
+                    lon2: waypoint.getLongitude()
                 )
                 if distance < minDistance {
                     minDistance = distance
-                    nearest = item
+                    nearestItem = item
                 }
             }
         }
-        return nearest
+        return nearestItem
     }
 }

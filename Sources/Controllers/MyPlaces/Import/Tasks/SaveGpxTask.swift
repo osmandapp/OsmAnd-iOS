@@ -19,6 +19,14 @@ private struct SaveGpxTaskResult {
     let savedPath: String?
     let writeError: String?
     let warning: String?
+
+    static func failure(message: String, savedPath: String? = nil) -> SaveGpxTaskResult {
+        SaveGpxTaskResult(savedPath: savedPath, writeError: message, warning: message)
+    }
+
+    static func success(savedPath: String) -> SaveGpxTaskResult {
+        SaveGpxTaskResult(savedPath: savedPath, writeError: nil, warning: nil)
+    }
 }
 
 final class SaveGpxTask: OAAsyncTask {
@@ -37,8 +45,8 @@ final class SaveGpxTask: OAAsyncTask {
     private let overwrite: Bool
     private let importURL: URL?
     private weak var listener: SaveImportedGpxListener?
-    
-    private var fm: FileManager { FileManager.default }
+
+    private var fileManager: FileManager { .default }
 
     init(gpxFile: GpxFile,
          destinationDir: String,
@@ -46,7 +54,6 @@ final class SaveGpxTask: OAAsyncTask {
          overwrite: Bool,
          importURL: URL?,
          listener: SaveImportedGpxListener?) {
-        
         self.gpxFile = gpxFile
         self.destinationDir = destinationDir
         self.fileName = fileName
@@ -61,45 +68,21 @@ final class SaveGpxTask: OAAsyncTask {
     }
 
     override func doInBackground() -> Any? {
-        if gpxFile.isEmpty() {
-            return SaveGpxTaskResult(
-                savedPath: nil,
-                writeError: localizedString("error_reading_gpx"),
-                warning: localizedString("error_reading_gpx")
-            )
+        guard !gpxFile.isEmpty() else {
+            return SaveGpxTaskResult.failure(message: localizedString("error_reading_gpx"))
         }
 
-        do {
-            try fm.createDirectory(atPath: destinationDir, withIntermediateDirectories: true)
-        } catch {
-            return SaveGpxTaskResult(
-                savedPath: nil,
-                writeError: localizedString("sd_dir_not_accessible"),
-                warning: localizedString("sd_dir_not_accessible")
-            )
+        if let directoryError = validateDestinationDirectory() {
+            return SaveGpxTaskResult.failure(message: directoryError)
         }
 
-        guard fm.isWritableFile(atPath: destinationDir) else {
-            return SaveGpxTaskResult(
-                savedPath: nil,
-                writeError: localizedString("sd_dir_not_accessible"),
-                warning: localizedString("sd_dir_not_accessible")
-            )
+        let destinationPath = resolveDestinationPath()
+        if let writeError = writeGpx(to: destinationPath) {
+            return SaveGpxTaskResult.failure(message: writeError, savedPath: destinationPath)
         }
 
-        let destPath = resolveDestinationPath()
-        let writeError = saveFile(to: destPath)
-
-        if let writeError {
-            return SaveGpxTaskResult(
-                savedPath: destPath,
-                writeError: writeError,
-                warning: localizedString("error_reading_gpx")
-            )
-        }
-
-        processSavedFile(at: destPath)
-        return SaveGpxTaskResult(savedPath: destPath, writeError: nil, warning: nil)
+        SaveImportedGpxHelper.processSavedFile(at: destinationPath, gpxFile: gpxFile)
+        return SaveGpxTaskResult.success(savedPath: destinationPath)
     }
 
     override func onPostExecute(result: Any?) {
@@ -113,76 +96,96 @@ final class SaveGpxTask: OAAsyncTask {
         listener?.gpxSavingFinished(warning: result.warning)
     }
 
-    // MARK: - Private
+    // MARK: - Destination
+
+    private func validateDestinationDirectory() -> String? {
+        do {
+            try fileManager.createDirectory(atPath: destinationDir, withIntermediateDirectories: true)
+        } catch {
+            return localizedString("sd_dir_not_accessible")
+        }
+
+        guard fileManager.isWritableFile(atPath: destinationDir) else {
+            return localizedString("sd_dir_not_accessible")
+        }
+        return nil
+    }
 
     private func resolveDestinationPath() -> String {
         var name = Self.normalizedFileName(fileName)
 
         if name.isEmpty {
-            let pt = gpxFile.findPointToShow()
-            let time = pt?.time ?? Int64(Date().timeIntervalSince1970 * 1000)
-            let date = Date(timeIntervalSince1970: TimeInterval(time) / 1000)
+            let point = gpxFile.findPointToShow()
+            let timestamp = point?.time ?? Int64(Date().timeIntervalSince1970 * 1000)
+            let date = Date(timeIntervalSince1970: TimeInterval(timestamp) / 1000)
             name = "import_\(Self.importDateFormat.string(from: date))\(Self.gpxExtension)"
         }
 
-        var destPath = (destinationDir as NSString).appendingPathComponent(name)
+        var destinationPath = (destinationDir as NSString).appendingPathComponent(name)
+        guard !overwrite else { return destinationPath }
 
-        if !overwrite {
-            while fm.fileExists(atPath: destPath) {
-                name = OAUtilities.createNewFileName(name)
-                destPath = (destinationDir as NSString).appendingPathComponent(name)
-            }
+        while fileManager.fileExists(atPath: destinationPath) {
+            name = OAUtilities.createNewFileName(name)
+            destinationPath = (destinationDir as NSString).appendingPathComponent(name)
         }
-
-        return destPath
+        return destinationPath
     }
 
-    private func saveFile(to destPath: String) -> String? {
-        if overwrite, fm.fileExists(atPath: destPath) {
-            try? fm.removeItem(atPath: destPath)
-            if let item = OAGPXDatabase.sharedDb().getGPXItem(destPath) {
+    // MARK: - Writing
+
+    private func writeGpx(to destinationPath: String) -> String? {
+        if overwrite, fileManager.fileExists(atPath: destinationPath) {
+            try? fileManager.removeItem(atPath: destinationPath)
+            if let item = OAGPXDatabase.sharedDb().getGPXItem(destinationPath) {
                 OAGPXDatabase.sharedDb().removeGpxItem(item, withLocalRemove: false)
             }
         }
 
         if !gpxFile.path.isEmpty, isTempFileToMove(gpxFile.path) {
-            do {
-                try fm.moveItem(atPath: gpxFile.path, toPath: destPath)
-                return nil
-            } catch {
-                return error.localizedDescription
-            }
-        }
-        
-        if let importURL, fm.fileExists(atPath: importURL.path) {
-            do {
-                try fm.copyItem(at: URL(fileURLWithPath: importURL.path), to: URL(fileURLWithPath: destPath))
-                return nil
-            } catch {
-                return error.localizedDescription
-            }
+            return moveTempFile(from: gpxFile.path, to: destinationPath)
         }
 
-        let file = KFile(filePath: destPath)
+        if let importURL, fileManager.fileExists(atPath: importURL.path) {
+            return copyImportedFile(from: importURL.path, to: destinationPath)
+        }
+
+        return writeGpxFile(to: destinationPath)
+    }
+
+    private func moveTempFile(from sourcePath: String, to destinationPath: String) -> String? {
+        do {
+            try fileManager.moveItem(atPath: sourcePath, toPath: destinationPath)
+            return nil
+        } catch {
+            return error.localizedDescription
+        }
+    }
+
+    private func copyImportedFile(from sourcePath: String, to destinationPath: String) -> String? {
+        do {
+            try fileManager.copyItem(at: URL(fileURLWithPath: sourcePath), to: URL(fileURLWithPath: destinationPath))
+            return nil
+        } catch {
+            return error.localizedDescription
+        }
+    }
+
+    private func writeGpxFile(to destinationPath: String) -> String? {
+        let file = KFile(filePath: destinationPath)
         if let exception = GpxUtilities.shared.writeGpxFile(file: file, gpxFile: gpxFile) {
             return exception.message ?? localizedString("error_reading_gpx")
         }
         return nil
     }
-    
-    private func processSavedFile(at path: String) {
-        SaveImportedGpxHelper.processSavedFile(at: path, gpxFile: gpxFile)
-    }
 
     private func isTempFileToMove(_ path: String) -> Bool {
         guard let gpxPath = OsmAndApp.swiftInstance()?.gpxPath else { return false }
         let tempDir = (gpxPath as NSString).appendingPathComponent("temp")
-        let parent = (path as NSString).deletingLastPathComponent
-        return parent == tempDir
+        return (path as NSString).deletingLastPathComponent == tempDir
     }
-    
+
     // MARK: - Static helpers
-    
+
     static func plannedDestinationPath(destinationDir: String, fileName: String) -> String {
         var name = normalizedFileName(fileName)
         if name.isEmpty {
@@ -193,8 +196,8 @@ final class SaveGpxTask: OAAsyncTask {
 
     private static func normalizedFileName(_ raw: String) -> String {
         var name = raw
-        let lower = name.lowercased()
-        if lower.hasSuffix(".kml") || lower.hasSuffix(".kmz") || lower.hasSuffix(".zip") {
+        let lowercased = name.lowercased()
+        if lowercased.hasSuffix(".kml") || lowercased.hasSuffix(".kmz") || lowercased.hasSuffix(".zip") {
             name = String(name.dropLast(4))
         }
         if !name.lowercased().hasSuffix(gpxExtension) {

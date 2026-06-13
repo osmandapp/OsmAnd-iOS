@@ -39,49 +39,18 @@ final class SaveTracksTask: OAAsyncTask {
     }
 
     override func doInBackground() -> Any? {
-        let fm = FileManager.default
+        let fileManager = FileManager.default
 
-        do {
-            try fm.createDirectory(atPath: destinationDir, withIntermediateDirectories: true)
-        } catch {
+        if let destinationError = validateDestinationDirectory(using: fileManager) {
             return SaveTracksTaskResult(trackResults: [
-                SavedTrackResult(error: localizedString("sd_dir_not_accessible"), savedPath: nil)
-            ])
-        }
-
-        guard fm.isWritableFile(atPath: destinationDir) else {
-            return SaveTracksTaskResult(trackResults: [
-                SavedTrackResult(error: localizedString("sd_dir_not_accessible"), savedPath: nil)
+                SavedTrackResult(error: destinationError, savedPath: nil)
             ])
         }
 
         var results: [SavedTrackResult] = []
-
         for trackItem in items {
             if isCancelled() { break }
-
-            let gpxToSave = trackItem.gpxFile
-            gpxToSave.addPoints(collection: trackItem.selectedPoints)
-
-            var name = trackItem.name
-            if !name.lowercased().hasSuffix(Self.gpxExtension) {
-                name += Self.gpxExtension
-            }
-
-            var destPath = (destinationDir as NSString).appendingPathComponent(name)
-            while fm.fileExists(atPath: destPath) {
-                name = OAUtilities.createNewFileName(name)
-                destPath = (destinationDir as NSString).appendingPathComponent(name)
-            }
-
-            let file = KFile(filePath: destPath)
-            if let exception = GpxUtilities.shared.writeGpxFile(file: file, gpxFile: gpxToSave) {
-                let error = exception.message ?? localizedString("error_reading_gpx")
-                results.append(SavedTrackResult(error: error, savedPath: nil))
-            } else {
-                SaveImportedGpxHelper.processSavedFile(at: destPath, gpxFile: gpxToSave)
-                results.append(SavedTrackResult(error: nil, savedPath: destPath))
-            }
+            results.append(saveTrackItem(trackItem, fileManager: fileManager))
         }
 
         return SaveTracksTaskResult(trackResults: results)
@@ -98,5 +67,50 @@ final class SaveTracksTask: OAAsyncTask {
             listener?.gpxSaved(error: trackResult.error, savedPath: trackResult.savedPath)
         }
         listener?.gpxSavingFinished(warning: result.firstWarning)
+    }
+
+    // MARK: - Saving
+
+    private func validateDestinationDirectory(using fileManager: FileManager) -> String? {
+        do {
+            try fileManager.createDirectory(atPath: destinationDir, withIntermediateDirectories: true)
+        } catch {
+            return localizedString("sd_dir_not_accessible")
+        }
+
+        guard fileManager.isWritableFile(atPath: destinationDir) else {
+            return localizedString("sd_dir_not_accessible")
+        }
+        return nil
+    }
+
+    private func saveTrackItem(_ trackItem: ImportTrackItem, fileManager: FileManager) -> SavedTrackResult {
+        let gpxToSave = trackItem.gpxFile
+        gpxToSave.addPoints(collection: trackItem.selectedPoints)
+
+        let destinationPath = uniqueDestinationPath(for: trackItem.name, fileManager: fileManager)
+        let file = KFile(filePath: destinationPath)
+
+        if let exception = GpxUtilities.shared.writeGpxFile(file: file, gpxFile: gpxToSave) {
+            let error = exception.message ?? localizedString("error_reading_gpx")
+            return SavedTrackResult(error: error, savedPath: nil)
+        }
+
+        SaveImportedGpxHelper.processSavedFile(at: destinationPath, gpxFile: gpxToSave)
+        return SavedTrackResult(error: nil, savedPath: destinationPath)
+    }
+
+    private func uniqueDestinationPath(for rawName: String, fileManager: FileManager) -> String {
+        var fileName = rawName
+        if !fileName.lowercased().hasSuffix(Self.gpxExtension) {
+            fileName += Self.gpxExtension
+        }
+
+        var destinationPath = (destinationDir as NSString).appendingPathComponent(fileName)
+        while fileManager.fileExists(atPath: destinationPath) {
+            fileName = OAUtilities.createNewFileName(fileName)
+            destinationPath = (destinationDir as NSString).appendingPathComponent(fileName)
+        }
+        return destinationPath
     }
 }

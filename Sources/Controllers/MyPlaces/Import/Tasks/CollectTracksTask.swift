@@ -53,7 +53,7 @@ final class CollectTracksTask: OAAsyncTask {
 
             var trackName = track.name ?? ""
             if trackName.isEmpty {
-                trackName = String(format: localizedString("ltr_or_rtl_combine_via_dash"), baseName, "\(index + 1)")
+                trackName = String(format: localizedString("ltr_or_rtl_combine_via_dash"), baseName, "\(index)")
             }
             
             let analysis = trackFile.getAnalysis(

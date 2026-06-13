@@ -206,7 +206,7 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
             cell.selectionGroupButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.selectionButton.addTarget(self, action: #selector(onGroupSelectTapped(_:)), for: .touchUpInside)
             cell.selectionGroupButton.addTarget(self, action: #selector(onGroupSelectTapped(_:)), for: .touchUpInside)
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 66, bottom: 0, right: 0)
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 0)
             cell.setNeedsUpdateConstraints()
             return cell
         case OAPointWithRegionTableViewCell.reuseIdentifier:
@@ -228,14 +228,11 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
                 cell.setDirection("")
             }
             cell.contentView.backgroundColor = .groupBg
-            if cell.selectedBackgroundView == nil {
+            if cell.selectedBackgroundView?.backgroundColor != .groupBg {
                 let bgView = UIView()
                 bgView.backgroundColor = .groupBg
                 cell.selectedBackgroundView = bgView
-            } else {
-                cell.selectedBackgroundView?.backgroundColor = .groupBg
             }
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 66, bottom: 0, right: 16)
             cell.setNeedsUpdateConstraints()
             return cell
         default:
@@ -288,6 +285,7 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
         } else {
             tableView.deselectRow(at: indexPath, animated: false)
         }
+        cell.separatorInset = UIEdgeInsets(top: 0, left: cell.contentView.frame.minX + 66, bottom: 0, right: 16)
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

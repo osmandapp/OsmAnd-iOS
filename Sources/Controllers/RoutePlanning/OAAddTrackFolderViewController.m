@@ -35,9 +35,10 @@
 - (void)viewDidLoad
 {
     _newFolderName = [_suggestedFolderName trim] ?: @"";
-    [self updateFileNameFromEditText:_newFolderName];
     
     [super viewDidLoad];
+    
+    [self updateFileNameFromEditText:_newFolderName];
 
     self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     _isFirstLaunch = YES;

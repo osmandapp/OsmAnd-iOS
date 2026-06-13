@@ -14,6 +14,12 @@ enum FolderCardsAddButtonPosition: Int {
     case beginning = 1
 }
 
+@objc(OAFolderCardsConfig)
+enum FolderCardsConfig: Int {
+    case defaultConfig = 0
+    case importTracks = 1
+}
+
 @objc(OAFolderCardsCellDelegate)
 protocol FolderCardsCellDelegate: AnyObject {
     func onItemSelected(_ index: Int)
@@ -46,6 +52,8 @@ final class FolderCardsCell: UITableViewCell {
 
     var addButtonPosition: FolderCardsAddButtonPosition = .end
     var iconDefaultColor: UIColor = .iconColorActive
+    var folderTitleDefaultColor: UIColor = .textColorActive
+    var folderTitleSelectedDefaultColor: UIColor = .textColorActive
 
     @objc let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -76,6 +84,11 @@ final class FolderCardsCell: UITableViewCell {
         super.init(coder: coder)
         setupUI()
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateContentOffset()
+    }
 
     private func setupUI() {
         selectionStyle = .none
@@ -94,6 +107,18 @@ final class FolderCardsCell: UITableViewCell {
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentView.heightAnchor.constraint(equalToConstant: Layout.rowHeight)
         ])
+    }
+    
+    // MARK: - Config
+    
+    func configureCell(_ config: FolderCardsConfig) {
+        switch config {
+        case .defaultConfig: break
+        case .importTracks:
+            addButtonPosition = .beginning
+            iconDefaultColor = .iconColorSelected
+            folderTitleSelectedDefaultColor = .textColorPrimary
+        }
     }
 
     // MARK: - ObjC API
@@ -266,7 +291,7 @@ final class FolderCardsCell: UITableViewCell {
         cell.imageView.tintColor = item.color
         cell.imageView.image = .templateImageNamed(item.imageName)
         cell.backgroundColor = .groupBg
-        cell.titleLabel.textColor = item.hidden ? .textColorSecondary : .textColorActive
+        cell.titleLabel.textColor = item.hidden ? .textColorSecondary : (selected ? folderTitleSelectedDefaultColor : folderTitleDefaultColor)
         cell.titleLabel.font = item.hidden ? italicGroupFont : originalGroupFont
 
         if selected {

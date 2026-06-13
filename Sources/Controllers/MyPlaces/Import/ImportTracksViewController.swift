@@ -199,7 +199,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
                 statsRow.setObj(item.statisticsCells, forKey: RowObjKey.statisticsCells)
                 statsRow.setObj(item, forKey: RowObjKey.importTrackItem)
             }
-            //Waypoints
+            // Waypoints
             let selectedPoints = item.selectedPoints.count
             let totalPoints = gpxFile.getPointsList().count
             let pointsRow = section.createNewRow()
@@ -300,14 +300,13 @@ final class ImportTracksViewController: OABaseButtonsViewController {
             cell.delegate = self
             cell.cellIndex = indexPath
             cell.state = foldersScrollState
-            cell.iconDefaultColor = .iconColorSelected
+            cell.configureCell(.importTracks)
             cell.setValues(item.obj(forKey: RowObjKey.foldersValues) as? [String] ?? [],
                            sizes: item.obj(forKey: RowObjKey.foldersSizes) as? [NSNumber],
                            colors: nil,
                            hidden: nil,
                            addButtonTitle: item.string(forKey: RowObjKey.foldersAddButtonTitle) ?? localizedString("shared_string_add"),
-                           withSelectedIndex: Int32(item.integer(forKey: RowObjKey.foldersSelectedValue)),
-                           addButtonPosition: .beginning)
+                           withSelectedIndex: Int32(item.integer(forKey: RowObjKey.foldersSelectedValue)))
             return cell
             
         case TrackStatsTableCell.reuseIdentifier:
@@ -734,7 +733,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     
     private func applyFolderSelection(named name: String) {
         selectedFolderPath = folderPath(forDisplayName: name)
-        reloadFolderNames()
+        selectedFolderIndex = folderIndex(for: selectedFolderPath)
         generateData()
         tableView.reloadData()
         
@@ -752,6 +751,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
         if !FileManager.default.fileExists(atPath: path) {
             do {
                 try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true)
+                folderNames.insert(name, at: 0)
             } catch {
                 debugPrint(error)
                 return

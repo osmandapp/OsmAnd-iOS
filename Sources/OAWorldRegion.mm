@@ -870,7 +870,7 @@
 
 - (BOOL)isRegionJoinRoadsItem:(OAResourceItem *)item
 {
-    return item.worldRegion.regionRoads && item.worldRegion.regionJoinRoads && item.resourceType == OsmAndResourceType::RoadMapRegion;
+    return item.worldRegion.regionRoads && (item.worldRegion.regionJoinRoads || item.worldRegion.regionJoinMap) && item.resourceType == OsmAndResourceType::RoadMapRegion;  // as Android ROADS_FILE
 }
 
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type

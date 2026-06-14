@@ -239,17 +239,20 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
 private extension SelectWaypointsViewController {
     func appendInfoSection() {
         let section = tableData.createNewSection()
-        section.footerText = localizedString("auto_select_nearest_footer")
 
         let descriptionRow = section.createNewRow()
         descriptionRow.cellType = OASimpleTableViewCell.reuseIdentifier
         descriptionRow.key = RowKey.infoDescr.rawValue
         descriptionRow.setObj(makeTopDescription(), forKey: RowObjKey.attributedTitleKey)
 
-        let selectNearestRow = section.createNewRow()
-        selectNearestRow.cellType = OASimpleTableViewCell.reuseIdentifier
-        selectNearestRow.key = RowKey.selectNearest.rawValue
-        selectNearestRow.title = localizedString("auto_select_nearest_points")
+        if !suggestedPoints.isEmpty {
+            section.footerText = localizedString("auto_select_nearest_footer")
+            
+            let selectNearestRow = section.createNewRow()
+            selectNearestRow.cellType = OASimpleTableViewCell.reuseIdentifier
+            selectNearestRow.key = RowKey.selectNearest.rawValue
+            selectNearestRow.title = localizedString("auto_select_nearest_points")
+        }
     }
 
     private func appendGroupSection(for group: WaypointGroup) {
@@ -590,7 +593,9 @@ private extension SelectWaypointsViewController {
             cell.setDirection(distance)
             cell.directionIconView.image = .templateImageNamed("ic_small_direction")
             cell.directionIconView.tintColor = .iconColorActive
-            cell.directionIconView.transform = CGAffineTransform(rotationAngle: wptItem.direction)
+            UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
+                cell.directionIconView.transform = CGAffineTransform(rotationAngle: wptItem.direction)
+            }
         } else {
             cell.setDirection("")
         }

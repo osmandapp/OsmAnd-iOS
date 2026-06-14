@@ -1367,6 +1367,7 @@
 		9F4844A72FD0000100484401 /* AisTrackerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */; };
 		9F4844A82FD0000100484401 /* AisTrackerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */; };
 		9F4844AA2FD0000100484401 /* AisSimulationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A92FD0000100484401 /* AisSimulationProvider.swift */; };
+		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
 		9F4844AC2FD0000100484401 /* AisObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844AB2FD0000100484401 /* AisObject.swift */; };
 		9F4844AE2FD0000100484401 /* AisDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844AD2FD0000100484401 /* AisDataManager.swift */; };
 		9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844AF2FD0000100484401 /* AisMessageDecoder.swift */; };
@@ -5126,6 +5127,7 @@
 		9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerPlugin.swift; sourceTree = "<group>"; };
 		9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerSettingsViewController.swift; sourceTree = "<group>"; };
 		9F4844A92FD0000100484401 /* AisSimulationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisSimulationProvider.swift; sourceTree = "<group>"; };
+		9F4844D02FD0000100484401 /* AisTrackerProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerProduct.swift; sourceTree = "<group>"; };
 		9F4844AB2FD0000100484401 /* AisObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisObject.swift; sourceTree = "<group>"; };
 		9F4844AD2FD0000100484401 /* AisDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisDataManager.swift; sourceTree = "<group>"; };
 		9F4844AF2FD0000100484401 /* AisMessageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisMessageDecoder.swift; sourceTree = "<group>"; };
@@ -10422,6 +10424,7 @@
 				9F4844AD2FD0000100484401 /* AisDataManager.swift */,
 				9F4844AF2FD0000100484401 /* AisMessageDecoder.swift */,
 				9F4844A92FD0000100484401 /* AisSimulationProvider.swift */,
+				9F4844D02FD0000100484401 /* AisTrackerProduct.swift */,
 				9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */,
 				9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */,
 				9F4844B12FD0000100484401 /* OAAisTrackerLayer.h */,
@@ -18009,6 +18012,7 @@
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
 				9F4844A62FD0000100484401 /* AisNmeaConnection.swift in Sources */,
+				9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */,
 				DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */,
 				DA69ED5C2A385B1B001022C7 /* WidgetPanelViewController.swift in Sources */,
 				FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */,

@@ -354,9 +354,6 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OAVehicleMetricsProduct : OAProduct
 @end
 
-@interface OAAisTrackerProduct : OAProduct
-@end
-
 @interface OACarPlayProduct : OAProduct
 
 @end

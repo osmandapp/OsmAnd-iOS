@@ -58,9 +58,10 @@ final class AisDataManager: NSObject {
             object = ais
             event = "new"
         }
-        if objectsByMmsi.count >= Self.objectLimit {
+        if objectsByMmsi.count > Self.objectLimit {
             removeOldestObject()
         }
+        guard let storedObject = objectsByMmsi[object.mmsi], storedObject === object else { return }
         aisDebugLog("[AisDataManager] data \(event) total=\(objectsByMmsi.count) \(object.debugSummary)")
         plugin?.onAisObjectReceived(object)
     }

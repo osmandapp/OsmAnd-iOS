@@ -672,8 +672,11 @@ static NSString *OAAisObjectTitle(AisObject *object)
 {
     if (![self isVisible])
     {
-        kAisImagesCache.clear();
-        [self cleanupResources];
+        if (_collectionsAdded || _objectDrawables.count > 0)
+        {
+            kAisImagesCache.clear();
+            [self cleanupResources];
+        }
         return;
     }
     if (![self shouldUpdateRenderDataForViewport])

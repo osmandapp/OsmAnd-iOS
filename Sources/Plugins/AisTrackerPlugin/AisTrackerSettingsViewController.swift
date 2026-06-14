@@ -128,7 +128,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         guard let row = rowData(indexPath), isRowEnabled(row) else { return }
         switch row {
         case .protocolType:
-            chooseProtocol()
+            chooseProtocol(sourceRow: indexPath)
         case .host:
             editString(title: localizedString("ais_address_nmea_server"), message: descriptionText(for: row), value: plugin.hostPref.get()) { [weak self] value in
                 let value = value.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -155,7 +155,8 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
                            message: descriptionText(for: row),
                            values: objectLostTimeoutValues,
                            current: Int(plugin.objectLostTimeoutPref.get()),
-                           titleProvider: minutesText) { [weak self] value in
+                           titleProvider: minutesText,
+                           sourceRow: indexPath) { [weak self] value in
                 self?.plugin.objectLostTimeoutPref.set(Int32(value))
                 self?.tableView.reloadData()
             }
@@ -164,7 +165,8 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
                            message: descriptionText(for: row),
                            values: shipLostTimeoutValues,
                            current: Int(plugin.shipLostTimeoutPref.get()),
-                           titleProvider: shipLostTimeoutText) { [weak self] value in
+                           titleProvider: shipLostTimeoutText,
+                           sourceRow: indexPath) { [weak self] value in
                 self?.plugin.shipLostTimeoutPref.set(Int32(value))
                 self?.tableView.reloadData()
             }
@@ -173,7 +175,8 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
                            message: descriptionText(for: row),
                            values: cpaWarningTimeValues,
                            current: Int(plugin.cpaWarningTimePref.get()),
-                           titleProvider: cpaWarningTimeText) { [weak self] value in
+                           titleProvider: cpaWarningTimeText,
+                           sourceRow: indexPath) { [weak self] value in
                 self?.plugin.cpaWarningTimePref.set(Int32(value))
                 self?.tableView.reloadData()
             }
@@ -182,14 +185,15 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
                               message: descriptionText(for: row),
                               values: cpaWarningDistanceValues,
                               current: plugin.cpaWarningDistancePref.get(),
-                              titleProvider: nauticalMilesText) { [weak self] value in
+                              titleProvider: nauticalMilesText,
+                              sourceRow: indexPath) { [weak self] value in
                 self?.plugin.cpaWarningDistancePref.set(value)
                 self?.tableView.reloadData()
             }
         }
     }
 
-    private func chooseProtocol() {
+    private func chooseProtocol(sourceRow: IndexPath) {
         let alert = UIAlertController(title: localizedString("ais_nmea_protocol"), message: descriptionText(for: .protocolType), preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "UDP", style: .default) { [weak self] _ in
             self?.plugin.protocolPref.set(Int32(AisNmeaProtocol.udp.rawValue))
@@ -202,7 +206,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
             self?.tableView.reloadData()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        present(alert, animated: true)
+        presentActionSheet(alert, sourceRow: sourceRow)
     }
 
     private func editString(title: String, message: String?, value: String, onSave: @escaping (String) -> Bool) {
@@ -233,7 +237,7 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
         }
     }
 
-    private func chooseIntValue(title: String, message: String?, values: [Int], current: Int, titleProvider: @escaping (Int) -> String, onSelect: @escaping (Int) -> Void) {
+    private func chooseIntValue(title: String, message: String?, values: [Int], current: Int, titleProvider: @escaping (Int) -> String, sourceRow: IndexPath, onSelect: @escaping (Int) -> Void) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         for value in values {
             alert.addAction(UIAlertAction(title: titleProvider(value), style: .default) { _ in
@@ -241,10 +245,10 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
             })
         }
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        present(alert, animated: true)
+        presentActionSheet(alert, sourceRow: sourceRow)
     }
 
-    private func chooseDoubleValue(title: String, message: String?, values: [Double], current: Double, titleProvider: @escaping (Double) -> String, onSelect: @escaping (Double) -> Void) {
+    private func chooseDoubleValue(title: String, message: String?, values: [Double], current: Double, titleProvider: @escaping (Double) -> String, sourceRow: IndexPath, onSelect: @escaping (Double) -> Void) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         for value in values {
             alert.addAction(UIAlertAction(title: titleProvider(value), style: .default) { _ in
@@ -252,6 +256,20 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
             })
         }
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        presentActionSheet(alert, sourceRow: sourceRow)
+    }
+
+    private func presentActionSheet(_ alert: UIAlertController, sourceRow: IndexPath) {
+        if let popover = alert.popoverPresentationController {
+            if let cell = tableView.cellForRow(at: sourceRow) {
+                popover.sourceView = cell
+                popover.sourceRect = cell.bounds
+            } else {
+                popover.sourceView = view
+                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 1, height: 1)
+            }
+            popover.permittedArrowDirections = [.up, .down]
+        }
         present(alert, animated: true)
     }
 

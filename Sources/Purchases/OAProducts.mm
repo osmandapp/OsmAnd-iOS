@@ -15,6 +15,7 @@
 #import "OALinks.h"
 #import "OAObservable.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAFunctionalAddon()
 
@@ -2531,49 +2532,6 @@
 @end
 
 
-@implementation OAAisTrackerProduct
-
-- (instancetype)init
-{
-    self = [super initWithIdentifier:kInAppId_Addon_Ais_Tracker];
-    if (self)
-    {
-        self.free = YES;
-        [self commonInit];
-    }
-    return self;
-}
-
-- (NSString *)productIconName
-{
-    return @"ic_plugin_nautical";
-}
-
-- (NSString *)productScreenshotName
-{
-    return @"ais_map";
-}
-
-- (NSString *)localizedTitle
-{
-    return OALocalizedString(@"plugin_ais_tracker_name");
-}
-
-- (NSString *)localizedDescription
-{
-    return OALocalizedString(@"plugin_ais_tracker_description");
-}
-
-- (NSString *)localizedDescriptionExt
-{
-    return [NSString stringWithFormat:@"%@\n\n%@",
-            OALocalizedString(@"plugin_ais_tracker_description"),
-            OALocalizedString(@"plugin_ais_tracker_disclaimer")];
-}
-
-@end
-
-
 @implementation OACarPlayProduct
 
 - (instancetype) init
@@ -2954,7 +2912,7 @@
         self.weather = [[OAWeatherProduct alloc] init];
         self.sensors = [[OAExternalSensorsProduct alloc] init];
         self.vehicleMetrics = [OAVehicleMetricsProduct new];
-        self.aisTracker = [OAAisTrackerProduct new];
+        self.aisTracker = [AisTrackerProduct new];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
 

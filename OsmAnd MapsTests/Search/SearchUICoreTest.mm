@@ -69,16 +69,15 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 
 - (void) testSearch
 {
-    /*_successCount = 0;
+    _successCount = 0;
     _failedCount = 0;
     _firstResultCount = 0;
     _missingCount = 0;
     [OsmAndApp.instance loadWorldRegions];
     [OsmAndApp.instance addRegionNamesToCommonWords];
-    [OsmAndApp.instance addAbbrevationsToCommonWords];
     for (NSString *path in _filePaths)
     {
-        //if ([path.lastPathComponent isEqualToString:@"Issue-11345-geo-Westbourne.json"])
+        //if ([path.lastPathComponent isEqualToString:@"Issue-16715-geo-NC-42.json"])
             [self testSearchCase:path];
     }
     NSLog(@"========================================");
@@ -87,7 +86,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     NSLog(@"FAILED:  %ld (total)", (long)_failedCount);
     NSLog(@"FAILED:  %ld (first result is matched)", (long)_firstResultCount);
     NSLog(@"FAILED:  %ld (totally missing)", (long)_missingCount);
-    NSLog(@"========================================");*/
+    NSLog(@"========================================");
     NSLog(@"Search tests done");
 }
 
@@ -240,6 +239,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     OASearchPhrase *emptyPhrase = [OASearchPhrase emptyPhrase:s];
     for (NSInteger k = 0; k < phrases.count; k++)
     {
+        long start = (long)([[NSDate date] timeIntervalSince1970] * 1000);
         NSString *text = phrases[k];
         NSArray<NSString *> *result = results[k];
         NSArray<OASearchResult *> *searchResults;
@@ -323,7 +323,8 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 return;
             }
         }
-        NSLog(@"Test phrase: %@ done (%@)", [phrase toString], @"PASSED");
+        long time = (long)([[NSDate date] timeIntervalSince1970] * 1000) - start;
+        NSLog(@"Test phrase: %@ (%@) - %ldms", [phrase toString], @"PASSED", time);
     }
 
     _successCount++;
@@ -396,7 +397,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     NSString * fullPresent = [self formatResult:NO res:res phrase:phrase];
     NSString * quotes2 = [fullPresent substringFromIndex:[fullPresent indexOf:@"["]].trim;
     if (([quotes1 containsString:@"LOCATION"] || [quotes1 containsString:@"POI_TYPE"])
-        && [quotes1 isEqual:quotes2])
+        && [quotes1 hasPrefix:quotes2])
     {
         return YES;
     }

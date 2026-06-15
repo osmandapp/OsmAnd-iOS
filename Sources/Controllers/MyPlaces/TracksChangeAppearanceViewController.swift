@@ -146,6 +146,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         .insetGrouped
     }
     
+    override func getTableHeaderDescription() -> String? {
+        guard case .folder = initMode else { return nil }
+        return localizedString("default_appearance_description")
+    }
+    
     override func generateData() {
         tableData.clearAllData()
         colorsCollectionIndexPath = nil

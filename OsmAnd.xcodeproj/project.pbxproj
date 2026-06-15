@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1627,20 +1627,31 @@
 		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
 		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
+		CE7AC1A82FE02A2600495411 /* OATrackPreviewMapRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19A2FE02A2600495411 /* OATrackPreviewMapRenderer.mm */; };
+		CE7AC1A92FE02A2600495411 /* TrackBitmapDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19B2FE02A2600495411 /* TrackBitmapDrawer.swift */; };
+		CE7AC1AA2FE02A2600495411 /* TrackPreviewColorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19C2FE02A2600495411 /* TrackPreviewColorHelper.swift */; };
+		CE7AC1AB2FE02A2600495411 /* TrackPreviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19D2FE02A2600495411 /* TrackPreviewManager.swift */; };
+		CE7AC1AC2FE02A2600495411 /* TrackStubPreviewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19E2FE02A2600495411 /* TrackStubPreviewRenderer.swift */; };
+		CE7AC1AD2FE02A2600495411 /* CollectTracksTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A02FE02A2600495411 /* CollectTracksTask.swift */; };
+		CE7AC1AE2FE02A2600495411 /* SaveGpxTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A12FE02A2600495411 /* SaveGpxTask.swift */; };
+		CE7AC1AF2FE02A2600495411 /* SaveImportedGpxHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A22FE02A2600495411 /* SaveImportedGpxHelper.swift */; };
+		CE7AC1B02FE02A2600495411 /* SaveTracksTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */; };
+		CE7AC1B12FE02A2600495411 /* ImportTracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */; };
+		CE7AC1B22FE02A2600495411 /* SelectWaypointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A62FE02A2600495411 /* SelectWaypointsViewController.swift */; };
+		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
 		CEAF08182FD91C4A0048A74A /* FolderCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */; };
 		CEAF08192FD91C4A0048A74A /* FolderCardsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF08172FD91C4A0048A74A /* FolderCardsCell.swift */; };
 		CEAF081B2FD9226C0048A74A /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF081A2FD9226C0048A74A /* Array+Extension.swift */; };
 		CEDB71E52FD993C3009DAA0D /* TrackStatsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDB71E42FD993C3009DAA0D /* TrackStatsTableCell.swift */; };
-		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
+		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
+		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
-		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
-		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
 		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
 		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
@@ -5568,20 +5579,32 @@
 		CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePoiIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuCell.swift; sourceTree = "<group>"; };
+		CE7AC1992FE02A2600495411 /* OATrackPreviewMapRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackPreviewMapRenderer.h; sourceTree = "<group>"; };
+		CE7AC19A2FE02A2600495411 /* OATrackPreviewMapRenderer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackPreviewMapRenderer.mm; sourceTree = "<group>"; };
+		CE7AC19B2FE02A2600495411 /* TrackBitmapDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackBitmapDrawer.swift; sourceTree = "<group>"; };
+		CE7AC19C2FE02A2600495411 /* TrackPreviewColorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPreviewColorHelper.swift; sourceTree = "<group>"; };
+		CE7AC19D2FE02A2600495411 /* TrackPreviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPreviewManager.swift; sourceTree = "<group>"; };
+		CE7AC19E2FE02A2600495411 /* TrackStubPreviewRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStubPreviewRenderer.swift; sourceTree = "<group>"; };
+		CE7AC1A02FE02A2600495411 /* CollectTracksTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectTracksTask.swift; sourceTree = "<group>"; };
+		CE7AC1A12FE02A2600495411 /* SaveGpxTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGpxTask.swift; sourceTree = "<group>"; };
+		CE7AC1A22FE02A2600495411 /* SaveImportedGpxHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImportedGpxHelper.swift; sourceTree = "<group>"; };
+		CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveTracksTask.swift; sourceTree = "<group>"; };
+		CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTracksViewController.swift; sourceTree = "<group>"; };
+		CE7AC1A62FE02A2600495411 /* SelectWaypointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectWaypointsViewController.swift; sourceTree = "<group>"; };
+		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
 		CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCardCollectionViewCell.swift; sourceTree = "<group>"; };
 		CEAF08172FD91C4A0048A74A /* FolderCardsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCardsCell.swift; sourceTree = "<group>"; };
 		CEAF081A2FD9226C0048A74A /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		CEDB71E42FD993C3009DAA0D /* TrackStatsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStatsTableCell.swift; sourceTree = "<group>"; };
-		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
+		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
 		D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeCell.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
-		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
 		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
 		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
@@ -8228,10 +8251,6 @@
 		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE7CBD962FD7C370008C0FF8 /* Import */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Import; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		BBA3AF66197FC4BB0039D991 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -10616,6 +10635,41 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */ = {
+			isa = PBXGroup;
+			children = (
+				CE7AC1992FE02A2600495411 /* OATrackPreviewMapRenderer.h */,
+				CE7AC19A2FE02A2600495411 /* OATrackPreviewMapRenderer.mm */,
+				CE7AC19B2FE02A2600495411 /* TrackBitmapDrawer.swift */,
+				CE7AC19C2FE02A2600495411 /* TrackPreviewColorHelper.swift */,
+				CE7AC19D2FE02A2600495411 /* TrackPreviewManager.swift */,
+				CE7AC19E2FE02A2600495411 /* TrackStubPreviewRenderer.swift */,
+			);
+			path = MapPreviewRenderer;
+			sourceTree = "<group>";
+		};
+		CE7AC1A42FE02A2600495411 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				CE7AC1A02FE02A2600495411 /* CollectTracksTask.swift */,
+				CE7AC1A12FE02A2600495411 /* SaveGpxTask.swift */,
+				CE7AC1A22FE02A2600495411 /* SaveImportedGpxHelper.swift */,
+				CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
+		CE7AC1A72FE02A2600495411 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */,
+				CE7AC1A42FE02A2600495411 /* Tasks */,
+				CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */,
+				CE7AC1A62FE02A2600495411 /* SelectWaypointsViewController.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
 		DA0133122A20E1E900920C14 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -12669,7 +12723,7 @@
 		DA5A7DC226C563A300F274C7 /* MyPlaces */ = {
 			isa = PBXGroup;
 			children = (
-				CE7CBD962FD7C370008C0FF8 /* Import */,
+				CE7AC1A72FE02A2600495411 /* Import */,
 				D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */,
 				D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */,
 				D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */,
@@ -14984,9 +15038,6 @@
 			dependencies = (
 				FAB2B14D2C787E4400B59B7A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				CE7CBD962FD7C370008C0FF8 /* Import */,
-			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
@@ -17253,6 +17304,17 @@
 				2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */,
 				DA5A840F26C563A800F274C7 /* OABasePointEditingHandler.m in Sources */,
 				DA5A832B26C563A800F274C7 /* OADirectionTableViewCell.m in Sources */,
+				CE7AC1A82FE02A2600495411 /* OATrackPreviewMapRenderer.mm in Sources */,
+				CE7AC1A92FE02A2600495411 /* TrackBitmapDrawer.swift in Sources */,
+				CE7AC1AA2FE02A2600495411 /* TrackPreviewColorHelper.swift in Sources */,
+				CE7AC1AB2FE02A2600495411 /* TrackPreviewManager.swift in Sources */,
+				CE7AC1AC2FE02A2600495411 /* TrackStubPreviewRenderer.swift in Sources */,
+				CE7AC1AD2FE02A2600495411 /* CollectTracksTask.swift in Sources */,
+				CE7AC1AE2FE02A2600495411 /* SaveGpxTask.swift in Sources */,
+				CE7AC1AF2FE02A2600495411 /* SaveImportedGpxHelper.swift in Sources */,
+				CE7AC1B02FE02A2600495411 /* SaveTracksTask.swift in Sources */,
+				CE7AC1B12FE02A2600495411 /* ImportTracksViewController.swift in Sources */,
+				CE7AC1B22FE02A2600495411 /* SelectWaypointsViewController.swift in Sources */,
 				DA5A817926C563A700F274C7 /* OAMapButtonsHelper.m in Sources */,
 				27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */,
 				27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */,

@@ -140,10 +140,10 @@ struct FavoriteFolderStats: Hashable {
 
 final class FavoriteListCell: UICollectionViewListCell {
     private static let rowHeight: CGFloat = 68.0
-    
+
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        attributes.frame.size.height = Self.rowHeight
+        attributes.frame.size.height = max(Self.rowHeight, attributes.frame.height)
         return attributes
     }
 }

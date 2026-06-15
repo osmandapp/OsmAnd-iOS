@@ -57,6 +57,7 @@ extension FavoriteListViewController {
             content.text = folder.title
             content.textProperties.color = folder.titleColor
             content.textProperties.font = folder.titleFont
+            content.textProperties.numberOfLines = 2
             content.secondaryText = folder.subtitle
             content.secondaryTextProperties.color = .textColorSecondary
             cell.contentConfiguration = content

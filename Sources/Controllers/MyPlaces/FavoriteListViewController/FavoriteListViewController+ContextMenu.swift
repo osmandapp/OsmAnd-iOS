@@ -55,7 +55,7 @@ extension FavoriteListViewController {
         let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
             OAFavoritesSwiftHelper.addFavoriteItems(toMapMarkers: hasDirectFavoritePoints ? folderFavoriteItem : subtreeFavoriteItems)
         }
-        let trackAction = UIAction(title: localizedString("add_to_a_track"), image: .icCustomTrip) { [weak self] _ in
+        let trackAction = UIAction(title: localizedString("shared_string_gpx_track"), image: .icCustomTrip) { [weak self] _ in
             guard let self else { return }
             if hasDirectFavoritePoints {
                 self.openFavoriteGroupAddToTrack(folder.bridgeItem.groupName)
@@ -69,7 +69,7 @@ extension FavoriteListViewController {
             OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: hasDirectFavoritePoints ? directFavoriteItems : subtreeFavoriteItems)
         }
         let addToActions: [UIMenuElement] = hasFavoritePoints ? [mapMarkersAction, trackAction, navigationAction] : []
-        let fourthButtons: [UIMenuElement] = addToActions.isEmpty ? [] : [UIMenu(title: localizedString("shared_string_add"), image: .icCustomAdd, children: addToActions)]
+        let fourthButtons: [UIMenuElement] = addToActions.isEmpty ? [] : [UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: addToActions)]
         let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: fourthButtons)
 
         let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
@@ -149,7 +149,7 @@ extension FavoriteListViewController {
             OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: selectedBridgeItems)
             self?.applySnapshot(animatingDifferences: true)
         }
-        let addToMenu = UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: [trackAction, navigationAction, mapMarkersAction])
+        let addToMenu = UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: [navigationAction, trackAction, mapMarkersAction])
         let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
         menuElements.append(thirdButtonsSection)
 

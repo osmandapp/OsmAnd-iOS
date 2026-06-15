@@ -220,7 +220,7 @@
                 [NSString stringWithFormat:@"%f", [_verticalExaggerationScaleProfile get:mode]];
         }
 
-        NSDictionary *profiles = @{
+        NSDictionary<NSString *, OACommonPreference *> *profiles = @{
             @"show_mapillary": _mapillaryProfile,
             @"global_wikipedia_poi_enabled": _wikipediaGlobalProfile,
             @"wikipedia_poi_enabled_languages": _wikipediaLanguagesProfile,
@@ -255,7 +255,7 @@
 
         for (NSString *key in profiles)
         {
-            id profile = profiles[key];
+            OACommonPreference *profile = profiles[key];
             if ([profile isSetForMode:mode])
             {
                 // NOTE: The value 0.67 is saved as 70 (similar to Android).  "weatherTempAlpha" : "0.7",

@@ -51,7 +51,7 @@
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devZoomLevel appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devTargetDistance appModes:@[]];
 
-        [[OATouchIndicatorController shared] apply];
+        [[TouchIndicatorController shared] apply];
     }
     return self;
 }

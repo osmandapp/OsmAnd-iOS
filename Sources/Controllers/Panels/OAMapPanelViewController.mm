@@ -1498,7 +1498,7 @@ typedef enum
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)
         {
-            [detailsObject addObjectIfWikiOnline:targetPoint.targetObj];
+            [detailsObject copyDescriptionIfNeeded:targetPoint.targetObj];
             targetPoint.type = OATargetBaseDetailsObject;
             targetPoint.targetObj = detailsObject;
         }

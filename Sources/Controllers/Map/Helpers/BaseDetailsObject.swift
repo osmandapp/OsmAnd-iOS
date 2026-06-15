@@ -114,21 +114,24 @@ final class BaseDetailsObject: NSObject {
         return true
     }
 
-    func addObjectIfWikiOnline(_ object: Any) {
+    func copyDescriptionIfNeeded(_ object: Any) {
+        guard OAAppSettings().wikiDataSourceType.get() == .online else { return }
         guard isSupportedObjectType(object) else { return }
+        guard syntheticAmenity.getAdditionalInfo(DESCRIPTION_TAG) == nil else { return }
         
         if let detailsObject = object as? BaseDetailsObject {
-            for obj in detailsObject.objects {
-                addObjectIfWikiOnline(obj)
+            for obj in detailsObject.objects where copyDescription(obj) {
+                break
             }
-        } else if isWikiOnline(object) {
-            addObject(object)
+        } else {
+            _ = copyDescription(object)
         }
     }
     
-    private func isWikiOnline(_ object: Any) -> Bool {
-        if let amenity = object as? OAPOI {
-            return amenity.getAdditionalInfo(IS_WIKI_ONLINE_TAG) != nil
+    private func copyDescription(_ object: Any) -> Bool {
+        if let poi = object as? OAPOI, let description = poi.getAdditionalInfo(DESCRIPTION_TAG), !description.isEmpty {
+            syntheticAmenity.copyAdditionalInfo(withMap: [DESCRIPTION_TAG: description], overwrite: false)
+            return true
         }
         return false
     }

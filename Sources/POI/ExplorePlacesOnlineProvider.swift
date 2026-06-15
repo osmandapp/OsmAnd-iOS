@@ -252,7 +252,6 @@ final class ExplorePlacesOnlineProvider: ExplorePlacesProvider {
         
         if let desc = properties.wikiDesc {
             amenity.setAdditionalInfo(DESCRIPTION_TAG, value: desc)
-            amenity.setAdditionalInfo(IS_WIKI_ONLINE_TAG, value: "true")
         }
         
         if let labelsJson = properties.labelsJson, labelsJson.length > 2 {

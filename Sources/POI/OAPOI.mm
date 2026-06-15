@@ -76,7 +76,6 @@ NSString * const ROUTE_MEMBERS_IDS = @"route_members_ids";
 NSString * const TRAVEL_EVO_TAG = @"travel_elo";
 NSString * const SHORT_DESCRIPTION_TAG = @"short_description";
 NSString * const WIKI_PHOTO = @"wiki_photo";
-NSString * const IS_WIKI_ONLINE_TAG = @"is_wiki_online";
 
 static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     COLOR_NAME_EXTENSION_KEY,

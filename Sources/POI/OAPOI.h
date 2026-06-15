@@ -71,7 +71,6 @@ extern NSString * const ALT_NAME_WITH_LANG_PREFIX;
 extern NSString * const WIKI_PHOTO;
 extern NSString * const WIKIDATA_TAG;
 extern NSString * const WIKIMEDIA_COMMONS_TAG;
-extern NSString * const IS_WIKI_ONLINE_TAG;
 
 static int DEFAULT_ELO = 900;
 

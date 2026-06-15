@@ -115,7 +115,7 @@ final class TrackStubPreviewRenderer: NSObject {
             }
         }
 
-        if (points.count - 1) % step != 0, let last = points.last {
+        if !(points.count - 1).isMultiple(of: step), let last = points.last {
             path.addLine(to: mapPoint(lat: last.lat, lon: last.lon, bounds: bounds, size: size, padding: padding))
         }
 

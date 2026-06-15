@@ -80,10 +80,14 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     private var isSavingTracks = false
     private var lastSavedPath: String?
     private var successfulSaveCount = 0
+    private lazy var allPointsCount: Int = {
+        gpxFile.getPointsList().count
+    }()
 
     private var folderNames: [String] = []
     private var selectedFolderIndex = 0
     private let foldersScrollState = OACollectionViewCellState()
+    private var foldersSizes: [NSNumber] = []
 
     private let trackPreviewManager = TrackPreviewManager()
     private var collectTracksTask: CollectTracksTask?
@@ -299,7 +303,6 @@ private extension ImportTracksViewController {
         waypointsRow.cellType = OAValueTableViewCell.reuseIdentifier
         waypointsRow.key = RowKey.trackWaypoints.rawValue
         waypointsRow.title = localizedString("shared_string_waypoints")
-        waypointsRow.descr = "\(item.selectedPoints.count)/\(gpxFile.getPointsList().count)"
         waypointsRow.icon = .icCustomFolder
         waypointsRow.iconTintColor = .iconColorActive
         waypointsRow.setObj(item, forKey: RowObjKey.importTrackItem)
@@ -322,7 +325,7 @@ private extension ImportTracksViewController {
         chipsRow.cellType = FolderCardsCell.reuseIdentifier
         chipsRow.key = RowKey.folderChips.rawValue
         chipsRow.setObj(folderNames, forKey: RowObjKey.foldersValues)
-        chipsRow.setObj(folderTrackCounts(), forKey: RowObjKey.foldersSizes)
+        chipsRow.setObj(foldersSizes, forKey: RowObjKey.foldersSizes)
         chipsRow.setObj(selectedFolderIndex, forKey: RowObjKey.foldersSelectedValue)
         chipsRow.setObj(localizedString("shared_string_add"), forKey: RowObjKey.foldersAddButtonTitle)
     }
@@ -397,7 +400,8 @@ private extension ImportTracksViewController {
         cell.setCustomLeftSeparatorInset(true)
         hideSeparator(for: cell, true)
 
-        if item.key == RowKey.trackWaypoints.rawValue {
+        if item.key == RowKey.trackWaypoints.rawValue, let trackItem = item.obj(forKey: RowObjKey.importTrackItem) as? ImportTrackItem {
+            cell.valueLabel.text = "\(trackItem.selectedPoints.count)/\(allPointsCount)"
             cell.leftIconView.image = item.icon
             cell.leftIconView.tintColor = item.iconTintColor
         }
@@ -686,6 +690,7 @@ private extension ImportTracksViewController {
         if !FileManager.default.fileExists(atPath: path) {
             do {
                 try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true)
+                foldersSizes.insert(NSNumber(0), at: 0)
                 folderNames.insert(name, at: 0)
             } catch {
                 debugPrint(error)
@@ -859,11 +864,21 @@ extension ImportTracksViewController: CollectTracksListener {
         trackItems = items
         selectedTracks = Set(items)
 
-        for item in trackItems {
-            guard let analysis = item.analysis else { continue }
-            item.statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false) as? [OAGPXTableCellData] ?? []
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.foldersSizes = self.folderTrackCounts()
+            
+            for item in self.trackItems {
+                guard let analysis = item.analysis else { continue }
+                item.statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false) as? [OAGPXTableCellData] ?? []
+            }
+            
+            DispatchQueue.main.async {
+                self.postCollectTracks()
+            }
         }
-
+    }
+    
+    private func postCollectTracks() {
         updateProgress()
         updateNavbar()
         updateButtonsState()
@@ -871,7 +886,7 @@ extension ImportTracksViewController: CollectTracksListener {
         tableView.reloadData()
 
         let params = MapDrawParams.importTrackPreviewParams(size: CGSize(width: tableView.bounds.width - 64, height: 96))
-        trackPreviewManager.startPreviews(for: items, params: params) { [weak self] item in
+        trackPreviewManager.startPreviews(for: trackItems, params: params) { [weak self] item in
             DispatchQueue.main.async {
                 self?.reloadPreviewRow(for: item)
             }
@@ -922,7 +937,6 @@ extension ImportTracksViewController: OAAddTrackFolderDelegate {
 extension ImportTracksViewController: SelectWaypointsDelegate {
     func onPointsSelected(_ trackItem: ImportTrackItem, selectedPoints: [WptPt]) {
         trackItem.selectedPoints = selectedPoints
-        generateData()
         tableView.reloadData()
     }
 }

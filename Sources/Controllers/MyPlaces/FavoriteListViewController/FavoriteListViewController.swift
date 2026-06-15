@@ -6,228 +6,78 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import CoreLocation
-import UniformTypeIdentifiers
-
-private enum ScreenMode {
-    case root
-    case folder(FavoriteFolderRow, previousTitle: String)
-}
-
-private enum FavoriteFolderSection: Hashable {
-    case pinned
-    case visible
-    case hidden
-
-    var title: String {
-        switch self {
-        case .pinned: localizedString("shared_string_pinned")
-        case .visible: localizedString("shared_string_visible")
-        case .hidden: localizedString("shared_string_hidden")
-        }
-    }
-}
-
-private enum FavoriteListSection: Hashable {
-    case sortHeader
-    case backupBanner
-    case folderSection(FavoriteFolderSection)
-    case content
-    case statsFooter
-    case emptyState
-}
-
-private enum FavoriteListItem: Hashable {
-    case sortHeader(FavoriteSortHeader)
-    case backupBanner
-    case header(FavoriteFolderSection)
-    case folder(FavoriteFolderRow)
-    case favorite(FavoritePointRow)
-    case statsFooter(FavoriteFolderStats)
-    case emptyState
-}
-
-private struct FavoriteSortHeader: Hashable {
-    let sortMode: FavoriteSortMode
-    let includesDistanceSortModes: Bool
-}
-
-private struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
-    private static let subtitleDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM"
-        return formatter
-    }()
-
-    let bridgeItem: OAFavoriteFolderBridgeItem
-
-    var title: String { bridgeItem.title }
-    
-    var isVisible: Bool { bridgeItem.isVisible }
-    
-    var isPinned: Bool { bridgeItem.isPinned }
-    
-    var lastModified: Date? { bridgeItem.lastModifiedDate }
-    
-    var subtitle: String {
-        let pointsText = "\(bridgeItem.subtreePointsCount) \(localizedString("shared_string_gpx_points").lowercased())"
-        guard let lastModified else { return pointsText + "." }
-        return String(format: localizedString("ltr_or_rtl_combine_via_comma"), Self.subtitleDateFormatter.string(from: lastModified), pointsText) + "."
-    }
-
-    var iconName: String {
-        isVisible ? "ic_custom_folder" : "ic_custom_folder_hidden_outlined"
-    }
-
-    var iconColor: UIColor {
-        isVisible ? (bridgeItem.color ?? .iconColorSelected) : .iconColorSecondary
-    }
-
-    var titleColor: UIColor {
-        isVisible ? .textColorPrimary : .textColorSecondary
-    }
-
-    var titleFont: UIFont {
-        guard !isVisible, let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withSymbolicTraits(.traitItalic) else { return .preferredFont(forTextStyle: .body) }
-        return UIFont(descriptor: descriptor, size: 0)
-    }
-
-    init(item: OAFavoriteFolderBridgeItem) {
-        bridgeItem = item
-    }
-}
-
-private struct FavoritePointRow: Hashable, FavoriteSortablePoint {
-    let bridgeItem: OAFavoritePointBridgeItem
-    
-    var title: String { bridgeItem.title }
-    
-    var distance: CLLocationDistance? { bridgeItem.distance?.doubleValue }
-    
-    var lastModified: Date? { bridgeItem.timestampDate }
-
-    var titleColor: UIColor {
-        bridgeItem.isVisible ? .textColorPrimary : .textColorSecondary
-    }
-
-    var titleFont: UIFont {
-        guard !bridgeItem.isVisible, let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withSymbolicTraits(.traitItalic) else { return .preferredFont(forTextStyle: .body) }
-        return UIFont(descriptor: descriptor, size: 0)
-    }
-
-    init(item: OAFavoritePointBridgeItem) {
-        bridgeItem = item
-    }
-}
-
-private struct FavoriteFolderStats: Hashable {
-    let foldersCount: Int
-    let pointsCount: Int
-    let fileSize: Int64
-
-    var text: String {
-        var parts: [String] = []
-        if foldersCount > 0 {
-            parts.append("\(localizedString("shared_string_folders").lowercased()) \(foldersCount)")
-        }
-
-        parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(pointsCount)")
-        parts.append("\(localizedString("shared_string_size").lowercased()) \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))")
-        let text = parts.joined(separator: ", ") + "."
-        return text.prefix(1).uppercased() + String(text.dropFirst())
-    }
-}
-
-private final class FavoriteListCell: UICollectionViewListCell {
-    private static let rowHeight: CGFloat = 68.0
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        attributes.frame.size.height = Self.rowHeight
-        return attributes
-    }
-}
-
 final class FavoriteListViewController: UIViewController {
-    private typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
-    private typealias CellRegistration<Item> = UICollectionView.CellRegistration<UICollectionViewListCell, Item>
-    private typealias RowCellRegistration<Item> = UICollectionView.CellRegistration<FavoriteListCell, Item>
+    typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
+    typealias CellRegistration<Item> = UICollectionView.CellRegistration<UICollectionViewListCell, Item>
+    typealias RowCellRegistration<Item> = UICollectionView.CellRegistration<FavoriteListCell, Item>
 
-    weak var myPlacesDelegate: MyPlacesDelegate?
+    static let imageSize: CGFloat = 30.0
+    static let favoriteIconSize: CGFloat = 36.0
+    static let sortHeaderHeight: CGFloat = 44.0
+    static let sortHeaderLeadingInset: CGFloat = 16.0
+    static let navigationTitleFontSize: CGFloat = 17.0
+    static let navigationTitleMaximumSize: CGFloat = 22.0
+    static let navigationSubtitleFontSize: CGFloat = 12.0
+    static let navigationSubtitleMaximumSize: CGFloat = 18.0
+    static let statsFooterInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 20.0, bottom: 12.0, trailing: 20.0)
+    static let wasClosedFreeBackupFavoritesBannerKey = "wasClosedFreeBackupFavoritesBanner"
 
-    private static let imageSize: CGFloat = 30.0
-    private static let favoriteIconSize: CGFloat = 36.0
-    private static let sortHeaderHeight: CGFloat = 44.0
-    private static let sortHeaderLeadingInset: CGFloat = 16.0
-    private static let navigationTitleFontSize: CGFloat = 17.0
-    private static let navigationTitleMaximumSize: CGFloat = 22.0
-    private static let navigationSubtitleFontSize: CGFloat = 12.0
-    private static let navigationSubtitleMaximumSize: CGFloat = 18.0
-    private static let statsFooterInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 20.0, bottom: 12.0, trailing: 20.0)
-    private static let wasClosedFreeBackupFavoritesBannerKey = "wasClosedFreeBackupFavoritesBanner"
-
-    private let screenMode: ScreenMode
-    private let settings = OAAppSettings.sharedManager()
-    private var layoutSections: [FavoriteListSection] = []
-    private let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    private var groupController: OAEditGroupViewController?
-    private var colorController: OAEditColorViewController?
-    private var favoriteItemsToMove: [Any]?
-    private var favoriteGroupAppearanceGroupName: String?
-    private var favoriteGroupAppearanceEditor: OAFavoriteGroupEditorViewController?
-    private var addToTrackGroupName: String?
-    private var addToTrackFavoriteItems: [Any]?
-    private var pointToShare: OAFavoritePointBridgeItem?
-    private var searchText = ""
-    private var isSearchActive = false
-    private var isSelectionModeInSearch = false
-    private var lastDistanceDirectionUpdate: TimeInterval = 0.0
-    private var isContextMenuVisible = false
-    private var shouldReloadCollectionView = false
-    private var locationUpdateObserver: OAAutoObserverProxy?
-    private var headingUpdateObserver: OAAutoObserverProxy?
-    private var isSearchResultsMode: Bool {
+    let screenMode: ScreenMode
+    let settings = OAAppSettings.sharedManager()
+    var layoutSections: [FavoriteListSection] = []
+    let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
+    var groupController: OAEditGroupViewController?
+    var colorController: OAEditColorViewController?
+    var favoriteItemsToMove: [Any]?
+    var favoriteGroupAppearanceGroupName: String?
+    var favoriteGroupAppearanceEditor: OAFavoriteGroupEditorViewController?
+    var addToTrackGroupName: String?
+    var addToTrackFavoriteItems: [Any]?
+    var pointToShare: OAFavoritePointBridgeItem?
+    var searchText = ""
+    var isSearchActive = false
+    var isSelectionModeInSearch = false
+    var lastDistanceDirectionUpdate: TimeInterval = 0.0
+    var isContextMenuVisible = false
+    var shouldReloadCollectionView = false
+    var locationUpdateObserver: OAAutoObserverProxy?
+    var headingUpdateObserver: OAAutoObserverProxy?
+    var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
-    private var isAvailablePaymentBanner: Bool {
+    var isAvailablePaymentBanner: Bool {
         isRootFolder && !isSearchResultsMode && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
     }
-    private var isRootFolder: Bool {
+    var isRootFolder: Bool {
         guard case .root = screenMode else { return false }
         return true
     }
-    private var normalTitle: String {
+    var normalTitle: String {
         switch screenMode {
         case .root: localizedString("shared_string_favorites")
         case .folder(let folder, _): folder.title
         }
     }
-    private var normalSubtitle: String {
-        switch screenMode {
-        case .root: localizedString("shared_string_my_places")
-        case .folder(_, let previousTitle): previousTitle
-        }
-    }
-    private var parentGroupName: String? {
+    var parentGroupName: String? {
         guard case .folder(let folder, _) = screenMode, !folder.bridgeItem.groupName.isEmpty else { return nil }
         return folder.bridgeItem.groupName
     }
-    private var searchParentGroupName: String? {
+    var searchParentGroupName: String? {
         guard case .folder(let folder, _) = screenMode else { return nil }
         return folder.bridgeItem.groupName
     }
-    private var currentSortMode: FavoriteSortMode {
+    var currentSortMode: FavoriteSortMode {
         isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode()
     }
-    private var currentSortHeader: FavoriteSortHeader {
+    var currentSortHeader: FavoriteSortHeader {
         FavoriteSortHeader(sortMode: currentSortMode, includesDistanceSortModes: isSearchResultsMode || !isRootFolder)
     }
-    private var currentSortEntryId: String {
+    var currentSortEntryId: String {
         parentGroupName ?? ""
     }
 
-    private lazy var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
         collectionView.tintColor = .iconColorActive
@@ -238,100 +88,7 @@ final class FavoriteListViewController: UIViewController {
         collectionView.allowsMultipleSelectionDuringEditing = true
         return collectionView
     }()
-    private lazy var headerCellRegistration = CellRegistration<FavoriteFolderSection> { cell, _, section in
-        var content = cell.defaultContentConfiguration()
-        content.text = section.title
-        content.textProperties.color = .textColorPrimary
-        content.textProperties.font = .systemFont(ofSize: 20, weight: .semibold)
-        cell.contentConfiguration = content
-        let disclosureOptions = UICellAccessory.OutlineDisclosureOptions(style: .header)
-        cell.accessories = [.outlineDisclosure(options: disclosureOptions)]
-        cell.tintColor = .iconColorActive
-    }
-    private lazy var sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortHeader> { [weak self] cell, _, sortHeader in
-        cell.sortButton.setImage(sortHeader.sortMode.image, for: .normal)
-        cell.sortButton.menu = self?.makeSortMenu(includesDistanceSortModes: sortHeader.includesDistanceSortModes)
-    }
-    private lazy var backupBannerCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        guard let self, let banner = Bundle.main.loadNibNamed("FreeBackupBanner", owner: self)?.first as? FreeBackupBanner else { return }
-        banner.configure(bannerType: .favorite)
-        banner.didOsmAndCloudButtonAction = { [weak self] in
-            self?.navigationController?.pushViewController(OACloudIntroductionViewController(), animated: true)
-        }
-        banner.didCloseButtonAction = { [weak self] in
-            self?.closeFreeBackupBanner()
-        }
-        banner.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(banner)
-        let fittingWidth = cell.contentView.bounds.width > 0.0 ? cell.contentView.bounds.width : cell.bounds.width
-        NSLayoutConstraint.activate([banner.topAnchor.constraint(equalTo: cell.contentView.topAnchor), banner.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor), banner.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)])
-        NSLayoutConstraint.activate([banner.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor), banner.heightAnchor.constraint(equalToConstant: self.backupBannerHeight(banner, fittingWidth: fittingWidth))])
-    }
-    private lazy var folderCellRegistration = RowCellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
-        var content = cell.defaultContentConfiguration()
-        let iconName = folder.isPinned ? "ic_custom_folder_pin" : folder.iconName
-        content.image = UIImage.templateImageNamed(iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
-        content.imageProperties.tintColor = folder.iconColor
-        content.text = folder.title
-        content.textProperties.color = folder.titleColor
-        content.textProperties.font = folder.titleFont
-        content.secondaryText = folder.subtitle
-        content.secondaryTextProperties.color = .textColorSecondary
-        cell.contentConfiguration = content
-        cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
-        cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
-    }
-    private lazy var favoriteCellRegistration = RowCellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
-        var content = cell.defaultContentConfiguration()
-        content.image = OAUtilities.resize(favorite.bridgeItem.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
-        content.text = favorite.title
-        content.textProperties.numberOfLines = 2
-        content.textProperties.color = favorite.titleColor
-        content.textProperties.font = favorite.titleFont
-        content.secondaryAttributedText = self?.favoriteSecondaryAttributedText(for: favorite, includesGroupName: self?.isSearchResultsMode == true)
-        content.secondaryTextProperties.color = .textColorSecondary
-        content.secondaryTextProperties.numberOfLines = 1
-        cell.contentConfiguration = content
-        cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
-        cell.accessories = [.multiselect()]
-    }
-    private lazy var statsFooterCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, FavoriteFolderStats> { cell, _, stats in
-        cell.backgroundColor = .clear
-        cell.contentView.backgroundColor = .clear
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .footnote)
-        label.adjustsFontForContentSizeCategory = true
-        label.textColor = .textColorSecondary
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.text = stats.text
-        label.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(label)
-        NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: Self.statsFooterInsets.top), label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.statsFooterInsets.leading), label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.statsFooterInsets.trailing), label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -Self.statsFooterInsets.bottom)])
-    }
-    private lazy var emptyStateCellRegistration = UICollectionView.CellRegistration<EmptyStateCollectionViewCell, Void>(cellNib: UINib(nibName: EmptyStateCollectionViewCell.reuseIdentifier, bundle: nil)) { [weak self] cell, _, _ in
-        guard let self else { return }
-        cell.button.removeTarget(nil, action: nil, for: .touchUpInside)
-        if self.isSearchResultsMode {
-            cell.configure(image: UIImage.templateImageNamed("ic_custom_search") ?? .icCustomFavorites,
-                           title: localizedString("no_search_results"),
-                           description: localizedString("favorite_search_empty_state_description"))
-            cell.button.setTitle(localizedString("shared_string_clear_all"), for: .normal)
-            cell.button.addTarget(self, action: #selector(self.clearSearchButtonClicked), for: .touchUpInside)
-            return
-        }
-
-        let isRootFolder = self.isRootFolder
-        cell.configure(image: isRootFolder ? .icCustomFavorites : .icCustomFolderOpen,
-                       title: localizedString(isRootFolder ? "empty_state_favourites" : "tracks_empty_folder"),
-                       description: localizedString(isRootFolder ? "empty_state_favourites_desc" : "tracks_empty_folder_description"))
-        cell.button.setTitle(localizedString("shared_string_import"), for: .normal)
-        cell.button.addTarget(self, action: #selector(self.importButtonClicked), for: .touchUpInside)
-    }
-
-    private lazy var subfolderSearchController: UISearchController = {
+    lazy var subfolderSearchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
@@ -339,155 +96,22 @@ final class FavoriteListViewController: UIViewController {
         searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
         return searchController
     }()
-    private lazy var dataSource: DataSource = makeDataSource()
-
-    private func favoriteSecondaryAttributedText(for favorite: FavoritePointRow, includesGroupName: Bool) -> NSAttributedString {
-        let font = UIFont.systemFont(ofSize: 15)
-        let directionAttributes: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: UIColor.textColorDirectionActive
-        ]
-        let secondaryAttributes: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: UIColor.textColorSecondary
-        ]
-
-        let result = NSMutableAttributedString()
-        let date = favorite.lastModified.map { DateFormatter.detailsDateFormatter.string(from: $0) }
-        let groupName = favorite.bridgeItem.groupName.isEmpty ? localizedString("shared_string_favorites") : favorite.bridgeItem.groupName
-
-        if currentSortMode.isDateOriented {
-            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
-            appendFavoriteDistance(favorite,
-                                   to: result,
-                                   font: font,
-                                   directionAttributes: directionAttributes,
-                                   separatorAttributes: secondaryAttributes)
-            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
-        } else {
-            appendFavoriteDistance(favorite,
-                                   to: result,
-                                   font: font,
-                                   directionAttributes: directionAttributes,
-                                   separatorAttributes: secondaryAttributes)
-            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
-            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
+    lazy var dataSource: DataSource = makeDataSource()
+    
+    weak var myPlacesDelegate: MyPlacesDelegate?
+    
+    private var normalSubtitle: String {
+        switch screenMode {
+        case .root: localizedString("shared_string_my_places")
+        case .folder(_, let previousTitle): previousTitle
         }
-        if includesGroupName {
-            appendFavoriteSecondaryText(groupName, to: result, attributes: secondaryAttributes)
-        }
-
-        return result
-    }
-
-    private func appendFavoriteSecondaryText(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
-        guard let text, !text.isEmpty else { return }
-        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: attributes)
-        result.append(NSAttributedString(string: text, attributes: attributes))
-    }
-
-    private func appendFavoriteDistance(_ favorite: FavoritePointRow,
-                                        to result: NSMutableAttributedString,
-                                        font: UIFont,
-                                        directionAttributes: [NSAttributedString.Key: Any],
-                                        separatorAttributes: [NSAttributedString.Key: Any]) {
-        guard let distance = favorite.distance, let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) else { return }
-        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: separatorAttributes)
-        if let directionIcon = favoriteDirectionIcon(tintColor: .iconColorDirectionActive) {
-            let rotatedDirectionIcon = rotatedFavoriteDirectionIcon(directionIcon, radians: favorite.bridgeItem.direction)
-            let attachment = NSTextAttachment()
-            attachment.image = rotatedDirectionIcon
-            attachment.bounds = CGRect(x: 0.0,
-                                       y: (font.capHeight - rotatedDirectionIcon.size.height) / 2.0,
-                                       width: rotatedDirectionIcon.size.width,
-                                       height: rotatedDirectionIcon.size.height)
-            result.append(NSAttributedString(attachment: attachment))
-        }
-        result.append(NSAttributedString(string: formattedDistance, attributes: directionAttributes))
-    }
-
-    private func appendFavoriteSecondarySeparatorIfNeeded(to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
-        guard result.length > 0 else { return }
-        result.append(NSAttributedString(string: " • ", attributes: attributes))
-    }
-
-    private func favoriteDirectionIcon(tintColor: UIColor) -> UIImage? {
-        let size = UIFontMetrics.default.scaledValue(for: 18.0)
-        return OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(tintColor)
-    }
-
-    private func rotatedFavoriteDirectionIcon(_ image: UIImage, radians: CGFloat) -> UIImage {
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = image.scale
-        format.opaque = false
-        let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
-        return renderer.image { context in
-            let rect = CGRect(origin: CGPoint(x: -image.size.width / 2.0, y: -image.size.height / 2.0),
-                              size: image.size)
-            context.cgContext.translateBy(x: image.size.width / 2.0, y: image.size.height / 2.0)
-            context.cgContext.rotate(by: radians)
-            image.draw(in: rect)
-        }
-    }
-
-    private func registerDistanceAndDirectionObservers() {
-        unregisterDistanceAndDirectionObservers()
-        let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
-        let updateDistanceAndDirectionSelector = #selector(updateDistanceAndDirection as () -> Void)
-        locationUpdateObserver = OAAutoObserverProxy(self,
-                                                     withHandler: updateDistanceAndDirectionSelector,
-                                                     andObserve: app.locationServices.updateLocationObserver)
-        headingUpdateObserver = OAAutoObserverProxy(self,
-                                                    withHandler: updateDistanceAndDirectionSelector,
-                                                    andObserve: app.locationServices.updateHeadingObserver)
-    }
-
-    private func unregisterDistanceAndDirectionObservers() {
-        locationUpdateObserver?.detach()
-        locationUpdateObserver = nil
-        headingUpdateObserver?.detach()
-        headingUpdateObserver = nil
-    }
-
-    @objc private func updateDistanceAndDirection() {
-        updateDistanceAndDirection(false)
-    }
-
-    private func updateDistanceAndDirection(_ forceUpdate: Bool) {
-        guard Thread.isMainThread else {
-            DispatchQueue.main.async { [weak self] in
-                self?.updateDistanceAndDirection(forceUpdate)
-            }
-            return
-        }
-
-        if isContextMenuVisible {
-            shouldReloadCollectionView = true
-            return
-        }
-
-        guard !collectionView.isEditing
-                && OsmAndApp.swiftInstance().locationServices.lastKnownLocation != nil
-                && dataSource.snapshot().itemIdentifiers.contains(where: { item in
-                    if case .favorite = item {
-                        return true
-                    }
-                    return false
-                }) else {
-            return
-        }
-
-        let currentTime = Date.now.timeIntervalSince1970
-        guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
-        lastDistanceDirectionUpdate = currentTime
-        applySnapshot(animatingDifferences: false)
     }
     
     convenience init(frame: CGRect) {
         self.init(frame: frame, screenMode: .root)
     }
 
-    private init(frame: CGRect, screenMode: ScreenMode) {
+    init(frame: CGRect, screenMode: ScreenMode) {
         self.screenMode = screenMode
         super.init(nibName: nil, bundle: nil)
         view.frame = frame
@@ -497,13 +121,7 @@ final class FavoriteListViewController: UIViewController {
         screenMode = .root
         super.init(coder: coder)
     }
-
-    deinit {
-        unregisterDistanceAndDirectionObservers()
-        NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
-        NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
-    }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .viewBg
@@ -533,6 +151,115 @@ final class FavoriteListViewController: UIViewController {
 
         definesPresentationContext = false
         super.viewWillDisappear(animated)
+    }
+    
+    func updateDistanceAndDirection(_ forceUpdate: Bool) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.updateDistanceAndDirection(forceUpdate)
+            }
+            return
+        }
+
+        if isContextMenuVisible {
+            shouldReloadCollectionView = true
+            return
+        }
+
+        guard !collectionView.isEditing
+                && OsmAndApp.swiftInstance().locationServices.lastKnownLocation != nil
+                && dataSource.snapshot().itemIdentifiers.contains(where: { item in
+                    if case .favorite = item {
+                        return true
+                    }
+                    return false
+                }) else {
+            return
+        }
+
+        let currentTime = Date.now.timeIntervalSince1970
+        guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
+        lastDistanceDirectionUpdate = currentTime
+        applySnapshot(animatingDifferences: false)
+    }
+    
+    func listCellBackgroundConfiguration() -> UIBackgroundConfiguration {
+        var configuration = UIBackgroundConfiguration.listGroupedCell()
+        configuration.backgroundColor = .groupBg
+        return configuration
+    }
+
+    func configureNavigation() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        if !isRootFolder {
+            let appearance = UINavigationBarAppearance()
+            appearance.backgroundColor = .viewBg
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+            navigationController?.navigationBar.tintColor = .iconColorActive
+        }
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        configureNavigationButtons()
+        configureSearchVisibility()
+        updateNavigationBarTitle()
+        updateSegmentedControlVisibility()
+    }
+    
+    func configureToolbar() {
+        guard !isSearchActive || collectionView.isEditing else {
+            if hasSearchResults() {
+                configureSearchToolbar()
+            }
+            return
+        }
+
+        let isSelected = collectionView.indexPathsForSelectedItems?.isEmpty == false
+        let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let shareButton = UIBarButtonItem(image: .icCustomExportOutlined, style: .plain, target: self, action: #selector(shareButtonClicked))
+        let moveButton = UIBarButtonItem(image: .icCustomFolderMoveOutlined, style: .plain, target: self, action: #selector(moveButtonClicked))
+        let actionsButton = UIBarButtonItem(image: .icCustomOverflowMenuStroke, style: .plain, target: nil, action: nil)
+        actionsButton.menu = makeAdditionalContextMenu()
+        let deleteButton = UIBarButtonItem(image: .icCustomTrashOutlined, style: .plain, target: self, action: #selector(deleteButtonClicked))
+        deleteButton.tintColor = .iconColorDisruptive
+        let items = [shareButton, fixedSpacer, moveButton, actionsFixedSpacer, actionsButton, flexibleSpacer, deleteButton]
+        items.forEach { $0.isEnabled = isSelected }
+        if isRootFolder {
+            myPlacesDelegate?.updateToolbar?(with: items)
+        } else {
+            toolbarItems = items
+        }
+    }
+    
+    func updateSelectionUI() {
+        updateNavigationBarTitle()
+        configureNavigationButtons()
+        configureToolbar()
+    }
+    
+    func updateSegmentedControlVisibility() {
+        myPlacesDelegate?.updateSegmentedControlVisibility(isRootFolder && !collectionView.isEditing && !isSearchResultsMode)
+    }
+    
+    private func registerDistanceAndDirectionObservers() {
+        unregisterDistanceAndDirectionObservers()
+        let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
+        let updateDistanceAndDirectionSelector = #selector(updateDistanceAndDirection as () -> Void)
+        locationUpdateObserver = OAAutoObserverProxy(self,
+                                                     withHandler: updateDistanceAndDirectionSelector,
+                                                     andObserve: app.locationServices.updateLocationObserver)
+        headingUpdateObserver = OAAutoObserverProxy(self,
+                                                    withHandler: updateDistanceAndDirectionSelector,
+                                                    andObserve: app.locationServices.updateHeadingObserver)
+    }
+
+    private func unregisterDistanceAndDirectionObservers() {
+        locationUpdateObserver?.detach()
+        locationUpdateObserver = nil
+        headingUpdateObserver?.detach()
+        headingUpdateObserver = nil
     }
 
     private func configureCollectionView() {
@@ -576,30 +303,7 @@ final class FavoriteListViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
         return NSCollectionLayoutSection(group: group)
     }
-
-    private func listCellBackgroundConfiguration() -> UIBackgroundConfiguration {
-        var configuration = UIBackgroundConfiguration.listGroupedCell()
-        configuration.backgroundColor = .groupBg
-        return configuration
-    }
-
-    private func configureNavigation() {
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        if !isRootFolder {
-            let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = .viewBg
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            navigationController?.navigationBar.tintColor = .iconColorActive
-        }
-
-        navigationController?.navigationBar.prefersLargeTitles = false
-        configureNavigationButtons()
-        configureSearchVisibility()
-        updateNavigationBarTitle()
-        updateSegmentedControlVisibility()
-    }
-
+    
     private func configureNavigationButtons() {
         let targetNavigationItem = isRootFolder ? navigationController?.navigationBar.topItem : navigationItem
         if collectionView.isEditing {
@@ -643,34 +347,7 @@ final class FavoriteListViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = collectionView.isEditing ? nil : subfolderSearchController
     }
-
-    private func configureToolbar() {
-        guard !isSearchActive || collectionView.isEditing else {
-            if hasSearchResults() {
-                configureSearchToolbar()
-            }
-            return
-        }
-
-        let isSelected = collectionView.indexPathsForSelectedItems?.isEmpty == false
-        let fixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        let actionsFixedSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let shareButton = UIBarButtonItem(image: .icCustomExportOutlined, style: .plain, target: self, action: #selector(shareButtonClicked))
-        let moveButton = UIBarButtonItem(image: .icCustomFolderMoveOutlined, style: .plain, target: self, action: #selector(moveButtonClicked))
-        let actionsButton = UIBarButtonItem(image: .icCustomOverflowMenuStroke, style: .plain, target: nil, action: nil)
-        actionsButton.menu = makeAdditionalContextMenu()
-        let deleteButton = UIBarButtonItem(image: .icCustomTrashOutlined, style: .plain, target: self, action: #selector(deleteButtonClicked))
-        deleteButton.tintColor = .iconColorDisruptive
-        let items = [shareButton, fixedSpacer, moveButton, actionsFixedSpacer, actionsButton, flexibleSpacer, deleteButton]
-        items.forEach { $0.isEnabled = isSelected }
-        if isRootFolder {
-            myPlacesDelegate?.updateToolbar?(with: items)
-        } else {
-            toolbarItems = items
-        }
-    }
-
+    
     private func configureSearchToolbar() {
         let selectButton = UIBarButtonItem(title: localizedString("shared_string_select"), style: .plain, target: self, action: #selector(searchSelectButtonPressed))
         selectButton.accessibilityLabel = localizedString("shared_string_select")
@@ -681,13 +358,7 @@ final class FavoriteListViewController: UIViewController {
             toolbarItems = items
         }
     }
-
-    private func updateSelectionUI() {
-        updateNavigationBarTitle()
-        configureNavigationButtons()
-        configureToolbar()
-    }
-
+    
     private func updateNavigationBarTitle() {
         if collectionView.isEditing {
             let selectedItems = bridgeItems(for: collectionView.indexPathsForSelectedItems ?? [])
@@ -713,1249 +384,11 @@ final class FavoriteListViewController: UIViewController {
             navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
         }
     }
-
-    private func updateSegmentedControlVisibility() {
-        myPlacesDelegate?.updateSegmentedControlVisibility(isRootFolder && !collectionView.isEditing && !isSearchResultsMode)
-    }
-
-    private func favoriteSortMode(entryId: String? = nil) -> FavoriteSortMode {
-        let sortModes = settings.getFavoriteSortModes()
-        guard let sortModeTitle = sortModes[entryId ?? currentSortEntryId] else { return FavoriteSortModeHelper.defaultSortMode() }
-        return FavoriteSortMode.byTitle(sortModeTitle)
-    }
-
-    private func searchFavoriteSortMode() -> FavoriteSortMode {
-        let sortModeTitle = settings.searchFavoriteSortMode.get()
-        return FavoriteSortMode.byTitle(sortModeTitle)
-    }
-
-    private func setFavoriteSortMode(_ sortMode: FavoriteSortMode) {
-        if isSearchResultsMode {
-            settings.searchFavoriteSortMode.set(sortMode.title)
-        } else {
-            var sortModes = settings.getFavoriteSortModes()
-            sortModes[currentSortEntryId] = sortMode.title
-            settings.saveFavoriteSortModes(sortModes)
-        }
-
-        applySnapshot(animatingDifferences: false)
-    }
-
-    private func clearFavoriteSortModes(forGroupNames groupNames: [String]) {
-        var sortModes = settings.getFavoriteSortModes()
-        let keysToRemove = sortModes.keys.filter { key in
-            groupNames.contains { groupName in
-                isFavoriteSortModeKey(key, insideOrEqualTo: groupName)
-            }
-        }
-
-        guard !keysToRemove.isEmpty else { return }
-        keysToRemove.forEach { sortModes.removeValue(forKey: $0) }
-        settings.saveFavoriteSortModes(sortModes)
-    }
-
-    private func renameFavoriteSortModeKeys(from oldGroupName: String, to newGroupName: String, existingGroupNames: Set<String>? = nil) {
-        guard !oldGroupName.isEmpty, oldGroupName != newGroupName else { return }
-        let groupNames = existingGroupNames ?? Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
-        guard !groupNames.contains(oldGroupName), groupNames.contains(newGroupName) else { return }
-        var sortModes = settings.getFavoriteSortModes()
-        let keysToRename = sortModes.keys.filter { isFavoriteSortModeKey($0, insideOrEqualTo: oldGroupName) }
-        guard !keysToRename.isEmpty else { return }
-        keysToRename.forEach { key in
-            if let value = sortModes.removeValue(forKey: key) {
-                sortModes[newGroupName + String(key.dropFirst(oldGroupName.count))] = value
-            }
-        }
-        
-        settings.saveFavoriteSortModes(sortModes)
-    }
-
-    private func updateFavoriteSortModeKeysAfterMove(_ favoriteItems: [Any], toGroupName targetGroupName: String) {
-        let groupNames = Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
-        favoriteItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }.forEach { folder in
-            let oldGroupName = folder.groupName
-            let folderName = oldGroupName.split(separator: "/").last.map(String.init) ?? oldGroupName
-            let newGroupName = targetGroupName.isEmpty ? folderName : "\(targetGroupName)/\(folderName)"
-            renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName, existingGroupNames: groupNames)
-        }
-    }
-
-    private func createFavoriteMoveTargetGroupIfNeeded(_ groupName: String, favoriteItems: [Any]) {
-        let folders = favoriteItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }
-        guard !folders.isEmpty, !folders.contains(where: { isFavoriteSortModeKey(groupName, insideOrEqualTo: $0.groupName) }) else { return }
-        var existingGroupNames = Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
-        var parentGroupName = ""
-        for folderName in groupName.split(separator: "/").map(String.init) {
-            let newGroupName = parentGroupName.isEmpty ? folderName : "\(parentGroupName)/\(folderName)"
-            if !existingGroupNames.contains(newGroupName), OAFavoritesSwiftHelper.addFavoriteGroup(folderName, parentGroupName: parentGroupName.isEmpty ? nil : parentGroupName, iconName: nil, color: nil, backgroundIconName: nil) {
-                existingGroupNames.insert(newGroupName)
-            }
-            parentGroupName = newGroupName
-        }
-    }
-
-    private func isFavoriteSortModeKey(_ key: String, insideOrEqualTo groupName: String) -> Bool {
-        key == groupName || (!groupName.isEmpty && key.hasPrefix(groupName + "/"))
-    }
-
-    private func makeSortMenu(includesDistanceSortModes: Bool) -> UIMenu {
-        let modes: [FavoriteSortMode] = includesDistanceSortModes ? FavoriteSortMode.allCases : [.lastModified, .nameAZ, .nameZA, .newestDateFirst, .oldestDateFirst]
-        let groups: [[FavoriteSortMode]] = [[.lastModified], [.nameAZ, .nameZA], [.newestDateFirst, .oldestDateFirst], [.nearest, .farthest]]
-        let sections = groups.compactMap { group -> UIMenu? in
-            let actions = group.filter { modes.contains($0) }.map { makeSortAction(for: $0) }
-            return actions.isEmpty ? nil : UIMenu(options: .displayInline, children: actions)
-        }
-
-        return UIMenu(title: "", children: sections)
-    }
-
-    private func makeSortAction(for sortMode: FavoriteSortMode) -> UIAction {
-        UIAction(title: sortMode.title, image: sortMode.image, state: currentSortMode == sortMode ? .on : .off) { [weak self] _ in
-            self?.setFavoriteSortMode(sortMode)
-        }
-    }
-
-    private func makeDataSource() -> DataSource {
-        let sortHeaderCellRegistration = sortHeaderCellRegistration
-        let backupBannerCellRegistration = backupBannerCellRegistration
-        let folderCellRegistration = folderCellRegistration
-        let favoriteCellRegistration = favoriteCellRegistration
-        let headerCellRegistration = headerCellRegistration
-        let statsFooterCellRegistration = statsFooterCellRegistration
-        let emptyStateCellRegistration = emptyStateCellRegistration
-        return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
-            switch item {
-            case .sortHeader(let sortHeader):
-                return collectionView.dequeueConfiguredReusableCell(using: sortHeaderCellRegistration, for: indexPath, item: sortHeader)
-            case .backupBanner:
-                return collectionView.dequeueConfiguredReusableCell(using: backupBannerCellRegistration, for: indexPath, item: item)
-            case .header(let section):
-                return collectionView.dequeueConfiguredReusableCell(using: headerCellRegistration, for: indexPath, item: section)
-            case .folder(let folder):
-                return collectionView.dequeueConfiguredReusableCell(using: folderCellRegistration, for: indexPath, item: folder)
-            case .favorite(let favorite):
-                return collectionView.dequeueConfiguredReusableCell(using: favoriteCellRegistration, for: indexPath, item: favorite)
-            case .statsFooter(let stats):
-                return collectionView.dequeueConfiguredReusableCell(using: statsFooterCellRegistration, for: indexPath, item: stats)
-            case .emptyState:
-                return collectionView.dequeueConfiguredReusableCell(using: emptyStateCellRegistration, for: indexPath, item: ())
-            }
-        }
-    }
-
-    private func applySnapshot(animatingDifferences: Bool = false) {
-        switch screenMode {
-        case .root:
-            applyRootSnapshot(animatingDifferences: animatingDifferences)
-        case .folder(let folder, _):
-            applyFolderSnapshot(folder: folder, animatingDifferences: animatingDifferences)
-        }
-    }
-
-    private func applyRootSnapshot(animatingDifferences: Bool) {
-        let allFolders = favoriteFolders()
-        if isSearchResultsMode {
-            applySearchSnapshot(allFolders: allFolders, parentGroupName: nil, animatingDifferences: animatingDifferences)
-            return
-        }
-
-        var snapshot = Snapshot()
-        if allFolders.isEmpty {
-            layoutSections = []
-            collectionView.collectionViewLayout.invalidateLayout()
-            snapshot.appendSections([.emptyState])
-            snapshot.appendItems([.emptyState])
-            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-            return
-        }
-        
-        let foldersBySection = favoriteFoldersBySection(folders: allFolders).mapValues { FavoriteSortModeHelper.sortFoldersWithMode($0, mode: currentSortMode) }
-        let folderSections = rootSections(foldersBySection: foldersBySection)
-        let isPaymentBannerVisible = isAvailablePaymentBanner
-        let stats = folderStats(allFolders: allFolders, currentGroupName: nil)
-        var sections: [FavoriteListSection] = [.sortHeader]
-        if isPaymentBannerVisible {
-            sections.append(.backupBanner)
-        }
-
-        sections.append(contentsOf: folderSections.map { FavoriteListSection.folderSection($0) })
-        if stats != nil {
-            sections.append(.statsFooter)
-        }
-
-        layoutSections = sections
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(sections)
-        snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
-        if isPaymentBannerVisible {
-            snapshot.appendItems([.backupBanner], toSection: .backupBanner)
-        }
-
-        if let stats {
-            snapshot.appendItems([.statsFooter(stats)], toSection: .statsFooter)
-        }
-
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-        folderSections.forEach { section in
-            let headerItem = FavoriteListItem.header(section)
-            let folderItems = (foldersBySection[section] ?? []).map(FavoriteListItem.folder)
-            var sectionSnapshot = NSDiffableDataSourceSectionSnapshot<FavoriteListItem>()
-            sectionSnapshot.append([headerItem])
-            sectionSnapshot.append(folderItems, to: headerItem)
-            sectionSnapshot.expand([headerItem])
-            dataSource.apply(sectionSnapshot, to: .folderSection(section), animatingDifferences: animatingDifferences)
-        }
-    }
-
-    private func applyFolderSnapshot(folder: FavoriteFolderRow, animatingDifferences: Bool) {
-        let allFolders = favoriteFolders()
-        if isSearchResultsMode {
-            applySearchSnapshot(allFolders: allFolders, parentGroupName: folder.bridgeItem.groupName, animatingDifferences: animatingDifferences)
-            return
-        }
-
-        let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
-        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesSwiftHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
-        var snapshot = Snapshot()
-        if favorites.isEmpty && folders.isEmpty {
-            layoutSections = []
-            collectionView.collectionViewLayout.invalidateLayout()
-            snapshot.appendSections([.emptyState])
-            snapshot.appendItems([.emptyState])
-            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-            return
-        }
-        let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
-        layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
-        snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
-        snapshot.appendItems(folders.map(FavoriteListItem.folder), toSection: .content)
-        snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
-        if let stats {
-            snapshot.appendItems([.statsFooter(stats)], toSection: .statsFooter)
-        }
-
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-    }
-
-    private func applySearchSnapshot(allFolders: [FavoriteFolderRow], parentGroupName: String?, animatingDifferences: Bool) {
-        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(searchFavoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName), mode: currentSortMode)
-        var snapshot = Snapshot()
-        if favorites.isEmpty {
-            layoutSections = []
-            collectionView.collectionViewLayout.invalidateLayout()
-            snapshot.appendSections([.emptyState])
-            snapshot.appendItems([.emptyState])
-            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-            return
-        }
-
-        layoutSections = [.sortHeader, .content]
-        collectionView.collectionViewLayout.invalidateLayout()
-        snapshot.appendSections(layoutSections)
-        snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
-        snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-    }
-
-    private func favoriteFoldersBySection(folders allFolders: [FavoriteFolderRow]) -> [FavoriteFolderSection: [FavoriteFolderRow]] {
-        let folders = directFavoriteFolders(allFolders, parentGroupName: nil).filter { matchesSearch($0.title) }
-        return [.pinned: folders.filter { $0.isPinned }, .visible: folders.filter { $0.isVisible && !$0.isPinned }, .hidden: folders.filter { !$0.isVisible && !$0.isPinned }]
-    }
-
-    private func rootSections(foldersBySection: [FavoriteFolderSection: [FavoriteFolderRow]]) -> [FavoriteFolderSection] {
-        var sections: [FavoriteFolderSection] = []
-        if !(foldersBySection[.pinned] ?? []).isEmpty {
-            sections.append(.pinned)
-        }
-
-        if !isSearchResultsMode || !(foldersBySection[.visible] ?? []).isEmpty {
-            sections.append(.visible)
-        }
-
-        if !(foldersBySection[.hidden] ?? []).isEmpty {
-            sections.append(.hidden)
-        }
-
-        return sections
-    }
-
-    private func backupBannerHeight(_ banner: FreeBackupBanner, fittingWidth: CGFloat) -> CGFloat {
-        let fallbackWidth = collectionView.bounds.width - collectionView.layoutMargins.left - collectionView.layoutMargins.right
-        let bannerWidth = fittingWidth > 0.0 ? fittingWidth : fallbackWidth
-        let textWidth = max(0.0, bannerWidth - CGFloat(banner.leadingTrailingOffset))
-        let titleHeight = OAUtilities.calculateTextBounds(banner.titleLabel.text ?? "", width: textWidth, font: banner.titleLabel.font).height
-        let descriptionHeight = OAUtilities.calculateTextBounds(banner.descriptionLabel.text ?? "", width: textWidth, font: banner.descriptionLabel.font).height
-        return ceil(CGFloat(banner.defaultFrameHeight) + titleHeight + descriptionHeight)
-    }
-
-    private func folderStats(allFolders: [FavoriteFolderRow], currentGroupName: String?) -> FavoriteFolderStats? {
-        guard !isSearchResultsMode else { return nil }
-        guard let currentGroupName else {
-            let pointsCount = allFolders.reduce(0) { $0 + $1.bridgeItem.pointsCount }
-            guard !allFolders.isEmpty || pointsCount > 0 else { return nil }
-            let fileSize = allFolders.reduce(Int64(0)) { $0 + $1.bridgeItem.fileSize }
-            return FavoriteFolderStats(foldersCount: allFolders.count, pointsCount: Int(pointsCount), fileSize: fileSize)
-        }
-
-        let nestedFolders = allFolders.filter { isNestedFolder($0.bridgeItem.groupName, in: currentGroupName) }
-        let currentFolder = allFolders.first { $0.bridgeItem.groupName == currentGroupName }
-        let pointsCount = currentFolder?.bridgeItem.subtreePointsCount ?? nestedFolders.reduce(0) { $0 + $1.bridgeItem.pointsCount }
-        guard !nestedFolders.isEmpty || pointsCount > 0 else { return nil }
-        let fileSize = (currentFolder?.bridgeItem.fileSize ?? 0) + nestedFolders.reduce(Int64(0)) { $0 + $1.bridgeItem.fileSize }
-        return FavoriteFolderStats(foldersCount: nestedFolders.count, pointsCount: Int(pointsCount), fileSize: fileSize)
-    }
-
-    private func closeFreeBackupBanner() {
-        UserDefaults.standard.set(true, forKey: Self.wasClosedFreeBackupFavoritesBannerKey)
-        applySnapshot(animatingDifferences: true)
-    }
-
-    private func directFavoriteFolders(_ folders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoriteFolderRow] {
-        folders.filter { isDirectFolder($0.bridgeItem.groupName, parentGroupName: parentGroupName) }
-    }
-
-    private func favoriteFolders() -> [FavoriteFolderRow] {
-        OAFavoritesSwiftHelper.favoriteFolders().map { FavoriteFolderRow(item: $0) }
-    }
-
-    private func isDirectFolder(_ groupName: String, parentGroupName: String?) -> Bool {
-        guard let parentGroupName else { return groupName.isEmpty || !groupName.contains("/") }
-        guard !parentGroupName.isEmpty else { return false }
-        guard groupName.hasPrefix(parentGroupName + "/") else { return false }
-        let childPath = groupName.dropFirst(parentGroupName.count + 1)
-        return !childPath.isEmpty && !childPath.contains("/")
-    }
-
-    private func isNestedFolder(_ groupName: String, in parentGroupName: String) -> Bool {
-        guard !parentGroupName.isEmpty else { return false }
-        return groupName.hasPrefix(parentGroupName + "/")
-    }
-
-    private func matchesSearch(_ text: String?) -> Bool {
-        guard !searchText.isEmpty else { return true }
-        return text?.range(of: searchText, options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive], locale: Locale.current) != nil
-    }
-
-    private func hasSearchResults() -> Bool {
-        !searchFavoritePointRows(allFolders: favoriteFolders(), parentGroupName: searchParentGroupName).isEmpty
-    }
-
-    private func shouldHideSearchToolbar() -> Bool {
-        !collectionView.isEditing && (!isSearchActive || !hasSearchResults())
-    }
-
-    private func searchFavoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        favoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName).filter { matchesSearch($0.title) }
-    }
-
-    private func clearSearchControllerText() {
-        if isRootFolder {
-            navigationController?.navigationBar.topItem?.searchController?.searchBar.text = ""
-        } else {
-            subfolderSearchController.searchBar.text = ""
-        }
-    }
-
-    private func selectableIndexPaths() -> [IndexPath] {
-        var indexPaths: [IndexPath] = []
-        for section in 0..<collectionView.numberOfSections {
-            for item in 0..<collectionView.numberOfItems(inSection: section) {
-                let indexPath = IndexPath(item: item, section: section)
-                guard let itemIdentifier = dataSource.itemIdentifier(for: indexPath) else { continue }
-                switch itemIdentifier {
-                case .folder, .favorite:
-                    indexPaths.append(indexPath)
-                default:
-                    continue
-                }
-            }
-        }
-
-        return indexPaths
-    }
-
-    private func areAllSelectableItemsSelected() -> Bool {
-        let selectableIndexPaths = selectableIndexPaths()
-        guard !selectableIndexPaths.isEmpty else { return false }
-        let selectedIndexPaths = Set(collectionView.indexPathsForSelectedItems ?? [])
-        return selectableIndexPaths.allSatisfy { selectedIndexPaths.contains($0) }
-    }
-
-    private func openNewFavoriteGroupEditor() {
-        guard let navigationController, let viewController = OAFavoriteGroupEditorViewController(new: ()) else { return }
-        viewController.delegate = self
-        let modalNavigationController = UINavigationController(rootViewController: viewController)
-        navigationController.present(modalNavigationController, animated: true)
-    }
-
-    private func openFavoriteGroupAppearance(_ groupName: String) {
-        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesSwiftHelper.pointsGroup(forGroupName: groupName)) else { return }
-        favoriteGroupAppearanceGroupName = groupName
-        favoriteGroupAppearanceEditor = viewController
-        viewController.delegate = self
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-
-    private func openFavoriteItemsMove(_ favoriteItems: [Any]) {
-        guard !favoriteItems.isEmpty,
-              let navigationController,
-              let groupController = OAEditGroupViewController(groupName: nil, groups: OAFavoritesSwiftHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItems)) else {
-            return
-        }
-        self.groupController = groupController
-        favoriteItemsToMove = favoriteItems
-        groupController.delegate = self
-        let modalNavigationController = UINavigationController(rootViewController: groupController)
-        navigationController.present(modalNavigationController, animated: true)
-    }
-
-    private func openFavoriteGroupAddToTrack(_ groupName: String) {
-        guard OAFavoritesSwiftHelper.canUseGroup(withName: groupName), let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
-        addToTrackGroupName = groupName
-        addToTrackFavoriteItems = nil
-        viewController.delegate = self
-        let modalNavigationController = UINavigationController(rootViewController: viewController)
-        navigationController.present(modalNavigationController, animated: true)
-    }
-
-    private func openFavoriteItemsAddToTrack(_ favoriteItems: [Any]) {
-        guard !favoriteItems.isEmpty, let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
-        addToTrackFavoriteItems = favoriteItems
-        addToTrackGroupName = nil
-        viewController.delegate = self
-        let modalNavigationController = UINavigationController(rootViewController: viewController)
-        navigationController.present(modalNavigationController, animated: true)
-    }
-
-    private func favoritePointRows(forGroupName groupName: String) -> [FavoritePointRow] {
-        let sortMode = isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
-        let favorites = OAFavoritesSwiftHelper.favoritePoints(forGroupName: groupName).map { FavoritePointRow(item: $0) }
-        return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
-    }
-
-    private func favoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesSwiftHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName).map { FavoritePointRow(item: $0) } }
-    }
-
-    private func isSearchGroup(_ groupName: String, parentGroupName: String?) -> Bool {
-        guard let parentGroupName else { return true }
-        guard !parentGroupName.isEmpty else { return groupName.isEmpty }
-        return groupName == parentGroupName || isNestedFolder(groupName, in: parentGroupName)
-    }
-
-    private func makeActionsMenu() -> UIMenu {
-        let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
-            self?.openNewFavoriteGroupEditor()
-        }
-        let importAction = UIAction(title: localizedString("shared_string_import"), image: .icCustomImportOutlined) { [weak self] _ in
-            self?.openPickerToImport()
-        }
-        
-        let addFolderSection = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
-        let importSection = UIMenu(title: "", options: .displayInline, children: [importAction])
-        return UIMenu(title: "", children: [addFolderSection, importSection])
-    }
-
-    private func setEdit(_ isEdit: Bool) {
-        let shouldResetSearchSelection = !isEdit && isSelectionModeInSearch
-        if !isEdit {
-            collectionView.indexPathsForSelectedItems?.forEach { collectionView.deselectItem(at: $0, animated: false) }
-            isSelectionModeInSearch = false
-            isSearchActive = false
-            searchText = ""
-        }
-
-        collectionView.isEditing = isEdit
-        collectionView.reloadData()
-        myPlacesDelegate?.updateEditMode(isEdit)
-        configureNavigation()
-        navigationController?.setToolbarHidden(!isEdit, animated: true)
-        if shouldResetSearchSelection {
-            clearSearchControllerText()
-            applySnapshot(animatingDifferences: false)
-        }
-    }
-
-    private func makeFolderContextMenu(for folder: FavoriteFolderRow, indexPath: IndexPath) -> UIMenu {
-        let folderFavoriteItem: [Any] = [folder.bridgeItem]
-        let subtreeFavoriteItems: [Any] = favoritePointRows(allFolders: favoriteFolders(), parentGroupName: folder.bridgeItem.groupName).map { $0.bridgeItem }
-        let hasFavoritePoints = !subtreeFavoriteItems.isEmpty
-        let hasDirectFavoritePoints = folder.bridgeItem.pointsCount > 0
-        let showHideAction = UIAction(title: localizedString(folder.isVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: folder.isVisible ? .icCustomHideOutlined : .icCustomShowOutlined) { [weak self] _ in
-            guard let self else { return }
-            OAFavoritesSwiftHelper.setFavoriteGroupVisible(folder.bridgeItem.groupName, visible: !folder.isVisible)
-            self.applySnapshot(animatingDifferences: true)
-        }
-        let pinAction = UIAction(title: localizedString(folder.isPinned ? "unpin_folder" : "pin_folder"), image: folder.isPinned ? .icCustomDrawingPinDisable : .icCustomDrawingPin) { [weak self] _ in
-            guard let self else { return }
-            OAFavoritesSwiftHelper.setFavoriteGroupPinned(folder.bridgeItem.groupName, pinned: !folder.isPinned)
-            self.applySnapshot(animatingDifferences: true)
-        }
-        let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [showHideAction, pinAction])
-
-        let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
-            guard let self else { return }
-            self.showRenameAlert(for: folder)
-        }
-        let defaultAppearanceAction = UIAction(title: localizedString("default_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteGroupAppearance(folder.bridgeItem.groupName)
-        }
-        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction, defaultAppearanceAction])
-
-        let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { [weak self] _ in
-            guard let self else { return }
-            let sourceView: UIView = self.collectionView.cellForItem(at: indexPath) ?? self.collectionView
-            guard let favoritesUrl = OAFavoritesSwiftHelper.shareFavoriteItems([folder.bridgeItem]) else { return }
-            showActivity([favoritesUrl], sourceView: sourceView, barButtonItem: nil, completionWithItemsHandler: {
-                try? FileManager.default.removeItem(at: favoritesUrl)
-            })
-        }
-        let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteItemsMove([folder.bridgeItem])
-        }
-        let thirdButtons: [UIMenuElement] = (hasFavoritePoints ? [shareAction] : []) + (folder.bridgeItem.groupName.isEmpty ? [] : [moveAction])
-        let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: thirdButtons)
-
-        let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
-            OAFavoritesSwiftHelper.addFavoriteItems(toMapMarkers: hasDirectFavoritePoints ? folderFavoriteItem : subtreeFavoriteItems)
-        }
-        let trackAction = UIAction(title: localizedString("add_to_a_track"), image: .icCustomTrip) { [weak self] _ in
-            guard let self else { return }
-            if hasDirectFavoritePoints {
-                self.openFavoriteGroupAddToTrack(folder.bridgeItem.groupName)
-            } else {
-                self.openFavoriteItemsAddToTrack(subtreeFavoriteItems)
-            }
-        }
-        let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { [weak self] _ in
-            guard let self else { return }
-            let directFavoriteItems: [Any] = self.favoritePointRows(forGroupName: folder.bridgeItem.groupName).map { $0.bridgeItem }
-            OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: hasDirectFavoritePoints ? directFavoriteItems : subtreeFavoriteItems)
-        }
-        let addToActions: [UIMenuElement] = hasFavoritePoints ? [mapMarkersAction, trackAction, navigationAction] : []
-        let fourthButtons: [UIMenuElement] = addToActions.isEmpty ? [] : [UIMenu(title: localizedString("shared_string_add"), image: .icCustomAdd, children: addToActions)]
-        let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: fourthButtons)
-
-        let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
-            guard let self else { return }
-            self.showDeleteAlert(for: folder)
-        }
-        let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
-
-        return UIMenu(title: "", children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, fourthButtonsSection, lastButtonsSection].filter { !$0.children.isEmpty })
-    }
-
-    private func makePointContextMenu(for point: FavoritePointRow, indexPath: IndexPath) -> UIMenu {
-        let editAction = UIAction(title: localizedString("shared_string_edit"), image: .icCustomEdit) { [weak self] _ in
-            guard let self, let viewController = OAFavoritesSwiftHelper.editPointViewController(forFavoritePoint: point.bridgeItem) else { return }
-            viewController.delegate = self
-            let navigationController = UINavigationController(rootViewController: viewController)
-            self.navigationController?.present(navigationController, animated: true)
-        }
-        let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [editAction])
-
-        let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteItemsMove([point.bridgeItem])
-        }
-        let shareAction = UIAction(title: localizedString("shared_string_share"), image: .icCustomExportOutlined) { [weak self] _ in
-            guard let self,
-                  let sourceView: UIView = self.collectionView.cellForItem(at: indexPath) else {
-                return
-            }
-            
-            self.shareFavoritePoint(point.bridgeItem, sourceView: sourceView)
-        }
-        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [moveAction, shareAction])
-
-        let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { _ in
-            OAFavoritesSwiftHelper.addFavoriteItems(toMapMarkers: [point.bridgeItem])
-        }
-        let trackAction = UIAction(title: localizedString("shared_string_gpx_track"), image: .icCustomTrip) { [weak self] _ in
-            guard let self else { return }
-            self.openFavoriteItemsAddToTrack([point.bridgeItem])
-        }
-        let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { _ in
-            OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: [point.bridgeItem])
-        }
-        let addToMenu = UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: [mapMarkersAction, trackAction, navigationAction])
-        let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
-
-        let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
-            guard let self else { return }
-            self.showFavoriteDeleteAlert(for: point)
-        }
-        let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
-
-        return UIMenu(title: "", children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, lastButtonsSection])
-    }
-
-    private func showRenameAlert(for folder: FavoriteFolderRow) {
-        let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
-        let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
-            guard let text = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
-            let oldGroupName = folder.bridgeItem.groupName
-            let newGroupName = self?.groupName(oldGroupName, replacingLastComponentWith: text) ?? text
-            OAFavoritesSwiftHelper.renameFavoriteGroup(oldGroupName, newName: newGroupName)
-            self?.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
-            self?.applySnapshot(animatingDifferences: true)
-        }
-
-        alert.addAction(applyAction)
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        alert.addTextField { textField in
-            textField.placeholder = localizedString("enter_new_name")
-            textField.text = folder.title
-        }
-
-        alert.preferredAction = applyAction
-        present(alert, animated: true)
-    }
-
-    private func groupName(_ groupName: String, replacingLastComponentWith lastComponent: String) -> String {
-        guard let separatorIndex = groupName.lastIndex(of: "/") else { return lastComponent }
-        let parentGroupName = groupName[..<separatorIndex]
-        guard !parentGroupName.isEmpty else { return lastComponent }
-        return "\(parentGroupName)/\(lastComponent)"
-    }
-
-    private func showDeleteAlert(for folder: FavoriteFolderRow) {
-        let message = String(format: localizedString("favorite_confirm_delete_group"), folder.title, folder.bridgeItem.subtreePointsCount)
-        let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesSwiftHelper.deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
-            self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])
-            self?.applySnapshot(animatingDifferences: true)
-        })
-
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        present(alert, animated: true)
-    }
-
-    private func showFavoriteDeleteAlert(for favorite: FavoritePointRow) {
-        let title = String(format: localizedString("delete_favorite_confirmation_title"), favorite.title)
-        let alert = UIAlertController(title: title, message: localizedString("favorites_delete_confirmation_message"), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesSwiftHelper.deleteFavoritePoint(favorite.bridgeItem) else { return }
-            self?.applySnapshot(animatingDifferences: true)
-        })
-
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        present(alert, animated: true)
-    }
-
-    private func shareFavoritePoint(_ point: OAFavoritePointBridgeItem, sourceView: UIView) {
-        pointToShare = point
-        let items = favoritePointShareItems(for: point)
-        guard !items.isEmpty else {
-            pointToShare = nil
-            return
-        }
-        showActivity(items,
-                     applicationActivities: favoritePointShareActivities(),
-                     excludedActivityTypes: nil,
-                     sourceView: sourceView,
-                     barButtonItem: nil) { [weak self] in
-            self?.pointToShare = nil
-        }
-    }
-
-    private func favoritePointShareItems(for point: OAFavoritePointBridgeItem) -> [Any] {
-        var items: [Any] = []
-        let sharingText = NSMutableString()
-        appendFavoritePointShareLine(point.title, to: sharingText)
-        appendFavoritePointShareLine(point.displayGroupName, to: sharingText)
-        appendFavoritePointShareLine(point.itemDescription, to: sharingText)
-        appendFavoritePointCoordinatesAndURL(to: sharingText, point: point)
-        if let url = URL(string: OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: point)) {
-            items.append(ShareLinkItem(url: url, title: point.title, icon: point.icon))
-        }
-        if sharingText.length > 0 {
-            items.append(sharingText)
-        }
-        return items
-    }
-
-    private func appendFavoritePointShareLine(_ line: String?, to sharingText: NSMutableString) {
-        guard let line, !line.isEmpty else { return }
-        if sharingText.length > 0 {
-            sharingText.append("\n")
-        }
-        sharingText.append(line)
-    }
-
-    private func appendFavoritePointCoordinatesAndURL(to sharingText: NSMutableString, point: OAFavoritePointBridgeItem) {
-        let geoURLString = OAFavoritesSwiftHelper.geoURLString(forFavoritePoint: point)
-        if !geoURLString.isEmpty {
-            sharingText.append("\n")
-            sharingText.append("Location: \(geoURLString)")
-        }
-
-        let shareURLString = OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: point)
-        if !shareURLString.isEmpty {
-            sharingText.append("\n")
-            sharingText.append(shareURLString)
-        }
-    }
-
-    private func favoritePointShareActivities() -> [UIActivity] {
-        let activities: [OAShareMenuActivityType] = [.clipboard, .copyAddress, .copyPOIName, .copyCoordinates, .geo]
-        return activities.compactMap { type in
-            let activity = OAShareMenuActivity(type: type)
-            activity?.delegate = self
-            return activity
-        }
-    }
-
-    private func shareItems(for sourceView: UIView) {
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else {
-            let alert = UIAlertController(
-                title: "",
-                message: localizedString("fav_export_select"),
-                preferredStyle: .alert
-            )
-
-            let defaultAction = UIAlertAction(
-                title: localizedString("shared_string_ok"),
-                style: .default,
-                handler: nil
-            )
-
-            alert.addAction(defaultAction)
-            present(alert, animated: true, completion: nil)
-            return
-        }
-
-        guard let favoritesUrl = OAFavoritesSwiftHelper.shareFavoriteItems(bridgeItems(for: selectedItems)) else { return }
-        showActivity(
-            [favoritesUrl],
-            sourceView: sourceView,
-            barButtonItem: nil,
-            completionWithItemsHandler: {
-                try? FileManager.default.removeItem(at: favoritesUrl)
-            }
-        )
-    }
-
-    private func removeSelectedFavoriteItems() {
-        let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
-        let items = bridgeItems(for: selectedIndexPaths)
-        let groupNames = items.compactMap { ($0 as? OAFavoriteFolderBridgeItem)?.groupName }
-        if OAFavoritesSwiftHelper.deleteFavoriteItems(items) {
-            clearFavoriteSortModes(forGroupNames: groupNames)
-        }
-
-        setEdit(false)
-        applySnapshot(animatingDifferences: true)
-    }
-
-    private func deleteConfirmationTitle(for selectedItems: [Any]) -> String {
-        let foldersCount = selectedItems.filter { $0 is OAFavoriteFolderBridgeItem }.count
-        let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
-
-        if foldersCount > 0 && pointsCount == 0 {
-            return String(format: localizedString("folders_delete_confirmation_title"), foldersCount)
-        } else if pointsCount > 0 && foldersCount == 0 {
-            return String(format: localizedString("favorites_delete_confirmation_title"), pointsCount)
-        } else {
-            return String(format: localizedString("items_delete_confirmation_title"), pointsCount + foldersCount)
-        }
-    }
-
-    private func deleteConfirmationMessage(for selectedItems: [Any]) -> String {
-        let folders = selectedItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }
-        let points = selectedItems.compactMap { $0 as? OAFavoritePointBridgeItem }
-        if folders.isEmpty {
-            return localizedString("favorites_delete_confirmation_message")
-        }
-
-        let folderPointsCount = folders.reduce(0) { $0 + Int($1.subtreePointsCount) }
-        let pointsCount = folderPointsCount + points.count
-
-        return String(format: localizedString("mixed_delete_confirmation_message"), folders.count, pointsCount)
-    }
-
-    private func selectedFavoritePointsCount(for selectedItems: [Any]) -> Int {
-        let folderPointsCount = selectedItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }.reduce(0) { $0 + Int($1.subtreePointsCount) }
-        let pointsCount = selectedItems.filter { $0 is OAFavoritePointBridgeItem }.count
-        return folderPointsCount + pointsCount
-    }
-
-    private func bridgeItems(for indexPaths: [IndexPath]) -> [Any] {
-        indexPaths.compactMap { indexPath in
-            guard let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
-            switch item {
-            case .folder(let folder):
-                return folder.bridgeItem
-            case .favorite(let favorite):
-                return favorite.bridgeItem
-            default:
-                return nil
-            }
-        }
-    }
-
-    private func makeAdditionalContextMenu() -> UIMenu {
-        var menuElements: [UIMenuElement] = []
-        let indexPathItems = collectionView.indexPathsForSelectedItems ?? []
-        let selectedBridgeItems = bridgeItems(for: indexPathItems)
-        let hasPoints = indexPathItems.contains {
-            guard case .favorite = dataSource.itemIdentifier(for: $0) else { return false }
-            return true
-        }
-
-        let mapMarkersAction = UIAction(title: localizedString("map_markers"), image: .icCustomMarker) { [weak self] _ in
-            OAFavoritesSwiftHelper.addFavoriteItems(toMapMarkers: selectedBridgeItems)
-            self?.setEdit(false)
-            self?.applySnapshot(animatingDifferences: true)
-        }
-        let trackAction = UIAction(title: localizedString("shared_string_gpx_track"), image: .icCustomTrip) { [weak self] _ in
-            self?.openFavoriteItemsAddToTrack(selectedBridgeItems)
-            self?.setEdit(false)
-            self?.applySnapshot(animatingDifferences: true)
-        }
-        let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: .icCustomNavigationOutlined) { [weak self] _ in
-            OAFavoritesSwiftHelper.addFavoriteItems(toNavigation: selectedBridgeItems)
-            self?.applySnapshot(animatingDifferences: true)
-        }
-        let addToMenu = UIMenu(title: localizedString("add_to"), image: .icCustomAdd, children: [trackAction, navigationAction, mapMarkersAction])
-        let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
-        menuElements.append(thirdButtonsSection)
-
-        let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
-            self?.openFavoriteItemsAppearance()
-        }
-        let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction])
-        menuElements.append(secondButtonsSection)
-
-        if !hasPoints {
-            let folders: [FavoriteFolderRow] = indexPathItems.compactMap {
-                guard case .folder(let folder) = dataSource.itemIdentifier(for: $0) else { return nil }
-                return folder
-            }
-
-            if !folders.isEmpty {
-                var folderMenuElements: [UIMenuElement] = []
-
-                if folders.contains(where: { !$0.isPinned }) {
-                    let unpinnedGroupNames = folders.filter({ !$0.isPinned }).map { $0.bridgeItem.groupName }
-                    let pinAction = UIAction(title: localizedString("pin_folder"), image: .icCustomMapPinOutlined) { [weak self] _ in
-                        OAFavoritesSwiftHelper.setFavoriteGroupsPinned(unpinnedGroupNames, pinned: true)
-                        self?.applySnapshot(animatingDifferences: true)
-                    }
-                    folderMenuElements.append(pinAction)
-                }
-
-                if folders.contains(where: { $0.isPinned }) {
-                    let pinnedGroupNames = folders.filter({ $0.isPinned }).map { $0.bridgeItem.groupName }
-                    let unpinAction = UIAction(title: localizedString("unpin_folder"), image: .icCustomMapPinOutlined) { [weak self] _ in
-                        OAFavoritesSwiftHelper.setFavoriteGroupsPinned(pinnedGroupNames, pinned: false)
-                        self?.applySnapshot(animatingDifferences: true)
-                    }
-                    folderMenuElements.append(unpinAction)
-                }
-
-                if folders.contains(where: { $0.isVisible }) {
-                    let visibleGroupNames = folders.filter({ $0.isVisible }).map { $0.bridgeItem.groupName }
-                    let hideAction = UIAction(title: localizedString("shared_string_hide_from_map"), image: .icCustomHideOutlined) { [weak self] _ in
-                        OAFavoritesSwiftHelper.setFavoriteGroupsVisible(visibleGroupNames, visible: false)
-                        self?.applySnapshot(animatingDifferences: true)
-                    }
-                    folderMenuElements.append(hideAction)
-                }
-
-                if folders.contains(where: { !$0.isVisible }) {
-                    let hiddenGroupNames = folders.filter({ !$0.isVisible }).map { $0.bridgeItem.groupName }
-                    let showAction = UIAction(title: localizedString("shared_string_show_on_map"), image: .icCustomShowOutlined) { [weak self] _ in
-                        OAFavoritesSwiftHelper.setFavoriteGroupsVisible(hiddenGroupNames, visible: true)
-                        self?.applySnapshot(animatingDifferences: true)
-                    }
-                    folderMenuElements.append(showAction)
-                }
-
-                let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: folderMenuElements)
-                menuElements.append(firstButtonsSection)
-            }
-        }
-
-        return UIMenu(title: "", children: menuElements)
-    }
-
-    private func openFavoriteItemsAppearance() {
-        guard collectionView.indexPathsForSelectedItems?.isEmpty == false else {
-            let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
-            present(alert, animated: true)
-            return
-        }
-
-        guard let navigationController else { return }
-        let colorController = OAEditColorViewController()
-        colorController.delegate = self
-        self.colorController = colorController
-        let modalNavigationController = UINavigationController(rootViewController: colorController)
-        navigationController.present(modalNavigationController, animated: true)
-    }
     
-    private func openPickerToImport() {
-        let gpxType = UTType(importedAs: "com.topografix.gpx", conformingTo: .xml)
-        let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [gpxType], asCopy: true)
-        documentPicker.allowsMultipleSelection = false
-        documentPicker.delegate = self
-        present(documentPicker, animated: true)
-    }
-
-    @objc private func selectButtonPressed() {
-        setEdit(true)
-    }
-
-    @objc private func searchSelectButtonPressed() {
-        isSelectionModeInSearch = true
-        isSearchActive = false
-        if isRootFolder {
-            let searchController = navigationController?.navigationBar.topItem?.searchController
-            searchController?.isActive = false
-        } else {
-            subfolderSearchController.isActive = false
-        }
-
-        selectButtonPressed()
-    }
-
-    @objc private func cancelButtonPressed() {
-        setEdit(false)
-        configureToolbar()
-    }
-
-    @objc private func selectAllButtonPressed() {
-        let selectableIndexPaths = selectableIndexPaths()
-        if areAllSelectableItemsSelected() {
-            selectableIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: false) }
-        } else {
-            selectableIndexPaths.forEach { collectionView.selectItem(at: $0, animated: false, scrollPosition: []) }
-        }
-
-        updateSelectionUI()
-    }
-
-    @objc private func favoriteDataDidChange() {
-        applySnapshot(animatingDifferences: true)
-    }
-
-    @objc private func productPurchased() {
-        DispatchQueue.main.async { [weak self] in
-            self?.applySnapshot(animatingDifferences: true)
-        }
-    }
-
-    @objc private func shareButtonClicked(_ sender: Any) {
-        let sourceView = sender as? UIView ?? collectionView
-        shareItems(for: sourceView)
-        setEdit(false)
-        applySnapshot()
-    }
-
-    @objc private func moveButtonClicked(_ sender: Any) {
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else {
-            let alert = UIAlertController(title: "", message: localizedString("fav_select"), preferredStyle: .alert)
-            let defaultAction = UIAlertAction(title: localizedString("shared_string_ok"), style: .default)
-            alert.addAction(defaultAction)
-            present(alert, animated: true)
-            return
-        }
-
-        openFavoriteItemsMove(bridgeItems(for: selectedItems))
-    }
-
-    @objc private func deleteButtonClicked(_ sender: Any) {
-        let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
-        if selectedIndexPaths.isEmpty {
-            let alert = UIAlertController(title: nil, message: localizedString("fav_select_remove"), preferredStyle: .alert)
-            let defaultAction = UIAlertAction(title: localizedString("ok"), style: .default)
-            alert.addAction(defaultAction)
-            present(alert, animated: true)
-            return
-        }
-
-        let selectedBridgeItems = bridgeItems(for: selectedIndexPaths)
-        let title = deleteConfirmationTitle(for: selectedBridgeItems)
-        let message = deleteConfirmationMessage(for: selectedBridgeItems)
-
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-
-        let deleteButton = UIAlertAction(
-            title: localizedString("shared_string_delete"),
-            style: .destructive
-        ) { [weak self] _ in
-            self?.removeSelectedFavoriteItems()
-        }
-
-        let cancelButton = UIAlertAction(
-            title: localizedString("shared_string_cancel"),
-            style: .cancel,
-            handler: nil
-        )
-
-        alert.addAction(deleteButton)
-        alert.addAction(cancelButton)
-
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @objc private func importButtonClicked(_ sender: Any) {
-        openPickerToImport()
-    }
-
-    @objc private func clearSearchButtonClicked(_ sender: Any) {
-        searchText = ""
-        clearSearchControllerText()
-        configureToolbar()
-        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
-        applySnapshot(animatingDifferences: false)
-    }
-}
-
-extension FavoriteListViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-        switch item {
-        case .folder(let folder):
-            if collectionView.isEditing {
-                updateSelectionUI()
-                return
-            }
-            let viewController = FavoriteListViewController(frame: view.bounds, screenMode: .folder(folder, previousTitle: normalTitle))
-            viewController.myPlacesDelegate = myPlacesDelegate
-            navigationController?.pushViewController(viewController, animated: true)
-        case .favorite(let favorite):
-            if collectionView.isEditing {
-                updateSelectionUI()
-                return
-            }
-            OAFavoritesSwiftHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
-        default:
-            break
-        }
-
-        collectionView.deselectItem(at: indexPath, animated: true)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard collectionView.isEditing else { return }
-        updateSelectionUI()
-    }
-
-    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        isContextMenuVisible = true
-        return nil
-    }
-
-    func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
-        animator?.addCompletion { [weak self] in
-            guard let self else { return }
-            self.isContextMenuVisible = false
-            if self.shouldReloadCollectionView {
-                self.shouldReloadCollectionView = false
-                self.updateDistanceAndDirection(true)
-            }
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard !collectionView.isEditing, let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
-        let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
-            guard let self else { return nil }
-            switch item {
-            case .folder(let folder):
-                return self.makeFolderContextMenu(for: folder, indexPath: indexPath)
-            case .favorite(let favorite):
-                return self.makePointContextMenu(for: favorite, indexPath: indexPath)
-            default:
-                return nil
-            }
-        }
-
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
-    }
-}
-
-extension FavoriteListViewController: OAShareMenuDelegate {
-    func onCopy(_ type: OAShareMenuActivityType) {
-        guard let pointToShare else { return }
-        switch type {
-        case .clipboard:
-            copyFavoritePointShareText(OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: pointToShare))
-        case .copyAddress:
-            if let address = pointToShare.address, !address.isEmpty {
-                copyFavoritePointShareText(address)
-            } else {
-                OAUtilities.showToast(localizedString("no_address_found"), details: nil, duration: 4, in: view)
-            }
-        case .copyPOIName:
-            if !pointToShare.title.isEmpty {
-                copyFavoritePointShareText(pointToShare.title)
-            } else {
-                OAUtilities.showToast(localizedString("toast_empty_name_error"), details: nil, duration: 4, in: view)
-            }
-        case .copyCoordinates:
-            copyFavoritePointShareText(OAFavoritesSwiftHelper.formattedCoordinates(forFavoritePoint: pointToShare))
-        case .geo:
-            copyFavoritePointShareText(OAFavoritesSwiftHelper.geoURLString(forFavoritePoint: pointToShare))
-        default:
-            break
-        }
-    }
-
-    private func copyFavoritePointShareText(_ text: String) {
-        UIPasteboard.general.string = text
-        OAUtilities.showToast(localizedString("copied_to_clipboard"), details: text, duration: 4, in: view)
-    }
-}
-
-extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
-        searchResults(for: searchController)
-    }
-
-    func searchResults(for searchController: UISearchController) {
-        isSearchActive = searchController.isActive
-        if isSearchActive || !isSelectionModeInSearch {
-            searchText = searchController.searchBar.searchTextField.text ?? ""
-        }
-        updateSegmentedControlVisibility()
-        configureToolbar()
-        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
-        applySnapshot(animatingDifferences: false)
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        isSearchActive = false
-        if !isSelectionModeInSearch {
-            searchText = ""
-        }
-        updateSegmentedControlVisibility()
-        configureToolbar()
-        navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
-        applySnapshot(animatingDifferences: false)
-    }
-}
-
-extension FavoriteListViewController: OAEditColorViewControllerDelegate {
-    func colorChanged() {
-        guard let colorController else { return }
-        defer {
-            self.colorController = nil
-        }
-
-        guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else { return }
-        if colorController.saveChanges {
-            OAFavoritesSwiftHelper.changeFavoriteItems(bridgeItems(for: selectedItems), colorIndex: colorController.colorIndex)
-        }
-
-        setEdit(false)
-        applySnapshot(animatingDifferences: true)
-    }
-}
-
-extension FavoriteListViewController: OAEditGroupViewControllerDelegate {
-    func groupChanged() {
-        guard let groupController else { return }
-        defer {
-            self.groupController = nil
-            favoriteItemsToMove = nil
-        }
-
-        guard groupController.saveChanges else { return }
-
-        let targetGroupName = groupController.groupName ?? ""
-        guard let favoriteItemsToMove else { return }
-        createFavoriteMoveTargetGroupIfNeeded(targetGroupName, favoriteItems: favoriteItemsToMove)
-        OAFavoritesSwiftHelper.moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
-        updateFavoriteSortModeKeysAfterMove(favoriteItemsToMove, toGroupName: targetGroupName)
-        setEdit(false)
-        applySnapshot(animatingDifferences: true)
-    }
-}
-
-extension FavoriteListViewController: OAOpenAddTrackDelegate {
-    func onFileSelected(_ gpxFilePath: String) {
-        if let addToTrackFavoriteItems {
-            OAFavoritesSwiftHelper.addFavoriteItems(toTrack: addToTrackFavoriteItems, gpxFileName: gpxFilePath)
-            self.addToTrackFavoriteItems = nil
-        } else if let addToTrackGroupName {
-            OAFavoritesSwiftHelper.addFavoriteGroup(toTrack: addToTrackGroupName, gpxFileName: gpxFilePath)
-            self.addToTrackGroupName = nil
-        }
-    }
-}
-
-extension FavoriteListViewController: OAEditorDelegate {
-    func addNewItem(withName name: String?, iconName: String, color: UIColor, backgroundIconName: String) {
-        guard OAFavoritesSwiftHelper.addFavoriteGroup(name ?? "",
-                                                      parentGroupName: parentGroupName,
-                                                      iconName: iconName,
-                                                      color: color,
-                                                      backgroundIconName: backgroundIconName) else { return }
-        applySnapshot(animatingDifferences: true)
-    }
-
-    func onEditorUpdated() {
-        if let oldGroupName = favoriteGroupAppearanceGroupName, let newGroupName = favoriteGroupAppearanceEditor?.editName {
-            renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
-        }
-        
-        favoriteGroupAppearanceGroupName = nil
-        favoriteGroupAppearanceEditor = nil
-        applySnapshot(animatingDifferences: true)
-    }
-
-    func selectColorItem(_ colorItem: PaletteItemSolid) {}
-
-    @discardableResult
-    func addAndGetNewColorItem(_ color: UIColor) -> PaletteItemSolid {
-        guard let newColorItem = appearanceCollection.addNewSelectedColor(color) else {
-            return appearanceCollection.defaultPointColorItem()
-        }
-
-        return newColorItem
-    }
-
-    func changeColorItem(_ colorItem: PaletteItemSolid, with color: UIColor) {
-        appearanceCollection.changeColor(colorItem, newColor: color)
-    }
-
-    @discardableResult
-    func duplicateColorItem(_ colorItem: PaletteItemSolid) -> PaletteItemSolid {
-        guard let duplicatedColorItem = appearanceCollection.duplicateColor(colorItem) else {
-            return colorItem
-        }
-
-        return duplicatedColorItem
-    }
-
-    func deleteColorItem(_ colorItem: PaletteItemSolid) {
-        appearanceCollection.deleteColor(colorItem)
-    }
-}
-
-extension FavoriteListViewController: OAEditPointViewControllerDelegate {
-    func saveTapped() {
-        applySnapshot()
-    }
-}
-
-extension FavoriteListViewController: UIDocumentPickerDelegate {
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first else { return }
-        OARootViewController.instance().import(asFavorites: url)
+    deinit {
+        unregisterDistanceAndDirectionObservers()
+        NotificationCenter.default.removeObserver(self, name: .favoriteImportViewControllerDidDismiss, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(NSNotification.Name.OAIAPProductPurchased.rawValue), object: nil)
     }
 }
 

@@ -1587,6 +1587,12 @@
 		C5E3B59F2DDDC40800083695 /* SelectRouteActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B59E2DDDC40800083695 /* SelectRouteActivityViewController.swift */; };
 		C5E92A492F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E92A482F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift */; };
 		C5EB56EE2FD18B8A00D01657 /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56ED2FD18B8A00D01657 /* FavoriteListViewController.swift */; };
+		C5EB56F12FD18B8A00D01657 /* FavoriteListViewController+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56F02FD18B8A00D01657 /* FavoriteListViewController+Models.swift */; };
+		C5EB56F32FD18B8A00D01657 /* FavoriteListViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56F22FD18B8A00D01657 /* FavoriteListViewController+DataSource.swift */; };
+		C5EB56F52FD18B8A00D01657 /* FavoriteListViewController+Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56F42FD18B8A00D01657 /* FavoriteListViewController+Cells.swift */; };
+		C5EB56F72FD18B8A00D01657 /* FavoriteListViewController+ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56F62FD18B8A00D01657 /* FavoriteListViewController+ContextMenu.swift */; };
+		C5EB56F92FD18B8A00D01657 /* FavoriteListViewController+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56F82FD18B8A00D01657 /* FavoriteListViewController+Actions.swift */; };
+		C5EB56FB2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56FA2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift */; };
 		C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */; };
 		C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */; };
 		C9DC5FD49885FD738343EB13 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC99B1D5FA05EDFE17BF38B8 /* libPods-OsmAnd Maps.a */; };
@@ -5493,6 +5499,12 @@
 		C5E3B59E2DDDC40800083695 /* SelectRouteActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRouteActivityViewController.swift; sourceTree = "<group>"; };
 		C5E92A482F5720D8001DE758 /* StatisticsSelectionBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSelectionBottomSheetViewController.swift; sourceTree = "<group>"; };
 		C5EB56ED2FD18B8A00D01657 /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
+		C5EB56F02FD18B8A00D01657 /* FavoriteListViewController+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+Models.swift"; sourceTree = "<group>"; };
+		C5EB56F22FD18B8A00D01657 /* FavoriteListViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+DataSource.swift"; sourceTree = "<group>"; };
+		C5EB56F42FD18B8A00D01657 /* FavoriteListViewController+Cells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+Cells.swift"; sourceTree = "<group>"; };
+		C5EB56F62FD18B8A00D01657 /* FavoriteListViewController+ContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+ContextMenu.swift"; sourceTree = "<group>"; };
+		C5EB56F82FD18B8A00D01657 /* FavoriteListViewController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+Actions.swift"; sourceTree = "<group>"; };
+		C5EB56FA2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteListViewController+Delegates.swift"; sourceTree = "<group>"; };
 		C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterDevelopmentViewController.swift; sourceTree = "<group>"; };
 		C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayNavigationModeProvider.swift; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
@@ -8383,6 +8395,12 @@
 			isa = PBXGroup;
 			children = (
 				C5EB56ED2FD18B8A00D01657 /* FavoriteListViewController.swift */,
+				C5EB56F02FD18B8A00D01657 /* FavoriteListViewController+Models.swift */,
+				C5EB56F22FD18B8A00D01657 /* FavoriteListViewController+DataSource.swift */,
+				C5EB56F42FD18B8A00D01657 /* FavoriteListViewController+Cells.swift */,
+				C5EB56F62FD18B8A00D01657 /* FavoriteListViewController+ContextMenu.swift */,
+				C5EB56F82FD18B8A00D01657 /* FavoriteListViewController+Actions.swift */,
+				C5EB56FA2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift */,
 				C58ACDE02FD2D6E8004E34C9 /* FavoriteSortModeHelper.swift */,
 				272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */,
 				272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */,
@@ -17794,6 +17812,12 @@
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,
 				C5EB56EE2FD18B8A00D01657 /* FavoriteListViewController.swift in Sources */,
+				C5EB56F12FD18B8A00D01657 /* FavoriteListViewController+Models.swift in Sources */,
+				C5EB56F32FD18B8A00D01657 /* FavoriteListViewController+DataSource.swift in Sources */,
+				C5EB56F52FD18B8A00D01657 /* FavoriteListViewController+Cells.swift in Sources */,
+				C5EB56F72FD18B8A00D01657 /* FavoriteListViewController+ContextMenu.swift in Sources */,
+				C5EB56F92FD18B8A00D01657 /* FavoriteListViewController+Actions.swift in Sources */,
+				C5EB56FB2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift in Sources */,
 				DA5A850926C563A900F274C7 /* UITableViewCell+getTableView.m in Sources */,
 				DA5A83FF26C563A800F274C7 /* OAQuickSearchEmptyResultListItem.mm in Sources */,
 				DA5A838926C563A800F274C7 /* OADonationSettingsViewController.mm in Sources */,

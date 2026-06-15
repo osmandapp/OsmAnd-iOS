@@ -1,0 +1,214 @@
+//
+//  FavoriteListViewController+Cells.swift
+//  OsmAnd Maps
+//
+//  Created by Dmitry Svetlichny on 04.06.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
+
+import CoreLocation
+import UniformTypeIdentifiers
+
+extension FavoriteListViewController {
+    var headerCellRegistration: CellRegistration<FavoriteFolderSection> {
+        CellRegistration<FavoriteFolderSection> { cell, _, section in
+            var content = cell.defaultContentConfiguration()
+            content.text = section.title
+            content.textProperties.color = .textColorPrimary
+            content.textProperties.font = .systemFont(ofSize: 20, weight: .semibold)
+            cell.contentConfiguration = content
+            let disclosureOptions = UICellAccessory.OutlineDisclosureOptions(style: .header)
+            cell.accessories = [.outlineDisclosure(options: disclosureOptions)]
+            cell.tintColor = .iconColorActive
+        }
+    }
+
+    var sortHeaderCellRegistration: UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortHeader> {
+        UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortHeader> { [weak self] cell, _, sortHeader in
+            cell.sortButton.setImage(sortHeader.sortMode.image, for: .normal)
+            cell.sortButton.menu = self?.makeSortMenu(includesDistanceSortModes: sortHeader.includesDistanceSortModes)
+        }
+    }
+
+    var backupBannerCellRegistration: UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> {
+        UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
+            cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+            guard let self, let banner = Bundle.main.loadNibNamed("FreeBackupBanner", owner: self)?.first as? FreeBackupBanner else { return }
+            banner.configure(bannerType: .favorite)
+            banner.didOsmAndCloudButtonAction = { [weak self] in
+                self?.navigationController?.pushViewController(OACloudIntroductionViewController(), animated: true)
+            }
+            banner.didCloseButtonAction = { [weak self] in
+                self?.closeFreeBackupBanner()
+            }
+            banner.translatesAutoresizingMaskIntoConstraints = false
+            cell.contentView.addSubview(banner)
+            let fittingWidth = cell.contentView.bounds.width > 0.0 ? cell.contentView.bounds.width : cell.bounds.width
+            NSLayoutConstraint.activate([banner.topAnchor.constraint(equalTo: cell.contentView.topAnchor), banner.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor), banner.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)])
+            NSLayoutConstraint.activate([banner.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor), banner.heightAnchor.constraint(equalToConstant: self.backupBannerHeight(banner, fittingWidth: fittingWidth))])
+        }
+    }
+
+    var folderCellRegistration: RowCellRegistration<FavoriteFolderRow> {
+        RowCellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
+            var content = cell.defaultContentConfiguration()
+            let iconName = folder.isPinned ? "ic_custom_folder_pin" : folder.iconName
+            content.image = UIImage.templateImageNamed(iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
+            content.imageProperties.tintColor = folder.iconColor
+            content.text = folder.title
+            content.textProperties.color = folder.titleColor
+            content.textProperties.font = folder.titleFont
+            content.secondaryText = folder.subtitle
+            content.secondaryTextProperties.color = .textColorSecondary
+            cell.contentConfiguration = content
+            cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
+            cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
+        }
+    }
+
+    var favoriteCellRegistration: RowCellRegistration<FavoritePointRow> {
+        RowCellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
+            var content = cell.defaultContentConfiguration()
+            content.image = OAUtilities.resize(favorite.bridgeItem.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
+            content.text = favorite.title
+            content.textProperties.numberOfLines = 2
+            content.textProperties.color = favorite.titleColor
+            content.textProperties.font = favorite.titleFont
+            content.secondaryAttributedText = self?.favoriteSecondaryAttributedText(for: favorite, includesGroupName: self?.isSearchResultsMode == true)
+            content.secondaryTextProperties.color = .textColorSecondary
+            content.secondaryTextProperties.numberOfLines = 1
+            cell.contentConfiguration = content
+            cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
+            cell.accessories = [.multiselect()]
+        }
+    }
+
+    var statsFooterCellRegistration: UICollectionView.CellRegistration<UICollectionViewCell, FavoriteFolderStats> {
+        UICollectionView.CellRegistration<UICollectionViewCell, FavoriteFolderStats> { cell, _, stats in
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+            let label = UILabel()
+            label.font = .preferredFont(forTextStyle: .footnote)
+            label.adjustsFontForContentSizeCategory = true
+            label.textColor = .textColorSecondary
+            label.textAlignment = .center
+            label.numberOfLines = 0
+            label.text = stats.text
+            label.translatesAutoresizingMaskIntoConstraints = false
+            cell.contentView.addSubview(label)
+            NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: Self.statsFooterInsets.top), label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.statsFooterInsets.leading), label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.statsFooterInsets.trailing), label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -Self.statsFooterInsets.bottom)])
+        }
+    }
+
+    var emptyStateCellRegistration: UICollectionView.CellRegistration<EmptyStateCollectionViewCell, Void> {
+        UICollectionView.CellRegistration<EmptyStateCollectionViewCell, Void>(cellNib: UINib(nibName: EmptyStateCollectionViewCell.reuseIdentifier, bundle: nil)) { [weak self] cell, _, _ in
+            guard let self else { return }
+            cell.button.removeTarget(nil, action: nil, for: .touchUpInside)
+            if self.isSearchResultsMode {
+                cell.configure(image: UIImage.templateImageNamed("ic_custom_search") ?? .icCustomFavorites,
+                               title: localizedString("no_search_results"),
+                               description: localizedString("favorite_search_empty_state_description"))
+                cell.button.setTitle(localizedString("shared_string_clear_all"), for: .normal)
+                cell.button.addTarget(self, action: #selector(self.clearSearchButtonClicked), for: .touchUpInside)
+                return
+            }
+
+            let isRootFolder = self.isRootFolder
+            cell.configure(image: isRootFolder ? .icCustomFavorites : .icCustomFolderOpen,
+                           title: localizedString(isRootFolder ? "empty_state_favourites" : "tracks_empty_folder"),
+                           description: localizedString(isRootFolder ? "empty_state_favourites_desc" : "tracks_empty_folder_description"))
+            cell.button.setTitle(localizedString("shared_string_import"), for: .normal)
+            cell.button.addTarget(self, action: #selector(self.importButtonClicked), for: .touchUpInside)
+        }
+    }
+
+    private func favoriteSecondaryAttributedText(for favorite: FavoritePointRow, includesGroupName: Bool) -> NSAttributedString {
+        let font = UIFont.systemFont(ofSize: 15)
+        let directionAttributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: UIColor.textColorDirectionActive
+        ]
+        let secondaryAttributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: UIColor.textColorSecondary
+        ]
+
+        let result = NSMutableAttributedString()
+        let date = favorite.lastModified.map { DateFormatter.detailsDateFormatter.string(from: $0) }
+        let groupName = favorite.bridgeItem.groupName.isEmpty ? localizedString("shared_string_favorites") : favorite.bridgeItem.groupName
+
+        if currentSortMode.isDateOriented {
+            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
+            appendFavoriteDistance(favorite,
+                                   to: result,
+                                   font: font,
+                                   directionAttributes: directionAttributes,
+                                   separatorAttributes: secondaryAttributes)
+            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
+        } else {
+            appendFavoriteDistance(favorite,
+                                   to: result,
+                                   font: font,
+                                   directionAttributes: directionAttributes,
+                                   separatorAttributes: secondaryAttributes)
+            appendFavoriteSecondaryText(favorite.bridgeItem.address, to: result, attributes: secondaryAttributes)
+            appendFavoriteSecondaryText(date, to: result, attributes: secondaryAttributes)
+        }
+        if includesGroupName {
+            appendFavoriteSecondaryText(groupName, to: result, attributes: secondaryAttributes)
+        }
+
+        return result
+    }
+
+    private func appendFavoriteSecondaryText(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
+        guard let text, !text.isEmpty else { return }
+        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: attributes)
+        result.append(NSAttributedString(string: text, attributes: attributes))
+    }
+
+    private func appendFavoriteDistance(_ favorite: FavoritePointRow,
+                                        to result: NSMutableAttributedString,
+                                        font: UIFont,
+                                        directionAttributes: [NSAttributedString.Key: Any],
+                                        separatorAttributes: [NSAttributedString.Key: Any]) {
+        guard let distance = favorite.distance, let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) else { return }
+        appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: separatorAttributes)
+        if let directionIcon = favoriteDirectionIcon(tintColor: .iconColorDirectionActive) {
+            let rotatedDirectionIcon = rotatedFavoriteDirectionIcon(directionIcon, radians: favorite.bridgeItem.direction)
+            let attachment = NSTextAttachment()
+            attachment.image = rotatedDirectionIcon
+            attachment.bounds = CGRect(x: 0.0,
+                                       y: (font.capHeight - rotatedDirectionIcon.size.height) / 2.0,
+                                       width: rotatedDirectionIcon.size.width,
+                                       height: rotatedDirectionIcon.size.height)
+            result.append(NSAttributedString(attachment: attachment))
+        }
+        result.append(NSAttributedString(string: formattedDistance, attributes: directionAttributes))
+    }
+
+    private func appendFavoriteSecondarySeparatorIfNeeded(to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
+        guard result.length > 0 else { return }
+        result.append(NSAttributedString(string: " • ", attributes: attributes))
+    }
+
+    private func favoriteDirectionIcon(tintColor: UIColor) -> UIImage? {
+        let size = UIFontMetrics.default.scaledValue(for: 18.0)
+        return OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(tintColor)
+    }
+
+    private func rotatedFavoriteDirectionIcon(_ image: UIImage, radians: CGFloat) -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = image.scale
+        format.opaque = false
+        let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
+        return renderer.image { context in
+            let rect = CGRect(origin: CGPoint(x: -image.size.width / 2.0, y: -image.size.height / 2.0),
+                              size: image.size)
+            context.cgContext.translateBy(x: image.size.width / 2.0, y: image.size.height / 2.0)
+            context.cgContext.rotate(by: radians)
+            image.draw(in: rect)
+        }
+    }
+}

@@ -138,6 +138,7 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
 static const NSInteger kDetailedMapZoom = 9;
 static const NSTimeInterval kRenderSyncSlowBlockThreshold = 0.05;
 static const NSTimeInterval kSingleTapContextMenuDelay = 0.15;
+static const NSTimeInterval kSingleTapContextMenuDoubleTapGuard = 0.4;
 static char kMapSourceUpdateQueueKey;
 
 @interface OATouchLocation : NSObject
@@ -233,6 +234,7 @@ static char kMapSourceUpdateQueueKey;
     UIPanGestureRecognizer* _grMouseWheelScroll;
 
     dispatch_block_t _pendingContextMenuBlock;
+    NSTimeInterval _singleTapContextMenuShownTime;
 
     BOOL _startRotating;
     BOOL _startZooming;
@@ -1564,6 +1566,7 @@ static char kMapSourceUpdateQueueKey;
         return;
 
     [self cancelPendingContextMenu];
+    [self dismissSingleTapContextMenuIfRecognizedAsDoubleTap];
 
     if (_mapView.zoomLevel >= _mapView.maxZoom)
         return;
@@ -1768,6 +1771,7 @@ static char kMapSourceUpdateQueueKey;
         if (!strongSelf)
             return;
         strongSelf->_pendingContextMenuBlock = nil;
+        strongSelf->_singleTapContextMenuShownTime = CACurrentMediaTime();
         [strongSelf showContextMenuAtPoint:touchPoint lat:lat lon:lon longPress:NO forceHide:forceHide];
     });
     _pendingContextMenuBlock = block;
@@ -1781,6 +1785,19 @@ static char kMapSourceUpdateQueueKey;
         dispatch_block_cancel(_pendingContextMenuBlock);
         _pendingContextMenuBlock = nil;
     }
+}
+
+- (void)dismissSingleTapContextMenuIfRecognizedAsDoubleTap
+{
+    if (_singleTapContextMenuShownTime <= 0)
+        return;
+
+    NSTimeInterval elapsed = CACurrentMediaTime() - _singleTapContextMenuShownTime;
+    _singleTapContextMenuShownTime = 0;
+    if (elapsed > kSingleTapContextMenuDoubleTapGuard)
+        return;
+
+    [[OARootViewController instance].mapPanel hideContextMenu];
 }
 
 - (id<OAMapRendererViewProtocol>) mapRendererView

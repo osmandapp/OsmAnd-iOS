@@ -122,7 +122,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String? {
-        localizedString("change_appearance")
+        switch initMode {
+        case .tracks:
+            localizedString("change_appearance")
+        case .folder:
+            localizedString("default_appearance")
+        }
     }
     
     override func getLeftNavbarButtonTitle() -> String? {

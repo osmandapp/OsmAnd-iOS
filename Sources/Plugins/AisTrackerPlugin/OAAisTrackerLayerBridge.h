@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class AisObject;
+#import "OsmAndSharedWrapper.h"
 
 @interface OAAisTrackerLayerBridge : NSObject
 
 + (void)reloadAisObjects;
-+ (void)onAisObjectReceived:(AisObject *)object;
-+ (void)onAisObjectRemoved:(AisObject *)object;
++ (void)onAisObjectReceived:(OASAisObject *)object;
++ (void)onAisObjectRemoved:(OASAisObject *)object;
 
 @end

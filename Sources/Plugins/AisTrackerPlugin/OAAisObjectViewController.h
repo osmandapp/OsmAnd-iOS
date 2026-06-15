@@ -7,11 +7,10 @@
 //
 
 #import "OATargetInfoViewController.h"
-
-@class AisObject;
+#import "OsmAndSharedWrapper.h"
 
 @interface OAAisObjectViewController : OATargetInfoViewController
 
-- (instancetype)initWithAisObject:(AisObject *)object;
+- (instancetype)initWithAisObject:(OASAisObject *)object;
 
 @end

@@ -26,12 +26,12 @@
     [[self aisTrackerLayer] reloadAisObjects];
 }
 
-+ (void)onAisObjectReceived:(AisObject *)object
++ (void)onAisObjectReceived:(OASAisObject *)object
 {
     [[self aisTrackerLayer] onAisObjectReceived:object];
 }
 
-+ (void)onAisObjectRemoved:(AisObject *)object
++ (void)onAisObjectRemoved:(OASAisObject *)object
 {
     [[self aisTrackerLayer] onAisObjectRemoved:object];
 }

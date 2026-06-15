@@ -8,13 +8,12 @@
 
 #import "OAMapLayer.h"
 #import "OAContextMenuProvider.h"
-
-@class AisObject;
+#import "OsmAndSharedWrapper.h"
 
 @interface OAAisTrackerLayer : OAMapLayer<OAContextMenuProvider>
 
 - (void)reloadAisObjects;
-- (void)onAisObjectReceived:(AisObject *)object;
-- (void)onAisObjectRemoved:(AisObject *)object;
+- (void)onAisObjectReceived:(OASAisObject *)object;
+- (void)onAisObjectRemoved:(OASAisObject *)object;
 
 @end

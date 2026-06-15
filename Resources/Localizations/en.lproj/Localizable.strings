@@ -2460,7 +2460,6 @@
 "plugin_ais_tracker_name" = "AIS vessel tracker";
 "plugin_ais_tracker_description" = "Displays AIS positions and information about nearby vessels. AIS data is received over the network from an external AIS receiver.";
 "plugin_ais_tracker_disclaimer" = "DISCLAIMER\n\nThis plugin is a hobby project and is not intended for use in critical applications. It does not guarantee reliability or accuracy. Do not rely on this software for navigation, safety of life, or any other essential operations.";
-"ais_use_nmea_location" = "Use NMEA as current location";
 "ais_add_test_objects" = "Add test AIS objects";
 "ais_clear_simulation" = "Clear AIS simulation";
 "ais_reconnect" = "Reconnect";
@@ -2473,6 +2472,15 @@
 "ais_connection_failed" = "Connection failed";
 "ais_connection_disconnected" = "Disconnected";
 "ais_call_sign" = "Call sign";
+"ais_mmsi" = "MMSI";
+"ais_imo" = "IMO";
+"ais_ship_name" = "Ship name";
+"ais_cpa" = "CPA";
+"ais_tcpa" = "TCPA";
+"ais_cog" = "COG";
+"ais_sog" = "SOG";
+"ais_rate_of_turn" = "Rate of turn";
+"ais_eta" = "ETA";
 "ais_object_type" = "AIS type";
 "ais_ship_type" = "Ship type";
 "ais_position" = "Position";
@@ -4763,4 +4771,4 @@
 "shared_string_unlock" = "Unlock";
 
 "shared_string_url" = "URL";
-
+"shared_string_kts" = "kts";

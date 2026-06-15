@@ -6,6 +6,8 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
+
 extension Notification.Name {
     static let aisSimulationStatusChanged = Notification.Name("OAAisSimulationStatusChanged")
 }
@@ -49,38 +51,39 @@ final class AisDataManager: NSObject {
     func onAisObjectReceived(_ ais: AisObject) {
         let object: AisObject
         let event: String
-        if let existing = objectsByMmsi[ais.mmsi] {
-            existing.merge(ais)
+        let mmsi = Int(ais.mmsi)
+        if let existing = objectsByMmsi[mmsi] {
+            existing.set(ais: ais)
             object = existing
             event = "merge"
         } else {
-            objectsByMmsi[ais.mmsi] = ais
-            object = ais
+            object = AisObject(ais: ais)
+            objectsByMmsi[mmsi] = object
             event = "new"
         }
         if objectsByMmsi.count > Self.objectLimit {
             removeOldestObject()
         }
-        guard let storedObject = objectsByMmsi[object.mmsi], storedObject === object else { return }
-        aisDebugLog("[AisDataManager] data \(event) total=\(objectsByMmsi.count) \(object.debugSummary)")
+        guard let storedObject = objectsByMmsi[Int(object.mmsi)], storedObject === object else { return }
+        AisObjectHelper.debugLog("[AisDataManager] data \(event) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(object))")
         plugin?.onAisObjectReceived(object)
     }
 
     func removeLostObjects() {
         guard let plugin else { return }
         let maxAge = plugin.maxObjectAgeInMinutes()
-        let removed = objectsByMmsi.values.filter { $0.isLost(maxAgeMinutes: maxAge) }
+        let removed = objectsByMmsi.values.filter { $0.isLost(maxAgeInMin: Int32(maxAge)) }
         for object in removed {
-            objectsByMmsi.removeValue(forKey: object.mmsi)
-            aisDebugLog("[AisDataManager] data remove-lost maxAge=\(maxAge)m total=\(objectsByMmsi.count) \(object.debugSummary)")
+            objectsByMmsi.removeValue(forKey: Int(object.mmsi))
+            AisObjectHelper.debugLog("[AisDataManager] data remove-lost maxAge=\(maxAge)m total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(object))")
             plugin.onAisObjectRemoved(object)
         }
     }
 
     private func removeOldestObject() {
         guard let oldest = objectsByMmsi.values.min(by: { $0.lastUpdate < $1.lastUpdate }) else { return }
-        objectsByMmsi.removeValue(forKey: oldest.mmsi)
-        aisDebugLog("[AisDataManager] data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(oldest.debugSummary)")
+        objectsByMmsi.removeValue(forKey: Int(oldest.mmsi))
+        AisObjectHelper.debugLog("[AisDataManager] data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(oldest))")
         plugin?.onAisObjectRemoved(oldest)
     }
 }

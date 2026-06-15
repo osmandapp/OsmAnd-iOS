@@ -1361,8 +1361,6 @@
 		97F6410929C475E7008F527B /* map_action_hill_climbing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410529C475E6008F527B /* map_action_hill_climbing@3x.png */; };
 		97F6410C29C475E7008F527B /* map_action_hill_climbing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */; };
 		9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */; };
-		9F4844A52FD0000100484401 /* AisNmeaParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A12FD0000100484401 /* AisNmeaParser.swift */; };
-		9F4844A62FD0000100484401 /* AisNmeaConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A22FD0000100484401 /* AisNmeaConnection.swift */; };
 		9F4844A72FD0000100484401 /* AisTrackerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */; };
 		9F4844A82FD0000100484401 /* AisTrackerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */; };
 		9F4844AA2FD0000100484401 /* AisSimulationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A92FD0000100484401 /* AisSimulationProvider.swift */; };
@@ -5126,8 +5124,6 @@
 		97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_hill_climbing@2x.png"; sourceTree = "<group>"; };
 		9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopIndexFilter.h; sourceTree = "<group>"; };
 		9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATopIndexFilter.mm; sourceTree = "<group>"; };
-		9F4844A12FD0000100484401 /* AisNmeaParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisNmeaParser.swift; sourceTree = "<group>"; };
-		9F4844A22FD0000100484401 /* AisNmeaConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisNmeaConnection.swift; sourceTree = "<group>"; };
 		9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerPlugin.swift; sourceTree = "<group>"; };
 		9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerSettingsViewController.swift; sourceTree = "<group>"; };
 		9F4844A92FD0000100484401 /* AisSimulationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisSimulationProvider.swift; sourceTree = "<group>"; };
@@ -10427,8 +10423,6 @@
 			isa = PBXGroup;
 			children = (
 				FA4EDBF52FDAC090003B0AFC /* AisLogger.swift */,
-				9F4844A12FD0000100484401 /* AisNmeaParser.swift */,
-				9F4844A22FD0000100484401 /* AisNmeaConnection.swift */,
 				9F4844AB2FD0000100484401 /* AisObject.swift */,
 				9F4844B42FD0000100484401 /* AisTrackerHelper.swift */,
 				9F4844AD2FD0000100484401 /* AisDataManager.swift */,
@@ -18029,7 +18023,6 @@
 				4657490E2B6803710006046B /* TrashItem.swift in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
-				9F4844A62FD0000100484401 /* AisNmeaConnection.swift in Sources */,
 				9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */,
 				DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */,
 				DA69ED5C2A385B1B001022C7 /* WidgetPanelViewController.swift in Sources */,
@@ -18287,7 +18280,6 @@
 				FACDC63D2DDB317D00CB0C55 /* VehicleMetricsDescriptionViewController.swift in Sources */,
 				DA5A81DC26C563A700F274C7 /* OABuilding.mm in Sources */,
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
-				9F4844A52FD0000100484401 /* AisNmeaParser.swift in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
 				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
 				320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */,

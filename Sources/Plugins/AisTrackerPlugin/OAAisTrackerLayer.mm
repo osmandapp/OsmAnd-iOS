@@ -37,6 +37,11 @@ static int kAisIconKeyStorage;
 static const OsmAnd::MapMarker::OnSurfaceIconKey kAisIconKey = &kAisIconKeyStorage;
 static std::unordered_map<std::string, sk_sp<SkImage>> kAisImagesCache;
 
+static BOOL OAAisTypeEquals(OASAisObjType *type, OASAisObjType *expected)
+{
+    return type == expected || [type isEqual:expected];
+}
+
 static std::string OAAisImageCacheKey(NSString *prefix, NSString *name, CGFloat iconSize)
 {
     NSString *key = [NSString stringWithFormat:@"%@:%@:%d", prefix, name, (int)std::round(iconSize * 100.0)];
@@ -56,21 +61,72 @@ static sk_sp<SkImage> OAAisCachedSvgImage(NSString *resourceName, CGFloat iconSi
     return image;
 }
 
-static NSString *OAAisObjectTitle(AisObject *object)
+static NSString *OAAisObjectTitle(OASAisObject *object)
 {
     return [NSString stringWithFormat:OALocalizedString(@"ais_object_with_mmsi"), (long)object.mmsi];
 }
 
+static NSDate *OAAisLastUpdateDate(OASAisObject *object)
+{
+    return [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)object.lastUpdate / 1000.0];
+}
+
+static CLLocation *OAAisObjectLocation(OASAisObject *object)
+{
+    OASAisLocation *location = [object getAisLocation];
+    if (!location)
+        return nil;
+    CLLocationDistance altitude = object.altitude == OASAisObjectConstants.shared.INVALID_ALTITUDE ? 0 : object.altitude;
+    return [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(location.latitude, location.longitude)
+                                        altitude:altitude
+                              horizontalAccuracy:20
+                                verticalAccuracy:-1
+                                          course:location.hasBearing ? location.bearing : -1
+                                           speed:location.hasSpeed ? location.speed : -1
+                                       timestamp:OAAisLastUpdateDate(object)];
+}
+
+static NSString *OAAisMessageTypesString(OASAisObject *object)
+{
+    NSMutableArray<NSString *> *values = [NSMutableArray array];
+    for (OASInt *type in object.msgTypes)
+        [values addObject:[NSString stringWithFormat:@"%d", type.intValue]];
+    [values sortUsingSelector:@selector(compare:)];
+    return [values componentsJoinedByString:@", "];
+}
+
+static NSString *OAAisDebugSummary(OASAisObject *object)
+{
+    NSString *positionText = object.position
+        ? [NSString stringWithFormat:@"%.6f,%.6f", object.position.latitude, object.position.longitude]
+        : @"none";
+    NSTimeInterval age = [[NSDate date] timeIntervalSinceDate:OAAisLastUpdateDate(object)];
+    return [NSString stringWithFormat:@"mmsi=%d msg=%d msgs=%@ class=%@ shipType=%d rest=%@ movable=%@ nav=%d sog=%.1f cog=%.1f heading=%d pos=%@ age=%.1fs",
+            object.mmsi,
+            object.msgType,
+            OAAisMessageTypesString(object),
+            object.objectClass.name,
+            object.shipType,
+            [object isVesselAtRest] ? @"yes" : @"no",
+            [object isMovable] ? @"yes" : @"no",
+            object.navStatus,
+            object.sog,
+            object.cog,
+            object.heading,
+            positionText,
+            age];
+}
+
 @interface AisObjectDrawable : NSObject
 
-@property (nonatomic) AisObject *object;
+@property (nonatomic) OASAisObject *object;
 @property (nonatomic, copy) NSString *renderKey;
 
-- (instancetype)initWithObject:(AisObject *)object;
-- (instancetype)initWithObject:(AisObject *)object
+- (instancetype)initWithObject:(OASAisObject *)object;
+- (instancetype)initWithObject:(OASAisObject *)object
                       textScale:(CGFloat)textScale
            displayDensityFactor:(CGFloat)displayDensityFactor;
-- (void)set:(AisObject *)object;
+- (void)set:(OASAisObject *)object;
 - (void)setTextScale:(CGFloat)textScale
  displayDensityFactor:(CGFloat)displayDensityFactor;
 - (BOOL)hasAisRenderData;
@@ -101,12 +157,12 @@ static NSString *OAAisObjectTitle(AisObject *object)
     int _baseOrder;
 }
 
-- (instancetype)initWithObject:(AisObject *)object
+- (instancetype)initWithObject:(OASAisObject *)object
 {
     return [self initWithObject:object textScale:1.0 displayDensityFactor:UIScreen.mainScreen.scale];
 }
 
-- (instancetype)initWithObject:(AisObject *)object
+- (instancetype)initWithObject:(OASAisObject *)object
                       textScale:(CGFloat)textScale
            displayDensityFactor:(CGFloat)displayDensityFactor
 {
@@ -119,7 +175,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
     return self;
 }
 
-- (void)set:(AisObject *)object
+- (void)set:(OASAisObject *)object
 {
     _object = object;
 }
@@ -152,7 +208,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
 
 - (OsmAnd::PointI)markerLocation
 {
-    CLLocation *location = _object.location;
+    CLLocation *location = OAAisObjectLocation(_object);
     if (!location)
         return OsmAnd::PointI(0, 0);
     return OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(location.coordinate.longitude),
@@ -254,13 +310,13 @@ static NSString *OAAisObjectTitle(AisObject *object)
         return;
 
     const OsmAnd::ZoomLevel zoom = mapView ? mapView.zoomLevel : OsmAnd::ZoomLevel::MinZoomLevel;
-    if (!mapView || (int)zoom < kAisTrackerStartZoom || !_object.hasPosition)
+    if (!mapView || (int)zoom < kAisTrackerStartZoom || !_object.position)
     {
         [self setAisRenderDataHidden:YES];
         return;
     }
 
-    CLLocation *location = _object.location;
+    CLLocation *location = OAAisObjectLocation(_object);
     if (!location)
     {
         [self setAisRenderDataHidden:YES];
@@ -276,7 +332,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
 
     NSInteger vesselLostTimeout = plugin ? [plugin vesselLostTimeoutInMinutes] : 0;
     BOOL vesselAtRest = [_object isVesselAtRest];
-    BOOL lostTimeout = vesselLostTimeout > 0 && [_object isLostWithMaxAgeMinutes:vesselLostTimeout] && !vesselAtRest;
+    BOOL lostTimeout = vesselLostTimeout > 0 && [_object isLostMaxAgeInMin:(int32_t)vesselLostTimeout] && !vesselAtRest;
     CGFloat speedFactor = [self movementFactor];
     BOOL drawDirectionLine = speedFactor > 0 && !lostTimeout && !vesselAtRest;
 
@@ -290,7 +346,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
     _restMarker->setIsHidden(!vesselAtRest);
     _lostMarker->setIsHidden(!lostTimeout);
 
-    float rotation = fmod(_object.vesselRotation + 180.0, 360.0);
+    float rotation = fmod([_object getVesselRotation] + 180.0, 360.0);
     if (!vesselAtRest && [self needRotation])
     {
         _activeMarker->setOnMapSurfaceIconDirection(kAisIconKey, rotation);
@@ -372,7 +428,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
             return image;
     }
 
-    NSString *drawnKeyName = [NSString stringWithFormat:@"%ld:%ld", (long)state, (long)_object.objectClass];
+    NSString *drawnKeyName = [NSString stringWithFormat:@"%ld:%@", (long)state, _object.objectClass.name];
     std::string drawnKey = OAAisImageCacheKey(@"drawn", drawnKeyName, iconSize);
     const auto cachedImage = kAisImagesCache.find(drawnKey);
     if (cachedImage != kAisImagesCache.end())
@@ -398,7 +454,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
         [outer fill];
         path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(bounds, 4 * sizeFactor, 4 * sizeFactor)];
     }
-    else if (_object.objectClass == AisObjTypeAton || _object.objectClass == AisObjTypeAtonVirtual)
+    else if (OAAisTypeEquals(_object.objectClass, OASAisObjType.aisAton) || OAAisTypeEquals(_object.objectClass, OASAisObjType.aisAtonVirtual))
     {
         path = [UIBezierPath bezierPath];
         [path moveToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMinY(bounds))];
@@ -427,7 +483,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
     [path fill];
     [path stroke];
 
-    if (_object.objectClass == AisObjTypeAtonVirtual && state != 1)
+    if (OAAisTypeEquals(_object.objectClass, OASAisObjType.aisAtonVirtual) && state != 1)
     {
         UIBezierPath *plus = [UIBezierPath bezierPath];
         [plus moveToPoint:CGPointMake(CGRectGetMidX(bounds), CGRectGetMinY(bounds) + 12 * sizeFactor)];
@@ -464,39 +520,31 @@ static NSString *OAAisObjectTitle(AisObject *object)
     return kAisBaseIconSize * _textScale * _displayDensityFactor;
 }
 
-- (UIColor *)colorForType:(AisObjType)type
+- (UIColor *)colorForType:(OASAisObjType *)type
 {
-    switch (type)
-    {
-        case AisObjTypeVessel: return UIColor.greenColor;
-        case AisObjTypeVesselSport: return UIColor.yellowColor;
-        case AisObjTypeVesselFast: return UIColor.blueColor;
-        case AisObjTypeVesselPassenger: return UIColor.cyanColor;
-        case AisObjTypeVesselFreight: return UIColor.grayColor;
-        case AisObjTypeVesselCommercial: return UIColor.lightGrayColor;
-        case AisObjTypeVesselAuthorities: return [UIColor colorWithRed:0.33 green:0.42 blue:0.18 alpha:1.0];
-        case AisObjTypeVesselSar:
-        case AisObjTypeSart: return [UIColor colorWithRed:0.98 green:0.50 blue:0.45 alpha:1.0];
-        case AisObjTypeVesselOther: return [UIColor colorWithRed:0.00 green:0.75 blue:1.00 alpha:1.0];
-        case AisObjTypeAirplane: return [UIColor colorWithRed:0.45 green:0.27 blue:0.86 alpha:1.0];
-        case AisObjTypeAton:
-        case AisObjTypeAtonVirtual: return [UIColor colorWithRed:0.92 green:0.82 blue:0.14 alpha:1.0];
-        case AisObjTypeLandStation: return [UIColor colorWithRed:0.45 green:0.45 blue:0.45 alpha:1.0];
-        default: return [UIColor colorWithRed:0.04 green:0.62 blue:0.72 alpha:1.0];
-    }
+    if (OAAisTypeEquals(type, OASAisObjType.aisVessel)) return UIColor.greenColor;
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselSport)) return UIColor.yellowColor;
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselFast)) return UIColor.blueColor;
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselPassenger)) return UIColor.cyanColor;
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselFreight)) return UIColor.grayColor;
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselCommercial)) return UIColor.lightGrayColor;
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselAuthorities)) return [UIColor colorWithRed:0.33 green:0.42 blue:0.18 alpha:1.0];
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselSar) || OAAisTypeEquals(type, OASAisObjType.aisSart)) return [UIColor colorWithRed:0.98 green:0.50 blue:0.45 alpha:1.0];
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselOther)) return [UIColor colorWithRed:0.00 green:0.75 blue:1.00 alpha:1.0];
+    if (OAAisTypeEquals(type, OASAisObjType.aisAirplane)) return [UIColor colorWithRed:0.45 green:0.27 blue:0.86 alpha:1.0];
+    if (OAAisTypeEquals(type, OASAisObjType.aisAton) || OAAisTypeEquals(type, OASAisObjType.aisAtonVirtual)) return [UIColor colorWithRed:0.92 green:0.82 blue:0.14 alpha:1.0];
+    if (OAAisTypeEquals(type, OASAisObjType.aisLandstation)) return [UIColor colorWithRed:0.45 green:0.45 blue:0.45 alpha:1.0];
+    return [UIColor colorWithRed:0.04 green:0.62 blue:0.72 alpha:1.0];
 }
 
-- (NSString *)iconResourceNameForType:(AisObjType)type
+- (NSString *)iconResourceNameForType:(OASAisObjType *)type
 {
-    switch (type)
-    {
-        case AisObjTypeLandStation: return @"c_mx_ais_land";
-        case AisObjTypeAirplane: return @"c_mx_ais_plane";
-        case AisObjTypeSart: return @"c_mx_ais_sar";
-        case AisObjTypeAton: return @"c_mx_ais_aton";
-        case AisObjTypeAtonVirtual: return @"c_mx_ais_aton_virt";
-        default: return @"c_mx_ais_vessel";
-    }
+    if (OAAisTypeEquals(type, OASAisObjType.aisLandstation)) return @"c_mx_ais_land";
+    if (OAAisTypeEquals(type, OASAisObjType.aisAirplane)) return @"c_mx_ais_plane";
+    if (OAAisTypeEquals(type, OASAisObjType.aisSart)) return @"c_mx_ais_sar";
+    if (OAAisTypeEquals(type, OASAisObjType.aisAton)) return @"c_mx_ais_aton";
+    if (OAAisTypeEquals(type, OASAisObjType.aisAtonVirtual)) return @"c_mx_ais_aton_virt";
+    return @"c_mx_ais_vessel";
 }
 
 - (CGFloat)movementFactor
@@ -516,8 +564,8 @@ static NSString *OAAisObjectTitle(AisObject *object)
 
 - (BOOL)needRotation
 {
-    return (((_object.cog != 360.0) && (_object.cog != 0.0)) ||
-            ((_object.heading != 511) && (_object.heading != 0))) && [_object isMovable];
+    return (((_object.cog != OASAisObjectConstants.shared.INVALID_COG) && (_object.cog != 0.0)) ||
+            ((_object.heading != OASAisObjectConstants.shared.INVALID_HEADING) && (_object.heading != 0))) && [_object isMovable];
 }
 
 @end
@@ -765,11 +813,11 @@ static NSString *OAAisObjectTitle(AisObject *object)
 {
     [self ensureObjectDrawables];
     AisTrackerPlugin *plugin = [self plugin];
-    NSArray<AisObject *> *objects = [plugin getAisObjects];
+    NSArray<OASAisObject *> *objects = [plugin getAisObjects];
     NSMutableSet<NSNumber *> *visibleMmsi = [NSMutableSet set];
-    for (AisObject *object in objects)
+    for (OASAisObject *object in objects)
     {
-        if (!object.hasPosition)
+        if (!object.position)
             continue;
 
         NSNumber *key = @(object.mmsi);
@@ -802,18 +850,18 @@ static NSString *OAAisObjectTitle(AisObject *object)
     [plugin updateSimulationRenderedObjects:_objectDrawables.count];
 }
 
-- (void)onAisObjectReceived:(AisObject *)object
+- (void)onAisObjectReceived:(OASAisObject *)object
 {
-    if (![self isVisible] || !object.hasPosition)
+    if (![self isVisible] || !object.position)
         return;
-    [[AisLogger shared] log:[NSString stringWithFormat:@"receive %@", object.debugSummary]];
+    [[AisLogger shared] log:[NSString stringWithFormat:@"receive %@", OAAisDebugSummary(object)]];
     [self addCollectionsToRenderer];
     [self.mapViewController runWithRenderSync:^{
         [self updateAisObjectSync:object];
     }];
 }
 
-- (void)onAisObjectRemoved:(AisObject *)object
+- (void)onAisObjectRemoved:(OASAisObject *)object
 {
     if (!object)
         return;
@@ -822,7 +870,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
         NSNumber *key = @(object.mmsi);
         AisObjectDrawable *drawable = _objectDrawables[key];
         [[AisLogger shared] log:[NSString stringWithFormat:@"remove hasDrawable=%@ drawables=%lu %@",
-                                 drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, object.debugSummary]];
+                                 drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, OAAisDebugSummary(object)]];
         if (drawable)
         {
             [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
@@ -832,7 +880,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
     }];
 }
 
-- (void)updateAisObjectSync:(AisObject *)object
+- (void)updateAisObjectSync:(OASAisObject *)object
 {
     [self ensureObjectDrawables];
     NSNumber *key = @(object.mmsi);
@@ -854,7 +902,7 @@ static NSString *OAAisObjectTitle(AisObject *object)
     [drawable updateAisRenderDataWithMapView:self.mapView plugin:[self plugin]];
     int linesCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
 
-    [[AisLogger shared] log:[NSString stringWithFormat:@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, object.debugSummary]];
+    [[AisLogger shared] log:[NSString stringWithFormat:@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, OAAisDebugSummary(object)]];
     [[self plugin] updateSimulationRenderedObjects:_objectDrawables.count];
 }
 
@@ -904,11 +952,11 @@ static NSString *OAAisObjectTitle(AisObject *object)
 
 - (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
-    if (![obj isKindOfClass:AisObject.class] || !((AisObject *)obj).hasPosition)
+    if (![obj isKindOfClass:OASAisObject.class] || !((OASAisObject *)obj).position)
         return nil;
 
-    AisObject *object = obj;
-    CLLocation *location = object.location;
+    OASAisObject *object = obj;
+    CLLocation *location = OAAisObjectLocation(object);
     if (!location)
         return nil;
 
@@ -917,7 +965,8 @@ static NSString *OAAisObjectTitle(AisObject *object)
     targetPoint.targetObj = object;
     targetPoint.title = OAAisObjectTitle(object);
     targetPoint.titleSecond = nil;
-    targetPoint.titleAddress = object.navStatusString.length > 0 ? object.navStatusString : nil;
+    NSString *navStatus = [object getNavStatusString];
+    targetPoint.titleAddress = navStatus.length > 0 ? navStatus : nil;
     targetPoint.shouldFetchAddress = NO;
     targetPoint.location = location.coordinate;
     
@@ -940,17 +989,17 @@ static NSString *OAAisObjectTitle(AisObject *object)
 
 - (CLLocation *)getObjectLocation:(id)obj
 {
-    if (![obj isKindOfClass:AisObject.class] || !((AisObject *)obj).hasPosition)
+    if (![obj isKindOfClass:OASAisObject.class] || !((OASAisObject *)obj).position)
         return nil;
-    AisObject *object = obj;
-    return object.location;
+    OASAisObject *object = obj;
+    return OAAisObjectLocation(object);
 }
 
 - (OAPointDescription *)getObjectName:(id)obj
 {
-    if (![obj isKindOfClass:AisObject.class])
+    if (![obj isKindOfClass:OASAisObject.class])
         return nil;
-    AisObject *object = obj;
+    OASAisObject *object = obj;
     return [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION typeName:OALocalizedString(@"ais_type_object") name:OAAisObjectTitle(object)];
 }
 
@@ -985,10 +1034,10 @@ static NSString *OAAisObjectTitle(AisObject *object)
     if (touchPolygon31.isEmpty())
         return;
 
-    NSArray<AisObject *> *objects = [[self plugin] getAisObjects];
-    for (AisObject *object in objects)
+    NSArray<OASAisObject *> *objects = [[self plugin] getAisObjects];
+    for (OASAisObject *object in objects)
     {
-        CLLocation *location = object.location;
+        CLLocation *location = OAAisObjectLocation(object);
         if (!location)
             continue;
 
@@ -1001,26 +1050,23 @@ static NSString *OAAisObjectTitle(AisObject *object)
     }
 }
 
-- (NSString *)objectTypeName:(AisObjType)type
+- (NSString *)objectTypeName:(OASAisObjType *)type
 {
-    switch (type)
-    {
-        case AisObjTypeVessel: return OALocalizedString(@"ais_type_vessel");
-        case AisObjTypeVesselSport: return OALocalizedString(@"ais_type_sport_vessel");
-        case AisObjTypeVesselFast: return OALocalizedString(@"ais_type_high_speed_vessel");
-        case AisObjTypeVesselPassenger: return OALocalizedString(@"ais_type_passenger_vessel");
-        case AisObjTypeVesselFreight: return OALocalizedString(@"ais_type_cargo_tanker");
-        case AisObjTypeVesselCommercial: return OALocalizedString(@"ais_type_commercial_vessel");
-        case AisObjTypeVesselAuthorities: return OALocalizedString(@"ais_type_authorities_vessel");
-        case AisObjTypeVesselSar: return OALocalizedString(@"ais_type_sar_vessel");
-        case AisObjTypeLandStation: return OALocalizedString(@"ais_type_base_station");
-        case AisObjTypeAirplane: return OALocalizedString(@"ais_type_sar_aircraft");
-        case AisObjTypeSart: return OALocalizedString(@"ais_type_sart");
-        case AisObjTypeAton: return OALocalizedString(@"ais_type_aid_to_navigation");
-        case AisObjTypeAtonVirtual: return OALocalizedString(@"ais_type_virtual_aid_to_navigation");
-        case AisObjTypeVesselOther: return OALocalizedString(@"ais_type_other_vessel");
-        default: return OALocalizedString(@"ais_type_object");
-    }
+    if (OAAisTypeEquals(type, OASAisObjType.aisVessel)) return OALocalizedString(@"ais_type_vessel");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselSport)) return OALocalizedString(@"ais_type_sport_vessel");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselFast)) return OALocalizedString(@"ais_type_high_speed_vessel");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselPassenger)) return OALocalizedString(@"ais_type_passenger_vessel");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselFreight)) return OALocalizedString(@"ais_type_cargo_tanker");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselCommercial)) return OALocalizedString(@"ais_type_commercial_vessel");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselAuthorities)) return OALocalizedString(@"ais_type_authorities_vessel");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselSar)) return OALocalizedString(@"ais_type_sar_vessel");
+    if (OAAisTypeEquals(type, OASAisObjType.aisLandstation)) return OALocalizedString(@"ais_type_base_station");
+    if (OAAisTypeEquals(type, OASAisObjType.aisAirplane)) return OALocalizedString(@"ais_type_sar_aircraft");
+    if (OAAisTypeEquals(type, OASAisObjType.aisSart)) return OALocalizedString(@"ais_type_sart");
+    if (OAAisTypeEquals(type, OASAisObjType.aisAton)) return OALocalizedString(@"ais_type_aid_to_navigation");
+    if (OAAisTypeEquals(type, OASAisObjType.aisAtonVirtual)) return OALocalizedString(@"ais_type_virtual_aid_to_navigation");
+    if (OAAisTypeEquals(type, OASAisObjType.aisVesselOther)) return OALocalizedString(@"ais_type_other_vessel");
+    return OALocalizedString(@"ais_type_object");
 }
 
 @end

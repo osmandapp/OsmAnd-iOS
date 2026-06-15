@@ -59,7 +59,6 @@ final class AisTrackerSettingsViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadStatus), name: .aisNmeaConnectionStateChanged, object: plugin)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadStatus), name: .aisNmeaLocationReceived, object: plugin)
     }
 
     override func getTitle() -> String {

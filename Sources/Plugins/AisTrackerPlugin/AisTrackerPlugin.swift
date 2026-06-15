@@ -7,10 +7,37 @@
 //
 
 import CoreLocation
+import OsmAndShared
 
 extension Notification.Name {
     static let aisNmeaConnectionStateChanged = Notification.Name("OAAisNmeaConnectionStateChanged")
-    static let aisNmeaLocationReceived = Notification.Name("OAAisNmeaLocationReceived")
+}
+
+@objc enum AisNmeaProtocol: Int {
+    case udp = 0
+    case tcp = 1
+}
+
+@objc enum AisNmeaConnectionState: Int {
+    case disconnected
+    case connecting
+    case connected
+    case failed
+}
+
+extension AisNmeaConnectionState: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .disconnected:
+            return "disconnected"
+        case .connecting:
+            return "connecting"
+        case .connected:
+            return "connected"
+        case .failed:
+            return "failed"
+        }
+    }
 }
 
 @objcMembers
@@ -20,7 +47,6 @@ final class AisTrackerPlugin: OAPlugin {
     static let hostPrefId = "ais_address_nmea_server"
     static let tcpPortPrefId = "ais_port_nmea_server"
     static let udpPortPrefId = "ais_port_nmea_local"
-    static let overrideLocationPrefId = "ais_use_nmea_location"
     static let objectLostTimeoutPrefId = "ais_object_lost_timeout"
     static let shipLostTimeoutPrefId = "ais_ship_lost_timeout"
     static let cpaWarningTimePrefId = "ais_cpa_warning_time"
@@ -30,23 +56,22 @@ final class AisTrackerPlugin: OAPlugin {
     let hostPref: OACommonString
     let tcpPortPref: OACommonInteger
     let udpPortPref: OACommonInteger
-    let overrideLocationPref: OACommonBoolean
     let objectLostTimeoutPref: OACommonInteger
     let shipLostTimeoutPref: OACommonInteger
     let cpaWarningTimePref: OACommonInteger
     let cpaWarningDistancePref: OACommonDouble
 
-    private let connection = AisNmeaConnection()
     private let decoder = AisMessageDecoder()
     private let aisDecoderQueue = DispatchQueue(label: "com.app.ais.decoder", qos: .userInitiated)
+    private var networkListener: AisMessageListener?
     
     private var applicationModeObserver: OAAutoObserverProxy?
     
     private lazy var simulationProvider = AisSimulationProvider(plugin: self)
     private lazy var aisDataManager = AisDataManager(plugin: self)
+    private lazy var networkDataListener = AisNetworkDataListener(plugin: self)
     
     private(set) var connectionState: AisNmeaConnectionState = .disconnected
-    private(set) var lastLocation: CLLocation?
     private(set) var fakeOwnLocation: CLLocation?
     private(set) var simulationFileName: String?
     private(set) var simulationStatusText: String?
@@ -63,23 +88,12 @@ final class AisTrackerPlugin: OAPlugin {
         hostPref = OAAppSettings.sharedManager().registerStringPreference(Self.hostPrefId, defValue: "192.168.200.16")
         tcpPortPref = OAAppSettings.sharedManager().registerIntPreference(Self.tcpPortPrefId, defValue: 4001)
         udpPortPref = OAAppSettings.sharedManager().registerIntPreference(Self.udpPortPrefId, defValue: 10110)
-        overrideLocationPref = OAAppSettings.sharedManager().registerBooleanPreference(Self.overrideLocationPrefId, defValue: false)
         objectLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.objectLostTimeoutPrefId, defValue: 7)
         shipLostTimeoutPref = OAAppSettings.sharedManager().registerIntPreference(Self.shipLostTimeoutPrefId, defValue: 4)
         cpaWarningTimePref = OAAppSettings.sharedManager().registerIntPreference(Self.cpaWarningTimePrefId, defValue: 0)
         cpaWarningDistancePref = OAAppSettings.sharedManager().registerFloatPreference(Self.cpaWarningDistancePrefId, defValue: 1.0)
         super.init()
 
-        connection.onStateChanged = { [weak self] state in
-            self?.connectionState = state
-            NotificationCenter.default.post(name: .aisNmeaConnectionStateChanged, object: self)
-        }
-        connection.onLocation = { [weak self] location in
-            self?.handle(location)
-        }
-        connection.onSentence = { [weak self] sentence in
-            self?.handleAisSentence(sentence)
-        }
         applicationModeObserver = OAAutoObserverProxy(self,
                                                       withHandler: #selector(onApplicationModeChanged),
                                                       andObserve: OsmAndApp.swiftInstance().applicationModeChangedObservable)
@@ -137,7 +151,7 @@ final class AisTrackerPlugin: OAPlugin {
 
     override func disable() {
         clearSimulationObjects()
-        connection.stop()
+        stopAisNetworkListener()
         super.disable()
     }
 
@@ -162,20 +176,20 @@ final class AisTrackerPlugin: OAPlugin {
         simulationReceivedObjects = 0
         simulationRenderedObjects = 0
         simulationStatusText = localizedString("shared_string_loading")
-        aisDebugLog("simulation start file=\(fileURL.lastPathComponent)")
+        AisObjectHelper.debugLog("simulation start file=\(fileURL.lastPathComponent)")
         simulationProvider.startAisSimulation(fileURL)
     }
 
     func updateSimulationStatus(sentences: Int, decoded: Int, objects: Int, error: String?) {
         if let error, !error.isEmpty {
             simulationStatusText = error
-            aisDebugLog("simulation status error=\(error)")
+            AisObjectHelper.debugLog("simulation status error=\(error)")
         } else {
             simulationSentences = sentences
             simulationDecoded = decoded
             simulationObjects = objects
             updateSimulationStatusText()
-            aisDebugLog("simulation stats sentences=\(sentences) decoded=\(decoded) objects=\(objects)")
+            AisObjectHelper.debugLog("simulation stats sentences=\(sentences) decoded=\(decoded) objects=\(objects)")
         }
         postSimulationStatusChanged()
     }
@@ -189,7 +203,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func prepareAisSimulation() {
-        connection.stop()
+        stopAisNetworkListener()
         aisDataManager.cleanupResources()
         aisDataManager.startUpdates()
     }
@@ -205,7 +219,7 @@ final class AisTrackerPlugin: OAPlugin {
 
     func clearSimulationObjects() {
         simulationProvider.stopAisSimulation()
-        aisDebugLog("simulation clear")
+        AisObjectHelper.debugLog("simulation clear")
         fakeOwnLocation = nil
         simulationFileName = nil
         simulationStatusText = nil
@@ -224,16 +238,24 @@ final class AisTrackerPlugin: OAPlugin {
         }
         aisDataManager.startUpdates()
         let proto = AisNmeaProtocol(rawValue: Int(protocolPref.get())) ?? .udp
+        stopSharedNetworkListener(updateState: false)
+        updateConnectionState(.connecting)
         switch proto {
         case .udp:
-            connection.startUDP(port: UInt16(max(1, udpPortPref.get())))
+            let port = max(1, Int(udpPortPref.get()))
+            AisObjectHelper.debugLog("[AisTrackerPlugin] start shared AIS UDP port=\(port)")
+            networkListener = OsmAndShared.AisMessageListener(dataListener: networkDataListener, udpPort: Int32(port))
         case .tcp:
-            connection.startTCP(host: hostPref.get(), port: UInt16(max(1, tcpPortPref.get())))
+            let host = hostPref.get()
+            let port = max(1, Int(tcpPortPref.get()))
+            AisObjectHelper.debugLog("[AisTrackerPlugin] start shared AIS TCP host=\(host) port=\(port)")
+            networkListener = OsmAndShared.AisMessageListener(dataListener: networkDataListener, serverIp: host, serverPort: Int32(port))
         }
+        updateConnectionState(.connected)
     }
 
     func stopAisNetworkListener() {
-        connection.stop()
+        stopSharedNetworkListener(updateState: true)
         aisDataManager.stopUpdates()
     }
 
@@ -243,13 +265,6 @@ final class AisTrackerPlugin: OAPlugin {
 
     func handleSimulatedNmeaSentence(_ sentence: String) {
         handleAisSentence(sentence)
-        if let location = AisNmeaParser.parseLocation(from: sentence) {
-            handleSimulatedLocation(location)
-        }
-    }
-
-    func handleSimulatedLocation(_ location: CLLocation) {
-        handle(location)
     }
 
     func handleSimulatedAisObject(_ object: AisObject) {
@@ -284,23 +299,23 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     func onAisObjectReceived(_ object: AisObject) {
-        lastMessageReceived = object.lastUpdate
+        lastMessageReceived = AisObjectHelper.lastUpdateDate(object)
         if simulationFileName != nil {
-            let receivedObjects = getAisObjects().filter(\.hasPosition).count
+            let receivedObjects = getAisObjects().filter { $0.position != nil }.count
             if simulationReceivedObjects != receivedObjects {
                 simulationReceivedObjects = receivedObjects
                 updateSimulationStatusText()
                 postSimulationStatusChanged()
             }
         }
-        aisDebugLog("plugin received withPosition=\(getAisObjects().filter(\.hasPosition).count) \(object.debugSummary)")
+        AisObjectHelper.debugLog("plugin received withPosition=\(getAisObjects().filter { $0.position != nil }.count) \(AisObjectHelper.debugSummary(object))")
         DispatchQueue.main.async {
             OAAisTrackerLayerBridge.onAisObjectReceived(object)
         }
     }
 
     func onAisObjectRemoved(_ object: AisObject) {
-        aisDebugLog("plugin removed \(object.debugSummary)")
+        AisObjectHelper.debugLog("plugin removed \(AisObjectHelper.debugSummary(object))")
         DispatchQueue.main.async {
             OAAisTrackerLayerBridge.onAisObjectRemoved(object)
         }
@@ -315,25 +330,25 @@ final class AisTrackerPlugin: OAPlugin {
     func hasCpaWarning(for object: AisObject) -> Bool {
         let warningTime = cpaWarningTimeInMinutes()
         let warningDistance = cpaWarningDistanceInNauticalMiles()
-        guard object.isMovable,
-              object.objectClass != .airplane,
+        guard object.isMovable(),
+              object.objectClass != OsmAndShared.AisObjType.aisAirplane,
               warningTime > 0,
               object.sog > 0,
               let ownPosition = ownPosition(),
-              let aisPosition = object.location else {
+              let aisPosition = AisObjectHelper.location(object) else {
             return false
         }
         AisTrackerHelper.getCpa(ownPosition, aisPosition, result: object.cpa)
         guard object.cpa.valid, object.cpa.tcpa > 0 else { return false }
-        return Double(object.cpa.cpaDistance) <= warningDistance
+        return Double(object.cpa.cpa) <= warningDistance
             && object.cpa.tcpa * 60.0 <= Double(warningTime)
-            && object.cpa.crossingTime1 >= 0
-            && object.cpa.crossingTime2 >= 0
+            && object.cpa.t1 >= 0
+            && object.cpa.t2 >= 0
     }
 
     func updateCpa(for object: AisObject) {
         guard let ownPosition = ownPosition(),
-              let aisPosition = object.currentLocation ?? object.location else {
+              let aisPosition = AisObjectHelper.currentLocation(object) ?? AisObjectHelper.location(object) else {
             object.cpa.reset()
             return
         }
@@ -342,7 +357,7 @@ final class AisTrackerPlugin: OAPlugin {
 
     func distanceInNauticalMiles(to object: AisObject) -> Double {
         guard let ownPosition = ownPosition(),
-              let aisPosition = object.currentLocation ?? object.location else {
+              let aisPosition = AisObjectHelper.currentLocation(object) ?? AisObjectHelper.location(object) else {
             return -1
         }
         return ownPosition.distance(from: aisPosition) / 1852.0
@@ -350,7 +365,7 @@ final class AisTrackerPlugin: OAPlugin {
 
     func bearing(to object: AisObject) -> Double {
         guard let ownPosition = ownPosition(),
-              let aisPosition = object.currentLocation ?? object.location else {
+              let aisPosition = AisObjectHelper.currentLocation(object) ?? AisObjectHelper.location(object) else {
             return -1
         }
         return Self.bearing(from: ownPosition.coordinate, to: aisPosition.coordinate)
@@ -379,17 +394,9 @@ final class AisTrackerPlugin: OAPlugin {
         }
     }
 
-    private func handle(_ location: CLLocation) {
-        lastLocation = location
-        NotificationCenter.default.post(name: .aisNmeaLocationReceived, object: self)
-        if overrideLocationPref.get() {
-            OsmAndApp.swiftInstance().locationServices?.setLocationFromNMEA(location)
-        }
-    }
-    
     private func updateConnectionForCurrentProfile() {
         if isActiveForCurrentProfile() {
-            if !connection.isRunning {
+            if networkListener == nil {
                 restartConnection()
             }
         } else {
@@ -407,6 +414,28 @@ final class AisTrackerPlugin: OAPlugin {
                 self.aisDataManager.onAisObjectReceived(object)
             }
         }
+    }
+
+    fileprivate func onNetworkAisObjectReceived(_ object: AisObject) {
+        DispatchQueue.main.async { [weak self] in
+            self?.aisDataManager.onAisObjectReceived(object)
+        }
+    }
+
+    private func stopSharedNetworkListener(updateState: Bool) {
+        if networkListener != nil {
+            AisObjectHelper.debugLog("[AisTrackerPlugin] stop shared AIS listener")
+        }
+        networkListener?.stopListener()
+        networkListener = nil
+        if updateState {
+            updateConnectionState(.disconnected)
+        }
+    }
+
+    private func updateConnectionState(_ state: AisNmeaConnectionState) {
+        connectionState = state
+        NotificationCenter.default.post(name: .aisNmeaConnectionStateChanged, object: self)
     }
 
     private func updateSimulationStatusText() {
@@ -438,5 +467,18 @@ final class AisTrackerPlugin: OAPlugin {
     
     @objc private func onApplicationModeChanged() {
         updateConnectionForCurrentProfile()
+    }
+}
+
+private final class AisNetworkDataListener: NSObject, OsmAndShared.AisDataListener {
+    private weak var plugin: AisTrackerPlugin?
+
+    init(plugin: AisTrackerPlugin) {
+        self.plugin = plugin
+        super.init()
+    }
+
+    func onAisObjectReceived(ais: AisObject) {
+        plugin?.onNetworkAisObjectReceived(ais)
     }
 }

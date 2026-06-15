@@ -887,7 +887,7 @@ static const NSInteger _buttonsCount = 4;
         }
         
         [self.customController setRowUpdatesDeferred:YES];
-        [UIView animateWithDuration:0.15 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
 
             self.frame = frame;
 

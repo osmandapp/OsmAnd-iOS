@@ -303,6 +303,8 @@ private extension ImportTracksViewController {
         waypointsRow.icon = .icCustomFolder
         waypointsRow.iconTintColor = .iconColorActive
         waypointsRow.setObj(item, forKey: RowObjKey.importTrackItem)
+        waypointsRow.accessibilityLabel = waypointsRow.title
+        waypointsRow.accessibilityValue = waypointsRow.descr
     }
 
     func appendFolderSection() {
@@ -336,13 +338,19 @@ private extension ImportTracksViewController {
 
         switch item.key {
         case RowKey.infoDescr.rawValue:
-            cell.descriptionLabel.attributedText = item.obj(forKey: RowObjKey.attributedTitleKey) as? NSAttributedString
+            let attributedString = item.obj(forKey: RowObjKey.attributedTitleKey) as? NSAttributedString
+            let plainText = attributedString?.string
+            cell.descriptionLabel.attributedText = attributedString
+            cell.isAccessibilityElement = true
+            cell.accessibilityLabel = plainText
+            cell.accessibilityTraits = .staticText
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(true)
             cell.titleVisibility(false)
             hideSeparator(for: cell, false)
             cell.selectionStyle = .none
         case RowKey.importAsOne.rawValue:
+            cell.configureAccessibility(withTitle: item.title, selected: false)
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = .textColorActive
             cell.titleLabel.font = .preferredFont(forTextStyle: .body)
@@ -353,11 +361,14 @@ private extension ImportTracksViewController {
             cell.selectionStyle = .default
         case RowKey.trackHeader.rawValue:
             guard let trackItem = item.obj(forKey: RowObjKey.importTrackItem) as? ImportTrackItem else { break }
+            let label = [item.title, item.descr].compactMap { $0 }.joined(separator: ", ")
             let isSelected = selectedTracks.contains(trackItem)
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = .textColorPrimary
             cell.titleLabel.font = .preferredFont(forTextStyle: .headline)
             cell.descriptionLabel.text = item.descr
+            cell.configureAccessibility(withTitle: label, selected: isSelected)
+            cell.leftIconView.isAccessibilityElement = false
             cell.leftIconView.image = isSelected ? .icCustomDone : .icCustomCheckboxUnselected
             cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorSecondary
             cell.leftIconVisibility(true)
@@ -380,6 +391,9 @@ private extension ImportTracksViewController {
         cell.descriptionVisibility(false)
         cell.leftIconVisibility(item.key == RowKey.trackWaypoints.rawValue)
         cell.accessoryType = .disclosureIndicator
+        cell.accessibilityLabel = item.accessibilityLabel
+        cell.accessibilityValue = item.accessibilityValue
+        cell.accessibilityTraits = .button
         cell.setCustomLeftSeparatorInset(true)
         hideSeparator(for: cell, true)
 
@@ -412,6 +426,8 @@ private extension ImportTracksViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: TrackStatsTableCell.reuseIdentifier, for: indexPath) as! TrackStatsTableCell
         cell.selectionStyle = .none
         cell.backgroundColor = .groupBg
+        cell.isAccessibilityElement = false
+        cell.accessibilityElementsHidden = true
         if let statisticsCells = item.obj(forKey: RowObjKey.statisticsCells) as? [OAGPXTableCellData] {
             cell.configure(statistics: statisticsCells)
         }
@@ -432,6 +448,8 @@ private extension ImportTracksViewController {
         cell.iconView.clipsToBounds = true
         cell.iconView.layer.cornerRadius = 10
         cell.iconViewHeight.constant = 96
+        cell.isAccessibilityElement = false
+        cell.accessibilityElementsHidden = true
         hideSeparator(for: cell, true)
 
         guard let trackItem = item.obj(forKey: RowObjKey.importTrackItem) as? ImportTrackItem else {
@@ -503,6 +521,13 @@ private extension ImportTracksViewController {
         tableView.isHidden = progressVisible
         topButton.isHidden = progressVisible
         separatorBottomView.isHidden = progressVisible
+        
+        progressStackView.isAccessibilityElement = true
+        progressStackView.accessibilityLabel = progressLabel.text
+        progressIndicator.isAccessibilityElement = false
+        if progressVisible {
+            UIAccessibility.post(notification: .announcement, argument: progressLabel.text)
+        }
     }
 
     func collectTracks() {

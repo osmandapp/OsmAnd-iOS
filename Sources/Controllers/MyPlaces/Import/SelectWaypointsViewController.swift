@@ -292,6 +292,8 @@ private extension SelectWaypointsViewController {
             cell.titleVisibility(false)
             hideSeparator(for: cell, false)
             cell.selectionStyle = .none
+            cell.accessibilityLabel = cell.descriptionLabel.attributedText?.string
+            cell.accessibilityTraits = .staticText
         case RowKey.selectNearest.rawValue:
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = .textColorActive
@@ -299,6 +301,8 @@ private extension SelectWaypointsViewController {
             cell.descriptionVisibility(false)
             hideSeparator(for: cell, true)
             cell.selectionStyle = .default
+            cell.accessibilityLabel = item.title
+            cell.accessibilityTraits = .button
         default:
             break
         }
@@ -324,6 +328,27 @@ private extension SelectWaypointsViewController {
         configureGroupButton(cell.openCloseGroupButton, tag: group.index, action: #selector(openCloseGroupAction(_:)))
         configureGroupButton(cell.selectionButton, tag: group.index, action: #selector(onGroupSelectTapped(_:)))
         configureGroupButton(cell.selectionGroupButton, tag: group.index, action: #selector(onGroupSelectTapped(_:)))
+        
+        let state = groupSelectionState(for: group)
+        let selectedValue: String = switch state {
+        case .all: localizedString("shared_string_selected")
+        case .none: localizedString("shared_string_not_selected")
+        case .part: String(format: localizedString("ltr_or_rtl_combine_via_slash"),
+                   "\(group.items.filter { selectedPoints.contains($0.point) }.count)",
+                   "\(group.items.count)")
+        }
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = group.name
+        cell.accessibilityValue = selectedValue
+        cell.accessibilityTraits = .button
+        
+        cell.openCloseGroupButton.accessibilityLabel = localizedString(
+            group.isExpanded ? "shared_string_collapse" : "shared_string_show"
+        )
+        cell.selectionButton.isAccessibilityElement = false
+        cell.selectionGroupButton.isAccessibilityElement = false
+        cell.leftIconView.isAccessibilityElement = false
+        cell.arrowIconView.isAccessibilityElement = false
 
         cell.setNeedsUpdateConstraints()
         return cell
@@ -345,6 +370,20 @@ private extension SelectWaypointsViewController {
             backgroundView.backgroundColor = .groupBg
             cell.selectedBackgroundView = backgroundView
         }
+        
+        let isSelected = selectedPoints.contains(wptItem.point)
+        let name = wptItem.point.name ?? localizedString("shared_string_waypoint")
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = name
+        cell.accessibilityTraits = isSelected ? [.button, .selected] : .button
+        cell.accessibilityValue = [
+            localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected"),
+            wptItem.point.getAddress(),
+            wptItem.distance
+        ].compactMap { $0?.isEmpty == false ? $0 : nil }.joined(separator: ", ")
+        cell.iconView.isAccessibilityElement = false
+        cell.directionIconView.isAccessibilityElement = false
+        
         cell.setNeedsUpdateConstraints()
         return cell
     }

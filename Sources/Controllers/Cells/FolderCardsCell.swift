@@ -301,6 +301,19 @@ final class FolderCardsCell: UITableViewCell {
             cell.layer.borderWidth = 1
             cell.layer.borderColor = UIColor.buttonBgColorSecondary.cgColor
         }
+        
+        cell.isAccessibilityElement = true
+        cell.accessibilityTraits = .button
+        if item.kind == .add {
+            cell.accessibilityLabel = item.title
+        } else {
+            cell.accessibilityLabel = item.title
+            cell.accessibilityValue = selected ? localizedString("shared_string_selected") : item.size
+            if selected {
+                cell.accessibilityTraits.insert(.selected)
+            }
+        }
+        cell.imageView.isAccessibilityElement = false
     }
 }
 

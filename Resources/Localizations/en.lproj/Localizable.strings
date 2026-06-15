@@ -1614,6 +1614,16 @@
 
 // Route planning
 "plan_route" = "Plan a route";
+"shared_string_undo" = "Undo";
+"shared_string_redo" = "Redo";
+"save_as_copy" = "Save as copy";
+"distance_measurement_clear_route" = "Clear all points";
+"plan_route_save_as" = "Save as…";
+"plan_route_append_to_existing_track" = "Append to existing track";
+"plan_route_change_segment_order" = "Change segment order";
+"plan_route_view_directions" = "View directions";
+"plan_route_no_points_title" = "No points added yet";
+"plan_route_no_points_descr" = "Tap anywhere on the map or use search to add the first points of your route.";
 "coord_input_add_point" = "Add point";
 "point_num" = "Point %d";
 "points_count" = "Points:";

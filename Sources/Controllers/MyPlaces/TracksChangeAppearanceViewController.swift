@@ -123,6 +123,10 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         false
     }
     
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+    
     override func generateData() {
         tableData.clearAllData()
         colorsCollectionIndexPath = nil

@@ -2369,7 +2369,7 @@
 "routing_attr_allow_via_ferrata_description" = "Mászóútvonal rögzített kábelekkel, fellépőkkel, létrákkal és hidakkal.";
 "shared_string_accessibility" = "Kisegítő lehetőségek";
 "map_marker_interval_dialog_desc" = "Adja meg azt az időközt, amelyre a rendszer az átlagsebességet mérje a becsült érkezési idő kiszámításához.";
-"air_pressure_widget_desc" = "Megjeleníti a légnyomást a jelenlegi térképközéppontnál.";
+"air_pressure_widget_desc" = "Megjeleníti a jelenlegi térképközépponthoz tartozó légnyomást.";
 "map_markers_bar" = "Térképjelölők sávja";
 "help_article_widgets_name" = "Térképmodulok";
 "map_widget_trip_recording_duration" = "Időtartam";
@@ -2398,7 +2398,7 @@
 "osm_upload_gpx_tags_footer" = "A címkéket vesszővel elválasztva írja be.";
 "coordinates_widget_map_center_desc" = "Megjeleníti a jelenlegi térképközéppont földrajzi koordinátáit";
 "help_article_navigation_routing_train_routing_name" = "Útvonaltervezés vonathoz";
-"clouds_widget_desc" = "Megjeleníti a felhőzetet a jelenlegi térképközéppontnál.";
+"clouds_widget_desc" = "Megjeleníti a jelenlegi térképközépponthoz tartozó felhőzetet.";
 "change_appearance" = "Megjelenés módosítása";
 "shortest_distance_first" = "Először a legrövidebb távolság";
 "map_widgets" = "Térképmodulok";
@@ -2475,7 +2475,7 @@
 "click_on_widget" = "Kattintson a modulra";
 "map_markers_history" = "Térképjelölők előzményei";
 "context_menu_read_article" = "Cikk elolvasása";
-"wind_widget_desc" = "Megjeleníti a szelet a jelenlegi térképközéppontnál.";
+"wind_widget_desc" = "Megjeleníti a jelenlegi térképközépponthoz tartozó szelet.";
 "help_article_purchases_giveaway_name" = "Ajándékozás";
 "shared_string_contents" = "Tartalomjegyzék";
 "elevation_profile_widget_desc" = "Megjeleníti a jelenlegi útvonal magassági és lejtésprofilját.";
@@ -2731,7 +2731,7 @@
 "announcement_time_intervals" = "Idő- és távolságközök";
 "shared_string_relief_3d" = "3D domborzat";
 "map_widget_trip_recording_distance" = "Távolság";
-"temperature_widget_desc" = "Megjeleníti a hőmérsékletet a jelenlegi térképközéppontnál.";
+"temperature_widget_desc" = "Megjeleníti a jelenlegi térképközépponthoz tartozó hőmérsékletet.";
 "trip_recording_distance_widget_desc" = "Megjeleníti a jelenleg rögzített utazás teljes hosszát, valamint az utolsó emelkedés és lejtés hosszát.";
 "purchases_feature_desc_external_sensors" = "Külső érzékelők adatainak megjelenítése és rögzítése: kerékpár-sebesség, -teljesítmény, pedálfordulatszám, valamint pulzusszám.";
 "developer_widgets" = "Fejlesztői modulok";
@@ -2781,7 +2781,7 @@
 "oldest_date_first" = "Először a legrégebbi dátum";
 "lanes_widgets_desc" = "Megjeleníti a jelenlegi közlekedési sávok elrendezését, és kiemeli azt, amelyen a navigáció szerint haladni kell.";
 "help_article_widgets_nav_widgets_name" = "Navigációs modulok";
-"precipitation_widget_desc" = "Megjeleníti a csapadékot a jelenlegi térképközéppontnál.";
+"precipitation_widget_desc" = "Megjeleníti a jelenlegi térképközépponthoz tartozó csapadékot.";
 "shared_string_nearest" = "Legközelebbi";
 "second_next_turn_widget_desc" = "A modul a soron következő második bekanyarodásról tájékoztat, és akkor aktiválódik, amikor ezt megközelíti.";
 "distance_during_navigation" = "Távolságok a navigálás során";

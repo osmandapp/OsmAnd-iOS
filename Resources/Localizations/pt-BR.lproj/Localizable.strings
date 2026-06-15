@@ -4112,3 +4112,10 @@
 "group_date_time" = "Data e hora";
 "organize_by_summary" = "Organize automaticamente suas trilhas em grupos com base em um parâmetro selecionado, como atividade, velocidade ou localização.";
 "organize_by" = "Organizar por";
+"delete_changes" = "Excluir alterações";
+"osm_edits_delete_item_confirmation" = "Tem certeza de que deseja excluir a edição %ld?";
+"osm_edits_delete_items_confirmation" = "Tem certeza de que deseja excluir %ld edições?";
+"map_variant_duplicate_title" = "Mapa duplicado";
+"map_variant_replace_with_road_only" = "Substituir por Somente estrada";
+"map_variant_replace_with_standard" = "Substituir pelo padrão";
+"shared_string_url" = "URL";

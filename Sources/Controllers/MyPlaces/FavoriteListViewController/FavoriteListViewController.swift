@@ -138,10 +138,21 @@ private struct FavoriteFolderStats: Hashable {
     }
 }
 
+private final class FavoriteListCell: UICollectionViewListCell {
+    private static let rowHeight: CGFloat = 68.0
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+        attributes.frame.size.height = Self.rowHeight
+        return attributes
+    }
+}
+
 final class FavoriteListViewController: UIViewController {
     private typealias DataSource = UICollectionViewDiffableDataSource<FavoriteListSection, FavoriteListItem>
     private typealias Snapshot = NSDiffableDataSourceSnapshot<FavoriteListSection, FavoriteListItem>
     private typealias CellRegistration<Item> = UICollectionView.CellRegistration<UICollectionViewListCell, Item>
+    private typealias RowCellRegistration<Item> = UICollectionView.CellRegistration<FavoriteListCell, Item>
 
     weak var myPlacesDelegate: MyPlacesDelegate?
 
@@ -153,7 +164,6 @@ final class FavoriteListViewController: UIViewController {
     private static let navigationTitleMaximumSize: CGFloat = 22.0
     private static let navigationSubtitleFontSize: CGFloat = 12.0
     private static let navigationSubtitleMaximumSize: CGFloat = 18.0
-    private static let rowContentInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 0.0, bottom: 12.0, trailing: 0.0)
     private static let statsFooterInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 20.0, bottom: 12.0, trailing: 20.0)
     private static let wasClosedFreeBackupFavoritesBannerKey = "wasClosedFreeBackupFavoritesBanner"
 
@@ -258,9 +268,8 @@ final class FavoriteListViewController: UIViewController {
         NSLayoutConstraint.activate([banner.topAnchor.constraint(equalTo: cell.contentView.topAnchor), banner.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor), banner.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)])
         NSLayoutConstraint.activate([banner.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor), banner.heightAnchor.constraint(equalToConstant: self.backupBannerHeight(banner, fittingWidth: fittingWidth))])
     }
-    private lazy var folderCellRegistration = CellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
+    private lazy var folderCellRegistration = RowCellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
         var content = cell.defaultContentConfiguration()
-        content.directionalLayoutMargins = Self.rowContentInsets
         let iconName = folder.isPinned ? "ic_custom_folder_pin" : folder.iconName
         content.image = UIImage.templateImageNamed(iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
         content.imageProperties.tintColor = folder.iconColor
@@ -273,9 +282,8 @@ final class FavoriteListViewController: UIViewController {
         cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
         cell.accessories = self?.collectionView.isEditing == true ? [.multiselect()] : [.multiselect(), .disclosureIndicator()]
     }
-    private lazy var favoriteCellRegistration = CellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
+    private lazy var favoriteCellRegistration = RowCellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
         var content = cell.defaultContentConfiguration()
-        content.directionalLayoutMargins = Self.rowContentInsets
         content.image = OAUtilities.resize(favorite.bridgeItem.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
         content.text = favorite.title
         content.textProperties.numberOfLines = 2

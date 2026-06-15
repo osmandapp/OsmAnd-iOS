@@ -63,7 +63,7 @@
 
 #define kSubviewVerticalOffset 8.
 
-@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
+@interface OAEditPointViewController() <UITextFieldDelegate, UITextViewDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, FolderCardsCellDelegate, OASelectFavoriteGroupDelegate, UIAdaptivePresentationControllerDelegate, OACollectionCellDelegate, OAEditorDelegate>
 
 @end
 
@@ -494,7 +494,7 @@
     if (selectedGroupIndex < 0)
         selectedGroupIndex = 0;
     [section addObject:@{
-        @"type" : [OAFolderCardsCell getCellIdentifier],
+        @"type" : [FolderCardsCell getCellIdentifier],
         @"selectedValue" : @(selectedGroupIndex),
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
@@ -759,12 +759,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAFolderCardsCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[FolderCardsCell getCellIdentifier]])
     {
-        OAFolderCardsCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAFolderCardsCell getCellIdentifier]];
+        FolderCardsCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[FolderCardsCell getCellIdentifier]];
         if (cell == nil)
         {
-            cell = [[OAFolderCardsCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[OAFolderCardsCell getCellIdentifier]];
+            cell = [[FolderCardsCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[FolderCardsCell getCellIdentifier]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
             cell.cellIndex = indexPath;
@@ -828,9 +828,9 @@
  {
      NSDictionary *item = _data[indexPath.section][indexPath.row];
      NSString *type = item[@"type"];
-     if ([type isEqualToString:[OAFolderCardsCell getCellIdentifier]])
+     if ([type isEqualToString:[FolderCardsCell getCellIdentifier]])
      {
-         OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
+         FolderCardsCell *folderCell = (FolderCardsCell *)cell;
          [folderCell updateContentOffset];
      }
  }
@@ -1152,7 +1152,7 @@
 {
     [self onGroupChanged:selectedGroupName];
     NSIndexPath *groupsIndexPath = [NSIndexPath indexPathForRow:_selectCategoryCardsRowIndex inSection:_selectCategorySectionIndex];
-    OAFolderCardsCell *colorCell = [self.tableView cellForRowAtIndexPath:groupsIndexPath];
+    FolderCardsCell *colorCell = [self.tableView cellForRowAtIndexPath:groupsIndexPath];
     NSInteger selectedIndex = [_groupNames indexOfObject:selectedGroupName];
     [colorCell setSelectedIndex:selectedIndex];
 
@@ -1258,7 +1258,7 @@
 
     [self updateUIAnimated:^(BOOL finished) {
         NSIndexPath *groupsIndexPath = [NSIndexPath indexPathForRow:_selectCategoryCardsRowIndex inSection:_selectCategorySectionIndex];
-        OAFolderCardsCell *groupCell = [self.tableView cellForRowAtIndexPath:groupsIndexPath];
+        FolderCardsCell *groupCell = [self.tableView cellForRowAtIndexPath:groupsIndexPath];
         [UIView transitionWithView:groupCell.collectionView
                           duration:.2
                            options:UIViewAnimationOptionTransitionCrossDissolve

@@ -13,6 +13,12 @@ final class FolderCardCollectionViewCell: UICollectionViewCell {
     let imageView = UIImageView()
     let titleLabel = UILabel()
     let descLabel = UILabel()
+    
+    override var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted ? .iconColorDefault : .groupBg
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -43,8 +43,8 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(
-            UINib(nibName: OAGpxStatBlockCollectionViewCell.getIdentifier(), bundle: nil),
-            forCellWithReuseIdentifier: OAGpxStatBlockCollectionViewCell.getIdentifier()
+            UINib(nibName: OAGpxStatBlockCollectionViewCell.reuseIdentifier, bundle: nil),
+            forCellWithReuseIdentifier: OAGpxStatBlockCollectionViewCell.reuseIdentifier
         )
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +70,7 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OAGpxStatBlockCollectionViewCell.getIdentifier(),
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OAGpxStatBlockCollectionViewCell.reuseIdentifier,
                                                       for: indexPath) as! OAGpxStatBlockCollectionViewCell
         let cellData = statisticsData[indexPath.row]
 

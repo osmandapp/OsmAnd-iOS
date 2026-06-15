@@ -8,25 +8,25 @@
 
 import UIKit
 
-@objc(OAFolderCardsAddButtonPosition)
+@objc
 enum FolderCardsAddButtonPosition: Int {
     case end = 0
     case beginning = 1
 }
 
-@objc(OAFolderCardsConfig)
+@objc
 enum FolderCardsConfig: Int {
     case defaultConfig = 0
     case importTracks = 1
 }
 
-@objc(OAFolderCardsCellDelegate)
+@objc
 protocol FolderCardsCellDelegate: AnyObject {
     func onItemSelected(_ index: Int)
     func onAddFolderButtonPressed()
 }
 
-@objc(OAFolderCardsCell)
+@objc
 final class FolderCardsCell: UITableViewCell {
 
     private enum Layout {
@@ -123,7 +123,7 @@ final class FolderCardsCell: UITableViewCell {
 
     // MARK: - ObjC API
 
-    @objc(setValues:sizes:colors:hidden:addButtonTitle:withSelectedIndex:)
+    @objc
     func setValues(_ values: [String],
                    sizes: [NSNumber]?,
                    colors: [UIColor]?,
@@ -139,7 +139,6 @@ final class FolderCardsCell: UITableViewCell {
                   addButtonPosition: addButtonPosition)
     }
     
-    @objc(setValues:sizes:colors:hidden:addButtonTitle:withSelectedIndex:addButtonPosition:)
     func setValues(_ values: [String],
                    sizes: [NSNumber]?,
                    colors: [UIColor]?,
@@ -205,11 +204,11 @@ final class FolderCardsCell: UITableViewCell {
             state.setOffset(initialOffset, forIndex: cellIndex)
             collectionView.contentOffset = initialOffset
         } else {
-            var loadedOffset = state.getOffsetForIndex(cellIndex)
+            var offsetForIndex = state.getOffsetForIndex(cellIndex)
             if OAUtilities.getLeftMargin() > 0 {
-                loadedOffset.x -= OAUtilities.getLeftMargin() - Layout.margin
+                offsetForIndex.x -= OAUtilities.getLeftMargin() - Layout.margin
             }
-            collectionView.contentOffset = loadedOffset
+            collectionView.contentOffset = offsetForIndex
         }
     }
     
@@ -342,21 +341,7 @@ extension FolderCardsCell: UICollectionViewDataSource {
 extension FolderCardsCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: Layout.cellWidth, height: Layout.cellHeight)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .allowUserInteraction) {
-            cell.backgroundColor = .iconColorDisabled
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .allowUserInteraction) {
-            cell.backgroundColor = .groupBg
-        }
-    }
+    } 
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if isAddButton(at: indexPath.row) {

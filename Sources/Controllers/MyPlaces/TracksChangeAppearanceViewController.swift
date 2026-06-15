@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum InitMode {
+    case tracks(Set<TrackItem>)
+    case folder(TrackFolder)
+}
+
 private enum WidthKeys: String {
     case thin, medium, bold
 }
@@ -37,10 +42,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private static let hasTopLabels = "hasTopLabels"
     private static let hasBottomLabels = "hasBottomLabels"
     
+    private let initMode: InitMode
+    private let appearanceCollection: OAGPXAppearanceCollection = OAGPXAppearanceCollection.sharedInstance()
+    
     private var tracks: Set<TrackItem>
     private var initialData: AppearanceData
     private var data: AppearanceData
-    private let appearanceCollection: OAGPXAppearanceCollection = OAGPXAppearanceCollection.sharedInstance()
     private var sortedColorItems: [PaletteItemSolid] = []
     private var sortedPaletteColorItems = OAConcurrentArray<PaletteItemGradient>()
     private var selectedShowArrows: Bool?
@@ -64,8 +71,15 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private var isSplitIntervalSelected = false
     private var isSplitIntervalNoneSelected = false
     
-    init(tracks: Set<TrackItem>) {
-        self.tracks = tracks
+    init(mode: InitMode) {
+        self.initMode = mode
+        switch mode {
+        case .tracks(let tracks):
+            self.tracks = tracks
+        case .folder(let folder):
+            self.tracks = Set(folder.getTrackItems())
+        }
+        
         self.initialData = Self.buildAppearanceData()
         self.data = AppearanceData(data: self.initialData)
         super.init(nibName: "OABaseNavbarViewController", bundle: nil)

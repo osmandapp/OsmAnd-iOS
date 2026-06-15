@@ -33,7 +33,7 @@ extension FavoriteListViewController {
     var backupBannerCellRegistration: UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> {
         UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
             cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-            guard let self, let banner = Bundle.main.loadNibNamed("FreeBackupBanner", owner: self)?.first as? FreeBackupBanner else { return }
+            guard let self, let banner = Bundle.main.loadNibNamed(FreeBackupBanner.reuseIdentifier, owner: self)?.first as? FreeBackupBanner else { return }
             banner.configure(bannerType: .favorite)
             banner.didOsmAndCloudButtonAction = { [weak self] in
                 self?.navigationController?.pushViewController(OACloudIntroductionViewController(), animated: true)
@@ -52,8 +52,7 @@ extension FavoriteListViewController {
     var folderCellRegistration: RowCellRegistration<FavoriteFolderRow> {
         RowCellRegistration<FavoriteFolderRow> { [weak self] cell, _, folder in
             var content = cell.defaultContentConfiguration()
-            let iconName = folder.isPinned ? "ic_custom_folder_pin" : folder.iconName
-            content.image = UIImage.templateImageNamed(iconName)?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
+            content.image = (folder.isPinned ? .icCustomFolderPin : UIImage.templateImageNamed(folder.iconName))?.resizedTemplateImage(with: FavoriteListViewController.imageSize)
             content.imageProperties.tintColor = folder.iconColor
             content.text = folder.title
             content.textProperties.color = folder.titleColor
@@ -106,7 +105,7 @@ extension FavoriteListViewController {
             guard let self else { return }
             cell.button.removeTarget(nil, action: nil, for: .touchUpInside)
             if self.isSearchResultsMode {
-                cell.configure(image: UIImage.templateImageNamed("ic_custom_search") ?? .icCustomFavorites,
+                cell.configure(image: .icCustomSearch,
                                title: localizedString("no_search_results"),
                                description: localizedString("favorite_search_empty_state_description"))
                 cell.button.setTitle(localizedString("shared_string_clear_all"), for: .normal)

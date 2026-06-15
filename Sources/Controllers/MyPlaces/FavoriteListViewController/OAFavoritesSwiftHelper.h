@@ -10,43 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class UIColor, UIImage, OAFavoriteItem, OASGpxUtilitiesPointsGroup, OAEditPointViewController;
-
-@interface OAFavoriteFolderBridgeItem : NSObject
-
-@property (nonatomic, readonly) NSString *identifier;
-@property (nonatomic, readonly) NSString *groupName;
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) NSUInteger pointsCount;
-@property (nonatomic, readonly) NSUInteger subtreePointsCount;
-@property (nonatomic, readonly) BOOL isVisible;
-@property (nonatomic, readonly) BOOL isPinned;
-@property (nonatomic, readonly, nullable) UIColor *color;
-@property (nonatomic, readonly, nullable) NSDate *lastModifiedDate;
-@property (nonatomic, readonly) long long fileSize;
-
-@end
-
-@interface OAFavoritePointBridgeItem : NSObject
-
-@property (nonatomic, readonly) NSString *identifier;
-@property (nonatomic, readonly) NSString *groupName;
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly, nullable) NSString *address;
-@property (nonatomic, readonly) NSString *displayGroupName;
-@property (nonatomic, readonly, nullable) NSString *itemDescription;
-@property (nonatomic, readonly) NSString *encodedNameForLink;
-@property (nonatomic, readonly, nullable) NSNumber *distance;
-@property (nonatomic, readonly) CGFloat direction;
-@property (nonatomic, readonly) double latitude;
-@property (nonatomic, readonly) double longitude;
-@property (nonatomic, readonly, nullable) NSDate *timestampDate;
-@property (nonatomic, readonly, nullable) UIImage *icon;
-@property (nonatomic, readonly) BOOL isVisible;
-
-- (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
-
-@end
+@class UIColor, UIImage, OAFavoriteItem, OASGpxUtilitiesPointsGroup, OAEditPointViewController, OAFavoriteFolderBridgeItem, OAFavoritePointBridgeItem;
 
 @interface OAFavoritesSwiftHelper : NSObject
 

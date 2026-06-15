@@ -116,6 +116,8 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmNotePoint.h"
 #import "OAShareMenuActivity.h"
+#import "OAFavoriteFolderBridgeItem.h"
+#import "OAFavoritePointBridgeItem.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

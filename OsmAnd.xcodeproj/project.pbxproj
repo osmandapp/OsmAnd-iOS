@@ -232,6 +232,8 @@
 		2758DD522E5CBABD00051096 /* MainExternalInputDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */; };
 		2758DD572E5EFAD700051096 /* EditKeyAssignmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */; };
 		2758DD592E5F05F000051096 /* KeyAssignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2758DD582E5F05F000051096 /* KeyAssignment.swift */; };
+		275ED65B2FE032600088D42B /* OAFavoriteFolderBridgeItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 275ED65A2FE032600088D42B /* OAFavoriteFolderBridgeItem.mm */; };
+		275ED65E2FE032C80088D42B /* OAFavoritePointBridgeItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 275ED65D2FE032C80088D42B /* OAFavoritePointBridgeItem.mm */; };
 		275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */; };
 		2765D1072FC0953B00D612A3 /* MyPlacesSortModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2765D1062FC0953B00D612A3 /* MyPlacesSortModeHelper.swift */; };
 		276C9D162EF152C7005ABD35 /* MapButtonAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */; };
@@ -3756,6 +3758,10 @@
 		2758DD512E5CBABD00051096 /* MainExternalInputDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainExternalInputDeviceViewController.swift; sourceTree = "<group>"; };
 		2758DD562E5EFAD700051096 /* EditKeyAssignmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditKeyAssignmentController.swift; sourceTree = "<group>"; };
 		2758DD582E5F05F000051096 /* KeyAssignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAssignment.swift; sourceTree = "<group>"; };
+		275ED6592FE032290088D42B /* OAFavoriteFolderBridgeItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteFolderBridgeItem.h; sourceTree = "<group>"; };
+		275ED65A2FE032600088D42B /* OAFavoriteFolderBridgeItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteFolderBridgeItem.mm; sourceTree = "<group>"; };
+		275ED65C2FE032A90088D42B /* OAFavoritePointBridgeItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritePointBridgeItem.h; sourceTree = "<group>"; };
+		275ED65D2FE032C80088D42B /* OAFavoritePointBridgeItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritePointBridgeItem.mm; sourceTree = "<group>"; };
 		275FE9982ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceUpdateSize.swift; sourceTree = "<group>"; };
 		2765D1062FC0953B00D612A3 /* MyPlacesSortModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlacesSortModeHelper.swift; sourceTree = "<group>"; };
 		276C9D152EF152C7005ABD35 /* MapButtonAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonAppearanceViewController.swift; sourceTree = "<group>"; };
@@ -8404,6 +8410,10 @@
 				C58ACDE02FD2D6E8004E34C9 /* FavoriteSortModeHelper.swift */,
 				272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */,
 				272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */,
+				275ED6592FE032290088D42B /* OAFavoriteFolderBridgeItem.h */,
+				275ED65A2FE032600088D42B /* OAFavoriteFolderBridgeItem.mm */,
+				275ED65C2FE032A90088D42B /* OAFavoritePointBridgeItem.h */,
+				275ED65D2FE032C80088D42B /* OAFavoritePointBridgeItem.mm */,
 			);
 			path = FavoriteListViewController;
 			sourceTree = "<group>";
@@ -18603,6 +18613,7 @@
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,
 				3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */,
 				27FA9F572F45B9040064B5BE /* MapUnderlayAction.swift in Sources */,
+				275ED65B2FE032600088D42B /* OAFavoriteFolderBridgeItem.mm in Sources */,
 				FA82B9192E74199200A250F1 /* ImageDownloadRequestModifier.swift in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
 				32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */,
@@ -18691,6 +18702,7 @@
 				46C841492C32F44A00E284B0 /* OAAddOSMBugAction.m in Sources */,
 				FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */,
 				CA4ED672AF26061C16E48A61 /* OACompassModeWidgetState.mm in Sources */,
+				275ED65E2FE032C80088D42B /* OAFavoritePointBridgeItem.mm in Sources */,
 				46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */,
 				CA4ED3D4E92007B8D20ECBC5 /* OAWeatherCacheSettingsViewController.mm in Sources */,
 				CA4ED855557936D7E91423FC /* OAWeatherHelper.mm in Sources */,

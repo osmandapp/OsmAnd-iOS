@@ -335,8 +335,7 @@ extension FavoriteListViewController {
     
     private func isDirectFolder(_ groupName: String, parentGroupName: String?) -> Bool {
         guard let parentGroupName else { return groupName.isEmpty || !groupName.contains("/") }
-        guard !parentGroupName.isEmpty else { return false }
-        guard groupName.hasPrefix(parentGroupName + "/") else { return false }
+        guard !parentGroupName.isEmpty && groupName.hasPrefix(parentGroupName + "/") else { return false }
         let childPath = groupName.dropFirst(parentGroupName.count + 1)
         return !childPath.isEmpty && !childPath.contains("/")
     }

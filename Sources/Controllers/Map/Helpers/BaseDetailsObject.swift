@@ -114,21 +114,22 @@ final class BaseDetailsObject: NSObject {
         return true
     }
 
-    func copyDescriptionIfNeeded(_ object: Any) {
-        guard OAAppSettings().wikiDataSourceType.get() == .online else { return }
+    func copyDescriptionToSyntheticAmenityIfNeeded(_ object: Any) {
+        guard OAAppSettings.sharedManager().wikiDataSourceType.get() == .online else { return }
         guard isSupportedObjectType(object) else { return }
         guard syntheticAmenity.getAdditionalInfo(DESCRIPTION_TAG) == nil else { return }
         
         if let detailsObject = object as? BaseDetailsObject {
-            for obj in detailsObject.objects where copyDescription(obj) {
+            for obj in detailsObject.objects where copyDescriptionToSyntheticAmenity(obj) {
                 break
             }
         } else {
-            _ = copyDescription(object)
+            copyDescriptionToSyntheticAmenity(object)
         }
     }
     
-    private func copyDescription(_ object: Any) -> Bool {
+    @discardableResult
+    private func copyDescriptionToSyntheticAmenity(_ object: Any) -> Bool {
         if let poi = object as? OAPOI, let description = poi.getAdditionalInfo(DESCRIPTION_TAG), !description.isEmpty {
             syntheticAmenity.copyAdditionalInfo(withMap: [DESCRIPTION_TAG: description], overwrite: false)
             return true

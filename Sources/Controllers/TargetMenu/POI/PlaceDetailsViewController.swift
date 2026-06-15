@@ -65,7 +65,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
     
     override func buildDescription(_ rows: NSMutableArray) {
-        let allowOnlineWiki = OAAppSettings().wikiDataSourceType.get() == .online
+        let allowOnlineWiki = OAAppSettings.sharedManager().wikiDataSourceType.get() == .online
         let wikiAmenities = getWikiAmenities()
         var hasDescription = buildDescription(amenities: wikiAmenities, allowOnlineWiki: allowOnlineWiki, rows: rows)
         

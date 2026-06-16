@@ -369,6 +369,7 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
                 {
                     NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
                     NSScanner *scanner = [NSScanner scannerWithString:str];
+                    [scanner setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
                     double dl;
                     if ([scanner scanDouble:&dl] && [scanner scanLocation] == str.length)
                     {
@@ -380,10 +381,6 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
                         [strings addObject:str];
                         digit = false;
                         word = -1;
-                    }
-                    else
-                    {
-                        digit = false;
                     }
                 }
             }
@@ -397,8 +394,9 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
                         [all addObject:str];
                         [strings addObject:str];
                     }
-                    [all addObject:[s substringWithRange:NSMakeRange(i, 1)]];
-                    [strings addObject:[s substringWithRange:NSMakeRange(i, 1)]];
+                    NSString *currentChStr = (i == s.length) ? @" " : [s substringWithRange:NSMakeRange(i, 1)];
+                    [all addObject:currentChStr];
+                    [strings addObject:currentChStr];
                     word = -1;
                 }
                 else if (word == -1)
@@ -419,7 +417,15 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
         }
     }
 
-    partial[0] = @NO;
+    if (partial.count > 0)
+    {
+        partial[0] = @NO;
+    }
+    else
+    {
+        [partial addObject:@NO];
+    }
+
     if (firstNumeralIdx != -1)
     {
         int nextTokenIdx = firstNumeralIdx + 1;

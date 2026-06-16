@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
+static NSString * const kNotificationChangedPreferenceKeys = @"kNotificationChangedPreferenceKeys";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
 
 static NSString * const appearanceProfileThemeKey = @"appearanceProfileThemeKey";
@@ -413,6 +414,7 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 @property (nonatomic, readonly) BOOL shared;
 @property (nonatomic, assign) BOOL lastModifiedTimeStored;
 @property (nonatomic) long lastModifiedTime;
+@property (nonatomic) BOOL isSilentChange;
 
 - (instancetype) makeGlobal;
 - (instancetype) makeProfile;
@@ -1339,6 +1341,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global;
 - (OACommonPreference *)getGlobalPreference:(NSString *)key;
 - (void)setGlobalPreference:(NSString *)value key:(NSString *)key;
+- (void)setGlobalPreference:(NSString *)value key:(NSString *)key isSilent:(BOOL)isSilent;
 - (OACommonPreference *)getProfilePreference:(NSString *)key;
 - (void)setProfilePreference:(NSString *)value key:(NSString *)key;
 

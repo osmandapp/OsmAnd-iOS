@@ -2380,19 +2380,12 @@ static char kMapSourceUpdateQueueKey;
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OACommonPreference *obj = notification.object;
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    OACommonBoolean *keepMapLabelsVisible = settings.keepMapLabelsVisible;
-    if (obj)
-    {
-        if (obj == keepMapLabelsVisible)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateSymbolsLayerProviderAlpha];
-                [self updateRasterLayerProviderAlpha];
-            });
-        }
-    }
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kNotificationChangedPreferenceKeys];
+    if (preferenceKeys && [preferenceKeys containsObject:[OAAppSettings sharedManager].keepMapLabelsVisible.key])
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateSymbolsLayerProviderAlpha];
+            [self updateRasterLayerProviderAlpha];
+        });
 }
 
 - (void) refreshMap

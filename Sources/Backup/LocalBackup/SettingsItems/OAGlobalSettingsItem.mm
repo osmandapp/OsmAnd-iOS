@@ -144,7 +144,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     }
 
     if ([settings getGlobalPreference:key].shared)
-        [settings setGlobalPreference:value key:key];
+        [settings setGlobalPreference:value key:key isSilent:YES];
 }
 
 // MARK: OASettingsItemWriter
@@ -232,10 +232,17 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     }
 
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+    NSMutableSet<NSString *> *keys = [NSMutableSet set];
 
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [self.item readPreferenceFromJson:key value:obj];
+        [keys addObject:key];
     }];
+    
+    executeOnMainThread(^{
+        NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:nil userInfo:@{@"keys":[keys copy]}];
+        [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+    });
 
     self.item.read = YES;
     return YES;

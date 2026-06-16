@@ -260,7 +260,8 @@ double const buildings3DAlphaDefValue = 0.5;
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == _enable3dMapsPref)
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kNotificationChangedPreferenceKeys];
+    if (preferenceKeys && [preferenceKeys containsObject:_enable3dMapsPref.key])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];

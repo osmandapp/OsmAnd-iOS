@@ -43,10 +43,22 @@ static NSString * const kGpxImportDir = @"import";
 
 - (void)onPreferenceSet:(NSNotification *)notification
 {
-    OACommonPreference *pref = (OACommonPreference *) notification.object;
-    id<OASKStateChangedListener> listener = _prefListeners[pref.key];
-    if (listener)
-        [listener stateChangedChange:[pref getPrefValue]];
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kNotificationChangedPreferenceKeys];
+    if (preferenceKeys && preferenceKeys.count > 0)
+    {
+        for (NSString *liestenerKey in _prefListeners.allKeys)
+        {
+            if ([preferenceKeys containsObject:liestenerKey])
+            {
+                OACommonPreference *pref = [[OAAppSettings.sharedManager getRegisteredPreferences] objectForKey:liestenerKey];
+                if (!pref)
+                    continue;
+                id<OASKStateChangedListener> listener = _prefListeners[pref.key];
+                if (listener)
+                    [listener stateChangedChange:[pref getPrefValue]];
+            }
+        }
+    }
 }
 
 - (void)registerPreferenceName:(NSString *)name defValue:(NSString *)defValue global:(BOOL)global shared_:(BOOL)shared

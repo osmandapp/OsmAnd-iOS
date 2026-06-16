@@ -181,19 +181,17 @@
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OACommonPreference *obj = notification.object;
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OACommonActiveMarkerConstant *activeMarkers = settings.activeMarkers;
     OACommonBoolean *directionLines = settings.directionLines;
-    if (obj)
-    {
-        if (obj == activeMarkers || obj == directionLines)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self drawDestinationLines];
-            });
-        }
-    }
+    
+    NSSet *keysToCheck = [NSSet setWithObjects:activeMarkers.key, directionLines.key, nil];
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kNotificationChangedPreferenceKeys];
+    
+    if (preferenceKeys && [preferenceKeys intersectsSet:keysToCheck])
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self drawDestinationLines];
+        });
 }
 
 - (BOOL) updateLayer

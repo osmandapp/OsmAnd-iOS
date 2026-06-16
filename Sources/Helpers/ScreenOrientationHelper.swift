@@ -123,7 +123,8 @@ class ScreenOrientationHelper: NSObject {
     }
 
     @objc private func onProfileSettingDidChange(notification: Notification) {
-        if let obj = notification.object as? OACommonPreference, obj == settings.mapScreenOrientation {
+        let preferenceKeys = notification.userInfo?[kNotificationChangedPreferenceKeys] as? Set<String>
+        if let preferenceKeys, preferenceKeys.contains(settings.mapScreenOrientation.key) {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.updateCachedUserInterfaceOrientationMask()

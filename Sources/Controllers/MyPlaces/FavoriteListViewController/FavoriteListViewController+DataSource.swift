@@ -187,12 +187,12 @@ extension FavoriteListViewController {
             return
         }
 
-        var snapshot = Snapshot()
         if allFolders.isEmpty {
             applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
 
+        var snapshot = Snapshot()
         let foldersBySection = favoriteFoldersBySection(folders: allFolders).mapValues { FavoriteSortModeHelper.sortFoldersWithMode($0, mode: currentSortMode) }
         let folderSections = rootSections(foldersBySection: foldersBySection)
         let isPaymentBannerVisible = isAvailablePaymentBanner
@@ -240,11 +240,11 @@ extension FavoriteListViewController {
 
         let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
         let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesBridgeHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
-        var snapshot = Snapshot()
         if favorites.isEmpty && folders.isEmpty {
             applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
+        var snapshot = Snapshot()
         let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
         layoutSections = stats == nil ? [.sortHeader, .content] : [.sortHeader, .content, .statsFooter]
         collectionView.collectionViewLayout.invalidateLayout()
@@ -261,12 +261,12 @@ extension FavoriteListViewController {
     
     private func applySearchSnapshot(allFolders: [FavoriteFolderRow], parentGroupName: String?, animatingDifferences: Bool) {
         let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(searchFavoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName), mode: currentSortMode)
-        var snapshot = Snapshot()
         if favorites.isEmpty {
             applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
 
+        var snapshot = Snapshot()
         layoutSections = [.sortHeader, .content]
         collectionView.collectionViewLayout.invalidateLayout()
         snapshot.appendSections(layoutSections)

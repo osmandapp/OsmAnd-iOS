@@ -168,7 +168,7 @@
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
     // Keep the movable pin centered by ignoring map position changes from rotation mode updates.
-    NSSet<NSString *> *preferenceKeys = notification.userInfo[kNotificationChangedPreferenceKeys];
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
     if (preferenceKeys && [preferenceKeys containsObject:[OAAppSettings sharedManager].rotateMap.key])
         [self adjustViewport];
 }

@@ -328,6 +328,8 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
     NSDictionary<NSString *, NSString *> *settings;
     settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
+    
+    NSMutableSet<NSString *> *changedKeys = [NSMutableSet set];
 
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
@@ -337,10 +339,31 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         else if ([key hasPrefix:kRoutingPreferencePrefix])
             [routingSettings setObject:obj forKey:key];
         else
+        {
+            [changedKeys addObject:key];
+            OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:key];
+            if (pref)
+                pref.isSilentChange = YES;
             [self.item readPreferenceFromJson:key value:obj];
+            if (pref)
+                pref.isSilentChange = NO;
+        }
     }];
     [self.item applyRendererPreferences:rendererSettings];
     [self.item applyRoutingPreferences:routingSettings];
+    
+    if (changedKeys.count > 0)
+    {
+        executeOnMainThread(^{
+            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting
+                                                                  object:nil
+                                                                userInfo:@{kPreferenceKeysUserInfoKey:[changedKeys copy]}];
+            [[NSNotificationQueue defaultQueue] enqueueNotification:notif
+                                                       postingStyle:NSPostASAP
+                                                       coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
+                                                           forModes:nil];
+        });
+    }
 
     self.item.read = YES;
     return YES;

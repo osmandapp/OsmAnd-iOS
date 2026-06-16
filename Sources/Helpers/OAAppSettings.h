@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
-static NSString * const kNotificationChangedPreferenceKeys = @"kNotificationChangedPreferenceKeys";
+static NSString * const kPreferenceKeysUserInfoKey = @"kPreferenceKeysUserInfoKey";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
 
 static NSString * const appearanceProfileThemeKey = @"appearanceProfileThemeKey";

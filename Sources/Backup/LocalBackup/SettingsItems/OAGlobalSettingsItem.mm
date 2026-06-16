@@ -240,7 +240,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     }];
     
     executeOnMainThread(^{
-        NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:nil userInfo:@{@"keys":[keys copy]}];
+        NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:nil userInfo:@{kPreferenceKeysUserInfoKey:[keys copy]}];
         [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
     });
 

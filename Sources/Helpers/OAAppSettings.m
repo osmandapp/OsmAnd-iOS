@@ -1694,7 +1694,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     if (self.isSilentChange == NO)
     {
         executeOnMainThread(^{
-            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:@{kNotificationChangedPreferenceKeys:[NSSet setWithObject:_key]}];
+            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:@{kPreferenceKeysUserInfoKey:[NSSet setWithObject:_key]}];
             [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
         });
     }
@@ -1888,7 +1888,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     if (self.isSilentChange == NO)
     {
         executeOnMainThread(^{
-            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:@{kNotificationChangedPreferenceKeys:[NSSet setWithObject:self.key]}];
+            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:@{kPreferenceKeysUserInfoKey:[NSSet setWithObject:self.key]}];
             [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
         });
     }
@@ -4292,7 +4292,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     if (self.isSilentChange == NO)
     {
         executeOnMainThread(^{
-            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:@{kNotificationChangedPreferenceKeys:[NSSet setWithObject:self.key]}];
+            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:@{kPreferenceKeysUserInfoKey:[NSSet setWithObject:self.key]}];
             [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
         });
     }
@@ -6853,7 +6853,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     OACommonPreference *setting = [_globalPreferences objectForKey:key];
     if (setting)
     {
-        setting.isSilentChange = YES;
+        setting.isSilentChange = isSilent;
         [setting setValueFromString:value appMode:nil];
         setting.isSilentChange = NO;
     }

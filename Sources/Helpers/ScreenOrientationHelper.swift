@@ -123,7 +123,7 @@ class ScreenOrientationHelper: NSObject {
     }
 
     @objc private func onProfileSettingDidChange(notification: Notification) {
-        let preferenceKeys = notification.userInfo?[kNotificationChangedPreferenceKeys] as? Set<String>
+        let preferenceKeys = notification.userInfo?[kPreferenceKeysUserInfoKey] as? Set<String>
         if let preferenceKeys, preferenceKeys.contains(settings.mapScreenOrientation.key) {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }

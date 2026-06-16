@@ -186,7 +186,7 @@
     OACommonBoolean *directionLines = settings.directionLines;
     
     NSSet *keysToCheck = [NSSet setWithObjects:activeMarkers.key, directionLines.key, nil];
-    NSSet<NSString *> *preferenceKeys = notification.userInfo[kNotificationChangedPreferenceKeys];
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
     
     if (preferenceKeys && [preferenceKeys intersectsSet:keysToCheck])
         dispatch_async(dispatch_get_main_queue(), ^{

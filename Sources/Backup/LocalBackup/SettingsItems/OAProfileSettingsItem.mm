@@ -308,7 +308,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
                     [[NSNotificationQueue defaultQueue] enqueueNotification:
                      [NSNotification notificationWithName:kNotificationSetProfileSetting
                                                    object:self
-                                                 userInfo:nil]
+                                                 userInfo:@{kPreferenceKeysUserInfoKey:[NSSet setWithObject:modeKey]}]
                                                                postingStyle:NSPostASAP
                                                                coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
                                                                    forModes:nil];

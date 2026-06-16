@@ -260,7 +260,7 @@ double const buildings3DAlphaDefValue = 0.5;
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    NSSet<NSString *> *preferenceKeys = notification.userInfo[kNotificationChangedPreferenceKeys];
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
     if (preferenceKeys && [preferenceKeys containsObject:_enable3dMapsPref.key])
     {
         dispatch_async(dispatch_get_main_queue(), ^{

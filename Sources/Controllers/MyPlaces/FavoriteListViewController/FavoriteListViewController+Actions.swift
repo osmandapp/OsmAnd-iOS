@@ -18,7 +18,7 @@ extension FavoriteListViewController {
     }
     
     func openFavoriteGroupAppearance(_ groupName: String) {
-        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesSwiftHelper.pointsGroup(forGroupName: groupName)) else { return }
+        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesBridgeHelper.pointsGroup(forGroupName: groupName)) else { return }
         favoriteGroupAppearanceGroupName = groupName
         favoriteGroupAppearanceEditor = viewController
         viewController.delegate = self
@@ -28,23 +28,21 @@ extension FavoriteListViewController {
     func openFavoriteItemsMove(_ favoriteItems: [Any]) {
         guard !favoriteItems.isEmpty,
               let navigationController,
-              let groupController = OAEditGroupViewController(groupName: nil, groups: OAFavoritesSwiftHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItems)) else {
+              let groupController = OAEditGroupViewController(groupName: nil, groups: OAFavoritesBridgeHelper.favoriteGroupNames(forMovingFavoriteItems: favoriteItems)) else {
             return
         }
         self.groupController = groupController
         favoriteItemsToMove = favoriteItems
         groupController.delegate = self
-        let modalNavigationController = UINavigationController(rootViewController: groupController)
-        navigationController.present(modalNavigationController, animated: true)
+        navigationController.present(UINavigationController(rootViewController: groupController), animated: true)
     }
 
     func openFavoriteGroupAddToTrack(_ groupName: String) {
-        guard OAFavoritesSwiftHelper.canUseGroup(withName: groupName), let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
+        guard OAFavoritesBridgeHelper.canUseGroup(withName: groupName), let navigationController, let viewController = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
         addToTrackGroupName = groupName
         addToTrackFavoriteItems = nil
         viewController.delegate = self
-        let modalNavigationController = UINavigationController(rootViewController: viewController)
-        navigationController.present(modalNavigationController, animated: true)
+        navigationController.present(UINavigationController(rootViewController: viewController), animated: true)
     }
 
     func openFavoriteItemsAddToTrack(_ favoriteItems: [Any]) {
@@ -52,18 +50,17 @@ extension FavoriteListViewController {
         addToTrackFavoriteItems = favoriteItems
         addToTrackGroupName = nil
         viewController.delegate = self
-        let modalNavigationController = UINavigationController(rootViewController: viewController)
-        navigationController.present(modalNavigationController, animated: true)
+        navigationController.present(UINavigationController(rootViewController: viewController), animated: true)
     }
 
     func favoritePointRows(forGroupName groupName: String) -> [FavoritePointRow] {
         let sortMode = isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode(entryId: groupName)
-        let favorites = OAFavoritesSwiftHelper.favoritePoints(forGroupName: groupName).map { FavoritePointRow(item: $0) }
+        let favorites = OAFavoritesBridgeHelper.favoritePoints(forGroupName: groupName).map { FavoritePointRow(item: $0) }
         return FavoriteSortModeHelper.sortFavoritePointsWithMode(favorites, mode: sortMode)
     }
 
     func favoritePointRows(allFolders: [FavoriteFolderRow], parentGroupName: String?) -> [FavoritePointRow] {
-        allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesSwiftHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName).map { FavoritePointRow(item: $0) } }
+        allFolders.filter { isSearchGroup($0.bridgeItem.groupName, parentGroupName: parentGroupName) }.flatMap { OAFavoritesBridgeHelper.favoritePoints(forGroupName: $0.bridgeItem.groupName).map { FavoritePointRow(item: $0) } }
     }
 
     func makeActionsMenu() -> UIMenu {
@@ -79,20 +76,20 @@ extension FavoriteListViewController {
         return UIMenu(title: "", children: [addFolderSection, importSection])
     }
 
-    func setEdit(_ isEdit: Bool) {
-        let shouldResetSearchSelection = !isEdit && isSelectionModeInSearch
-        if !isEdit {
+    func setEditing(_ isEditing: Bool) {
+        let shouldResetSearchSelection = !isEditing && isSelectionModeInSearch
+        if !isEditing {
             collectionView.indexPathsForSelectedItems?.forEach { collectionView.deselectItem(at: $0, animated: false) }
             isSelectionModeInSearch = false
             isSearchActive = false
             searchText = ""
         }
 
-        collectionView.isEditing = isEdit
+        collectionView.isEditing = isEditing
         collectionView.reloadData()
-        myPlacesDelegate?.updateEditMode(isEdit)
+        myPlacesDelegate?.updateEditMode(isEditing)
         configureNavigation()
-        navigationController?.setToolbarHidden(!isEdit, animated: true)
+        navigationController?.setToolbarHidden(!isEditing, animated: true)
         if shouldResetSearchSelection {
             clearSearchControllerText()
             applySnapshot(animatingDifferences: false)
@@ -102,12 +99,12 @@ extension FavoriteListViewController {
     func showRenameAlert(for folder: FavoriteFolderRow) {
         let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
         let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
-            guard let text = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
+            guard let self, let text = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
             let oldGroupName = folder.bridgeItem.groupName
-            let newGroupName = self?.groupName(oldGroupName, replacingLastComponentWith: text) ?? text
-            OAFavoritesSwiftHelper.renameFavoriteGroup(oldGroupName, newName: newGroupName)
-            self?.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
-            self?.applySnapshot(animatingDifferences: true)
+            let newGroupName = self.groupName(oldGroupName, replacingLastComponentWith: text)
+            OAFavoritesBridgeHelper.renameFavoriteGroup(oldGroupName, newName: newGroupName)
+            self.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
+            self.applySnapshot(animatingDifferences: true)
         }
 
         alert.addAction(applyAction)
@@ -125,7 +122,7 @@ extension FavoriteListViewController {
         let message = String(format: localizedString("favorite_confirm_delete_group"), folder.title, folder.bridgeItem.subtreePointsCount)
         let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesSwiftHelper.deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
+            guard OAFavoritesBridgeHelper.deleteFavoriteGroup(folder.bridgeItem.groupName) else { return }
             self?.clearFavoriteSortModes(forGroupNames: [folder.bridgeItem.groupName])
             self?.applySnapshot(animatingDifferences: true)
         })
@@ -138,7 +135,7 @@ extension FavoriteListViewController {
         let title = String(format: localizedString("delete_favorite_confirmation_title"), favorite.title)
         let alert = UIAlertController(title: title, message: localizedString("favorites_delete_confirmation_message"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-            guard OAFavoritesSwiftHelper.deleteFavoritePoint(favorite.bridgeItem) else { return }
+            guard OAFavoritesBridgeHelper.deleteFavoritePoint(favorite.bridgeItem) else { return }
             self?.applySnapshot(animatingDifferences: true)
         })
 
@@ -199,7 +196,7 @@ extension FavoriteListViewController {
     }
 
     @objc func selectButtonPressed() {
-        setEdit(true)
+        setEditing(true)
     }
 
     @objc func searchSelectButtonPressed() {
@@ -216,7 +213,7 @@ extension FavoriteListViewController {
     }
 
     @objc func cancelButtonPressed() {
-        setEdit(false)
+        setEditing(false)
         configureToolbar()
     }
 
@@ -244,7 +241,7 @@ extension FavoriteListViewController {
     @objc func shareButtonClicked(_ sender: Any) {
         let sourceView = sender as? UIView ?? collectionView
         shareItems(for: sourceView)
-        setEdit(false)
+        setEditing(false)
         applySnapshot()
     }
 
@@ -360,7 +357,7 @@ extension FavoriteListViewController {
         appendFavoritePointShareLine(point.displayGroupName, to: sharingText)
         appendFavoritePointShareLine(point.itemDescription, to: sharingText)
         appendFavoritePointCoordinatesAndURL(to: sharingText, point: point)
-        if let url = URL(string: OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: point)) {
+        if let url = URL(string: OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)) {
             items.append(ShareLinkItem(url: url, title: point.title, icon: point.icon))
         }
         if sharingText.length > 0 {
@@ -378,16 +375,14 @@ extension FavoriteListViewController {
     }
     
     private func appendFavoritePointCoordinatesAndURL(to sharingText: NSMutableString, point: OAFavoritePointBridgeItem) {
-        let geoURLString = OAFavoritesSwiftHelper.geoURLString(forFavoritePoint: point)
+        let geoURLString = OAFavoritesBridgeHelper.geoURLString(forFavoritePoint: point)
         if !geoURLString.isEmpty {
-            sharingText.append("\n")
-            sharingText.append("Location: \(geoURLString)")
+            sharingText.append("\nLocation: \(geoURLString)")
         }
 
-        let shareURLString = OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: point)
+        let shareURLString = OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)
         if !shareURLString.isEmpty {
-            sharingText.append("\n")
-            sharingText.append(shareURLString)
+            sharingText.append("\n\(shareURLString)")
         }
     }
 
@@ -419,7 +414,7 @@ extension FavoriteListViewController {
             return
         }
 
-        guard let favoritesUrl = OAFavoritesSwiftHelper.shareFavoriteItems(bridgeItems(for: selectedItems)) else { return }
+        guard let favoritesUrl = OAFavoritesBridgeHelper.shareFavoriteItems(bridgeItems(for: selectedItems)) else { return }
         showActivity(
             [favoritesUrl],
             sourceView: sourceView,
@@ -434,11 +429,11 @@ extension FavoriteListViewController {
         let selectedIndexPaths = collectionView.indexPathsForSelectedItems ?? []
         let items = bridgeItems(for: selectedIndexPaths)
         let groupNames = items.compactMap { ($0 as? OAFavoriteFolderBridgeItem)?.groupName }
-        if OAFavoritesSwiftHelper.deleteFavoriteItems(items) {
+        if OAFavoritesBridgeHelper.deleteFavoriteItems(items) {
             clearFavoriteSortModes(forGroupNames: groupNames)
         }
 
-        setEdit(false)
+        setEditing(false)
         applySnapshot(animatingDifferences: true)
     }
     

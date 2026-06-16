@@ -6,9 +6,6 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import CoreLocation
-import UniformTypeIdentifiers
-
 extension FavoriteListViewController {
     func favoriteSortMode(entryId: String? = nil) -> FavoriteSortMode {
         let sortModes = settings.getFavoriteSortModes()
@@ -36,7 +33,7 @@ extension FavoriteListViewController {
 
     func renameFavoriteSortModeKeys(from oldGroupName: String, to newGroupName: String, existingGroupNames: Set<String>? = nil) {
         guard !oldGroupName.isEmpty, oldGroupName != newGroupName else { return }
-        let groupNames = existingGroupNames ?? Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
+        let groupNames = existingGroupNames ?? Set(OAFavoritesBridgeHelper.favoriteFolders().map { $0.groupName })
         guard !groupNames.contains(oldGroupName), groupNames.contains(newGroupName) else { return }
         var sortModes = settings.getFavoriteSortModes()
         let keysToRename = sortModes.keys.filter { isFavoriteSortModeKey($0, insideOrEqualTo: oldGroupName) }
@@ -51,7 +48,7 @@ extension FavoriteListViewController {
     }
 
     func updateFavoriteSortModeKeysAfterMove(_ favoriteItems: [Any], toGroupName targetGroupName: String) {
-        let groupNames = Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
+        let groupNames = Set(OAFavoritesBridgeHelper.favoriteFolders().map { $0.groupName })
         favoriteItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }.forEach { folder in
             let oldGroupName = folder.groupName
             let folderName = oldGroupName.split(separator: "/").last.map(String.init) ?? oldGroupName
@@ -63,11 +60,11 @@ extension FavoriteListViewController {
     func createFavoriteMoveTargetGroupIfNeeded(_ groupName: String, favoriteItems: [Any]) {
         let folders = favoriteItems.compactMap { $0 as? OAFavoriteFolderBridgeItem }
         guard !folders.isEmpty, !folders.contains(where: { isFavoriteSortModeKey(groupName, insideOrEqualTo: $0.groupName) }) else { return }
-        var existingGroupNames = Set(OAFavoritesSwiftHelper.favoriteFolders().map { $0.groupName })
+        var existingGroupNames = Set(OAFavoritesBridgeHelper.favoriteFolders().map { $0.groupName })
         var parentGroupName = ""
         for folderName in groupName.split(separator: "/").map(String.init) {
             let newGroupName = parentGroupName.isEmpty ? folderName : "\(parentGroupName)/\(folderName)"
-            if !existingGroupNames.contains(newGroupName), OAFavoritesSwiftHelper.addFavoriteGroup(folderName, parentGroupName: parentGroupName.isEmpty ? nil : parentGroupName, iconName: nil, color: nil, backgroundIconName: nil) {
+            if !existingGroupNames.contains(newGroupName), OAFavoritesBridgeHelper.addFavoriteGroup(folderName, parentGroupName: parentGroupName.isEmpty ? nil : parentGroupName, iconName: nil, color: nil, backgroundIconName: nil) {
                 existingGroupNames.insert(newGroupName)
             }
             parentGroupName = newGroupName
@@ -137,7 +134,7 @@ extension FavoriteListViewController {
     }
     
     func favoriteFolders() -> [FavoriteFolderRow] {
-        OAFavoritesSwiftHelper.favoriteFolders().map { FavoriteFolderRow(item: $0) }
+        OAFavoritesBridgeHelper.favoriteFolders().map { FavoriteFolderRow(item: $0) }
     }
     
     func isNestedFolder(_ groupName: String, in parentGroupName: String) -> Bool {
@@ -192,11 +189,7 @@ extension FavoriteListViewController {
 
         var snapshot = Snapshot()
         if allFolders.isEmpty {
-            layoutSections = []
-            collectionView.collectionViewLayout.invalidateLayout()
-            snapshot.appendSections([.emptyState])
-            snapshot.appendItems([.emptyState])
-            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
 
@@ -246,14 +239,10 @@ extension FavoriteListViewController {
         }
 
         let folders = FavoriteSortModeHelper.sortFoldersWithMode(directFavoriteFolders(allFolders, parentGroupName: folder.bridgeItem.groupName).filter { matchesSearch($0.title) }, mode: currentSortMode)
-        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesSwiftHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
+        let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(OAFavoritesBridgeHelper.favoritePoints(forGroupName: folder.bridgeItem.groupName).map { FavoritePointRow(item: $0) }.filter { matchesSearch($0.title) || matchesSearch($0.bridgeItem.address) }, mode: currentSortMode)
         var snapshot = Snapshot()
         if favorites.isEmpty && folders.isEmpty {
-            layoutSections = []
-            collectionView.collectionViewLayout.invalidateLayout()
-            snapshot.appendSections([.emptyState])
-            snapshot.appendItems([.emptyState])
-            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
         let stats = folderStats(allFolders: allFolders, currentGroupName: folder.bridgeItem.groupName)
@@ -274,11 +263,7 @@ extension FavoriteListViewController {
         let favorites = FavoriteSortModeHelper.sortFavoritePointsWithMode(searchFavoritePointRows(allFolders: allFolders, parentGroupName: parentGroupName), mode: currentSortMode)
         var snapshot = Snapshot()
         if favorites.isEmpty {
-            layoutSections = []
-            collectionView.collectionViewLayout.invalidateLayout()
-            snapshot.appendSections([.emptyState])
-            snapshot.appendItems([.emptyState])
-            dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+            applyEmptyStateSnapshot(animatingDifferences: animatingDifferences)
             return
         }
 
@@ -287,6 +272,15 @@ extension FavoriteListViewController {
         snapshot.appendSections(layoutSections)
         snapshot.appendItems([.sortHeader(currentSortHeader)], toSection: .sortHeader)
         snapshot.appendItems(favorites.map(FavoriteListItem.favorite), toSection: .content)
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+    }
+    
+    private func applyEmptyStateSnapshot(animatingDifferences: Bool) {
+        var snapshot = Snapshot()
+        layoutSections = []
+        collectionView.collectionViewLayout.invalidateLayout()
+        snapshot.appendSections([.emptyState])
+        snapshot.appendItems([.emptyState])
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 

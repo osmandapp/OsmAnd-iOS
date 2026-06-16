@@ -1,5 +1,5 @@
 //
-//  OAFavoritesSwiftHelper.h
+//  OAFavoritesBridgeHelper.h
 //  OsmAnd
 //
 //  Created by Vladyslav Lysenko on 05.06.2026.
@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class UIColor, UIImage, OAFavoriteItem, OASGpxUtilitiesPointsGroup, OAEditPointViewController, OAFavoriteFolderBridgeItem, OAFavoritePointBridgeItem;
 
-@interface OAFavoritesSwiftHelper : NSObject
+@interface OAFavoritesBridgeHelper : NSObject
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;

@@ -1,12 +1,12 @@
 //
-//  OAFavoritesSwiftHelper.mm
+//  OAFavoritesBridgeHelper.mm
 //  OsmAnd Maps
 //
 //  Created by Vladyslav Lysenko on 05.06.2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-#import "OAFavoritesSwiftHelper.h"
+#import "OAFavoritesBridgeHelper.h"
 #import "OAAppSettings.h"
 #import "OAEditGroupViewController.h"
 #import "OAEditPointViewController.h"
@@ -39,7 +39,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@implementation OAFavoritesSwiftHelper
+@implementation OAFavoritesBridgeHelper
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders
 {

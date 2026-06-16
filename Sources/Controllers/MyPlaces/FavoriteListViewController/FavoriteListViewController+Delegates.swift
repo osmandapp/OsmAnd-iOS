@@ -6,9 +6,6 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import CoreLocation
-import UniformTypeIdentifiers
-
 extension FavoriteListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
@@ -26,7 +23,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 updateSelectionUI()
                 return
             }
-            OAFavoritesSwiftHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
+            OAFavoritesBridgeHelper.openFavoritePoint(withIdentifier: favorite.bridgeItem.identifier)
         default:
             break
         }
@@ -78,7 +75,7 @@ extension FavoriteListViewController: OAShareMenuDelegate {
         guard let pointToShare else { return }
         switch type {
         case .clipboard:
-            copyFavoritePointShareText(OAFavoritesSwiftHelper.sharePoiURLString(forFavoritePoint: pointToShare))
+            copyFavoritePointShareText(OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: pointToShare))
         case .copyAddress:
             if let address = pointToShare.address, !address.isEmpty {
                 copyFavoritePointShareText(address)
@@ -92,9 +89,9 @@ extension FavoriteListViewController: OAShareMenuDelegate {
                 OAUtilities.showToast(localizedString("toast_empty_name_error"), details: nil, duration: 4, in: view)
             }
         case .copyCoordinates:
-            copyFavoritePointShareText(OAFavoritesSwiftHelper.formattedCoordinates(forFavoritePoint: pointToShare))
+            copyFavoritePointShareText(OAFavoritesBridgeHelper.formattedCoordinates(forFavoritePoint: pointToShare))
         case .geo:
-            copyFavoritePointShareText(OAFavoritesSwiftHelper.geoURLString(forFavoritePoint: pointToShare))
+            copyFavoritePointShareText(OAFavoritesBridgeHelper.geoURLString(forFavoritePoint: pointToShare))
         default:
             break
         }
@@ -143,10 +140,10 @@ extension FavoriteListViewController: OAEditColorViewControllerDelegate {
 
         guard let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty else { return }
         if colorController.saveChanges {
-            OAFavoritesSwiftHelper.changeFavoriteItems(bridgeItems(for: selectedItems), colorIndex: colorController.colorIndex)
+            OAFavoritesBridgeHelper.changeFavoriteItems(bridgeItems(for: selectedItems), colorIndex: colorController.colorIndex)
         }
 
-        setEdit(false)
+        setEditing(false)
         applySnapshot(animatingDifferences: true)
     }
 }
@@ -164,9 +161,9 @@ extension FavoriteListViewController: OAEditGroupViewControllerDelegate {
         let targetGroupName = groupController.groupName ?? ""
         guard let favoriteItemsToMove else { return }
         createFavoriteMoveTargetGroupIfNeeded(targetGroupName, favoriteItems: favoriteItemsToMove)
-        OAFavoritesSwiftHelper.moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
+        OAFavoritesBridgeHelper.moveFavoriteItems(favoriteItemsToMove, toGroupName: targetGroupName)
         updateFavoriteSortModeKeysAfterMove(favoriteItemsToMove, toGroupName: targetGroupName)
-        setEdit(false)
+        setEditing(false)
         applySnapshot(animatingDifferences: true)
     }
 }
@@ -174,10 +171,10 @@ extension FavoriteListViewController: OAEditGroupViewControllerDelegate {
 extension FavoriteListViewController: OAOpenAddTrackDelegate {
     func onFileSelected(_ gpxFilePath: String) {
         if let addToTrackFavoriteItems {
-            OAFavoritesSwiftHelper.addFavoriteItems(toTrack: addToTrackFavoriteItems, gpxFileName: gpxFilePath)
+            OAFavoritesBridgeHelper.addFavoriteItems(toTrack: addToTrackFavoriteItems, gpxFileName: gpxFilePath)
             self.addToTrackFavoriteItems = nil
         } else if let addToTrackGroupName {
-            OAFavoritesSwiftHelper.addFavoriteGroup(toTrack: addToTrackGroupName, gpxFileName: gpxFilePath)
+            OAFavoritesBridgeHelper.addFavoriteGroup(toTrack: addToTrackGroupName, gpxFileName: gpxFilePath)
             self.addToTrackGroupName = nil
         }
     }
@@ -185,7 +182,7 @@ extension FavoriteListViewController: OAOpenAddTrackDelegate {
 
 extension FavoriteListViewController: OAEditorDelegate {
     func addNewItem(withName name: String?, iconName: String, color: UIColor, backgroundIconName: String) {
-        guard OAFavoritesSwiftHelper.addFavoriteGroup(name ?? "",
+        guard OAFavoritesBridgeHelper.addFavoriteGroup(name ?? "",
                                                       parentGroupName: parentGroupName,
                                                       iconName: iconName,
                                                       color: color,

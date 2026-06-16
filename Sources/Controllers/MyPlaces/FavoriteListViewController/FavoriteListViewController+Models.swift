@@ -6,9 +6,6 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import CoreLocation
-import UniformTypeIdentifiers
-
 enum ScreenMode {
     case root
     case folder(FavoriteFolderRow, previousTitle: String)
@@ -53,9 +50,9 @@ struct FavoriteSortHeader: Hashable {
 }
 
 struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
-    static let subtitleDateFormatter: DateFormatter = {
+    private static let subtitleDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM"
+        formatter.setLocalizedDateFormatFromTemplate("dMMM")
         return formatter
     }()
 

@@ -219,7 +219,7 @@
 		271A62052E3CA8CD00B34CB1 /* DistanceByTapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */; };
 		27291B612EE81169005D0B0A /* PreviewImageViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */; };
 		27291B622EE81169005D0B0A /* PreviewImageViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */; };
-		272AFB9B2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */; };
+		272AFB9B2FD2DD3C006C2E21 /* OAFavoritesBridgeHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 272AFB9A2FD2DD3C006C2E21 /* OAFavoritesBridgeHelper.mm */; };
 		272AFBAC2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272AFBAA2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift */; };
 		272AFBAD2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 272AFBAB2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib */; };
 		274167472E4DD3660051DD4B /* BaseWidgetView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */; };
@@ -3744,8 +3744,8 @@
 		271A62042E3CA8CD00B34CB1 /* DistanceByTapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceByTapViewController.swift; sourceTree = "<group>"; };
 		27291B5F2EE81169005D0B0A /* PreviewImageViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewImageViewTableViewCell.swift; sourceTree = "<group>"; };
 		27291B602EE81169005D0B0A /* PreviewImageViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreviewImageViewTableViewCell.xib; sourceTree = "<group>"; };
-		272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesSwiftHelper.h; sourceTree = "<group>"; };
-		272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesSwiftHelper.mm; sourceTree = "<group>"; };
+		272AFB972FD2DC42006C2E21 /* OAFavoritesBridgeHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBridgeHelper.h; sourceTree = "<group>"; };
+		272AFB9A2FD2DD3C006C2E21 /* OAFavoritesBridgeHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBridgeHelper.mm; sourceTree = "<group>"; };
 		272AFBAA2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateCollectionViewCell.swift; sourceTree = "<group>"; };
 		272AFBAB2FD810CC006C2E21 /* EmptyStateCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyStateCollectionViewCell.xib; sourceTree = "<group>"; };
 		274167462E4DD3660051DD4B /* BaseWidgetView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseWidgetView+Extension.swift"; sourceTree = "<group>"; };
@@ -8408,8 +8408,8 @@
 				C5EB56F82FD18B8A00D01657 /* FavoriteListViewController+Actions.swift */,
 				C5EB56FA2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift */,
 				C58ACDE02FD2D6E8004E34C9 /* FavoriteSortModeHelper.swift */,
-				272AFB972FD2DC42006C2E21 /* OAFavoritesSwiftHelper.h */,
-				272AFB9A2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm */,
+				272AFB972FD2DC42006C2E21 /* OAFavoritesBridgeHelper.h */,
+				272AFB9A2FD2DD3C006C2E21 /* OAFavoritesBridgeHelper.mm */,
 				275ED6592FE032290088D42B /* OAFavoriteFolderBridgeItem.h */,
 				275ED65A2FE032600088D42B /* OAFavoriteFolderBridgeItem.mm */,
 				275ED65C2FE032A90088D42B /* OAFavoritePointBridgeItem.h */,
@@ -17712,7 +17712,7 @@
 				DA5A814D26C563A700F274C7 /* OASearchCategoriesListController.mm in Sources */,
 				DA5A81F726C563A700F274C7 /* OAChoosePlanViewController.mm in Sources */,
 				FAA6505A2ADD42C50020DCEA /* DeviceFactory.swift in Sources */,
-				272AFB9B2FD2DD3C006C2E21 /* OAFavoritesSwiftHelper.mm in Sources */,
+				272AFB9B2FD2DD3C006C2E21 /* OAFavoritesBridgeHelper.mm in Sources */,
 				DA5A84F126C563A900F274C7 /* OAMapSource.m in Sources */,
 				FA282AF62C2C456700CC7AC1 /* WeatherNavigationBarView.swift in Sources */,
 				DA5A825526C563A700F274C7 /* OAArrivalAnnouncementViewController.m in Sources */,

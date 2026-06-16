@@ -6,9 +6,6 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
-import CoreLocation
-import UniformTypeIdentifiers
-
 extension FavoriteListViewController {
     var headerCellRegistration: CellRegistration<FavoriteFolderSection> {
         CellRegistration<FavoriteFolderSection> { cell, _, section in

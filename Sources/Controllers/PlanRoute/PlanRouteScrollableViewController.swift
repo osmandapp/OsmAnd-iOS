@@ -1,5 +1,5 @@
 //
-//  PlanRouteContainerViewController.swift
+//  PlanRouteScrollableViewController.swift
 //  OsmAnd Maps
 //
 //  Created by OsmAnd on 15.06.2026.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class PlanRouteContainerViewController: OABaseScrollableHudViewController {
+final class PlanRouteScrollableViewController: OABaseScrollableHudViewController {
     private static let topPartHeight: CGFloat = 50
     private static let grabberAreaHeight: CGFloat = 16
     private static let segmentedControlHeight: CGFloat = 36
@@ -45,9 +45,19 @@ final class PlanRouteContainerViewController: OABaseScrollableHudViewController 
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc static func showNewRoute() {
-        let provider = PlanRouteStubDataProvider(mode: .newRoute)
-        let controller = PlanRouteContainerViewController(dataProvider: provider)
+    @objc(showNewRoute)
+    static func showNewRoute() {
+        showPlanRoute(dataProvider: PlanRouteStubDataProvider(mode: .newRoute))
+    }
+
+    @objc(openExistingTrackWithFilePath:)
+    static func openExistingTrack(filePath: String) {
+        let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
+        showPlanRoute(dataProvider: PlanRouteStubDataProvider(mode: .editTrack(fileName: fileName)))
+    }
+
+    private static func showPlanRoute(dataProvider: PlanRouteDataProvider) {
+        let controller = PlanRouteScrollableViewController(dataProvider: dataProvider)
         OARootViewController.instance().mapPanel?.showScrollableHudViewController(controller)
     }
 

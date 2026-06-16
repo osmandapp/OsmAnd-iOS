@@ -256,7 +256,7 @@
     if ([key isEqualToString:@"create_new_route"])
     {
         [self hide:YES completion:^{
-            [PlanRouteContainerViewController showNewRoute];
+            [PlanRouteScrollableViewController showNewRoute];
         }];
         return;
     }
@@ -271,9 +271,9 @@
     else if ([key isEqualToString:@"gpx_route"])
     {
         OASGpxDataItem *track = item[@"track"];
-        [self hide:YES];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:
-                [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
+        [self hide:YES completion:^{
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:track.gpxFilePath];
+        }];
         return;
     }
 }
@@ -297,7 +297,7 @@
 
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:gpxFilePath]];
+    [PlanRouteScrollableViewController openExistingTrackWithFilePath:gpxFilePath];
 }
 
 @end

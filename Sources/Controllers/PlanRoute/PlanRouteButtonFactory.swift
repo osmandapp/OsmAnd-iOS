@@ -15,7 +15,7 @@ enum PlanRouteButtonFactory {
     static func iconButton(image: UIImage?, size: CGFloat = toolbarButtonSize) -> UIButton {
         var configuration = UIButton.Configuration.plain()
         configuration.image = image
-        configuration.baseForegroundColor = .iconColorBlack
+        configuration.baseForegroundColor = .mapButtonIconColorDefault
         configuration.background.backgroundColor = .mapButtonBgColorDefault
         configuration.background.cornerRadius = size / 2
         let button = UIButton(configuration: configuration)
@@ -69,8 +69,8 @@ enum PlanRouteButtonFactory {
 
     private static func applyShadow(to button: UIButton) {
         button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.12
+        button.layer.shadowOpacity = 0.35
         button.layer.shadowOffset = CGSize(width: 0, height: 2)
-        button.layer.shadowRadius = 4
+        button.layer.shadowRadius = 5
     }
 }

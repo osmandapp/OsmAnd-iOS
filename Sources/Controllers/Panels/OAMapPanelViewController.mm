@@ -407,7 +407,7 @@ typedef enum
 
     self.sidePanelController.recognizesPanGesture = NO;
 
-    if ([controller isKindOfClass:OARoutePlanningHudViewController.class] || [controller isKindOfClass:PlanRouteContainerViewController.class])
+    if ([controller isKindOfClass:OARoutePlanningHudViewController.class] || [controller isKindOfClass:PlanRouteScrollableViewController.class])
         _activeTargetType = OATargetRoutePlanning;
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;

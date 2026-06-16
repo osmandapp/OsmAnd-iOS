@@ -33,7 +33,7 @@ final class PlanRouteTopToolbarView: UIView {
     }
 
     private let titleLabel = UILabel()
-    private let closeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_close"))
+    private let closeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_navbar_close"))
     private let optionsButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_overflow_menu_stroke"))
 
     private lazy var saveButton = PlanRouteButtonFactory.primaryButton(title: localizedString("shared_string_save"))
@@ -57,8 +57,11 @@ final class PlanRouteTopToolbarView: UIView {
 
         titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
         titleLabel.textColor = .textColorPrimary
-        titleLabel.textAlignment = .center
+        titleLabel.textAlignment = .natural
         titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byTruncatingTail
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         let trailingStack = UIStackView(arrangedSubviews: [optionsButton, saveButton])
         trailingStack.spacing = Self.buttonSpacing
@@ -77,9 +80,8 @@ final class PlanRouteTopToolbarView: UIView {
             trailingStack.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -inset),
             trailingStack.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
 
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: closeButton.trailingAnchor, constant: Self.buttonSpacing),
+            titleLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingStack.leadingAnchor, constant: -Self.buttonSpacing)
         ])
 

@@ -36,6 +36,6 @@ final class RouteAction: OAQuickAction {
     }
     
     override func execute() {
-        PlanRouteContainerViewController.showNewRoute()
+        PlanRouteScrollableViewController.showNewRoute()
     }
 }

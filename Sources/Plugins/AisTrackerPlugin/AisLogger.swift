@@ -28,6 +28,6 @@ final class AisLogger: NSObject {
     func log(_ message: String) {
         guard isEnabled else { return }
         
-        print("[AIS] \(message)")
+        debugPrint("[AIS] \(message)")
     }
 }

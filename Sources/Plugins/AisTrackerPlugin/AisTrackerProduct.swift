@@ -1,4 +1,10 @@
-import Foundation
+//
+//  AisTrackerProduct.swift
+//  OsmAnd
+//
+//  Created by Oleksandr Panchenko on 15.06.2026.
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
 
 @objcMembers
 final class AisTrackerProduct: OAProduct {

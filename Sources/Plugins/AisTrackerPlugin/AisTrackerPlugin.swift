@@ -63,9 +63,14 @@ final class AisTrackerPlugin: OAPlugin {
 
     private let decoder = AisMessageDecoder()
     private let aisDecoderQueue = DispatchQueue(label: "com.app.ais.decoder", qos: .userInitiated)
-    private var networkListener: AisMessageListener?
     
+    private var networkListener: AisMessageListener?
     private var applicationModeObserver: OAAutoObserverProxy?
+    private var simulationSentences = 0
+    private var simulationDecoded = 0
+    private var simulationObjects = 0
+    private var simulationReceivedObjects = 0
+    private var simulationRenderedObjects = 0
     
     private lazy var simulationProvider = AisSimulationProvider(plugin: self)
     private lazy var aisDataManager = AisDataManager(plugin: self)
@@ -76,12 +81,6 @@ final class AisTrackerPlugin: OAPlugin {
     private(set) var simulationFileName: String?
     private(set) var simulationStatusText: String?
     private(set) var lastMessageReceived = Date.distantPast
-    
-    private var simulationSentences = 0
-    private var simulationDecoded = 0
-    private var simulationObjects = 0
-    private var simulationReceivedObjects = 0
-    private var simulationRenderedObjects = 0
 
     override init() {
         protocolPref = OAAppSettings.sharedManager().registerIntPreference(Self.protocolPrefId, defValue: Int32(AisNmeaProtocol.udp.rawValue))
@@ -244,12 +243,12 @@ final class AisTrackerPlugin: OAPlugin {
         case .udp:
             let port = max(1, Int(udpPortPref.get()))
             AisObjectHelper.debugLog("[AisTrackerPlugin] start shared AIS UDP port=\(port)")
-            networkListener = OsmAndShared.AisMessageListener(dataListener: networkDataListener, udpPort: Int32(port))
+            networkListener = AisMessageListener(dataListener: networkDataListener, udpPort: Int32(port))
         case .tcp:
             let host = hostPref.get()
             let port = max(1, Int(tcpPortPref.get()))
             AisObjectHelper.debugLog("[AisTrackerPlugin] start shared AIS TCP host=\(host) port=\(port)")
-            networkListener = OsmAndShared.AisMessageListener(dataListener: networkDataListener, serverIp: host, serverPort: Int32(port))
+            networkListener = AisMessageListener(dataListener: networkDataListener, serverIp: host, serverPort: Int32(port))
         }
         updateConnectionState(.connected)
     }
@@ -331,7 +330,7 @@ final class AisTrackerPlugin: OAPlugin {
         let warningTime = cpaWarningTimeInMinutes()
         let warningDistance = cpaWarningDistanceInNauticalMiles()
         guard object.isMovable(),
-              object.objectClass != OsmAndShared.AisObjType.aisAirplane,
+              object.objectClass != AisObjType.aisAirplane,
               warningTime > 0,
               object.sog > 0,
               let ownPosition = ownPosition(),
@@ -470,7 +469,7 @@ final class AisTrackerPlugin: OAPlugin {
     }
 }
 
-private final class AisNetworkDataListener: NSObject, OsmAndShared.AisDataListener {
+private final class AisNetworkDataListener: NSObject, AisDataListener {
     private weak var plugin: AisTrackerPlugin?
 
     init(plugin: AisTrackerPlugin) {

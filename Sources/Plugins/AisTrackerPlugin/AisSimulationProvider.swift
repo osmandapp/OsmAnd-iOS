@@ -10,12 +10,14 @@ import CoreLocation
 import OsmAndShared
 
 final class AisMessageSimulationListener {
-    private weak var plugin: AisTrackerPlugin?
     private let fileURL: URL
     private let latency: TimeInterval
     private let queue = DispatchQueue(label: "net.osmand.ais.simulation.listener")
     private let lock = NSLock()
+    
     private var cancelled = false
+    
+    private weak var plugin: AisTrackerPlugin?
 
     private var isCancelled: Bool {
         lock.lock()
@@ -110,8 +112,9 @@ final class AisMessageSimulationListener {
 final class AisSimulationProvider: NSObject {
     private static let simulatedLatency: TimeInterval = 0.1
 
-    private weak var plugin: AisTrackerPlugin?
     private var listener: AisMessageSimulationListener?
+    
+    private weak var plugin: AisTrackerPlugin?
 
     init(plugin: AisTrackerPlugin) {
         self.plugin = plugin

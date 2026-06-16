@@ -10,7 +10,7 @@ import OsmAndShared
 
 final class AisMessageDecoder {
     private let dataListener = AisSharedDataListener()
-    private lazy var listener = OsmAndShared.AisMessageListener(dataListener: dataListener)
+    private lazy var listener = AisMessageListener(dataListener: dataListener)
 
     func decode(sentence: String) -> AisObject? {
         dataListener.lastObject = nil
@@ -19,7 +19,7 @@ final class AisMessageDecoder {
     }
 }
 
-private final class AisSharedDataListener: NSObject, OsmAndShared.AisDataListener {
+private final class AisSharedDataListener: NSObject, AisDataListener {
     var lastObject: AisObject?
 
     func onAisObjectReceived(ais: AisObject) {

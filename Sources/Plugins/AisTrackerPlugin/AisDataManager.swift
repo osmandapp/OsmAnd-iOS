@@ -16,14 +16,14 @@ extension Notification.Name {
 final class AisDataManager: NSObject {
     private static let objectLimit = 200
 
-    private weak var plugin: AisTrackerPlugin?
-    
-    private var objectsByMmsi: [Int: AisObject] = [:]
-    private var cleanupTimer: Timer?
-
     var objects: [AisObject] {
         Array(objectsByMmsi.values)
     }
+    
+    private var objectsByMmsi: [Int: AisObject] = [:]
+    private var cleanupTimer: Timer?
+    
+    private weak var plugin: AisTrackerPlugin?
     
     init(plugin: AisTrackerPlugin) {
         self.plugin = plugin

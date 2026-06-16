@@ -1,5 +1,5 @@
 //
-//  AisObject.swift
+//  AisObjectHelper.swift
 //  OsmAnd
 //
 //  Created by Oleksandr Panchenko on 11.06.2026.

@@ -9,22 +9,22 @@
 import CoreLocation
 import OsmAndShared
 
+enum AisTrackerHelper {
+    static func getCpa(_ ownLocation: CLLocation, _ otherLocation: CLLocation, result: AisCpa) {
+        result.reset()
+        AisTrackerMath.shared.getCpa(ownLocation: ownLocation.aisLocation,
+                                                  otherLocation: otherLocation.aisLocation,
+                                                  result: result)
+    }
+}
+
 private extension CLLocation {
     var aisLocation: AisLocation {
-        OsmAndShared.AisLocation(latitude: coordinate.latitude,
+        AisLocation(latitude: coordinate.latitude,
                                  longitude: coordinate.longitude,
                                  speed: speed >= 0 ? Float(speed) : .nan,
                                  bearing: course >= 0 ? Float(course) : .nan,
                                  hasSpeed: speed >= 0,
                                  hasBearing: course >= 0)
-    }
-}
-
-enum AisTrackerHelper {
-    static func getCpa(_ ownLocation: CLLocation, _ otherLocation: CLLocation, result: AisCpa) {
-        result.reset()
-        OsmAndShared.AisTrackerMath.shared.getCpa(ownLocation: ownLocation.aisLocation,
-                                                  otherLocation: otherLocation.aisLocation,
-                                                  result: result)
     }
 }

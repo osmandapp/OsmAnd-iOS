@@ -1364,14 +1364,14 @@
 		9F4844A72FD0000100484401 /* AisTrackerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */; };
 		9F4844A82FD0000100484401 /* AisTrackerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */; };
 		9F4844AA2FD0000100484401 /* AisSimulationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A92FD0000100484401 /* AisSimulationProvider.swift */; };
-		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
-		9F4844AC2FD0000100484401 /* AisObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844AB2FD0000100484401 /* AisObject.swift */; };
+		9F4844AC2FD0000100484401 /* AisObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844AB2FD0000100484401 /* AisObjectHelper.swift */; };
 		9F4844AE2FD0000100484401 /* AisDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844AD2FD0000100484401 /* AisDataManager.swift */; };
 		9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844AF2FD0000100484401 /* AisMessageDecoder.swift */; };
 		9F4844B32FD0000100484401 /* OAAisTrackerLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844B22FD0000100484401 /* OAAisTrackerLayer.mm */; };
 		9F4844B52FD0000100484401 /* AisTrackerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844B42FD0000100484401 /* AisTrackerHelper.swift */; };
 		9F4844B82FD0000100484401 /* OAAisObjectViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844B72FD0000100484401 /* OAAisObjectViewController.mm */; };
 		9F4844C22FD0000100484401 /* OAAisTrackerLayerBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */; };
+		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
 		B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */; };
@@ -1641,13 +1641,13 @@
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
+		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
+		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
-		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
-		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
 		DA0132DD2A1E4A6300920C14 /* ic_custom20_screen_side_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */; };
 		DA0132DE2A1E4A6300920C14 /* ic_custom20_screen_side_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */; };
@@ -5127,8 +5127,7 @@
 		9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerPlugin.swift; sourceTree = "<group>"; };
 		9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerSettingsViewController.swift; sourceTree = "<group>"; };
 		9F4844A92FD0000100484401 /* AisSimulationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisSimulationProvider.swift; sourceTree = "<group>"; };
-		9F4844D02FD0000100484401 /* AisTrackerProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerProduct.swift; sourceTree = "<group>"; };
-		9F4844AB2FD0000100484401 /* AisObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisObject.swift; sourceTree = "<group>"; };
+		9F4844AB2FD0000100484401 /* AisObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisObjectHelper.swift; sourceTree = "<group>"; };
 		9F4844AD2FD0000100484401 /* AisDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisDataManager.swift; sourceTree = "<group>"; };
 		9F4844AF2FD0000100484401 /* AisMessageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisMessageDecoder.swift; sourceTree = "<group>"; };
 		9F4844B12FD0000100484401 /* OAAisTrackerLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAisTrackerLayer.h; sourceTree = "<group>"; };
@@ -5138,6 +5137,7 @@
 		9F4844B72FD0000100484401 /* OAAisObjectViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAisObjectViewController.mm; sourceTree = "<group>"; };
 		9F4844C02FD0000100484401 /* OAAisTrackerLayerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAisTrackerLayerBridge.h; sourceTree = "<group>"; };
 		9F4844C12FD0000100484401 /* OAAisTrackerLayerBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAisTrackerLayerBridge.mm; sourceTree = "<group>"; };
+		9F4844D02FD0000100484401 /* AisTrackerProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisTrackerProduct.swift; sourceTree = "<group>"; };
 		ADA2D9C11AEC31EA6BB2AF2C /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
 		B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectionCollapsableCell.h; sourceTree = "<group>"; };
@@ -5598,12 +5598,12 @@
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
+		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
 		D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeCell.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
-		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
 		DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsListViewController.swift; sourceTree = "<group>"; };
 		DA0132D52A1E4A6100920C14 /* ic_custom20_screen_side_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_right@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_right@2x.png"; sourceTree = "<group>"; };
 		DA0132D62A1E4A6100920C14 /* ic_custom20_screen_side_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_top@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_top@2x.png"; sourceTree = "<group>"; };
@@ -10423,7 +10423,7 @@
 			isa = PBXGroup;
 			children = (
 				FA4EDBF52FDAC090003B0AFC /* AisLogger.swift */,
-				9F4844AB2FD0000100484401 /* AisObject.swift */,
+				9F4844AB2FD0000100484401 /* AisObjectHelper.swift */,
 				9F4844B42FD0000100484401 /* AisTrackerHelper.swift */,
 				9F4844AD2FD0000100484401 /* AisDataManager.swift */,
 				9F4844AF2FD0000100484401 /* AisMessageDecoder.swift */,
@@ -18041,7 +18041,7 @@
 				FA1D6DAE2DCE04710080E374 /* VehicleMetricsPlugin.swift in Sources */,
 				9F4844A72FD0000100484401 /* AisTrackerPlugin.swift in Sources */,
 				9F4844AA2FD0000100484401 /* AisSimulationProvider.swift in Sources */,
-				9F4844AC2FD0000100484401 /* AisObject.swift in Sources */,
+				9F4844AC2FD0000100484401 /* AisObjectHelper.swift in Sources */,
 				9F4844AE2FD0000100484401 /* AisDataManager.swift in Sources */,
 				9F4844B02FD0000100484401 /* AisMessageDecoder.swift in Sources */,
 				9F4844B32FD0000100484401 /* OAAisTrackerLayer.mm in Sources */,

@@ -2082,7 +2082,6 @@
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    long long startG = (long long)([[NSDate date] timeIntervalSince1970] * 1000000);
     OsmAndAppInstance app = [OsmAndApp instance];
     QString lang = QString::fromNSString([[phrase getSettings] getLang]);
     bool transliterate = [[phrase getSettings] isTransliterate];

@@ -847,7 +847,6 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
             [_objectDrawables removeObjectForKey:key];
         }
     }
-    [plugin updateSimulationRenderedObjects:_objectDrawables.count];
 }
 
 - (void)onAisObjectReceived:(OASAisObject *)object
@@ -876,7 +875,6 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
             [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
             [_objectDrawables removeObjectForKey:key];
         }
-        [[self plugin] updateSimulationRenderedObjects:_objectDrawables.count];
     }];
 }
 
@@ -903,7 +901,6 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     int linesCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
 
     [[AisLogger shared] log:[NSString stringWithFormat:@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, OAAisDebugSummary(object)]];
-    [[self plugin] updateSimulationRenderedObjects:_objectDrawables.count];
 }
 
 - (void)updateRenderData

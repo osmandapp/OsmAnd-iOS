@@ -93,17 +93,6 @@ final class AisMessageSimulationListener {
     private func postStatus(sentences: Int, decoded: Int, objects: Int, error: String?) {
         DispatchQueue.main.async {
             self.plugin?.updateSimulationStatus(sentences: sentences, decoded: decoded, objects: objects, error: error)
-            var userInfo: [String: Any] = [
-                "sentences": sentences,
-                "decoded": decoded,
-                "objects": objects
-            ]
-            if let error {
-                userInfo["error"] = error
-            }
-            NotificationCenter.default.post(name: .aisSimulationStatusChanged,
-                                            object: self.plugin,
-                                            userInfo: userInfo)
         }
     }
 }

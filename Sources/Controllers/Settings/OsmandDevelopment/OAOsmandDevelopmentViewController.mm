@@ -72,7 +72,6 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
 - (void)registerNotifications
 {
     [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
-    [self addNotification:@"OAAisSimulationStatusChanged" selector:@selector(onAisSimulationStatusChanged:)];
 }
 
 #pragma mark - Base UI
@@ -125,18 +124,11 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         OATableSectionData *aisSection = [OATableSectionData sectionData];
         aisSection.headerText = OALocalizedString(@"plugin_ais_tracker_name");
         
-        NSString *simulationDescription = aisPlugin.simulationFileName ?: @"";
-        if (aisPlugin.simulationStatusText.length > 0)
-        {
-            simulationDescription = simulationDescription.length > 0
-                ? [NSString stringWithFormat:@"%@ • %@", simulationDescription, aisPlugin.simulationStatusText]
-                : aisPlugin.simulationStatusText;
-        }
         [aisSection addRowFromDictionary:@{
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellKeyKey : kAisTrackerSimulationKey,
             kCellTitleKey : OALocalizedString(@"ais_load_data"),
-            kCellDescrKey : simulationDescription,
+            kCellDescrKey : aisPlugin.simulationFileName ?: @"",
             @"actionBlock" : (^void(){ [weakSelf openAisSimulationFilePicker]; })
         }];
         
@@ -393,12 +385,6 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     [self.tableView reloadData];
 }
 
-- (void)onAisSimulationStatusChanged:(NSNotification *)notification
-{
-    [self generateData];
-    [self.tableView reloadData];
-}
-
 #pragma mark - UIDocumentPickerDelegate
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
@@ -420,8 +406,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     [self.tableView reloadData];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         UIView *toastView = self.view.window ?: OARootViewController.instance.view;
-        NSString *details = aisPlugin.simulationStatusText.length > 0 ? aisPlugin.simulationStatusText : url.lastPathComponent;
-        [OAUtilities showToast:@"AIS simulation" details:details duration:5 inView:toastView];
+        [OAUtilities showToast:@"AIS simulation" details:url.lastPathComponent duration:5 inView:toastView];
     });
 }
 

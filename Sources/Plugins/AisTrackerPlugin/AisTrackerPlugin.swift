@@ -66,11 +66,6 @@ final class AisTrackerPlugin: OAPlugin {
     
     private var networkListener: AisMessageListener?
     private var applicationModeObserver: OAAutoObserverProxy?
-    private var simulationSentences = 0
-    private var simulationDecoded = 0
-    private var simulationObjects = 0
-    private var simulationReceivedObjects = 0
-    private var simulationRenderedObjects = 0
     
     private lazy var simulationProvider = AisSimulationProvider(plugin: self)
     private lazy var aisDataManager = AisDataManager(plugin: self)
@@ -79,7 +74,6 @@ final class AisTrackerPlugin: OAPlugin {
     private(set) var connectionState: AisNmeaConnectionState = .disconnected
     private(set) var fakeOwnLocation: CLLocation?
     private(set) var simulationFileName: String?
-    private(set) var simulationStatusText: String?
     private(set) var lastMessageReceived = Date.distantPast
 
     override init() {
@@ -169,36 +163,16 @@ final class AisTrackerPlugin: OAPlugin {
     func startAisSimulation(_ fileURL: URL) {
         guard isEnabled() else { return }
         simulationFileName = fileURL.lastPathComponent
-        simulationSentences = 0
-        simulationDecoded = 0
-        simulationObjects = 0
-        simulationReceivedObjects = 0
-        simulationRenderedObjects = 0
-        simulationStatusText = localizedString("shared_string_loading")
         AisObjectHelper.debugLog("simulation start file=\(fileURL.lastPathComponent)")
         simulationProvider.startAisSimulation(fileURL)
     }
 
     func updateSimulationStatus(sentences: Int, decoded: Int, objects: Int, error: String?) {
         if let error, !error.isEmpty {
-            simulationStatusText = error
             AisObjectHelper.debugLog("simulation status error=\(error)")
         } else {
-            simulationSentences = sentences
-            simulationDecoded = decoded
-            simulationObjects = objects
-            updateSimulationStatusText()
             AisObjectHelper.debugLog("simulation stats sentences=\(sentences) decoded=\(decoded) objects=\(objects)")
         }
-        postSimulationStatusChanged()
-    }
-
-    func updateSimulationRenderedObjects(_ count: Int) {
-        guard simulationFileName != nil else { return }
-        guard simulationRenderedObjects != count else { return }
-        simulationRenderedObjects = count
-        updateSimulationStatusText()
-        postSimulationStatusChanged()
     }
 
     func prepareAisSimulation() {
@@ -221,12 +195,6 @@ final class AisTrackerPlugin: OAPlugin {
         AisObjectHelper.debugLog("simulation clear")
         fakeOwnLocation = nil
         simulationFileName = nil
-        simulationStatusText = nil
-        simulationSentences = 0
-        simulationDecoded = 0
-        simulationObjects = 0
-        simulationReceivedObjects = 0
-        simulationRenderedObjects = 0
         aisDataManager.cleanupResources()
     }
 
@@ -299,14 +267,6 @@ final class AisTrackerPlugin: OAPlugin {
 
     func onAisObjectReceived(_ object: AisObject) {
         lastMessageReceived = AisObjectHelper.lastUpdateDate(object)
-        if simulationFileName != nil {
-            let receivedObjects = getAisObjects().filter { $0.position != nil }.count
-            if simulationReceivedObjects != receivedObjects {
-                simulationReceivedObjects = receivedObjects
-                updateSimulationStatusText()
-                postSimulationStatusChanged()
-            }
-        }
         AisObjectHelper.debugLog("plugin received withPosition=\(getAisObjects().filter { $0.position != nil }.count) \(AisObjectHelper.debugSummary(object))")
         DispatchQueue.main.async {
             OAAisTrackerLayerBridge.onAisObjectReceived(object)
@@ -435,23 +395,6 @@ final class AisTrackerPlugin: OAPlugin {
     private func updateConnectionState(_ state: AisNmeaConnectionState) {
         connectionState = state
         NotificationCenter.default.post(name: .aisNmeaConnectionStateChanged, object: self)
-    }
-
-    private func updateSimulationStatusText() {
-        var parts = [
-            "sentences \(simulationSentences)",
-            "decoded \(simulationDecoded)",
-            "objects \(simulationObjects)"
-        ]
-        if simulationReceivedObjects > 0 || simulationRenderedObjects > 0 {
-            parts.append("received \(simulationReceivedObjects)")
-            parts.append("rendered \(simulationRenderedObjects)")
-        }
-        simulationStatusText = parts.joined(separator: ", ")
-    }
-
-    private func postSimulationStatusChanged() {
-        NotificationCenter.default.post(name: .aisSimulationStatusChanged, object: self)
     }
 
     private static func bearing(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) -> Double {

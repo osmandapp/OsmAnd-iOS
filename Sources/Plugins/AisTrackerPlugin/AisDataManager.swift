@@ -8,10 +8,6 @@
 
 import OsmAndShared
 
-extension Notification.Name {
-    static let aisSimulationStatusChanged = Notification.Name("OAAisSimulationStatusChanged")
-}
-
 @objcMembers
 final class AisDataManager: NSObject {
     private static let objectLimit = 200

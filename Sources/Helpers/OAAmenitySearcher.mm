@@ -278,6 +278,8 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     if (request)
     {
         detailsObject = [self searchDetailedObjectWithRequest:request];
+        if (detailsObject)
+            [detailsObject copyDescriptionToSyntheticAmenityIfNeeded:object];
     }
     
     [self completeGeometry:detailsObject object:object];

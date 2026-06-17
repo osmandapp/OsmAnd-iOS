@@ -1498,7 +1498,6 @@ typedef enum
         BaseDetailsObject *detailsObject = [OAAmenitySearcher.sharedInstance searchDetailedObject:targetPoint.targetObj];
         if (detailsObject)
         {
-            [detailsObject copyDescriptionToSyntheticAmenityIfNeeded:targetPoint.targetObj];
             targetPoint.type = OATargetBaseDetailsObject;
             targetPoint.targetObj = detailsObject;
         }

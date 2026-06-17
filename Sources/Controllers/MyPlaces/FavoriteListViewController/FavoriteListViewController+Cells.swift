@@ -173,7 +173,7 @@ extension FavoriteListViewController {
         guard let distance = favorite.distance, let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) else { return }
         appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: separatorAttributes)
         if let directionIcon = favoriteDirectionIcon(tintColor: .iconColorDirectionActive) {
-            let rotatedDirectionIcon = rotatedFavoriteDirectionIcon(directionIcon, radians: favorite.bridgeItem.direction)
+            let rotatedDirectionIcon = directionIcon.rotatedForAttributedString(with: favorite.bridgeItem.direction)
             let attachment = NSTextAttachment()
             attachment.image = rotatedDirectionIcon
             attachment.bounds = CGRect(x: 0.0,
@@ -193,19 +193,5 @@ extension FavoriteListViewController {
     private func favoriteDirectionIcon(tintColor: UIColor) -> UIImage? {
         let size = UIFontMetrics.default.scaledValue(for: 18.0)
         return OAUtilities.resize(.icSmallDirection, newSize: CGSize(width: size, height: size))?.withTintColor(tintColor)
-    }
-
-    private func rotatedFavoriteDirectionIcon(_ image: UIImage, radians: CGFloat) -> UIImage {
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = image.scale
-        format.opaque = false
-        let renderer = UIGraphicsImageRenderer(size: image.size, format: format)
-        return renderer.image { context in
-            let rect = CGRect(origin: CGPoint(x: -image.size.width / 2.0, y: -image.size.height / 2.0),
-                              size: image.size)
-            context.cgContext.translateBy(x: image.size.width / 2.0, y: image.size.height / 2.0)
-            context.cgContext.rotate(by: radians)
-            image.draw(in: rect)
-        }
     }
 }

@@ -30,6 +30,20 @@ extension UIImage {
         }
         return self
     }
+    
+    func rotatedForAttributedString(with radians: CGFloat) -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+        format.opaque = false
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { context in
+            let rect = CGRect(origin: CGPoint(x: -size.width / 2.0, y: -size.height / 2.0),
+                              size: size)
+            context.cgContext.translateBy(x: size.width / 2.0, y: size.height / 2.0)
+            context.cgContext.rotate(by: radians)
+            draw(in: rect)
+        }
+    }
 
     func rotateWithDiagonalSize(radians: CGFloat) -> UIImage? {
         let diagonalSize = sqrt(size.width * size.width + size.height * size.height)

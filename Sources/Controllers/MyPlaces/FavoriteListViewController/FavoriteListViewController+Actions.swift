@@ -10,13 +10,6 @@ import CoreLocation
 import UniformTypeIdentifiers
 
 extension FavoriteListViewController {
-    func areAllSelectableItemsSelected() -> Bool {
-        let selectableIndexPaths = selectableIndexPaths()
-        guard !selectableIndexPaths.isEmpty else { return false }
-        let selectedIndexPaths = Set(collectionView.indexPathsForSelectedItems ?? [])
-        return selectableIndexPaths.allSatisfy { selectedIndexPaths.contains($0) }
-    }
-    
     func openFavoriteGroupAppearance(_ groupName: String) {
         guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesBridgeHelper.pointsGroup(forGroupName: groupName)) else { return }
         favoriteGroupAppearanceGroupName = groupName
@@ -83,6 +76,7 @@ extension FavoriteListViewController {
             isSelectionModeInSearch = false
             isSearchActive = false
             searchText = ""
+            selectionManager.deselectAll()
         }
 
         collectionView.isEditing = isEditing
@@ -194,6 +188,11 @@ extension FavoriteListViewController {
         let modalNavigationController = UINavigationController(rootViewController: colorController)
         navigationController.present(modalNavigationController, animated: true)
     }
+    
+    func updateSelection(at indexPath: IndexPath) {
+        guard let selectionItem = dataSource.itemIdentifier(for: indexPath)?.selectionItem else { return }
+        selectionManager.toggle(selectionItem)
+    }
 
     @objc func selectButtonPressed() {
         setEditing(true)
@@ -219,10 +218,12 @@ extension FavoriteListViewController {
 
     @objc func selectAllButtonPressed() {
         let selectableIndexPaths = selectableIndexPaths()
-        if areAllSelectableItemsSelected() {
+        if selectionManager.areAllSelected {
             selectableIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: false) }
+            selectionManager.deselectAll()
         } else {
             selectableIndexPaths.forEach { collectionView.selectItem(at: $0, animated: false, scrollPosition: []) }
+            selectionManager.selectAll()
         }
 
         updateSelectionUI()

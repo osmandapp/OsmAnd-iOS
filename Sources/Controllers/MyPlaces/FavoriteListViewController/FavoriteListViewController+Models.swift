@@ -42,6 +42,22 @@ enum FavoriteListItem: Hashable {
     case favorite(FavoritePointRow)
     case statsFooter(FavoriteFolderStats)
     case emptyState
+    
+    var selectionItem: FavoriteSelectionItem? {
+        switch self {
+        case .folder(let folder):
+            return .folder(folder.bridgeItem.groupName)
+        case .favorite(let favorite):
+            return .favorite(favorite.bridgeItem.identifier)
+        default:
+            return nil
+        }
+    }
+}
+
+enum FavoriteSelectionItem: Hashable {
+    case folder(String)
+    case favorite(String)
 }
 
 struct FavoriteSortHeader: Hashable {

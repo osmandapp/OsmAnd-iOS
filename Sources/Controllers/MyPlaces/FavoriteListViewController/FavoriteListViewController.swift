@@ -96,6 +96,12 @@ final class FavoriteListViewController: UIViewController {
         searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
         return searchController
     }()
+    lazy var selectionManager: SelectionManager<FavoriteSelectionItem> = {
+        let items = collectionView.indexPathsForVisibleItems.compactMap {
+            dataSource.itemIdentifier(for: $0)?.selectionItem
+        }
+        return SelectionManager(allItems: items)
+    }()
     lazy var dataSource: DataSource = makeDataSource()
     
     weak var myPlacesDelegate: MyPlacesDelegate?
@@ -309,7 +315,7 @@ final class FavoriteListViewController: UIViewController {
         if collectionView.isEditing {
             let cancelButton = UIBarButtonItem(title: localizedString("shared_string_cancel"), style: .plain, target: self, action: #selector(cancelButtonPressed))
             cancelButton.accessibilityLabel = localizedString("shared_string_cancel")
-            let selectAllTitle = localizedString(areAllSelectableItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
+            let selectAllTitle = localizedString(selectionManager.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
             let selectAllButton = UIBarButtonItem(title: selectAllTitle, style: .plain, target: self, action: #selector(selectAllButtonPressed))
             selectAllButton.accessibilityLabel = selectAllTitle
             targetNavigationItem?.leftBarButtonItem = cancelButton

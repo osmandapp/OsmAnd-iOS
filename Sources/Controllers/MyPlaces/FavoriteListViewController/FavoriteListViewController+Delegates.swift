@@ -12,6 +12,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
         switch item {
         case .folder(let folder):
             if collectionView.isEditing {
+                updateSelection(at: indexPath)
                 updateSelectionUI()
                 return
             }
@@ -20,6 +21,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
             navigationController?.pushViewController(viewController, animated: true)
         case .favorite(let favorite):
             if collectionView.isEditing {
+                updateSelection(at: indexPath)
                 updateSelectionUI()
                 return
             }
@@ -33,6 +35,7 @@ extension FavoriteListViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard collectionView.isEditing else { return }
+        updateSelection(at: indexPath)
         updateSelectionUI()
     }
 

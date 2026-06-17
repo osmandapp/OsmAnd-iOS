@@ -138,9 +138,24 @@ struct PlanRoutePoint {
     let isDestination: Bool
 }
 
+struct PlanRouteProfileGroup {
+    let appMode: OAApplicationMode?
+    let distance: Double
+    let lastPointIndex: Int
+    let points: [PlanRoutePoint]
+}
+
 struct PlanRouteSegment {
     let index: Int
-    let points: [PlanRoutePoint]
+    let groups: [PlanRouteProfileGroup]
+    let routed: Bool
+    let multiMode: Bool
+    let singleMode: OAApplicationMode?
+    let distance: Double
+
+    var pointIndexes: [Int] {
+        groups.flatMap { $0.points.map { $0.index } }
+    }
 }
 
 struct PlanRouteElevationData {
@@ -160,8 +175,17 @@ protocol PlanRouteAnalyzeDataSource: AnyObject {
 
 protocol PlanRoutePointsDataSource: AnyObject {
     var routeInfo: PlanRouteInfo { get }
-    var segments: [PlanRouteSegment] { get }
-    var routePoints: [PlanRoutePoint] { get }
+    var routeSegments: [PlanRouteSegment] { get }
+    var canStartNewSegment: Bool { get }
+    var availableModes: [OAApplicationMode] { get }
+
+    func deleteRoutePoint(at index: Int)
+    func deleteSegment(pointIndexes: [Int])
+    func startNewSegment()
+    func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool)
+    func sortDoorToDoor(pointIndexes: [Int])
+    func saveSegment(pointIndexes: [Int])
+    func selectRoutePoint(at index: Int)
 }
 
 protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource {

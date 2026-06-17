@@ -183,6 +183,7 @@
 #import "OATrackSegmentsViewController.h"
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OARoutePlanningHudViewController.h"
+#import "OAPlanRouteEditingBridge.h"
 #import "OASaveTrackViewController.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OARecordSettingsBottomSheetViewController.h"

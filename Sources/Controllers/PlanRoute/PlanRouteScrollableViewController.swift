@@ -47,13 +47,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     @objc(showNewRoute)
     static func showNewRoute() {
-        showPlanRoute(dataProvider: PlanRouteStubDataProvider(mode: .newRoute))
+        showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .newRoute))
     }
 
     @objc(openExistingTrackWithFilePath:)
     static func openExistingTrack(filePath: String) {
         let fileName = ((filePath as NSString).lastPathComponent as NSString).deletingPathExtension
-        showPlanRoute(dataProvider: PlanRouteStubDataProvider(mode: .editTrack(fileName: fileName)))
+        showPlanRoute(dataProvider: PlanRouteEditingContextDataProvider(mode: .editTrack(fileName: fileName), filePath: filePath))
     }
 
     private static func showPlanRoute(dataProvider: PlanRouteDataProvider) {

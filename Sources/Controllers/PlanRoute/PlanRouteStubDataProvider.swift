@@ -30,7 +30,7 @@ final class PlanRouteStubDataProvider: PlanRouteDataProvider {
     var routeInfo: PlanRouteInfo {
         PlanRouteInfo(isNewRoute: mode.isNewRoute,
                       isStraightLine: false,
-                      hasRoute: !routePoints.isEmpty,
+                      hasRoute: !routeSegments.isEmpty,
                       totalDistance: 0,
                       duration: 0,
                       arrivalTime: nil,
@@ -48,11 +48,47 @@ final class PlanRouteStubDataProvider: PlanRouteDataProvider {
         []
     }
 
-    var routePoints: [PlanRoutePoint] {
-        []
+    var routeSegments: [PlanRouteSegment] {
+        guard mode.isEditTrack else { return [] }
+        return [sampleSegment]
     }
 
-    var segments: [PlanRouteSegment] {
-        []
+    var canStartNewSegment: Bool {
+        mode.isEditTrack
     }
+
+    private var sampleSegment: PlanRouteSegment {
+        let cyclingPoints = [
+            PlanRoutePoint(index: 0, name: "Point - 1", distanceFromPrevious: 0, bearing: 100, isStart: true, isDestination: false),
+            PlanRoutePoint(index: 1, name: "Point - 2", distanceFromPrevious: 100, bearing: 100, isStart: false, isDestination: false)
+        ]
+        let walkingPoints = [
+            PlanRoutePoint(index: 2, name: "Point - 3", distanceFromPrevious: 200, bearing: 100, isStart: false, isDestination: false),
+            PlanRoutePoint(index: 3, name: "Point - 4", distanceFromPrevious: 5000, bearing: 100, isStart: false, isDestination: false),
+            PlanRoutePoint(index: 4, name: "Point - 5", distanceFromPrevious: 3580, bearing: 100, isStart: false, isDestination: true)
+        ]
+        let groups = [
+            PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 53000, lastPointIndex: 1, points: cyclingPoints),
+            PlanRouteProfileGroup(appMode: OAApplicationMode.pedestrian(), distance: 120000, lastPointIndex: 4, points: walkingPoints)
+        ]
+        return PlanRouteSegment(index: 0, groups: groups, routed: true, multiMode: true, singleMode: nil, distance: 173000)
+    }
+
+    var availableModes: [OAApplicationMode] {
+        OAApplicationMode.values()
+    }
+
+    func deleteRoutePoint(at index: Int) {}
+
+    func deleteSegment(pointIndexes: [Int]) {}
+
+    func startNewSegment() {}
+
+    func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool) {}
+
+    func sortDoorToDoor(pointIndexes: [Int]) {}
+
+    func saveSegment(pointIndexes: [Int]) {}
+
+    func selectRoutePoint(at index: Int) {}
 }

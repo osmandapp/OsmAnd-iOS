@@ -279,10 +279,12 @@ static NSString *OAAisMessageTypesString(OASAisObject *object)
 
 - (NSInteger)addDimensionRows:(NSMutableArray<OAAmenityInfoRow *> *)rows order:(NSInteger)order
 {
+    const int32_t invalidDimension = OASAisObjectConstants.shared.INVALID_DIMENSION;
     NSInteger length = _object.dimensionToBow + _object.dimensionToStern;
     NSInteger width = _object.dimensionToPort + _object.dimensionToStarboard;
-    if (length > 0 && width > 0)
-        [self addRow:rows key:@"dimensions" prefix:OALocalizedString(@"ais_dimensions") text:[NSString stringWithFormat:@"%ldm x %ldm", (long)length, (long)width] order:order++];
+    if ((_object.dimensionToBow != invalidDimension || _object.dimensionToStern != invalidDimension)
+        && (_object.dimensionToPort != invalidDimension || _object.dimensionToStarboard != invalidDimension))
+        [self addRow:rows key:@"dimension" prefix:OALocalizedString(@"ais_dimension") text:[NSString stringWithFormat:@"%ldm x %ldm", (long)length, (long)width] order:order++];
     return order;
 }
 

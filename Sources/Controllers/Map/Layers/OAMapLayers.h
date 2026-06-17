@@ -35,9 +35,7 @@
 #import "OANetworkRouteSelectionLayer.h"
 #import "OATravelSelectionLayer.h"
 
-@class OAAisTrackerLayer;
-
-@class OAMapViewController;
+@class OAMapViewController, OAAisTrackerLayer;
 
 @interface OAMapLayers : NSObject
 

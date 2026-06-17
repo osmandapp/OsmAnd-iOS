@@ -2490,7 +2490,7 @@
 "ais_navigation_status" = "Navigation status";
 "ais_maneuver" = "Maneuver";
 "ais_aid_type" = "Aid type";
-"ais_dimensions" = "Dimensions";
+"ais_dimension" = "Dimension";
 "ais_antenna" = "AIS antenna";
 "ais_antenna_offsets_format" = "bow %ld, stern %ld, port %ld, starboard %ld m";
 "ais_draught" = "Draught";

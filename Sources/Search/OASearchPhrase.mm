@@ -43,6 +43,9 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 static NSArray<NSString *> *CHARS_TO_NORMALIZE_KEY = @[@"’", @"ʼ", @"(", @")", @"´", @"`", @"′", @"‵", @"ʹ"]; // remove () subcities
 static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ", @"'", @"'", @"'", @"'", @"'"];
 
+static NSMapTable<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
+static dispatch_queue_t sCommonWordWeightQueue = nil;
+
 @interface OASearchPhrase ()
 
 @property (nonatomic) OACollatorStringMatcher *clt;
@@ -113,10 +116,31 @@ static NSComparator _OACommonWordsComparator = nil;
                         @"и",
                         // Don't add short names !  issues for perfect matching "Drive A", ...
                         nil];
+        sCommonWordWeightCache = [NSMapTable strongToStrongObjectsMapTable];
+        sCommonWordWeightQueue = dispatch_queue_create("org.osmand.search.commonwords.cache", DISPATCH_QUEUE_CONCURRENT);
+        int (^weightForWord)(NSString *) = ^int(NSString *word)
+        {
+            if (word == nil) return -1;
+            NSString *key = [word lowercaseString];
+            __block NSNumber *cached = nil;
+            dispatch_sync(sCommonWordWeightQueue, ^{
+                cached = [sCommonWordWeightCache objectForKey:key];
+            });
+            if (cached != nil) {
+                return (int)cached.integerValue;
+            }
+            int value = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString(key));
+            // Store into cache using barrier to avoid races
+            dispatch_barrier_async(sCommonWordWeightQueue, ^{
+                [sCommonWordWeightCache setObject:@(value) forKey:key];
+            });
+            return value;
+        };
+        
         _OACommonWordsComparator = ^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2)
         {
-            int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowercaseString]));
-            int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowercaseString]));
+            int i1 = weightForWord(o1);
+            int i2 = weightForWord(o2);
             
             if (i1 != i2)
             {
@@ -1176,3 +1200,4 @@ static NSComparator _OACommonWordsComparator = nil;
 }
 
 @end
+

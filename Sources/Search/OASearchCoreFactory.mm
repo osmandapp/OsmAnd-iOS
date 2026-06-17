@@ -2082,6 +2082,7 @@
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
+    long long startG = (long long)([[NSDate date] timeIntervalSince1970] * 1000000);
     OsmAndAppInstance app = [OsmAndApp instance];
     QString lang = QString::fromNSString([[phrase getSettings] getLang]);
     bool transliterate = [[phrase getSettings] isTransliterate];
@@ -2209,8 +2210,7 @@
                 [resultMatcher publish:res];
             }
         }
-        QString streetIntersection = QString::fromNSString([phrase getUnknownWordToSearch]);
-        OANameStringMatcher *streetMatch = [phrase getMainUnknownNameStringMatcher];
+        QString streetIntersection = s->intersectedStreets.size() > 0 ? QString::fromNSString([phrase getUnknownWordToSearch]) : QString();
         if (streetIntersection.isEmpty() || (!streetIntersection[0].isDigit() && OsmAnd::CommonWords::getCommonSearch(streetIntersection) == -1))
         {
             for (const auto& street : s->intersectedStreets)

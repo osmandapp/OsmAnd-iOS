@@ -2836,7 +2836,7 @@
 "track_sort_az" = "Име А - З";
 "oldest_date_first" = "Најпре најстарији датум";
 "longest_distance_first" = "Најпре најдуже растојање";
-"shorter_duration_first" = "Најпре најкраће трајање";
+"shorter_duration_first" = "Најпре краће трајање";
 "history_clear_alert_title" = "Избриши сву историју";
 "search_history_disabled" = "Претрага историје је онемогућена";
 "enable_search_history" = "Можете омогућити претрагу историје у Подешавањима";

@@ -306,6 +306,8 @@
 		27F050952DD38E400058075F /* RouteInfoWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050942DD38E400058075F /* RouteInfoWidgetState.swift */; };
 		27F050992DD4B6080058075F /* RouteInfoCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F050982DD4B6060058075F /* RouteInfoCalculator.swift */; };
 		27F0509F2DD4DEB30058075F /* RouteInfoWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */; };
+		27F055AA2FE2EB860025F578 /* StatsFooterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F055A92FE2EB860025F578 /* StatsFooterCollectionViewCell.swift */; };
+		27F055AC2FE2F76F0025F578 /* BackupBannerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F055AB2FE2F76F0025F578 /* BackupBannerCollectionViewCell.swift */; };
 		27FA9F572F45B9040064B5BE /* MapUnderlayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FA9F562F45B9040064B5BE /* MapUnderlayAction.swift */; };
 		27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */; };
 		27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */; };
@@ -3836,6 +3838,8 @@
 		27F050942DD38E400058075F /* RouteInfoWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoWidgetState.swift; sourceTree = "<group>"; };
 		27F050982DD4B6060058075F /* RouteInfoCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoCalculator.swift; sourceTree = "<group>"; };
 		27F0509E2DD4DEB30058075F /* RouteInfoWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoWidget.xib; sourceTree = "<group>"; };
+		27F055A92FE2EB860025F578 /* StatsFooterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsFooterCollectionViewCell.swift; sourceTree = "<group>"; };
+		27F055AB2FE2F76F0025F578 /* BackupBannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupBannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		27FA9F562F45B9040064B5BE /* MapUnderlayAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapUnderlayAction.swift; sourceTree = "<group>"; };
 		27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonAppearanceParams.swift; sourceTree = "<group>"; };
 		27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceIconSizeViewController.swift; sourceTree = "<group>"; };
@@ -12395,6 +12399,8 @@
 				CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */,
 				271A5C432FCDE1D700C27411 /* SortButtonCollectionViewCell.swift */,
 				272AFBAA2FD810CC006C2E21 /* EmptyStateCollectionViewCell.swift */,
+				27F055A92FE2EB860025F578 /* StatsFooterCollectionViewCell.swift */,
+				27F055AB2FE2F76F0025F578 /* BackupBannerCollectionViewCell.swift */,
 				DA5A7BB626C563A100F274C7 /* Xibs */,
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
@@ -18374,6 +18380,7 @@
 				DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */,
 				DA5A856226C563A900F274C7 /* OAWaypointHelper.mm in Sources */,
 				DA5A838726C563A800F274C7 /* OAManageResourcesViewController.mm in Sources */,
+				27F055AC2FE2F76F0025F578 /* BackupBannerCollectionViewCell.swift in Sources */,
 				46B619DC29EFE97500950A20 /* OAAltitudeWidget.mm in Sources */,
 				DA5A81C226C563A700F274C7 /* OAPOICategory.m in Sources */,
 				FAA650572ADD42C50020DCEA /* BLEHeartRateDevice.swift in Sources */,
@@ -18627,6 +18634,7 @@
 				27FA9F572F45B9040064B5BE /* MapUnderlayAction.swift in Sources */,
 				275ED65B2FE032600088D42B /* OAFavoriteFolderBridgeItem.mm in Sources */,
 				FA82B9192E74199200A250F1 /* ImageDownloadRequestModifier.swift in Sources */,
+				27F055AA2FE2EB860025F578 /* StatsFooterCollectionViewCell.swift in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
 				32AC14832D6DF0B7009BE64E /* ChipsCollectionHandler.swift in Sources */,
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,

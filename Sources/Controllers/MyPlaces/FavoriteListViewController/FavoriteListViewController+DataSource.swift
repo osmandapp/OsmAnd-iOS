@@ -119,15 +119,6 @@ extension FavoriteListViewController {
         }
     }
     
-    func backupBannerHeight(_ banner: FreeBackupBanner, fittingWidth: CGFloat) -> CGFloat {
-        let fallbackWidth = collectionView.bounds.width - collectionView.layoutMargins.left - collectionView.layoutMargins.right
-        let bannerWidth = fittingWidth > 0.0 ? fittingWidth : fallbackWidth
-        let textWidth = max(0.0, bannerWidth - CGFloat(banner.leadingTrailingOffset))
-        let titleHeight = OAUtilities.calculateTextBounds(banner.titleLabel.text ?? "", width: textWidth, font: banner.titleLabel.font).height
-        let descriptionHeight = OAUtilities.calculateTextBounds(banner.descriptionLabel.text ?? "", width: textWidth, font: banner.descriptionLabel.font).height
-        return ceil(CGFloat(banner.defaultFrameHeight) + titleHeight + descriptionHeight)
-    }
-    
     func closeFreeBackupBanner() {
         UserDefaults.standard.set(true, forKey: Self.wasClosedFreeBackupFavoritesBannerKey)
         applySnapshot(animatingDifferences: true)

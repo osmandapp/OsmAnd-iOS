@@ -20,7 +20,6 @@ final class FavoriteListViewController: UIViewController {
     static let navigationTitleMaximumSize: CGFloat = 22.0
     static let navigationSubtitleFontSize: CGFloat = 12.0
     static let navigationSubtitleMaximumSize: CGFloat = 18.0
-    static let statsFooterInsets = NSDirectionalEdgeInsets(top: 12.0, leading: 20.0, bottom: 12.0, trailing: 20.0)
     static let wasClosedFreeBackupFavoritesBannerKey = "wasClosedFreeBackupFavoritesBanner"
 
     let screenMode: ScreenMode

@@ -27,22 +27,9 @@ extension FavoriteListViewController {
         }
     }
 
-    var backupBannerCellRegistration: UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> {
-        UICollectionView.CellRegistration<UICollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
-            cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-            guard let self, let banner = Bundle.main.loadNibNamed(FreeBackupBanner.reuseIdentifier, owner: self)?.first as? FreeBackupBanner else { return }
-            banner.configure(bannerType: .favorite)
-            banner.didOsmAndCloudButtonAction = { [weak self] in
-                self?.navigationController?.pushViewController(OACloudIntroductionViewController(), animated: true)
-            }
-            banner.didCloseButtonAction = { [weak self] in
-                self?.closeFreeBackupBanner()
-            }
-            banner.translatesAutoresizingMaskIntoConstraints = false
-            cell.contentView.addSubview(banner)
-            let fittingWidth = cell.contentView.bounds.width > 0.0 ? cell.contentView.bounds.width : cell.bounds.width
-            NSLayoutConstraint.activate([banner.topAnchor.constraint(equalTo: cell.contentView.topAnchor), banner.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor), banner.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor)])
-            NSLayoutConstraint.activate([banner.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor), banner.heightAnchor.constraint(equalToConstant: self.backupBannerHeight(banner, fittingWidth: fittingWidth))])
+    var backupBannerCellRegistration: UICollectionView.CellRegistration<BackupBannerCollectionViewCell, FavoriteListItem> {
+        UICollectionView.CellRegistration<BackupBannerCollectionViewCell, FavoriteListItem> { [weak self] cell, _, _ in
+            cell.delegate = self
         }
     }
 
@@ -80,21 +67,11 @@ extension FavoriteListViewController {
         }
     }
 
-    var statsFooterCellRegistration: UICollectionView.CellRegistration<UICollectionViewCell, FavoriteFolderStats> {
-        UICollectionView.CellRegistration<UICollectionViewCell, FavoriteFolderStats> { cell, _, stats in
+    var statsFooterCellRegistration: UICollectionView.CellRegistration<StatsFooterCollectionViewCell, FavoriteFolderStats> {
+        UICollectionView.CellRegistration<StatsFooterCollectionViewCell, FavoriteFolderStats> { cell, _, stats in
             cell.backgroundColor = .clear
             cell.contentView.backgroundColor = .clear
-            cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-            let label = UILabel()
-            label.font = .preferredFont(forTextStyle: .footnote)
-            label.adjustsFontForContentSizeCategory = true
-            label.textColor = .textColorSecondary
-            label.textAlignment = .center
-            label.numberOfLines = 0
-            label.text = stats.text
-            label.translatesAutoresizingMaskIntoConstraints = false
-            cell.contentView.addSubview(label)
-            NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: Self.statsFooterInsets.top), label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: Self.statsFooterInsets.leading), label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -Self.statsFooterInsets.trailing), label.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -Self.statsFooterInsets.bottom)])
+            cell.label.text = stats.text
         }
     }
 

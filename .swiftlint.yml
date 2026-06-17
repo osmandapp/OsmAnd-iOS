@@ -227,9 +227,13 @@ opt_in_rules: # some rules are only opt-in
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#array-init
   - array_init
 
+  # Rationale: Avoids misleading async declarations.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#async-without-await
+  - async_without_await
+
   # Rationale: Provides consistency in coding style
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#attributes
-  #- attributes
+  - attributes
 
   # Rationale: Provides consistency in coding style and follows modern practices of the language
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#block-based-kvo
@@ -339,6 +343,10 @@ opt_in_rules: # some rules are only opt-in
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#fatal-error-message
   - fatal_error_message
 
+  # Rationale: Prevents XCTest classes from being subclassed accidentally.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#final-test-case
+  - final_test_case
+
   # Rationale: Provides consistency
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#file-header
   # - file_header
@@ -366,6 +374,10 @@ opt_in_rules: # some rules are only opt-in
   # Rationale: Provides consistency in coding style and brevity.
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#implicit-getter
   - implicit_getter
+
+  # Rationale: Catches likely copy-paste mistakes in comparisons.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#identical-operands
+  - identical_operands
 
   # Rationale: Prevents coder error, doesn't crash, makes coder be explicit about their assumptions
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#implicitly-unwrapped-optional
@@ -440,8 +452,8 @@ opt_in_rules: # some rules are only opt-in
   - operator_usage_whitespace
 
   # Rationale: Provides consistency in coding style
-  # https://github.com/realm/SwiftLint/blob/master/Rules.md#operator-function-whitespace
-  - operator_whitespace
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#function-name-whitespace
+  - function_name_whitespace
 
   # Rationale: Prevents coder error
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#overridden-methods-call-super
@@ -454,6 +466,10 @@ opt_in_rules: # some rules are only opt-in
   # Rationale: Promotes consistency and reduces duplication.
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#pattern-matching-keywords
   - pattern_matching_keywords
+
+  # Rationale: Keeps optional enum case matching concise and unambiguous.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#optional-enum-case-matching
+  - optional_enum_case_matching
 
   # Rationale: UI elements should only be configurable by their owners and not be exposed to others
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#private-actions
@@ -492,8 +508,8 @@ opt_in_rules: # some rules are only opt-in
   - redundant_objc_attribute
 
   # Rationale: Provides consistency in coding style and brevity
-  # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-optional-initialization
-  - redundant_optional_initialization
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#implicit-optional-initialization
+  - implicit_optional_initialization
 
   # Rationale: Provides consistency in coding style and brevity
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#redundant-void-return
@@ -591,10 +607,6 @@ opt_in_rules: # some rules are only opt-in
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#void-return
   - void_return
 
-  # Rationale: Avoids using weak when it has no effect.
-  # https://github.com/realm/SwiftLint/blob/master/Rules.md#weak-computed-property
-  - weak_computed_property
-
   # Rationale: Prevents retain cycles and coder error
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#weak-delegate
   - weak_delegate
@@ -623,13 +635,13 @@ opt_in_rules: # some rules are only opt-in
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#type-contents-order
   - type_contents_order
   
-  # Rationale: Provides consistency in coding style.
-  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unused-capture-list
-  - unused_capture_list
-  
   # Rationale: Prevents issues with using unowned.
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#unowned-variable-capture
   - unowned_variable_capture
+
+  # Rationale: Prevents silently ignored errors from throwing tasks.
+  # https://github.com/realm/SwiftLint/blob/master/Rules.md#unhandled-throwing-task
+  - unhandled_throwing_task
   
   # Rationale: Ensures all enums can be switched upon.
   # https://github.com/realm/SwiftLint/blob/master/Rules.md#duplicate-enum-cases
@@ -642,6 +654,11 @@ opt_in_rules: # some rules are only opt-in
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
   - Pods
+  - build
+  - DerivedData
+  - ios/Pods
+  - ios/build
+  - ios/DerivedData
   - OsmAnd_projects
   - Libraries/**
 
@@ -666,7 +683,7 @@ custom_rules:
     severity: warning
   custom_todo:
     name: "TODO Violation"
-    regex: "(TODO).(?!.*(https&)).(?!.*issue)"
+    regex: "\\bTODO\\b(?!.*(https?://|issue|#\\d+))"
     match_kinds: comment
     message: "TODOs must include a link to the issue."
     severity: warning

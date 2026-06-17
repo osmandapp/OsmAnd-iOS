@@ -9,13 +9,13 @@
 import UIKit
 import OsmAndShared
 
-protocol MapBitmapDrawerListener: AnyObject {
+protocol MapBitmapDrawerDelegate: AnyObject {
     func onBitmapDrawing()
     func onBitmapDrawn(_ success: Bool)
     func onBitmapDrawn(image: UIImage)
 }
 
-extension MapBitmapDrawerListener {
+extension MapBitmapDrawerDelegate {
     func onBitmapDrawing() {}
     func onBitmapDrawn(_ success: Bool) {}
 }
@@ -45,18 +45,18 @@ class MapBitmapDrawer {
     let params: MapDrawParams
     var isDrawingAllowed = true
 
-    private var listeners: [MapBitmapDrawerListener] = []
+    private var listeners: [MapBitmapDrawerDelegate] = []
 
     init(params: MapDrawParams) {
         self.params = params
     }
 
-    func addListener(_ listener: MapBitmapDrawerListener) {
+    func addListener(_ listener: MapBitmapDrawerDelegate) {
         guard !listeners.contains(where: { $0 === listener }) else { return }
         listeners.append(listener)
     }
 
-    func removeListener(_ listener: MapBitmapDrawerListener) {
+    func removeListener(_ listener: MapBitmapDrawerDelegate) {
         listeners.removeAll { $0 === listener }
     }
 

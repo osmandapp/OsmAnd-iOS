@@ -65,6 +65,11 @@ namespace {
     _cancelled = true;
 }
 
+- (BOOL)isCancelled
+{
+    return _cancelled;
+}
+
 #pragma mark - Public API
 
 - (void)renderGpxFile:(OASGpxFile *)gpxFile
@@ -86,10 +91,10 @@ namespace {
         return;
     }
 
-    __weak OATrackPreviewMapRenderer *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(_queue, ^{
-        __strong OATrackPreviewMapRenderer *strongSelf = weakSelf;
-        if (!strongSelf || strongSelf->_cancelled)
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf || [strongSelf isCancelled])
         {
             dispatch_async(dispatch_get_main_queue(), ^{ completion(nil); });
             return;
@@ -102,7 +107,7 @@ namespace {
                                                      density:density
                                                   trackColor:trackColor];
         dispatch_async(dispatch_get_main_queue(), ^{
-            completion(strongSelf->_cancelled ? nil : image);
+            completion([strongSelf isCancelled] ? nil : image);
         });
     });
 }
@@ -117,11 +122,11 @@ namespace {
                           trackColor:(int)trackColor
 {
     OASKQuadRect *rect = [gpxFile getRect];
-    if ([self isEmptyBounds:rect])
+    if ([rect hasInitialState])
         return nil;
 
-    const double centerLat = (rect.top + rect.bottom) / 2.0;
-    const double centerLon = (rect.left + rect.right) / 2.0;
+    const double centerLat = rect.centerY;
+    const double centerLon = rect.centerX;
 
     const int pixelWidth = (int)round(widthPx * density);
     const int pixelHeight = (int)round(heightPx * density);
@@ -179,11 +184,6 @@ namespace {
 
 #pragma mark - Zoom
 
-- (BOOL)isEmptyBounds:(OASKQuadRect *)rect
-{
-    return rect.left == 0 && rect.right == 0 && rect.top == 0 && rect.bottom == 0;
-}
-
 - (int)zoomLevelForBounds:(OASKQuadRect *)rect
                 centerLat:(double)centerLat
                 centerLon:(double)centerLon
@@ -230,14 +230,14 @@ namespace {
 
     std::shared_ptr<const OsmAnd::IQueryController> queryController;
     queryController.reset(new OsmAnd::FunctorQueryController([self](const OsmAnd::FunctorQueryController* const) {
-        return (bool)self->_cancelled;
+        return [self isCancelled];
     }));
 
     for (int ty = tyMin; ty <= tyMax; ty++)
     {
         for (int tx = txMin; tx <= txMax; tx++)
         {
-            if (self->_cancelled)
+            if ([self isCancelled])
                 return;
 
             OsmAnd::IMapTiledDataProvider::Request request;
@@ -275,7 +275,7 @@ namespace {
 
     for (OASTrkSegment *segment in segments)
     {
-        if (self->_cancelled)
+        if ([self isCancelled])
             return;
 
         int segmentColor = [TrackPreviewColorHelper resolvedColorWithGpxFile:gpxFile
@@ -339,7 +339,7 @@ namespace {
 
     for (OASWptPt *point in [gpxFile getPointsList])
     {
-        if (self->_cancelled)
+        if ([self isCancelled])
             return;
 
         CGPoint mappedPoint = [self mapPoint:point zoom:zoom tileSize:tileSize leftPx:leftPx topPx:topPx];

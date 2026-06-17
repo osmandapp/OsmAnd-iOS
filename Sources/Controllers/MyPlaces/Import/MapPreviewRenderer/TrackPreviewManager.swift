@@ -8,25 +8,8 @@
 
 import UIKit
 
-private final class TrackPreviewDrawerListener: MapBitmapDrawerListener {
-    private weak var item: ImportTrackItem?
-    private let onUpdate: (ImportTrackItem) -> Void
-
-    init(item: ImportTrackItem, onUpdate: @escaping (ImportTrackItem) -> Void) {
-        self.item = item
-        self.onUpdate = onUpdate
-    }
-
-    func onBitmapDrawn(image: UIImage) {
-        guard let item else { return }
-        item.previewImage = image
-        item.isPreviewLoading = false
-        onUpdate(item)
-    }
-}
-
 final class TrackPreviewManager {
-    private var listeners: [ImportTrackItem: TrackPreviewDrawerListener] = [:]
+    private var listeners: [ImportTrackItem: TrackPreviewDrawerDelegate] = [:]
 
     func startPreviews(
         for items: [ImportTrackItem],
@@ -39,7 +22,7 @@ final class TrackPreviewManager {
             let drawer = TrackBitmapDrawer(params: params, gpxFile: item.gpxFile)
             drawer.defaultTrackColor = TrackPreviewColorHelper.appDefaultTrackColor()
 
-            let listener = TrackPreviewDrawerListener(item: item, onUpdate: onUpdate)
+            let listener = TrackPreviewDrawerDelegate(item: item, onUpdate: onUpdate)
             listeners[item] = listener
             drawer.addListener(listener)
 
@@ -58,5 +41,22 @@ final class TrackPreviewManager {
             item.bitmapDrawer = nil
             listeners[item] = nil
         }
+    }
+}
+
+private final class TrackPreviewDrawerDelegate: MapBitmapDrawerDelegate {
+    private weak var item: ImportTrackItem?
+    private let onUpdate: (ImportTrackItem) -> Void
+
+    init(item: ImportTrackItem, onUpdate: @escaping (ImportTrackItem) -> Void) {
+        self.item = item
+        self.onUpdate = onUpdate
+    }
+
+    func onBitmapDrawn(image: UIImage) {
+        guard let item else { return }
+        item.previewImage = image
+        item.isPreviewLoading = false
+        onUpdate(item)
     }
 }

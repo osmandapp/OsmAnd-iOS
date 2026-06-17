@@ -10,14 +10,14 @@ import UIKit
 
 @objc
 enum FolderCardsAddButtonPosition: Int {
-    case end = 0
-    case beginning = 1
+    case end
+    case beginning
 }
 
 @objc
 enum FolderCardsConfig: Int {
-    case defaultConfig = 0
-    case importTracks = 1
+    case defaultConfig
+    case importTracks
 }
 
 @objc
@@ -121,7 +121,7 @@ final class FolderCardsCell: UITableViewCell {
         }
     }
 
-    // MARK: - ObjC API
+    // MARK: - Public API
 
     @objc
     func setValues(_ values: [String],
@@ -219,7 +219,7 @@ final class FolderCardsCell: UITableViewCell {
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
     }
 
-    // MARK: - Mapping folder index <-> collection index
+    // MARK: - Index mapping
 
     private func collectionIndex(forFolderIndex folderIndex: Int) -> Int {
         switch addButtonPosition {
@@ -283,6 +283,15 @@ final class FolderCardsCell: UITableViewCell {
                 italicGroupFont = UIFont(descriptor: descriptor, size: 0)
             }
         }
+        
+        let titleColor: UIColor
+        if item.hidden {
+            titleColor = .textColorSecondary
+        } else if selected {
+            titleColor = folderTitleSelectedDefaultColor
+        } else {
+            titleColor = folderTitleDefaultColor
+        }
 
         cell.layer.cornerRadius = 9
         cell.titleLabel.text = item.title
@@ -290,7 +299,7 @@ final class FolderCardsCell: UITableViewCell {
         cell.imageView.tintColor = item.color
         cell.imageView.image = .templateImageNamed(item.imageName)
         cell.backgroundColor = .groupBg
-        cell.titleLabel.textColor = item.hidden ? .textColorSecondary : (selected ? folderTitleSelectedDefaultColor : folderTitleDefaultColor)
+        cell.titleLabel.textColor = titleColor
         cell.titleLabel.font = item.hidden ? italicGroupFont : originalGroupFont
 
         if selected {

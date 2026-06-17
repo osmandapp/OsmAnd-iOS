@@ -37,7 +37,7 @@ final class CollectTracksTask: OAAsyncTask {
         var items: [ImportTrackItem] = []
 
         for (index, track) in tracks.enumerated() {
-            if isCancelled() { return items }
+            guard !isCancelled() else { return items }
             guard !track.isGeneralTrack() else { continue }
             items.append(makeImportTrackItem(from: track, at: index, baseName: baseName, author: author))
         }
@@ -100,7 +100,7 @@ final class CollectTracksTask: OAAsyncTask {
 
     private func assignWaypoints(from sourceFile: GpxFile, to items: inout [ImportTrackItem]) {
         for point in sourceFile.getPointsList() {
-            if isCancelled() { return }
+            guard !isCancelled() else { return }
             guard let nearestItem = findNearestTrack(for: point, in: items) else { continue }
             nearestItem.selectedPoints.append(point)
             nearestItem.suggestedPoints.append(point)
@@ -150,10 +150,10 @@ final class CollectTracksTask: OAAsyncTask {
         var minDistance = Double.greatestFiniteMagnitude
 
         for item in items {
-            if isCancelled() { return nil }
+            guard !isCancelled() else { return nil }
 
             for waypoint in item.gpxFile.getAllSegmentsPoints() {
-                if isCancelled() { return nil }
+                guard !isCancelled() else { return nil }
 
                 let distance = KMapUtils.shared.getDistance(
                     lat1: point.getLatitude(),

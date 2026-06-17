@@ -10,6 +10,8 @@ import UIKit
 import OsmAndShared
 
 final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    private static let stringValueKey = "string_value"
+    
     private let collectionView: UICollectionView
     private var statisticsData: [OAGPXTableCellData] = []
 
@@ -74,7 +76,7 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
                                                       for: indexPath) as! OAGpxStatBlockCollectionViewCell
         let cellData = statisticsData[indexPath.row]
 
-        cell.valueView.text = cellData.values["string_value"] as? String
+        cell.valueView.text = cellData.values[Self.stringValueKey] as? String
         cell.iconView.image = .templateImageNamed(cellData.rightIconName)
         cell.iconView.tintColor = .iconColorDefault
         cell.titleView.text = cellData.title
@@ -88,7 +90,7 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellData = statisticsData[indexPath.row]
         let isLast = indexPath.row == statisticsData.count - 1
-        let text = cellData.values["string_value"] as? String
+        let text = cellData.values[Self.stringValueKey] as? String
         return OATrackMenuHeaderView.getSizeForItem(cellData.title, value: text, isLast: isLast)
     }
 }

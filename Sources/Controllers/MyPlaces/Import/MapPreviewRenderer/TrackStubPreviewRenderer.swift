@@ -16,75 +16,11 @@ final class TrackStubPreviewRenderer: NSObject {
 
     private let queue = DispatchQueue(label: "net.osmand.track-preview", qos: .userInitiated)
     private var cancelled = false
-
-    func renderGpxFile(
-        _ gpxFile: GpxFile,
-        params: MapDrawParams,
-        trackColor: Int32,
-        completion: @escaping (UIImage?) -> Void
-    ) {
-        cancelled = false
-        queue.async { [weak self] in
-            guard let self, !self.cancelled else {
-                DispatchQueue.main.async { completion(nil) }
-                return
-            }
-            let image = self.renderImage(gpxFile: gpxFile, params: params, trackColor: trackColor)
-            DispatchQueue.main.async {
-                completion(self.cancelled ? nil : image)
-            }
-        }
-    }
-
-    func cancelAll() {
-        cancelled = true
-    }
-
-    // MARK: - Rendering
-
-    private func renderImage(gpxFile: GpxFile, params: MapDrawParams, trackColor: Int32) -> UIImage? {
-        let width = max(1, params.widthPixels)
-        let height = max(1, params.heightPixels)
-        let bounds = gpxFile.getRect()
-
-        guard !bounds.isEmpty else { return nil }
-
-        let segments = TrackPreviewColorHelper.previewSegments(for: gpxFile)
-        guard !segments.isEmpty else { return nil }
-
-        let size = CGSize(width: width, height: height)
-        let padding: CGFloat = 8
-        let lineWidth = 3 * CGFloat(params.density)
-
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = CGFloat(params.density)
-        format.opaque = true
-
-        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-            UIColor.groupBg.setFill()
-            UIRectFill(CGRect(origin: .zero, size: size))
-
-            for segment in segments {
-                guard !self.cancelled else { return }
-                guard let path = Self.segmentPath(
-                    segment: segment,
-                    bounds: bounds,
-                    size: size,
-                    padding: padding,
-                    lineWidth: lineWidth
-                ) else { continue }
-
-                let color = TrackPreviewColorHelper.resolvedColor(
-                    gpxFile: gpxFile,
-                    segment: segment,
-                    defaultColor: trackColor
-                )
-                Self.color(fromARGB: color).setStroke()
-                path.stroke()
-            }
-        }
-    }
-
+    
+    private var isCancelled: Bool { cancelled }
+    
+    // MARK: - Helpers
+    
     private static func segmentPath(
         segment: TrkSegment,
         bounds: KQuadRect,
@@ -121,7 +57,7 @@ final class TrackStubPreviewRenderer: NSObject {
 
         return path
     }
-
+    
     private static func mapPoint(
         lat: Double,
         lon: Double,
@@ -153,10 +89,74 @@ final class TrackStubPreviewRenderer: NSObject {
         let blue = CGFloat(argb & 0xFF) / 255
         return UIColor(red: red, green: green, blue: blue, alpha: alpha > 0 ? alpha : 1)
     }
-}
+    
+    // MARK: - Public API
 
-private extension KQuadRect {
-    var isEmpty: Bool {
-        left == 0 && right == 0 && top == 0 && bottom == 0
+    func renderGpxFile(
+        _ gpxFile: GpxFile,
+        params: MapDrawParams,
+        trackColor: Int32,
+        completion: @escaping (UIImage?) -> Void
+    ) {
+        cancelled = false
+        queue.async { [weak self] in
+            guard let self, !self.isCancelled else {
+                DispatchQueue.main.async { completion(nil) }
+                return
+            }
+            let image = self.renderImage(gpxFile: gpxFile, params: params, trackColor: trackColor)
+            DispatchQueue.main.async {
+                completion(self.isCancelled ? nil : image)
+            }
+        }
+    }
+
+    func cancelAll() {
+        cancelled = true
+    }
+
+    // MARK: - Rendering
+
+    private func renderImage(gpxFile: GpxFile, params: MapDrawParams, trackColor: Int32) -> UIImage? {
+        let width = max(1, params.widthPixels)
+        let height = max(1, params.heightPixels)
+        let bounds = gpxFile.getRect()
+
+        guard !bounds.hasInitialState() else { return nil }
+
+        let segments = TrackPreviewColorHelper.previewSegments(for: gpxFile)
+        guard !segments.isEmpty else { return nil }
+
+        let size = CGSize(width: width, height: height)
+        let padding: CGFloat = 8
+        let lineWidth = 3 * CGFloat(params.density)
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = CGFloat(params.density)
+        format.opaque = true
+
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            UIColor.groupBg.setFill()
+            UIRectFill(CGRect(origin: .zero, size: size))
+
+            for segment in segments {
+                guard !self.isCancelled else { return }
+                guard let path = Self.segmentPath(
+                    segment: segment,
+                    bounds: bounds,
+                    size: size,
+                    padding: padding,
+                    lineWidth: lineWidth
+                ) else { continue }
+
+                let color = TrackPreviewColorHelper.resolvedColor(
+                    gpxFile: gpxFile,
+                    segment: segment,
+                    defaultColor: trackColor
+                )
+                Self.color(fromARGB: color).setStroke()
+                path.stroke()
+            }
+        }
     }
 }

@@ -23,6 +23,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/ArchiveReader.h>
+#include <OsmAndCore/Search/CommonWords.h>
 #include <OsmAndCore/stdlib_common.h>
 #include <OsmAndCore/QtExtensions.h>
 #include <QString>
@@ -65,6 +66,24 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 - (void) tearDown
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
+}
+
+- (void)testSelectMainUnknownWordToSearchSortsCommonWords
+{
+    OASearchPhrase *phrase = [OASearchPhrase emptyPhrase:nil];
+
+    NSMutableArray<NSString *> *unknownBeatsCommon = [@[@"street", @"zzxqv"] mutableCopy];
+    XCTAssertEqualObjects(@"zzxqv", [phrase selectMainUnknownWordToSearch:unknownBeatsCommon]);
+
+    NSMutableArray<NSString *> *commonWords = [@[@"road", @"street"] mutableCopy];
+    XCTAssertGreaterThan(OsmAnd::CommonWords::getCommonSearch(QStringLiteral("street")), OsmAnd::CommonWords::getCommonSearch(QStringLiteral("road")));
+    XCTAssertEqualObjects(@"street", [phrase selectMainUnknownWordToSearch:commonWords]);
+
+    NSMutableArray<NSString *> *longerWithoutDigits = [@[@"zzx123", @"zzxy"] mutableCopy];
+    XCTAssertEqualObjects(@"zzxy", [phrase selectMainUnknownWordToSearch:longerWithoutDigits]);
+
+    NSMutableArray<NSString *> *emptyAndDuplicateWords = [@[@"", @"zzx1", @"zzx1"] mutableCopy];
+    XCTAssertEqualObjects(@"zzx1", [phrase selectMainUnknownWordToSearch:emptyAndDuplicateWords]);
 }
 
 - (void) testSearch

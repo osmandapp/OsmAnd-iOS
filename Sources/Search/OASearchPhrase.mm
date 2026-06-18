@@ -43,6 +43,18 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 static NSArray<NSString *> *CHARS_TO_NORMALIZE_KEY = @[@"’", @"ʼ", @"(", @")", @"´", @"`", @"′", @"‵", @"ʹ"]; // remove () subcities
 static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ", @"'", @"'", @"'", @"'", @"'"];
 
+static int OALengthWithoutNumbers(NSString *s)
+{
+    int len = 0;
+    for (int k = 0; k < s.length; k++)
+    {
+        unichar ch = [s characterAtIndex:k];
+        if (ch < '0' || ch > '9')
+            len++;
+    }
+    return len;
+}
+
 @interface OASearchPhrase ()
 
 @property (nonatomic) OACollatorStringMatcher *clt;
@@ -77,9 +89,9 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'", @"'", @" ", @" ",
 @property (nonatomic) OARegionPriorityProvider *regionPriorityProvider;
 @property (nonatomic) BOOL acceptPrivate;
 
-@end
+- (void)sortCommonWords:(NSMutableArray<NSString *> *)searchWords;
 
-static NSComparator _OACommonWordsComparator = nil;
+@end
 
 @implementation OASearchPhrase
 {
@@ -113,30 +125,40 @@ static NSComparator _OACommonWordsComparator = nil;
                         @"и",
                         // Don't add short names !  issues for perfect matching "Drive A", ...
                         nil];
-        _OACommonWordsComparator = ^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2)
-        {
-            int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowercaseString]));
-            int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowercaseString]));
-            
-            if (i1 != i2)
-            {
-                if (i1 == -1)
-                    return NSOrderedAscending;
-                else if (i2 == -1)
-                    return NSOrderedDescending;
-                
-                return [OAUtilities compareInt:i2 y:i1];
-            }
-            
-            // compare length without numbers to not include house numbers
-            return [OAUtilities compareInt:[OASearchPhrase lengthWithoutNumbers:o2] y:[OASearchPhrase lengthWithoutNumbers:o1]];
-        };
     }
 }
 
-- (NSComparator) commonWordsComparator
+- (void)sortCommonWords:(NSMutableArray<NSString *> *)searchWords
 {
-    return _OACommonWordsComparator;
+    NSMutableDictionary<NSString *, NSNumber *> *commonRanks = [NSMutableDictionary dictionaryWithCapacity:searchWords.count];
+    NSMutableDictionary<NSString *, NSNumber *> *lengthsWithoutNumbers = [NSMutableDictionary dictionaryWithCapacity:searchWords.count];
+    for (NSString *word in searchWords)
+    {
+        if (commonRanks[word] == nil)
+        {
+            commonRanks[word] = @(OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([word lowercaseString])));
+            lengthsWithoutNumbers[word] = @(OALengthWithoutNumbers(word));
+        }
+    }
+
+    [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2)
+    {
+        int i1 = commonRanks[o1].intValue;
+        int i2 = commonRanks[o2].intValue;
+
+        if (i1 != i2)
+        {
+            if (i1 == -1)
+                return NSOrderedAscending;
+            else if (i2 == -1)
+                return NSOrderedDescending;
+
+            return [OAUtilities compareInt:i2 y:i1];
+        }
+
+        // compare length without numbers to not include house numbers
+        return [OAUtilities compareInt:lengthsWithoutNumbers[o2].intValue y:lengthsWithoutNumbers[o1].intValue];
+    }];
 }
 
 + (OASearchPhrase *) emptyPhrase
@@ -362,7 +384,7 @@ static NSComparator _OACommonWordsComparator = nil;
         _mainUnknownSearchWordComplete = YES;
         NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
         [searchWords insertObject:_firstUnknownSearchWord atIndex:0];
-        [searchWords sortUsingComparator:self.commonWordsComparator];
+        [self sortCommonWords:searchWords];
         for (NSString *s in searchWords)
         {
             if (s.length > 0)
@@ -1037,18 +1059,7 @@ static NSComparator _OACommonWordsComparator = nil;
 
 + (int) lengthWithoutNumbers:(NSString *)s
 {
-    int len = 0;
-    for (int k = 0; k < s.length; k++)
-    {
-        if ([s characterAtIndex:k] >= '0' && [s characterAtIndex:k] <= '9')
-        {
-        }
-        else
-        {
-            len++;
-        }
-    }
-    return len;
+    return OALengthWithoutNumbers(s);
 }
 
 - (int) getUnknownWordToSearchBuildingInd
@@ -1144,7 +1155,7 @@ static NSComparator _OACommonWordsComparator = nil;
 
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords
 {
-    [searchWords sortUsingComparator:self.commonWordsComparator];
+    [self sortCommonWords:searchWords];
     
     for (NSString *s in searchWords)
     {

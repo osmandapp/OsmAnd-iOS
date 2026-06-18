@@ -28,9 +28,11 @@ final class AisDataManager: NSObject {
 
     func startUpdates() {
         stopUpdates()
-        cleanupTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+        let timer = Timer(timeInterval: 30, repeats: true) { [weak self] _ in
             self?.removeLostObjects()
         }
+        RunLoop.main.add(timer, forMode: .common)
+        cleanupTimer = timer
     }
 
     func stopUpdates() {
@@ -61,7 +63,9 @@ final class AisDataManager: NSObject {
             removeOldestObject()
         }
         guard let storedObject = objectsByMmsi[Int(object.mmsi)], storedObject === object else { return }
-        AisObjectHelper.debugLog("[AisDataManager] data \(event) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(object))")
+        if AisLogger.shared.isEnabled {
+            AisObjectHelper.debugLog("[AisDataManager] data \(event) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(object))")
+        }
         plugin?.onAisObjectReceived(object)
     }
 
@@ -71,7 +75,9 @@ final class AisDataManager: NSObject {
         let removed = objectsByMmsi.values.filter { $0.isLost(maxAgeInMin: Int32(maxAge)) }
         for object in removed {
             objectsByMmsi.removeValue(forKey: Int(object.mmsi))
-            AisObjectHelper.debugLog("[AisDataManager] data remove-lost maxAge=\(maxAge)m total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(object))")
+            if AisLogger.shared.isEnabled {
+                AisObjectHelper.debugLog("[AisDataManager] data remove-lost maxAge=\(maxAge)m total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(object))")
+            }
             plugin.onAisObjectRemoved(object)
         }
     }
@@ -79,7 +85,9 @@ final class AisDataManager: NSObject {
     private func removeOldestObject() {
         guard let oldest = objectsByMmsi.values.min(by: { $0.lastUpdate < $1.lastUpdate }) else { return }
         objectsByMmsi.removeValue(forKey: Int(oldest.mmsi))
-        AisObjectHelper.debugLog("[AisDataManager] data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(oldest))")
+        if AisLogger.shared.isEnabled {
+            AisObjectHelper.debugLog("[AisDataManager] data remove-oldest limit=\(Self.objectLimit) total=\(objectsByMmsi.count) \(AisObjectHelper.debugSummary(oldest))")
+        }
         plugin?.onAisObjectRemoved(oldest)
     }
 }

@@ -189,7 +189,7 @@ static NSString *OAAisMessageTypesString(OASAisObject *object)
             [self addRow:rows key:@"imo" prefix:OALocalizedString(@"ais_imo") text:[NSString stringWithFormat:@"%ld", (long)_object.imo] order:order++];
         if (_object.shipName.length > 0)
             [self addRow:rows key:@"ship_name" prefix:OALocalizedString(@"ais_ship_name") text:_object.shipName order:order++];
-        if (_object.shipType != OASAisObjectConstants.shared.INVALID_DIMENSION && (OAAisHasMessageType(_object, 5) || OAAisHasMessageType(_object, 19) || OAAisHasMessageType(_object, 24)))
+        if (OAAisHasMessageType(_object, 5) || OAAisHasMessageType(_object, 19) || OAAisHasMessageType(_object, 24))
             [self addRow:rows key:@"ship_type" prefix:OALocalizedString(@"ais_ship_type") text:[_object getShipTypeString] order:order++];
         order = [self addCourseRows:rows order:order includeHeading:YES includeNavStatus:YES];
         order = [self addDimensionRows:rows order:order];

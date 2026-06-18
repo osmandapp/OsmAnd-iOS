@@ -59,7 +59,7 @@ final class AisMessageSimulationListener {
                     return
                 }
                 DispatchQueue.main.async { [weak self] in
-                    guard let plugin = self?.plugin, plugin.isEnabled() else { return }
+                    guard let self, !self.isCancelled, let plugin = self.plugin, plugin.isEnabled() else { return }
                     plugin.handleSimulatedNmeaSentence(sentence)
                 }
             }

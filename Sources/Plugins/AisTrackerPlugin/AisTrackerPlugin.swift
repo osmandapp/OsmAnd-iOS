@@ -61,20 +61,20 @@ final class AisTrackerPlugin: OAPlugin {
     let cpaWarningTimePref: OACommonInteger
     let cpaWarningDistancePref: OACommonDouble
 
-    private let decoder = AisMessageDecoder()
-    private let aisDecoderQueue = DispatchQueue(label: "com.app.ais.decoder", qos: .userInitiated)
-    
-    private var networkListener: AisMessageListener?
-    private var applicationModeObserver: OAAutoObserverProxy?
-    
-    private lazy var simulationProvider = AisSimulationProvider(plugin: self)
-    private lazy var aisDataManager = AisDataManager(plugin: self)
-    private lazy var networkDataListener = AisNetworkDataListener(plugin: self)
-    
     private(set) var connectionState: AisNmeaConnectionState = .disconnected
     private(set) var fakeOwnLocation: CLLocation?
     private(set) var simulationFileName: String?
     private(set) var lastMessageReceived = Date.distantPast
+
+    private let decoder = AisMessageDecoder()
+    private let aisDecoderQueue = DispatchQueue(label: "com.app.ais.decoder", qos: .userInitiated)
+
+    private var networkListener: AisMessageListener?
+    private var applicationModeObserver: OAAutoObserverProxy?
+
+    private lazy var simulationProvider = AisSimulationProvider(plugin: self)
+    private lazy var aisDataManager = AisDataManager(plugin: self)
+    private lazy var networkDataListener = AisNetworkDataListener(plugin: self)
 
     override init() {
         protocolPref = OAAppSettings.sharedManager().registerIntPreference(Self.protocolPrefId, defValue: Int32(AisNmeaProtocol.udp.rawValue))
@@ -92,8 +92,14 @@ final class AisTrackerPlugin: OAPlugin {
                                                       andObserve: OsmAndApp.swiftInstance().applicationModeChangedObservable)
     }
 
-    deinit {
-        applicationModeObserver?.detach()
+    private static func bearing(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) -> Double {
+        let lat1 = start.latitude * .pi / 180
+        let lat2 = end.latitude * .pi / 180
+        let deltaLon = (end.longitude - start.longitude) * .pi / 180
+        let y = sin(deltaLon) * cos(lat2)
+        let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLon)
+        let degrees = atan2(y, x) * 180 / .pi
+        return fmod(degrees + 360, 360)
     }
 
     override func getId() -> String {
@@ -103,7 +109,7 @@ final class AisTrackerPlugin: OAPlugin {
     override func getName() -> String {
         localizedString("plugin_ais_tracker_name")
     }
-    
+
     override func getDescription() -> String {
         localizedString("plugin_ais_tracker_description")
             + "<br><br>"
@@ -218,7 +224,6 @@ final class AisTrackerPlugin: OAPlugin {
             AisObjectHelper.debugLog("[AisTrackerPlugin] start shared AIS TCP host=\(host) port=\(port)")
             networkListener = AisMessageListener(dataListener: networkDataListener, serverIp: host, serverPort: Int32(port))
         }
-        updateConnectionState(.connected)
     }
 
     func stopAisNetworkListener() {
@@ -267,14 +272,18 @@ final class AisTrackerPlugin: OAPlugin {
 
     func onAisObjectReceived(_ object: AisObject) {
         lastMessageReceived = AisObjectHelper.lastUpdateDate(object)
-        AisObjectHelper.debugLog("plugin received withPosition=\(getAisObjects().filter { $0.position != nil }.count) \(AisObjectHelper.debugSummary(object))")
+        if AisLogger.shared.isEnabled {
+            AisObjectHelper.debugLog("plugin received withPosition=\(getAisObjects().filter { $0.position != nil }.count) \(AisObjectHelper.debugSummary(object))")
+        }
         DispatchQueue.main.async {
             OAAisTrackerLayerBridge.onAisObjectReceived(object)
         }
     }
 
     func onAisObjectRemoved(_ object: AisObject) {
-        AisObjectHelper.debugLog("plugin removed \(AisObjectHelper.debugSummary(object))")
+        if AisLogger.shared.isEnabled {
+            AisObjectHelper.debugLog("plugin removed \(AisObjectHelper.debugSummary(object))")
+        }
         DispatchQueue.main.async {
             OAAisTrackerLayerBridge.onAisObjectRemoved(object)
         }
@@ -375,12 +384,6 @@ final class AisTrackerPlugin: OAPlugin {
         }
     }
 
-    fileprivate func onNetworkAisObjectReceived(_ object: AisObject) {
-        DispatchQueue.main.async { [weak self] in
-            self?.aisDataManager.onAisObjectReceived(object)
-        }
-    }
-
     private func stopSharedNetworkListener(updateState: Bool) {
         if networkListener != nil {
             AisObjectHelper.debugLog("[AisTrackerPlugin] stop shared AIS listener")
@@ -393,22 +396,32 @@ final class AisTrackerPlugin: OAPlugin {
     }
 
     private func updateConnectionState(_ state: AisNmeaConnectionState) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in
+                self?.updateConnectionState(state)
+            }
+            return
+        }
         connectionState = state
         NotificationCenter.default.post(name: .aisNmeaConnectionStateChanged, object: self)
     }
 
-    private static func bearing(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) -> Double {
-        let lat1 = start.latitude * .pi / 180
-        let lat2 = end.latitude * .pi / 180
-        let deltaLon = (end.longitude - start.longitude) * .pi / 180
-        let y = sin(deltaLon) * cos(lat2)
-        let x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(deltaLon)
-        let degrees = atan2(y, x) * 180 / .pi
-        return fmod(degrees + 360, 360)
+    fileprivate func onNetworkAisObjectReceived(_ object: AisObject) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if self.connectionState != .connected {
+                self.updateConnectionState(.connected)
+            }
+            self.aisDataManager.onAisObjectReceived(object)
+        }
     }
-    
+
     @objc private func onApplicationModeChanged() {
         updateConnectionForCurrentProfile()
+    }
+
+    deinit {
+        applicationModeObserver?.detach()
     }
 }
 

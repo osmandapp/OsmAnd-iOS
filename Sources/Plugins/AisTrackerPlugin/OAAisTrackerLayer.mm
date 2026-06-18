@@ -853,7 +853,8 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
 {
     if (![self isVisible] || !object.position)
         return;
-    [[AisLogger shared] log:[NSString stringWithFormat:@"receive %@", OAAisDebugSummary(object)]];
+    if ([AisLogger shared].isEnabled)
+        [[AisLogger shared] log:[NSString stringWithFormat:@"receive %@", OAAisDebugSummary(object)]];
     [self addCollectionsToRenderer];
     [self.mapViewController runWithRenderSync:^{
         [self updateAisObjectSync:object];
@@ -868,8 +869,9 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     [self.mapViewController runWithRenderSync:^{
         NSNumber *key = @(object.mmsi);
         AisObjectDrawable *drawable = _objectDrawables[key];
-        [[AisLogger shared] log:[NSString stringWithFormat:@"remove hasDrawable=%@ drawables=%lu %@",
-                                 drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, OAAisDebugSummary(object)]];
+        if ([AisLogger shared].isEnabled)
+            [[AisLogger shared] log:[NSString stringWithFormat:@"remove hasDrawable=%@ drawables=%lu %@",
+                                     drawable ? @"yes" : @"no", (unsigned long)_objectDrawables.count, OAAisDebugSummary(object)]];
         if (drawable)
         {
             [drawable clearAisRenderDataFromMarkersCollection:_markersCollection vectorLinesCollection:_vectorLinesCollection];
@@ -900,7 +902,8 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
     [drawable updateAisRenderDataWithMapView:self.mapView plugin:[self plugin]];
     int linesCount = _vectorLinesCollection ? _vectorLinesCollection->getLinesCount() : 0;
 
-    [[AisLogger shared] log:[NSString stringWithFormat:@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, OAAisDebugSummary(object)]];
+    if ([AisLogger shared].isEnabled)
+        [[AisLogger shared] log:[NSString stringWithFormat:@"update recreated=%@ drawables=%lu lines=%d %@", recreated ? @"yes" : @"no", (unsigned long)_objectDrawables.count, linesCount, OAAisDebugSummary(object)]];
 }
 
 - (void)updateRenderData
@@ -909,7 +912,7 @@ static NSString *OAAisDebugSummary(OASAisObject *object)
         return;
 
     AisTrackerPlugin *plugin = [self plugin];
-    for (NSNumber *key in _objectDrawables)
+    for (NSNumber *key in [_objectDrawables.allKeys copy])
         [_objectDrawables[key] updateAisRenderDataWithMapView:self.mapView plugin:plugin];
 }
 

@@ -127,11 +127,6 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     return NO;
 }
 
-- (long)infoModifiedTime
-{
-    return 0;
-}
-
 - (BOOL) exists
 {
     return NO;

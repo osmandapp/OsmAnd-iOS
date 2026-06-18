@@ -168,13 +168,7 @@
     localFile.filePath = filePath;
     localFile.item = item;
     localFile.fileName = fileName;
-    
-    long infoModifiedTime = item.infoModifiedTime;
-    if (infoModifiedTime > 0) {
-        localFile.localModifiedTime = MAX(lastModifiedTime, infoModifiedTime);
-    } else {
-        localFile.localModifiedTime = lastModifiedTime;
-    }
+    localFile.localModifiedTime = lastModifiedTime;
     
     if (_infos != nil)
     {
@@ -188,8 +182,7 @@
             BOOL needM5Digest = [item isKindOfClass:OAFileSettingsItem.class]
                 && ((OAFileSettingsItem *) item).needMd5Digest
                 && localFile.uploadTime < lastModifiedTime
-                && lastMd5.length > 0
-                && infoModifiedTime <= lastModifiedTime;
+                && lastMd5.length > 0;
             if (needM5Digest && filePath && [NSFileManager.defaultManager fileExistsAtPath:filePath])
             {
                 NSString *md5 = [OAUtilities fileMD5:filePath];

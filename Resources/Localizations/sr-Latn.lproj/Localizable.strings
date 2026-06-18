@@ -3000,7 +3000,7 @@
 "longest_distance_first" = "Prvo najduže rastojanje";
 "shortest_distance_first" = "Prvo najkraće rastojanje";
 "longest_duration_first" = "Prvo najduže trajanje";
-"shorter_duration_first" = "Prvo najkraće trajanje";
+"shorter_duration_first" = "Prvo kraće trajanje";
 "route_preferred_terrain_any" = "Profil terena se ne uzima u obzir pri izboru rute.";
 "route_preferred_terrain_hilly" = "Rute sa brdovitim profilom reljefa.";
 "history_clear_alert_title" = "Izbriši svu istoriju";

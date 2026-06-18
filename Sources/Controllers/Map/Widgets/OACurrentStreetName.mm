@@ -229,11 +229,12 @@
         {
             uint32_t nameId = rdo->namesIds[i].first;
             
-            const char *cTag = nullptr;
+            NSString *tag = nil;
             if (rdo->region)
-                cTag = rdo->region->quickGetEncodingRule(nameId).getTag().c_str();
-            
-            NSString *tag = cTag ? OAStringFromUTF8Nullable(cTag) : nil;
+            {
+                std::string localTagStr = rdo->region->quickGetEncodingRule(nameId).getTag();
+                tag = OAStringFromUTF8Nullable(localTagStr.c_str());
+            }
             if (!tag)
             {
                 NSLog(@"[RoadShield] Warning: tag is null for nameId %u", nameId);

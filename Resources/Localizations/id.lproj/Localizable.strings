@@ -3853,3 +3853,9 @@
 "liter_single" = "Liter";
 "download_roads_only_maps" = "Peta jalan saja";
 "obd_alt_battery_voltage_desc" = "Tampilkan tingkat voltase pada adapter OBD";
+"sort_lowest_first" = "Terendah dulu";
+"set_step_size" = "Atur ukuran langkah";
+"set_step_size_summary" = "Pilih ukuran langkah untuk mengelompokkan trek.";
+"shared_string_step" = "Langkah";
+"shared_string_unlock" = "Buka";
+"shared_string_url" = "URL";

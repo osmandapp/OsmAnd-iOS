@@ -142,7 +142,7 @@
         }
     }
 
-    if (oldGpx)
+    if (_gpxFile && oldGpx)
     {
         gpx.showArrows = oldGpx.showArrows;
         gpx.showStartFinish = oldGpx.showStartFinish;
@@ -159,6 +159,11 @@
         gpx.splitInterval = oldGpx.splitInterval;
         gpx.creationDate = oldGpx.creationDate;
     }
+    else
+    {
+        [gpx applyFolderDefaultAppearance:YES];
+    }
+
     [gpxDb updateDataItem:gpx];
 }
 

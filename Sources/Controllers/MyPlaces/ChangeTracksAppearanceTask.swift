@@ -87,7 +87,7 @@ final class ChangeTracksAppearanceTask: NSObject {
         for parameter in GpxParameter.companion.getAppearanceParameters() {
             if data.shouldResetParameter(parameter), let gpxFile = gpxFile {
                 item.readGpxAppearanceParameter(gpxFile: gpxFile, parameter: parameter)
-            } else if let value: Any = data.getParameter(for: parameter) {
+            } else if let value = data.rawParameter(for: parameter) {
                 item.setParameter(parameter: parameter, value: value)
             }
         }

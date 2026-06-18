@@ -34,6 +34,7 @@ private enum RowKey: String {
     case splitIntervalRowKey
     case splitIntervalDescrRowKey
     case splitIntervalNoneDescrRowKey
+    case applyExistingTracksRowKey
 }
 
 final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
@@ -41,8 +42,10 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private static let widthArrayValue = "widthArrayValue"
     private static let hasTopLabels = "hasTopLabels"
     private static let hasBottomLabels = "hasBottomLabels"
+    private static let isEnabledValue = "isEnabled"
     
-    private let initMode: InitMode
+    private let folder: TrackFolder?
+    private let dirItem: GpxDirItem?
     private let appearanceCollection: OAGPXAppearanceCollection = OAGPXAppearanceCollection.sharedInstance()
     
     private var tracks: Set<TrackItem>
@@ -72,15 +75,20 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     private var isSplitIntervalNoneSelected = false
     
     init(mode: InitMode) {
-        self.initMode = mode
         switch mode {
         case .tracks(let tracks):
+            self.folder = nil
+            self.dirItem = nil
             self.tracks = tracks
+            self.initialData = Self.buildAppearanceData()
         case .folder(let folder):
+            let dirItem = GpxDbHelper.shared.getGpxDirItem(file: folder.getDirFile())
+            self.folder = folder
+            self.dirItem = dirItem
             self.tracks = Set(folder.getTrackItems())
+            self.initialData = Self.buildAppearanceData(from: dirItem)
         }
         
-        self.initialData = Self.buildAppearanceData()
         self.data = AppearanceData(data: self.initialData)
         super.init(nibName: "OABaseNavbarViewController", bundle: nil)
         initTableData()
@@ -119,15 +127,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         addCell(SegmentImagesTableViewCell.reuseIdentifier)
         addCell(SegmentTextTableViewCell.reuseIdentifier)
         addCell(OASegmentSliderTableViewCell.reuseIdentifier)
+        addCell(OASearchMoreCell.reuseIdentifier)
     }
     
     override func getTitle() -> String? {
-        switch initMode {
-        case .tracks:
-            localizedString("change_appearance")
-        case .folder:
-            localizedString("default_appearance")
-        }
+        localizedString(folder == nil ? "change_appearance" : "default_appearance")
     }
     
     override func getLeftNavbarButtonTitle() -> String? {
@@ -147,8 +151,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     override func getTableHeaderDescription() -> String? {
-        guard case .folder = initMode else { return nil }
-        return localizedString("default_appearance_description")
+        folder != nil ? localizedString("default_appearance_description") : nil
     }
     
     override func generateData() {
@@ -252,6 +255,16 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             splitIntervalDescrRow.key = RowKey.splitIntervalDescrRowKey.rawValue
             splitIntervalDescrRow.title = localizedString("unchanged_parameter_summary")
         }
+        
+        if folder != nil {
+            let applySection = tableData.createNewSection()
+            applySection.footerText = localizedString("apply_to_existing_tracks_description")
+            let applyRow = applySection.createNewRow()
+            applyRow.cellType = OASearchMoreCell.reuseIdentifier
+            applyRow.key = RowKey.applyExistingTracksRowKey.rawValue
+            applyRow.title = applyExistingTracksTitle()
+            applyRow.setObj(hasAppearanceChanges(), forKey: Self.isEnabledValue)
+        }
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -311,6 +324,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.selectionStyle = .none
             cell.heightConstraint.constant = 60
             cell.chartView.extraBottomOffset = 24
+            cell.backgroundColor = .groupBg
             GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .textColorSecondary)
             if let paletteItem = selectedPaletteColorItem {
                 let fileType = paletteItem.properties.fileType
@@ -396,6 +410,15 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside, .touchUpOutside])
             cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside, .touchUpOutside])
             return cell
+        } else if item.cellType == OASearchMoreCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASearchMoreCell.reuseIdentifier, for: indexPath) as! OASearchMoreCell
+            let isEnabled = item.bool(forKey: Self.isEnabledValue)
+            cell.selectionStyle = isEnabled ? .default : .none
+            cell.textView.text = item.title
+            cell.textView.textAlignment = .center
+            cell.textView.font = UIFont.preferredFont(forTextStyle: .body)
+            cell.textView.textColor = isEnabled ? .textColorActive : .textColorSecondary
+            return cell
         }
         
         return nil
@@ -407,13 +430,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             if isSolidColorSelected {
                 let items = appearanceCollection.getAvailableColorsSortingByLastUsed() ?? []
                 let selectedItem: Any = selectedColorItem ?? NSNull()
-    
                 let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorItems, items: items, selectedItem: selectedItem)
                 colorCollectionVC.delegate = self
                 if let colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
                     colorCollectionVC.hostColorHandler = colorHandler
                 }
-
                 navigationController?.pushViewController(colorCollectionVC, animated: true)
             } else if isGradientColorSelected {
                 if let paletteColorItem = selectedPaletteColorItem {
@@ -423,23 +444,28 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                     navigationController?.pushViewController(colorCollectionVC, animated: true)
                 }
             }
+        } else if item.key == RowKey.applyExistingTracksRowKey.rawValue {
+            guard hasAppearanceChanges() else { return }
+            saveFolderDefaultAppearance(updateExisting: true, dismissOnFinish: false)
         }
     }
     
     override func onLeftNavbarButtonPressed() {
-        if data != initialData {
+        if hasAppearanceChanges() {
             let alertController = UIAlertController(title: localizedString("unsaved_changes"), message: localizedString("unsaved_changes_will_be_lost"), preferredStyle: .actionSheet)
-            let discardAction = UIAlertAction(title: "Discard", style: .destructive) { [weak self] _ in
+            let discardAction = UIAlertAction(title: localizedString("shared_string_discard_changes"), style: .destructive) { [weak self] _ in
                 guard let self else { return }
                 self.dismiss(animated: true, completion: nil)
             }
-            let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self] _ in
-                guard let self else { return }
-                self.onRightNavbarButtonPressed()
+            alertController.addAction(discardAction)
+            if folder == nil {
+                let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self] _ in
+                    guard let self else { return }
+                    self.onRightNavbarButtonPressed()
+                }
+                alertController.addAction(applyAction)
             }
             let cancelAction = UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel, handler: nil)
-            alertController.addAction(discardAction)
-            alertController.addAction(applyAction)
             alertController.addAction(cancelAction)
             let popPresenter = alertController.popoverPresentationController
             popPresenter?.barButtonItem = navigationItem.leftBarButtonItem
@@ -451,52 +477,150 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        if isSolidColorSelected, let selectedColorItem {
-            appearanceCollection.selectColor(selectedColorItem)
-        } else if isGradientColorSelected, let selectedPaletteColorItem {
-            GradientPaletteHelper.shared.markPaletteItemAsUsed(selectedPaletteColorItem)
-        }
-        let task = ChangeTracksAppearanceTask(data: data, items: tracks) { [weak self] in
-            guard let self else { return }
-            self.dismiss(animated: true) {
-                OsmAndApp.swiftInstance().updateGpxTracksOnMapObservable.notifyEvent()
+        if folder == nil {
+            markSelectedAppearanceAsUsed()
+            let task = ChangeTracksAppearanceTask(data: data, items: tracks) { [weak self] in
+                self?.dismissAndRefreshMap()
             }
+            task.execute()
+        } else {
+            showFolderDefaultAppearanceConfirmation()
         }
-        
-        task.execute()
     }
     
-    private static func buildAppearanceData() -> AppearanceData {
+    private static func buildAppearanceData(from item: GpxDirItem? = nil) -> AppearanceData {
         let data = AppearanceData()
         for parameter in GpxParameter.companion.getAppearanceParameters() {
-            data.setParameter(parameter, value: nil)
+            let value: Any? = item?.getParameter(parameter: parameter)
+            data.setParameter(parameter, value: value)
         }
         
         return data
     }
     
+    private func markSelectedAppearanceAsUsed() {
+        if isSolidColorSelected, let selectedColorItem {
+            appearanceCollection.selectColor(selectedColorItem)
+        } else if isGradientColorSelected, let selectedPaletteColorItem {
+            GradientPaletteHelper.shared.markPaletteItemAsUsed(selectedPaletteColorItem)
+        }
+    }
+    
+    private func showFolderDefaultAppearanceConfirmation() {
+        guard hasAppearanceChanges() else {
+            dismissAndRefreshMap()
+            return
+        }
+        
+        let alertController = UIAlertController(title: localizedString("shared_string_save"), message: localizedString("change_default_tracks_appearance_confirmation"), preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: applyExistingTracksTitle(), style: .default) { [weak self] _ in
+            self?.saveFolderDefaultAppearance(updateExisting: true)
+        })
+        alertController.addAction(UIAlertAction(title: localizedString("apply_only_to_new"), style: .default) { [weak self] _ in
+            self?.saveFolderDefaultAppearance(updateExisting: false)
+        })
+        alertController.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        let popPresenter = alertController.popoverPresentationController
+        popPresenter?.barButtonItem = navigationItem.rightBarButtonItems?.first
+        popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func saveFolderDefaultAppearance(updateExisting: Bool, dismissOnFinish: Bool = true) {
+        guard let dirItem else { return }
+        markSelectedAppearanceAsUsed()
+        for parameter in GpxParameter.companion.getAppearanceParameters() {
+            if data.shouldResetParameter(parameter) {
+                dirItem.setParameter(parameter: parameter, value: nil)
+            } else {
+                let value = data.rawParameter(for: parameter)
+                dirItem.setParameter(parameter: parameter, value: value)
+            }
+        }
+        
+        GpxDbHelper.shared.updateDataItem(item: dirItem)
+        if updateExisting {
+            let task = ChangeTracksAppearanceTask(data: data, items: tracks) { [weak self] in
+                guard let self else { return }
+                if dismissOnFinish {
+                    self.dismissAndRefreshMap()
+                } else {
+                    self.onExistingTracksAppearanceApplied()
+                }
+            }
+            task.execute()
+        } else {
+            if dismissOnFinish {
+                dismissAndRefreshMap()
+            } else {
+                onExistingTracksAppearanceApplied()
+            }
+        }
+    }
+    
+    private func onExistingTracksAppearanceApplied() {
+        initialData = Self.buildAppearanceData(from: dirItem)
+        data = AppearanceData(data: initialData)
+        updateData()
+        OsmAndApp.swiftInstance().updateGpxTracksOnMapObservable.notifyEvent()
+        OAUtilities.showToast(localizedString("settings_applied"), details: nil, duration: 4, verticalOffset: 50, in: view)
+    }
+    
+    private func applyExistingTracksTitle() -> String {
+        String(format: localizedString("ltr_or_rtl_combine_via_space"), localizedString("apply_to_existing"), "(\(tracks.count))")
+    }
+    
+    private func dismissAndRefreshMap() {
+        dismiss(animated: true) {
+            OsmAndApp.swiftInstance().updateGpxTracksOnMapObservable.notifyEvent()
+        }
+    }
+    
     private func configureShowArrows() {
+        if folder != nil {
+            selectedShowArrows = data.getParameter(for: .showArrows)
+            return
+        }
+
         selectedShowArrows = preselectParameter(in: tracks) { $0.showArrows }
         initialData.setParameter(.showArrows, value: selectedShowArrows)
         data.setParameter(.showArrows, value: selectedShowArrows)
     }
     
     private func configureShowStartFinish() {
+        if folder != nil {
+            selectedShowStartFinish = data.getParameter(for: .showStartFinish)
+            return
+        }
+        
         selectedShowStartFinish = preselectParameter(in: tracks) { $0.showStartFinish }
         initialData.setParameter(.showStartFinish, value: selectedShowStartFinish)
         data.setParameter(.showStartFinish, value: selectedShowStartFinish)
     }
     
     private func configureColorType() {
-        guard let typeStr = preselectParameter(in: tracks, extractor: { $0.coloringType }) else { return }
-        let normalizedTypeStr = ColoringType.routeStatisticsAttributesStrings.contains(typeStr) ? typeStr.replacingOccurrences(of: "routeInfo", with: "route_info") : typeStr
+        let typeStr: String?
+        if folder != nil {
+            typeStr = data.getParameter(for: .coloringType)
+        } else {
+            typeStr = preselectParameter(in: tracks, extractor: { $0.coloringType })
+        }
+        guard let typeStr else { return }
+        let normalizedTypeStr = normalizedColoringType(typeStr)
         selectedColorType = ColoringType.companion.valueOf(purpose: .track, name: normalizedTypeStr, defaultValue: .trackSolid)
-        initialData.setParameter(.coloringType, value: selectedColorType?.id)
-        data.setParameter(.coloringType, value: selectedColorType?.id)
+        if folder == nil {
+            initialData.setParameter(.coloringType, value: selectedColorType?.id)
+            data.setParameter(.coloringType, value: selectedColorType?.id)
+        }
         guard let type = selectedColorType else { return }
         switch type {
         case .trackSolid:
-            if preselectParameter(in: tracks, extractor: { $0.color }) != nil {
+            if folder != nil {
+                let color: Int? = data.getParameter(for: .color)
+                configureLineColors(color: color, updateAppearanceData: false)
+                isColorSelected = true
+                isSolidColorSelected = true
+            } else if preselectParameter(in: tracks, extractor: { $0.color }) != nil {
                 configureLineColors()
                 isColorSelected = true
                 isSolidColorSelected = true
@@ -510,7 +634,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             isGradientColorSelected = false
             isRouteAttributeTypeSelected = false
         case .speed, .altitude, .slope:
-            if preselectParameter(in: tracks, extractor: { $0.gradientPaletteName }) != nil {
+            if folder != nil {
+                let paletteName: String? = data.getParameter(for: .colorPalette)
+                configureGradientColors(paletteName: paletteName, updateAppearanceData: false)
+                isColorSelected = true
+                isGradientColorSelected = true
+            } else if preselectParameter(in: tracks, extractor: { $0.gradientPaletteName }) != nil {
                 configureGradientColors()
                 isColorSelected = true
                 isGradientColorSelected = true
@@ -534,8 +663,10 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         }
     }
     
-    private func configureLineColors() {
-        if let trackColor = tracks.first?.color {
+    private func configureLineColors(color: Int? = nil, updateAppearanceData: Bool = true) {
+        if let color {
+            selectedColorItem = appearanceCollection.getColorItem(withValue: Int32(color))
+        } else if folder == nil, let trackColor = tracks.first?.color {
             selectedColorItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
         } else {
             selectedColorItem = appearanceCollection.defaultLineColorItem()
@@ -543,25 +674,34 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
 
         sortedColorItems = Array(appearanceCollection.getAvailableColorsSortingByLastUsed() ?? [])
         let selectedColor = Int(selectedColorItem?.colorInt ?? 0)
-        initialData.setParameter(.color, value: KotlinInt(integerLiteral: selectedColor))
-        data.setParameter(.color, value: KotlinInt(integerLiteral: selectedColor))
-        initialData.setParameter(.colorPalette, value: PaletteConstants.shared.DEFAULT_NAME)
-        data.setParameter(.colorPalette, value: PaletteConstants.shared.DEFAULT_NAME)
+        if updateAppearanceData {
+            initialData.setParameter(.color, value: KotlinInt(integerLiteral: selectedColor))
+            data.setParameter(.color, value: KotlinInt(integerLiteral: selectedColor))
+            initialData.setParameter(.colorPalette, value: PaletteConstants.shared.DEFAULT_NAME)
+            data.setParameter(.colorPalette, value: PaletteConstants.shared.DEFAULT_NAME)
+        }
     }
     
-    private func configureGradientColors() {
+    private func configureGradientColors(paletteName: String? = nil, updateAppearanceData: Bool = true) {
         let gradientScaleType = selectedColorType?.toGradientScaleType()
         let paletteItems = GradientPaletteHelper.shared.paletteItems(gradientScaleType: gradientScaleType, sortMode: .lastUsedTime)
         sortedPaletteColorItems.replaceAll(withObjectsSync: paletteItems)
-        selectedPaletteColorItem = GradientPaletteHelper.shared.paletteItemOrDefault(gradientScaleType: gradientScaleType, name: tracks.first?.gradientPaletteName)
-        if let selectedPaletteColorItem {
+        let selectedPaletteName = paletteName ?? (folder == nil ? tracks.first?.gradientPaletteName : nil)
+        selectedPaletteColorItem = GradientPaletteHelper.shared.paletteItemOrDefault(gradientScaleType: gradientScaleType, name: selectedPaletteName)
+        if updateAppearanceData, let selectedPaletteColorItem {
             initialData.setParameter(.colorPalette, value: selectedPaletteColorItem.id)
             data.setParameter(.colorPalette, value: selectedPaletteColorItem.id)
         }
     }
     
     private func configureWidth() {
-        selectedWidth = preselectParameter(in: tracks) { appearanceCollection.getWidthForValue($0.width) }
+        if folder != nil {
+            let width: String? = data.getParameter(for: .width)
+            selectedWidth = width.flatMap { appearanceCollection.getWidthForValue($0) }
+        } else {
+            selectedWidth = preselectParameter(in: tracks) { appearanceCollection.getWidthForValue($0.width) }
+        }
+
         let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()
         let maxValue = OAGPXTrackWidth.getCustomTrackWidthMax()
         customWidthValues = (minValue...maxValue).map { "\($0)" }
@@ -569,27 +709,32 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         isWidthSelected = true
         isCustomWidthSelected = false
         let widthString = width.isCustom() ? width.customValue : width.key
-        initialData.setParameter(.width, value: widthString)
-        data.setParameter(.width, value: widthString)
-        switch width.key {
-        case WidthKeys.thin.rawValue:
-            selectedWidthIndex = 0
-        case WidthKeys.medium.rawValue:
-            selectedWidthIndex = 1
-        case WidthKeys.bold.rawValue:
-            selectedWidthIndex = 2
-        default:
-            isCustomWidthSelected = true
-            selectedWidthIndex = 3
+        if folder == nil {
+            initialData.setParameter(.width, value: widthString)
+            data.setParameter(.width, value: widthString)
         }
+
+        selectedWidthIndex = widthSegmentIndex(for: width)
+        isCustomWidthSelected = width.isCustom()
     }
     
     private func configureSplitInterval() {
-        selectedSplit = preselectParameter(in: tracks) { appearanceCollection.getSplitInterval(for: $0.splitType) }
-        if let firstTrack = tracks.first {
+        let splitInterval: Double?
+        if folder != nil {
+            guard let splitTypeValue = intValue(for: .splitType), let splitType = EOAGpxSplitType(rawValue: splitTypeValue) else { return }
+            selectedSplit = appearanceCollection.getSplitInterval(for: splitType)
+            splitInterval = doubleValue(for: .splitInterval)
+        } else {
+            selectedSplit = preselectParameter(in: tracks) { appearanceCollection.getSplitInterval(for: $0.splitType) }
+            splitInterval = tracks.first?.splitInterval
+        }
+        
+        if folder == nil, let firstTrack = tracks.first {
             if firstTrack.splitInterval > 0 && firstTrack.splitType != EOAGpxSplitType.none {
                 selectedSplit?.customValue = selectedSplit?.titles[(selectedSplit?.values.firstIndex { ($0).doubleValue == Double(firstTrack.splitInterval) }) ?? 0]
             }
+        } else if let splitInterval, splitInterval > 0, selectedSplit?.type != EOAGpxSplitType.none {
+            selectedSplit?.customValue = selectedSplit?.titles[(selectedSplit?.values.firstIndex { ($0).doubleValue == splitInterval }) ?? 0]
         }
         
         if let selectedSplit {
@@ -609,22 +754,78 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             }
             
             let splitTypeValue = Int32(selectedSplit.type.rawValue)
-            initialData.setParameter(.splitType, value: splitTypeValue)
-            data.setParameter(.splitType, value: splitTypeValue)
+            if folder == nil {
+                initialData.setParameter(.splitType, value: splitTypeValue)
+                data.setParameter(.splitType, value: splitTypeValue)
+            }
             if selectedSplit.isCustom(), let customValue = selectedSplit.customValue, let customIndex = selectedSplit.titles.firstIndex(of: customValue) {
                 let intervalValue = selectedSplit.values[customIndex].doubleValue
-                initialData.setParameter(.splitInterval, value: intervalValue)
-                data.setParameter(.splitInterval, value: intervalValue)
+                if folder == nil {
+                    initialData.setParameter(.splitInterval, value: intervalValue)
+                    data.setParameter(.splitInterval, value: intervalValue)
+                }
             } else {
-                initialData.setParameter(.splitInterval, value: 0)
-                data.setParameter(.splitInterval, value: 0)
+                if folder == nil {
+                    initialData.setParameter(.splitInterval, value: 0)
+                    data.setParameter(.splitInterval, value: 0)
+                }
             }
         }
+    }
+    
+    private func widthSegmentIndex(for width: OAGPXTrackWidth) -> Int {
+        switch width.key {
+        case WidthKeys.thin.rawValue:
+            return 0
+        case WidthKeys.medium.rawValue:
+            return 1
+        case WidthKeys.bold.rawValue:
+            return 2
+        default:
+            return 3
+        }
+    }
+    
+    private func intValue(for parameter: GpxParameter) -> Int? {
+        switch data.rawParameter(for: parameter) {
+        case let value as Int: return value
+        case let value as Int32: return Int(value)
+        case let value as NSNumber: return value.intValue
+        default: return nil
+        }
+    }
+    
+    private func doubleValue(for parameter: GpxParameter) -> Double? {
+        switch data.rawParameter(for: parameter) {
+        case let value as Double: return value
+        case let value as NSNumber: return value.doubleValue
+        default: return nil
+        }
+    }
+    
+    private func hasAppearanceChanges() -> Bool {
+        guard folder != nil else { return data != initialData }
+        for parameter in GpxParameter.companion.getAppearanceParameters() {
+            switch (initialData.rawParameter(for: parameter), data.rawParameter(for: parameter)) {
+            case (nil, nil):
+                continue
+            case let (lhs as NSObject, rhs as NSObject) where lhs.isEqual(rhs):
+                continue
+            default:
+                return true
+            }
+        }
+
+        return false
     }
     
     private func preselectParameter<T: Equatable>(in tracks: Set<TrackItem>, extractor: (TrackItem) -> T?) -> T? {
         guard let firstTrack = tracks.first, let firstValue = extractor(firstTrack) else { return nil }
         return tracks.allSatisfy { extractor($0) == firstValue } ? firstValue : nil
+    }
+    
+    private func normalizedColoringType(_ type: String) -> String {
+        ColoringType.routeStatisticsAttributesStrings.contains(type) ? type.replacingOccurrences(of: "routeInfo", with: "route_info") : type
     }
     
     private func createStateSelectionMenu(for key: String) -> UIMenu {
@@ -651,23 +852,44 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     private func updateSection(containingRowKey key: RowKey) {
         generateData()
-        guard let matchingSection = (0..<tableData.sectionCount()).first(where: {
-            let sectionData = tableData.sectionData(for: $0)
-            return (0..<sectionData.rowCount()).contains { sectionData.getRow($0).key == key.rawValue }
-        }) else { return }
-        tableView.reloadSections(IndexSet(integer: Int(matchingSection)), with: .automatic)
+        var sectionsToReload = IndexSet()
+        for section in 0..<tableData.sectionCount() {
+            let sectionData = tableData.sectionData(for: section)
+            let hasUpdatedRow = (0..<sectionData.rowCount()).contains {
+                let rowKey = sectionData.getRow($0).key
+                return rowKey == key.rawValue || (folder != nil && rowKey == RowKey.applyExistingTracksRowKey.rawValue)
+            }
+            if hasUpdatedRow {
+                sectionsToReload.insert(Int(section))
+            }
+        }
+        
+        guard !sectionsToReload.isEmpty else { return }
+        tableView.reloadSections(sectionsToReload, with: .automatic)
     }
     
     private func handleWidthSelection(index: Int) {
-        guard let widths = appearanceCollection.getAvailableWidth(), index >= 0, index < widths.count else { return }
-        let width = widths[index]
+        let width: OAGPXTrackWidth?
+        switch index {
+        case 0:
+            width = appearanceCollection.getWidthForValue(WidthKeys.thin.rawValue)
+        case 1:
+            width = appearanceCollection.getWidthForValue(WidthKeys.medium.rawValue)
+        case 2:
+            width = appearanceCollection.getWidthForValue(WidthKeys.bold.rawValue)
+        default:
+            let customValue = selectedWidth?.isCustom() == true ? selectedWidth?.customValue : customWidthValues.first
+            width = customValue.flatMap { appearanceCollection.getWidthForValue($0) }
+        }
+        
+        guard let width else { return }
         selectedWidth = width
         let isCustom = width.isCustom()
         let widthString = isCustom ? width.customValue : width.key
         data.setParameter(.width, value: widthString)
         isWidthSelected = true
         isCustomWidthSelected = isCustom
-        selectedWidthIndex = index
+        selectedWidthIndex = widthSegmentIndex(for: width)
         updateSection(containingRowKey: .widthRowKey)
     }
     
@@ -720,6 +942,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         guard let cell = tableView.cellForRow(at: indexPath) as? OASegmentSliderTableViewCell else { return }
         let selectedIndex = Int(cell.sliderView.selectedMark)
+        let rowKey: RowKey
         if item.key == RowKey.customWidthModesRowKey.rawValue {
             guard let customWidthValues = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < customWidthValues.count else { return }
             let selectedValue = customWidthValues[selectedIndex]
@@ -727,6 +950,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 w.customValue = selectedValue
             }
             data.setParameter(.width, value: selectedValue)
+            rowKey = .widthRowKey
         } else if item.key == RowKey.customSplitIntervalRowKey.rawValue {
             guard let splitTitles = item.obj(forKey: Self.widthArrayValue) as? [String], selectedIndex >= 0, selectedIndex < splitTitles.count else { return }
             let selectedValue = splitTitles[selectedIndex]
@@ -736,10 +960,12 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                     data.setParameter(.splitInterval, value: split.values[customIndex].doubleValue)
                 }
             }
+            rowKey = .splitIntervalRowKey
+        } else {
+            return
         }
         
-        generateData()
-        tableView.reloadRows(at: [indexPath], with: .none)
+        updateSection(containingRowKey: rowKey)
     }
     
     @objc private func productPurchased(_: Notification) {
@@ -761,39 +987,45 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
 
 extension TracksChangeAppearanceViewController {
     private func createArrowsMenu() -> UIMenu {
-        return createBooleanSelectionMenu(currentValue: selectedShowArrows, parameter: .showArrows) { [weak self] newValue in
+        return createBooleanSelectionMenu(currentValue: selectedShowArrows, parameter: .showArrows, rowKey: .directionArrowsRowKey) { [weak self] newValue in
             self?.selectedShowArrows = newValue
         }
     }
     
     private func createStartFinishMenu() -> UIMenu {
-        return createBooleanSelectionMenu(currentValue: selectedShowStartFinish, parameter: .showStartFinish) { [weak self] newValue in
+        return createBooleanSelectionMenu(currentValue: selectedShowStartFinish, parameter: .showStartFinish, rowKey: .startFinishIconsRowKey) { [weak self] newValue in
             self?.selectedShowStartFinish = newValue
         }
     }
     
-    private func createBooleanSelectionMenu(currentValue: Bool?, parameter: GpxParameter, update: @escaping (Bool?) -> Void) -> UIMenu {
+    private func createBooleanSelectionMenu(currentValue: Bool?, parameter: GpxParameter, rowKey: RowKey, update: @escaping (Bool?) -> Void) -> UIMenu {
         let isReset = data.shouldResetParameter(parameter)
+        let isOriginal = isReset || (folder != nil && currentValue == nil)
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && currentValue == nil ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(parameter, value: nil)
             update(nil)
+            self.updateSection(containingRowKey: rowKey)
         }
-        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
+        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isOriginal ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.resetParameter(parameter)
+            update(nil)
+            self.updateSection(containingRowKey: rowKey)
         }
-        let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
+        let unchangedOriginalMenu = inlineMenu(withActions: folder == nil ? [unchangedAction, originalAction] : [originalAction])
         
         let onAction = UIAction(title: localizedString("shared_string_on"), state: !isReset && currentValue == true ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(parameter, value: true)
             update(true)
+            self.updateSection(containingRowKey: rowKey)
         }
         let offAction = UIAction(title: localizedString("shared_string_off"), state: !isReset && currentValue == false ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(parameter, value: false)
             update(false)
+            self.updateSection(containingRowKey: rowKey)
         }
         let onOffMenu = inlineMenu(withActions: [onAction, offAction])
         
@@ -803,30 +1035,34 @@ extension TracksChangeAppearanceViewController {
     private func createColoringMenu() -> UIMenu {
         let isReset = data.shouldResetParameter(.coloringType)
         let isRouteInfoAttribute = selectedColorType?.isRouteInfoAttribute() ?? false
+        let isOriginal = isReset || (folder != nil && selectedColorType == nil)
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: !isReset && selectedColorType == nil ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.coloringType, value: nil)
+            self.data.setParameter(.color, value: nil)
+            self.data.setParameter(.colorPalette, value: nil)
             self.selectedColorType = nil
             self.isRouteAttributeTypeSelected = false
             self.resetColorSelectionFlags()
             self.updateSection(containingRowKey: .coloringRowKey)
         }
-        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
+        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isOriginal ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.resetParameter(.coloringType)
             self.data.resetParameter(.color)
+            self.data.resetParameter(.colorPalette)
             self.selectedColorType = nil
             self.isRouteAttributeTypeSelected = false
             self.resetColorSelectionFlags()
             self.updateSection(containingRowKey: .coloringRowKey)
         }
-        let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
+        let unchangedOriginalMenu = inlineMenu(withActions: folder == nil ? [unchangedAction, originalAction] : [originalAction])
         
         let solidColorAction = UIAction(title: localizedString("track_coloring_solid"), state: !isReset && selectedColorType == .trackSolid ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.trackSolid.id)
             self.selectedColorType = .trackSolid
-            self.configureLineColors()
+            self.configureLineColors(updateAppearanceData: self.folder == nil)
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: true)
             self.updateSection(containingRowKey: .coloringRowKey)
@@ -837,7 +1073,7 @@ extension TracksChangeAppearanceViewController {
             guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.altitude.id)
             self.selectedColorType = .altitude
-            self.configureGradientColors()
+            self.configureGradientColors(updateAppearanceData: self.folder == nil)
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: false)
             self.updateSection(containingRowKey: .coloringRowKey)
@@ -846,7 +1082,7 @@ extension TracksChangeAppearanceViewController {
             guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.speed.id)
             self.selectedColorType = .speed
-            self.configureGradientColors()
+            self.configureGradientColors(updateAppearanceData: self.folder == nil)
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: false)
             self.updateSection(containingRowKey: .coloringRowKey)
@@ -855,7 +1091,7 @@ extension TracksChangeAppearanceViewController {
             guard let self else { return }
             self.data.setParameter(.coloringType, value: ColoringType.slope.id)
             self.selectedColorType = .slope
-            self.configureGradientColors()
+            self.configureGradientColors(updateAppearanceData: self.folder == nil)
             self.resetColorSelectionFlags()
             self.isColorSelectionEnabled(true, solid: false)
             self.updateSection(containingRowKey: .coloringRowKey)
@@ -904,6 +1140,7 @@ extension TracksChangeAppearanceViewController {
     private func createWidthMenu() -> UIMenu {
         let paramValue: String? = selectedWidth?.isCustom() == true ? selectedWidth?.customValue : selectedWidth?.key
         let isReset = data.shouldResetParameter(.width)
+        let isOriginal = isReset || (folder != nil && paramValue == nil)
         let fixedWidths: [(titleKey: String, widthKey: String, index: Int)] = [("rendering_value_thin_name", "thin", 0), ("rendering_value_medium_w_name", "medium", 1), ("rendering_value_bold_name", "bold", 2)]
         let unchangedAction = UIAction(title: localizedString("shared_string_unchanged"), state: (!isReset && paramValue == nil) ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -913,14 +1150,15 @@ extension TracksChangeAppearanceViewController {
             self.isCustomWidthSelected = false
             self.updateSection(containingRowKey: .widthRowKey)
         }
-        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isReset ? .on : .off) { [weak self] _ in
+        let originalAction = UIAction(title: localizedString("simulate_location_movement_speed_original"), state: isOriginal ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.data.resetParameter(.width)
+            self.selectedWidth = nil
             self.isWidthSelected = false
             self.isCustomWidthSelected = false
             self.updateSection(containingRowKey: .widthRowKey)
         }
-        let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
+        let unchangedOriginalMenu = inlineMenu(withActions: folder == nil ? [unchangedAction, originalAction] : [originalAction])
         
         let fixedWidthActions = fixedWidths.map { item in
             return UIAction(title: localizedString(item.titleKey), state: (!isReset && paramValue == item.widthKey) ? .on : .off) { [weak self] _ in
@@ -930,7 +1168,8 @@ extension TracksChangeAppearanceViewController {
         }
         let widthMenu = inlineMenu(withActions: fixedWidthActions)
         
-        let customAction = UIAction(title: localizedString("shared_string_custom"), state: (!isReset && paramValue == selectedWidth?.customValue) ? .on : .off) { [weak self] _ in
+        let isCustomSelected = !isReset && paramValue != nil && selectedWidth?.isCustom() == true && paramValue == selectedWidth?.customValue
+        let customAction = UIAction(title: localizedString("shared_string_custom"), state: isCustomSelected ? .on : .off) { [weak self] _ in
             guard let self else { return }
             self.handleWidthSelection(index: 3)
         }
@@ -940,11 +1179,11 @@ extension TracksChangeAppearanceViewController {
     }
     
     private func createSplitIntervalMenu() -> UIMenu {
-        let paramSplitType: Int32? = selectedSplit.map { Int32($0.type.rawValue) } ?? data.getParameter(for: .splitType)
+        let paramSplitType: Int32? = selectedSplit.map { Int32($0.type.rawValue) } ?? (folder == nil ? data.getParameter(for: .splitType) : nil)
         let isResetSplitType = data.shouldResetParameter(.splitType)
         let isResetSplitInterval = data.shouldResetParameter(.splitInterval)
         let isUnchanged = paramSplitType == nil && !isResetSplitType && !isResetSplitInterval
-        let isOriginalSelected = isResetSplitType && isResetSplitInterval
+        let isOriginalSelected = (isResetSplitType && isResetSplitInterval) || (folder != nil && paramSplitType == nil)
         let currentType = paramSplitType ?? 0
         let isNoSplit = paramSplitType != nil && currentType == GpxSplitType.noSplit.type
         let isTime = currentType == GpxSplitType.time.type
@@ -963,11 +1202,12 @@ extension TracksChangeAppearanceViewController {
             guard let self else { return }
             self.data.resetParameter(.splitType)
             self.data.resetParameter(.splitInterval)
+            self.selectedSplit = nil
             self.isSplitIntervalSelected = false
             self.isSplitIntervalNoneSelected = false
             self.updateSection(containingRowKey: .splitIntervalRowKey)
         }
-        let unchangedOriginalMenu = inlineMenu(withActions: [unchangedAction, originalAction])
+        let unchangedOriginalMenu = inlineMenu(withActions: folder == nil ? [unchangedAction, originalAction] : [originalAction])
         
         let noSplitAction = UIAction(title: localizedString("shared_string_none"), state: isNoSplit ? .on : .off) { [weak self] _ in
             guard let self else { return }
@@ -1009,6 +1249,9 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
             selectedPaletteColorItem = picked
             data.setParameter(.colorPalette, value: picked.id)
         }
+        if collectionView != nil {
+            updateSection(containingRowKey: .coloringRowKey)
+        }
     }
     
     func reloadCollectionData() {
@@ -1018,7 +1261,11 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
             selectedItem = selectedColor
         }
         if selectedItem == nil {
-            if let trackColor = tracks.first?.color {
+            if folder != nil, let color: Int = data.getParameter(for: .color) {
+                selectedItem = appearanceCollection.getColorItem(withValue: Int32(color))
+            } else if folder != nil {
+                selectedItem = appearanceCollection.defaultLineColorItem()
+            } else if let trackColor = tracks.first?.color {
                 selectedItem = appearanceCollection.getColorItem(withValue: Int32(trackColor))
             } else {
                 selectedItem = appearanceCollection.defaultLineColorItem()

@@ -155,7 +155,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             tabs.append(.osm)
         }
         
-        if TravelLocalDataHelper.shared.hasSavedArticles() {
+        if TravelLocalDataHelper.shared.getSavedArticles().count > 1 {
             tabs.append(.travel)
         }
         

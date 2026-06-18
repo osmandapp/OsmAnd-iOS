@@ -2790,7 +2790,18 @@ extension TracksViewController {
             createAction(for: .shorterDurationFirst, isSortingSubfolders: isSortingSubfolders)
         ])
         
-        return UIMenu(title: isSortingSubfolders ? localizedString("sort_subfolders_tracks") : "", image: isSortingSubfolders ? .icCustomSortSubfolder.resizedMenuImage() : nil, children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+        let menuOptions = [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions]
+        var mainMenuElements: [UIMenuElement]
+        if isSortingSubfolders {
+            mainMenuElements = [UIDeferredMenuElement.uncached { completion in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    completion(menuOptions)
+                }
+            }]
+        } else {
+            mainMenuElements = menuOptions
+        }
+        return UIMenu(title: isSortingSubfolders ? localizedString("sort_subfolders_tracks") : "", image: isSortingSubfolders ? .icCustomSortSubfolder.resizedMenuImage() : nil, children: mainMenuElements)
     }
     
     private func createAction(for sortType: TracksSortMode, isSortingSubfolders: Bool) -> UIAction {

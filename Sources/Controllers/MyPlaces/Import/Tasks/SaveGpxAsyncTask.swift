@@ -1,5 +1,5 @@
 //
-//  SaveGpxTask.swift
+//  SaveGpxAsyncTask.swift
 //  OsmAnd Maps
 //
 //  Created by Vitaliy Sova on 11.06.2026.
@@ -10,9 +10,9 @@ import Foundation
 import OsmAndShared
 
 protocol SaveImportedGpxListener: AnyObject {
-    func gpxSavingStarted()
-    func gpxSaved(error: String?, savedPath: String?)
-    func gpxSavingFinished(warning: String?)
+    func onGpxSavingStarted()
+    func onGpxSaved(error: String?, savedPath: String?)
+    func onGpxSavingFinished(warning: [String])
 }
 
 private struct SaveGpxTaskResult {
@@ -29,7 +29,7 @@ private struct SaveGpxTaskResult {
     }
 }
 
-final class SaveGpxTask: OAAsyncTask {
+final class SaveGpxAsyncTask: OAAsyncTask {
 
     private static let gpxExtension = ".gpx"
     private static let importDateFormat: DateFormatter = {
@@ -64,7 +64,7 @@ final class SaveGpxTask: OAAsyncTask {
     }
 
     override func onPreExecute() {
-        listener?.gpxSavingStarted()
+        listener?.onGpxSavingStarted()
     }
 
     override func doInBackground() -> Any? {
@@ -87,13 +87,13 @@ final class SaveGpxTask: OAAsyncTask {
 
     override func onPostExecute(result: Any?) {
         guard let result = result as? SaveGpxTaskResult else {
-            listener?.gpxSaved(error: localizedString("error_reading_gpx"), savedPath: nil)
-            listener?.gpxSavingFinished(warning: localizedString("error_reading_gpx"))
+            listener?.onGpxSaved(error: localizedString("error_reading_gpx"), savedPath: nil)
+            listener?.onGpxSavingFinished(warning: [localizedString("error_reading_gpx")])
             return
         }
 
-        listener?.gpxSaved(error: result.writeError, savedPath: result.savedPath)
-        listener?.gpxSavingFinished(warning: result.warning)
+        listener?.onGpxSaved(error: result.writeError, savedPath: result.savedPath)
+        listener?.onGpxSavingFinished(warning: [result.warning].compactMap { $0 })
     }
 
     // MARK: - Destination

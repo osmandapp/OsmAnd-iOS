@@ -1,5 +1,5 @@
 //
-//  SelectWaypointsViewController.swift
+//  SelectPointsViewController.swift
 //  OsmAnd Maps
 //
 //  Created by Vitaliy Sova on 11.06.2026.
@@ -9,11 +9,11 @@
 import UIKit
 import OsmAndShared
 
-protocol SelectWaypointsDelegate: AnyObject {
+protocol SelectPointsDelegate: AnyObject {
     func onPointsSelected(_ trackItem: ImportTrackItem, selectedPoints: [WptPt])
 }
 
-final class SelectWaypointsViewController: OABaseButtonsViewController {
+final class SelectPointsViewController: OABaseButtonsViewController {
 
     private enum RowKey: String {
         case infoDescr
@@ -46,7 +46,7 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
         }
     }
 
-    weak var delegate: SelectWaypointsDelegate?
+    weak var delegate: SelectPointsDelegate?
 
     private let track: ImportTrackItem
     private let allPoints: [WptPt]
@@ -236,7 +236,7 @@ final class SelectWaypointsViewController: OABaseButtonsViewController {
 
 // MARK: - Table Data
 
-private extension SelectWaypointsViewController {
+private extension SelectPointsViewController {
     func appendInfoSection() {
         let section = tableData.createNewSection()
 
@@ -278,7 +278,7 @@ private extension SelectWaypointsViewController {
 
 // MARK: - Cell Configuration
 
-private extension SelectWaypointsViewController {
+private extension SelectPointsViewController {
     func configuredSimpleCell(for item: OATableRowData, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
         cell.leftIconVisibility(false)
@@ -397,7 +397,7 @@ private extension SelectWaypointsViewController {
 
 // MARK: - Setup & Helpers
 
-private extension SelectWaypointsViewController {
+private extension SelectPointsViewController {
     func setupTable() {
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.isEditing = true
@@ -416,7 +416,7 @@ private extension SelectWaypointsViewController {
     func makeTopDescription() -> NSAttributedString {
         let text = String(format: localizedString("selected_waypoints_descr"), track.name)
         let baseFont = UIFont.preferredFont(forTextStyle: .body)
-        let boldFont = UIFont.systemFont(ofSize: baseFont.pointSize, weight: .semibold)
+        let boldFont = baseFont.fontDescriptor.withSymbolicTraits(.traitBold).map { UIFont(descriptor: $0, size: 0) } ?? baseFont
 
         let result = NSMutableAttributedString(
             string: text,
@@ -441,7 +441,7 @@ private extension SelectWaypointsViewController {
 
 // MARK: - Groups
 
-private extension SelectWaypointsViewController {
+private extension SelectPointsViewController {
     private func makeGroups(from points: [WptPt]) -> [WaypointGroup] {
         var groupedItems: [String: [OAGpxWptItem]] = [:]
         let defaultName = localizedString("shared_string_gpx_points")
@@ -493,7 +493,7 @@ private extension SelectWaypointsViewController {
 
 // MARK: - Points
 
-private extension SelectWaypointsViewController {
+private extension SelectPointsViewController {
     func togglePoint(at indexPath: IndexPath) {
         guard let group = group(at: indexPath),
               let wptItem = tableData.item(for: indexPath).obj(forKey: RowObjKey.wptItem) as? OAGpxWptItem,
@@ -515,7 +515,7 @@ private extension SelectWaypointsViewController {
 
 // MARK: - Actions
 
-private extension SelectWaypointsViewController {
+private extension SelectPointsViewController {
     @objc func onSelectAllAction() {
         selectedPoints = selectedPoints.count == allPoints.count ? [] : Set(allPoints)
         updateSelectAllButtonTitle()
@@ -576,7 +576,7 @@ private extension SelectWaypointsViewController {
 
 // MARK: - Distance And Direction
 
-private extension SelectWaypointsViewController {
+private extension SelectPointsViewController {
     func updateWaypointDistanceAndDirection(for item: OAGpxWptItem) {
         guard let point = item.point,
               let location = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation else {

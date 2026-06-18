@@ -1633,11 +1633,11 @@
 		CE7AC1AB2FE02A2600495411 /* TrackPreviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19D2FE02A2600495411 /* TrackPreviewManager.swift */; };
 		CE7AC1AC2FE02A2600495411 /* TrackStubPreviewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC19E2FE02A2600495411 /* TrackStubPreviewRenderer.swift */; };
 		CE7AC1AD2FE02A2600495411 /* CollectTracksTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A02FE02A2600495411 /* CollectTracksTask.swift */; };
-		CE7AC1AE2FE02A2600495411 /* SaveGpxTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A12FE02A2600495411 /* SaveGpxTask.swift */; };
+		CE7AC1AE2FE02A2600495411 /* SaveGpxAsyncTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A12FE02A2600495411 /* SaveGpxAsyncTask.swift */; };
 		CE7AC1AF2FE02A2600495411 /* SaveImportedGpxHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A22FE02A2600495411 /* SaveImportedGpxHelper.swift */; };
 		CE7AC1B02FE02A2600495411 /* SaveTracksTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */; };
 		CE7AC1B12FE02A2600495411 /* ImportTracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */; };
-		CE7AC1B22FE02A2600495411 /* SelectWaypointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A62FE02A2600495411 /* SelectWaypointsViewController.swift */; };
+		CE7AC1B22FE02A2600495411 /* SelectPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */; };
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
 		CEAF08182FD91C4A0048A74A /* FolderCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */; };
 		CEAF08192FD91C4A0048A74A /* FolderCardsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF08172FD91C4A0048A74A /* FolderCardsCell.swift */; };
@@ -5586,11 +5586,11 @@
 		CE7AC19D2FE02A2600495411 /* TrackPreviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPreviewManager.swift; sourceTree = "<group>"; };
 		CE7AC19E2FE02A2600495411 /* TrackStubPreviewRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStubPreviewRenderer.swift; sourceTree = "<group>"; };
 		CE7AC1A02FE02A2600495411 /* CollectTracksTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectTracksTask.swift; sourceTree = "<group>"; };
-		CE7AC1A12FE02A2600495411 /* SaveGpxTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGpxTask.swift; sourceTree = "<group>"; };
+		CE7AC1A12FE02A2600495411 /* SaveGpxAsyncTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGpxAsyncTask.swift; sourceTree = "<group>"; };
 		CE7AC1A22FE02A2600495411 /* SaveImportedGpxHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImportedGpxHelper.swift; sourceTree = "<group>"; };
 		CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveTracksTask.swift; sourceTree = "<group>"; };
 		CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTracksViewController.swift; sourceTree = "<group>"; };
-		CE7AC1A62FE02A2600495411 /* SelectWaypointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectWaypointsViewController.swift; sourceTree = "<group>"; };
+		CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPointsViewController.swift; sourceTree = "<group>"; };
 		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
 		CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCardCollectionViewCell.swift; sourceTree = "<group>"; };
 		CEAF08172FD91C4A0048A74A /* FolderCardsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCardsCell.swift; sourceTree = "<group>"; };
@@ -10652,7 +10652,7 @@
 			isa = PBXGroup;
 			children = (
 				CE7AC1A02FE02A2600495411 /* CollectTracksTask.swift */,
-				CE7AC1A12FE02A2600495411 /* SaveGpxTask.swift */,
+				CE7AC1A12FE02A2600495411 /* SaveGpxAsyncTask.swift */,
 				CE7AC1A22FE02A2600495411 /* SaveImportedGpxHelper.swift */,
 				CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */,
 			);
@@ -10665,7 +10665,7 @@
 				CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */,
 				CE7AC1A42FE02A2600495411 /* Tasks */,
 				CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */,
-				CE7AC1A62FE02A2600495411 /* SelectWaypointsViewController.swift */,
+				CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */,
 			);
 			path = Import;
 			sourceTree = "<group>";
@@ -17310,11 +17310,11 @@
 				CE7AC1AB2FE02A2600495411 /* TrackPreviewManager.swift in Sources */,
 				CE7AC1AC2FE02A2600495411 /* TrackStubPreviewRenderer.swift in Sources */,
 				CE7AC1AD2FE02A2600495411 /* CollectTracksTask.swift in Sources */,
-				CE7AC1AE2FE02A2600495411 /* SaveGpxTask.swift in Sources */,
+				CE7AC1AE2FE02A2600495411 /* SaveGpxAsyncTask.swift in Sources */,
 				CE7AC1AF2FE02A2600495411 /* SaveImportedGpxHelper.swift in Sources */,
 				CE7AC1B02FE02A2600495411 /* SaveTracksTask.swift in Sources */,
 				CE7AC1B12FE02A2600495411 /* ImportTracksViewController.swift in Sources */,
-				CE7AC1B22FE02A2600495411 /* SelectWaypointsViewController.swift in Sources */,
+				CE7AC1B22FE02A2600495411 /* SelectPointsViewController.swift in Sources */,
 				DA5A817926C563A700F274C7 /* OAMapButtonsHelper.m in Sources */,
 				27E316872E716901007172DA /* BaseSwitchAppModeAction.swift in Sources */,
 				27E316882E716901007172DA /* PreviousAppProfileAction.swift in Sources */,

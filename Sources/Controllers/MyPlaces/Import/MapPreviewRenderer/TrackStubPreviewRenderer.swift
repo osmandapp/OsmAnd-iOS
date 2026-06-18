@@ -36,7 +36,7 @@ final class TrackStubPreviewRenderer: NSObject {
         path.lineCapStyle = .round
 
         let step = max(1, points.count / 250)
-        for index in Swift.stride(from: 0, to: points.count, by: step) {
+        for index in stride(from: 0, to: points.count, by: step) {
             let mappedPoint = mapPoint(
                 lat: points[index].lat,
                 lon: points[index].lon,
@@ -80,14 +80,6 @@ final class TrackStubPreviewRenderer: NSObject {
             x: originX + CGFloat((lon - bounds.left) * scale),
             y: originY + CGFloat((bounds.top - lat) * scale)
         )
-    }
-
-    private static func color(fromARGB argb: Int32) -> UIColor {
-        let alpha = CGFloat((argb >> 24) & 0xFF) / 255
-        let red = CGFloat((argb >> 16) & 0xFF) / 255
-        let green = CGFloat((argb >> 8) & 0xFF) / 255
-        let blue = CGFloat(argb & 0xFF) / 255
-        return UIColor(red: red, green: green, blue: blue, alpha: alpha > 0 ? alpha : 1)
     }
     
     // MARK: - Public API
@@ -154,7 +146,7 @@ final class TrackStubPreviewRenderer: NSObject {
                     segment: segment,
                     defaultColor: trackColor
                 )
-                Self.color(fromARGB: color).setStroke()
+                UIColor(argb: Int(color)).setStroke()
                 path.stroke()
             }
         }

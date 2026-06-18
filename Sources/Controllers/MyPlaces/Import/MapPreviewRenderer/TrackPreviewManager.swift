@@ -19,7 +19,7 @@ final class TrackPreviewManager {
         for item in items {
             guard item.previewImage == nil, item.bitmapDrawer == nil else { continue }
 
-            let drawer = TrackBitmapDrawer(params: params, gpxFile: item.gpxFile)
+            let drawer = TrackBitmapDrawer(params: params, gpxFile: item.selectedGpxFile)
             drawer.defaultTrackColor = TrackPreviewColorHelper.appDefaultTrackColor()
 
             let listener = TrackPreviewDrawerDelegate(item: item, onUpdate: onUpdate)

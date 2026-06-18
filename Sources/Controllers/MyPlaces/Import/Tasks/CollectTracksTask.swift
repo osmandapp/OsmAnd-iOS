@@ -152,7 +152,7 @@ final class CollectTracksTask: OAAsyncTask {
         for item in items {
             guard !isCancelled() else { return nil }
 
-            for waypoint in item.gpxFile.getAllSegmentsPoints() {
+            for waypoint in item.selectedGpxFile.getAllSegmentsPoints() {
                 guard !isCancelled() else { return nil }
 
                 let distance = KMapUtils.shared.getDistance(

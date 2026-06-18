@@ -16,7 +16,7 @@ private struct SavedTrackResult {
 
 private struct SaveTracksTaskResult {
     let trackResults: [SavedTrackResult]
-    var firstWarning: String? { trackResults.compactMap(\.error).first }
+    var warnings: [String] { trackResults.compactMap(\.error) }
 }
 
 final class SaveTracksTask: OAAsyncTask {
@@ -35,7 +35,7 @@ final class SaveTracksTask: OAAsyncTask {
     }
 
     override func onPreExecute() {
-        listener?.gpxSavingStarted()
+        listener?.onGpxSavingStarted()
     }
 
     override func doInBackground() -> Any? {
@@ -58,15 +58,15 @@ final class SaveTracksTask: OAAsyncTask {
 
     override func onPostExecute(result: Any?) {
         guard let result = result as? SaveTracksTaskResult else {
-            listener?.gpxSaved(error: localizedString("error_reading_gpx"), savedPath: nil)
-            listener?.gpxSavingFinished(warning: localizedString("error_reading_gpx"))
+            listener?.onGpxSaved(error: localizedString("error_reading_gpx"), savedPath: nil)
+            listener?.onGpxSavingFinished(warning: [localizedString("error_reading_gpx")])
             return
         }
 
         for trackResult in result.trackResults {
-            listener?.gpxSaved(error: trackResult.error, savedPath: trackResult.savedPath)
+            listener?.onGpxSaved(error: trackResult.error, savedPath: trackResult.savedPath)
         }
-        listener?.gpxSavingFinished(warning: result.firstWarning)
+        listener?.onGpxSavingFinished(warning: result.warnings)
     }
 
     // MARK: - Saving
@@ -85,7 +85,7 @@ final class SaveTracksTask: OAAsyncTask {
     }
 
     private func saveTrackItem(_ trackItem: ImportTrackItem, fileManager: FileManager) -> SavedTrackResult {
-        let gpxToSave = trackItem.gpxFile
+        let gpxToSave = trackItem.selectedGpxFile
         gpxToSave.addPoints(collection: trackItem.selectedPoints)
 
         let destinationPath = uniqueDestinationPath(for: trackItem.name, fileManager: fileManager)

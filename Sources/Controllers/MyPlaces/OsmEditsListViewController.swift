@@ -72,7 +72,7 @@ final class OsmEditsListViewController: UIViewController {
     private let estimatedRowHeight: CGFloat = 48.0
     private let poiTypeTag = "poi_type_tag"
     
-    private let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, OsmPoint> { cell, indexPath, item in
+    private let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, OsmPoint> { cell, _, item in
         let translatedNames = OAPOIHelper.sharedInstance().getAllTranslatedNames(false)
         var poiType: OAPOIType?
         if let poiTypeString = item.poiType {
@@ -82,11 +82,14 @@ final class OsmEditsListViewController: UIViewController {
         content.image = poiType?.icon().resizedTemplateImage(with: imageSize) ?? .icCustomOsmNoteUnresolved.withRenderingMode(.alwaysOriginal)
         content.text = item.title
         content.secondaryText = item.descr
+        var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
+        backgroundConfig.backgroundColor = .groupBg
+        cell.backgroundConfiguration = backgroundConfig
         cell.contentConfiguration = content
         cell.accessories = [.multiselect()]
     }
     
-    private let headerCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Header> { (cell, indexPath, headerItem) in
+    private let headerCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Header> { (cell, _, headerItem) in
         var content = cell.defaultContentConfiguration()
         content.text = headerItem.title
         content.textProperties.color = .textColorPrimary
@@ -98,7 +101,7 @@ final class OsmEditsListViewController: UIViewController {
         cell.tintColor = .iconColorActive
     }
     
-    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, indexPath, headerItem) in
+    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, _, headerItem) in
         cell.sortButton.setImage(headerItem.sortMode.image, for: .normal)
         cell.sortButton.menu = headerItem.menu
     }

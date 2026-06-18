@@ -235,7 +235,9 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         if let viewController = viewController(for: selectedTab) {
             pageViewController?.setViewControllers([viewController], direction: .forward, animated: true)
         }
-        setupNavbarTitle(with: selectedTab)
+        DispatchQueue.main.async {
+            self.setupNavbarTitle(with: self.selectedTab)
+        }
     }
     
     private func initialSelectedTab() {

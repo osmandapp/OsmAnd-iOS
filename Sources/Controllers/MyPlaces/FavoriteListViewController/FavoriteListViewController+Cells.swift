@@ -98,7 +98,7 @@ extension FavoriteListViewController {
     }
 
     private func favoriteSecondaryAttributedText(for favorite: FavoritePointRow, includesGroupName: Bool) -> NSAttributedString {
-        let font = UIFont.systemFont(ofSize: 15)
+        let font = UIFont.scaledSystemFont(ofSize: 15)
         let directionAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: UIColor.textColorDirectionActive

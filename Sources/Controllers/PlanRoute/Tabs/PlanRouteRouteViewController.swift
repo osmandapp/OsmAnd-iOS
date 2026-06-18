@@ -61,6 +61,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.delegate = self
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
+        tableView.alwaysBounceVertical = true
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
         tableView.sectionHeaderTopPadding = 0
@@ -564,8 +565,7 @@ final class PlanRoutePointCell: UITableViewCell {
 
     func configure(with point: PlanRoutePoint, tintColor: UIColor) {
         numberLabel.text = "\(point.index + 1)"
-        numberLabel.textColor = tintColor
-        numberContainer.layer.borderColor = tintColor.cgColor
+        numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name
         subtitleLabel.text = subtitle(for: point)
     }
@@ -579,12 +579,11 @@ final class PlanRoutePointCell: UITableViewCell {
         deleteButton.tintColor = .systemRed
         deleteButton.addTarget(self, action: #selector(onDeleteTapped), for: .touchUpInside)
 
-        numberContainer.backgroundColor = .clear
         numberContainer.layer.cornerRadius = Self.circleSize / 2
-        numberContainer.layer.borderWidth = 1.5
-        numberContainer.layer.borderColor = UIColor.iconColorActive.cgColor
+        numberContainer.layer.borderWidth = 2
+        numberContainer.layer.borderColor = UIColor.white.cgColor
         numberLabel.font = .scaledSystemFont(ofSize: 13, weight: .semibold)
-        numberLabel.textColor = .iconColorActive
+        numberLabel.textColor = .white
         numberLabel.textAlignment = .center
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
         numberContainer.addSubview(numberLabel)

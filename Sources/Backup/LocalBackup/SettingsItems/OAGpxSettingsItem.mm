@@ -69,6 +69,15 @@
     return [self.filePath.lastPathComponent stringByDeletingPathExtension];
 }
 
+- (long)infoModifiedTime
+{
+    OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] getGPXItem:self.filePath];
+    if (!dataItem)
+        return 0;
+    NSNumber *time = [dataItem getParameterParameter:OASGpxParameter.appearanceLastModifiedTime];
+    return time ? time.longValue : 0;
+}
+
 - (void)remove
 {
     [super remove];

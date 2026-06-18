@@ -51,6 +51,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (long) getEstimatedSize;
 - (NSString *)getPublicName;
+- (long)infoModifiedTime;
 
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;

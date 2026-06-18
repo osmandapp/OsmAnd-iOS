@@ -407,7 +407,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleAddRoutePoint() {
-        print("[PlanRoute] Add route point tapped")
+        dataProvider.addRoutePoint()
+        reloadData()
     }
 
     private func handleMenuAction(_ action: PlanRouteMenuAction) {

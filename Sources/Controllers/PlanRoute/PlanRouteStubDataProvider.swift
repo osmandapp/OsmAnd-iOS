@@ -78,6 +78,8 @@ final class PlanRouteStubDataProvider: PlanRouteDataProvider {
         OAApplicationMode.values()
     }
 
+    func addRoutePoint() {}
+
     func deleteRoutePoint(at index: Int) {}
 
     func deleteSegment(pointIndexes: [Int]) {}

@@ -179,6 +179,7 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
 
+    func addRoutePoint()
     func deleteRoutePoint(at index: Int)
     func deleteSegment(pointIndexes: [Int])
     func startNewSegment()

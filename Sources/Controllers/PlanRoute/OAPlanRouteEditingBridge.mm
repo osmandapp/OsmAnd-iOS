@@ -19,6 +19,7 @@
 #import "OAMapUtils.h"
 #import "OAGpxData.h"
 #import "OsmAndSharedWrapper.h"
+#import "OAAddPointCommand.h"
 #import "OARemovePointCommand.h"
 #import "OAReorderPointCommand.h"
 #import "OAChangeRouteModeCommand.h"
@@ -200,6 +201,16 @@
 - (NSArray<OAApplicationMode *> *)availableModes
 {
     return [OAApplicationMode values];
+}
+
+- (void)addCenterPoint
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    [ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer center:YES]];
+    [layer updateLayer];
 }
 
 - (void)prepareNewRoute

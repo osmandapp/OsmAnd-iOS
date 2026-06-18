@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)prepareNewRoute;
 - (void)openTrackWithFilePath:(NSString *)filePath;
+- (void)addCenterPoint;
 
 - (NSArray<OAPlanRouteSegmentData *> *)buildSegments;
 - (NSArray<OAApplicationMode *> *)availableModes;

@@ -67,6 +67,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.availableModes()
     }
 
+    func addRoutePoint() {
+        bridge.addCenterPoint()
+    }
+
     func deleteRoutePoint(at index: Int) {
         bridge.deletePoint(at: index)
     }

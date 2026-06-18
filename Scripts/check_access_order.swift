@@ -82,6 +82,8 @@ private struct TypeContext {
     let bodyDepth: Int
     var lastAccessGroup: [MemberBucket: AccessGroup] = [:]
     var sawWeakProperty: [AccessGroup: Set<MemberBucket>] = [:]
+    var sawAccessorProperty: [AccessGroup: Set<MemberBucket>] = [:]
+    var sawPostWeakProperty: [AccessGroup: Set<MemberBucket>] = [:]
 
     mutating func markAccessGroup(_ accessGroup: AccessGroup, bucket: MemberBucket) {
         let current = lastAccessGroup[bucket]
@@ -92,6 +94,14 @@ private struct TypeContext {
 
     mutating func markWeakProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) {
         sawWeakProperty[accessGroup, default: []].insert(bucket)
+    }
+
+    mutating func markAccessorProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) {
+        sawAccessorProperty[accessGroup, default: []].insert(bucket)
+    }
+
+    mutating func markPostWeakProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) {
+        sawPostWeakProperty[accessGroup, default: []].insert(bucket)
     }
 
     func hasSeenMoreRestrictiveAccessGroup(
@@ -107,12 +117,23 @@ private struct TypeContext {
     func hasSeenWeakProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) -> Bool {
         sawWeakProperty[accessGroup]?.contains(bucket) == true
     }
+
+    func hasSeenAccessorProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) -> Bool {
+        sawAccessorProperty[accessGroup]?.contains(bucket) == true
+    }
+
+    func hasSeenPostWeakProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) -> Bool {
+        sawPostWeakProperty[accessGroup]?.contains(bucket) == true
+    }
 }
 
 private struct MemberDeclaration {
     let bucket: MemberBucket
     let accessGroup: AccessGroup
     let isWeakProperty: Bool
+    let isLazyProperty: Bool
+    let isAccessorProperty: Bool
+    let canFollowWeakProperty: Bool
 }
 
 private func accessGroup(from tokens: [String]) -> AccessGroup {
@@ -263,7 +284,44 @@ private func tokens(before declarationKeyword: String, in code: String) -> [Stri
     return prefix.split { !$0.isLetter && !$0.isNumber && $0 != "_" }.map(String.init)
 }
 
-private func memberDeclaration(from code: String, pendingAttributes: [String]) -> MemberDeclaration? {
+private func propertyCanFollowWeakProperty(
+    declarationCode: String,
+    lineOffset: Int,
+    lines: [String]
+) -> Bool {
+    guard let openingBrace = declarationCode.firstIndex(of: "{") else {
+        return false
+    }
+
+    let declarationPrefix = declarationCode[..<openingBrace]
+    if !declarationPrefix.contains("=") {
+        return true
+    }
+
+    var accessorCode = String(declarationCode[openingBrace...])
+    var depth = braceDelta(in: accessorCode)
+    var offset = lineOffset + 1
+    var inBlockComment = false
+
+    while depth > 0, offset < lines.count {
+        let code = codeWithoutCommentsAndStrings(
+            from: lines[offset],
+            inBlockComment: &inBlockComment
+        )
+        accessorCode += "\n" + code
+        depth += braceDelta(in: code)
+        offset += 1
+    }
+
+    let observerPattern = #"(^|[^A-Za-z0-9_])(willSet|didSet)([^A-Za-z0-9_]|$)"#
+    return accessorCode.range(of: observerPattern, options: .regularExpression) != nil
+}
+
+private func memberDeclaration(
+    from code: String,
+    pendingAttributes: [String],
+    propertyCanFollowWeak: Bool
+) -> MemberDeclaration? {
     let combinedAttributes = attributeNames(in: (pendingAttributes + [code]).joined(separator: "\n"))
     if !combinedAttributes.isDisjoint(with: ignoredAttributeNames) {
         return nil
@@ -272,11 +330,15 @@ private func memberDeclaration(from code: String, pendingAttributes: [String]) -
     if let propertyTokens = tokens(before: "var|let", in: code) {
         let isTypeMember = propertyTokens.contains("static") || propertyTokens.contains("class")
         let accessGroup = accessGroup(from: propertyTokens)
+        let isLazyProperty = propertyTokens.contains("lazy")
 
         return MemberDeclaration(
             bucket: isTypeMember ? .typeProperty : .instanceProperty,
             accessGroup: accessGroup,
-            isWeakProperty: propertyTokens.contains("weak")
+            isWeakProperty: propertyTokens.contains("weak"),
+            isLazyProperty: isLazyProperty,
+            isAccessorProperty: propertyCanFollowWeak,
+            canFollowWeakProperty: propertyCanFollowWeak || isLazyProperty
         )
     }
 
@@ -291,7 +353,10 @@ private func memberDeclaration(from code: String, pendingAttributes: [String]) -
         return MemberDeclaration(
             bucket: isTypeMember ? .typeMethod : .instanceMethod,
             accessGroup: accessGroup,
-            isWeakProperty: false
+            isWeakProperty: false,
+            isLazyProperty: false,
+            isAccessorProperty: false,
+            canFollowWeakProperty: false
         )
     }
 
@@ -327,19 +392,55 @@ private func check(filePath: String) -> Int {
             pendingAttributes.append(trimmedCode)
         } else if !trimmedCode.isEmpty, !trimmedCode.hasPrefix("#") {
             if contexts.last?.bodyDepth == braceDepth,
-               let member = memberDeclaration(from: trimmedCode, pendingAttributes: pendingAttributes) {
+               let member = memberDeclaration(
+                   from: trimmedCode,
+                   pendingAttributes: pendingAttributes,
+                   propertyCanFollowWeak: propertyCanFollowWeakProperty(
+                       declarationCode: trimmedCode,
+                       lineOffset: offset,
+                       lines: lines
+                   )
+               ) {
                 if member.bucket == .instanceProperty || member.bucket == .typeProperty {
                     if member.isWeakProperty {
+                        if contexts[contexts.count - 1].hasSeenPostWeakProperty(
+                            member.bucket,
+                            accessGroup: member.accessGroup
+                        ) {
+                            print("\(filePath):\(lineNumber):1: warning: Weak \(member.accessGroup.displayName) \(member.bucket.displayName) should be declared before lazy, computed, or observed \(member.bucket.pluralDisplayName) (property_access_order)")
+                            violationCount += 1
+                        }
                         contexts[contexts.count - 1].markWeakProperty(
                             member.bucket,
                             accessGroup: member.accessGroup
                         )
-                    } else if contexts[contexts.count - 1].hasSeenWeakProperty(
+                    } else if member.isLazyProperty,
+                              contexts[contexts.count - 1].hasSeenAccessorProperty(
+                                member.bucket,
+                                accessGroup: member.accessGroup
+                              ) {
+                        print("\(filePath):\(lineNumber):1: warning: Lazy \(member.accessGroup.displayName) \(member.bucket.displayName) should be declared before computed or observed \(member.bucket.pluralDisplayName) (property_access_order)")
+                        violationCount += 1
+                    } else if !member.canFollowWeakProperty,
+                              contexts[contexts.count - 1].hasSeenWeakProperty(
                         member.bucket,
                         accessGroup: member.accessGroup
                     ) {
                         print("\(filePath):\(lineNumber):1: warning: Non-weak \(member.accessGroup.displayName) \(member.bucket.displayName) should be declared before weak \(member.bucket.pluralDisplayName) (property_access_order)")
                         violationCount += 1
+                    }
+
+                    if member.isAccessorProperty {
+                        contexts[contexts.count - 1].markAccessorProperty(
+                            member.bucket,
+                            accessGroup: member.accessGroup
+                        )
+                    }
+                    if member.canFollowWeakProperty, !member.isWeakProperty {
+                        contexts[contexts.count - 1].markPostWeakProperty(
+                            member.bucket,
+                            accessGroup: member.accessGroup
+                        )
                     }
                 }
 

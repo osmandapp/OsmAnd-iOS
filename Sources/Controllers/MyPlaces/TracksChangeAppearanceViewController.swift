@@ -82,7 +82,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             self.tracks = tracks
             self.initialData = Self.buildAppearanceData()
         case .folder(let folder):
-            let dirItem = GpxDbHelper.shared.getGpxDirItem(file: folder.getDirFile())
+            let dirItem = folder.dirItem ?? GpxDbHelper.shared.getGpxDirItem(file: folder.getDirFile())
+            folder.dirItem = dirItem
             self.folder = folder
             self.dirItem = dirItem
             self.tracks = Set(folder.getTrackItems())
@@ -263,7 +264,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             applyRow.cellType = OASearchMoreCell.reuseIdentifier
             applyRow.key = RowKey.applyExistingTracksRowKey.rawValue
             applyRow.title = applyExistingTracksTitle()
-            applyRow.setObj(hasAppearanceChanges(), forKey: Self.isEnabledValue)
+            applyRow.setObj(hasAppearanceChanges() && !tracks.isEmpty, forKey: Self.isEnabledValue)
         }
     }
     
@@ -445,7 +446,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 }
             }
         } else if item.key == RowKey.applyExistingTracksRowKey.rawValue {
-            guard hasAppearanceChanges() else { return }
+            guard hasAppearanceChanges(), !tracks.isEmpty else { return }
             saveFolderDefaultAppearance(updateExisting: true, dismissOnFinish: false)
         }
     }
@@ -533,8 +534,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             if data.shouldResetParameter(parameter) {
                 dirItem.setParameter(parameter: parameter, value: nil)
             } else {
-                let value = data.rawParameter(for: parameter)
-                dirItem.setParameter(parameter: parameter, value: value)
+                dirItem.setParameter(parameter: parameter, value: folderDefaultValue(for: parameter))
             }
         }
         
@@ -578,7 +578,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     private func configureShowArrows() {
         if folder != nil {
-            selectedShowArrows = data.getParameter(for: .showArrows)
+            selectedShowArrows = booleanNumber(for: .showArrows)?.boolValue
             return
         }
 
@@ -589,7 +589,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
     
     private func configureShowStartFinish() {
         if folder != nil {
-            selectedShowStartFinish = data.getParameter(for: .showStartFinish)
+            selectedShowStartFinish = booleanNumber(for: .showStartFinish)?.boolValue
             return
         }
         
@@ -616,7 +616,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         switch type {
         case .trackSolid:
             if folder != nil {
-                let color: Int? = data.getParameter(for: .color)
+                let color = intValue(for: .color)
                 configureLineColors(color: color, updateAppearanceData: false)
                 isColorSelected = true
                 isSolidColorSelected = true
@@ -800,6 +800,27 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         case let value as Double: return value
         case let value as NSNumber: return value.doubleValue
         default: return nil
+        }
+    }
+
+    private func booleanNumber(for parameter: GpxParameter) -> NSNumber? {
+        switch data.rawParameter(for: parameter) {
+        case let value as Bool: return NSNumber(value: value)
+        case let value as NSNumber: return value
+        default: return nil
+        }
+    }
+
+    private func folderDefaultValue(for parameter: GpxParameter) -> Any? {
+        switch parameter {
+        case .color, .splitType:
+            return intValue(for: parameter).map { KotlinInt(integerLiteral: $0) }
+        case .showArrows, .showStartFinish:
+            return booleanNumber(for: parameter).map { KotlinBoolean(bool: $0.boolValue) }
+        case .splitInterval:
+            return doubleValue(for: parameter)
+        default:
+            return data.rawParameter(for: parameter)
         }
     }
     
@@ -1261,7 +1282,7 @@ extension TracksChangeAppearanceViewController: OACollectionCellDelegate {
             selectedItem = selectedColor
         }
         if selectedItem == nil {
-            if folder != nil, let color: Int = data.getParameter(for: .color) {
+            if folder != nil, let color = intValue(for: .color) {
                 selectedItem = appearanceCollection.getColorItem(withValue: Int32(color))
             } else if folder != nil {
                 selectedItem = appearanceCollection.defaultLineColorItem()

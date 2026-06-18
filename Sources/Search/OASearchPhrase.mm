@@ -132,28 +132,26 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
             continue;
         }
         NSString *key = [w lowercaseString];
-        if (weights[key] == nil)
+        if (weights[w] == nil)
         {
             NSNumber *cached = [sCommonWordWeightCache objectForKey:key];
             if (cached)
             {
-                weights[key] = cached;
+                weights[w] = cached;
             }
             else
             {
                 int value = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString(key));
                 NSNumber *num = @(value);
-                weights[key] = num;
+                weights[w] = num;
                 [sCommonWordWeightCache setObject:num forKey:key];
             }
         }
     }
     [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2)
      {
-        NSString *k1 = [o1 lowercaseString];
-        NSString *k2 = [o2 lowercaseString];
-        int i1 = (int)weights[k1].integerValue;
-        int i2 = (int)weights[k2].integerValue;
+        int i1 = (int)weights[o1].integerValue;
+        int i2 = (int)weights[o2].integerValue;
         if (i1 != i2)
         {
             if (i1 == -1)

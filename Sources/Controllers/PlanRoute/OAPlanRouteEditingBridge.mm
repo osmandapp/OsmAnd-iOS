@@ -7,6 +7,7 @@
 //
 
 #import "OAPlanRouteEditingBridge.h"
+#import <CoreLocation/CoreLocation.h>
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -20,6 +21,7 @@
 #import "OAGpxData.h"
 #import "OsmAndSharedWrapper.h"
 #import "OAAddPointCommand.h"
+#import "OASplitPointsCommand.h"
 #import "OARemovePointCommand.h"
 #import "OAReorderPointCommand.h"
 #import "OAChangeRouteModeCommand.h"
@@ -57,7 +59,7 @@
 
 @end
 
-@interface OAPlanRouteEditingBridge ()
+@interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate>
 
 - (OAMeasurementToolLayer *)layer;
 - (OAMeasurementEditingContext *)editingContext;
@@ -220,6 +222,7 @@
         return;
     OAMeasurementEditingContext *ctx = [[OAMeasurementEditingContext alloc] init];
     layer.editingCtx = ctx;
+    layer.delegate = self;
     [ctx.commandManager setMeasurementLayer:layer];
     [layer updateLayer];
 }
@@ -250,6 +253,7 @@
     }
 
     layer.editingCtx = ctx;
+    layer.delegate = self;
     [ctx.commandManager setMeasurementLayer:layer];
     [ctx addPoints];
     [layer updateLayer];
@@ -378,7 +382,7 @@
                 groupDistance += legDistance;
             }
         }
-        NSString *name = point.name.length > 0 ? point.name : [NSString stringWithFormat:@"%@ %ld", OALocalizedString(@"shared_string_waypoint"), (long) (index + 1)];
+        NSString *name = point.name.length > 0 ? point.name : [NSString stringWithFormat:@"%@ - %ld", OALocalizedString(@"shared_string_point"), (long) (index + 1)];
         [points addObject:[[OAPlanRoutePointData alloc] initWithGlobalIndex:index
                                                                        name:name
                                                        distanceFromPrevious:legDistance
@@ -400,6 +404,16 @@
     [layer updateLayer];
 }
 
+- (void)movePointFrom:(NSInteger)from to:(NSInteger)to
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || from == to)
+        return;
+    [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to]];
+    [layer updateLayer];
+}
+
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes
 {
     OAMeasurementToolLayer *layer = [self layer];
@@ -418,9 +432,31 @@
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || ctx.getPointsCount == 0)
         return;
-    [ctx splitPoints:ctx.getBeforePoints.count after:YES];
+    ctx.selectedPointPosition = ctx.getPointsCount - 1;
+    [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES]];
+    ctx.selectedPointPosition = -1;
+    [layer updateLayer];
+}
+
+- (void)undo
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ![ctx.commandManager canUndo])
+        return;
+    [ctx.commandManager undo];
+    [layer updateLayer];
+}
+
+- (void)redo
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ![ctx.commandManager canRedo])
+        return;
+    [ctx.commandManager redo];
     [layer updateLayer];
 }
 
@@ -483,6 +519,27 @@
             [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to]];
     }
     [layer updateLayer];
+}
+
+#pragma mark - OAMeasurementLayerDelegate
+
+- (void)onMeasure:(double)distance bearing:(double)bearing
+{
+}
+
+- (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress
+{
+    if (longPress)
+        return;
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    layer.pressPointLocation = [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
+    [ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer center:NO]];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
 }
 
 @end

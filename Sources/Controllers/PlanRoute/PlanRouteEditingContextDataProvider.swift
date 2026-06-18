@@ -11,10 +11,13 @@ import UIKit
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     let mode: PlanRouteMode
 
+    var onDataChanged: (() -> Void)?
+
     private let bridge = OAPlanRouteEditingBridge()
 
     init(mode: PlanRouteMode = .newRoute, filePath: String? = nil) {
         self.mode = mode
+        bridge.onChange = { [weak self] in self?.onDataChanged?() }
         if mode.isEditTrack, let filePath {
             bridge.openTrack(withFilePath: filePath)
         } else {
@@ -69,6 +72,18 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func addRoutePoint() {
         bridge.addCenterPoint()
+    }
+
+    func undo() {
+        bridge.undo()
+    }
+
+    func redo() {
+        bridge.redo()
+    }
+
+    func moveRoutePoint(from: Int, to: Int) {
+        bridge.movePoint(from: from, to: to)
     }
 
     func deleteRoutePoint(at index: Int) {

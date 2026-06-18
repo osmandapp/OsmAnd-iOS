@@ -1626,9 +1626,11 @@
 "plan_route_no_points_descr" = "Tap anywhere on the map or use search to add the first points of your route.";
 "shared_string_sort" = "Sort";
 "shared_string_manual" = "Manual";
-"change_mode" = "Change mode";
-"set_single_mode" = "Set single mode";
+"shared_string_point" = "Point";
+"change_mode" = "Change route type";
+"set_single_mode" = "Set single route type";
 "delete_segment" = "Delete segment";
+"delete_section" = "Delete section";
 "coord_input_add_point" = "Add point";
 "point_num" = "Point %d";
 "points_count" = "Points:";

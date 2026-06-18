@@ -11,6 +11,8 @@ import UIKit
 final class PlanRouteStubDataProvider: PlanRouteDataProvider {
     let mode: PlanRouteMode
 
+    var onDataChanged: (() -> Void)?
+
     init(mode: PlanRouteMode = .newRoute) {
         self.mode = mode
     }
@@ -79,6 +81,12 @@ final class PlanRouteStubDataProvider: PlanRouteDataProvider {
     }
 
     func addRoutePoint() {}
+
+    func undo() {}
+
+    func redo() {}
+
+    func moveRoutePoint(from: Int, to: Int) {}
 
     func deleteRoutePoint(at index: Int) {}
 

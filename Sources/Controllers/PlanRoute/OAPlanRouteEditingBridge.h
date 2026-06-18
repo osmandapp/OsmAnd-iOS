@@ -45,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAPlanRouteEditingBridge : NSObject
 
+@property (nonatomic, copy, nullable) void (^onChange)(void);
+
 @property (nonatomic, readonly) BOOL hasContext;
 @property (nonatomic, readonly) BOOL hasPoints;
 @property (nonatomic, readonly) BOOL isAddNewSegmentAllowed;
@@ -57,11 +59,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)prepareNewRoute;
 - (void)openTrackWithFilePath:(NSString *)filePath;
 - (void)addCenterPoint;
+- (void)undo;
+- (void)redo;
 
 - (NSArray<OAPlanRouteSegmentData *> *)buildSegments;
 - (NSArray<OAApplicationMode *> *)availableModes;
 
 - (void)deletePointAtIndex:(NSInteger)index;
+- (void)movePointFrom:(NSInteger)from to:(NSInteger)to;
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)startNewSegment;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;

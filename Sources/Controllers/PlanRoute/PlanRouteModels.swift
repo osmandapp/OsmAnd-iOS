@@ -180,6 +180,9 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var availableModes: [OAApplicationMode] { get }
 
     func addRoutePoint()
+    func undo()
+    func redo()
+    func moveRoutePoint(from: Int, to: Int)
     func deleteRoutePoint(at index: Int)
     func deleteSegment(pointIndexes: [Int])
     func startNewSegment()
@@ -194,6 +197,7 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var hasChanges: Bool { get }
     var canUndo: Bool { get }
     var canRedo: Bool { get }
+    var onDataChanged: (() -> Void)? { get set }
 }
 
 protocol PlanRouteTabContent: AnyObject {

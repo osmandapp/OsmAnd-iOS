@@ -13,7 +13,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private enum Row {
         case profileGroup(PlanRouteProfileGroup, segment: PlanRouteSegment)
-        case point(PlanRoutePoint)
+        case point(PlanRoutePoint, color: UIColor)
         case empty
     }
 
@@ -56,9 +56,11 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private func setupTableView() {
         view.backgroundColor = .clear
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = .viewBg
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.isEditing = true
+        tableView.allowsSelectionDuringEditing = true
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.separatorLeftInset, bottom: 0, right: 0)
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.bottomContentInset, right: 0)
         tableView.sectionHeaderTopPadding = 0
@@ -82,7 +84,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         guard !segments.isEmpty else {
             return [SectionModel(headerTitle: localizedString("route_points"),
                                  headerSubtitle: nil,
-                                 headerMenu: nil,
+                                 headerMenu: makeRouteTypeMenu(pointIndex: 0),
                                  rows: [.empty],
                                  isStartNewSegment: false)]
         }
@@ -101,17 +103,12 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private func makeSection(for segment: PlanRouteSegment, multipleSegments: Bool) -> SectionModel {
         var rows: [Row] = []
-        if segment.multiMode {
-            for group in segment.groups {
-                if group.appMode != nil {
-                    rows.append(.profileGroup(group, segment: segment))
-                }
-                rows.append(contentsOf: group.points.map { Row.point($0) })
+        for group in segment.groups {
+            let color = group.appMode?.getProfileColor() ?? .iconColorActive
+            if segment.multiMode, group.appMode != nil {
+                rows.append(.profileGroup(group, segment: segment))
             }
-        } else {
-            for group in segment.groups {
-                rows.append(contentsOf: group.points.map { Row.point($0) })
-            }
+            rows.append(contentsOf: group.points.map { Row.point($0, color: color) })
         }
 
         let title: String
@@ -123,7 +120,8 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
         var subtitle: String?
         if segment.routed, !segment.multiMode, let mode = segment.singleMode {
-            subtitle = "\(mode.toHumanString()) • \(formattedDistance(segment.distance))"
+            let modeName = mode.toHumanString() ?? ""
+            subtitle = "\(modeName) • \(formattedDistance(segment.distance))"
         }
 
         return SectionModel(headerTitle: title,
@@ -162,33 +160,38 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private func makeGroupMenu(for group: PlanRouteProfileGroup, in segment: PlanRouteSegment) -> UIMenu {
         let groupIndexes = group.points.map { $0.index }
-        let changeMode = UIAction(title: localizedString("change_mode"),
-                                  subtitle: group.appMode?.toHumanString(),
-                                  image: group.appMode?.getIcon()) { [weak self] _ in
+        let changeRouteType = UIAction(title: localizedString("change_mode"),
+                                       subtitle: group.appMode?.toHumanString(),
+                                       image: group.appMode?.getIcon()) { [weak self] _ in
             self?.presentModePicker(pointIndex: group.lastPointIndex, wholeRoute: false)
         }
-        let saveAs = UIAction(title: localizedString("plan_route_save_as"),
-                              image: .templateImageNamed("ic_custom_save_to_file")) { [weak self] _ in
-            self?.dataSource?.saveSegment(pointIndexes: groupIndexes)
-        }
-        let deleteSegment = UIAction(title: localizedString("delete_segment"),
+        let deleteSection = UIAction(title: localizedString("delete_section"),
                                      image: .templateImageNamed("ic_custom_trash_outlined"),
                                      attributes: .destructive) { [weak self] _ in
             self?.deleteSegment(pointIndexes: groupIndexes)
         }
-        return UIMenu(children: [changeMode, makeSortMenu(pointIndexes: segment.pointIndexes), saveAs, deleteSegment])
+        return UIMenu(children: [changeRouteType, makeSortMenu(pointIndexes: groupIndexes), deleteSection])
+    }
+
+    private func makeRouteTypeMenu(pointIndex: Int) -> UIMenu {
+        let changeRouteType = UIAction(title: localizedString("change_mode"),
+                                       image: .templateImageNamed("ic_custom_point_to_point")) { [weak self] _ in
+            self?.presentModePicker(pointIndex: pointIndex, wholeRoute: true)
+        }
+        return UIMenu(children: [changeRouteType])
     }
 
     private func makeSortMenu(pointIndexes: [Int]) -> UIMenu {
+        let sortImage = UIImage(systemName: "arrow.up.arrow.down")
         let manual = UIAction(title: localizedString("shared_string_manual"),
-                              image: .templateImageNamed("ic_custom_direction_manual"),
+                              image: sortImage,
                               state: .on) { _ in }
         let doorToDoor = UIAction(title: localizedString("intermediate_items_sort_by_distance"),
                                   image: .templateImageNamed("ic_custom_sort_door_to_door")) { [weak self] _ in
             self?.dataSource?.sortDoorToDoor(pointIndexes: pointIndexes)
             self?.reloadData()
         }
-        return UIMenu(title: localizedString("shared_string_sort"), children: [manual, doorToDoor])
+        return UIMenu(title: localizedString("shared_string_sort"), image: sortImage, children: [manual, doorToDoor])
     }
 
     private func presentModePicker(pointIndex: Int, wholeRoute: Bool) {
@@ -226,7 +229,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func formattedDistance(_ meters: Double) -> String {
-        OAOsmAndFormatter.getFormattedDistance(Float(meters))
+        OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
     }
 }
 
@@ -266,11 +269,11 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
                            tintColor: mode?.getProfileColor() ?? .iconColorActive,
                            menu: makeGroupMenu(for: group, in: segment))
             return cell
-        case let .point(point):
+        case let .point(point, color):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRoutePointCell.cellReuseId, for: indexPath) as? PlanRoutePointCell else {
                 return UITableViewCell()
             }
-            cell.configure(with: point)
+            cell.configure(with: point, tintColor: color)
             cell.onDelete = { [weak self] in
                 self?.deletePoint(at: point.index)
             }
@@ -297,9 +300,65 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
             startNewSegment()
             return
         }
-        if case let .point(point) = section.rows[indexPath.row] {
+        if case let .point(point, _) = section.rows[indexPath.row] {
             dataSource?.selectRoutePoint(at: point.index)
         }
+    }
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        .none
+    }
+
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        false
+    }
+
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        guard !sections[indexPath.section].isStartNewSegment else { return false }
+        if case .point = sections[indexPath.section].rows[indexPath.row] {
+            return true
+        }
+        return false
+    }
+
+    func tableView(_ tableView: UITableView,
+                   targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+                   toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        let rows = sections[sourceIndexPath.section].rows
+        let pointRows = rows.indices.filter { if case .point = rows[$0] { return true } else { return false } }
+        guard let first = pointRows.first, let last = pointRows.last else { return sourceIndexPath }
+        if proposedDestinationIndexPath.section != sourceIndexPath.section {
+            let row = proposedDestinationIndexPath.section < sourceIndexPath.section ? first : last
+            return IndexPath(row: row, section: sourceIndexPath.section)
+        }
+        let clampedRow = min(max(proposedDestinationIndexPath.row, first), last)
+        return IndexPath(row: clampedRow, section: sourceIndexPath.section)
+    }
+
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let rows = sections[sourceIndexPath.section].rows
+        let pointGlobals: [Int] = rows.compactMap { row in
+            if case let .point(point, _) = row { return point.index }
+            return nil
+        }
+        let fromPosition = pointPosition(in: rows, beforeRow: sourceIndexPath.row)
+        let toPosition = pointPosition(in: rows, beforeRow: destinationIndexPath.row)
+        guard pointGlobals.indices.contains(fromPosition), pointGlobals.indices.contains(toPosition) else {
+            reloadData()
+            return
+        }
+        dataSource?.moveRoutePoint(from: pointGlobals[fromPosition], to: pointGlobals[toPosition])
+        reloadData()
+    }
+
+    private func pointPosition(in rows: [Row], beforeRow row: Int) -> Int {
+        var count = 0
+        for index in 0..<min(row, rows.count) {
+            if case .point = rows[index] {
+                count += 1
+            }
+        }
+        return count
     }
 }
 
@@ -345,7 +404,7 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "ellipsis")
         configuration.baseForegroundColor = .iconColorActive
-        configuration.background.backgroundColor = .groupBgColorSecondary
+        configuration.background.backgroundColor = UIColor.iconColorActive.withAlphaComponent(0.1)
         configuration.background.cornerRadius = Self.optionsButtonSize / 2
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true
@@ -413,7 +472,9 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "ellipsis")
         configuration.baseForegroundColor = .iconColorActive
-        configuration.background.backgroundColor = .groupBgColorSecondary
+        configuration.background.backgroundColor = .clear
+        configuration.background.strokeColor = .iconColorTertiary
+        configuration.background.strokeWidth = 1
         configuration.background.cornerRadius = Self.optionsButtonSize / 2
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true
@@ -491,7 +552,6 @@ final class PlanRoutePointCell: UITableViewCell {
     private let numberContainer = UIView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
-    private let dragHandleView = UIImageView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -502,8 +562,10 @@ final class PlanRoutePointCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with point: PlanRoutePoint) {
+    func configure(with point: PlanRoutePoint, tintColor: UIColor) {
         numberLabel.text = "\(point.index + 1)"
+        numberLabel.textColor = tintColor
+        numberContainer.layer.borderColor = tintColor.cgColor
         titleLabel.text = point.name
         subtitleLabel.text = subtitle(for: point)
     }
@@ -511,15 +573,18 @@ final class PlanRoutePointCell: UITableViewCell {
     private func setupCell() {
         backgroundColor = .groupBg
         selectionStyle = .none
+        showsReorderControl = true
 
         deleteButton.setImage(UIImage(systemName: "minus.circle.fill"), for: .normal)
         deleteButton.tintColor = .systemRed
         deleteButton.addTarget(self, action: #selector(onDeleteTapped), for: .touchUpInside)
 
-        numberContainer.backgroundColor = .iconColorActive
+        numberContainer.backgroundColor = .clear
         numberContainer.layer.cornerRadius = Self.circleSize / 2
+        numberContainer.layer.borderWidth = 1.5
+        numberContainer.layer.borderColor = UIColor.iconColorActive.cgColor
         numberLabel.font = .scaledSystemFont(ofSize: 13, weight: .semibold)
-        numberLabel.textColor = .white
+        numberLabel.textColor = .iconColorActive
         numberLabel.textAlignment = .center
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
         numberContainer.addSubview(numberLabel)
@@ -533,11 +598,7 @@ final class PlanRoutePointCell: UITableViewCell {
         textStack.axis = .vertical
         textStack.spacing = 2
 
-        dragHandleView.image = UIImage(systemName: "line.3.horizontal")
-        dragHandleView.tintColor = .iconColorTertiary
-        dragHandleView.contentMode = .scaleAspectFit
-
-        [deleteButton, numberContainer, textStack, dragHandleView].forEach {
+        [deleteButton, numberContainer, textStack].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -556,22 +617,17 @@ final class PlanRoutePointCell: UITableViewCell {
             numberLabel.centerYAnchor.constraint(equalTo: numberContainer.centerYAnchor),
 
             textStack.leadingAnchor.constraint(equalTo: numberContainer.trailingAnchor, constant: 12),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8),
-
-            dragHandleView.leadingAnchor.constraint(greaterThanOrEqualTo: textStack.trailingAnchor, constant: 12),
-            dragHandleView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            dragHandleView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            dragHandleView.widthAnchor.constraint(equalToConstant: 24),
-            dragHandleView.heightAnchor.constraint(equalToConstant: 24)
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8)
         ])
     }
 
     private func subtitle(for point: PlanRoutePoint) -> String {
         if point.isStart {
-            return localizedString("starting_point")
+            return localizedString("start_point")
         }
-        let distance = OAOsmAndFormatter.getFormattedDistance(Float(point.distanceFromPrevious))
+        let distance = OAOsmAndFormatter.getFormattedDistance(Float(point.distanceFromPrevious)) ?? ""
         if point.isDestination {
             return "\(distance) • \(localizedString("route_descr_destination"))"
         }

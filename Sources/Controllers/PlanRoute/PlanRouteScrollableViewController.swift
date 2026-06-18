@@ -73,6 +73,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupBottomToolbar()
         setupContent()
         setupTopToolbar()
+        dataProvider.onDataChanged = { [weak self] in self?.reloadData() }
         selectTab(.default)
         reloadData()
     }
@@ -150,6 +151,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     func reloadData() {
         topPartView.configure(with: dataProvider.routeInfo)
+        bottomToolbar.isUndoEnabled = dataProvider.canUndo
+        bottomToolbar.isRedoEnabled = dataProvider.canRedo
         currentTabViewController.flatMap { $0 as? PlanRouteTabContent }?.reloadData()
     }
 
@@ -181,6 +184,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         ])
 
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        panRecognizer.delegate = self
         sheetView.addGestureRecognizer(panRecognizer)
     }
 
@@ -399,11 +403,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleUndo() {
-        print("[PlanRoute] Undo tapped")
+        dataProvider.undo()
+        reloadData()
     }
 
     private func handleRedo() {
-        print("[PlanRoute] Redo tapped")
+        dataProvider.redo()
+        reloadData()
     }
 
     private func handleAddRoutePoint() {
@@ -442,5 +448,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         default:
             break
         }
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension PlanRouteScrollableViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let location = gestureRecognizer.location(in: tabContainerView)
+        return !tabContainerView.bounds.contains(location)
     }
 }

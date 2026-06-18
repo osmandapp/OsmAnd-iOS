@@ -4110,8 +4110,12 @@
 "change_appearance" = "Change appearance";
 "default_appearance" = "Default appearance";
 "default_appearance_description" = "These settings apply to all new tracks added to this folder.";
+"change_default_tracks_appearance_confirmation" = "Apply changes to existing tracks in the folder or only to new ones?";
+"apply_to_existing_tracks_description" = "This will overwrite the individual appearance settings of tracks currently inside this folder.";
+"settings_applied" = "Settings applied";
 "default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
 "apply_to_existing" = "Apply to existing";
+"apply_only_to_new" = "Apply only to new";
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_all_points" = "Apply to all points";
 "save_favorite_default_appearance" = "Apply changes to all existing points in the folder, or only to newly added ones?";

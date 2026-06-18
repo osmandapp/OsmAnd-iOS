@@ -97,7 +97,7 @@ final class OsmEditsListViewController: UIViewController {
         cell.contentConfiguration = content
         
         let headerDisclosureOption = UICellAccessory.OutlineDisclosureOptions(style: .header)
-        cell.accessories = [.outlineDisclosure(options:headerDisclosureOption)]
+        cell.accessories = [.outlineDisclosure(options: headerDisclosureOption)]
         cell.tintColor = .iconColorActive
     }
     
@@ -125,6 +125,7 @@ final class OsmEditsListViewController: UIViewController {
         sortMode = savedSortMode()
         configureCollectionView()
         dataSource = makeDataSource()
+        applySnapshot()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -146,7 +147,6 @@ final class OsmEditsListViewController: UIViewController {
         }
         
         definesPresentationContext = true
-        applySnapshot()
         updateNavigationBarTitle()
 
         NotificationCenter.default.addObserver(

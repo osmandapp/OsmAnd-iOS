@@ -201,26 +201,6 @@ final class DeepLinkAppRouter: NSObject {
         nav.pushViewController(myPlaces, animated: true)
     }
     
-    func openMyPlacesTracks(inFolder absoluteFolderPath: String?) {
-        guard let nav = root.navigationController else { return }
-
-        if let myPlaces = nav.viewControllers.first(where: { $0 is MyPlacesContainerViewController }) as? MyPlacesContainerViewController {
-            nav.popToViewController(myPlaces, animated: false)
-            
-            myPlaces.switchToWithSegmentControl(tab: .tracks)
-            
-            guard let rootTracks = myPlaces.viewController(for: .tracks) as? TracksViewController else { return }
-            rootTracks.navigateToFolderAfterImport(absoluteFolderPath)
-            return
-        }
-        
-        guard let nav = dismissAndPopToRoot() else { return }
-        let myPlaces = MyPlacesContainerViewController()
-        myPlaces.selectedTab = .tracks
-        myPlaces.pendingDeepLinkTracksFolderPath = absoluteFolderPath
-        nav.pushViewController(myPlaces, animated: true)
-    }
-    
     func openMapsAndResources() {
         guard let nav = root.navigationController else { return }
         guard !OADeepLinkBridge.isMapsAndResourcesController(nav.visibleViewController) else { return }

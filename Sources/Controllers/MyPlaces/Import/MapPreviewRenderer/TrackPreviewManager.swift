@@ -45,8 +45,9 @@ final class TrackPreviewManager {
 }
 
 private final class TrackPreviewDrawerDelegate: MapBitmapDrawerDelegate {
-    private weak var item: ImportTrackItem?
     private let onUpdate: (ImportTrackItem) -> Void
+    
+    private weak var item: ImportTrackItem?
 
     init(item: ImportTrackItem, onUpdate: @escaping (ImportTrackItem) -> Void) {
         self.item = item

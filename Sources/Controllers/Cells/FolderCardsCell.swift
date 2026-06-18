@@ -8,26 +8,22 @@
 
 import UIKit
 
-@objc
-enum FolderCardsAddButtonPosition: Int {
+@objc enum FolderCardsAddButtonPosition: Int {
     case end
     case beginning
 }
 
-@objc
-enum FolderCardsConfig: Int {
+@objc enum FolderCardsConfig: Int {
     case defaultConfig
     case importTracks
 }
 
-@objc
-protocol FolderCardsCellDelegate: AnyObject {
+@objc protocol FolderCardsCellDelegate: AnyObject {
     func onItemSelected(_ index: Int)
     func onAddFolderButtonPressed()
 }
 
-@objc
-final class FolderCardsCell: UITableViewCell {
+@objc final class FolderCardsCell: UITableViewCell {
 
     private enum Layout {
         static let margin: CGFloat = 16
@@ -89,25 +85,6 @@ final class FolderCardsCell: UITableViewCell {
         super.layoutSubviews()
         updateContentOffset()
     }
-
-    private func setupUI() {
-        selectionStyle = .none
-        backgroundColor = .groupBg
-        contentView.backgroundColor = .groupBg
-
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(FolderCardCollectionViewCell.self, forCellWithReuseIdentifier: FolderCardCollectionViewCell.reuseIdentifier)
-
-        contentView.addSubview(collectionView)
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentView.heightAnchor.constraint(equalToConstant: Layout.rowHeight)
-        ])
-    }
     
     // MARK: - Config
     
@@ -122,14 +99,13 @@ final class FolderCardsCell: UITableViewCell {
     }
 
     // MARK: - Public API
-
-    @objc
-    func setValues(_ values: [String],
-                   sizes: [NSNumber]?,
-                   colors: [UIColor]?,
-                   hidden: [NSNumber]?,
-                   addButtonTitle: String,
-                   withSelectedIndex index: Int32) {
+    
+    @objc func setValues(_ values: [String],
+                         sizes: [NSNumber]?,
+                         colors: [UIColor]?,
+                         hidden: [NSNumber]?,
+                         addButtonTitle: String,
+                         withSelectedIndex index: Int32) {
         setValues(values,
                   sizes: sizes,
                   colors: colors,
@@ -217,6 +193,27 @@ final class FolderCardsCell: UITableViewCell {
         guard indexPath.row < collectionView.numberOfItems(inSection: 0),
               !collectionView.indexPathsForVisibleItems.contains(indexPath) else { return }
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+    }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
+        selectionStyle = .none
+        backgroundColor = .groupBg
+        contentView.backgroundColor = .groupBg
+
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(FolderCardCollectionViewCell.self, forCellWithReuseIdentifier: FolderCardCollectionViewCell.reuseIdentifier)
+
+        contentView.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentView.heightAnchor.constraint(equalToConstant: Layout.rowHeight)
+        ])
     }
 
     // MARK: - Index mapping

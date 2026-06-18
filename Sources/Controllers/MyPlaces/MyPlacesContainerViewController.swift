@@ -67,7 +67,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     var selectedTab: Tab = .default
     var availableTabs: [Tab] = []
-    var pendingDeepLinkTracksFolderPath: String?
+    var pendingTracksFolderPath: String?
     
     private let segmentedControlIconSize: CGFloat = 24
     private var availableViewControllers: [Tab: UIViewController] = [:]
@@ -97,7 +97,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         pageViewController?.scrollView?.backgroundColor = .clear
         navigationController?.navigationBar.prefersLargeTitles = false
         view.backgroundColor = .viewBg
-        applyPendingDeepLinkIfNeeded()
+        handlePendingImportFolderIfNeeded()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -232,10 +232,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         }
     }
     
-    private func applyPendingDeepLinkIfNeeded() {
-        guard let path = pendingDeepLinkTracksFolderPath else { return }
-        pendingDeepLinkTracksFolderPath = nil
-        (viewController(for: .tracks) as? TracksViewController)?.setPendingDeepLink(path)
+    private func handlePendingImportFolderIfNeeded() {
+        guard let path = pendingTracksFolderPath else { return }
+        pendingTracksFolderPath = nil
+        (viewController(for: .tracks) as? TracksViewController)?.setPendingImportFolder(path)
     }
     
     private func switchTo(tab: Tab) {

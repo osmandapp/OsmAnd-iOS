@@ -74,8 +74,9 @@ class MapBitmapDrawer {
 }
 
 final class TrackBitmapDrawer: MapBitmapDrawer {
-    private let gpxFile: GpxFile
     var defaultTrackColor: Int32 = 0
+    
+    private let gpxFile: GpxFile
 
     init(params: MapDrawParams, gpxFile: GpxFile) {
         self.gpxFile = gpxFile

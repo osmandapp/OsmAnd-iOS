@@ -47,6 +47,8 @@ final class SaveGpxAsyncTask: OAAsyncTask {
     private weak var listener: SaveImportedGpxListener?
 
     private var fileManager: FileManager { .default }
+    
+    // MARK: - Init
 
     init(gpxFile: GpxFile,
          destinationDir: String,
@@ -62,6 +64,30 @@ final class SaveGpxAsyncTask: OAAsyncTask {
         self.listener = listener
         super.init()
     }
+    
+    // MARK: - Static
+
+    static func plannedDestinationPath(destinationDir: String, fileName: String) -> String {
+        var name = normalizedFileName(fileName)
+        if name.isEmpty {
+            name = "import\(gpxExtension)"
+        }
+        return (destinationDir as NSString).appendingPathComponent(name)
+    }
+
+    private static func normalizedFileName(_ raw: String) -> String {
+        var name = raw
+        let lowercased = name.lowercased()
+        if lowercased.hasSuffix(".kml") || lowercased.hasSuffix(".kmz") || lowercased.hasSuffix(".zip") {
+            name = String(name.dropLast(4))
+        }
+        if !name.lowercased().hasSuffix(gpxExtension) {
+            name += gpxExtension
+        }
+        return name
+    }
+    
+    // MARK: - Override
 
     override func onPreExecute() {
         listener?.onGpxSavingStarted()
@@ -182,27 +208,5 @@ final class SaveGpxAsyncTask: OAAsyncTask {
         guard let gpxPath = OsmAndApp.swiftInstance()?.gpxPath else { return false }
         let tempDir = (gpxPath as NSString).appendingPathComponent("temp")
         return (path as NSString).deletingLastPathComponent == tempDir
-    }
-
-    // MARK: - Static helpers
-
-    static func plannedDestinationPath(destinationDir: String, fileName: String) -> String {
-        var name = normalizedFileName(fileName)
-        if name.isEmpty {
-            name = "import\(gpxExtension)"
-        }
-        return (destinationDir as NSString).appendingPathComponent(name)
-    }
-
-    private static func normalizedFileName(_ raw: String) -> String {
-        var name = raw
-        let lowercased = name.lowercased()
-        if lowercased.hasSuffix(".kml") || lowercased.hasSuffix(".kmz") || lowercased.hasSuffix(".zip") {
-            name = String(name.dropLast(4))
-        }
-        if !name.lowercased().hasSuffix(gpxExtension) {
-            name += gpxExtension
-        }
-        return name
     }
 }

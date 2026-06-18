@@ -75,7 +75,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     private var importCompletion: ((Bool) -> Void)?
 
     private var trackItems: [ImportTrackItem] = []
-    private var selectedTracks: Set<ImportTrackItem> = []
+    private var selection = SelectionManager<ImportTrackItem>(allItems: [])
     private var isCollectingTracks = false
     private var isSavingTracks = false
     private var lastSavedPath: String?
@@ -100,8 +100,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
     // MARK: - Init
 
-    @objc(initWithGpxFile:fileName:selectedFolderPath:importURL:completion:)
-    init(gpxFile: GpxFile, fileName: String, selectedFolderPath: String?, importURL: URL?, completion: ((Bool) -> Void)?) {
+    @objc init(gpxFile: GpxFile, fileName: String, selectedFolderPath: String?, importURL: URL?, completion: ((Bool) -> Void)?) {
         self.gpxFile = gpxFile
         self.fileName = fileName
         self.importURL = importURL
@@ -117,10 +116,6 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        trackPreviewManager.cancelAll(trackItems)
     }
 
     // MARK: - Lifecycle
@@ -224,8 +219,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
 
     override func getRightNavbarButtons() -> [UIBarButtonItem]? {
-        let allSelected = selectedTracks.count == trackItems.count
-        let title = localizedString(allSelected ? "shared_string_deselect_all" : "shared_string_select_all")
+        let title = localizedString(selection.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
         let item = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(onSelectAllAction))
         item.tintColor = .label
         item.accessibilityLabel = title
@@ -240,17 +234,23 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     // MARK: - Bottom buttons
 
     override func getTopButtonTitle() -> String? {
-        "\(localizedString("shared_string_import")) \(selectedTracks.count)/\(trackItems.count)"
+        "\(localizedString("shared_string_import")) \(selection.selectedItems.count)/\(trackItems.count)"
     }
 
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        selectedTracks.isEmpty ? .inactive : .purple
+        selection.isEmpty ? .inactive : .purple
     }
 
     override func isBottomSeparatorVisible() -> Bool { false }
 
     override func onTopButtonPressed() {
         importSelectedTracksAction()
+    }
+    
+    // MARK: - Deinit
+    
+    deinit {
+        trackPreviewManager.cancelAll(trackItems)
     }
 }
 
@@ -365,7 +365,7 @@ private extension ImportTracksViewController {
         case RowKey.trackHeader.rawValue:
             guard let trackItem = item.obj(forKey: RowObjKey.importTrackItem.rawValue) as? ImportTrackItem else { break }
             let label = [item.title, item.descr].compactMap { $0 }.joined(separator: ", ")
-            let isSelected = selectedTracks.contains(trackItem)
+            let isSelected = selection.selectedItems.contains(trackItem)
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = .textColorPrimary
             cell.titleLabel.font = .preferredFont(forTextStyle: .headline)
@@ -540,13 +540,13 @@ private extension ImportTracksViewController {
     }
 
     func updateButtonsState() {
-        topButton.isEnabled = !selectedTracks.isEmpty
+        topButton.isEnabled = !selection.isEmpty
         updateBottomButtons()
         updateSelectAllButtonTitle()
     }
 
     func updateSelectAllButtonTitle() {
-        let allSelected = !trackItems.isEmpty && selectedTracks.count == trackItems.count
+        let allSelected = !trackItems.isEmpty && selection.areAllSelected
         let title = localizedString(allSelected ? "shared_string_deselect_all" : "shared_string_select_all")
         guard let item = navigationItem.rightBarButtonItems?.first else { return }
         item.title = title
@@ -698,14 +698,18 @@ private extension ImportTracksViewController {
 
 private extension ImportTracksViewController {
     @objc func onSelectAllAction() {
-        selectedTracks = selectedTracks.count == trackItems.count ? [] : Set(trackItems)
+        if selection.areAllSelected {
+            selection.deselectAll()
+        } else {
+            selection.selectAll()
+        }
         updateButtonsState()
         tableView.reloadData()
     }
 
     func importSelectedTracksAction() {
-        guard !isCollectingTracks, !isSavingTracks, !selectedTracks.isEmpty else { return }
-        let items = selectedTracks.sorted { $0.index < $1.index }
+        guard !isCollectingTracks, !isSavingTracks, !selection.isEmpty else { return }
+        let items = selection.selectedItems.sorted { $0.index < $1.index }
         saveTracksTask = SaveTracksTask(items: items, destinationDir: selectedFolderPath, listener: self)
         saveTracksTask?.execute()
     }
@@ -737,11 +741,7 @@ private extension ImportTracksViewController {
     
     func onTrackItemSelected(at indexPath: IndexPath) {
         guard let trackItem = trackItem(from: indexPath) else { return }
-        if selectedTracks.contains(trackItem) {
-            selectedTracks.remove(trackItem)
-        } else {
-            selectedTracks.insert(trackItem)
-        }
+        selection.toggle(trackItem)
         updateButtonsState()
         tableView.reloadData()
     }
@@ -846,7 +846,7 @@ private extension ImportTracksViewController {
     }
 
     func openMyPlacesTracksFolder() {
-        DeepLinkAppRouter(rootViewController: OARootViewController.instance()).openMyPlacesTracks(inFolder: selectedFolderPath)
+        MyPlacesNavigator(rootViewController: OARootViewController.instance()).openTracks(inFolder: selectedFolderPath)
     }
 }
 
@@ -862,7 +862,7 @@ extension ImportTracksViewController: CollectTracksListener {
         collectTracksTask = nil
         isCollectingTracks = false
         trackItems = items
-        selectedTracks = Set(items)
+        selection = SelectionManager(allItems: items, initiallySelected: items)
 
         DispatchQueue.global(qos: .userInitiated).async {
             self.foldersSizes = self.folderTrackCounts()

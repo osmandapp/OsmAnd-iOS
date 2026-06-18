@@ -9,7 +9,7 @@
 import UIKit
 import OsmAndShared
 
-final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class TrackStatsTableCell: UITableViewCell {
     private static let stringValueKey = "string_value"
     
     private let collectionView: UICollectionView
@@ -34,6 +34,13 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
         collectionView.contentOffset.x = -collectionView.contentInset.left
     }
 
+    func configure(statistics: [OAGPXTableCellData]) {
+        statisticsData = statistics
+        collectionView.reloadData()
+    }
+    
+    // MARK: - Setup UI
+    
     private func setup() {
         selectionStyle = .none
         backgroundColor = .groupBg
@@ -59,14 +66,11 @@ final class TrackStatsTableCell: UITableViewCell, UICollectionViewDataSource, UI
             collectionView.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
+}
 
-    func configure(statistics: [OAGPXTableCellData]) {
-        statisticsData = statistics
-        collectionView.reloadData()
-    }
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
-    // MARK: - UICollectionView
-
+extension TrackStatsTableCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         statisticsData.count
     }

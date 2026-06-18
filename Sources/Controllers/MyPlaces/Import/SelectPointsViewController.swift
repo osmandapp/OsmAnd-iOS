@@ -22,10 +22,10 @@ final class SelectPointsViewController: OABaseButtonsViewController {
         case point
     }
 
-    private enum RowObjKey {
-        static let attributedTitleKey = "attributedTitle"
-        static let wptItem = "wptItem"
-        static let group = "group"
+    private enum RowObjKey: String {
+        case attributedTitleKey = "attributedTitle"
+        case wptItem = "wptItem"
+        case group = "group"
     }
 
     private enum SelectionState {
@@ -51,8 +51,7 @@ final class SelectPointsViewController: OABaseButtonsViewController {
     private let track: ImportTrackItem
     private let allPoints: [WptPt]
     private let suggestedPoints: [WptPt]
-    private var selectedPoints: Set<WptPt>
-    private var initialSelectedPoints: Set<WptPt> = []
+    private let selection: SelectionManager<WptPt>
     private var groups: [WaypointGroup] = []
 
     private var lastUpdate: TimeInterval?
@@ -63,7 +62,7 @@ final class SelectPointsViewController: OABaseButtonsViewController {
     init(track: ImportTrackItem, allPoints: [WptPt]) {
         self.track = track
         self.allPoints = allPoints
-        self.selectedPoints = Set(track.selectedPoints)
+        self.selection = SelectionManager(allItems: allPoints, initiallySelected: track.selectedPoints)
         self.suggestedPoints = track.suggestedPoints
         super.init()
     }
@@ -82,7 +81,6 @@ final class SelectPointsViewController: OABaseButtonsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTable()
-        initialSelectedPoints = selectedPoints
         groups = makeGroups(from: allPoints)
         generateData()
         tableView.reloadData()
@@ -162,9 +160,9 @@ final class SelectPointsViewController: OABaseButtonsViewController {
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard indexPath.section > 0, indexPath.row > 0 else { return }
-        guard let wptItem = tableData.item(for: indexPath).obj(forKey: RowObjKey.wptItem) as? OAGpxWptItem else { return }
+        guard let wptItem = tableData.item(for: indexPath).obj(forKey: RowObjKey.wptItem.rawValue) as? OAGpxWptItem else { return }
 
-        if selectedPoints.contains(wptItem.point) {
+        if selection.selectedItems.contains(wptItem.point) {
             tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
         } else {
             tableView.deselectRow(at: indexPath, animated: false)
@@ -204,8 +202,7 @@ final class SelectPointsViewController: OABaseButtonsViewController {
     }
 
     override func getRightNavbarButtons() -> [UIBarButtonItem]? {
-        let allSelected = selectedPoints.count == allPoints.count
-        let title = localizedString(allSelected ? "shared_string_deselect_all" : "shared_string_select_all")
+        let title = localizedString(selection.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
         let item = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(onSelectAllAction))
         item.tintColor = .label
         item.accessibilityLabel = title
@@ -243,7 +240,7 @@ private extension SelectPointsViewController {
         let descriptionRow = section.createNewRow()
         descriptionRow.cellType = OASimpleTableViewCell.reuseIdentifier
         descriptionRow.key = RowKey.infoDescr.rawValue
-        descriptionRow.setObj(makeTopDescription(), forKey: RowObjKey.attributedTitleKey)
+        descriptionRow.setObj(makeTopDescription(), forKey: RowObjKey.attributedTitleKey.rawValue)
 
         if !suggestedPoints.isEmpty {
             section.footerText = localizedString("auto_select_nearest_footer")
@@ -262,7 +259,7 @@ private extension SelectPointsViewController {
         groupRow.cellType = OASelectionCollapsableCell.reuseIdentifier
         groupRow.key = RowKey.group.rawValue
         groupRow.title = group.name
-        groupRow.setObj(group, forKey: RowObjKey.group)
+        groupRow.setObj(group, forKey: RowObjKey.group.rawValue)
 
         guard group.isExpanded else { return }
 
@@ -271,7 +268,7 @@ private extension SelectPointsViewController {
             pointRow.cellType = OAPointWithRegionTableViewCell.reuseIdentifier
             pointRow.key = RowKey.point.rawValue
             pointRow.title = item.point.name ?? ""
-            pointRow.setObj(item, forKey: RowObjKey.wptItem)
+            pointRow.setObj(item, forKey: RowObjKey.wptItem.rawValue)
         }
     }
 }
@@ -287,7 +284,7 @@ private extension SelectPointsViewController {
 
         switch item.key {
         case RowKey.infoDescr.rawValue:
-            cell.descriptionLabel.attributedText = item.obj(forKey: RowObjKey.attributedTitleKey) as? NSAttributedString
+            cell.descriptionLabel.attributedText = item.obj(forKey: RowObjKey.attributedTitleKey.rawValue) as? NSAttributedString
             cell.descriptionVisibility(true)
             cell.titleVisibility(false)
             hideSeparator(for: cell, false)
@@ -311,17 +308,17 @@ private extension SelectPointsViewController {
 
     func configuredGroupCell(for item: OATableRowData, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: OASelectionCollapsableCell.reuseIdentifier, for: indexPath) as! OASelectionCollapsableCell
-        guard let group = item.obj(forKey: RowObjKey.group) as? WaypointGroup else { return cell }
+        guard let group = item.obj(forKey: RowObjKey.group.rawValue) as? WaypointGroup else { return cell }
 
         cell.selectionStyle = .none
         cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 0)
         cell.showOptionsButton(false)
         cell.makeSelectable(true)
         cell.titleView.text = item.title
-        cell.leftIconView.image = .templateImageNamed("ic_custom_folder")
+        cell.leftIconView.image = .icCustomFolder
         cell.leftIconView.tintColor = item.iconTintColor ?? .iconColorActive
         cell.arrowIconView.tintColor = .iconColorActive
-        cell.arrowIconView.image = .templateImageNamed(group.isExpanded ? "ic_custom_arrow_down" : "ic_custom_arrow_up")
+        cell.arrowIconView.image = group.isExpanded ? .icCustomArrowDown : .icCustomArrowUp
         cell.selectionButton.setImage(groupSelectionImage(for: group), for: .normal)
         cell.selectionButton.tintColor = .iconColorActive
 
@@ -334,7 +331,7 @@ private extension SelectPointsViewController {
         case .all: localizedString("shared_string_selected")
         case .none: localizedString("shared_string_not_selected")
         case .part: String(format: localizedString("ltr_or_rtl_combine_via_slash"),
-                           "\(group.items.filter { selectedPoints.contains($0.point) }.count)",
+                           "\(group.items.filter { selection.selectedItems.contains($0.point) }.count)",
                            "\(group.items.count)")
         }
         cell.isAccessibilityElement = true
@@ -356,7 +353,7 @@ private extension SelectPointsViewController {
 
     func configuredPointCell(for item: OATableRowData, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: OAPointWithRegionTableViewCell.reuseIdentifier, for: indexPath) as! OAPointWithRegionTableViewCell
-        guard let wptItem = item.obj(forKey: RowObjKey.wptItem) as? OAGpxWptItem else { return cell }
+        guard let wptItem = item.obj(forKey: RowObjKey.wptItem.rawValue) as? OAGpxWptItem else { return cell }
 
         cell.setRegion(wptItem.point.getAddress() ?? "")
         cell.titleView.text = wptItem.point.name ?? ""
@@ -371,7 +368,7 @@ private extension SelectPointsViewController {
             cell.selectedBackgroundView = backgroundView
         }
         
-        let isSelected = selectedPoints.contains(wptItem.point)
+        let isSelected = selection.selectedItems.contains(wptItem.point)
         let name = wptItem.point.name ?? localizedString("shared_string_waypoint")
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = name
@@ -431,8 +428,7 @@ private extension SelectPointsViewController {
     }
 
     func updateSelectAllButtonTitle() {
-        let allSelected = selectedPoints.count == allPoints.count
-        let title = localizedString(allSelected ? "shared_string_deselect_all" : "shared_string_select_all")
+        let title = localizedString(selection.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
         guard let item = navigationItem.rightBarButtonItems?.first else { return }
         item.title = title
         item.accessibilityLabel = title
@@ -461,12 +457,12 @@ private extension SelectPointsViewController {
 
     private func group(at indexPath: IndexPath) -> WaypointGroup? {
         tableData.item(for: IndexPath(row: 0, section: indexPath.section))
-            .obj(forKey: RowObjKey.group) as? WaypointGroup
+            .obj(forKey: RowObjKey.group.rawValue) as? WaypointGroup
     }
 
     private func groupSelectionState(for group: WaypointGroup) -> SelectionState {
         guard !group.items.isEmpty else { return .none }
-        let selectedCount = group.items.filter { selectedPoints.contains($0.point) }.count
+        let selectedCount = group.items.filter { selection.selectedItems.contains($0.point) }.count
         if selectedCount == 0 { return .none }
         if selectedCount == group.items.count { return .all }
         return .part
@@ -496,15 +492,11 @@ private extension SelectPointsViewController {
 private extension SelectPointsViewController {
     func togglePoint(at indexPath: IndexPath) {
         guard let group = group(at: indexPath),
-              let wptItem = tableData.item(for: indexPath).obj(forKey: RowObjKey.wptItem) as? OAGpxWptItem,
+              let wptItem = tableData.item(for: indexPath).obj(forKey: RowObjKey.wptItem.rawValue) as? OAGpxWptItem,
               let point = wptItem.point else { return }
 
         let previousState = groupSelectionState(for: group)
-        if selectedPoints.contains(point) {
-            selectedPoints.remove(point)
-        } else {
-            selectedPoints.insert(point)
-        }
+        selection.toggle(point)
 
         updateSelectAllButtonTitle()
         if previousState != groupSelectionState(for: group) {
@@ -517,24 +509,29 @@ private extension SelectPointsViewController {
 
 private extension SelectPointsViewController {
     @objc func onSelectAllAction() {
-        selectedPoints = selectedPoints.count == allPoints.count ? [] : Set(allPoints)
+        if selection.areAllSelected {
+            selection.deselectAll()
+        } else {
+            selection.selectAll()
+        }
         updateSelectAllButtonTitle()
         tableView.reloadData()
     }
 
     func applyAction() {
-        delegate?.onPointsSelected(track, selectedPoints: Array(selectedPoints))
+        delegate?.onPointsSelected(track, selectedPoints: Array(selection.selectedItems))
         dismiss(animated: true)
     }
 
     func selectNearestAction() {
-        selectedPoints = Set(suggestedPoints)
+        selection.deselectAll()
+        Set(suggestedPoints).forEach { selection.toggle($0) }
         updateSelectAllButtonTitle()
         tableView.reloadData()
     }
 
     @objc func showExitConfirmationAction() {
-        guard selectedPoints != initialSelectedPoints else {
+        guard selection.hasChanges else {
             dismiss(animated: true)
             return
         }
@@ -555,12 +552,10 @@ private extension SelectPointsViewController {
         guard let group = groups.first(where: { $0.index == sender.tag }) else { return }
 
         let points = group.items.compactMap(\.point)
-        let shouldDeselect = !points.isEmpty && points.allSatisfy { selectedPoints.contains($0) }
+        let shouldDeselect = !points.isEmpty && points.allSatisfy { selection.selectedItems.contains($0) }
         points.forEach { point in
-            if shouldDeselect {
-                selectedPoints.remove(point)
-            } else {
-                selectedPoints.insert(point)
+            if shouldDeselect == selection.selectedItems.contains(point) {
+                selection.toggle(point)
             }
         }
 
@@ -622,7 +617,7 @@ private extension SelectPointsViewController {
         let visibleIndexPaths = tableView.indexPathsForVisibleRows?.filter { $0.section > 0 && $0.row > 0 } ?? []
         for indexPath in visibleIndexPaths {
             guard let cell = tableView.cellForRow(at: indexPath) as? OAPointWithRegionTableViewCell,
-                  let wptItem = tableData.item(for: indexPath).obj(forKey: RowObjKey.wptItem) as? OAGpxWptItem else { continue }
+                  let wptItem = tableData.item(for: indexPath).obj(forKey: RowObjKey.wptItem.rawValue) as? OAGpxWptItem else { continue }
             updatePointDistanceAndDirectionCell(cell, wptItem: wptItem)
         }
     }
@@ -630,7 +625,7 @@ private extension SelectPointsViewController {
     func updatePointDistanceAndDirectionCell(_ cell: OAPointWithRegionTableViewCell, wptItem: OAGpxWptItem) {
         if let distance = wptItem.distance, !distance.isEmpty {
             cell.setDirection(distance)
-            cell.directionIconView.image = .templateImageNamed("ic_small_direction")
+            cell.directionIconView.image = .icSmallDirection
             cell.directionIconView.tintColor = .iconColorActive
             UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
                 cell.directionIconView.transform = CGAffineTransform(rotationAngle: wptItem.direction)

@@ -337,19 +337,6 @@ extension GpxDataItem {
         gpxFileName.deletingPathExtension()
     }
     
-    func applyFolderDefaultAppearance() {
-        guard let parentFile = file.getParentFile() else { return }
-        let dirItem = GpxDbHelper.shared.getGpxDirItem(file: parentFile)
-        for parameter in GpxParameter.companion.getAppearanceParameters() {
-            let defaultValue = dirItem.getParameter(parameter: parameter)
-            if defaultValue != nil {
-                setParameter(parameter: parameter, value: defaultValue)
-            }
-        }
-
-        GpxDbHelper.shared.updateDataItem(item: self)
-    }
-
     func updateAppearance() {
         let gpx: GpxFile? = GpxUtilities.shared.loadGpxFile(file: file)
         guard let gpx, gpx.error == nil else { return }

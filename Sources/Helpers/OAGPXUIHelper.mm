@@ -600,7 +600,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
                     OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:newStoringFullPath];
                     if (gpx)
                     {
-                        [gpx applyFolderDefaultAppearance];
                         trackItem = [[OASTrackItem alloc] initWithFile:newFile];
                         trackItem.dataItem = gpx;
                         [SharedLibSmartFolderHelper.shared addTrackItemToSmartFolderItem:trackItem];

@@ -1049,7 +1049,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         if (pref.key.length > 0)
             [keys addObject:pref.key];
     }
-    return keys;
+    return [keys copy];
 }
 
 - (NSSet<NSString *> *)buttonStateAppearanceKeysForVisibilityPref:(OACommonPreference *)visibilityPref
@@ -1069,7 +1069,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     NSMutableSet<NSString *> *keys = [NSMutableSet setWithSet:[self buttonStateAppearanceKeysForVisibilityPref:buttonState.visibilityPref buttonState:buttonState]];
     if (_settings.rotateMap.key.length > 0)
         [keys addObject:_settings.rotateMap.key];
-    return keys;
+    return [keys copy];
 }
 
 - (NSSet<NSString *> *)quickActionPropertyKeys:(OAMapButtonsHelper *)helper
@@ -1086,7 +1086,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             buttonState.quickActionsPref
         ]]];
     }
-    return keys;
+    return [keys copy];
 }
 
 - (void)updateMapButton:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams

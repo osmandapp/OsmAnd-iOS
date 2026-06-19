@@ -114,16 +114,16 @@ enum AstroScheduleCardViewHolder {
         buttons.setContentHuggingPriority(.required, for: .horizontal)
         buttons.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        let reset = iconButton(name: "ic_action_date_start",
+        let reset = iconButton(name: "ic_custom_date",
                                accessibilityLabel: localizedString("astro_schedule_show_current_week")) {
             onResetPeriod()
         }
         reset.isHidden = !item.showResetPeriodButton
-        let prev = iconButton(name: "ic_arrow_back",
+        let prev = iconButton(name: "ic_custom_arrow_back",
                               accessibilityLabel: localizedString("shared_string_previous")) {
             onShiftPeriod(-AstroScheduleCardController.periodDays)
         }
-        let next = iconButton(name: "ic_arrow_forward",
+        let next = iconButton(name: "ic_custom_arrow_forward",
                               accessibilityLabel: localizedString("shared_string_next")) {
             onShiftPeriod(AstroScheduleCardController.periodDays)
         }

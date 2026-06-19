@@ -35,7 +35,7 @@ final class AstronomyPlugin: OAPlugin {
     }
 
     override func getLogoResourceId() -> String? {
-        "ic_action_telescope"
+        "ic_custom_telescope"
     }
 
     @objc func showStarMap() {

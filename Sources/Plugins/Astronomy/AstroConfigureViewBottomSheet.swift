@@ -205,7 +205,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         circle.isUserInteractionEnabled = false
         circle.translatesAutoresizingMaskIntoConstraints = false
 
-        let imageView = UIImageView(image: AstroIcon.template("ic_action_close_rounded"))
+        let imageView = UIImageView(image: .icCustomClose)
         imageView.tintColor = .iconColorDefault
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = false
@@ -272,8 +272,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     private func bindMapActions() {
         bindToggleMapActionCard(
             card: addActionCard(to: topButtonsRow),
-            drawableEnabled: AstroIcon.template("ic_action_globe_view"),
-            drawableDisabled: AstroIcon.template("ic_action_celestial_path"),
+            drawableEnabled: .icCustomGlobeView,
+            drawableDisabled: .icCustomCelestialPath,
             titleResEnabled: "map_3d",
             titleResDisabled: "map_2d",
             isChecked: { [weak self] in
@@ -293,8 +293,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         bindToggleMapActionCard(
             card: addActionCard(to: topButtonsRow),
-            drawableEnabled: AstroIcon.template("ic_map"),
-            drawableDisabled: AstroIcon.template("ic_action_map_outlined"),
+            drawableEnabled: AstroIcon.template("ic_custom_map"),
+            drawableDisabled: .icCustomMapOutline,
             titleResEnabled: "shared_string_map",
             isChecked: { [weak self] in
                 self?.commonConfig.showRegularMap ?? false
@@ -336,7 +336,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         visibleObjectsGridContent.addArrangedSubview(gridRow([
             bindToggleAstroCard(
                 card: AstroActionCard(),
-                iconName: "ic_action_planet_outlined",
+                iconName: "ic_custom_planet_outlined",
                 titleRes: "astro_solar_system",
                 isChecked: { c in c.showSun && c.showMoon && c.showPlanets },
                 toggle: { c in
@@ -351,7 +351,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
             ),
             bindToggleAstroCard(
                 card: AstroActionCard(),
-                iconName: "ic_action_constellations",
+                iconName: "ic_custom_constellations",
                 titleRes: "astro_constellations",
                 isChecked: { $0.showConstellations },
                 toggle: { c in
@@ -362,7 +362,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
             ),
             bindToggleAstroCard(
                 card: AstroActionCard(),
-                iconName: "ic_action_stars",
+                iconName: "ic_custom_star_shine",
                 titleRes: "astro_stars",
                 isChecked: { $0.showStars },
                 toggle: { c in
@@ -376,7 +376,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         visibleObjectsGridContent.addArrangedSubview(gridRow([
             bindToggleAstroCard(
                 card: AstroActionCard(),
-                iconName: "ic_action_nebulas",
+                iconName: "ic_custom_nebulas",
                 titleRes: "astro_nebulas",
                 isChecked: { $0.showNebulae },
                 toggle: { c in
@@ -387,7 +387,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
             ),
             bindToggleAstroCard(
                 card: AstroActionCard(),
-                iconName: "ic_action_star_clusters",
+                iconName: "ic_custom_star_clusters",
                 titleRes: "astro_star_clusters",
                 isChecked: { c in c.showOpenClusters && c.showGlobularClusters },
                 toggle: { c in
@@ -401,7 +401,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
             ),
             bindToggleAstroCard(
                 card: AstroActionCard(),
-                iconName: "ic_action_galaxy",
+                iconName: "ic_custom_galaxy",
                 titleRes: "astro_deep_sky",
                 isChecked: { c in c.showGalaxies && c.showBlackHoles && c.showGalaxyClusters },
                 toggle: { c in
@@ -422,7 +422,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: personalContent,
-            iconName: "ic_action_bookmark_filled",
+            iconName: "ic_custom_bookmark",
             titleRes: "favorites_item",
             checked: current.showFavorites,
             smallItem: false
@@ -437,7 +437,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         
         addSwitchRow(
             parent: personalContent,
-            iconName: "ic_action_target_direction_on",
+            iconName: "ic_custom_target_direction_on",
             titleRes: "astro_directions",
             checked: current.showDirections,
             smallItem: false
@@ -452,7 +452,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: personalContent,
-            iconName: "ic_action_target_path_on",
+            iconName: "ic_custom_target_path_on",
             titleRes: "astro_daily_path",
             checked: current.showCelestialPaths,
             showDivider: false,
@@ -468,7 +468,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_action_azimuthal_grid",
+            iconName: "ic_custom_azimuthal_grid",
             titleRes: "azimuthal_grid",
             checked: current.showAzimuthalGrid
         ) { [weak self] checked in
@@ -482,7 +482,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_action_meridian_line",
+            iconName: "ic_custom_meridian_line",
             titleRes: "meridian_line",
             checked: current.showMeridianLine
         ) { [weak self] checked in
@@ -496,7 +496,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_action_equatorial_grid",
+            iconName: "ic_custom_equatorial_grid",
             titleRes: "equatorial_grid",
             checked: current.showEquatorialGrid
         ) { [weak self] checked in
@@ -510,7 +510,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_action_eliptical_line",
+            iconName: "ic_custom_eliptical_line",
             titleRes: "ecliptic_line",
             checked: current.showEclipticLine
         ) { [weak self] checked in
@@ -524,7 +524,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_action_galaxy_equator",
+            iconName: "ic_custom_galaxy_equator",
             titleRes: "equator_line",
             checked: current.showEquatorLine,
             showDivider: false
@@ -539,7 +539,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_action_galaxy_line",
+            iconName: "ic_custom_galaxy_line",
             titleRes: "galactic_line",
             checked: current.showGalacticLine,
             showDivider: false
@@ -713,11 +713,11 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
     private func redFilterIcon(selected: Bool) -> UIImage? {
         guard selected else {
-            return AstroIcon.template("ic_action_red_filter_off")
+            return .icCustomRedFilterOff
         }
-        return AstroIcon.layeredTemplate(baseName: "ic_action_red_filter_base_on",
+        return AstroIcon.layeredTemplate(baseName: "ic_custom_red_filter_base_on",
                                          baseColor: .iconColorActive,
-                                         overlayName: "ic_action_red_filter_overlay_on",
+                                         overlayName: "ic_custom_red_filter_overlay_on",
                                          overlayColor: .systemRed)
     }
 

@@ -28,7 +28,7 @@ private final class AstroGalleryCardView: UIView {
 
     private let stack = UIStackView()
     private let headerButton = UIControl()
-    private let iconView = UIImageView(image: AstroIcon.template("ic_action_photo"))
+    private let iconView = UIImageView(image: .icCustomPhoto)
     private let titleLabel = UILabel()
     private let arrowView = UIImageView()
     private var galleryHeightConstraint: NSLayoutConstraint?
@@ -132,9 +132,9 @@ private final class AstroGalleryCardView: UIView {
         let arrowName: String
         switch item.state {
         case .collapsed:
-            arrowName = "ic_action_arrow_down"
+            arrowName = "ic_custom_arrow_down"
         case .loading, .ready:
-            arrowName = "ic_action_arrow_up"
+            arrowName = "ic_custom_arrow_up"
         }
         arrowView.image = AstroIcon.template(arrowName)
 

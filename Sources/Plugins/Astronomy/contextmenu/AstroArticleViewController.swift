@@ -147,7 +147,7 @@ final class AstroArticleViewController: UIViewController {
 
         let closeButton = UIButton(type: .system)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.setImage(AstroIcon.template("ic_action_close"), for: .normal)
+        closeButton.setImage(.icCustomClose, for: .normal)
         closeButton.tintColor = AstroContextMenuTheme.secondaryIcon
         closeButton.addAction(UIAction { [weak self] _ in
             self?.dismiss(animated: true)

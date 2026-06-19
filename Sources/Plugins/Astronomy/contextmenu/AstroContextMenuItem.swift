@@ -77,9 +77,9 @@ struct AstroKnowledgeCardItem: AstroContextMenuItem {
     func getIconName() -> String {
         switch state {
         case .upsell:
-            return "ic_action_telescope_colored"
+            return "ic_custom_telescope_colored"
         case .download:
-            return "ic_action_sky_map_download"
+            return "ic_custom_sky_map_download"
         }
     }
 }

@@ -310,19 +310,19 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         headerStack.spacing = 0
         headerStack.backgroundColor = appBarBackgroundColor()
 
-        backButton.setImage(AstroIcon.template("ic_arrow_back"), for: .normal)
+        backButton.setImage(AstroIcon.template("ic_custom_arrow_back"), for: .normal)
         backButton.setTitle(nil, for: .normal)
         backButton.accessibilityLabel = localizedString("shared_string_back")
         backButton.addTarget(self, action: #selector(backPressed), for: .touchUpInside)
         backButton.tintColor = StarMapSearchLightPalette.toolbarIcon
 
-        inputBackButton.setImage(AstroIcon.template("ic_arrow_back"), for: .normal)
+        inputBackButton.setImage(AstroIcon.template("ic_custom_arrow_back"), for: .normal)
         inputBackButton.setTitle(nil, for: .normal)
         inputBackButton.accessibilityLabel = localizedString("shared_string_back")
         inputBackButton.addTarget(self, action: #selector(backPressed), for: .touchUpInside)
         inputBackButton.tintColor = StarMapSearchLightPalette.toolbarIcon
 
-        browseSearchButton.setImage(AstroIcon.template("ic_action_search_dark"), for: .normal)
+        browseSearchButton.setImage(.icCustomSearch, for: .normal)
         browseSearchButton.setTitle(nil, for: .normal)
         browseSearchButton.accessibilityLabel = localizedString("shared_string_search")
         browseSearchButton.addTarget(self, action: #selector(switchToInputModeAction), for: .touchUpInside)
@@ -534,7 +534,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         searchSurface.addTarget(self, action: #selector(openExploreInputSearch), for: .touchUpInside)
 
         let closeButton = UIButton(type: .system)
-        closeButton.setImage(AstroIcon.template("ic_action_close"), for: .normal)
+        closeButton.setImage(.icCustomClose, for: .normal)
         closeButton.tintColor = StarMapSearchLightPalette.toolbarIcon
         closeButton.accessibilityLabel = localizedString("shared_string_close")
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
@@ -545,7 +545,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         title.textColor = StarMapSearchLightPalette.primaryText
 
         let searchButton = UIButton(type: .system)
-        searchButton.setImage(AstroIcon.template("ic_action_search_dark"), for: .normal)
+        searchButton.setImage(.icCustomSearch, for: .normal)
         searchButton.tintColor = StarMapSearchLightPalette.toolbarIcon
         searchButton.accessibilityLabel = localizedString("shared_string_search")
         searchButton.addTarget(self, action: #selector(openExploreInputSearch), for: .touchUpInside)
@@ -651,7 +651,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func setupWatchNowRow() {
         configureExploreRow(watchNowRow,
-                            iconName: "ic_action_telescope",
+                            iconName: "ic_custom_telescope",
                             title: localizedString("astro_explore_watch_now"),
                             subtitle: localizedString("astro_explore_watch_now_subtitle"),
                             count: nil)
@@ -704,12 +704,12 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         categoriesContainer.removeArrangedSubviews()
         configureExploreSectionCard(categoriesContainer)
         let categories = [
-            ExploreRowConfig(quickPresetType: .CATEGORY_SOLAR_SYSTEM, iconRes: "ic_action_planet_outlined", titleRes: "astro_solar_system", subtitleRes: nil),
-            ExploreRowConfig(quickPresetType: .CATEGORY_CONSTELLATIONS, iconRes: "ic_action_constellations", titleRes: "astro_constellations", subtitleRes: nil),
-            ExploreRowConfig(quickPresetType: .CATEGORY_STARS, iconRes: "ic_action_stars", titleRes: "astro_stars", subtitleRes: nil),
-            ExploreRowConfig(quickPresetType: .CATEGORY_NEBULAS, iconRes: "ic_action_nebulas", titleRes: "astro_nebulas", subtitleRes: nil),
-            ExploreRowConfig(quickPresetType: .CATEGORY_STAR_CLUSTERS, iconRes: "ic_action_star_clusters", titleRes: "astro_star_clusters", subtitleRes: nil),
-            ExploreRowConfig(quickPresetType: .CATEGORY_DEEP_SKY, iconRes: "ic_action_galaxy", titleRes: "astro_deep_sky", subtitleRes: "astro_explore_deep_sky_subtitle")
+            ExploreRowConfig(quickPresetType: .CATEGORY_SOLAR_SYSTEM, iconRes: "ic_custom_planet_outlined", titleRes: "astro_solar_system", subtitleRes: nil),
+            ExploreRowConfig(quickPresetType: .CATEGORY_CONSTELLATIONS, iconRes: "ic_custom_constellations", titleRes: "astro_constellations", subtitleRes: nil),
+            ExploreRowConfig(quickPresetType: .CATEGORY_STARS, iconRes: "ic_custom_star_shine", titleRes: "astro_stars", subtitleRes: nil),
+            ExploreRowConfig(quickPresetType: .CATEGORY_NEBULAS, iconRes: "ic_custom_nebulas", titleRes: "astro_nebulas", subtitleRes: nil),
+            ExploreRowConfig(quickPresetType: .CATEGORY_STAR_CLUSTERS, iconRes: "ic_custom_star_clusters", titleRes: "astro_star_clusters", subtitleRes: nil),
+            ExploreRowConfig(quickPresetType: .CATEGORY_DEEP_SKY, iconRes: "ic_custom_galaxy", titleRes: "astro_deep_sky", subtitleRes: "astro_explore_deep_sky_subtitle")
         ]
         for (index, config) in categories.enumerated() {
             addExploreRow(container: categoriesContainer,
@@ -734,9 +734,9 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         myDataContainer.addArrangedSubview(sectionHeaderView(localizedString("astro_explore_my_data")))
         let config = parentStarMapController?.getSearchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
         let items: [(ExploreRowConfig, Int)] = [
-            (ExploreRowConfig(quickPresetType: .MY_DATA_FAVORITES, iconRes: "ic_action_bookmark_filled", titleRes: "favorites_item", subtitleRes: nil), config.favorites.count),
-            (ExploreRowConfig(quickPresetType: .MY_DATA_DAILY_PATH, iconRes: "ic_action_target_path_on", titleRes: "astro_daily_path", subtitleRes: nil), config.celestialPaths.count),
-            (ExploreRowConfig(quickPresetType: .MY_DATA_DIRECTIONS, iconRes: "ic_action_target_direction_on", titleRes: "astro_directions", subtitleRes: nil), config.directions.count)
+            (ExploreRowConfig(quickPresetType: .MY_DATA_FAVORITES, iconRes: "ic_custom_bookmark", titleRes: "favorites_item", subtitleRes: nil), config.favorites.count),
+            (ExploreRowConfig(quickPresetType: .MY_DATA_DAILY_PATH, iconRes: "ic_custom_target_path_on", titleRes: "astro_daily_path", subtitleRes: nil), config.celestialPaths.count),
+            (ExploreRowConfig(quickPresetType: .MY_DATA_DIRECTIONS, iconRes: "ic_custom_target_direction_on", titleRes: "astro_directions", subtitleRes: nil), config.directions.count)
         ]
         for (index, item) in items.enumerated() {
             addExploreRow(container: myDataContainer,
@@ -760,7 +760,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         let featuredCatalogs = getFeaturedCatalogEntries()
         for entry in featuredCatalogs {
             addExploreRow(container: catalogsContainer,
-                          iconRes: "ic_action_book_info",
+                          iconRes: "ic_custom_book_info",
                           iconColor: StarMapSearchLightPalette.defaultIcon,
                           title: entry.displayName,
                           subtitle: nil,
@@ -1401,28 +1401,28 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         switch searchState.sortMode {
         case .NEWEST_FIRST:
             text = localizedString("astro_sort_newest_first")
-            iconName = "ic_action_sort_date_1"
+            iconName = "ic_custom_sort_date_newest"
         case .OLDEST_FIRST:
             text = localizedString("astro_sort_oldest_first")
-            iconName = "ic_action_sort_date_31"
+            iconName = "ic_custom_sort_date_oldest"
         case .NAME_ASC:
             text = localizedString("sort_name_ascending")
-            iconName = "ic_action_sort_by_name_ascending"
+            iconName = "ic_custom_sort_name_ascending"
         case .NAME_DESC:
             text = localizedString("sort_name_descending")
-            iconName = "ic_action_sort_by_name_descending"
+            iconName = "ic_custom_sort_name_descending"
         case .BRIGHTEST_FIRST:
             text = localizedString("astro_sort_brightest_first")
-            iconName = "ic_action_sort_brightest"
+            iconName = "ic_custom_sort_brightest"
         case .FAINTEST_FIRST:
             text = localizedString("astro_sort_faintest_first")
-            iconName = "ic_action_sort_faintest"
+            iconName = "ic_custom_sort_faintest"
         case .RISES_SOONEST:
             text = localizedString("astro_sort_rises_soonest")
-            iconName = "ic_action_sort_rises"
+            iconName = "ic_custom_sort_rises"
         case .SETS_SOONEST:
             text = localizedString("astro_sort_sets_soonest")
-            iconName = "ic_action_sort_sets"
+            iconName = "ic_custom_sort_sets"
         }
         var configuration = sortButton.configuration ?? UIButton.Configuration.plain()
         configuration.title = text
@@ -1438,7 +1438,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         filterButton.isHidden = shouldShowCatalogEntries()
         var configuration = filterButton.configuration ?? UIButton.Configuration.plain()
         configuration.title = String(format: localizedString("filter_tracks_count"), searchState.calculateFilterCount())
-        configuration.image = AstroIcon.template("ic_action_filter_dark")
+        configuration.image = .icCustomFilter
         configuration.imagePlacement = .trailing
         configuration.baseForegroundColor = .systemBlue
         configuration.imagePadding = Layout.smallPadding
@@ -1467,15 +1467,15 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
             let descriptionKey: String
             switch searchState.quickPresetType {
             case .MY_DATA_DIRECTIONS:
-                iconName = "ic_action_bookmark"
+                iconName = "ic_custom_bookmark_outlined"
                 titleKey = "astro_my_data_no_directions_title"
                 descriptionKey = "astro_my_data_no_directions_description"
             case .MY_DATA_DAILY_PATH:
-                iconName = "ic_action_target_path_off"
+                iconName = "ic_custom_target_path_off"
                 titleKey = "astro_my_data_no_daily_paths_title"
                 descriptionKey = "astro_my_data_no_daily_paths_description"
             default:
-                iconName = "ic_action_bookmark"
+                iconName = "ic_custom_bookmark_outlined"
                 titleKey = "astro_my_data_no_favorites_title"
                 descriptionKey = "astro_my_data_no_favorites_description"
             }

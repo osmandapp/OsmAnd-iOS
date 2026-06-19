@@ -391,23 +391,23 @@ enum AstroUtils {
     static func getObjectTypeIcon(_ type: SkyObjectType) -> String {
         switch type {
         case .SUN:
-            return "ic_action_sun"
+            return "ic_custom_sun"
         case .MOON:
-            return "ic_action_moon"
+            return "ic_custom_moon"
         case .PLANET:
             return "ic_action_ufo"
         case .STAR:
-            return "ic_action_favorite"
+            return "ic_custom_favorites"
         case .GALAXY, .GALAXY_CLUSTER:
             return "ic_world_globe_dark"
         case .NEBULA:
-            return "ic_action_clouds"
+            return "ic_custom_clouds"
         case .BLACK_HOLE:
             return "ic_action_circle"
         case .CONSTELLATION:
-            return "ic_action_celestial_path"
+            return "ic_custom_celestial_path"
         case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
-            return "ic_action_favorite"
+            return "ic_custom_favorites"
         }
     }
 

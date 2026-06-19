@@ -39,7 +39,7 @@ enum AstroVisibilityCardViewHolder {
         header.addArrangedSubview(title)
         if item.showResetButton {
             let resetButton = UIButton(type: .system)
-            resetButton.setImage(AstroIcon.template("ic_action_date_start"), for: .normal)
+            resetButton.setImage(AstroIcon.template("ic_custom_date"), for: .normal)
             resetButton.tintColor = AstroContextMenuTheme.activeIcon
             resetButton.accessibilityLabel = localizedString("astro_visibility_show_today")
             resetButton.addAction(UIAction { _ in onResetToToday() }, for: .touchUpInside)
@@ -102,7 +102,7 @@ enum AstroVisibilityCardViewHolder {
             location.textColor = AstroContextMenuTheme.secondaryText
             location.font = .systemFont(ofSize: 14)
             location.numberOfLines = 0
-            let iconView = UIImageView(image: AstroIcon.template("ic_action_marker_dark"))
+            let iconView = UIImageView(image: .icCustomMarker)
             iconView.tintColor = AstroContextMenuTheme.secondaryIcon
             iconView.contentMode = .scaleAspectFit
             let row = UIStackView(arrangedSubviews: [iconView, location])

@@ -210,14 +210,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         addRoundButton(compassButton, accessibilityLabel: localizedString("map_widget_compass"))
         compassButton.onSingleTap = { [weak self] in self?.setAzimuth(0, animate: true) }
 
-        addRoundButton(arModeButton, iconName: "ic_action_view_in_ar", accessibilityLabel: localizedString("astro_ar"))
+        addRoundButton(arModeButton, iconName: "ic_custom_view_in_ar", accessibilityLabel: localizedString("astro_ar"))
         arModeButton.addTarget(self, action: #selector(toggleARMode), for: .touchUpInside)
 
-        addRoundButton(cameraButton, iconName: "ic_action_device_camera", accessibilityLabel: localizedString("astro_camera"))
+        addRoundButton(cameraButton, iconName: "ic_custom_device", accessibilityLabel: localizedString("astro_camera"))
         cameraButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
         cameraButton.isHidden = true
 
-        addRoundButton(searchButton, iconName: "ic_action_search_dark", accessibilityLabel: localizedString("shared_string_search"))
+        addRoundButton(searchButton, iconName: "ic_custom_search", accessibilityLabel: localizedString("shared_string_search"))
         searchButton.addTarget(self, action: #selector(showSearchDialog), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
@@ -236,7 +236,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupRightControls() {
-        addRoundButton(closeButton, iconName: "ic_action_close", accessibilityLabel: localizedString("shared_string_close"))
+        addRoundButton(closeButton, iconName: "ic_custom_close", accessibilityLabel: localizedString("shared_string_close"))
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         addRoundButton(settingsButton, iconName: "ic_layer_top", accessibilityLabel: localizedString("shared_string_settings"))
@@ -324,7 +324,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         filterStack.translatesAutoresizingMaskIntoConstraints = false
         magnitudeFilterButton.addSubview(filterStack)
 
-        magnitudeFilterIcon.image = AstroIcon.template("ic_action_sort_brightest")
+        magnitudeFilterIcon.image = .icCustomMagnitude
         magnitudeFilterIcon.tintColor = StarMapControlTheme.foreground(active: false, nightMode: nightMode)
         magnitudeFilterIcon.contentMode = .scaleAspectFit
         magnitudeFilterIcon.widthAnchor.constraint(equalToConstant: 24).isActive = true
@@ -406,7 +406,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         transparencySlider.addTarget(self, action: #selector(transparencyChanged), for: .valueChanged)
         sliderContainer.addSubview(transparencySlider)
 
-        addRoundButton(resetFovButton, iconName: "ic_action_reset_to_default_dark", accessibilityLabel: localizedString("shared_string_reset"))
+        addRoundButton(resetFovButton, iconName: "ic_custom_reset", accessibilityLabel: localizedString("shared_string_reset"))
         resetFovButton.addTarget(self, action: #selector(resetFov), for: .touchUpInside)
         resetFovButton.isHidden = true
 

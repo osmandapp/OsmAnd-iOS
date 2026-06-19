@@ -81,10 +81,10 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
                                                       iconName: overviewTabIconName(for: skyObject?.type),
                                                       tag: Tab.overview.rawValue)
     private lazy var visibilityTabItem = makeTabBarItem(title: localizedString("gpx_visibility_txt"),
-                                                        iconName: "ic_action_telescope_colored",
+                                                        iconName: "ic_custom_telescope_colored",
                                                         tag: Tab.visibility.rawValue)
     private lazy var scheduleTabItem = makeTabBarItem(title: localizedString("astronomy_schedule"),
-                                                      iconName: "ic_action_date_start",
+                                                      iconName: "ic_custom_date",
                                                       tag: Tab.schedule.rawValue)
     private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
     private var selectedTab: Tab = .overview
@@ -430,21 +430,21 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
 
     private func overviewTabIconName(for type: SkyObjectType?) -> String {
         guard let type else {
-            return "ic_action_planet_outlined"
+            return "ic_custom_planet_outlined"
         }
         switch type {
         case .SUN, .MOON, .PLANET:
-            return "ic_action_planet_outlined"
+            return "ic_custom_planet_outlined"
         case .CONSTELLATION:
-            return "ic_action_constellations"
+            return "ic_custom_constellations"
         case .STAR:
-            return "ic_action_stars"
+            return "ic_custom_star_shine"
         case .NEBULA:
-            return "ic_action_nebulas"
+            return "ic_custom_nebulas"
         case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
-            return "ic_action_star_clusters"
+            return "ic_custom_star_clusters"
         case .GALAXY, .GALAXY_CLUSTER, .BLACK_HOLE:
-            return "ic_action_galaxy"
+            return "ic_custom_galaxy"
         }
     }
 
@@ -493,7 +493,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private func updateButtons(_ obj: SkyObject) {
         bindActionButton(saveButton,
                          title: localizedString("shared_string_save"),
-                         image: obj.isFavorite ? "ic_action_bookmark_filled" : "ic_action_bookmark") { [weak self] in
+                         image: obj.isFavorite ? "ic_custom_bookmark" : "ic_custom_bookmark_outlined") { [weak self] in
             guard let self else { return }
             obj.isFavorite.toggle()
             dependencies.onFavoriteChanged(obj, obj.isFavorite)
@@ -501,14 +501,14 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         }
         bindActionButton(locationButton,
                          title: localizedString("astro_locate"),
-                         image: "ic_action_location_16") { [weak self] in
+                         image: "ic_custom_location_marker") { [weak self] in
             guard let self else { return }
             dependencies.onCenterObject(obj)
             bindActionButtonsForCurrentObject()
         }
         bindActionButton(directionButton,
                          title: localizedString("astro_direction"),
-                         image: obj.showDirection ? "ic_action_target_direction_on" : "ic_action_target_direction_off") { [weak self] in
+                         image: obj.showDirection ? "ic_custom_target_direction_on" : "ic_custom_target_direction_off") { [weak self] in
             guard let self else { return }
             obj.showDirection.toggle()
             if obj.showDirection {
@@ -520,7 +520,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         }
         bindActionButton(pathButton,
                          title: localizedString("astro_path"),
-                         image: obj.showCelestialPath ? "ic_action_target_path_on" : "ic_action_target_path_off") { [weak self] in
+                         image: obj.showCelestialPath ? "ic_custom_target_path_on" : "ic_custom_target_path_off") { [weak self] in
             guard let self else { return }
             obj.showCelestialPath.toggle()
             dependencies.onCelestialPathChanged(obj, obj.showCelestialPath)
@@ -547,7 +547,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func actionButtonImage(named imageName: String) -> UIImage? {
-        if imageName == "ic_action_location_16" {
+        if imageName == "ic_custom_location_marker" {
             return AstroIcon.template(imageName, size: CGSize(width: 24, height: 24))
         }
         return AstroIcon.template(imageName)

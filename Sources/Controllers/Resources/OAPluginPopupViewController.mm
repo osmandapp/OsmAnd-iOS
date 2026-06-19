@@ -427,7 +427,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"purchases_feature_desc_astronomy");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_action_telescope";
+        iconName = @"ic_custom_telescope";
         popup.okButton.tag = EOAFeatureAstronomy;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];

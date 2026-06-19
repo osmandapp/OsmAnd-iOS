@@ -12,6 +12,7 @@
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 static OAFeature * OSMAND_CLOUD;
 static OAFeature * ADVANCED_WIDGETS;
@@ -165,10 +166,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 
 - (UIImage *)getAstronomyIcon
 {
-    NSString *iconName = [OAAppSettings sharedManager].nightMode
-            ? @"ic_action_astronomy_colored_night"
-            : @"ic_action_astronomy_colored_day";
-    return [UIImage imageNamed:iconName];
+    return [UIImage imageNamed:ACImageNameIcCustomAstronomyColored];
 }
 
 - (UIImage *)getIcon

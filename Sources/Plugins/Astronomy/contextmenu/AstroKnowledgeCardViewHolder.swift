@@ -43,7 +43,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
 
         let iconName = item.getIconName()
         let iconView = UIImageView(image: AstroIcon.original(iconName) ?? AstroIcon.template(iconName))
-        if iconName != "ic_action_telescope_colored" && iconName != "ic_action_sky_map_download" {
+        if iconName != "ic_custom_telescope_colored" && iconName != "ic_custom_sky_map_download" {
             iconView.tintColor = AstroContextMenuTheme.activeIcon
         }
         iconView.contentMode = .scaleAspectFit

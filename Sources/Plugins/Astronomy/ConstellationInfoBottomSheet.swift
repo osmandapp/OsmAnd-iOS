@@ -26,7 +26,7 @@ final class ConstellationInfoFragment: UIViewController {
         view.backgroundColor = UIColor(white: 0.03, alpha: 0.96)
         let closeButton = UIButton(type: .system)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.setImage(AstroIcon.template("ic_action_close"), for: .normal)
+        closeButton.setImage(.icCustomClose, for: .normal)
         closeButton.tintColor = UIColor(white: 0.8, alpha: 1)
         closeButton.backgroundColor = UIColor(white: 0.12, alpha: 1)
         closeButton.layer.cornerRadius = 16

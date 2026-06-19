@@ -142,7 +142,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             imageNamed = @"ic_custom_wikipedia";
             break;
         case OsmAndResourceType::StarMap:
-            imageNamed = @"ic_action_stars";
+            imageNamed = @"ic_custom_star_shine";
             break;
         case OsmAndResourceType::GeoTiffRegion:
         case OsmAndResourceType::HeightmapRegionLegacy:

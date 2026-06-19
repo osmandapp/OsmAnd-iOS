@@ -2545,7 +2545,7 @@
 
 - (NSString *)productIconName
 {
-    return @"ic_action_telescope";
+    return @"ic_custom_telescope";
 }
 
 - (NSString *)localizedTitle

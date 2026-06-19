@@ -11,7 +11,7 @@ import UIKit
 final class StarMapResetButton: StarMapButton {
     override func updateTheme() {
         super.updateTheme()
-        setImage(AstroIcon.template("ic_action_refresh_dark"), for: .normal)
+        setImage(.icCustomRefresh, for: .normal)
         accessibilityLabel = localizedString("shared_string_reset")
     }
 }

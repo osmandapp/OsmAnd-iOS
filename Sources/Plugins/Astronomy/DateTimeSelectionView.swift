@@ -68,7 +68,7 @@ final class DateTimeSelectionView: UIView {
         column.alignment = .center
         column.spacing = 2
 
-        let up = makeStepButton(iconName: "ic_action_arrow_up")
+        let up = makeStepButton(iconName: "ic_custom_arrow_up")
         up.addAction(UIAction { [weak self] _ in self?.step(field, amount: field == .minute ? 5 : 1) }, for: .touchUpInside)
         column.addArrangedSubview(up)
 
@@ -80,7 +80,7 @@ final class DateTimeSelectionView: UIView {
         labels[field] = label
         column.addArrangedSubview(label)
 
-        let down = makeStepButton(iconName: "ic_action_arrow_down")
+        let down = makeStepButton(iconName: "ic_custom_arrow_down")
         down.addAction(UIAction { [weak self] _ in self?.step(field, amount: field == .minute ? -5 : -1) }, for: .touchUpInside)
         column.addArrangedSubview(down)
 

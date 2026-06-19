@@ -66,7 +66,7 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     }
 
     private func bind(_ cell: StarMapCatalogCell, entry: StarMapCatalogEntry, isLastItem: Bool) {
-        cell.configure(icon: AstroIcon.template("ic_action_book_info"),
+        cell.configure(icon: .icCustomBookInfo,
                        iconTintColor: StarMapSearchLightPalette.defaultIcon,
                        title: entry.displayName,
                        subtitle: entry.description?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false

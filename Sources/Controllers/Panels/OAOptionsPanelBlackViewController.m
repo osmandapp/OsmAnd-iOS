@@ -424,7 +424,7 @@
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconPlugins] forState:UIControlStateNormal];
     [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:ACImageNameIcCustomBackpack] forState:UIControlStateNormal];
     [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:ACImageNameIcCustomSensor] forState:UIControlStateNormal];
-    [_menuButtonStarMap setImage:[UIImage templateImageNamed:@"ic_action_telescope"] forState:UIControlStateNormal];
+    [_menuButtonStarMap setImage:[UIImage templateImageNamed:ACImageNameIcCustomTelescope] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
     

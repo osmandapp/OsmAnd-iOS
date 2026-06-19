@@ -447,19 +447,19 @@ private final class StarMapSearchResultFormatter {
 func getCategoryIconRes(_ category: StarMapSearchCategoryFilter) -> String {
     switch category {
     case .SOLAR_SYSTEM:
-        return "ic_action_planet_outlined"
+        return "ic_custom_planet_outlined"
     case .CONSTELLATIONS:
-        return "ic_action_constellations"
+        return "ic_custom_constellations"
     case .STARS:
-        return "ic_action_stars"
+        return "ic_custom_star_shine"
     case .NEBULAS:
-        return "ic_action_nebulas"
+        return "ic_custom_nebulas"
     case .STAR_CLUSTERS:
-        return "ic_action_star_clusters"
+        return "ic_custom_star_clusters"
     case .DEEP_SKY:
-        return "ic_action_galaxy"
+        return "ic_custom_galaxy"
     case .ALL:
-        return "ic_action_search_dark"
+        return "ic_custom_search"
     }
 }
 

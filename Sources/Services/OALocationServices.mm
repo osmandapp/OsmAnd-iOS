@@ -35,7 +35,6 @@
 #define LOST_LOCATION_CHECK_DELAY 18.0
 #define START_LOCATION_SIMULATION_DELAY 2.0
 #define ACCURACY_FOR_GPX_AND_ROUTING 50.0
-#define NMEA_LOCATION_OVERRIDE_INTERVAL 5.0
 
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end
@@ -69,7 +68,6 @@
     BOOL _isSuspended;
     
     NSDate *_locationLostTime;
-    NSDate *_nmeaLocationOverrideUntil;
 }
 
 - (instancetype) initWith:(OsmAndAppInstance)app
@@ -644,20 +642,6 @@
     [self setLocation:location];
 }
 
-- (void) setLocationFromNMEA:(CLLocation *)location
-{
-    if (!location || [_locationSimulation isRouteAnimating])
-        return;
-
-    _nmeaLocationOverrideUntil = [NSDate dateWithTimeIntervalSinceNow:NMEA_LOCATION_OVERRIDE_INTERVAL];
-    if (location.course >= 0)
-    {
-        _lastHeading = location.course;
-        _lastMagneticHeading = location.course;
-    }
-    [self setLocation:location];
-}
-
 - (BOOL) isInLocationSimulation
 {
     return _simulatePosition != nil;
@@ -773,9 +757,6 @@
     if (!locations || ![locations lastObject] || [_locationSimulation isRouteAnimating])
         return;
 
-    if (_nmeaLocationOverrideUntil && [_nmeaLocationOverrideUntil timeIntervalSinceNow] > 0)
-        return;
-    
     BOOL wasLocationUnknown = (_lastLocation == nil);
     
     [self setLocation:[locations lastObject]];

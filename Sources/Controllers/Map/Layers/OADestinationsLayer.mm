@@ -185,7 +185,7 @@
     OACommonActiveMarkerConstant *activeMarkers = settings.activeMarkers;
     OACommonBoolean *directionLines = settings.directionLines;
     
-    NSSet *keysToCheck = [NSSet setWithObjects:activeMarkers.key, directionLines.key, nil];
+    NSSet *keysToCheck = [NSSet setWithArray:@[activeMarkers.key, directionLines.key]];
     NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
     
     if (preferenceKeys && [preferenceKeys intersectsSet:keysToCheck])

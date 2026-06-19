@@ -972,14 +972,14 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     ]]];
     
     BOOL quickActionChanged = [preferenceKeys intersectsSet:[self quickActionPropertyKeys:mapButtonsHelper]];
-    BOOL map3DChanged      = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:map3DButtonState.visibilityPref buttonState:map3DButtonState]];
+    BOOL map3DChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:map3DButtonState.visibilityPref buttonState:map3DButtonState]];
     BOOL configureMapChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:configureMapButtonState.visibilityPref buttonState:configureMapButtonState]];
-    BOOL searchChanged     = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:searchButtonState.visibilityPref buttonState:searchButtonState]];
-    BOOL menuChanged       = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:menuButtonState.visibilityPref buttonState:menuButtonState]];
+    BOOL searchChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:searchButtonState.visibilityPref buttonState:searchButtonState]];
+    BOOL menuChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:menuButtonState.visibilityPref buttonState:menuButtonState]];
     BOOL navigationChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:navigationButtonState.visibilityPref buttonState:navigationButtonState]];
     BOOL myLocationChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:myLocationButtonState.visibilityPref buttonState:myLocationButtonState]];
-    BOOL zoomInChanged     = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
-    BOOL zoomOutChanged    = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
+    BOOL zoomInChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
+    BOOL zoomOutChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
     
     if (!compassChanged && !colorsChanged && !map3DChanged && !quickActionChanged
         && !configureMapChanged && !searchChanged && !menuChanged && !navigationChanged

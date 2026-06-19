@@ -239,10 +239,13 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         [keys addObject:key];
     }];
     
-    executeOnMainThread(^{
-        NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:nil userInfo:@{kPreferenceKeysUserInfoKey:[keys copy]}];
-        [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
-    });
+    if (keys.count > 0)
+    {
+        executeOnMainThread(^{
+            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:nil userInfo:@{kPreferenceKeysUserInfoKey:[keys copy]}];
+            [[NSNotificationCenter defaultCenter] postNotification:notif];
+        });
+    }
 
     self.item.read = YES;
     return YES;

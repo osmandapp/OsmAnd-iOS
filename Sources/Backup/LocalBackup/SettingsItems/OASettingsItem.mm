@@ -355,13 +355,8 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     if (changedKeys.count > 0)
     {
         executeOnMainThread(^{
-            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting
-                                                                  object:nil
-                                                                userInfo:@{kPreferenceKeysUserInfoKey:[changedKeys copy]}];
-            [[NSNotificationQueue defaultQueue] enqueueNotification:notif
-                                                       postingStyle:NSPostASAP
-                                                       coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
-                                                           forModes:nil];
+            NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:nil userInfo:@{kPreferenceKeysUserInfoKey:[changedKeys copy]}];
+            [[NSNotificationCenter defaultCenter] postNotification:notif];
         });
     }
 

@@ -38,10 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (long) getSegmentTime:(OASTrkSegment *)segment;
 + (double) getSegmentDistance:(OASTrkSegment *)segment;
 
-+ (NSArray<OAGpxFileInfo *> *) getSortedGPXFilesInfo:(nullable NSString *)dir
-                                     selectedGpxList:(nullable NSArray<NSString *> *)selectedGpxList
-                                        absolutePath:(BOOL)absolutePath;
-+ (NSArray<OASGpxDataItem *> *)getSortedGPXDataItems;
++ (NSArray<OASGpxDataItem *> *)sortedGPXDataItems;
 
 + (void) addAppearanceToGpx:(OASGpxFile *)gpxFile gpxItem:(OASGpxDataItem *)gpxItem;
 

@@ -348,7 +348,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return settingsItems;
 }
 
-- (NSDictionary<OAExportSettingsType *, NSArray *> *)getMyPlacesItems:(BOOL)sort
+- (NSDictionary<OAExportSettingsType *, NSArray *> *)getMyPlacesItems:(BOOL)sorted
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [MutableOrderedDictionary new];
     
@@ -358,9 +358,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     NSFileManager *fileManager = NSFileManager.defaultManager;
     NSArray<OASGpxDataItem *> *gpsDataItems;
-    if (sort)
+    if (sorted)
     {
-        gpsDataItems = [OAGPXUIHelper getSortedGPXDataItems];
+        gpsDataItems = [OAGPXUIHelper sortedGPXDataItems];
     }
     else
     {

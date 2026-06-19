@@ -337,13 +337,12 @@ extension GpxDataItem {
         gpxFileName.deletingPathExtension()
     }
     
-    func applyFolderDefaultAppearance(_ overwriteExistingValues: Bool) {
+    func applyFolderDefaultAppearance() {
         guard let parentFile = file.getParentFile() else { return }
         let dirItem = GpxDbHelper.shared.getGpxDirItem(file: parentFile)
         for parameter in GpxParameter.companion.getAppearanceParameters() {
-            let value = getParameter(parameter: parameter)
             let defaultValue = dirItem.getParameter(parameter: parameter)
-            if defaultValue != nil && (overwriteExistingValues || value == nil) {
+            if defaultValue != nil {
                 setParameter(parameter: parameter, value: defaultValue)
             }
         }

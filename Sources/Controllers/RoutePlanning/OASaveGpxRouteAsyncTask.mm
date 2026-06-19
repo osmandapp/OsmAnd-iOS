@@ -161,7 +161,7 @@
     }
     else
     {
-        [gpx applyFolderDefaultAppearance:YES];
+        [gpx applyFolderDefaultAppearance];
     }
 
     [gpxDb updateDataItem:gpx];

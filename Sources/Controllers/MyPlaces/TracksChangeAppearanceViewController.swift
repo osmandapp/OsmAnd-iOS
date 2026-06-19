@@ -688,7 +688,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         sortedPaletteColorItems.replaceAll(withObjectsSync: paletteItems)
         let selectedPaletteName = paletteName ?? (folder == nil ? tracks.first?.gradientPaletteName : nil)
         selectedPaletteColorItem = GradientPaletteHelper.shared.paletteItemOrDefault(gradientScaleType: gradientScaleType, name: selectedPaletteName)
-        if updateAppearanceData, let selectedPaletteColorItem {
+        if (updateAppearanceData || paletteName?.isEmpty == false), let selectedPaletteColorItem {
             initialData.setParameter(.colorPalette, value: selectedPaletteColorItem.id)
             data.setParameter(.colorPalette, value: selectedPaletteColorItem.id)
         }

@@ -699,7 +699,10 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             let width: String? = data.getParameter(for: .width)
             selectedWidth = width.flatMap { appearanceCollection.getWidthForValue($0) }
         } else {
-            selectedWidth = preselectParameter(in: tracks) { appearanceCollection.getWidthForValue($0.width) }
+            selectedWidth = preselectParameter(in: tracks) {
+                guard let width = $0.dataItem?.getParameter(parameter: .width) as? String, !width.isEmpty else { return nil }
+                return appearanceCollection.getWidthForValue(width)
+            }
         }
 
         let minValue = OAGPXTrackWidth.getCustomTrackWidthMin()

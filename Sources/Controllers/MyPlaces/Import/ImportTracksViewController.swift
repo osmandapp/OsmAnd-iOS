@@ -219,6 +219,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
     }
 
     override func getRightNavbarButtons() -> [UIBarButtonItem]? {
+        guard !isCollectingTracks, !isSavingTracks else { return nil }
         let title = localizedString(selection.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
         let item = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(onSelectAllAction))
         item.tintColor = .label
@@ -345,6 +346,7 @@ private extension ImportTracksViewController {
             let plainText = attributedString?.string
             cell.descriptionLabel.attributedText = attributedString
             cell.isAccessibilityElement = true
+            cell.accessibilityValue = nil
             cell.accessibilityLabel = plainText
             cell.accessibilityTraits = .staticText
             cell.leftIconVisibility(false)
@@ -353,7 +355,10 @@ private extension ImportTracksViewController {
             hideSeparator(for: cell, false)
             cell.selectionStyle = .none
         case RowKey.importAsOne.rawValue:
-            cell.configureAccessibility(withTitle: item.title, selected: false)
+            cell.isAccessibilityElement = true
+            cell.accessibilityValue = nil
+            cell.accessibilityLabel = item.title
+            cell.accessibilityTraits = .button
             cell.titleLabel.text = item.title
             cell.titleLabel.textColor = .textColorActive
             cell.titleLabel.font = .preferredFont(forTextStyle: .body)
@@ -529,9 +534,6 @@ private extension ImportTracksViewController {
         progressStackView.isAccessibilityElement = true
         progressStackView.accessibilityLabel = progressLabel.text
         progressIndicator.isAccessibilityElement = false
-        if progressVisible {
-            UIAccessibility.post(notification: .announcement, argument: progressLabel.text)
-        }
     }
 
     func collectTracks() {
@@ -820,9 +822,7 @@ private extension ImportTracksViewController {
         notifyImportFinished(success: true)
 
         dismiss(animated: true) {
-            DispatchQueue.main.async {
-                self.handlePostImportNavigation()
-            }
+            self.handlePostImportNavigation()
             NotificationCenter.default.post(name: NSNotification.Name.OAGPXImportUIHelperDidFinishImport, object: nil)
         }
     }

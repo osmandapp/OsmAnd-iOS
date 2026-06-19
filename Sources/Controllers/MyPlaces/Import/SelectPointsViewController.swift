@@ -374,7 +374,6 @@ private extension SelectPointsViewController {
         cell.accessibilityLabel = name
         cell.accessibilityTraits = isSelected ? [.button, .selected] : .button
         cell.accessibilityValue = [
-            localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected"),
             wptItem.point.getAddress(),
             wptItem.distance
         ].compactMap { $0?.isEmpty == false ? $0 : nil }.joined(separator: ", ")

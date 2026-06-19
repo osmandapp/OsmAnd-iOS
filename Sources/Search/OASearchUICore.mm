@@ -151,14 +151,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         case EOASearchDistanceIfNotByName:
         {
             if (!c.sortByName) {
-                double s1F = [o1 getSearchDistanceFloored:c.loc];
-                double s2F = [o2 getSearchDistanceFloored:c.loc];
-                double s1R = [o1 getSearchDistanceRound:c.loc];
-                double s2R = [o2 getSearchDistanceRound:c.loc];
-                if (s1F == s2F || s1R == s2R)
+                double s1 = [o1 getSearchDistance:c.loc];
+                double s2 = [o2 getSearchDistance:c.loc];
+                if (s1 == s2)
                     break;
                 else
-                    return [OAUtilities compareDouble:fmax(s1F, s1R) y:fmax(s2F, s2R)];
+                    return [OAUtilities compareDouble:s1 y:s2];
             }
             break;
         }
@@ -202,21 +200,22 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             break;
         case EOACompareDistanceToParentSearchResult:
         {
-            double s1F = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistanceFloored:c.loc];
-            double s2F = o2.parentSearchResult == nil ? 0 : [o2.parentSearchResult getSearchDistanceFloored:c.loc];
-            double s1R = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistanceRound:c.loc];
-            double s2R = o2.parentSearchResult == nil ? 0 : [o2.parentSearchResult getSearchDistanceRound:c.loc];
-            if (s1F == s2F || s1R == s2R)
+            double s1 = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistance:c.loc];
+            double s2 = o2.parentSearchResult == nil ? 0 : [o2.parentSearchResult getSearchDistance:c.loc];
+            if (s1 == s2)
                 break;
             else
-                return [OAUtilities compareDouble:fmax(s1F, s1R) y:fmax(s2F, s2R)];
+                return [OAUtilities compareDouble:s1 y:s2];
         }
         case EOACompareByName:
         {
             NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
             NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
-            
-            int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
+            QString qStr1 = QString::fromNSString(localeName1);
+            QString qStr2 = QString::fromNSString(localeName2);
+            qStr1.replace('-', ' ');
+            qStr2.replace('-', ' ');
+            int cmp = OsmAnd::ICU::ccompare(qStr1, qStr2);
             if (cmp != 0)
                 return (NSComparisonResult)cmp;
             
@@ -224,14 +223,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         }
         case EOACompareByDistance:
         {
-            double s1F = [o1 getSearchDistanceFloored:c.loc pd:1];
-            double s2F = [o2 getSearchDistanceFloored:c.loc pd:1];
-            double s1R = [o1 getSearchDistanceRound:c.loc pd:1];
-            double s2R = [o2 getSearchDistanceRound:c.loc pd:1];
-            if (s1F == s2F || s1R == s2R)
+            double s1 = [o1 getSearchDistance:c.loc pd:1];
+            double s2 = [o2 getSearchDistance:c.loc pd:1];
+            if (s1 == s2)
                 break;
             else
-                return [OAUtilities compareDouble:fmax(s1F, s1R) y:fmax(s2F, s2R)];
+                return [OAUtilities compareDouble:s1 y:s2];
         }
         case EOAAmenityLastAndSortBySubtype:
         {
@@ -629,10 +626,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     {
         if (r1.objectType == r2.objectType && r1.objectType == EOAObjectTypeStreet)
         {
-            OAStreet *st1 = (OAStreet *) r1.object;
-            OAStreet *st2 = (OAStreet *) r2.object;
-            
-            return fabs(st1.latitude - st2.latitude) < 0.00001 && fabs(st1.longitude - st2.longitude) < 0.00001;
+            return [OAMapUtils areLocationEqual:r1.location l2:r2.location];
         }
         std::shared_ptr<const OsmAnd::Amenity> a1;
         if (r1.objectType == EOAObjectTypePoi)

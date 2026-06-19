@@ -109,4 +109,11 @@ final public class GradientChart: LineChartView {
         xAxisRenderer.renderGridLines(context: ctx)
         xAxisRenderer.renderAxisLine(context: ctx)
     }
+    
+    public func highlightXAxis(value: Double?, backgroundColor: NSUIColor, textColor: NSUIColor) {
+        guard let renderer = xAxisRenderer as? GradientXAxisRenderer else { return }
+        renderer.highlightedValue = value
+        renderer.activeBackgroundColor = backgroundColor
+        renderer.activeTextColor = textColor
+    }
 }

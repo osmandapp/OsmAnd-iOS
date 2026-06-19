@@ -228,11 +228,11 @@ static BOOL dataInvalidated = NO;
     } onTaskResumed:nil];
 }
 
-- (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
+- (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView
 {
-    [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
-            [self updateContent];
-    } onTaskResumed:nil];
+    [OAResourcesUIHelper offerDownloadAndInstallOf:item sourceView:sourceView onTaskCreated:^(id<OADownloadTask> task) {
+        [self updateContent];
+    } onTaskResumed:nil completionHandler:nil silent:NO];
 }
 
 - (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
@@ -248,7 +248,7 @@ static BOOL dataInvalidated = NO;
         repositoryItem.worldRegion = item.worldRegion;
         repositoryItem.date = item.date;
 
-        [self offerDownloadAndInstallOf:repositoryItem];
+        [self offerDownloadAndInstallOf:repositoryItem sourceView:nil];
         return;
     }
 
@@ -332,7 +332,7 @@ static BOOL dataInvalidated = NO;
     return nil;
 }
 
-- (void) onItemClicked:(id)senderItem
+- (void) onItemClicked:(id)senderItem sourceView:(UIView *)sourceView
 {
     if ([senderItem isKindOfClass:[OAResourceItem class]] || [senderItem isKindOfClass:[OASearchResult class]])
     {
@@ -363,7 +363,7 @@ static BOOL dataInvalidated = NO;
             }
 
             if (item.resource && [item isFree])
-                return [self offerDownloadAndInstallOf:item];
+                return [self offerDownloadAndInstallOf:item sourceView:sourceView];
             
             if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![_iapHelper.srtm isPurchased])
             {
@@ -406,7 +406,7 @@ static BOOL dataInvalidated = NO;
             }
             else
             {
-                [self offerDownloadAndInstallOf:item];
+                [self offerDownloadAndInstallOf:item sourceView:sourceView];
             }
         }
         else if ([item_ isKindOfClass:OACustomResourceItem.class])
@@ -523,8 +523,9 @@ static BOOL dataInvalidated = NO;
         }
         else
         {
-            if ((resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
-                || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"]))
+            BOOL isTypeMap = resource != nullptr && resource->type == OsmAndResourceType::MapRegion;
+            BOOL isTypeRoadOnly = resource != nullptr && resource->type == OsmAndResourceType::RoadMapRegion;
+            if ((isTypeMap || isTypeRoadOnly) || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"]))
                 [_app.data.mapLayerChangeObservable notifyEvent];
         }
         

@@ -447,10 +447,11 @@
     _osmAndLiveUpdatedObservable = [[OAObservable alloc] init];
     LogStartup(@"observables initialized");
 
+    BOOL isTestInit = NSClassFromString(@"SearchUICoreTest") != nil;
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                         _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
+                                                         _worldMiniBasemapFilename != nil && !isTestInit ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_hiddenMapsPath),
                                                          QString::fromNSString(_cachePath),
@@ -692,7 +693,6 @@
     // Load world regions
     [self loadWorldRegions];
     [self addRegionNamesToCommonWords];
-    [self addAbbrevationsToCommonWords];
     LogStartup(@"world regions loaded");
 
     [OAManageResourcesViewController prepareData];
@@ -1161,9 +1161,7 @@
         _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                              _documentsDir.absolutePath(),
                                                              QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                             _worldMiniBasemapFilename != nil
-                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                             : QString(),
+                                                             QString(),
                                                              QString::fromNSString(NSTemporaryDirectory()),
                                                              QString::fromNSString(_hiddenMapsPath),
                                                              QString::fromNSString(_cachePath),
@@ -1193,23 +1191,12 @@
 {
     NSMutableArray<NSString *> *regionNames = [NSMutableArray array];
     [self parseRegionNames:_worldRegion result:regionNames];
+    QStringList qRegionNames;
     for (NSString * region in regionNames)
     {
-        OsmAnd::CommonWords::addRegionName(QString::fromNSString(region));
+        qRegionNames.append(QString::fromNSString(region));
     }
-}
-
-- (void) addAbbrevationsToCommonWords
-{
-    NSDictionary * abbreviations = [OAAbbreviations getAbbreviations];
-    for (id key in abbreviations)
-    {
-        int indx = OsmAnd::CommonWords::getCommonGeocoding(QString::fromNSString(abbreviations[key]).toLower());
-        if (indx != -1)
-        {
-            OsmAnd::CommonWords::insertCommonWord(QString::fromNSString(key).toLower(), indx);
-        }
-    }
+    OsmAnd::CommonWords::addAllRegions(qRegionNames);
 }
 
 - (void)parseRegionNames:(OAWorldRegion *)region result:(NSMutableArray<NSString *> *)result

@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
-- (void)showWaypointOnMap:(OAGpxWptItem *)item latitude:(double)latitude longitude:(double)longitude;
+- (void)goToTargetPoint:(double)latitude longitude:(double)longitude;
 
 - (void) openRecordingTrackTargetView;
 - (void) openTargetViewWithGPX:(nullable OASTrackItem *)item;

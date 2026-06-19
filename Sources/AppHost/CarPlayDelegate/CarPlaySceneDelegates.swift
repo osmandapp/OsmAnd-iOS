@@ -30,10 +30,20 @@ final class CarPlaySceneDelegate: UIResponder {
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard let str = URLContexts.first?.url.absoluteString else { return }
-        if str.contains("search") {
+        guard let url = URLContexts.first?.url,
+              let action = CarPlayDashboardAction(url: url) else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.handleDeepLink(action: action)
+        }
+    }
+    
+    private func handleDeepLink(action: CarPlayDashboardAction) {
+        NSLog("[CarPlay] CarPlaySceneDelegate handling deep link action: \(action.rawValue)")
+        
+        switch action {
+        case .search:
             carPlayDashboardController?.openSearch()
-        } else if str.contains("navigation") {
+        case .navigation:
             carPlayDashboardController?.openNavigation()
         }
     }
@@ -92,27 +102,27 @@ final class CarPlaySceneDelegate: UIResponder {
     private func addListeners() {
         guard let carPlayDashboardController else { return }
         guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
-
+        
         // Register as a route information listener
         if let infoListener = carPlayDashboardController as? OARouteInformationListener {
             routingHelper.add(infoListener)
         }
-
+        
         // Register for route calculation progress callbacks
         if let progressListener = carPlayDashboardController as? OARouteCalculationProgressCallback {
             routingHelper.add(progressListener)
         }
     }
-
+    
     private func removeListeners() {
         guard let carPlayDashboardController else { return }
         guard let routingHelper = OARoutingHelper.sharedInstance() else { return }
-
+        
         // Unregister as a route information listener
         if let infoListener = carPlayDashboardController as? OARouteInformationListener {
             routingHelper.remove(infoListener)
         }
-
+        
         // Unregister route calculation progress callbacks
         if let progressListener = carPlayDashboardController as? OARouteCalculationProgressCallback {
             routingHelper.remove(progressListener)
@@ -147,7 +157,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
         
-        CarPlayService.shared.disconnectScene()
+        CarPlayService.shared.disconnectScene(.app)
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")
             return
@@ -203,7 +213,7 @@ extension CarPlaySceneDelegate: CarPlayActionDelegate {
             }
         }
     }
-
+    
     func showAlert(title: String, actions: [AlertActionConfig], presentationFailure: (() -> Void)? = nil) {
         guard let carPlayInterfaceController else {
             presentationFailure?()

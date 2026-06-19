@@ -2085,7 +2085,8 @@ typedef enum
         || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated)
         || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph
         || self.targetMenuView.targetPoint.type == OATargetTransportRouteDetails
-        || self.targetMenuView.targetPoint.type == OATargetChangePosition)
+        || self.targetMenuView.targetPoint.type == OATargetChangePosition
+        || self.targetMenuView.targetPoint.type == OATargetNewMovableWpt)
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
@@ -3027,9 +3028,8 @@ typedef enum
     }];
 }
 
-- (void)showWaypointOnMap:(OAGpxWptItem *)item latitude:(double)latitude longitude:(double)longitude
+- (void)goToTargetPoint:(double)latitude longitude:(double)longitude
 {
-    [_mapViewController showContextPinMarker:item.point.lat longitude:item.point.lon animated:NO];
     _targetLatitude = latitude;
     _targetLongitude = longitude;
     [self goToTargetPointDefault];

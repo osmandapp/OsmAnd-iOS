@@ -571,7 +571,7 @@
             if (self.onTapDownloadButtonCallback)
                 self.onTapDownloadButtonCallback();
             OAMultipleResourceItem *item = [[OAMultipleResourceItem alloc] initWithType:OsmAndResourceType::MapRegion items:_selectedResourcesItems];
-            [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:_selectedResourcesItems onTaskCreated:nil onTaskResumed:nil];
+            [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:_selectedResourcesItems sourceView:self.topButton onTaskCreated:nil onTaskResumed:nil];
             
             [self dismissViewController];
         }

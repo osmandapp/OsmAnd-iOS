@@ -47,6 +47,7 @@ NSString *const kCellSwitchIsOnKey = @"kCellSwitchIsOnKey";
 NSString *const kUse3dIconsKey = @"kUse3dIconsKey";
 NSString *const kBatterySavingModeKey = @"kBatterySavingModeKey";
 NSString *const kEnableMsaaKey = @"kEnableMsaaKey";
+NSString *const kShowTouchesKey = @"kShowTouchesKey";
 NSString *const kVisualizingButtonGridKey = @"kVisualizingButtonGridKey";
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kTraceRenderingKey = @"kTraceRenderingKey";
@@ -131,6 +132,12 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         kCellKeyKey : kEnableMsaaKey,
         kCellTitleKey : OALocalizedString(@"enable_msaa_carplay"),
         @"isOn" : @([[OAAppSettings sharedManager].enableMsaaForСarPlay get])
+    }];
+    [renderingSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kShowTouchesKey,
+        kCellTitleKey : OALocalizedString(@"show_touches"),
+        @"isOn" : @([[OAAppSettings sharedManager].showTouches get])
     }];
     [renderingSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
@@ -268,6 +275,11 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         [[OAAppSettings sharedManager].enableMsaaForСarPlay set:sender.isOn];
         if (UIApplication.sharedApplication.isCarPlayConnected)
             [OARootViewController.instance.mapPanel.mapViewController.mapView setMSAAEnabled:sender.isOn];
+    }
+    else if ([item.key isEqualToString:kShowTouchesKey])
+    {
+        [[OAAppSettings sharedManager].showTouches set:sender.isOn];
+        [[TouchIndicatorController shared] apply];
     }
     else if ([item.key isEqualToString:kSimulateOBDDataKey]) {
         [[OAAppSettings sharedManager].simulateOBDData set:sender.isOn];

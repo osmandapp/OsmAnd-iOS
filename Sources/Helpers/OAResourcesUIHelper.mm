@@ -1477,6 +1477,11 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
+    [OAResourcesUIHelper offerDownloadAndInstallOf:item sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:silent];
+}
+
++ (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
+{
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
 
@@ -1515,7 +1520,14 @@ includeHidden:(BOOL)includeHidden
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
-        [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        [self handleMapVariantConflictsForItems:@[item]
+                                     sourceView:sourceView
+                                     targetItem:item
+                                      onProceed:^{
+            [self.class startDownloadOfItem:item
+                              onTaskCreated:onTaskCreated
+                              onTaskResumed:onTaskResumed];
+        }];
     }
     else if (!silent)
     {
@@ -1523,7 +1535,14 @@ includeHidden:(BOOL)includeHidden
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            [self handleMapVariantConflictsForItems:@[item]
+                                         sourceView:nil
+                                         targetItem:item
+                                          onProceed:^{
+                [self.class startDownloadOfItem:item
+                                  onTaskCreated:onTaskCreated
+                                  onTaskResumed:onTaskResumed];
+            }];
         }]];
         
         if (completionHandler)
@@ -1544,6 +1563,7 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
                             selectedItems:(NSArray<OAResourceItem *> *)selectedItems
+                               sourceView:(UIView *)sourceView
                             onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                             onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
@@ -1593,7 +1613,14 @@ includeHidden:(BOOL)includeHidden
     }
     else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
-        [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+        [self handleMapVariantConflictsForItems:items
+                                     sourceView:sourceView
+                                     targetItem:multipleItem
+                                      onProceed:^{
+            [self.class startDownloadOfItems:items
+                               onTaskCreated:onTaskCreated
+                               onTaskResumed:onTaskResumed];
+        }];
     }
     else
     {
@@ -1603,7 +1630,14 @@ includeHidden:(BOOL)includeHidden
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_install") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            [self handleMapVariantConflictsForItems:items
+                                         sourceView:sourceView
+                                         targetItem:multipleItem
+                                          onProceed:^{
+                [self.class startDownloadOfItems:items
+                                   onTaskCreated:onTaskCreated
+                                   onTaskResumed:onTaskResumed];
+            }];
         }]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
     }
@@ -1615,7 +1649,13 @@ includeHidden:(BOOL)includeHidden
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
-    BOOL isFree = resourceInRepository && (resourceInRepository->free || resourceInRepository->type == OsmAnd::ResourcesManager::ResourceType::MapRegion);
+    if (!resourceInRepository)
+        return;
+    
+    const auto resourceType = resourceInRepository->type;
+    BOOL isMapRegion = resourceType == OsmAnd::ResourcesManager::ResourceType::MapRegion;
+    BOOL isRoadMapRegion = resourceType == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion;
+    BOOL isFree = resourceInRepository && (resourceInRepository->free || isMapRegion || isRoadMapRegion);
     if (!isFree && ![self.class checkIfUpdateEnabled:item.worldRegion])
         return;
 
@@ -2018,6 +2058,8 @@ includeHidden:(BOOL)includeHidden
 
                 if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
+                
+                [item.worldRegion.superregion updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
             }
         }
 
@@ -2522,6 +2564,182 @@ includeHidden:(BOOL)includeHidden
     
     [task resume];
     [session finishTasksAndInvalidate];
+}
+
+#pragma mark - Map Variant Conflicts (Map <--> RoadOnly)
+
++ (void)handleMapVariantConflictsForItems:(NSArray<OAResourceItem *> *)items
+                               sourceView:(UIView *)sourceView
+                               targetItem:(OAResourceItem *)targetItem
+                                onProceed:(dispatch_block_t)onProceed
+{
+    if (!targetItem || !targetItem.worldRegion)
+    {
+        if (onProceed)
+            onProceed();
+        return;
+    }
+
+    BOOL targetIsRoad = targetItem.resourceType == OsmAndResourceType::RoadMapRegion;
+    BOOL targetIsMap  = targetItem.resourceType == OsmAndResourceType::MapRegion;
+    if (!targetIsRoad && !targetIsMap)
+    {
+        if (onProceed)
+            onProceed();
+        return;
+    }
+    
+    NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *duplicateMaps = [self getLocalResourcesToDeleteFor:items];
+    
+    if (duplicateMaps.count > 0)
+    {
+        [self presentMapVariantConflictActionSheet:targetItem sourceView:sourceView onReplace:^{
+            [self addPendingMapVariantDeletions:duplicateMaps];
+            if (onProceed)
+                onProceed();
+        } onKeepBoth:^{
+            if (onProceed)
+                onProceed();
+        }];
+    }
+    else
+    {
+        if (onProceed)
+            onProceed();
+    }
+}
+
++ (void)presentMapVariantConflictActionSheet:(OAResourceItem *)targetItem
+                                    sourceView:(UIView *)sourceView
+                                     onReplace:(dispatch_block_t)onReplace
+                                    onKeepBoth:(dispatch_block_t)onKeepBoth
+{
+    if (!targetItem || !targetItem.worldRegion)
+        return;
+
+    BOOL targetIsRoad = targetItem.resourceType == OsmAndResourceType::RoadMapRegion;
+    
+    NSString *resourceName = [self.class titleOfResourceType:targetItem.resourceType inRegion:targetItem.worldRegion withRegionName:YES withResourceType:NO];
+    NSString *messageKey = targetIsRoad ? @"map_variant_has_standard_download_road_message" : @"map_variant_has_road_download_standard_message";
+    NSString *replaceButtonKey = targetIsRoad ? @"map_variant_replace_with_road_only" : @"map_variant_replace_with_standard";
+
+    UIAlertController *sheet = [UIAlertController alertControllerWithTitle:OALocalizedString(@"map_variant_duplicate_title")
+                                                                   message:[NSString stringWithFormat:OALocalizedString(messageKey), resourceName]
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+
+    [sheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(replaceButtonKey)
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(__unused UIAlertAction * _Nonnull action) {
+        if (onReplace) onReplace();
+    }]];
+
+    [sheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"keep_both")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(__unused UIAlertAction * _Nonnull action) {
+        if (onKeepBoth) onKeepBoth();
+    }]];
+
+    [sheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleCancel
+                                            handler:nil]];
+
+    UIPopoverPresentationController *popover = sheet.popoverPresentationController;
+    if (popover) {
+        if (sourceView)
+        {
+            popover.sourceView = sourceView;
+            popover.sourceRect = sourceView.bounds;
+            popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+        }
+        else
+        {
+            UIView *anchorView = [OARootViewController instance].view;
+            popover.sourceView = anchorView;
+            popover.sourceRect = CGRectMake(CGRectGetMidX(anchorView.bounds), CGRectGetMidY(anchorView.bounds), 1, 1);
+            popover.permittedArrowDirections = 0;
+        }
+    }
+    [[OARootViewController instance] presentViewController:sheet animated:YES completion:nil];
+}
+
++ (void)addPendingMapVariantDeletions:(NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)variantMaps
+{
+    [variantMaps enumerateKeysAndObjectsUsingBlock:^(NSString *key,
+                                                     NSArray<OALocalResourceItem *> *items,
+                                                     BOOL *stop) {
+        NSMutableArray *mapped = [NSMutableArray arrayWithCapacity:items.count];
+        for (OALocalResourceItem *item in items)
+        {
+            [mapped addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
+        }
+        
+        [MapVariantReplacementManager.shared storePendingDeletion:mapped for:key];
+    }];
+}
+
++ (NSArray<OALocalResourceItem *> *)getLocalItemsFor:(OARepositoryResourceItem *)targetItem oppositeType:(OsmAndResourceType)oppositeType
+{
+    NSMutableArray<OALocalResourceItem *> *result = [NSMutableArray array];
+
+    NSArray<OAResourceItem *> *items = [self requestMapDownloadInfo:@[targetItem.worldRegion]
+                                                      resourceTypes:@[[OAResourceType toValue:oppositeType]]
+                                                            isGroup:NO];
+
+    NSString *targetRegionId = targetItem.worldRegion.regionId;
+
+    for (OAResourceItem *it in items)
+    {
+        if (!it.worldRegion || ![it.worldRegion.regionId isEqualToString:targetRegionId])
+            continue;
+
+        if ([it isKindOfClass:OALocalResourceItem.class] || [it isKindOfClass:OAOutdatedResourceItem.class])
+            [result addObject:(OALocalResourceItem *)it];
+    }
+
+    return result;
+}
+
++ (OsmAndResourceType)oppositeMapTypeForResourceType:(OARepositoryResourceItem *)targetItem
+{
+    if (targetItem.resourceType == OsmAndResourceType::RoadMapRegion)
+        return OsmAndResourceType::MapRegion;
+    if (targetItem.resourceType == OsmAndResourceType::MapRegion)
+        return OsmAndResourceType::RoadMapRegion;
+    return OsmAndResourceType::Unknown;
+}
+
++ (NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *)getLocalResourcesToDeleteFor:(NSArray<OAResourceItem *> *)items
+{
+    NSMutableDictionary<NSString *, NSArray<OALocalResourceItem *> *> *pending = [NSMutableDictionary dictionary];
+
+    if (items.count == 0)
+        return pending;
+
+    for (OAResourceItem *item in items)
+    {
+        if (![item isKindOfClass:OARepositoryResourceItem.class])
+            continue;
+
+        OARepositoryResourceItem *targetItem = (OARepositoryResourceItem *)item;
+        if (!targetItem.worldRegion)
+            continue;
+
+        OsmAndResourceType oppositeType = [self oppositeMapTypeForResourceType:targetItem];
+        if (oppositeType == OsmAndResourceType::Unknown)
+            continue;
+
+        NSArray<OALocalResourceItem *> *toDelete = [self getLocalItemsFor:targetItem oppositeType:oppositeType];
+        if (toDelete.count == 0)
+            continue;
+
+        NSString *resourceId = targetItem.resourceId.toNSString();
+        if (resourceId.length == 0)
+            continue;
+
+        pending[resourceId] = [toDelete copy];
+    }
+    
+    return pending;
 }
 
 @end

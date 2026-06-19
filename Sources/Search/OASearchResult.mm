@@ -140,7 +140,7 @@
         }
         // if all words from search phrase match (<) the search result words - we prioritize it higher
         if (matched)
-            res = [self getPhraseWeightForCompleteMatch:completeMatchRes];
+            res = [self getPhraseWeightForCompleteMatch:completeMatchRes exactResult:exactResult];
         if ([_object isKindOfClass:OAPOI.class])
         {
             OAPOI * a = (OAPOI *) _object;
@@ -159,7 +159,7 @@
     return res;
 }
 
-- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes
+- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes exactResult:(OASearchResult *)exactResult
     {
         double res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10; // range 10 - 40
         BOOL closeDistance = false;
@@ -186,6 +186,10 @@
             if (closeDistance)
             {
                 res += 1;
+            }
+            if (_objectType == EOAObjectTypeCity && exactResult == nil)
+            {
+                res += MAX_PHRASE_WEIGHT_TOTAL / 2;
             }
             // range 60 - 91
         }
@@ -353,14 +357,13 @@
     return inc;
 }
 
-- (double) getSearchDistanceRound:(CLLocation *)location
+- (double) getSearchDistance:(CLLocation *)location
 {
     double distance = 0;
     if (location && self.location)
     {
-        // round to 5 decimal places
-        CLLocationDegrees lat1 = (round(self.location.coordinate.latitude * 100000)) / 100000.0;
-        CLLocationDegrees lon1 = (round(self.location.coordinate.longitude * 100000)) / 100000.0;
+        CLLocationDegrees lat1 = self.location.coordinate.latitude;
+        CLLocationDegrees lon1 = self.location.coordinate.longitude;
         CLLocationDegrees lat2 = location.coordinate.latitude;
         CLLocationDegrees lon2 = location.coordinate.longitude;
         distance = getDistance(lat1, lon1, lat2, lon2);
@@ -369,44 +372,13 @@
     return self.priority - 1 / (1 + self.priorityDistance * distance);
 }
 
-- (double) getSearchDistanceRound:(CLLocation *)location pd:(double)pd
+- (double) getSearchDistance:(CLLocation *)location pd:(double)pd
 {
     double distance = 0.0;
     if (location && self.location)
     {
-        CLLocationDegrees lat1 = (round(self.location.coordinate.latitude * 100000)) / 100000.0;
-        CLLocationDegrees lon1 = (round(self.location.coordinate.longitude * 100000)) / 100000.0;
-        CLLocationDegrees lat2 = location.coordinate.latitude;
-        CLLocationDegrees lon2 = location.coordinate.longitude;
-        distance = getDistance(lat1, lon1, lat2, lon2);
-    }
-    
-    return self.priority - 1.0 / (1.0 + pd * distance);
-}
-
-- (double) getSearchDistanceFloored:(CLLocation *)location
-{
-    double distance = 0;
-    if (location && self.location)
-    {
-        // floor to 5 decimal places
-        CLLocationDegrees lat1 = (floor(self.location.coordinate.latitude * 100000)) / 100000.0;
-        CLLocationDegrees lon1 = (floor(self.location.coordinate.longitude * 100000)) / 100000.0;
-        CLLocationDegrees lat2 = location.coordinate.latitude;
-        CLLocationDegrees lon2 = location.coordinate.longitude;
-        distance = getDistance(lat1, lon1, lat2, lon2);
-    }
-    
-    return self.priority - 1 / (1 + self.priorityDistance * distance);
-}
-
-- (double) getSearchDistanceFloored:(CLLocation *)location pd:(double)pd
-{
-    double distance = 0.0;
-    if (location && self.location)
-    {
-        CLLocationDegrees lat1 = (floor(self.location.coordinate.latitude * 100000)) / 100000.0;
-        CLLocationDegrees lon1 = (floor(self.location.coordinate.longitude * 100000)) / 100000.0;
+        CLLocationDegrees lat1 = self.location.coordinate.latitude;
+        CLLocationDegrees lon1 = self.location.coordinate.longitude;
         CLLocationDegrees lat2 = location.coordinate.latitude;
         CLLocationDegrees lon2 = location.coordinate.longitude;
         distance = getDistance(lat1, lon1, lat2, lon2);

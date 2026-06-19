@@ -134,6 +134,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+    BOOL _isFetchingNearestPoi;
 }
 
 - (instancetype)init
@@ -527,6 +528,9 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 {
     if (OARowsContainKey(rows, @"nearest_poi"))
         return;
+    
+    if (_isFetchingNearestPoi)
+        return;
 
     OAPOI *poi = [self getTargetObj];
     if (![poi isKindOfClass:OAPOI.class] || ![self showNearestPoi])
@@ -541,7 +545,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         [self addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
         return;
     }
-
+    _isFetchingNearestPoi = YES;
     __weak __typeof(self) weakSelf = self;
     [self fetchNearestPoi:poi filter:filter completion:^(NSArray<OAPOI *> *results) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -555,6 +559,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
             [strongSelf addNearestPoiRowIfNeeded:rows poi:poi filter:filter];
             [strongSelf updateInfoRows];
         }
+        strongSelf->_isFetchingNearestPoi = NO;
     }];
 }
 
@@ -712,12 +717,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
-    UIView *view = [[UIView alloc] init];
-    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-    self.tableView.backgroundView = view;
-    self.tableView.scrollEnabled = NO;
+    
+    [self setupTableView];
+    
     _calculatedWidth = 0;
     [self buildMenu:[NSMutableArray array]];
 }
@@ -730,6 +732,19 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void) setupTableView
+{
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.tableView.backgroundView = view;
+    self.tableView.scrollEnabled = NO;
+    
+    [self.tableView registerClass:WikipediaContextMenuCell.self forCellReuseIdentifier:[WikipediaContextMenuCell reuseIdentifier]];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -1308,6 +1323,64 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     [self.navController presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)didTapWiki:(OAAmenityInfoRow *)info
+{
+    NSString *url = info.hiddenUrl;
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    BOOL isWikiPurchased = helper.wiki.isPurchased;
+    
+    if (NSStringIsEmpty(url))
+    {
+        if (![self isKindOfClass:OAPOIViewController.class])
+            return;
+        
+        id target = [self getTargetObj];
+        if (![target isKindOfClass:OAPOI.class])
+            return;
+        
+        if (!isWikiPurchased)
+        {
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+            return;
+        }
+        
+        OAWikiWebViewController *wikiController =
+        [[OAWikiWebViewController alloc] initWithPoi:target];
+        
+        [OARootViewController.instance.mapPanel.navigationController
+         pushViewController:wikiController
+         animated:YES];
+        return;
+    }
+    
+    if ([url containsString:kWikiLink])
+    {
+        if (!isWikiPurchased)
+        {
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+            return;
+        }
+        
+        CLLocation *location =
+        [[CLLocation alloc] initWithLatitude:self.location.latitude
+                                   longitude:self.location.longitude];
+        
+        NSInteger index = [_rows indexOfObject:info];
+        
+        if (index != NSNotFound)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [OAWikiArticleHelper showWikiArticle:location
+                                             url:url
+                                      sourceView:[_tableView cellForRowAtIndexPath:indexPath]];
+        }
+    }
+    else
+    {
+        [OAUtilities callUrl:url];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -1371,7 +1444,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         }
         return cell;
     }
-    else if ([info.typeName isEqualToString:kShortDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionWikiRowType] || [info.typeName isEqualToString:kShortDescriptionTravelRowType])
+    else if ([info.typeName isEqualToString:kShortDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionTravelRowType])
     {
         OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -1395,6 +1468,45 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             h = MAX(48.0, h);
             info.height = h;
         }
+        return cell;
+    } else if ([info.typeName isEqualToString:kShortDescriptionWikiRowType])
+    {
+        WikipediaContextMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:[WikipediaContextMenuCell reuseIdentifier]];
+ 
+        NSString *label = info.text;
+        NSString *buttonText = info.textPrefix;
+        
+        __weak __typeof(self) weakSelf = self;
+        __weak __typeof(info) weakInfo = info;
+        
+        [cell configureWithText:label buttonText:buttonText icon:info.icon onButtonAction:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            __strong __typeof(weakInfo) strongInfo = weakInfo;
+            
+            if (!strongSelf || !strongInfo) return;
+            
+            [strongSelf didTapWiki:strongInfo];
+        }];
+
+        cell.onExpandStateChange = ^(BOOL isExpand, WikipediaContextMenuCell * _Nonnull cell) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            __strong __typeof(weakInfo) strongInfo = weakInfo;
+            
+            if (!strongSelf || !strongInfo) return;
+            
+            strongInfo.height = [cell calculateHeightIn:strongSelf.tableView.bounds.size.width];
+            strongInfo.collapsed = isExpand;
+            
+            [strongSelf.tableView beginUpdates];
+            [strongSelf.tableView endUpdates];
+            
+            [strongSelf calculateContentHeight];
+            if (strongSelf.delegate)
+                [strongSelf.delegate contentHeightChanged:0];
+        };
+        
+        info.height = [cell calculateHeightIn:tableView.frame.size.width];
+
         return cell;
     }
     
@@ -1644,7 +1756,21 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         }
         else
         {
-            [OAUtilities callUrl:NSStringIsEmpty(info.hiddenUrl) ? info.text : info.hiddenUrl];
+            NSString *inputString = NSStringIsEmpty(info.hiddenUrl) ? info.text : info.hiddenUrl;
+            NSArray<NSString *> *urls = [inputString extractValidURLs];
+     
+            if (urls.count == 1)
+                [OAUtilities callUrl:urls.firstObject];
+            else if (urls.count > 1)
+            {
+                MultipleValuesViewController *controller = [[MultipleValuesViewController alloc] initWithTitle:localizedString(@"shared_string_url")
+                                                                                                          urls:urls
+                                                                                                      onSelect:^(NSString * _Nonnull selectedURL) {
+                    [OAUtilities callUrl:selectedURL];
+                }];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+                [self.navController presentViewController:navigationController animated:YES completion:nil];
+            }
         }
     }
     else if (info.isText && info.moreText)
@@ -1673,57 +1799,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
-    }
-    else if ([info.typeName isEqualToString:kShortDescriptionWikiRowType])
-    {
-        NSString *url = info.hiddenUrl;
-        OAIAPHelper *helper = [OAIAPHelper sharedInstance];
-        BOOL isWikiPurchased = helper.wiki.isPurchased;
-        
-        if (NSStringIsEmpty(url))
-        {
-            if (![self isKindOfClass:OAPOIViewController.class])
-                return;
-            
-            id target = [self getTargetObj];
-            if (![target isKindOfClass:OAPOI.class])
-                return;
-            
-            if (!isWikiPurchased)
-            {
-                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-                return;
-            }
-            
-            OAWikiWebViewController *wikiController =
-                [[OAWikiWebViewController alloc] initWithPoi:target];
-            
-            [OARootViewController.instance.mapPanel.navigationController
-                pushViewController:wikiController
-                          animated:YES];
-            return;
-        }
-        
-        if ([url containsString:kWikiLink])
-        {
-            if (!isWikiPurchased)
-            {
-                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-                return;
-            }
-            
-            CLLocation *location =
-                [[CLLocation alloc] initWithLatitude:self.location.latitude
-                                          longitude:self.location.longitude];
-            
-            [OAWikiArticleHelper showWikiArticle:location
-                                             url:url
-                                      sourceView:[tableView cellForRowAtIndexPath:indexPath]];
-        }
-        else
-        {
-            [OAUtilities callUrl:url];
-        }
     }
     else if ([info.typeName isEqualToString:kShortDescriptionTravelRowType])
     {

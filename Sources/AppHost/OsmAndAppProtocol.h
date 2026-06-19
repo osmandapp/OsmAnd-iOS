@@ -64,7 +64,6 @@
 - (void) saveDataToPermamentStorage;
 
 - (void) addRegionNamesToCommonWords;
-- (void) addAbbrevationsToCommonWords;
 - (void) parseRegionNames:(OAWorldRegion *)region result:(NSMutableArray<NSString *> *)result;
 
 @property(readonly) NSString* favoritesFilePrefix;

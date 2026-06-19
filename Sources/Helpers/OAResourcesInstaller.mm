@@ -355,24 +355,25 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         else
                         {
                             OAWorldRegion *foundRegion;
-                            if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+                            for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
                             {
-                                for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+                                if (region.downloadsIdPrefix.length > 0 && resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
                                 {
-                                    if (region.downloadsIdPrefix.length > 0 &&  resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
-                                    {
-                                        foundRegion = region;
-                                        break;
-                                    }
+                                    foundRegion = region;
+                                    break;
                                 }
-
+                            }
+                            if (foundRegion && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion ||
+                                                resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion ||
+                                                resource->type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion))
+                            {
                                 //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
-
+                                
                                 if (foundRegion && foundRegion.superregion && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                                 {
                                     [self initSettingsFirstMap:foundRegion];
                                 }
-
+                                
                                 if (foundRegion && foundRegion.superregion && !task.silentInstall)
                                 {
                                     dispatch_async(dispatch_get_main_queue(), ^{

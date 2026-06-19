@@ -77,7 +77,7 @@
 "settings_preset_descr" = "Map-vido kaj navigadaj agordoj estas memoritaj aparte por iu profilo de uzado. Agordi vian implicitan profilon tie ĉi.";
 "unit_of_length" = "Unuoj de longo";
 "unit_of_length_descr" = "Ŝanĝi unuojn por reprezenti distancoj.";
-"coords_format" = "Koordinat-formo";
+"coords_format" = "Formo de koordinatoj";
 "coordinates" = "Koordinatoj";
 "coords_format_descr" = "Formo de geografiaj koordinatoj.";
 "rotate_map_to" = "Map-orientiĝo";
@@ -2763,3 +2763,4 @@
 "trip_recording_moving_time" = "Tempo dum movo";
 "open_till_short" = "ĝis";
 "open_from_short" = "ekde";
+"shared_string_ratio" = "rilatumo";

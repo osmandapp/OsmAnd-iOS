@@ -226,7 +226,7 @@
             }
             else
             {
-                cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+                cell.iconView.image = [UIImage imageNamedOrMxIcon:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
         }

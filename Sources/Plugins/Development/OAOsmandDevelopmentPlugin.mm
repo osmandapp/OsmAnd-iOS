@@ -50,6 +50,8 @@
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devCameraDistance appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devZoomLevel appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devTargetDistance appModes:@[]];
+
+        [[TouchIndicatorController shared] apply];
     }
     return self;
 }

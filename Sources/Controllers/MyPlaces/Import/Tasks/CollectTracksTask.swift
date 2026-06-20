@@ -36,10 +36,12 @@ final class CollectTracksTask: OAAsyncTask {
         let author = gpxAuthor()
         var items: [ImportTrackItem] = []
 
-        for (index, track) in tracks.enumerated() {
+        var index = 0
+        for track in tracks {
             guard !isCancelled() else { return items }
             guard !track.isGeneralTrack() else { continue }
             items.append(makeImportTrackItem(from: track, at: index, baseName: baseName, author: author))
+            index += 1
         }
 
         assignWaypoints(from: gpxFile, to: &items)
@@ -95,7 +97,7 @@ final class CollectTracksTask: OAAsyncTask {
         if let name = track.name, !name.isEmpty {
             return name
         }
-        return String(format: localizedString("ltr_or_rtl_combine_via_dash"), baseName, "\(index)")
+        return String(format: localizedString("ltr_or_rtl_combine_via_dash"), baseName, "\(index + 1)")
     }
 
     private func assignWaypoints(from sourceFile: GpxFile, to items: inout [ImportTrackItem]) {

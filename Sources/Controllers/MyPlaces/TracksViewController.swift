@@ -84,7 +84,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var selectedTracks: [GpxDataItem] = []
     private var selectedFolders: [String] = []
     
-    private var pendingImportFolderPath: String?
+    private var folderPathToOpenAfterLoad: String?
     
     private var app: OsmAndAppProtocol
     private var settings: OAAppSettings
@@ -227,26 +227,26 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         unregisterNotificationsAndObservers()
     }
     
-    func setPendingImportFolder(_ selectedFolderPath: String) {
-        pendingImportFolderPath = selectedFolderPath
+    func setFolderToOpenAfterLoad(_ selectedFolderPath: String) {
+        folderPathToOpenAfterLoad = selectedFolderPath
     }
     
-    func navigateToFolderAfterImport(_ absolutePath: String?) {
+    func navigateToSubfolder(_ absolutePath: String?) {
         let gpxPath = app.gpxPath ?? ""
 
         if absolutePath == nil || absolutePath?.isEmpty == true || absolutePath == gpxPath {
-            pendingImportFolderPath = nil
+            folderPathToOpenAfterLoad = nil
             updateAllFoldersVCData(forceLoad: true)
             return
         }
         
-        pendingImportFolderPath = absolutePath
+        folderPathToOpenAfterLoad = absolutePath
         
         guard rootFolder.getFlattenedSubFolders().contains(where: {
             $0.getDirFile().path() == absolutePath
         }) else { return }
         
-        handlePendingImportFolderIfNeeded()
+        openSubfolderIfNeeded()
     }
     
     private func registerObservers() {
@@ -1021,9 +1021,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         updateDistanceAndDirection(false)
     }
     
-    private func handlePendingImportFolderIfNeeded() {
-        guard let absolutePath = pendingImportFolderPath else { return }
-        pendingImportFolderPath = nil
+    private func openSubfolderIfNeeded() {
+        guard let absolutePath = folderPathToOpenAfterLoad else { return }
+        folderPathToOpenAfterLoad = nil
         
         let gpxPath = app.gpxPath ?? ""
         if absolutePath.isEmpty || absolutePath == gpxPath { return }
@@ -2737,7 +2737,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
         onLoadFinished(folder: folder)
-        handlePendingImportFolderIfNeeded()
+        openSubfolderIfNeeded()
     }
     
     func tracksLoaded(folder: TrackFolder) {

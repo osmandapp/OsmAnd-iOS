@@ -31,7 +31,6 @@ private struct SaveGpxTaskResult {
 
 final class SaveGpxAsyncTask: OAAsyncTask {
 
-    private static let gpxExtension = ".gpx"
     private static let importDateFormat: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -68,23 +67,9 @@ final class SaveGpxAsyncTask: OAAsyncTask {
     // MARK: - Static
 
     static func plannedDestinationPath(destinationDir: String, fileName: String) -> String {
-        var name = normalizedFileName(fileName)
-        if name.isEmpty {
-            name = "import\(gpxExtension)"
-        }
-        return (destinationDir as NSString).appendingPathComponent(name)
-    }
+        var name = SaveImportedGpxHelper.sanitizedFileName(from: fileName, stripArchiveExtensions: true)
 
-    private static func normalizedFileName(_ raw: String) -> String {
-        var name = raw
-        let lowercased = name.lowercased()
-        if lowercased.hasSuffix(".kml") || lowercased.hasSuffix(".kmz") || lowercased.hasSuffix(".zip") {
-            name = String(name.dropLast(4))
-        }
-        if !name.lowercased().hasSuffix(gpxExtension) {
-            name += gpxExtension
-        }
-        return name
+        return (destinationDir as NSString).appendingPathComponent(name)
     }
     
     // MARK: - Override
@@ -138,13 +123,13 @@ final class SaveGpxAsyncTask: OAAsyncTask {
     }
 
     private func resolveDestinationPath() -> String {
-        var name = Self.normalizedFileName(fileName)
+        var name = SaveImportedGpxHelper.sanitizedFileName(from: fileName, stripArchiveExtensions: true)
 
         if name.isEmpty {
             let point = gpxFile.findPointToShow()
             let timestamp = point?.time ?? Int64(Date().timeIntervalSince1970 * 1000)
             let date = Date(timeIntervalSince1970: TimeInterval(timestamp) / 1000)
-            name = "import_\(Self.importDateFormat.string(from: date))\(Self.gpxExtension)"
+            name = "import_\(Self.importDateFormat.string(from: date))\(SaveImportedGpxHelper.gpxExtension)"
         }
 
         var destinationPath = (destinationDir as NSString).appendingPathComponent(name)

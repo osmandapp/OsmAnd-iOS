@@ -20,9 +20,6 @@ private struct SaveTracksTaskResult {
 }
 
 final class SaveTracksTask: OAAsyncTask {
-
-    private static let gpxExtension = ".gpx"
-
     private let items: [ImportTrackItem]
     private let destinationDir: String
     private weak var listener: SaveImportedGpxListener?
@@ -85,7 +82,7 @@ final class SaveTracksTask: OAAsyncTask {
     }
 
     private func saveTrackItem(_ trackItem: ImportTrackItem, fileManager: FileManager) -> SavedTrackResult {
-        let gpxToSave = trackItem.selectedGpxFile
+        let gpxToSave = trackItem.selectedGpxFile.clone()
         gpxToSave.addPoints(collection: trackItem.selectedPoints)
 
         let destinationPath = uniqueDestinationPath(for: trackItem.name, fileManager: fileManager)
@@ -96,15 +93,14 @@ final class SaveTracksTask: OAAsyncTask {
             return SavedTrackResult(error: error, savedPath: nil)
         }
 
+        trackItem.savedPath = destinationPath
+        
         SaveImportedGpxHelper.processSavedFile(at: destinationPath, gpxFile: gpxToSave)
         return SavedTrackResult(error: nil, savedPath: destinationPath)
     }
 
     private func uniqueDestinationPath(for rawName: String, fileManager: FileManager) -> String {
-        var fileName = rawName
-        if !fileName.lowercased().hasSuffix(Self.gpxExtension) {
-            fileName += Self.gpxExtension
-        }
+        var fileName = SaveImportedGpxHelper.sanitizedFileName(from: rawName)
 
         var destinationPath = (destinationDir as NSString).appendingPathComponent(fileName)
         while fileManager.fileExists(atPath: destinationPath) {

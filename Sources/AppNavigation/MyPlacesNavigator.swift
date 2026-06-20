@@ -49,7 +49,7 @@ final class MyPlacesNavigator: NSObject {
         if let myPlaces = nav.viewControllers.first(where: { $0 is MyPlacesContainerViewController }) as? MyPlacesContainerViewController {
             nav.popToViewController(myPlaces, animated: false)
             myPlaces.switchToWithSegmentControl(tab: .tracks)
-            (myPlaces.viewController(for: .tracks) as? TracksViewController)?.navigateToFolderAfterImport(absoluteFolderPath)
+            (myPlaces.viewController(for: .tracks) as? TracksViewController)?.navigateToSubfolder(absoluteFolderPath)
             return
         }
         
@@ -59,7 +59,7 @@ final class MyPlacesNavigator: NSObject {
         let myPlaces = MyPlacesContainerViewController()
         myPlaces.loadViewIfNeeded()
         myPlaces.selectedTab = .tracks
-        myPlaces.pendingTracksFolderPath = absoluteFolderPath
+        myPlaces.tracksFolderPathToOpenOnLoad = absoluteFolderPath
         nav.pushViewController(myPlaces, animated: true)
     }
 

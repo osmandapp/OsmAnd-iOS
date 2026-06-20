@@ -20,6 +20,7 @@ final class ImportTrackItem: Hashable {
     var previewImage: UIImage?
     var isPreviewLoading = false
     var bitmapDrawer: TrackBitmapDrawer?
+    var savedPath: String?
 
     init(index: Int, name: String, gpxFile: GpxFile, selectedPoints: [WptPt], suggestedPoints: [WptPt]) {
         self.index = index
@@ -279,7 +280,7 @@ private extension ImportTracksViewController {
         headerRow.cellType = OASimpleTableViewCell.reuseIdentifier
         headerRow.key = RowKey.trackHeader.rawValue
         headerRow.title = item.name
-        let positionText = String(format: localizedString("ltr_or_rtl_combine_via_of"), item.index, trackItems.count)
+        let positionText = String(format: localizedString("ltr_or_rtl_combine_via_of"), item.index + 1, trackItems.count)
         headerRow.descr = String(
             format: localizedString("ltr_or_rtl_combine_via_space"),
             localizedString("shared_string_gpx_track"),
@@ -300,15 +301,17 @@ private extension ImportTracksViewController {
             statsRow.setObj(item, forKey: RowObjKey.importTrackItem.rawValue)
         }
 
-        let waypointsRow = section.createNewRow()
-        waypointsRow.cellType = OAValueTableViewCell.reuseIdentifier
-        waypointsRow.key = RowKey.trackWaypoints.rawValue
-        waypointsRow.title = localizedString("shared_string_waypoints")
-        waypointsRow.icon = .icCustomFolder
-        waypointsRow.iconTintColor = .iconColorActive
-        waypointsRow.setObj(item, forKey: RowObjKey.importTrackItem.rawValue)
-        waypointsRow.accessibilityLabel = waypointsRow.title
-        waypointsRow.accessibilityValue = waypointsRow.descr
+        if allPointsCount > 0 {
+            let waypointsRow = section.createNewRow()
+            waypointsRow.cellType = OAValueTableViewCell.reuseIdentifier
+            waypointsRow.key = RowKey.trackWaypoints.rawValue
+            waypointsRow.title = localizedString("shared_string_waypoints")
+            waypointsRow.icon = .icCustomFolder
+            waypointsRow.iconTintColor = .iconColorActive
+            waypointsRow.setObj(item, forKey: RowObjKey.importTrackItem.rawValue)
+            waypointsRow.accessibilityLabel = waypointsRow.title
+            waypointsRow.accessibilityValue = waypointsRow.descr
+        }
     }
 
     func appendFolderSection() {
@@ -613,23 +616,24 @@ private extension ImportTracksViewController {
     }
 
     func folderIndex(for path: String) -> Int {
-        folderNames.firstIndex(of: folderDisplayName(for: path)) ?? 0
+        let relative = folderRelativePath(for: path)
+        return folderNames.firstIndex(of: relative) ?? 0
     }
 
     func folderDisplayName(for path: String) -> String {
-        let gpxPath = OsmAndApp.swiftInstance().gpxPath ?? ""
-        if path.isEmpty || path == gpxPath {
-            return localizedString("shared_string_gpx_tracks")
-        }
-        return (path as NSString).lastPathComponent
+        folderRelativePath(for: path)
     }
 
     func folderPath(forDisplayName name: String) -> String {
-        let gpxPath = OsmAndApp.swiftInstance().gpxPath ?? ""
+        let gpxPath = OsmAndApp.swiftInstance()?.gpxPath ?? ""
         if name == localizedString("shared_string_gpx_tracks") {
             return gpxPath
         }
-        return gpxPath.appendingPathComponent(name)
+        var result = gpxPath
+        for component in name.split(separator: "/") {
+            result = (result as NSString).appendingPathComponent(String(component))
+        }
+        return result
     }
 
     func folderTrackCounts() -> [NSNumber] {
@@ -694,6 +698,18 @@ private extension ImportTracksViewController {
     func suggestedFolderNameFromFile() -> String {
         (fileName as NSString).deletingPathExtension
     }
+    
+    func folderRelativePath(for absolutePath: String) -> String {
+        let gpxPath = OsmAndApp.swiftInstance()?.gpxPath ?? ""
+        if absolutePath.isEmpty || absolutePath == gpxPath {
+            return localizedString("shared_string_gpx_tracks")
+        }
+        let prefix = gpxPath.hasSuffix("/") ? gpxPath : gpxPath + "/"
+        guard absolutePath.hasPrefix(prefix) else {
+            return (absolutePath as NSString).lastPathComponent
+        }
+        return String(absolutePath.dropFirst(prefix.count))
+    }
 }
 
 // MARK: - Actions
@@ -711,7 +727,8 @@ private extension ImportTracksViewController {
 
     func importSelectedTracksAction() {
         guard !isCollectingTracks, !isSavingTracks, !selection.isEmpty else { return }
-        let items = selection.selectedItems.sorted { $0.index < $1.index }
+        let items = selection.selectedItems.filter { $0.savedPath == nil }.sorted { $0.index < $1.index }
+        guard !items.isEmpty else { return }
         saveTracksTask = SaveTracksTask(items: items, destinationDir: selectedFolderPath, listener: self)
         saveTracksTask?.execute()
     }
@@ -958,6 +975,11 @@ extension ImportTracksViewController: SaveImportedGpxListener {
         }
         successfulSaveCount += 1
         lastSavedPath = savedPath
+        
+        guard let savedPath,
+              let item = trackItems.first(where: { $0.savedPath == savedPath }),
+              selection.selectedItems.contains(item) else { return }
+        selection.toggle(item)
     }
 
     func onGpxSavingFinished(warning: [String]) {
@@ -971,6 +993,8 @@ extension ImportTracksViewController: SaveImportedGpxListener {
             finishImportSuccessfully()
         } else {
             showSaveError(warning.joined(separator: "\n"))
+            updateButtonsState()
+            tableView.reloadData()
         }
     }
 }

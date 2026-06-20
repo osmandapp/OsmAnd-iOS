@@ -10,6 +10,8 @@ import Foundation
 import OsmAndShared
 
 enum SaveImportedGpxHelper {
+    static let gpxExtension = ".gpx"
+    
     static func processSavedFile(at path: String, gpxFile: GpxFile) {
         gpxFile.path = path
 
@@ -47,5 +49,25 @@ enum SaveImportedGpxHelper {
         let trackItem = TrackItem(file: file)
         trackItem.dataItem = dataItem
         SharedLibSmartFolderHelper.shared.addTrackItemToSmartFolder(item: trackItem)
+    }
+    
+    static func sanitizedFileName(from rawName: String, stripArchiveExtensions: Bool = false) -> String {
+        var fileName = (rawName as NSString).lastPathComponent.sanitizeFileName()
+        if fileName.isEmpty || fileName == "." || fileName == ".." {
+            fileName = "import"
+        }
+        if stripArchiveExtensions {
+            let lowercased = fileName.lowercased()
+            if lowercased.hasSuffix(".kml") || lowercased.hasSuffix(".kmz") || lowercased.hasSuffix(".zip") {
+                fileName = String(fileName.dropLast(4))
+            }
+            if fileName.isEmpty || fileName == "." || fileName == ".." {
+                fileName = "import"
+            }
+        }
+        if !fileName.lowercased().hasSuffix(gpxExtension) {
+            fileName += gpxExtension
+        }
+        return fileName
     }
 }

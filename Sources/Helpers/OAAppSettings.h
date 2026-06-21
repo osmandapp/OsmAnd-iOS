@@ -414,7 +414,6 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 @property (nonatomic, readonly) BOOL shared;
 @property (nonatomic, assign) BOOL lastModifiedTimeStored;
 @property (nonatomic) long lastModifiedTime;
-@property (nonatomic) BOOL isSilentChange;
 
 - (instancetype) makeGlobal;
 - (instancetype) makeProfile;
@@ -1341,9 +1340,10 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global;
 - (OACommonPreference *)getGlobalPreference:(NSString *)key;
 - (void)setGlobalPreference:(NSString *)value key:(NSString *)key;
-- (void)setGlobalPreference:(NSString *)value key:(NSString *)key isSilent:(BOOL)isSilent;
 - (OACommonPreference *)getProfilePreference:(NSString *)key;
 - (void)setProfilePreference:(NSString *)value key:(NSString *)key;
++ (void)performBatchedPreferenceNotifications:(void (^)(void))changes;
++ (void)notifyPreferenceKeysChanged:(NSSet<NSString *> *)keys;
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences;
 - (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;

@@ -155,7 +155,8 @@ final class GradientPaletteHelper: NSObject {
                     self.openGradientEditor(from: viewController, fileType: fileType)
                 })
             }
-
+    
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
             if let popoverPresentationController = alert.popoverPresentationController {
                 popoverPresentationController.sourceView = sourceView ?? viewController.view
                 popoverPresentationController.sourceRect = sourceView?.bounds ?? viewController.view.bounds

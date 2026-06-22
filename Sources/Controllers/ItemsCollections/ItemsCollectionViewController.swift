@@ -725,7 +725,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         alert.addTextField { textField in
             textField.text = paletteItem.displayName
         }
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
+        let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
             guard let self, let newName = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
             guard !newName.isEmpty else {
                 OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: self.view)
@@ -733,8 +733,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             }
             guard let indexPath = self.indexPath(for: paletteItem), let renamedPaletteItem = GradientPaletteHelper.shared.renamePaletteItem(paletteItem, newName: newName) else { return }
             self.renameItem(fromContextMenu: indexPath, oldItem: paletteItem, newItem: renamedPaletteItem)
-        })
+        }
+        alert.addAction(applyAction)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.preferredAction = applyAction
         present(alert, animated: true)
     }
 

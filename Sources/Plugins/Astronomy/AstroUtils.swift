@@ -46,7 +46,7 @@ enum AstroIcon {
         return UIGraphicsImageRenderer(size: size, format: format).image { _ in
             base.withTintColor(baseColor, renderingMode: .alwaysOriginal).draw(in: CGRect(origin: .zero, size: size))
             overlay.withTintColor(overlayColor, renderingMode: .alwaysOriginal).draw(in: CGRect(origin: .zero, size: size))
-        }.withRenderingMode(.alwaysOriginal)
+        }.withRenderingMode(.alwaysTemplate)
     }
 }
 

@@ -236,10 +236,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func setupRightControls() {
-        addRoundButton(closeButton, iconName: "ic_custom_close", accessibilityLabel: localizedString("shared_string_close"))
+        addRoundButton(closeButton, iconName: "ic_navbar_close", accessibilityLabel: localizedString("shared_string_close"))
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
-        addRoundButton(settingsButton, iconName: "ic_layer_top", accessibilityLabel: localizedString("shared_string_settings"))
+        addRoundButton(settingsButton, iconName: "ic_custom_overlay_map", accessibilityLabel: localizedString("shared_string_settings"))
         settingsButton.addTarget(self, action: #selector(showConfigureSheet), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
@@ -1222,13 +1222,26 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         let navigationController = UINavigationController(rootViewController: sheet)
         navigationController.modalPresentationStyle = .pageSheet
         navigationController.navigationBar.prefersLargeTitles = false
-        if let sheetPresentationController = navigationController.sheetPresentationController {
-            sheetPresentationController.detents = [.medium(), .large()]
-            sheetPresentationController.selectedDetentIdentifier = .medium
-            sheetPresentationController.prefersGrabberVisible = true
-            sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheetPresentationController.preferredCornerRadius = 24
-            sheetPresentationController.largestUndimmedDetentIdentifier = .medium
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if let sheetPresentationController = navigationController.sheetPresentationController {
+                sheetPresentationController.detents = [.large()]
+                sheetPresentationController.selectedDetentIdentifier = .large
+                sheetPresentationController.prefersGrabberVisible = true
+                sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
+                sheetPresentationController.preferredCornerRadius = 24
+                sheetPresentationController.largestUndimmedDetentIdentifier = .large
+                sheetPresentationController.sourceView = compassButton
+            }
+        } else {
+            if let sheetPresentationController = navigationController.sheetPresentationController {
+                sheetPresentationController.detents = [.medium(), .large()]
+                sheetPresentationController.selectedDetentIdentifier = .medium
+                sheetPresentationController.prefersGrabberVisible = true
+                sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
+                sheetPresentationController.preferredCornerRadius = 24
+                sheetPresentationController.largestUndimmedDetentIdentifier = .large
+            }
         }
         configureSheetController = sheet
         configureSheetNavigationController = navigationController

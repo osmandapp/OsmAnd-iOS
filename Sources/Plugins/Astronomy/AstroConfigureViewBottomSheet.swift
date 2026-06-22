@@ -9,6 +9,19 @@
 import UIKit
 
 final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentationControllerDelegate {
+    private enum Layout {
+        static let contentPadding: CGFloat = 16
+        static let contentPaddingSmall: CGFloat = 15
+        static let contentPaddingMedium: CGFloat = 9
+        static let contentPaddingMinimal: CGFloat = 2
+        static let headerTitleRowHeight: CGFloat = 56
+        static let headerTitlePadding: CGFloat = 32
+        static let sectionCornerRadius: CGFloat = 26
+        static let closeButtonSize: CGFloat = 48
+        static let closeCircleSize: CGFloat = 44
+        static let closeIconSize: CGFloat = 24
+    }
+    
     var config = AstronomyPluginSettings.StarMapConfig()
     var commonConfig = AstronomyPluginSettings.CommonConfig()
     var onConfigChanged: ((AstronomyPluginSettings.StarMapConfig) -> Void)?
@@ -16,18 +29,6 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     var onRedFilterChanged: ((Bool) -> Void)?
     var onClose: (() -> Void)?
     var onDismissed: (() -> Void)?
-
-    private enum Layout {
-        static let contentPadding: CGFloat = 16
-        static let contentPaddingSmall: CGFloat = 12
-        static let contentPaddingMedium: CGFloat = 9
-        static let contentPaddingMinimal: CGFloat = 2
-        static let headerTitleRowHeight: CGFloat = 56
-        static let sectionCornerRadius: CGFloat = 12
-        static let closeButtonSize: CGFloat = 48
-        static let closeCircleSize: CGFloat = 32
-        static let closeIconSize: CGFloat = 24
-    }
 
     private let scrollView = UIScrollView()
     private let contentStack = UIStackView()
@@ -38,8 +39,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     private let personalContent = UIStackView()
     private let renderingContent = UIStackView()
 
-    private weak var redFilterCard: AstroActionCard?
     private var themeRenderActions: [() -> Void] = []
+    private weak var redFilterCard: AstroActionCard?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,12 +93,17 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     }
 
     private func configureNavigationBar() {
-        title = nil
-        navigationItem.title = nil
+        let imageClose = OAUtilities.resize(UIImage.templateImageNamed("ic_navbar_close"),
+                                            newSize: CGSize(width: 24, height: 24))?.withRenderingMode(.alwaysTemplate)
+        let closeButton = UIBarButtonItem(image: imageClose, style: .plain, target: self, action: #selector(closeAction))
+        closeButton.tintColor = .label
+        closeButton.accessibilityLabel = localizedString("shared_string_close")
+        
+        title = localizedString("astro_configure_view")
+        navigationItem.title = localizedString("astro_configure_view")
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.leftBarButtonItem = nil
+        navigationItem.leftBarButtonItem = closeButton
         navigationItem.rightBarButtonItem = nil
-        navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     private func setupScrollView() {
@@ -128,16 +134,12 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     private func setupContent() {
         setupTopCard()
         contentStack.addArrangedSubview(topCard)
-        contentStack.addArrangedSubview(sectionCard(title: localizedString("personal_category_name"),
-                                                    contentStack: personalContent))
-        contentStack.addArrangedSubview(sectionCard(title: localizedString("astro_rendering"),
-                                                    contentStack: renderingContent))
+        contentStack.addArrangedSubview(setupSection(stackView: personalContent, with: localizedString("personal_category_name")))
+        contentStack.addArrangedSubview(setupSection(stackView: renderingContent, with: localizedString("astro_rendering")))
     }
 
     private func setupTopCard() {
         topCard.translatesAutoresizingMaskIntoConstraints = false
-        topCard.layer.cornerRadius = Layout.sectionCornerRadius
-        topCard.layer.masksToBounds = true
         topCard.addSubview(topCardStack)
 
         topCardStack.axis = .vertical
@@ -151,81 +153,11 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
             topCardStack.bottomAnchor.constraint(equalTo: topCard.bottomAnchor)
         ])
 
-        addHeader()
         setupTopButtonsRow()
         topCardStack.addArrangedSubview(topButtonsRow)
-        topCardStack.addArrangedSubview(divider())
-        addVisibleObjectsTitle()
+        topCardStack.addArrangedSubview(createHeaderView(text: localizedString("astro_visible_objects")))
         setupVisibleObjectsGrid()
         topCardStack.addArrangedSubview(visibleObjectsGridContent)
-    }
-
-    private func addHeader() {
-        let header = UIStackView()
-        header.axis = .vertical
-        header.spacing = Layout.contentPaddingMinimal
-
-        let titleRow = UIView()
-        let title = UILabel()
-        title.text = localizedString("astro_configure_view")
-        title.textColor = .textColorPrimary
-        title.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        title.adjustsFontForContentSizeCategory = false
-        title.translatesAutoresizingMaskIntoConstraints = false
-
-        let closeButton = makeCloseButton()
-        titleRow.addSubview(title)
-        titleRow.addSubview(closeButton)
-
-        NSLayoutConstraint.activate([
-            titleRow.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.headerTitleRowHeight),
-            title.leadingAnchor.constraint(equalTo: titleRow.leadingAnchor, constant: Layout.contentPadding),
-            title.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -Layout.contentPaddingSmall),
-            title.centerYAnchor.constraint(equalTo: titleRow.centerYAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: titleRow.trailingAnchor, constant: -4),
-            closeButton.centerYAnchor.constraint(equalTo: titleRow.centerYAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: Layout.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: Layout.closeButtonSize)
-        ])
-
-        header.addArrangedSubview(titleRow)
-        topCardStack.addArrangedSubview(header)
-    }
-
-    private func makeCloseButton() -> UIControl {
-        let control = UIControl()
-        control.translatesAutoresizingMaskIntoConstraints = false
-        control.addAction(UIAction { [weak self] _ in
-            self?.onClose?()
-        }, for: .touchUpInside)
-
-        let circle = UIView()
-        circle.backgroundColor = .viewBg
-        circle.layer.cornerRadius = Layout.closeCircleSize / 2
-        circle.isUserInteractionEnabled = false
-        circle.translatesAutoresizingMaskIntoConstraints = false
-
-        let imageView = UIImageView(image: .icCustomClose)
-        imageView.tintColor = .iconColorDefault
-        imageView.contentMode = .scaleAspectFit
-        imageView.isUserInteractionEnabled = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-
-        control.addSubview(circle)
-        control.addSubview(imageView)
-
-        NSLayoutConstraint.activate([
-            circle.centerXAnchor.constraint(equalTo: control.centerXAnchor),
-            circle.centerYAnchor.constraint(equalTo: control.centerYAnchor),
-            circle.widthAnchor.constraint(equalToConstant: Layout.closeCircleSize),
-            circle.heightAnchor.constraint(equalToConstant: Layout.closeCircleSize),
-            imageView.centerXAnchor.constraint(equalTo: control.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: control.centerYAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: Layout.closeIconSize),
-            imageView.heightAnchor.constraint(equalToConstant: Layout.closeIconSize)
-        ])
-
-        return control
     }
 
     private func setupTopButtonsRow() {
@@ -239,34 +171,64 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         topButtonsRow.isLayoutMarginsRelativeArrangement = true
     }
 
-    private func addVisibleObjectsTitle() {
-        let container = UIView()
-        let title = UILabel()
-        title.text = localizedString("astro_visible_objects")
-        title.textColor = .textColorPrimary
-        title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        title.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(title)
-
-        NSLayoutConstraint.activate([
-            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
-            title.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: Layout.contentPadding),
-            title.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -Layout.contentPadding),
-            title.topAnchor.constraint(equalTo: container.topAnchor, constant: Layout.contentPaddingSmall),
-            title.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -Layout.contentPaddingSmall)
-        ])
-
-        topCardStack.addArrangedSubview(container)
-    }
-
     private func setupVisibleObjectsGrid() {
         visibleObjectsGridContent.axis = .vertical
         visibleObjectsGridContent.spacing = Layout.contentPaddingSmall
         visibleObjectsGridContent.layoutMargins = UIEdgeInsets(top: 0,
                                                                left: Layout.contentPadding,
-                                                               bottom: Layout.contentPadding,
+                                                               bottom: 0,
                                                                right: Layout.contentPadding)
         visibleObjectsGridContent.isLayoutMarginsRelativeArrangement = true
+    }
+    
+    private func setupSection(stackView: UIStackView, with title: String) -> UIView {
+        let header = createHeaderView(text: title)
+        
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        
+        stackView.layer.cornerRadius = Layout.sectionCornerRadius
+        stackView.layer.masksToBounds = true
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        container.addSubview(header)
+        container.addSubview(stackView)
+
+        NSLayoutConstraint.activate([
+            header.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            header.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            header.topAnchor.constraint(equalTo: container.topAnchor, constant: Layout.contentPadding),
+            
+            stackView.leadingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.leadingAnchor, constant: Layout.contentPadding),
+            stackView.trailingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.trailingAnchor, constant: -Layout.contentPadding),
+            stackView.topAnchor.constraint(equalTo: header.bottomAnchor),
+            stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+        ])
+
+        return container
+    }
+    
+    private func createHeaderView(text: String) -> UIView {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        
+        let title = UILabel()
+        title.text = text
+        title.textColor = .textColorSecondary
+        title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        
+        container.addSubview(title)
+
+        NSLayoutConstraint.activate([
+            title.leadingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.leadingAnchor, constant: Layout.headerTitlePadding),
+            title.trailingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.trailingAnchor, constant: -Layout.headerTitlePadding),
+            title.topAnchor.constraint(equalTo: container.topAnchor, constant: Layout.contentPaddingSmall),
+            title.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -Layout.contentPaddingSmall)
+        ])
+
+        return container
     }
 
     private func bindMapActions() {
@@ -419,28 +381,13 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
     private func bindSwitchRows() {
         let current = config
-
-        addSwitchRow(
-            parent: personalContent,
-            iconName: "ic_custom_bookmark",
-            titleRes: "favorites_item",
-            checked: current.showFavorites,
-            smallItem: false
-        ) { [weak self] checked in
-            guard let self else {
-                return
-            }
-            var updated = config
-            updated.showFavorites = checked
-            applyConfigChange(updated)
-        }
         
         addSwitchRow(
             parent: personalContent,
-            iconName: "ic_custom_target_direction_on",
+            iconNameEnabled: "ic_custom_target_direction_on",
+            iconNameDisabled: "ic_custom_target_direction_off",
             titleRes: "astro_directions",
-            checked: current.showDirections,
-            smallItem: false
+            checked: current.showDirections
         ) { [weak self] checked in
             guard let self else {
                 return
@@ -449,14 +396,29 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
             updated.showDirections = checked
             applyConfigChange(updated)
         }
+        
+        addSwitchRow(
+            parent: personalContent,
+            iconNameEnabled: "ic_custom_bookmark",
+            iconNameDisabled: "ic_custom_bookmark_outlined",
+            titleRes: "favorites_item",
+            checked: current.showFavorites
+        ) { [weak self] checked in
+            guard let self else {
+                return
+            }
+            var updated = config
+            updated.showFavorites = checked
+            applyConfigChange(updated)
+        }
 
         addSwitchRow(
             parent: personalContent,
-            iconName: "ic_custom_target_path_on",
+            iconNameEnabled: "ic_custom_target_path_on",
+            iconNameDisabled: "ic_custom_target_path_off",
             titleRes: "astro_daily_path",
             checked: current.showCelestialPaths,
-            showDivider: false,
-            smallItem: false
+            showDivider: false
         ) { [weak self] checked in
             guard let self else {
                 return
@@ -468,7 +430,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_custom_azimuthal_grid",
+            iconNameEnabled: "ic_custom_azimuthal_grid",
+            iconNameDisabled: "ic_custom_azimuthal_grid",
             titleRes: "azimuthal_grid",
             checked: current.showAzimuthalGrid
         ) { [weak self] checked in
@@ -482,7 +445,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_custom_meridian_line",
+            iconNameEnabled: "ic_custom_meridian_line",
+            iconNameDisabled: "ic_custom_meridian_line",
             titleRes: "meridian_line",
             checked: current.showMeridianLine
         ) { [weak self] checked in
@@ -496,7 +460,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_custom_equatorial_grid",
+            iconNameEnabled: "ic_custom_equatorial_grid",
+            iconNameDisabled: "ic_custom_equatorial_grid",
             titleRes: "equatorial_grid",
             checked: current.showEquatorialGrid
         ) { [weak self] checked in
@@ -510,7 +475,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_custom_eliptical_line",
+            iconNameEnabled: "ic_custom_eliptical_line",
+            iconNameDisabled: "ic_custom_eliptical_line",
             titleRes: "ecliptic_line",
             checked: current.showEclipticLine
         ) { [weak self] checked in
@@ -524,10 +490,11 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_custom_galaxy_equator",
+            iconNameEnabled: "ic_custom_galaxy_equator",
+            iconNameDisabled: "ic_custom_galaxy_equator",
             titleRes: "equator_line",
             checked: current.showEquatorLine,
-            showDivider: false
+            showDivider: true
         ) { [weak self] checked in
             guard let self else {
                 return
@@ -539,7 +506,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
         addSwitchRow(
             parent: renderingContent,
-            iconName: "ic_custom_galaxy_line",
+            iconNameEnabled: "ic_custom_galaxy_line",
+            iconNameDisabled: "ic_custom_galaxy_line",
             titleRes: "galactic_line",
             checked: current.showGalacticLine,
             showDivider: false
@@ -636,18 +604,18 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
     private func addSwitchRow(
         parent: UIStackView,
-        iconName: String,
+        iconNameEnabled: String,
+        iconNameDisabled: String,
         titleRes: String,
         checked: Bool,
         showDivider: Bool = true,
-        smallItem: Bool = true,
         onToggle: @escaping (Bool) -> Void
     ) {
-        let row = AstroSwitchRow(iconName: iconName,
+        let row = AstroSwitchRow(iconNameEnabled: iconNameEnabled,
+                                 iconNameDisabled: iconNameDisabled,
                                  title: localizedString(titleRes),
                                  checked: checked,
                                  showDivider: showDivider,
-                                 smallItem: smallItem,
                                  onToggle: onToggle)
         parent.addArrangedSubview(row)
     }
@@ -671,38 +639,6 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         return row
     }
 
-    private func sectionCard(title: String, contentStack sectionContentStack: UIStackView) -> UIStackView {
-        let wrapper = UIStackView()
-        wrapper.axis = .vertical
-        wrapper.spacing = 0
-        wrapper.backgroundColor = .groupBg
-        wrapper.layer.cornerRadius = Layout.sectionCornerRadius
-        wrapper.layer.masksToBounds = true
-
-        let titleContainer = UIView()
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.textColor = .textColorPrimary
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleContainer.addSubview(titleLabel)
-
-        NSLayoutConstraint.activate([
-            titleContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
-            titleLabel.leadingAnchor.constraint(equalTo: titleContainer.leadingAnchor, constant: Layout.contentPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: titleContainer.trailingAnchor, constant: -Layout.contentPadding),
-            titleLabel.topAnchor.constraint(equalTo: titleContainer.topAnchor, constant: Layout.contentPaddingSmall),
-            titleLabel.bottomAnchor.constraint(equalTo: titleContainer.bottomAnchor, constant: -Layout.contentPaddingSmall)
-        ])
-
-        sectionContentStack.axis = .vertical
-        sectionContentStack.spacing = 0
-
-        wrapper.addArrangedSubview(titleContainer)
-        wrapper.addArrangedSubview(sectionContentStack)
-        return wrapper
-    }
-
     private func divider() -> UIView {
         let divider = UIView()
         divider.backgroundColor = .customSeparator
@@ -718,7 +654,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         return AstroIcon.layeredTemplate(baseName: "ic_custom_red_filter_base_on",
                                          baseColor: .iconColorActive,
                                          overlayName: "ic_custom_red_filter_overlay_on",
-                                         overlayColor: .systemRed)
+                                         overlayColor: .iconColorDisruptive)
     }
 
     private func applyConfigChange(_ newConfig: AstronomyPluginSettings.StarMapConfig) {
@@ -728,8 +664,11 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
     private func applyTheme() {
         view.backgroundColor = .viewBg
-        scrollView.backgroundColor = .viewBg
-        topCard.backgroundColor = .groupBg
+    }
+    
+    @objc
+    private func closeAction() {
+        onClose?()
     }
 }
 
@@ -748,6 +687,13 @@ private enum AstroConfigureTheme {
 }
 
 private final class AstroActionCard: UIControl {
+    
+    override var isHighlighted: Bool {
+        didSet {
+            alpha = isHighlighted ? 0.65 : 1
+        }
+    }
+    
     private let iconView = UIImageView()
     private let titleLabel = UILabel()
     private var checked = false
@@ -760,12 +706,6 @@ private final class AstroActionCard: UIControl {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override var isHighlighted: Bool {
-        didSet {
-            alpha = isHighlighted ? 0.65 : 1
-        }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -784,14 +724,15 @@ private final class AstroActionCard: UIControl {
 
     private func setupView() {
         translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 6
+        layer.cornerRadius = 10
         layer.masksToBounds = true
 
         iconView.contentMode = .scaleAspectFit
         iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.isUserInteractionEnabled = false
 
-        titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        titleLabel.font = .preferredFont(forTextStyle: .subheadline)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 2
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -803,7 +744,7 @@ private final class AstroActionCard: UIControl {
         addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 66),
+            heightAnchor.constraint(equalToConstant: 75),
             iconView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
             iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
             iconView.widthAnchor.constraint(equalToConstant: 24),
@@ -816,16 +757,24 @@ private final class AstroActionCard: UIControl {
     }
 
     private func applyStyle() {
-        backgroundColor = checked ? AstroConfigureTheme.actionTileSelectedBackground : AstroConfigureTheme.actionTileBackground
-        layer.borderWidth = 2
-        layer.borderColor = checked ? UIColor.iconColorActive.cgColor : UIColor.clear.cgColor
+        backgroundColor = checked ? .buttonBgColorTertiary : .groupBg
+        layer.borderWidth = checked ? 2 : 0
+        layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
         iconView.tintColor = .iconColorActive
-        titleLabel.textColor = .iconColorActive
+        titleLabel.textColor = .buttonTextColorSecondary
     }
 }
 
 private final class AstroSwitchRow: UIControl {
-    private let iconName: String
+    
+    override var isHighlighted: Bool {
+        didSet {
+            alpha = isHighlighted ? 0.65 : 1
+        }
+    }
+    
+    private let iconNameEnabled: String
+    private let iconNameDisabled: String
     private let iconView = UIImageView()
     private let titleLabel = UILabel()
     private let switcher = UISwitch()
@@ -833,28 +782,23 @@ private final class AstroSwitchRow: UIControl {
     private let onToggle: (Bool) -> Void
     private var checked: Bool
 
-    init(iconName: String,
+    init(iconNameEnabled: String,
+         iconNameDisabled: String,
          title: String,
          checked: Bool,
          showDivider: Bool,
-         smallItem: Bool,
          onToggle: @escaping (Bool) -> Void) {
-        self.iconName = iconName
+        self.iconNameEnabled = iconNameEnabled
+        self.iconNameDisabled = iconNameDisabled
         self.checked = checked
         self.onToggle = onToggle
         super.init(frame: .zero)
-        setupView(title: title, checked: checked, showDivider: showDivider, smallItem: smallItem)
+        setupView(title: title, checked: checked, showDivider: showDivider)
         applyStyle()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override var isHighlighted: Bool {
-        didSet {
-            alpha = isHighlighted ? 0.65 : 1
-        }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -864,7 +808,7 @@ private final class AstroSwitchRow: UIControl {
         }
     }
 
-    private func setupView(title: String, checked: Bool, showDivider: Bool, smallItem: Bool) {
+    private func setupView(title: String, checked: Bool, showDivider: Bool) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         addAction(UIAction { [weak self] _ in
@@ -872,17 +816,19 @@ private final class AstroSwitchRow: UIControl {
         }, for: .touchUpInside)
 
         let contentView = UIView()
+        contentView.backgroundColor = .groupBg
         contentView.isUserInteractionEnabled = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
 
-        iconView.image = AstroIcon.template(iconName)
+        iconView.image = AstroIcon.template(checked ? iconNameEnabled : iconNameDisabled)
         iconView.contentMode = .scaleAspectFit
         iconView.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.text = title
         titleLabel.textColor = .textColorPrimary
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        titleLabel.font = .preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.8
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -905,12 +851,12 @@ private final class AstroSwitchRow: UIControl {
         let dividerHeight = showDivider ? AstroConfigureTheme.separatorHeight : 0
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: smallItem ? 48 : 56),
+            heightAnchor.constraint(greaterThanOrEqualToConstant: 52),
             contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             contentView.topAnchor.constraint(equalTo: topAnchor),
             contentView.bottomAnchor.constraint(equalTo: dividerView.topAnchor),
-            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 72),
+            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 56),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: dividerHeight),
@@ -920,8 +866,8 @@ private final class AstroSwitchRow: UIControl {
             iconView.heightAnchor.constraint(equalToConstant: 24),
             switcher.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             switcher.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: switcher.leadingAnchor, constant: -32),
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: switcher.leadingAnchor, constant: -16),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
@@ -944,7 +890,7 @@ private final class AstroSwitchRow: UIControl {
     }
 
     private func applyStyle() {
-        iconView.image = AstroIcon.template(iconName)
+        iconView.image = AstroIcon.template(checked ? iconNameEnabled : iconNameDisabled)
         iconView.tintColor = checked ? .iconColorActive : .iconColorDefault
         titleLabel.textColor = .textColorPrimary
         dividerView.backgroundColor = .customSeparator

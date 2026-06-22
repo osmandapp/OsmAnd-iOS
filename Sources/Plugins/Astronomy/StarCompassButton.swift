@@ -10,7 +10,7 @@ import UIKit
 
 final class StarCompassButton: StarMapButton {
     var onSingleTap: (() -> Void)?
-    private let arrowView = UIImageView(image: AstroIcon.original("ic_compass_white"))
+    private let arrowView = UIImageView(image: AstroIcon.original("ic_custom_direction_compass"))
     private var currentRotation: CGFloat = 0
 
     override init(frame: CGRect) {

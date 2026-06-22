@@ -8,7 +8,6 @@
 
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
-#import "OAOsmEditsListViewController.h"
 #import "OAMappersViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"

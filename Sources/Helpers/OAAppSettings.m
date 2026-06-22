@@ -25,6 +25,16 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
+static NSString * const kPreferenceNotificationBatchDepthThreadKey = @"OAPreferenceNotificationBatchDepth";
+static NSString * const kPreferenceNotificationBatchKeysThreadKey = @"OAPreferenceNotificationBatchKeys";
+
+@interface OAAppSettings ()
+
++ (void)notifyPreferenceChanged:(OACommonPreference *)preference;
++ (void)postPreferenceNotificationWithObject:(id)object keys:(NSSet<NSString *> *)keys enqueue:(BOOL)enqueue;
+
+@end
+
 static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
 static NSString * const metricSystemKey = @"settingMetricSystemKey";
@@ -146,6 +156,7 @@ static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const batterySavingModeKey = @"batterySavingMode";
 static NSString * const enableMsaaForСarPlayKey = @"enableMsaaForСarPlayKey";
 static NSString * const showPrimitivesDebugInfoKey = @"showPrimitivesDebugInfoKey";
+static NSString * const showTouchesKey = @"showTouchesKey";
 
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const viewAngleVisibilityKey = @"viewAngleVisibility";
@@ -251,6 +262,7 @@ static NSString * const customWidgetKeys = @"custom_widgets_keys";
 static NSString * const tracksSortModesKey = @"tracks_tabs_sort_modes";
 static NSString * const searchTracksSortModesKey = @"search_tracks_sort_mode";
 static NSString * const travelGuidesSortModeKey = @"travel_guides_tabs_sort_mode";
+static NSString * const osmEditsSortModeKey = @"osm_edits_tabs_sort_mode";
 static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
@@ -392,8 +404,6 @@ static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentT
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
 static NSString * const currentTrackRouteActivityKey = @"currentTrackRouteActivityKey";
 
-static NSString * const customTrackColorsKey = @"customTrackColors";
-static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
 static NSString * const lastUsedProfileIconsKey = @"lastUsedProfileIcons";
 
@@ -1690,8 +1700,8 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
        [self setLastModifiedTime:NSDate.date.timeIntervalSince1970];
     
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
-    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
-    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+    
+    [OAAppSettings notifyPreferenceChanged:self];
 }
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode
@@ -1878,8 +1888,8 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         [self.cachedValues setObject:appMode forKey:mode];
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
-    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
-    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+    
+    [OAAppSettings notifyPreferenceChanged:self];
 }
 
 - (void)resetToDefault
@@ -4276,8 +4286,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
-    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
-    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+    
+    [OAAppSettings notifyPreferenceChanged:self];
 }
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
@@ -5700,6 +5710,91 @@ static NSString *kOfflineKey = @"OFFLINE";
     return _sharedManager;
 }
 
++ (void)performBatchedPreferenceNotifications:(void (^)(void))changes
+{
+    if (!changes)
+        return;
+
+    NSMutableDictionary *threadDictionary = NSThread.currentThread.threadDictionary;
+    NSInteger previousDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue];
+    if (previousDepth == 0)
+        threadDictionary[kPreferenceNotificationBatchKeysThreadKey] = [NSMutableSet set];
+
+    threadDictionary[kPreferenceNotificationBatchDepthThreadKey] = @(previousDepth + 1);
+    @try
+    {
+        changes();
+    }
+    @finally
+    {
+        NSInteger currentDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue] - 1;
+        if (currentDepth > 0)
+        {
+            threadDictionary[kPreferenceNotificationBatchDepthThreadKey] = @(currentDepth);
+        }
+        else
+        {
+            NSSet<NSString *> *changedKeys = [threadDictionary[kPreferenceNotificationBatchKeysThreadKey] copy];
+            [threadDictionary removeObjectForKey:kPreferenceNotificationBatchDepthThreadKey];
+            [threadDictionary removeObjectForKey:kPreferenceNotificationBatchKeysThreadKey];
+            if (changedKeys.count > 0)
+                [self postPreferenceNotificationWithObject:nil keys:changedKeys enqueue:NO];
+        }
+    }
+}
+
++ (void)notifyPreferenceKeysChanged:(NSSet<NSString *> *)keys
+{
+    if (keys.count == 0)
+        return;
+
+    NSMutableDictionary *threadDictionary = NSThread.currentThread.threadDictionary;
+    NSInteger batchDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue];
+    if (batchDepth > 0)
+    {
+        NSMutableSet<NSString *> *batchedKeys = threadDictionary[kPreferenceNotificationBatchKeysThreadKey];
+        if (!batchedKeys)
+        {
+            batchedKeys = [NSMutableSet set];
+            threadDictionary[kPreferenceNotificationBatchKeysThreadKey] = batchedKeys;
+        }
+        [batchedKeys unionSet:keys];
+    }
+    else
+    {
+        [self postPreferenceNotificationWithObject:nil keys:keys enqueue:NO];
+    }
+}
+
++ (void)notifyPreferenceChanged:(OACommonPreference *)preference
+{
+    if (preference.key.length == 0)
+        return;
+
+    NSSet<NSString *> *keys = [NSSet setWithObject:preference.key];
+    NSMutableDictionary *threadDictionary = NSThread.currentThread.threadDictionary;
+    NSInteger batchDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue];
+    if (batchDepth > 0)
+        [self notifyPreferenceKeysChanged:keys];
+    else
+        [self postPreferenceNotificationWithObject:preference keys:keys enqueue:YES];
+}
+
++ (void)postPreferenceNotificationWithObject:(id)object keys:(NSSet<NSString *> *)keys enqueue:(BOOL)enqueue
+{
+    if (keys.count == 0)
+        return;
+
+    NSSet<NSString *> *keysCopy = [keys copy];
+    executeOnMainThread(^{
+        NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:object userInfo:@{kPreferenceKeysUserInfoKey:keysCopy}];
+        if (enqueue)
+            [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+        else
+            [[NSNotificationCenter defaultCenter] postNotification:notif];
+    });
+}
+
 - (instancetype) init
 {
     self = [super init];
@@ -6085,8 +6180,11 @@ static NSString *kOfflineKey = @"OFFLINE";
         _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeTitleFor:nil]];
         [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
         
-        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultSortModeTitle]];
+        _travelGuidesSortMode = [OACommonString withKey:travelGuidesSortModeKey defValue:[MyPlacesSortModeHelper defaultTravelGuidesSortModeTitle]];
         [_globalPreferences setObject:_travelGuidesSortMode forKey:travelGuidesSortModeKey];
+        
+        _osmEditsSortMode = [OACommonString withKey:osmEditsSortModeKey defValue:[MyPlacesSortModeHelper defaultOsmEditsSortModeTitle]];
+               [_globalPreferences setObject:_osmEditsSortMode forKey:osmEditsSortModeKey];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
@@ -6633,8 +6731,6 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
         [_currentTrackRouteActivity setModeDefaultValue:@"adventure_motorcycling" mode:OAApplicationMode.MOTORCYCLE];
         
-        _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
-        _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedProfileIcons = [[[OACommonStringList withKey:lastUsedProfileIconsKey defValue:@[]] makeGlobal] makeShared];
 
@@ -6654,8 +6750,6 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
         [_profilePreferences setObject:_currentTrackRouteActivity forKey:@"current_track_route_activity"];
         
-        [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
-        [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
         [_globalPreferences setObject:_lastUsedProfileIcons forKey:@"last_used_profile_icons"];
 
@@ -6676,6 +6770,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _showPrimitivesDebugInfo = [[[OACommonBoolean withKey:showPrimitivesDebugInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_showPrimitivesDebugInfo forKey:@"show_primitives_debug_info"];
+
+        _showTouches = [[[OACommonBoolean withKey:showTouchesKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_showTouches forKey:@"show_touches"];
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:levelToSwitchVectorRasterKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];

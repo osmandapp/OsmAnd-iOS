@@ -27,9 +27,9 @@
 - (void) refreshContent:(BOOL)update;
 - (void) updateDisplayItem:(OAResourceItem *)item;
 
-- (void) onItemClicked:(id)senderItem;
+- (void) onItemClicked:(id)senderItem sourceView:(UIView *)sourceView;
 
-- (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item;
+- (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView;
 - (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item;
 
 - (void) startDownloadOfItem:(OARepositoryResourceItem*)item;

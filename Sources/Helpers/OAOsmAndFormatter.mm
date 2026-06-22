@@ -452,10 +452,10 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
             [valueUnitArray addObject:_unitsMinKm];
             return [OAUtilities getFormattedValue:@"-" unit:_unitsMinKm];
         }
-        float minPerKm = METERS_IN_KILOMETER / (METERS_PER_SECOND * 60);
+        float minPerKm = METERS_IN_KILOMETER / (metersperseconds * 60);
         if (minPerKm >= 10)
         {
-            return [self getFormattedSpeed:minPerKm unit:_unitsMinKm valueUnitArray:valueUnitArray];
+            return [self getFormattedSpeed:round(minPerKm) unit:_unitsMinKm valueUnitArray:valueUnitArray];
         }
         else
         {

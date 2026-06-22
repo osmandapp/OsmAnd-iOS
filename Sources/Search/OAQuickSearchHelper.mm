@@ -634,9 +634,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-        _core = [[OASearchUICore alloc] initWithLang:lang ? lang : @"" transliterate:transliterate];
-        
-        __weak __typeof(self) weakSelf = self;
+        _core = [[OASearchUICore alloc] initWithLang:lang ?: @"" transliterate:transliterate];
 
         _searchCitiesSerialQueue = dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL);
         _searchCitiesGroup = dispatch_group_create();
@@ -735,11 +733,20 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray<NSString *> *resIds = [NSMutableArray array];
+    BOOL isCarPlayAppActive = UIApplication.sharedApplication.isCarPlayAppActive;
+    
     for (const auto& resource : app.resourcesManager->getLocalResources())
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion)
-        {
+    {
+        BOOL isAllowedType = (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion ||
+                              resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion ||
+                              resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion);
+
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::Travel && !isCarPlayAppActive)
+            isAllowedType = YES;
+        
+        if (isAllowedType)
             [resIds addObject:resource->id.toNSString()];
-        }
+    }
 
     [resIds sortUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
         first = [[first stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]

@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
+static NSString * const kPreferenceKeysUserInfoKey = @"kPreferenceKeysUserInfoKey";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
 
 static NSString * const appearanceProfileThemeKey = @"appearanceProfileThemeKey";
@@ -1117,6 +1118,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *batterySavingMode;
 @property (nonatomic) OACommonBoolean *enableMsaaForСarPlay;
 @property (nonatomic) OACommonBoolean *showPrimitivesDebugInfo;
+@property (nonatomic) OACommonBoolean *showTouches;
 @property (nonatomic) OACommonInteger *appModeOrder;
 @property (nonatomic) OACommonInteger *viewAngleVisibility;
 @property (nonatomic) OACommonInteger *locationRadiusVisibility;
@@ -1230,6 +1232,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonStringList *tracksSortModes;
 @property (nonatomic) OACommonString *searchTracksSortModes;
 @property (nonatomic) OACommonString *travelGuidesSortMode;
+@property (nonatomic) OACommonString *osmEditsSortMode;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
@@ -1339,6 +1342,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (void)setGlobalPreference:(NSString *)value key:(NSString *)key;
 - (OACommonPreference *)getProfilePreference:(NSString *)key;
 - (void)setProfilePreference:(NSString *)value key:(NSString *)key;
++ (void)performBatchedPreferenceNotifications:(void (^)(void))changes;
++ (void)notifyPreferenceKeysChanged:(NSSet<NSString *> *)keys;
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences;
 - (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;
@@ -1470,8 +1475,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
 @property (nonatomic) OACommonString *currentTrackRouteActivity;
 
-@property (nonatomic) OACommonStringList *customTrackColors;
-@property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
 @property (nonatomic) OACommonStringList *lastUsedProfileIcons;
 

@@ -76,17 +76,15 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 - (instancetype)initWithPhrase:(OASearchPhrase *)sp;
 
 - (int) getFoundWordCount;
-- (double) getSearchDistanceRound:(CLLocation *)location;
-- (double) getSearchDistanceRound:(CLLocation *)location pd:(double)pd;
-- (double) getSearchDistanceFloored:(CLLocation *)location;
-- (double) getSearchDistanceFloored:(CLLocation *)location pd:(double)pd;
+- (double) getSearchDistance:(CLLocation *)location;
+- (double) getSearchDistance:(CLLocation *)location pd:(double)pd;
 
 - (double) getSumPhraseMatchWeight:(OASearchResult *)exactResult;
 - (int) getDepth;
 - (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult;
 - (BOOL) allWordsMatched:(NSString *)name exactResult:(OASearchResult *)exactResult cnt:(CheckWordsMatchCount*)cnt;
 - (NSMutableArray<NSString *> *) getSearchPhraseNames;
-- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes;
+- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes exactResult:(OASearchResult *)exactResult;
 - (NSMutableArray<NSString *> *)filterUnknownSearchWord:(NSMutableArray<NSString *> *)leftUnknownSearchWords;
 - (NSArray<NSString *> *)stripBracesNames;
 - (void)restoreBraceNames:(NSArray<NSString *> *)backup;

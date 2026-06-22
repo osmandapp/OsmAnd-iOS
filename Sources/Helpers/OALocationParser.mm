@@ -348,8 +348,9 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
             {
                 if (word != -1)
                 {
-                    [all addObject:[s substringWithRange:NSMakeRange(word, i - word)]];
-                    [strings addObject:[s substringWithRange:NSMakeRange(word, i - word)]];
+                    NSString *sub = [s substringWithRange:NSMakeRange(word, i - word)];
+                    [all addObject:sub];
+                    [strings addObject:sub];
                 }
                 digit = true;
                 word = i;
@@ -364,18 +365,23 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
         {
             if (digit)
             {
-                NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
-                double dl;
-                if ([[NSScanner scannerWithString:str] scanDouble:&dl])
+                if (word != -1)
                 {
-                    [d addObject:[NSNumber numberWithDouble:dl]];
-                    [all addObject:[NSNumber numberWithDouble:dl]];
-                    if (firstNumeralIdx == -1) {
-                        firstNumeralIdx = (int) all.count - 1;
+                    NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
+                    NSScanner *scanner = [NSScanner scannerWithString:str];
+                    [scanner setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
+                    double dl;
+                    if ([scanner scanDouble:&dl] && [scanner scanLocation] == str.length)
+                    {
+                        [d addObject:[NSNumber numberWithDouble:dl]];
+                        [all addObject:[NSNumber numberWithDouble:dl]];
+                        if (firstNumeralIdx == -1) {
+                            firstNumeralIdx = (int) all.count - 1;
+                        }
+                        [strings addObject:str];
+                        digit = false;
+                        word = -1;
                     }
-                    [strings addObject:str];
-                    digit = false;
-                    word = -1;
                 }
             }
             if (nonwh)
@@ -388,8 +394,9 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
                         [all addObject:str];
                         [strings addObject:str];
                     }
-                    [all addObject:[s substringWithRange:NSMakeRange(i, 1)]];
-                    [strings addObject:[s substringWithRange:NSMakeRange(i, 1)]];
+                    NSString *currentChStr = (i == s.length) ? @" " : [s substringWithRange:NSMakeRange(i, 1)];
+                    [all addObject:currentChStr];
+                    [strings addObject:currentChStr];
                     word = -1;
                 }
                 else if (word == -1)
@@ -408,14 +415,23 @@ static NSString *kRTLMark = @"\u200f";  // right-to-right mark
                 word = -1;
             }
         }
+    }
+
+    if (partial.count > 0)
+    {
         partial[0] = @NO;
-        if (firstNumeralIdx != -1)
+    }
+    else
+    {
+        [partial addObject:@NO];
+    }
+
+    if (firstNumeralIdx != -1)
+    {
+        int nextTokenIdx = firstNumeralIdx + 1;
+        if (all.count <= nextTokenIdx)
         {
-            int nextTokenIdx = firstNumeralIdx + 1;
-            if (all.count <= nextTokenIdx)
-            {
-                partial[0] = @YES;
-            }
+            partial[0] = @YES;
         }
     }
 }

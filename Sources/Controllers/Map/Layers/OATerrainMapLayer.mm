@@ -106,7 +106,7 @@
         {
             [self.mapView resetProviderFor:self.layerIndex];
         }
-        [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
+        [self.mapView setElevationScaleFactor:[_plugin isHeightmapEnabled] ? self.app.data.verticalExaggerationScale : kExaggerationDefScale];
         return YES;
     }
     return NO;
@@ -136,35 +136,53 @@
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    
+    if (!preferenceKeys)
+        return;
+    
+    BOOL terrainEnabledChanged = NO;
+    BOOL terrainModeChanged = NO;
+    BOOL transparencyChanged = NO;
+    BOOL zoomChanged = NO;
+    
+    for (NSString *key in preferenceKeys)
+    {
+        if ([key isEqualToString:_plugin.terrainEnabledPref.key])
+            terrainEnabledChanged = YES;
+        else if ([key isEqualToString:_plugin.terrainModeTypePref.key])
+            terrainModeChanged = YES;
+        else if ([_terrainMode isTransparencySettingKey:key])
+            transparencyChanged = YES;
+        else if ([_terrainMode isZoomSettingKey:key])
+            zoomChanged = YES;
+    }
+    
+    if (!terrainEnabledChanged && !terrainModeChanged && !transparencyChanged && !zoomChanged)
+        return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (notification.object == _plugin.terrainEnabledPref || notification.object == _plugin.terrainModeTypePref)
+        if (terrainEnabledChanged || terrainModeChanged || zoomChanged)
         {
             [self updateTerrainLayer];
-            if (_plugin.terrainModeTypePref)
+            if (_plugin.terrainModeTypePref && (terrainEnabledChanged || terrainModeChanged))
                 [self onVerticalExaggerationScaleChanged];
         }
-        else if ([notification.object isKindOfClass:OACommonInteger.class])
+        else if (transparencyChanged)
         {
-            if ([_terrainMode isTransparencySetting:notification.object])
-            {
-                [self.mapViewController runWithRenderSync:^{
-                    if ([_terrainMode isTerrainShadows])
-                    {
-                        [self.mapViewController updateElevationConfiguration];
-                        [self onVerticalExaggerationScaleChanged];
-                    }
-                    else
-                    {
-                        OsmAnd::MapLayerConfiguration config;
-                        config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
-                        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-                    }
-                }];
-            }
-            else if ([_terrainMode isZoomSetting:notification.object])
-            {
-                [self updateTerrainLayer];
-            }
+            [self.mapViewController runWithRenderSync:^{
+                if ([_terrainMode isTerrainShadows])
+                {
+                    [self.mapViewController updateElevationConfiguration];
+                    [self onVerticalExaggerationScaleChanged];
+                }
+                else
+                {
+                    OsmAnd::MapLayerConfiguration config;
+                    config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
+                    [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+                }
+            }];
         }
     });
 }

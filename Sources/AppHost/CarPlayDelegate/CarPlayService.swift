@@ -10,6 +10,11 @@ import CarPlay.CPSessionConfiguration
 
 @objcMembers
 final class CarPlayService: NSObject {
+    enum CarPlaySceneType {
+        case app
+        case dashboard
+    }
+    
     static let shared = CarPlayService()
     
     private let navigationModeProvider = CarPlayNavigationModeProvider()
@@ -18,11 +23,13 @@ final class CarPlayService: NSObject {
     /// MapAppearanceMode that was active before switching to a CarPlay mode.
     private var appMapAppearanceMode: DayNightMode?
     private var carPlayMapAppearanceMode: DayNightMode?
+    /// Indicates whether Search Core resources have been prepared for CarPlay.
+    private var isSearchUICorePrepared = false
     
     private override init() {
         super.init()
     }
-    
+        
     func configure() {
         reconnectOBDIfNeeded()
         navigationModeProvider.configureForCarPlay()
@@ -32,7 +39,7 @@ final class CarPlayService: NSObject {
         OARoutingHelper.sharedInstance().resumeNavigationAfterCarPlayReconnect()
     }
     
-    func disconnectScene() {
+    func disconnectScene(_ sceneType: CarPlaySceneType) {
         guard OsmAndApp.swiftInstance().initialized else {
             return
         }
@@ -42,6 +49,21 @@ final class CarPlayService: NSObject {
         carPlayMapAppearanceMode = nil
         OARoutingHelper.sharedInstance().onCarPlayConnectionStateChanged()
         navigationModeProvider.restoreOnDisconnect()
+        if case .app = sceneType, isSearchUICorePrepared, UIApplication.shared.mainScene != nil {
+            OAQuickSearchHelper.instance().setResourcesForSearchUICore()
+            isSearchUICorePrepared = false
+        }
+    }
+    
+    /// Prepares Search Core resources for CarPlay if needed.
+    /// - Important:
+    /// CarPlay search results may differ from the main application search results due to
+    /// different resource sets and constraints.
+    func prepareSearchUICoreForIfNeeded() {
+        guard !isSearchUICorePrepared else { return }
+        
+        OAQuickSearchHelper.instance().setResourcesForSearchUICore()
+        isSearchUICorePrepared = true
     }
 
     // MARK: - Save / Restore appearance mode

@@ -157,7 +157,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
         
-        CarPlayService.shared.disconnectScene()
+        CarPlayService.shared.disconnectScene(.app)
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")
             return

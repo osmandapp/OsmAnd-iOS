@@ -73,8 +73,8 @@ final class MapUnderlayAction: OASwitchableAction {
     }
     
     override func nextSelectedItem() -> String {
-        guard let sources: [[String]] = loadListFromParams() as? [[String]] else { return "" }
-        return next(fromSource: sources, defValue: noUnderlay)
+        guard let sources: [[String]] = loadListFromParams() as? [[String]], let next = next(fromSource: sources, defValue: noUnderlay) else { return "" }
+        return next
     }
     
     override func fillParams(_ model: [AnyHashable: Any]) -> Bool {

@@ -44,7 +44,7 @@
 
 - (void) execute
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         
         NSMutableArray<OALocalFile *> *result = [NSMutableArray array];
         _infos = [_dbHelper getUploadedFileInfoMap];
@@ -169,6 +169,7 @@
     localFile.item = item;
     localFile.fileName = fileName;
     localFile.localModifiedTime = lastModifiedTime;
+    
     if (_infos != nil)
     {
         OAUploadedFileInfo *fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName]];

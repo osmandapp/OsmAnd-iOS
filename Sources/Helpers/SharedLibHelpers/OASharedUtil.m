@@ -19,7 +19,7 @@
 {
     [OASPlatformUtil.shared initializeOsmAndContext:[[OAOsmAndContextImpl alloc] init]
                                       xmlFactoryApi:[[OAXmlFactory alloc] init]];
-    (void)[SharedLibSmartFolderHelper shared]; // AppInitializer on Android
+    (void)[SharedLibSmartFolderHelper shared];
 }
 
 // Temporary test code

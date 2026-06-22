@@ -11,8 +11,9 @@ protocol MyPlacesDelegate: AnyObject {
     func showBackButton(_ show: Bool)
     func updateSegmentedControlVisibility(_ isVisible: Bool)
     func updateEditMode(_ edit: Bool)
-    @objc optional func updateTitle(_ title: String, hideSubtitle: Bool)
-    @objc optional func updateToolbar(with items: [UIBarButtonItem]?)
+    func updateSearchEnabling(_ isEnabled: Bool)
+    func updateTitle(_ title: String, hideSubtitle: Bool)
+    func updateToolbar(with items: [UIBarButtonItem]?)
 }
 
 @objc
@@ -184,6 +185,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         searchController = UISearchController(searchResultsController: nil)
         searchController?.searchResultsUpdater = self
         searchController?.searchBar.delegate = self
+        searchController?.delegate = self
         guard let searchController else { return }
         searchController.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
@@ -192,7 +194,6 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
         }
-        navigationItem.searchController = searchController
         updateSearchController()
     }
     
@@ -299,9 +300,6 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     
     func updateEditMode(_ edit: Bool) {
         updateSegmentedControlVisibility(!edit)
-        let searchController = edit ? nil : searchController
-        navigationController?.navigationItem.searchController = searchController
-        navigationItem.searchController = searchController
     }
     
     func updateTitle(_ title: String, hideSubtitle: Bool) {
@@ -310,6 +308,12 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     
     func updateToolbar(with items: [UIBarButtonItem]?) {
         toolbarItems = items
+    }
+    
+    func updateSearchEnabling(_ isEnabled: Bool) {
+        let searchController = isEnabled ? searchController : nil
+        navigationItem.searchController = searchController
+        navigationItem.searchController?.isActive = true
     }
 }
 
@@ -330,5 +334,19 @@ extension MyPlacesContainerViewController: UISearchBarDelegate {
             return
         }
         searchableViewController.searchBarCancelButtonClicked?(searchBar)
+    }
+}
+
+// MARK: - UISearchControllerDelegate
+extension MyPlacesContainerViewController: UISearchControllerDelegate {
+    func presentSearchController(_ searchController: UISearchController) {
+        // The delay is introduced to allow UISearchController to fully initialize and become ready for interaction.
+        // Sometimes, immediate attempts to make the searchBar the first responder can fail due to ongoing animations or the controller's initialization process.
+        let searchBarActivationDelay = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
+            if !searchController.searchBar.isFirstResponder {
+                searchController.searchBar.becomeFirstResponder()
+            }
+        }
     }
 }

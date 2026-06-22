@@ -647,13 +647,18 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if !isRootFolder {
             navigationItem.title = title
         } else {
-            myPlacesDelegate?.updateTitle?(title, hideSubtitle: !isRootFolder || tableView.isEditing)
+            myPlacesDelegate?.updateTitle(title, hideSubtitle: !isRootFolder || tableView.isEditing)
         }
     }
     
     private func setupNavBarMenuButton() {
         var menuActions: [UIMenuElement] = []
         if !tableView.isEditing {
+            let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage(systemName: "checkmark.circle")?.resizedMenuImage()) { [weak self] _ in
+                self?.onNavbarSelectButtonClicked()
+            }
+            let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
+            menuActions.append(selectActionWithDivider)
             if isSmartFolder {
                 let isGeneralView = organizedGroup == nil
                 let refreshSmartFolderAction = UIAction(title: localizedString("shared_string_refresh"), image: .icCustomUpdate.resizedMenuImage()) { [weak self] _ in
@@ -733,14 +738,18 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         } else {
             color = isSmartFolder ? .textColorPrimary : .navBarTextColorPrimary
         }
-        if let selectBarButton = OABaseNavbarViewController.createRightNavbarButton(localizedString("shared_string_select"), icon: nil, color: color, action: #selector(onNavbarSelectButtonClicked), target: self, menu: nil) {
+        if !isSearchActive, let searchBarButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: color, action: #selector(onSearchButtonClicked), target: self, menu: nil) {
             if #available(iOS 26.0, *) {
-                selectBarButton.style = .prominent
-                selectBarButton.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+                searchBarButton.style = .prominent
+                searchBarButton.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
             }
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
-            navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, selectBarButton], animated: false)
-            navigationItem.setRightBarButtonItems([actionsBarButton, selectBarButton], animated: false)
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
+            navigationItem.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
+        } else {
+            let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton], animated: false)
+            navigationItem.setRightBarButtonItems([actionsBarButton], animated: false)
         }
     }
     
@@ -913,7 +922,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if !isRootFolder {
             toolbarItems = items
         } else {
-            myPlacesDelegate?.updateToolbar?(with: items)
+            myPlacesDelegate?.updateToolbar(with: items)
         }
     }
     
@@ -1431,6 +1440,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         baseFiltersResult = nil
         isFiltersInitialized = false
         updateData()
+    }
+    
+    @objc private func onSearchButtonClicked() {
+        myPlacesDelegate?.updateSearchEnabling(true)
+        isSearchActive = true
     }
 
     // MARK: - Folders Actions
@@ -2653,6 +2667,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         baseFiltersResult = nil
         isFiltersInitialized = false
         navigationController?.setToolbarHidden(true, animated: true)
+        myPlacesDelegate?.updateSearchEnabling(false)
         if !isRootFolder {
             updateSearchController()
         }

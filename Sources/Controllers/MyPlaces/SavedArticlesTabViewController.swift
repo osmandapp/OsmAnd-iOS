@@ -48,7 +48,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
+        setupNavbarButtons()
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
         tableView.backgroundColor = .viewBg
@@ -64,6 +64,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         definesPresentationContext = false
+        myPlacesDelegate?.updateSearchEnabling(false)
     }
     
     override func isNavbarVisible() -> Bool {
@@ -270,11 +271,45 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         return MyPlacesSortMode.byTitle(sortModeTitle)
     }
     
+    private func setupNavbarButtons() {
+        guard !isSearchActive else {
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems(nil, animated: false)
+            navigationItem.setRightBarButtonItems(nil, animated: false)
+            return
+        }
+
+        let searchButton = OABaseNavbarViewController.createRightNavbarButton(
+            nil,
+            icon: UIImage(systemName: "magnifyingglass"),
+            color: .label,
+            action: #selector(searchButtonPressed(_:)),
+            target: self,
+            menu: nil
+        )
+        searchButton?.accessibilityLabel = localizedString("shared_string_search")
+
+        if #available(iOS 26.0, *) {
+            searchButton?.style = .prominent
+            searchButton?.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+        }
+
+        guard let searchButton else { return }
+        navigationController?.navigationBar.topItem?.setRightBarButtonItems([searchButton], animated: false)
+        navigationItem.setRightBarButtonItems([searchButton], animated: false)
+    }
+
     private func updateData() {
         generateData()
         tableView.reloadData()
     }
     
+    @objc
+    private func searchButtonPressed(_ sender: Any) {
+        myPlacesDelegate?.updateSearchEnabling(true)
+        isSearchActive = true
+        setupNavbarButtons()
+    }
+
     // MARK: GpxReadDelegate
     
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
@@ -315,11 +350,13 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         }
         myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         updateData()
+        setupNavbarButtons()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
         isFiltered = false
+        myPlacesDelegate?.updateSearchEnabling(false)
     }
     
     // MARK: TravelExploreViewControllerDelegate

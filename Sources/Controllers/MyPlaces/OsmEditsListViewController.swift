@@ -65,6 +65,7 @@ final class OsmEditsListViewController: UIViewController {
     private var headerViews: [UITableViewHeaderFooterView] = []
 
     private var selectButton: UIBarButtonItem?
+    private var searchButton: UIBarButtonItem?
 
     private var sortMode: MyPlacesSortMode = .nameAZ
     private var isSearchActive = false
@@ -133,18 +134,7 @@ final class OsmEditsListViewController: UIViewController {
 
         navigationController?.setNavigationBarHidden(false, animated: false)
 
-        selectButton = OABaseNavbarViewController.createRightNavbarButton(
-            localizedString("shared_string_select"),
-            icon: nil,
-            color: .label,
-            action: #selector(selectButtonPressed(_:)),
-            target: self,
-            menu: nil
-        )
-        if let selectButton {
-            selectButton.accessibilityLabel = localizedString("shared_string_select")
-            navigationController?.navigationBar.topItem?.rightBarButtonItems = [selectButton]
-        }
+        setupNavbarButtons()
         
         definesPresentationContext = true
         updateNavigationBarTitle()
@@ -336,6 +326,45 @@ final class OsmEditsListViewController: UIViewController {
             navigationController?.navigationBar.topItem?.leftBarButtonItem = nil
             navigationItem.leftBarButtonItem = nil
         }
+
+        setupNavbarButtons()
+    }
+
+    private func setupNavbarButtons() {
+        if collectionView.isEditing {
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems(nil, animated: false)
+            navigationItem.setRightBarButtonItems(nil, animated: false)
+            return
+        }
+
+        selectButton = OABaseNavbarViewController.createRightNavbarButton(
+            nil,
+            icon: UIImage(systemName: "checkmark.circle"),
+            color: .label,
+            action: #selector(selectButtonPressed(_:)),
+            target: self,
+            menu: nil
+        )
+        selectButton?.accessibilityLabel = localizedString("shared_string_select")
+
+        searchButton = OABaseNavbarViewController.createRightNavbarButton(
+            nil,
+            icon: UIImage(systemName: "magnifyingglass"),
+            color: .label,
+            action: #selector(searchButtonPressed(_:)),
+            target: self,
+            menu: nil
+        )
+        searchButton?.accessibilityLabel = localizedString("shared_string_search")
+
+        if #available(iOS 26.0, *) {
+            searchButton?.style = .prominent
+            searchButton?.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+        }
+
+        let rightButtons = [selectButton, isSearchActive ? nil : searchButton].compactMap { $0 }
+        navigationController?.navigationBar.topItem?.setRightBarButtonItems(rightButtons, animated: false)
+        navigationItem.setRightBarButtonItems(rightButtons, animated: false)
     }
     
     private func updateNavigationBarTitle() {
@@ -352,13 +381,12 @@ final class OsmEditsListViewController: UIViewController {
             title = localizedString("osm_edits_title")
         }
         
-        myPlacesDelegate?.updateTitle?(title, hideSubtitle: collectionView.isEditing)
+        myPlacesDelegate?.updateTitle(title, hideSubtitle: collectionView.isEditing)
     }
     
     private func setEdit(_ isEdit: Bool) {
         collectionView.isEditing = isEdit
         navigationController?.setToolbarHidden(!isEdit, animated: true)
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = isEdit ? nil : selectButton
         myPlacesDelegate?.updateEditMode(isEdit)
         setupNavbar()
         updateNavigationBarTitle()
@@ -491,7 +519,7 @@ final class OsmEditsListViewController: UIViewController {
         deleteButton.isEnabled = isSelected
         
         let items = [uploadButton, flexibleSpacer, deleteButton]
-        myPlacesDelegate?.updateToolbar?(with: items)
+        myPlacesDelegate?.updateToolbar(with: items)
     }
     
     // MARK: - Actions
@@ -501,6 +529,13 @@ final class OsmEditsListViewController: UIViewController {
         setEdit(true)
     }
     
+    @objc
+    private func searchButtonPressed(_ sender: Any) {
+        myPlacesDelegate?.updateSearchEnabling(true)
+        isSearchActive = true
+        setupNavbarButtons()
+    }
+
     @objc
     private func cancelButtonPressed(_ sender: Any) {
         setEdit(false)
@@ -754,5 +789,10 @@ extension OsmEditsListViewController: MyPlacesSearchable {
             applySnapshot()
         }
         myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
+        setupNavbarButtons()
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        myPlacesDelegate?.updateSearchEnabling(false)
     }
 }

@@ -271,6 +271,8 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         } else if item.cellType == OASearchMoreCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASearchMoreCell.reuseIdentifier, for: indexPath) as! OASearchMoreCell
             cell.selectionStyle = editorBehaviour.isRemoveEnabled(dataState.draft, selectedIndex: dataState.selectedIndex) ? .default : .none
+            cell.contentView.backgroundColor = .clear
+            cell.textView.backgroundColor = .clear
             cell.textView.font = UIFont.preferredFont(forTextStyle: .body)
             cell.textView.textColor = .textColorDisruptive
             cell.textView.text = item.title
@@ -289,7 +291,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
             if let colorsCollectionIndexPath, let cell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let handler = cell.getCollectionHandler() as? OAColorCollectionHandler {
                 colorCollectionVC.hostColorHandler = handler
             }
-            navigationController?.pushViewController(colorCollectionVC, animated: true)
+            showMediumToLargeSheetViewController(colorCollectionVC)
         } else if item.key == GradientEditorRow.removeStep.rawValue,
                   let state = GradientEditorAlgorithms.removeStep(dataState, behaviour: editorBehaviour) {
             updateSelectedColorItem(for: state)

@@ -166,7 +166,9 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         
         tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
         tableView.keyboardDismissMode = .onDrag
-        tableView.separatorStyle = .none
+        if collectionType != .colorizationPaletteItems && collectionType != .terrainPaletteItems {
+            tableView.separatorStyle = .none
+        }
         
         chipsCellScrollState = OACollectionViewCellState()
         tableView.reloadData()
@@ -203,7 +205,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     override func getLeftNavbarButtonTitle() -> String {
-        localizedString("shared_string_cancel")
+        localizedString("shared_string_close")
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
@@ -338,20 +340,17 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         } else if item.cellType == OATwoIconsButtonTableViewCell.reuseIdentifier {
             
             if let cell = tableView.dequeueReusableCell(withIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier, for: indexPath) as? OATwoIconsButtonTableViewCell {
-                
                 if let palette = item.obj(forKey: "palette") as? PaletteItemGradient {
                     cell.titleLabel.text = item.title
                     cell.descriptionLabel.text = PaletteCollectionHandler.createDescriptionForPalette(palette)
                     cell.descriptionLabel.numberOfLines = 1
                     PaletteCollectionHandler.applyGradient(to: cell.secondLeftIconView, with: palette.getColorPalette())
-                    
                     cell.secondLeftIconView.layer.cornerRadius = 3
                     cell.leftIconView.image = palette.id == selectedPaletteItem?.id ? UIImage(named: "ic_checkmark_default") : nil
                     cell.button.setTitle(nil, for: .normal)
                     cell.button.setImage(UIImage(named: "ic_navbar_overflow_menu_outlined")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     cell.button.menu = createPaletteMenu(for: indexPath)
                     cell.button.showsMenuAsPrimaryAction = true
-                    
                     return cell
                 }
             }

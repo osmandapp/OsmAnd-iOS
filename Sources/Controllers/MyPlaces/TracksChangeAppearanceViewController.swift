@@ -386,13 +386,13 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                     colorCollectionVC.hostColorHandler = colorHandler
                 }
 
-                navigationController?.pushViewController(colorCollectionVC, animated: true)
+                showMediumToLargeSheetViewController(colorCollectionVC)
             } else if isGradientColorSelected {
                 if let paletteColorItem = selectedPaletteColorItem {
                     let paletteItems = sortedPaletteColorItems.asArray().compactMap { $0 as? PaletteItemGradient }
                     let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorizationPaletteItems, items: paletteItems, selectedItem: paletteColorItem)
                     colorCollectionVC.delegate = self
-                    navigationController?.pushViewController(colorCollectionVC, animated: true)
+                    showMediumToLargeSheetViewController(colorCollectionVC)
                 }
             }
         }

@@ -662,6 +662,9 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - OsmAnd_projects
   - Libraries/**
 
+attributes:
+  always_on_same_line: ["@IBAction", "@IBSegueAction", "@NSManaged", "@discardableResult", "@escaping", "@objc"]
+
 type_contents_order:
   order:
     - case

@@ -21,6 +21,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let regularMapHeight: CGFloat = 300
         static let regularMapHeightLandscape: CGFloat = 110
         static let maxMagnitude: Double = 7.0
+        static let leftPanelWidth: CGFloat = 393
     }
     private var settings: AstronomyPluginSettings
     private let plugin: AstronomyPlugin
@@ -76,6 +77,25 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
     private var screenOrientationObserver: NSObjectProtocol?
+    private var leftPanelLeadingConstraint: NSLayoutConstraint?
+    private let mapVisibleAreaGuide = UILayoutGuide()
+    private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
+
+    private var mapControlsLeadingInset: CGFloat {
+        embeddedLeftPanelNavigationController() != nil && UIDevice.current.userInterfaceIdiom == .pad
+            ? Layout.contentPadding + Layout.leftPanelWidth + Layout.contentPadding
+            : Layout.contentPadding
+    }
+
+    private func embeddedLeftPanelNavigationController() -> UINavigationController? {
+        if let navigationController = configureSheetNavigationController, navigationController.parent === self {
+            return navigationController
+        }
+        if let navigationController = objectInfoNavigationController, navigationController.parent === self {
+            return navigationController
+        }
+        return nil
+    }
 
     init(plugin: AstronomyPlugin) {
         let loadedSettings = AstronomyPluginSettings.load()
@@ -188,6 +208,16 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             mapControlsContainer.topAnchor.constraint(equalTo: mainLayout.topAnchor),
             mapControlsContainer.bottomAnchor.constraint(equalTo: mainLayout.bottomAnchor)
         ])
+
+        mapControlsContainer.addLayoutGuide(mapVisibleAreaGuide)
+        let mapVisibleLeading = mapVisibleAreaGuide.leadingAnchor.constraint(equalTo: mapControlsContainer.leadingAnchor)
+        mapVisibleAreaLeadingConstraint = mapVisibleLeading
+        NSLayoutConstraint.activate([
+            mapVisibleLeading,
+            mapVisibleAreaGuide.trailingAnchor.constraint(equalTo: mapControlsContainer.trailingAnchor),
+            mapVisibleAreaGuide.topAnchor.constraint(equalTo: mapControlsContainer.topAnchor),
+            mapVisibleAreaGuide.bottomAnchor.constraint(equalTo: mapControlsContainer.bottomAnchor)
+        ])
     }
 
     private func setupControls() {
@@ -221,7 +251,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         searchButton.addTarget(self, action: #selector(showSearchDialog), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
-            compassButton.leadingAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.leadingAnchor, constant: Layout.contentPadding),
+            compassButton.leadingAnchor.constraint(equalTo: mapVisibleAreaGuide.leadingAnchor, constant: Layout.contentPadding),
             compassButton.topAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
 
             arModeButton.centerXAnchor.constraint(equalTo: compassButton.centerXAnchor),
@@ -288,7 +318,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         mapControlsContainer.addSubview(timeSelectionView)
 
         NSLayoutConstraint.activate([
-            timeControlCard.centerXAnchor.constraint(equalTo: mapControlsContainer.centerXAnchor),
+            timeControlCard.centerXAnchor.constraint(equalTo: mapVisibleAreaGuide.centerXAnchor),
             timeControlCard.bottomAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
             timeControlCard.heightAnchor.constraint(equalToConstant: Layout.buttonSize),
 
@@ -297,7 +327,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             stack.topAnchor.constraint(equalTo: timeControlCard.topAnchor),
             stack.bottomAnchor.constraint(equalTo: timeControlCard.bottomAnchor),
 
-            timeSelectionView.centerXAnchor.constraint(equalTo: mapControlsContainer.centerXAnchor),
+            timeSelectionView.centerXAnchor.constraint(equalTo: mapVisibleAreaGuide.centerXAnchor),
             timeSelectionView.bottomAnchor.constraint(equalTo: timeControlCard.topAnchor, constant: -Layout.contentPadding)
         ])
     }
@@ -922,7 +952,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateMapControlsVisibility() {
-        mapControlsContainer.isHidden = objectInfoController != nil || configureSheetController != nil
+        let isPhoneSheet = UIDevice.current.userInterfaceIdiom == .phone
+            && (objectInfoController != nil || configureSheetController != nil)
+        mapControlsContainer.isHidden = isPhoneSheet
+        mapVisibleAreaLeadingConstraint?.constant = mapControlsLeadingInset
     }
 
     private func clearSelectedObject() {
@@ -960,6 +993,15 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             }
             return
         }
+        if navigationController.parent === self {
+            isDismissingObjectInfoSheet = true
+            dismissLeftPanel(navigationController: navigationController, animated: animated) { [weak self] in
+                guard let self else { return }
+                isDismissingObjectInfoSheet = false
+                finishObjectInfoDismiss(clearSelection: clearSelection)
+            }
+            return
+        }
         isDismissingObjectInfoSheet = true
         navigationController.dismiss(animated: animated) { [weak self] in
             guard let self else { return }
@@ -980,6 +1022,15 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private func dismissConfigureSheet(animated: Bool) {
         guard let navigationController = configureSheetNavigationController else {
             if configureSheetController != nil {
+                finishConfigureSheetDismiss()
+            }
+            return
+        }
+        if navigationController.parent === self {
+            isDismissingConfigureSheet = true
+            dismissLeftPanel(navigationController: navigationController, animated: animated) { [weak self] in
+                guard let self else { return }
+                isDismissingConfigureSheet = false
                 finishConfigureSheetDismiss()
             }
             return
@@ -1223,16 +1274,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         navigationController.modalPresentationStyle = .pageSheet
         navigationController.navigationBar.prefersLargeTitles = false
         
+        configureSheetController = sheet
+        configureSheetNavigationController = navigationController
+
         if UIDevice.current.userInterfaceIdiom == .pad {
-            if let sheetPresentationController = navigationController.sheetPresentationController {
-                sheetPresentationController.detents = [.large()]
-                sheetPresentationController.selectedDetentIdentifier = .large
-                sheetPresentationController.prefersGrabberVisible = true
-                sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
-                sheetPresentationController.preferredCornerRadius = 24
-                sheetPresentationController.largestUndimmedDetentIdentifier = .large
-                sheetPresentationController.sourceView = compassButton
-            }
+            showLeftPanel(navigationController)
         } else {
             if let sheetPresentationController = navigationController.sheetPresentationController {
                 sheetPresentationController.detents = [.medium(), .large()]
@@ -1242,11 +1288,87 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 sheetPresentationController.preferredCornerRadius = 24
                 sheetPresentationController.largestUndimmedDetentIdentifier = .large
             }
+            present(navigationController, animated: true)
+            updateMapControlsVisibility()
         }
-        configureSheetController = sheet
-        configureSheetNavigationController = navigationController
-        present(navigationController, animated: true)
-        updateMapControlsVisibility()
+    }
+
+    private func showLeftPanel(_ navigationController: UINavigationController, animated: Bool = true, completion: (() -> Void)? = nil) {
+        if let existingPanel = embeddedLeftPanelNavigationController(), existingPanel !== navigationController {
+            dismissLeftPanel(navigationController: existingPanel, animated: false)
+            if existingPanel === configureSheetNavigationController {
+                finishConfigureSheetDismiss()
+            } else if existingPanel === objectInfoNavigationController {
+                finishObjectInfoDismiss(clearSelection: false)
+            }
+        }
+
+        addChild(navigationController)
+        view.insertSubview(navigationController.view, belowSubview: mapControlsContainer)
+        navigationController.view.translatesAutoresizingMaskIntoConstraints = false
+        navigationController.view.layer.cornerRadius = 24
+        navigationController.view.clipsToBounds = true
+
+        let offscreenLeading = -(Layout.leftPanelWidth + Layout.contentPadding)
+        let leading = navigationController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: offscreenLeading)
+        leftPanelLeadingConstraint = leading
+
+        NSLayoutConstraint.activate([
+            navigationController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            leading,
+            navigationController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
+            navigationController.view.widthAnchor.constraint(equalToConstant: Layout.leftPanelWidth)
+        ])
+
+        navigationController.didMove(toParent: self)
+
+        view.layoutIfNeeded()
+
+        guard animated else {
+            leading.constant = Layout.contentPadding
+            mapVisibleAreaLeadingConstraint?.constant = mapControlsLeadingInset
+            view.layoutIfNeeded()
+            completion?()
+            return
+        }
+
+        UIView.animate(withDuration: 0.25, animations: {
+            leading.constant = Layout.contentPadding
+            self.mapVisibleAreaLeadingConstraint?.constant = self.mapControlsLeadingInset
+            self.view.layoutIfNeeded()
+        }, completion: { _ in
+            completion?()
+        })
+    }
+
+    private func dismissLeftPanel(navigationController: UINavigationController, animated: Bool, completion: (() -> Void)? = nil) {
+        guard navigationController.parent === self else {
+            completion?()
+            return
+        }
+
+        let finish = {
+            navigationController.willMove(toParent: nil)
+            navigationController.view.removeFromSuperview()
+            navigationController.removeFromParent()
+            self.leftPanelLeadingConstraint = nil
+            completion?()
+        }
+
+        guard animated, let leading = leftPanelLeadingConstraint else {
+            finish()
+            return
+        }
+
+        UIView.animate(withDuration: 0.25, animations: {
+            leading.constant = -(Layout.leftPanelWidth + Layout.contentPadding)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                self.mapVisibleAreaLeadingConstraint?.constant = Layout.contentPadding
+            }
+            self.view.layoutIfNeeded()
+        }, completion: { _ in
+            finish()
+        })
     }
 
     @objc private func toggleTimeSelection() {

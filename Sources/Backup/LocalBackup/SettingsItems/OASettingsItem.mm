@@ -328,16 +328,21 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
     NSDictionary<NSString *, NSString *> *settings;
     settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
-
+    
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
-    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([key hasPrefix:kRendererPreferencePrefix] || [key isEqualToString:@"displayed_transport_settings"])
-            [rendererSettings setObject:obj forKey:key];
-        else if ([key hasPrefix:kRoutingPreferencePrefix])
-            [routingSettings setObject:obj forKey:key];
-        else
-            [self.item readPreferenceFromJson:key value:obj];
+    [OAAppSettings performBatchedPreferenceNotifications:^{
+        [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            if ([key hasPrefix:kRendererPreferencePrefix] || [key isEqualToString:@"displayed_transport_settings"])
+                [rendererSettings setObject:obj forKey:key];
+            else if ([key hasPrefix:kRoutingPreferencePrefix])
+                [routingSettings setObject:obj forKey:key];
+            else
+            {
+                [self.item readPreferenceFromJson:key value:obj];
+                [OAAppSettings notifyPreferenceKeysChanged:[NSSet setWithObject:key]];
+            }
+        }];
     }];
     [self.item applyRendererPreferences:rendererSettings];
     [self.item applyRoutingPreferences:routingSettings];

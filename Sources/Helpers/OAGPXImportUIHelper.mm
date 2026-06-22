@@ -372,11 +372,18 @@ static UIViewController *parentController;
         return nil;
     }
     
-    OASGpxDataItem *item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:gpxPath];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxPath];
+    OASGpxDataItem *item = [[OASGpxDataItem alloc] initWithFile:file];
     [item updateAppearance];
     
+    OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+    if ([gpxDbHelper hasGpxDataItemFile:file])
+        [gpxDbHelper updateDataItemItem:item];
+    else
+        [gpxDbHelper addItem:item];
+
     if (item.color != 0)
-        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
+        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:(int)item.color];
 
     [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 

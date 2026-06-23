@@ -73,7 +73,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private let headerType = UILabel()
     private let metricsContainer = UIView()
     private let actionsStack = UIStackView()
-    private let scrollView = UIScrollView()
+    private let scrollView = CancelableScrollView()
     private let contentStack = UIStackView()
     private let cardsStack = UIStackView()
     private let tabBar = UITabBar()
@@ -81,10 +81,10 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
                                                       iconName: overviewTabIconName(for: skyObject?.type),
                                                       tag: Tab.overview.rawValue)
     private lazy var visibilityTabItem = makeTabBarItem(title: localizedString("gpx_visibility_txt"),
-                                                        iconName: "ic_custom_telescope_colored",
+                                                        iconName: "ic_custom_telescope",
                                                         tag: Tab.visibility.rawValue)
     private lazy var scheduleTabItem = makeTabBarItem(title: localizedString("astronomy_schedule"),
-                                                      iconName: "ic_custom_date",
+                                                      iconName: "ic_custom_calendar_month",
                                                       tag: Tab.schedule.rawValue)
     private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
     private var selectedTab: Tab = .overview
@@ -278,7 +278,8 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         view.addSubview(sheetHeaderView)
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: .systemFont(ofSize: 34, weight: .bold))
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textColor = AstroContextMenuTheme.primaryText
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.numberOfLines = 1
@@ -294,7 +295,8 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         sheetHeaderView.addSubview(closeButton)
 
         headerType.translatesAutoresizingMaskIntoConstraints = false
-        headerType.font = .systemFont(ofSize: 17)
+        headerType.font = .preferredFont(forTextStyle: .subheadline)
+        headerType.adjustsFontForContentSizeCategory = true
         headerType.numberOfLines = 2
 
         metricsContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -302,7 +304,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         actionsStack.axis = .horizontal
         actionsStack.alignment = .fill
         actionsStack.distribution = .fillEqually
-        actionsStack.spacing = 8
+        actionsStack.spacing = 6
         actionsStack.translatesAutoresizingMaskIntoConstraints = false
         [saveButton, locationButton, directionButton, pathButton].forEach {
             configureActionButton($0)
@@ -350,8 +352,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
 
-            metricsContainer.heightAnchor.constraint(equalToConstant: 62),
-            actionsStack.heightAnchor.constraint(equalToConstant: 66),
+            actionsStack.heightAnchor.constraint(equalToConstant: 74),
 
             tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -411,7 +412,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
 
     private func configureTabBarAppearance() {
         tabBar.tintColor = AstroContextMenuTheme.activeIcon
-        tabBar.unselectedItemTintColor = AstroContextMenuTheme.secondaryIcon
+        tabBar.unselectedItemTintColor = .iconColorBlack
     }
 
     private func makeTabBarItem(title: String, iconName: String, tag: Int) -> UITabBarItem {
@@ -451,20 +452,35 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     private func configureActionButton(_ button: UIButton) {
         var config = UIButton.Configuration.filled()
         config.imagePlacement = .top
-        config.imagePadding = 3
+        config.imagePadding = 4
         config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
-        config.baseForegroundColor = AstroContextMenuTheme.activeIcon
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 4, bottom: 7, trailing: 4)
+        config.baseForegroundColor = .buttonTextColorSecondary
+        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 4, bottom: 10, trailing: 4)
+        config.background.cornerRadius = 16
+        config.titleLineBreakMode = .byTruncatingTail
+        config.imageColorTransformer = UIConfigurationColorTransformer { _ in
+            AstroContextMenuTheme.activeIcon
+        }
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = .systemFont(ofSize: 15, weight: .regular)
+            outgoing.font = UIFont.preferredFont(forTextStyle: .caption1)
             return outgoing
         }
+        
         button.configuration = config
-        button.layer.cornerRadius = 8
-        button.clipsToBounds = true
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.titleLabel?.minimumScaleFactor = 0.65
+        button.configurationUpdateHandler = { button in
+            var configuration = button.configuration ?? config
+            let isOn = button.isHighlighted
+            
+            configuration.baseBackgroundColor = isOn ? AstroContextMenuTheme.actionTapBackground : AstroContextMenuTheme.actionBackground
+            configuration.baseForegroundColor = isOn ? .buttonTextColorPrimary : .buttonTextColorSecondary
+            
+            configuration.imageColorTransformer = UIConfigurationColorTransformer { _ in
+                isOn ? .buttonIconColorPrimary : AstroContextMenuTheme.activeIcon
+            }
+            
+            button.configuration = configuration
+        }
     }
 
     private func bindControllerCallbacks() {
@@ -501,7 +517,7 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
         }
         bindActionButton(locationButton,
                          title: localizedString("astro_locate"),
-                         image: "ic_custom_location_marker") { [weak self] in
+                         image: "ic_custom_location_marker_outlined") { [weak self] in
             guard let self else { return }
             dependencies.onCenterObject(obj)
             bindActionButtonsForCurrentObject()
@@ -547,9 +563,6 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
     }
 
     private func actionButtonImage(named imageName: String) -> UIImage? {
-        if imageName == "ic_custom_location_marker" {
-            return AstroIcon.template(imageName, size: CGSize(width: 24, height: 24))
-        }
         return AstroIcon.template(imageName)
     }
 
@@ -569,6 +582,10 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             MetricsAdapter.MetricUi(value: String(format: "%.2f", obj.magnitude),
                                     label: localizedString("shared_string_magnitude"))
         ]
+        
+        if let distanceMetric = makeDistanceMetric(for: obj) {
+            metrics.append(distanceMetric)
+        }
 
         let currentDate = dependencies.currentDate()
         let startLocal = noon(on: normalizedDay(currentDate))
@@ -599,6 +616,27 @@ final class AstroContextMenuViewController: UIViewController, UIScrollViewDelega
             metricsView.topAnchor.constraint(equalTo: metricsContainer.topAnchor),
             metricsView.bottomAnchor.constraint(equalTo: metricsContainer.bottomAnchor)
         ])
+    }
+    
+    private func makeDistanceMetric(for obj: SkyObject) -> MetricsAdapter.MetricUi? {
+        if obj.type.isSunSystem() {
+            guard obj.distAu > 0 else { return nil }
+            return MetricsAdapter.MetricUi(
+                value: String(format: "%.3f AU", obj.distAu),
+                label: localizedString("shared_string_distance")
+            )
+        }
+
+        guard let lightYears = obj.distance, lightYears > 0 else { return nil }
+
+        let value = lightYears >= 100
+            ? String(format: "%.0f ly", lightYears)
+            : String(format: "%.1f ly", lightYears)
+
+        return MetricsAdapter.MetricUi(
+            value: value,
+            label: localizedString("shared_string_distance")
+        )
     }
 
     private func updateVisibilityCard(_ obj: SkyObject) {

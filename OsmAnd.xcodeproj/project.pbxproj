@@ -1679,6 +1679,7 @@
 		CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */; };
 		CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */; };
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
+		CE948E792FEA5EAB0023FA12 /* WikipediaContextMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE948E782FEA5EAB0023FA12 /* WikipediaContextMenuView.swift */; };
 		D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */; };
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
@@ -5672,6 +5673,7 @@
 		CE4075A42FC48C2F004224AA /* ProfileIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileIconCollectionHandler.swift; sourceTree = "<group>"; };
 		CE7818252FC07944005CCF47 /* WikipediaContextMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuCell.swift; sourceTree = "<group>"; };
 		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
+		CE948E782FEA5EAB0023FA12 /* WikipediaContextMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuView.swift; sourceTree = "<group>"; };
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
@@ -13956,6 +13958,7 @@
 				DA5A806E26C563A500F274C7 /* OAUserInteractionPassThroughView.m */,
 				32A46BBE2C6BA422000FC20B /* OAWeatherTimeSegmentedSlider.h */,
 				32A46BBF2C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm */,
+				CE948E782FEA5EAB0023FA12 /* WikipediaContextMenuView.swift */,
 				FA4195572AAB55D4007CBBAB /* ShadowTransporentView */,
 				FA83EAA32BF6538B00DBF321 /* SpeedometerView */,
 				DA5A804826C563A500F274C7 /* UITableViewCell+getTableView.h */,
@@ -17792,6 +17795,7 @@
 				FA73410D2BBAED8600CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.swift in Sources */,
 				DA4ABF172876DA6800B996EF /* OAGlobalSettingsItem.mm in Sources */,
 				DA5A81AA26C563A700F274C7 /* OASearchSettings.mm in Sources */,
+				CE948E792FEA5EAB0023FA12 /* WikipediaContextMenuView.swift in Sources */,
 				2CFF22942F7AB48A000C5477 /* OARegionPriorityProvider.mm in Sources */,
 				320F71242A823E210071C0E7 /* TravelObfHelper.swift in Sources */,
 				46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */,

@@ -480,8 +480,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let folderName = folder.getDirName(includingSubdirs: false)
         folderRow.cellType = OASimpleTableViewCell.reuseIdentifier
         folderRow.title = folderName
-        folderRow.setObj(UIColor.iconColorSelected, forKey: colorKey)
         if let trackFolder = folder as? TrackFolder {
+            folderRow.setObj(UIColor.iconColorSelected, forKey: colorKey)
             folderRow.key = tracksFolderKey
             folderRow.setObj(trackFolder.relativePath, forKey: pathKey)
             folderRow.iconName = "ic_custom_folder"
@@ -489,6 +489,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             folderRow.setObj(tracksCount, forKey: tracksCountKey)
             folderRow.descr = TracksSortModeHelper.descriptionForFolder(folder: trackFolder, currentFolderPath: currentFolderPath)
         } else if let smartFolder = folder as? SmartFolder {
+            folderRow.setObj(UIColor.iconColorActive, forKey: colorKey)
             folderRow.key = tracksSmartFolderKey
             folderRow.iconName = "ic_custom_folder_smart"
             let tracksCount = smartFolder.getTrackItems().count

@@ -8,9 +8,11 @@
 
 #import "OAChoosePlanHelper.h"
 #import "OAChoosePlanViewController.h"
+#import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 static OAFeature * OSMAND_CLOUD;
 static OAFeature * ADVANCED_WIDGETS;
@@ -28,6 +30,7 @@ static OAFeature * NAUTICAL;
 static OAFeature * WEATHER;
 static OAFeature * SENSORS;
 static OAFeature * VEHICLEMETRICS;
+static OAFeature * ASTRONOMY;
 
 static NSArray<OAFeature *> * OSMAND_PRO_FEATURES;
 static NSArray<OAFeature *> * MAPS_PLUS_FEATURES;
@@ -84,6 +87,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"nautical_depth");
         case EOAFeatureWeather:
             return OALocalizedString(@"shared_string_weather");
+        case EOAFeatureAstronomy:
+            return OALocalizedString(@"astronomy_plugin_name");
         case EOAFeatureRegionAfrica:
             return OALocalizedString(@"product_desc_africa");
         case EOAFeatureRegionRussia:
@@ -152,9 +157,16 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"purchases_feature_desc_nautical");
         case EOAFeatureWeather:
             return OALocalizedString(@"purchases_feature_weather");
+        case EOAFeatureAstronomy:
+            return OALocalizedString(@"purchases_feature_desc_astronomy");
         default:
             return @"";
     }
+}
+
+- (UIImage *)getAstronomyIcon
+{
+    return [UIImage imageNamed:ACImageNameIcCustomAstronomyColored];
 }
 
 - (UIImage *)getIcon
@@ -201,6 +213,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
         case EOAFeatureWeather:
             return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
+        case EOAFeatureAstronomy:
+            return [self getAstronomyIcon];
         default:
             return nil;
     }
@@ -250,6 +264,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
         case EOAFeatureWeather:
             return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
+        case EOAFeatureAstronomy:
+            return [self getAstronomyIcon];
         default:
             return nil;
     }
@@ -376,6 +392,13 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     return VEHICLEMETRICS;
 }
 
++ (OAFeature *)ASTRONOMY
+{
+    if (!ASTRONOMY)
+        ASTRONOMY = [[OAFeature alloc] initWithFeature:EOAFeatureAstronomy];
+    return ASTRONOMY;
+}
+
 + (NSArray<OAFeature *> *)OSMAND_PRO_FEATURES
 {
     if (!OSMAND_PRO_FEATURES)
@@ -397,6 +420,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.SENSORS,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL,
+                OAFeature.ASTRONOMY,
         ];
     }
     return OSMAND_PRO_FEATURES;
@@ -415,7 +439,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.WIKIVOYAGE,
                 OAFeature.SENSORS,
                 OAFeature.TERRAIN,
-                OAFeature.NAUTICAL
+                OAFeature.NAUTICAL,
+                OAFeature.ASTRONOMY
         ];
     }
     return MAPS_PLUS_FEATURES;
@@ -432,7 +457,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.SENSORS,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.TERRAIN,
-                OAFeature.NAUTICAL
+                OAFeature.NAUTICAL,
+                OAFeature.ASTRONOMY
         ];
     }
     return MAPS_PLUS_PREVIEW_FEATURES;
@@ -482,6 +508,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OAFeature.NAUTICAL;
         case EOAFeatureWeather:
             return OAFeature.WEATHER;
+        case EOAFeatureAstronomy:
+            return OAFeature.ASTRONOMY;
         default:
             return nil;
     }

@@ -132,6 +132,8 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
             return !iapHelper.weather.isPurchased()
         case .srtmMapRegion, .hillshadeRegion, .slopeRegion, .heightmapRegionLegacy, .geoTiffRegion:
             return !iapHelper.srtm.isPurchased()
+        case .starMap:
+            return !OAIAPHelper.isOsmAndProAvailable()
         default:
             return false
         }
@@ -246,6 +248,8 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 OAPluginPopupViewController.ask(forPlugin: kInAppId_Addon_Wiki)
             } else if type == .srtmMapRegion || type == .hillshadeRegion || type == .slopeRegion {
                 OAPluginPopupViewController.ask(forPlugin: kInAppId_Addon_Srtm)
+            } else if type == .starMap, let navigationController = hostViewController?.navigationController ?? OARootViewController.instance().navigationController {
+                OAChoosePlanHelper.showChoosePlanScreen(with: nil as OAFeature?, navController: navigationController)
             }
         }
     }

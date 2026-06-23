@@ -33,7 +33,8 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         @"osmand.wikipedia": kInAppId_Addon_Wiki,
         @"osmand.weather": kInAppId_Addon_Weather,
         @"osmand.sensor": kInAppId_Addon_External_Sensors,
-        @"osmand.vehicle.metrics": kInAppId_Addon_Vehicle_Metrics
+        @"osmand.vehicle.metrics": kInAppId_Addon_Vehicle_Metrics,
+        @"osmand.astronomy": kInAppId_Addon_Astronomy
         //        @"osmand.antplus"
         //        @"osmand.accessibility":
         //        @"osmand.rastermaps"

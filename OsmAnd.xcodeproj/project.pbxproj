@@ -1361,6 +1361,57 @@
 		97F6410929C475E7008F527B /* map_action_hill_climbing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410529C475E6008F527B /* map_action_hill_climbing@3x.png */; };
 		97F6410C29C475E7008F527B /* map_action_hill_climbing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */; };
 		9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */; };
+		A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500012F50000100000001 /* AstronomyPlugin.swift */; };
+		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
+		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
+		A5A5000A2F5000010000000A /* AstroUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500092F50000100000009 /* AstroUtils.swift */; };
+		A5A5000E2F5000010000000E /* StarObjectsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5000D2F5000010000000D /* StarObjectsViewModel.swift */; };
+		A5A500102F50000100000010 /* StarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5000F2F5000010000000F /* StarView.swift */; };
+		A5A500122F50000100000012 /* StarMapARModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500112F50000100000011 /* StarMapARModeHelper.swift */; };
+		A5A500142F50000100000014 /* StarMapCameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500132F50000100000013 /* StarMapCameraHelper.swift */; };
+		A5A500162F50000100000016 /* StarMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500152F50000100000015 /* StarMapViewController.swift */; };
+		A5A5001A2F5000010000001A /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500192F50000100000019 /* Catalog.swift */; };
+		A5A5001C2F5000010000001C /* AstroArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5001B2F5000010000001B /* AstroArticle.swift */; };
+		A5A5001E2F5000010000001E /* SkyObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5001D2F5000010000001D /* SkyObject.swift */; };
+		A5A500202F50000100000020 /* Constellation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5001F2F5000010000001F /* Constellation.swift */; };
+		A5A500222F50000100000022 /* AstroDataDbProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500212F50000100000021 /* AstroDataDbProvider.swift */; };
+		A5A500242F50000100000024 /* AstroConfigureViewBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500232F50000100000023 /* AstroConfigureViewBottomSheet.swift */; };
+		A5A500262F50000100000026 /* SkyObjectInfoBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500252F50000100000025 /* SkyObjectInfoBottomSheet.swift */; };
+		A5A500282F50000100000028 /* ConstellationInfoBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500272F50000100000027 /* ConstellationInfoBottomSheet.swift */; };
+		A5A5002A2F5000010000002A /* DateTimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500292F50000100000029 /* DateTimeSelectionView.swift */; };
+		A5A5002C2F5000010000002C /* StarMapButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002B2F5000010000002B /* StarMapButton.swift */; };
+		A5A5002E2F5000010000002E /* StarMapResetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002D2F5000010000002D /* StarMapResetButton.swift */; };
+		A5A500302F50000100000030 /* StarMapTimeControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */; };
+		A5A500322F50000100000032 /* StarCompassButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500312F50000100000031 /* StarCompassButton.swift */; };
+		A5A502022F51000100000102 /* AstroContextMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501022F51000100000102 /* AstroContextMenuItem.swift */; };
+		A5A502032F51000100000103 /* AstroContextUiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501032F51000100000103 /* AstroContextUiState.swift */; };
+		A5A502042F51000100000104 /* MetricsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501042F51000100000104 /* MetricsAdapter.swift */; };
+		A5A502052F51000100000105 /* AstroChartUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501052F51000100000105 /* AstroChartUtils.swift */; };
+		A5A502062F51000100000106 /* AstroVisibilityCardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501062F51000100000106 /* AstroVisibilityCardController.swift */; };
+		A5A502072F51000100000107 /* AstroScheduleCardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501072F51000100000107 /* AstroScheduleCardController.swift */; };
+		A5A502082F51000100000108 /* AstroVisibilityGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501082F51000100000108 /* AstroVisibilityGraphView.swift */; };
+		A5A502092F51000100000109 /* AstroScheduleGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501092F51000100000109 /* AstroScheduleGraphView.swift */; };
+		A5A5020A2F5100010000010A /* AstroContextCardFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010A2F5100010000010A /* AstroContextCardFactory.swift */; };
+		A5A5020B2F5100010000010B /* AstroKnowledgeBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010B2F5100010000010B /* AstroKnowledgeBaseController.swift */; };
+		A5A5020C2F5100010000010C /* GetAstroImagesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010C2F5100010000010C /* GetAstroImagesTask.swift */; };
+		A5A5020D2F5100010000010D /* AstroGalleryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010D2F5100010000010D /* AstroGalleryLoader.swift */; };
+		A5A5020E2F5100010000010E /* AstroArticleWebViewClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */; };
+		A5A5020F2F5100010000010F /* AstroArticleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5010F2F5100010000010F /* AstroArticleViewController.swift */; };
+		A5A502102F51000100000110 /* AstroContextMenuAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */; };
+		A5A502112F51000100000111 /* AstroDescriptionCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */; };
+		A5A502122F51000100000112 /* AstroCatalogsCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */; };
+		A5A502132F51000100000113 /* AstroKnowledgeCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501132F51000100000113 /* AstroKnowledgeCardViewHolder.swift */; };
+		A5A502142F51000100000114 /* AstroGalleryCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501142F51000100000114 /* AstroGalleryCardViewHolder.swift */; };
+		A5A502152F51000100000115 /* AstroBottomSheetBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501152F51000100000115 /* AstroBottomSheetBehavior.swift */; };
+		A5A502162F51000100000116 /* AstroVisibilityCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501162F51000100000116 /* AstroVisibilityCardViewHolder.swift */; };
+		A5A502172F51000100000117 /* AstroScheduleCardViewHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501172F51000100000117 /* AstroScheduleCardViewHolder.swift */; };
+		A5A502182F51000100000118 /* AstroContextMenuFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A501182F51000100000118 /* AstroContextMenuFragment.swift */; };
+		A5A504012F51000200000401 /* StarMapSearchPreparedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503012F51000200000301 /* StarMapSearchPreparedData.swift */; };
+		A5A504022F51000200000402 /* StarMapSearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503022F51000200000302 /* StarMapSearchState.swift */; };
+		A5A504032F51000200000403 /* StarMapSearchHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503032F51000200000303 /* StarMapSearchHelper.swift */; };
+		A5A504042F51000200000404 /* StarMapSearchResultsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */; };
+		A5A504052F51000200000405 /* StarMapCatalogsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */; };
+		A5A504062F51000200000406 /* StarMapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503062F51000200000306 /* StarMapSearchViewController.swift */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
 		B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */; };
@@ -5124,6 +5175,57 @@
 		97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_hill_climbing@2x.png"; sourceTree = "<group>"; };
 		9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopIndexFilter.h; sourceTree = "<group>"; };
 		9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATopIndexFilter.mm; sourceTree = "<group>"; };
+		A5A500012F50000100000001 /* AstronomyPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPlugin.swift; sourceTree = "<group>"; };
+		A5A500052F50000100000005 /* AstronomyPluginSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyPluginSettings.swift; sourceTree = "<group>"; };
+		A5A500072F50000100000007 /* AstroDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDataProvider.swift; sourceTree = "<group>"; };
+		A5A500092F50000100000009 /* AstroUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroUtils.swift; sourceTree = "<group>"; };
+		A5A5000D2F5000010000000D /* StarObjectsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarObjectsViewModel.swift; sourceTree = "<group>"; };
+		A5A5000F2F5000010000000F /* StarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarView.swift; sourceTree = "<group>"; };
+		A5A500112F50000100000011 /* StarMapARModeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapARModeHelper.swift; sourceTree = "<group>"; };
+		A5A500132F50000100000013 /* StarMapCameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapCameraHelper.swift; sourceTree = "<group>"; };
+		A5A500152F50000100000015 /* StarMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapViewController.swift; sourceTree = "<group>"; };
+		A5A500192F50000100000019 /* Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Catalog.swift; sourceTree = "<group>"; };
+		A5A5001B2F5000010000001B /* AstroArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroArticle.swift; sourceTree = "<group>"; };
+		A5A5001D2F5000010000001D /* SkyObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyObject.swift; sourceTree = "<group>"; };
+		A5A5001F2F5000010000001F /* Constellation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constellation.swift; sourceTree = "<group>"; };
+		A5A500212F50000100000021 /* AstroDataDbProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDataDbProvider.swift; sourceTree = "<group>"; };
+		A5A500232F50000100000023 /* AstroConfigureViewBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroConfigureViewBottomSheet.swift; sourceTree = "<group>"; };
+		A5A500252F50000100000025 /* SkyObjectInfoBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyObjectInfoBottomSheet.swift; sourceTree = "<group>"; };
+		A5A500272F50000100000027 /* ConstellationInfoBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstellationInfoBottomSheet.swift; sourceTree = "<group>"; };
+		A5A500292F50000100000029 /* DateTimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeSelectionView.swift; sourceTree = "<group>"; };
+		A5A5002B2F5000010000002B /* StarMapButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapButton.swift; sourceTree = "<group>"; };
+		A5A5002D2F5000010000002D /* StarMapResetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapResetButton.swift; sourceTree = "<group>"; };
+		A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapTimeControlButton.swift; sourceTree = "<group>"; };
+		A5A500312F50000100000031 /* StarCompassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarCompassButton.swift; sourceTree = "<group>"; };
+		A5A501022F51000100000102 /* AstroContextMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuItem.swift; sourceTree = "<group>"; };
+		A5A501032F51000100000103 /* AstroContextUiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextUiState.swift; sourceTree = "<group>"; };
+		A5A501042F51000100000104 /* MetricsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsAdapter.swift; sourceTree = "<group>"; };
+		A5A501052F51000100000105 /* AstroChartUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroChartUtils.swift; sourceTree = "<group>"; };
+		A5A501062F51000100000106 /* AstroVisibilityCardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroVisibilityCardController.swift; sourceTree = "<group>"; };
+		A5A501072F51000100000107 /* AstroScheduleCardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroScheduleCardController.swift; sourceTree = "<group>"; };
+		A5A501082F51000100000108 /* AstroVisibilityGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroVisibilityGraphView.swift; sourceTree = "<group>"; };
+		A5A501092F51000100000109 /* AstroScheduleGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroScheduleGraphView.swift; sourceTree = "<group>"; };
+		A5A5010A2F5100010000010A /* AstroContextCardFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextCardFactory.swift; sourceTree = "<group>"; };
+		A5A5010B2F5100010000010B /* AstroKnowledgeBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroKnowledgeBaseController.swift; sourceTree = "<group>"; };
+		A5A5010C2F5100010000010C /* GetAstroImagesTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAstroImagesTask.swift; sourceTree = "<group>"; };
+		A5A5010D2F5100010000010D /* AstroGalleryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroGalleryLoader.swift; sourceTree = "<group>"; };
+		A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroArticleWebViewClient.swift; sourceTree = "<group>"; };
+		A5A5010F2F5100010000010F /* AstroArticleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroArticleViewController.swift; sourceTree = "<group>"; };
+		A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuAdapter.swift; sourceTree = "<group>"; };
+		A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroDescriptionCardViewHolder.swift; sourceTree = "<group>"; };
+		A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroCatalogsCardViewHolder.swift; sourceTree = "<group>"; };
+		A5A501132F51000100000113 /* AstroKnowledgeCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroKnowledgeCardViewHolder.swift; sourceTree = "<group>"; };
+		A5A501142F51000100000114 /* AstroGalleryCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroGalleryCardViewHolder.swift; sourceTree = "<group>"; };
+		A5A501152F51000100000115 /* AstroBottomSheetBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroBottomSheetBehavior.swift; sourceTree = "<group>"; };
+		A5A501162F51000100000116 /* AstroVisibilityCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroVisibilityCardViewHolder.swift; sourceTree = "<group>"; };
+		A5A501172F51000100000117 /* AstroScheduleCardViewHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroScheduleCardViewHolder.swift; sourceTree = "<group>"; };
+		A5A501182F51000100000118 /* AstroContextMenuFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstroContextMenuFragment.swift; sourceTree = "<group>"; };
+		A5A503012F51000200000301 /* StarMapSearchPreparedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchPreparedData.swift; sourceTree = "<group>"; };
+		A5A503022F51000200000302 /* StarMapSearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchState.swift; sourceTree = "<group>"; };
+		A5A503032F51000200000303 /* StarMapSearchHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchHelper.swift; sourceTree = "<group>"; };
+		A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchResultsAdapter.swift; sourceTree = "<group>"; };
+		A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapCatalogsAdapter.swift; sourceTree = "<group>"; };
+		A5A503062F51000200000306 /* StarMapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchViewController.swift; sourceTree = "<group>"; };
 		ADA2D9C11AEC31EA6BB2AF2C /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditWaypointsGroupBottomSheetViewController.mm; sourceTree = "<group>"; };
 		B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectionCollapsableCell.h; sourceTree = "<group>"; };
@@ -10415,6 +10517,80 @@
 			path = Resources/Icons/Location;
 			sourceTree = "<group>";
 		};
+		A5A500002F50000000000001 /* Astronomy */ = {
+			isa = PBXGroup;
+			children = (
+				A5A500012F50000100000001 /* AstronomyPlugin.swift */,
+				A5A5001B2F5000010000001B /* AstroArticle.swift */,
+				A5A500192F50000100000019 /* Catalog.swift */,
+				A5A5001D2F5000010000001D /* SkyObject.swift */,
+				A5A5001F2F5000010000001F /* Constellation.swift */,
+				A5A500052F50000100000005 /* AstronomyPluginSettings.swift */,
+				A5A500072F50000100000007 /* AstroDataProvider.swift */,
+				A5A500212F50000100000021 /* AstroDataDbProvider.swift */,
+				A5A500092F50000100000009 /* AstroUtils.swift */,
+				A5A5000D2F5000010000000D /* StarObjectsViewModel.swift */,
+				A5A500232F50000100000023 /* AstroConfigureViewBottomSheet.swift */,
+				A5A500252F50000100000025 /* SkyObjectInfoBottomSheet.swift */,
+				A5A500272F50000100000027 /* ConstellationInfoBottomSheet.swift */,
+				A5A501002F51000100000100 /* contextmenu */,
+				A5A503202F51000200000320 /* search */,
+				A5A500292F50000100000029 /* DateTimeSelectionView.swift */,
+				A5A5002B2F5000010000002B /* StarMapButton.swift */,
+				A5A5002D2F5000010000002D /* StarMapResetButton.swift */,
+				A5A5002F2F5000010000002F /* StarMapTimeControlButton.swift */,
+				A5A500312F50000100000031 /* StarCompassButton.swift */,
+				A5A5000F2F5000010000000F /* StarView.swift */,
+				A5A500112F50000100000011 /* StarMapARModeHelper.swift */,
+				A5A500132F50000100000013 /* StarMapCameraHelper.swift */,
+				A5A500152F50000100000015 /* StarMapViewController.swift */,
+			);
+			path = Astronomy;
+			sourceTree = "<group>";
+		};
+		A5A501002F51000100000100 /* contextmenu */ = {
+			isa = PBXGroup;
+			children = (
+				A5A5010F2F5100010000010F /* AstroArticleViewController.swift */,
+				A5A5010E2F5100010000010E /* AstroArticleWebViewClient.swift */,
+				A5A501152F51000100000115 /* AstroBottomSheetBehavior.swift */,
+				A5A501122F51000100000112 /* AstroCatalogsCardViewHolder.swift */,
+				A5A501052F51000100000105 /* AstroChartUtils.swift */,
+				A5A5010A2F5100010000010A /* AstroContextCardFactory.swift */,
+				A5A501102F51000100000110 /* AstroContextMenuAdapter.swift */,
+				A5A501182F51000100000118 /* AstroContextMenuFragment.swift */,
+				A5A501022F51000100000102 /* AstroContextMenuItem.swift */,
+				A5A501032F51000100000103 /* AstroContextUiState.swift */,
+				A5A501112F51000100000111 /* AstroDescriptionCardViewHolder.swift */,
+				A5A501142F51000100000114 /* AstroGalleryCardViewHolder.swift */,
+				A5A5010D2F5100010000010D /* AstroGalleryLoader.swift */,
+				A5A501132F51000100000113 /* AstroKnowledgeCardViewHolder.swift */,
+				A5A5010B2F5100010000010B /* AstroKnowledgeBaseController.swift */,
+				A5A501072F51000100000107 /* AstroScheduleCardController.swift */,
+				A5A501172F51000100000117 /* AstroScheduleCardViewHolder.swift */,
+				A5A501092F51000100000109 /* AstroScheduleGraphView.swift */,
+				A5A501062F51000100000106 /* AstroVisibilityCardController.swift */,
+				A5A501162F51000100000116 /* AstroVisibilityCardViewHolder.swift */,
+				A5A501082F51000100000108 /* AstroVisibilityGraphView.swift */,
+				A5A5010C2F5100010000010C /* GetAstroImagesTask.swift */,
+				A5A501042F51000100000104 /* MetricsAdapter.swift */,
+			);
+			path = contextmenu;
+			sourceTree = "<group>";
+		};
+		A5A503202F51000200000320 /* search */ = {
+			isa = PBXGroup;
+			children = (
+				A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */,
+				A5A503012F51000200000301 /* StarMapSearchPreparedData.swift */,
+				A5A503032F51000200000303 /* StarMapSearchHelper.swift */,
+				A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */,
+				A5A503022F51000200000302 /* StarMapSearchState.swift */,
+				A5A503062F51000200000306 /* StarMapSearchViewController.swift */,
+			);
+			path = search;
+			sourceTree = "<group>";
+		};
 		B247453027E35B1D00C18C3F /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
@@ -11280,6 +11456,7 @@
 		DA5A797626C563A000F274C7 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				A5A500002F50000000000001 /* Astronomy */,
 				FA1D6DAC2DCE04640080E374 /* VehicleMetricsPlugin */,
 				FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */,
 				32119B3A28477112005E1E0C /* Development */,
@@ -17229,6 +17406,57 @@
 				DA5A845C26C563A900F274C7 /* OAGPXLayer.mm in Sources */,
 				DA5A835126C563A800F274C7 /* OAPointHeaderTableViewCell.m in Sources */,
 				27D33B5F2E74622A00AD4F70 /* OpenWeatherAction.swift in Sources */,
+				A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */,
+				A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */,
+				A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */,
+				A5A5000A2F5000010000000A /* AstroUtils.swift in Sources */,
+				A5A5000E2F5000010000000E /* StarObjectsViewModel.swift in Sources */,
+				A5A500102F50000100000010 /* StarView.swift in Sources */,
+				A5A500122F50000100000012 /* StarMapARModeHelper.swift in Sources */,
+				A5A500142F50000100000014 /* StarMapCameraHelper.swift in Sources */,
+				A5A500162F50000100000016 /* StarMapViewController.swift in Sources */,
+				A5A504012F51000200000401 /* StarMapSearchPreparedData.swift in Sources */,
+				A5A504022F51000200000402 /* StarMapSearchState.swift in Sources */,
+				A5A504032F51000200000403 /* StarMapSearchHelper.swift in Sources */,
+				A5A504042F51000200000404 /* StarMapSearchResultsAdapter.swift in Sources */,
+				A5A504052F51000200000405 /* StarMapCatalogsAdapter.swift in Sources */,
+				A5A504062F51000200000406 /* StarMapSearchViewController.swift in Sources */,
+				A5A5001A2F5000010000001A /* Catalog.swift in Sources */,
+				A5A5001C2F5000010000001C /* AstroArticle.swift in Sources */,
+				A5A5001E2F5000010000001E /* SkyObject.swift in Sources */,
+				A5A500202F50000100000020 /* Constellation.swift in Sources */,
+				A5A500222F50000100000022 /* AstroDataDbProvider.swift in Sources */,
+				A5A500242F50000100000024 /* AstroConfigureViewBottomSheet.swift in Sources */,
+				A5A500262F50000100000026 /* SkyObjectInfoBottomSheet.swift in Sources */,
+				A5A500282F50000100000028 /* ConstellationInfoBottomSheet.swift in Sources */,
+				A5A5002A2F5000010000002A /* DateTimeSelectionView.swift in Sources */,
+				A5A5002C2F5000010000002C /* StarMapButton.swift in Sources */,
+				A5A5002E2F5000010000002E /* StarMapResetButton.swift in Sources */,
+				A5A500302F50000100000030 /* StarMapTimeControlButton.swift in Sources */,
+				A5A500322F50000100000032 /* StarCompassButton.swift in Sources */,
+				A5A502022F51000100000102 /* AstroContextMenuItem.swift in Sources */,
+				A5A502032F51000100000103 /* AstroContextUiState.swift in Sources */,
+				A5A502042F51000100000104 /* MetricsAdapter.swift in Sources */,
+				A5A502052F51000100000105 /* AstroChartUtils.swift in Sources */,
+				A5A502062F51000100000106 /* AstroVisibilityCardController.swift in Sources */,
+				A5A502072F51000100000107 /* AstroScheduleCardController.swift in Sources */,
+				A5A502082F51000100000108 /* AstroVisibilityGraphView.swift in Sources */,
+				A5A502092F51000100000109 /* AstroScheduleGraphView.swift in Sources */,
+				A5A5020A2F5100010000010A /* AstroContextCardFactory.swift in Sources */,
+				A5A5020B2F5100010000010B /* AstroKnowledgeBaseController.swift in Sources */,
+				A5A5020C2F5100010000010C /* GetAstroImagesTask.swift in Sources */,
+				A5A5020D2F5100010000010D /* AstroGalleryLoader.swift in Sources */,
+				A5A5020E2F5100010000010E /* AstroArticleWebViewClient.swift in Sources */,
+				A5A5020F2F5100010000010F /* AstroArticleViewController.swift in Sources */,
+				A5A502102F51000100000110 /* AstroContextMenuAdapter.swift in Sources */,
+				A5A502112F51000100000111 /* AstroDescriptionCardViewHolder.swift in Sources */,
+				A5A502122F51000100000112 /* AstroCatalogsCardViewHolder.swift in Sources */,
+				A5A502132F51000100000113 /* AstroKnowledgeCardViewHolder.swift in Sources */,
+				A5A502142F51000100000114 /* AstroGalleryCardViewHolder.swift in Sources */,
+				A5A502152F51000100000115 /* AstroBottomSheetBehavior.swift in Sources */,
+				A5A502162F51000100000116 /* AstroVisibilityCardViewHolder.swift in Sources */,
+				A5A502172F51000100000117 /* AstroScheduleCardViewHolder.swift in Sources */,
+				A5A502182F51000100000118 /* AstroContextMenuFragment.swift in Sources */,
 				DA5A824926C563A700F274C7 /* OAAutoCenterMapViewController.m in Sources */,
 				DA5A855F26C563A900F274C7 /* OALocationPointWrapper.mm in Sources */,
 				DA5A81AE26C563A700F274C7 /* OASearchResultMatcher.mm in Sources */,

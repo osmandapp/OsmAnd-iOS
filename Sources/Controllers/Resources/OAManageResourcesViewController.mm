@@ -83,6 +83,18 @@ struct RegionResources
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > outdatedResources;
 };
 
+static BOOL ResourceMatchesRegion(OAWorldRegion *region,
+                                  const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &resource,
+                                  const QString &downloadsIdPrefix,
+                                  const QString &acceptedExtension)
+{
+    if ([region.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && resource->type == OsmAndResourceType::StarMap)
+        return YES;
+    if (!acceptedExtension.isEmpty())
+        return resource->id.endsWith(acceptedExtension);
+    return resource->id.startsWith(downloadsIdPrefix);
+}
+
 @implementation OAManageResourcesViewController
 {
     OsmAndAppInstance _app;
@@ -120,14 +132,18 @@ struct RegionResources
     NSInteger _localResourcesSection;
     NSInteger _localSqliteSection;
     NSInteger _resourcesSection;
+    NSInteger _astronomyResourcesSection;
     NSInteger _localOnlineTileSourcesSection;
     NSInteger _localTravelSection;
+    NSInteger _localAstronomySection;
     NSInteger _localTerrainMapSourcesSection;
     NSMutableArray *_allResourceItems;
+    NSMutableArray *_astronomyResourceItems;
     NSMutableArray *_localResourceItems;
     NSMutableArray *_localSqliteItems;
     NSMutableArray *_localOnlineTileSources;
     NSMutableArray *_localTravelItems;
+    NSMutableArray *_localAstronomyItems;
     NSMutableArray *_localTerrainMapSources;
 
     NSInteger _weatherForecastRow;
@@ -227,10 +243,12 @@ static BOOL _repositoryUpdated = NO;
         _allSubregionItems = [NSMutableArray array];
 
         _allResourceItems = [NSMutableArray array];
+        _astronomyResourceItems = [NSMutableArray array];
         _localResourceItems = [NSMutableArray array];
         _localSqliteItems = [NSMutableArray array];
         _localOnlineTileSources = [NSMutableArray array];
         _localTravelItems = [NSMutableArray array];
+        _localAstronomyItems = [NSMutableArray array];
         _localTerrainMapSources = [NSMutableArray array];
 
         _regionMapItems = [NSMutableArray array];
@@ -748,10 +766,8 @@ static BOOL _repositoryUpdated = NO;
         if (initWorldwideRegionItems)
             [_searchableWorldwideRegionItems addObject:region];
         
-        const auto regionId = QString::fromNSString(region.regionId);
         const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
         const auto acceptedExtension = QString::fromNSString(region.acceptedExtension).toLower();
-        bool checkExtension = acceptedExtension.length() > 0;
         
         RegionResources regionResources;
         RegionResources regionResPrevious;
@@ -767,15 +783,8 @@ static BOOL _repositoryUpdated = NO;
         {
             for (const auto& resource : _localResources)
             {
-                if (checkExtension)
-                {
-                    if (resource->id.endsWith(acceptedExtension))
-                        regionResources.allResources.remove(resource->id);
-                }
-                else if (resource->id.startsWith(downloadsIdPrefix))
-                {
+                if (ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
                     regionResources.allResources.remove(resource->id);
-                }
             }
             for (const auto& resource : regionResources.outdatedResources)
             {
@@ -794,15 +803,8 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _outdatedResources)
         {
-            if (checkExtension)
-            {
-                if (!resource->id.endsWith(acceptedExtension))
-                    continue;
-            }
-            else if (!resource->id.startsWith(downloadsIdPrefix))
-            {
+            if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
                 continue;
-            }
             
             regionResources.allResources.insert(resource->id, resource);
             regionResources.outdatedResources.insert(resource->id, resource);
@@ -811,15 +813,8 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _localResources)
         {
-            if (checkExtension)
-            {
-                if (!resource->id.endsWith(acceptedExtension))
-                    continue;
-            }
-            else if (!resource->id.startsWith(downloadsIdPrefix))
-            {
+            if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
                 continue;
-            }
 
             if (!regionResources.allResources.contains(resource->id))
                 regionResources.allResources.insert(resource->id, resource);
@@ -833,15 +828,8 @@ static BOOL _repositoryUpdated = NO;
             BOOL hasSrtm = NO;
             for (const auto& resource : _resourcesInRepository)
             {
-                if (checkExtension)
-                {
-                    if (!resource->id.endsWith(acceptedExtension))
-                        continue;
-                }
-                else if (!resource->id.startsWith(downloadsIdPrefix))
-                {
+                if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
                     continue;
-                }
                 
                 switch (resource->type)
                 {
@@ -921,6 +909,7 @@ static BOOL _repositoryUpdated = NO;
     // resource available in repository or locally.
     
     [_allResourceItems removeAllObjects];
+    [_astronomyResourceItems removeAllObjects];
     [_allSubregionItems removeAllObjects];
     [_regionMapItems removeAllObjects];
     [_localRegionMapItems removeAllObjects];
@@ -963,6 +952,7 @@ static BOOL _repositoryUpdated = NO;
 
     NSMutableArray<OAResourceItem *> *regionMapArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
+    NSMutableArray<OAResourceItem *> *astronomyResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
     
     for (const auto& resource_ : regionResources.allResources)
@@ -1074,7 +1064,14 @@ static BOOL _repositoryUpdated = NO;
     }
     else if (travelRegion)
     {
-        [_allResourceItems addObjectsFromArray:allResourcesArray];
+        for (OAResourceItem *item in allResourcesArray)
+        {
+            if (item.resourceType == OsmAndResourceType::StarMap)
+                [astronomyResourcesArray addObject:item];
+            else
+                [_allResourceItems addObject:item];
+        }
+        [_astronomyResourceItems addObjectsFromArray:astronomyResourcesArray];
     }
     else if (allResourcesArray.count > 1)
     {
@@ -1232,6 +1229,7 @@ static BOOL _repositoryUpdated = NO;
     
     [_allResourceItems addObjectsFromArray:_allSubregionItems];
     [_allResourceItems sortUsingComparator:self.resourceItemsComparator];
+    [_astronomyResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_regionMapItems sortUsingComparator:^NSComparisonResult(OAResourceItem *res1, OAResourceItem *res2) {
         NSInteger orderValue1 = [OAResourceType getOrderIndex:[OAResourceType toValue:res1.resourceType]];
         NSInteger orderValue2 = [OAResourceType getOrderIndex:[OAResourceType toValue:res2.resourceType]];
@@ -1280,6 +1278,7 @@ static BOOL _repositoryUpdated = NO;
     // Outdated Resources
     [_localResourceItems removeAllObjects];
     [_localTravelItems removeAllObjects];
+    [_localAstronomyItems removeAllObjects];
     [_localTerrainMapSources removeAllObjects];
     _outdatedMapsCount = 0;
     _totalOutdatedSize = 0;
@@ -1308,7 +1307,14 @@ static BOOL _repositoryUpdated = NO;
 
         if (item.title != nil)
         {
-            if (![item.worldRegion.regionId isEqualToString:_travelRegionId])
+            if ([item.worldRegion.regionId isEqualToString:_travelRegionId])
+            {
+                if (item.resourceType == OsmAndResourceType::StarMap)
+                    [_localAstronomyItems addObject:item];
+                else
+                    [_localTravelItems addObject:item];
+            }
+            else
             {
                 if (match == self.region)
                     [_localRegionMapItems addObject:item];
@@ -1363,7 +1369,10 @@ static BOOL _repositoryUpdated = NO;
         {
             if ([item.worldRegion.regionId isEqualToString:_travelRegionId])
             {
-                [_localTravelItems addObject:item];
+                if (item.resourceType == OsmAndResourceType::StarMap)
+                    [_localAstronomyItems addObject:item];
+                else
+                    [_localTravelItems addObject:item];
             }
             else
             {
@@ -1391,6 +1400,7 @@ static BOOL _repositoryUpdated = NO;
     [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
     [_localTravelItems sortUsingComparator:self.resourceItemsComparator];
+    [_localAstronomyItems sortUsingComparator:self.resourceItemsComparator];
     [_localTerrainMapSources sortUsingComparator:self.resourceItemsComparator];
     
     for (OAResourceItem *item in _regionMapItems)
@@ -1419,9 +1429,11 @@ static BOOL _repositoryUpdated = NO;
         _subscribeEmailSection = -1;
         _localResourcesSection = -1;
         _resourcesSection = -1;
+        _astronomyResourcesSection = -1;
         _localSqliteSection = -1;
         _localOnlineTileSourcesSection = -1;
         _localTravelSection = -1;
+        _localAstronomySection = -1;
         _localTerrainMapSourcesSection = -1;
         _freeMemorySection = -1;
 
@@ -1469,6 +1481,9 @@ static BOOL _repositoryUpdated = NO;
         if ([[self getResourceItems] count] > 0)
             _resourcesSection = _lastUnusedSectionIndex++;
 
+        if (_currentScope == kAllResourcesScope && [self isTravelGuidesScope] && _astronomyResourceItems.count > 0)
+            _astronomyResourcesSection = _lastUnusedSectionIndex++;
+
         if (_regionMapSection == -1 && [[self getRegionMapItems] count] > 0)
             _regionMapSection = _lastUnusedSectionIndex++;
         
@@ -1480,6 +1495,9 @@ static BOOL _repositoryUpdated = NO;
         
         if (_currentScope == kLocalResourcesScope && _localTravelItems.count > 0)
             _localTravelSection = _lastUnusedSectionIndex++;
+
+        if (_currentScope == kLocalResourcesScope && _localAstronomyItems.count > 0)
+            _localAstronomySection = _lastUnusedSectionIndex++;
 
         if (_currentScope == kLocalResourcesScope && _localTerrainMapSources.count > 0)
             _localTerrainMapSourcesSection = _lastUnusedSectionIndex++;
@@ -1543,7 +1561,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL)hasLocalResources
 {
-    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0 || _localTravelItems.count > 0 || _localTerrainMapSources.count > 0;
+    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0 || _localTravelItems.count > 0 || _localAstronomyItems.count > 0 || _localTerrainMapSources.count > 0;
 }
 
 - (NSMutableArray *) getResourceItems
@@ -2052,7 +2070,7 @@ static BOOL _repositoryUpdated = NO;
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + (_localTravelItems.count > 0 ? 1 : 0) + (_localTerrainMapSources.count > 0 ? 1 : 0) + 1;
+        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + (_localTravelItems.count > 0 ? 1 : 0) + (_localAstronomyItems.count > 0 ? 1 : 0) + (_localTerrainMapSources.count > 0 ? 1 : 0) + 1;
 
     NSInteger sectionsCount = 0;
 
@@ -2071,6 +2089,8 @@ static BOOL _repositoryUpdated = NO;
     if (_localResourcesSection >= 0)
         sectionsCount++;
     if (_resourcesSection >= 0)
+        sectionsCount++;
+    if (_astronomyResourcesSection >= 0)
         sectionsCount++;
     if (_regionMapSection >= 0)
         sectionsCount++;
@@ -2101,6 +2121,8 @@ static BOOL _repositoryUpdated = NO;
         return _downloadDescriptionInfo.getActionButtons.count + 1;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
+    if (section == _astronomyResourcesSection)
+        return [_astronomyResourceItems count];
     if (section == _localResourcesSection)
         return ([self hasLocalResources]) ? 2 : 1;
     if (section == _regionMapSection)
@@ -2111,6 +2133,8 @@ static BOOL _repositoryUpdated = NO;
         return [_localOnlineTileSources count];
     if (section == _localTravelSection)
         return [_localTravelItems count];
+    if (section == _localAstronomySection)
+        return [_localAstronomyItems count];
     if (section == _localTerrainMapSourcesSection)
         return [_localTerrainMapSources count];
     if (section == _otherMapsSection)
@@ -2139,7 +2163,9 @@ static BOOL _repositoryUpdated = NO;
             else if (section == _localOnlineTileSourcesSection)
                 return OALocalizedString(@"online_raster_maps");
             else if (section == _localTravelSection)
-                return OALocalizedString(@"shared_string_travel_guides");
+                return OALocalizedString(@"shared_string_wikivoyage");
+            else if (section == _localAstronomySection)
+                return OALocalizedString(@"astronomy_plugin_name");
             else if (section == _localTerrainMapSourcesSection)
                 return OALocalizedString(@"terrain_3D_maps");
             else
@@ -2153,10 +2179,12 @@ static BOOL _repositoryUpdated = NO;
             if ([self isNauticalScope])
                 return OALocalizedString(@"nautical_maps");
             else if ([self isTravelGuidesScope])
-                return OALocalizedString(@"shared_string_travel_guides");
+                return OALocalizedString(@"shared_string_wikivoyage");
             else
                 return OALocalizedString(@"res_worldwide");
         }
+        if (section == _astronomyResourcesSection)
+            return OALocalizedString(@"astronomy_plugin_name");
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
@@ -2176,10 +2204,12 @@ static BOOL _repositoryUpdated = NO;
         if ([self isNauticalScope])
             return OALocalizedString(@"nautical_maps");
         else if ([self isTravelGuidesScope])
-            return OALocalizedString(@"shared_string_travel_guides");
+            return OALocalizedString(@"shared_string_wikivoyage");
         else
             return OALocalizedString(@"res_mapsres");
     }
+    if (section == _astronomyResourcesSection)
+        return OALocalizedString(@"astronomy_plugin_name");
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
@@ -2281,7 +2311,7 @@ static BOOL _repositoryUpdated = NO;
             if (isLocalCell)
             {
                 subtitle = [NSString stringWithFormat:@"%lu %@ - %@",
-                        _localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count + _localTravelItems.count,
+                        _localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count + _localTravelItems.count + _localAstronomyItems.count,
                         OALocalizedString(@"res_maps_inst"),
                         [NSByteCountFormatter stringFromByteCount:_totalInstalledSize
                                                        countStyle:NSByteCountFormatterCountStyleFile]];
@@ -2326,9 +2356,11 @@ static BOOL _repositoryUpdated = NO;
             cellTypeId = subregionCell;
             title = OALocalizedString(@"shared_string_travel_guides");
         }
-        else if ((indexPath.section == _resourcesSection && _resourcesSection >= 0) || indexPath.section == _localTerrainMapSourcesSection)
+        else if ((indexPath.section == _resourcesSection && _resourcesSection >= 0) || indexPath.section == _astronomyResourcesSection || indexPath.section == _localTerrainMapSourcesSection)
         {
-            item_ = indexPath.section == _localTerrainMapSourcesSection ? _localTerrainMapSources[indexPath.row] : [self getResourceItems][indexPath.row];
+            item_ = indexPath.section == _localTerrainMapSourcesSection
+                ? _localTerrainMapSources[indexPath.row]
+                : (indexPath.section == _astronomyResourcesSection ? _astronomyResourceItems[indexPath.row] : [self getResourceItems][indexPath.row]);
 
             if ([item_ isKindOfClass:[OAWorldRegion class]])
             {
@@ -2376,6 +2408,11 @@ static BOOL _repositoryUpdated = NO;
                     }
                 }
                 
+                if (item.resourceType == OsmAndResourceType::StarMap && ![OAIAPHelper isOsmAndProAvailable])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
                 if (!item.isFree)
                 {
                     if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion)
@@ -2395,7 +2432,7 @@ static BOOL _repositoryUpdated = NO;
                         disabled = YES;
                         item.disabled = disabled;
                     }
-                    if ([self isTravelGuidesScope] && ![OAPluginsHelper isEnabled:OAWikipediaPlugin.class])
+                    if ([self isTravelGuidesScope] && item.resourceType != OsmAndResourceType::StarMap && ![OAPluginsHelper isEnabled:OAWikipediaPlugin.class])
                     {
                         disabled = YES;
                         item.disabled = disabled;
@@ -2427,6 +2464,8 @@ static BOOL _repositoryUpdated = NO;
                         srtmFormat = [NSString stringWithFormat:@" (%@)", [OAResourceType getSRTMFormatItem:item longFormat:NO]];
 
                     subtitle = [NSString stringWithFormat:@"%@%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], srtmFormat, [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                    if (item.getDate.length > 0)
+                        subtitle = [NSString stringWithFormat:@"%@  •  %@", subtitle, item.getDate];
                 }
                 else
                     subtitle = [NSString stringWithFormat:@"%@", [OAResourceType resourceTypeLocalized:item.resourceType]];
@@ -2631,6 +2670,17 @@ static BOOL _repositoryUpdated = NO;
                 subtitle = [NSString stringWithFormat:@"%@  •  %@", OALocalizedString(@"shared_string_wikivoyage"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
             else
                 subtitle = OALocalizedString(@"shared_string_wikivoyage");
+        }
+        else if (indexPath.section == _localAstronomySection)
+        {
+            OALocalResourceItem *item = _localAstronomyItems[indexPath.row];
+            localItem = item;
+            cellTypeId = localResourceCell;
+            title = item.title;
+            if (item.size > 0)
+                subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
+            else
+                subtitle = [OAResourceType resourceTypeLocalized:item.resourceType];
         }
         
         else if (indexPath.section == _freeMapsBannerSection)
@@ -2932,12 +2982,18 @@ static BOOL _repositoryUpdated = NO;
     id item;
     if (indexPath.section == _resourcesSection)
         item = [self getResourceItems][indexPath.row];
+    else if (indexPath.section == _astronomyResourcesSection)
+        item = _astronomyResourceItems[indexPath.row];
     else if (indexPath.section == _regionMapSection)
         item = [self getRegionMapItems][indexPath.row];
     else if (indexPath.section == _localSqliteSection)
         item = _localSqliteItems[indexPath.row];
     else if (indexPath.section == _localOnlineTileSourcesSection)
         item = _localOnlineTileSources[indexPath.row];
+    else if (indexPath.section == _localTravelSection)
+        item = _localTravelItems[indexPath.row];
+    else if (indexPath.section == _localAstronomySection)
+        item = _localAstronomyItems[indexPath.row];
     else if (indexPath.section == _localTerrainMapSourcesSection)
         item = _localTerrainMapSources[indexPath.row];
     else if (indexPath.section == _otherMapsSection)
@@ -3264,6 +3320,8 @@ static BOOL _repositoryUpdated = NO;
         {
             if (cellPath.section == _resourcesSection && _resourcesSection >= 0)
                 item = [self getResourceItems][cellPath.row];
+            if (cellPath.section == _astronomyResourcesSection)
+                item = _astronomyResourceItems[cellPath.row];
             if (cellPath.section == _regionMapSection && _regionMapSection >= 0)
                 item = [self getRegionMapItems][cellPath.row];
             if (cellPath.section == _localSqliteSection)
@@ -3272,6 +3330,8 @@ static BOOL _repositoryUpdated = NO;
                 item = _localOnlineTileSources[cellPath.row];
             if (cellPath.section == _localTravelSection)
                 item = _localTravelItems[cellPath.row];
+            if (cellPath.section == _localAstronomySection)
+                item = _localAstronomyItems[cellPath.row];
             if (cellPath.section == _localTerrainMapSourcesSection)
                 item = _localTerrainMapSources[cellPath.row];
         }

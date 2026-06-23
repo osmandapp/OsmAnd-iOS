@@ -18,6 +18,7 @@ final class GalleryGridViewController: OABaseNavbarViewController {
     var cards: [AbstractCard] = []
     var titleString: String = ""
     var placeholderImage: UIImage?
+    var presentsCarouselFromSelf = false
     // swiftlint:disable all
     private var collectionView: UICollectionView!
     // swiftlint:enable all
@@ -209,7 +210,11 @@ extension GalleryGridViewController: UICollectionViewDelegate {
         navController.modalPresentationStyle = .custom
         navController.modalTransitionStyle = .crossDissolve
         navController.modalPresentationCapturesStatusBarAppearance = true
-        OARootViewController.instance().mapPanel?.navigationController?.present(navController, animated: true)
+        if presentsCarouselFromSelf {
+            (navigationController ?? self).present(navController, animated: true)
+        } else {
+            OARootViewController.instance().mapPanel?.navigationController?.present(navController, animated: true)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView,

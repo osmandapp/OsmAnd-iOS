@@ -2240,6 +2240,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     cell.descriptionLabel.attributedText = nil
                     cell.descriptionLabel.text = item.descr
                 }
+                let subheadKeys = [trackKey, tracksFolderKey, tracksSmartFolderKey]
+                cell.descriptionLabel.font = .preferredFont(forTextStyle: subheadKeys.contains(where: { $0 == item.key }) ? .subheadline : .footnote)
                 cell.accessoryType = tableView.isEditing ? .none : .disclosureIndicator
                 if let icon = item.icon {
                     cell.leftIconView.image = icon
@@ -2428,20 +2430,20 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 // }
                 // let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [detailsAction])
                 
-                let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { _ in
+                let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit.resizedMenuImage()) { _ in
                     self?.onFolderRenameButtonClicked(selectedFolderName)
                 }
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction])
                 
-                let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined) { _ in
+                let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined.resizedMenuImage()) { _ in
                     self?.onFolderExportButtonClicked(selectedFolderName)
                 }
-                let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined) { _ in
+                let moveAction = UIAction(title: localizedString("shared_string_move"), image: .icCustomFolderMoveOutlined.resizedMenuImage()) { _ in
                     self?.onFolderMoveButtonClicked(selectedFolderName)
                 }
                 let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [exportAction, moveAction])
                 
-                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { _ in
+                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined.resizedMenuImage(), attributes: .destructive) { _ in
                     guard let self else { return }
                     
                     let folderTracksCount = item.integer(forKey: self.tracksCountKey)

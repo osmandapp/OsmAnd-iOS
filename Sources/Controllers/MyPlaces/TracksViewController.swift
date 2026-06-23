@@ -2256,7 +2256,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     cell.leftIconView.tintColor = color
                 }
                 
-                cell.setCustomLeftSeparatorInset(false)
+                let tracksFoldersKeys = [tracksFolderKey, tracksSmartFolderKey, trackKey]
+                if tracksFoldersKeys.contains(where: { $0 == item.key }) {
+                    cell.setCustomLeftSeparatorInset(true)
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 16)
+                } else {
+                    cell.setCustomLeftSeparatorInset(false)
+                }
+                
                 if item.obj(forKey: isFullWidthSeparatorKey) as? Bool ?? false {
                     cell.setCustomLeftSeparatorInset(true)
                     cell.separatorInset = .zero

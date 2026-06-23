@@ -42,6 +42,20 @@ extension UIViewController {
         
         present(navigationController, animated: true, completion: nil)
     }
+
+    @objc func showMediumToLargeSheetViewController(_ viewController: UIViewController) {
+        let sheetNavigationController = UINavigationController(rootViewController: viewController)
+        sheetNavigationController.modalPresentationStyle = .pageSheet
+        if let sheet = sheetNavigationController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 20
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        }
+
+        (navigationController ?? self).present(sheetNavigationController, animated: true)
+    }
 }
 
 extension UIViewController {

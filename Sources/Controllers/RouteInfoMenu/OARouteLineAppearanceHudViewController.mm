@@ -1362,7 +1362,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         if (vc)
         {
             vc.delegate = self;
-            [self.navigationController pushViewController:vc animated:YES];
+            [self showMediumToLargeSheetViewController:vc];
         }
     }
 }

@@ -436,13 +436,13 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 if let colorsCollectionIndexPath, let colorCell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let colorHandler = colorCell.getCollectionHandler() as? OAColorCollectionHandler {
                     colorCollectionVC.hostColorHandler = colorHandler
                 }
-                navigationController?.pushViewController(colorCollectionVC, animated: true)
+                showMediumToLargeSheetViewController(colorCollectionVC)
             } else if isGradientColorSelected {
                 if let paletteColorItem = selectedPaletteColorItem {
                     let paletteItems = sortedPaletteColorItems.asArray().compactMap { $0 as? PaletteItemGradient }
                     let colorCollectionVC = ItemsCollectionViewController(collectionType: .colorizationPaletteItems, items: paletteItems, selectedItem: paletteColorItem)
                     colorCollectionVC.delegate = self
-                    navigationController?.pushViewController(colorCollectionVC, animated: true)
+                    showMediumToLargeSheetViewController(colorCollectionVC)
                 }
             }
         } else if item.key == RowKey.applyExistingTracksRowKey.rawValue {

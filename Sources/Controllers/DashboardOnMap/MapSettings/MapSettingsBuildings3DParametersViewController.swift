@@ -682,7 +682,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDelegate {
                 colorCollectionViewController.hostColorHandler = colorHandler
             }
             
-            navigationController?.pushViewController(colorCollectionViewController, animated: true)
+            showMediumToLargeSheetViewController(colorCollectionViewController)
         }
     }
 }

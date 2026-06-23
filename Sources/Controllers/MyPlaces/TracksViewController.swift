@@ -2192,7 +2192,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 cell.leftButton.layer.cornerRadius = 9
                 cell.rightButton.layer.cornerRadius = 9
                 cell.setCustomLeftSeparatorInset(true)
-                cell.separatorInset = .zero
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 16)
                 
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr

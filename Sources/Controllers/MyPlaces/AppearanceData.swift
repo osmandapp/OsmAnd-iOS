@@ -33,18 +33,13 @@ final class AppearanceData: NSObject {
         }
     }
     
-    private func notifyAppearanceModified() {
-        delegate?.onAppearanceChanged()
-    }
-    
-    private func isValidValue(parameter: GpxParameter, value: Any?) -> Bool {
-        guard parameter.isAppearanceParameter() else { return false }
-        return true
-    }
-    
     func getParameter<T>(for parameter: GpxParameter) -> T? {
         guard let tuple = map[parameter] else { return nil }
         return tuple.1 as? T
+    }
+
+    func rawParameter(for parameter: GpxParameter) -> Any? {
+        map[parameter]?.1
     }
     
     func setParameter(_ parameter: GpxParameter, value: Any?) {
@@ -71,8 +66,17 @@ final class AppearanceData: NSObject {
                 return true
             }
         }
-        
+
         return false
+    }
+
+    private func notifyAppearanceModified() {
+        delegate?.onAppearanceChanged()
+    }
+
+    private func isValidValue(parameter: GpxParameter, value: Any?) -> Bool {
+        guard parameter.isAppearanceParameter() else { return false }
+        return true
     }
 }
 

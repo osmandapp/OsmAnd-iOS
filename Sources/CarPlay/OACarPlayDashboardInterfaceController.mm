@@ -273,7 +273,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == [[OAMapButtonsHelper sharedInstance] getMap3DButtonState].visibilityPref)
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if (preferenceKeys && [preferenceKeys containsObject:[[OAMapButtonsHelper sharedInstance] getMap3DButtonState].visibilityPref.key])
         [self onMap3dModeUpdated];
 }
 

@@ -1144,17 +1144,11 @@ static double const TILT_ANIMATION_TIME = 0.4;
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OACommonPreference *obj = notification.object;
-    OACommonInteger *centerPositionOnMap = [OAAppSettings sharedManager].positionPlacementOnMap;
-    if (obj)
-    {
-        if (obj == centerPositionOnMap)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateSettings];
-            });
-        }
-    }
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if (preferenceKeys && [preferenceKeys containsObject:[OAAppSettings sharedManager].positionPlacementOnMap.key])
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateSettings];
+        });
 }
 
 @end

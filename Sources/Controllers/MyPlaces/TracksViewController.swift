@@ -84,6 +84,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var selectedTracks: [GpxDataItem] = []
     private var selectedFolders: [String] = []
     
+    private var folderPathToOpenAfterLoad: String?
+    
     private var app: OsmAndAppProtocol
     private var settings: OAAppSettings
     private var savingHelper: OASavingTrackHelper
@@ -223,6 +225,28 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     deinit {
         unregisterNotificationsAndObservers()
+    }
+    
+    func setFolderToOpenAfterLoad(_ selectedFolderPath: String) {
+        folderPathToOpenAfterLoad = selectedFolderPath
+    }
+    
+    func navigateToSubfolder(_ absolutePath: String?) {
+        let gpxPath = app.gpxPath ?? ""
+
+        if absolutePath == nil || absolutePath?.isEmpty == true || absolutePath == gpxPath {
+            folderPathToOpenAfterLoad = nil
+            updateAllFoldersVCData(forceLoad: true)
+            return
+        }
+        
+        folderPathToOpenAfterLoad = absolutePath
+        
+        guard rootFolder.getFlattenedSubFolders().contains(where: {
+            $0.getDirFile().path() == absolutePath
+        }) else { return }
+        
+        openSubfolderIfNeeded()
     }
     
     private func registerObservers() {
@@ -995,6 +1019,26 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     @objc private func updateDistanceAndDirection() {
         updateDistanceAndDirection(false)
+    }
+    
+    private func openSubfolderIfNeeded() {
+        guard let absolutePath = folderPathToOpenAfterLoad else { return }
+        folderPathToOpenAfterLoad = nil
+        
+        let gpxPath = app.gpxPath ?? ""
+        if absolutePath.isEmpty || absolutePath == gpxPath { return }
+        
+        guard let subfolder = rootFolder.getFlattenedSubFolders().first(where: {
+            $0.getDirFile().path() == absolutePath
+        }) else { return }
+        
+        let vc = TracksViewController(isRootFolder: false)
+        vc.currentFolder = subfolder
+        vc.currentFolderPath = subfolder.relativePath
+        vc.rootFolder = rootFolder
+        vc.visibleTracksFolder = visibleTracksFolder
+        vc.hostVCDelegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: - Data
@@ -2708,6 +2752,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
         onLoadFinished(folder: folder)
+        openSubfolderIfNeeded()
     }
     
     func tracksLoaded(folder: TrackFolder) {

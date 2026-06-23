@@ -4610,3 +4610,15 @@
 
 "shared_string_url" = "URL";
 
+"import_tracks_cancel_title" = "Cancel import?";
+"import_tracks_cancel_descr" = "If you close now, your track selections will not be imported.";
+"import_tracks_descr_one" = "The file %@ contains 1 separate track. Select the one you want to import.";
+"import_tracks_descr_other" = "The file %@ contains %d separate tracks. Select the ones you want to import.";
+"import_as_one_track" = "Import as one track";
+"import_tracks_folders_footer" = "Select a destination folder for the imported tracks.";
+"error_reading_gpx" = "Could not read GPX data.";
+
+"selected_waypoints_descr" = "Selected waypoints will be added to the %@ track.";
+"selected_waypoints_exit_descr" = "Your waypoint selections will not be saved if you close now";
+"auto_select_nearest_points" = "Auto-select nearest points";
+"auto_select_nearest_footer" = "Automatically find and select the waypoints closest to this track.";

@@ -28,8 +28,13 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         config.imagePadding = 7
         config.imagePlacement = .leading
         config.baseForegroundColor = .iconColorActive
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .preferredFont(forTextStyle: .subheadline)
+            return outgoing
+        }
         let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(sortMode.image, for: .normal)
+        button.setImage(sortMode.image?.resizedMenuImage(), for: .normal)
         button.menu = createSortMenu()
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
@@ -225,7 +230,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         headerView.addSubview(sortButton)
         sortButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            sortButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            sortButton.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
             sortButton.topAnchor.constraint(equalTo: headerView.topAnchor),
             sortButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
             sortButton.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor)
@@ -235,7 +240,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     }
     
     private func updateSortButtonAndMenu() {
-        sortButton.setImage(sortMode.image, for: .normal)
+        sortButton.setImage(sortMode.image?.resizedMenuImage(), for: .normal)
         sortButton.menu = createSortMenu()
     }
     

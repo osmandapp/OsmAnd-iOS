@@ -103,7 +103,7 @@ final class OsmEditsListViewController: UIViewController {
     }
     
     private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, _, headerItem) in
-        cell.sortButton.setImage(headerItem.sortMode.image, for: .normal)
+        cell.sortButton.setImage(headerItem.sortMode.image?.resizedMenuImage(), for: .normal)
         cell.sortButton.menu = headerItem.menu
     }
 

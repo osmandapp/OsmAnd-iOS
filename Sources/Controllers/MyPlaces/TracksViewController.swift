@@ -103,8 +103,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         config.imagePlacement = .trailing
         config.baseForegroundColor = .iconColorActive
         config.title = localizedString("filter_current_poiButton")
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .preferredFont(forTextStyle: .subheadline)
+            return outgoing
+        }
         let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(.icCustomFilter, for: .normal)
+        button.setImage(.icCustomFilter.resizedMenuImage(), for: .normal)
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -114,8 +119,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         config.imagePadding = 7
         config.imagePlacement = .leading
         config.baseForegroundColor = .iconColorActive
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .preferredFont(forTextStyle: .subheadline)
+            return outgoing
+        }
         let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(sortMode.image, for: .normal)
+        button.setImage(sortMode.image?.resizedMenuImage(), for: .normal)
         button.menu = createSortMenu(isSortingSubfolders: false)
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
@@ -205,7 +215,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupSearchControllerIfChildFolder()
+        navigationItem.searchController = nil
         definesPresentationContext = true
         reloadTableViewOnAppearIfNeeded()
     }
@@ -764,7 +774,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             filterButton.trailingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.trailingAnchor),
             filterButton.topAnchor.constraint(equalTo: headerView.topAnchor),
             filterButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-            sortButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            sortButton.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
             sortButton.topAnchor.constraint(equalTo: headerView.topAnchor),
             sortButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
             sortButton.trailingAnchor.constraint(lessThanOrEqualTo: filterButton.leadingAnchor)
@@ -787,7 +797,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         
         var currentConfig = filterButton.configuration ?? UIButton.Configuration.plain()
         currentConfig.title = baseTitle
-        filterButton.setImage(baseIcon, for: .normal)
+        filterButton.setImage(baseIcon.resizedMenuImage(), for: .normal)
         filterButton.configuration = currentConfig
     }
     
@@ -965,12 +975,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
+        searchController.delegate = self
         if #available(iOS 26.0, *) {
             if !OAUtilities.isIPad() {
                 navigationItem.preferredSearchBarPlacement = .stacked
             }
         }
         navigationItem.searchController = searchController
+        searchController.isActive = true
         updateSearchController()
     }
     
@@ -1343,7 +1355,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         updateData()
         setupNavbar()
         updateNavigationBarTitle()
-        setupSearchControllerIfChildFolder()
+        hideSearch()
         navigationController?.setToolbarHidden(true, animated: true)
     }
     
@@ -1443,8 +1455,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     @objc private func onSearchButtonClicked() {
-        myPlacesDelegate?.updateSearchEnabling(true)
         isSearchActive = true
+        if isRootFolder {
+            myPlacesDelegate?.updateSearchEnabling(true)
+        } else {
+            setupSearchControllerIfChildFolder()
+        }
     }
 
     // MARK: - Folders Actions
@@ -2106,7 +2122,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         isEditFilterActive = false
         setupNavbar()
         updateNavigationBarTitle()
-        setupSearchControllerIfChildFolder()
+        hideSearch()
         updateFilterButtonVisibility(filterIsActive: false)
         updateAllFoldersVCData(forceLoad: true)
         setupTableFooter()
@@ -2115,6 +2131,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func handleDeletedGpxFile(gpxFile: KFile) {
         smartFolderHelper.onGpxFileDeleted(gpxFile: gpxFile)
+    }
+    
+    private func hideSearch() {
+        searchController.isActive = false
+        navigationItem.searchController = nil
     }
     
     // MARK: - TableView
@@ -2667,7 +2688,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         baseFiltersResult = nil
         isFiltersInitialized = false
         navigationController?.setToolbarHidden(true, animated: true)
-        myPlacesDelegate?.updateSearchEnabling(false)
+        if isRootFolder {
+            myPlacesDelegate?.updateSearchEnabling(false)
+        } else {
+            hideSearch()
+        }
+        setupNavBarMenuButton()
         if !isRootFolder {
             updateSearchController()
         }
@@ -2859,7 +2885,20 @@ extension TracksViewController {
     }
 
     private func updateSortButtonAndMenu() {
-        sortButton.setImage(sortButtonImage(), for: .normal)
+        sortButton.setImage(sortButtonImage()?.resizedMenuImage(), for: .normal)
         sortButton.menu = createSortMenu(isSortingSubfolders: false)
+    }
+}
+
+extension TracksViewController: UISearchControllerDelegate {
+    func presentSearchController(_ searchController: UISearchController) {
+        // The delay is introduced to allow UISearchController to fully initialize and become ready for interaction.
+        // Sometimes, immediate attempts to make the searchBar the first responder can fail due to ongoing animations or the controller's initialization process.
+        let searchBarActivationDelay = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
+            if !searchController.searchBar.isFirstResponder {
+                searchController.searchBar.becomeFirstResponder()
+            }
+        }
     }
 }

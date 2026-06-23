@@ -29,10 +29,11 @@ enum PlanRouteButtonFactory {
         return button
     }
 
-    static func labeledButton(title: String, image: UIImage?, height: CGFloat = bottomButtonHeight) -> UIButton {
+    static func labeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge = .leading, height: CGFloat = bottomButtonHeight) -> UIButton {
         var configuration = UIButton.Configuration.plain()
         configuration.title = title
         configuration.image = image
+        configuration.imagePlacement = imagePlacement
         configuration.imagePadding = 6
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 14, bottom: 0, trailing: 14)
         configuration.baseForegroundColor = .textColorPrimary

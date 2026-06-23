@@ -285,6 +285,10 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension PlanRouteRouteViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        sections[section].headerTitle != nil ? 44 : 0
+    }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let title = sections[section].headerTitle else { return nil }
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PlanRouteSegmentHeaderView.reuseId) as? PlanRouteSegmentHeaderView else {
@@ -366,7 +370,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
 final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
     static let reuseId = "PlanRouteSegmentHeaderView"
 
-    private static let optionsButtonSize: CGFloat = 30
+    private static let optionsButtonSize: CGFloat = 44
 
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
@@ -390,7 +394,7 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
     }
 
     private func setupView() {
-        titleLabel.font = .scaledSystemFont(ofSize: 22, weight: .bold)
+        titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 1
 
@@ -404,9 +408,9 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
 
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "ellipsis")
-        configuration.baseForegroundColor = .iconColorActive
-        configuration.background.backgroundColor = UIColor.iconColorActive.withAlphaComponent(0.1)
-        configuration.background.cornerRadius = Self.optionsButtonSize / 2
+        configuration.baseForegroundColor = .buttonAccentsBlue
+        configuration.background.image = UIImage(named: "blue_circle_fill")
+        configuration.contentInsets = .zero
         optionsButton.configuration = configuration
         optionsButton.showsMenuAsPrimaryAction = true
 
@@ -661,7 +665,7 @@ final class PlanRouteEmptyCell: UITableViewCell {
         selectionStyle = .none
 
         titleLabel.text = localizedString("plan_route_no_points_title")
-        titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .medium)
+        titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 0
 

@@ -13,7 +13,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let grabberAreaHeight: CGFloat = 16
     private static let segmentedControlHeight: CGFloat = 36
     private static let bottomToolbarAreaHeight: CGFloat = 60
-    private static let horizontalInset: CGFloat = 16
+    private static let horizontalInset: CGFloat = 20
     private static let cornerRadius: CGFloat = 16
     private static let fullScreenTopGap: CGFloat = 8
     private static let animationDuration: TimeInterval = 0.3
@@ -157,7 +157,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func setupSheet() {
-        sheetView.backgroundColor = .groupBg
+        sheetView.backgroundColor = .viewBg
         sheetView.layer.cornerRadius = Self.cornerRadius
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         sheetView.clipsToBounds = true
@@ -231,11 +231,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         }
         segmentControl.selectedSegmentIndex = tabs.firstIndex(of: selectedTab) ?? 0
         segmentControl.backgroundColor = .groupBgColorSecondary
-        segmentControl.selectedSegmentTintColor = .viewBg
-        segmentControl.setTitleTextAttributes([.foregroundColor: UIColor.textColorSecondary,
-                                               .font: UIFont.scaledSystemFont(ofSize: 13)], for: .normal)
-        segmentControl.setTitleTextAttributes([.foregroundColor: UIColor.textColorPrimary,
-                                               .font: UIFont.scaledSystemFont(ofSize: 13, weight: .semibold)], for: .selected)
+        segmentControl.selectedSegmentTintColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        let segmentAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.textColorPrimary,
+            .font: UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
+        ]
+        segmentControl.setTitleTextAttributes(segmentAttributes, for: .normal)
+        segmentControl.setTitleTextAttributes(segmentAttributes, for: .selected)
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
     }
 

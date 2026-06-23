@@ -119,7 +119,7 @@ final class PlanRouteBottomToolbarView: UIView {
     private let redoButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_redo"), size: PlanRouteButtonFactory.bottomButtonHeight)
 
     private lazy var addPoiButton = PlanRouteButtonFactory.labeledButton(title: localizedString("poi"), image: .templateImageNamed("ic_custom_add"))
-    private lazy var routeButton = PlanRouteButtonFactory.labeledButton(title: localizedString("layer_route"), image: .templateImageNamed("ic_custom_add"))
+    private lazy var routeButton = PlanRouteButtonFactory.labeledButton(title: localizedString("layer_route"), image: .templateImageNamed("ic_custom_add"), imagePlacement: .trailing)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

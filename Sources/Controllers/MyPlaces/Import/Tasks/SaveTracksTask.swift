@@ -72,11 +72,11 @@ final class SaveTracksTask: OAAsyncTask {
         do {
             try fileManager.createDirectory(atPath: destinationDir, withIntermediateDirectories: true)
         } catch {
-            return localizedString("sd_dir_not_accessible")
+            return localizedString("import_failed")
         }
 
         guard fileManager.isWritableFile(atPath: destinationDir) else {
-            return localizedString("sd_dir_not_accessible")
+            return localizedString("import_failed")
         }
         return nil
     }

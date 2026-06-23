@@ -4612,7 +4612,6 @@
 "import_as_one_track" = "Import as one track";
 "import_tracks_folders_footer" = "Select a destination folder for the imported tracks.";
 "error_reading_gpx" = "Could not read GPX data.";
-"sd_dir_not_accessible" = "The storage folder on the memory card is not accessible!";
 
 "selected_waypoints_descr" = "Selected waypoints will be added to the %@ track.";
 "selected_waypoints_exit_descr" = "Your waypoint selections will not be saved if you close now";

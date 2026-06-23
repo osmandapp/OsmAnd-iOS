@@ -2157,10 +2157,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if let cell {
                 cell.leftIconView.contentMode = .center
                 cell.setCustomLeftSeparatorInset(true)
-                cell.separatorInset = .zero
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 60, bottom: 0, right: 16)
                 
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
+                cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
                 if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage(named: iconName)
                     cell.leftIconView.tintColor = .iconColorDefault
@@ -2168,7 +2169,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 
                 cell.button.layer.cornerRadius = 9
                 cell.button.configuration = getRecButtonConfig()
-                cell.button.backgroundColor = .contextMenuButtonBg
+                cell.button.backgroundColor = .buttonBgColorTertiary
                 if let buttonTitle = item.string(forKey: buttonTitleKey) {
                     cell.button.setTitle(buttonTitle, for: .normal)
                 }
@@ -2194,6 +2195,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
+                cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
                 if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage(named: iconName)
                 }
@@ -2202,7 +2204,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 }
                 
                 cell.leftButton.setTitle("", for: .normal)
-                cell.leftButton.backgroundColor = .contextMenuButtonBg
+                cell.leftButton.backgroundColor = .buttonBgColorTertiary
                 if let buttonIconName = item.string(forKey: buttonIconKey) {
                     cell.leftButton.setImage(UIImage.templateImageNamed(buttonIconName), for: .normal)
                     cell.leftButton.tintColor = .iconColorActive
@@ -2212,7 +2214,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 cell.leftButton.tag = item.integer(forKey: buttonActionNumberTagKey)
                 
                 cell.rightButton.setTitle("", for: .normal)
-                cell.rightButton.backgroundColor = .contextMenuButtonBg
+                cell.rightButton.backgroundColor = .buttonBgColorTertiary
                 if let buttonIconName = item.string(forKey: secondButtonIconKey) {
                     cell.rightButton.setImage(UIImage.templateImageNamed(buttonIconName), for: .normal)
                     cell.rightButton.tintColor = .iconColorActive
@@ -2240,8 +2242,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     cell.descriptionLabel.attributedText = nil
                     cell.descriptionLabel.text = item.descr
                 }
-                let subheadKeys = [trackKey, tracksFolderKey, tracksSmartFolderKey]
-                cell.descriptionLabel.font = .preferredFont(forTextStyle: subheadKeys.contains(where: { $0 == item.key }) ? .subheadline : .footnote)
+                cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
                 cell.accessoryType = tableView.isEditing ? .none : .disclosureIndicator
                 if let icon = item.icon {
                     cell.leftIconView.image = icon
@@ -2296,7 +2297,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func getRecButtonConfig() -> UIButton.Configuration {
         var buttonConfig = UIButton.Configuration.plain()
-        buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7)
+        buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 7, bottom: 3, trailing: 7)
         buttonConfig.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = .preferredFont(forTextStyle: .footnote)

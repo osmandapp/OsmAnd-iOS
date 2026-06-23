@@ -39,40 +39,34 @@ import UIKit
 
 @objcMembers
 final class ItemsCollectionViewController: OABaseNavbarViewController {
-    
+    var customTitle: String = ""
+    var selectedIconColor: UIColor?
+    var regularIconColor: UIColor?
+    var iconImages = [UIImage]()
+    var iconCategories = [IconsAppearanceCategory]()
+
+    weak var delegate: ColorCollectionViewControllerDelegate?
+    weak var iconsDelegate: IconsCollectionViewControllerDelegate?
+    weak var hostColorHandler: OAColorCollectionHandler?
+
     private let iconNamesKey = "iconNamesKey"
     private let poiCategoryNameKey = "poiCategoryNameKey"
     private let chipsTitlesKey = "chipsTitlesKey"
     private let chipsSelectedIndexKey = "chipsSelectedIndexKey"
-    
     private let poiTypeNoIconValue = "ic_action_categories_search"
-    
-    weak var delegate: ColorCollectionViewControllerDelegate?
-    weak var iconsDelegate: IconsCollectionViewControllerDelegate?
-    weak var hostColorHandler: OAColorCollectionHandler?
-    
-    var customTitle: String = ""
-    var selectedIconColor: UIColor?
-    var regularIconColor: UIColor?
-    
-    var iconImages = [UIImage]()
-    var iconCategories = [IconsAppearanceCategory]()
+
     private var iconItems = [String]()
     private var selectedIconItem: String?
     private var baseIconHandlers = [IndexPath: BaseAppearanceIconCollectionHandler]()
-    
     private var chipsCell: OAFoldersCell?
     private var chipsCellScrollState: OACollectionViewCellState?
     private var selectedChipsIndex = 0
-    
     private var settings: OAAppSettings
     private var data: OATableDataModel
-    
     private var searchController: UISearchController?
     private var lastSearchResults = [OAPOIType]()
     private var inSearchMode = false
     private var searchCancelled = false
-    
     private var collectionType: ColorCollectionType
     private var selectedPaletteItem: PaletteItemGradient?
     private var paletteItems: OAConcurrentArray<PaletteItemGradient>?
@@ -99,7 +93,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     init(collectionType: ColorCollectionType, items: Any, selectedItem: Any) {
-        
         self.collectionType = collectionType
         settings = OAAppSettings.sharedManager()
         data = OATableDataModel()
@@ -137,28 +130,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func tableStyle() -> UITableView.Style {
-        .insetGrouped
-    }
-    
-    override func registerCells() {
-        switch collectionType {
-        case .colorItems, .iconItems, .bigIconItems, .poiIconCategories, .profileIconCategories, .baseAppearanceCategories:
-            tableView.register(UINib(nibName: OACollectionSingleLineTableViewCell.reuseIdentifier, bundle: nil),
-                               forCellReuseIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier)
-            tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil),
-                               forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
-            tableView.register(UINib(nibName: OADividerCell.reuseIdentifier, bundle: nil),
-                               forCellReuseIdentifier: OADividerCell.reuseIdentifier)
-            tableView.register(UINib(nibName: OAFoldersCell.reuseIdentifier, bundle: nil),
-                               forCellReuseIdentifier: OAFoldersCell.reuseIdentifier)
-            
-        case .colorizationPaletteItems, .terrainPaletteItems:
-            tableView.register(UINib(nibName: OATwoIconsButtonTableViewCell.reuseIdentifier, bundle: nil),
-                               forCellReuseIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier)
-        }
-    }
-    
     // MARK: - UIViewController
     
     override func viewDidLoad() {
@@ -192,7 +163,28 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     }
     
     // MARK: - Base UI
-    
+
+    override func tableStyle() -> UITableView.Style {
+        .insetGrouped
+    }
+
+    override func registerCells() {
+        switch collectionType {
+        case .colorItems, .iconItems, .bigIconItems, .poiIconCategories, .profileIconCategories, .baseAppearanceCategories:
+            tableView.register(UINib(nibName: OACollectionSingleLineTableViewCell.reuseIdentifier, bundle: nil),
+                               forCellReuseIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier)
+            tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil),
+                               forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
+            tableView.register(UINib(nibName: OADividerCell.reuseIdentifier, bundle: nil),
+                               forCellReuseIdentifier: OADividerCell.reuseIdentifier)
+            tableView.register(UINib(nibName: OAFoldersCell.reuseIdentifier, bundle: nil),
+                               forCellReuseIdentifier: OAFoldersCell.reuseIdentifier)
+        case .colorizationPaletteItems, .terrainPaletteItems:
+            tableView.register(UINib(nibName: OATwoIconsButtonTableViewCell.reuseIdentifier, bundle: nil),
+                               forCellReuseIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier)
+        }
+    }
+
     override func getTitle() -> String {
         switch collectionType {
         case .colorItems, .colorizationPaletteItems, .terrainPaletteItems:
@@ -299,16 +291,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
         iconsDelegate is BaseAppearanceIconCollectionHandler && section == 0 ? 14 : super.getCustomHeight(forHeader: section)
     }
-    
-    private func generateRowData(for paletteItem: PaletteItemGradient) -> OATableRowData {
-        let paletteColorRow = OATableRowData()
-        paletteColorRow.cellType = OATwoIconsButtonTableViewCell.reuseIdentifier
-        paletteColorRow.key = "paletteColor"
-        paletteColorRow.title = paletteItem.displayName
-        paletteColorRow.setObj(paletteItem, forKey: "palette")
-        return paletteColorRow
-    }
-    
+
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell {
         let item = data.item(for: indexPath)
         
@@ -331,14 +314,12 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 cell.contentView.layer.cornerRadius = 32
                 cell.contentView.layer.masksToBounds = true
                 cell.backgroundColor = .clear
-                
                 cell.rightActionButtonVisibility(false)
                 cell.collectionView.reloadData()
                 cell.layoutIfNeeded()
                 return cell
             }
         } else if item.cellType == OATwoIconsButtonTableViewCell.reuseIdentifier {
-            
             if let cell = tableView.dequeueReusableCell(withIdentifier: OATwoIconsButtonTableViewCell.reuseIdentifier, for: indexPath) as? OATwoIconsButtonTableViewCell {
                 if let palette = item.obj(forKey: "palette") as? PaletteItemGradient {
                     cell.titleLabel.text = item.title
@@ -389,13 +370,103 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             }
             cell.collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 20)
             cell.collectionView.reloadData()
-            
             return cell
         }
         
         return UITableViewCell()
     }
+
+    override func onRowSelected(_ indexPath: IndexPath) {
+        super.onRowSelected(indexPath)
+        let item = data.item(for: indexPath)
+        if item.key == "paletteColor" {
+            if let palette = item.obj(forKey: "palette") as? PaletteItemGradient {
+                selectedPaletteItem = palette
+                delegate?.selectPaletteItem?(palette)
+                delegate?.reloadData?()
+            }
+            dismissWith(animated: true)
+        } else if (collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories) && inSearchMode {
+            if let searchIconName = item.iconName,
+               let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler {
+                selectedIconItem = searchIconName
+                poiIconsDelegate.setIconName(searchIconName)
+                poiIconsDelegate.selectIconName(searchIconName)
+                poiIconsDelegate.allIconsVCDelegate = nil
+            }
+            searchController?.dismiss(animated: true)
+            dismiss(animated: true)
+        }
+    }
     
+    override func sectionsCount() -> Int {
+        Int(data.sectionCount())
+    }
+    
+    override func rowsCount(_ section: Int) -> Int {
+        Int(data.rowCount(UInt(section)))
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = data.item(for: indexPath)
+        if item.cellType == OADividerCell.reuseIdentifier {
+            return 1.0 / UIScreen.main.scale
+        } else if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
+            return 52
+        }
+        return UITableView.automaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = data.item(for: indexPath)
+        if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
+            return ChipsCollectionHandler.folderCellHeight
+        }
+        if let iconsHandler = iconsDelegate as? IconCollectionHandler {
+            return iconsHandler.getItemSize().height
+        } else if let colorCollectionHandler {
+            return colorCollectionHandler.getItemSize().height
+        }
+        return UITableView.automaticDimension
+    }
+    
+    // MARK: - Selectors
+    
+    override func onRightNavbarButtonPressed() {
+        switch collectionType {
+        case .colorItems:
+            isStartedNewColorAdding = true
+            if let selectedColorItem {
+                openColorPicker(with: selectedColorItem)
+            }
+        case .colorizationPaletteItems, .terrainPaletteItems:
+            GradientPaletteHelper.shared.showAddPaletteEditor(from: self, paletteCategory: paletteCategory, sourceView: navigationItem.rightBarButtonItem?.customView)
+        default:
+            break
+        }
+    }
+    
+    func applyPaletteEditorResult(_ paletteItem: PaletteItemGradient, replacing originalId: String?) {
+        guard let paletteItems else { return }
+        paletteItems.replaceAll(withObjectsSync: GradientPaletteHelper.shared.paletteItems(category: paletteItem.properties.fileType.category, sortMode: .lastUsedTime))
+        if originalId == nil || selectedPaletteItem?.id == originalId {
+            selectedPaletteItem = paletteItem
+            delegate?.selectPaletteItem?(paletteItem)
+        }
+        
+        delegate?.reloadData?()
+        reloadData()
+    }
+    
+    private func generateRowData(for paletteItem: PaletteItemGradient) -> OATableRowData {
+        let paletteColorRow = OATableRowData()
+        paletteColorRow.cellType = OATwoIconsButtonTableViewCell.reuseIdentifier
+        paletteColorRow.key = "paletteColor"
+        paletteColorRow.title = paletteItem.displayName
+        paletteColorRow.setObj(paletteItem, forKey: "palette")
+        return paletteColorRow
+    }
+
     private func setupColorCollectionCell(_ cell: OACollectionSingleLineTableViewCell) {
         let data = (hostColorHandler?.getData() as? [[PaletteItemSolid]]) ?? [colorItems]
         if let items = data.first {
@@ -447,7 +518,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             iconHandler.setIconBackgroundSize(size: 36)
             iconHandler.setIconSize(size: 24)
             iconHandler.setSpacing(spacing: 10)
-            
             iconHandler.roundedSquareCells = false
             iconHandler.innerViewCornerRadius = -1
             if let poiCategoryKey {
@@ -511,60 +581,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         handler.titles = chipsTitles
         handler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
     }
-    
-    override func onRowSelected(_ indexPath: IndexPath) {
-        super.onRowSelected(indexPath)
-        let item = data.item(for: indexPath)
-        if item.key == "paletteColor" {
-            if let palette = item.obj(forKey: "palette") as? PaletteItemGradient {
-                selectedPaletteItem = palette
-                delegate?.selectPaletteItem?(palette)
-            }
-            dismissWith(animated: true)
-        } else if (collectionType == .poiIconCategories || collectionType == .profileIconCategories || collectionType == .baseAppearanceCategories) && inSearchMode {
-            if let searchIconName = item.iconName,
-                let poiIconsDelegate = iconsDelegate as? BaseAppearanceIconCollectionHandler {
-                selectedIconItem = searchIconName
-                poiIconsDelegate.setIconName(searchIconName)
-                poiIconsDelegate.selectIconName(searchIconName)
-                poiIconsDelegate.allIconsVCDelegate = nil
-            }
-            searchController?.dismiss(animated: true)
-            dismiss(animated: true)
-        }
-    }
-    
-    override func sectionsCount() -> Int {
-        Int(data.sectionCount())
-    }
-    
-    override func rowsCount(_ section: Int) -> Int {
-        Int(data.rowCount(UInt(section)))
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let item = data.item(for: indexPath)
-        if item.cellType == OADividerCell.reuseIdentifier {
-            return 1.0 / UIScreen.main.scale
-        } else if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
-            return 52
-        }
-        return UITableView.automaticDimension
-    }
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        let item = data.item(for: indexPath)
-        if item.obj(forKey: chipsTitlesKey) is [[String: String]] {
-            return ChipsCollectionHandler.folderCellHeight
-        }
-        if let iconsHandler = iconsDelegate as? IconCollectionHandler {
-            return iconsHandler.getItemSize().height
-        } else if let colorCollectionHandler {
-            return colorCollectionHandler.getItemSize().height
-        }
-        return UITableView.automaticDimension
-    }
-    
+
     // MARK: - Additions
     
     private func openColorPicker(with colorItem: PaletteItemSolid) {
@@ -622,23 +639,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
 
         return UIMenu(children: menuElements)
     }
-    
-    // MARK: - Selectors
-    
-    override func onRightNavbarButtonPressed() {
-        switch collectionType {
-        case .colorItems:
-            isStartedNewColorAdding = true
-            if let selectedColorItem {
-                openColorPicker(with: selectedColorItem)
-            }
-        case .colorizationPaletteItems, .terrainPaletteItems:
-            GradientPaletteHelper.shared.showAddPaletteEditor(from: self, paletteCategory: paletteCategory, sourceView: navigationItem.rightBarButtonItem?.customView)
-        default:
-            break
-        }
-    }
-    
+
     // MARK: - Search
     
     private func setupSearch() {
@@ -753,19 +754,6 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
         }
         present(alert, animated: true)
     }
-    
-    func applyPaletteEditorResult(_ paletteItem: PaletteItemGradient, replacing originalId: String?) {
-        guard let paletteItems else { return }
-        paletteItems.replaceAll(withObjectsSync: GradientPaletteHelper.shared.paletteItems(category: paletteItem.properties.fileType.category, sortMode: .lastUsedTime))
-        if originalId == nil || selectedPaletteItem?.id == originalId {
-            selectedPaletteItem = paletteItem
-            delegate?.selectPaletteItem?(paletteItem)
-        } else {
-            delegate?.reloadData?()
-        }
-
-        reloadData()
-    }
 }
 
 extension ItemsCollectionViewController: UISearchBarDelegate {
@@ -849,10 +837,9 @@ extension ItemsCollectionViewController: OAColorsCollectionCellDelegate {
         if selectedPaletteItem?.id == oldItem.id {
             selectedPaletteItem = newItem
             delegate?.selectPaletteItem?(newItem)
-        } else {
-            delegate?.reloadData?()
         }
-        
+
+        delegate?.reloadData?()
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     

@@ -168,14 +168,14 @@ final class GradientPaletteHelper: NSObject {
         }
     }
 
-    func showEditPaletteEditor(from viewController: UIViewController, paletteItem: PaletteItemGradient) {
+    func showEditPaletteEditor(from viewController: UIViewController, paletteItem: PaletteItemGradient, onSave: ((PaletteItemGradient) -> Void)? = nil) {
         if !OAIAPHelper.isOsmAndProAvailable() {
             guard let navigationController = OARootViewController.instance().navigationController else { return }
             OAChoosePlanHelper.showChoosePlanScreen(with: OAFeature.advanced_WIDGETS(), navController: navigationController)
             return
         }
         
-        openGradientEditor(from: viewController, originalId: paletteItem.id, fileType: paletteItem.properties.fileType)
+        openGradientEditor(from: viewController, originalId: paletteItem.id, fileType: paletteItem.properties.fileType, onSave: onSave)
     }
     
     private func updateExternalDependenciesIfNeeded(category: GradientPaletteCategory) {
@@ -233,10 +233,15 @@ final class GradientPaletteHelper: NSObject {
         return (fileType.category, paletteName)
     }
 
-    private func openGradientEditor(from viewController: UIViewController, originalId: String? = nil, fileType: GradientFileType) {
+    private func openGradientEditor(from viewController: UIViewController, originalId: String? = nil, fileType: GradientFileType, onSave: ((PaletteItemGradient) -> Void)? = nil) {
         let editor = GradientEditorViewController(originalId: originalId, fileType: fileType) { [weak self, weak viewController] draft, newName in
             guard let self, let paletteItem = self.applyGradientEdits(draft, newName: newName) else { return false }
-            self.applyPaletteEditorResult(paletteItem, replacing: draft.originalId, from: viewController)
+            if let onSave {
+                onSave(paletteItem)
+            } else {
+                self.applyPaletteEditorResult(paletteItem, replacing: draft.originalId, from: viewController)
+            }
+
             return true
         }
 

@@ -69,6 +69,25 @@ final class WikipediaContextMenuView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Configure
+    
+    func configure(text: String,
+                   buttonText: String,
+                   icon: UIImage?,
+                   onButtonAction: @escaping () -> Void) {
+        self.onButtonAction = onButtonAction
+        self.text = text
+        
+        titleLabel.attributedText = makeAttributedText(from: text)
+        actionButton.setTitle(buttonText, for: .normal)
+        actionButton.isHidden = buttonText.isEmpty
+        
+        if let icon {
+            let resizedIcon = OAUtilities.resize(icon, newSize: .init(width: Constants.iconSize, height: Constants.iconSize))
+            actionButton.setImage(resizedIcon, for: .normal)
+        }
+    }
 
     // MARK: - Setup
 
@@ -113,24 +132,6 @@ final class WikipediaContextMenuView: UIView {
     
     @objc private func didTapActionButton() {
         onButtonAction?()
-    }
-
-    // MARK: - Configure
-    
-    func configure(text: String,
-                   buttonText: String,
-                   icon: UIImage?,
-                   onButtonAction: @escaping () -> Void) {
-        self.onButtonAction = onButtonAction
-        
-        self.text = text
-        titleLabel.attributedText = makeAttributedText(from: text)
-        actionButton.setTitle(buttonText, for: .normal)
-        
-        if let icon {
-            let resizedIcon = OAUtilities.resize(icon, newSize: .init(width: Constants.iconSize, height: Constants.iconSize))
-            actionButton.setImage(resizedIcon, for: .normal)
-        }
     }
     
     private func makeAttributedText(from text: String) -> NSAttributedString {

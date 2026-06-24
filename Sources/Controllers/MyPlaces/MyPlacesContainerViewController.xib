@@ -12,8 +12,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyPlacesContainerViewController">
             <connections>
                 <outlet property="contentView" destination="bel-oP-mWo" id="v5w-ap-IVD"/>
+                <outlet property="safeAreaTopConstraint" destination="b6L-gG-ajR" id="ZhY-uw-IjL"/>
                 <outlet property="segmentContainerView" destination="COI-FC-npu" id="sNY-Ax-vDI"/>
                 <outlet property="segmentControl" destination="CDK-ru-NR9" id="Nrv-Pj-iKN"/>
+                <outlet property="superviewTopConstraint" destination="sue-5G-SP3" id="fik-jQ-nOO"/>
                 <outlet property="view" destination="iN0-l3-epB" id="qqm-iF-NSb"/>
             </connections>
         </placeholder>
@@ -26,10 +28,10 @@
                     <rect key="frame" x="0.0" y="118" width="393" height="734"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="COI-FC-npu">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="42"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="31"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CDK-ru-NR9">
-                                    <rect key="frame" x="16" y="0.0" width="361" height="43"/>
+                                    <rect key="frame" x="16" y="0.0" width="361" height="32"/>
                                     <segments>
                                         <segment title="First"/>
                                         <segment title="Second"/>
@@ -44,7 +46,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bel-oP-mWo">
-                            <rect key="frame" x="0.0" y="42" width="393" height="692"/>
+                            <rect key="frame" x="0.0" y="31" width="393" height="703"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
                     </subviews>
@@ -56,9 +58,15 @@
                 <constraint firstAttribute="bottom" secondItem="PGt-Ow-fLH" secondAttribute="bottom" id="9jd-oq-g5S"/>
                 <constraint firstItem="PGt-Ow-fLH" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b6L-gG-ajR"/>
                 <constraint firstItem="PGt-Ow-fLH" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="skG-Xg-FWe"/>
+                <constraint firstItem="PGt-Ow-fLH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sue-5G-SP3"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="PGt-Ow-fLH" secondAttribute="trailing" id="wHS-tv-KiB"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="sue-5G-SP3"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="19" y="68"/>
         </view>
     </objects>

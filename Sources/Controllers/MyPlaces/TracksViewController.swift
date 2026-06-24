@@ -2637,9 +2637,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             isFiltersInitialized = false
         }
         
-        if isRootFolder {
-            myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
-        }
         updateFilterButtonVisibility(filterIsActive: isSearchActive)
         baseFiltersResult = baseFilters?.performFiltering()
         updateSortButtonAndMenu()

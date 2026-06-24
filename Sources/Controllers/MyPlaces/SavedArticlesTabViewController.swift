@@ -353,7 +353,6 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
             isSearchActive = false
             isFiltered = false
         }
-        myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         updateData()
         setupNavbarButtons()
     }

@@ -788,7 +788,6 @@ extension OsmEditsListViewController: MyPlacesSearchable {
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
             applySnapshot()
         }
-        myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         setupNavbarButtons()
     }
 

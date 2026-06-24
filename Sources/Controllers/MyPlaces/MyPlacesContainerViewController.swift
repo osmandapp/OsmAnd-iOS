@@ -65,6 +65,8 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var segmentContainerView: UIView!
     @IBOutlet private weak var segmentControl: UISegmentedControl!
+    @IBOutlet private var safeAreaTopConstraint: NSLayoutConstraint!
+    @IBOutlet private var superviewTopConstraint: NSLayoutConstraint!
     
     var selectedTab: Tab = .default
     var availableTabs: [Tab] = []
@@ -186,8 +188,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         searchController?.searchResultsUpdater = self
         searchController?.searchBar.delegate = self
         searchController?.delegate = self
-        guard let searchController else { return }
-        searchController.obscuresBackgroundDuringPresentation = false
+        searchController?.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
         if #available(iOS 26.0, *) {
             if !OAUtilities.isIPad() {
@@ -210,10 +211,16 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
     
-    private func setupNavbar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .viewBg
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    private func setupNavbar(isSearchActive: Bool = false) {
+        if isSearchActive {
+            navigationController?.navigationBar.scrollEdgeAppearance = nil
+        } else {
+            let appearance = UINavigationBarAppearance()
+            appearance.backgroundColor = .viewBg
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
+        safeAreaTopConstraint.isActive = !isSearchActive
+        superviewTopConstraint.isActive = isSearchActive
     }
     
     private func updateSearchController() {
@@ -314,6 +321,8 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         let searchController = isEnabled ? searchController : nil
         navigationItem.searchController = searchController
         navigationItem.searchController?.isActive = true
+        updateSegmentedControlVisibility(!isEnabled)
+        setupNavbar(isSearchActive: isEnabled)
     }
 }
 

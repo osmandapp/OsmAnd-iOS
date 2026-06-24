@@ -1715,9 +1715,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func onTrackDeleteClicked(trackItem: TrackItem?) {
         guard let trackItem else { return }
-        let message = trackItem.isShowCurrentTrack ? localizedString("track_clear_q") : localizedString("gpx_remove")
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
+        let message = localizedString(trackItem.isShowCurrentTrack ? "track_clear_q" : "tracks_delete_confirmation_message")
+        let alert = UIAlertController(title: String(format: localizedString("delete_track_confirmation_title"), trackItem.gpxFileName.lastPathComponent().deletingPathExtension()), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
             guard let self else { return }
             if trackItem.isShowCurrentTrack {
                 settings.mapSettingTrackRecording = false
@@ -1740,7 +1740,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 updateAllFoldersVCData(forceLoad: true)
             }
         })
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_no"), style: .cancel))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
     }
     

@@ -1055,6 +1055,8 @@
 "fav_point_dublicate" = "Duplicate Favorite name specified";
 "fav_point_dublicate_message" = "Favorite renamed to %@ to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
+"delete_track_confirmation_title" = "Delete \"%@\"?";
+"tracks_delete_confirmation_message" = "This action cannot be undone.";
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 

@@ -244,6 +244,8 @@ enum SegmentRouteContext {
 
 protocol PlanRoutePoiDataSource: AnyObject {
     var poiPoints: [PlanRoutePoint] { get }
+
+    func openAddPoi(from presentingViewController: UIViewController)
 }
 
 protocol PlanRouteAnalyzeDataSource: AnyObject {

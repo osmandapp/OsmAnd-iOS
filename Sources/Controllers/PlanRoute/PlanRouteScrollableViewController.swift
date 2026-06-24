@@ -461,8 +461,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleAddPoi() {
-        dataProvider.addRoutePoint()
-        reloadData()
+        dataProvider.openAddPoi(from: self)
     }
 
     private func handleUndo() {

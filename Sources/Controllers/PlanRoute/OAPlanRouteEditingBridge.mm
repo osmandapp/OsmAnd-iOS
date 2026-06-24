@@ -12,6 +12,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 #import "OAMapLayers.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAMeasurementEditingContext.h"
@@ -33,6 +34,8 @@
 #import "OsmAndApp.h"
 #import "OAMapActions.h"
 #import "OAAppSettings.h"
+#import "OAEditPointViewController.h"
+#import "OANativeUtilities.h"
 
 @class OAMeasurementToolLayer, OAMeasurementEditingContext;
 
@@ -77,6 +80,7 @@
 - (OAMeasurementEditingContext *)editingContext;
 - (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to;
 - (double)bearingFrom:(OASWptPt *)from to:(OASWptPt *)to;
+- (CLLocationCoordinate2D)crosshairLocation;
 - (OAPlanRouteSegmentData *)buildSegmentWithIndex:(NSInteger)segmentIndex
                                      pointIndexes:(NSArray<NSNumber *> *)pointIndexes
                                         allPoints:(NSArray<OASWptPt *> *)allPoints;
@@ -551,6 +555,46 @@
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
+}
+
+- (void)openAddPoiWithFilePath:(NSString *)filePath presentingViewController:(UIViewController *)presentingViewController
+{
+    if (filePath.length == 0 || presentingViewController == nil)
+        return;
+    
+    CLLocationCoordinate2D location = [self crosshairLocation];
+    if (!CLLocationCoordinate2DIsValid(location))
+        return;
+    
+    NSString *gpxFilePath = filePath.isAbsolutePath ? filePath : [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location title:OALocalizedString(@"shared_string_waypoint") address:nil customParam:gpxFilePath pointType:EOAEditPointTypeWaypoint targetMenuState:nil poi:nil];
+    controller.gpxWptDelegate = (id<OAGpxWptEditingHandlerDelegate>)[OARootViewController instance].mapPanel;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [presentingViewController presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (CLLocationCoordinate2D)crosshairLocation
+{
+    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    if (mapView == nil)
+        return kCLLocationCoordinate2DInvalid;
+    
+    OAMeasurementToolLayer *layer = [self layer];
+    OsmAnd::PointI location31;
+    if (layer != nil && !CGPointEqualToPoint(layer.cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = mapView.contentScaleFactor;
+        CGPoint scaledPoint = CGPointMake(layer.cursorScreenPoint.x * scale, layer.cursorScreenPoint.y * scale);
+        [mapView convert:scaledPoint toLocation:&location31];
+    }
+    else
+    {
+        const auto center = [mapView getCenterPixel];
+        location31 = [OANativeUtilities get31FromElevatedPixel:center];
+    }
+    
+    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(location31);
+    return CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
 }
 
 - (void)saveAs:(NSString *)fileName

@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode;
+@class OAApplicationMode, UIViewController;
 
 @interface OAPlanRoutePointData : NSObject
 
@@ -68,6 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)redo;
 - (void)reverseRoute;
 - (void)clearAllPoints;
+- (void)openAddPoiWithFilePath:(NSString *)filePath presentingViewController:(UIViewController *)presentingViewController;
 
 - (NSArray<OAPlanRouteSegmentData *> *)buildSegments;
 - (NSArray<OAApplicationMode *> *)availableModes;

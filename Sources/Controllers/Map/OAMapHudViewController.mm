@@ -949,203 +949,144 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
-    OACommonPreference *obj = notification.object;
-    if (obj)
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if (preferenceKeys.count == 0)
+        return;
+    
+    OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
+    CompassButtonState *compassButtonState = [mapButtonsHelper getCompassButtonState];
+    Map3DButtonState *map3DButtonState = [mapButtonsHelper getMap3DButtonState];
+    MapSettingsButtonState *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState];
+    SearchButtonState *searchButtonState = [mapButtonsHelper getSearchButtonState];
+    OptionsMenuButtonState *menuButtonState = [mapButtonsHelper getMenuButtonState];
+    DriveModeButtonState *navigationButtonState = [mapButtonsHelper getNavigationModeButtonState];
+    MyLocationButtonState *myLocationButtonState = [mapButtonsHelper getMyLocationButtonState];
+    ZoomInButtonState *zoomInButtonState = [mapButtonsHelper getZoomInButtonState];
+    ZoomOutButtonState *zoomOutButtonState = [mapButtonsHelper getZoomOutButtonState];
+    
+    BOOL compassChanged = [preferenceKeys intersectsSet:[self compassPropertyKeysForButtonState:compassButtonState]];
+    BOOL colorsChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
+        _settings.transparentMapTheme,
+        _settings.profileIconColor,
+        _settings.profileCustomIconColor
+    ]]];
+    
+    BOOL quickActionChanged = [preferenceKeys intersectsSet:[self quickActionPropertyKeys:mapButtonsHelper]];
+    BOOL map3DChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:map3DButtonState.visibilityPref buttonState:map3DButtonState]];
+    BOOL configureMapChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:configureMapButtonState.visibilityPref buttonState:configureMapButtonState]];
+    BOOL searchChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:searchButtonState.visibilityPref buttonState:searchButtonState]];
+    BOOL menuChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:menuButtonState.visibilityPref buttonState:menuButtonState]];
+    BOOL navigationChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:navigationButtonState.visibilityPref buttonState:navigationButtonState]];
+    BOOL myLocationChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:myLocationButtonState.visibilityPref buttonState:myLocationButtonState]];
+    BOOL zoomInChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
+    BOOL zoomOutChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
+    
+    if (!compassChanged && !colorsChanged && !map3DChanged && !quickActionChanged
+        && !configureMapChanged && !searchChanged && !menuChanged && !navigationChanged
+        && !myLocationChanged && !zoomInChanged && !zoomOutChanged)
+        return;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (compassChanged)
+        {
+            [self updateCompassButton];
+            [_mapHudLayout updateButtons];
+        }
+        if (colorsChanged)
+            [self updateColors];
+        if (map3DChanged || quickActionChanged)
+            [self updateDependentButtons];
+        if (configureMapChanged)
+        {
+            [self updateMapButton:_mapSettingsButton
+                       showButton:[self shouldShowConfigureMap]
+                 appearanceParams:[[mapButtonsHelper getConfigureMapButtonState] createAppearanceParams]];
+        }
+        if (searchChanged)
+        {
+            [self updateMapButton:_searchButton
+                       showButton:[self shouldShowSearch]
+                 appearanceParams:[[mapButtonsHelper getSearchButtonState] createAppearanceParams]];
+        }
+        if (menuChanged)
+        {
+            [self updateMapButton:_optionsMenuButton
+                       showButton:[self shouldShowMenu]
+                 appearanceParams:[[mapButtonsHelper getMenuButtonState] createAppearanceParams]];
+        }
+        if (navigationChanged)
+        {
+            [self updateMapButton:_driveModeButton
+                       showButton:[self shouldShowNavigation]
+                 appearanceParams:[[mapButtonsHelper getNavigationModeButtonState] createAppearanceParams]];
+        }
+        if (myLocationChanged)
+        {
+            [self updateMapButton:_mapModeButton
+                       showButton:[self shouldShowMyLocation]
+                 appearanceParams:[[mapButtonsHelper getMyLocationButtonState] createAppearanceParams]];
+        }
+        if (zoomInChanged)
+        {
+            [self updateMapButton:_zoomInButton
+                       showButton:[self shouldShowZoomIn]
+                 appearanceParams:[[mapButtonsHelper getZoomInButtonState] createAppearanceParams]];
+        }
+        if (zoomOutChanged)
+        {
+            [self updateMapButton:_zoomOutButton
+                       showButton:[self shouldShowZoomOut]
+                 appearanceParams:[[mapButtonsHelper getZoomOutButtonState] createAppearanceParams]];
+        }
+    });
+}
+
+- (NSSet<NSString *> *)keysFromPreferences:(NSArray<OACommonPreference *> *)preferences
+{
+    NSMutableSet<NSString *> *keys = [NSMutableSet setWithCapacity:preferences.count];
+    for (OACommonPreference *pref in preferences)
     {
-        OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
-        CompassButtonState *compassButtonState = [mapButtonsHelper getCompassButtonState];
-        Map3DButtonState *map3DButtonState = [mapButtonsHelper getMap3DButtonState];
-        MapSettingsButtonState *configureMapButtonState = [mapButtonsHelper getConfigureMapButtonState];
-        SearchButtonState *searchButtonState = [mapButtonsHelper getSearchButtonState];
-        OptionsMenuButtonState *menuButtonState = [mapButtonsHelper getMenuButtonState];
-        DriveModeButtonState *navigationButtonState = [mapButtonsHelper getNavigationModeButtonState];
-        MyLocationButtonState *myLocationButtonState = [mapButtonsHelper getMyLocationButtonState];
-        ZoomInButtonState *zoomInButtonState = [mapButtonsHelper getZoomInButtonState];
-        ZoomOutButtonState *zoomOutButtonState = [mapButtonsHelper getZoomOutButtonState];
-
-        BOOL isQuickAction = NO;
-        for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
-        {
-            BOOL isQuickActionProperty = [[NSSet setWithArray:@[
-                buttonState.statePref,
-                [buttonState storedCornerRadiusPref],
-                [buttonState storedOpacityPref],
-                [buttonState storedSizePref],
-                [buttonState storedIconPref],
-                buttonState.quickActionsPref
-            ]] containsObject:obj];
-            
-            if (isQuickActionProperty)
-            {
-                isQuickAction = YES;
-                break;
-            }
-        }
-
-        if ([self isCompassProperty:obj buttonState:compassButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateCompassButton];
-                [_mapHudLayout updateButtons];
-            });
-        }
-        else if (obj == _settings.transparentMapTheme
-                 || obj == _settings.profileIconColor
-                 || obj == _settings.profileCustomIconColor)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateColors];
-            });
-        }
-        else if ([self isMap3DProperty:obj buttonState:map3DButtonState] || isQuickAction)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateDependentButtons];
-            });
-        }
-        else if ([self isConfigureMapProperty:obj buttonState:configureMapButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateMapButton:_mapSettingsButton showButton:[self shouldShowConfigureMap] appearanceParams:[[mapButtonsHelper getConfigureMapButtonState] createAppearanceParams]];
-            });
-        }
-        else if ([self isSearchProperty:obj buttonState:searchButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateMapButton:_searchButton showButton:[self shouldShowSearch] appearanceParams:[[mapButtonsHelper getSearchButtonState] createAppearanceParams]];
-            });
-        }
-        else if ([self isMenuProperty:obj buttonState:menuButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateMapButton:_optionsMenuButton showButton:[self shouldShowMenu] appearanceParams:[[mapButtonsHelper getMenuButtonState] createAppearanceParams]];
-            });
-        }
-        else if ([self isNavigationProperty:obj buttonState:navigationButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateMapButton:_driveModeButton showButton:[self shouldShowNavigation] appearanceParams:[[mapButtonsHelper getNavigationModeButtonState] createAppearanceParams]];
-            });
-        }
-        else if ([self isMyLocationProperty:obj buttonState:myLocationButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateMapButton:_mapModeButton showButton:[self shouldShowMyLocation] appearanceParams:[[mapButtonsHelper getMyLocationButtonState] createAppearanceParams]];
-            });
-        }
-        else if ([self isZoomInProperty:obj buttonState:zoomInButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateMapButton:_zoomInButton showButton:[self shouldShowZoomIn] appearanceParams:[[mapButtonsHelper getZoomInButtonState] createAppearanceParams]];
-            });
-        }
-        else if ([self isZoomOutProperty:obj buttonState:zoomOutButtonState])
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateMapButton:_zoomOutButton showButton:[self shouldShowZoomOut] appearanceParams:[[mapButtonsHelper getZoomOutButtonState] createAppearanceParams]];
-            });
-        }
+        if (pref.key.length > 0)
+            [keys addObject:pref.key];
     }
+    return [keys copy];
 }
 
-- (BOOL)isCompassProperty:(OACommonPreference *)obj buttonState:(CompassButtonState *)buttonState
+- (NSSet<NSString *> *)buttonStateAppearanceKeysForVisibilityPref:(OACommonPreference *)visibilityPref
+                                                         buttonState:(MapButtonState *)buttonState
 {
-    return [[NSSet setWithArray:@[
-        _settings.rotateMap,
-        buttonState.visibilityPref,
+    return [self keysFromPreferences:@[
+        visibilityPref,
         [buttonState storedCornerRadiusPref],
         [buttonState storedOpacityPref],
         [buttonState storedSizePref],
         [buttonState storedIconPref]
-    ]] containsObject:obj];
+    ]];
 }
 
-- (BOOL)isMap3DProperty:(OACommonPreference *)obj buttonState:(Map3DButtonState *)buttonState
+- (NSSet<NSString *> *)compassPropertyKeysForButtonState:(CompassButtonState *)buttonState
 {
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
+    NSMutableSet<NSString *> *keys = [NSMutableSet setWithSet:[self buttonStateAppearanceKeysForVisibilityPref:buttonState.visibilityPref buttonState:buttonState]];
+    if (_settings.rotateMap.key.length > 0)
+        [keys addObject:_settings.rotateMap.key];
+    return [keys copy];
 }
 
-- (BOOL)isConfigureMapProperty:(OACommonPreference *)obj buttonState:(MapSettingsButtonState *)buttonState
+- (NSSet<NSString *> *)quickActionPropertyKeys:(OAMapButtonsHelper *)helper
 {
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
-}
-
-- (BOOL)isSearchProperty:(OACommonPreference *)obj buttonState:(SearchButtonState *)buttonState
-{
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
-}
-
-- (BOOL)isMenuProperty:(OACommonPreference *)obj buttonState:(OptionsMenuButtonState *)buttonState
-{
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
-}
-
-- (BOOL)isNavigationProperty:(OACommonPreference *)obj buttonState:(DriveModeButtonState *)buttonState
-{
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
-}
-
-- (BOOL)isMyLocationProperty:(OACommonPreference *)obj buttonState:(MyLocationButtonState *)buttonState
-{
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
-}
-
-- (BOOL)isZoomInProperty:(OACommonPreference *)obj buttonState:(ZoomInButtonState *)buttonState
-{
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
-}
-
-- (BOOL)isZoomOutProperty:(OACommonPreference *)obj buttonState:(ZoomOutButtonState *)buttonState
-{
-    return [[NSSet setWithArray:@[
-        buttonState.visibilityPref,
-        [buttonState storedCornerRadiusPref],
-        [buttonState storedOpacityPref],
-        [buttonState storedSizePref],
-        [buttonState storedIconPref]
-    ]] containsObject:obj];
+    NSMutableSet<NSString *> *keys = [NSMutableSet set];
+    for (QuickActionButtonState *buttonState in [helper getButtonsStates])
+    {
+        [keys unionSet:[self keysFromPreferences:@[
+            buttonState.statePref,
+            [buttonState storedCornerRadiusPref],
+            [buttonState storedOpacityPref],
+            [buttonState storedSizePref],
+            [buttonState storedIconPref],
+            buttonState.quickActionsPref
+        ]]];
+    }
+    return [keys copy];
 }
 
 - (void)updateMapButton:(OAHudButton *)button showButton:(BOOL)showButton appearanceParams:(ButtonAppearanceParams *)appearanceParams

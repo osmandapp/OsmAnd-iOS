@@ -91,14 +91,14 @@ final class GpxAppearanceInfo: NSObject {
 
     convenience init(dataItem: GpxDataItem) {
         self.init()
-        self.color = dataItem.color
-        self.width = dataItem.width
-        self.showArrows = dataItem.showArrows
-        self.showStartFinish = dataItem.showStartFinish
-        self.splitType = dataItem.splitType
-        self.splitInterval = dataItem.splitInterval
-        self.coloringType = dataItem.coloringType
-        self.gradientPaletteName = dataItem.gradientPaletteName
+        self.color = dataItem.getParameter(parameter: .color) as? Int ?? 0
+        self.width = dataItem.getParameter(parameter: .width) as? String
+        self.showArrows = dataItem.getParameter(parameter: .showArrows) as? Bool ?? false
+        self.showStartFinish = dataItem.getParameter(parameter: .showStartFinish) as? Bool ?? false
+        self.splitType = EOAGpxSplitType(rawValue: dataItem.getParameter(parameter: .splitType) as? Int ?? -1) ?? .none
+        self.splitInterval = dataItem.getParameter(parameter: .splitInterval) as? Double ?? 0
+        self.coloringType = dataItem.getParameter(parameter: .coloringType) as? String
+        self.gradientPaletteName = dataItem.getParameter(parameter: .colorPalette) as? String
         
         self.trackVisualizationType = dataItem.visualization3dByType
         self.trackWallColorType = dataItem.visualization3dWallColorType

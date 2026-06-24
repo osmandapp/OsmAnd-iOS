@@ -6,6 +6,7 @@
 #pragma clang diagnostic ignored "-Wnullability-completeness"
 
 // Helpers
+#import "OAAppVersion.h"
 #import "OAAppSettings.h"
 #import "OAColoringType.h"
 #import "OAColors.h"
@@ -110,6 +111,7 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmNotePoint.h"
+#import "OATrackPreviewMapRenderer.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -223,6 +225,7 @@
 #import "OAOsmNoteViewController.h"
 #import "OAOsmEditingViewController.h"
 #import "OAOsmUploadPOIViewController.h"
+#import "OAAddTrackFolderViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -259,7 +262,9 @@
 #import "OAFoldersCell.h"
 #import "OAShapesTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
-
+#import "OAImageDescTableViewCell.h"
+#import "OAPointWithRegionTableViewCell.h"
+#import "OAGpxWptItem.h"
 
 // Views
 #import "OASegmentedSlider.h"

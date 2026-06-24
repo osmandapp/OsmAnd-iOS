@@ -303,14 +303,6 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
                                                     requiringSecureCoding:NO
                                                                     error:nil];
                 [defaults setObject:data forKey:modeKey];
-
-                [[NSNotificationQueue defaultQueue] enqueueNotification:
-                 [NSNotification notificationWithName:kNotificationSetProfileSetting
-                                               object:self
-                                             userInfo:nil]
-                                                           postingStyle:NSPostASAP
-                                                           coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender)
-                                                               forModes:nil];
             }
             else
             {

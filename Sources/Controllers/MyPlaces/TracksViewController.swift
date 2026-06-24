@@ -84,6 +84,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var selectedTracks: [GpxDataItem] = []
     private var selectedFolders: [String] = []
     
+    private var folderPathToOpenAfterLoad: String?
+    
     private var app: OsmAndAppProtocol
     private var settings: OAAppSettings
     private var savingHelper: OASavingTrackHelper
@@ -223,6 +225,28 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     deinit {
         unregisterNotificationsAndObservers()
+    }
+    
+    func setFolderToOpenAfterLoad(_ selectedFolderPath: String) {
+        folderPathToOpenAfterLoad = selectedFolderPath
+    }
+    
+    func navigateToSubfolder(_ absolutePath: String?) {
+        let gpxPath = app.gpxPath ?? ""
+
+        if absolutePath == nil || absolutePath?.isEmpty == true || absolutePath == gpxPath {
+            folderPathToOpenAfterLoad = nil
+            updateAllFoldersVCData(forceLoad: true)
+            return
+        }
+        
+        folderPathToOpenAfterLoad = absolutePath
+        
+        guard rootFolder.getFlattenedSubFolders().contains(where: {
+            $0.getDirFile().path() == absolutePath
+        }) else { return }
+        
+        openSubfolderIfNeeded()
     }
     
     private func registerObservers() {
@@ -997,6 +1021,26 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         updateDistanceAndDirection(false)
     }
     
+    private func openSubfolderIfNeeded() {
+        guard let absolutePath = folderPathToOpenAfterLoad else { return }
+        folderPathToOpenAfterLoad = nil
+        
+        let gpxPath = app.gpxPath ?? ""
+        if absolutePath.isEmpty || absolutePath == gpxPath { return }
+        
+        guard let subfolder = rootFolder.getFlattenedSubFolders().first(where: {
+            $0.getDirFile().path() == absolutePath
+        }) else { return }
+        
+        let vc = TracksViewController(isRootFolder: false)
+        vc.currentFolder = subfolder
+        vc.currentFolderPath = subfolder.relativePath
+        vc.rootFolder = rootFolder
+        vc.visibleTracksFolder = visibleTracksFolder
+        vc.hostVCDelegate = self
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     // MARK: - Data
     
     private func configureFolders() {
@@ -1252,7 +1296,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         
         let trackItems = Set(allTracks.toTrackItems())
         guard !trackItems.isEmpty else { return }
-        let vc = TracksChangeAppearanceViewController(tracks: trackItems)
+        let vc = TracksChangeAppearanceViewController(mode: .tracks(trackItems))
         let navigationController = UINavigationController(rootViewController: vc)
         navigationController.modalPresentationStyle = .custom
         present(navigationController, animated: true) { [weak self] in
@@ -1456,6 +1500,14 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         present(alert, animated: true)
+    }
+    
+    private func onFolderDefaultAppearanceButtonClicked(_ selectedFolderName: String) {
+        guard let selectedFolder = currentFolder.getSubFolders().first(where: { $0.getDirName(includingSubdirs: false) == selectedFolderName }) else { return }
+        let vc = TracksChangeAppearanceViewController(mode: .folder(selectedFolder))
+        let navigationController = UINavigationController(rootViewController: vc)
+        navigationController.modalPresentationStyle = .custom
+        present(navigationController, animated: true)
     }
     
     private func onFolderExportButtonClicked(_ selectedFolderName: String) {
@@ -2382,9 +2434,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
         if item.key == tracksFolderKey || item.key == tracksSmartFolderKey {
-            
+            let isTracksFolder = item.key == tracksFolderKey
             let selectedFolderName = item.title ?? ""
-            
             let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
                 
                 // TODO: implement Folder Details in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
@@ -2396,7 +2447,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { _ in
                     self?.onFolderRenameButtonClicked(selectedFolderName)
                 }
-                let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction])
+                let secondButtonsSection: UIMenu
+                if isTracksFolder {
+                    let defaultAppearanceAction = UIAction(title: localizedString("default_appearance"), image: .icCustomAppearanceOutlined) { _ in
+                        self?.onFolderDefaultAppearanceButtonClicked(selectedFolderName)
+                    }
+                    secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction, defaultAppearanceAction])
+                } else {
+                    secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction])
+                }
                 
                 let exportAction = UIAction(title: localizedString("shared_string_export"), image: .icCustomExportOutlined) { _ in
                     self?.onFolderExportButtonClicked(selectedFolderName)
@@ -2693,6 +2752,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
         onLoadFinished(folder: folder)
+        openSubfolderIfNeeded()
     }
     
     func tracksLoaded(folder: TrackFolder) {

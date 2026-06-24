@@ -10,7 +10,6 @@
 #import "OAColorsCollectionViewCell.h"
 #import "OAColorsPaletteCell.h"
 #import "OACollectionSingleLineTableViewCell.h"
-#import "OASuperViewController.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
@@ -479,15 +478,7 @@ static NSString * const kSolidColorKey = @"solid_color";
         [[ItemsCollectionViewController alloc] initWithCollectionType:ColorCollectionTypeColorItems items:_data[0] selectedItem:[self getSelectedItem]];
         colorCollectionViewController.delegate = self;
         colorCollectionViewController.hostColorHandler = self;
-        if ([_hostVC isKindOfClass:OASuperViewController.class])
-        {
-            [(OASuperViewController *)_hostVC showModalViewController:colorCollectionViewController];
-        }
-        else
-        {
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:colorCollectionViewController];
-            [_hostVC presentViewController:navigationController animated:YES completion:nil];
-        }
+        [_hostVC showMediumToLargeSheetViewController:colorCollectionViewController];
     }
 }
 

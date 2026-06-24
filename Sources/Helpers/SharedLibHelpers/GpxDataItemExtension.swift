@@ -170,7 +170,7 @@ extension GpxDataItem {
     
     var showArrows: Bool {
         get {
-            getParameter(parameter: .showArrows) as? Bool ?? false
+            appearanceParameter(.showArrows) as? Bool ?? GpxParameter.showArrows.defaultValue as? Bool ?? false
         }
         set {
             setParameter(parameter: .showArrows, value: newValue)
@@ -179,7 +179,7 @@ extension GpxDataItem {
     
     var showStartFinish: Bool {
         get {
-            getParameter(parameter: .showStartFinish) as? Bool ?? false
+            appearanceParameter(.showStartFinish) as? Bool ?? GpxParameter.showStartFinish.defaultValue as? Bool ?? true
         }
         set {
             setParameter(parameter: .showStartFinish, value: newValue)
@@ -239,7 +239,7 @@ extension GpxDataItem {
     
     var coloringType: String {
         get {
-            getParameter(parameter: .coloringType) as? String ?? ""
+            appearanceParameter(.coloringType) as? String ?? ""
         }
         set {
             setParameter(parameter: .coloringType, value: newValue)
@@ -248,7 +248,7 @@ extension GpxDataItem {
     
     var width: String {
         get {
-            getParameter(parameter: .width) as? String ?? ""
+            appearanceParameter(.width) as? String ?? ""
         }
         set {
             setParameter(parameter: .width, value: newValue)
@@ -257,7 +257,7 @@ extension GpxDataItem {
     
     var color: Int {
         get {
-            return getParameter(parameter: .color) as? Int ?? 0
+            appearanceParameter(.color) as? Int ?? 0
         }
         set {
             setParameter(parameter: .color, value: KotlinInt(integerLiteral: newValue))
@@ -266,7 +266,7 @@ extension GpxDataItem {
     
     var splitType: EOAGpxSplitType {
         get {
-            let value = getParameter(parameter: .splitType) as? Int ?? -1
+            let value = appearanceParameter(.splitType) as? Int ?? -1
             return EOAGpxSplitType(rawValue: value) ?? .none
         }
         set {
@@ -276,7 +276,7 @@ extension GpxDataItem {
     
     var splitInterval: Double {
         get {
-            getParameter(parameter: .splitInterval) as? Double ?? 0.0
+            appearanceParameter(.splitInterval) as? Double ?? 0.0
         }
         set {
             setParameter(parameter: .splitInterval, value: newValue)
@@ -294,13 +294,30 @@ extension GpxDataItem {
     
     var gradientPaletteName: String? {
         get {
-            getParameter(parameter: .colorPalette) as? String ?? ""
+            appearanceParameter(.colorPalette) as? String ?? ""
         }
         set {
             setParameter(parameter: .colorPalette, value: newValue)
         }
     }
     
+    @nonobjc private func appearanceParameter(_ parameter: GpxParameter) -> Any? {
+        let value: Any?
+        if let trackValue = getParameter(parameter: parameter) {
+            value = trackValue
+        } else if let parentFile = file.getParentFile() {
+            value = GpxDbHelper.shared.getGpxDirItem(file: parentFile).getParameter(parameter: parameter)
+        } else {
+            value = nil
+        }
+
+        if parameter == .splitType, let splitType = value as? Int32 {
+            return Int(splitType)
+        }
+
+        return value
+    }
+
     private func convertTimestamp(_ timestamp: TimeInterval) -> Date {
         // Check if the timestamp is greater than 10 billion
         if timestamp > 10_000_000_000 {
@@ -313,7 +330,7 @@ extension GpxDataItem {
     }
 }
 
-@objc(OASGpxDataItem)
+@objc(OASGpxDataItemAppearance)
 extension GpxDataItem {
     
     var gpxFileNameWithoutExtension: String {

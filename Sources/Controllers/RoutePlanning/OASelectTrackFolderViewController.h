@@ -24,6 +24,8 @@
 
 @property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
 
+@property (nonatomic, copy, nullable) NSString *suggestedFolderName;
+
 - (instancetype) initWithGPX:(OASTrackItem *)gpx;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath;

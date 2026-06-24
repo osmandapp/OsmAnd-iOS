@@ -46,6 +46,7 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 + (NSString *) normalizeFileUrl:(NSString *)url;
 + (NSString *) getLang:(NSString *)url;
 + (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang;
++ (nullable NSString *) readArchiveString:(NSData *)archiveData;
 + (UIMenu *)createLanguagesMenu:(NSArray<NSString *> *)availableLocales selectedLocale:(NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate;
 
 @end

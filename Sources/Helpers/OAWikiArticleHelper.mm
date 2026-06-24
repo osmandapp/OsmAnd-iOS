@@ -26,6 +26,7 @@
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/ArchiveReader.h>
 
 #define kPOpened @"<p>"
 #define kPClosed @"</p>"
@@ -205,6 +206,29 @@
 
 
 @implementation OAWikiArticleHelper
+
++ (nullable NSString *) readArchiveString:(NSData *)archiveData
+{
+    if (!archiveData || archiveData.length == 0)
+        return nil;
+
+    OsmAnd::ArchiveReader archive(static_cast<const char *>(archiveData.bytes), static_cast<int>(archiveData.length));
+    bool ok = false;
+    const auto archiveItems = archive.getItems(&ok, true);
+    if (!ok)
+        return nil;
+
+    for (const auto& archiveItem : constOf(archiveItems))
+    {
+        if (!archiveItem.isValid())
+            continue;
+
+        const QString stringContent = archive.extractItemToString(archiveItem.name, true);
+        if (!stringContent.isEmpty())
+            return stringContent.toNSString();
+    }
+    return nil;
+}
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion
 {

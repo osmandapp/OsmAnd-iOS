@@ -38,6 +38,8 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
     BOOL _shouldOpenSettingsOnInit;
     BOOL _shouldOpenMyPlacesOnInit;
     BOOL _shouldOpenResourcesOnInit;
+    
+    BOOL _loadingItems;
 }
 
 #pragma mark - Initialization
@@ -102,14 +104,37 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
 {
     _settingsHelper = [OASettingsHelper sharedInstance];
     _state = EOAExportItemsViewControllerStateTypeInited;
-    self.itemsMap = [_settingsHelper getSettingsByCategory:YES];
-    self.itemTypes = self.itemsMap.allKeys;
+    _loadingItems = YES;
+    self.itemsMap = @{};
+    self.itemTypes = @[];
 }
 
 - (void)postInit
 {
     if (_appMode)
         [self updateSelectedProfile];
+}
+
+#pragma mark - Lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    if (!_loadingItems)
+        return;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *itemsMap = [_settingsHelper getSettingsByCategory:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.itemsMap = itemsMap;
+            self.itemTypes = itemsMap.allKeys;
+            _loadingItems = NO;
+            if (_appMode)
+                [self updateSelectedProfile];
+            [self updateUI];
+            [self updateNavbar];
+            [self updateBottomButtons];
+        });
+    });
 }
 
 #pragma mark - Base UI
@@ -121,6 +146,8 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
+    if (_loadingItems)
+        return nil;
     return _state == EOAExportItemsViewControllerStateTypeInited ? [super getRightNavbarButtons] : nil;
 }
 
@@ -141,6 +168,8 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
 
 - (NSString *)getBottomButtonTitle
 {
+    if (_loadingItems)
+        return nil;
     return _state == EOAExportItemsViewControllerStateTypeInited ? [super getBottomButtonTitle] : @"";
 }
 
@@ -148,7 +177,15 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
 
 - (void)generateData
 {
-    if (_state == EOAExportItemsViewControllerStateTypeInited)
+    if (_loadingItems)
+    {
+        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
+        group.type = [OAProgressTitleCell getCellIdentifier];
+        group.groupName = OALocalizedString(@"shared_string_loading");
+        self.data = @[group];
+        return;
+    }
+    else if (_state == EOAExportItemsViewControllerStateTypeInited)
     {
         [super generateData];
 

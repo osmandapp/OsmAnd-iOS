@@ -26,7 +26,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
 @implementation OAHeightDataLoader
 {
     std::map<RouteSubregion, std::vector<RouteDataObject *>> _loadedSubregions;
-    std::map<BinaryMapFile *, std::vector<RouteSubregion>> _readers;
+    BinaryMapFiles _readers;
     
     int64_t _osmId;
     std::map<int64_t, std::shared_ptr<const OsmAnd::Road> > _results;
@@ -46,11 +46,11 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
             initBinaryMapFile(resource->localPath.toStdString(), false, true);
         }
         
-        std::vector<BinaryMapFile *> readers = getOpenMapFiles();
-        for (const auto& r : readers)
+        const auto readers = getOpenFilesSnapshot();
+        for (const auto& reader : readers)
         {
             std::vector<RouteSubregion> subregions;
-            std::vector<std::shared_ptr<RoutingIndex>> routingIndexes = r->routingIndexes;
+            std::vector<std::shared_ptr<RoutingIndex>> routingIndexes = reader->routingIndexes;
             
             for (const auto& rInd : routingIndexes)
             {
@@ -63,7 +63,7 @@ static const int ZOOM_TO_LOAD_TILES_SHIFT_R = 31 - ZOOM_TO_LOAD_TILES;
                 }
             }
             
-            _readers[r] = subregions;
+            _readers.push_back(reader);
         }
         
     }

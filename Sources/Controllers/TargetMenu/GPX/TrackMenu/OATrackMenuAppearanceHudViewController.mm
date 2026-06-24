@@ -2537,7 +2537,7 @@ static const NSInteger kColorsSection = 1;
         if (colorCollectionViewController)
         {
             colorCollectionViewController.delegate = self;
-            [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+            [self showMediumToLargeSheetViewController:colorCollectionViewController];
         }
     }
     else if ([tableData.key isEqualToString:@"vertical_exaggeration"])

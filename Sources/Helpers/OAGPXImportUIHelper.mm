@@ -287,20 +287,35 @@ static UIViewController *parentController;
         NSString *fileName = [_importUrl.path lastPathComponent];
         // 123/_2024-07-30_.gpx
         NSString *importDestFilepath = [_importGpxPath stringByAppendingPathComponent:fileName];
-        if ([[OAGPXDatabase sharedDb] containsGPXItem:importDestFilepath])
-        {
-            if (showAlerts)
-            {
-                [self showImportGpxAlert:OALocalizedString(@"import_tracks")
-                                 message:OALocalizedString(@"gpx_import_already_exists")
-                       cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
-                       otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]
-                             openGpxView:openGpxView];
-            }
+        
+        NSInteger tracksCount = _doc.getTracksCount;
+        if (tracksCount > 1 && tracksCount < 50) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                ImportTracksViewController *vc = [[ImportTracksViewController alloc]initWithGpxFile:_doc fileName:fileName selectedFolderPath:importDestFilepath importURL:_importUrl completion:nil];
+                OARootViewController *root = [OARootViewController instance];
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+                nav.modalPresentationStyle = UIModalPresentationFullScreen;
+                [root.navigationController presentViewController:nav animated:YES completion:nil];
+            });
+            return;
         }
         else
         {
-            item = [self doImport];
+            if ([[OAGPXDatabase sharedDb] containsGPXItem:importDestFilepath])
+            {
+                if (showAlerts)
+                {
+                    [self showImportGpxAlert:OALocalizedString(@"import_tracks")
+                                     message:OALocalizedString(@"gpx_import_already_exists")
+                           cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
+                           otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]
+                                 openGpxView:openGpxView];
+                }
+            }
+            else
+            {
+                item = [self doImport];
+            }
         }
     }
     else
@@ -372,11 +387,18 @@ static UIViewController *parentController;
         return nil;
     }
     
-    OASGpxDataItem *item = [[OAGPXDatabase sharedDb] addGPXFileToDBIfNeeded:gpxPath];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxPath];
+    OASGpxDataItem *item = [[OASGpxDataItem alloc] initWithFile:file];
     [item updateAppearance];
     
+    OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+    if ([gpxDbHelper hasGpxDataItemFile:file])
+        [gpxDbHelper updateDataItemItem:item];
+    else
+        [gpxDbHelper addItem:item];
+
     if (item.color != 0)
-        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
+        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:(int)item.color];
 
     [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 

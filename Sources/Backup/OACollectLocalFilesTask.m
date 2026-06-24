@@ -169,6 +169,7 @@
     localFile.item = item;
     localFile.fileName = fileName;
     localFile.localModifiedTime = lastModifiedTime;
+    
     if (_infos != nil)
     {
         OAUploadedFileInfo *fileInfo = _infos[[NSString stringWithFormat:@"%@___%@", [OASettingsItemType typeName:item.type], fileName]];

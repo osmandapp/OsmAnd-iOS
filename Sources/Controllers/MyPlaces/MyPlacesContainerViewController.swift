@@ -70,6 +70,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     var selectedTab: Tab = .default
     var availableTabs: [Tab] = []
+    var tracksFolderPathToOpenOnLoad: String?
     
     private let segmentedControlIconSize: CGFloat = 24
     private var availableViewControllers: [Tab: UIViewController] = [:]
@@ -99,6 +100,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         pageViewController?.scrollView?.backgroundColor = .clear
         navigationController?.navigationBar.prefersLargeTitles = false
         view.backgroundColor = .viewBg
+        openTracksFolderIfNeeded()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -236,6 +238,12 @@ final class MyPlacesContainerViewController: OACompoundViewController {
             }
             segmentControl.insertSegment(with: image, at: index, animated: false)
         }
+    }
+    
+    private func openTracksFolderIfNeeded() {
+        guard let path = tracksFolderPathToOpenOnLoad else { return }
+        tracksFolderPathToOpenOnLoad = nil
+        (viewController(for: .tracks) as? TracksViewController)?.setFolderToOpenAfterLoad(path)
     }
     
     private func switchTo(tab: Tab) {

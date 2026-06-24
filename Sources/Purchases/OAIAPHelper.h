@@ -97,6 +97,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, readonly) OAProduct *weather;
 @property (nonatomic, readonly) OAProduct *sensors;
 @property (nonatomic, readonly) OAProduct *vehicleMetrics;
+@property (nonatomic, readonly) OAProduct *astronomy;
 
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;

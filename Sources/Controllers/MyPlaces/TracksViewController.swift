@@ -156,7 +156,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         routingHelper = OARoutingHelper.sharedInstance()
         gpxDB = OAGPXDatabase.sharedDb()
         smartFolderHelper = SharedLibSmartFolderHelper.shared
-        super.init(style: (isRootFolder || isSmartFolder) ? .insetGrouped : .grouped)
+        super.init(style: .insetGrouped)
         self.isRootFolder = isRootFolder
         self.isSmartFolder = isSmartFolder
     }
@@ -572,7 +572,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         
         if !isRootFolder {
-            configureNavigationBarAppearance()
             navigationController?.setNavigationBarHidden(false, animated: false)
             navigationItem.searchController = nil
         }
@@ -592,32 +591,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private func setupSearchControllerIfChildFolder() {
         guard !isRootFolder else { return }
         setupSearchController()
-    }
-    
-    private func configureNavigationBarAppearance() {
-        let backgroundColor: UIColor = isSmartFolder ? .viewBg : .navBarBgColorPrimary
-        let titleColor: UIColor = isSmartFolder ? .textColorPrimary : .navBarTextColorPrimary
-
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = backgroundColor
-        appearance.shadowColor = backgroundColor
-        appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: titleColor]
-
-        let blurAppearance = UINavigationBarAppearance()
-        blurAppearance.backgroundEffect = UIBlurEffect(style: .regular)
-        blurAppearance.backgroundColor = backgroundColor
-        blurAppearance.shadowColor = backgroundColor
-        blurAppearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: titleColor]
-
-        navigationController?.navigationBar.standardAppearance = blurAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        if #available(iOS 26.0, *) {
-            navigationController?.navigationBar.tintColor = .label
-        } else {
-            navigationController?.navigationBar.tintColor = titleColor
-        }
-        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     private func updateNavigationBarTitle() {
@@ -766,7 +739,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     private func setupHeaderView() -> UIView? {
         let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
-        headerView.backgroundColor = (isRootFolder || isSmartFolder) ? .clear : .groupBg
+        headerView.backgroundColor = .clear
         headerView.addSubview(filterButton)
         headerView.addSubview(sortButton)
         filterButton.translatesAutoresizingMaskIntoConstraints = false
@@ -849,7 +822,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         
         let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: .preferredFont(forTextStyle: .footnote), textColor: .textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
-        footer.backgroundColor = (isRootFolder || isSmartFolder) ? .clear : .groupBg
+        footer.backgroundColor = .clear
         for subview in footer.subviews {
             if let label = subview as? UILabel {
                 label.textAlignment = .center
@@ -988,23 +961,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func updateSearchController() {
-        if isSmartFolder {
-            searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
-            return
-        }
-        if isNameFiltered {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
-            searchController.searchBar.searchTextField.backgroundColor = .groupBg
-            searchController.searchBar.searchTextField.leftView?.tintColor = .textColorTertiary
-        } else if isSearchActive {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-        } else {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 1, alpha: 0.5)
-        }
+        guard !isRootFolder || isSmartFolder else { return }
+        searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
     }
     
     private func show(_ viewController: UIViewController) {
@@ -2679,10 +2637,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             isFiltersInitialized = false
         }
         
-        if !isRootFolder {
-            updateSearchController()
-        }
-        
         if isRootFolder {
             myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         }
@@ -2705,9 +2659,6 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             hideSearch()
         }
         setupNavBarMenuButton()
-        if !isRootFolder {
-            updateSearchController()
-        }
         updateFilterButtonVisibility(filterIsActive: isSearchActive)
         updateSortButtonAndMenu()
     }

@@ -579,7 +579,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
     for (OAPOI *amenity in sorted)
     {
-        NSString *travelRouteId = amenity.getAdditionalInfo[@"route_id"];
+        NSString *travelRouteId = amenity.getAdditionalInfo[ROUTE_ID];
         if (![amenity isClosed] && [amenity isRoutePoint] && NSStringIsEmpty(amenity.name) && travelRouteId && [names containsObject:travelRouteId])
         {
             return amenity;
@@ -1822,7 +1822,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 - (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId
 {
     NSMutableArray<OAPOI *> *result = [NSMutableArray new];
-    QString qRouteMebersIdKey = QString::fromNSString(@"route_members_ids");
+    QString qRouteMebersIdKey = QString::fromNSString(ROUTE_MEMBERS_IDS);
     QString qRouteId = QString::fromNSString(routeId);
     
     OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(__autoreleasing id *objectPtr) {
@@ -1864,8 +1864,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         return false;
     }];
     
-    OACollatorStringMatcher *mode = [[OACollatorStringMatcher alloc] initWithPart:nil mode:CHECK_EQUALS_FROM_SPACE];
-    [self searchRouteByName:routeId mode:mode matcher:matcher];
+    [self searchRouteByName:routeId mode:OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE matcher:matcher];
     return result;
 }
 
@@ -1917,8 +1916,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         return false;
     }];
     
-    OACollatorStringMatcher *mode = [[OACollatorStringMatcher alloc] initWithPart:nil mode:MULTISEARCH];
-    [self searchRouteByName:multipleSearch mode:mode matcher:matcher];
+    [self searchRouteByName:multipleSearch mode:OsmAnd::StringMatcherMode::MULTISEARCH matcher:matcher];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOI *> *> *map = [NSMutableDictionary new];
     
     for (OAPOI *am in result)
@@ -1934,88 +1932,29 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return map;
 }
 
-
-//private List<Amenity> searchRouteByName(String multipleSearch, CollatorStringMatcher.StringMatcherMode mode, ResultMatcher<Amenity> matcher) {
-//    List<Amenity> result = new ArrayList();
-//    BinaryMapIndexReader.SearchRequest<Amenity> req = BinaryMapIndexReader.buildSearchPoiRequest(0, 0, multipleSearch, 0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE, matcher);
-//    req.setMatcherMode(mode);
-//
-//    for(AmenityIndexRepository index : this.getAmenityRepositories(false, (Predicate)null)) {
-//        List<Amenity> amenities = index.searchPoiByName(req);
-//        if (!Algorithms.isEmpty(amenities)) {
-//            result.addAll(amenities);
-//        }
-//    }
-//
-//    return result;
-//}
-
-//TODO: implement
-- (void)searchRouteByName:(NSString *)multipleSearch mode:(OACollatorStringMatcher *)mode matcher:(OAResultMatcher *)matcher
+- (void)searchRouteByName:(NSString *)multipleSearch mode:(OsmAnd::StringMatcherMode)mode matcher:(OAResultMatcher *)matcher
 {
-    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
-    
-//    //TODO: use this like in androd
-//    OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
-//    OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
-//    OsmAnd::AreaI bbox31 = OsmAnd::AreaI(topLeft, bottomRight);
-    
-//    TODO: delete after quick testing
-    OsmAnd::LatLon latLon(50.448514, 30.495601);
-    const auto location = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(10000, location);
-    
-    [self searchPoiByName:multipleSearch mode:mode matcher:matcher bbox31:bbox31];
-}
-
-- (void) searchPoiByName:(NSString *)multipleSearch mode:(OACollatorStringMatcher *)mode matcher:(OAResultMatcher *)matcher bbox31:(OsmAnd::AreaI)bbox31
-{
-    QString qKey = QString::fromNSString(ROUTE_ID);
-    QString qCode = QString::fromNSString(multipleSearch);
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    NSMutableArray<OAPOI *> *res = [NSMutableArray new];
-    
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([&matcher]
                                                   (const OsmAnd::FunctorQueryController* const controller)
                                                   {
-                                                      return [matcher isCancelled];
+                                                      return matcher && [matcher isCancelled];
                                                   }));
-    
-    //TODO: delete AmenitiesInAreaSearch
-    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
-    searchCriteria->bbox31 = bbox31;
-    
-    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
-    
+    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+
+    searchCriteria->name = QString::fromNSString(multipleSearch);
+    searchCriteria->obfInfoAreaFilter = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
+    searchCriteria->matcherMode = mode;
+
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
     search->performSearch(*searchCriteria,
-                          [&res, &multipleSearch, &qCode, &qKey, &matcher]
+                          [&matcher]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                                [matcher publish:[NSValue valueWithPointer:&resultEntry]];
+                            [matcher publish:[NSValue valueWithPointer:&resultEntry]];
                           },
                           ctrl);
-    
-    
-    
-   //TODO: use AmenitiesByNameSearch
-//    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
-//    
-//    searchCriteria->name = multipleSearch;
-//    //searchCriteria->obfInfoAreaFilter = _visibleArea; // ???
-//    searchCriteria->bbox31 = bbox31;
-//    
-//    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
-//    search->performSearch(*searchCriteria,
-//                          [self, &matcher]
-//                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-//                          {
-//                              //[self onPOIFound:resultEntry];
-//                                [matcher publish:[NSValue valueWithPointer:&resultEntry]];
-//                          },
-//                          ctrl);
 }
 
 @end

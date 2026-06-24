@@ -2196,9 +2196,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 cell.titleLabel.text = item.title
                 if item.key == trackKey {
                     cell.descriptionLabel.text = nil
+                    cell.descriptionLabel.numberOfLines = 1
                     cell.descriptionLabel.attributedText = item.obj(forKey: trackSortDescrKey) as? NSAttributedString
                 } else {
                     cell.descriptionLabel.attributedText = nil
+                    cell.descriptionLabel.numberOfLines = 0
                     cell.descriptionLabel.text = item.descr
                 }
                 cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)

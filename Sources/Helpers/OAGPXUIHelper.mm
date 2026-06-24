@@ -596,6 +596,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             }
         }
         [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
+        [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
     }
     else
     {

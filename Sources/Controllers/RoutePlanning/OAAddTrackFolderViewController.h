@@ -18,5 +18,7 @@
 
 @property (nonatomic, weak) id<OAAddTrackFolderDelegate> delegate;
 
+@property (nonatomic, copy, nullable) NSString *suggestedFolderName;
+
 @end
 

@@ -42,6 +42,26 @@ final class MyPlacesNavigator: NSObject {
         let track = TrackItem(file: item.file)
         openTrack(track)
     }
+    
+    func openTracks(inFolder absoluteFolderPath: String?) {
+        guard let root, let nav = root.navigationController else { return }
+        
+        if let myPlaces = nav.viewControllers.first(where: { $0 is MyPlacesContainerViewController }) as? MyPlacesContainerViewController {
+            nav.popToViewController(myPlaces, animated: false)
+            myPlaces.switchToWithSegmentControl(tab: .tracks)
+            (myPlaces.viewController(for: .tracks) as? TracksViewController)?.navigateToSubfolder(absoluteFolderPath)
+            return
+        }
+        
+        nav.dismiss(animated: false)
+        nav.popToRootViewController(animated: false)
+        
+        let myPlaces = MyPlacesContainerViewController()
+        myPlaces.loadViewIfNeeded()
+        myPlaces.selectedTab = .tracks
+        myPlaces.tracksFolderPathToOpenOnLoad = absoluteFolderPath
+        nav.pushViewController(myPlaces, animated: true)
+    }
 
     private func openMyPlaces(tab: MyPlacesContainerViewController.Tab) {
         guard let root,

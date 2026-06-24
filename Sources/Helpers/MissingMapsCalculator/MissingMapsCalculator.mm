@@ -84,8 +84,10 @@ static const double DISTANCE_SKIP = 10000;
     string profile = profileToString(ctx->config->router->getProfile());
     NSMutableDictionary<NSString *, RegisteredMap *> *knownMaps = [NSMutableDictionary new];
     
-    for (auto* file : getOpenMapFiles())
+    const auto openFilesSnapshot = getOpenFilesSnapshot();
+    for (const auto& fileRef : openFilesSnapshot)
     {
+        auto* file = fileRef.get();
         NSString *regionName = [NSString stringWithCString:file->inputName.c_str()
                                                   encoding:[NSString defaultCStringEncoding]];
         NSString *downloadName = regionName.lastPathComponent;

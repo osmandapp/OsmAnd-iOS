@@ -101,6 +101,8 @@
             return EOAOAResourceSwiftItemTypeWeatherForecast;
         case OsmAndResourceType::Travel:
             return EOAOAResourceSwiftItemTypeTravel;
+        case OsmAndResourceType::StarMap:
+            return EOAOAResourceSwiftItemTypeStarMap;
         default:
             return EOAOAResourceSwiftItemTypeUnknown;
     }
@@ -266,6 +268,11 @@
 {
     OsmAndResourceType cppType = [OAResourceType resourceTypeByScopeId:scopeId];
     return [OAResourceType toValue:cppType];
+}
+
++ (void)prepareResourcesData
+{
+    [OAManageResourcesViewController prepareData];
 }
 
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegionId:(NSString *)regionId resourceTypeNames:(NSArray<NSString *> *)resourceTypeNames
@@ -502,7 +509,10 @@
                    withRegionName:(BOOL)includeRegionName
                  withResourceType:(BOOL)includeResourceType
 {
-    return [OAResourcesUIHelper titleOfResourceType:(OsmAndResourceType) type
+    OsmAndResourceType resourceType = type == EOAOAResourceSwiftItemTypeStarMap
+        ? OsmAndResourceType::StarMap
+        : (OsmAndResourceType) type;
+    return [OAResourcesUIHelper titleOfResourceType:resourceType
                                            inRegion:region
                                      withRegionName:includeRegionName
                                    withResourceType:includeResourceType];

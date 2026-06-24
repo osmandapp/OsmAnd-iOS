@@ -2394,6 +2394,11 @@ static char kMapSourceUpdateQueueKey;
         [[OAMapViewTrackingUtilities instance] refreshLocation];
 }
 
+- (void)setSingleTapContextMenuGestureEnabled:(BOOL)enabled
+{
+    _grSymbolContextMenu.enabled = enabled;
+}
+
 - (void) disableRotationAnd3DView:(BOOL)disabled
 {
     _rotationAnd3DViewDisabled = disabled;

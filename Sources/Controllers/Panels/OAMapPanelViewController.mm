@@ -1559,16 +1559,26 @@ typedef enum
 
 - (void)setSelectedObject:(OATargetPoint *)targetPoint
 {
+
+    OAMapObject *obj = nil;
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
+        obj = targetPoint.targetObj;
+
+    }
+    else if([targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *baseDetails = (BaseDetailsObject *) targetPoint.targetObj;
+        obj = (OAMapObject *) [baseDetails syntheticAmenity];
+    }
+    if (obj != nil)
+    {
         QVector<OsmAnd::PointI> points;
-        OAMapObject *obj = targetPoint.targetObj;
         if (obj.x && obj.x.count > 0)
         {
             for (int i = 0; i < obj.x.count; i++)
                 points.push_back(OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue));
         }
-
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
 }

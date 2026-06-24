@@ -16,7 +16,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
     init(item: AstroKnowledgeCardItem, onActionClick: @escaping () -> Void) {
         currentButtonTitle = item.buttonTitle
         currentActionEnabled = item.actionEnabled
-        actionButton = UIButton(configuration: Self.makeButtonConfiguration(title: item.buttonTitle))
+        actionButton = UIButton(configuration: Self.makeButtonConfiguration(item: item))
         super.init()
         setup(item: item, onActionClick: onActionClick)
     }
@@ -31,7 +31,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         }
         currentButtonTitle = item.buttonTitle
         currentActionEnabled = item.actionEnabled
-        actionButton.configuration = Self.makeButtonConfiguration(title: item.buttonTitle)
+        actionButton.configuration = Self.makeButtonConfiguration(item: item)
         actionButton.isEnabled = item.actionEnabled
     }
 
@@ -49,36 +49,90 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         iconView.contentMode = .scaleAspectFit
         iconView.widthAnchor.constraint(equalToConstant: 34).isActive = true
         iconView.heightAnchor.constraint(equalToConstant: 34).isActive = true
-        row.addArrangedSubview(iconView)
 
         let textStack = UIStackView()
         textStack.axis = .vertical
-        textStack.spacing = 5
+        textStack.spacing = 6
+        
         let title = UILabel()
         title.text = item.getTitle()
         title.textColor = AstroContextMenuTheme.primaryText
-        title.font = .systemFont(ofSize: 17, weight: .semibold)
+        title.font = .preferredFont(forTextStyle: .body)
+        title.adjustsFontForContentSizeCategory = true
         title.numberOfLines = 0
+        
         let description = UILabel()
         description.text = item.getDescription()
         description.textColor = AstroContextMenuTheme.secondaryText
-        description.font = .systemFont(ofSize: 14)
+        description.font = .preferredFont(forTextStyle: .subheadline)
         description.numberOfLines = 0
+        
         textStack.addArrangedSubview(title)
         textStack.addArrangedSubview(description)
+        
         row.addArrangedSubview(textStack)
+        row.addArrangedSubview(iconView)
+        
         stack.addArrangedSubview(row)
-
-        actionButton.isEnabled = item.actionEnabled
-        actionButton.addAction(UIAction { _ in onActionClick() }, for: .touchUpInside)
-        stack.addArrangedSubview(actionButton)
+        stack.setCustomSpacing(20, after: row)
+        
+        if item.state == .download {
+            let divider = UIView()
+            divider.backgroundColor = AstroContextMenuTheme.separator
+            divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
+            stack.addArrangedSubview(divider)
+            stack.setCustomSpacing(0, after: divider)
+            
+            actionButton.isEnabled = item.actionEnabled
+            actionButton.addAction(UIAction { _ in onActionClick() }, for: .touchUpInside)
+            actionButton.contentHorizontalAlignment = .leading
+            stack.addArrangedSubview(actionButton)
+        } else {
+            actionButton.isEnabled = item.actionEnabled
+            actionButton.addAction(UIAction { _ in onActionClick() }, for: .touchUpInside)
+            textStack.addArrangedSubview(actionButton)
+            textStack.setCustomSpacing(20, after: description)
+            stack.isLayoutMarginsRelativeArrangement = true
+            stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+        }
+    }
+    
+    private static func makeButtonConfiguration(item: AstroKnowledgeCardItem) -> UIButton.Configuration {
+        if item.state == .download {
+            makeButtonConfigurationDownload(title: item.buttonTitle)
+        } else {
+            makeButtonConfigurationUpsell(title: item.buttonTitle)
+        }
     }
 
-    private static func makeButtonConfiguration(title: String) -> UIButton.Configuration {
+    private static func makeButtonConfigurationDownload(title: String) -> UIButton.Configuration {
+        var config = UIButton.Configuration.plain()
+        config.title = title
+        config.baseForegroundColor = AstroContextMenuTheme.activeText
+        config.titleAlignment = .leading
+        config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 0, bottom: 14, trailing: 0)
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .preferredFont(forTextStyle: .body)
+            return outgoing
+        }
+        
+        return config
+    }
+    
+    private static func makeButtonConfigurationUpsell(title: String) -> UIButton.Configuration {
         var config = UIButton.Configuration.filled()
         config.title = title
-        config.baseBackgroundColor = AstroContextMenuTheme.primaryButton
-        config.baseForegroundColor = .white
+        config.baseBackgroundColor = .buttonBgColorTertiary
+        config.baseForegroundColor = AstroContextMenuTheme.activeText
+        config.background.cornerRadius = 10
+        config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 0, bottom: 14, trailing: 0)
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .preferredFont(forTextStyle: .body)
+            return outgoing
+        }
+        
         return config
     }
 }

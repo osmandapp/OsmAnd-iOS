@@ -17,10 +17,27 @@ enum AstroScheduleCardViewHolder {
                          onResetPeriod: @escaping () -> Void,
                          onShiftPeriod: @escaping (Int) -> Void,
                          onSelectDate: @escaping (Date) -> Void) -> UIView {
+        let headerLabel = UILabel()
+        headerLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerLabel.text = localizedString("astronomy_schedule")
+        headerLabel.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
+        headerLabel.adjustsFontForContentSizeCategory = true
+        headerLabel.textColor = AstroContextMenuTheme.secondaryText
+        
+        let headerView = UIView()
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.addSubview(headerLabel)
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 10),
+            headerLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+            headerLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            headerLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16)
+        ])
+        
         let card = UIView()
         card.translatesAutoresizingMaskIntoConstraints = false
         card.backgroundColor = AstroContextMenuTheme.cardBackground
-        card.layer.cornerRadius = 12
+        card.layer.cornerRadius = 26
         card.layer.masksToBounds = true
 
         let contentStack = UIStackView()
@@ -28,11 +45,15 @@ enum AstroScheduleCardViewHolder {
         contentStack.spacing = 0
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(contentStack)
+        
+        let divider = UIView()
+        divider.backgroundColor = AstroContextMenuTheme.separator
+        divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
 
-        let headerView = header(item: item,
-                                onResetPeriod: onResetPeriod,
-                                onShiftPeriod: onShiftPeriod)
-        contentStack.addArrangedSubview(headerView)
+        let headerCardView = header(item: item,
+                                    onResetPeriod: onResetPeriod,
+                                    onShiftPeriod: onShiftPeriod)
+        contentStack.addArrangedSubview(headerCardView)
 
         let daysStack = UIStackView()
         daysStack.axis = .vertical
@@ -46,8 +67,14 @@ enum AstroScheduleCardViewHolder {
                 daysStack.addArrangedSubview(placeholderRow(showDivider: index != AstroScheduleCardController.periodDays - 1))
             }
         }
-        contentStack.setCustomSpacing(12, after: headerView)
+        contentStack.setCustomSpacing(12, after: headerCardView)
+        contentStack.addArrangedSubview(divider)
         contentStack.addArrangedSubview(daysStack)
+        
+        let mainStack = UIStackView(arrangedSubviews: [headerView, card])
+        mainStack.axis = .vertical
+        mainStack.spacing = 10
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         if item.days.contains(where: { $0.setDayOffset > 0 }) {
             let noteContainer = UIView()
@@ -64,17 +91,17 @@ enum AstroScheduleCardViewHolder {
                 note.topAnchor.constraint(equalTo: noteContainer.topAnchor),
                 note.bottomAnchor.constraint(equalTo: noteContainer.bottomAnchor)
             ])
-            contentStack.setCustomSpacing(12, after: daysStack)
-            contentStack.addArrangedSubview(noteContainer)
+            mainStack.setCustomSpacing(4, after: card)
+            mainStack.addArrangedSubview(noteContainer)
         }
 
         NSLayoutConstraint.activate([
             contentStack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             contentStack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
             contentStack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            contentStack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
+            contentStack.bottomAnchor.constraint(equalTo: card.bottomAnchor)
         ])
-        return card
+        return mainStack
     }
 
     private static func header(item: AstroScheduleCardItem,
@@ -85,70 +112,101 @@ enum AstroScheduleCardViewHolder {
         header.alignment = .center
         header.spacing = 8
         header.isLayoutMarginsRelativeArrangement = true
-        header.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-
-        let titleColumn = UIStackView()
-        titleColumn.axis = .vertical
-        titleColumn.alignment = .leading
-        titleColumn.spacing = 2
-        titleColumn.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        titleColumn.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
-        let title = UILabel()
-        title.text = localizedString("astronomy_schedule")
-        title.textColor = AstroContextMenuTheme.primaryText
-        title.font = .systemFont(ofSize: 16, weight: .bold)
+        header.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 
         let range = UILabel()
         range.text = item.rangeLabel
-        range.textColor = AstroContextMenuTheme.secondaryText
-        range.font = .systemFont(ofSize: 14)
-
-        titleColumn.addArrangedSubview(title)
-        titleColumn.addArrangedSubview(range)
+        range.textColor = AstroContextMenuTheme.primaryText
+        range.font = .preferredFont(forTextStyle: .headline)
+        range.adjustsFontForContentSizeCategory = true
 
         let buttons = UIStackView()
         buttons.axis = .horizontal
         buttons.alignment = .center
-        buttons.spacing = 4
+        buttons.spacing = 6
         buttons.setContentHuggingPriority(.required, for: .horizontal)
         buttons.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        let reset = iconButton(name: "ic_custom_date",
+        let resetIconName: String
+        if #available(iOS 26.0, *) {
+            let day = Calendar.current.component(.day, from: Date())
+            resetIconName = "\(day).calendar"
+        } else {
+            resetIconName = "calendar"
+        }
+        
+        let reset = iconButton(name: resetIconName,
                                accessibilityLabel: localizedString("astro_schedule_show_current_week")) {
             onResetPeriod()
         }
         reset.isHidden = !item.showResetPeriodButton
-        let prev = iconButton(name: "ic_custom_arrow_back",
+        let prev = iconButton(name: "arrow.left",
                               accessibilityLabel: localizedString("shared_string_previous")) {
             onShiftPeriod(-AstroScheduleCardController.periodDays)
         }
-        let next = iconButton(name: "ic_custom_arrow_forward",
+        let next = iconButton(name: "arrow.right",
                               accessibilityLabel: localizedString("shared_string_next")) {
             onShiftPeriod(AstroScheduleCardController.periodDays)
         }
         buttons.addArrangedSubview(reset)
         buttons.addArrangedSubview(prev)
         buttons.addArrangedSubview(next)
+        buttons.setCustomSpacing(16, after: reset)
 
-        header.addArrangedSubview(titleColumn)
+        header.addArrangedSubview(range)
         header.addArrangedSubview(buttons)
         return header
     }
-
+    
     private static func iconButton(name: String,
                                    accessibilityLabel: String,
                                    action: @escaping () -> Void) -> UIButton {
-        let button = UIButton(type: .system)
+        
+        let iconConfig = UIImage.SymbolConfiguration(
+            font: .preferredFont(forTextStyle: .headline)
+        )
+        
+        let image = UIImage(
+            systemName: name,
+            withConfiguration: iconConfig
+        )?.imageFlippedForRightToLeftLayoutDirection()
+        
+        var config = UIButton.Configuration.plain()
+        config.image = image
+        config.contentInsets = .zero
+        config.cornerStyle = .capsule
+        
+        let button = UIButton(configuration: config)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = AstroContextMenuTheme.activeIcon
-        button.setImage(AstroIcon.template(name)?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         button.accessibilityLabel = accessibilityLabel
+        
+        button.configurationUpdateHandler = { button in
+            var config = button.configuration
+            
+            switch button.state {
+            case .disabled:
+                config?.baseForegroundColor = .cellButtonIconDisabled
+                config?.background.backgroundColor = .cellButtonBg
+                
+            case .highlighted:
+                config?.baseForegroundColor = .cellButtonIcon
+                config?.background.backgroundColor = .cellButtonBgPressed
+                
+            default:
+                config?.baseForegroundColor = .cellButtonIcon
+                config?.background.backgroundColor = .cellButtonBg
+            }
+            
+            button.configuration = config
+        }
+        
         button.addAction(UIAction { _ in action() }, for: .touchUpInside)
+        
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 44),
-            button.heightAnchor.constraint(equalToConstant: 44)
+            button.widthAnchor.constraint(equalToConstant: 46),
+            button.heightAnchor.constraint(equalToConstant: 32)
         ])
+        
         return button
     }
 
@@ -212,7 +270,7 @@ enum AstroScheduleCardViewHolder {
             graph.leadingAnchor.constraint(equalTo: riseBlock.trailingAnchor, constant: 10),
             graph.centerYAnchor.constraint(equalTo: row.centerYAnchor),
             graph.widthAnchor.constraint(equalTo: dayLabel.widthAnchor, multiplier: 1.6),
-            graph.heightAnchor.constraint(equalToConstant: 24),
+            graph.heightAnchor.constraint(equalToConstant: 22),
 
             setBlock.leadingAnchor.constraint(equalTo: graph.trailingAnchor, constant: 10),
             setBlock.trailingAnchor.constraint(equalTo: row.trailingAnchor),
@@ -260,7 +318,6 @@ enum AstroScheduleCardViewHolder {
         let timeLabel = UILabel()
         timeLabel.attributedText = buildTimeText(time: time, suffix: suffix)
         timeLabel.textColor = AstroContextMenuTheme.secondaryText
-        timeLabel.font = .systemFont(ofSize: 16)
         timeLabel.numberOfLines = 1
         timeLabel.adjustsFontSizeToFitWidth = true
         timeLabel.minimumScaleFactor = 0.7

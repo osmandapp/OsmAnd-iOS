@@ -57,6 +57,15 @@ final class WikipediaContextMenuView: UIView {
 
         return button
     }()
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 14
+        stackView.alignment = .leading
+        return stackView
+    }()
 
     // MARK: - Init
 
@@ -80,6 +89,8 @@ final class WikipediaContextMenuView: UIView {
         self.text = text
         
         titleLabel.attributedText = makeAttributedText(from: text)
+        labelContainer.isHidden = text.isEmpty
+        
         actionButton.setTitle(buttonText, for: .normal)
         actionButton.isHidden = buttonText.isEmpty
         
@@ -92,27 +103,23 @@ final class WikipediaContextMenuView: UIView {
     // MARK: - Setup
 
     private func setupUI() {
-        addSubview(labelContainer)
-        addSubview(actionButton)
+        addSubview(stackView)
         labelContainer.addSubview(titleLabel)
+        stackView.addArrangedSubview(labelContainer)
+        stackView.addArrangedSubview(actionButton)
         
         let heightContainerConstraint = labelContainer.heightAnchor.constraint(equalTo: titleLabel.heightAnchor)
         heightContainerConstraint.priority = .defaultLow
 
         NSLayoutConstraint.activate([
-            labelContainer.topAnchor.constraint(equalTo: topAnchor, constant: Constants.contentInset.top),
-            labelContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.contentInset.leading),
-            labelContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.contentInset.trailing),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: Constants.contentInset.top),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.contentInset.leading),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.contentInset.trailing),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constants.contentInset.bottom),
             heightContainerConstraint,
-            
             titleLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: labelContainer.trailingAnchor),
-
-            actionButton.topAnchor.constraint(greaterThanOrEqualTo: labelContainer.bottomAnchor, constant: Constants.buttonTopOffset),
-            actionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.contentInset.leading),
-            actionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -Constants.contentInset.trailing),
-            actionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constants.contentInset.bottom),
             actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: Constants.buttonHeight)
         ])
     }

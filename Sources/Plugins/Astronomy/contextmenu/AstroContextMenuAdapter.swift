@@ -133,7 +133,7 @@ class AstroCardContainerView: UIView {
     private func setup(title: String?, iconName: String?) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = AstroContextMenuTheme.cardBackground
-        layer.cornerRadius = 12
+        layer.cornerRadius = 26
         layer.masksToBounds = true
 
         stack.axis = .vertical
@@ -169,7 +169,7 @@ class AstroCardContainerView: UIView {
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 

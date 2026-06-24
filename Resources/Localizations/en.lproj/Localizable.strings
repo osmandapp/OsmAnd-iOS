@@ -1692,6 +1692,17 @@
 "change_folder" = "Change folder";
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add new one";
+"plan_route_select_segment_hint" = "Select segment or section to change Route type and Settings.";
+"plan_route_change_for_whole_segment" = "Change for whole segment";
+"plan_route_change_for_whole_track" = "Change for whole track";
+"plan_route_section_recalculate_format" = "%1$@ section of %2$@ will be recalculated using the selected profile.";
+"plan_route_segment_recalculate_format" = "%@ will be recalculated using the selected profile.";
+"plan_route_start_new_segment_hint" = "New segment continues with the same route type.";
+"plan_route_straight_line" = "Straight line";
+"plan_route_use_elevation_data" = "Use elevation data";
+"plan_route_avoid_roads" = "Avoid roads";
+"plan_route_consider_temp_limitations" = "Consider temporary limitations";
+"plan_route_navigation_settings" = "Navigation settings";
 "add_folder" = "Add folder";
 "add_smart_folder" = "Add smart folder";
 "save_as_smart_folder" = "Save as smart folder";

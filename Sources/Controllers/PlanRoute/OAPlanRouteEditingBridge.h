@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -55,12 +56,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL canRedo;
 @property (nonatomic, readonly) BOOL hasRoute;
 @property (nonatomic, readonly) double routeDistance;
+@property (nonatomic, readonly) double distanceToMapCenter;
+@property (nonatomic, readonly) double bearingToMapCenter;
 
+- (void)dismiss;
 - (void)prepareNewRoute;
 - (void)openTrackWithFilePath:(NSString *)filePath;
 - (void)addCenterPoint;
+- (void)setCrosshairScreenPoint:(CGPoint)point;
 - (void)undo;
 - (void)redo;
+- (void)reverseRoute;
+- (void)clearAllPoints;
 
 - (NSArray<OAPlanRouteSegmentData *> *)buildSegments;
 - (NSArray<OAApplicationMode *> *)availableModes;
@@ -72,6 +79,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)selectPointAtIndex:(NSInteger)index;
+
+- (void)saveAs:(NSString *)fileName
+        folder:(nullable NSString *)folder
+     showOnMap:(BOOL)showOnMap
+    onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
+
+- (void)saveAsCopy:(NSString *)fileName
+            folder:(nullable NSString *)folder
+         showOnMap:(BOOL)showOnMap
+        onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
+
+- (void)enterNavigationWithTrackName:(NSString *)trackName;
 
 @end
 

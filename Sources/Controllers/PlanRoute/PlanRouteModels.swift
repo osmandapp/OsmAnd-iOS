@@ -164,6 +164,84 @@ struct PlanRouteElevationData {
     let elevations: [Double]
 }
 
+struct PlanRouteSegmentRoutingParams {
+    var useElevationData: Bool
+    var considerTemporaryLimitations: Bool
+}
+
+enum SegmentRouteContext {
+    case profileGroup(PlanRouteProfileGroup, segment: PlanRouteSegment)
+    case wholeSegment(PlanRouteSegment)
+    case wholeTrack
+
+    var screenTitle: String {
+        switch self {
+        case let .profileGroup(_, segment), let .wholeSegment(segment):
+            return String(format: localizedString("segments_count"), segment.index + 1)
+        case .wholeTrack:
+            return localizedString("route_between_points")
+        }
+    }
+
+    var screenSubtitle: String? {
+        switch self {
+        case let .profileGroup(group, _):
+            let modeName = group.appMode?.toHumanString() ?? localizedString("plan_route_straight_line")
+            let distance = OAOsmAndFormatter.getFormattedDistance(Float(group.distance)) ?? ""
+            return "\(modeName) • \(distance)"
+        case let .wholeSegment(segment):
+            guard !segment.multiMode, let mode = segment.singleMode else { return nil }
+            let distance = OAOsmAndFormatter.getFormattedDistance(Float(segment.distance)) ?? ""
+            return "\(mode.toHumanString() ?? "") • \(distance)"
+        case .wholeTrack:
+            return nil
+        }
+    }
+
+    var recalculateSubtitle: String {
+        switch self {
+        case let .profileGroup(group, segment):
+            let modeName = group.appMode?.toHumanString() ?? localizedString("plan_route_straight_line")
+            let segmentTitle = String(format: localizedString("segments_count"), segment.index + 1)
+            return String(format: localizedString("plan_route_section_recalculate_format"), modeName, segmentTitle)
+        case let .wholeSegment(segment):
+            let segmentTitle = String(format: localizedString("segments_count"), segment.index + 1)
+            return String(format: localizedString("plan_route_segment_recalculate_format"), segmentTitle)
+        case .wholeTrack:
+            return localizedString("whole_track_descr")
+        }
+    }
+
+    var currentMode: OAApplicationMode? {
+        switch self {
+        case let .profileGroup(group, _): return group.appMode
+        case let .wholeSegment(segment): return segment.multiMode ? nil : segment.singleMode
+        case .wholeTrack: return nil
+        }
+    }
+
+    var applyPointIndex: Int {
+        switch self {
+        case let .profileGroup(group, _): return group.lastPointIndex
+        case let .wholeSegment(segment): return segment.pointIndexes.last ?? 0
+        case .wholeTrack: return 0
+        }
+    }
+
+    var applyWholeRoute: Bool {
+        switch self {
+        case .profileGroup: return false
+        case .wholeSegment: return true
+        case .wholeTrack: return true
+        }
+    }
+
+    var usesCloseButton: Bool {
+        if case .wholeTrack = self { return true }
+        return false
+    }
+}
+
 protocol PlanRoutePoiDataSource: AnyObject {
     var poiPoints: [PlanRoutePoint] { get }
 }
@@ -182,22 +260,37 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func addRoutePoint()
     func undo()
     func redo()
+    func reverseRoute()
+    func clearAllPoints()
     func moveRoutePoint(from: Int, to: Int)
     func deleteRoutePoint(at index: Int)
     func deleteSegment(pointIndexes: [Int])
     func startNewSegment()
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool)
+    func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext)
     func sortDoorToDoor(pointIndexes: [Int])
     func saveSegment(pointIndexes: [Int])
     func selectRoutePoint(at index: Int)
+    func routingParams(for context: SegmentRouteContext) -> PlanRouteSegmentRoutingParams
+    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, for context: SegmentRouteContext)
 }
 
-protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource {
+protocol PlanRouteSaveDataSource: AnyObject {
+    func saveAs(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
+    func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
+    func enterNavigation()
+}
+
+protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource, PlanRouteSaveDataSource {
+
     var mode: PlanRouteMode { get }
     var hasChanges: Bool { get }
     var canUndo: Bool { get }
     var canRedo: Bool { get }
     var onDataChanged: (() -> Void)? { get set }
+
+    func setCrosshairPosition(screenPoint: CGPoint)
+    func dismissLayer()
 }
 
 protocol PlanRouteTabContent: AnyObject {

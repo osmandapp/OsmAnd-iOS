@@ -273,8 +273,20 @@
 
 - (OASWptPt *) addCenterPoint:(BOOL)addPointBefore
 {
-    const auto center = [self.mapViewController.mapView getCenterPixel];
-    const auto elevated31 = [OANativeUtilities get31FromElevatedPixel:center];
+    OsmAnd::PointI elevated31;
+    if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = self.mapViewController.mapView.contentScaleFactor;
+        CGPoint scaledPoint = CGPointMake(_cursorScreenPoint.x * scale, _cursorScreenPoint.y * scale);
+        OsmAnd::PointI location31;
+        [self.mapViewController.mapView convert:scaledPoint toLocation:&location31];
+        elevated31 = location31;
+    }
+    else
+    {
+        const auto center = [self.mapViewController.mapView getCenterPixel];
+        elevated31 = [OANativeUtilities get31FromElevatedPixel:center];
+    }
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(elevated31);
     
     OASWptPt *pt = [[OASWptPt alloc] init];
@@ -400,8 +412,17 @@
     NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
 
     OsmAnd::PointI center;
-    auto centerPixel = self.mapViewController.mapView.getCenterPixel;
-    [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
+    if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = self.mapViewController.mapView.contentScaleFactor;
+        CGPoint scaledPoint = CGPointMake(_cursorScreenPoint.x * scale, _cursorScreenPoint.y * scale);
+        [self.mapViewController.mapView convert:scaledPoint toLocation:&center];
+    }
+    else
+    {
+        auto centerPixel = self.mapViewController.mapView.getCenterPixel;
+        [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
+    }
     if (center == _cachedCenter)
         return;
 

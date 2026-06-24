@@ -185,6 +185,7 @@
 #import "OARoutePlanningHudViewController.h"
 #import "OAPlanRouteEditingBridge.h"
 #import "OASaveTrackViewController.h"
+#import "OAOpenAddTrackViewController.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OARecordSettingsBottomSheetViewController.h"
 #import "OAAlertBottomSheetViewController.h"

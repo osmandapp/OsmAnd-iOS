@@ -102,10 +102,22 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         return result
     }
 
+    private static func segmentColor(at index: Int) -> UIColor {
+        let palette: [UIColor] = [
+            .iconColorActive,
+            .iconColorGreen,
+            UIColor(red: 0.96, green: 0.60, blue: 0.13, alpha: 1),
+            UIColor(red: 0.88, green: 0.24, blue: 0.24, alpha: 1),
+            UIColor(red: 0.42, green: 0.27, blue: 0.80, alpha: 1),
+            UIColor(red: 0.09, green: 0.62, blue: 0.80, alpha: 1)
+        ]
+        return palette[index % palette.count]
+    }
+
     private func makeSection(for segment: PlanRouteSegment, multipleSegments: Bool) -> SectionModel {
         var rows: [Row] = []
+        let color = Self.segmentColor(at: segment.index)
         for group in segment.groups {
-            let color = group.appMode?.getProfileColor() ?? .iconColorActive
             if segment.multiMode, group.appMode != nil {
                 rows.append(.profileGroup(group, segment: segment))
             }
@@ -143,7 +155,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             children.append(UIAction(title: localizedString("change_mode"),
                                      subtitle: segment.singleMode?.toHumanString(),
                                      image: segment.singleMode?.getIcon()) { [weak self] _ in
-                self?.presentModePicker(pointIndex: segment.pointIndexes.last ?? 0, wholeRoute: true)
+                self?.presentRouteBetweenPoints()
             })
         }
         children.append(makeSortMenu(pointIndexes: segment.pointIndexes))
@@ -164,7 +176,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         let changeRouteType = UIAction(title: localizedString("change_mode"),
                                        subtitle: group.appMode?.toHumanString(),
                                        image: group.appMode?.getIcon()) { [weak self] _ in
-            self?.presentModePicker(pointIndex: group.lastPointIndex, wholeRoute: false)
+            self?.presentRouteBetweenPoints()
         }
         let deleteSection = UIAction(title: localizedString("delete_section"),
                                      image: .templateImageNamed("ic_custom_trash_outlined"),
@@ -177,7 +189,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private func makeRouteTypeMenu(pointIndex: Int) -> UIMenu {
         let changeRouteType = UIAction(title: localizedString("change_mode"),
                                        image: .templateImageNamed("ic_custom_point_to_point")) { [weak self] _ in
-            self?.presentModePicker(pointIndex: pointIndex, wholeRoute: true)
+            self?.presentRouteBetweenPoints()
         }
         return UIMenu(children: [changeRouteType])
     }
@@ -195,17 +207,16 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         return UIMenu(title: localizedString("shared_string_sort"), image: sortImage, children: [manual, doorToDoor])
     }
 
-    private func presentModePicker(pointIndex: Int, wholeRoute: Bool) {
+    private func presentRouteBetweenPoints() {
         guard let dataSource else { return }
-        let alert = UIAlertController(title: localizedString("change_mode"), message: nil, preferredStyle: .actionSheet)
-        for mode in dataSource.availableModes {
-            alert.addAction(UIAlertAction(title: mode.toHumanString(), style: .default) { [weak self] _ in
-                dataSource.applyMode(mode, pointIndex: pointIndex, wholeRoute: wholeRoute)
-                self?.reloadData()
-            })
+        let listVC = RouteBetweenPointsViewController(dataSource: dataSource)
+        let navController = UINavigationController(rootViewController: listVC)
+        navController.modalPresentationStyle = .pageSheet
+        if let sheet = navController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
         }
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        present(alert, animated: true)
+        present(navController, animated: true)
     }
 
     private func setSingleMode(for segment: PlanRouteSegment) {
@@ -286,7 +297,8 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension PlanRouteRouteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        sections[section].headerTitle != nil ? 44 : 0
+        guard sections[section].headerTitle != nil else { return 0 }
+        return sections[section].headerSubtitle != nil ? 60 : 44
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -305,8 +317,13 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
             startNewSegment()
             return
         }
-        if case let .point(point, _) = section.rows[indexPath.row] {
+        switch section.rows[indexPath.row] {
+        case let .point(point, _):
             dataSource?.selectRoutePoint(at: point.index)
+        case .profileGroup:
+            presentRouteBetweenPoints()
+        case .empty:
+            break
         }
     }
 

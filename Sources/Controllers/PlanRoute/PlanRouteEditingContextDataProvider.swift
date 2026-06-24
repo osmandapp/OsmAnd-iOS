@@ -46,8 +46,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                       arrivalTime: nil,
                       uphill: 0,
                       downhill: 0,
-                      mapCenterDistance: 0,
-                      bearing: 0)
+                      mapCenterDistance: bridge.distanceToMapCenter,
+                      bearing: bridge.bearingToMapCenter)
     }
 
     var elevationData: PlanRouteElevationData? {
@@ -82,6 +82,34 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.redo()
     }
 
+    func reverseRoute() {
+        bridge.reverseRoute()
+    }
+
+    func clearAllPoints() {
+        bridge.clearAllPoints()
+    }
+
+    func saveAs(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {
+        bridge.save(as: fileName, folder: folder, showOnMap: showOnMap, onComplete: onComplete)
+    }
+
+    func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {
+        bridge.save(asCopy: fileName, folder: folder, showOnMap: showOnMap, onComplete: onComplete)
+    }
+
+    func enterNavigation() {
+        bridge.enterNavigation(withTrackName: mode.title)
+    }
+
+    func setCrosshairPosition(screenPoint: CGPoint) {
+        bridge.setCrosshairScreenPoint(screenPoint)
+    }
+
+    func dismissLayer() {
+        bridge.dismiss()
+    }
+
     func moveRoutePoint(from: Int, to: Int) {
         bridge.movePoint(from: from, to: to)
     }
@@ -102,6 +130,11 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.apply(mode, pointIndex: pointIndex, wholeRoute: wholeRoute)
     }
 
+    func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext) {
+        guard let mode else { return }
+        bridge.apply(mode, pointIndex: context.applyPointIndex, wholeRoute: context.applyWholeRoute)
+    }
+
     func sortDoorToDoor(pointIndexes: [Int]) {
         bridge.sortSegmentDoorToDoor(withPointIndexes: pointIndexes.map { NSNumber(value: $0) })
     }
@@ -111,6 +144,13 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func selectRoutePoint(at index: Int) {
         bridge.selectPoint(at: index)
+    }
+
+    func routingParams(for context: SegmentRouteContext) -> PlanRouteSegmentRoutingParams {
+        PlanRouteSegmentRoutingParams(useElevationData: false, considerTemporaryLimitations: true)
+    }
+
+    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, for context: SegmentRouteContext) {
     }
 
     private func mapSegment(_ segment: OAPlanRouteSegmentData) -> PlanRouteSegment {

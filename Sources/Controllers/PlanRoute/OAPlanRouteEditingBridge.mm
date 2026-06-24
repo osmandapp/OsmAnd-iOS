@@ -25,6 +25,14 @@
 #import "OARemovePointCommand.h"
 #import "OAReorderPointCommand.h"
 #import "OAChangeRouteModeCommand.h"
+#import "OAReversePointsCommand.h"
+#import "OAClearPointsCommand.h"
+#import "OAGPXDatabase.h"
+#import "OAUtilities.h"
+#import "OAAppVersion.h"
+#import "OsmAndApp.h"
+#import "OAMapActions.h"
+#import "OAAppSettings.h"
 
 @class OAMeasurementToolLayer, OAMeasurementEditingContext;
 
@@ -60,6 +68,10 @@
 @end
 
 @interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate>
+{
+    double _distanceToMapCenter;
+    double _bearingToMapCenter;
+}
 
 - (OAMeasurementToolLayer *)layer;
 - (OAMeasurementEditingContext *)editingContext;
@@ -71,6 +83,11 @@
 - (OAPlanRouteGroupData *)buildGroupWithKey:(NSString *)key
                                     indexes:(NSArray<NSNumber *> *)indexes
                                   allPoints:(NSArray<OASWptPt *> *)allPoints;
+- (void)performSaveWithFileName:(NSString *)fileName
+                         folder:(nullable NSString *)folder
+                      showOnMap:(BOOL)showOnMap
+                     asCopy:(BOOL)asCopy
+                     onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
 
 @end
 
@@ -202,7 +219,9 @@
 
 - (NSArray<OAApplicationMode *> *)availableModes
 {
-    return [OAApplicationMode values];
+    return [[OAApplicationMode values] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAApplicationMode *mode, NSDictionary *bindings) {
+        return mode != [OAApplicationMode DEFAULT];
+    }]];
 }
 
 - (void)addCenterPoint
@@ -213,6 +232,25 @@
         return;
     [ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer center:YES]];
     [layer updateLayer];
+}
+
+- (void)setCrosshairScreenPoint:(CGPoint)point
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    if (layer == nil)
+        return;
+    layer.cursorScreenPoint = point;
+    [layer updateLayer];
+}
+
+- (void)dismiss
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    if (layer == nil)
+        return;
+    layer.cursorScreenPoint = CGPointZero;
+    layer.editingCtx = nil;
+    [layer resetLayer];
 }
 
 - (void)prepareNewRoute
@@ -480,6 +518,136 @@
     ctx.selectedPointPosition = index;
 }
 
+- (double)distanceToMapCenter
+{
+    return _distanceToMapCenter;
+}
+
+- (double)bearingToMapCenter
+{
+    return _bearingToMapCenter;
+}
+
+- (void)reverseRoute
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ctx.getPointsCount < 2)
+        return;
+    [ctx.commandManager execute:[[OAReversePointsCommand alloc] initWithLayer:layer]];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)clearAllPoints
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeAll]];
+    [ctx cancelSnapToRoad];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)saveAs:(NSString *)fileName
+        folder:(nullable NSString *)folder
+     showOnMap:(BOOL)showOnMap
+    onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
+{
+    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:NO onComplete:onComplete];
+}
+
+- (void)saveAsCopy:(NSString *)fileName
+            folder:(nullable NSString *)folder
+         showOnMap:(BOOL)showOnMap
+        onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
+{
+    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:YES onComplete:onComplete];
+}
+
+- (void)performSaveWithFileName:(NSString *)fileName
+                         folder:(nullable NSString *)folder
+                      showOnMap:(BOOL)showOnMap
+                         asCopy:(BOOL)asCopy
+                     onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+    {
+        if (onComplete) onComplete(NO, nil);
+        return;
+    }
+    NSString *trackName = fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route");
+    OASGpxFile *gpx = [ctx exportGpx:trackName];
+    if (gpx == nil)
+    {
+        if (onComplete) onComplete(NO, nil);
+        return;
+    }
+    NSString *gpxRootPath = OsmAndApp.instance.gpxPath;
+    NSString *folderPath = (folder.length > 0) ? [gpxRootPath stringByAppendingPathComponent:folder] : gpxRootPath;
+    NSString *outFile = [[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:outFile];
+        OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpx];
+        BOOL success = (exception == nil);
+        if (success)
+        {
+            gpx.path = outFile;
+            OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
+            NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
+            OASGpxDataItem *item = [gpxDb getGPXItem:gpxFilePath];
+            if (!item)
+                item = [gpxDb addGPXFileToDBIfNeeded:gpxFilePath];
+            [gpxDb updateDataItem:item];
+            if (!asCopy)
+            {
+                OAGpxData *gpxData = [[OAGpxData alloc] initWithFile:gpx];
+                ctx.gpxData = gpxData;
+                [ctx setChangesSaved];
+            }
+            if (showOnMap)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[OAAppSettings sharedManager] showGpx:@[gpxFilePath]];
+                });
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (onComplete) onComplete(success, success ? outFile : nil);
+        });
+    });
+}
+
+- (void)enterNavigationWithTrackName:(NSString *)trackName
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    NSString *name = trackName.length > 0 ? trackName : OALocalizedString(@"quick_action_new_route");
+    OASGpxFile *gpx = [ctx exportGpx:name];
+    if (gpx == nil)
+        return;
+    NSString *outFile = [[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        OASKFile *file = [[OASKFile alloc] initWithFilePath:outFile];
+        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpx];
+        gpx.path = outFile;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx
+                                                                                         path:outFile
+                                                                                         from:nil
+                                                                                     fromName:nil
+                                                                 useIntermediatePointsByDefault:YES
+                                                                                   showDialog:YES];
+        });
+    });
+}
+
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes
 {
     OAMeasurementToolLayer *layer = [self layer];
@@ -525,6 +693,10 @@
 
 - (void)onMeasure:(double)distance bearing:(double)bearing
 {
+    _distanceToMapCenter = distance;
+    _bearingToMapCenter = bearing;
+    if (self.onChange)
+        self.onChange();
 }
 
 - (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress

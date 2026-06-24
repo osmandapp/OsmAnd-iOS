@@ -27,12 +27,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private let topPartView = PlanRouteTopPartView()
     private let segmentControl = UISegmentedControl()
     private let tabContainerView = UIView()
+    private let crosshairView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "map_ruler_center_day"))
+        imageView.contentMode = .center
+        return imageView
+    }()
 
     private let tabs = PlanRouteTab.allCases
     private var sheetState: EOADraggableMenuState = .expanded
     private var selectedTab: PlanRouteTab = .default
     private var tabViewControllers: [PlanRouteTab: UIViewController] = [:]
     private var sheetHeightConstraint: NSLayoutConstraint?
+    private var crosshairCenterYConstraint: NSLayoutConstraint?
     private var panStartHeight: CGFloat = 0
     private weak var currentTabViewController: UIViewController?
 
@@ -73,6 +79,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupBottomToolbar()
         setupContent()
         setupTopToolbar()
+        setupCrosshair()
         dataProvider.onDataChanged = { [weak self] in self?.reloadData() }
         selectTab(.default)
         reloadData()
@@ -83,6 +90,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         applyHeight(for: sheetState)
         tabContainerView.alpha = isContentVisible(in: sheetState) ? 1 : 0
         view.layoutIfNeeded()
+        updateCrosshairPosition(sheetHeight: height(for: sheetState))
         if animated {
             sheetView.transform = CGAffineTransform(translationX: 0, y: height(for: sheetState))
             UIView.animate(withDuration: Self.animationDuration) { [weak self] in
@@ -96,6 +104,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         coordinator.animate { [weak self] _ in
             guard let self else { return }
             applyHeight(for: sheetState)
+            updateCrosshairPosition(sheetHeight: height(for: sheetState))
             refreshMapControls()
         }
     }
@@ -134,6 +143,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)!) {
         let dismiss: () -> Void = { [weak self] in
+            self?.dataProvider.dismissLayer()
             OARootViewController.instance().mapPanel?.hideScrollableHudViewController()
             self?.removeFromParent()
             self?.view.removeFromSuperview()
@@ -239,6 +249,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         segmentControl.setTitleTextAttributes(segmentAttributes, for: .normal)
         segmentControl.setTitleTextAttributes(segmentAttributes, for: .selected)
         segmentControl.addTarget(self, action: #selector(onSegmentChanged), for: .valueChanged)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onSegmentTapped))
+        segmentControl.addGestureRecognizer(tapGesture)
     }
 
     private func setupBottomToolbar() {
@@ -275,6 +287,40 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         ])
     }
 
+    private func setupCrosshair() {
+        crosshairView.translatesAutoresizingMaskIntoConstraints = false
+        crosshairView.isUserInteractionEnabled = false
+        view.insertSubview(crosshairView, belowSubview: sheetView)
+        let centerY = crosshairView.centerYAnchor.constraint(equalTo: view.topAnchor, constant: crosshairCenterY(sheetHeight: height(for: sheetState)))
+        crosshairCenterYConstraint = centerY
+        NSLayoutConstraint.activate([
+            crosshairView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerY
+        ])
+    }
+
+    private func crosshairCenterY(sheetHeight: CGFloat) -> CGFloat {
+        let h = OAUtilities.calculateScreenHeight()
+        if sheetHeight <= height(for: .initial) {
+            return h / 2.0
+        }
+        let visibleTop = getNavbarHeight()
+        let visibleBottom = h - min(sheetHeight, height(for: .expanded))
+        return visibleTop + (visibleBottom - visibleTop) / 2
+    }
+
+    private func updateCrosshairPosition(sheetHeight: CGFloat) {
+        let centerY = crosshairCenterY(sheetHeight: sheetHeight)
+        crosshairCenterYConstraint?.constant = centerY
+        let x = view.bounds.midX
+        guard x > 0 else { return }
+        if sheetHeight > height(for: .initial) {
+            dataProvider.setCrosshairPosition(screenPoint: CGPoint(x: x, y: centerY))
+        } else {
+            dataProvider.setCrosshairPosition(screenPoint: .zero)
+        }
+    }
+
     private func height(for state: EOADraggableMenuState) -> CGFloat {
         let screenHeight = OAUtilities.calculateScreenHeight()
         let collapsed = Self.grabberAreaHeight + Self.topPartHeight + 8 + Self.segmentedControlHeight + 12
@@ -301,7 +347,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func setState(_ state: EOADraggableMenuState, animated: Bool) {
         sheetState = state
-        sheetHeightConstraint?.constant = height(for: state)
+        let h = height(for: state)
+        sheetHeightConstraint?.constant = h
+        updateCrosshairPosition(sheetHeight: h)
         let updates: () -> Void = { [weak self] in
             guard let self else { return }
             view.layoutIfNeeded()
@@ -397,11 +445,24 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleSave() {
-        print("[PlanRoute] Save tapped")
+        switch dataProvider.mode {
+        case .newRoute:
+            presentSaveDialog(duplicate: false)
+        case .editTrack(let fileName):
+            dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: true) { [weak self] success, _ in
+                guard let self else { return }
+                if success {
+                    reloadData()
+                } else {
+                    showSaveError()
+                }
+            }
+        }
     }
 
     private func handleAddPoi() {
-        print("[PlanRoute] Add POI tapped")
+        dataProvider.addRoutePoint()
+        reloadData()
     }
 
     private func handleUndo() {
@@ -420,15 +481,72 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
-        print("[PlanRoute] Options menu action: \(action)")
+        switch action {
+        case .saveAs:
+            presentSaveDialog(duplicate: false)
+        case .saveAsCopy:
+            presentSaveDialog(duplicate: true)
+        case .appendToExistingTrack:
+            presentAppendToTrack()
+        case .changeSegmentOrder:
+            break
+        case .viewDirections:
+            break
+        case .reverseRoute:
+            dataProvider.reverseRoute()
+            reloadData()
+        case .navigation:
+            hide()
+            dataProvider.enterNavigation()
+        case .clearAllPoints:
+            confirmClearAllPoints()
+        }
+    }
+
+    private func presentSaveDialog(duplicate: Bool) {
+        let fileName: String
+        switch dataProvider.mode {
+        case .newRoute: fileName = localizedString("quick_action_new_route")
+        case .editTrack(let name): fileName = name
+        }
+        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: nil, showOnMap: true, simplifiedTrack: false, duplicate: duplicate) else { return }
+        vc.delegate = self
+        present(UINavigationController(rootViewController: vc), animated: true)
+    }
+
+    private func presentAppendToTrack() {
+        guard let vc = OAOpenAddTrackViewController(screenType: .addToATrack) else { return }
+        vc.delegate = self
+        present(UINavigationController(rootViewController: vc), animated: true)
+    }
+
+    private func confirmClearAllPoints() {
+        let alert = UIAlertController(title: localizedString("distance_measurement_clear_route"),
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .destructive) { [weak self] _ in
+            self?.dataProvider.clearAllPoints()
+            self?.reloadData()
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func showSaveError() {
+        let alert = UIAlertController(title: localizedString("gpx_export_failed"),
+                                      message: nil,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
+        present(alert, animated: true)
     }
 
     @objc private func onSegmentChanged() {
         let index = segmentControl.selectedSegmentIndex
         guard tabs.indices.contains(index) else { return }
-        let tab = tabs[index]
-        print("[PlanRoute] Segment switched to: \(tab)")
-        selectTab(tab)
+        selectTab(tabs[index])
+    }
+
+    @objc private func onSegmentTapped() {
         if sheetState == .initial {
             setState(.expanded, animated: true)
         }
@@ -443,7 +561,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         case .changed:
             let lower = height(for: .initial)
             let upper = height(for: .fullScreen)
-            sheetHeightConstraint.constant = min(max(panStartHeight - translation, lower), upper)
+            let newHeight = min(max(panStartHeight - translation, lower), upper)
+            sheetHeightConstraint.constant = newHeight
+            updateCrosshairPosition(sheetHeight: newHeight)
         case .ended, .cancelled:
             let velocity = gesture.velocity(in: view).y
             setState(nearestState(for: sheetHeightConstraint.constant, velocity: velocity), animated: true)
@@ -458,5 +578,31 @@ extension PlanRouteScrollableViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let location = gestureRecognizer.location(in: tabContainerView)
         return !tabContainerView.bounds.contains(location)
+    }
+}
+
+// MARK: - OASaveTrackViewControllerDelegate
+extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
+    func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
+        dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap) { [weak self] success, _ in
+            guard let self else { return }
+            if success {
+                topToolbar.titleText = fileName
+                reloadData()
+            } else {
+                showSaveError()
+            }
+        }
+    }
+}
+
+// MARK: - OAOpenAddTrackDelegate
+extension PlanRouteScrollableViewController: OAOpenAddTrackDelegate {
+    func onFileSelected(_ gpxFilePath: String) {
+        let fileName = ((gpxFilePath as NSString).lastPathComponent as NSString).deletingPathExtension
+        dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: false) { [weak self] success, _ in
+            guard let self else { return }
+            if !success { showSaveError() }
+        }
     }
 }

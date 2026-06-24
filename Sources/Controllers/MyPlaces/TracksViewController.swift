@@ -2706,6 +2706,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
+        isSelectionModeInSearch = false
+        setEdit(false)
         isNameFiltered = false
         baseFilters = nil
         baseFiltersResult = nil
@@ -2719,6 +2721,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         setupNavBarMenuButton()
         updateFilterButtonVisibility(filterIsActive: isSearchActive)
         updateSortButtonAndMenu()
+        selectedTracks.removeAll()
+        selectedFolders.removeAll()
+        addRefreshControl()
+        updateData()
+        setupNavbar()
+        updateNavigationBarTitle()
     }
 }
 

@@ -65,15 +65,20 @@ final class SearchByRouteIdTask: OAAsyncTask {
                     }
                 }
                 
-                var routeIdHash = Set<CLLocation>()
+                var seenCoords = Set<String>()
                 for am in amenityList {
-                    let location = am.getLocation()
-                    if !routeIdHash.contains(location) {
-                        if let amenity, amenity.obfId == am.obfId {
+                    let loc = am.getLocation()
+                    let lat = loc.coordinate.latitude
+                    let lon = loc.coordinate.longitude
+                    let key = String(format: "%.5f,%.5f", lat, lon)
+                    if !seenCoords.contains(key) {
+                        if let amenity, amenity.obfId != am.obfId {
+                            amenities.append(am)
+                        } else if amenity == nil {
                             amenities.append(am)
                         }
                     }
-                    routeIdHash.insert(location)
+                    seenCoords.insert(key)
                 }
             }
         } else if searchType == .partOf {
@@ -100,3 +105,4 @@ final class SearchByRouteIdTask: OAAsyncTask {
         }
     }
 }
+

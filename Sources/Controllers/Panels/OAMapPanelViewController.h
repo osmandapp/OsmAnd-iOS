@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) doMapReuse:(UIViewController *)destinationViewController destinationView:(UIView *)destinationView;
 
+- (void) restoreMapAfterReuseIfNeeded;
+
 - (void) modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
 
 - (void) modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
@@ -67,6 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) reopenContextMenu;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
+- (NSString *) findRoadNameByLat:(double)lat lon:(double)lon;
 - (BOOL) isRouteInfoVisible;
 - (void) processNoSymbolFound:(CLLocationCoordinate2D)coord forceHide:(BOOL)forceHide;
 

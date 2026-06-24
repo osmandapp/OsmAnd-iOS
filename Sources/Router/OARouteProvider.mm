@@ -868,8 +868,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         }
         writeMapFilesCache(app.routingMapsCachePath.UTF8String);
 
-        for (const auto* file : getOpenMapFiles())
+        const auto openFilesSnapshot = getOpenFilesSnapshot();
+        for (const auto& fileRef : openFilesSnapshot)
         {
+            const auto* file = fileRef.get();
             BOOL hasLocal = NO;
             for (const auto& resource : localResources)
             {

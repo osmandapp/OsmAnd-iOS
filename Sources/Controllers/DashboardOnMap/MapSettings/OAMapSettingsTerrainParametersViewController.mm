@@ -1161,7 +1161,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         }
 
         colorCollectionViewController.delegate = self;
-        [self.navigationController pushViewController:colorCollectionViewController animated:YES];
+        [self showMediumToLargeSheetViewController:colorCollectionViewController];
     }
 }
 

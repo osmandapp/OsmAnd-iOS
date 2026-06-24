@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const ONLINE_PLUGINS_URL = @"https://osmand.net/api/plugins/list";
 static NSString * const OSMAND_URL = @"https://osmand.net";
+FOUNDATION_EXPORT NSNotificationName const OAPluginsHelperPluginStateChangedNotification;
+FOUNDATION_EXPORT NSString * const OAPluginsHelperPluginIdKey;
+FOUNDATION_EXPORT NSString * const OAPluginsHelperPluginEnabledKey;
 
 @class OAPlugin, OACustomPlugin, OAWorldRegion, QuickActionType, OAApplicationMode, OAPOIUIFilter, OASGpxTrackAnalysis, OASPointAttributes, OAWidgetType, OABaseWidgetView, OAOnlinePlugin;
 

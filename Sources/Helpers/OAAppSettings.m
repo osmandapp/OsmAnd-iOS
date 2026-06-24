@@ -25,6 +25,16 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
+static NSString * const kPreferenceNotificationBatchDepthThreadKey = @"OAPreferenceNotificationBatchDepth";
+static NSString * const kPreferenceNotificationBatchKeysThreadKey = @"OAPreferenceNotificationBatchKeys";
+
+@interface OAAppSettings ()
+
++ (void)notifyPreferenceChanged:(OACommonPreference *)preference;
++ (void)postPreferenceNotificationWithObject:(id)object keys:(NSSet<NSString *> *)keys enqueue:(BOOL)enqueue;
+
+@end
+
 static NSString * const settingAppModeKey = @"settingAppModeKey";
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
 static NSString * const metricSystemKey = @"settingMetricSystemKey";
@@ -1692,8 +1702,8 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
        [self setLastModifiedTime:NSDate.date.timeIntervalSince1970];
     
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
-    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
-    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+    
+    [OAAppSettings notifyPreferenceChanged:self];
 }
 
 - (BOOL)isSetForMode:(OAApplicationMode *)mode
@@ -1880,8 +1890,8 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         [self.cachedValues setObject:appMode forKey:mode];
 
     [[NSUserDefaults standardUserDefaults] setObject:appMode.stringKey forKey:[self getKey:mode]];
-    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
-    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+    
+    [OAAppSettings notifyPreferenceChanged:self];
 }
 
 - (void)resetToDefault
@@ -4278,8 +4288,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
-    NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:self userInfo:nil];
-    [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+    
+    [OAAppSettings notifyPreferenceChanged:self];
 }
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
@@ -5700,6 +5710,91 @@ static NSString *kOfflineKey = @"OFFLINE";
         _sharedManager = [[OAAppSettings alloc] init];
     });
     return _sharedManager;
+}
+
++ (void)performBatchedPreferenceNotifications:(void (^)(void))changes
+{
+    if (!changes)
+        return;
+
+    NSMutableDictionary *threadDictionary = NSThread.currentThread.threadDictionary;
+    NSInteger previousDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue];
+    if (previousDepth == 0)
+        threadDictionary[kPreferenceNotificationBatchKeysThreadKey] = [NSMutableSet set];
+
+    threadDictionary[kPreferenceNotificationBatchDepthThreadKey] = @(previousDepth + 1);
+    @try
+    {
+        changes();
+    }
+    @finally
+    {
+        NSInteger currentDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue] - 1;
+        if (currentDepth > 0)
+        {
+            threadDictionary[kPreferenceNotificationBatchDepthThreadKey] = @(currentDepth);
+        }
+        else
+        {
+            NSSet<NSString *> *changedKeys = [threadDictionary[kPreferenceNotificationBatchKeysThreadKey] copy];
+            [threadDictionary removeObjectForKey:kPreferenceNotificationBatchDepthThreadKey];
+            [threadDictionary removeObjectForKey:kPreferenceNotificationBatchKeysThreadKey];
+            if (changedKeys.count > 0)
+                [self postPreferenceNotificationWithObject:nil keys:changedKeys enqueue:NO];
+        }
+    }
+}
+
++ (void)notifyPreferenceKeysChanged:(NSSet<NSString *> *)keys
+{
+    if (keys.count == 0)
+        return;
+
+    NSMutableDictionary *threadDictionary = NSThread.currentThread.threadDictionary;
+    NSInteger batchDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue];
+    if (batchDepth > 0)
+    {
+        NSMutableSet<NSString *> *batchedKeys = threadDictionary[kPreferenceNotificationBatchKeysThreadKey];
+        if (!batchedKeys)
+        {
+            batchedKeys = [NSMutableSet set];
+            threadDictionary[kPreferenceNotificationBatchKeysThreadKey] = batchedKeys;
+        }
+        [batchedKeys unionSet:keys];
+    }
+    else
+    {
+        [self postPreferenceNotificationWithObject:nil keys:keys enqueue:NO];
+    }
+}
+
++ (void)notifyPreferenceChanged:(OACommonPreference *)preference
+{
+    if (preference.key.length == 0)
+        return;
+
+    NSSet<NSString *> *keys = [NSSet setWithObject:preference.key];
+    NSMutableDictionary *threadDictionary = NSThread.currentThread.threadDictionary;
+    NSInteger batchDepth = [threadDictionary[kPreferenceNotificationBatchDepthThreadKey] integerValue];
+    if (batchDepth > 0)
+        [self notifyPreferenceKeysChanged:keys];
+    else
+        [self postPreferenceNotificationWithObject:preference keys:keys enqueue:YES];
+}
+
++ (void)postPreferenceNotificationWithObject:(id)object keys:(NSSet<NSString *> *)keys enqueue:(BOOL)enqueue
+{
+    if (keys.count == 0)
+        return;
+
+    NSSet<NSString *> *keysCopy = [keys copy];
+    executeOnMainThread(^{
+        NSNotification *notif = [NSNotification notificationWithName:kNotificationSetProfileSetting object:object userInfo:@{kPreferenceKeysUserInfoKey:keysCopy}];
+        if (enqueue)
+            [[NSNotificationQueue defaultQueue] enqueueNotification:notif postingStyle:NSPostASAP coalesceMask:(NSNotificationCoalescingOnName | NSNotificationCoalescingOnSender) forModes:nil];
+        else
+            [[NSNotificationCenter defaultCenter] postNotification:notif];
+    });
 }
 
 - (instancetype) init

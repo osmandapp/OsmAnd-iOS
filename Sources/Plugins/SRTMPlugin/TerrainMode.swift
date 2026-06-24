@@ -302,8 +302,16 @@ final class TerrainMode: NSObject {
     func isTransparencySetting(_ setting: OACommonInteger) -> Bool {
         setting == transparencyPref
     }
+    
+    func isTransparencySettingKey(_ key: String) -> Bool {
+        key == transparencyPref.key
+    }
 
     func isZoomSetting(_ setting: OACommonInteger) -> Bool {
         setting == minZoomPref || setting == maxZoomPref
+    }
+    
+    func isZoomSettingKey(_ key: String) -> Bool {
+        key == minZoomPref.key || key == maxZoomPref.key
     }
 }

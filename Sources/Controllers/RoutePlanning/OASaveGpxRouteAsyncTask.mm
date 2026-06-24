@@ -159,6 +159,7 @@
         gpx.splitInterval = oldGpx.splitInterval;
         gpx.creationDate = oldGpx.creationDate;
     }
+
     [gpxDb updateDataItem:gpx];
 }
 

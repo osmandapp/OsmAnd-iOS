@@ -226,7 +226,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *typesMap = [NSMutableDictionary new];
     [typesMap addEntriesFromDictionary:[self getSettingsItems:addProfiles]];
-    [typesMap addEntriesFromDictionary:[self getMyPlacesItems]];
+    [typesMap addEntriesFromDictionary:[self getMyPlacesItems:NO]];
     [typesMap addEntriesFromDictionary:[self getResourcesItems]];
     
     return [self getFilteredSettingsItems:typesMap settingsTypes:settingsTypes settingsItems:@[] doExport:doExport];
@@ -254,7 +254,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     MutableOrderedDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *dataList = [MutableOrderedDictionary new];
     
     NSDictionary<OAExportSettingsType *, NSArray *> *settingsItems = [self getSettingsItems:addProfiles];
-    NSDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [self getMyPlacesItems];
+    NSDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [self getMyPlacesItems:YES];
     NSDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [self getResourcesItems];
     
     if (settingsItems.count > 0)
@@ -348,7 +348,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return settingsItems;
 }
 
-- (NSDictionary<OAExportSettingsType *, NSArray *> *)getMyPlacesItems
+- (NSDictionary<OAExportSettingsType *, NSArray *> *)getMyPlacesItems:(BOOL)sorted
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [MutableOrderedDictionary new];
     
@@ -357,18 +357,34 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         myPlacesItems[OAExportSettingsType.FAVORITES] = favoriteGroups;
     
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSArray<OAGpxFileInfo *> *gpxInfoList = [OAGPXUIHelper getSortedGPXFilesInfo:OsmAndApp.instance.gpxPath selectedGpxList:nil absolutePath:YES];
-    if (gpxInfoList.count > 0)
+    NSArray<OASGpxDataItem *> *gpsDataItems;
+    if (sorted)
+    {
+        gpsDataItems = [OAGPXUIHelper sortedGPXDataItems];
+    }
+    else
+    {
+        gpsDataItems = [OAGPXDatabase.sharedDb getDataItems];
+    }
+
+    if (gpsDataItems)
     {
         NSMutableArray<NSString *> *files = [NSMutableArray new];
-        for (OAGpxFileInfo *gpxInfo in gpxInfoList)
+        for (OASGpxDataItem *item in gpsDataItems)
         {
-            if ([fileManager fileExistsAtPath:gpxInfo.fileName])
-                [files addObject:gpxInfo.fileName];
+            NSString *filePath = item.file.absolutePath;
+            if (filePath.length == 0)
+                continue;
+            BOOL isDir = NO;
+            if (![fileManager fileExistsAtPath:filePath isDirectory:&isDir] || isDir)
+                continue;
+            [files addObject:filePath];
         }
+        
         if (files.count > 0)
             myPlacesItems[OAExportSettingsType.TRACKS] = files;
     }
+    
     OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
     if (osmEditingPlugin)
     {

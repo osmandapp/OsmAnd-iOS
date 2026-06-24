@@ -38,7 +38,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
     EOAOAResourceSwiftItemTypeGpxFile,
     EOAOAResourceSwiftItemTypeSqliteFile,
     EOAOAResourceSwiftItemTypeWeatherForecast,
-    EOAOAResourceSwiftItemTypeTravel
+    EOAOAResourceSwiftItemTypeTravel,
+    EOAOAResourceSwiftItemTypeStarMap
 };
 
 
@@ -86,6 +87,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 
 + (OAWorldRegion *) worldRegionByScopeId:(NSString *)regionId;
 + (NSNumber *) resourceTypeByScopeId:(NSString *)scopeId;
++ (void)prepareResourcesData;
 
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegionId:(NSString *)regionId resourceTypeNames:(NSArray<NSString *> *)resourceTypeNames;
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region resourceTypes:(NSArray<NSNumber *> *)resourceTypes;

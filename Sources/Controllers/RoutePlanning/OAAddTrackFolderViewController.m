@@ -34,10 +34,13 @@
 
 - (void)viewDidLoad
 {
+    _newFolderName = [_suggestedFolderName trim] ?: @"";
+    
     [super viewDidLoad];
+    
+    [self updateFileNameFromEditText:_newFolderName];
 
     self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
-    _newFolderName = @"";
     _isFirstLaunch = YES;
 }
 
@@ -71,7 +74,7 @@
     [data addObject:@[
         @{
             @"type" : [OATextMultilineTableViewCell getCellIdentifier],
-            @"title" : @"",
+            @"title" : _newFolderName,
             @"key" : @"input_name",
         }
     ]];

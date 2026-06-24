@@ -95,6 +95,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"terrain_map");
         case OsmAndResourceType::Travel:
             return OALocalizedString(@"shared_string_wikivoyage");
+        case OsmAndResourceType::StarMap:
+            return OALocalizedString(@"star_map");
         default:
             return OALocalizedString(@"res_unknown");
     }
@@ -139,6 +141,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::Travel:
             imageNamed = @"ic_custom_wikipedia";
             break;
+        case OsmAndResourceType::StarMap:
+            imageNamed = @"ic_custom_star_shine";
+            break;
         case OsmAndResourceType::GeoTiffRegion:
         case OsmAndResourceType::HeightmapRegionLegacy:
             imageNamed = @"ic_custom_terrain";
@@ -181,6 +186,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 //            return 65;
         case OsmAndResourceType::Travel:
             return 66;
+        case OsmAndResourceType::StarMap:
+            return 95;
         case OsmAndResourceType::LiveUpdateRegion:
             return 70;
         case OsmAndResourceType::GpxFile:
@@ -216,6 +223,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 //        return OsmAnd::ResourcesManager::ResourceType::MapRegion;
     else if ([scopeId isEqualToString:@"travel"])
         return OsmAnd::ResourcesManager::ResourceType::Travel;
+    else if ([scopeId isEqualToString:@"starmap"])
+        return OsmAnd::ResourcesManager::ResourceType::StarMap;
     else if ([scopeId isEqualToString:@"live_updates"])
         return OsmAndResourceType::LiveUpdateRegion;
     else if ([scopeId isEqualToString:@"gpx"])
@@ -260,7 +269,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::MapStylesPresets],
             [self.class toValue:OsmAndResourceType::OnlineTileSources],
             [self.class toValue:OsmAndResourceType::WeatherForecast],
-            [self.class toValue:OsmAndResourceType::Travel]
+            [self.class toValue:OsmAndResourceType::Travel],
+            [self.class toValue:OsmAndResourceType::StarMap]
     ];
 }
 
@@ -753,6 +763,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
     else if ([region.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()])
     {
+        if (resource->type == OsmAndResourceType::StarMap)
+            return OALocalizedString(@"astronomy_map");
+
         auto name = resource->id;
         name = name.remove(QStringLiteral(".travel.obf")).replace('_', ' ');
         return name.toNSString().capitalizedString;
@@ -791,6 +804,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                 else
                     nameStr =  OALocalizedString(@"%@", region.name);
             }
+            break;
+        case OsmAndResourceType::StarMap:
+            nameStr = OALocalizedString(@"astronomy_map");
             break;
 
         default:
@@ -952,6 +968,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
     const auto acceptedExtension = QString::fromNSString(region.acceptedExtension);
+
+    if ([region.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && resourceId.endsWith(QLatin1String(".stardb")))
+        return region;
 
     if (!acceptedExtension.isEmpty())
     {
@@ -1997,6 +2016,7 @@ includeHidden:(BOOL)includeHidden
 {
     dispatch_block_t proc = ^{
         OsmAndAppInstance app = [OsmAndApp instance];
+        BOOL shouldClearAstronomyCache = NO;
         for (OALocalResourceItem *item in items)
         {
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
@@ -2032,6 +2052,8 @@ includeHidden:(BOOL)includeHidden
                 {
                     if (item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion)
                         [app.data.terrainResourcesChangeObservable notifyEvent];
+                    if (item.resourceType == OsmAndResourceType::StarMap)
+                        shouldClearAstronomyCache = YES;
                 }
 
                 if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
@@ -2039,6 +2061,12 @@ includeHidden:(BOOL)includeHidden
                 
                 [item.worldRegion.superregion updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
             }
+        }
+
+        if (shouldClearAstronomyCache)
+        {
+            AstronomyPlugin *plugin = (AstronomyPlugin *)[OAPluginsHelper getPlugin:AstronomyPlugin.class];
+            [plugin clearCachedData];
         }
 
         if (block)

@@ -420,6 +420,18 @@ static NSMutableArray *activePopups;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([kInAppId_Addon_Astronomy isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+        title = OALocalizedString(@"astronomy_plugin_name");
+        descText = OALocalizedString(@"purchases_feature_desc_astronomy");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_telescope";
+        popup.okButton.tag = EOAFeatureAstronomy;
+
+        [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     if (needShow)
     {

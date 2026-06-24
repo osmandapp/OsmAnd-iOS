@@ -246,36 +246,20 @@ static NSLock *OAGPXNearestCitySearchLock()
     return distance;
 }
 
-+ (NSArray<OAGpxFileInfo *> *) getSortedGPXFilesInfo:(NSString *)dir selectedGpxList:(NSArray<NSString *> *)selectedGpxList absolutePath:(BOOL)absolutePath
++ (NSArray<OASGpxDataItem *> *)sortedGPXDataItems
 {
-    NSMutableArray<OAGpxFileInfo *> *list = [NSMutableArray new];
-    [self readGpxDirectory:dir list:list parent:@"" absolutePath:absolutePath];
-    if (selectedGpxList)
-    {
-        for (OAGpxFileInfo *info in list)
-        {
-            for (NSString *fileName in selectedGpxList)
-            {
-                if ([fileName hasSuffix:info.fileName])
-                {
-                    info.selected = YES;
-                    break;
-                }
-            }
-        }
-    }
+    NSMutableArray<OASGpxDataItem *> *list = [[OAGPXDatabase.sharedDb getDataItems] mutableCopy];
     
-    [list sortUsingComparator:^NSComparisonResult(OAGpxFileInfo *i1, OAGpxFileInfo *i2) {
-        NSComparisonResult res = (NSComparisonResult) (i1.selected == i2.selected ? 0 : i1.selected ? -1 : 1);
-        if (res != NSOrderedSame)
-            return res;
-        
-        NSString *name1 = i1.fileName;
-        NSString *name2 = i2.fileName;
+    [list sortUsingComparator:^NSComparisonResult(OASGpxDataItem *i1, OASGpxDataItem *i2) {
+        NSString *name1 = i1.gpxFileName;
+        NSString *name2 = i2.gpxFileName;
         NSInteger d1 = [self depth:name1];
         NSInteger d2 = [self depth:name2];
-        if (d1 != d2)
-            return d1 - d2 > 0 ? NSOrderedDescending : NSOrderedAscending;
+        
+        if (d1 < d2)
+            return NSOrderedAscending;
+        if (d1 > d2)
+            return NSOrderedDescending;
         
         NSInteger lastSame = 0;
         for (NSInteger i = 0; i < name1.length && i < name2.length; i++)
@@ -289,7 +273,7 @@ static NSLock *OAGPXNearestCitySearchLock()
         
         BOOL isDigitStarts1 = [self isLastSameStartsWithDigit:name1 lastSame:lastSame];
         BOOL isDigitStarts2 = [self isLastSameStartsWithDigit:name2 lastSame:lastSame];
-        res = (NSComparisonResult) (isDigitStarts1 == isDigitStarts2 ? 0 : isDigitStarts1 ? -1 : 1);
+        NSComparisonResult res = (NSComparisonResult) (isDigitStarts1 == isDigitStarts2 ? 0 : isDigitStarts1 ? -1 : 1);
         if (res != NSOrderedSame)
             return res;
 
@@ -612,6 +596,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             }
         }
         [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
+        [OsmAndApp.instance.updateGpxTracksOnMapObservable notifyEvent];
     }
     else
     {

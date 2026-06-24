@@ -360,11 +360,20 @@ static NSCharacterSet* URL_PATH_CHARACTER_SET;
 - (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete
 {
     [self checkRegistered];
+     
+    NSMutableArray<NSString *> *enabledTypes = [NSMutableArray array];
+    for (OAExportSettingsType *exportType in [OAExportSettingsType getEnabledTypes])
+    {
+        if ([[BackupUtils getBackupTypePref:exportType] get])
+            [enabledTypes addObject:exportType.itemName];
+    }
     
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"deviceid"] = self.getDeviceId;
     params[@"accessToken"] = self.getAccessToken;
     params[@"allVersions"] = @"true";
+    if (enabledTypes.count > 0)
+        params[@"type"] = [enabledTypes componentsJoinedByString:@","];
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"downloadFileList" debug:BACKUP_DEBUG_LOGS];
     [operationLog startOperation];
     [OANetworkUtilities sendRequestWithUrl:LIST_FILES_URL params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {

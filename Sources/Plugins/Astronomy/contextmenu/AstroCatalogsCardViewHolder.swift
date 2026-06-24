@@ -14,6 +14,7 @@ enum AstroCatalogsCardViewHolder {
     static func makeView(item: AstroCatalogsCardItem,
                          onToggleExpanded: @escaping () -> Void,
                          onCatalogClick: @escaping (Catalog) -> Void) -> UIView {
+
         let headerLabel = UILabel()
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
         headerLabel.text = localizedString("astro_designations")
@@ -39,6 +40,7 @@ enum AstroCatalogsCardViewHolder {
 
         let chips = WrappingChipsView()
         chips.translatesAutoresizingMaskIntoConstraints = false
+
         let needShowMore = item.catalogs.count > maxVisible
         let visible = !item.expanded && needShowMore ? Array(item.catalogs.prefix(maxVisible)) : item.catalogs
         visible.forEach { catalog in
@@ -53,7 +55,7 @@ enum AstroCatalogsCardViewHolder {
                 onToggleExpanded()
             }
         }
-        
+
         card.addSubview(chips)
         NSLayoutConstraint.activate([
             chips.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
@@ -81,7 +83,7 @@ final class WrappingChipsView: UIView {
         super.layoutSubviews()
         _ = layoutHeight(for: bounds.width, apply: true)
     }
-    
+
     func addChip(title: String, action: @escaping () -> Void) {
         var config = UIButton.Configuration.filled()
         config.title = title

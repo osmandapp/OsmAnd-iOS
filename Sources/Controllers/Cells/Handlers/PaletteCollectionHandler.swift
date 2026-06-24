@@ -13,6 +13,37 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
     private var selectedIndexPath: IndexPath?
     private var defaultIndexPath: IndexPath?
     private var data = [[PaletteItemGradient]]()
+    private var hostViewController: (UIViewController & ColorCollectionViewControllerDelegate)? {
+        delegate as? (UIViewController & ColorCollectionViewControllerDelegate)
+    }
+
+    @objc static func applyGradient(to imageView: UIImageView, with colorPalette: OsmAndShared.ColorPalette) {
+        imageView.gradated(Self.createGradientPoints(colorPalette))
+    }
+
+    @objc static func createDescriptionForPalette(_ paletteItem: PaletteItemGradient) -> String {
+        let fileType = paletteItem.properties.fileType
+        return paletteItem.points.map {
+            GradientFormatter.formatSimpleValue(value: $0.value, fileType: fileType)
+        }.joined(separator: " • ")
+    }
+
+    private static func createGradientPoints(_ colorPalette: OsmAndShared.ColorPalette) -> [GradientPoint] {
+        let colorValues = colorPalette.colors.compactMap { $0 as? OsmAndShared.ColorPalette.ColorValue }
+        guard !colorValues.isEmpty else { return [] }
+        if colorValues.count == 1 {
+            let color = UIColor(argb: Int(colorValues[0].clr))
+            return [GradientPoint(location: 0, color: color), GradientPoint(location: 1, color: color)]
+        }
+
+        var gradientPoints = [GradientPoint]()
+        let step = 1.0 / CGFloat(colorValues.count - 1)
+        for (index, colorValue) in colorValues.enumerated() {
+            gradientPoints.append(GradientPoint(location: CGFloat(index) * step, color: UIColor(argb: Int(colorValue.clr))))
+        }
+
+        return gradientPoints
+    }
 
     override func getCellIdentifier() -> String {
         PaletteCollectionViewCell.reuseIdentifier
@@ -28,11 +59,6 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
 
     override func setSelectedIndexPath(_ selectedIndexPath: IndexPath) {
         self.selectedIndexPath = selectedIndexPath
-    }
-
-    func setSelectionItem(_ item: PaletteItemGradient?) {
-        guard let indexPath = indexPath(for: item) else { return }
-        selectedIndexPath = indexPath
     }
 
     override func generateData(_ data: [[Any]]) {
@@ -164,32 +190,102 @@ final class PaletteCollectionHandler: OABaseCollectionHandler {
         data.count
     }
 
-    @objc static func applyGradient(to imageView: UIImageView, with colorPalette: OsmAndShared.ColorPalette) {
-        imageView.gradated(Self.createGradientPoints(colorPalette))
+    override func getMenuForItem(_ indexPath: IndexPath, collectionView _: UICollectionView) -> UIMenu? {
+        guard hostViewController != nil, data.indices.contains(indexPath.section), data[indexPath.section].indices.contains(indexPath.row) else { return nil }
+        return contextMenu(for: data[indexPath.section][indexPath.row])
     }
-
-    @objc static func createDescriptionForPalette(_ paletteItem: PaletteItemGradient) -> String {
-        let fileType = paletteItem.properties.fileType
-        return paletteItem.points.map {
-            GradientFormatter.formatSimpleValue(value: $0.value, fileType: fileType)
-        }.joined(separator: " • ")
+    
+    private func contextMenu(for paletteItem: PaletteItemGradient) -> UIMenu {
+        let canEditPalette = !paletteItem.isDefault && paletteItem.properties.fileType.category != .terrainHillshade && paletteItem.isEditable
+        var menuElements = [UIMenuElement]()
+        if canEditPalette {
+            let renameAction = UIAction(title: localizedString("shared_string_rename"), image: .icCustomEdit) { [weak self] _ in
+                self?.showRenamePaletteAlert(for: paletteItem)
+            }
+            menuElements.append(UIMenu(options: .displayInline, children: [renameAction]))
+        }
+        
+        var editDuplicateActions = [UIMenuElement]()
+        if canEditPalette {
+            let editAction = UIAction(title: localizedString("shared_string_edit"), image: .icCustomAppearanceOutlined) { [weak self] _ in
+                self?.editPaletteItem(paletteItem)
+            }
+            editDuplicateActions.append(editAction)
+        }
+        
+        let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: .icCustomCopy) { [weak self] _ in
+            self?.duplicatePaletteItem(paletteItem)
+        }
+        editDuplicateActions.append(duplicateAction)
+        menuElements.append(UIMenu(options: .displayInline, children: editDuplicateActions))
+        
+        if !paletteItem.isDefault {
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: .icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
+                self?.showDeletePaletteAlert(for: paletteItem)
+            }
+            menuElements.append(UIMenu(options: .displayInline, children: [deleteAction]))
+        }
+        
+        return UIMenu(children: menuElements)
     }
-
-    private static func createGradientPoints(_ colorPalette: OsmAndShared.ColorPalette) -> [GradientPoint] {
-        let colorValues = colorPalette.colors.compactMap { $0 as? OsmAndShared.ColorPalette.ColorValue }
-        guard !colorValues.isEmpty else { return [] }
-        if colorValues.count == 1 {
-            let color = UIColor(argb: Int(colorValues[0].clr))
-            return [GradientPoint(location: 0, color: color), GradientPoint(location: 1, color: color)]
+    
+    private func showRenamePaletteAlert(for paletteItem: PaletteItemGradient) {
+        guard let hostViewController else { return }
+        let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
+        alert.addTextField { $0.text = paletteItem.displayName }
+        let applyAction = UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self, weak alert] _ in
+            guard let self, let newName = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+            guard !newName.isEmpty else {
+                if let view = self.hostViewController?.view {
+                    OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: view)
+                }
+                return
+            }
+            guard let renamedItem = GradientPaletteHelper.shared.renamePaletteItem(paletteItem, newName: newName) else { return }
+            self.notifyPaletteReplaced(paletteItem, with: renamedItem)
         }
-
-        var gradientPoints = [GradientPoint]()
-        let step = 1.0 / CGFloat(colorValues.count - 1)
-        for (index, colorValue) in colorValues.enumerated() {
-            gradientPoints.append(GradientPoint(location: CGFloat(index) * step, color: UIColor(argb: Int(colorValue.clr))))
+        
+        alert.addAction(applyAction)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.preferredAction = applyAction
+        hostViewController.present(alert, animated: true)
+    }
+    
+    private func editPaletteItem(_ paletteItem: PaletteItemGradient) {
+        guard let hostViewController else { return }
+        GradientPaletteHelper.shared.showEditPaletteEditor(from: hostViewController, paletteItem: paletteItem) { [weak self] editedItem in
+            self?.notifyPaletteReplaced(paletteItem, with: editedItem)
         }
-
-        return gradientPoints
+    }
+    
+    private func duplicatePaletteItem(_ paletteItem: PaletteItemGradient) {
+        guard GradientPaletteHelper.shared.duplicatePaletteItem(paletteItem) != nil else { return }
+        hostViewController?.reloadData?()
+    }
+    
+    private func showDeletePaletteAlert(for paletteItem: PaletteItemGradient) {
+        guard let hostViewController else { return }
+        let alert = UIAlertController(title: "\(localizedString("delete_palette"))?", message: String(format: localizedString("delete_colors_palette_dialog_summary"), paletteItem.displayName), preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
+            guard let self, GradientPaletteHelper.shared.deletePaletteItem(paletteItem) else { return }
+            self.hostViewController?.reloadData?()
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        if let indexPath = indexPath(for: paletteItem), let cell = getCollectionView()?.cellForItem(at: indexPath) {
+            alert.popoverPresentationController?.sourceView = cell
+            alert.popoverPresentationController?.sourceRect = cell.bounds
+        }
+        
+        hostViewController.present(alert, animated: true)
+    }
+    
+    private func notifyPaletteReplaced(_ oldItem: PaletteItemGradient, with newItem: PaletteItemGradient) {
+        guard let hostViewController else { return }
+        if indexPath(for: oldItem) == selectedIndexPath {
+            hostViewController.selectPaletteItem?(newItem)
+        }
+        
+        hostViewController.reloadData?()
     }
 
     private func indexPath(for item: PaletteItemGradient?) -> IndexPath? {

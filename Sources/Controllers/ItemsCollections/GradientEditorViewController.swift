@@ -37,6 +37,13 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     private let initialDraft: GradientDraft
     private let editorBehaviour: GradientEditorBehaviour
     
+    private lazy var valueInputToolbar: UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onValueInputDonePressed))]
+        return toolbar
+    }()
+
     private var dataState: EditorDataState
     private var sortedColorItems = [PaletteItemSolid]()
     private var selectedColorItem: PaletteItemSolid?
@@ -49,13 +56,6 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     private var isNoDataSelected: Bool {
         dataState.selectedIndex == dataState.draft.points.count
     }
-    
-    private lazy var valueInputToolbar: UIToolbar = {
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        toolbar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(onValueInputDonePressed))]
-        return toolbar
-    }()
     
     init(originalId: String? = nil, fileType: GradientFileType, onSave: @escaping (GradientDraft, String?) -> Bool) {
         self.originalId = originalId
@@ -78,6 +78,12 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateSelectedColorItem()
+        tableView.keyboardDismissMode = .onDrag
+    }
     
     override func getTitle() -> String {
         localizedString(originalId == nil ? "add_palette" : "edit_palette")
@@ -95,17 +101,11 @@ final class GradientEditorViewController: OABaseNavbarViewController {
     
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
         [UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(onDonePressed)),
-         UIBarButtonItem(barButtonSystemItem: .undo, target: self, action: #selector(onUndoPressed))]
+         UIBarButtonItem(image: UIImage(systemName: "arrow.uturn.backward"), style: .plain, target: self, action: #selector(onUndoPressed))]
     }
     
     override func tableStyle() -> UITableView.Style {
         .insetGrouped
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        updateSelectedColorItem()
-        tableView.keyboardDismissMode = .onDrag
     }
     
     override func registerCells() {
@@ -207,6 +207,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(false)
             cell.clearButtonVisibility(false)
             cell.inputFieldVisibility(true)
+            cell.inputField.clearButtonMode = .whileEditing
             cell.inputField.textAlignment = .left
             cell.inputField.keyboardType = .numbersAndPunctuation
             cell.inputField.isEnabled = isEditable
@@ -271,6 +272,8 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         } else if item.cellType == OASearchMoreCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASearchMoreCell.reuseIdentifier, for: indexPath) as! OASearchMoreCell
             cell.selectionStyle = editorBehaviour.isRemoveEnabled(dataState.draft, selectedIndex: dataState.selectedIndex) ? .default : .none
+            cell.contentView.backgroundColor = .clear
+            cell.textView.backgroundColor = .clear
             cell.textView.font = UIFont.preferredFont(forTextStyle: .body)
             cell.textView.textColor = .textColorDisruptive
             cell.textView.text = item.title
@@ -289,7 +292,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
             if let colorsCollectionIndexPath, let cell = tableView.cellForRow(at: colorsCollectionIndexPath) as? OACollectionSingleLineTableViewCell, let handler = cell.getCollectionHandler() as? OAColorCollectionHandler {
                 colorCollectionVC.hostColorHandler = handler
             }
-            navigationController?.pushViewController(colorCollectionVC, animated: true)
+            showMediumToLargeSheetViewController(colorCollectionVC)
         } else if item.key == GradientEditorRow.removeStep.rawValue,
                   let state = GradientEditorAlgorithms.removeStep(dataState, behaviour: editorBehaviour) {
             updateSelectedColorItem(for: state)
@@ -429,7 +432,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         let alert = UIAlertController(title: localizedString("access_hint_enter_name"), message: nil, preferredStyle: .alert)
         let suggestedName = GradientPaletteHelper.shared.suggestedPaletteName(for: dataState.draft)
         alert.addTextField { $0.text = suggestedName }
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self, weak alert] _ in
+        let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self, weak alert] _ in
             guard let self, let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
             guard !name.isEmpty else {
                 OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: self.view)
@@ -440,8 +443,10 @@ final class GradientEditorViewController: OABaseNavbarViewController {
             } else {
                 OAUtilities.showToast(localizedString("gpx_already_exsists"), details: nil, duration: 4, in: self.view)
             }
-        })
+        }
+        alert.addAction(saveAction)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.preferredAction = saveAction
         present(alert, animated: true)
     }
 }

@@ -32,6 +32,9 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
+    private var pendingEmptySegmentIndex: Int?
+
+    var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
 
     init(dataSource: PlanRoutePointsDataSource?) {
         self.dataSource = dataSource
@@ -50,6 +53,11 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     func reloadData() {
         guard isViewLoaded else { return }
+        if let pendingIndex = pendingEmptySegmentIndex,
+           let segments = dataSource?.routeSegments,
+           segments.count >= pendingIndex {
+            pendingEmptySegmentIndex = nil
+        }
         sections = buildSections()
         tableView.reloadData()
     }
@@ -83,6 +91,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private func buildSections() -> [SectionModel] {
         let segments = dataSource?.routeSegments ?? []
         guard !segments.isEmpty else {
+            pendingEmptySegmentIndex = nil
             return [SectionModel(headerTitle: localizedString("route_points"),
                                  headerSubtitle: nil,
                                  headerMenu: makeRouteTypeMenu(pointIndex: 0),
@@ -90,9 +99,17 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                  isStartNewSegment: false)]
         }
 
-        let multipleSegments = segments.count > 1
+        let multipleSegments = segments.count > 1 || pendingEmptySegmentIndex != nil
         var result: [SectionModel] = segments.map { makeSection(for: $0, multipleSegments: multipleSegments) }
-        if dataSource?.canStartNewSegment ?? false {
+
+        if let pendingIndex = pendingEmptySegmentIndex {
+            let title = String(format: localizedString("segments_count"), pendingIndex)
+            result.append(SectionModel(headerTitle: title,
+                                       headerSubtitle: nil,
+                                       headerMenu: nil,
+                                       rows: [.empty],
+                                       isStartNewSegment: false))
+        } else if dataSource?.canStartNewSegment ?? false {
             result.append(SectionModel(headerTitle: nil,
                                        headerSubtitle: nil,
                                        headerMenu: nil,
@@ -102,26 +119,17 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         return result
     }
 
-    private static func segmentColor(at index: Int) -> UIColor {
-        let palette: [UIColor] = [
-            .iconColorActive,
-            .iconColorGreen,
-            UIColor(red: 0.96, green: 0.60, blue: 0.13, alpha: 1),
-            UIColor(red: 0.88, green: 0.24, blue: 0.24, alpha: 1),
-            UIColor(red: 0.42, green: 0.27, blue: 0.80, alpha: 1),
-            UIColor(red: 0.09, green: 0.62, blue: 0.80, alpha: 1)
-        ]
-        return palette[index % palette.count]
-    }
-
     private func makeSection(for segment: PlanRouteSegment, multipleSegments: Bool) -> SectionModel {
         var rows: [Row] = []
-        let color = Self.segmentColor(at: segment.index)
+        let segmentColor = segment.singleMode?.getProfileColor() ?? .iconColorActive
         for group in segment.groups {
             if segment.multiMode, group.appMode != nil {
                 rows.append(.profileGroup(group, segment: segment))
             }
-            rows.append(contentsOf: group.points.map { Row.point($0, color: color) })
+            let groupColor = segment.multiMode
+                ? (group.appMode?.getProfileColor() ?? .iconColorActive)
+                : segmentColor
+            rows.append(contentsOf: group.points.map { Row.point($0, color: groupColor) })
         }
 
         let title: String
@@ -236,8 +244,21 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func startNewSegment() {
+        let nextIndex = (dataSource?.routeSegments.count ?? 0) + 1
+        pendingEmptySegmentIndex = nextIndex
         dataSource?.startNewSegment()
         reloadData()
+    }
+
+    private func findSegmentAndGroup(for pointIndex: Int) -> (PlanRouteSegment, PlanRouteProfileGroup)? {
+        for segment in dataSource?.routeSegments ?? [] {
+            for group in segment.groups {
+                if group.points.contains(where: { $0.index == pointIndex }) {
+                    return (segment, group)
+                }
+            }
+        }
+        return nil
     }
 
     private func formattedDistance(_ meters: Double) -> String {
@@ -319,7 +340,9 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
         }
         switch section.rows[indexPath.row] {
         case let .point(point, _):
-            dataSource?.selectRoutePoint(at: point.index)
+            if let (seg, grp) = findSegmentAndGroup(for: point.index) {
+                onPointSelected?(point, grp, seg)
+            }
         case .profileGroup:
             presentRouteBetweenPoints()
         case .empty:

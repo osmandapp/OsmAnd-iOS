@@ -47,6 +47,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAPlanRouteEditingBridge : NSObject
 
 @property (nonatomic, copy, nullable) void (^onChange)(void);
+@property (nonatomic, copy, nullable) void (^onPointSelected)(NSInteger index);
+@property (nonatomic, copy, nullable) void (^onChangeRouteTypeBefore)(NSInteger pointIndex);
+@property (nonatomic, copy, nullable) void (^onChangeRouteTypeAfter)(NSInteger pointIndex);
+@property (nonatomic, weak, nullable) UIViewController *presenterViewController;
 
 @property (nonatomic, readonly) BOOL hasContext;
 @property (nonatomic, readonly) BOOL hasPoints;
@@ -80,6 +84,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)selectPointAtIndex:(NSInteger)index;
+- (void)showPointOptionsAtIndex:(NSInteger)index NS_SWIFT_NAME(showPointOptions(at:));
+- (void)addPointBeforeIndex:(NSInteger)index NS_SWIFT_NAME(addPointBefore(index:));
+- (void)addPointAfterIndex:(NSInteger)index NS_SWIFT_NAME(addPointAfter(index:));
+- (void)trimBeforeIndex:(NSInteger)index NS_SWIFT_NAME(trimBefore(index:));
+- (void)trimAfterIndex:(NSInteger)index NS_SWIFT_NAME(trimAfter(index:));
 
 - (void)saveAs:(NSString *)fileName
         folder:(nullable NSString *)folder

@@ -273,6 +273,10 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func sortDoorToDoor(pointIndexes: [Int])
     func saveSegment(pointIndexes: [Int])
     func selectRoutePoint(at index: Int)
+    func addPointBefore(index: Int)
+    func addPointAfter(index: Int)
+    func trimBefore(index: Int)
+    func trimAfter(index: Int)
     func routingParams(for context: SegmentRouteContext) -> PlanRouteSegmentRoutingParams
     func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, for context: SegmentRouteContext)
 }
@@ -290,9 +294,13 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var canUndo: Bool { get }
     var canRedo: Bool { get }
     var onDataChanged: (() -> Void)? { get set }
+    var onPointSelected: ((Int) -> Void)? { get set }
+    var onChangeRouteTypeBefore: ((Int) -> Void)? { get set }
+    var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
 
     func setCrosshairPosition(screenPoint: CGPoint)
     func dismissLayer()
+    func showPointOptions(index: Int, in viewController: UIViewController)
 }
 
 protocol PlanRouteTabContent: AnyObject {

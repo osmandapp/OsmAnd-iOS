@@ -7,9 +7,11 @@
 //
 
 #import "OAPlanRouteEditingBridge.h"
+#import "OAPointOptionsBottomSheetViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapRendererView.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
@@ -70,7 +72,7 @@
 
 @end
 
-@interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate>
+@interface OAPlanRouteEditingBridge () <OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate>
 {
     double _distanceToMapCenter;
     double _bearingToMapCenter;
@@ -402,7 +404,11 @@
 {
     OAApplicationMode *appMode = nil;
     if (key.length > 0)
-        appMode = [OAApplicationMode valueOfStringKey:key def:OAApplicationMode.DEFAULT];
+    {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:key def:OAApplicationMode.DEFAULT];
+        if (mode != [OAApplicationMode DEFAULT])
+            appMode = mode;
+    }
 
     NSMutableArray<OAPlanRoutePointData *> *points = [NSMutableArray array];
     double groupDistance = 0;
@@ -520,6 +526,109 @@
     if (ctx == nil)
         return;
     ctx.selectedPointPosition = index;
+    if (self.onPointSelected)
+        self.onPointSelected(index);
+}
+
+- (void)showPointOptionsAtIndex:(NSInteger)index
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
+        return;
+    ctx.selectedPointPosition = index;
+    OASWptPt *pt = ctx.getPoints[index];
+    OAPointOptionsBottomSheetViewController *sheet = [[OAPointOptionsBottomSheetViewController alloc]
+                                                      initWithPoint:pt
+                                                      index:index
+                                                      editingContext:ctx];
+    sheet.delegate = self;
+    UIViewController *presenter = self.presenterViewController;
+    if (presenter)
+        [sheet presentInViewController:presenter];
+}
+
+- (NSInteger)findNearestPointToCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || ctx.getPointsCount == 0 || mapView == nil)
+        return -1;
+
+    CGPoint p0 = CGPointZero;
+    CGPoint p1 = CGPointMake(0., 44.);
+    OsmAnd::PointI ip0, ip1;
+    [mapView convert:p0 toLocation:&ip0];
+    [mapView convert:p1 toLocation:&ip1];
+    OsmAnd::LatLon ll0 = OsmAnd::Utilities::convert31ToLatLon(ip0);
+    OsmAnd::LatLon ll1 = OsmAnd::Utilities::convert31ToLatLon(ip1);
+    double hitRadius = [OAMapUtils getDistance:ll0.latitude lon1:ll0.longitude lat2:ll1.latitude lon2:ll1.longitude];
+
+    NSInteger nearest = -1;
+    double lowestDist = hitRadius;
+    for (NSInteger i = 0; i < ctx.getPointsCount; i++)
+    {
+        OASWptPt *pt = ctx.getPoints[i];
+        double dist = [OAMapUtils getDistance:coordinate.latitude
+                                         lon1:coordinate.longitude
+                                         lat2:pt.getLatitude
+                                         lon2:pt.getLongitude];
+        if (dist < lowestDist)
+        {
+            lowestDist = dist;
+            nearest = i;
+        }
+    }
+    return nearest;
+}
+
+- (void)addPointBeforeIndex:(NSInteger)index
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    ctx.selectedPointPosition = index;
+    [layer addCenterPoint:YES];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)addPointAfterIndex:(NSInteger)index
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    ctx.selectedPointPosition = index;
+    [layer addCenterPoint:NO];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)trimBeforeIndex:(NSInteger)index
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    ctx.selectedPointPosition = index;
+    [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeBefore]];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)trimAfterIndex:(NSInteger)index
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    ctx.selectedPointPosition = index;
+    [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeAfter]];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
 }
 
 - (double)distanceToMapCenter
@@ -751,11 +860,85 @@
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
         return;
+
+    NSInteger hitIndex = [self findNearestPointToCoordinate:coordinate];
+    if (hitIndex != -1)
+    {
+        [self showPointOptionsAtIndex:hitIndex];
+        return;
+    }
+
     layer.pressPointLocation = [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
     [ctx.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:layer center:NO]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
+}
+
+#pragma mark - OAPointOptionsBottmSheetDelegate
+
+- (void)onMovePoint:(NSInteger)point
+{
+    if (self.onPointSelected)
+        self.onPointSelected(point);
+}
+
+- (void)onClearPoints:(EOAClearPointsMode)mode
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    NSInteger idx = ctx.selectedPointPosition;
+    if (mode == EOAClearPointsModeBefore)
+        [self trimBeforeIndex:idx];
+    else
+        [self trimAfterIndex:idx];
+}
+
+- (void)onAddPoints:(EOAAddPointMode)type
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    NSInteger idx = ctx.selectedPointPosition;
+    if (type == EOAAddPointModeBefore)
+        [self addPointBeforeIndex:idx];
+    else
+        [self addPointAfterIndex:idx];
+}
+
+- (void)onDeletePoint
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return;
+    [self deletePointAtIndex:ctx.selectedPointPosition];
+}
+
+- (void)onChangeRouteTypeBefore
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (self.onChangeRouteTypeBefore && ctx != nil)
+        self.onChangeRouteTypeBefore(ctx.selectedPointPosition);
+}
+
+- (void)onChangeRouteTypeAfter
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (self.onChangeRouteTypeAfter && ctx != nil)
+        self.onChangeRouteTypeAfter(ctx.selectedPointPosition);
+}
+
+- (void)onSplitPointsBefore {}
+- (void)onSplitPointsAfter {}
+- (void)onJoinPoints {}
+- (void)onCloseMenu {}
+
+- (void)onClearSelection
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx)
+        ctx.selectedPointPosition = -1;
 }
 
 @end

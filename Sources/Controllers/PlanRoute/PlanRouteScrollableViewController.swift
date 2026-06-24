@@ -41,6 +41,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var crosshairCenterYConstraint: NSLayoutConstraint?
     private var panStartHeight: CGFloat = 0
     private weak var currentTabViewController: UIViewController?
+    private let routeTypeButton = PlanRouteButtonFactory.iconButton(image: .templateImageNamed("ic_custom_straight_line"))
 
     init(dataProvider: PlanRouteDataProvider) {
         self.dataProvider = dataProvider
@@ -79,8 +80,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupBottomToolbar()
         setupContent()
         setupTopToolbar()
+        setupRouteTypeButton()
         setupCrosshair()
         dataProvider.onDataChanged = { [weak self] in self?.reloadData() }
+        dataProvider.onPointSelected = { [weak self] index in self?.presentPointMenu(for: index) }
+        dataProvider.onChangeRouteTypeBefore = { [weak self] pointIndex in self?.presentChangeRouteType(before: pointIndex) }
+        dataProvider.onChangeRouteTypeAfter = { [weak self] pointIndex in self?.presentChangeRouteType(after: pointIndex) }
         selectTab(.default)
         reloadData()
     }
@@ -163,6 +168,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         topPartView.configure(with: dataProvider.routeInfo)
         bottomToolbar.isUndoEnabled = dataProvider.canUndo
         bottomToolbar.isRedoEnabled = dataProvider.canRedo
+        updateRouteTypeButton()
         currentTabViewController.flatMap { $0 as? PlanRouteTabContent }?.reloadData()
     }
 
@@ -299,6 +305,85 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         ])
     }
 
+    private func setupRouteTypeButton() {
+        routeTypeButton.translatesAutoresizingMaskIntoConstraints = false
+        view.insertSubview(routeTypeButton, belowSubview: sheetView)
+        NSLayoutConstraint.activate([
+            routeTypeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            routeTypeButton.bottomAnchor.constraint(equalTo: sheetView.topAnchor, constant: -12)
+        ])
+        routeTypeButton.addTarget(self, action: #selector(onRouteTypeButtonTapped), for: .touchUpInside)
+        updateRouteTypeButton()
+    }
+
+    private func updateRouteTypeButton() {
+        let segments = dataProvider.routeSegments
+        let mode = segments.last?.singleMode
+        let icon: UIImage?
+        if let mode {
+            icon = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
+        } else {
+            icon = .templateImageNamed("ic_custom_straight_line")
+        }
+        routeTypeButton.setImage(icon, for: .normal)
+    }
+
+    private func presentRouteBetweenPoints() {
+        let listVC = RouteBetweenPointsViewController(dataSource: dataProvider)
+        let navController = UINavigationController(rootViewController: listVC)
+        navController.modalPresentationStyle = .pageSheet
+        if let sheet = navController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(navController, animated: true)
+    }
+
+    func presentPointMenu(for pointIndex: Int) {
+        dataProvider.showPointOptions(index: pointIndex, in: self)
+    }
+
+    private func presentChangeRouteType(before pointIndex: Int) {
+        let segments = dataProvider.routeSegments
+        guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
+        let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
+        guard groupIndex > 0 else { return }
+        let prevGroup = segment.groups[groupIndex - 1]
+        presentSettingsForContext(.profileGroup(prevGroup, segment: segment))
+    }
+
+    private func presentChangeRouteType(after pointIndex: Int) {
+        let segments = dataProvider.routeSegments
+        guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
+        presentSettingsForContext(.profileGroup(group, segment: segment))
+    }
+
+    private func presentSettingsForContext(_ context: SegmentRouteContext) {
+        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider)
+        let nav = UINavigationController(rootViewController: settingsVC)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
+
+    private func findPointContext(index: Int, in segments: [PlanRouteSegment]) -> (PlanRouteSegment, PlanRouteProfileGroup, PlanRoutePoint)? {
+        for segment in segments {
+            for group in segment.groups {
+                if let point = group.points.first(where: { $0.index == index }) {
+                    return (segment, group, point)
+                }
+            }
+        }
+        return nil
+    }
+
+    @objc private func onRouteTypeButtonTapped() {
+        presentRouteBetweenPoints()
+    }
+
     private func crosshairCenterY(sheetHeight: CGFloat) -> CGFloat {
         let h = OAUtilities.calculateScreenHeight()
         if sheetHeight <= height(for: .initial) {
@@ -391,7 +476,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         switch tab {
         case .poi: controller = PlanRoutePoiViewController(dataSource: dataProvider)
         case .analyze: controller = PlanRouteAnalyzeViewController(dataSource: dataProvider)
-        case .route: controller = PlanRouteRouteViewController(dataSource: dataProvider)
+        case .route:
+            let routeVC = PlanRouteRouteViewController(dataSource: dataProvider)
+            routeVC.onPointSelected = { [weak self] point, group, segment in
+                self?.presentPointMenu(for: point.index)
+            }
+            controller = routeVC
         }
         tabViewControllers[tab] = controller
         return controller

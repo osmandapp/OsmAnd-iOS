@@ -12,6 +12,15 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     let mode: PlanRouteMode
 
     var onDataChanged: (() -> Void)?
+    var onPointSelected: ((Int) -> Void)? {
+        didSet { bridge.onPointSelected = onPointSelected }
+    }
+    var onChangeRouteTypeBefore: ((Int) -> Void)? {
+        didSet { bridge.onChangeRouteTypeBefore = onChangeRouteTypeBefore }
+    }
+    var onChangeRouteTypeAfter: ((Int) -> Void)? {
+        didSet { bridge.onChangeRouteTypeAfter = onChangeRouteTypeAfter }
+    }
 
     private let bridge = OAPlanRouteEditingBridge()
     private let filePath: String?
@@ -117,6 +126,11 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.dismiss()
     }
 
+    func showPointOptions(index: Int, in viewController: UIViewController) {
+        bridge.presenterViewController = viewController
+        bridge.showPointOptions(at: index)
+    }
+
     func moveRoutePoint(from: Int, to: Int) {
         bridge.movePoint(from: from, to: to)
     }
@@ -151,6 +165,22 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func selectRoutePoint(at index: Int) {
         bridge.selectPoint(at: index)
+    }
+
+    func addPointBefore(index: Int) {
+        bridge.addPointBefore(index: index)
+    }
+
+    func addPointAfter(index: Int) {
+        bridge.addPointAfter(index: index)
+    }
+
+    func trimBefore(index: Int) {
+        bridge.trimBefore(index: index)
+    }
+
+    func trimAfter(index: Int) {
+        bridge.trimAfter(index: index)
     }
 
     func routingParams(for context: SegmentRouteContext) -> PlanRouteSegmentRoutingParams {

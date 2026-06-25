@@ -747,7 +747,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         } else {
             color = isSmartFolder ? .textColorPrimary : .navBarTextColorPrimary
         }
-        if !isSearchActive, let searchBarButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: color, action: #selector(onSearchButtonClicked), target: self, menu: nil) {
+        if !isSearchActive, !tableView.isEditing, let searchBarButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: color, action: #selector(onSearchButtonClicked), target: self, menu: nil) {
             if #available(iOS 26.0, *) {
                 searchBarButton.style = .prominent
                 searchBarButton.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)

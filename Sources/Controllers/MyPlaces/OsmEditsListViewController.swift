@@ -363,7 +363,7 @@ final class OsmEditsListViewController: UIViewController {
             searchButton?.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
         }
 
-        let rightButtons = [selectButton, isSearchActive ? nil : searchButton].compactMap { $0 }
+        let rightButtons = [selectButton, isSearchActive || collectionView.isEditing ? nil : searchButton].compactMap { $0 }
         navigationController?.navigationBar.topItem?.setRightBarButtonItems(rightButtons, animated: false)
         navigationItem.setRightBarButtonItems(rightButtons, animated: false)
     }

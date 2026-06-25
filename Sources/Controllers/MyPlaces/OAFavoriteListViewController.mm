@@ -625,7 +625,7 @@ static UIViewController *parentController;
 - (void)setupNavbarButtons
 {
     _actionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"ellipsis.circle"] menu:[self actionsMenu]];
-    if (_isSearchActive)
+    if (_isSearchActive || self.favoriteTableView.isEditing)
     {
         [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton] animated:NO];
         return;
@@ -904,8 +904,8 @@ static UIViewController *parentController;
 
     [_myPlacesDelegate showBackButton:YES];
 
-    [self setupNavbarButtons];
     [self setEdit:NO];
+    [self setupNavbarButtons];
     [_selectedItems removeAllObjects];
 }
 

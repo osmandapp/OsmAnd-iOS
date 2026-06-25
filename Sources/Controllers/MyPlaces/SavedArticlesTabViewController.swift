@@ -298,9 +298,10 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
             searchButton?.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
         }
 
-        guard let searchButton else { return }
-        navigationController?.navigationBar.topItem?.setRightBarButtonItems([searchButton], animated: false)
-        navigationItem.setRightBarButtonItems([searchButton], animated: false)
+        if let searchButton {
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([searchButton], animated: false)
+            navigationItem.setRightBarButtonItems([searchButton], animated: false)
+        }
     }
 
     private func updateData() {

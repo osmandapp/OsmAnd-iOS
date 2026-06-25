@@ -566,10 +566,29 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         trackRow.iconName = "ic_custom_trip"
         let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
         trackRow.setObj(isVisible, forKey: isVisibleKey)
-        trackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
+        trackRow.setObj(trackIconColor(for: track, isVisible: isVisible), forKey: colorKey)
         trackRow.setObj(TracksSortModeHelper.getTrackDescription(track: track, sortMode: isSearchActive || isSelectionModeInSearch ? sortModeForSearch : sortMode, includeFolderInfo: shouldShowFolderInfo), forKey: trackSortDescrKey)
     }
     
+    private func trackIconColor(for track: GpxDataItem, isVisible: Bool) -> UIColor {
+        if tableView.isEditing && selectedTracks.contains(where: { $0.gpxFilePath == track.gpxFilePath }) {
+            return .iconColorActive
+        } else {
+            return isVisible ? .iconColorActive : .iconColorDefault
+        }
+    }
+
+    private func updateTrackRowIconColor(at indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        guard item.key == trackKey, let track = item.obj(forKey: trackObjectKey) as? GpxDataItem else {
+            return
+        }
+
+        let color = trackIconColor(for: track, isVisible: item.bool(forKey: isVisibleKey))
+        item.setObj(color, forKey: colorKey)
+        (tableView.cellForRow(at: indexPath) as? OASimpleTableViewCell)?.leftIconView.tintColor = color
+    }
+
     private func setupNavbar() {
         if tableView.isEditing {
             hideBackButton(true)
@@ -1431,6 +1450,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             }
         }
         
+        tableView.indexPathsForVisibleRows?.forEach { updateTrackRowIconColor(at: $0) }
         updateNavigationBarTitle()
         configureToolbar()
     }
@@ -2344,6 +2364,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     selectedFolders.append(folderName)
                 }
             }
+            updateTrackRowIconColor(at: indexPath)
             updateNavigationBarTitle()
             configureToolbar()
         } else {
@@ -2409,6 +2430,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     selectedFolders.remove(at: index)
                 }
             }
+            updateTrackRowIconColor(at: indexPath)
             updateNavigationBarTitle()
             configureToolbar()
         }

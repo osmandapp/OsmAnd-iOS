@@ -4172,7 +4172,7 @@
 "astro_designations" = "Betegnelser";
 "astro_expand_your_universe_title" = "Udvid dit univers";
 "astro_expand_your_universe_description" = "Få adgang til den udvidede database med kataloger over det dybe rum, Wikipedia-artikler og AR-tilstand offline.";
-"astro_offline_knowledge_base_title" = "Offline-vidensdatabase";
+"astro_offline_knowledge_base_title" = "Offline himmelkort og katalog";
 "astro_offline_knowledge_base_description" = "Download den udvidede database for at få adgang til Wikipedia-artikler og kataloger over dybrumsobjekter, når du ikke er online.";
 "astro_today_visibility" = "Synlighed i dag";
 "astro_visibility_show_today" = "Vis dagens synlighed";
@@ -4283,3 +4283,7 @@
 "selected_waypoints_exit_descr" = "Dine valg af rutepunkter gemmes ikke, hvis du lukker nu";
 "auto_select_nearest_points" = "Vælg automatisk nærmeste punkter";
 "auto_select_nearest_footer" = "Find og vælg automatisk de rutepunkter, der ligger tættest på dette spor.";
+"ltr_or_rtl_triple_combine_via_space" = "%@ %@ %@";
+"route_members" = "Medlemmer";
+"route_part_of" = "Del af";
+"multipoligon_related" = "Relateret";

@@ -213,16 +213,15 @@ final class MyPlacesContainerViewController: OACompoundViewController {
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
     
-    private func setupNavbar(isSearchActive: Bool = false) {
-        if isSearchActive {
-            navigationController?.navigationBar.scrollEdgeAppearance = nil
-        } else {
-            let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = .viewBg
+    private func setupNavbar(isClearNavBar: Bool = false) {
+        var appearance = navigationController?.navigationBar.scrollEdgeAppearance
+        if appearance == nil {
+            appearance = UINavigationBarAppearance()
             navigationController?.navigationBar.scrollEdgeAppearance = appearance
         }
-        safeAreaTopConstraint.isActive = !isSearchActive
-        superviewTopConstraint.isActive = isSearchActive
+        navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = isClearNavBar ? .clear : .viewBg
+        safeAreaTopConstraint.isActive = !isClearNavBar
+        superviewTopConstraint.isActive = isClearNavBar
     }
     
     private func updateSearchController() {
@@ -315,6 +314,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     
     func updateEditMode(_ edit: Bool) {
         updateSegmentedControlVisibility(!edit)
+        setupNavbar(isClearNavBar: edit)
     }
     
     func updateTitle(_ title: String, hideSubtitle: Bool) {
@@ -330,7 +330,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
         navigationItem.searchController = searchController
         navigationItem.searchController?.isActive = true
         updateSegmentedControlVisibility(!isEnabled)
-        setupNavbar(isSearchActive: isEnabled)
+        setupNavbar(isClearNavBar: isEnabled)
     }
 }
 

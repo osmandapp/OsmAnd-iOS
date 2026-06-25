@@ -171,6 +171,7 @@ final class OsmEditsListViewController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.allowsMultipleSelectionDuringEditing = true
+        collectionView.tintColor = .iconColorActive
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([

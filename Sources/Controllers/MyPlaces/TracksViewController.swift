@@ -195,6 +195,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
+        tableView.tintColor = .iconColorActive
         addRefreshControl()
         reloadTracks(forceLoad: true)
         
@@ -948,7 +949,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         lastUpdate = Date.now.timeIntervalSince1970
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            guard view.window != nil else {
+            guard !self.tableView.isEditing && view.window != nil else {
                 shouldReloadTableView = true
                 return
             }

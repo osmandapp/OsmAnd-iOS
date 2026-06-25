@@ -136,6 +136,7 @@ static UIViewController *parentController;
     _decelerating = NO;
     self.sortingType = 0;
     self.view.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.favoriteTableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _sortedHeaderView.delegate = self;

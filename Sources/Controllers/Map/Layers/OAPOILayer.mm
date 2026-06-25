@@ -1520,6 +1520,11 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (OATargetPoint *)getTargetPoint:(id)obj touchLocation:(CLLocation *)touchLocation
 {
+    return [self.class getTargetPoint:obj];
+}
+
++ (OATargetPoint *)getTargetPoint:(id)obj
+{
     if ([obj isKindOfClass:OAPOI.class])
         return [self getTargetPoint:obj renderedObject:nil placeDetailsObject:nil];
     else if ([obj isKindOfClass:OARenderedObject.class])
@@ -1529,7 +1534,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     return nil;
 }
 
-- (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(BaseDetailsObject *)placeDetailsObject
++ (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(BaseDetailsObject *)placeDetailsObject
 {
     if (placeDetailsObject)
         poi = placeDetailsObject.syntheticAmenity;

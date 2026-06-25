@@ -1212,7 +1212,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         controller.applyRedFilter(enabled: starView.showRedFilter)
         searchViewController = controller
         let presentingController = presentedViewController ?? self
-        presentingController.present(controller, animated: true)
+        
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .fullScreen
+        nav.navigationBar.prefersLargeTitles = true
+        presentingController.present(nav, animated: true)
+        searchViewController = controller
     }
 
     private func clearPreviousSearchDialog() {

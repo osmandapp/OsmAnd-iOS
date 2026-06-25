@@ -1689,6 +1689,8 @@
 		CE7AC1B02FE02A2600495411 /* SaveTracksTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */; };
 		CE7AC1B12FE02A2600495411 /* ImportTracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */; };
 		CE7AC1B22FE02A2600495411 /* SelectPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */; };
+		CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */; };
+		CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */; };
 		CE8A82A92FCFE11F00EADFD8 /* MapVariantReplacementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */; };
 		CE948E792FEA5EAB0023FA12 /* WikipediaContextMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE948E782FEA5EAB0023FA12 /* WikipediaContextMenuView.swift */; };
 		CEAF08182FD91C4A0048A74A /* FolderCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */; };
@@ -5695,6 +5697,8 @@
 		CE7AC1A32FE02A2600495411 /* SaveTracksTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveTracksTask.swift; sourceTree = "<group>"; };
 		CE7AC1A52FE02A2600495411 /* ImportTracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTracksViewController.swift; sourceTree = "<group>"; };
 		CE7AC1A62FE02A2600495411 /* SelectPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPointsViewController.swift; sourceTree = "<group>"; };
+		CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMyDataViewController.swift; sourceTree = "<group>"; };
+		CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchExploreAdapter.swift; sourceTree = "<group>"; };
 		CE8A82A82FCFE11F00EADFD8 /* MapVariantReplacementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVariantReplacementManager.swift; sourceTree = "<group>"; };
 		CE948E782FEA5EAB0023FA12 /* WikipediaContextMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaContextMenuView.swift; sourceTree = "<group>"; };
 		CEAF08162FD91C4A0048A74A /* FolderCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCardCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -10589,6 +10593,8 @@
 				A5A503042F51000200000304 /* StarMapSearchResultsAdapter.swift */,
 				A5A503022F51000200000302 /* StarMapSearchState.swift */,
 				A5A503062F51000200000306 /* StarMapSearchViewController.swift */,
+				CE7CE0ED2FED645D001709F0 /* StarMapMyDataViewController.swift */,
+				CE7CE0EF2FED8435001709F0 /* StarMapSearchExploreAdapter.swift */,
 			);
 			path = search;
 			sourceTree = "<group>";
@@ -18150,6 +18156,7 @@
 				DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */,
 				CE7818262FC07944005CCF47 /* WikipediaContextMenuCell.swift in Sources */,
 				C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */,
+				CE7CE0F02FED8435001709F0 /* StarMapSearchExploreAdapter.swift in Sources */,
 				C5C81F8E2E5340CB009D3439 /* MyLocationButtonState.swift in Sources */,
 				32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */,
 				DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */,
@@ -18161,6 +18168,7 @@
 				DA5A84F526C563A900F274C7 /* OADistanceDirection.mm in Sources */,
 				DA5A812C26C563A700F274C7 /* OAWaypointsMapLayerProvider.mm in Sources */,
 				DA5A823E26C563A700F274C7 /* OAProfileDataObject.m in Sources */,
+				CE7CE0EE2FED645D001709F0 /* StarMapMyDataViewController.swift in Sources */,
 				FA899F1E2DD3449F0022F736 /* VehicleMetricsSearchViewController.swift in Sources */,
 				DAA9F44E27EC9EB8002BB1A8 /* OARegisterUserCommand.m in Sources */,
 				DA5A836126C563A800F274C7 /* OASliderWithValuesCell.m in Sources */,

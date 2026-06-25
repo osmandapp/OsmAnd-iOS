@@ -273,6 +273,8 @@
                                                        timeoutInterval:60.0];
     [request setHTTPMethod:@"GET"];
     [request addValue:tileSource.userAgent.length > 0 ? tileSource.userAgent : kDefaultUserAgent forHTTPHeaderField:@"User-Agent"];
+    if (tileSource.referer.length > 0)
+        [request addValue:tileSource.referer forHTTPHeaderField:@"Referer"];
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSData *data = [NSData dataWithContentsOfFile:location.path];
         if (data)

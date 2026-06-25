@@ -760,7 +760,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         
         let menu = UIMenu(title: "", image: nil, children: menuActions)
-        var color: UIColor
+        var color: UIColor?
         if #available(iOS 26.0, *) {
             color = .label
         } else {
@@ -769,7 +769,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         if !isSearchActive, !tableView.isEditing, let searchBarButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: color, action: #selector(onSearchButtonClicked), target: self, menu: nil) {
             if #available(iOS 26.0, *) {
                 searchBarButton.style = .prominent
-                searchBarButton.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+                searchBarButton.tintColor = .clear
             }
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
@@ -995,9 +995,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.delegate = self
         if #available(iOS 26.0, *) {
-            if !OAUtilities.isIPad() {
-                navigationItem.preferredSearchBarPlacement = .stacked
-            }
+            navigationItem.preferredSearchBarPlacement = .stacked
         }
         navigationItem.searchController = searchController
         searchController.isActive = true
@@ -1479,12 +1477,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     @objc private func onSearchButtonClicked() {
-        isSearchActive = true
         if isRootFolder {
             myPlacesDelegate?.updateSearchEnabling(true)
         } else {
             setupSearchControllerIfChildFolder()
         }
+        isSearchActive = true
+        setupNavBarMenuButton()
     }
 
     // MARK: - Folders Actions

@@ -165,7 +165,7 @@ final class OsmEditsListViewController: UIViewController {
     // MARK: - Generate Data
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .viewBg
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
@@ -184,6 +184,7 @@ final class OsmEditsListViewController: UIViewController {
     
     private func createLayout() -> UICollectionViewLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        config.backgroundColor = .clear
         if !isSearchActive {
             config.headerMode = .firstItemInSection
         }
@@ -360,7 +361,7 @@ final class OsmEditsListViewController: UIViewController {
 
         if #available(iOS 26.0, *) {
             searchButton?.style = .prominent
-            searchButton?.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+            searchButton?.tintColor = .clear
         }
 
         let rightButtons = [selectButton, isSearchActive || collectionView.isEditing ? nil : searchButton].compactMap { $0 }

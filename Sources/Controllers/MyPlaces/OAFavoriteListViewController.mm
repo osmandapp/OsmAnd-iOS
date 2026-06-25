@@ -443,7 +443,7 @@ static UIViewController *parentController;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     _editButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_select")
                                                                  icon:nil
-                                                                color:[UIColor labelColor]
+                                                                color:UIColor.labelColor
                                                                action:@selector(editButtonClicked:)
                                                                target:self
                                                                  menu:nil];
@@ -633,7 +633,7 @@ static UIViewController *parentController;
 
     _searchButton = [OABaseNavbarViewController createRightNavbarButton:nil
                                                                    icon:[UIImage systemImageNamed:@"magnifyingglass"]
-                                                                  color:[UIColor labelColor]
+                                                                  color:UIColor.labelColor
                                                                  action:@selector(searchButtonClicked:)
                                                                  target:self
                                                                    menu:nil];
@@ -641,7 +641,7 @@ static UIViewController *parentController;
     if (@available(iOS 26.0, *))
     {
         _searchButton.style = UIBarButtonItemStyleProminent;
-        _searchButton.tintColor = [[UIColor colorNamed:ACColorNameNavBarTextColorPrimary] colorWithAlphaComponent:.3];
+        _searchButton.tintColor = UIColor.clearColor;
     }
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _searchButton] animated:NO];
 }

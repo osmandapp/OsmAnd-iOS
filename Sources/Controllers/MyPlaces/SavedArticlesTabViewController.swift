@@ -295,7 +295,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
 
         if #available(iOS 26.0, *) {
             searchButton?.style = .prominent
-            searchButton?.tintColor = .navBarTextColorPrimary.withAlphaComponent(0.3)
+            searchButton?.tintColor = .clear
         }
 
         if let searchButton {

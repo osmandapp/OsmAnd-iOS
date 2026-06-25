@@ -193,9 +193,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         searchController?.obscuresBackgroundDuringPresentation = false
         definesPresentationContext = true
         if #available(iOS 26.0, *) {
-            if !OAUtilities.isIPad() {
-                navigationItem.preferredSearchBarPlacement = .stacked
-            }
+            navigationItem.preferredSearchBarPlacement = .stacked
         }
         updateSearchController()
     }

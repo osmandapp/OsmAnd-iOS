@@ -99,6 +99,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         segmentContainerView.backgroundColor = .clear
         pageViewController?.scrollView?.backgroundColor = .clear
         navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.tintColor = .label
         view.backgroundColor = .viewBg
         openTracksFolderIfNeeded()
     }

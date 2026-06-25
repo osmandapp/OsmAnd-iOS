@@ -772,10 +772,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 searchBarButton.tintColor = .clear
             }
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
+            actionsBarButton.tintColor = .label
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
         } else {
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
+            actionsBarButton.tintColor = .label
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton], animated: false)
         }

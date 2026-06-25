@@ -625,6 +625,7 @@ static UIViewController *parentController;
 - (void)setupNavbarButtons
 {
     _actionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"ellipsis.circle"] menu:[self actionsMenu]];
+    [_actionsButton setTintColor: UIColor.labelColor];
     if (_isSearchActive || self.favoriteTableView.isEditing)
     {
         [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton] animated:NO];

@@ -20,7 +20,11 @@ final class AstroContextCardFactory {
         }
 
         var items: [AstroContextMenuItem] = []
+        
         let descriptionItem = buildDescriptionCardItem(obj: skyObject, astroArticle: article)
+        if let knowledgeItem, (knowledgeItem.state == .download || descriptionItem == nil) {
+            items.append(knowledgeItem)
+        }
         if let descriptionItem {
             items.append(descriptionItem)
         }
@@ -30,9 +34,6 @@ final class AstroContextCardFactory {
         items.append(AstroGalleryCardItem(wid: skyObject.wid,
                                           showAllTitle: skyObject.niceName(),
                                           state: uiState.galleryState))
-        if let knowledgeItem, (knowledgeItem.state == .download || descriptionItem == nil) {
-            items.append(knowledgeItem)
-        }
         if let visibilityItem {
             items.append(visibilityItem)
         }

@@ -82,12 +82,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
 
     private var mapControlsLeadingInset: CGFloat {
-        embeddedLeftPanelNavigationController() != nil && UIDevice.current.userInterfaceIdiom == .pad
-            ? Layout.contentPadding + Layout.leftPanelWidth + Layout.contentPadding
-            : Layout.contentPadding
+        embeddedLeftPanelNavigationController != nil && UIDevice.current.userInterfaceIdiom == .pad
+            ? Layout.contentPadding + Layout.leftPanelWidth
+            : 0
     }
 
-    private func embeddedLeftPanelNavigationController() -> UINavigationController? {
+    private var embeddedLeftPanelNavigationController: UINavigationController? {
         if let navigationController = configureSheetNavigationController, navigationController.parent === self {
             return navigationController
         }
@@ -1132,21 +1132,29 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .pageSheet
         navigationController.navigationBar.prefersLargeTitles = false
-        if let sheet = navigationController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.selectedDetentIdentifier = .medium
-            sheet.prefersGrabberVisible = true
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.preferredCornerRadius = 24
-            sheet.largestUndimmedDetentIdentifier = .medium
-        }
+        
         objectInfoController = controller
         objectInfoNavigationController = navigationController
-        present(navigationController, animated: true) { [weak self] in
-            guard centerInVisibleMapOnPresentation else {
-                return
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            showLeftPanel(navigationController) { [weak self] in
+                guard centerInVisibleMapOnPresentation else { return }
+                self?.centerObjectInVisibleStarMap(object, animate: true)
             }
-            self?.centerObjectInVisibleStarMap(object, animate: true)
+        } else {
+            if let sheet = navigationController.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+                sheet.selectedDetentIdentifier = .medium
+                sheet.prefersGrabberVisible = true
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+                sheet.preferredCornerRadius = 24
+                sheet.largestUndimmedDetentIdentifier = .medium
+            }
+            present(navigationController, animated: true) { [weak self] in
+                guard centerInVisibleMapOnPresentation else {
+                    return
+                }
+                self?.centerObjectInVisibleStarMap(object, animate: true)
+            }
         }
         updateMapControlsVisibility()
     }
@@ -1294,7 +1302,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func showLeftPanel(_ navigationController: UINavigationController, animated: Bool = true, completion: (() -> Void)? = nil) {
-        if let existingPanel = embeddedLeftPanelNavigationController(), existingPanel !== navigationController {
+        if let existingPanel = embeddedLeftPanelNavigationController, existingPanel !== navigationController {
             dismissLeftPanel(navigationController: existingPanel, animated: false)
             if existingPanel === configureSheetNavigationController {
                 finishConfigureSheetDismiss()

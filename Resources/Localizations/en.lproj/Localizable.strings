@@ -4618,7 +4618,7 @@
 "astro_designations" = "Designations";
 "astro_expand_your_universe_title" = "Expand your universe";
 "astro_expand_your_universe_description" = "Get access to the extended database of deep sky catalogs, Wikipedia articles and AR mode offline.";
-"astro_offline_knowledge_base_title" = "Offline Knowledge Base";
+"astro_offline_knowledge_base_title" = "Offline Sky Map & Catalog";
 "astro_offline_knowledge_base_description" = "Download the extended database to access Wikipedia articles and deep sky catalogs offline.";
 "astro_today_visibility" = "Today visibility";
 "astro_visibility_show_today" = "Show today visibility";

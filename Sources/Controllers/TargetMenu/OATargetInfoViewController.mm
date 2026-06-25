@@ -1494,7 +1494,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             
             if (!strongSelf || !strongInfo) return;
             
-            strongInfo.height = [cell calculateHeightIn:strongSelf.tableView.bounds.size.width];
+            strongInfo.height = [cell calculateHeightIn:strongSelf.tableView.bounds.size.width - [OAUtilities getLeftMargin]];
             strongInfo.collapsed = isExpand;
             
             [strongSelf.tableView beginUpdates];

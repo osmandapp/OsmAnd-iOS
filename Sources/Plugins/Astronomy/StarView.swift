@@ -849,9 +849,9 @@ final class StarView: UIView {
     private func drawBackground(in context: CGContext) {
         if isCameraMode {
             context.clear(bounds)
-            UIColor.black.withAlphaComponent(0.20).setFill()
+            UIColor(named: "mapBgZenithColor")!.withAlphaComponent(0.20).setFill()
         } else {
-            UIColor.black.setFill()
+            UIColor(named: "mapBgZenithColor")!.setFill()
         }
         context.fill(bounds)
     }
@@ -875,7 +875,7 @@ final class StarView: UIView {
         var baseSize: CGFloat = 15
         if object.type == .STAR && zoomFactor > 0.3 && object.magnitude > 2.5 {
             baseSize = 8
-            color = .gray
+            color = UIColor(named: "starDotDimmed")!
         }
 
         var radius = max(2, baseSize - CGFloat(object.magnitude) * 2)
@@ -930,12 +930,12 @@ final class StarView: UIView {
 
     private func labelColor(for object: SkyObject) -> UIColor {
         if object === selectedObject {
-            return .red
+            return UIColor(named: "mapTextSelected")!
         }
         if settings.starMap.showCelestialPaths && object.showCelestialPath {
-            return .yellow
+            return UIColor(named: "mapObjectPath")!
         }
-        return .lightGray
+        return UIColor(named: "mapTextPrimary")!
     }
 
     private func drawHighlights(in context: CGContext) {
@@ -949,7 +949,7 @@ final class StarView: UIView {
 
         if let object = selectedObject,
            let point = skyToScreen(azimuth: object.azimuth, altitude: object.altitude) {
-            strokeCircle(at: point, radius: pixelsToPoints(25), color: .red, width: pixelsToPoints(3), in: context)
+            strokeCircle(at: point, radius: pixelsToPoints(25), color: UIColor(named: "mapTextSelected")!, width: pixelsToPoints(3), in: context)
         }
 
         if settings.starMap.showDirections {
@@ -976,12 +976,12 @@ final class StarView: UIView {
         appendSkyLine(to: path, range: stride(from: 0.0, through: 360.0, by: 2.0)) { azimuth in
             (azimuth, 0.0)
         }
-        stroke(path, color: .green, width: 1.2, in: context)
+        stroke(path, color: UIColor(named: "mapLineHorizon")!, width: 1.2, in: context)
 
-        drawOutsideLabel("N", azimuth: 0, altitude: 0, color: .green, offset: 30, in: context)
-        drawOutsideLabel("E", azimuth: 90, altitude: 0, color: .green, offset: 30, in: context)
-        drawOutsideLabel("S", azimuth: 180, altitude: 0, color: .green, offset: 30, in: context)
-        drawOutsideLabel("W", azimuth: 270, altitude: 0, color: .green, offset: 30, in: context)
+        drawOutsideLabel("N", azimuth: 0, altitude: 0, color: UIColor(named: "mapLineHorizon")!, offset: 30, in: context)
+        drawOutsideLabel("E", azimuth: 90, altitude: 0, color: UIColor(named: "mapLineHorizon")!, offset: 30, in: context)
+        drawOutsideLabel("S", azimuth: 180, altitude: 0, color: UIColor(named: "mapLineHorizon")!, offset: 30, in: context)
+        drawOutsideLabel("W", azimuth: 270, altitude: 0, color: UIColor(named: "mapLineHorizon")!, offset: 30, in: context)
     }
 
     private func drawAzimuthalGrid(in context: CGContext) {
@@ -1000,8 +1000,8 @@ final class StarView: UIView {
                 (azimuth, Double(altitude))
             }
             if altitude != 0 {
-                drawGridLabel("\(altitude)°", azimuth: centerAzimuth, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
-                drawGridLabel("\(altitude)°", azimuth: centerAzimuth + 180, altitude: Double(altitude), align: .left, color: UIColor(white: 0.55, alpha: 1), in: context)
+                drawGridLabel("\(altitude)°", azimuth: centerAzimuth, altitude: Double(altitude), align: .left, color: UIColor(named: "mapGridSecondaryText")!, in: context)
+                drawGridLabel("\(altitude)°", azimuth: centerAzimuth + 180, altitude: Double(altitude), align: .left, color: UIColor(named: "mapGridSecondaryText")!, in: context)
             }
         }
 
@@ -1010,10 +1010,10 @@ final class StarView: UIView {
                 (Double(azimuth), altitude)
             }
             if !azimuth.isMultiple(of: 90) {
-                drawOutsideLabel("\(azimuth)°", azimuth: Double(azimuth), altitude: 0, color: UIColor(white: 0.55, alpha: 1), offset: 25, in: context)
+                drawOutsideLabel("\(azimuth)°", azimuth: Double(azimuth), altitude: 0, color: UIColor(named: "mapGridSecondaryText")!, offset: 25, in: context)
             }
         }
-        stroke(path, color: UIColor(white: 0.27, alpha: 1), width: 2.0, in: context)
+        stroke(path, color: UIColor(named: "mapGridSecondary")!, width: 2.0, in: context)
     }
 
     private func updateEquatorialGridCache() {
@@ -1124,7 +1124,7 @@ final class StarView: UIView {
                 let hours = totalMinutes / 60
                 let minutes = totalMinutes % 60
                 let label = minutes == 0 ? "\(hours)h" : "\(hours)h\(minutes)"
-                drawText(label, at: CGPoint(x: point.x, y: point.y - 18), color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), font: .systemFont(ofSize: 11), align: .center)
+                drawText(label, at: CGPoint(x: point.x, y: point.y - 18), color: UIColor(named: "mapGridMainText")!, font: .systemFont(ofSize: 11), align: .center)
             }
         }
 
@@ -1148,12 +1148,12 @@ final class StarView: UIView {
                 if dec != 0 {
                     let ra = Double(bestRaIndex * equRaStepMin) / 60.0
                     let hor = AstronomyKt.horizon(time: currentTime, observer: observer, ra: ra, dec: Double(dec), refraction: Refraction.normal)
-                    drawGridLabel("\(dec)°", azimuth: hor.azimuth, altitude: hor.altitude, align: .left, color: UIColor(red: 0, green: 0.74, blue: 0.74, alpha: 1), in: context)
+                    drawGridLabel("\(dec)°", azimuth: hor.azimuth, altitude: hor.altitude, align: .left, color: UIColor(named: "mapGridMainText")!, in: context)
                 }
             }
         }
 
-        stroke(path, color: UIColor(red: 0, green: 0.40, blue: 0.40, alpha: 1), width: 0.8, in: context)
+        stroke(path, color: UIColor(named: "mapGridMain")!, width: 0.8, in: context)
     }
 
     private func updateEclipticCache() {
@@ -1185,7 +1185,7 @@ final class StarView: UIView {
     private func drawEclipticLine(in context: CGContext) {
         updateEclipticCache()
         stroke(cachedLinePath(azimuths: eclipticAzimuths, altitudes: eclipticAltitudes),
-               color: .yellow,
+               color: UIColor(named: "mapLineEcliptic")!,
                width: 1.2,
                dash: [8, 8],
                in: context)
@@ -1199,7 +1199,7 @@ final class StarView: UIView {
         appendSkyLine(to: path, range: stride(from: -90.0, through: 90.0, by: 2.0)) { altitude in
             (180.0, altitude)
         }
-        stroke(path, color: .green, width: 1.2, dash: [12, 8], in: context)
+        stroke(path, color: UIColor(named: "mapLineMeridian")!, width: 1.2, dash: [12, 8], in: context)
     }
 
     private func updateEquatorCache() {
@@ -1226,7 +1226,7 @@ final class StarView: UIView {
     private func drawEquatorLine(in context: CGContext) {
         updateEquatorCache()
         stroke(cachedLinePath(azimuths: equatorAzimuths, altitudes: equatorAltitudes),
-               color: UIColor(red: 0, green: 0.67, blue: 0.67, alpha: 1),
+               color: UIColor(named: "mapLineEquator")!,
                width: 1.2,
                dash: [12, 8],
                in: context)
@@ -1261,7 +1261,7 @@ final class StarView: UIView {
     private func drawGalacticLine(in context: CGContext) {
         updateGalacticCache()
         stroke(cachedLinePath(azimuths: galacticAzimuths, altitudes: galacticAltitudes),
-               color: .magenta,
+               color: UIColor(named: "mapLineGalactic")!,
                width: 1.2,
                dash: [8, 8],
                in: context)
@@ -1286,7 +1286,7 @@ final class StarView: UIView {
                 path.addLine(to: p2)
             }
             stroke(path,
-                   color: isSelected ? UIColor(red: 1, green: 0.84, blue: 0, alpha: 1) : UIColor(red: 0.33, green: 0.60, blue: 1.0, alpha: 0.58),
+                   color: isSelected ? UIColor(named: "constellationSelected")! : UIColor(named: "constellationLine")!,
                    width: isSelected ? 1.8 : 0.9,
                    in: context)
         }
@@ -1304,7 +1304,7 @@ final class StarView: UIView {
                 continue
             }
 
-            let color = isSelected ? UIColor(red: 1, green: 0.84, blue: 0, alpha: 1) : UIColor(red: 0.67, green: 0.73, blue: 1.0, alpha: 1)
+            let color = isSelected ? UIColor(named: "constellationSelected")! : UIColor(named: "constellationText")!
             let font = UIFont.italicSystemFont(ofSize: 16)
             let text = constellation.getDisplayName()
             let size = text.size(withAttributes: [.font: font])
@@ -1400,7 +1400,7 @@ final class StarView: UIView {
             }
             previousPoint = point
         }
-        stroke(path, color: .cyan, width: 1.1, dash: [5, 8], in: context)
+        stroke(path, color: UIColor(named: "mapTrajectoryLine")!, width: 1.1, dash: [5, 8], in: context)
 
         var drawnLabels: Set<String> = []
         for index in 0..<drawCount {
@@ -1427,7 +1427,7 @@ final class StarView: UIView {
             let labelAngle = Double(angle - .pi / 2)
             let labelPoint = CGPoint(x: point.x + 30 * CGFloat(cos(labelAngle)),
                                      y: point.y + 30 * CGFloat(sin(labelAngle)) + 8)
-            drawText(label, at: labelPoint, color: .cyan, font: .systemFont(ofSize: 12), align: .center)
+            drawText(label, at: labelPoint, color: UIColor(named: "mapTrajectoryLine")!, font: .systemFont(ofSize: 12), align: .center)
             drawArrow(at: point, angle: angle, in: context)
         }
     }
@@ -1607,7 +1607,7 @@ final class StarView: UIView {
         path.addLine(to: CGPoint(x: -10, y: -6))
         path.addLine(to: CGPoint(x: -10, y: 6))
         path.closeSubpath()
-        UIColor.cyan.setFill()
+        UIColor(named: "mapTrajectoryLine")!.setFill()
         context.addPath(path)
         context.fillPath()
         context.restoreGState()

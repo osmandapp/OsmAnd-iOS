@@ -63,7 +63,7 @@ private final class AstroRedFilterOverlayView: UIView {
 
     private func commonInit() {
         isUserInteractionEnabled = false
-        backgroundColor = .red
+        backgroundColor = UIColor(named: "mapNightFilter")!
         layer.compositingFilter = "multiplyBlendMode"
     }
 
@@ -352,17 +352,17 @@ enum AstroUtils {
 
     static func color(for body: Body) -> UIColor {
         if body === Body.sun {
-            return UIColor(red: 1.0, green: 0.69, blue: 0.20, alpha: 1.0)
+            return UIColor(named: "solarSun")!
         } else if body === Body.moon {
-            return UIColor(white: 0.88, alpha: 1.0)
+            return UIColor(named: "solarMoon")!
         } else if body === Body.mars {
-            return UIColor(red: 0.95, green: 0.36, blue: 0.22, alpha: 1.0)
+            return UIColor(named: "solarMars")!
         } else if body === Body.jupiter {
-            return UIColor(red: 0.95, green: 0.73, blue: 0.48, alpha: 1.0)
+            return UIColor(named: "solarJupiter")!
         } else if body === Body.saturn {
-            return UIColor(red: 0.95, green: 0.82, blue: 0.52, alpha: 1.0)
+            return UIColor(named: "solarSaturn")!
         } else if body === Body.neptune || body === Body.uranus {
-            return UIColor(red: 0.42, green: 0.73, blue: 1.0, alpha: 1.0)
+            return UIColor(named: "solarUranusNeptune")!
         } else {
             return UIColor(red: 0.87, green: 0.90, blue: 1.0, alpha: 1.0)
         }
@@ -371,16 +371,15 @@ enum AstroUtils {
     static func color(for type: SkyObjectType, magnitude: Double?) -> UIColor {
         switch type {
         case .STAR:
-            let brightness = max(0.45, min(1.0, 1.0 - ((magnitude ?? 2.0) / 8.0)))
-            return UIColor(red: brightness, green: brightness, blue: 1.0, alpha: 1.0)
+            return UIColor(named: "starDot")!
         case .GALAXY, .GALAXY_CLUSTER:
-            return UIColor(red: 0.52, green: 0.74, blue: 1.0, alpha: 1.0)
+            return UIColor(named: "deepSkyGalaxyDot")!
         case .NEBULA:
-            return UIColor(red: 0.85, green: 0.45, blue: 0.95, alpha: 1.0)
+            return UIColor(named: "deepSkyNebulaDot")!
         case .OPEN_CLUSTER, .GLOBULAR_CLUSTER:
-            return UIColor(red: 0.50, green: 0.95, blue: 0.78, alpha: 1.0)
+            return UIColor(named: "deepSkyClusterDot")!
         case .BLACK_HOLE:
-            return UIColor(red: 0.95, green: 0.45, blue: 0.35, alpha: 1.0)
+            return UIColor(named: "deepSkyBlackHoleDot")!
         case .CONSTELLATION:
             return UIColor(red: 0.80, green: 0.86, blue: 1.0, alpha: 1.0)
         case .SUN, .MOON, .PLANET:

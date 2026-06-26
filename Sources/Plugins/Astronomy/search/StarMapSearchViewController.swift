@@ -104,7 +104,6 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private var widToDisplayName: [String: String] = [:]
 
     private let mainStack = UIStackView()
-    private let exploreHeaderStack = UIStackView()
     private let fullSearchContainer = UIView()
     private let fullSearchStack = UIStackView()
     private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
@@ -142,9 +141,9 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         "Q857461",
         "Q2661779",
         "Q55712879",
-        "Q3247327",
-        "Q91442269",
-        "Q4999741"
+        "Q3247327"
+//        "Q91442269",
+//        "Q4999741"
     ]
     
     private let plugin: AstronomyPlugin
@@ -231,21 +230,11 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         mainStack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainStack)
 
-        exploreHeaderStack.axis = .vertical
-        exploreHeaderStack.spacing = Layout.smallPadding
-        exploreHeaderStack.backgroundColor = StarMapSearchLightPalette.listBackground
-        exploreHeaderStack.layoutMargins = UIEdgeInsets(top: Layout.contentPadding, left: Layout.contentPadding, bottom: Layout.contentPadding, right: Layout.contentPadding)
-        exploreHeaderStack.isLayoutMarginsRelativeArrangement = true
-        exploreHeaderStack.translatesAutoresizingMaskIntoConstraints = false
-
         fullSearchContainer.translatesAutoresizingMaskIntoConstraints = false
-        fullSearchContainer.backgroundColor = StarMapSearchLightPalette.listBackground
         fullSearchStack.axis = .vertical
-        fullSearchStack.backgroundColor = StarMapSearchLightPalette.listBackground
         fullSearchStack.translatesAutoresizingMaskIntoConstraints = false
         fullSearchContainer.addSubview(fullSearchStack)
         resultsContainer.translatesAutoresizingMaskIntoConstraints = false
-        resultsContainer.backgroundColor = StarMapSearchLightPalette.listBackground
 
         NSLayoutConstraint.activate([
             mainStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -326,13 +315,11 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         searchRecycler.rowHeight = UITableView.automaticDimension
         searchRecycler.estimatedRowHeight = Layout.resultRowMinHeight
         searchRecycler.separatorStyle = .none
-        searchRecycler.backgroundColor = StarMapSearchLightPalette.listBackground
 
         sortFilterBar.axis = .horizontal
         sortFilterBar.alignment = .center
         sortFilterBar.distribution = .fill
         sortFilterBar.spacing = 0
-        sortFilterBar.backgroundColor = StarMapSearchLightPalette.listBackground
         sortFilterBar.layoutMargins = UIEdgeInsets(top: 0, left: Layout.contentPadding, bottom: 0, right: Layout.contentPadding)
         sortFilterBar.isLayoutMarginsRelativeArrangement = true
         sortFilterBar.heightAnchor.constraint(equalToConstant: Layout.toolbarHeight).isActive = true
@@ -374,6 +361,8 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         recentChipsContainer.axis = .horizontal
         recentChipsContainer.spacing = Layout.smallPadding
         recentChipsContainer.translatesAutoresizingMaskIntoConstraints = false
+        recentChipsContainer.layoutMargins = UIEdgeInsets(top: Layout.contentPadding, left: Layout.contentPadding, bottom: Layout.contentPadding, right: Layout.contentPadding)
+        recentChipsContainer.isLayoutMarginsRelativeArrangement = true
         recentChipsScroll.addSubview(recentChipsContainer)
         NSLayoutConstraint.activate([
             recentChipsContainer.leadingAnchor.constraint(equalTo: recentChipsScroll.contentLayoutGuide.leadingAnchor),
@@ -382,8 +371,6 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
             recentChipsContainer.bottomAnchor.constraint(equalTo: recentChipsScroll.contentLayoutGuide.bottomAnchor),
             recentChipsContainer.heightAnchor.constraint(equalTo: recentChipsScroll.frameLayoutGuide.heightAnchor)
         ])
-        recentChipsScroll.heightAnchor.constraint(equalToConstant: 38).isActive = true
-        exploreHeaderStack.addArrangedSubview(recentChipsScroll)
     }
 
     private func setupEmptyState() {
@@ -476,7 +463,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
             searchRecycler.tableHeaderView = nil
             return
         }
-        let header = exploreHeaderStack
+        let header = recentChipsScroll
         let width = searchRecycler.bounds.width > 0 ? searchRecycler.bounds.width : view.bounds.width
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
         let height = header.systemLayoutSizeFitting(
@@ -490,13 +477,11 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func updateTableAdapter() {
         if currentMode == .EXPLORE {
-            searchRecycler.backgroundColor = StarMapSearchLightPalette.groupedBackground
             searchRecycler.separatorStyle = .singleLine
             exploreAdapter.submitSnapshot(buildExploreSnapshot())
             searchRecycler.dataSource = exploreAdapter
             searchRecycler.delegate = exploreAdapter
         } else {
-            searchRecycler.backgroundColor = StarMapSearchLightPalette.listBackground
             searchRecycler.separatorStyle = .none
             if shouldShowCatalogEntries() {
                 catalogsAdapter.submitSnapshot(StarMapCatalogsAdapter.Snapshot(entries: visibleCatalogEntries))
@@ -548,12 +533,17 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         return Array((prioritizedEntries + fallbackEntries).prefix(Self.FEATURED_CATALOGS_COUNT))
     }
 
-    private func openFullSearch(_ quickPresetType: StarMapSearchQuickPresetType, catalogWid: String?) {
+    private func openFullSearch(_ quickPresetType: StarMapSearchQuickPresetType,
+                                catalogWid: String?,
+                                fromSearchBarActivation: Bool = false) {
         searchState.prepareForExploreEntry(quickPresetType, catalogWid: catalogWid)
         currentFullSearchMode = searchState.shouldOpenInBrowseMode() ? .BROWSE : .INPUT
+        
+        let shouldRequestKeyboard = currentFullSearchMode == .INPUT && !fromSearchBarActivation
+        applyMode(.FULL_SEARCH, requestKeyboard: shouldRequestKeyboard)
+        
         prepareForFreshResultLoad()
-        applyMode(.FULL_SEARCH, requestKeyboard: currentFullSearchMode == .INPUT)
-        applyFiltersAndSort(scrollToTop: true)
+        applyFiltersAndSort(scrollToTop: !fromSearchBarActivation)
     }
 
     private func applyMode(_ mode: ScreenMode, requestKeyboard: Bool) {
@@ -1029,6 +1019,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
             configuration.baseBackgroundColor = UIColor.systemBlue.withAlphaComponent(0.12)
             configuration.baseForegroundColor = .systemBlue
             let chipButton = UIButton(configuration: configuration)
+            chipButton.translatesAutoresizingMaskIntoConstraints = false
             chipButton.addAction(UIAction { [weak self] _ in
                 guard let self else {
                     return
@@ -1058,7 +1049,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func onSearchEntrySelected(_ entry: StarMapSearchEntry) {
         addRecentChip(entry)
-        dismiss(animated: true) { [weak self] in
+        navigationController?.dismiss(animated: true) { [weak self] in
             self?.onObjectSelected?(entry.objectRef)
         }
     }
@@ -1208,7 +1199,9 @@ private extension UIStackView {
 
 extension StarMapSearchViewController: UISearchControllerDelegate {
     func willPresentSearchController(_ searchController: UISearchController) {
-        if currentFullSearchMode == .BROWSE {
+        if currentMode == .EXPLORE {
+            openFullSearch(.NONE, catalogWid: nil, fromSearchBarActivation: true)
+        } else if currentFullSearchMode == .BROWSE {
             switchToInputMode()
         }
     }
@@ -1235,13 +1228,8 @@ extension StarMapSearchViewController: UISearchResultsUpdating {
 
 extension StarMapSearchViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        if currentMode == .EXPLORE {
-            openFullSearch(.NONE, catalogWid: nil)
-            return false
-        }
         if currentFullSearchMode == .BROWSE {
             switchToInputMode()
-            return true
         }
         return true
     }

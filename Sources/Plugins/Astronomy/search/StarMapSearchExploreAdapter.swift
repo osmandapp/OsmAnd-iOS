@@ -99,7 +99,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard snapshot.sections.indices.contains(section), section > 0 else {
-            return 16
+            return 10
         }
         switch snapshot.sections[section].0 {
         case .myData, .catalogs:
@@ -111,7 +111,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         guard snapshot.sections.indices.contains(section), section > 0 else {
-            return 16
+            return 10
         }
         switch snapshot.sections[section].0 {
         case .myData, .catalogs:
@@ -140,51 +140,46 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         case .watchNow:
             let cell = dequeueMenuCell(tableView)
             cell.configure(icon: AstroIcon.template("ic_custom_telescope"),
-                           iconTintColor: .iconColorActive,
                            title: localizedString("astro_explore_watch_now"),
                            subtitle: localizedString("astro_explore_watch_now_subtitle"),
                            trailingText: nil,
-                           titleColor: .textColorPrimary)
+                           config: .watchNow)
             return cell
 
         case .category(let config):
             let cell = dequeueMenuCell(tableView)
             cell.configure(icon: AstroIcon.template(config.iconRes),
-                           iconTintColor: .iconColorActive,
                            title: localizedString(config.titleRes),
                            subtitle: config.subtitleRes.map(localizedString),
                            trailingText: nil,
-                           titleColor: .textColorPrimary)
+                           config: .category)
             return cell
 
         case .myData(let config, let count):
             let cell = dequeueMenuCell(tableView)
             cell.configure(icon: AstroIcon.template(config.iconRes),
-                           iconTintColor: .iconColorActive,
                            title: localizedString(config.titleRes),
                            subtitle: nil,
                            trailingText: String(count),
-                           titleColor: .textColorPrimary)
+                           config: .category)
             return cell
 
         case .catalog(let entry):
             let cell = dequeueMenuCell(tableView)
             cell.configure(icon: AstroIcon.template("ic_custom_book_info"),
-                           iconTintColor: .iconColorDefault,
                            title: entry.displayName,
                            subtitle: nil,
                            trailingText: nil,
-                           titleColor: .textColorPrimary)
+                           config: isBeforeViewAll(at: indexPath) ? .catalogLast : .catalog)
             return cell
 
         case .viewAllCatalogs(let count):
             let cell = dequeueMenuCell(tableView)
             cell.configure(icon: nil,
-                           iconTintColor: .iconColorActive,
                            title: localizedString("shared_string_view_all"),
                            subtitle: nil,
                            trailingText: String(count),
-                           titleColor: .textColorActive)
+                           config: .button)
             return cell
         }
     }
@@ -214,8 +209,8 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
     }
 
     private func dequeueMenuCell(_ tableView: UITableView) -> StarMapExploreMenuCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Self.menuReuseIdentifier) as? StarMapExploreMenuCell
-            ?? StarMapExploreMenuCell(reuseIdentifier: Self.menuReuseIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: StarMapExploreMenuCell.reuseIdentifier) as? StarMapExploreMenuCell
+        ?? StarMapExploreMenuCell(reuseIdentifier: StarMapExploreMenuCell.reuseIdentifier)
         return cell
     }
 
@@ -237,24 +232,50 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         ])
         return container
     }
-
-    private static let menuReuseIdentifier = "StarMapExploreMenuCell"
+    
+    private func isBeforeViewAll(at indexPath: IndexPath) -> Bool {
+        let nextIndex = indexPath.row + 1
+        
+        guard let section = snapshot.sections[safe: indexPath.section]?.1 else { return false }
+        guard let nextRow = section[safe: nextIndex] else { return false }
+        
+        if case .viewAllCatalogs = nextRow {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 private final class StarMapExploreMenuCell: UITableViewCell {
+    private enum Layout {
+        static let contentPadding: CGFloat = 16
+        static let smallPadding: CGFloat = 11
+        static let bigPadding: CGFloat = 24
+        static let iconSize: CGFloat = 30
+    }
+    
+    struct Config {
+        let iconColor: UIColor
+        let titleColor: UIColor
+        let hasRightArrow: Bool
+        let separatorInset: UIEdgeInsets
+        
+        static let watchNow = Config(iconColor: .iconColorActive, titleColor: .textColorPrimary, hasRightArrow: false, separatorInset: .init(top: 0, left: 0, bottom: 0, right: 0))
+        static let category = Config(iconColor: .iconColorActive, titleColor: .textColorPrimary, hasRightArrow: true, separatorInset: .init(top: 0, left: 62, bottom: 0, right: 16))
+        static let catalog = Config(iconColor: .iconColorDefault, titleColor: .textColorPrimary, hasRightArrow: false, separatorInset: .init(top: 0, left: 62, bottom: 0, right: 16))
+        static let catalogLast = Config(iconColor: .iconColorDefault, titleColor: .textColorPrimary, hasRightArrow: false, separatorInset: .init(top: 0, left: 16, bottom: 0, right: 16))
+        static let button = Config(iconColor: .iconColorDefault, titleColor: .textColorActive, hasRightArrow: false, separatorInset: .init(top: 0, left: 0, bottom: 0, right: 0))
+    }
+    
     private let rowIconView = UIImageView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let trailingLabel = UILabel()
     private let textStack = UIStackView()
-    private var textStackLeadingToIcon: NSLayoutConstraint!
-    private var textStackLeadingToContent: NSLayoutConstraint!
-
-    private enum Metrics {
-        static let contentPadding: CGFloat = 16
-        static let iconSize: CGFloat = 30
-    }
-
+    private var textStackLeadingToIcon: NSLayoutConstraint?
+    private var textStackLeadingToContent: NSLayoutConstraint?
+    
     init(reuseIdentifier: String) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         setup()
@@ -265,6 +286,38 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         setup()
     }
 
+    func configure(icon: UIImage?,
+                   title: String,
+                   subtitle: String?,
+                   trailingText: String?,
+                   config: Config) {
+        if let icon {
+            rowIconView.image = icon
+            rowIconView.tintColor = config.iconColor
+            rowIconView.isHidden = false
+            textStackLeadingToContent?.isActive = false
+            textStackLeadingToIcon?.isActive = true
+        } else {
+            rowIconView.image = nil
+            rowIconView.isHidden = true
+            textStackLeadingToIcon?.isActive = false
+            textStackLeadingToContent?.isActive = true
+        }
+        titleLabel.text = title
+        titleLabel.textColor = config.titleColor
+        subtitleLabel.text = subtitle
+        subtitleLabel.isHidden = subtitle?.isEmpty != false
+        trailingLabel.text = trailingText
+        trailingLabel.isHidden = trailingText == nil
+        
+        if config.hasRightArrow {
+            accessoryType = .disclosureIndicator
+        } else {
+            accessoryType = .none
+        }
+        separatorInset = config.separatorInset
+    }
+    
     private func setup() {
         selectionStyle = .default
         accessoryType = .disclosureIndicator
@@ -275,21 +328,24 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         rowIconView.isUserInteractionEnabled = false
 
         titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 1
 
         subtitleLabel.textColor = .textColorSecondary
-        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
+        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        subtitleLabel.adjustsFontForContentSizeCategory = true
         subtitleLabel.numberOfLines = 2
 
         textStack.axis = .vertical
-        textStack.spacing = 2
+        textStack.spacing = 6
         textStack.translatesAutoresizingMaskIntoConstraints = false
         textStack.isUserInteractionEnabled = false
         textStack.addArrangedSubview(titleLabel)
         textStack.addArrangedSubview(subtitleLabel)
 
         trailingLabel.textColor = StarMapSearchLightPalette.secondaryText
-        trailingLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        trailingLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        trailingLabel.adjustsFontForContentSizeCategory = true
         trailingLabel.setContentHuggingPriority(.required, for: .horizontal)
         trailingLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         trailingLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -299,60 +355,23 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         contentView.addSubview(textStack)
         contentView.addSubview(trailingLabel)
 
-        textStackLeadingToIcon = textStack.leadingAnchor.constraint(equalTo: rowIconView.trailingAnchor, constant: Metrics.contentPadding)
+        textStackLeadingToIcon = textStack.leadingAnchor.constraint(equalTo: rowIconView.trailingAnchor, constant: Layout.contentPadding)
         textStackLeadingToContent = textStack.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor)
 
         NSLayoutConstraint.activate([
             rowIconView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
             rowIconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            rowIconView.widthAnchor.constraint(equalToConstant: Metrics.iconSize),
-            rowIconView.heightAnchor.constraint(equalToConstant: Metrics.iconSize),
+            rowIconView.widthAnchor.constraint(equalToConstant: Layout.iconSize),
+            rowIconView.heightAnchor.constraint(equalToConstant: Layout.iconSize),
 
-            textStackLeadingToIcon,
+            textStackLeadingToIcon!,
             textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8),
-            textStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8),
-            textStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingLabel.leadingAnchor, constant: -8),
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: Layout.smallPadding),
+            textStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -Layout.smallPadding),
+            textStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingLabel.leadingAnchor, constant: -Layout.smallPadding),
 
-            trailingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metrics.contentPadding),
+            trailingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Layout.bigPadding),
             trailingLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        accessoryView?.tintColor = .tertiaryLabel
-    }
-
-    func configure(icon: UIImage?,
-                   iconTintColor: UIColor,
-                   title: String,
-                   subtitle: String?,
-                   trailingText: String?,
-                   titleColor: UIColor) {
-        accessoryType = .disclosureIndicator
-        if let icon {
-            rowIconView.image = icon
-            rowIconView.tintColor = iconTintColor
-            rowIconView.isHidden = false
-            textStackLeadingToContent.isActive = false
-            textStackLeadingToIcon.isActive = true
-        } else {
-            rowIconView.image = nil
-            rowIconView.isHidden = true
-            textStackLeadingToIcon.isActive = false
-            textStackLeadingToContent.isActive = true
-        }
-        titleLabel.text = title
-        titleLabel.textColor = titleColor
-        subtitleLabel.text = subtitle
-        subtitleLabel.isHidden = subtitle?.isEmpty != false
-        trailingLabel.text = trailingText
-        trailingLabel.isHidden = trailingText == nil
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        accessoryType = .disclosureIndicator
     }
 }

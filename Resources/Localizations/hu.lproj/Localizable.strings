@@ -4135,7 +4135,7 @@
 "astro_designations" = "Megjelölések";
 "astro_expand_your_universe_title" = "Fedezze fel az univerzumot";
 "astro_expand_your_universe_description" = "Szerezzen hozzáférést az offline működő mélyég-katalógusok, a Wikipédia-cikkek és az AR-mód kibővített adatbázisaihoz.";
-"astro_offline_knowledge_base_title" = "Offline tudásbázis";
+"astro_offline_knowledge_base_title" = "Offline égtérkép és katalógus";
 "astro_offline_knowledge_base_description" = "Töltse le a bővített adatbázist a Wikipédia-szócikkek és mélyég-katalógusok offline eléréséhez.";
 "astro_today_visibility" = "Mai láthatóság";
 "astro_visibility_show_today" = "Mai láthatóság megjelenítése";
@@ -4246,3 +4246,7 @@
 "selected_waypoints_exit_descr" = "A kijelölt útpontok nem mentődnek el, ha most bezárja";
 "auto_select_nearest_points" = "Legközelebbi pontok automatikus kijelölése";
 "auto_select_nearest_footer" = "Automatikusan megkeresi és kijelöli a nyomvonalhoz legközelebb eső útpontokat.";
+"ltr_or_rtl_triple_combine_via_space" = "%@ %@ %@";
+"route_members" = "Tagok";
+"route_part_of" = "Része ennek:";
+"multipoligon_related" = "Érintett";

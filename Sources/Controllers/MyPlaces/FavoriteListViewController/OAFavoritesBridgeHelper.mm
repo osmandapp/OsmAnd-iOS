@@ -384,8 +384,7 @@
 
 + (BOOL)canUseGroupWithName:(NSString *)groupName
 {
-    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-    return group && group.points.count > 0;
+    return [self favoriteItemsInsideOrEqualToGroupName:groupName].count > 0;
 }
 
 + (NSURL *)shareFavoriteItems:(NSArray *)favoriteItems
@@ -601,50 +600,7 @@
     if (favoriteItems.count == 0)
         return;
 
-    NSMutableArray<OAFavoriteItem *> *itemsToAdd = [NSMutableArray array];
-    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
-
-    for (id item in favoriteItems)
-    {
-        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
-            continue;
-
-        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
-        OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
-        if (!group)
-            continue;
-
-        for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
-        {
-            NSString *pointKey = [favorite getKey];
-            if (pointKey.length > 0 && [addedPointKeys containsObject:pointKey])
-                continue;
-
-            if (pointKey.length > 0)
-                [addedPointKeys addObject:pointKey];
-            [itemsToAdd addObject:favorite];
-        }
-    }
-
-    for (id item in favoriteItems)
-    {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
-            continue;
-
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
-        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
-        if (!favorite)
-            continue;
-
-        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
-        if ([addedPointKeys containsObject:pointKey])
-            continue;
-
-        if (pointKey.length > 0)
-            [addedPointKeys addObject:pointKey];
-        [itemsToAdd addObject:favorite];
-    }
-
+    NSArray<OAFavoriteItem *> *itemsToAdd = [self favoriteItemsForBridgeItemsToAdd:favoriteItems standalonePointItems:NO];
     if (itemsToAdd.count == 0)
         return;
 
@@ -661,8 +617,7 @@
 
 + (void)addFavoriteGroupToTrack:(NSString *)groupName gpxFileName:(nullable NSString *)gpxFileName
 {
-    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-    NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:group];
+    NSArray<OAFavoriteItem *> *points = [self favoriteItemsInsideOrEqualToGroupName:groupName];
     if (points.count == 0)
         return;
 
@@ -688,7 +643,9 @@
     if (!gpxFile)
         return;
 
-    [gpxFile addPointsGroupGroup:[group toPointsGroup]];
+    for (OAFavoriteItem *favorite in points)
+        [gpxFile addPointPoint:[favorite toWpt]];
+
     [OASGpxUtilities.shared writeGpxFileFile:dataItem.file gpxFile:gpxFile];
     [gpxDatabase updateDataItem:dataItem];
     [OASelectedGPXHelper.instance markTrackForReload:dataItem.file.absolutePath];
@@ -697,11 +654,7 @@
 
 + (void)addFavoriteGroupToNavigation:(NSString *)groupName
 {
-    OAFavoriteGroup *group = [self favoriteGroupWithName:groupName];
-    if (!group)
-        return;
-
-    NSArray<OAFavoriteItem *> *points = [self sortedFavoritePointsForGroup:group];
+    NSArray<OAFavoriteItem *> *points = [self favoriteItemsInsideOrEqualToGroupName:groupName];
     NSMutableArray<OAFavoritePointBridgeItem *> *items = [NSMutableArray arrayWithCapacity:points.count];
     for (OAFavoriteItem *point in points)
     {
@@ -716,51 +669,7 @@
     if (favoriteItems.count == 0)
         return;
 
-    NSMutableArray<OAFavoriteItem *> *itemsToAdd = [NSMutableArray array];
-    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
-
-    for (id item in favoriteItems)
-    {
-        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
-            continue;
-
-        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
-        OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
-        if (!group)
-            continue;
-
-        for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
-        {
-            NSString *pointKey = [favorite getKey];
-            if (pointKey.length > 0 && [addedPointKeys containsObject:pointKey])
-                continue;
-
-            if (pointKey.length > 0)
-                [addedPointKeys addObject:pointKey];
-            [itemsToAdd addObject:favorite];
-        }
-    }
-
-    for (id item in favoriteItems)
-    {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
-            continue;
-
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
-        OAFavoriteItem *favorite = [self standaloneFavoritePoint:[self favoritePointWithIdentifier:pointItem.identifier]];
-
-        if (!favorite)
-            continue;
-
-        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
-        if ([addedPointKeys containsObject:pointKey])
-            continue;
-
-        if (pointKey.length > 0)
-            [addedPointKeys addObject:pointKey];
-        [itemsToAdd addObject:favorite];
-    }
-
+    NSArray<OAFavoriteItem *> *itemsToAdd = [self favoriteItemsForBridgeItemsToAdd:favoriteItems standalonePointItems:YES];
     if (itemsToAdd.count == 0)
         return;
 
@@ -800,50 +709,7 @@
     if (favoriteItems.count == 0)
         return;
 
-    NSMutableArray<OAFavoriteItem *> *itemsToAdd = [NSMutableArray array];
-    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
-
-    for (id item in favoriteItems)
-    {
-        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
-            continue;
-
-        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
-        OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
-        if (!group)
-            continue;
-
-        for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
-        {
-            NSString *pointKey = [favorite getKey];
-            if (pointKey.length > 0 && [addedPointKeys containsObject:pointKey])
-                continue;
-
-            if (pointKey.length > 0)
-                [addedPointKeys addObject:pointKey];
-            [itemsToAdd addObject:favorite];
-        }
-    }
-
-    for (id item in favoriteItems)
-    {
-        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
-            continue;
-
-        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
-        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
-        if (!favorite)
-            continue;
-
-        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
-        if ([addedPointKeys containsObject:pointKey])
-            continue;
-
-        if (pointKey.length > 0)
-            [addedPointKeys addObject:pointKey];
-        [itemsToAdd addObject:favorite];
-    }
-
+    NSArray<OAFavoriteItem *> *itemsToAdd = [self favoriteItemsForBridgeItemsToAdd:favoriteItems standalonePointItems:NO];
     if (itemsToAdd.count == 0)
         return;
 
@@ -890,6 +756,73 @@
 + (NSArray<OAFavoriteItem *> *)sortedFavoritePointsForGroup:(OAFavoriteGroup *)group
 {
     return [self sortedFavoritePoints:group.points ?: @[]];
+}
+
++ (NSArray<OAFavoriteItem *> *)favoriteItemsForBridgeItemsToAdd:(NSArray *)favoriteItems standalonePointItems:(BOOL)standalonePointItems
+{
+    NSMutableArray<OAFavoriteItem *> *result = [NSMutableArray array];
+    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoriteFolderBridgeItem.class])
+            continue;
+
+        OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
+        [self addFavoriteItemsInsideOrEqualToGroupName:folderItem.groupName toArray:result addedPointKeys:addedPointKeys];
+    }
+
+    for (id item in favoriteItems)
+    {
+        if (![item isKindOfClass:OAFavoritePointBridgeItem.class])
+            continue;
+
+        OAFavoritePointBridgeItem *pointItem = (OAFavoritePointBridgeItem *) item;
+        OAFavoriteItem *favorite = [self favoritePointWithIdentifier:pointItem.identifier];
+        if (!favorite)
+            continue;
+
+        NSString *pointKey = [favorite getKey] ?: pointItem.identifier;
+        OAFavoriteItem *favoriteToAdd = standalonePointItems ? [self standaloneFavoritePoint:favorite] : favorite;
+        [self addFavoriteItem:favoriteToAdd pointKey:pointKey toArray:result addedPointKeys:addedPointKeys];
+    }
+
+    return [result copy];
+}
+
++ (NSArray<OAFavoriteItem *> *)favoriteItemsInsideOrEqualToGroupName:(NSString *)groupName
+{
+    NSMutableArray<OAFavoriteItem *> *result = [NSMutableArray array];
+    NSMutableSet<NSString *> *addedPointKeys = [NSMutableSet set];
+    [self addFavoriteItemsInsideOrEqualToGroupName:groupName toArray:result addedPointKeys:addedPointKeys];
+    return [result copy];
+}
+
++ (void)addFavoriteItemsInsideOrEqualToGroupName:(NSString *)groupName
+                                        toArray:(NSMutableArray<OAFavoriteItem *> *)result
+                                 addedPointKeys:(NSMutableSet<NSString *> *)addedPointKeys
+{
+    for (OAFavoriteGroup *group in [self favoriteGroupsInsideOrEqualToGroupName:groupName])
+    {
+        for (OAFavoriteItem *favorite in [self sortedFavoritePointsForGroup:group])
+            [self addFavoriteItem:favorite pointKey:[favorite getKey] toArray:result addedPointKeys:addedPointKeys];
+    }
+}
+
++ (void)addFavoriteItem:(OAFavoriteItem *)favorite
+               pointKey:(NSString *)pointKey
+                toArray:(NSMutableArray<OAFavoriteItem *> *)result
+         addedPointKeys:(NSMutableSet<NSString *> *)addedPointKeys
+{
+    if (!favorite)
+        return;
+
+    if (pointKey.length > 0 && [addedPointKeys containsObject:pointKey])
+        return;
+
+    if (pointKey.length > 0)
+        [addedPointKeys addObject:pointKey];
+    [result addObject:favorite];
 }
 
 + (NSDate *)lastModifiedDateForGroupName:(NSString *)groupName groups:(NSArray<OAFavoriteGroup *> *)groups fileAttributesByGroupName:(NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *)fileAttributesByGroupName

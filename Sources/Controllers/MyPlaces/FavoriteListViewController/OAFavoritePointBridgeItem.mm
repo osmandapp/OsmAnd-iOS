@@ -14,6 +14,9 @@
 #include <OsmAndCore/Utilities.h>
 
 @implementation OAFavoritePointBridgeItem
+{
+    OAFavoriteItem *_favorite;
+}
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite
 {
@@ -34,9 +37,16 @@
         _timestampDate = [favorite getTimestamp];
         _icon = [favorite getCompositeIcon];
         _isVisible = [favorite isVisible];
+        _favorite = favorite;
     }
 
     return self;
+}
+
+- (void)updateDistanceAndDirection
+{
+    _distance = [self.class distanceForFavorite:_favorite];
+    _direction = [self.class directionForFavorite:_favorite];
 }
 
 + (NSNumber *)distanceForFavorite:(OAFavoriteItem *)favorite

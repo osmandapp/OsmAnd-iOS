@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isVisible;
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
+- (void)updateDistanceAndDirection;
 
 @end
 

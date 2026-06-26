@@ -52,6 +52,9 @@ extension FavoriteListViewController {
 
     var favoriteCellRegistration: RowCellRegistration<FavoritePointRow> {
         RowCellRegistration<FavoritePointRow> { [weak self] cell, _, favorite in
+            if let self, !self.currentSortMode.isDistanceOriented {
+                favorite.bridgeItem.updateDistanceAndDirection()
+            }
             var content = cell.defaultContentConfiguration()
             content.image = OAUtilities.resize(favorite.bridgeItem.icon, newSize: CGSize(width: Self.favoriteIconSize, height: Self.favoriteIconSize))
             content.text = favorite.title
@@ -94,6 +97,20 @@ extension FavoriteListViewController {
                            description: localizedString(isRootFolder ? "empty_state_favourites_desc" : "tracks_empty_folder_description"))
             cell.button.setTitle(localizedString("shared_string_import"), for: .normal)
             cell.button.addTarget(self, action: #selector(self.importButtonClicked), for: .touchUpInside)
+        }
+    }
+
+    func updateVisibleFavoriteCellsDistanceAndDirection() {
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard case .favorite(let favorite) = dataSource.itemIdentifier(for: indexPath),
+                  let cell = collectionView.cellForItem(at: indexPath) as? FavoriteListCell,
+                  var content = cell.contentConfiguration as? UIListContentConfiguration else {
+                continue
+            }
+
+            favorite.bridgeItem.updateDistanceAndDirection()
+            content.secondaryAttributedText = favoriteSecondaryAttributedText(for: favorite, includesGroupName: isSearchResultsMode)
+            cell.contentConfiguration = content
         }
     }
 

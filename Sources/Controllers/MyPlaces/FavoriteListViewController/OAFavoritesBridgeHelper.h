@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAFavoritesBridgeHelper : NSObject
 
++ (void)invalidateFavoriteFoldersCache;
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;
 + (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;

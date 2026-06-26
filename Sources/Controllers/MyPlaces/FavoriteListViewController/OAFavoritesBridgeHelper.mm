@@ -39,10 +39,20 @@
 
 #include <OsmAndCore/Utilities.h>
 
+static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
+
 @implementation OAFavoritesBridgeHelper
+
++ (void)invalidateFavoriteFoldersCache
+{
+    favoriteFoldersCache = nil;
+}
 
 + (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders
 {
+    if (favoriteFoldersCache)
+        return favoriteFoldersCache;
+
     NSArray<OAFavoriteGroup *> *groups = [OAFavoritesHelper getFavoriteGroups] ?: @[];
     NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *fileAttributesByGroupName = [self favoriteStorageAttributesForGroups:groups];
     NSMutableArray<OAFavoriteFolderBridgeItem *> *folders = [NSMutableArray arrayWithCapacity:groups.count];
@@ -55,7 +65,8 @@
         [folders addObject:[[OAFavoriteFolderBridgeItem alloc] initWithGroup:group index:index lastModifiedDate:lastModifiedDate fileSize:fileSize subtreePointsCount:subtreePointsCount]];
     }];
     
-    return [folders copy];
+    favoriteFoldersCache = [folders copy];
+    return favoriteFoldersCache;
 }
 
 + (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName
@@ -111,6 +122,7 @@
     }
 
     [OAFavoritesHelper saveCurrentPointsIntoFile];
+    [self invalidateFavoriteFoldersCache];
 }
 
 + (void)setFavoriteGroupPinned:(NSString *)groupName pinned:(BOOL)pinned
@@ -120,6 +132,7 @@
         return;
 
     [OAFavoritesHelper updateGroup:group pinned:pinned saveImmediately:YES];
+    [self invalidateFavoriteFoldersCache];
 }
 
 + (void)setFavoriteGroupsVisible:(NSArray<NSString *> *)groupNames visible:(BOOL)visible
@@ -144,7 +157,10 @@
     }
 
     if (changed)
+    {
         [OAFavoritesHelper saveCurrentPointsIntoFile];
+        [self invalidateFavoriteFoldersCache];
+    }
 }
 
 + (void)setFavoriteGroupsPinned:(NSArray<NSString *> *)groupNames pinned:(BOOL)pinned
@@ -166,7 +182,10 @@
     }
 
     if (changed)
+    {
         [OAFavoritesHelper saveCurrentPointsIntoFile];
+        [self invalidateFavoriteFoldersCache];
+    }
 }
 
 + (BOOL)addFavoriteGroup:(NSString *)name
@@ -186,6 +205,7 @@
                                iconName:iconName
                      backgroundIconName:backgroundIconName];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
+    [self invalidateFavoriteFoldersCache];
     return YES;
 }
 
@@ -279,6 +299,9 @@
                                         address:[favorite getAddress]])
             [movedItemKeys addObject:itemKey];
     }
+
+    if (movedItemKeys.count > 0)
+        [self invalidateFavoriteFoldersCache];
 }
 
 + (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems
@@ -371,7 +394,10 @@
     }
 
     if (changed)
-        [OAFavoritesHelper saveCurrentPointsIntoFile];;
+    {
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
+        [self invalidateFavoriteFoldersCache];
+    }
 }
 
 + (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName
@@ -477,7 +503,10 @@
     if (groupsToDelete.count == 0)
         return NO;
 
-    return [OAFavoritesHelper deleteFavoriteGroups:groupsToDelete andFavoritesItems:nil];
+    BOOL didDelete = [OAFavoritesHelper deleteFavoriteGroups:groupsToDelete andFavoritesItems:nil];
+    if (didDelete)
+        [self invalidateFavoriteFoldersCache];
+    return didDelete;
 }
 
 + (BOOL)deleteFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem
@@ -487,6 +516,7 @@
         return NO;
 
     [OAFavoritesHelper deleteFavorites:@[favorite] saveImmediately:YES];
+    [self invalidateFavoriteFoldersCache];
     return YES;
 }
 
@@ -565,6 +595,8 @@
         didDelete = YES;
     }
 
+    if (didDelete)
+        [self invalidateFavoriteFoldersCache];
     return didDelete;
 }
 
@@ -933,7 +965,10 @@
     }
 
     if (changed)
+    {
         [OAFavoritesHelper saveCurrentPointsIntoFile];
+        [self invalidateFavoriteFoldersCache];
+    }
 
     return changed;
 }

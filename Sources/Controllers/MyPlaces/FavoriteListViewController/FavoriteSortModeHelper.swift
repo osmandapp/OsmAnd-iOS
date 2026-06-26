@@ -58,6 +58,10 @@ protocol FavoriteSortablePoint {
     var isDateOriented: Bool {
         self == .lastModified || self == .newestDateFirst || self == .oldestDateFirst
     }
+    
+    var isDistanceOriented: Bool {
+        self == .nearest || self == .farthest
+    }
 
     static func byTitle(_ title: String) -> FavoriteSortMode {
         allCases.first { $0.title == title } ?? .nameAZ

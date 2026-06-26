@@ -200,6 +200,7 @@ extension FavoriteListViewController: OAEditorDelegate {
 
         favoriteGroupAppearanceGroupName = nil
         favoriteGroupAppearanceEditor = nil
+        OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
         applySnapshot(animatingDifferences: true)
     }
 
@@ -234,6 +235,7 @@ extension FavoriteListViewController: OAEditorDelegate {
 
 extension FavoriteListViewController: OAEditPointViewControllerDelegate {
     func saveTapped() {
+        OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
         applySnapshot()
     }
 }

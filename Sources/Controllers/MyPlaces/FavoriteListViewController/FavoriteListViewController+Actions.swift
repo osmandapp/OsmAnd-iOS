@@ -230,6 +230,7 @@ extension FavoriteListViewController {
     }
 
     @objc func favoriteDataDidChange() {
+        OAFavoritesBridgeHelper.invalidateFavoriteFoldersCache()
         applySnapshot(animatingDifferences: true)
     }
 

@@ -185,7 +185,11 @@ final class FavoriteListViewController: UIViewController {
         let currentTime = Date.now.timeIntervalSince1970
         guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
         lastDistanceDirectionUpdate = currentTime
-        applySnapshot(animatingDifferences: false)
+        if currentSortMode.isDistanceOriented {
+            applySnapshot(animatingDifferences: false)
+        } else {
+            updateVisibleFavoriteCellsDistanceAndDirection()
+        }
     }
     
     func listCellBackgroundConfiguration() -> UIBackgroundConfiguration {

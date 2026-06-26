@@ -4172,7 +4172,7 @@
 "astro_designations" = "Oznake";
 "astro_expand_your_universe_title" = "Proširite svoj univerzum";
 "astro_expand_your_universe_description" = "Pristupite proširenoj bazi podataka kataloga dubokog neba, člancima Vikipedije i AR režimu van mreže.";
-"astro_offline_knowledge_base_title" = "Baza znanja van mreže";
+"astro_offline_knowledge_base_title" = "Oflajn Mapa neba i Katalog";
 "astro_offline_knowledge_base_description" = "Preuzmite proširenu bazu podataka da biste pristupili člancima Vikipedije i katalozima dubokog neba van mreže.";
 "astro_today_visibility" = "Vidljivost danas";
 "astro_visibility_show_today" = "Prikaži vidljivost danas";
@@ -4283,3 +4283,7 @@
 "selected_waypoints_exit_descr" = "Vaš izbor tačaka puta neće biti sačuvan ako sada zatvorite";
 "auto_select_nearest_points" = "Automatski izbor najbližih tačaka";
 "auto_select_nearest_footer" = "Automatski pronađi i izaberi tačke puta najbliže ovoj putanji.";
+"ltr_or_rtl_triple_combine_via_space" = "%@ %@ %@";
+"route_members" = "Članovi";
+"route_part_of" = "Deo od";
+"multipoligon_related" = "Povezano";

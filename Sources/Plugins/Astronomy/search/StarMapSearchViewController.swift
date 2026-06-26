@@ -85,6 +85,8 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private var pendingSearchQueryRestore = false
     private var catalogsBackState: CatalogsBackState?
     private var dismissOnBrowseBack = false
+    private var launchesInFullSearchMode = false
+    private var pendingInitialQuickPreset: StarMapSearchQuickPresetType?
     private var pendingInitialCatalogWid: String?
     private var redFilterEnabled = false
     private var pendingBrowseScrollOffsetRestore: CGPoint?
@@ -94,10 +96,6 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private let fullSearchContainer = UIView()
     private let fullSearchStack = UIStackView()
     private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
-    private let sortFilterBar = UIStackView()
-    private let sortButton = UIButton(type: .system)
-    private let filterButton = UIButton(type: .system)
-    private let sortProgress = UIActivityIndicatorView(style: .medium)
     private let resultsContainer = UIView()
     private let emptyStateContainer = UIStackView()
     private let emptyStateIcon = UIImageView()
@@ -106,6 +104,9 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private let emptyStateResetButton = UIButton(type: .system)
     private let recentChipsScroll = UIScrollView()
     private let recentChipsContainer = UIStackView()
+    private let sortFilterChipsView = SearchSortFilterChipsView()
+    private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
+    private var sortFilterChipsViewTopConstraint: NSLayoutConstraint?
     
     private weak var parentStarMapController: StarMapViewController?
 
@@ -124,26 +125,25 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         snapshot: .empty,
         widToDisplayName: { [weak self] in self?.widToDisplayName ?? [:] },
         eventTextProvider: { [weak self] entry in self?.searchHelper.resolveEventText(entry) ?? NSAttributedString(string: "") },
-        onScroll: { [weak self] scrollView in self?.onResultsScrolled(scrollView) },
+        onScroll: { [weak self] scrollView in self?.updateSortFilterBarTopConstraint(scrollView) },
         onEntrySelected: { [weak self] entry in self?.onSearchEntrySelected(entry) }
     )
     private lazy var catalogsAdapter = StarMapCatalogsAdapter(
         nightMode: nightMode,
         snapshot: .empty,
-        onScroll: { [weak self] scrollView in self?.onResultsScrolled(scrollView) },
+        onScroll: { [weak self] scrollView in self?.updateSortFilterBarTopConstraint(scrollView) },
         onCatalogSelected: { [weak self] entry in self?.onCatalogSelected(entry) }
     )
     private lazy var exploreAdapter = StarMapSearchExploreAdapter(
         snapshot: .empty,
-        onScroll: { [weak self] scrollView in self?.onResultsScrolled(scrollView) },
-        onWatchNow: { [weak self] in self?.openFullSearch(.WATCH_NOW, catalogWid: nil) },
-        onCategory: { [weak self] preset in self?.openFullSearch(preset, catalogWid: nil) },
+        onScroll: { [weak self] scrollView in self?.updateSortFilterBarTopConstraint(scrollView) },
+        onWatchNow: { [weak self] in self?.pushFullSearchFromExplore(.WATCH_NOW, catalogWid: nil) },
+        onCategory: { [weak self] preset in self?.pushFullSearchFromExplore(preset, catalogWid: nil) },
         onMyData: { [weak self] preset in self?.openMyData(preset) },
         onCatalog: { [weak self] entry in
-            self?.clearCatalogsBackState()
-            self?.openFullSearch(.CATALOG_WID, catalogWid: entry.catalog.wid)
+            self?.pushFullSearchFromExplore(.CATALOG_WID, catalogWid: entry.catalog.wid)
         },
-        onViewAllCatalogs: { [weak self] in self?.openFullSearch(.CATALOGS, catalogWid: nil) }
+        onViewAllCatalogs: { [weak self] in self?.pushFullSearchFromExplore(.CATALOGS, catalogWid: nil) }
     )
     private lazy var searchPreparedDataFactory = StarMapSearchPreparedDataFactory(dataProvider: dataProvider, nightMode: nightMode)
     private lazy var searchHelper = StarMapSearchHelper()
@@ -172,19 +172,50 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         return controller
     }
 
+    static func newFullSearchInstance(quickPreset: StarMapSearchQuickPresetType,
+                                      catalogWid: String? = nil,
+                                      parent: StarMapViewController,
+                                      plugin: AstronomyPlugin) -> StarMapSearchViewController {
+        let controller = StarMapSearchViewController(parent: parent, plugin: plugin)
+        controller.launchesInFullSearchMode = true
+        controller.pendingInitialQuickPreset = quickPreset
+        if quickPreset == .CATALOG_WID, let catalogWid, !catalogWid.isEmpty {
+            controller.pendingInitialCatalogWid = catalogWid
+        }
+        return controller
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .viewBg
-        bindViews()
-        setupNavigationBar()
         definesPresentationContext = true
+        
+        if launchesInFullSearchMode {
+            currentMode = .FULL_SEARCH
+        }
+        
+        setupNavigationBar()
+        
+        bindViews()
+        
         refreshPreparedEntries()
         setupSearchRecycler()
         setupListeners()
         renderRecentChips()
         applyRedFilter(enabled: redFilterEnabled)
+        if launchesInFullSearchMode {
+            let preset = pendingInitialQuickPreset ?? .NONE
+            let catalogWid = pendingInitialCatalogWid
+            pendingInitialQuickPreset = nil
+            pendingInitialCatalogWid = nil
+            currentMode = .FULL_SEARCH
+            clearCatalogsBackState()
+            openFullSearch(preset, catalogWid: catalogWid)
+            return
+        }
         if let initialCatalogWid = pendingInitialCatalogWid {
             pendingInitialCatalogWid = nil
+            currentMode = .FULL_SEARCH
             clearCatalogsBackState()
             openFullSearch(.CATALOG_WID, catalogWid: initialCatalogWid)
             return
@@ -198,6 +229,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         if currentMode == .EXPLORE {
             updateExploreTableHeader()
         }
+        searchAdapter.headerHeight = sortFilterChipsView.frame.height + Layout.contentPadding
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -240,7 +272,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         NSLayoutConstraint.activate([
             mainStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             mainStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainStack.topAnchor.constraint(equalTo: view.topAnchor),
             mainStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             fullSearchStack.leadingAnchor.constraint(equalTo: fullSearchContainer.leadingAnchor),
@@ -262,45 +294,42 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         searchRecycler.estimatedRowHeight = Layout.resultRowMinHeight
         searchRecycler.separatorStyle = .none
 
-        sortFilterBar.axis = .horizontal
-        sortFilterBar.alignment = .center
-        sortFilterBar.distribution = .fill
-        sortFilterBar.spacing = 0
-        sortFilterBar.layoutMargins = UIEdgeInsets(top: 0, left: Layout.contentPadding, bottom: 0, right: Layout.contentPadding)
-        sortFilterBar.isLayoutMarginsRelativeArrangement = true
-        sortFilterBar.heightAnchor.constraint(equalToConstant: Layout.toolbarHeight).isActive = true
-
-        configureMenuButton(sortButton)
-        configureMenuButton(filterButton)
-        let spacer = UIView()
-        sortProgress.hidesWhenStopped = true
-        sortProgress.color = .systemBlue
-        sortFilterBar.addArrangedSubview(sortButton)
-        sortFilterBar.addArrangedSubview(sortProgress)
-        sortFilterBar.addArrangedSubview(spacer)
-        sortFilterBar.addArrangedSubview(filterButton)
+        sortFilterChipsView.dataSource = sortFilterChipsProvider
+        sortFilterChipsView.delegate = sortFilterChipsProvider
+        sortFilterChipsProvider.onChange = { [weak self] in
+            self?.applyFiltersAndSort(scrollToTop: true)
+        }
 
         searchRecycler.translatesAutoresizingMaskIntoConstraints = false
+        sortFilterChipsView.translatesAutoresizingMaskIntoConstraints = false
         emptyStateContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        searchRecycler.addSubview(sortFilterChipsView)
+        sortFilterChipsViewTopConstraint = sortFilterChipsView.topAnchor.constraint(equalTo: searchRecycler.safeAreaLayoutGuide.topAnchor)
+        sortFilterChipsViewTopConstraint?.isActive = true
+        
         resultsContainer.addSubview(searchRecycler)
         resultsContainer.addSubview(emptyStateContainer)
+        fullSearchStack.addArrangedSubview(resultsContainer)
+        
         NSLayoutConstraint.activate([
             searchRecycler.leadingAnchor.constraint(equalTo: resultsContainer.leadingAnchor),
             searchRecycler.trailingAnchor.constraint(equalTo: resultsContainer.trailingAnchor),
             searchRecycler.topAnchor.constraint(equalTo: resultsContainer.topAnchor),
             searchRecycler.bottomAnchor.constraint(equalTo: resultsContainer.bottomAnchor),
+            
+            sortFilterChipsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            sortFilterChipsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             emptyStateContainer.leadingAnchor.constraint(equalTo: resultsContainer.leadingAnchor, constant: Layout.contentPadding),
             emptyStateContainer.trailingAnchor.constraint(equalTo: resultsContainer.trailingAnchor, constant: -Layout.contentPadding),
             emptyStateContainer.centerYAnchor.constraint(equalTo: resultsContainer.centerYAnchor)
         ])
-
-        fullSearchStack.addArrangedSubview(sortFilterBar)
-        fullSearchStack.addArrangedSubview(resultsContainer)
     }
 
     private func setupExploreHeader() {
         recentChipsContainer.axis = .horizontal
+        recentChipsContainer.distribution = .equalSpacing
         recentChipsContainer.spacing = Layout.smallPadding
         recentChipsContainer.translatesAutoresizingMaskIntoConstraints = false
         recentChipsContainer.layoutMargins = UIEdgeInsets(top: Layout.contentPadding, left: Layout.contentPadding, bottom: Layout.contentPadding, right: Layout.contentPadding)
@@ -344,16 +373,6 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         emptyStateContainer.addArrangedSubview(emptyStateResetButton)
         emptyStateResetButton.widthAnchor.constraint(equalTo: emptyStateContainer.widthAnchor, constant: -2 * Layout.contentPadding).isActive = true
         emptyStateContainer.isHidden = true
-    }
-
-    private func configureMenuButton(_ button: UIButton) {
-        button.showsMenuAsPrimaryAction = true
-        button.changesSelectionAsPrimaryAction = false
-        var configuration = UIButton.Configuration.plain()
-        configuration.baseForegroundColor = .systemBlue
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        configuration.imagePadding = Layout.smallPadding
-        button.configuration = configuration
     }
 
     private func appBarBackgroundColor() -> UIColor {
@@ -402,7 +421,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
                     action: #selector(backPressed)
                 )
                 navigationItem.title = getBrowseTitle()
-                navigationItem.largeTitleDisplayMode = .always
+                navigationItem.largeTitleDisplayMode = searchState.quickPresetType == .WATCH_NOW ? .never : .always
                 syncSearchQuery()
 
             case .INPUT:
@@ -493,6 +512,30 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         applyFiltersAndSort(scrollToTop: !fromSearchBarActivation)
     }
 
+    private func pushFullSearchFromExplore(_ quickPresetType: StarMapSearchQuickPresetType,
+                                           catalogWid: String? = nil) {
+        guard let parent = parentStarMapController else { return }
+        let controller = StarMapSearchViewController.newFullSearchInstance(
+            quickPreset: quickPresetType,
+            catalogWid: catalogWid,
+            parent: parent,
+            plugin: plugin
+        )
+        controller.onObjectSelected = onObjectSelected
+        controller.applyRedFilter(enabled: redFilterEnabled)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
+    private func popOrDismiss() {
+        if let navigationController,
+           navigationController.viewControllers.count > 1,
+           navigationController.viewControllers.last === self {
+            navigationController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
+    }
+
     private func applyMode(_ mode: ScreenMode, requestKeyboard: Bool) {
         currentMode = mode
         switch mode {
@@ -509,7 +552,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func showExploreMode() {
         resetResultsScrollState(scrollToTop: true)
-        sortFilterBar.isHidden = true
+        sortFilterChipsView.isHidden = true
         emptyStateContainer.isHidden = true
         searchRecycler.isHidden = false
         updateTableAdapter()
@@ -521,14 +564,13 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         if resetCollapseState {
             resetResultsScrollState(scrollToTop: true)
         }
-        sortFilterBar.isHidden = false
+        sortFilterChipsView.isHidden = false
         searchRecycler.tableHeaderView = nil
         currentFullSearchMode = .BROWSE
         syncSearchQuery()
         navSearchBar.resignFirstResponder()
         updateTableAdapter()
-        updateSortControls()
-        updateFilterControls()
+        updateSortFilterBar()
         updateEmptyStateContent()
         updateEmptyStateVisibility()
         updateNavigationBar()
@@ -541,12 +583,11 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     private func showInputMode(requestKeyboard: Bool) {
         resetResultsScrollState(scrollToTop: true)
         currentFullSearchMode = .INPUT
-        sortFilterBar.isHidden = false
+        sortFilterChipsView.isHidden = false
         searchRecycler.tableHeaderView = nil
         syncSearchQuery()
         updateTableAdapter()
-        updateSortControls()
-        updateFilterControls()
+        updateSortFilterBar()
         updateEmptyStateContent()
         updateEmptyStateVisibility()
         if requestKeyboard {
@@ -559,7 +600,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         if currentMode == .FULL_SEARCH {
             if currentFullSearchMode == .BROWSE {
                 if dismissOnBrowseBack {
-                    dismiss(animated: true)
+                    popOrDismiss()
                     return true
                 }
                 if restoreCatalogsListIfNeeded() {
@@ -570,6 +611,8 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
             }
             if searchState.hasBrowseContext() {
                 showBrowseMode()
+            } else if launchesInFullSearchMode {
+                popOrDismiss()
             } else {
                 applyMode(.EXPLORE, requestKeyboard: false)
             }
@@ -579,6 +622,10 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
     }
 
     private func handleBrowseBackNavigation() {
+        if launchesInFullSearchMode {
+            popOrDismiss()
+            return
+        }
         searchState.reset()
         clearCatalogsBackState()
         applyMode(.EXPLORE, requestKeyboard: false)
@@ -609,9 +656,6 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func currentSearchScrollOffset() -> CGFloat {
         max(0, searchRecycler.contentOffset.y + searchRecycler.adjustedContentInset.top)
-    }
-
-    private func onResultsScrolled(_ scrollView: UIScrollView) {
     }
 
     private func resetResultsScrollState(scrollToTop: Bool) {
@@ -783,10 +827,9 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         let preparedEntriesSnapshot = preparedEntries
         let preparedCatalogEntriesSnapshot = preparedCatalogEntries
         updateResultsAdapter()
-        updateSortControls()
-        updateFilterControls()
+        updateSortFilterBar()
         updateEmptyStateContent()
-        updateSortProgressVisibility(true)
+        sortFilterChipsView.setSortProgressVisible(true)
         emptyStateContainer.isHidden = true
         searchRecycler.isHidden = false
 
@@ -841,7 +884,7 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         updateEmptyStateVisibility()
 //        updateBrowseTitleCollapse(scrollOffset: currentSearchScrollOffset(), animated: false)
         if requestId == filterAndSortRequestId {
-            updateSortProgressVisibility(false)
+            sortFilterChipsView.setSortProgressVisible(false)
         }
     }
 
@@ -876,137 +919,23 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
         searchState.quickPresetType == .WATCH_NOW
     }
 
-    private func updateSortProgressVisibility(_ isVisible: Bool) {
-        if isVisible {
-            sortProgress.startAnimating()
-        } else {
-            sortProgress.stopAnimating()
-        }
+    private func updateSortFilterBar() {
+        sortFilterChipsProvider.configure(
+            searchState: searchState,
+            configuration: .make(
+                catalogMode: shouldShowCatalogEntries(),
+                isMyData: false,
+                showsShowAllVisibility: !shouldHideShowAllTypeFilter(),
+                showsCategoriesSection: !searchState.isCategoryPreset()
+            )
+        )
+        sortFilterChipsView.reloadData()
     }
-
-    private func updateSortControls() {
-        let text: String
-        let iconName: String
-        switch searchState.sortMode {
-        case .NEWEST_FIRST:
-            text = localizedString("astro_sort_newest_first")
-            iconName = "ic_custom_sort_date_newest"
-        case .OLDEST_FIRST:
-            text = localizedString("astro_sort_oldest_first")
-            iconName = "ic_custom_sort_date_oldest"
-        case .NAME_ASC:
-            text = localizedString("sort_name_ascending")
-            iconName = "ic_custom_sort_name_ascending"
-        case .NAME_DESC:
-            text = localizedString("sort_name_descending")
-            iconName = "ic_custom_sort_name_descending"
-        case .BRIGHTEST_FIRST:
-            text = localizedString("astro_sort_brightest_first")
-            iconName = "ic_custom_sort_brightest"
-        case .FAINTEST_FIRST:
-            text = localizedString("astro_sort_faintest_first")
-            iconName = "ic_custom_sort_faintest"
-        case .RISES_SOONEST:
-            text = localizedString("astro_sort_rises_soonest")
-            iconName = "ic_custom_sort_rises"
-        case .SETS_SOONEST:
-            text = localizedString("astro_sort_sets_soonest")
-            iconName = "ic_custom_sort_sets"
-        }
-        var configuration = sortButton.configuration ?? UIButton.Configuration.plain()
-        configuration.title = text
-        configuration.image = AstroIcon.template(iconName)
-        configuration.imagePlacement = .leading
-        configuration.baseForegroundColor = .systemBlue
-        configuration.imagePadding = Layout.smallPadding
-        sortButton.configuration = configuration
-        sortButton.menu = createSortMenu()
-    }
-
-    private func updateFilterControls() {
-        filterButton.isHidden = shouldShowCatalogEntries()
-        var configuration = filterButton.configuration ?? UIButton.Configuration.plain()
-        configuration.title = String(format: localizedString("filter_tracks_count"), searchState.calculateFilterCount())
-        configuration.image = .icCustomFilter
-        configuration.imagePlacement = .trailing
-        configuration.baseForegroundColor = .systemBlue
-        configuration.imagePadding = Layout.smallPadding
-        filterButton.configuration = configuration
-        filterButton.menu = createFilterMenu()
-    }
-
-    private func createSortMenu() -> UIMenu {
-        if shouldShowCatalogEntries() {
-            return UIMenu(title: localizedString("sort_by"), children: [
-                sortAction(title: localizedString("sort_name_ascending"), mode: .NAME_ASC),
-                sortAction(title: localizedString("sort_name_descending"), mode: .NAME_DESC)
-            ])
-        }
-        let actions = [
-            sortAction(title: localizedString("sort_name_ascending"), mode: .NAME_ASC),
-            sortAction(title: localizedString("sort_name_descending"), mode: .NAME_DESC),
-            sortAction(title: localizedString("astro_sort_brightest_first"), mode: .BRIGHTEST_FIRST),
-            sortAction(title: localizedString("astro_sort_faintest_first"), mode: .FAINTEST_FIRST),
-            sortAction(title: localizedString("astro_sort_rises_soonest"), mode: .RISES_SOONEST),
-            sortAction(title: localizedString("astro_sort_sets_soonest"), mode: .SETS_SOONEST)
-        ]
-
-        return UIMenu(title: localizedString("sort_by"), children: actions)
-    }
-
-    private func sortAction(title: String, mode: StarMapSearchSortMode) -> UIAction {
-        UIAction(title: title, state: searchState.sortMode == mode ? .on : .off) { [weak self] _ in
-            self?.searchState.sortMode = mode
-            self?.updateSortControls()
-            self?.applyFiltersAndSort(scrollToTop: true)
-        }
-    }
-
-    private func createFilterMenu() -> UIMenu {
-        guard !shouldShowCatalogEntries() else {
-            return UIMenu(children: [])
-        }
-        normalizeTypeFilterForCurrentPreset()
-        var children: [UIMenuElement] = []
-        if !shouldHideShowAllTypeFilter() {
-            children.append(typeFilterAction(title: localizedString("astro_filter_show_all"), filter: .SHOW_ALL))
-        }
-        children.append(typeFilterAction(title: localizedString("astro_filter_visible_now"), filter: .VISIBLE_NOW))
-        children.append(typeFilterAction(title: localizedString("astro_filter_visible_tonight"), filter: .VISIBLE_TONIGHT))
-        children.append(UIAction(title: localizedString("astro_filter_naked_eye"), state: searchState.nakedEyeOnly ? .on : .off) { [weak self] _ in
-            guard let self else {
-                return
-            }
-            searchState.nakedEyeOnly.toggle()
-            applyFiltersAndSort(scrollToTop: true)
-        })
-        if !searchState.isCategoryPreset() {
-            let categoryActions = [
-                categoryFilterAction(title: localizedString("shared_string_all"), category: .ALL),
-                categoryFilterAction(title: localizedString("astro_solar_system"), category: .SOLAR_SYSTEM),
-                categoryFilterAction(title: localizedString("astro_constellations"), category: .CONSTELLATIONS),
-                categoryFilterAction(title: localizedString("astro_stars"), category: .STARS),
-                categoryFilterAction(title: localizedString("astro_nebulas"), category: .NEBULAS),
-                categoryFilterAction(title: localizedString("astro_star_clusters"), category: .STAR_CLUSTERS),
-                categoryFilterAction(title: localizedString("astro_deep_sky"), category: .DEEP_SKY)
-            ]
-            children.append(UIMenu(title: localizedString("favourites_edit_dialog_category"), options: .displayInline, children: categoryActions))
-        }
-        return UIMenu(title: localizedString("shared_string_type"), children: children)
-    }
-
-    private func typeFilterAction(title: String, filter: StarMapSearchTypeFilter) -> UIAction {
-        UIAction(title: title, state: searchState.typeFilter == filter ? .on : .off) { [weak self] _ in
-            self?.searchState.typeFilter = filter
-            self?.applyFiltersAndSort(scrollToTop: true)
-        }
-    }
-
-    private func categoryFilterAction(title: String, category: StarMapSearchCategoryFilter) -> UIAction {
-        UIAction(title: title, state: searchState.selectedCategories.contains(category) ? .on : .off) { [weak self] _ in
-            self?.searchState.toggleCategoryFilter(category)
-            self?.applyFiltersAndSort(scrollToTop: true)
-        }
+    
+    private func updateSortFilterBarTopConstraint(_ scrollView: UIScrollView) {
+        let inset = scrollView.safeAreaInsets.top + scrollView.contentOffset.y
+        let min = min(inset, 0)
+        sortFilterChipsViewTopConstraint?.constant = abs(min)
     }
 
     // MARK: - Empty State
@@ -1167,35 +1096,11 @@ final class StarMapSearchViewController: UIViewController, UITextFieldDelegate {
 
     private func dismissPopups() {}
 
-//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-//        if textField === exploreSearchBar {
-//            openFullSearch(.NONE, catalogWid: nil)
-//            return false
-//        }
-//        if currentFullSearchMode == .BROWSE {
-//            switchToInputMode()
-//        }
-//        return true
-//    }
-//
-//    @objc private func searchTextChanged() {
-//        guard !suppressQueryDispatch else {
-//            return
-//        }
-//        searchState.query = fullSearchBar.text ?? ""
-//        applyFiltersAndSort(scrollToTop: true)
-//    }
-//
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.resignFirstResponder()
-//        return true
-//    }
-
     // MARK: - Actions
 
     @objc private func backPressed() {
         if !handleBackPressedInternal() {
-            dismiss(animated: true)
+            popOrDismiss()
         }
     }
 
@@ -1230,6 +1135,8 @@ extension StarMapSearchViewController: UISearchControllerDelegate {
         guard currentMode == .FULL_SEARCH, currentFullSearchMode == .INPUT else { return }
         if searchState.hasBrowseContext() {
             showBrowseMode()
+        } else if launchesInFullSearchMode {
+            popOrDismiss()
         } else {
             applyMode(.EXPLORE, requestKeyboard: false)
         }

@@ -43,8 +43,7 @@ final class StarMapMyDataViewController: UIViewController {
     private enum Layout {
         static let contentPadding: CGFloat = 16
         static let smallPadding: CGFloat = 8
-        static let toolbarHeight: CGFloat = 56
-        static let myDataTabsHeight: CGFloat = 56
+        static let myDataSegmentedControlHeight: CGFloat = 36
         static let resultRowMinHeight: CGFloat = 72
         static let buttonHeight: CGFloat = 44
     }
@@ -56,7 +55,37 @@ final class StarMapMyDataViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .darkContent
     }
-    
+
+    private let plugin: AstronomyPlugin
+    private let dataProvider: AstroDataProvider
+    private let nightMode: Bool
+
+    private var isSearchAttached = false
+    private var searchState = StarMapSearchState()
+    private var currentTab: Tab
+    private var preparedEntries: [StarMapSearchEntry] = []
+    private var visibleEntries: [StarMapSearchEntry] = []
+    private var widToDisplayName: [String: String] = [:]
+    private var filterAndSortRequestId = 0
+    private var isFilteringResults = false
+    private var suppressQueryDispatch = false
+    private var redFilterEnabled = false
+
+    private let mainStack = UIStackView()
+    private let myDataSegmentedControlContainer = UIView()
+    private let myDataSegmentedControl = UISegmentedControl()
+    private let sortFilterChipsView = SearchSortFilterChipsView()
+    private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
+    private let resultsContainer = UIView()
+    private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
+    private let emptyStateContainer = UIStackView()
+    private let emptyStateIcon = UIImageView()
+    private let emptyStateTitle = UILabel()
+    private let emptyStateDescription = UILabel()
+    private let emptyStateResetButton = UIButton(type: .system)
+
+    private weak var parentStarMapController: StarMapViewController?
+
     private lazy var inlineSearchBar: UISearchBar = {
         let bar = UISearchBar()
         bar.placeholder = localizedString("astro_search_input_hint")
@@ -69,13 +98,6 @@ final class StarMapMyDataViewController: UIViewController {
     }()
 
     private lazy var searchNavButton = UIBarButtonItem(
-        image: .icCustomSearch,
-        style: .plain,
-        target: self,
-        action: #selector(showInlineSearch)
-    )
-    
-    private lazy var backNavButton = UIBarButtonItem(
         image: .icCustomSearch,
         style: .plain,
         target: self,
@@ -98,38 +120,6 @@ final class StarMapMyDataViewController: UIViewController {
         nightMode: nightMode
     )
     private lazy var searchHelper = StarMapSearchHelper()
-    
-    private let plugin: AstronomyPlugin
-    private let dataProvider: AstroDataProvider
-    private let nightMode: Bool
-    private weak var parentStarMapController: StarMapViewController?
-
-    private var isSearchAttached = false
-    private var searchState = StarMapSearchState()
-    private var currentTab: Tab
-    private var preparedEntries: [StarMapSearchEntry] = []
-    private var visibleEntries: [StarMapSearchEntry] = []
-    private var widToDisplayName: [String: String] = [:]
-    private var filterAndSortRequestId = 0
-    private var isFilteringResults = false
-    private var suppressQueryDispatch = false
-    private var redFilterEnabled = false
-
-    private let mainStack = UIStackView()
-    private let myDataTabs = UIStackView()
-    private var myDataTabButtons: [UIButton] = []
-    private var myDataTabIndicators: [UIView] = []
-    private let sortFilterBar = UIStackView()
-    private let sortButton = UIButton(type: .system)
-    private let filterButton = UIButton(type: .system)
-    private let sortProgress = UIActivityIndicatorView(style: .medium)
-    private let resultsContainer = UIView()
-    private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
-    private let emptyStateContainer = UIStackView()
-    private let emptyStateIcon = UIImageView()
-    private let emptyStateTitle = UILabel()
-    private let emptyStateDescription = UILabel()
-    private let emptyStateResetButton = UIButton(type: .system)
 
     private init(parent: StarMapViewController,
                  plugin: AstronomyPlugin,
@@ -147,17 +137,11 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     static func newInstance(initialTab: Tab = .favorites,
-                          initialPreset: StarMapSearchQuickPresetType? = nil,
-                          parent: StarMapViewController,
-                          plugin: AstronomyPlugin) -> StarMapMyDataViewController {
+                            initialPreset: StarMapSearchQuickPresetType? = nil,
+                            parent: StarMapViewController,
+                            plugin: AstronomyPlugin) -> StarMapMyDataViewController {
         let tab = initialPreset.flatMap(Tab.init(quickPresetType:)) ?? initialTab
         return StarMapMyDataViewController(parent: parent, plugin: plugin, initialTab: tab)
-    }
-
-    func applyRedFilter(enabled: Bool) {
-        redFilterEnabled = enabled
-        guard isViewLoaded else { return }
-        AstroRedFilter.apply(enabled, to: navigationController?.view ?? view)
     }
 
     override func viewDidLoad() {
@@ -169,12 +153,16 @@ final class StarMapMyDataViewController: UIViewController {
         searchState.prepareForExploreEntry(currentTab.quickPresetType, catalogWid: nil)
         refreshPreparedEntries()
         setupSearchRecycler()
-        updateMyDataTabs()
-        updateSortControls()
-        updateFilterControls()
+        updateSortFilterBar()
         updateEmptyStateContent()
         applyRedFilter(enabled: redFilterEnabled)
         applyFiltersAndSort(scrollToTop: false)
+    }
+
+    func applyRedFilter(enabled: Bool) {
+        redFilterEnabled = enabled
+        guard isViewLoaded else { return }
+        AstroRedFilter.apply(enabled, to: navigationController?.view ?? view)
     }
 
     // MARK: - Layout
@@ -184,13 +172,13 @@ final class StarMapMyDataViewController: UIViewController {
         mainStack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainStack)
 
-        setupMyDataTabs()
-        setupSortFilterBar()
+        setupMyDataSegmentedControl()
+        setupSortFilterChips()
         setupEmptyState()
         setupResultsContainer()
 
-        mainStack.addArrangedSubview(myDataTabs)
-        mainStack.addArrangedSubview(sortFilterBar)
+        mainStack.addArrangedSubview(myDataSegmentedControlContainer)
+        mainStack.addArrangedSubview(sortFilterChipsView)
         mainStack.addArrangedSubview(resultsContainer)
 
         NSLayoutConstraint.activate([
@@ -201,83 +189,67 @@ final class StarMapMyDataViewController: UIViewController {
         ])
     }
 
-    private func setupMyDataTabs() {
-        myDataTabs.axis = .horizontal
-        myDataTabs.alignment = .fill
-        myDataTabs.distribution = .fillEqually
-        myDataTabs.spacing = 0
-        myDataTabs.backgroundColor = .viewBg
-        myDataTabs.heightAnchor.constraint(equalToConstant: Layout.myDataTabsHeight).isActive = true
-
+    private func setupMyDataSegmentedControl() {
         let tabTitles = [
             localizedString("favorites_item"),
             localizedString("astro_daily_path"),
             localizedString("astro_directions")
         ]
-        myDataTabButtons.removeAll()
-        myDataTabIndicators.removeAll()
-
         for (index, title) in tabTitles.enumerated() {
-            let tabContainer = UIControl()
-            tabContainer.tag = index
-            tabContainer.addTarget(self, action: #selector(myDataTabPressed(_:)), for: .touchUpInside)
-
-            let button = UIButton(type: .system)
-            button.tag = index
-            button.setTitle(title, for: .normal)
-            button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-            button.isUserInteractionEnabled = false
-            button.translatesAutoresizingMaskIntoConstraints = false
-
-            let indicator = UIView()
-            indicator.backgroundColor = .systemBlue
-            indicator.translatesAutoresizingMaskIntoConstraints = false
-
-            tabContainer.translatesAutoresizingMaskIntoConstraints = false
-            tabContainer.addSubview(button)
-            tabContainer.addSubview(indicator)
-            NSLayoutConstraint.activate([
-                button.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor),
-                button.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
-                button.topAnchor.constraint(equalTo: tabContainer.topAnchor),
-                button.bottomAnchor.constraint(equalTo: indicator.topAnchor),
-                indicator.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor),
-                indicator.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
-                indicator.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-                indicator.heightAnchor.constraint(equalToConstant: 3)
-            ])
-
-            myDataTabs.addArrangedSubview(tabContainer)
-            myDataTabButtons.append(button)
-            myDataTabIndicators.append(indicator)
+            myDataSegmentedControl.insertSegment(withTitle: title, at: index, animated: false)
         }
+        myDataSegmentedControl.selectedSegmentIndex = currentTab.rawValue
+        myDataSegmentedControl.addTarget(self, action: #selector(myDataSegmentChanged(_:)), for: .valueChanged)
+        styleMyDataSegmentedControl()
+
+        myDataSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        myDataSegmentedControlContainer.translatesAutoresizingMaskIntoConstraints = false
+        myDataSegmentedControlContainer.addSubview(myDataSegmentedControl)
+
+        NSLayoutConstraint.activate([
+            myDataSegmentedControl.leadingAnchor.constraint(
+                equalTo: myDataSegmentedControlContainer.leadingAnchor,
+                constant: Layout.contentPadding
+            ),
+            myDataSegmentedControl.trailingAnchor.constraint(
+                equalTo: myDataSegmentedControlContainer.trailingAnchor,
+                constant: -Layout.contentPadding
+            ),
+            myDataSegmentedControl.topAnchor.constraint(
+                equalTo: myDataSegmentedControlContainer.topAnchor,
+                constant: Layout.smallPadding
+            ),
+            myDataSegmentedControl.bottomAnchor.constraint(
+                equalTo: myDataSegmentedControlContainer.bottomAnchor,
+                constant: -Layout.smallPadding
+            ),
+            myDataSegmentedControl.heightAnchor.constraint(equalToConstant: Layout.myDataSegmentedControlHeight)
+        ])
     }
 
-    private func setupSortFilterBar() {
-        sortFilterBar.axis = .horizontal
-        sortFilterBar.alignment = .center
-        sortFilterBar.distribution = .fill
-        sortFilterBar.spacing = 0
-        sortFilterBar.backgroundColor = StarMapSearchLightPalette.listBackground
-        sortFilterBar.layoutMargins = UIEdgeInsets(
-            top: 0,
-            left: Layout.contentPadding,
-            bottom: 0,
-            right: Layout.contentPadding
+    private func styleMyDataSegmentedControl() {
+        myDataSegmentedControl.selectedSegmentTintColor = .white
+        myDataSegmentedControl.backgroundColor = UIColor(
+            red: 118 / 255,
+            green: 118 / 255,
+            blue: 128 / 255,
+            alpha: 0.12
         )
-        sortFilterBar.isLayoutMarginsRelativeArrangement = true
-        sortFilterBar.heightAnchor.constraint(equalToConstant: Layout.toolbarHeight).isActive = true
+        let font = UIFont.scaledSystemFont(ofSize: 13, weight: .semibold, maximumSize: 17)
+        let titleAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: StarMapSearchLightPalette.primaryText,
+            .font: font
+        ]
+        myDataSegmentedControl.setTitleTextAttributes(titleAttributes, for: .normal)
+        myDataSegmentedControl.setTitleTextAttributes(titleAttributes, for: .selected)
+    }
 
-        configureMenuButton(sortButton)
-        configureMenuButton(filterButton)
-
-        let spacer = UIView()
-        sortProgress.hidesWhenStopped = true
-        sortProgress.color = .systemBlue
-        sortFilterBar.addArrangedSubview(sortButton)
-        sortFilterBar.addArrangedSubview(sortProgress)
-        sortFilterBar.addArrangedSubview(spacer)
-        sortFilterBar.addArrangedSubview(filterButton)
+    private func setupSortFilterChips() {
+        sortFilterChipsView.dataSource = sortFilterChipsProvider
+        sortFilterChipsView.delegate = sortFilterChipsProvider
+        sortFilterChipsProvider.onChange = { [weak self] in
+            self?.applyFiltersAndSort(scrollToTop: true)
+        }
     }
 
     private func setupResultsContainer() {
@@ -364,16 +336,6 @@ final class StarMapMyDataViewController: UIViewController {
         searchRecycler.delegate = searchAdapter
     }
 
-    private func configureMenuButton(_ button: UIButton) {
-        button.showsMenuAsPrimaryAction = true
-        button.changesSelectionAsPrimaryAction = false
-        var configuration = UIButton.Configuration.plain()
-        configuration.baseForegroundColor = .systemBlue
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        configuration.imagePadding = Layout.smallPadding
-        button.configuration = configuration
-    }
-
     // MARK: - Navigation
 
     private func setupNavigationBar() {
@@ -425,10 +387,9 @@ final class StarMapMyDataViewController: UIViewController {
         let stateSnapshot = searchState.snapshot()
         let preparedEntriesSnapshot = preparedEntries
         updateResultsAdapter()
-        updateSortControls()
-        updateFilterControls()
+        updateSortFilterBar()
         updateEmptyStateContent()
-        updateSortProgressVisibility(true)
+        sortFilterChipsView.setSortProgressVisible(true)
         emptyStateContainer.isHidden = true
         searchRecycler.isHidden = false
 
@@ -466,7 +427,7 @@ final class StarMapMyDataViewController: UIViewController {
         isFilteringResults = false
         updateEmptyStateVisibility()
         if requestId == filterAndSortRequestId {
-            updateSortProgressVisibility(false)
+            sortFilterChipsView.setSortProgressVisible(false)
         }
     }
 
@@ -492,78 +453,17 @@ final class StarMapMyDataViewController: UIViewController {
 
     // MARK: - UI updates
 
-    private func updateMyDataTabs() {
-        for (index, button) in myDataTabButtons.enumerated() {
-            let selected = index == currentTab.rawValue
-            button.setTitleColor(
-                selected ? .systemBlue : StarMapSearchLightPalette.secondaryText,
-                for: .normal
+    private func updateSortFilterBar() {
+        sortFilterChipsProvider.configure(
+            searchState: searchState,
+            configuration: .make(
+                catalogMode: false,
+                isMyData: true,
+                showsShowAllVisibility: true,
+                showsCategoriesSection: !searchState.isCategoryPreset()
             )
-            if index < myDataTabIndicators.count {
-                myDataTabIndicators[index].isHidden = !selected
-            }
-        }
-    }
-
-    private func updateSortProgressVisibility(_ isVisible: Bool) {
-        if isVisible {
-            sortProgress.startAnimating()
-        } else {
-            sortProgress.stopAnimating()
-        }
-    }
-
-    private func updateSortControls() {
-        let text: String
-        let iconName: String
-        switch searchState.sortMode {
-        case .NEWEST_FIRST:
-            text = localizedString("astro_sort_newest_first")
-            iconName = "ic_custom_sort_date_newest"
-        case .OLDEST_FIRST:
-            text = localizedString("astro_sort_oldest_first")
-            iconName = "ic_custom_sort_date_oldest"
-        case .NAME_ASC:
-            text = localizedString("sort_name_ascending")
-            iconName = "ic_custom_sort_name_ascending"
-        case .NAME_DESC:
-            text = localizedString("sort_name_descending")
-            iconName = "ic_custom_sort_name_descending"
-        case .BRIGHTEST_FIRST:
-            text = localizedString("astro_sort_brightest_first")
-            iconName = "ic_custom_sort_brightest"
-        case .FAINTEST_FIRST:
-            text = localizedString("astro_sort_faintest_first")
-            iconName = "ic_custom_sort_faintest"
-        case .RISES_SOONEST:
-            text = localizedString("astro_sort_rises_soonest")
-            iconName = "ic_custom_sort_rises"
-        case .SETS_SOONEST:
-            text = localizedString("astro_sort_sets_soonest")
-            iconName = "ic_custom_sort_sets"
-        }
-        var configuration = sortButton.configuration ?? UIButton.Configuration.plain()
-        configuration.title = text
-        configuration.image = AstroIcon.template(iconName)
-        configuration.imagePlacement = .leading
-        configuration.baseForegroundColor = .systemBlue
-        configuration.imagePadding = Layout.smallPadding
-        sortButton.configuration = configuration
-        sortButton.menu = createSortMenu()
-    }
-
-    private func updateFilterControls() {
-        var configuration = filterButton.configuration ?? UIButton.Configuration.plain()
-        configuration.title = String(
-            format: localizedString("filter_tracks_count"),
-            searchState.calculateFilterCount()
         )
-        configuration.image = .icCustomFilter
-        configuration.imagePlacement = .trailing
-        configuration.baseForegroundColor = .systemBlue
-        configuration.imagePadding = Layout.smallPadding
-        filterButton.configuration = configuration
-        filterButton.menu = createFilterMenu()
+        sortFilterChipsView.reloadData()
     }
 
     private func updateEmptyStateContent() {
@@ -601,87 +501,18 @@ final class StarMapMyDataViewController: UIViewController {
         searchRecycler.isHidden = shouldShowEmptyState
     }
 
-    // MARK: - Menus
-
-    private func createSortMenu() -> UIMenu {
-        UIMenu(title: localizedString("sort_by"), children: [
-            sortAction(title: localizedString("sort_name_ascending"), mode: .NAME_ASC),
-            sortAction(title: localizedString("sort_name_descending"), mode: .NAME_DESC),
-            sortAction(title: localizedString("astro_sort_brightest_first"), mode: .BRIGHTEST_FIRST),
-            sortAction(title: localizedString("astro_sort_faintest_first"), mode: .FAINTEST_FIRST),
-            sortAction(title: localizedString("astro_sort_rises_soonest"), mode: .RISES_SOONEST),
-            sortAction(title: localizedString("astro_sort_sets_soonest"), mode: .SETS_SOONEST),
-            sortAction(title: localizedString("astro_sort_newest_first"), mode: .NEWEST_FIRST),
-            sortAction(title: localizedString("astro_sort_oldest_first"), mode: .OLDEST_FIRST)
-        ])
-    }
-
-    private func sortAction(title: String, mode: StarMapSearchSortMode) -> UIAction {
-        UIAction(title: title, state: searchState.sortMode == mode ? .on : .off) { [weak self] _ in
-            self?.searchState.sortMode = mode
-            self?.updateSortControls()
-            self?.applyFiltersAndSort(scrollToTop: true)
-        }
-    }
-
-    private func createFilterMenu() -> UIMenu {
-        var children: [UIMenuElement] = [
-            typeFilterAction(title: localizedString("astro_filter_show_all"), filter: .SHOW_ALL),
-            typeFilterAction(title: localizedString("astro_filter_visible_now"), filter: .VISIBLE_NOW),
-            typeFilterAction(title: localizedString("astro_filter_visible_tonight"), filter: .VISIBLE_TONIGHT),
-            UIAction(
-                title: localizedString("astro_filter_naked_eye"),
-                state: searchState.nakedEyeOnly ? .on : .off
-            ) { [weak self] _ in
-                self?.searchState.nakedEyeOnly.toggle()
-                self?.applyFiltersAndSort(scrollToTop: true)
-            }
-        ]
-        let categoryActions = [
-            categoryFilterAction(title: localizedString("shared_string_all"), category: .ALL),
-            categoryFilterAction(title: localizedString("astro_solar_system"), category: .SOLAR_SYSTEM),
-            categoryFilterAction(title: localizedString("astro_constellations"), category: .CONSTELLATIONS),
-            categoryFilterAction(title: localizedString("astro_stars"), category: .STARS),
-            categoryFilterAction(title: localizedString("astro_nebulas"), category: .NEBULAS),
-            categoryFilterAction(title: localizedString("astro_star_clusters"), category: .STAR_CLUSTERS),
-            categoryFilterAction(title: localizedString("astro_deep_sky"), category: .DEEP_SKY)
-        ]
-        children.append(
-            UIMenu(
-                title: localizedString("favourites_edit_dialog_category"),
-                options: .displayInline,
-                children: categoryActions
-            )
-        )
-        return UIMenu(title: localizedString("shared_string_type"), children: children)
-    }
-
-    private func typeFilterAction(title: String, filter: StarMapSearchTypeFilter) -> UIAction {
-        UIAction(title: title, state: searchState.typeFilter == filter ? .on : .off) { [weak self] _ in
-            self?.searchState.typeFilter = filter
-            self?.applyFiltersAndSort(scrollToTop: true)
-        }
-    }
-
-    private func categoryFilterAction(title: String, category: StarMapSearchCategoryFilter) -> UIAction {
-        UIAction(title: title, state: searchState.selectedCategories.contains(category) ? .on : .off) { [weak self] _ in
-            self?.searchState.toggleCategoryFilter(category)
-            self?.applyFiltersAndSort(scrollToTop: true)
-        }
-    }
-
     // MARK: - Actions
 
     @objc private func backPressed() {
         navigationController?.popViewController(animated: true)
     }
 
-    @objc private func myDataTabPressed(_ sender: UIControl) {
-        guard let tab = Tab(rawValue: sender.tag), tab != currentTab else { return }
+    @objc private func myDataSegmentChanged(_ sender: UISegmentedControl) {
+        guard let tab = Tab(rawValue: sender.selectedSegmentIndex), tab != currentTab else { return }
         currentTab = tab
         searchState.prepareForExploreEntry(tab.quickPresetType, catalogWid: nil)
         syncSearchQuery()
-        updateMyDataTabs()
+        updateSortFilterBar()
         updateEmptyStateContent()
         applyFiltersAndSort(scrollToTop: true)
     }
@@ -695,16 +526,16 @@ final class StarMapMyDataViewController: UIViewController {
             self?.onObjectSelected?(entry.objectRef)
         }
     }
-    
+
     @objc private func showInlineSearch() {
         navigationItem.title = nil
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = nil
         navigationItem.rightBarButtonItem = nil
         navigationItem.titleView = inlineSearchBar
-        
+
         inlineSearchBar.alpha = 0
-        
+
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
             self.inlineSearchBar.alpha = 1
             self.navigationController?.navigationBar.layoutIfNeeded()
@@ -714,21 +545,19 @@ final class StarMapMyDataViewController: UIViewController {
             self.inlineSearchBar.becomeFirstResponder()
         }
     }
-    
+
     private func hideInlineSearch() {
-        
         UIView.animate(withDuration: 0.2, animations: {
             self.inlineSearchBar.alpha = 0
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.view.layoutIfNeeded()
         }) { _ in
-            
             self.navigationItem.titleView = nil
             self.setupNavigationBar()
-            
+
             self.inlineSearchBar.resignFirstResponder()
             self.inlineSearchBar.text = nil
-            
+
             self.suppressQueryDispatch = true
             self.suppressQueryDispatch = false
             self.searchState.query = ""
@@ -749,7 +578,7 @@ extension StarMapMyDataViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
-    
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         hideInlineSearch()
     }

@@ -20,6 +20,8 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
                                     infoHeaderCategory: nil,
                                     useExploreRowLayout: false)
     }
+    
+    var headerHeight: CGFloat = 0
 
     private var snapshot: Snapshot
     private let nightMode: Bool
@@ -48,6 +50,20 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
 
     func submitSnapshot(_ snapshot: Snapshot) {
         self.snapshot = snapshot
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let v = UIView()
+        v.isUserInteractionEnabled = false
+        return v
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return headerHeight
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return headerHeight
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -459,7 +475,7 @@ func getCategoryIconRes(_ category: StarMapSearchCategoryFilter) -> String {
     case .DEEP_SKY:
         return "ic_custom_galaxy"
     case .ALL:
-        return "ic_custom_search"
+        return "ic_custom_list"
     }
 }
 

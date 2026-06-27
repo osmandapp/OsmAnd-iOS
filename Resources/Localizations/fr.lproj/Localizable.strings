@@ -2300,7 +2300,7 @@
 "annual_subscription" = "Abonnement annuel";
 "continue_with" = "Continuer avec %@";
 "redeem_promo_code" = "Utiliser le code promo";
-"purchases_feature_desc_hourly_map_updates" = "Bénéficiez de mises à jour des cartes plus régulières : horaires, quotidiennes ou hebdomadaires. Seules les nouveautés seront téléchargées.";
+"purchases_feature_desc_hourly_map_updates" = "Bénéficiez de mises à jour cartographiques plus fréquentes. Mises à jour toutes les heures, tous les jours ou toutes les semaines. Les mises à jour sont téléchargées de manière incrémentielle, uniquement pour la zone modifiée.";
 "transport_hazmat_no_desc" = "Certaines routes et certains tunnels peuvent interdire le transport de matières dangereuses.";
 "restore_purchases" = "Restaurer vos achats";
 "monthly_subscription" = "Abonnement mensuel";
@@ -2590,7 +2590,7 @@
 "routing_attr_avoid_4wd_only_name" = "Éviter les routes pour 4 x 4";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Privilégier le hors-piste";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolignes de vitesse de vent";
-"rendering_attr_showMtbScaleIMBATrails_description" = "Afficher les sentiers dédiés au VTT.";
+"rendering_attr_showMtbScaleIMBATrails_description" = "Afficher les pistes réservées au VTT.";
 "routing_attr_avoid_fords_name" = "Éviter les gués";
 "routing_attr_avoid_highway_name" = "Éviter les autoroutes";
 "rendering_attr_horse_scale_dangerous_name" = "Dangereux";
@@ -3756,7 +3756,7 @@
 "obd_fuel_left_km" = "Carburant restant (km)";
 "obd_fuel_consumption_rate_liter_hour" = "Taux de consommation de carburant";
 "obd_fuel_consumption_rate_percent_hour" = "Taux de consommation de carburant %/h";
-"simulate_obd" = "Simuler les données OBD";
+"simulate_obd" = "Simuler des données OBD";
 "kpa_unit" = "kPa";
 "percent_unit" = "%";
 "percent_hour" = "%/h";
@@ -4186,3 +4186,10 @@
 "astro_galaxies" = "Galaxies";
 "astro_nebulae" = "Nébuleuses";
 "astro_nebulas" = "Nébuleuses";
+"astro_culmination" = "Apogée";
+"astro_star_clusters" = "Amas d'étoiles";
+"astro_open_clusters" = "Ouvrir les amas";
+"astro_min_magnitude" = "Magnitude min.";
+"astro_designations" = "Designations";
+"astro_offline_knowledge_base_title" = "Carte du ciel hors-ligne & Catalogue";
+"astro_offline_knowledge_base_description" = "Téléchargez la base de données étendue pour accéder aux articles de Wikipédia et aux catalogues du ciel profond hors ligne.";

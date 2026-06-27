@@ -28,8 +28,13 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         config.imagePadding = 7
         config.imagePlacement = .leading
         config.baseForegroundColor = .iconColorActive
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .preferredFont(forTextStyle: .subheadline)
+            return outgoing
+        }
         let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(sortMode.image, for: .normal)
+        button.setImage(sortMode.image?.resizedMenuImage(), for: .normal)
         button.menu = createSortMenu()
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
@@ -48,7 +53,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
+        setupNavbarButtons()
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
         tableView.backgroundColor = .viewBg
@@ -64,6 +69,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         definesPresentationContext = false
+        myPlacesDelegate?.updateSearchEnabling(false)
     }
     
     override func isNavbarVisible() -> Bool {
@@ -193,19 +199,19 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
                 let lang = item.string(forKey: "lang") ?? ""
                 
                 let menuProvider: UIContextMenuActionProvider = { _ in
-                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(named: "ic_custom_file_read")) { [weak self] _ in
+                    let readAction = UIAction(title: localizedString("shared_string_read"), image: .icCustomFileRead.resizedMenuImage()) { [weak self] _ in
                         guard let self else { return }
                         lastSelectedIndexPath = indexPath
                         let vc = TravelArticleDialogViewController(articleId: article.generateIdentifier(), lang: article.lang ?? "")
                         vc.delegate = self
                         navigationController?.pushViewController(vc, animated: true)
                     }
-                    let bookmarkAction = UIAction(title: localizedString("shared_string_remove_bookmark"), image: UIImage(named: "ic_custom_bookmark_outlined")) { [weak self] _ in
+                    let bookmarkAction = UIAction(title: localizedString("shared_string_remove_bookmark"), image: .icCustomBookmarkOutlined.resizedMenuImage()) { [weak self] _ in
                         guard let self else { return }
                         TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
                         self.updateData()
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_custom_point_markers_outlined")) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: .icCustomPointMarkersOutlined.resizedMenuImage()) { [weak self] _ in
                         guard let self else { return }
                         self.view.addSpinner(inCenterOfCurrentView: true)
                         _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
@@ -224,7 +230,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         headerView.addSubview(sortButton)
         sortButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            sortButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            sortButton.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
             sortButton.topAnchor.constraint(equalTo: headerView.topAnchor),
             sortButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
             sortButton.trailingAnchor.constraint(lessThanOrEqualTo: headerView.trailingAnchor)
@@ -234,7 +240,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
     }
     
     private func updateSortButtonAndMenu() {
-        sortButton.setImage(sortMode.image, for: .normal)
+        sortButton.setImage(sortMode.image?.resizedMenuImage(), for: .normal)
         sortButton.menu = createSortMenu()
     }
     
@@ -270,11 +276,46 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         return MyPlacesSortMode.byTitle(sortModeTitle)
     }
     
+    private func setupNavbarButtons() {
+        guard !isSearchActive else {
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems(nil, animated: false)
+            navigationItem.setRightBarButtonItems(nil, animated: false)
+            return
+        }
+
+        let searchButton = OABaseNavbarViewController.createRightNavbarButton(
+            nil,
+            icon: UIImage(systemName: "magnifyingglass"),
+            color: .label,
+            action: #selector(searchButtonPressed(_:)),
+            target: self,
+            menu: nil
+        )
+        searchButton?.accessibilityLabel = localizedString("shared_string_search")
+
+        if #available(iOS 26.0, *) {
+            searchButton?.style = .prominent
+            searchButton?.tintColor = .clear
+        }
+
+        if let searchButton {
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([searchButton], animated: false)
+            navigationItem.setRightBarButtonItems([searchButton], animated: false)
+        }
+    }
+
     private func updateData() {
         generateData()
         tableView.reloadData()
     }
     
+    @objc
+    private func searchButtonPressed(_ sender: Any) {
+        myPlacesDelegate?.updateSearchEnabling(true)
+        isSearchActive = true
+        setupNavbarButtons()
+    }
+
     // MARK: GpxReadDelegate
     
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
@@ -313,13 +354,14 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
             isSearchActive = false
             isFiltered = false
         }
-        myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
         updateData()
+        setupNavbarButtons()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
         isFiltered = false
+        myPlacesDelegate?.updateSearchEnabling(false)
     }
     
     // MARK: TravelExploreViewControllerDelegate

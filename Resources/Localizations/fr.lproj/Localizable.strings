@@ -4187,3 +4187,9 @@
 "astro_nebulae" = "Nébuleuses";
 "astro_nebulas" = "Nébuleuses";
 "astro_culmination" = "Apogée";
+"astro_star_clusters" = "Amas d'étoiles";
+"astro_open_clusters" = "Ouvrir les amas";
+"astro_min_magnitude" = "Magnitude min.";
+"astro_designations" = "Designations";
+"astro_offline_knowledge_base_title" = "Carte du ciel hors-ligne & Catalogue";
+"astro_offline_knowledge_base_description" = "Téléchargez la base de données étendue pour accéder aux articles de Wikipédia et aux catalogues du ciel profond hors ligne.";

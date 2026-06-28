@@ -15,7 +15,7 @@ final class FavoriteListViewController: UIViewController {
     static let imageSize: CGFloat = 30.0
     static let favoriteIconSize: CGFloat = 36.0
     static let sortHeaderHeight: CGFloat = 44.0
-    static let sortHeaderLeadingInset: CGFloat = 16.0
+    static let sortHeaderLeadingInset: CGFloat = 24.0
     static let navigationTitleFontSize: CGFloat = 17.0
     static let navigationTitleMaximumSize: CGFloat = 22.0
     static let navigationSubtitleFontSize: CGFloat = 12.0

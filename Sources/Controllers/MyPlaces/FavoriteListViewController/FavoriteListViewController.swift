@@ -91,6 +91,7 @@ final class FavoriteListViewController: UIViewController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
+        searchController.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
         return searchController
@@ -252,6 +253,43 @@ final class FavoriteListViewController: UIViewController {
         myPlacesDelegate?.updateSegmentedControlVisibility(isRootFolder && !collectionView.isEditing && !isSearchResultsMode)
     }
     
+    func configureNavigationButtons() {
+        let targetNavigationItem = isRootFolder ? navigationController?.navigationBar.topItem : navigationItem
+        if collectionView.isEditing {
+            let cancelButton = UIBarButtonItem(title: localizedString("shared_string_cancel"), style: .plain, target: self, action: #selector(cancelButtonPressed))
+            cancelButton.accessibilityLabel = localizedString("shared_string_cancel")
+            let selectAllTitle = localizedString(selectionManager.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
+            let selectAllButton = UIBarButtonItem(title: selectAllTitle, style: .plain, target: self, action: #selector(selectAllButtonPressed))
+            selectAllButton.accessibilityLabel = selectAllTitle
+            targetNavigationItem?.leftBarButtonItem = cancelButton
+            targetNavigationItem?.rightBarButtonItems = [selectAllButton]
+            if isRootFolder {
+                myPlacesDelegate?.showBackButton(false)
+            } else {
+                self.navigationItem.hidesBackButton = true
+            }
+        } else {
+            let actionsButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: makeActionsMenu())
+            actionsButton.tintColor = .label
+            actionsButton.accessibilityLabel = localizedString("shared_string_actions")
+            let searchButton = OABaseNavbarViewController.createRightNavbarButton(nil, icon: UIImage(systemName: "magnifyingglass"), color: .label, action: #selector(searchButtonPressed(_:)), target: self, menu: nil)
+            searchButton?.accessibilityLabel = localizedString("shared_string_search")
+            if #available(iOS 26.0, *) {
+                searchButton?.style = .prominent
+                searchButton?.tintColor = .clear
+            }
+
+            let rightBarButtonItems = [actionsButton, isSearchActive ? nil : searchButton].compactMap { $0 }
+            targetNavigationItem?.leftBarButtonItem = nil
+            targetNavigationItem?.setRightBarButtonItems(rightBarButtonItems, animated: false)
+            if isRootFolder {
+                myPlacesDelegate?.showBackButton(true)
+            } else {
+                self.navigationItem.hidesBackButton = false
+            }
+        }
+    }
+    
     private func registerDistanceAndDirectionObservers() {
         unregisterDistanceAndDirectionObservers()
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
@@ -312,36 +350,6 @@ final class FavoriteListViewController: UIViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
         return NSCollectionLayoutSection(group: group)
     }
-    
-    private func configureNavigationButtons() {
-        let targetNavigationItem = isRootFolder ? navigationController?.navigationBar.topItem : navigationItem
-        if collectionView.isEditing {
-            let cancelButton = UIBarButtonItem(title: localizedString("shared_string_cancel"), style: .plain, target: self, action: #selector(cancelButtonPressed))
-            cancelButton.accessibilityLabel = localizedString("shared_string_cancel")
-            let selectAllTitle = localizedString(selectionManager.areAllSelected ? "shared_string_deselect_all" : "shared_string_select_all")
-            let selectAllButton = UIBarButtonItem(title: selectAllTitle, style: .plain, target: self, action: #selector(selectAllButtonPressed))
-            selectAllButton.accessibilityLabel = selectAllTitle
-            targetNavigationItem?.leftBarButtonItem = cancelButton
-            targetNavigationItem?.rightBarButtonItems = [selectAllButton]
-            if isRootFolder {
-                myPlacesDelegate?.showBackButton(false)
-            } else {
-                self.navigationItem.hidesBackButton = true
-            }
-        } else {
-            let selectButton = UIBarButtonItem(title: localizedString("shared_string_select"), style: .plain, target: self, action: #selector(selectButtonPressed))
-            selectButton.accessibilityLabel = localizedString("shared_string_select")
-            let actionsButton = UIBarButtonItem(image: .icNavbarOverflowMenuOutlined, menu: makeActionsMenu())
-            actionsButton.accessibilityLabel = localizedString("shared_string_actions")
-            targetNavigationItem?.leftBarButtonItem = nil
-            targetNavigationItem?.rightBarButtonItems = [actionsButton, selectButton]
-            if isRootFolder {
-                myPlacesDelegate?.showBackButton(true)
-            } else {
-                self.navigationItem.hidesBackButton = false
-            }
-        }
-    }
 
     private func configureSearchVisibility() {
         guard !isRootFolder else {
@@ -354,7 +362,7 @@ final class FavoriteListViewController: UIViewController {
         }
 
         navigationItem.hidesSearchBarWhenScrolling = false
-        navigationItem.searchController = collectionView.isEditing ? nil : subfolderSearchController
+        navigationItem.searchController = collectionView.isEditing || !isSearchActive ? nil : subfolderSearchController
     }
     
     private func configureSearchToolbar() {

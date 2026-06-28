@@ -22,7 +22,7 @@ extension FavoriteListViewController {
 
     var sortHeaderCellRegistration: UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortHeader> {
         UICollectionView.CellRegistration<SortButtonCollectionViewCell, FavoriteSortHeader> { [weak self] cell, _, sortHeader in
-            cell.sortButton.setImage(sortHeader.sortMode.image, for: .normal)
+            cell.sortButton.setImage(sortHeader.sortMode.image?.resizedMenuImage(), for: .normal)
             cell.sortButton.menu = self?.makeSortMenu(includesDistanceSortModes: sortHeader.includesDistanceSortModes)
         }
     }

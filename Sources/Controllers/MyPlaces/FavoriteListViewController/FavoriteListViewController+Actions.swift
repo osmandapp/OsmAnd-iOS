@@ -57,6 +57,9 @@ extension FavoriteListViewController {
     }
 
     func makeActionsMenu() -> UIMenu {
+        let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage(systemName: "checkmark.circle")?.resizedMenuImage()) { [weak self] _ in
+            self?.selectButtonPressed()
+        }
         let addFolderAction = UIAction(title: localizedString("add_new_folder"), image: .icCustomFolderAddOutlined) { [weak self] _ in
             self?.openNewFavoriteGroupEditor()
         }
@@ -64,9 +67,10 @@ extension FavoriteListViewController {
             self?.openPickerToImport()
         }
 
+        let selectSection = UIMenu(title: "", options: .displayInline, children: [selectAction])
         let addFolderSection = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
         let importSection = UIMenu(title: "", options: .displayInline, children: [importAction])
-        return UIMenu(title: "", children: [addFolderSection, importSection])
+        return UIMenu(title: "", children: [selectSection, addFolderSection, importSection])
     }
 
     func setEditing(_ isEditing: Bool) {
@@ -194,19 +198,53 @@ extension FavoriteListViewController {
         selectionManager.toggle(selectionItem)
     }
 
+    func showSearchController() {
+        if isRootFolder {
+            myPlacesDelegate?.updateSearchEnabling(true)
+        } else {
+            if #available(iOS 26.0, *) {
+                navigationItem.preferredSearchBarPlacement = .stacked
+            }
+
+            navigationItem.hidesSearchBarWhenScrolling = false
+            navigationItem.searchController = subfolderSearchController
+            subfolderSearchController.isActive = true
+        }
+    }
+
+    func hideSearchController() {
+        if isRootFolder {
+            let searchController = navigationController?.navigationBar.topItem?.searchController
+            searchController?.isActive = false
+            if isSelectionModeInSearch {
+                searchController?.searchBar.text = ""
+            }
+            myPlacesDelegate?.updateSearchEnabling(false)
+        } else {
+            subfolderSearchController.isActive = false
+            if isSelectionModeInSearch {
+                subfolderSearchController.searchBar.text = ""
+            }
+            navigationItem.searchController = nil
+        }
+    }
+
     @objc func selectButtonPressed() {
         setEditing(true)
+    }
+
+    @objc func searchButtonPressed(_ sender: Any) {
+        isSearchActive = true
+        showSearchController()
+        configureNavigationButtons()
+        configureToolbar()
+        navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
     }
 
     @objc func searchSelectButtonPressed() {
         isSelectionModeInSearch = true
         isSearchActive = false
-        if isRootFolder {
-            let searchController = navigationController?.navigationBar.topItem?.searchController
-            searchController?.isActive = false
-        } else {
-            subfolderSearchController.isActive = false
-        }
+        hideSearchController()
 
         selectButtonPressed()
     }

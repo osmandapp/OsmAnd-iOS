@@ -106,7 +106,7 @@ extension FavoriteListViewController: OAShareMenuDelegate {
     }
 }
 
-extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate {
+extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         searchResults(for: searchController)
     }
@@ -116,7 +116,6 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
         if isSearchActive || !isSelectionModeInSearch {
             searchText = searchController.searchBar.searchTextField.text ?? ""
         }
-        updateSegmentedControlVisibility()
         configureToolbar()
         navigationController?.setToolbarHidden(shouldHideSearchToolbar(), animated: true)
         applySnapshot(animatingDifferences: false)
@@ -126,11 +125,21 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
         isSearchActive = false
         if !isSelectionModeInSearch {
             searchText = ""
+            searchBar.text = ""
+            hideSearchController()
         }
-        updateSegmentedControlVisibility()
+        configureNavigationButtons()
         configureToolbar()
         navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
+    }
+
+    func presentSearchController(_ searchController: UISearchController) {
+        let searchBarActivationDelay = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
+            guard !searchController.searchBar.isFirstResponder else { return }
+            searchController.searchBar.becomeFirstResponder()
+        }
     }
 }
 

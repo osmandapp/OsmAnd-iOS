@@ -395,7 +395,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     
     if (!NSStringIsEmpty(description))
     {
-        UIImage *icon = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
+        UIImage *icon = [[UIImage templateImageNamed:@"ic_custom_wikipedia"] imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
         
         NSString *buttonText;
         NSString *wikipediaUrl;

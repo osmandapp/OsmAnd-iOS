@@ -126,7 +126,7 @@
 "shared_string_details" = "详情";
 "shared_string_type" = "类型";
 "res_unknown" = "未知";
-"shared_string_size" = "尺寸";
+"shared_string_size" = "大小";
 "created_on" = "创建于";
 "res_update_all" = "更新全部";
 "res_updates_avail_q" = "有更新可用。";
@@ -341,7 +341,7 @@
 "new_destination_point_dialog" = "您已经设置了一个目的地：";
 "add_as_last_destination_point" = "添加为最后的中转点";
 "intermediate_point" = "中转地点 %@";
-"arrived_at_intermediate_point" = "到达中间目的地";
+"arrived_at_intermediate_point" = "到达途径点";
 "shared_string_current" = "当前";
 "make_as_start_point" = "将此设为起点";
 "poi" = "兴趣点";
@@ -408,7 +408,7 @@
 "select_gpx" = "选择 GPX…";
 "shared_string_collapse" = "折叠";
 "shared_string_widgets" = "小工具";
-"map_widget_intermediate_distance" = "中转点";
+"map_widget_intermediate_distance" = "途径点";
 "always_center_position_on_map" = "位置放置始终处于中心";
 "map_widget_appearance_rem" = "剩余的元素";
 "map_widget_compass" = "指南针";
@@ -487,7 +487,7 @@
 "auto_zoom_close" = "近距";
 "auto_zoom_far" = "中距";
 "auto_zoom_farthest" = "远距";
-"keep_informing_never" = "只有手动（轻触箭头）";
+"keep_informing_never" = "仅手动（轻触箭头）";
 "arrival_distance_factor_early" = "提前";
 "arrival_distance_factor_normally" = "正常";
 "arrival_distance_factor_late" = "延后";
@@ -863,7 +863,7 @@
 "rendering_value_bold_name" = "加粗";
 "rendering_attr_showSurfaces_name" = "显示路面材质";
 "rendering_attr_contourWidth_description" = "等高线线宽";
-"rendering_attr_noPolygons_description" = "透明表示地图上所有的陆地区域。";
+"rendering_attr_noPolygons_description" = "使地图上的所有陆地区域透明显示。";
 "routing_attr_avoid_train_description" = "避开火车";
 "routing_attr_avoid_unpaved_description" = "避开未铺设道路";
 "rendering_value_default13_name" = "默认 (13)";
@@ -878,7 +878,7 @@
 "routing_attr_avoid_bus_description" = "避开公交车和无轨电车";
 "routing_attr_weight_name" = "重量";
 "rendering_value_light_brown_name" = "浅棕色";
-"rendering_attr_appMode_description" = "优化的地图用于";
+"rendering_attr_appMode_description" = "针对以下用途优化地图";
 "rendering_attr_noAdminboundaries_description" = "不显示区域(行政区划级别5-9)的边界。";
 "rendering_value_medium_name" = "中等";
 "rendering_attr_contourColorScheme_name" = "等高线的颜色调配";
@@ -978,7 +978,7 @@
 "new_profile" = "新配置文件";
 "routing_attr_piste_type_skitour_name" = "滑雪游览";
 "base_profile_descr_aircraft" = "飞机、滑翔";
-"map_widget_intermediate_time" = "中转点时间";
+"map_widget_intermediate_time" = "途径点时间";
 "purchase_dialog_title" = "选择计划";
 "rendering_attr_whiteWaterSports_name" = "白水运动";
 "rendering_value_darkyellow_name" = "暗黄色";
@@ -1025,7 +1025,7 @@
 "poi_filter_public_transport" = "公共交通";
 "whole_track" = "整个轨迹";
 "shared_string_zoom_levels" = "缩放等级";
-"arrived_at_destination" = "您已抵达目的地。";
+"arrived_at_destination" = "您已抵达终点。";
 "shared_string_min_speed" = "最低速度";
 "sqlite_db_file" = "SQLiteDB 文件";
 "pseudo_mercator_projection" = "球面正轴等角圆柱投影";
@@ -1081,7 +1081,7 @@
 "routing_profile_ski" = "滑雪";
 "shared_string_legend" = "图例";
 "select_data_to_import" = "选择要导入的数据。";
-"shared_string_tones" = "色调";
+"shared_string_tones" = "吨";
 "shared_string_total" = "总计";
 "shared_string_importing" = "正在导入";
 "shared_string_meters" = "米";
@@ -1105,7 +1105,7 @@
 "osm_notes" = "OSM 注记";
 "select_color" = "选择颜色";
 "public_transport_try_change_settings" = "尝试更改设置。";
-"quick_action_remove_next_destination" = "下一个目的地点";
+"quick_action_remove_next_destination" = "下个目的地";
 "shared_string_settings" = "设置";
 "vessel_width_limit_description" = "设置船只宽度以避开狭窄的桥梁";
 "none_point_error" = "请添加至少一个点。";
@@ -1856,7 +1856,7 @@
 "routing_attr_avoid_4wd_only_name" = "避开四轮驱动道路";
 "routing_attr_avoid_footways_name" = "避开人行道";
 "routing_attr_allow_intermittent_name" = "允许间歇性水路";
-"rendering_attr_showWaterwayTunnels_description" = "提高水路隧道的能见度";
+"rendering_attr_showWaterwayTunnels_description" = "提高水路隧道的可视性";
 "routing_attr_allow_intermittent_description" = "允许间歇性水路";
 "routing_attr_allow_streams_description" = "允许溪流和水沟";
 "rendering_attr_OSMMapperAssistantNote_name" = "注记标签";
@@ -1889,7 +1889,7 @@
 "routing_attr_carriage_restrictions_description" = "考虑针对马车的访问许可";
 "routing_attr_prefer_hiking_routes_description" = "偏好徒步路线";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "不要离开越野滑雪道";
-"rendering_attr_showWaterwayTunnels_name" = "提高水路隧道的能见度";
+"rendering_attr_showWaterwayTunnels_name" = "提高水路隧道的可视性";
 "routing_attr_avoid_fords_description" = "避免涉水";
 "routing_attr_difficulty_preference_expert_name" = "专家";
 "rendering_attr_horse_scale_difficult_name" = "艰难";
@@ -2024,7 +2024,7 @@
 "help_article_navigation_routing_name" = "路线规划参数";
 "max_speed_widget_desc" = "显示当前行驶道路的速度限制。";
 "true_bearing_widget_desc" = "从您所在位置观察到的真北与目标点之间的角度。";
-"time_to_go_desc" = "到达目的地所需的时间（以分钟或小时为单位）。";
+"time_to_go_desc" = "到达目的地所需的时间（以分钟或小时计）。";
 "first_marker_widget_desc" = "你可以配置小组件来显示距离或估计到达第一个地图标记的时间。";
 "temperature_widget_desc" = "显示当前地图中心的温度。";
 "shared_string_external" = "外部";
@@ -2087,7 +2087,7 @@
 "activity_type_car_name" = "汽车";
 "activity_type_racing_name" = "赛车";
 "shared_string_cloud" = "云端";
-"announcement_time_passing" = "通过";
+"announcement_time_passing" = "经过";
 "map_widget_ant_bicycle_speed_desc" = "显示行驶速度";
 "coordinates_format" = "坐标格式";
 "help_article_troubleshooting_track_recording_issues_name" = "轨迹录制";
@@ -2284,7 +2284,7 @@
 "map_widget_sunrise_desc" = "显示下一次日出的时间或距离日出的剩余时间。";
 "map_orientation_portrait" = "竖屏";
 "average_speed_widget_desc" = "显示当前行程的平均速度。";
-"announcement_time_prepare_long" = "长时间准备";
+"announcement_time_prepare_long" = "更长准备";
 "shared_string_contents" = "内容";
 "map_marker_2nd" = "第二个地图标记";
 "map_widget_altitude_map_center" = "海拔：地图中心";
@@ -2314,7 +2314,7 @@
 "map_widget_trip_recording_duration" = "持续时间";
 "av_notes_video_widget_desc" = "点击小部件可以让你录制一个视频。";
 "detailed_log_file" = "详细日志文档";
-"arrival_time_widget_desc" = "到达目标地点的时间。";
+"arrival_time_widget_desc" = "预计到达目的地的时间。";
 "glide_ratio_to_target" = "目标滑翔比率";
 "second_next_turn_widget_desc" = "小工具会显示下一处转弯的信息，如果距离转弯处较近，信息则会启用。";
 "help_article_troubleshooting_maps_data_name" = "地图与数据";
@@ -2533,8 +2533,8 @@
 "height_legend_description" = "海拔高度着色图用于可视化地形起伏。";
 "profile_icon" = "配置文件图标";
 "battery_saving_mode" = "省电模式";
-"view_angle_description" = "显示您当前面对方向的锥形区域";
-"quick_action_toggle_preference" = "更改首选项的开关。";
+"view_angle_description" = "显示您当前面朝方向的锥形区域";
+"quick_action_toggle_preference" = "更改首选项的按钮。";
 "navigation_position" = "导航位置";
 "location_radius_description" = "显示代表您当前位置精度的圆形区域";
 "shared_string_local" = "本地";
@@ -2628,14 +2628,14 @@
 "three_years_subscription" = "三年订阅";
 "sensor_data" = "传感器数据";
 "osm_live_payment_renews_3_years" = "每三年更新一次";
-"auto_25_chars_route_tl_kl" = "向左转并靠左";
+"auto_25_chars_route_tl_kl" = "左转后靠左";
 "detailed_track_guidance" = "详细的轨迹指引";
 "auto_25_chars_route_roundabout_kr" = "从第 %d 出口离开并靠右";
 "shared_strings_dimensions" = "尺寸规格";
-"auto_25_chars_route_tshl" = "向左急转";
+"auto_25_chars_route_tshl" = "左急转";
 "new_trip_segment" = "新的行程分段";
 "online_photos" = "在线照片";
-"auto_25_chars_route_kl" = "保持在左侧";
+"auto_25_chars_route_kl" = "靠左行驶";
 "auto_25_chars_route_tu" = "调头";
 "imperial_gallons" = "英制加仑";
 "quick_action_showhide_coordinates_grid_descr" = "快捷动作可控制地图上坐标网格可见度。";
@@ -2649,7 +2649,7 @@
 "dd_mm_mmm_format" = "度度°分分.分分分\'";
 "shared_string_items" = "项目";
 "litres" = "升";
-"auto_25_chars_route_kr" = "保持在右侧";
+"auto_25_chars_route_kr" = "靠右行驶";
 "add_smart_folder" = "添加智能文件夹";
 "shared_string_unchanged" = "未修改";
 "meridian_180" = "180 度经线";
@@ -2657,7 +2657,7 @@
 "auto_25_chars_route_tslr" = "稍向右转";
 "no_internet_descr" = "请检查您的连接并重试。";
 "map_widget_route_information_desc" = "显示预计到达时间、剩余旅行时间以及当前导航路线的距离。";
-"auto_25_chars_route_tu_kr" = "掉头并靠右";
+"auto_25_chars_route_tu_kr" = "掉头后靠右";
 "original_color_description" = "每个点都会保留其颜色。";
 "three_months_subscription" = "季度订阅";
 "save_favorite_default_appearance" = "将更改应用于文件夹中已存在的点，还是仅应用于新的点？";
@@ -2674,7 +2674,7 @@
 "preview_next_turn" = "预览下个转弯";
 "liter" = "升";
 "empty_smart_folder_title" = "没有匹配的轨迹";
-"auto_25_chars_route_tr_kl" = "向右转并靠左";
+"auto_25_chars_route_tr_kl" = "右转后靠左";
 "fuel_tank_capacity_description" = "输入油箱容量，准确跟踪油量和消耗情况";
 "default_appearance" = "默认外观";
 "intermediate_first" = "中继点优先";
@@ -2701,15 +2701,15 @@
 "save_as_smart_folder" = "保存为智能文件夹";
 "add_hidden_group_info" = "添加的点可以在\"%@\"中被找到。解除指定组的隐藏以在地图上展示它。";
 "unit_of_volume" = "容积单位";
-"auto_25_chars_route_tr_kr" = "向右转并靠右";
+"auto_25_chars_route_tr_kr" = "右转后靠右";
 "auto_25_chars_route_tl" = "左转";
 "shared_string_default_view" = "默认视图";
-"auto_25_chars_route_tshr" = "向右急转";
+"auto_25_chars_route_tshr" = "右急转";
 "change_activity" = "变更活动";
-"auto_25_chars_route_tl_kr" = "向左转并靠右";
+"auto_25_chars_route_tl_kr" = "左转后靠右";
 "apply_to_all_points" = "应用至所有点";
 "terrain_map" = "地形图(3D)";
-"auto_25_chars_route_tu_kl" = "掉头并靠左";
+"auto_25_chars_route_tu_kl" = "掉头后靠左";
 "original_shape_description" = "每个点都会保留其形状。";
 "dd_mm_ss_format" = "度度°分分′秒秒″";
 "attach_roads_descr" = "将轨迹附加到道路上，即可获得详细的路线信息，包括转弯指示和道路属性。";
@@ -2881,7 +2881,7 @@
 "trip_recording_moving_time_widget_description" = "显示当前记录的移动时间，或最后一次上坡和下坡的时间。";
 "trip_recording_moving_time" = "移动时间";
 "free_custom_color_description" = "使用任意颜色自定义 3D 建筑。非常适合搭配地图主题或提高对比度。";
-"buildings_3d_visibility_description" = "调整地图上 3D 建筑的透明度。";
+"buildings_3d_visibility_description" = "调整地图上 3D 建筑的不透明度。";
 "level_of_details" = "详细程度";
 "performance" = "性能";
 "view_distance" = "可视距离";
@@ -2916,3 +2916,10 @@
 "shared_string_last_uphill" = "近期爬升";
 "shared_string_last_downhill" = "近期下降";
 "enable_3d_objects" = "3D 建筑";
+"quick_action_drawer_desc" = "显示或隐藏侧边菜单的切换按钮。";
+"quick_action_to_my_location" = "回到当前位置";
+"quick_action_move_map_left" = "左移地图";
+"quick_action_move_map_right" = "右移地图";
+"quick_action_move_map_down" = "下移地图";
+"quick_action_move_map_up" = "上移地图";
+"local_indexes_cat_tts" = "语音提示（文字转语音）";

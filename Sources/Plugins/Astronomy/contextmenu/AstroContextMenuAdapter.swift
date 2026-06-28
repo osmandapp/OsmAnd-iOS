@@ -11,8 +11,9 @@ import UIKit
 enum AstroContextMenuTheme {
     static var pageBackground: UIColor { .viewBg }
     static var cardBackground: UIColor { .groupBg }
-    static var secondaryBackground: UIColor { UIColor(named: "groupBgColorSecondary") ?? .viewBg }
-    static var actionBackground: UIColor { .contextMenuButtonBg }
+    static var secondaryBackground: UIColor { .groupBgColorSecondary }
+    static var actionBackground: UIColor { .buttonBgColorTertiary }
+    static var actionTapBackground: UIColor { .buttonBgColorTap }
     static var iconButtonBackground: UIColor { UIColor(named: "iconButtonBgColor") ?? secondaryBackground }
     static var primaryText: UIColor { .textColorPrimary }
     static var secondaryText: UIColor { .textColorSecondary }
@@ -31,6 +32,8 @@ enum AstroContextMenuTheme {
 }
 
 final class AstroContextMenuAdapter {
+    private(set) var currentList: [AstroContextMenuItem] = []
+    
     private let presentingController: UIViewController
     private let onDescriptionRead: (AstroDescriptionCardItem) -> Void
     private let onGalleryToggle: (String) -> Void
@@ -43,8 +46,6 @@ final class AstroContextMenuAdapter {
     private let onScheduleSelectDate: (Date) -> Void
     private let onCatalogsToggleExpanded: () -> Void
     private let onCatalogClick: (Catalog) -> Void
-
-    private(set) var currentList: [AstroContextMenuItem] = []
 
     init(presentingController: UIViewController,
          onDescriptionRead: @escaping (AstroDescriptionCardItem) -> Void,
@@ -132,7 +133,7 @@ class AstroCardContainerView: UIView {
     private func setup(title: String?, iconName: String?) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = AstroContextMenuTheme.cardBackground
-        layer.cornerRadius = 12
+        layer.cornerRadius = 26
         layer.masksToBounds = true
 
         stack.axis = .vertical
@@ -168,7 +169,7 @@ class AstroCardContainerView: UIView {
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 

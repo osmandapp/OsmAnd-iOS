@@ -1065,6 +1065,8 @@
 "fav_point_dublicate" = "Duplicate Favorite name specified";
 "fav_point_dublicate_message" = "Favorite renamed to %@ to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
+"delete_track_confirmation_title" = "Delete \"%@\"?";
+"tracks_delete_confirmation_message" = "This action cannot be undone.";
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorites_delete_confirmation_title" = "Delete %ld favorites?";
@@ -1546,6 +1548,7 @@
 "ltr_or_rtl_combine_via_per" = "%@ per %@";
 "ltr_or_rtl_combine_with_brackets" = "%@ (%@)";
 
+"ltr_or_rtl_triple_combine_via_space" = "%@ %@ %@";
 "shared_string_beta" = "Beta";
 "of" = "%d of %d";
 "downloaded_bytes" = "%@ of %@";
@@ -4394,6 +4397,10 @@
 "rendering_attr_showClimbingRoutes_description" = "Show climbing routes";
 "rendering_attr_showClimbingRoutes_name" = "Climbing routes";
 
+"route_members" = "Members";
+"route_part_of" = "Part of";
+"multipoligon_related" = "Related";
+
 "shared_string_view_all" = "View all";
 "no_internet_descr" = "Please check your connection and try again.";
 "no_photos_available" = "No photos available";
@@ -4642,7 +4649,7 @@
 "astro_designations" = "Designations";
 "astro_expand_your_universe_title" = "Expand your universe";
 "astro_expand_your_universe_description" = "Get access to the extended database of deep sky catalogs, Wikipedia articles and AR mode offline.";
-"astro_offline_knowledge_base_title" = "Offline Knowledge Base";
+"astro_offline_knowledge_base_title" = "Offline Sky Map & Catalog";
 "astro_offline_knowledge_base_description" = "Download the extended database to access Wikipedia articles and deep sky catalogs offline.";
 "astro_today_visibility" = "Today visibility";
 "astro_visibility_show_today" = "Show today visibility";

@@ -15,7 +15,7 @@ enum AstroVisibilityCardViewHolder {
         let card = UIView()
         card.translatesAutoresizingMaskIntoConstraints = false
         card.backgroundColor = AstroContextMenuTheme.cardBackground
-        card.layer.cornerRadius = 12
+        card.layer.cornerRadius = 26
         card.layer.masksToBounds = true
 
         let stack = UIStackView()
@@ -23,20 +23,29 @@ enum AstroVisibilityCardViewHolder {
         stack.spacing = 0
         stack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(stack)
+        
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
+            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
+            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
+        ])
 
         let header = UIStackView()
         header.axis = .horizontal
         header.alignment = .center
         header.spacing = 8
         header.isLayoutMarginsRelativeArrangement = true
-        header.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: item.showResetButton ? 8 : 16)
-        header.heightAnchor.constraint(greaterThanOrEqualToConstant: 48).isActive = true
+        header.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 0, trailing: item.showResetButton ? 8 : 16)
+        
         let title = UILabel()
         title.text = item.titleText
-        title.textColor = AstroContextMenuTheme.primaryText
-        title.font = .systemFont(ofSize: 16, weight: .bold)
+        title.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
+        title.adjustsFontForContentSizeCategory = true
+        title.textColor = AstroContextMenuTheme.secondaryText
         title.numberOfLines = 0
         header.addArrangedSubview(title)
+        
         if item.showResetButton {
             let resetButton = UIButton(type: .system)
             resetButton.setImage(AstroIcon.template("ic_custom_date"), for: .normal)
@@ -47,7 +56,6 @@ enum AstroVisibilityCardViewHolder {
             resetButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
             header.addArrangedSubview(resetButton)
         }
-        stack.addArrangedSubview(header)
 
         let graphView = AstroVisibilityGraphView()
         graphView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,34 +103,34 @@ enum AstroVisibilityCardViewHolder {
             eventViews.dropFirst().forEach { $0.widthAnchor.constraint(equalTo: eventViews[0].widthAnchor).isActive = true }
             stack.addArrangedSubview(events)
         }
+        
+        let mainStack = UIStackView(arrangedSubviews: [header, card])
+        mainStack.axis = .vertical
+        mainStack.spacing = 10
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         if !item.locationText.isEmpty {
             let location = UILabel()
             location.text = item.locationText
-            location.textColor = AstroContextMenuTheme.secondaryText
-            location.font = .systemFont(ofSize: 14)
+            location.textColor = .textColorSecondary
+            location.font = .preferredFont(forTextStyle: .footnote)
             location.numberOfLines = 0
-            let iconView = UIImageView(image: .icCustomMarker)
-            iconView.tintColor = AstroContextMenuTheme.secondaryIcon
+            let iconView = UIImageView(image: .icCustomLocationMarker)
+            iconView.tintColor = .textColorSecondary
             iconView.contentMode = .scaleAspectFit
             let row = UIStackView(arrangedSubviews: [iconView, location])
             row.axis = .horizontal
             row.alignment = .center
-            row.spacing = 10
+            row.spacing = 2
             row.isLayoutMarginsRelativeArrangement = true
-            row.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 16, trailing: 16)
+            row.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
             iconView.widthAnchor.constraint(equalToConstant: 20).isActive = true
             iconView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-            stack.addArrangedSubview(row)
+            mainStack.addArrangedSubview(row)
+            mainStack.setCustomSpacing(4, after: card)
         }
 
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            stack.topAnchor.constraint(equalTo: card.topAnchor),
-            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor)
-        ])
-        return card
+        return mainStack
     }
 
     private static func makeEvent(time: String?,
@@ -143,17 +151,17 @@ enum AstroVisibilityCardViewHolder {
         let timeLabel = UILabel()
         timeLabel.text = time
         timeLabel.textColor = AstroContextMenuTheme.activeText
-        timeLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        timeLabel.font = .preferredFont(forTextStyle: .subheadline)
         timeLabel.adjustsFontSizeToFitWidth = true
         timeLabel.minimumScaleFactor = 0.75
         let symbolLabel = UILabel()
         symbolLabel.text = symbol
         symbolLabel.textColor = symbolColor
-        symbolLabel.font = .systemFont(ofSize: 12, weight: .bold)
+        symbolLabel.font = .preferredFont(forTextStyle: .footnote)
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.textColor = AstroContextMenuTheme.secondaryText
-        titleLabel.font = .systemFont(ofSize: 12)
+        titleLabel.textColor = .textColorSecondary
+        titleLabel.font = .preferredFont(forTextStyle: .footnote)
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.7
         valueRow.addArrangedSubview(timeLabel)

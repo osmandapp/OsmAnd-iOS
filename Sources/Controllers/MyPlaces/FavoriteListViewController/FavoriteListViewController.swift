@@ -236,7 +236,7 @@ final class FavoriteListViewController: UIViewController {
         let items = [shareButton, fixedSpacer, moveButton, actionsFixedSpacer, actionsButton, flexibleSpacer, deleteButton]
         items.forEach { $0.isEnabled = isSelected }
         if isRootFolder {
-            myPlacesDelegate?.updateToolbar?(with: items)
+            myPlacesDelegate?.updateToolbar(with: items)
         } else {
             toolbarItems = items
         }
@@ -362,7 +362,7 @@ final class FavoriteListViewController: UIViewController {
         selectButton.accessibilityLabel = localizedString("shared_string_select")
         let items = [selectButton]
         if isRootFolder {
-            myPlacesDelegate?.updateToolbar?(with: items)
+            myPlacesDelegate?.updateToolbar(with: items)
         } else {
             toolbarItems = items
         }
@@ -386,8 +386,8 @@ final class FavoriteListViewController: UIViewController {
 
     private func setNavigationTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
         if isRootFolder {
-            if myPlacesDelegate?.updateTitle?(title, subtitle: subtitle, hideSubtitle: hideSubtitle) == nil {
-                myPlacesDelegate?.updateTitle?(title, hideSubtitle: hideSubtitle)
+            if myPlacesDelegate?.updateTitle(title, subtitle: subtitle, hideSubtitle: hideSubtitle) == nil {
+                myPlacesDelegate?.updateTitle(title, hideSubtitle: hideSubtitle)
             }
         } else {
             navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))

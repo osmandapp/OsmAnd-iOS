@@ -27,6 +27,7 @@ typedef enum
     CHECK_CONTAINS,
     // simple collator equals
     CHECK_EQUALS,
+    MULTISEARCH,
 
 } StringMatcherMode;
 

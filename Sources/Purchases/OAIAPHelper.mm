@@ -494,6 +494,11 @@ static OASubscriptionState *EXPIRED;
     return _products.vehicleMetrics;
 }
 
+- (OAProduct *)astronomy
+{
+    return _products.astronomy;
+}
+
 - (OAProduct *) carplay
 {
     return _products.carplay;

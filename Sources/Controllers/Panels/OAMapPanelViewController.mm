@@ -644,12 +644,25 @@ typedef enum
     CGRect newFrame = CGRectMake(0, 0, destinationView.bounds.size.width, destinationView.bounds.size.height);
     if (!CGRectEqualToRect(_mapViewController.view.frame, newFrame))
         _mapViewController.view.frame = newFrame;
+    _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-    [_mapViewController willMoveToParentViewController:nil];
-    
-    [destinationViewController addChildViewController:_mapViewController];
-    [destinationView addSubview:_mapViewController.view];
-    [_mapViewController didMoveToParentViewController:self];
+    UIViewController *currentParent = [_mapViewController parentViewController];
+    if (currentParent && currentParent != destinationViewController)
+    {
+        [_mapViewController willMoveToParentViewController:nil];
+        [_mapViewController.view removeFromSuperview];
+        [_mapViewController removeFromParentViewController];
+    }
+
+    if ([_mapViewController parentViewController] != destinationViewController)
+        [destinationViewController addChildViewController:_mapViewController];
+
+    if (_mapViewController.view.superview != destinationView)
+        [destinationView addSubview:_mapViewController.view];
+
+    if (currentParent != destinationViewController)
+        [_mapViewController didMoveToParentViewController:destinationViewController];
+
     [destinationView bringSubviewToFront:_mapViewController.view];
     
     _mapViewController.minimap = YES;
@@ -736,13 +749,41 @@ typedef enum
     [_mapViewController hideTempGpxTrack];
     
     _mapViewController.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
+    _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    [_mapViewController willMoveToParentViewController:nil];
-    
-    [self addChildViewController:_mapViewController];
-    [self.view addSubview:_mapViewController.view];
-    [_mapViewController didMoveToParentViewController:self];
+    UIViewController *currentParent = [_mapViewController parentViewController];
+    if (currentParent && currentParent != self)
+    {
+        [_mapViewController willMoveToParentViewController:nil];
+        [_mapViewController.view removeFromSuperview];
+        [_mapViewController removeFromParentViewController];
+    }
+
+    if ([_mapViewController parentViewController] != self)
+        [self addChildViewController:_mapViewController];
+
+    if (_mapViewController.view.superview != self.view)
+        [self.view addSubview:_mapViewController.view];
+
+    if (currentParent != self)
+        [_mapViewController didMoveToParentViewController:self];
+
     [self.view sendSubviewToBack:_mapViewController.view];
+    _mapViewController.minimap = NO;
+}
+
+- (void) restoreMapAfterReuseIfNeeded
+{
+    if (_mapNeedsRestore)
+    {
+        _mapNeedsRestore = NO;
+        [self restoreMapAfterReuse];
+    }
+    if ([_mapViewController parentViewController] != self)
+    {
+        [self doMapRestore];
+    }
+    _mapViewController.minimap = NO;
 }
 
 - (void) openDestinationViewController
@@ -1389,7 +1430,7 @@ typedef enum
     if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
         [validPoints addObjectsFromArray:targetPoints];
-        if (selectedObjects)
+        if (!NSArrayIsEmpty(selectedObjects))
             [validSelectedObjects addObjectsFromArray:selectedObjects];
     }
     else
@@ -1400,7 +1441,7 @@ typedef enum
             if ([self processTargetPoint:targetPoint])
             {
                 [validPoints addObject:targetPoint];
-                if (selectedObjects)
+                if (!NSArrayIsEmpty(selectedObjects))
                     [validSelectedObjects addObject:selectedObjects[i]];
             }
         }
@@ -1521,16 +1562,26 @@ typedef enum
 
 - (void)setSelectedObject:(OATargetPoint *)targetPoint
 {
+
+    OAMapObject *obj = nil;
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
+        obj = targetPoint.targetObj;
+
+    }
+    else if([targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *baseDetails = (BaseDetailsObject *) targetPoint.targetObj;
+        obj = (OAMapObject *) [baseDetails syntheticAmenity];
+    }
+    if (obj != nil)
+    {
         QVector<OsmAnd::PointI> points;
-        OAMapObject *obj = targetPoint.targetObj;
         if (obj.x && obj.x.count > 0)
         {
             for (int i = 0; i < obj.x.count; i++)
                 points.push_back(OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue));
         }
-
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
 }

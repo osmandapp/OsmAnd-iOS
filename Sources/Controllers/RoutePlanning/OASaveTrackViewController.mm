@@ -16,13 +16,12 @@
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OAValueTableViewCell.h"
-#import "OAFolderCardsCell.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
+@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, FolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
 @end
 
@@ -93,7 +92,7 @@
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        OAFolderCardsCell *cell = (OAFolderCardsCell *)[self.tableView cellForRowAtIndexPath:_selectedFolderIndexPath];
+        FolderCardsCell *cell = (FolderCardsCell *)[self.tableView cellForRowAtIndexPath:_selectedFolderIndexPath];
         [cell.collectionView reloadData];
     }
 }
@@ -205,7 +204,7 @@
             @"value" : _selectedFolderName,
         },
         @{
-            @"type" : [OAFolderCardsCell getCellIdentifier],
+            @"type" : [FolderCardsCell getCellIdentifier],
             @"selectedValue" : @(_selectedFolderIndex),
             @"values" : _allFolders,
             @"addButtonTitle" : OALocalizedString(@"add_folder")
@@ -381,13 +380,12 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAFolderCardsCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[FolderCardsCell getCellIdentifier]])
     {
-        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAFolderCardsCell getCellIdentifier]];
+        FolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:[FolderCardsCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFolderCardsCell getCellIdentifier] owner:self options:nil];
-            cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
+            cell = [[FolderCardsCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[FolderCardsCell getCellIdentifier]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
             cell.cellIndex = indexPath;
@@ -409,9 +407,9 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAFolderCardsCell getCellIdentifier]])
+    if ([type isEqualToString:[FolderCardsCell getCellIdentifier]])
     {
-        OAFolderCardsCell *folderCell = (OAFolderCardsCell *)cell;
+        FolderCardsCell *folderCell = (FolderCardsCell *)cell;
         [folderCell updateContentOffset];
     }
 }

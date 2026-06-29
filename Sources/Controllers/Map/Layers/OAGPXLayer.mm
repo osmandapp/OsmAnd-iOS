@@ -1087,10 +1087,18 @@ colorizationScheme:(int)colorizationScheme
 
 - (void)processSplitLabels:(OASGpxDataItem *)gpx doc:(OASGpxFile *)doc
 {
+    double splitInterval = gpx.splitInterval;
+
+    if (splitInterval <= 0 || !isfinite(splitInterval))
+        return;
+    
+    GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
+    BOOL joinSegments = gpx.joinSegments;
+    EOAGpxSplitType splitType = dataWrapper.splitType;
+
     NSBlockOperation* operation = [[NSBlockOperation alloc] init];
     __weak NSBlockOperation* weakOperation = operation;
     OAAtomicInteger *splitCounter = _splitCounter;
-    GPXDataItemGPXFileWrapper *dataWrapper = [[GPXDataItemGPXFileWrapper alloc] initWithGpxDataItem:gpx gpxFile:doc];
     [operation addExecutionBlock:^{
         if (splitCounter != _splitCounter || weakOperation.isCancelled)
             return;
@@ -1098,14 +1106,14 @@ colorizationScheme:(int)colorizationScheme
         NSArray<OASGpxTrackAnalysis *> *splitData = nil;
         BOOL splitByTime = NO;
         BOOL splitByDistance = NO;
-        switch (dataWrapper.splitType) {
+        switch (splitType) {
             case EOAGpxSplitTypeDistance: {
                 NSMutableArray *array = [NSMutableArray array];
                 for (OASTrack *subtrack in document.tracks)
                 {
                     for (OASTrkSegment *segment in subtrack.segments)
                     {
-                        [array addObjectsFromArray:[segment splitByDistanceMeters:gpx.splitInterval joinSegments:gpx.joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
+                        [array addObjectsFromArray:[segment splitByDistanceMeters:splitInterval joinSegments:joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
                     }
                 }
                 splitData = [array copy];
@@ -1118,7 +1126,7 @@ colorizationScheme:(int)colorizationScheme
                 {
                     for (OASTrkSegment *segment in subtrack.segments)
                     {
-                        [array addObjectsFromArray:[segment splitByTimeSeconds:gpx.splitInterval joinSegments:gpx.joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
+                        [array addObjectsFromArray:[segment splitByTimeSeconds:splitInterval joinSegments:joinSegments pointsAnalyser:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
                     }
                 }
                 splitData = [array copy];

@@ -102,6 +102,7 @@ static const NSStringCompareOptions searchOptions = NSCaseInsensitiveSearch | NS
 
     UIBarButtonItem *_actionsButton;
     UIBarButtonItem *_editButton;
+    UIBarButtonItem *_searchButton;
     FreeBackupBanner *_freeBackupBanner;
     
     BOOL _isSearchActive;
@@ -135,6 +136,7 @@ static UIViewController *parentController;
     _decelerating = NO;
     self.sortingType = 0;
     self.view.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.favoriteTableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _sortedHeaderView.delegate = self;
@@ -441,7 +443,7 @@ static UIViewController *parentController;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     _editButton = [OABaseNavbarViewController createRightNavbarButton:OALocalizedString(@"shared_string_select")
                                                                  icon:nil
-                                                                color:[UIColor labelColor]
+                                                                color:UIColor.labelColor
                                                                action:@selector(editButtonClicked:)
                                                                target:self
                                                                  menu:nil];
@@ -450,8 +452,7 @@ static UIViewController *parentController;
         _editButton.style = UIBarButtonItemStyleProminent;
         _editButton.tintColor = [[UIColor colorNamed:ACColorNameNavBarTextColorPrimary] colorWithAlphaComponent:.3];
     }
-    _actionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"ellipsis.circle"] menu:[self actionsMenu]];
-    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _editButton] animated:YES];
+    [self setupNavbarButtons];
     self.definesPresentationContext = YES;
     [self addAccessibilityLabels];
     [self configurePaymentBanner];
@@ -478,11 +479,15 @@ static UIViewController *parentController;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     self.definesPresentationContext = NO;
+    _isSearchActive = NO;
+    _isFiltered = NO;
+    [_myPlacesDelegate updateSearchEnabling:NO];
 }
 
 -(void) addAccessibilityLabels
 {
     _editButton.accessibilityLabel = OALocalizedString(@"shared_string_select");
+    _searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
     self.exportButton.accessibilityLabel = OALocalizedString(@"shared_string_export");
     self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
 }
@@ -588,17 +593,58 @@ static UIViewController *parentController;
 - (UIMenu *)actionsMenu
 {
     __weak __typeof(self) weakSelf = self;
+    UIAction *selectAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_select")
+                                                 image:[[UIImage systemImageNamed:@"checkmark.circle"] resizedMenuImage]
+                                            identifier:nil
+                                               handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf editButtonClicked:nil];
+    }];
     UIAction *importAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_import")
                                                  image:[[UIImage imageNamed:ACImageNameIcCustomImportOutlined] resizedMenuImage]
                                             identifier:nil
                                                handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf onImportClicked];
     }];
+    UIMenu *selectMenu = [UIMenu menuWithTitle:@""
+                                         image:nil
+                                    identifier:nil
+                                       options:UIMenuOptionsDisplayInline
+                                      children:@[selectAction]];
+    UIMenu *importMenu = [UIMenu menuWithTitle:@""
+                                         image:nil
+                                    identifier:nil
+                                       options:UIMenuOptionsDisplayInline
+                                      children:@[importAction]];
     return [UIMenu menuWithTitle:@""
                            image:nil
                       identifier:nil
                          options:UIMenuOptionsDisplayInline
-                        children:@[importAction]];
+                        children:@[selectMenu, importMenu]];
+}
+
+- (void)setupNavbarButtons
+{
+    _actionsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"ellipsis.circle"] menu:[self actionsMenu]];
+    [_actionsButton setTintColor: UIColor.labelColor];
+    if (_isSearchActive || self.favoriteTableView.isEditing)
+    {
+        [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton] animated:NO];
+        return;
+    }
+
+    _searchButton = [OABaseNavbarViewController createRightNavbarButton:nil
+                                                                   icon:[UIImage systemImageNamed:@"magnifyingglass"]
+                                                                  color:UIColor.labelColor
+                                                                 action:@selector(searchButtonClicked:)
+                                                                 target:self
+                                                                   menu:nil];
+    _searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
+    if (@available(iOS 26.0, *))
+    {
+        _searchButton.style = UIBarButtonItemStyleProminent;
+        _searchButton.tintColor = UIColor.clearColor;
+    }
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _searchButton] animated:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -859,8 +905,8 @@ static UIViewController *parentController;
 
     [_myPlacesDelegate showBackButton:YES];
 
-    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_actionsButton, _editButton] animated:YES];
     [self setEdit:NO];
+    [self setupNavbarButtons];
     [_selectedItems removeAllObjects];
 }
 
@@ -878,6 +924,13 @@ static UIViewController *parentController;
     else
         [self startEditing];
     [self.favoriteTableView endUpdates];
+}
+
+- (IBAction)searchButtonClicked:(id)sender
+{
+    _isSearchActive = YES;
+    [_myPlacesDelegate updateSearchEnabling:YES];
+    [self setupNavbarButtons];
 }
 
 - (IBAction) shareButtonClicked:(id)sender
@@ -2104,6 +2157,12 @@ static UIViewController *parentController;
         [self.favoriteTableView reloadData];
     }
     [_myPlacesDelegate updateSegmentedControlVisibility:!_isSearchActive];
+    [self setupNavbarButtons];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [_myPlacesDelegate updateSearchEnabling:NO];
 }
 
 @end

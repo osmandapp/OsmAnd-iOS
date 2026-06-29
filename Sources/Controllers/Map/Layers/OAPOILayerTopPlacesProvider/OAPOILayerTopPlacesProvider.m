@@ -75,6 +75,9 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     NSMutableDictionary<NSNumber *, UIImage *> *_topPlacesImages;
     QList<std::shared_ptr<const OsmAnd::Amenity>> _allPlaces;
     QList<std::shared_ptr<const OsmAnd::Amenity>> _displayedPlaces;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> _publishedTopPlaces;
+    QList<std::shared_ptr<const OsmAnd::Amenity>> _publishedDisplayedPlaces;
+    NSLock *_placesSnapshotLock;
     NSSet<NSNumber *> *_topPlaceIds;
     NSSet<NSNumber *> *_loadingImagePlaceIds;
     OsmAnd::AreaI _topPlacesBox;
@@ -114,6 +117,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _enabled = NO;
     _textScale = 1.f;
     _displayDensityFactor = _mapViewController.mapView.displayDensityFactor;
+    _placesSnapshotLock = [[NSLock alloc] init];
     _backgroundQueue = dispatch_queue_create("com.osmand.topplaces.background", DISPATCH_QUEUE_SERIAL);
     dispatch_queue_set_specific(_backgroundQueue, kTopPlacesStateQueueKey, kTopPlacesStateQueueKey, NULL);
 }
@@ -219,19 +223,19 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
 
 - (QList<std::shared_ptr<const OsmAnd::Amenity>>)topPlaces
 {
-    __block QList<std::shared_ptr<const OsmAnd::Amenity>> topPlaces;
-    [self performStateSync:^{
-        topPlaces = _topPlaces;
-    }];
+    QList<std::shared_ptr<const OsmAnd::Amenity>> topPlaces;
+    [_placesSnapshotLock lock];
+    topPlaces = _publishedTopPlaces;
+    [_placesSnapshotLock unlock];
     return topPlaces;
 }
 
 - (QList<std::shared_ptr<const OsmAnd::Amenity>>)displayedAmenities
 {
-    __block QList<std::shared_ptr<const OsmAnd::Amenity>> displayedPlaces;
-    [self performStateSync:^{
-        displayedPlaces = _displayedPlaces;
-    }];
+    QList<std::shared_ptr<const OsmAnd::Amenity>> displayedPlaces;
+    [_placesSnapshotLock lock];
+    displayedPlaces = _publishedDisplayedPlaces;
+    [_placesSnapshotLock unlock];
     return displayedPlaces;
 }
 
@@ -242,12 +246,13 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     return dispatch_get_specific(kTopPlacesStateQueueKey) == kTopPlacesStateQueueKey;
 }
 
-- (void)performStateSync:(dispatch_block_t)block
+- (void)publishTopPlacesSnapshot:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)topPlaces
+         displayedPlacesSnapshot:(const QList<std::shared_ptr<const OsmAnd::Amenity>> &)displayedPlaces
 {
-    if ([self isOnStateQueue])
-        block();
-    else
-        dispatch_sync(_backgroundQueue, block);
+    [_placesSnapshotLock lock];
+    _publishedTopPlaces = topPlaces;
+    _publishedDisplayedPlaces = displayedPlaces;
+    [_placesSnapshotLock unlock];
 }
 
 - (BOOL)captureVisibleBounds:(OsmAnd::AreaI *)visibleBBox31
@@ -430,6 +435,7 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
     _selectedTopPlaceId = nil;
     _visiblePlacesRefreshScheduled = NO;
     _renderedMarkerStates = nil;
+    [self publishTopPlacesSnapshot:_topPlaces displayedPlacesSnapshot:_displayedPlaces];
 }
 
 - (void)refreshVisiblePlacesOnStateQueue
@@ -475,9 +481,8 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         [_mapViewController runWithRenderSync:^{
             [self clearMapMarkersCollectionLocked];
         }];
-        [self performStateSync:^{
-            _displayedPlaces.clear();
-        }];
+        _displayedPlaces.clear();
+        [self publishTopPlacesSnapshot:_topPlaces displayedPlacesSnapshot:_displayedPlaces];
         return;
     }
 
@@ -581,9 +586,8 @@ static NSString * const kWikiPhotoTag = @"wiki_photo";
         }
     }];
 
-    [self performStateSync:^{
-        _displayedPlaces = displayedPlaces;
-    }];
+    _displayedPlaces = displayedPlaces;
+    [self publishTopPlacesSnapshot:_topPlaces displayedPlacesSnapshot:_displayedPlaces];
 }
 
 - (int32_t)truncatedTopPlaceId:(const std::shared_ptr<const OsmAnd::Amenity> &)topPlace

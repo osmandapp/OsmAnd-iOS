@@ -51,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_External_Sensors @"net.osmand.maps.inapp.addon.external_sensors"
 #define kInAppId_Addon_Vehicle_Metrics @"net.osmand.maps.inapp.addon.vehicle_metrics"
 #define kInAppId_Addon_Ais_Tracker @"net.osmand.maps.inapp.addon.ais_tracker"
+#define kInAppId_Addon_Astronomy @"net.osmand.maps.inapp.addon.astronomy"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -354,6 +355,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OAVehicleMetricsProduct : OAProduct
 @end
 
+@interface OAAstronomyProduct : OAProduct
+@end
+
 @interface OACarPlayProduct : OAProduct
 
 @end
@@ -409,6 +413,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *sensors;
 @property (nonatomic, readonly) OAProduct *vehicleMetrics;
 @property (nonatomic, readonly) OAProduct *aisTracker;
+@property (nonatomic, readonly) OAProduct *astronomy;
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;
 

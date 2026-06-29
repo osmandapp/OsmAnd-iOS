@@ -33,7 +33,8 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         @"osmand.wikipedia": kInAppId_Addon_Wiki,
         @"osmand.weather": kInAppId_Addon_Weather,
         @"osmand.sensor": kInAppId_Addon_External_Sensors,
-        @"osmand.vehicle.metrics": kInAppId_Addon_Vehicle_Metrics
+        @"osmand.vehicle.metrics": kInAppId_Addon_Vehicle_Metrics,
+        @"osmand.astronomy": kInAppId_Addon_Astronomy
         //        @"osmand.antplus"
         //        @"osmand.accessibility":
         //        @"osmand.rastermaps"
@@ -232,9 +233,11 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     }
 
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-
-    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [self.item readPreferenceFromJson:key value:obj];
+    [OAAppSettings performBatchedPreferenceNotifications:^{
+        [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            [self.item readPreferenceFromJson:key value:obj];
+            [OAAppSettings notifyPreferenceKeysChanged:[NSSet setWithObject:key]];
+        }];
     }];
 
     self.item.read = YES;

@@ -269,6 +269,7 @@
     {
         OAAddTrackFolderViewController * addFolderVC = [[OAAddTrackFolderViewController alloc] init];
         addFolderVC.delegate = self;
+        addFolderVC.suggestedFolderName = _suggestedFolderName;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addFolderVC];
         [self presentViewController:navigationController animated:YES completion:nil];
         

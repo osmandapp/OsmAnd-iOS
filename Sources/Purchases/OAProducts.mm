@@ -2531,6 +2531,43 @@
 
 @end
 
+@implementation OAAstronomyProduct
+
+- (instancetype)init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Astronomy];
+    return self;
+}
+
+- (OAFeature *)feature
+{
+    return OAFeature.ASTRONOMY;
+}
+
+- (NSString *)productIconName
+{
+    return @"ic_custom_telescope";
+}
+
+- (NSString *)localizedTitle
+{
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_with_brackets"),
+                                      OALocalizedString(@"astronomy_plugin_name"),
+                                      OALocalizedString(@"shared_string_beta")];
+}
+
+- (NSString *)localizedDescription
+{
+    return OALocalizedString(@"purchases_feature_desc_astronomy");
+}
+
+- (NSString *)localizedDescriptionExt
+{
+    return OALocalizedString(@"purchases_feature_desc_astronomy");
+}
+
+@end
+
 
 @implementation OACarPlayProduct
 
@@ -2861,6 +2898,7 @@
 @property (nonatomic) OAProduct *sensors;
 @property (nonatomic) OAProduct *vehicleMetrics;
 @property (nonatomic) OAProduct *aisTracker;
+@property (nonatomic) OAProduct *astronomy;
 @property (nonatomic) OAProduct *carplay;
 @property (nonatomic) OAProduct *osmandDevelopment;
 
@@ -2913,6 +2951,7 @@
         self.sensors = [[OAExternalSensorsProduct alloc] init];
         self.vehicleMetrics = [OAVehicleMetricsProduct new];
         self.aisTracker = [AisTrackerProduct new];
+        self.astronomy = [OAAstronomyProduct new];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
 
@@ -2939,6 +2978,7 @@
                              self.sensors,
                              self.vehicleMetrics,
                              self.aisTracker,
+                             self.astronomy,
                              self.osmandDevelopment
         ];
 

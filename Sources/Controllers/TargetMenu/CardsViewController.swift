@@ -19,6 +19,7 @@ final class CardsViewController: UIView {
     var contentType: CollapsableCardsType = .onlinePhoto
     var title: String = ""
     var placeholderImage: UIImage?
+    weak var carouselPresenter: UIViewController?
     var didChangeHeightAction: ((Section, Float) -> Void)?
     // swiftlint:disable all
     var сardsFilter: CardsFilter! {
@@ -45,6 +46,10 @@ final class CardsViewController: UIView {
     
     func reloadData() {
         applySnapshot()
+    }
+
+    func setCardsFilter(_ cardsFilter: CardsFilter) {
+        сardsFilter = cardsFilter
     }
     
     func showSpinner(show: Bool) {
@@ -175,7 +180,9 @@ final class CardsViewController: UIView {
         }
         dataSource.applySnapshotUsingReloadData(snapshot) { [weak self] in
             guard let self else { return }
-            didChangeHeightAction?(section, contentHeight)
+            DispatchQueue.main.async {
+                self.didChangeHeightAction?(section, self.contentHeight)
+            }
         }
     }
     
@@ -236,7 +243,7 @@ extension CardsViewController: UICollectionViewDelegate {
             navController.modalPresentationStyle = .custom
             navController.modalTransitionStyle = .crossDissolve
             navController.modalPresentationCapturesStatusBarAppearance = true
-            OARootViewController.instance().mapPanel?.navigationController?.present(navController, animated: true)
+            (carouselPresenter ?? OARootViewController.instance().mapPanel?.navigationController)?.present(navController, animated: true)
         } else {
             card.onCardPressed(OARootViewController.instance().mapPanel)
         }

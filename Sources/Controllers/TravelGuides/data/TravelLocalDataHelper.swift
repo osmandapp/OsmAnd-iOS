@@ -73,6 +73,10 @@ final class TravelLocalDataHelper : NSObject {
         Array(savedArticles)
     }
     
+    func savedAriticlesCount() -> Int {
+        savedArticles.count > 0 ? savedArticles.count : Int(dbHelper.savedArticelsCount())
+    }
+    
     func addArticleToSaved(article: TravelArticle) {
         if !isArticleSaved(article: article) {
             savedArticles.append(article)

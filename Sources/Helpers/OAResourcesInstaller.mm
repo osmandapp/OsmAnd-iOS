@@ -21,6 +21,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OADownloadTask.h"
 #import "OAIAPHelper.h"
+#import "OAPluginsHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAWeatherHelper.h"
 #import "OAWorldRegion.h"
@@ -437,6 +438,12 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         _progressHUD = nil;
                     }
                 });
+            }
+
+            if (success && resourceId == QStringLiteral("stars-articles.stardb"))
+            {
+                AstronomyPlugin *plugin = (AstronomyPlugin *)[OAPluginsHelper getPlugin:AstronomyPlugin.class];
+                [plugin clearCachedData];
             }
         }
 

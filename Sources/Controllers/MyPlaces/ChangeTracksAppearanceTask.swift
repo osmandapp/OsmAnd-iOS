@@ -28,14 +28,13 @@ final class ChangeTracksAppearanceTask: NSObject {
                 updateCurrentTrackAppearance()
             } else if let file = track.getFile() {
                 let gpxFile = resetAnything ? getGpxFile(for: file) : nil
-                updateTrackAppearance(file: file, gpxFile: gpxFile)
+                updateTrackAppearance(track: track, file: file, gpxFile: gpxFile)
             }
         }
     }
     
-    private func updateTrackAppearance(file: KFile, gpxFile: GpxFile?) {
-        let callback = getGpxDataItemCallback(gpxFile: gpxFile)
-        if let dataItem = gpxDbHelper?.getItem(file: file, callback: callback) {
+    private func updateTrackAppearance(track: TrackItem, file: KFile, gpxFile: GpxFile?) {
+        if let dataItem = track.dataItem ?? gpxDbHelper?.getItem(file: file, readIfNeeded: false) {
             updateTrackAppearance(item: dataItem, gpxFile: gpxFile)
         }
     }
@@ -74,20 +73,11 @@ final class ChangeTracksAppearanceTask: NSObject {
         }
     }
     
-    private func getGpxDataItemCallback(gpxFile: GpxFile?) -> GpxDbHelperGpxDataItemCallback {
-        let handler = GpxDataItemHandler()
-        handler.onGpxDataItemReady = { [weak self] item in
-            self?.updateTrackAppearance(item: item, gpxFile: gpxFile)
-        }
-        
-        return handler
-    }
-    
     private func updateTrackAppearance(item: GpxDataItem, gpxFile: GpxFile?) {
         for parameter in GpxParameter.companion.getAppearanceParameters() {
             if data.shouldResetParameter(parameter), let gpxFile = gpxFile {
                 item.readGpxAppearanceParameter(gpxFile: gpxFile, parameter: parameter)
-            } else if let value: Any = data.getParameter(for: parameter) {
+            } else if let value = data.rawParameter(for: parameter) {
                 item.setParameter(parameter: parameter, value: value)
             }
         }

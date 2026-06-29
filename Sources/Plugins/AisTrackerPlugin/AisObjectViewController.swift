@@ -236,9 +236,19 @@ final class AisObjectViewController: OATargetInfoViewController {
 
     private func formatPosition() -> String {
         guard let position = object.position else { return "" }
-        let latitude = OALocationConvert.convertLatitude(position.latitude, outputType: Int(FORMAT_MINUTES), addCardinalDirection: true) ?? ""
-        let longitude = OALocationConvert.convertLongitude(position.longitude, outputType: Int(FORMAT_MINUTES), addCardinalDirection: true) ?? ""
-        return "\(latitude), \(longitude)"
+        let format = Int(OAAppSettings.sharedManager().settingGeoFormat.get())
+        switch format {
+        case MAP_GEO_UTM_FORMAT:
+            return OALocationConvert.getUTMCoordinateString(position.latitude, lon: position.longitude) ?? ""
+        case MAP_GEO_MGRS_FORMAT:
+            return OALocationConvert.getMgrsCoordinateString(position.latitude, lon: position.longitude) ?? ""
+        case MAP_GEO_OLC_FORMAT:
+            return OALocationConvert.getLocationOlcName(position.latitude, lon: position.longitude) ?? ""
+        default:
+            let latitude = OALocationConvert.convertLatitude(position.latitude, outputType: format, addCardinalDirection: true) ?? ""
+            let longitude = OALocationConvert.convertLongitude(position.longitude, outputType: format, addCardinalDirection: true) ?? ""
+            return "\(latitude), \(longitude)"
+        }
     }
 
     private func formatLastUpdate() -> String {

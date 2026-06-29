@@ -398,7 +398,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _colorCollectionHandler.handlerDelegate = self;
     _colorCollectionHandler.hostVC = self;
     
-    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    OAFavoriteGroup *group = [self existingGroupFor:self.editName];
     if (group)
     {
         NSMutableArray *colors = [NSMutableArray array];
@@ -421,7 +421,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     _poiIconCollectionHandler.selectedIconColor = self.editColor;
     
-    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    OAFavoriteGroup *group = [self existingGroupFor:self.editName];
     if (group)
     {
         NSMutableArray *iconNames = [NSMutableArray array];
@@ -468,7 +468,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _shapesCollectionHandler.handlerDelegate = self;
     _shapesCollectionHandler.hostVC = self;
     
-    OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:self.editName];
+    OAFavoriteGroup *group = [self existingGroupFor:self.editName];
     if (group)
     {
         NSMutableArray *backgroundIconNames = [NSMutableArray array];
@@ -579,9 +579,24 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return !_isNewItem || _isTextViewNameValid;
 }
 
+- (OAFavoriteGroup *)existingGroupFor:(NSString *)name
+{
+    return [OAFavoritesHelper getGroupByName:name];
+}
+
+- (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group
+{
+    return NO;
+}
+
+- (BOOL)allowsValidationForGroupName
+{
+    return YES;
+}
+
 - (BOOL)isAppearanceChanged
 {
-    OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
+    OAFavoriteGroup *groupExist = [self existingGroupFor:self.editName];
     return !groupExist
             || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
             || ![self.editIconName isEqual:groupExist.iconName]
@@ -671,7 +686,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     if ([category isEqualToString: @"original"])
     {
-        OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:self.editName];
+        OAFavoriteGroup *groupExist = [self existingGroupFor:self.editName];
         if (groupExist)
         {
             _selectedIconName = groupExist.iconName;
@@ -702,9 +717,10 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
     if ([item.key isEqualToString:kInputNameKey])
     {
-        OAFavoriteGroup *groupExist = [OAFavoritesHelper getGroupByName:textView.text];
-        _isTextViewNameValid = [OAFavoritesHelper isGroupNameValidWithText:textView.text] && !groupExist;
-        if (!_isTextViewNameValid && groupExist)
+        OAFavoriteGroup *groupExist = [self existingGroupFor:textView.text];
+        BOOL isGroupNameValid = [OAFavoritesHelper isGroupNameValidWithText:textView.text];
+        _isTextViewNameValid = isGroupNameValid && (!groupExist || [self allowsExistingGroupFor:textView.text group:groupExist]);
+        if (!_isTextViewNameValid && groupExist && [self allowsValidationForGroupName])
         {
             _isTextViewNameValid = textView.text.length > 0
                 && (![groupExist.iconName isEqualToString:self.editIconName]

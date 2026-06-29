@@ -44,6 +44,33 @@
     return self.isNewItem ? [super getNavbarColorScheme] : EOABaseNavbarColorSchemeOrange;
 }
 
+- (OAFavoriteGroup *)existingGroupFor:(NSString *)name
+{
+    return [OAFavoritesHelper getGroupByName:[self targetGroupNameForName:name]];
+}
+
+- (BOOL)allowsExistingGroupFor:(NSString *)name group:(OAFavoriteGroup *)group
+{
+    if (self.validatesGroupUniqueness)
+        return NO;
+
+    return self.isNewItem && [self isParentOnlyGroup:group groupName:[self targetGroupNameForName:name]];
+}
+
+- (BOOL)allowsValidationForGroupName
+{
+    return !self.validatesGroupUniqueness;
+}
+
+- (BOOL)isAppearanceChanged
+{
+    OAFavoriteGroup *existingGroup = [self existingGroupFor:self.editName];
+    if ([self allowsExistingGroupFor:self.editName group:existingGroup])
+        return YES;
+
+    return [super isAppearanceChanged];
+}
+
 #pragma mark - Selectors
 
 - (void)onRightNavbarButtonPressed
@@ -110,6 +137,29 @@
 }
 
 #pragma mark - Additions
+
+- (NSString *)targetGroupNameForName:(NSString *)name
+{
+    NSString *trimmedName = [(name ?: @"") stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+    NSString *parentGroupName = self.parentGroupName ?: @"";
+    return parentGroupName.length > 0 && trimmedName.length > 0 ? [NSString stringWithFormat:@"%@/%@", parentGroupName, trimmedName] : trimmedName;
+}
+
+- (BOOL)isParentOnlyGroup:(OAFavoriteGroup *)group groupName:(NSString *)groupName
+{
+    if (!group || group.points.count > 0 || groupName.length == 0)
+        return NO;
+
+    NSString *nestedPrefix = [groupName stringByAppendingString:@"/"];
+    for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
+    {
+        NSString *favoriteGroupName = favoriteGroup.name ?: @"";
+        if ([favoriteGroupName hasPrefix:nestedPrefix])
+            return YES;
+    }
+
+    return NO;
+}
 
 - (void)addPointsGroup
 {

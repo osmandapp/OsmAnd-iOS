@@ -53,6 +53,7 @@ final class OsmEditsListViewController: UIViewController {
     // MARK: - Properties
     
     private static let imageSize: CGFloat = 30
+    private static let sortHeaderHeight: CGFloat = 44.0
 
     weak var myPlacesDelegate: MyPlacesDelegate?
     
@@ -182,14 +183,39 @@ final class OsmEditsListViewController: UIViewController {
         ])
     }
     
+    private func sortHeaderLayoutSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(Self.sortHeaderHeight))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
+        return NSCollectionLayoutSection(group: group)
+    }
+
     private func createLayout() -> UICollectionViewLayout {
-        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        config.backgroundColor = .clear
-        if !isSearchActive {
-            config.headerMode = .firstItemInSection
+        UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+            guard let self else { return nil }
+            if self.isSortHeaderSection(at: sectionIndex) {
+                return self.sortHeaderLayoutSection()
+            }
+
+            var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            config.backgroundColor = .clear
+            if !self.isSearchActive {
+                config.headerMode = .firstItemInSection
+            }
+
+            return NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
         }
-        let layout = UICollectionViewCompositionalLayout.list(using: config)
-        return layout
+    }
+
+    private func isSortHeaderSection(at sectionIndex: Int) -> Bool {
+        guard let dataSource else { return false }
+        let snapshot = dataSource.snapshot()
+        guard snapshot.sectionIdentifiers.indices.contains(sectionIndex) else { return false }
+        let section = snapshot.sectionIdentifiers[sectionIndex]
+        return snapshot.itemIdentifiers(inSection: section).contains {
+            guard case .sortHeader = $0 else { return false }
+            return true
+        }
     }
     
     private func makeDataSource() -> DataSource {

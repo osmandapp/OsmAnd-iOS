@@ -796,14 +796,22 @@ static const NSInteger _buttonsCount = 4;
     return _headerHeight;
 }
 
+- (CGFloat)visibleDetailsButtonHeight
+{
+    if (![self isLandscape] && self.customController && [self.customController showDetailsButton])
+        return [self.customController detailsButtonHeight];
+    else
+        return 0.0;
+}
+
 - (CGFloat) getVisibleHeight
 {
-    return _headerHeight + self.contentOffset.y;
+    return _headerHeight + self.contentOffset.y + [self visibleDetailsButtonHeight];
 }
 
 - (CGFloat) getVisibleHeightWithOffset:(CGPoint)offset
 {
-    return _headerHeight + offset.y;
+    return _headerHeight + offset.y + [self visibleDetailsButtonHeight];
 }
 
 - (BOOL) isLandscapeSupported

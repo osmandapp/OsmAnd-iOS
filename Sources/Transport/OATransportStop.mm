@@ -15,6 +15,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Data/TransportRoute.h>
 #include <OsmAndCore/Data/TransportStopExit.h>
@@ -37,6 +38,7 @@ static NSString *CONNECTED_PLATFORM_ID = @"osmand:connected_platform_id";
 
 - (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop
 {
+    self = [super init];
     if (self)
     {
         _stop = stop;
@@ -48,6 +50,10 @@ static NSString *CONNECTED_PLATFORM_ID = @"osmand:connected_platform_id";
             self.latitude = stop->location.latitude;
             self.longitude = stop->location.longitude;
             self.stopId = stop->id.id;
+            for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(stop->localizedNames)))
+            {
+                self.localizedNames[entry.key().toNSString()] = entry.value().toNSString();
+            }
             
             NSMutableArray<CLLocation *> *extiLocations = [NSMutableArray new];
             const auto stopExits = stop->exits;

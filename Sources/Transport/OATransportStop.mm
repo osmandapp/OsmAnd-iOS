@@ -19,6 +19,8 @@
 #include <OsmAndCore/Data/TransportRoute.h>
 #include <OsmAndCore/Data/TransportStopExit.h>
 
+static NSString *CONNECTED_PLATFORM_ID = @"osmand:connected_platform_id";
+
 
 @interface OATransportStop()
 
@@ -112,6 +114,11 @@
     const auto qLang = QString::fromNSString(lang);
     const auto qName = _stop->getName(qLang, transliterate);
     return qName.toNSString();
+}
+
+- (NSString *)getConnectedPlatformId
+{
+    return self.localizedNames[CONNECTED_PLATFORM_ID];
 }
 
 - (BOOL)isEqual:(OATransportStop *)object

@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)findAmenityDataIfNeeded;
 - (NSString *)getStopObjectName:(NSString *)lang transliterate:(BOOL)transliterate;
+- (NSString *)getConnectedPlatformId;
 
 @end
 

@@ -100,6 +100,11 @@ extension FavoriteListViewController {
             guard let self, let text = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
             let oldGroupName = folder.bridgeItem.groupName
             let newGroupName = self.groupName(oldGroupName, replacingLastComponentWith: text)
+            if self.hasFolderInList(named: newGroupName, excluding: oldGroupName) {
+                self.showErrorAlert(localizedString("folder_already_exsists"))
+                return
+            }
+
             OAFavoritesBridgeHelper.renameFavoriteGroup(oldGroupName, newName: newGroupName)
             self.renameFavoriteSortModeKeys(from: oldGroupName, to: newGroupName)
             self.applySnapshot(animatingDifferences: true)
@@ -392,6 +397,19 @@ extension FavoriteListViewController {
         let parentGroupName = groupName[..<separatorIndex]
         guard !parentGroupName.isEmpty else { return lastComponent }
         return "\(parentGroupName)/\(lastComponent)"
+    }
+    
+    private func showErrorAlert(_ text: String) {
+        let alert = UIAlertController(title: text, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func hasFolderInList(named groupName: String, excluding excludedGroupName: String) -> Bool {
+        favoriteFolders().contains { folder in
+            let existingGroupName = folder.bridgeItem.groupName
+            return existingGroupName != excludedGroupName && existingGroupName == groupName
+        }
     }
     
     private func favoritePointShareItems(for point: OAFavoritePointBridgeItem) -> [Any] {

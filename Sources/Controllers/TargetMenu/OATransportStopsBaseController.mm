@@ -214,7 +214,7 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
                     || [OAUtilities isCoordEqual:[stop getLocation].coordinate destLat:CLLocationCoordinate2DMake(lat, lon)]
                     || (connectedPlatformId
                         && ([connectedPlatformId isEqualToString:[@(amenity.obfId) stringValue]]
-                            || (nearestStop && [connectedPlatformId isEqualToString:[@(nearestStop.obfId) stringValue]])))
+                            || (nearestStop && [connectedPlatformId isEqualToString:[@(nearestStop.stopId) stringValue]])))
                 )
             {
                 [stopAggregated addLocalTransportStop:stop];

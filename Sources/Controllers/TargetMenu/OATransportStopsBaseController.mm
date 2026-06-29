@@ -207,14 +207,14 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
             NSString *connectedPlatformId = [stop getConnectedPlatformId];
             auto dist = OsmAnd::Utilities::distance(stop.longitude, stop.latitude, lon, lat);
             
-            if (([stopName containsString:amenityName] || [amenityName containsString:stopName])
+            if ((([stopName containsString:amenityName] || [amenityName containsString:stopName])
                 && dist < MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS
                 && (!nearestStop
-                    || [OAUtilities isCoordEqual:[nearestStop getLocation].coordinate destLat:[stop getLocation].coordinate]
+                    || [OAUtilities isCoordEqual:[nearestStop getLocation].coordinate destLat:[stop getLocation].coordinate]))
                     || [OAUtilities isCoordEqual:[stop getLocation].coordinate destLat:CLLocationCoordinate2DMake(lat, lon)]
                     || (connectedPlatformId
                         && ([connectedPlatformId isEqualToString:[@(amenity.obfId) stringValue]]
-                            || (nearestStop && [connectedPlatformId isEqualToString:[@(nearestStop.obfId) stringValue]]))))
+                            || (nearestStop && [connectedPlatformId isEqualToString:[@(nearestStop.obfId) stringValue]])))
                 )
             {
                 [stopAggregated addLocalTransportStop:stop];

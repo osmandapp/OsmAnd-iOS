@@ -4669,6 +4669,7 @@
 "astro_search_sets_tomorrow" = "↘ %1$s %2$s";
 "astro_search_never_rises" = "↓ Never rises";
 "astro_search_always_up" = "↑ Always up";
+"astro_search_visible_all_night" = "Visible all night";
 "astro_search_sets_at" = "↘ Sets %1$s";
 "astro_search_rises_at" = "↗ Rises %1$s";
 "astro_search_magnitude_short" = "mag %.1f";
@@ -4680,7 +4681,7 @@
 "astro_sort_rises_soonest" = "Rises soonest";
 "astro_sort_faintest_first" = "Faintest first";
 "astro_sort_brightest_first" = "Brightest first";
-"astro_search_empty_description" = "Try changing the filters or observation time.";
+"astro_search_empty_description" = "Refine your search or adjust filters.";
 "astro_search_input_hint" = "Input text";
 "astro_explore_my_data" = "My data";
 "astro_explore_schedule_subtitle" = "Upcoming astronomical events";

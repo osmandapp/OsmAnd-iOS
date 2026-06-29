@@ -21,6 +21,8 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
 
         static let empty = Snapshot(entries: [])
     }
+    
+    var topInsetHeight: CGFloat = 0
 
     private var snapshot: Snapshot
     private let nightMode: Bool
@@ -41,14 +43,28 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     func submitSnapshot(_ snapshot: Snapshot) {
         self.snapshot = snapshot
     }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let v = UIView()
+        v.isUserInteractionEnabled = false
+        return v
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return topInsetHeight
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return topInsetHeight
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         snapshot.entries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Self.reuseIdentifier) as? StarMapCatalogCell
-            ?? StarMapCatalogCell(reuseIdentifier: Self.reuseIdentifier)
+        let cell = tableView.dequeueReusableCell(withIdentifier: StarMapCatalogCell.reuseIdentifier) as? StarMapCatalogCell
+            ?? StarMapCatalogCell(reuseIdentifier: StarMapCatalogCell.reuseIdentifier)
         bind(cell, entry: snapshot.entries[indexPath.row], isLastItem: indexPath.row == snapshot.entries.count - 1)
         return cell
     }
@@ -67,26 +83,32 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
 
     private func bind(_ cell: StarMapCatalogCell, entry: StarMapCatalogEntry, isLastItem: Bool) {
         cell.configure(icon: .icCustomBookInfo,
-                       iconTintColor: StarMapSearchLightPalette.defaultIcon,
                        title: entry.displayName,
                        subtitle: entry.description?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
                             ? entry.description ?? ""
-                            : formatCatalogObjectsCount(entry.objectCount),
-                       showDivider: !isLastItem)
+                            : formatCatalogObjectsCount(entry.objectCount))
     }
 
     private func formatCatalogObjectsCount(_ count: Int) -> String {
         String.localizedStringWithFormat((localizedString("astro_catalog_objects_count") as NSString) as String, count) as String
     }
-
-    private static let reuseIdentifier = "StarMapCatalogCell"
 }
 
 private final class StarMapCatalogCell: UITableViewCell {
+    private enum Layout {
+        static let contentPadding: CGFloat = 16
+        static let iconSize: CGFloat = 30
+        static let iconTextSpacing: CGFloat = 16
+        static var separatorLeadingInset: CGFloat {
+            contentPadding + iconSize + iconTextSpacing
+        }
+    }
+
     private let rowIconView = UIImageView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
-    private let dividerView = UIView()
+    private let textStack = UIStackView()
+    private let rowStack = UIStackView()
 
     init(reuseIdentifier: String) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -97,64 +119,62 @@ private final class StarMapCatalogCell: UITableViewCell {
         super.init(coder: coder)
         setup()
     }
-
-    private func setup() {
-        selectionStyle = .default
-        backgroundColor = StarMapSearchLightPalette.listBackground
-        contentView.backgroundColor = StarMapSearchLightPalette.listBackground
-        contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 56).isActive = true
-
-        rowIconView.contentMode = .scaleAspectFit
-        rowIconView.translatesAutoresizingMaskIntoConstraints = false
-        rowIconView.isUserInteractionEnabled = false
-
-        titleLabel.textColor = StarMapSearchLightPalette.primaryText
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        titleLabel.numberOfLines = 1
-
-        subtitleLabel.textColor = StarMapSearchLightPalette.secondaryText
-        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
-        subtitleLabel.numberOfLines = 2
-
-        let textStack = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
-        textStack.axis = .vertical
-        textStack.spacing = 2
-        textStack.translatesAutoresizingMaskIntoConstraints = false
-        textStack.isUserInteractionEnabled = false
-
-        dividerView.backgroundColor = StarMapSearchLightPalette.separator
-        dividerView.translatesAutoresizingMaskIntoConstraints = false
-        dividerView.isUserInteractionEnabled = false
-
-        contentView.addSubview(rowIconView)
-        contentView.addSubview(textStack)
-        contentView.addSubview(dividerView)
-
-        NSLayoutConstraint.activate([
-            rowIconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            rowIconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            rowIconView.widthAnchor.constraint(equalToConstant: 24),
-            rowIconView.heightAnchor.constraint(equalToConstant: 24),
-
-            textStack.leadingAnchor.constraint(equalTo: rowIconView.trailingAnchor, constant: 32),
-            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            textStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8),
-            textStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8),
-
-            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 72),
-            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            dividerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            dividerView.heightAnchor.constraint(equalToConstant: 1.0 / UIScreen.main.scale)
-        ])
-    }
-
-    func configure(icon: UIImage?, iconTintColor: UIColor, title: String, subtitle: String, showDivider: Bool) {
+    
+    func configure(icon: UIImage?, title: String, subtitle: String) {
         rowIconView.image = icon
-        rowIconView.tintColor = iconTintColor
+        rowIconView.tintColor = .iconColorActive
         titleLabel.text = title
         subtitleLabel.text = subtitle
         subtitleLabel.isHidden = subtitle.isEmpty
-        dividerView.isHidden = !showDivider
+    }
+
+    private func setup() {
+        selectionStyle = .default
+        accessoryType = .disclosureIndicator
+        backgroundColor = .groupBg
+        contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 68).isActive = true
+
+        rowIconView.contentMode = .scaleAspectFit
+        rowIconView.tintColor = .iconColorActive
+        rowIconView.isUserInteractionEnabled = false
+        rowIconView.setContentHuggingPriority(.required, for: .horizontal)
+        rowIconView.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        titleLabel.textColor = .textColorPrimary
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.numberOfLines = 1
+
+        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        subtitleLabel.adjustsFontForContentSizeCategory = true
+        subtitleLabel.numberOfLines = 2
+
+        textStack.axis = .vertical
+        textStack.spacing = 4
+        textStack.isUserInteractionEnabled = false
+        textStack.addArrangedSubview(titleLabel)
+        textStack.addArrangedSubview(subtitleLabel)
+
+        rowStack.axis = .horizontal
+        rowStack.alignment = .center
+        rowStack.spacing = Layout.iconTextSpacing
+        rowStack.isUserInteractionEnabled = false
+        rowStack.translatesAutoresizingMaskIntoConstraints = false
+        rowStack.addArrangedSubview(rowIconView)
+        rowStack.addArrangedSubview(textStack)
+
+        contentView.addSubview(rowStack)
+
+        NSLayoutConstraint.activate([
+            rowStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Layout.contentPadding),
+            rowStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Layout.contentPadding),
+            rowStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            rowStack.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 8),
+            rowStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -8),
+
+            rowIconView.widthAnchor.constraint(equalToConstant: Layout.iconSize),
+            rowIconView.heightAnchor.constraint(equalToConstant: Layout.iconSize)
+        ])
     }
 }

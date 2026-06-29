@@ -73,6 +73,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var configureSheetNavigationController: UINavigationController?
     private var isDismissingConfigureSheet = false
     private var searchViewController: StarMapSearchViewController?
+    private var searchNavigationController: UINavigationController?
     private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
@@ -88,6 +89,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private var embeddedLeftPanelNavigationController: UINavigationController? {
+        if let navigationController = searchNavigationController, navigationController.parent === self {
+            return navigationController
+        }
         if let navigationController = configureSheetNavigationController, navigationController.parent === self {
             return navigationController
         }
@@ -1198,7 +1202,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc func showSearchDialog() {
-        showSearchDialog(initialCatalogWid: nil)
+        if UIDevice.current.userInterfaceIdiom == .pad, searchViewController != nil {
+            dismissSearchDialog(animated: true)
+        } else {
+            showSearchDialog(initialCatalogWid: nil)
+        }
     }
 
     func showSearchDialog(initialCatalogWid: String? = nil) {
@@ -1209,24 +1217,61 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         controller.onObjectSelected = { [weak self] obj in
             self?.handleSearchObjectSelected(obj)
         }
+        controller.onDismiss = { [weak self] in
+            self?.dismissSearchDialog(animated: true)
+        }
         controller.applyRedFilter(enabled: starView.showRedFilter)
         searchViewController = controller
-        let presentingController = presentedViewController ?? self
         
         let nav = UINavigationController(rootViewController: controller)
         nav.modalPresentationStyle = .fullScreen
         nav.navigationBar.prefersLargeTitles = true
-        presentingController.present(nav, animated: true)
-        searchViewController = controller
+        searchNavigationController = nav
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            showLeftPanel(nav)
+            updateMapControlsVisibility()
+        } else {
+            nav.modalPresentationStyle = .fullScreen
+            (presentedViewController ?? self).present(nav, animated: true)
+        }
+    }
+    
+    private func dismissSearchDialog(animated: Bool, completion: (() -> Void)? = nil) {
+        guard let navigationController = searchNavigationController else {
+            finishSearchDismiss()
+            completion?()
+            return
+        }
+        if navigationController.parent === self {
+            dismissLeftPanel(navigationController: navigationController, animated: animated) { [weak self] in
+                self?.finishSearchDismiss()
+                completion?()
+            }
+        } else {
+            navigationController.dismiss(animated: animated) { [weak self] in
+                self?.finishSearchDismiss()
+                completion?()
+            }
+        }
+    }
+
+    private func finishSearchDismiss() {
+        searchViewController = nil
+        searchNavigationController = nil
+        updateMapControlsVisibility()
     }
 
     private func clearPreviousSearchDialog() {
-        searchViewController?.dismiss(animated: false)
-        searchViewController = nil
+        dismissSearchDialog(animated: false)
     }
 
     func getSearchableObjects() -> [SkyObject] {
         getTrackableObjects()
+    }
+
+    func getSearchConstellations() -> [Constellation] {
+        viewModel.constellations
     }
 
     func getSearchObserver() -> Observer {
@@ -1313,6 +1358,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 finishConfigureSheetDismiss()
             } else if existingPanel === objectInfoNavigationController {
                 finishObjectInfoDismiss(clearSelection: false)
+            } else if existingPanel === searchNavigationController {
+                finishSearchDismiss()
             }
         }
 

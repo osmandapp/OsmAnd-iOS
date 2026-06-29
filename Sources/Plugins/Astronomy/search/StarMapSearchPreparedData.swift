@@ -21,6 +21,7 @@ struct StarMapSearchPreparedData {
     let entries: [StarMapSearchEntry]
     let catalogEntries: [StarMapCatalogEntry]
     let widToDisplayName: [String: String]
+    let starConstellationNameByObjectId: [String: String]
     let computationContext: StarMapSearchComputationContext
 }
 
@@ -39,6 +40,10 @@ final class StarMapSearchPreparedDataFactory {
         let currentDate = parent?.getSearchCurrentDate() ?? Date()
         let computationContext = createComputationContext(observer: observer, date: currentDate)
         var widToDisplayName: [String: String] = [:]
+        let starConstellationNameByObjectId = buildStarConstellationNameMap(
+            objects: objects,
+            constellations: parent?.getSearchConstellations() ?? []
+        )
         let primaryIconColor = StarMapControlTheme.resolved(.iconColorDefault, nightMode: nightMode)
 
         let entries = objects.map { obj in
@@ -57,7 +62,27 @@ final class StarMapSearchPreparedDataFactory {
         return StarMapSearchPreparedData(entries: entries,
                                          catalogEntries: buildCatalogEntries(preparedEntries: entries),
                                          widToDisplayName: widToDisplayName,
+                                         starConstellationNameByObjectId: starConstellationNameByObjectId,
                                          computationContext: computationContext)
+    }
+
+    private func buildStarConstellationNameMap(objects: [SkyObject],
+                                               constellations: [Constellation]) -> [String: String] {
+        var hipToConstellationName: [Int: String] = [:]
+        for constellation in constellations {
+            let name = constellation.niceName()
+            for (first, second) in constellation.lines {
+                hipToConstellationName[first] = name
+                hipToConstellationName[second] = name
+            }
+        }
+        var result: [String: String] = [:]
+        for object in objects where object.type == .STAR && object.hip > 0 {
+            if let name = hipToConstellationName[object.hip] {
+                result[object.id] = name
+            }
+        }
+        return result
     }
 
     private func createComputationContext(observer: Observer, date: Date) -> StarMapSearchComputationContext {

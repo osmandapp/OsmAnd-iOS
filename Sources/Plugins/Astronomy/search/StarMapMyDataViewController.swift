@@ -45,12 +45,12 @@ final class StarMapMyDataViewController: UIViewController {
         static let smallPadding: CGFloat = 8
         static let myDataSegmentedControlHeight: CGFloat = 36
         static let resultRowMinHeight: CGFloat = 72
-        static let buttonHeight: CGFloat = 44
     }
 
     private static let RISE_SET_PRELOAD_COUNT = 32
 
     var onObjectSelected: ((SkyObject) -> Void)?
+    var onDismiss: (() -> Void)?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .darkContent
@@ -60,12 +60,12 @@ final class StarMapMyDataViewController: UIViewController {
     private let dataProvider: AstroDataProvider
     private let nightMode: Bool
 
-    private var isSearchAttached = false
     private var searchState = StarMapSearchState()
     private var currentTab: Tab
     private var preparedEntries: [StarMapSearchEntry] = []
     private var visibleEntries: [StarMapSearchEntry] = []
     private var widToDisplayName: [String: String] = [:]
+    private var starConstellationNameByObjectId: [String: String] = [:]
     private var filterAndSortRequestId = 0
     private var isFilteringResults = false
     private var suppressQueryDispatch = false
@@ -78,27 +78,24 @@ final class StarMapMyDataViewController: UIViewController {
     private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
     private let resultsContainer = UIView()
     private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
-    private let emptyStateContainer = UIStackView()
-    private let emptyStateIcon = UIImageView()
-    private let emptyStateTitle = UILabel()
-    private let emptyStateDescription = UILabel()
-    private let emptyStateResetButton = UIButton(type: .system)
+    private let emptyView = StarMapSearchEmptyView()
+    private let searchContainer = UIStackView()
 
     private weak var parentStarMapController: StarMapViewController?
 
     private lazy var inlineSearchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.placeholder = localizedString("astro_search_input_hint")
+        bar.placeholder = localizedString("shared_string_search")
         bar.delegate = self
         bar.searchBarStyle = .minimal
         bar.autocapitalizationType = .none
         bar.returnKeyType = .search
-        bar.showsCancelButton = true
+        bar.showsCancelButton = false
         return bar
     }()
 
     private lazy var searchNavButton = UIBarButtonItem(
-        image: .icCustomSearch,
+        image: UIImage(systemName: "magnifyingglass"),
         style: .plain,
         target: self,
         action: #selector(showInlineSearch)
@@ -108,8 +105,15 @@ final class StarMapMyDataViewController: UIViewController {
         nightMode: nightMode,
         snapshot: .empty,
         widToDisplayName: { [weak self] in self?.widToDisplayName ?? [:] },
+        starConstellationNameForObject: { [weak self] object in
+            guard let self else { return nil }
+            return starConstellationNameByObjectId[object.id]
+        },
         eventTextProvider: { [weak self] entry in
             self?.searchHelper.resolveEventText(entry) ?? NSAttributedString(string: "")
+        },
+        visibilityAttributedTextProvider: { [weak self] entry in
+            self?.searchHelper.resolveConstellationVisibilityAttributedText(entry) ?? NSAttributedString(string: "")
         },
         onScroll: { _ in },
         onEntrySelected: { [weak self] entry in self?.onSearchEntrySelected(entry) }
@@ -153,6 +157,7 @@ final class StarMapMyDataViewController: UIViewController {
         searchState.prepareForExploreEntry(currentTab.quickPresetType, catalogWid: nil)
         refreshPreparedEntries()
         setupSearchRecycler()
+        setupSearchBar()
         updateSortFilterBar()
         updateEmptyStateContent()
         applyRedFilter(enabled: redFilterEnabled)
@@ -174,12 +179,13 @@ final class StarMapMyDataViewController: UIViewController {
 
         setupMyDataSegmentedControl()
         setupSortFilterChips()
-        setupEmptyState()
         setupResultsContainer()
 
         mainStack.addArrangedSubview(myDataSegmentedControlContainer)
         mainStack.addArrangedSubview(sortFilterChipsView)
         mainStack.addArrangedSubview(resultsContainer)
+        
+        mainStack.setCustomSpacing(16, after: sortFilterChipsView)
 
         NSLayoutConstraint.activate([
             mainStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -215,29 +221,18 @@ final class StarMapMyDataViewController: UIViewController {
                 equalTo: myDataSegmentedControlContainer.trailingAnchor,
                 constant: -Layout.contentPadding
             ),
-            myDataSegmentedControl.topAnchor.constraint(
-                equalTo: myDataSegmentedControlContainer.topAnchor,
-                constant: Layout.smallPadding
-            ),
-            myDataSegmentedControl.bottomAnchor.constraint(
-                equalTo: myDataSegmentedControlContainer.bottomAnchor,
-                constant: -Layout.smallPadding
-            ),
+            myDataSegmentedControl.topAnchor.constraint(equalTo: myDataSegmentedControlContainer.topAnchor),
+            myDataSegmentedControl.bottomAnchor.constraint(equalTo: myDataSegmentedControlContainer.bottomAnchor, constant: -Layout.contentPadding),
             myDataSegmentedControl.heightAnchor.constraint(equalToConstant: Layout.myDataSegmentedControlHeight)
         ])
     }
 
     private func styleMyDataSegmentedControl() {
         myDataSegmentedControl.selectedSegmentTintColor = .white
-        myDataSegmentedControl.backgroundColor = UIColor(
-            red: 118 / 255,
-            green: 118 / 255,
-            blue: 128 / 255,
-            alpha: 0.12
-        )
-        let font = UIFont.scaledSystemFont(ofSize: 13, weight: .semibold, maximumSize: 17)
+        myDataSegmentedControl.backgroundColor = .tertiarySystemFill.withAlphaComponent(0.12)
+        let font = UIFont.scaledSystemFont(ofSize: 15, weight: .medium, maximumSize: 17)
         let titleAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: StarMapSearchLightPalette.primaryText,
+            .foregroundColor: UIColor.textColorPrimary,
             .font: font
         ]
         myDataSegmentedControl.setTitleTextAttributes(titleAttributes, for: .normal)
@@ -254,18 +249,29 @@ final class StarMapMyDataViewController: UIViewController {
 
     private func setupResultsContainer() {
         resultsContainer.translatesAutoresizingMaskIntoConstraints = false
-        resultsContainer.backgroundColor = StarMapSearchLightPalette.listBackground
 
         searchRecycler.translatesAutoresizingMaskIntoConstraints = false
         searchRecycler.keyboardDismissMode = .onDrag
         searchRecycler.rowHeight = UITableView.automaticDimension
         searchRecycler.estimatedRowHeight = Layout.resultRowMinHeight
-        searchRecycler.separatorStyle = .none
-        searchRecycler.backgroundColor = StarMapSearchLightPalette.listBackground
+        searchRecycler.separatorStyle = .singleLine
+        searchRecycler.sectionHeaderTopPadding = 0
 
-        emptyStateContainer.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.isHidden = true
+        emptyView.onAction = { [weak self] in
+            if self?.shouldShowSearchNoResultsEmpty() == true {
+                self?.resetMyDataFilters()
+            } else {
+                if self?.parentStarMapController != nil, UIDevice.current.userInterfaceIdiom == .pad {
+                    self?.onDismiss?()
+                } else {
+                    self?.navigationController?.dismiss(animated: true)
+                }
+            }
+        }
         resultsContainer.addSubview(searchRecycler)
-        resultsContainer.addSubview(emptyStateContainer)
+        resultsContainer.addSubview(emptyView)
 
         NSLayoutConstraint.activate([
             searchRecycler.leadingAnchor.constraint(equalTo: resultsContainer.leadingAnchor),
@@ -273,67 +279,47 @@ final class StarMapMyDataViewController: UIViewController {
             searchRecycler.topAnchor.constraint(equalTo: resultsContainer.topAnchor),
             searchRecycler.bottomAnchor.constraint(equalTo: resultsContainer.bottomAnchor),
 
-            emptyStateContainer.leadingAnchor.constraint(
-                equalTo: resultsContainer.leadingAnchor,
-                constant: Layout.contentPadding
-            ),
-            emptyStateContainer.trailingAnchor.constraint(
-                equalTo: resultsContainer.trailingAnchor,
-                constant: -Layout.contentPadding
-            ),
-            emptyStateContainer.centerYAnchor.constraint(equalTo: resultsContainer.centerYAnchor)
+            emptyView.leadingAnchor.constraint(equalTo: resultsContainer.leadingAnchor, constant: Layout.contentPadding),
+            emptyView.trailingAnchor.constraint(equalTo: resultsContainer.trailingAnchor, constant: -Layout.contentPadding),
+            emptyView.topAnchor.constraint(equalTo: resultsContainer.topAnchor)
         ])
-    }
-
-    private func setupEmptyState() {
-        emptyStateContainer.axis = .vertical
-        emptyStateContainer.alignment = .center
-        emptyStateContainer.spacing = Layout.smallPadding
-        emptyStateContainer.backgroundColor = .clear
-        emptyStateContainer.layoutMargins = UIEdgeInsets(
-            top: 0,
-            left: Layout.contentPadding,
-            bottom: 0,
-            right: Layout.contentPadding
-        )
-        emptyStateContainer.isLayoutMarginsRelativeArrangement = true
-
-        emptyStateIcon.contentMode = .scaleAspectFit
-        emptyStateIcon.tintColor = StarMapSearchLightPalette.defaultIcon
-        emptyStateIcon.heightAnchor.constraint(equalToConstant: 64).isActive = true
-        emptyStateIcon.widthAnchor.constraint(equalToConstant: 64).isActive = true
-
-        emptyStateTitle.font = UIFont.preferredFont(forTextStyle: .headline)
-        emptyStateTitle.textColor = StarMapSearchLightPalette.primaryText
-        emptyStateDescription.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        emptyStateDescription.textColor = StarMapSearchLightPalette.secondaryText
-        emptyStateDescription.numberOfLines = 0
-        emptyStateDescription.textAlignment = .center
-
-        emptyStateResetButton.heightAnchor.constraint(equalToConstant: Layout.buttonHeight).isActive = true
-        emptyStateResetButton.translatesAutoresizingMaskIntoConstraints = false
-        emptyStateResetButton.addTarget(self, action: #selector(emptyStateAction), for: .touchUpInside)
-
-        var configuration = UIButton.Configuration.filled()
-        configuration.cornerStyle = .small
-        configuration.baseBackgroundColor = StarMapSearchLightPalette.secondaryButtonBackground
-        configuration.baseForegroundColor = .systemBlue
-        emptyStateResetButton.configuration = configuration
-
-        emptyStateContainer.addArrangedSubview(emptyStateIcon)
-        emptyStateContainer.addArrangedSubview(emptyStateTitle)
-        emptyStateContainer.addArrangedSubview(emptyStateDescription)
-        emptyStateContainer.addArrangedSubview(emptyStateResetButton)
-        emptyStateResetButton.widthAnchor.constraint(
-            equalTo: emptyStateContainer.widthAnchor,
-            constant: -2 * Layout.contentPadding
-        ).isActive = true
-        emptyStateContainer.isHidden = true
     }
 
     private func setupSearchRecycler() {
         searchRecycler.dataSource = searchAdapter
         searchRecycler.delegate = searchAdapter
+    }
+    
+    private func setupSearchBar() {
+        searchContainer.spacing = 8
+        
+        searchContainer.addArrangedSubview(inlineSearchBar)
+        
+        var config: UIButton.Configuration
+        if #available(iOS 26.0, *) {
+            config = UIButton.Configuration.glass()
+        } else {
+            config = UIButton.Configuration.filled()
+        }
+        
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .medium)
+        config.image = UIImage(systemName: "xmark", withConfiguration: symbolConfig)
+        config.baseForegroundColor = .label
+        config.cornerStyle = .capsule
+
+        let cancelButton = UIButton(configuration: config)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        cancelButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        cancelButton.configurationUpdateHandler = { button in
+            cancelButton.alpha = button.isHighlighted ? 0.5 : 1.0
+        }
+        cancelButton.accessibilityLabel = localizedString("shared_string_cancel")
+        cancelButton.addAction(UIAction { [weak self] _ in
+            self?.searchCancelButtonAction()
+        }, for: .touchUpInside)
+        
+        searchContainer.addArrangedSubview(cancelButton)
     }
 
     // MARK: - Navigation
@@ -360,11 +346,25 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     // MARK: - Data
+    
+    private func resetMyDataFilters() {
+        searchState.query = ""
+        searchState.typeFilter = .SHOW_ALL
+        searchState.nakedEyeOnly = false
+        searchState.selectedCategories = [.ALL]
+        syncSearchQuery()
+        if !searchContainer.isHidden {
+            hideInlineSearch()
+            return
+        }
+        applyFiltersAndSort(scrollToTop: true)
+    }
 
     private func refreshPreparedEntries() {
         let preparedData = searchPreparedDataFactory.create(parent: parentStarMapController)
         preparedEntries = preparedData.entries
         widToDisplayName = preparedData.widToDisplayName
+        starConstellationNameByObjectId = preparedData.starConstellationNameByObjectId
         searchHelper.updateComputationContext(preparedData.computationContext)
     }
 
@@ -373,7 +373,6 @@ final class StarMapMyDataViewController: UIViewController {
             StarMapSearchResultsAdapter.Snapshot(
                 entries: visibleEntries,
                 categoryPreset: nil,
-                infoHeaderCategory: nil,
                 useExploreRowLayout: true
             )
         )
@@ -389,8 +388,7 @@ final class StarMapMyDataViewController: UIViewController {
         updateResultsAdapter()
         updateSortFilterBar()
         updateEmptyStateContent()
-        sortFilterChipsView.setSortProgressVisible(true)
-        emptyStateContainer.isHidden = true
+        StarMapSearchProgressHUD.show(on: view)
         searchRecycler.isHidden = false
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -425,9 +423,10 @@ final class StarMapMyDataViewController: UIViewController {
             }
         }
         isFilteringResults = false
+        updateEmptyStateContent()
         updateEmptyStateVisibility()
         if requestId == filterAndSortRequestId {
-            sortFilterChipsView.setSortProgressVisible(false)
+            StarMapSearchProgressHUD.hide(from: view, animated: true)
         }
     }
 
@@ -450,6 +449,22 @@ final class StarMapMyDataViewController: UIViewController {
         }
         return result
     }
+    
+    private func currentTabHasData() -> Bool {
+        let config = parentStarMapController?.getSearchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
+        switch currentTab {
+        case .favorites:
+            return !config.favorites.isEmpty
+        case .dailyPath:
+            return !config.celestialPaths.isEmpty
+        case .directions:
+            return !config.directions.isEmpty
+        }
+    }
+
+    private func isSearching() -> Bool {
+        !searchState.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 
     // MARK: - UI updates
 
@@ -464,40 +479,39 @@ final class StarMapMyDataViewController: UIViewController {
             )
         )
         sortFilterChipsView.reloadData()
+        sortFilterChipsView.isHidden = !(isSearching() || currentTabHasData())
     }
 
     private func updateEmptyStateContent() {
-        let iconName: String
-        let titleKey: String
-        let descriptionKey: String
+        if shouldShowSearchNoResultsEmpty() {
+            emptyView.configure(with: .searchNoResults(clearFiltersOnly: false))
+            return
+        }
+        
+        let config: StarMapSearchEmptyConfig
         switch currentTab {
         case .directions:
-            iconName = "ic_custom_bookmark_outlined"
-            titleKey = "astro_my_data_no_directions_title"
-            descriptionKey = "astro_my_data_no_directions_description"
+            config = .myDataDirections
         case .dailyPath:
-            iconName = "ic_custom_target_path_off"
-            titleKey = "astro_my_data_no_daily_paths_title"
-            descriptionKey = "astro_my_data_no_daily_paths_description"
+            config = .myDataDailyPath
         case .favorites:
-            iconName = "ic_custom_bookmark_outlined"
-            titleKey = "astro_my_data_no_favorites_title"
-            descriptionKey = "astro_my_data_no_favorites_description"
+            config = .myDataFavorites
         }
-        emptyStateIcon.image = AstroIcon.template(iconName)
-        emptyStateTitle.text = localizedString(titleKey)
-        emptyStateDescription.text = localizedString(descriptionKey)
-        emptyStateResetButton.setTitle(localizedString("astro_go_to_map"), for: .normal)
+        emptyView.configure(with: config)
+    }
+    
+    private func shouldShowSearchNoResultsEmpty() -> Bool {
+        currentTabHasData() && visibleEntries.isEmpty
     }
 
     private func updateEmptyStateVisibility() {
         if isFilteringResults {
-            emptyStateContainer.isHidden = true
+            emptyView.isHidden = true
             searchRecycler.isHidden = false
             return
         }
         let shouldShowEmptyState = visibleEntries.isEmpty
-        emptyStateContainer.isHidden = !shouldShowEmptyState
+        emptyView.isHidden = !shouldShowEmptyState
         searchRecycler.isHidden = shouldShowEmptyState
     }
 
@@ -517,13 +531,13 @@ final class StarMapMyDataViewController: UIViewController {
         applyFiltersAndSort(scrollToTop: true)
     }
 
-    @objc private func emptyStateAction() {
-        dismiss(animated: true)
-    }
-
     private func onSearchEntrySelected(_ entry: StarMapSearchEntry) {
-        dismiss(animated: true) { [weak self] in
-            self?.onObjectSelected?(entry.objectRef)
+        let select = { [weak self] in self?.onObjectSelected?(entry.objectRef) }
+        if parentStarMapController != nil, UIDevice.current.userInterfaceIdiom == .pad {
+            onDismiss?()
+            select()
+        } else {
+            navigationController?.dismiss(animated: true) { select() }
         }
     }
 
@@ -532,37 +546,45 @@ final class StarMapMyDataViewController: UIViewController {
         navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = nil
         navigationItem.rightBarButtonItem = nil
-        navigationItem.titleView = inlineSearchBar
+        navigationItem.titleView = searchContainer
 
-        inlineSearchBar.alpha = 0
+        self.searchContainer.isHidden = false
+        searchContainer.alpha = 0
 
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-            self.inlineSearchBar.alpha = 1
+            self.searchContainer.alpha = 1
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.view.layoutIfNeeded()
         } completion: { _ in
-            self.inlineSearchBar.setShowsCancelButton(true, animated: true)
             self.inlineSearchBar.becomeFirstResponder()
         }
     }
 
     private func hideInlineSearch() {
-        UIView.animate(withDuration: 0.2, animations: {
-            self.inlineSearchBar.alpha = 0
+        UIView.animate(withDuration: 0.2) {
+            self.searchContainer.alpha = 0
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.view.layoutIfNeeded()
-        }) { _ in
+        } completion: { _ in
             self.navigationItem.titleView = nil
             self.setupNavigationBar()
 
+            self.searchContainer.isHidden = true
             self.inlineSearchBar.resignFirstResponder()
             self.inlineSearchBar.text = nil
 
-            self.suppressQueryDispatch = true
             self.suppressQueryDispatch = false
             self.searchState.query = ""
             self.applyFiltersAndSort(scrollToTop: true)
         }
+    }
+    
+    @objc private func searchCancelButtonAction() {
+        hideInlineSearch()
+    }
+    
+    deinit {
+        StarMapSearchProgressHUD.hide(from: view, animated: true)
     }
 }
 
@@ -577,9 +599,5 @@ extension StarMapMyDataViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        hideInlineSearch()
     }
 }

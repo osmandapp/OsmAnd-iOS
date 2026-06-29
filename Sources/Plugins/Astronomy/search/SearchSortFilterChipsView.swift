@@ -83,28 +83,6 @@ private final class SearchSortFilterChipButton: UIButton {
         setup()
     }
 
-    private func setup() {
-        changesSelectionAsPrimaryAction = false
-        titleLabel?.lineBreakMode = .byTruncatingTail
-        titleLabel?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
-        chevronView.image = UIImage(
-            systemName: "chevron.up.chevron.down",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
-        )
-        chevronView.tintColor = .iconColorActive
-        chevronView.translatesAutoresizingMaskIntoConstraints = false
-        chevronView.isUserInteractionEnabled = false
-        addSubview(chevronView)
-
-        NSLayoutConstraint.activate([
-            chevronView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            chevronView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            chevronView.widthAnchor.constraint(equalToConstant: 12),
-            chevronView.heightAnchor.constraint(equalToConstant: 14)
-        ])
-    }
-
     func configureForMenu() {
         showsMenuAsPrimaryAction = true
         showsMenuChevron = true
@@ -151,6 +129,28 @@ private final class SearchSortFilterChipButton: UIButton {
         }
         configuration = config
     }
+    
+    private func setup() {
+        changesSelectionAsPrimaryAction = false
+        titleLabel?.lineBreakMode = .byTruncatingTail
+        titleLabel?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+        chevronView.image = UIImage(
+            systemName: "chevron.up.chevron.down",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
+        )
+        chevronView.tintColor = .iconColorActive
+        chevronView.translatesAutoresizingMaskIntoConstraints = false
+        chevronView.isUserInteractionEnabled = false
+        addSubview(chevronView)
+
+        NSLayoutConstraint.activate([
+            chevronView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            chevronView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            chevronView.widthAnchor.constraint(equalToConstant: 12),
+            chevronView.heightAnchor.constraint(equalToConstant: 14)
+        ])
+    }
 }
 
 // MARK: - Chips view
@@ -160,7 +160,7 @@ final class SearchSortFilterChipsView: UIView {
     private enum Layout {
         static let horizontalPadding: CGFloat = 16
         static let chipSpacing: CGFloat = 8
-        static let barHeight: CGFloat = 48
+        static let barHeight: CGFloat = 36
     }
 
     weak var dataSource: SearchSortFilterChipsDataSource?
@@ -168,7 +168,6 @@ final class SearchSortFilterChipsView: UIView {
 
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
-    private let sortProgress = UIActivityIndicatorView(style: .medium)
     private var chipButtons: [String: SearchSortFilterChipButton] = [:]
     private var chipGroups: [SearchSortFilterChipGroup] = []
 
@@ -182,26 +181,33 @@ final class SearchSortFilterChipsView: UIView {
         setup()
     }
 
+    // MARK: - Public API
+
+    func reloadData() {
+        chipGroups = dataSource?.chipGroups(for: self) ?? []
+        rebuildChips()
+        updateChipAppearances()
+        updateChipMenus()
+    }
+    
+    // MARK: - Setup
+    
     private func setup() {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.alwaysBounceHorizontal = true
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.clipsToBounds = false
 
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.spacing = Layout.chipSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
-        sortProgress.hidesWhenStopped = true
-        sortProgress.color = .iconColorActive
-        sortProgress.translatesAutoresizingMaskIntoConstraints = false
-
         scrollView.addSubview(stackView)
         addSubview(scrollView)
-        addSubview(sortProgress)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: Layout.barHeight),
+            heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.barHeight),
 
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -212,29 +218,8 @@ final class SearchSortFilterChipsView: UIView {
             stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -Layout.horizontalPadding),
             stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            stackView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
-
-            sortProgress.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Layout.horizontalPadding),
-            sortProgress.centerYAnchor.constraint(equalTo: centerYAnchor)
+            stackView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
         ])
-    }
-
-    // MARK: - Public API
-
-    func reloadData() {
-        chipGroups = dataSource?.chipGroups(for: self) ?? []
-        rebuildChips()
-        updateChipAppearances()
-        updateChipMenus()
-    }
-
-    func setSortProgressVisible(_ isVisible: Bool) {
-        if isVisible {
-            sortProgress.startAnimating()
-        } else {
-            sortProgress.stopAnimating()
-        }
-        sortProgress.isHidden = !isVisible
     }
 
     // MARK: - Chips

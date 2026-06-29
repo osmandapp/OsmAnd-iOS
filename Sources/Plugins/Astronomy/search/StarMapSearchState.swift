@@ -331,18 +331,6 @@ final class StarMapSearchState {
         restore(savedInstanceState)
     }
 
-    func save(outState: inout [String: Any]) {
-        outState[Self.KEY_QUERY] = query
-        outState[Self.KEY_SORT] = sortMode.rawValue
-        outState[Self.KEY_TYPE_FILTER] = typeFilter.rawValue
-        outState[Self.KEY_NAKED_EYE] = nakedEyeOnly
-        outState[Self.KEY_CATEGORIES] = selectedCategories.map(\.rawValue)
-        outState[Self.KEY_QUICK_PRESET] = quickPresetType.rawValue
-        outState[Self.KEY_QUICK_CATALOG] = quickPresetCatalogWid
-        outState[Self.KEY_RECENT_CHIP_LABELS] = recentChips.map(\.label)
-        outState[Self.KEY_RECENT_CHIP_IDS] = recentChips.map { $0.objectId ?? "" }
-    }
-
     func restore(_ savedInstanceState: [String: Any]?) {
         guard let savedInstanceState else {
             return
@@ -446,27 +434,6 @@ final class StarMapSearchState {
                                  insertionOrderProvider: insertionOrderProvider)
     }
 
-    func calculateFilterCount() -> Int {
-        var count = 0
-        if quickPresetType != .NONE &&
-            quickPresetType != .CATALOGS &&
-            quickPresetType != .WATCH_NOW &&
-            quickPresetType.categoryPreset == nil {
-            count += 1
-        }
-        let defaultTypeFilter: StarMapSearchTypeFilter = quickPresetType == .WATCH_NOW ? .VISIBLE_TONIGHT : .SHOW_ALL
-        if typeFilter != defaultTypeFilter {
-            count += 1
-        }
-        if nakedEyeOnly {
-            count += 1
-        }
-        if selectedCategories.contains(where: { $0 != .ALL }) {
-            count += 1
-        }
-        return count
-    }
-
     func reset() {
         query = ""
         sortMode = .NAME_ASC
@@ -476,10 +443,6 @@ final class StarMapSearchState {
         quickPresetCatalogWid = nil
         selectedCategories.removeAll()
         selectedCategories.append(.ALL)
-    }
-
-    private func defaultSortModeForPreset(_ quickPresetType: StarMapSearchQuickPresetType) -> StarMapSearchSortMode {
-        quickPresetType == .WATCH_NOW ? .BRIGHTEST_FIRST : .NAME_ASC
     }
 
     func addRecentChip(label: String, objectId: String) {
@@ -516,6 +479,17 @@ final class StarMapSearchState {
         }
         if selectedCategories.isEmpty {
             selectedCategories.append(.ALL)
+        }
+    }
+    
+    private func defaultSortModeForPreset(_ quickPresetType: StarMapSearchQuickPresetType) -> StarMapSearchSortMode {
+        switch quickPresetType {
+        case .WATCH_NOW:
+            return .BRIGHTEST_FIRST
+        case .MY_DATA_FAVORITES, .MY_DATA_DAILY_PATH, .MY_DATA_DIRECTIONS:
+            return .NEWEST_FIRST
+        default:
+            return .NAME_ASC
         }
     }
 }

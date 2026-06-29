@@ -701,8 +701,18 @@
     NSMutableArray<OARenderedObject *> *res = [NSMutableArray new];
     
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    if (!mapViewController)
+        return res;
+
     OAMapRendererEnvironment *menv = [mapViewController mapRendererEnv];
-    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = menv.mapPrimitivesProvider->retreivePolygons(point, zoomLevel);
+    if (!menv)
+        return res;
+
+    const auto mapPrimitivesProvider = menv.mapPrimitivesProvider;
+    if (!mapPrimitivesProvider)
+        return res;
+
+    QList<std::shared_ptr<const OsmAnd::MapObject>> polygons = mapPrimitivesProvider->retreivePolygons(point, zoomLevel);
     if (!polygons.isEmpty())
     {
         for (int i = 0; i < polygons.size(); i++)

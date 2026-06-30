@@ -81,6 +81,9 @@ extension FavoriteListViewController {
             isSearchActive = false
             searchText = ""
             selectionManager.deselectAll()
+        } else {
+            let selectableItems = selectableIndexPaths().compactMap { dataSource.itemIdentifier(for: $0)?.selectionItem }
+            selectionManager = SelectionManager(allItems: selectableItems)
         }
 
         collectionView.isEditing = isEditing

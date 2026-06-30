@@ -41,6 +41,7 @@ final class FavoriteListViewController: UIViewController {
     var shouldReloadCollectionView = false
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
+    var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
     var isSearchResultsMode: Bool {
         isSearchActive || isSelectionModeInSearch
     }
@@ -94,12 +95,6 @@ final class FavoriteListViewController: UIViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.searchTextField.placeholder = localizedString("search_activity")
         return searchController
-    }()
-    lazy var selectionManager: SelectionManager<FavoriteSelectionItem> = {
-        let items = collectionView.indexPathsForVisibleItems.compactMap {
-            dataSource.itemIdentifier(for: $0)?.selectionItem
-        }
-        return SelectionManager(allItems: items)
     }()
     lazy var dataSource: DataSource = makeDataSource()
     

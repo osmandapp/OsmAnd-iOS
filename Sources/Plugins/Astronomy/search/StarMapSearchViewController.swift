@@ -275,13 +275,7 @@ final class StarMapSearchViewController: UIViewController {
         if currentMode == .EXPLORE {
             updateTableAdapter()
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if isMovingFromParent == false, navigationController?.viewControllers.last !== self {
-            navigationController?.setNavigationBarHidden(false, animated: false)
-        }
+        navigationController?.setNavigationBarHidden(!searchCancelButton.isHidden, animated: false)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -588,7 +582,6 @@ final class StarMapSearchViewController: UIViewController {
         if resetCollapseState {
             resetResultsScrollState(scrollToTop: true)
         }
-        searchRecycler.tableHeaderView = nil
         currentFullSearchMode = .BROWSE
         syncSearchQuery()
         searchBar.resignFirstResponder()
@@ -606,7 +599,6 @@ final class StarMapSearchViewController: UIViewController {
     private func showInputMode(requestKeyboard: Bool) {
         resetResultsScrollState(scrollToTop: true)
         currentFullSearchMode = .INPUT
-        searchRecycler.tableHeaderView = nil
         syncSearchQuery()
         updateTableAdapter()
         updateSortFilterBar()
@@ -948,7 +940,7 @@ final class StarMapSearchViewController: UIViewController {
     // MARK: - Empty State
 
     private func updateEmptyStateContent() {
-        emptyView.configure(with: .searchNoResults(clearFiltersOnly: shouldShowWatchNowClearFiltersAction()))
+        emptyView.configure(with: .searchNoResults)
     }
 
     private func updateEmptyStateVisibility() {
@@ -1021,7 +1013,10 @@ final class StarMapSearchViewController: UIViewController {
     }
 
     private func renderRecentChips() {
-        recentChipsContainer.removeArrangedSubviews()
+        for view in recentChipsContainer.arrangedSubviews {
+            recentChipsContainer.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
         if searchState.recentChips.isEmpty {
             if currentMode == .EXPLORE {
                 exploreAdapter.submitSnapshot(buildExploreSnapshot())
@@ -1122,15 +1117,6 @@ final class StarMapSearchViewController: UIViewController {
     
     deinit {
         StarMapSearchProgressHUD.hide(from: view, animated: true)
-    }
-}
-
-private extension UIStackView {
-    func removeArrangedSubviews() {
-        for view in arrangedSubviews {
-            removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
     }
 }
 

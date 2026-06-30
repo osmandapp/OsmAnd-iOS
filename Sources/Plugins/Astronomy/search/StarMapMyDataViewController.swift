@@ -228,7 +228,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     private func styleMyDataSegmentedControl() {
-        myDataSegmentedControl.selectedSegmentTintColor = .white
+        myDataSegmentedControl.selectedSegmentTintColor = .groupBg
         myDataSegmentedControl.backgroundColor = .tertiarySystemFill.withAlphaComponent(0.12)
         let font = UIFont.scaledSystemFont(ofSize: 15, weight: .medium, maximumSize: 17)
         let titleAttributes: [NSAttributedString.Key: Any] = [
@@ -484,7 +484,7 @@ final class StarMapMyDataViewController: UIViewController {
 
     private func updateEmptyStateContent() {
         if shouldShowSearchNoResultsEmpty() {
-            emptyView.configure(with: .searchNoResults(clearFiltersOnly: false))
+            emptyView.configure(with: .searchNoResults)
             return
         }
         

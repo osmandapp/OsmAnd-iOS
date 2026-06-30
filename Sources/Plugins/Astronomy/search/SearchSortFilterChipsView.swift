@@ -131,6 +131,12 @@ private final class SearchSortFilterChipButton: UIButton {
     }
     
     private func setup() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.05
+        layer.shadowRadius = 6
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.zPosition = 1
+        
         changesSelectionAsPrimaryAction = false
         titleLabel?.lineBreakMode = .byTruncatingTail
         titleLabel?.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

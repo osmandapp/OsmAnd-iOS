@@ -9,7 +9,7 @@
 import UIKit
 
 enum StarMapSearchEmptyConfig {
-    case searchNoResults(clearFiltersOnly: Bool)
+    case searchNoResults
     case myDataFavorites
     case myDataDailyPath
     case myDataDirections

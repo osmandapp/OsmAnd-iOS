@@ -210,7 +210,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         ])
 
         mapControlsContainer.addLayoutGuide(mapVisibleAreaGuide)
-        let mapVisibleLeading = mapVisibleAreaGuide.leadingAnchor.constraint(equalTo: mapControlsContainer.leadingAnchor)
+        let mapVisibleLeading = mapVisibleAreaGuide.leadingAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.leadingAnchor)
         mapVisibleAreaLeadingConstraint = mapVisibleLeading
         NSLayoutConstraint.activate([
             mapVisibleLeading,
@@ -849,7 +849,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                              searchButton,
                              closeButton,
                              settingsButton,
-                             sliderContainer)
+                             sliderContainer,
+                             regularMapContainer)
         objectInfoController?.applyRedFilter(enabled: enabled)
         configureSheetController?.applyRedFilter(enabled: enabled)
     }
@@ -865,6 +866,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         if additionalSafeAreaInsets.bottom != height {
             additionalSafeAreaInsets.bottom = height
+            view.layoutIfNeeded()
         }
     }
 
@@ -882,6 +884,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         layoutRegularMapRenderer()
         mapPanel.refreshMap(true)
+        
+        if starView.showRedFilter {
+            AstroRedFilter.apply(true, to: regularMapContainer)
+        }
     }
 
     private func restoreRegularMapIfNeeded(refresh: Bool) {
@@ -1246,10 +1252,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     @objc private func showConfigureSheet() {
         if configureSheetController != nil {
-            configureSheetNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
-                self?.configureSheetNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                configureSheetNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
+                    self?.configureSheetNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
+                }
+                updateMapControlsVisibility()
+            } else {
+                dismissConfigureSheet(animated: true)
             }
-            updateMapControlsVisibility()
             return
         }
         hideBottomSheet(clearSelection: false)
@@ -1322,7 +1332,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         leftPanelLeadingConstraint = leading
 
         NSLayoutConstraint.activate([
-            navigationController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            navigationController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
             leading,
             navigationController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
             navigationController.view.widthAnchor.constraint(equalToConstant: Layout.leftPanelWidth)

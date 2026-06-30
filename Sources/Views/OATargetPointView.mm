@@ -796,22 +796,14 @@ static const NSInteger _buttonsCount = 4;
     return _headerHeight;
 }
 
-- (CGFloat)visibleDetailsButtonHeight
-{
-    if (![self isLandscape] && self.customController && [self.customController showDetailsButton])
-        return [self.customController detailsButtonHeight];
-    else
-        return 0.0;
-}
-
 - (CGFloat) getVisibleHeight
 {
-    return _headerHeight + self.contentOffset.y + [self visibleDetailsButtonHeight];
+    return _headerHeight + self.contentOffset.y;
 }
 
 - (CGFloat) getVisibleHeightWithOffset:(CGPoint)offset
 {
-    return _headerHeight + offset.y + [self visibleDetailsButtonHeight];
+    return _headerHeight + offset.y;
 }
 
 - (BOOL) isLandscapeSupported
@@ -1276,7 +1268,10 @@ static const NSInteger _buttonsCount = 4;
     CGFloat contentViewHeight = self.customController.contentView.frame.size.height + self.customController.getToolBarHeight;
 
     _headerY = _containerView.frame.origin.y;
-    _headerHeight = containerViewHeight;
+    CGFloat detailsButtonHeight = 0.0;
+    if (![self isLandscape] && self.customController && [self.customController showDetailsButton])
+        detailsButtonHeight = [self.customController detailsButtonHeight];
+    _headerHeight = containerViewHeight + detailsButtonHeight;
     _headerOffset = 0;
     
     _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
@@ -1329,7 +1324,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.customController.contentView)
     {
-        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, !landscape && [self.customController disableScroll] ? _fullOffset - bottomToolBarHeight : contentViewHeight - bottomToolBarHeight);
+        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight - detailsButtonHeight, width, !landscape && [self.customController disableScroll] ? _fullOffset - bottomToolBarHeight : contentViewHeight - bottomToolBarHeight);
         if ([self.customController isMapFrameNeeded])
             [self.customController addMapFrameLayer:[self getMapFrame:width] view:self];
     }

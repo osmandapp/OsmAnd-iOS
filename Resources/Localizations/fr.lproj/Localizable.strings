@@ -4193,3 +4193,11 @@
 "astro_designations" = "Désignations";
 "astro_offline_knowledge_base_title" = "Carte du ciel hors-ligne & Catalogue";
 "astro_offline_knowledge_base_description" = "Téléchargez la base de données étendue pour accéder, hors ligne, aux articles Wikipédia et aux catalogues du ciel profond.";
+"delete_track_confirmation_title" = "Supprimer « %@ » ?";
+"tracks_delete_confirmation_message" = "Cette action ne peut pas être annulée.";
+"astro_alt_short" = "Alt";
+"astro_expand_your_universe_title" = "Élargissez vos horizons";
+"astro_expand_your_universe_description" = "Accédez à la base de données étendue regroupant les catalogues du ciel profond, les articles Wikipédia et le mode AR hors ligne.";
+"astro_today_visibility" = "Visibilité du jour";
+"astro_visibility_show_today" = "Afficher la visibilité d'aujourd'hui";
+"astro_schedule_show_current_week" = "Afficher la semaine en cours";

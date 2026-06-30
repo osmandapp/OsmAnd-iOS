@@ -107,7 +107,7 @@ final class POIImageLoader: NSObject, @unchecked Sendable {
                             completion?(placeId, value.image)
                         }
                     case .failure(let error):
-                        NSLog("[POIImageLoader] fetchImages -> failed to load \(urlStr): \(error)")
+                        NSLog("[POIImageLoader] fetchImages -> failed to load %@: %@", urlStr, String(describing: error))
                         
                         guard let placeholderImageName = place.placeholderImageName,
                               let placeholderImage = OASvgHelper.mapImageNamed(placeholderImageName, scale: Float(scale)),

@@ -4287,3 +4287,5 @@
 "route_members" = "Medlemmer";
 "route_part_of" = "Del af";
 "multipoligon_related" = "Relateret";
+"delete_track_confirmation_title" = "Slet \"%@\"?";
+"tracks_delete_confirmation_message" = "Denne handling kan ikke fortrydes.";

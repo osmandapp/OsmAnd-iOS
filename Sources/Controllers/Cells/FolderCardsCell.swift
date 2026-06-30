@@ -123,7 +123,7 @@ import UIKit
                    withSelectedIndex index: Int32,
                    addButtonPosition position: FolderCardsAddButtonPosition) {
         self.addButtonPosition = position
-        selectedFolderIndex = Int(index)
+        let requestedSelectedFolderIndex = Int(index)
         
         let folderItems: [Item] = values.enumerated().map { i, title in
             let sizeNumber = sizes?[safe: i]
@@ -160,16 +160,22 @@ import UIKit
             items = [addItem] + folderItems
         }
 
+        selectedFolderIndex = folderItems.indices.contains(requestedSelectedFolderIndex) ? requestedSelectedFolderIndex : 0
+
         collectionView.reloadData()
     }
 
     @objc func setSelectedIndex(_ selectedIndex: Int) {
         let previous = selectedFolderIndex
         selectedFolderIndex = selectedIndex
-        collectionView.reloadItems(at: [
-            IndexPath(row: collectionIndex(forFolderIndex: previous), section: 0),
-            IndexPath(row: collectionIndex(forFolderIndex: selectedFolderIndex), section: 0)
-        ])
+
+        let rows = Set([previous, selectedFolderIndex]
+            .map { collectionIndex(forFolderIndex: $0) }
+            .filter { $0 >= 0 && $0 < collectionView.numberOfItems(inSection: 0) }
+        ).sorted()
+        guard !rows.isEmpty else { return }
+
+        collectionView.reloadItems(at: rows.map { IndexPath(row: $0, section: 0) })
     }
 
     @objc func updateContentOffset() {
@@ -190,7 +196,8 @@ import UIKit
     
     @objc func scrollToFolder(at folderIndex: Int, animated: Bool) {
         let indexPath = IndexPath(row: collectionIndex(forFolderIndex: folderIndex), section: 0)
-        guard indexPath.row < collectionView.numberOfItems(inSection: 0),
+        guard indexPath.row >= 0,
+              indexPath.row < collectionView.numberOfItems(inSection: 0),
               !collectionView.indexPathsForVisibleItems.contains(indexPath) else { return }
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
     }

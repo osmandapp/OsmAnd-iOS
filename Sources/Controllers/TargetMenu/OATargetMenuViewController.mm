@@ -212,6 +212,12 @@
             controller = [[RenderedObjectViewController alloc] initWithRenderedObject:targetPoint.targetObj];
             break;
         }
+
+        case OATargetAisObject:
+        {
+            controller = [[AisObjectViewController alloc] initWithAisObject:targetPoint.targetObj];
+            break;
+        }
             
         case OATargetAddress:
         {

@@ -4287,3 +4287,5 @@
 "route_members" = "Članovi";
 "route_part_of" = "Deo od";
 "multipoligon_related" = "Povezano";
+"delete_track_confirmation_title" = "Obrisati „%@“?";
+"tracks_delete_confirmation_message" = "Ova radnja se ne može poništiti.";

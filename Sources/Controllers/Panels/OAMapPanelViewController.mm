@@ -1527,7 +1527,10 @@ typedef enum
         [_mapViewController hidePolygonHighlight];
     }
     // show context marker on map
-    [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
+    if (targetPoint.type == OATargetAisObject)
+        [_mapViewController hideContextPinMarker];
+    else
+        [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
@@ -1699,7 +1702,10 @@ typedef enum
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
 {
     // show context marker on map
-    [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
+    if (targetPoint.type == OATargetAisObject)
+        [_mapViewController hideContextPinMarker];
+    else
+        [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
@@ -2537,6 +2543,7 @@ typedef enum
         case OATargetTurn:
         case OATargetMyLocation:
         case OATargetLocation:
+        case OATargetAisObject:
         case OATargetRenderedObject:
         case OATargetBaseDetailsObject:
         {

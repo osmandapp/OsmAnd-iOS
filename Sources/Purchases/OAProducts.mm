@@ -15,6 +15,7 @@
 #import "OALinks.h"
 #import "OAObservable.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAFunctionalAddon()
 
@@ -2896,6 +2897,7 @@
 @property (nonatomic) OAProduct *weather;
 @property (nonatomic) OAProduct *sensors;
 @property (nonatomic) OAProduct *vehicleMetrics;
+@property (nonatomic) OAProduct *aisTracker;
 @property (nonatomic) OAProduct *astronomy;
 @property (nonatomic) OAProduct *carplay;
 @property (nonatomic) OAProduct *osmandDevelopment;
@@ -2948,6 +2950,7 @@
         self.weather = [[OAWeatherProduct alloc] init];
         self.sensors = [[OAExternalSensorsProduct alloc] init];
         self.vehicleMetrics = [OAVehicleMetricsProduct new];
+        self.aisTracker = [AisTrackerProduct new];
         self.astronomy = [OAAstronomyProduct new];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
@@ -2974,6 +2977,7 @@
                              self.weather,
                              self.sensors,
                              self.vehicleMetrics,
+                             self.aisTracker,
                              self.astronomy,
                              self.osmandDevelopment
         ];

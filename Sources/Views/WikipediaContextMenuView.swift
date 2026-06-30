@@ -42,17 +42,23 @@ final class WikipediaContextMenuView: UIView {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
         
         var config = UIButton.Configuration.plain()
         config.baseForegroundColor = .buttonTextColorSecondary
+        config.background.backgroundColor = .clear
         config.background.strokeColor = UIColor.buttonOutlineColorSecondary
         config.background.strokeWidth = 1
         config.cornerStyle = .fixed
         config.background.cornerRadius = 8
-        
         config.imagePadding = Constants.buttonContentInset.leading
         config.contentInsets = Constants.buttonContentInset
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            return outgoing
+        }
+        config.imageColorTransformer = .init { _ in .iconColorDefault }
+        
         button.configuration = config
 
         return button
@@ -126,6 +132,9 @@ final class WikipediaContextMenuView: UIView {
 
     private func setupActions() {
         actionButton.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
+        actionButton.addTarget(self, action: #selector(didTapDownActionButton), for: .touchDown)
+        actionButton.addTarget(self, action: #selector(resetButtonState), for: .touchUpOutside)
+        actionButton.addTarget(self, action: #selector(resetButtonState), for: .touchCancel)
         titleLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapText)))
     }
     
@@ -139,6 +148,23 @@ final class WikipediaContextMenuView: UIView {
     
     @objc private func didTapActionButton() {
         onButtonAction?()
+        resetButtonState()
+    }
+    
+    @objc private func didTapDownActionButton() {
+        var config = actionButton.configuration
+        config?.background.backgroundColor = .buttonBgColorTap
+        config?.baseForegroundColor = .buttonTextColorPrimary
+        actionButton.configuration = config
+    }
+    
+    @objc private func resetButtonState() {
+        UIView.animate(withDuration: 0.15) {
+            var config = self.actionButton.configuration
+            config?.background.backgroundColor = .clear
+            config?.baseForegroundColor = .buttonTextColorSecondary
+            self.actionButton.configuration = config
+        }
     }
     
     private func makeAttributedText(from text: String) -> NSAttributedString {

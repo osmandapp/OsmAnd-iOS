@@ -730,7 +730,6 @@ static int TILE_SIZE = 256;
     MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:CGPointMake(0, 0)];
     CLLocation *latLon = [poi getLocation];
     result.objectLatLon = latLon;
-    
     OATravelGpx *travelGpx = [[OATravelGpx alloc] initWithAmenity:poi];
     
     if (filename)

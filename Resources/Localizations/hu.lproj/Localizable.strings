@@ -4250,3 +4250,5 @@
 "route_members" = "Tagok";
 "route_part_of" = "Része ennek:";
 "multipoligon_related" = "Érintett";
+"delete_track_confirmation_title" = "Biztosan törli a(z) „%@” nyomvonalat?";
+"tracks_delete_confirmation_message" = "Ez a művelet nem vonható vissza!";

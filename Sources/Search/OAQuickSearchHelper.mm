@@ -469,9 +469,12 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         }
         
         for (OASWptPt *point in gpx.getPointsList) {
+            NSString *pointName = [point.name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            if (pointName.length == 0)
+                continue;
 
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-            sr.localeName = point.name;
+            sr.localeName = pointName;
             sr.wpt = point;
             sr.object = sr.wpt;
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;

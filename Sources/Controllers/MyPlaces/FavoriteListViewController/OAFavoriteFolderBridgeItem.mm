@@ -16,7 +16,7 @@
     self = [super init];
     if (self)
     {
-        NSString *groupName = group.name ?: @"";
+        NSString *groupName = group.name;
         _identifier = [NSString stringWithFormat:@"%@-%lu", groupName, (unsigned long)index];
         _groupName = groupName;
         _title = [self.class titleForGroupName:groupName];

@@ -57,7 +57,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *fileAttributesByGroupName = [self favoriteStorageAttributesForGroups:groups];
     NSMutableArray<OAFavoriteFolderBridgeItem *> *folders = [NSMutableArray arrayWithCapacity:groups.count];
     [groups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger index, BOOL * _Nonnull stop) {
-        NSString *groupName = group.name ?: @"";
+        NSString *groupName = group.name;
         NSDictionary<NSFileAttributeKey, id> *fileAttributes = fileAttributesByGroupName[groupName];
         NSDate *lastModifiedDate = [self lastModifiedDateForGroupName:groupName groups:groups fileAttributesByGroupName:fileAttributesByGroupName];
         long long fileSize = [fileAttributes[NSFileSize] longLongValue];
@@ -146,7 +146,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     {
         for (OAFavoriteGroup *group in [self favoriteGroupsInsideOrEqualToGroupName:groupName])
         {
-            NSString *currentGroupName = group.name ?: @"";
+            NSString *currentGroupName = group.name;
             if ([handledGroupNames containsObject:currentGroupName])
                 continue;
 
@@ -216,7 +216,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if (!group || trimmedName.length == 0)
         return;
 
-    NSString *sourceGroupName = group.name ?: @"";
+    NSString *sourceGroupName = group.name;
     if ([sourceGroupName isEqualToString:trimmedName])
         return;
 
@@ -229,7 +229,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if (!group)
         return NO;
 
-    NSString *sourceGroupName = group.name ?: @"";
+    NSString *sourceGroupName = group.name;
     NSString *parentGroupName = targetGroupName ?: @"";
     if (sourceGroupName.length == 0 || [self isGroupName:parentGroupName insideOrEqualToGroupName:sourceGroupName])
         return NO;
@@ -260,7 +260,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         if (!group)
             continue;
 
-        NSString *sourceGroupName = group.name ?: @"";
+        NSString *sourceGroupName = group.name;
         if ([self moveFavoriteGroup:sourceGroupName toGroupName:groupName])
             [movedGroupNames addObject:sourceGroupName];
     }
@@ -315,13 +315,13 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         OAFavoriteFolderBridgeItem *folderItem = (OAFavoriteFolderBridgeItem *) item;
         OAFavoriteGroup *group = [self favoriteGroupWithName:folderItem.groupName];
         if (group)
-            [selectedGroupNames addObject:group.name ?: @""];
+            [selectedGroupNames addObject:group.name];
     }
 
     NSMutableArray<NSString *> *groupNames = [NSMutableArray array];
     for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
     {
-        NSString *favoriteGroupName = favoriteGroup.name ?: @"";
+        NSString *favoriteGroupName = favoriteGroup.name;
         BOOL isInsideSelectedGroup = NO;
         for (NSString *selectedGroupName in selectedGroupNames)
         {
@@ -432,9 +432,9 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         if (!group)
             continue;
 
-        for (OAFavoriteGroup *groupToShare in [self favoriteGroupsInsideOrEqualToGroupName:group.name ?: @""])
+        for (OAFavoriteGroup *groupToShare in [self favoriteGroupsInsideOrEqualToGroupName:group.name])
         {
-            NSString *sourceGroupName = groupToShare.name ?: @"";
+            NSString *sourceGroupName = groupToShare.name;
             if (groupsByName[sourceGroupName])
                 continue;
 
@@ -499,7 +499,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     if (!group)
         return NO;
 
-    NSArray<OAFavoriteGroup *> *groupsToDelete = [self favoriteGroupsInsideOrEqualToGroupName:group.name ?: @""];
+    NSArray<OAFavoriteGroup *> *groupsToDelete = [self favoriteGroupsInsideOrEqualToGroupName:group.name];
     if (groupsToDelete.count == 0)
         return NO;
 
@@ -540,9 +540,9 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
         if (!group)
             continue;
 
-        for (OAFavoriteGroup *groupToDelete in [self favoriteGroupsInsideOrEqualToGroupName:group.name ?: @""])
+        for (OAFavoriteGroup *groupToDelete in [self favoriteGroupsInsideOrEqualToGroupName:group.name])
         {
-            NSString *groupName = groupToDelete.name ?: @"";
+            NSString *groupName = groupToDelete.name;
             if ([deletedGroupNames containsObject:groupName])
                 continue;
 
@@ -863,7 +863,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *parentGroupName = groupName ?: @"";
     for (OAFavoriteGroup *favoriteGroup in groups)
     {
-        NSString *currentGroupName = favoriteGroup.name ?: @"";
+        NSString *currentGroupName = favoriteGroup.name;
         if (![self isGroupName:currentGroupName insideOrEqualToGroupName:parentGroupName])
             continue;
 
@@ -888,7 +888,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *parentGroupName = groupName ?: @"";
     for (OAFavoriteGroup *favoriteGroup in groups)
     {
-        if ([self isGroupName:favoriteGroup.name ?: @"" insideOrEqualToGroupName:parentGroupName])
+        if ([self isGroupName:favoriteGroup.name insideOrEqualToGroupName:parentGroupName])
             pointsCount += favoriteGroup.points.count;
     }
     
@@ -900,7 +900,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSMutableDictionary<NSString *, NSDictionary<NSFileAttributeKey, id> *> *result = [NSMutableDictionary dictionaryWithCapacity:groups.count];
     for (OAFavoriteGroup *group in groups)
     {
-        NSString *groupName = group.name ?: @"";
+        NSString *groupName = group.name;
         NSString *filePath = [OsmAndApp.instance favoritesStorageFilename:groupName];
         NSDictionary<NSFileAttributeKey, id> *attributes = [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:nil];
         if (attributes)
@@ -916,7 +916,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *parentGroupName = groupName ?: @"";
     for (OAFavoriteGroup *favoriteGroup in [[OAFavoritesHelper getFavoriteGroups] copy])
     {
-        if ([self isGroupName:favoriteGroup.name ?: @"" insideOrEqualToGroupName:parentGroupName])
+        if ([self isGroupName:favoriteGroup.name insideOrEqualToGroupName:parentGroupName])
             [result addObject:favoriteGroup];
     }
 
@@ -955,7 +955,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     BOOL changed = NO;
     for (OAFavoriteGroup *favoriteGroup in [self favoriteGroupsInsideOrEqualToGroupName:source])
     {
-        NSString *currentGroupName = favoriteGroup.name ?: @"";
+        NSString *currentGroupName = favoriteGroup.name;
         NSString *renamedGroupName = [target stringByAppendingString:[self suffixForGroupName:currentGroupName parentGroupName:source]];
         if ([currentGroupName isEqualToString:renamedGroupName])
             continue;
@@ -988,10 +988,8 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 
 + (NSString *)groupNameByMovingGroupName:(NSString *)groupName toParentGroupName:(NSString *)parentGroupName
 {
-    NSString *name = groupName ?: @"";
-    NSString *parent = parentGroupName ?: @"";
-    NSString *lastComponent = [self lastComponentForGroupName:name];
-    return parent.length > 0 ? [NSString stringWithFormat:@"%@/%@", parent, lastComponent] : lastComponent;
+    NSString *lastComponent = [self lastComponentForGroupName:groupName];
+    return !parentGroupName || parentGroupName.length == 0 ? lastComponent : [NSString stringWithFormat:@"%@/%@", parentGroupName, lastComponent];
 }
 
 + (NSString *)suffixForGroupName:(NSString *)groupName parentGroupName:(NSString *)parentGroupName
@@ -1010,7 +1008,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
 + (OAFavoriteGroup *)favoriteGroupForSharingGroup:(OAFavoriteGroup *)group points:(NSArray<OAFavoriteItem *> *)points
 {
     OAFavoriteGroup *groupToShare = [[OAFavoriteGroup alloc] initWithPoints:points ?: @[]
-                                                                       name:group.name ?: @""
+                                                                       name:group.name
                                                                   isVisible:group.isVisible
                                                                       color:group.color];
     groupToShare.isPinned = group.isPinned;
@@ -1028,7 +1026,7 @@ static NSArray<OAFavoriteFolderBridgeItem *> *favoriteFoldersCache = nil;
     NSString *filename = app.favoritesFilePrefix ?: @"";
     if (favoriteGroups.count == 1)
     {
-        NSString *groupFileName = [app getGroupFileName:favoriteGroups.firstObject.name ?: @""];
+        NSString *groupFileName = [app getGroupFileName:favoriteGroups.firstObject.name];
         filename = [NSString stringWithFormat:@"%@%@%@",
                     filename,
                     groupFileName.length > 0 ? app.favoritesGroupNameSeparator : @"",

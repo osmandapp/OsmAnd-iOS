@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class UIColor, UIImage, OAFavoriteItem, OASGpxUtilitiesPointsGroup, OAEditPointViewController, OAFavoriteFolderBridgeItem, OAFavoritePointBridgeItem;
+@class UIColor, OAFavoriteItem, OASGpxUtilitiesPointsGroup, OAEditPointViewController, OAFavoriteFolderBridgeItem, OAFavoritePointBridgeItem;
 
 @interface OAFavoritesBridgeHelper : NSObject
 

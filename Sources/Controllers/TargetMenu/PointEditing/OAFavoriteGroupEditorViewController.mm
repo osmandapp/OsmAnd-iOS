@@ -142,7 +142,12 @@
 {
     NSString *trimmedName = [(name ?: @"") stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
     NSString *parentGroupName = self.parentGroupName ?: @"";
-    return parentGroupName.length > 0 && trimmedName.length > 0 ? [NSString stringWithFormat:@"%@/%@", parentGroupName, trimmedName] : trimmedName;
+    if (parentGroupName.length > 0 && trimmedName.length > 0)
+        return [NSString stringWithFormat:@"%@/%@", parentGroupName, trimmedName];
+    else if (trimmedName.length > 0)
+        return trimmedName;
+    else
+        return parentGroupName;
 }
 
 - (BOOL)isParentOnlyGroup:(OAFavoriteGroup *)group groupName:(NSString *)groupName
@@ -153,7 +158,7 @@
     NSString *nestedPrefix = [groupName stringByAppendingString:@"/"];
     for (OAFavoriteGroup *favoriteGroup in [OAFavoritesHelper getFavoriteGroups])
     {
-        NSString *favoriteGroupName = favoriteGroup.name ?: @"";
+        NSString *favoriteGroupName = favoriteGroup.name;
         if ([favoriteGroupName hasPrefix:nestedPrefix])
             return YES;
     }

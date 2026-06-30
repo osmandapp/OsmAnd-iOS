@@ -379,7 +379,7 @@ extension FavoriteListViewController {
     
     private func openNewFavoriteGroupEditor() {
         guard let navigationController, let viewController = OAFavoriteGroupEditorViewController(new: ()) else { return }
-        viewController.parentGroupName = parentGroupName ?? ""
+        viewController.parentGroupName = parentGroupName
         viewController.validatesGroupUniqueness = true
         viewController.delegate = self
         let modalNavigationController = UINavigationController(rootViewController: viewController)
@@ -439,7 +439,7 @@ extension FavoriteListViewController {
     private func appendFavoritePointCoordinatesAndURL(to sharingText: NSMutableString, point: OAFavoritePointBridgeItem) {
         let geoURLString = OAFavoritesBridgeHelper.geoURLString(forFavoritePoint: point)
         if !geoURLString.isEmpty {
-            sharingText.append("\nLocation: \(geoURLString)")
+            sharingText.append("\n\(localizedString("shared_string_location")): \(geoURLString)")
         }
 
         let shareURLString = OAFavoritesBridgeHelper.sharePoiURLString(forFavoritePoint: point)

@@ -60,6 +60,7 @@
         NSLog(@"SQLite error: %@", errorString);
     }
 }
+
 - (void)createDb
 {
     NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/History"];
@@ -86,7 +87,7 @@
                     OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
-                
+
                 sqlite3_close(historyDB);
             }
             else
@@ -149,7 +150,7 @@
     [self addPoints: @[item] updateLastTime: YES];
 }
 
-- (void)addPoints:(NSArray<OAHistoryItem *> *)items updateLastTime: (BOOL) updateLastTime
+- (void)addPoints:(NSArray<OAHistoryItem *> *)items updateLastTime:(BOOL)updateLastTime
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt *statement;
@@ -158,16 +159,17 @@
         {
             bool updateMarkers = NO;
             bool updateHistory = NO;
-            for(OAHistoryItem * item: items) {
+            for (OAHistoryItem * item: items)
+            {
                 int64_t hId = 0;
                 NSString *querySQL = [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ = ? AND %@ = ? ORDER BY %@ DESC LIMIT 1", TABLE_NAME, POINT_COL_HASH, POINT_COL_FROM_NAVIGATION, POINT_COL_TIME];
                 const char *query_stmt = [querySQL UTF8String];
                 int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
-                if (item.hType == OAHistoryTypeDirection) {
+                if (item.hType == OAHistoryTypeDirection)
                     updateMarkers = YES;
-                } else {
+                else
                     updateHistory = YES;
-                }
+                
                 if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
                 {
                     sqlite3_bind_int64(statement, 1, hHash);
@@ -189,8 +191,8 @@
                 if (hId > 0)
                     sqlite3_bind_int64(statement, row++, hId);
                 
-                NSString *iconName = item.iconName ? item.iconName : @"";
-                NSString *typeName = item.typeName ? item.typeName : @"";
+                NSString *iconName = item.iconName ?: @"";
+                NSString *typeName = item.typeName ?: @"";
                 int fromNavigation = item.fromNavigation ? 1 : 0;
                 
                 sqlite3_bind_int64(statement, row++, hHash);
@@ -198,7 +200,7 @@
                 sqlite3_bind_double(statement, row++, item.latitude);
                 sqlite3_bind_double(statement, row++, item.longitude);
                 sqlite3_bind_text(statement, row++, [item.name UTF8String], -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(statement, row++, item.hType);
+                sqlite3_bind_int(statement, row++, (int)item.hType);
                 sqlite3_bind_text(statement, row++, [iconName UTF8String], -1, SQLITE_TRANSIENT);
                 sqlite3_bind_text(statement, row++, [typeName UTF8String], -1, SQLITE_TRANSIENT);
                 sqlite3_bind_int(statement, row, fromNavigation);
@@ -209,38 +211,59 @@
                 
             }
             sqlite3_close(historyDB);
-            if (updateLastTime && updateMarkers) {
+            if (updateLastTime && updateMarkers)
                 [self updateMarkersHistoryLastModifiedTime];
-            }
-            if (updateLastTime && updateHistory) {
+            
+            if (updateLastTime && updateHistory)
                 [self updateHistoryLastModifiedTime];
-            }
         }
     });
 }
 
 - (void)deletePoint:(OAHistoryItem *)item
 {
+    [self deletePoints:@[item]];
+}
+
+- (void)deletePoints:(NSArray<OAHistoryItem *> *)items
+{
+    if (items.count == 0)
+        return;
+
     dispatch_async(dbQueue, ^{
-        sqlite3_stmt    *statement;
-        
+        sqlite3_stmt *statement;
         const char *dbpath = [databasePath UTF8String];
-        
+
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
+            bool updateMarkers = NO;
+            bool updateHistory = NO;
             NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE ROWID=?", TABLE_NAME];
-            
-            const char *update_stmt = [query UTF8String];
-            
-            sqlite3_prepare_v2(historyDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_int64(statement, 1, item.hId);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
+            const char *delete_stmt = [query UTF8String];
+
+            sqlite3_exec(historyDB, "BEGIN TRANSACTION", NULL, NULL, NULL);
+            if (sqlite3_prepare_v2(historyDB, delete_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                for (OAHistoryItem *item in items)
+                {
+                    sqlite3_bind_int64(statement, 1, item.hId);
+                    [self checkError:sqlite3_step(statement)];
+                    sqlite3_reset(statement);
+                    sqlite3_clear_bindings(statement);
+
+                    if (item.hType == OAHistoryTypeDirection)
+                        updateMarkers = YES;
+                    else
+                        updateHistory = YES;
+                }
+                sqlite3_finalize(statement);
+            }
+            sqlite3_exec(historyDB, "COMMIT", NULL, NULL, NULL);
+
             sqlite3_close(historyDB);
-            if (item.hType == OAHistoryTypeDirection)
+            if (updateMarkers)
                 [self updateMarkersHistoryLastModifiedTime];
-            else
+            if (updateHistory)
                 [self updateHistoryLastModifiedTime];
         }
     });
@@ -335,6 +358,16 @@
             {
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+                NSMutableSet<NSString *> *disabledPoiTypeNames = [NSMutableSet set];
+                if (!ignoreDisabledResult)
+                {
+                    for (NSString *disabledPoiType in [settings getDisabledTypes])
+                    {
+                        NSString *disabledPoiTypeName = [poiHelper getPhraseByName:disabledPoiType];
+                        if (disabledPoiTypeName.length > 0)
+                            [disabledPoiTypeNames addObject:disabledPoiTypeName];
+                    }
+                }
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
                     OAHistoryItem *item = [[OAHistoryItem alloc] init];
@@ -362,14 +395,7 @@
                     BOOL skipDisabledResult = NO;
                     if (!ignoreDisabledResult)
                     {
-                        NSSet<NSString *> *disabledPoiTypes = [settings getDisabledTypes];
-                        for (NSString *disabledPoiType in disabledPoiTypes)
-                        {
-                            if ([[poiHelper getPhraseByName:disabledPoiType] isEqualToString:typeName])
-                                skipDisabledResult = YES;
-                        }
-                        if (!skipDisabledResult)
-                            skipDisabledResult = type == OAHistoryTypePOI && ![OAAmenitySearcher findPOIByName:name lat:lat lon:lon];
+                        skipDisabledResult = typeName.length > 0 && [disabledPoiTypeNames containsObject:typeName];
                     }
                     if (!skipDisabledResult)
                     {

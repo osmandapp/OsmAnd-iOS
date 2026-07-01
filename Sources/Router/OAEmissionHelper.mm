@@ -148,7 +148,7 @@ static OAMotorType * HYBRID;
 + (OAMotorType *)GAS
 {
     if (!GAS)
-        GAS = [[OAMotorType alloc] initWithName:@"gas" fuelConsumption:4.73f fuelEmissionFactor:2.86f];
+        GAS = [[OAMotorType alloc] initWithName:@"gas" fuelConsumption:4.73f fuelEmissionFactor:2.28f];
     return GAS;
 }
 

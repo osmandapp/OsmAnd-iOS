@@ -14,19 +14,19 @@ struct StarMapSearchSortFilterConfiguration {
     var showsCategoriesSection = true
 
     static func make(catalogMode: Bool,
-                     isMyData: Bool,
+                     showMyDataSortModes: Bool,
                      showsShowAllVisibility: Bool,
                      showsCategoriesSection: Bool) -> StarMapSearchSortFilterConfiguration {
         StarMapSearchSortFilterConfiguration(
             catalogMode: catalogMode,
-            showsMyDataSortModes: isMyData,
+            showsMyDataSortModes: showMyDataSortModes,
             showsShowAllVisibility: showsShowAllVisibility,
             showsCategoriesSection: showsCategoriesSection
         )
     }
 }
 
-final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSource, SearchSortFilterChipsDelegate {
+final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDataSource, StarMapSearchSortFilterChipsDelegate {
 
     var onChange: (() -> Void)?
 
@@ -39,9 +39,9 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
         normalizeTypeFilterIfNeeded()
     }
 
-    // MARK: SearchSortFilterChipsDataSource
+    // MARK: StarMapSearchSortFilterChipsDataSource
 
-    func chipGroups(for chipsView: SearchSortFilterChipsView) -> [SearchSortFilterChipGroup] {
+    func chipGroups(for chipsView: StarMapSearchSortFilterChipsView) -> [SearchSortFilterChipGroup] {
         guard let searchState else {
             return []
         }
@@ -61,9 +61,9 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
         return groups
     }
 
-    // MARK: SearchSortFilterChipsDelegate
+    // MARK: StarMapSearchSortFilterChipsDelegate
 
-    func chipsView(_ chipsView: SearchSortFilterChipsView, didSelectOption optionId: String, inGroup groupId: String) {
+    func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didSelectOption optionId: String, inGroup groupId: String) {
         guard let searchState else {
             return
         }
@@ -86,7 +86,7 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
         onChange?()
     }
 
-    func chipsView(_ chipsView: SearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool) {
+    func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool) {
         guard groupId == StarMapSearchSortFilterChipGroupID.nakedEye else {
             return
         }
@@ -105,10 +105,10 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
 
     private func makeVisibilityGroup(searchState: StarMapSearchState) -> SearchSortFilterChipGroup {
         let filters = StarMapSearchTypeFilter.availableFilters(configuration: configuration)
-        var sections: [SearchSortFilterChipSection] = []
+        var sections: [StarMapSearchSortFilterChipSection] = []
 
         if let showAll = filters.first(where: { $0 == .SHOW_ALL }) {
-            sections.append(SearchSortFilterChipSection(options: [
+            sections.append(StarMapSearchSortFilterChipSection(options: [
                 makeOption(id: showAll.rawValue,
                            title: showAll.localizedTitle,
                            iconName: showAll.iconName,
@@ -116,7 +116,7 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
             ]))
             let rest = filters.filter { $0 != .SHOW_ALL }
             if !rest.isEmpty {
-                sections.append(SearchSortFilterChipSection(options: rest.map { filter in
+                sections.append(StarMapSearchSortFilterChipSection(options: rest.map { filter in
                     makeOption(id: filter.rawValue,
                                title: filter.localizedTitle,
                                iconName: filter.iconName,
@@ -124,7 +124,7 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
                 }))
             }
         } else {
-            sections.append(SearchSortFilterChipSection(options: filters.map { filter in
+            sections.append(StarMapSearchSortFilterChipSection(options: filters.map { filter in
                 makeOption(id: filter.rawValue,
                            title: filter.localizedTitle,
                            iconName: filter.iconName,
@@ -142,13 +142,13 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
     }
 
     private func makeCategoriesGroup(searchState: StarMapSearchState) -> SearchSortFilterChipGroup {
-        let allSection = SearchSortFilterChipSection(options: [
+        let allSection = StarMapSearchSortFilterChipSection(options: [
             makeOption(id: StarMapSearchCategoryFilter.ALL.rawValue,
                        title: StarMapSearchCategoryFilter.ALL.localizedTitle,
                        iconName: getCategoryIconRes(.ALL),
                        isSelected: searchState.selectedCategories.contains(.ALL))
         ])
-        let specificSection = SearchSortFilterChipSection(options: StarMapSearchCategoryFilter.specific.map { category in
+        let specificSection = StarMapSearchSortFilterChipSection(options: StarMapSearchCategoryFilter.specific.map { category in
             makeOption(id: category.rawValue,
                        title: category.localizedTitle,
                        iconName: getCategoryIconRes(category),
@@ -166,7 +166,7 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
 
     private func makeSortGroup(searchState: StarMapSearchState) -> SearchSortFilterChipGroup {
         let sections = StarMapSearchSortMode.menuSections(configuration: configuration).map { modes in
-            SearchSortFilterChipSection(options: modes.map { mode in
+            StarMapSearchSortFilterChipSection(options: modes.map { mode in
                 makeOption(id: mode.rawValue,
                            title: mode.localizedTitle,
                            iconName: mode.iconName,
@@ -195,8 +195,8 @@ final class StarMapSearchSortFilterChipsProvider: SearchSortFilterChipsDataSourc
 
     // MARK: - Helpers
 
-    private func makeOption(id: String, title: String, iconName: String, isSelected: Bool) -> SearchSortFilterChipOption {
-        SearchSortFilterChipOption(
+    private func makeOption(id: String, title: String, iconName: String, isSelected: Bool) -> StarMapSearchSortFilterChipOption {
+        StarMapSearchSortFilterChipOption(
             id: id,
             title: title,
             image: chipImage(iconName),

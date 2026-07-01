@@ -74,7 +74,7 @@ final class StarMapMyDataViewController: UIViewController {
     private let mainStack = UIStackView()
     private let myDataSegmentedControlContainer = UIView()
     private let myDataSegmentedControl = UISegmentedControl()
-    private let sortFilterChipsView = SearchSortFilterChipsView()
+    private let sortFilterChipsView = StarMapSearchSortFilterChipsView()
     private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
     private let resultsContainer = UIView()
     private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
@@ -102,7 +102,7 @@ final class StarMapMyDataViewController: UIViewController {
     )
 
     private lazy var searchAdapter = StarMapSearchResultsAdapter(
-        nightMode: nightMode,
+        tableView: searchRecycler,
         snapshot: .empty,
         widToDisplayName: { [weak self] in self?.widToDisplayName ?? [:] },
         starConstellationNameForObject: { [weak self] object in
@@ -167,7 +167,10 @@ final class StarMapMyDataViewController: UIViewController {
     func applyRedFilter(enabled: Bool) {
         redFilterEnabled = enabled
         guard isViewLoaded else { return }
-        AstroRedFilter.apply(enabled, to: navigationController?.view ?? view)
+        
+        if let view = navigationController?.view {
+            AstroRedFilter.apply(enabled, to: view)
+        }
     }
 
     // MARK: - Layout
@@ -197,10 +200,10 @@ final class StarMapMyDataViewController: UIViewController {
 
     private func setupMyDataSegmentedControl() {
         let tabTitles = [
-            localizedString("favorites_item"),
-            localizedString("astro_daily_path"),
-            localizedString("astro_directions")
-        ]
+            "favorites_item",
+            "astro_daily_path",
+            "astro_directions"
+        ].map { localizedString($0) }
         for (index, title) in tabTitles.enumerated() {
             myDataSegmentedControl.insertSegment(withTitle: title, at: index, animated: false)
         }
@@ -473,7 +476,7 @@ final class StarMapMyDataViewController: UIViewController {
             searchState: searchState,
             configuration: .make(
                 catalogMode: false,
-                isMyData: true,
+                showMyDataSortModes: true,
                 showsShowAllVisibility: true,
                 showsCategoriesSection: !searchState.isCategoryPreset()
             )
@@ -553,8 +556,6 @@ final class StarMapMyDataViewController: UIViewController {
 
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
             self.searchContainer.alpha = 1
-            self.navigationController?.navigationBar.layoutIfNeeded()
-            self.view.layoutIfNeeded()
         } completion: { _ in
             self.inlineSearchBar.becomeFirstResponder()
         }
@@ -563,8 +564,6 @@ final class StarMapMyDataViewController: UIViewController {
     private func hideInlineSearch() {
         UIView.animate(withDuration: 0.2) {
             self.searchContainer.alpha = 0
-            self.navigationController?.navigationBar.layoutIfNeeded()
-            self.view.layoutIfNeeded()
         } completion: { _ in
             self.navigationItem.titleView = nil
             self.setupNavigationBar()

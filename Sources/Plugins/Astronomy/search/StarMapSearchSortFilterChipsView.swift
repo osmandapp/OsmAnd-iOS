@@ -9,36 +9,36 @@ import UIKit
 
 // MARK: - Models
 
-enum SearchSortFilterChipSelectionMode {
+enum StarMapSearchSortFilterChipSelectionMode {
     case single
     case multiple
     case toggle
 }
 
-struct SearchSortFilterChipOption {
+struct StarMapSearchSortFilterChipOption {
     let id: String
     let title: String
     let image: UIImage?
     let isSelected: Bool
 }
 
-struct SearchSortFilterChipSection {
-    let options: [SearchSortFilterChipOption]
+struct StarMapSearchSortFilterChipSection {
+    let options: [StarMapSearchSortFilterChipOption]
 }
 
 struct SearchSortFilterChipGroup {
     let id: String
     let chipTitle: String
     let chipImage: UIImage?
-    let selectionMode: SearchSortFilterChipSelectionMode
-    let sections: [SearchSortFilterChipSection]
+    let selectionMode: StarMapSearchSortFilterChipSelectionMode
+    let sections: [StarMapSearchSortFilterChipSection]
     let isToggleOn: Bool
 
     init(id: String,
          chipTitle: String,
          chipImage: UIImage?,
-         selectionMode: SearchSortFilterChipSelectionMode,
-         sections: [SearchSortFilterChipSection] = [],
+         selectionMode: StarMapSearchSortFilterChipSelectionMode,
+         sections: [StarMapSearchSortFilterChipSection] = [],
          isToggleOn: Bool = false) {
         self.id = id
         self.chipTitle = chipTitle
@@ -51,24 +51,24 @@ struct SearchSortFilterChipGroup {
 
 // MARK: - Protocols
 
-protocol SearchSortFilterChipsDataSource: AnyObject {
-    func chipGroups(for chipsView: SearchSortFilterChipsView) -> [SearchSortFilterChipGroup]
+protocol StarMapSearchSortFilterChipsDataSource: AnyObject {
+    func chipGroups(for chipsView: StarMapSearchSortFilterChipsView) -> [SearchSortFilterChipGroup]
 }
 
-protocol SearchSortFilterChipsDelegate: AnyObject {
-    func chipsView(_ chipsView: SearchSortFilterChipsView, didSelectOption optionId: String, inGroup groupId: String)
-    func chipsView(_ chipsView: SearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool)
+protocol StarMapSearchSortFilterChipsDelegate: AnyObject {
+    func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didSelectOption optionId: String, inGroup groupId: String)
+    func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool)
 }
 
 // MARK: - Chip button
 
-private enum SearchSortFilterChipStyle {
+private enum StarMapSearchSortFilterChipStyle {
     case menu
     case toggleOff
     case toggleOn
 }
 
-private final class SearchSortFilterChipButton: UIButton {
+private final class StarMapSearchSortFilterChipButton: UIButton {
 
     private let chevronView = UIImageView()
     private var showsMenuChevron = true
@@ -98,7 +98,7 @@ private final class SearchSortFilterChipButton: UIButton {
         addAction(action, for: .touchUpInside)
     }
 
-    func apply(title: String, image: UIImage?, style: SearchSortFilterChipStyle) {
+    func apply(title: String, image: UIImage?, style: StarMapSearchSortFilterChipStyle) {
         var config = UIButton.Configuration.filled()
         config.cornerStyle = .capsule
         config.image = image
@@ -161,7 +161,7 @@ private final class SearchSortFilterChipButton: UIButton {
 
 // MARK: - Chips view
 
-final class SearchSortFilterChipsView: UIView {
+final class StarMapSearchSortFilterChipsView: UIView {
 
     private enum Layout {
         static let horizontalPadding: CGFloat = 16
@@ -169,12 +169,12 @@ final class SearchSortFilterChipsView: UIView {
         static let barHeight: CGFloat = 36
     }
 
-    weak var dataSource: SearchSortFilterChipsDataSource?
-    weak var delegate: SearchSortFilterChipsDelegate?
+    weak var dataSource: StarMapSearchSortFilterChipsDataSource?
+    weak var delegate: StarMapSearchSortFilterChipsDelegate?
 
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
-    private var chipButtons: [String: SearchSortFilterChipButton] = [:]
+    private var chipButtons: [String: StarMapSearchSortFilterChipButton] = [:]
     private var chipGroups: [SearchSortFilterChipGroup] = []
 
     override init(frame: CGRect) {
@@ -238,7 +238,7 @@ final class SearchSortFilterChipsView: UIView {
         chipButtons.removeAll()
 
         for group in chipGroups {
-            let button = SearchSortFilterChipButton(type: .system)
+            let button = StarMapSearchSortFilterChipButton(type: .system)
 
             switch group.selectionMode {
             case .single, .multiple:
@@ -304,7 +304,7 @@ final class SearchSortFilterChipsView: UIView {
         return UIMenu(children: children)
     }
 
-    private func makeMenuAction(option: SearchSortFilterChipOption, group: SearchSortFilterChipGroup) -> UIAction {
+    private func makeMenuAction(option: StarMapSearchSortFilterChipOption, group: SearchSortFilterChipGroup) -> UIAction {
         UIAction(
             title: option.title,
             image: option.image,

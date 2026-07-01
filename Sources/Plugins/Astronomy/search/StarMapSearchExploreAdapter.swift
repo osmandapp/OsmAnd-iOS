@@ -54,8 +54,9 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
     private let onCatalog: (StarMapCatalogEntry) -> Void
     private let onViewAllCatalogs: () -> Void
     private let recentChipsScrollView: () -> UIScrollView
-
-    init(snapshot: Snapshot,
+    
+    init(tableView: UITableView,
+         snapshot: Snapshot,
          onScroll: @escaping (UIScrollView) -> Void,
          onWatchNow: @escaping () -> Void,
          onCategory: @escaping (StarMapSearchQuickPresetType) -> Void,
@@ -72,6 +73,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
         self.onViewAllCatalogs = onViewAllCatalogs
         self.recentChipsScrollView = recentChipsScrollView
         super.init()
+        self.registerCells(for: tableView)
     }
 
     func submitSnapshot(_ snapshot: Snapshot) {
@@ -287,6 +289,11 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
             return false
         }
     }
+    
+    private func registerCells(for tableView: UITableView) {
+        tableView.register(StarMapExploreRecentChipsCell.self, forCellReuseIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier)
+        tableView.register(StarMapExploreMenuCell.self, forCellReuseIdentifier: StarMapExploreMenuCell.reuseIdentifier)
+    }
 }
 
 private final class StarMapExploreRecentChipsCell: UITableViewCell {
@@ -297,6 +304,11 @@ private final class StarMapExploreRecentChipsCell: UITableViewCell {
 
     private weak var attachedScrollView: UIScrollView?
 
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+    }
+    
     init(reuseIdentifier: String) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -353,6 +365,11 @@ private final class StarMapExploreMenuCell: UITableViewCell {
     private let textStack = UIStackView()
     private var textStackLeadingToIcon: NSLayoutConstraint?
     private var textStackLeadingToContent: NSLayoutConstraint?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        setup()
+    }
     
     init(reuseIdentifier: String) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)

@@ -21,8 +21,10 @@ enum StarMapSearchProgressHUD {
         }
     }
     static func hide(from view: UIView, animated: Bool) {
-        DispatchQueue.main.async {
-            MBProgressHUD.hide(for: view, animated: true)
+        if Thread.isMainThread {
+            MBProgressHUD.hide(for: view, animated: animated)
+        } else {
+            DispatchQueue.main.async { MBProgressHUD.hide(for: view, animated: animated) }
         }
     }
 }
@@ -103,7 +105,7 @@ final class StarMapSearchViewController: UIViewController {
     private let recentChipsContainer = UIStackView()
     private let searchFiltersHeaderStack = UIStackView()
     private let searchBarContainer = UIStackView()
-    private let sortFilterChipsView = SearchSortFilterChipsView()
+    private let sortFilterChipsView = StarMapSearchSortFilterChipsView()
     private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
     private var searchFiltersHeaderStackTopConstraint: NSLayoutConstraint?
     
@@ -145,7 +147,7 @@ final class StarMapSearchViewController: UIViewController {
         return bar
     }()
     private lazy var searchAdapter = StarMapSearchResultsAdapter(
-        nightMode: nightMode,
+        tableView: searchRecycler,
         snapshot: .empty,
         widToDisplayName: { [weak self] in self?.widToDisplayName ?? [:] },
         starConstellationNameForObject: { [weak self] object in
@@ -160,12 +162,13 @@ final class StarMapSearchViewController: UIViewController {
         onEntrySelected: { [weak self] entry in self?.onSearchEntrySelected(entry) }
     )
     private lazy var catalogsAdapter = StarMapCatalogsAdapter(
-        nightMode: nightMode,
+        tableView: searchRecycler,
         snapshot: .empty,
         onScroll: { [weak self] scrollView in self?.updateSortFilterBarTopConstraint(scrollView) },
         onCatalogSelected: { [weak self] entry in self?.onCatalogSelected(entry) }
     )
     private lazy var exploreAdapter = StarMapSearchExploreAdapter(
+        tableView: searchRecycler,
         snapshot: .empty,
         onScroll: { [weak self] scrollView in self?.updateSortFilterBarTopConstraint(scrollView) },
         onWatchNow: { [weak self] in self?.pushFullSearchFromExplore(.WATCH_NOW, catalogWid: nil) },
@@ -290,7 +293,9 @@ final class StarMapSearchViewController: UIViewController {
         guard isViewLoaded else {
             return
         }
-        AstroRedFilter.apply(enabled, to: navigationController?.view ?? view)
+        if let view = navigationController?.view {
+            AstroRedFilter.apply(enabled, to: view)
+        }
     }
 
     // MARK: - Layout
@@ -923,7 +928,7 @@ final class StarMapSearchViewController: UIViewController {
             searchState: searchState,
             configuration: .make(
                 catalogMode: shouldShowCatalogEntries(),
-                isMyData: false,
+                showMyDataSortModes: false,
                 showsShowAllVisibility: !shouldHideShowAllTypeFilter(),
                 showsCategoriesSection: !searchState.isCategoryPreset()
             )
@@ -1066,7 +1071,6 @@ final class StarMapSearchViewController: UIViewController {
         addRecentChip(entry)
         let select = { [weak self] in self?.onObjectSelected?(entry.objectRef) }
         if parentStarMapController != nil, UIDevice.current.userInterfaceIdiom == .pad {
-            onDismiss?()
             select()
         } else {
             navigationController?.dismiss(animated: true) { select() }

@@ -22,7 +22,6 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     var topInsetHeight: CGFloat = .leastNormalMagnitude
 
     private var snapshot: Snapshot
-    private let nightMode: Bool
     private let widToDisplayName: () -> [String: String]
     private let starConstellationNameForObject: (SkyObject) -> String?
     private let eventTextProvider: (StarMapSearchEntry) -> NSAttributedString
@@ -30,14 +29,13 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     private let onScroll: (UIScrollView) -> Void
     private let onEntrySelected: (StarMapSearchEntry) -> Void
     private lazy var resultFormatter = StarMapSearchResultFormatter(
-        nightMode: nightMode,
         widToDisplayName: widToDisplayName,
         starConstellationNameForObject: starConstellationNameForObject,
         eventTextProvider: eventTextProvider,
         visibilityAttributedTextProvider: visibilityAttributedTextProvider
     )
 
-    init(nightMode: Bool,
+    init(tableView: UITableView,
          snapshot: Snapshot,
          widToDisplayName: @escaping () -> [String: String],
          starConstellationNameForObject: @escaping (SkyObject) -> String?,
@@ -45,7 +43,7 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
          visibilityAttributedTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
          onScroll: @escaping (UIScrollView) -> Void,
          onEntrySelected: @escaping (StarMapSearchEntry) -> Void) {
-        self.nightMode = nightMode
+
         self.snapshot = snapshot
         self.widToDisplayName = widToDisplayName
         self.starConstellationNameForObject = starConstellationNameForObject
@@ -54,6 +52,7 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
         self.onScroll = onScroll
         self.onEntrySelected = onEntrySelected
         super.init()
+        self.registerCells(for: tableView)
     }
 
     func submitSnapshot(_ snapshot: Snapshot) {
@@ -61,17 +60,17 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let v = UIView()
-        v.isUserInteractionEnabled = false
-        return v
+        let insetView = UIView()
+        insetView.isUserInteractionEnabled = false
+        return insetView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return topInsetHeight
+        topInsetHeight
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return topInsetHeight
+        topInsetHeight
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -109,6 +108,10 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
         }
         return snapshot.entries[position]
     }
+    
+    private func registerCells(for tableView: UITableView) {
+        tableView.register(StarMapSearchObjectCell.self, forCellReuseIdentifier: StarMapSearchObjectCell.reuseIdentifier)
+    }
 
     private func bindResult(_ cell: StarMapSearchObjectCell, entry: StarMapSearchEntry) {
         let style: StarMapSearchObjectCellStyle = snapshot.useExploreRowLayout ? .myData : .explore
@@ -140,6 +143,11 @@ private final class StarMapSearchObjectCell: UITableViewCell {
     private let infoLabel = UILabel()
     private let textStack = UIStackView()
     private let rowStack = UIStackView()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        setup()
+    }
 
     init(reuseIdentifier: String) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -236,18 +244,15 @@ private extension NSAttributedString {
 }
 
 private final class StarMapSearchResultFormatter {
-    private let nightMode: Bool
     private let widToDisplayName: () -> [String: String]
     private let starConstellationNameForObject: (SkyObject) -> String?
     private let eventTextProvider: (StarMapSearchEntry) -> NSAttributedString
     private let visibilityAttributedTextProvider: (StarMapSearchEntry) -> NSAttributedString
 
-    init(nightMode: Bool,
-         widToDisplayName: @escaping () -> [String: String],
+    init(widToDisplayName: @escaping () -> [String: String],
          starConstellationNameForObject: @escaping (SkyObject) -> String?,
          eventTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString,
          visibilityAttributedTextProvider: @escaping (StarMapSearchEntry) -> NSAttributedString) {
-        self.nightMode = nightMode
         self.widToDisplayName = widToDisplayName
         self.starConstellationNameForObject = starConstellationNameForObject
         self.eventTextProvider = eventTextProvider

@@ -25,19 +25,19 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     var topInsetHeight: CGFloat = 0
 
     private var snapshot: Snapshot
-    private let nightMode: Bool
     private let onScroll: (UIScrollView) -> Void
     private let onCatalogSelected: (StarMapCatalogEntry) -> Void
 
-    init(nightMode: Bool,
+    init(tableView: UITableView,
          snapshot: Snapshot,
          onScroll: @escaping (UIScrollView) -> Void,
          onCatalogSelected: @escaping (StarMapCatalogEntry) -> Void) {
-        self.nightMode = nightMode
+        
         self.snapshot = snapshot
         self.onScroll = onScroll
         self.onCatalogSelected = onCatalogSelected
         super.init()
+        self.registerCells(for: tableView)
     }
 
     func submitSnapshot(_ snapshot: Snapshot) {
@@ -45,17 +45,17 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let v = UIView()
-        v.isUserInteractionEnabled = false
-        return v
+        let insetView = UIView()
+        insetView.isUserInteractionEnabled = false
+        return insetView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return topInsetHeight
+        topInsetHeight
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return topInsetHeight
+        topInsetHeight
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,6 +79,10 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         onScroll(scrollView)
+    }
+    
+    private func registerCells(for tableView: UITableView) {
+        tableView.register(StarMapCatalogCell.self, forCellReuseIdentifier: StarMapCatalogCell.reuseIdentifier)
     }
 
     private func bind(_ cell: StarMapCatalogCell, entry: StarMapCatalogEntry, isLastItem: Bool) {
@@ -109,6 +113,11 @@ private final class StarMapCatalogCell: UITableViewCell {
     private let subtitleLabel = UILabel()
     private let textStack = UIStackView()
     private let rowStack = UIStackView()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        setup()
+    }
 
     init(reuseIdentifier: String) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)

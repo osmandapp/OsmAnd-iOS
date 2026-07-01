@@ -128,35 +128,35 @@ static OAMotorType * HYBRID;
 + (OAMotorType *)PETROL
 {
     if (!PETROL)
-        PETROL = [[OAMotorType alloc] initWithName:@"petrol" fuelConsumption:7.85f fuelEmissionFactor:2.80f];
+        PETROL = [[OAMotorType alloc] initWithName:@"petrol" fuelConsumption:7.48f fuelEmissionFactor:2.80f];
     return PETROL;
 }
 
 + (OAMotorType *)DIESEL
 {
     if (!DIESEL)
-        DIESEL = [[OAMotorType alloc] initWithName:@"diesel" fuelConsumption:6.59f fuelEmissionFactor:3.17f];
+        DIESEL = [[OAMotorType alloc] initWithName:@"diesel" fuelConsumption:6.61f fuelEmissionFactor:3.17f];
     return DIESEL;
 }
 
 + (OAMotorType *)LPG
 {
     if (!LPG)
-        LPG = [[OAMotorType alloc] initWithName:@"lpg" fuelConsumption:10.60f fuelEmissionFactor:1.86f];
+        LPG = [[OAMotorType alloc] initWithName:@"lpg" fuelConsumption:10.50f fuelEmissionFactor:1.86f];
     return LPG;
 }
 
 + (OAMotorType *)GAS
 {
     if (!GAS)
-        GAS = [[OAMotorType alloc] initWithName:@"gas" fuelConsumption:4.90f fuelEmissionFactor:2.86f];
+        GAS = [[OAMotorType alloc] initWithName:@"gas" fuelConsumption:4.73f fuelEmissionFactor:2.86f];
     return GAS;
 }
 
 + (OAMotorType *)ELECTRIC
 {
     if (!ELECTRIC)
-        ELECTRIC = [[OAMotorType alloc] initWithName:@"electric" fuelConsumption:21.1f fuelEmissionFactor:0.42f];
+        ELECTRIC = [[OAMotorType alloc] initWithName:@"electric" fuelConsumption:19.02f fuelEmissionFactor:0.42f];
     return ELECTRIC;
 }
 

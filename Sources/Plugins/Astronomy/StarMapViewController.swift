@@ -13,7 +13,7 @@ import UIKit
 final class StarMapViewController: UIViewController, StarViewDelegate {
     private enum Layout {
         static let contentPadding: CGFloat = 16
-        static let buttonSize: CGFloat = 52
+        static let buttonSize: CGFloat = 48
         static let smallButtonSize: CGFloat = 40
         static let magnitudeButtonHeight: CGFloat = 76
         static let magnitudeSliderWidth: CGFloat = 240
@@ -214,7 +214,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         mapVisibleAreaLeadingConstraint = mapVisibleLeading
         NSLayoutConstraint.activate([
             mapVisibleLeading,
-            mapVisibleAreaGuide.trailingAnchor.constraint(equalTo: mapControlsContainer.trailingAnchor),
+            mapVisibleAreaGuide.trailingAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.trailingAnchor),
             mapVisibleAreaGuide.topAnchor.constraint(equalTo: mapControlsContainer.topAnchor),
             mapVisibleAreaGuide.bottomAnchor.constraint(equalTo: mapControlsContainer.bottomAnchor)
         ])
@@ -357,8 +357,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         magnitudeFilterIcon.image = .icCustomMagnitude
         magnitudeFilterIcon.tintColor = StarMapControlTheme.foreground(active: false, nightMode: nightMode)
         magnitudeFilterIcon.contentMode = .scaleAspectFit
-        magnitudeFilterIcon.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        magnitudeFilterIcon.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        magnitudeFilterIcon.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        magnitudeFilterIcon.heightAnchor.constraint(equalToConstant: 30).isActive = true
         filterStack.addArrangedSubview(magnitudeFilterIcon)
 
         magnitudeFilterText.textColor = StarMapControlTheme.foreground(active: false, nightMode: nightMode)

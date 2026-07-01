@@ -697,6 +697,7 @@ private final class AstroActionCard: UIControl {
         iconView.image = icon
         titleLabel.text = title
         applyStyle()
+        updateAccessibility(title: title)
     }
 
     private func setupView() {
@@ -741,6 +742,15 @@ private final class AstroActionCard: UIControl {
         layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
         iconView.tintColor = .iconColorActive
         titleLabel.textColor = .buttonTextColorSecondary
+    }
+    
+    private func updateAccessibility(title: String) {
+        isAccessibilityElement = true
+        iconView.isAccessibilityElement = false
+        titleLabel.isAccessibilityElement = false
+        
+        accessibilityLabel = title
+        accessibilityTraits = checked ? [.button, .selected] : [.button]
     }
 }
 
@@ -847,6 +857,8 @@ private final class AstroSwitchRow: UIControl {
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: switcher.leadingAnchor, constant: -16),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
+        
+        updateAccessibility()
     }
 
     private func toggleFromRow() {
@@ -861,6 +873,7 @@ private final class AstroSwitchRow: UIControl {
         self.checked = checked
         switcher.setOn(checked, animated: true)
         applyStyle()
+        updateAccessibility()
         if sendAction {
             onToggle(checked)
         }
@@ -871,5 +884,17 @@ private final class AstroSwitchRow: UIControl {
         iconView.tintColor = checked ? .iconColorActive : .iconColorDefault
         titleLabel.textColor = .textColorPrimary
         dividerView.backgroundColor = .customSeparator
+    }
+    
+    private func updateAccessibility() {
+        iconView.isAccessibilityElement = false
+        titleLabel.isAccessibilityElement = false
+        dividerView.isAccessibilityElement = false
+        isAccessibilityElement = false
+        
+        accessibilityElements = [switcher]
+        switcher.isAccessibilityElement = true
+        switcher.accessibilityLabel = titleLabel.text
+        switcher.accessibilityValue = checked ? localizedString("shared_string_on") : localizedString("shared_string_off")
     }
 }

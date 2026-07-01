@@ -32,7 +32,7 @@
 "shared_string_and" = "与";
 "shared_string_edit" = "编辑";
 "shared_string_modify" = "修改";
-"first_time_continue" = "稍后";
+"first_time_continue" = "以后再说";
 "shared_string_all" = "所有";
 "shared_string_from" = "从";
 "offline_maps" = "离线地图";
@@ -209,7 +209,7 @@
 "srtm_plugin_disabled" = "地形图已禁用";
 "shared_string_open" = "打开";
 "will_close_at" = "关闭于";
-"osm_live_active" = "活动";
+"osm_live_active" = "启用";
 "total_time" = "总时间";
 "moving_time" = "移动时间";
 "change_color" = "改变颜色";
@@ -241,7 +241,7 @@
 "free" = "%@ 可用";
 "first_usage_greeting" = "无需互联网连接，即可获取路线指引并发现新地点";
 "get_started" = "使用入门";
-"first_usage_wizard_desc" = "让 OsmAnd 确定您所在的位置，建议下载该区域的地图。";
+"first_usage_wizard_desc" = "让 OsmAnd 自动确定您的位置，并为该区域推荐可下载的地图。";
 "location_not_found" = "找不到位置";
 "search_my_location" = "寻找我的位置";
 "no_inet_connection" = "没有互联网连接";
@@ -378,7 +378,7 @@
 "shared_string_control_stop" = "停止";
 "show_poi_over_map" = "显示兴趣点叠加";
 "road_blocked" = "道路被阻塞";
-"starting_point" = "起始点";
+"starting_point" = "出发点";
 "simulate_routing_descr" = "使用已计算的路线模拟您的位置";
 "do_not_send_anonymous_data_desc" = "我们不收集位置信息，只收集应用使用和地图下载统计信息。";
 "rotate_map_north_opt" = "北朝上";
@@ -1200,7 +1200,7 @@
 "custom_osmand_plugin" = "自定义 OsmAnd 插件";
 "profile_alert_need_profile_name_title" = "输入配置文件名称";
 "favorite_group_name" = "组名称";
-"shared_string_search_history" = "搜索历史记录";
+"shared_string_search_history" = "搜索历史";
 "shared_string_gpx_track" = "轨迹";
 "show_direction" = "距离指示";
 "searching" = "正在搜索…";
@@ -1731,7 +1731,7 @@
 "backup_delete_all_data_warning" = "你将删除之前上传至 OsmAnd 云的所有数据，包括版本历史记录。 \n \n你将无法恢复已删除的数据。";
 "shared_string_refresh" = "刷新";
 "simulation_real_mode_desc" = "在笔直的路段，速度将近似于允许的最大速度。 \n在十字路口，模拟将放慢速度。 \n在交通信号灯、停车标志等处将会有额外的惩罚措施。";
-"purchases_feature_desc_cross_buy" = "在不同的平台（Android/iOS/Web）上使用您的订阅功能，无需额外费用。";
+"purchases_feature_desc_cross_buy" = "在不同平台（Android/iOS/Web）上使用您的订阅功能，无需额外费用。";
 "backup_restore_data" = "恢复数据";
 "shared_string_added" = "新增";
 "internet_connection_required_for_online_route" = "在线导航不能离线工作。";
@@ -1979,7 +1979,7 @@
 "app_mode_utv" = "并排";
 "weather_forecast" = "天气预报";
 "speak_route_deviation" = "偏离原路线时播报";
-"map_markers_history" = "地图标记历史记录";
+"map_markers_history" = "地图标记历史";
 "rendering_attr_alpineHiking_name" = "徒步路线难度等级";
 "visible_in_3d_mode" = "在 3D 模式下可见";
 "rendering_value_sacScale_description" = "瑞士高山俱乐部";
@@ -2295,7 +2295,7 @@
 "map_widget_sunrise" = "日出";
 "shared_string_symbol" = "符号";
 "shared_string_wikivoyage" = "维基导游";
-"saved_articles" = "已存书签的文章";
+"saved_articles" = "已收藏文章";
 "map_widget_zoom_level_desc" = "显示当前的地图缩放级别。";
 "search_favorites" = "在我的收藏中搜索";
 "average_speed_skip_stops" = "考虑停止时间";
@@ -2923,3 +2923,14 @@
 "quick_action_move_map_down" = "下移地图";
 "quick_action_move_map_up" = "上移地图";
 "local_indexes_cat_tts" = "语音提示（文字转语音）";
+"ais_address_settings_description" = "选择 NMEA 协议（UDP/TCP）并定义地址";
+"ais_object_lost_timeout" = "对象丢失时的可见性超时";
+"ais_object_lost_timeout_description" = "设置 AIS 对象的可见性超时： 在这段时间内未接收到信号，屏幕上的 AIS 对象将被删除。";
+"ais_ship_lost_timeout" = "未收到信号时，船舶的可见性超时时间";
+"ais_ship_lost_timeout_description" = "设置船只可见性超时： 在此时间内没有接收到信号后，屏幕上的船只符号将改变状态： 它会被标记为划掉。";
+"ais_cpa_settings_description" = "这些值定义了可能过于接近自身位置的 AIS 对象的显示方式。";
+"ais_cpa_warning_time" = "到达最近接近点 (CPA) 的预警时间";
+"ais_cpa_warning_time_description" = "如果 TCPA（与其他船只到达 CPA 的时间）小于该值，则该船将被标记为红色。";
+"plugin_ais_tracker_description" = "显示 AIS 位置和周围船只的信息。AIS 数据通过网络从外部 AIS 接收器接收。";
+"plugin_ais_tracker_disclaimer" = "免责声明\n\n本插件仅为业余爱好项目，并非为可靠性和正确性而设计。请勿以任何方式依赖本软件，包括导航和/或人身安全。";
+"external_sensor_widgets" = "外部传感器";

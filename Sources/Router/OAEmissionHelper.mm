@@ -35,21 +35,23 @@ Only fossil fuel are counted for hybrid cars since their consumption is given in
 
 @interface OAListParameters : NSObject
 
-@property (nonatomic, readonly) NSArray<NSString *> *names;
+@property (nonatomic, readonly) NSArray<NSString *> *originalNames;
+@property (nonatomic, readonly) NSArray<NSString *> *localizedNames;
 @property (nonatomic, readonly) NSArray<NSString *> *values;
 
-- (instancetype)initWithNames:(NSArray<NSString *> *)names values:(NSArray<NSString *> *)values;
+- (instancetype)initWithNames:(NSArray<NSString *> *)originalNames  localizedNames:(NSArray<NSString *> *)localizedNames values:(NSArray<NSString *> *)values;
 
 @end
 
 @implementation OAListParameters
 
-- (instancetype)initWithNames:(NSArray<NSString *> *)names values:(NSArray<NSString *> *)values
+- (instancetype)initWithNames:(NSArray<NSString *> *)originalNames  localizedNames:(NSArray<NSString *> *)localizedNames values:(NSArray<NSString *> *)values
 {
     self = [super init];
     if (self)
     {
-        _names = names;
+        _originalNames = originalNames;
+        _localizedNames = localizedNames;
         _values = values;
     }
     return self;
@@ -219,7 +221,7 @@ static OAMotorType * HYBRID;
             OAListParameters *parameters = [self.class populateListParameters:parameter];
             NSInteger index = [parameters findIndexOfValue:[pref get:mode]];
             if (index != -1)
-                return [OAMotorType getMotorTypeByName:parameters.names[index]];
+                return [OAMotorType getMotorTypeByName:parameters.originalNames[index]];
         }
     }
     return nil;
@@ -235,11 +237,13 @@ static OAMotorType * HYBRID;
         [sVls addObject:[NSString stringWithFormat:@"%.2f", o]];
     }
 
-    vector<string> descriptions = parameter.possibleValueDescriptions;
+    vector<string> descriptionsVector = parameter.possibleValueDescriptions;
+    NSMutableArray<NSString *> *descriptions = [NSMutableArray array];
     NSMutableArray<NSString *> *names = [NSMutableArray array];
-    for (int j = 0; j < descriptions.size(); j++)
+    for (int j = 0; j < descriptionsVector.size(); j++)
     {
-        NSString *name = [NSString stringWithUTF8String:descriptions[j].c_str()];
+        NSString *name = [NSString stringWithUTF8String:descriptionsVector[j].c_str()];
+        [descriptions addObject:name];
         if ([name containsString:@"-"])
         {
             [names addObject:OALocalizedString(@"shared_string_not_selected")];
@@ -253,7 +257,7 @@ static OAMotorType * HYBRID;
         }
     }
 
-    return [[OAListParameters alloc] initWithNames:names values:sVls];
+    return [[OAListParameters alloc] initWithNames:descriptions localizedNames:names values:sVls];
 }
 
 - (void)getEmission:(OAMotorType *)motorType meters:(CGFloat)meters listener:(id<OAEmissionHelperListener>)listener

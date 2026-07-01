@@ -94,6 +94,11 @@ static OAMotorType * HYBRID;
     return self;
 }
 
++ (NSArray<OAMotorType *> *)values
+{
+    return @[OAMotorType.PETROL, OAMotorType.DIESEL, OAMotorType.LPG, OAMotorType.GAS, OAMotorType.ELECTRIC, OAMotorType.HYBRID, OAMotorType.ETHANOL];
+}
+
 - (BOOL)shouldCheckRegion
 {
     return self == self.class.ELECTRIC;
@@ -101,27 +106,19 @@ static OAMotorType * HYBRID;
 
 + (OAMotorType *)getMotorTypeByName:(NSString *)name
 {
-    if ([PETROL.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.PETROL;
-    else if ([DIESEL.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.DIESEL;
-    else if ([LPG.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.LPG;
-    else if ([GAS.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.GAS;
-    else if ([ELECTRIC.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.ELECTRIC;
-    else if ([ETHANOL.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.ETHANOL;
-    else if ([HYBRID.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.HYBRID;
+    NSArray<OAMotorType *> *motorTypes = [OAMotorType values];
+    for (OAMotorType *type in motorTypes)
+    {
+        if ([type.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
+            return type;
+    }
 
     return nil;
 }
 
 + (OAMotorType *)getMotorTypeByValue:(NSInteger)value
 {
-    NSArray<OAMotorType *> *motorTypes = @[OAMotorType.PETROL, OAMotorType.DIESEL, OAMotorType.LPG, OAMotorType.GAS, OAMotorType.ELECTRIC, OAMotorType.HYBRID, OAMotorType.ETHANOL];
+    NSArray<OAMotorType *> *motorTypes = [OAMotorType values];
     if (value < 1 || value > motorTypes.count)
         return nil;
     return motorTypes[value - 1];

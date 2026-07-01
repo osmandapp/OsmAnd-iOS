@@ -75,6 +75,7 @@ static OAMotorType * DIESEL;
 static OAMotorType * LPG;
 static OAMotorType * GAS;
 static OAMotorType * ELECTRIC;
+static OAMotorType * ETHANOL;
 static OAMotorType * HYBRID;
 
 @implementation OAMotorType
@@ -108,6 +109,8 @@ static OAMotorType * HYBRID;
         return self.class.GAS;
     else if ([ELECTRIC.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
         return self.class.ELECTRIC;
+    else if ([ETHANOL.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
+        return self.class.ETHANOL;
     else if ([HYBRID.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
         return self.class.HYBRID;
 
@@ -116,7 +119,7 @@ static OAMotorType * HYBRID;
 
 + (OAMotorType *)getMotorTypeByValue:(NSInteger)value
 {
-    NSArray<OAMotorType *> *motorTypes = @[OAMotorType.PETROL, OAMotorType.DIESEL, OAMotorType.LPG, OAMotorType.GAS, OAMotorType.ELECTRIC, OAMotorType.HYBRID];
+    NSArray<OAMotorType *> *motorTypes = @[OAMotorType.PETROL, OAMotorType.DIESEL, OAMotorType.LPG, OAMotorType.GAS, OAMotorType.ELECTRIC, OAMotorType.HYBRID, OAMotorType.ETHANOL];
     if (value < 1 || value > motorTypes.count)
         return nil;
     return motorTypes[value - 1];
@@ -155,6 +158,13 @@ static OAMotorType * HYBRID;
     if (!ELECTRIC)
         ELECTRIC = [[OAMotorType alloc] initWithName:@"electric" fuelConsumption:21.1f fuelEmissionFactor:0.42f];
     return ELECTRIC;
+}
+
++ (OAMotorType *)ETHANOL
+{
+    if (!ETHANOL)
+        ETHANOL = [[OAMotorType alloc] initWithName:@"ethanol" fuelConsumption:8.02f fuelEmissionFactor:1.68f];
+    return ETHANOL;
 }
 
 + (OAMotorType *)HYBRID

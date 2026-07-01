@@ -27,6 +27,7 @@
 + (OAMotorType *) LPG; // L
 + (OAMotorType *) GAS; // kg
 + (OAMotorType *) ELECTRIC; // kWh fuelEmissionFactor "UE except France"
++ (OAMotorType *) ETHANOL; // L, E85
 + (OAMotorType *) HYBRID; // L, hybrid petrol
 
 + (OAMotorType *)getMotorTypeByValue:(NSInteger)value;

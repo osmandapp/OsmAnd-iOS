@@ -180,7 +180,7 @@
     return count;
 }
 
-- (NSString *)getCellType:(NSIndexPath *)indexPath
+- (NSString *)cellTypeForIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControlCell getCellIdentifier] :
     indexPath.row == 1 && !_isSingleSRTM ? [OAButtonTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier];
@@ -212,7 +212,7 @@
         return cell;
     }
 
-    NSString *cellType = [self getCellType:indexPath];
+    NSString *cellType = [self cellTypeForIndexPath:indexPath];
     
     if ([cellType isEqualToString:[OASegmentedControlCell getCellIdentifier]])
     {
@@ -367,7 +367,7 @@
 {
     if (![self isDividerCell:indexPath] && indexPath.row > 2)
     {
-        OAResourceItem * item = [self getItem:indexPath];
+        OAResourceItem *item = [self getItem:indexPath];
         if (!_isSingleSRTM && !item.isInstalled)
             [self selectDeselectItem:indexPath];
     }
@@ -431,15 +431,14 @@
     NSInteger rowsCount = [self rowsCount:section];
     NSString *buttonCellType = [OAButtonTableViewCell getCellIdentifier];
 
-    NSMutableArray<NSIndexPath *> *indexPathsToReload = [NSMutableArray array];
-    [indexPathsToReload addObject:indexPath];
+    NSMutableArray<NSIndexPath *> *indexPathsToReload = [@[indexPath] mutableCopy];
     
     for (NSInteger row = 0; row < rowsCount; row++)
     {
         NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
         if ([self isDividerCell:cellIndexPath])
             continue;
-        NSString *cellType = [self getCellType:cellIndexPath];
+        NSString *cellType = [self cellTypeForIndexPath:cellIndexPath];
 
         if ([cellType isEqualToString:buttonCellType] && indexPath.row != cellIndexPath.row)
         {
@@ -465,9 +464,11 @@
 {
     OAResourceItem *item = [self getItem:indexPath];
     if ([item isKindOfClass:OALocalResourceItem.class])
+    {
         [self dismissViewControllerAnimated:YES completion:^{
             [self.delegate onDetailsSelected:[[OAResourceSwiftItem alloc] initWithItem:item]];
         }];
+    }
 }
 
 #pragma mark - Selectors

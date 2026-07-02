@@ -82,7 +82,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
 
     private var mapControlsLeadingInset: CGFloat {
-        embeddedLeftPanelNavigationController != nil && UIDevice.current.userInterfaceIdiom == .pad
+        embeddedLeftPanelNavigationController != nil && OAUtilities.isIPad()
             ? Layout.contentPadding + Layout.leftPanelWidth
             : 0
     }
@@ -958,7 +958,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateMapControlsVisibility() {
-        let isPhoneSheet = UIDevice.current.userInterfaceIdiom == .phone
+        let isPhoneSheet = OAUtilities.isIPhone()
             && (objectInfoController != nil || configureSheetController != nil)
         mapControlsContainer.isHidden = isPhoneSheet
         mapVisibleAreaLeadingConstraint?.constant = mapControlsLeadingInset
@@ -1141,7 +1141,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         
         objectInfoController = controller
         objectInfoNavigationController = navigationController
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if OAUtilities.isIPad() {
             showLeftPanel(navigationController) { [weak self] in
                 guard centerInVisibleMapOnPresentation else { return }
                 self?.centerObjectInVisibleStarMap(object, animate: true)
@@ -1252,7 +1252,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     @objc private func showConfigureSheet() {
         if configureSheetController != nil {
-            if UIDevice.current.userInterfaceIdiom == .phone {
+            if OAUtilities.isIPhone() {
                 configureSheetNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
                     self?.configureSheetNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
                 }
@@ -1295,7 +1295,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         configureSheetController = sheet
         configureSheetNavigationController = navigationController
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if OAUtilities.isIPad() {
             showLeftPanel(navigationController)
         } else {
             if let sheetPresentationController = navigationController.sheetPresentationController {
@@ -1380,7 +1380,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
         UIView.animate(withDuration: 0.25, animations: {
             leading.constant = -(Layout.leftPanelWidth + Layout.contentPadding)
-            if UIDevice.current.userInterfaceIdiom == .pad {
+            if OAUtilities.isIPad() {
                 self.mapVisibleAreaLeadingConstraint?.constant = Layout.contentPadding
             }
             self.view.layoutIfNeeded()

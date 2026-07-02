@@ -3474,6 +3474,7 @@
 		FAACFF1E2FC84AD9002D765A /* CarPlayDashboardAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACFF1D2FC84AD9002D765A /* CarPlayDashboardAction.swift */; };
 		FAACFF222FC9B42B002D765A /* MultipleValuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACFF212FC9B42B002D765A /* MultipleValuesViewController.swift */; };
 		FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */; };
+		FAAD72602E1C0000000807A0 /* AppSystemMetadataReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD725F2E1C0000000807A0 /* AppSystemMetadataReporter.swift */; };
 		FAB2B14B2C787E3900B59B7A /* DGCharts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FA6116182C787B7C005C3ABD /* DGCharts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAB302A92DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */; };
 		FAB5B71D2EF186CE002E3D79 /* DataSourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB5B71C2EF186CE002E3D79 /* DataSourceType.swift */; };
@@ -8334,6 +8335,7 @@
 		FAACFF212FC9B42B002D765A /* MultipleValuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleValuesViewController.swift; sourceTree = "<group>"; };
 		FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupMonitor.swift; sourceTree = "<group>"; };
 		FAAD725E2E1BEF5F000807A0 /* StartupLogging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartupLogging.h; sourceTree = "<group>"; };
+		FAAD725F2E1C0000000807A0 /* AppSystemMetadataReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSystemMetadataReporter.swift; sourceTree = "<group>"; };
 		FAB302A82DBA820A009BA87D /* SearchDownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
 		FAB5B71C2EF186CE002E3D79 /* DataSourceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceType.swift; sourceTree = "<group>"; };
 		FAB5B7272EF30682002E3D79 /* OAMapTopPlace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapTopPlace.h; sourceTree = "<group>"; };
@@ -15135,6 +15137,7 @@
 			isa = PBXGroup;
 			children = (
 				FAAD72592E1BBE51000807A0 /* AppStartupMonitor.swift */,
+				FAAD725F2E1C0000000807A0 /* AppSystemMetadataReporter.swift */,
 				FAAD725E2E1BEF5F000807A0 /* StartupLogging.h */,
 			);
 			path = AppStartupMonitor;
@@ -17697,6 +17700,7 @@
 				4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */,
 				DA5A83DD26C563A800F274C7 /* OAFavoriteListViewController.mm in Sources */,
 				FAAD725A2E1BBE51000807A0 /* AppStartupMonitor.swift in Sources */,
+				FAAD72602E1C0000000807A0 /* AppSystemMetadataReporter.swift in Sources */,
 				DA5A81C626C563A700F274C7 /* OACollatorStringMatcher.m in Sources */,
 				DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */,
 				DA5A84B526C563A900F274C7 /* OAAddDestinationBottomSheetViewController.mm in Sources */,

@@ -180,6 +180,13 @@
     return count;
 }
 
+- (NSString *)cellTypeForIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControlCell getCellIdentifier] :
+    indexPath.row == 1 && !_isSingleSRTM ? [OAButtonTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier];
+    return cellType;
+}
+
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     if ([self isDividerCell:indexPath])
@@ -205,8 +212,7 @@
         return cell;
     }
 
-    NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControlCell getCellIdentifier] :
-    indexPath.row == 1 && !_isSingleSRTM ? [OAButtonTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier];
+    NSString *cellType = [self cellTypeForIndexPath:indexPath];
     
     if ([cellType isEqualToString:[OASegmentedControlCell getCellIdentifier]])
     {
@@ -324,7 +330,9 @@
     if (![self isDividerCell:indexPath] && indexPath.row > 2)
     {
         OAResourceItem * item = [self getItem:indexPath];
-        if (!_isSingleSRTM && !item.isInstalled)
+        if (item.isInstalled)
+            [self openLocalResource:indexPath];
+        else if (!_isSingleSRTM)
             [self selectDeselectItem:indexPath];
     }
 }
@@ -347,11 +355,11 @@
     {
         OAResourceItem *item = _items[(indexPath.row - 1) / 2 - 1];
         BOOL selected = [_selectedItems containsObject:item];
-        [cell setSelected:selected animated:YES];
+        [cell setSelected:selected animated:NO];
         if (selected)
-            [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         else
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 
@@ -359,18 +367,15 @@
 {
     if (![self isDividerCell:indexPath] && indexPath.row > 2)
     {
-        if (!_isSingleSRTM)
+        OAResourceItem *item = [self getItem:indexPath];
+        if (!_isSingleSRTM && !item.isInstalled)
             [self selectDeselectItem:indexPath];
     }
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        OAResourceItem *item = [self getItem:indexPath];
-        if ([item isKindOfClass:OALocalResourceItem.class])
-            [self.delegate onDetailsSelected:[[OAResourceSwiftItem alloc] initWithItem:item]];
-    }];
+    [self openLocalResource:indexPath];
 }
 
 #pragma mark - UITableViewDataSource
@@ -413,16 +418,57 @@
         [_selectedItems removeObject:item];
     else
         [_selectedItems addObject:item];
+
+    [self reloadSelectionStateForRow:indexPath];
+}
+
+- (void)reloadSelectionStateForRow:(NSIndexPath *)indexPath
+{
+    if (!indexPath || _isSingleSRTM)
+        return;
     
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
-                    animations:^(void)
-     {
-        [self.tableView reloadData];
+    NSInteger section = indexPath.section;
+    NSInteger rowsCount = [self rowsCount:section];
+    NSString *buttonCellType = [OAButtonTableViewCell getCellIdentifier];
+
+    NSMutableArray<NSIndexPath *> *indexPathsToReload = [@[indexPath] mutableCopy];
+    
+    for (NSInteger row = 0; row < rowsCount; row++)
+    {
+        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        if ([self isDividerCell:cellIndexPath])
+            continue;
+        NSString *cellType = [self cellTypeForIndexPath:cellIndexPath];
+
+        if ([cellType isEqualToString:buttonCellType] && indexPath.row != cellIndexPath.row)
+        {
+            [indexPathsToReload addObject:cellIndexPath];
+            break;
+        }
     }
-                    completion:nil];
+    
+    UIView *header = [self.tableView headerViewForSection:indexPath.section];
+    if ([header isKindOfClass:[UITableViewHeaderFooterView class]])
+    {
+        UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *)header;
+        headerView.textLabel.text = [self getTitleForHeader:indexPath.section];
+        [headerView setNeedsLayout];
+        [headerView layoutIfNeeded];
+    }
+    
+    [self.tableView reloadRowsAtIndexPaths:indexPathsToReload withRowAnimation:UITableViewRowAnimationNone];
     [self updateBottomButtons];
+}
+
+- (void)openLocalResource:(NSIndexPath *)indexPath
+{
+    OAResourceItem *item = [self getItem:indexPath];
+    if ([item isKindOfClass:OALocalResourceItem.class])
+    {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self.delegate onDetailsSelected:[[OAResourceSwiftItem alloc] initWithItem:item]];
+        }];
+    }
 }
 
 #pragma mark - Selectors

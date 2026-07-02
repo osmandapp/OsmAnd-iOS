@@ -668,7 +668,7 @@
 "working_days" = "Darba dienas";
 "contact_info" = "kontaktinformācija";
 "map_widget_top_text" = "Ielas nosaukums";
-"phone" = "Telefons";
+"phone" = "Tālrunis";
 "website" = "Interneta adrese";
 "poi_remove_title" = "Dzēst POI";
 "osm_edit_modified_poi" = "Labots OSM POI";
@@ -1465,9 +1465,9 @@
 "show_along_the_route" = "Rādīt maršruta laikā";
 "nm" = "nm";
 "navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DM" = "DDD MM.MMM";
 "gpx_selection_segment_title" = "Segments";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "of" = "%d no %d";
 "downloaded_bytes" = "%@ no %@";
 "quick_action_need_to_add_item_to_list" = "Ir nepieciešams pievienot vismaz vienu vienību sarakstā \"Ātrās darbības\" iestatījumos";

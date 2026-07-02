@@ -12,6 +12,7 @@
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
+        OAInitializeStartupLogFileIfNeeded();
         LogStartupSimple(@"App Started (main.m)");
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([OAAppDelegate class]));
     }

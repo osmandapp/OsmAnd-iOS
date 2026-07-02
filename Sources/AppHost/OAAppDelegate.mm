@@ -292,6 +292,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    LogStartupContext(launchOptions);
     LogStartup(@"willFinishLaunchingWithOptions");
     return YES;
 }

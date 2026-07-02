@@ -1165,6 +1165,17 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func visibleStarMapTargetPoint() -> CGPoint {
         view.layoutIfNeeded()
+        
+        if OAUtilities.isIPad(), embeddedLeftPanelNavigationController != nil {
+            let visibleArea = mapVisibleAreaGuide.layoutFrame
+            guard visibleArea.width > 0, visibleArea.height > 0 else {
+                return CGPoint(x: starView.bounds.midX, y: starView.bounds.midY)
+            }
+            let targetInControls = CGPoint(x: visibleArea.midX, y: visibleArea.midY)
+            let targetInView = mapControlsContainer.convert(targetInControls, to: view)
+            return view.convert(targetInView, to: starView)
+        }
+        
         let starFrame = starView.convert(starView.bounds, to: view)
         var visibleFrame = starFrame
         if let sheetView = objectInfoNavigationController?.view, !sheetView.isHidden {

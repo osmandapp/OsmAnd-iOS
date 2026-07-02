@@ -3477,6 +3477,7 @@
 "routing_attr_motor_type_gas_name" = "CNG";
 "routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
+"routing_attr_motor_type_ethanol_name" = "Ethanol";
 "transport" = "Transport";
 "shared_strings_dimensions" = "Dimensions";
 "fuel_tank_capacity" = "Fuel tank capacity";

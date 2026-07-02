@@ -35,21 +35,23 @@ Only fossil fuel are counted for hybrid cars since their consumption is given in
 
 @interface OAListParameters : NSObject
 
-@property (nonatomic, readonly) NSArray<NSString *> *names;
+@property (nonatomic, readonly) NSArray<NSString *> *originalNames;
+@property (nonatomic, readonly) NSArray<NSString *> *localizedNames;
 @property (nonatomic, readonly) NSArray<NSString *> *values;
 
-- (instancetype)initWithNames:(NSArray<NSString *> *)names values:(NSArray<NSString *> *)values;
+- (instancetype)initWithNames:(NSArray<NSString *> *)originalNames  localizedNames:(NSArray<NSString *> *)localizedNames values:(NSArray<NSString *> *)values;
 
 @end
 
 @implementation OAListParameters
 
-- (instancetype)initWithNames:(NSArray<NSString *> *)names values:(NSArray<NSString *> *)values
+- (instancetype)initWithNames:(NSArray<NSString *> *)originalNames  localizedNames:(NSArray<NSString *> *)localizedNames values:(NSArray<NSString *> *)values
 {
     self = [super init];
     if (self)
     {
-        _names = names;
+        _originalNames = originalNames;
+        _localizedNames = localizedNames;
         _values = values;
     }
     return self;
@@ -75,6 +77,7 @@ static OAMotorType * DIESEL;
 static OAMotorType * LPG;
 static OAMotorType * GAS;
 static OAMotorType * ELECTRIC;
+static OAMotorType * ETHANOL;
 static OAMotorType * HYBRID;
 
 @implementation OAMotorType
@@ -91,6 +94,11 @@ static OAMotorType * HYBRID;
     return self;
 }
 
++ (NSArray<OAMotorType *> *)values
+{
+    return @[OAMotorType.PETROL, OAMotorType.DIESEL, OAMotorType.LPG, OAMotorType.GAS, OAMotorType.ELECTRIC, OAMotorType.HYBRID, OAMotorType.ETHANOL];
+}
+
 - (BOOL)shouldCheckRegion
 {
     return self == self.class.ELECTRIC;
@@ -98,25 +106,19 @@ static OAMotorType * HYBRID;
 
 + (OAMotorType *)getMotorTypeByName:(NSString *)name
 {
-    if ([PETROL.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.PETROL;
-    else if ([DIESEL.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.DIESEL;
-    else if ([LPG.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.LPG;
-    else if ([GAS.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.GAS;
-    else if ([ELECTRIC.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.ELECTRIC;
-    else if ([HYBRID.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
-        return self.class.HYBRID;
+    NSArray<OAMotorType *> *motorTypes = [OAMotorType values];
+    for (OAMotorType *type in motorTypes)
+    {
+        if ([type.name localizedCaseInsensitiveCompare:name] == NSOrderedSame)
+            return type;
+    }
 
     return nil;
 }
 
 + (OAMotorType *)getMotorTypeByValue:(NSInteger)value
 {
-    NSArray<OAMotorType *> *motorTypes = @[OAMotorType.PETROL, OAMotorType.DIESEL, OAMotorType.LPG, OAMotorType.GAS, OAMotorType.ELECTRIC, OAMotorType.HYBRID];
+    NSArray<OAMotorType *> *motorTypes = [OAMotorType values];
     if (value < 1 || value > motorTypes.count)
         return nil;
     return motorTypes[value - 1];
@@ -125,36 +127,43 @@ static OAMotorType * HYBRID;
 + (OAMotorType *)PETROL
 {
     if (!PETROL)
-        PETROL = [[OAMotorType alloc] initWithName:@"petrol" fuelConsumption:7.85f fuelEmissionFactor:2.80f];
+        PETROL = [[OAMotorType alloc] initWithName:@"petrol" fuelConsumption:7.48f fuelEmissionFactor:2.80f];
     return PETROL;
 }
 
 + (OAMotorType *)DIESEL
 {
     if (!DIESEL)
-        DIESEL = [[OAMotorType alloc] initWithName:@"diesel" fuelConsumption:6.59f fuelEmissionFactor:3.17f];
+        DIESEL = [[OAMotorType alloc] initWithName:@"diesel" fuelConsumption:6.61f fuelEmissionFactor:3.17f];
     return DIESEL;
 }
 
 + (OAMotorType *)LPG
 {
     if (!LPG)
-        LPG = [[OAMotorType alloc] initWithName:@"lpg" fuelConsumption:10.60f fuelEmissionFactor:1.86f];
+        LPG = [[OAMotorType alloc] initWithName:@"lpg" fuelConsumption:10.50f fuelEmissionFactor:1.86f];
     return LPG;
 }
 
 + (OAMotorType *)GAS
 {
     if (!GAS)
-        GAS = [[OAMotorType alloc] initWithName:@"gas" fuelConsumption:4.90f fuelEmissionFactor:2.86f];
+        GAS = [[OAMotorType alloc] initWithName:@"gas" fuelConsumption:4.73f fuelEmissionFactor:2.28f];
     return GAS;
 }
 
 + (OAMotorType *)ELECTRIC
 {
     if (!ELECTRIC)
-        ELECTRIC = [[OAMotorType alloc] initWithName:@"electric" fuelConsumption:21.1f fuelEmissionFactor:0.42f];
+        ELECTRIC = [[OAMotorType alloc] initWithName:@"electric" fuelConsumption:19.02f fuelEmissionFactor:0.42f];
     return ELECTRIC;
+}
+
++ (OAMotorType *)ETHANOL
+{
+    if (!ETHANOL)
+        ETHANOL = [[OAMotorType alloc] initWithName:@"ethanol" fuelConsumption:8.02f fuelEmissionFactor:1.68f];
+    return ETHANOL;
 }
 
 + (OAMotorType *)HYBRID
@@ -209,7 +218,7 @@ static OAMotorType * HYBRID;
             OAListParameters *parameters = [self.class populateListParameters:parameter];
             NSInteger index = [parameters findIndexOfValue:[pref get:mode]];
             if (index != -1)
-                return [OAMotorType getMotorTypeByName:parameters.names[index]];
+                return [OAMotorType getMotorTypeByName:parameters.originalNames[index]];
         }
     }
     return nil;
@@ -225,11 +234,13 @@ static OAMotorType * HYBRID;
         [sVls addObject:[NSString stringWithFormat:@"%.2f", o]];
     }
 
-    vector<string> descriptions = parameter.possibleValueDescriptions;
+    vector<string> descriptionsVector = parameter.possibleValueDescriptions;
+    NSMutableArray<NSString *> *descriptions = [NSMutableArray array];
     NSMutableArray<NSString *> *names = [NSMutableArray array];
-    for (int j = 0; j < descriptions.size(); j++)
+    for (int j = 0; j < descriptionsVector.size(); j++)
     {
-        NSString *name = [NSString stringWithUTF8String:descriptions[j].c_str()];
+        NSString *name = [NSString stringWithUTF8String:descriptionsVector[j].c_str()];
+        [descriptions addObject:name];
         if ([name containsString:@"-"])
         {
             [names addObject:OALocalizedString(@"shared_string_not_selected")];
@@ -243,7 +254,7 @@ static OAMotorType * HYBRID;
         }
     }
 
-    return [[OAListParameters alloc] initWithNames:names values:sVls];
+    return [[OAListParameters alloc] initWithNames:descriptions localizedNames:names values:sVls];
 }
 
 - (void)getEmission:(OAMotorType *)motorType meters:(CGFloat)meters listener:(id<OAEmissionHelperListener>)listener

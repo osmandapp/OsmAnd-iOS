@@ -83,7 +83,7 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
     private var trackItems: [ImportTrackItem] = []
     private var selection = SelectionManager<ImportTrackItem>(allItems: [])
-    private var isCollectingTracks = false
+    private var isCollectingTracks = true
     private var isSavingTracks = false
     private var lastSavedPath: String?
     private var successfulSaveCount = 0

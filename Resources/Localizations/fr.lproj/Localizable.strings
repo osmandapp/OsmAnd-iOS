@@ -4201,3 +4201,4 @@
 "astro_today_visibility" = "Visibilité du jour";
 "astro_visibility_show_today" = "Afficher la visibilité d'aujourd'hui";
 "astro_schedule_show_current_week" = "Afficher la semaine en cours";
+"routing_attr_motor_type_ethanol_name" = "Éthanol";

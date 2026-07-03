@@ -19,7 +19,7 @@ enum AstroDescriptionCardViewHolder {
         
         let showButton = item.linkType != nil && (item.readMoreUri != nil || item.hasOfflineArticle)
         let buttonText: String
-        var icon: UIImage? = .templateImageNamed("ic_custom_wikipedia")
+        var icon: UIImage? = .templateImageNamed("ic_custom_wikipedia")?.withTintColor(.iconColorDefault)
         
         if showButton, let linkType = item.linkType {
             buttonText = makeReadButtonText(linkType: linkType, hasOfflineArticle: item.hasOfflineArticle)

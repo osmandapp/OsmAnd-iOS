@@ -1563,6 +1563,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         };
         
         info.height = [cell calculateHeightIn:tableView.frame.size.width];
+        
+        cell.backgroundColor = _contentColor;
 
         return cell;
     }

@@ -40,6 +40,8 @@
 {
     OAAppSettings *_settings;
     OATableDataModel *_data;
+    dispatch_queue_t _historyDataQueue;
+    NSUInteger _reloadGeneration;
     BOOL _decelerating;
     NSArray *_headerViews;
     BOOL _wasAnyDeleted;
@@ -52,6 +54,7 @@
     if (self)
     {
         self.view.frame = frame;
+        _historyDataQueue = dispatch_queue_create("com.osmand.history.tableDataQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -157,10 +160,7 @@
     }
     else
     {
-        [self generateData];
-        if (self.groupsAndItems.count > 0)
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        [self updateDistanceAndDirection];
+        [self reloadHistoryDataAndScrollToTopAsync];
     }
 }
 
@@ -203,92 +203,98 @@
     }
     else
     {
-        self.groupsAndItems = [NSMutableArray array];
-        NSMutableArray *headerViews = [NSMutableArray array];
-        
+        [self reloadHistoryDataAsync];
+    }
+}
+
+- (NSArray<OAMultiselectableHeaderView *> *)createHeaderViewsForGroups:(NSArray<OASearchHistoryTableGroup *> *)groups
+{
+    NSMutableArray *headerViews = [NSMutableArray arrayWithCapacity:groups.count];
+    int i = 0;
+    for (OASearchHistoryTableGroup *group in groups)
+    {
+        OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+        if ([group.groupName isEqualToString:@"0"])
+            [headerView setTitleText:OALocalizedString(@"today")];
+        else if ([group.groupName isEqualToString:@"1"])
+            [headerView setTitleText:OALocalizedString(@"yesterday")];
+        else
+            [headerView setTitleText:group.groupName];
+
+        headerView.section = i++;
+        headerView.delegate = self;
+        [headerViews addObject:headerView];
+    }
+    return [NSArray arrayWithArray:headerViews];
+}
+
+- (void)reloadHistoryDataAsync
+{
+    [self reloadHistoryDataAsyncWithScrollToTop:NO];
+}
+
+- (void)reloadHistoryDataAndScrollToTopAsync
+{
+    [self reloadHistoryDataAsyncWithScrollToTop:YES];
+}
+
+- (void)reloadHistoryDataAsyncWithScrollToTop:(BOOL)scrollToTop
+{
+    NSUInteger generation = ++_reloadGeneration;
+    BOOL searchNearMapCenter = _searchNearMapCenter;
+    OsmAnd::PointI myLocation31 = _myLocation;
+    NSTimeInterval todayBeginTime = [self beginningOfToday];
+    NSTimeInterval yesterdayBeginTime = todayBeginTime - 60 * 60 * 24;
+
+    dispatch_async(_historyDataQueue, ^{
         OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
         NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes exceptNavigation:NO limit:0];
-        
-        NSTimeInterval todayBeginTime = [self beginningOfToday];
-        NSTimeInterval yesterdayBeginTime = todayBeginTime - 60 * 60 * 24;
-        
         NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
         [fmt setDateFormat:@"LLLL - yyyy"];
-        
-        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
+
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(myLocation31);
         CLLocationCoordinate2D myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-        
+        NSMutableArray<OASearchHistoryTableGroup *> *groups = [NSMutableArray array];
+        NSMutableDictionary<NSString *, OASearchHistoryTableGroup *> *groupsByName = [NSMutableDictionary dictionary];
+
         for (OAHistoryItem *item in allItems)
         {
             NSString *groupName;
             NSTimeInterval time = [item.date timeIntervalSince1970];
             if (time < yesterdayBeginTime)
-            {
                 groupName = [fmt stringFromDate:item.date];
-            }
             else if (time < todayBeginTime)
-            {
                 groupName = @"1";
-            }
             else
-            {
                 groupName = @"0";
-            }
-            
-            OASearchHistoryTableGroup *grp;
-            for (OASearchHistoryTableGroup *g in self.groupsAndItems)
-                if ([g.groupName isEqualToString:groupName])
-                {
-                    grp = g;
-                    break;
-                }
-            
+
+            OASearchHistoryTableGroup *grp = groupsByName[groupName];
             if (!grp)
             {
                 grp = [[OASearchHistoryTableGroup alloc] init];
                 grp.groupName = groupName;
-                [self.groupsAndItems addObject:grp];
+                groupsByName[groupName] = grp;
+                [groups addObject:grp];
             }
-            
-            OASearchHistoryTableItem *tableItem;
-            if (_searchNearMapCenter)
-                tableItem = [[OASearchHistoryTableItem alloc] initWithItem:item mapCenterCoordinate:myLocation];
-            else
-                tableItem = [[OASearchHistoryTableItem alloc] initWithItem:item];
-            
+
+            OASearchHistoryTableItem *tableItem = searchNearMapCenter
+                    ? [[OASearchHistoryTableItem alloc] initWithItem:item mapCenterCoordinate:myLocation]
+                    : [[OASearchHistoryTableItem alloc] initWithItem:item];
             [grp.groupItems addObject:tableItem];
         }
-        
-        // Sort items
-        /*
-         NSArray *sortedArrayGroups = [self.groupsAndItems sortedArrayUsingComparator:^NSComparisonResult(SearchHistoryTableGroup* obj1, SearchHistoryTableGroup* obj2) {
-         return [obj1.groupName localizedCaseInsensitiveCompare:obj2.groupName];
-         }];
-         [self.groupsAndItems setArray:sortedArrayGroups];
-         */
-        
-        int i = 0;
-        for (OASearchHistoryTableGroup *group in self.groupsAndItems)
-        {
-            // add header
-            OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
-            if ([group.groupName isEqualToString:@"0"])
-                [headerView setTitleText:OALocalizedString(@"today")];
-            else if ([group.groupName isEqualToString:@"1"])
-                [headerView setTitleText:OALocalizedString(@"yesterday")];
-            else
-                [headerView setTitleText:group.groupName];
-            
-            headerView.section = i++;
-            headerView.delegate = self;
-            [headerViews addObject:headerView];
-        }
-        
-        if (doReload)
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (generation != _reloadGeneration)
+                return;
+
+            self.groupsAndItems = [NSMutableArray arrayWithArray:groups];
+            _headerViews = [self createHeaderViewsForGroups:groups];
             [self.tableView reloadData];
-        
-        _headerViews = [NSArray arrayWithArray:headerViews];
-    }
+            if (scrollToTop && self.groupsAndItems.count > 0 && [self.tableView numberOfRowsInSection:0] > 0)
+                [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            [self updateDistanceAndDirection];
+        });
+    });
 }
 
 -(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter

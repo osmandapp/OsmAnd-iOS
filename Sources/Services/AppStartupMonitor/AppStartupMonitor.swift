@@ -27,6 +27,9 @@ final class AppStartupMonitor: NSObject {
     /// A flag indicating whether the startup logging has been completed.
     private var didFinishStartupLogging = false
     
+    /// A flag indicating whether launch diagnostics have already been logged.
+    private var didLogLaunchContext = false
+
     /// Private initializer to enforce singleton usage.
     private override init() {
         startTime = CACurrentMediaTime()
@@ -76,9 +79,19 @@ final class AppStartupMonitor: NSObject {
         }
         
         NSLog("[Startup] Total: %.3fs", totalTime)
-        NSLog("============================\n")
+        NSLog("\n============================\n")
         
         reset()
+    }
+    
+    private func logLaunchContextInternal(_ launchOptions: NSDictionary?) {
+        NSLog("\n=== App Launch Context ===")
+        
+        for line in AppSystemMetadataReporter.makeLaunchContextLines(launchOptions: launchOptions) {
+            NSLog("[Startup] %@", line)
+        }
+        
+        NSLog("\n==========================\n")
     }
     
     /// Resets the monitor by clearing all recorded events and resetting the start time.
@@ -111,6 +124,17 @@ extension AppStartupMonitor {
         }
     }
     
+    /// Logs app, device, runtime, storage and launch option diagnostics once per process.
+    @objc func logLaunchContext(_ launchOptions: NSDictionary?) {
+        lock.lock()
+        let wasLogged = didLogLaunchContext
+        didLogLaunchContext = true
+        lock.unlock()
+
+        guard !wasLogged else { return }
+        logLaunchContextInternal(launchOptions)
+    }
+
     /// Marks the startup logging as finished and prints all recorded events.
     /// This method ensures that the events are only logged once.
     @objc func markStartupFinishedIfNeeded() {

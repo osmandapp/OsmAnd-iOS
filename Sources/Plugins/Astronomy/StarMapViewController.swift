@@ -13,7 +13,7 @@ import UIKit
 final class StarMapViewController: UIViewController, StarViewDelegate {
     private enum Layout {
         static let contentPadding: CGFloat = 16
-        static let buttonSize: CGFloat = 52
+        static let buttonSize: CGFloat = 48
         static let smallButtonSize: CGFloat = 40
         static let magnitudeButtonHeight: CGFloat = 76
         static let magnitudeSliderWidth: CGFloat = 240
@@ -73,6 +73,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var configureSheetNavigationController: UINavigationController?
     private var isDismissingConfigureSheet = false
     private var searchViewController: StarMapSearchViewController?
+    private var searchNavigationController: UINavigationController?
     private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
@@ -82,12 +83,15 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var mapVisibleAreaLeadingConstraint: NSLayoutConstraint?
 
     private var mapControlsLeadingInset: CGFloat {
-        embeddedLeftPanelNavigationController != nil && UIDevice.current.userInterfaceIdiom == .pad
+        embeddedLeftPanelNavigationController != nil && OAUtilities.isIPad()
             ? Layout.contentPadding + Layout.leftPanelWidth
             : 0
     }
 
     private var embeddedLeftPanelNavigationController: UINavigationController? {
+        if let navigationController = searchNavigationController, navigationController.parent === self {
+            return navigationController
+        }
         if let navigationController = configureSheetNavigationController, navigationController.parent === self {
             return navigationController
         }
@@ -210,11 +214,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         ])
 
         mapControlsContainer.addLayoutGuide(mapVisibleAreaGuide)
-        let mapVisibleLeading = mapVisibleAreaGuide.leadingAnchor.constraint(equalTo: mapControlsContainer.leadingAnchor)
+        let mapVisibleLeading = mapVisibleAreaGuide.leadingAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.leadingAnchor)
         mapVisibleAreaLeadingConstraint = mapVisibleLeading
         NSLayoutConstraint.activate([
             mapVisibleLeading,
-            mapVisibleAreaGuide.trailingAnchor.constraint(equalTo: mapControlsContainer.trailingAnchor),
+            mapVisibleAreaGuide.trailingAnchor.constraint(equalTo: mapControlsContainer.safeAreaLayoutGuide.trailingAnchor),
             mapVisibleAreaGuide.topAnchor.constraint(equalTo: mapControlsContainer.topAnchor),
             mapVisibleAreaGuide.bottomAnchor.constraint(equalTo: mapControlsContainer.bottomAnchor)
         ])
@@ -357,8 +361,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         magnitudeFilterIcon.image = .icCustomMagnitude
         magnitudeFilterIcon.tintColor = StarMapControlTheme.foreground(active: false, nightMode: nightMode)
         magnitudeFilterIcon.contentMode = .scaleAspectFit
-        magnitudeFilterIcon.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        magnitudeFilterIcon.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        magnitudeFilterIcon.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        magnitudeFilterIcon.heightAnchor.constraint(equalToConstant: 30).isActive = true
         filterStack.addArrangedSubview(magnitudeFilterIcon)
 
         magnitudeFilterText.textColor = StarMapControlTheme.foreground(active: false, nightMode: nightMode)
@@ -849,7 +853,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                              searchButton,
                              closeButton,
                              settingsButton,
-                             sliderContainer)
+                             sliderContainer,
+                             regularMapContainer)
         objectInfoController?.applyRedFilter(enabled: enabled)
         configureSheetController?.applyRedFilter(enabled: enabled)
     }
@@ -865,6 +870,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         if additionalSafeAreaInsets.bottom != height {
             additionalSafeAreaInsets.bottom = height
+            view.layoutIfNeeded()
         }
     }
 
@@ -882,6 +888,10 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         }
         layoutRegularMapRenderer()
         mapPanel.refreshMap(true)
+        
+        if starView.showRedFilter {
+            AstroRedFilter.apply(true, to: regularMapContainer)
+        }
     }
 
     private func restoreRegularMapIfNeeded(refresh: Bool) {
@@ -952,7 +962,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private func updateMapControlsVisibility() {
-        let isPhoneSheet = UIDevice.current.userInterfaceIdiom == .phone
+        let isPhoneSheet = OAUtilities.isIPhone()
             && (objectInfoController != nil || configureSheetController != nil)
         mapControlsContainer.isHidden = isPhoneSheet
         mapVisibleAreaLeadingConstraint?.constant = mapControlsLeadingInset
@@ -965,12 +975,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.setNeedsDisplay()
     }
 
-    func getTrackableObjects() -> [SkyObject] {
+    func trackableObjects() -> [SkyObject] {
         viewModel.skyObjects + viewModel.constellations.map { $0 as SkyObject }
     }
 
     func findTrackableObjectById(_ id: String) -> SkyObject? {
-        getTrackableObjects().first { $0.id == id }
+        trackableObjects().first { $0.id == id }
     }
 
     private func hideBottomSheet() {
@@ -1070,7 +1080,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             observer: { [weak self] in self?.starView.observer ?? AstroUtils.observer(from: nil) },
             dataProvider: dataProvider,
             preferredLocale: { OsmAndApp.swiftInstance()?.getLanguageCode() },
-            trackableObjects: { [weak self] in self?.getTrackableObjects() ?? [] },
+            trackableObjects: { [weak self] in self?.trackableObjects() ?? [] },
             constellations: { [weak self] in self?.viewModel.constellations ?? [] },
             onClose: { [weak self] in self?.dismissObjectInfoSheet(clearSelection: true, animated: true) },
             onDismissed: { [weak self] in
@@ -1135,7 +1145,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         
         objectInfoController = controller
         objectInfoNavigationController = navigationController
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if OAUtilities.isIPad() {
             showLeftPanel(navigationController) { [weak self] in
                 guard centerInVisibleMapOnPresentation else { return }
                 self?.centerObjectInVisibleStarMap(object, animate: true)
@@ -1161,6 +1171,17 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func visibleStarMapTargetPoint() -> CGPoint {
         view.layoutIfNeeded()
+        
+        if OAUtilities.isIPad(), embeddedLeftPanelNavigationController != nil {
+            let visibleArea = mapVisibleAreaGuide.layoutFrame
+            guard visibleArea.width > 0, visibleArea.height > 0 else {
+                return CGPoint(x: starView.bounds.midX, y: starView.bounds.midY)
+            }
+            let targetInControls = CGPoint(x: visibleArea.midX, y: visibleArea.midY)
+            let targetInView = mapControlsContainer.convert(targetInControls, to: view)
+            return view.convert(targetInView, to: starView)
+        }
+        
         let starFrame = starView.convert(starView.bounds, to: view)
         var visibleFrame = starFrame
         if let sheetView = objectInfoNavigationController?.view, !sheetView.isHidden {
@@ -1198,7 +1219,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc func showSearchDialog() {
-        showSearchDialog(initialCatalogWid: nil)
+        if UIDevice.current.userInterfaceIdiom == .pad, searchViewController != nil {
+            dismissSearchDialog(animated: true)
+        } else {
+            showSearchDialog(initialCatalogWid: nil)
+        }
     }
 
     func showSearchDialog(initialCatalogWid: String? = nil) {
@@ -1209,30 +1234,72 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         controller.onObjectSelected = { [weak self] obj in
             self?.handleSearchObjectSelected(obj)
         }
+        controller.onDismiss = { [weak self] in
+            self?.dismissSearchDialog(animated: true)
+        }
         controller.applyRedFilter(enabled: starView.showRedFilter)
         searchViewController = controller
-        let presentingController = presentedViewController ?? self
-        presentingController.present(controller, animated: true)
+        
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .fullScreen
+        nav.navigationBar.prefersLargeTitles = true
+        searchNavigationController = nav
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            showLeftPanel(nav)
+            updateMapControlsVisibility()
+        } else {
+            nav.modalPresentationStyle = .fullScreen
+            (presentedViewController ?? self).present(nav, animated: true)
+        }
+    }
+    
+    private func dismissSearchDialog(animated: Bool, completion: (() -> Void)? = nil) {
+        guard let navigationController = searchNavigationController else {
+            finishSearchDismiss()
+            completion?()
+            return
+        }
+        if navigationController.parent === self {
+            dismissLeftPanel(navigationController: navigationController, animated: animated) { [weak self] in
+                self?.finishSearchDismiss()
+                completion?()
+            }
+        } else {
+            navigationController.dismiss(animated: animated) { [weak self] in
+                self?.finishSearchDismiss()
+                completion?()
+            }
+        }
+    }
+
+    private func finishSearchDismiss() {
+        searchViewController = nil
+        searchNavigationController = nil
+        updateMapControlsVisibility()
     }
 
     private func clearPreviousSearchDialog() {
-        searchViewController?.dismiss(animated: false)
-        searchViewController = nil
+        dismissSearchDialog(animated: false)
     }
 
-    func getSearchableObjects() -> [SkyObject] {
-        getTrackableObjects()
+    func searchableObjects() -> [SkyObject] {
+        trackableObjects()
     }
 
-    func getSearchObserver() -> Observer {
+    func searchConstellations() -> [Constellation] {
+        viewModel.constellations
+    }
+
+    func searchObserver() -> Observer {
         starView.observer
     }
 
-    func getSearchCurrentDate() -> Date {
+    func searchCurrentDate() -> Date {
         currentDate
     }
 
-    func getSearchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
+    func searchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
         settings.starMap
     }
 
@@ -1246,10 +1313,14 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     @objc private func showConfigureSheet() {
         if configureSheetController != nil {
-            configureSheetNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
-                self?.configureSheetNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
+            if OAUtilities.isIPhone() {
+                configureSheetNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
+                    self?.configureSheetNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
+                }
+                updateMapControlsVisibility()
+            } else {
+                dismissConfigureSheet(animated: true)
             }
-            updateMapControlsVisibility()
             return
         }
         hideBottomSheet(clearSelection: false)
@@ -1285,7 +1356,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         configureSheetController = sheet
         configureSheetNavigationController = navigationController
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if OAUtilities.isIPad() {
             showLeftPanel(navigationController)
         } else {
             if let sheetPresentationController = navigationController.sheetPresentationController {
@@ -1308,6 +1379,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 finishConfigureSheetDismiss()
             } else if existingPanel === objectInfoNavigationController {
                 finishObjectInfoDismiss(clearSelection: false)
+            } else if existingPanel === searchNavigationController {
+                finishSearchDismiss()
             }
         }
 
@@ -1322,7 +1395,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         leftPanelLeadingConstraint = leading
 
         NSLayoutConstraint.activate([
-            navigationController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            navigationController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.contentPadding),
             leading,
             navigationController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Layout.contentPadding),
             navigationController.view.widthAnchor.constraint(equalToConstant: Layout.leftPanelWidth)
@@ -1370,7 +1443,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
         UIView.animate(withDuration: 0.25, animations: {
             leading.constant = -(Layout.leftPanelWidth + Layout.contentPadding)
-            if UIDevice.current.userInterfaceIdiom == .pad {
+            if OAUtilities.isIPad() {
                 self.mapVisibleAreaLeadingConstraint?.constant = Layout.contentPadding
             }
             self.view.layoutIfNeeded()

@@ -16,6 +16,7 @@
 - (void)addPoint:(OAHistoryItem *)item;
 - (void)importBackupPoints:(NSArray<OAHistoryItem *> *)items;
 - (void)deletePoint:(OAHistoryItem *)item;
+- (void)deletePoints:(NSArray<OAHistoryItem *> *)items;
 
 - (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation;
 - (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix limit:(int)limit;

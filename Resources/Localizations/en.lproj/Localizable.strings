@@ -3477,6 +3477,7 @@
 "routing_attr_motor_type_gas_name" = "CNG";
 "routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
+"routing_attr_motor_type_ethanol_name" = "Ethanol";
 "transport" = "Transport";
 "shared_strings_dimensions" = "Dimensions";
 "fuel_tank_capacity" = "Fuel tank capacity";
@@ -4843,6 +4844,7 @@
 "astro_search_sets_tomorrow" = "↘ %1$s %2$s";
 "astro_search_never_rises" = "↓ Never rises";
 "astro_search_always_up" = "↑ Always up";
+"astro_search_visible_all_night" = "Visible all night";
 "astro_search_sets_at" = "↘ Sets %1$s";
 "astro_search_rises_at" = "↗ Rises %1$s";
 "astro_search_magnitude_short" = "mag %.1f";
@@ -4854,7 +4856,7 @@
 "astro_sort_rises_soonest" = "Rises soonest";
 "astro_sort_faintest_first" = "Faintest first";
 "astro_sort_brightest_first" = "Brightest first";
-"astro_search_empty_description" = "Try changing the filters or observation time.";
+"astro_search_empty_description" = "Refine your search or adjust filters.";
 "astro_search_input_hint" = "Input text";
 "astro_explore_my_data" = "My data";
 "astro_explore_schedule_subtitle" = "Upcoming astronomical events";
@@ -4898,7 +4900,7 @@
 "missing_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "shared_string_allow" = "Allow";
 
-"map_variant_duplicate_title" = "Duplicated map";
+"map_variant_duplicate_title" = "Duplicate map";
 "map_variant_has_standard_download_road_message" = "You already have the standard map for %@.\n\nDownloading the road-only map will duplicate data and may degrade performance.";
 "map_variant_has_road_download_standard_message" = "You already have the road-only map for %@.\n\nDownloading the standard map will duplicate data and may degrade performance.";
 "map_variant_replace_with_road_only" = "Replace with Road-only";

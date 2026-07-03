@@ -422,13 +422,22 @@ static NSString * const kLinkExternalType = @"ext_link";
     NSString *logsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"Logs"];
     NSFileManager *manager = [NSFileManager defaultManager];
     
-    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:logsPath error:nil];
+    NSMutableArray<NSString *> *logFiles = [NSMutableArray array];
+    for (NSString *file in [manager contentsOfDirectoryAtPath:logsPath error:nil])
+    {
+        if ([file.pathExtension isEqualToString:@"log"])
+            [logFiles addObject:file];
+    }
+
+    NSArray<NSString *> *files = logFiles;
     files = [files sortedArrayUsingComparator:^NSComparisonResult(NSString *file1, NSString *file2) {
         NSString *path1 = [logsPath stringByAppendingPathComponent:file1];
         NSString *path2 = [logsPath stringByAppendingPathComponent:file2];
         NSDictionary *attr1 = [manager attributesOfItemAtPath:path1 error:nil];
         NSDictionary *attr2 = [manager attributesOfItemAtPath:path2 error:nil];
-        return [attr2[NSFileCreationDate] compare:attr1[NSFileCreationDate]];
+        NSDate *date1 = attr1[NSFileCreationDate] ?: NSDate.distantPast;
+        NSDate *date2 = attr2[NSFileCreationDate] ?: NSDate.distantPast;
+        return [date2 compare:date1];
     }];
     
     if (files.count > 0)

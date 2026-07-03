@@ -162,7 +162,7 @@ final class WikipediaContextMenuView: UIView {
     }
     
     @objc private func resetButtonState() {
-        var config = self.actionButton.configuration
+        var config = actionButton.configuration
         config?.background.backgroundColor = .clear
         config?.baseForegroundColor = .buttonTextColorSecondary
         

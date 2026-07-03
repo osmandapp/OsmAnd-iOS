@@ -69,10 +69,16 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
     weak var delegate: ImportTracksViewControllerDelegate?
 
+    private let trackPreviewManager = TrackPreviewManager()
+    private let foldersScrollState = OACollectionViewCellState()
+    private let progressStackView = UIStackView()
+    private let progressIndicator = UIActivityIndicatorView(style: .medium)
+    private let progressLabel = UILabel()
+    
     private let gpxFile: GpxFile
     private let fileName: String
-    private var selectedFolderPath: String
     private let importURL: URL?
+    private var selectedFolderPath: String
     private var importCompletion: ((Bool) -> Void)?
 
     private var trackItems: [ImportTrackItem] = []
@@ -87,17 +93,11 @@ final class ImportTracksViewController: OABaseButtonsViewController {
 
     private var folderNames: [String] = []
     private var selectedFolderIndex = 0
-    private let foldersScrollState = OACollectionViewCellState()
     private var foldersSizes: [NSNumber] = []
 
-    private let trackPreviewManager = TrackPreviewManager()
     private var collectTracksTask: CollectTracksTask?
     private var saveAsOneTrackTask: SaveGpxAsyncTask?
     private var saveTracksTask: SaveTracksTask?
-
-    private let progressStackView = UIStackView()
-    private let progressIndicator = UIActivityIndicatorView(style: .medium)
-    private let progressLabel = UILabel()
 
     // MARK: - Init
 
@@ -463,6 +463,7 @@ private extension ImportTracksViewController {
         cell.isAccessibilityElement = false
         cell.accessibilityElementsHidden = true
         hideSeparator(for: cell, true)
+        cell.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 
         guard let trackItem = item.obj(forKey: RowObjKey.importTrackItem.rawValue) as? ImportTrackItem else {
             return cell

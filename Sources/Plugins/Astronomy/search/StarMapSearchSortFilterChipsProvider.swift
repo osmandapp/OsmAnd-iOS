@@ -28,10 +28,17 @@ struct StarMapSearchSortFilterConfiguration {
 
 final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDataSource, StarMapSearchSortFilterChipsDelegate {
 
+    private enum StarMapSearchSortFilterChipGroupID: String {
+        case visibility
+        case categories
+        case sort
+        case nakedEye = "naked_eye"
+    }
+    
     var onChange: (() -> Void)?
-
-    private weak var searchState: StarMapSearchState?
+    
     private var configuration = StarMapSearchSortFilterConfiguration()
+    private weak var searchState: StarMapSearchState?
 
     func configure(searchState: StarMapSearchState, configuration: StarMapSearchSortFilterConfiguration) {
         self.searchState = searchState
@@ -95,13 +102,6 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
     }
 
     // MARK: - Groups
-
-    private enum StarMapSearchSortFilterChipGroupID: String {
-        case visibility = "visibility"
-        case categories = "categories"
-        case sort = "sort"
-        case nakedEye = "naked_eye"
-    }
 
     private func makeVisibilityGroup(searchState: StarMapSearchState) -> SearchSortFilterChipGroup {
         let filters = StarMapSearchTypeFilter.availableFilters(configuration: configuration)

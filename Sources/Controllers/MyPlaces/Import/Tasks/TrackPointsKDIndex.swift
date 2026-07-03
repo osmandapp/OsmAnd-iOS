@@ -79,6 +79,38 @@ final class TrackPointsKDIndex {
         self.root = Self.build(points: flat, indices: Array(flat.indices), depth: 0)
     }
     
+    private static func build(points: [IndexedTrackPoint], indices: [Int], depth: Int) -> KDNode? {
+        guard !indices.isEmpty else { return nil }
+
+        let axis = depth & 1
+        let bbox = GeoBBox.from(points, indices: indices[indices.startIndex..<indices.endIndex])
+
+        var sorted = indices
+        sorted.sort { a, b in
+            let pa = points[a]
+            let pb = points[b]
+            if axis == 0 {
+                if pa.lat != pb.lat { return pa.lat < pb.lat }
+                if pa.lon != pb.lon { return pa.lon < pb.lon }
+            } else {
+                if pa.lon != pb.lon { return pa.lon < pb.lon }
+                if pa.lat != pb.lat { return pa.lat < pb.lat }
+            }
+            if pa.trackIndex != pb.trackIndex { return pa.trackIndex < pb.trackIndex }
+            return pa.pointIndex < pb.pointIndex
+        }
+
+        let mid = sorted.count / 2
+        let node = KDNode(pointIndex: sorted[mid], axis: axis, bbox: bbox)
+
+        let leftIndices = Array(sorted[..<mid])
+        let rightIndices = Array(sorted[(mid + 1)...])
+
+        node.left = build(points: points, indices: leftIndices, depth: depth + 1)
+        node.right = build(points: points, indices: rightIndices, depth: depth + 1)
+        return node
+    }
+    
     func nearestTrackIndex(lat: Double, lon: Double) -> Int? {
         guard let root else { return nil }
 
@@ -86,7 +118,6 @@ final class TrackPointsKDIndex {
         var bestTrackIndex = -1
         var bestPointIndex = Int.max
 
-        @inline(__always)
         func isBetter(_ d: Double, _ t: Int, _ p: Int) -> Bool {
             if d < bestDist { return true }
             if d > bestDist { return false }
@@ -95,7 +126,6 @@ final class TrackPointsKDIndex {
             return p < bestPointIndex
         }
 
-        @inline(__always)
         func consider(_ p: IndexedTrackPoint) {
             let d = OAMapUtils.getDistance(lat, lon1: lon,
                                            lat2: p.lat, lon2: p.lon)
@@ -132,37 +162,5 @@ final class TrackPointsKDIndex {
         }
 
         return bestTrackIndex >= 0 ? bestTrackIndex : nil
-    }
-
-    private static func build(points: [IndexedTrackPoint], indices: [Int], depth: Int) -> KDNode? {
-        guard !indices.isEmpty else { return nil }
-
-        let axis = depth & 1
-        let bbox = GeoBBox.from(points, indices: indices[indices.startIndex..<indices.endIndex])
-
-        var sorted = indices
-        sorted.sort { a, b in
-            let pa = points[a]
-            let pb = points[b]
-            if axis == 0 {
-                if pa.lat != pb.lat { return pa.lat < pb.lat }
-                if pa.lon != pb.lon { return pa.lon < pb.lon }
-            } else {
-                if pa.lon != pb.lon { return pa.lon < pb.lon }
-                if pa.lat != pb.lat { return pa.lat < pb.lat }
-            }
-            if pa.trackIndex != pb.trackIndex { return pa.trackIndex < pb.trackIndex }
-            return pa.pointIndex < pb.pointIndex
-        }
-
-        let mid = sorted.count / 2
-        let node = KDNode(pointIndex: sorted[mid], axis: axis, bbox: bbox)
-
-        let leftIndices = Array(sorted[..<mid])
-        let rightIndices = Array(sorted[(mid + 1)...])
-
-        node.left = build(points: points, indices: leftIndices, depth: depth + 1)
-        node.right = build(points: points, indices: rightIndices, depth: depth + 1)
-        return node
     }
 }

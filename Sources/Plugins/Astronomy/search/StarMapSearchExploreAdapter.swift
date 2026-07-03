@@ -46,7 +46,6 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
 
     var topInsetHeight: CGFloat = 10
 
-    private var snapshot: Snapshot
     private let onScroll: (UIScrollView) -> Void
     private let onWatchNow: () -> Void
     private let onCategory: (StarMapSearchQuickPresetType) -> Void
@@ -54,6 +53,8 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
     private let onCatalog: (StarMapCatalogEntry) -> Void
     private let onViewAllCatalogs: () -> Void
     private let recentChipsScrollView: () -> UIScrollView
+    
+    private var snapshot: Snapshot
     
     init(tableView: UITableView,
          snapshot: Snapshot,
@@ -247,14 +248,16 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
     }
 
     private func dequeueRecentChipsCell(_ tableView: UITableView) -> StarMapExploreRecentChipsCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier) as? StarMapExploreRecentChipsCell
-        ?? StarMapExploreRecentChipsCell(reuseIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier) as? StarMapExploreRecentChipsCell else {
+            return StarMapExploreRecentChipsCell(reuseIdentifier: StarMapExploreRecentChipsCell.reuseIdentifier)
+        }
         return cell
     }
 
     private func dequeueMenuCell(_ tableView: UITableView) -> StarMapExploreMenuCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: StarMapExploreMenuCell.reuseIdentifier) as? StarMapExploreMenuCell
-        ?? StarMapExploreMenuCell(reuseIdentifier: StarMapExploreMenuCell.reuseIdentifier)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: StarMapExploreMenuCell.reuseIdentifier) as? StarMapExploreMenuCell else {
+            return StarMapExploreMenuCell(reuseIdentifier: StarMapExploreMenuCell.reuseIdentifier)
+        }
         return cell
     }
 

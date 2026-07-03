@@ -75,6 +75,19 @@ final class StarMapSearchViewController: UIViewController {
     private let dataProvider: AstroDataProvider
     private let nightMode: Bool
     
+    private let mainStack = UIStackView()
+    private let fullSearchContainer = UIView()
+    private let fullSearchStack = UIStackView()
+    private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
+    private let resultsContainer = UIView()
+    private let emptyView = StarMapSearchEmptyView()
+    private let recentChipsScroll = UIScrollView()
+    private let recentChipsContainer = UIStackView()
+    private let searchFiltersHeaderStack = UIStackView()
+    private let searchBarContainer = UIStackView()
+    private let sortFilterChipsView = StarMapSearchSortFilterChipsView()
+    private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
+    
     private var searchState = StarMapSearchState()
     private var preparedEntries: [StarMapSearchEntry] = []
     private var visibleEntries: [StarMapSearchEntry] = []
@@ -95,18 +108,6 @@ final class StarMapSearchViewController: UIViewController {
     private var pendingBrowseScrollOffsetRestore: CGPoint?
     private var isFilteringResults = false
     
-    private let mainStack = UIStackView()
-    private let fullSearchContainer = UIView()
-    private let fullSearchStack = UIStackView()
-    private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
-    private let resultsContainer = UIView()
-    private let emptyView = StarMapSearchEmptyView()
-    private let recentChipsScroll = UIScrollView()
-    private let recentChipsContainer = UIStackView()
-    private let searchFiltersHeaderStack = UIStackView()
-    private let searchBarContainer = UIStackView()
-    private let sortFilterChipsView = StarMapSearchSortFilterChipsView()
-    private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
     private var searchFiltersHeaderStackTopConstraint: NSLayoutConstraint?
     
     private weak var parentStarMapController: StarMapViewController?
@@ -1070,7 +1071,7 @@ final class StarMapSearchViewController: UIViewController {
     private func onSearchEntrySelected(_ entry: StarMapSearchEntry) {
         addRecentChip(entry)
         let select = { [weak self] in self?.onObjectSelected?(entry.objectRef) }
-        if parentStarMapController != nil, UIDevice.current.userInterfaceIdiom == .pad {
+        if parentStarMapController != nil, OAUtilities.isIPad() {
             select()
         } else {
             navigationController?.dismiss(animated: true) { select() }

@@ -20,10 +20,11 @@ final class StarMapSearchHelper {
     private static let SET_ARROW = "↘"
     private static let UP_ARROW = "↑"
     private static let DOWN_ARROW = "↓"
+    
+    private let cacheLock = NSLock()
 
     private var riseSetCache: [String: RiseSetCacheEntry] = [:]
     private var visibleTonightCache: [String: Bool] = [:]
-    private let cacheLock = NSLock()
     private var computationContext = StarMapSearchComputationContext(observer: Observer(latitude: 0.0, longitude: 0.0, height: 0.0),
                                                                      now: Date(),
                                                                      dusk: Date(),

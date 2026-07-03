@@ -23,11 +23,12 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     }
     
     var topInsetHeight: CGFloat = 0
-
-    private var snapshot: Snapshot
+    
     private let onScroll: (UIScrollView) -> Void
     private let onCatalogSelected: (StarMapCatalogEntry) -> Void
 
+    private var snapshot: Snapshot
+    
     init(tableView: UITableView,
          snapshot: Snapshot,
          onScroll: @escaping (UIScrollView) -> Void,
@@ -63,8 +64,9 @@ final class StarMapCatalogsAdapter: NSObject, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: StarMapCatalogCell.reuseIdentifier) as? StarMapCatalogCell
-            ?? StarMapCatalogCell(reuseIdentifier: StarMapCatalogCell.reuseIdentifier)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: StarMapCatalogCell.reuseIdentifier) as? StarMapCatalogCell else {
+            return UITableViewCell()
+        }
         bind(cell, entry: snapshot.entries[indexPath.row], isLastItem: indexPath.row == snapshot.entries.count - 1)
         return cell
     }

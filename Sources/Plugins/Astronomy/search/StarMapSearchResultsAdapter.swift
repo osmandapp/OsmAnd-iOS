@@ -21,13 +21,15 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
     
     var topInsetHeight: CGFloat = .leastNormalMagnitude
 
-    private var snapshot: Snapshot
     private let widToDisplayName: () -> [String: String]
     private let starConstellationNameForObject: (SkyObject) -> String?
     private let eventTextProvider: (StarMapSearchEntry) -> NSAttributedString
     private let visibilityAttributedTextProvider: (StarMapSearchEntry) -> NSAttributedString
     private let onScroll: (UIScrollView) -> Void
     private let onEntrySelected: (StarMapSearchEntry) -> Void
+    
+    private var snapshot: Snapshot
+    
     private lazy var resultFormatter = StarMapSearchResultFormatter(
         widToDisplayName: widToDisplayName,
         starConstellationNameForObject: starConstellationNameForObject,
@@ -79,8 +81,9 @@ final class StarMapSearchResultsAdapter: NSObject, UITableViewDataSource, UITabl
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let entry = getEntryForPosition(indexPath.row)
-        let cell = tableView.dequeueReusableCell(withIdentifier: StarMapSearchObjectCell.reuseIdentifier) as? StarMapSearchObjectCell
-            ?? StarMapSearchObjectCell(reuseIdentifier: StarMapSearchObjectCell.reuseIdentifier)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: StarMapSearchObjectCell.reuseIdentifier) as? StarMapSearchObjectCell else {
+            return UITableViewCell()
+        }
         bindResult(cell, entry: entry)
         return cell
     }

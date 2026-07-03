@@ -59,6 +59,16 @@ final class StarMapMyDataViewController: UIViewController {
     private let plugin: AstronomyPlugin
     private let dataProvider: AstroDataProvider
     private let nightMode: Bool
+    
+    private let mainStack = UIStackView()
+    private let myDataSegmentedControlContainer = UIView()
+    private let myDataSegmentedControl = UISegmentedControl()
+    private let sortFilterChipsView = StarMapSearchSortFilterChipsView()
+    private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
+    private let resultsContainer = UIView()
+    private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
+    private let emptyView = StarMapSearchEmptyView()
+    private let searchContainer = UIStackView()
 
     private var searchState = StarMapSearchState()
     private var currentTab: Tab
@@ -70,16 +80,6 @@ final class StarMapMyDataViewController: UIViewController {
     private var isFilteringResults = false
     private var suppressQueryDispatch = false
     private var redFilterEnabled = false
-
-    private let mainStack = UIStackView()
-    private let myDataSegmentedControlContainer = UIView()
-    private let myDataSegmentedControl = UISegmentedControl()
-    private let sortFilterChipsView = StarMapSearchSortFilterChipsView()
-    private let sortFilterChipsProvider = StarMapSearchSortFilterChipsProvider()
-    private let resultsContainer = UIView()
-    private let searchRecycler = UITableView(frame: .zero, style: .insetGrouped)
-    private let emptyView = StarMapSearchEmptyView()
-    private let searchContainer = UIStackView()
 
     private weak var parentStarMapController: StarMapViewController?
 
@@ -266,7 +266,7 @@ final class StarMapMyDataViewController: UIViewController {
             if self?.shouldShowSearchNoResultsEmpty() == true {
                 self?.resetMyDataFilters()
             } else {
-                if self?.parentStarMapController != nil, UIDevice.current.userInterfaceIdiom == .pad {
+                if self?.parentStarMapController != nil, OAUtilities.isIPad() {
                     self?.onDismiss?()
                 } else {
                     self?.navigationController?.dismiss(animated: true)
@@ -536,8 +536,7 @@ final class StarMapMyDataViewController: UIViewController {
 
     private func onSearchEntrySelected(_ entry: StarMapSearchEntry) {
         let select = { [weak self] in self?.onObjectSelected?(entry.objectRef) }
-        if parentStarMapController != nil, UIDevice.current.userInterfaceIdiom == .pad {
-            onDismiss?()
+        if parentStarMapController != nil, OAUtilities.isIPad() {
             select()
         } else {
             navigationController?.dismiss(animated: true) { select() }

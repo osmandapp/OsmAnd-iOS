@@ -99,6 +99,16 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private static func buildAppearanceData(from item: GpxDirItem? = nil) -> AppearanceData {
+        let data = AppearanceData()
+        for parameter in GpxParameter.companion.getAppearanceParameters() {
+            let value: Any? = item?.getParameter(parameter: parameter)
+            data.setParameter(parameter, value: value)
+        }
+        
+        return data
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureShowArrows()
@@ -379,7 +389,13 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.configureSegmentedControl(icons: [.icCustomTrackLineThin, .icCustomTrackLineMedium, .icCustomTrackLineBold, .icCustomParameters], selectedSegmentIndex: selectedWidthIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
-                self.handleWidthSelection(index: index)
+                if #available(iOS 26.0, *) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        self.handleWidthSelection(index: index)
+                    }
+                } else {
+                    self.handleWidthSelection(index: index)
+                }
             }
             return cell
         } else if item.cellType == SegmentTextTableViewCell.reuseIdentifier {
@@ -391,7 +407,13 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.configureSegmentedControl(titles: [localizedString("shared_string_none"), localizedString("shared_string_time"), localizedString("shared_string_distance")], selectedSegmentIndex: selectedSplitIntervalIndex)
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self else { return }
-                self.handleSplitIntervalSelection(index: index)
+                if #available(iOS 26.0, *) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        self.handleSplitIntervalSelection(index: index)
+                    }
+                } else {
+                    self.handleSplitIntervalSelection(index: index)
+                }
             }
             return cell
         } else if item.cellType == OASegmentSliderTableViewCell.reuseIdentifier {
@@ -484,19 +506,11 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
                 self?.dismissAndRefreshMap()
             }
             task.execute()
+        } else if hasAppearanceChanges() {
+            saveFolderDefaultAppearance(updateExisting: false)
         } else {
-            showFolderDefaultAppearanceConfirmation()
+            dismissAndRefreshMap()
         }
-    }
-    
-    private static func buildAppearanceData(from item: GpxDirItem? = nil) -> AppearanceData {
-        let data = AppearanceData()
-        for parameter in GpxParameter.companion.getAppearanceParameters() {
-            let value: Any? = item?.getParameter(parameter: parameter)
-            data.setParameter(parameter, value: value)
-        }
-        
-        return data
     }
     
     private func markSelectedAppearanceAsUsed() {
@@ -505,26 +519,6 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else if isGradientColorSelected, let selectedPaletteColorItem {
             GradientPaletteHelper.shared.markPaletteItemAsUsed(selectedPaletteColorItem)
         }
-    }
-    
-    private func showFolderDefaultAppearanceConfirmation() {
-        guard hasAppearanceChanges() else {
-            dismissAndRefreshMap()
-            return
-        }
-        
-        let alertController = UIAlertController(title: localizedString("shared_string_save"), message: localizedString("change_default_tracks_appearance_confirmation"), preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: applyExistingTracksTitle(), style: .default) { [weak self] _ in
-            self?.saveFolderDefaultAppearance(updateExisting: true)
-        })
-        alertController.addAction(UIAlertAction(title: localizedString("apply_only_to_new"), style: .default) { [weak self] _ in
-            self?.saveFolderDefaultAppearance(updateExisting: false)
-        })
-        alertController.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        let popPresenter = alertController.popoverPresentationController
-        popPresenter?.barButtonItem = navigationItem.rightBarButtonItems?.first
-        popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any
-        present(alertController, animated: true, completion: nil)
     }
     
     private func saveFolderDefaultAppearance(updateExisting: Bool, dismissOnFinish: Bool = true) {

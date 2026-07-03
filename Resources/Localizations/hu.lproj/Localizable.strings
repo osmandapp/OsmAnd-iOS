@@ -4057,7 +4057,7 @@
 "osm_edits_delete_items_confirmation" = "Biztosan törölni szeretne %ld szerkesztést?";
 "shared_string_url" = "Webcím";
 "folder_one_track" = "1 nyomvonal";
-"map_variant_duplicate_title" = "Duplikált térkép";
+"map_variant_duplicate_title" = "Térkép duplikálása";
 "ios_release_5_4" = "• Hozzáadva a „Terepárnyékok” megjelenítési típus\n• Teljesen átalakult a „Saját helyek” felhasználói felület: alkönyvtárakkal bővült a „Kedvencek” menüpont, és kényelmesebbé váltak a műveletek\n• Hozzáadva a kizárólag közutakat tartalmazó térképek támogatása\n• Bővült a profil testreszabási lehetősége: most már minden POI-ikon támogatott\n• Hozzáadva a kerékpárszélesség beállítása a keskeny kerékpárutak elkerüléséhez\n• Hozzáadva az OBD-II-adapter feszültségét jelző modul\n• Javítottuk a nagy számú kedvencek kezelésének teljesítményét\n• Hozzáadva a „Hang szüneteltetése” beállítás a hangműsorok vagy hangoskönyvek szüneteltetéséhez a navigációs utasítások alatt\n";
 "map_variant_has_standard_download_road_message" = "Már rendelkezik szabványos térképpel ehhez: %@.\n\nA „Csak úttérkép” letöltése duplikálja az adatokat, és ronthatja a teljesítményt.";
 "map_variant_has_road_download_standard_message" = "Már rendelkezik Csak úttérképpel térképpel ehhez: %@.\n\nA „Szabványos térkép” letöltése duplikálja az adatokat, és ronthatja a teljesítményt.";
@@ -4420,3 +4420,4 @@
 "ais_aid_special_mark" = "Különleges jel";
 "ais_aid_light_vessel_lanby_rigs" = "Világítóhajó / LANBY / Fúrótornyok";
 "shared_string_kts" = "csomó";
+"routing_attr_motor_type_ethanol_name" = "Etanol";

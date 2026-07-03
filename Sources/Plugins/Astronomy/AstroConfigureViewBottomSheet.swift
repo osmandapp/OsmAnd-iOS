@@ -84,7 +84,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
                              titleResEnabled: "red_filter")
         }
         if isViewLoaded {
-            AstroRedFilter.apply(enabled, to: navigationController?.view ?? view)
+            AstroRedFilter.apply(enabled, to: navigationController?.view)
         }
     }
 

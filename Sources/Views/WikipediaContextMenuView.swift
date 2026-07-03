@@ -133,8 +133,8 @@ final class WikipediaContextMenuView: UIView {
     private func setupActions() {
         actionButton.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
         actionButton.addTarget(self, action: #selector(didTapDownActionButton), for: .touchDown)
-        actionButton.addTarget(self, action: #selector(resetButtonState), for: .touchUpOutside)
-        actionButton.addTarget(self, action: #selector(resetButtonState), for: .touchCancel)
+        actionButton.addTarget(self, action: #selector(resetButtonState), for: [.touchUpOutside, .touchCancel])
+
         titleLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapText)))
     }
     

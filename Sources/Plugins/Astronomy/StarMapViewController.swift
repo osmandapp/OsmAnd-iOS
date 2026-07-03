@@ -73,6 +73,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var configureSheetNavigationController: UINavigationController?
     private var isDismissingConfigureSheet = false
     private var searchViewController: StarMapSearchViewController?
+    private var searchNavigationController: UINavigationController?
     private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
@@ -88,6 +89,9 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     private var embeddedLeftPanelNavigationController: UINavigationController? {
+        if let navigationController = searchNavigationController, navigationController.parent === self {
+            return navigationController
+        }
         if let navigationController = configureSheetNavigationController, navigationController.parent === self {
             return navigationController
         }
@@ -971,12 +975,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.setNeedsDisplay()
     }
 
-    func getTrackableObjects() -> [SkyObject] {
+    func trackableObjects() -> [SkyObject] {
         viewModel.skyObjects + viewModel.constellations.map { $0 as SkyObject }
     }
 
     func findTrackableObjectById(_ id: String) -> SkyObject? {
-        getTrackableObjects().first { $0.id == id }
+        trackableObjects().first { $0.id == id }
     }
 
     private func hideBottomSheet() {
@@ -1076,7 +1080,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             observer: { [weak self] in self?.starView.observer ?? AstroUtils.observer(from: nil) },
             dataProvider: dataProvider,
             preferredLocale: { OsmAndApp.swiftInstance()?.getLanguageCode() },
-            trackableObjects: { [weak self] in self?.getTrackableObjects() ?? [] },
+            trackableObjects: { [weak self] in self?.trackableObjects() ?? [] },
             constellations: { [weak self] in self?.viewModel.constellations ?? [] },
             onClose: { [weak self] in self?.dismissObjectInfoSheet(clearSelection: true, animated: true) },
             onDismissed: { [weak self] in
@@ -1167,6 +1171,17 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func visibleStarMapTargetPoint() -> CGPoint {
         view.layoutIfNeeded()
+        
+        if OAUtilities.isIPad(), embeddedLeftPanelNavigationController != nil {
+            let visibleArea = mapVisibleAreaGuide.layoutFrame
+            guard visibleArea.width > 0, visibleArea.height > 0 else {
+                return CGPoint(x: starView.bounds.midX, y: starView.bounds.midY)
+            }
+            let targetInControls = CGPoint(x: visibleArea.midX, y: visibleArea.midY)
+            let targetInView = mapControlsContainer.convert(targetInControls, to: view)
+            return view.convert(targetInView, to: starView)
+        }
+        
         let starFrame = starView.convert(starView.bounds, to: view)
         var visibleFrame = starFrame
         if let sheetView = objectInfoNavigationController?.view, !sheetView.isHidden {
@@ -1204,7 +1219,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     }
 
     @objc func showSearchDialog() {
-        showSearchDialog(initialCatalogWid: nil)
+        if UIDevice.current.userInterfaceIdiom == .pad, searchViewController != nil {
+            dismissSearchDialog(animated: true)
+        } else {
+            showSearchDialog(initialCatalogWid: nil)
+        }
     }
 
     func showSearchDialog(initialCatalogWid: String? = nil) {
@@ -1215,30 +1234,72 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         controller.onObjectSelected = { [weak self] obj in
             self?.handleSearchObjectSelected(obj)
         }
+        controller.onDismiss = { [weak self] in
+            self?.dismissSearchDialog(animated: true)
+        }
         controller.applyRedFilter(enabled: starView.showRedFilter)
         searchViewController = controller
-        let presentingController = presentedViewController ?? self
-        presentingController.present(controller, animated: true)
+        
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .fullScreen
+        nav.navigationBar.prefersLargeTitles = true
+        searchNavigationController = nav
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            showLeftPanel(nav)
+            updateMapControlsVisibility()
+        } else {
+            nav.modalPresentationStyle = .fullScreen
+            (presentedViewController ?? self).present(nav, animated: true)
+        }
+    }
+    
+    private func dismissSearchDialog(animated: Bool, completion: (() -> Void)? = nil) {
+        guard let navigationController = searchNavigationController else {
+            finishSearchDismiss()
+            completion?()
+            return
+        }
+        if navigationController.parent === self {
+            dismissLeftPanel(navigationController: navigationController, animated: animated) { [weak self] in
+                self?.finishSearchDismiss()
+                completion?()
+            }
+        } else {
+            navigationController.dismiss(animated: animated) { [weak self] in
+                self?.finishSearchDismiss()
+                completion?()
+            }
+        }
+    }
+
+    private func finishSearchDismiss() {
+        searchViewController = nil
+        searchNavigationController = nil
+        updateMapControlsVisibility()
     }
 
     private func clearPreviousSearchDialog() {
-        searchViewController?.dismiss(animated: false)
-        searchViewController = nil
+        dismissSearchDialog(animated: false)
     }
 
-    func getSearchableObjects() -> [SkyObject] {
-        getTrackableObjects()
+    func searchableObjects() -> [SkyObject] {
+        trackableObjects()
     }
 
-    func getSearchObserver() -> Observer {
+    func searchConstellations() -> [Constellation] {
+        viewModel.constellations
+    }
+
+    func searchObserver() -> Observer {
         starView.observer
     }
 
-    func getSearchCurrentDate() -> Date {
+    func searchCurrentDate() -> Date {
         currentDate
     }
 
-    func getSearchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
+    func searchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
         settings.starMap
     }
 
@@ -1318,6 +1379,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 finishConfigureSheetDismiss()
             } else if existingPanel === objectInfoNavigationController {
                 finishObjectInfoDismiss(clearSelection: false)
+            } else if existingPanel === searchNavigationController {
+                finishSearchDismiss()
             }
         }
 

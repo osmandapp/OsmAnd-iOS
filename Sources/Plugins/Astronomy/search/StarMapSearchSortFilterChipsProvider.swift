@@ -68,15 +68,15 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
             return
         }
         switch groupId {
-        case StarMapSearchSortFilterChipGroupID.visibility:
+        case StarMapSearchSortFilterChipGroupID.visibility.rawValue:
             if let filter = StarMapSearchTypeFilter(rawValue: optionId) {
                 searchState.typeFilter = filter
             }
-        case StarMapSearchSortFilterChipGroupID.categories:
+        case StarMapSearchSortFilterChipGroupID.categories.rawValue:
             if let category = StarMapSearchCategoryFilter(rawValue: optionId) {
                 searchState.toggleCategoryFilter(category)
             }
-        case StarMapSearchSortFilterChipGroupID.sort:
+        case StarMapSearchSortFilterChipGroupID.sort.rawValue:
             if let mode = StarMapSearchSortMode(rawValue: optionId) {
                 searchState.sortMode = mode
             }
@@ -87,7 +87,7 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
     }
 
     func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool) {
-        guard groupId == StarMapSearchSortFilterChipGroupID.nakedEye else {
+        guard groupId == StarMapSearchSortFilterChipGroupID.nakedEye.rawValue else {
             return
         }
         searchState?.nakedEyeOnly = isOn
@@ -96,11 +96,11 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
 
     // MARK: - Groups
 
-    private enum StarMapSearchSortFilterChipGroupID {
-        static let visibility = "visibility"
-        static let categories = "categories"
-        static let sort = "sort"
-        static let nakedEye = "naked_eye"
+    private enum StarMapSearchSortFilterChipGroupID: String {
+        case visibility = "visibility"
+        case categories = "categories"
+        case sort = "sort"
+        case nakedEye = "naked_eye"
     }
 
     private func makeVisibilityGroup(searchState: StarMapSearchState) -> SearchSortFilterChipGroup {
@@ -133,7 +133,7 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
         }
 
         return SearchSortFilterChipGroup(
-            id: StarMapSearchSortFilterChipGroupID.visibility,
+            id: StarMapSearchSortFilterChipGroupID.visibility.rawValue,
             chipTitle: visibilityChipTitle(searchState: searchState),
             chipImage: chipImage(searchState.typeFilter.iconName),
             selectionMode: .single,
@@ -156,7 +156,7 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
         })
 
         return SearchSortFilterChipGroup(
-            id: StarMapSearchSortFilterChipGroupID.categories,
+            id: StarMapSearchSortFilterChipGroupID.categories.rawValue,
             chipTitle: categoriesChipTitle(searchState: searchState),
             chipImage: chipImage(categoriesChipIcon(searchState: searchState)),
             selectionMode: .multiple,
@@ -175,7 +175,7 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
         }
 
         return SearchSortFilterChipGroup(
-            id: StarMapSearchSortFilterChipGroupID.sort,
+            id: StarMapSearchSortFilterChipGroupID.sort.rawValue,
             chipTitle: searchState.sortMode.localizedTitle,
             chipImage: chipImage(searchState.sortMode.iconName),
             selectionMode: .single,
@@ -185,7 +185,7 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
 
     private func makeNakedEyeGroup(searchState: StarMapSearchState) -> SearchSortFilterChipGroup {
         SearchSortFilterChipGroup(
-            id: StarMapSearchSortFilterChipGroupID.nakedEye,
+            id: StarMapSearchSortFilterChipGroupID.nakedEye.rawValue,
             chipTitle: localizedString("astro_filter_naked_eye"),
             chipImage: chipImage("ic_custom_show"),
             selectionMode: .toggle,
@@ -220,12 +220,13 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
     private func categoriesChipTitle(searchState: StarMapSearchState) -> String {
         let defaultLabel = localizedString("search_categories")
         let specific = searchState.selectedCategories.filter { $0 != .ALL }
-        switch specific.count {
-        case 0:
+        
+        let count = specific.count
+        if count == 0 {
             return defaultLabel
-        case 1:
+        } else if count == 1 {
             return specific[0].localizedTitle
-        default:
+        } else {
             return "\(defaultLabel) (\(specific.count))"
         }
     }

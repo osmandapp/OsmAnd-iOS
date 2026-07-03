@@ -8,13 +8,6 @@
 
 import UIKit
 
-struct StarMapExploreRowConfig {
-    let quickPresetType: StarMapSearchQuickPresetType
-    let iconRes: String
-    let titleRes: String
-    let subtitleRes: String?
-}
-
 enum StarMapExploreSection: Int, CaseIterable {
     case recent
     case watchNow
@@ -30,6 +23,13 @@ enum StarMapExploreRow {
     case myData(config: StarMapExploreRowConfig, count: Int)
     case catalog(StarMapCatalogEntry)
     case viewAllCatalogs(count: Int)
+}
+
+struct StarMapExploreRowConfig {
+    let quickPresetType: StarMapSearchQuickPresetType
+    let iconRes: String
+    let titleRes: String
+    let subtitleRes: String?
 }
 
 final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITableViewDelegate {

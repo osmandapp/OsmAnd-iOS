@@ -11,9 +11,9 @@ import UIKit
 final class StarMapMyDataViewController: UIViewController {
 
     enum Tab: Int, CaseIterable {
-        case favorites = 0
-        case dailyPath = 1
-        case directions = 2
+        case favorites
+        case dailyPath
+        case directions
 
         var quickPresetType: StarMapSearchQuickPresetType {
             switch self {
@@ -434,7 +434,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     private func getMyDataInsertionOrderMap(_ quickPresetType: StarMapSearchQuickPresetType) -> [String: Int] {
-        let config = parentStarMapController?.getSearchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
+        let config = parentStarMapController?.searchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
         let ids: [String]
         switch quickPresetType {
         case .MY_DATA_FAVORITES:
@@ -454,7 +454,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
     
     private func currentTabHasData() -> Bool {
-        let config = parentStarMapController?.getSearchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
+        let config = parentStarMapController?.searchStarMapConfig() ?? AstronomyPluginSettings.load().starMap
         switch currentTab {
         case .favorites:
             return !config.favorites.isEmpty
@@ -520,43 +520,12 @@ final class StarMapMyDataViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func backPressed() {
-        navigationController?.popViewController(animated: true)
-    }
-
-    @objc private func myDataSegmentChanged(_ sender: UISegmentedControl) {
-        guard let tab = Tab(rawValue: sender.selectedSegmentIndex), tab != currentTab else { return }
-        currentTab = tab
-        searchState.prepareForExploreEntry(tab.quickPresetType, catalogWid: nil)
-        syncSearchQuery()
-        updateSortFilterBar()
-        updateEmptyStateContent()
-        applyFiltersAndSort(scrollToTop: true)
-    }
-
     private func onSearchEntrySelected(_ entry: StarMapSearchEntry) {
         let select = { [weak self] in self?.onObjectSelected?(entry.objectRef) }
         if parentStarMapController != nil, OAUtilities.isIPad() {
             select()
         } else {
             navigationController?.dismiss(animated: true) { select() }
-        }
-    }
-
-    @objc private func showInlineSearch() {
-        navigationItem.title = nil
-        navigationItem.hidesBackButton = true
-        navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem = nil
-        navigationItem.titleView = searchContainer
-
-        self.searchContainer.isHidden = false
-        searchContainer.alpha = 0
-
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-            self.searchContainer.alpha = 1
-        } completion: { _ in
-            self.inlineSearchBar.becomeFirstResponder()
         }
     }
 
@@ -574,6 +543,37 @@ final class StarMapMyDataViewController: UIViewController {
             self.suppressQueryDispatch = false
             self.searchState.query = ""
             self.applyFiltersAndSort(scrollToTop: true)
+        }
+    }
+    
+    @objc private func backPressed() {
+        navigationController?.popViewController(animated: true)
+    }
+
+    @objc private func myDataSegmentChanged(_ sender: UISegmentedControl) {
+        guard let tab = Tab(rawValue: sender.selectedSegmentIndex), tab != currentTab else { return }
+        currentTab = tab
+        searchState.prepareForExploreEntry(tab.quickPresetType, catalogWid: nil)
+        syncSearchQuery()
+        updateSortFilterBar()
+        updateEmptyStateContent()
+        applyFiltersAndSort(scrollToTop: true)
+    }
+    
+    @objc private func showInlineSearch() {
+        navigationItem.title = nil
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.titleView = searchContainer
+
+        self.searchContainer.isHidden = false
+        searchContainer.alpha = 0
+
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+            self.searchContainer.alpha = 1
+        } completion: { _ in
+            self.inlineSearchBar.becomeFirstResponder()
         }
     }
     

@@ -969,12 +969,12 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         starView.setNeedsDisplay()
     }
 
-    func getTrackableObjects() -> [SkyObject] {
+    func trackableObjects() -> [SkyObject] {
         viewModel.skyObjects + viewModel.constellations.map { $0 as SkyObject }
     }
 
     func findTrackableObjectById(_ id: String) -> SkyObject? {
-        getTrackableObjects().first { $0.id == id }
+        trackableObjects().first { $0.id == id }
     }
 
     private func hideBottomSheet() {
@@ -1074,7 +1074,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             observer: { [weak self] in self?.starView.observer ?? AstroUtils.observer(from: nil) },
             dataProvider: dataProvider,
             preferredLocale: { OsmAndApp.swiftInstance()?.getLanguageCode() },
-            trackableObjects: { [weak self] in self?.getTrackableObjects() ?? [] },
+            trackableObjects: { [weak self] in self?.trackableObjects() ?? [] },
             constellations: { [weak self] in self?.viewModel.constellations ?? [] },
             onClose: { [weak self] in self?.dismissObjectInfoSheet(clearSelection: true, animated: true) },
             onDismissed: { [weak self] in
@@ -1277,23 +1277,23 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         dismissSearchDialog(animated: false)
     }
 
-    func getSearchableObjects() -> [SkyObject] {
-        getTrackableObjects()
+    func searchableObjects() -> [SkyObject] {
+        trackableObjects()
     }
 
-    func getSearchConstellations() -> [Constellation] {
+    func searchConstellations() -> [Constellation] {
         viewModel.constellations
     }
 
-    func getSearchObserver() -> Observer {
+    func searchObserver() -> Observer {
         starView.observer
     }
 
-    func getSearchCurrentDate() -> Date {
+    func searchCurrentDate() -> Date {
         currentDate
     }
 
-    func getSearchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
+    func searchStarMapConfig() -> AstronomyPluginSettings.StarMapConfig {
         settings.starMap
     }
 

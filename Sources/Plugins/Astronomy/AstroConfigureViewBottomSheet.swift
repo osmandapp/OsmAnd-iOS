@@ -84,7 +84,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
                              titleResEnabled: "red_filter")
         }
         if isViewLoaded {
-            AstroRedFilter.apply(enabled, to: view)
+            AstroRedFilter.apply(enabled, to: navigationController?.view)
         }
     }
 
@@ -639,14 +639,6 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         return row
     }
 
-    private func divider() -> UIView {
-        let divider = UIView()
-        divider.backgroundColor = .customSeparator
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        divider.heightAnchor.constraint(equalToConstant: AstroConfigureTheme.separatorHeight).isActive = true
-        return divider
-    }
-
     private func redFilterIcon(selected: Bool) -> UIImage? {
         guard selected else {
             return .icCustomRedFilterOff
@@ -666,23 +658,8 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         view.backgroundColor = .viewBg
     }
     
-    @objc
-    private func closeAction() {
+    @objc private func closeAction() {
         onClose?()
-    }
-}
-
-private enum AstroConfigureTheme {
-    static var separatorHeight: CGFloat {
-        1 / UIScreen.main.scale
-    }
-
-    static var actionTileBackground: UIColor {
-        UIColor(named: "groupBgColorSecondary") ?? .buttonBgColorSecondary
-    }
-
-    static var actionTileSelectedBackground: UIColor {
-        UIColor(named: "cellBgColorSelected") ?? .buttonBgColorTertiary
     }
 }
 
@@ -720,6 +697,7 @@ private final class AstroActionCard: UIControl {
         iconView.image = icon
         titleLabel.text = title
         applyStyle()
+        updateAccessibility(title: title)
     }
 
     private func setupView() {
@@ -744,11 +722,13 @@ private final class AstroActionCard: UIControl {
         addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 75),
+            heightAnchor.constraint(greaterThanOrEqualToConstant: 75),
             iconView.topAnchor.constraint(equalTo: topAnchor, constant: 12),
             iconView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: 24),
-            iconView.heightAnchor.constraint(equalToConstant: 24),
+            iconView.widthAnchor.constraint(equalToConstant: 30),
+            iconView.heightAnchor.constraint(equalToConstant: 30),
+            
+            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: iconView.bottomAnchor),
             titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 4),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -4),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -762,6 +742,15 @@ private final class AstroActionCard: UIControl {
         layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
         iconView.tintColor = .iconColorActive
         titleLabel.textColor = .buttonTextColorSecondary
+    }
+    
+    private func updateAccessibility(title: String) {
+        isAccessibilityElement = true
+        iconView.isAccessibilityElement = false
+        titleLabel.isAccessibilityElement = false
+        
+        accessibilityLabel = title
+        accessibilityTraits = checked ? [.button, .selected] : [.button]
     }
 }
 
@@ -848,28 +837,28 @@ private final class AstroSwitchRow: UIControl {
         addSubview(switcher)
         addSubview(dividerView)
 
-        let dividerHeight = showDivider ? AstroConfigureTheme.separatorHeight : 0
-
         NSLayoutConstraint.activate([
             heightAnchor.constraint(greaterThanOrEqualToConstant: 52),
             contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             contentView.topAnchor.constraint(equalTo: topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: dividerView.topAnchor),
-            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 56),
-            dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 62),
+            dividerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            dividerView.heightAnchor.constraint(equalToConstant: dividerHeight),
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
             iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: 24),
-            iconView.heightAnchor.constraint(equalToConstant: 24),
+            iconView.widthAnchor.constraint(equalToConstant: 30),
+            iconView.heightAnchor.constraint(equalToConstant: 30),
             switcher.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             switcher.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: switcher.leadingAnchor, constant: -16),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
+        
+        updateAccessibility()
     }
 
     private func toggleFromRow() {
@@ -884,6 +873,7 @@ private final class AstroSwitchRow: UIControl {
         self.checked = checked
         switcher.setOn(checked, animated: true)
         applyStyle()
+        updateAccessibility()
         if sendAction {
             onToggle(checked)
         }
@@ -894,5 +884,17 @@ private final class AstroSwitchRow: UIControl {
         iconView.tintColor = checked ? .iconColorActive : .iconColorDefault
         titleLabel.textColor = .textColorPrimary
         dividerView.backgroundColor = .customSeparator
+    }
+    
+    private func updateAccessibility() {
+        iconView.isAccessibilityElement = false
+        titleLabel.isAccessibilityElement = false
+        dividerView.isAccessibilityElement = false
+        isAccessibilityElement = false
+        
+        accessibilityElements = [switcher]
+        switcher.isAccessibilityElement = true
+        switcher.accessibilityLabel = titleLabel.text
+        switcher.accessibilityValue = checked ? localizedString("shared_string_on") : localizedString("shared_string_off")
     }
 }

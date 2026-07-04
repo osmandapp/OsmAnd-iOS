@@ -4197,7 +4197,7 @@
 "astro_sort_rises_soonest" = "Hamarosan kel";
 "astro_sort_faintest_first" = "Leghalványabb elöl";
 "astro_sort_brightest_first" = "Legfényesebb elöl";
-"astro_search_empty_description" = "Próbálja meg megváltoztatni a szűrőket vagy a megfigyelési időt.";
+"astro_search_empty_description" = "Finomítsa a keresést, vagy módosítsa a szűrőket.";
 "astro_search_input_hint" = "Szöveg bevitele";
 "astro_explore_my_data" = "Saját adatok";
 "astro_explore_schedule_subtitle" = "Közelgő csillagászati események";
@@ -4421,3 +4421,4 @@
 "ais_aid_light_vessel_lanby_rigs" = "Világítóhajó / LANBY / Fúrótornyok";
 "shared_string_kts" = "csomó";
 "routing_attr_motor_type_ethanol_name" = "Etanol";
+"astro_search_visible_all_night" = "Egész éjszaka látható";

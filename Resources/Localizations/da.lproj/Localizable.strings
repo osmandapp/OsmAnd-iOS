@@ -4447,3 +4447,15 @@
 "ais_aid_beacon_safe_water" = "Båke, sikkert vand";
 "ais_aid_beacon_special_mark" = "Båke, specialafmærkning";
 "astro_search_visible_all_night" = "Synlig hele natten";
+"ais_aid_cardinal_mark_n" = "Kompasafmærkning, nord";
+"ais_aid_cardinal_mark_e" = "Kompasafmærkning, øst";
+"ais_aid_cardinal_mark_s" = "Kompasafmærkning, syd";
+"ais_aid_cardinal_mark_w" = "Kompasafmærkning, vest";
+"ais_aid_port_hand_mark" = "Bagbordsafmærkning";
+"ais_aid_starboard_hand_mark" = "Styrbordsafmærkning";
+"ais_aid_isolated_danger" = "Isoleret fare";
+"ais_aid_safe_water" = "Sikkert vand";
+"ais_aid_special_mark" = "Specialafmærkning";
+"ais_aid_light_vessel_lanby_rigs" = "Fyrskib / LANBY / platforme";
+"shared_string_kts" = "kn";
+"ais_ship_type_dredging" = "Opmudring";

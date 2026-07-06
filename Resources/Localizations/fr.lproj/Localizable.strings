@@ -4228,7 +4228,7 @@
 "ais_cpa_warning_distance_description" = "Les navires sont mis en évidence en rouge si le CPA (point d'approche le plus proche) est inférieur au seuil défini et si le TCPA (temps restant jusqu'au CPA) se situe dans le délai d'alerte défini dans le paramètre « Délai d'alerte avant d'atteindre le CPA ».";
 "plugin_ais_tracker_name" = "Système de suivi des navires par AIS";
 "plugin_ais_tracker_description" = "Affiche les positions AIS et les informations relatives aux navires à proximité. Les données AIS sont reçues via le réseau depuis un récepteur AIS externe.";
-"plugin_ais_tracker_disclaimer" = "AVERTISSEMENT\n\nCe plugin est un projet amateur et n'est pas destiné à être utilisé dans des applications critiques. Il n'offre aucune garantie quant à sa fiabilité ou à sa précision. Ne vous fiez pas à ce logiciel pour la navigation, la sécurité des personnes ou toute autre opération essentielle.";
+"plugin_ais_tracker_disclaimer" = "AVERTISSEMENT\n\nCette extension est un projet amateur et n'est pas destinée à un usage critique. Elle ne garantit ni sa fiabilité ni sa précision. Ne vous fiez pas à ce logiciel pour la navigation, la sécurité des personnes ou toute autre opération essentielle.";
 "ais_add_test_objects" = "Ajouter des objets AIS de test";
 "ais_reconnect" = "Se reconnecter";
 "ais_nautical_mile" = "mille marin";

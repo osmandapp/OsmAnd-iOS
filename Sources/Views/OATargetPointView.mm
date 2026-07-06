@@ -149,6 +149,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat _bottomBarHeight;
     
     NSArray<OATransportStopRoute *> *_visibleTransportRoutes;
+    OATargetPoint *_addressLookupTarget;
 }
 
 - (instancetype) init
@@ -2768,10 +2769,10 @@ static const NSInteger _buttonsCount = 4;
 - (void)fetchAddressIfNeededAsync
 {
     OATargetPoint *targetPoint = self.targetPoint;
-    if (!targetPoint || targetPoint.titleAddress.length > 0 || !targetPoint.shouldFetchAddress)
+    if (!targetPoint || targetPoint.titleAddress.length > 0 || !targetPoint.shouldFetchAddress || _addressLookupTarget)
         return;
 
-    targetPoint.shouldFetchAddress = NO;
+    _addressLookupTarget = targetPoint;
 
     __weak __typeof(self) weakSelf = self;
 
@@ -2782,9 +2783,17 @@ static const NSInteger _buttonsCount = 4;
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
+            targetPoint.shouldFetchAddress = NO;
+
             __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf)
+                return;
+
+            strongSelf->_addressLookupTarget = nil;
             if (strongSelf.targetPoint == targetPoint)
                 [strongSelf updateTargetPointAddress];
+
+            [strongSelf fetchAddressIfNeededAsync];
         });
     });
 }

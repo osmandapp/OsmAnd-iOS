@@ -2771,6 +2771,8 @@ static const NSInteger _buttonsCount = 4;
     if (!targetPoint || targetPoint.titleAddress.length > 0 || !targetPoint.shouldFetchAddress)
         return;
 
+    targetPoint.shouldFetchAddress = NO;
+
     __weak __typeof(self) weakSelf = self;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -2792,7 +2794,6 @@ static const NSInteger _buttonsCount = 4;
     if (self.targetPoint.titleAddress.length == 0)
         self.targetPoint.titleAddress = OALocalizedString(@"map_no_address");
 
-    self.targetPoint.shouldFetchAddress = NO;
     [self addressLabelUpdated];
 }
 

@@ -101,7 +101,7 @@ final class WikipediaContextMenuView: UIView {
         actionButton.isHidden = buttonText.isEmpty
         
         if let icon {
-            let resizedIcon = OAUtilities.resize(icon, newSize: .init(width: Constants.iconSize, height: Constants.iconSize))
+            let resizedIcon = OAUtilities.resize(icon, newSize: .init(width: Constants.iconSize, height: Constants.iconSize))?.withRenderingMode(.alwaysTemplate)
             actionButton.setImage(resizedIcon, for: .normal)
         }
     }

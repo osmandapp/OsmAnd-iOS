@@ -23,7 +23,6 @@ enum AstroDescriptionCardViewHolder {
         
         if showButton, let linkType = item.linkType {
             buttonText = makeReadButtonText(linkType: linkType, hasOfflineArticle: item.hasOfflineArticle)
-            icon = linkType == .wikidata ? .init(named: "ic_custom_logo_wikidata") : .templateImageNamed("ic_custom_wikipedia")?.withTintColor(.iconColorDefault)
         } else {
             buttonText = ""
             icon = nil

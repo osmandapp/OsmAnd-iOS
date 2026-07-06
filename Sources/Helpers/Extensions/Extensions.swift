@@ -31,7 +31,7 @@ extension UIImage {
         return self
     }
     
-    func rotatedForAttributedString(with radians: CGFloat) -> UIImage {
+    func rotatedWithinBounds(by radians: CGFloat) -> UIImage {
         let format = UIGraphicsImageRendererFormat()
         format.scale = scale
         format.opaque = false

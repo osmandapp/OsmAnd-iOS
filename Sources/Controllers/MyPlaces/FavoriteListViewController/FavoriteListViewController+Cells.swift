@@ -167,7 +167,7 @@ extension FavoriteListViewController {
         guard let distance = favorite.distance, let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) else { return }
         appendFavoriteSecondarySeparatorIfNeeded(to: result, attributes: separatorAttributes)
         if let directionIcon = favoriteDirectionIcon(tintColor: .iconColorDirectionActive) {
-            let rotatedDirectionIcon = directionIcon.rotatedForAttributedString(with: favorite.bridgeItem.direction)
+            let rotatedDirectionIcon = directionIcon.rotatedWithinBounds(by: favorite.bridgeItem.direction)
             let attachment = NSTextAttachment()
             attachment.image = rotatedDirectionIcon
             attachment.bounds = CGRect(x: 0.0,

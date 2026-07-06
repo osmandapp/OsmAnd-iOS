@@ -50,7 +50,7 @@
 "settings_preset_descr" = "Kaartweergave en navigatie-instellingen worden per profiel opgeslagen. Kies hier het standaardprofiel.";
 "unit_of_length" = "Lengte-eenheden";
 "unit_of_length_descr" = "Wijzig de eenheid van afstand voor metingen.";
-"coords_format" = "Coördinatenformaat";
+"coords_format" = "Coördinatennotatie";
 "coords_format_descr" = "Formaat van geografische coördinaten.";
 "do_not_show_discount_desc" = "Onderdrukt het weergeven van app kortingen en berichten over speciale lokale evenementen.";
 "save_global_track_interval" = "Algemeen registratie-interval";
@@ -2045,7 +2045,7 @@
 "temperature_widget_desc" = "Toont temperatuur voor huidige midden van de kaart.";
 "angular_measeurement" = "Eenheid hoeken";
 "angular_measeurement_descr" = "Wijzig azimut eenheid.";
-"coordinates_format" = "Coördinatenformaat";
+"coordinates_format" = "Coördinatennotatie";
 "coordinates_widget_secondary_desc" = "De opmaak van de coördinaten kan veranderd worden in %@ - %@ - %@.";
 "go_to_marker_location" = "Ga naar locatie van markering";
 "side_marker_eta" = "Verwachte aankomsttijd";
@@ -3786,3 +3786,4 @@
 "vehicle_metrics_chart_category" = "Voertuigdiagnostiek";
 "open_till_short" = "Tot";
 "open_from_short" = "Vanaf";
+"routing_attr_motor_type_ethanol_name" = "Ethanol";

@@ -718,18 +718,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     
     OsmAndAppInstance app = [OsmAndApp instance];
     QList<std::shared_ptr<const OsmAnd::ObfFile> > obfFiles = app.resourcesManager->obfsCollection->getObfFiles();
-    
-    std::sort(obfFiles.begin(), obfFiles.end(), [](const auto &a, const auto &b) {
-        NSString *nameA = a->filePath.toNSString();
-        NSString *nameB = b->filePath.toNSString();
-        if (nameA)
-            nameA = [OAUtilities simplifyFileName:[nameA lastPathComponent]];
-        if (nameB)
-            nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
-        
-        return [nameA compare:nameB] == NSOrderedAscending;
-    });
-    
+
     for (const auto& file : obfFiles)
     {
         NSString *path = file->filePath.toNSString();
@@ -1565,6 +1554,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     }
     if (!isEmpty || additionalFilter)
     {
+        NSMutableSet<NSNumber *> *allIds = [NSMutableSet set]; // live updates filter
         for (NSString *repoName in repos)
         {
             if (matcher && matcher.isCancelled)
@@ -1604,7 +1594,8 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                                         }
                                   },
                                   ctrl);
-            
+
+            NSMutableSet<NSNumber *> *localIds = [NSMutableSet set];
             for (OAPOI *amenity in foundAmenities)
             {
                 NSNumber *obfId = @(amenity.obfId);
@@ -1612,12 +1603,14 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                 {
                     [closedAmenities addObject:obfId];
                 }
-                else if (![closedAmenities containsObject:obfId])
+                else if (![closedAmenities containsObject:obfId]  && ![allIds containsObject:obfId])
                 {
                     [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];
+                    [localIds addObject:obfId];
                 }
             }
+            [allIds unionSet:localIds];
         }
     }
     return actualAmenities;

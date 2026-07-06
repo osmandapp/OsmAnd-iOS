@@ -714,6 +714,7 @@
 "traffic_warning_stop" = "Stop sign";
 "traffic_warning_calming" = "Traffic calming";
 "traffic_warning_speed_camera" = "Speed camera";
+"traffic_warning_enforcement_traffic_signals" = "Red light camera";
 "traffic_warning" = "Traffic warning";
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";

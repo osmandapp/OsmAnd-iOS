@@ -57,6 +57,13 @@
             alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_STOP locationIndex:locInd];
         }
     }
+    else if ("enforcement" == ruleType.getTag())
+    {
+        if ("traffic_signals" == ruleType.getValue())
+        {
+            alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_ENFORCEMENT_TRAFFIC_SIGNALS locationIndex:locInd];
+        }
+    }
     else if ("barrier" == ruleType.getTag())
     {
         if ("toll_booth" == ruleType.getValue())
@@ -105,7 +112,7 @@
     if (time < 6 || distance < 75 || self.type == AIT_SPEED_LIMIT)
         return [self.class getPriority:self.type];
 
-    if (self.type == AIT_SPEED_CAMERA && (time < 15 || distance < 150))
+    if ([self isSpeedCameraType] && (time < 15 || distance < 150))
         return [self.class getPriority:self.type];
 
     // 2nd level
@@ -140,6 +147,8 @@
             return 10;
         case AIT_TUNNEL:
             return 11;
+        case AIT_ENFORCEMENT_TRAFFIC_SIGNALS:
+            return 12;
 
         default:
             return 0;
@@ -171,6 +180,8 @@
             return @"TUNNEL";
         case AIT_MAXIMUM:
             return @"MAXIMUM";
+        case AIT_ENFORCEMENT_TRAFFIC_SIGNALS:
+            return @"ENFORCEMENT_TRAFFIC_SIGNALS";
 
         default:
             return @"";
@@ -202,10 +213,17 @@
             return OALocalizedString(@"tunnel_warning");
         case AIT_MAXIMUM:
             return OALocalizedString(@"traffic_warning");
+        case AIT_ENFORCEMENT_TRAFFIC_SIGNALS:
+            return OALocalizedString(@"traffic_warning_enforcement_traffic_signals");
             
         default:
             return @"";
     }
+}
+
+- (BOOL) isSpeedCameraType
+{
+    return self.type == AIT_SPEED_CAMERA || self.type == AIT_ENFORCEMENT_TRAFFIC_SIGNALS;
 }
 
 - (NSUInteger) hash

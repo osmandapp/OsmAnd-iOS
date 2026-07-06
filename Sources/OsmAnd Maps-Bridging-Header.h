@@ -64,6 +64,11 @@
 #import "OACommonTypes.h"
 #import "OABaseCollectionHandler.h"
 #import "OAResourcesUISwiftHelper.h"
+#import "OAEditGroupViewController.h"
+#import "OAFavoriteGroupEditorViewController.h"
+#import "OAFavoritesBridgeHelper.h"
+#import "OAOpenAddTrackViewController.h"
+#import "OAEditColorViewController.h"
 #import "OAResourcesInstaller.h"
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentAdapter.h"
@@ -111,6 +116,9 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmNotePoint.h"
+#import "OAShareMenuActivity.h"
+#import "OAFavoriteFolderBridgeItem.h"
+#import "OAFavoritePointBridgeItem.h"
 #import "OATrackPreviewMapRenderer.h"
 
 // Widgets
@@ -216,7 +224,6 @@
 #import "OACloudIntroductionViewController.h"
 #import "OAHelpViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
-#import "OAFavoriteListViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAPluginDetailsViewController.h"
@@ -224,6 +231,7 @@
 #import "OAOsmNoteViewController.h"
 #import "OAOsmEditingViewController.h"
 #import "OAOsmUploadPOIViewController.h"
+#import "OAEditPointViewController.h"
 #import "OAAddTrackFolderViewController.h"
 
 // Cells

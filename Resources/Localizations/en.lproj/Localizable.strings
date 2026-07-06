@@ -648,6 +648,8 @@
 "shared_string_subfolders_in" = "Subfolders in";
 "shared_string_sorted_by" = "is sorted by:";
 "shared_string_nearest" = "Nearest";
+"distance_nearest" = "Nearest first";
+"distance_farthest" = "Farthest first";
 "track_sort_az" = "Name A - Z";
 "track_sort_za" = "Name Z - A";
 "newest_date_first" = "Newest date first";
@@ -1010,6 +1012,14 @@
 "hud_no_movement" = "No movement";
 
 // Favorites
+"shared_string_pinned" = "Pinned";
+"delete_groups_confirmation" = "Delete groups?";
+"add_to_track" = "Add to track";
+"unpin_folder" = "Unpin folder";
+"pin_folder" = "Pin folder";
+"no_search_results" = "No results";
+"favorite_search_empty_state_description" = "Adjust your search or filters to see if that helps";
+"favorites_empty_folder_description" = "This folder doesn\’t have any points yet.";
 "shared_string_color" = "Color";
 "fav_colors" = "Colors";
 "shared_string_name" = "Name";
@@ -1060,6 +1070,16 @@
 "tracks_delete_confirmation_message" = "This action cannot be undone.";
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
+"favorites_delete_confirmation_title" = "Delete %ld favorites?";
+"items_delete_confirmation_title" = "Delete %ld items?";
+"folders_delete_confirmation_title" = "Delete %ld folders?";
+"favorites_delete_confirmation_message" = "This action cannot be undone.";
+"mixed_delete_confirmation_message" = "This will delete %ld folders and %ld points. This action cannot be undone.";
+"empty_state_favourites" = "Add Favorites";
+"empty_state_favourites_desc" = "Import Favorites or add them by marking points on the map.";
+"tracks_empty_folder" = "Empty folder";
+"tracks_empty_folder_description" = "This folder doesn’t have any points yet.";
+"delete_favorite_confirmation_title" = "Delete \"%@\"?";
 
 "favorite_friends_category" = "Friends";
 "favorite_places_category" = "Places";
@@ -1680,6 +1700,7 @@
 "change_folder" = "Change folder";
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add new one";
+"add_new_folder" = "Add new folder";
 "add_folder" = "Add folder";
 "add_smart_folder" = "Add smart folder";
 "save_as_smart_folder" = "Save as smart folder";
@@ -4294,13 +4315,16 @@
 "original_icon_description" = "Each point retains its individual icon.";
 "original_color_description" = "Each point retains its individual color.";
 "original_shape_description" = "Each point retains its individual shape.";
+"add_to" = "Add to";
 
 "my_places_no_tracks_title_root" = "You don’t have track files";
 "my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";
 "my_places_no_tracks_title" = "Empty folder";
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
+"favorite_confirm_delete_group" = "Delete \"%1$@\" group and all included points (%2$lu)?";
 "root_folder" = "Root folder";
+"shared_string_folders" = "Folders";
 "all_folders" = "All folders";
 "copy_as_new_folder" = "Copy as new folder";
 "add_to_a_folder" = "Add to a folder";

@@ -1044,6 +1044,7 @@
         if (_editPointType == EOAEditPointTypeFavorite)
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
     }
+    [self.delegate saveTapped];
     [self dismissViewController];
 }
 

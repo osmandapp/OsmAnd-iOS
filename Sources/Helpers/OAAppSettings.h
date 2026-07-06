@@ -1231,6 +1231,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonStringList *customWidgetKeys;
 @property (nonatomic) OACommonStringList *tracksSortModes;
 @property (nonatomic) OACommonString *searchTracksSortModes;
+@property (nonatomic) OACommonStringList *favoriteSortModes;
+@property (nonatomic) OACommonString *searchFavoriteSortMode;
 @property (nonatomic) OACommonString *travelGuidesSortMode;
 @property (nonatomic) OACommonString *osmEditsSortMode;
 
@@ -1328,6 +1330,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 - (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes;
 - (NSDictionary<NSString *, NSString *> *)getTracksSortModes;
+- (void)saveFavoriteSortModes:(NSDictionary<NSString *, NSString *> *)favoriteSortModes;
+- (NSDictionary<NSString *, NSString *> *)getFavoriteSortModes;
 
 - (NSString *) getFormattedTrackInterval:(int)value;
 

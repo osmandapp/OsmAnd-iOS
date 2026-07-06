@@ -8,7 +8,7 @@
 
 #import "OABaseNavbarSubviewViewController.h"
 
-@class OAGPXAppearanceCollection, OATextInputFloatingCell, OASPaletteItemSolid, PoiIconCollectionHandler;
+@class OAFavoriteGroup, OAGPXAppearanceCollection, OATextInputFloatingCell, OASPaletteItemSolid, PoiIconCollectionHandler;
 
 @protocol OAEditorDelegate <NSObject>
 
@@ -45,6 +45,9 @@
                                              text:(NSString *)text
                                               tag:(NSInteger)tag;
 - (BOOL)isAppearanceChanged;
+- (nullable OAFavoriteGroup *)existingGroupFor:(NSString *_Nullable)name;
+- (BOOL)allowsExistingGroupFor:(NSString *_Nonnull)name group:(nullable OAFavoriteGroup *)group;
+- (BOOL)allowsValidationForGroupName;
 
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler;
 

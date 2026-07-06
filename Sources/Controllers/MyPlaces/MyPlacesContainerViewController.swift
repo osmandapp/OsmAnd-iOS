@@ -13,6 +13,7 @@ protocol MyPlacesDelegate: AnyObject {
     func updateEditMode(_ edit: Bool)
     func updateSearchEnabling(_ isEnabled: Bool)
     func updateTitle(_ title: String, hideSubtitle: Bool)
+    func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool)
     func updateToolbar(with items: [UIBarButtonItem]?)
 }
 
@@ -50,7 +51,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         
         var controllerType: AnyClass {
             switch self {
-            case .favorites: OAFavoriteListViewController.self
+            case .favorites: FavoriteListViewController.self
             case .tracks: TracksViewController.self
             case .osm: OsmEditsListViewController.self
             case .travel: SavedArticlesTabViewController.self
@@ -118,11 +119,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     func viewController(for tab: Tab) -> UIViewController? {
         guard let pageViewController else { return nil }
-        let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
         switch tab {
         case .favorites:
-            if !availableViewControllers.contains(where: { $0.key == .favorites }),
-               let favoritesViewController = storyboard.instantiateViewController(withIdentifier: "OAFavoriteListViewController") as? OAFavoriteListViewController {
+            if !availableViewControllers.contains(where: { $0.key == .favorites }) {
+                let favoritesViewController = FavoriteListViewController(frame: pageViewController.view.frame)
                 favoritesViewController.myPlacesDelegate = self
                 availableViewControllers[tab] = favoritesViewController
             }
@@ -204,10 +204,14 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     }
     
     private func setupNavbarTitle(_ title: String, hideSubtitle: Bool) {
+        setupNavbarTitle(title, subtitle: localizedString("shared_string_my_places"), hideSubtitle: hideSubtitle)
+    }
+
+    private func setupNavbarTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
         navigationItem.setStackViewWithTitle(title,
                                              titleColor: .textColorPrimary,
                                              titleFont: .scaledSystemFont(ofSize: 17.0, weight: .semibold, maximumSize: 22.0),
-                                             subtitle: hideSubtitle ? "" : localizedString("shared_string_my_places"),
+                                             subtitle: hideSubtitle ? "" : subtitle,
                                              subtitleColor: .textColorSecondary,
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
@@ -318,6 +322,10 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
     
     func updateTitle(_ title: String, hideSubtitle: Bool) {
         setupNavbarTitle(title, hideSubtitle: hideSubtitle)
+    }
+
+    func updateTitle(_ title: String, subtitle: String, hideSubtitle: Bool) {
+        setupNavbarTitle(title, subtitle: subtitle, hideSubtitle: hideSubtitle)
     }
     
     func updateToolbar(with items: [UIBarButtonItem]?) {

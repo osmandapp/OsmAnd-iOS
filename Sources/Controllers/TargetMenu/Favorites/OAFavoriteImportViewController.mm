@@ -159,7 +159,6 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 {
     if (_gpxFile && _gpxFile.pointsGroups.count > 0)
     {
-        // IOS-214
         if (![self isFavoritesValid])
             return;
 

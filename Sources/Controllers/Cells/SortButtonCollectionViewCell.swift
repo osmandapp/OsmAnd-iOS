@@ -32,7 +32,7 @@ final class SortButtonCollectionViewCell: UICollectionViewListCell {
         sortButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            sortButton.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: -24),
+            sortButton.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             sortButton.topAnchor.constraint(equalTo: topAnchor),
             sortButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             sortButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),

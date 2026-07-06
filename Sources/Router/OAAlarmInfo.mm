@@ -112,7 +112,7 @@
     if (time < 6 || distance < 75 || self.type == AIT_SPEED_LIMIT)
         return [self.class getPriority:self.type];
 
-    if ([self isTrafficCamera] && (time < 15 || distance < 150))
+    if ((self.type == AIT_SPEED_CAMERA || self.type == AIT_RED_LIGHT_CAMERA) && (time < 15 || distance < 150))
         return [self.class getPriority:self.type];
 
     // 2nd level

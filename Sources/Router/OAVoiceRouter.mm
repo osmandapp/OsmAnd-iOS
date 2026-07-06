@@ -835,8 +835,8 @@ std::string preferredLanguage;
         BOOL speakTrafficWarnings = [_settings.speakTrafficWarnings get];
         BOOL speakTunnels = type == AIT_TUNNEL && [_settings.speakTunnels get];
         BOOL speakPedestrian = type == AIT_PEDESTRIAN && [_settings.speakPedestrian get];
-        BOOL speakSpeedCamera = [info isTrafficCamera] && [_settings.speakCameras get];
-        BOOL speakPrefType = type == AIT_TUNNEL || type == AIT_PEDESTRIAN || [info isTrafficCamera];
+        BOOL speakSpeedCamera = (type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA) && [_settings.speakCameras get];
+        BOOL speakPrefType = type == AIT_TUNNEL || type == AIT_PEDESTRIAN || type == AIT_SPEED_CAMERA || type == AIT_RED_LIGHT_CAMERA;
 
         if (speakSpeedCamera || speakPedestrian || speakTunnels || (speakTrafficWarnings && !speakPrefType))
         {

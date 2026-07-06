@@ -172,7 +172,7 @@
                 }
                 text = @(alarm.intValue).stringValue;
             }
-            else if ([alarm isSpeedCameraType])
+            else if ([alarm isTrafficCamera])
             {
                 locImgId = @"warnings_speed_camera";
             }
@@ -236,7 +236,7 @@
             visible = (text && text.length > 0) || (locImgId.length > 0);
             if (visible)
             {
-                if ([alarm isSpeedCameraType])
+                if ([alarm isTrafficCamera])
                     visible = cams;
                 else if (alarm.type == AIT_PEDESTRIAN)
                     visible = peds;

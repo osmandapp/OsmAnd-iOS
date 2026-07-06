@@ -573,7 +573,7 @@
 
                 float time = speed > 0 ? distanceByRoute / speed : INT_MAX;
                 int priority = [inf updateDistanceAndGetPriority:time distance:distanceByRoute];
-                if (priority < mostPriority && (showCameras ||  ![inf isSpeedCameraType]))
+                if (priority < mostPriority && (showCameras ||  ![inf isTrafficCamera]))
                 {
                     mostImportant = inf;
                     mostPriority = priority;
@@ -680,7 +680,7 @@
     OAAlarmInfo *prevSpeedCam = nil;
     for (OAAlarmInfo *i in route.alarmInfo)
     {
-        if ([i isSpeedCameraType])
+        if ([i isTrafficCamera])
         {
             if ([settings.showCameras get:mode] || [settings.speakCameras get:mode])
             {
@@ -925,7 +925,7 @@
                 OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:0 coordinate:loc.coordinate];
                 if (info)
                 {
-                    if (![info isSpeedCameraType ] || showCameras)
+                    if (![info isTrafficCamera ] || showCameras)
                     {
                         return info;
                     }

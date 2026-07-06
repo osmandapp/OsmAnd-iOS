@@ -272,8 +272,8 @@ final class AstroVisibilityGraphView: UIView {
         }
         let y = yForAltitude(0.0, area: area) - Constants.sunIconRaise
         for crossing in crossings {
-            let imageName = crossing.type == .sunrise ? "ic_action_sunrise_12" : "ic_action_sunset_12"
-            guard let image = AstroIcon.original(imageName) ?? AstroIcon.template(imageName) else {
+            let imageName = crossing.type == .sunrise ? "sunrise.fill" : "sunset.fill"
+            guard let image = UIImage(systemName: imageName)?.withTintColor(.white) else {
                 continue
             }
             image.draw(in: CGRect(x: crossing.x - Constants.sunIconSize / 2,

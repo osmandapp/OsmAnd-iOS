@@ -116,6 +116,13 @@ final class AstroContextMenuAdapter {
             }
         }
     }
+    
+    func makeScheduleCardView(item: AstroScheduleCardItem) -> UIView {
+        AstroScheduleCardViewHolder.makeView(item: item,
+                                             onResetPeriod: onScheduleResetPeriod,
+                                             onShiftPeriod: onScheduleShiftPeriod,
+                                             onSelectDate: onScheduleSelectDate)
+    }
 }
 
 class AstroCardContainerView: UIView {
@@ -168,7 +175,7 @@ class AstroCardContainerView: UIView {
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            stack.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

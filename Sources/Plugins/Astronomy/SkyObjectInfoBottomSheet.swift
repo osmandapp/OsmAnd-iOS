@@ -29,21 +29,53 @@ struct AstroContextMenuDependencies {
 
 final class AstroContextMenuViewController: UIViewController {
     enum Tab: Int {
-        case overview = 0
-        case visibility = 1
-        case schedule = 2
+        case overview
+        case visibility
+        case schedule
     }
 
     private let dependencies: AstroContextMenuDependencies
-    private var skyObject: SkyObject?
-    private var article: AstroArticle?
-    private var uiState = AstroContextUiState()
-
     private let visibilityController = AstroVisibilityCardController()
     private let scheduleController = AstroScheduleCardController()
     private let knowledgeBaseController = AstroKnowledgeBaseController()
     private let cardFactory = AstroContextCardFactory()
     private let metricsAdapter = MetricsAdapter()
+    private let sheetHeaderView = UIView()
+    private let sheetHeaderBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+    private let titleLabel = UILabel()
+    private let closeButton = UIButton(type: .close)
+    private let headerType = UILabel()
+    private let metricsContainer = UIView()
+    private let actionsStack = UIStackView()
+    private let scrollView = CancelableScrollView()
+    private let contentStack = UIStackView()
+    private let cardsStack = UIStackView()
+    private let tabBar = UITabBar()
+    private let knowledgeDownloadButtonRefreshInterval: TimeInterval = 0.5
+    private let saveButton = UIButton(type: .system)
+    private let locationButton = UIButton(type: .system)
+    private let directionButton = UIButton(type: .system)
+    private let pathButton = UIButton(type: .system)
+    private let headerHeight: CGFloat = 78
+    private let compactThreshold: CGFloat = 8
+    private let expandThreshold: CGFloat = 2
+    
+    private var skyObject: SkyObject?
+    private var article: AstroArticle?
+    private var uiState = AstroContextUiState()
+    private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
+    private var selectedTab: Tab = .overview
+    private var isProgrammaticTabScroll = false
+    private var redFilterEnabled = false
+    private var downloadTaskProgressObserver: OAAutoObserverProxy?
+    private var downloadTaskCompletedObserver: OAAutoObserverProxy?
+    private var localResourcesChangedObserver: OAAutoObserverProxy?
+    private var latestKnowledgeDownloadProgress: Float?
+    private var knowledgeDownloadProgressRenderScheduled = false
+    private var lastRenderedKnowledgeDownloadButtonTitle: String?
+    private var displayedKnowledgeDownloadActive = false
+    private var isHeaderCompact = false
+
     private lazy var galleryLoader = AstroGalleryLoader(onStateChanged: { [weak self] wid, state in
         self?.onGalleryStateChanged(wid: wid, state: state)
     })
@@ -66,21 +98,6 @@ final class AstroContextMenuViewController: UIViewController {
         onCatalogsToggleExpanded: { [weak self] in self?.toggleCatalogsExpanded() },
         onCatalogClick: { [weak self] catalog in self?.openCatalogSearch(catalog) }
     )
-    
-    private var isEmbeddedLeftPanel: Bool {
-        navigationController?.parent is StarMapViewController
-    }
-
-    private let sheetHeaderView = UIView()
-    private let titleLabel = UILabel()
-    private let closeButton = UIButton(type: .close)
-    private let headerType = UILabel()
-    private let metricsContainer = UIView()
-    private let actionsStack = UIStackView()
-    private let scrollView = CancelableScrollView()
-    private let contentStack = UIStackView()
-    private let cardsStack = UIStackView()
-    private let tabBar = UITabBar()
     private lazy var overviewTabItem = makeTabBarItem(title: localizedString("shared_string_overview"),
                                                       iconName: overviewTabIconName(for: skyObject?.type),
                                                       tag: Tab.overview.rawValue)
@@ -90,28 +107,10 @@ final class AstroContextMenuViewController: UIViewController {
     private lazy var scheduleTabItem = makeTabBarItem(title: localizedString("astronomy_schedule"),
                                                       iconName: "ic_custom_calendar_month",
                                                       tag: Tab.schedule.rawValue)
-    private var cardViewsByKey: [AstroContextCardKey: UIView] = [:]
-    private var selectedTab: Tab = .overview
-    private var isProgrammaticTabScroll = false
-    private var redFilterEnabled = false
-    private var downloadTaskProgressObserver: OAAutoObserverProxy?
-    private var downloadTaskCompletedObserver: OAAutoObserverProxy?
-    private var localResourcesChangedObserver: OAAutoObserverProxy?
-    private var latestKnowledgeDownloadProgress: Float?
-    private var knowledgeDownloadProgressRenderScheduled = false
-    private var lastRenderedKnowledgeDownloadButtonTitle: String?
-    private var displayedKnowledgeDownloadActive = false
-    private let knowledgeDownloadButtonRefreshInterval: TimeInterval = 0.5
-
-    private let saveButton = UIButton(type: .system)
-    private let locationButton = UIButton(type: .system)
-    private let directionButton = UIButton(type: .system)
-    private let pathButton = UIButton(type: .system)
+    private var isEmbeddedLeftPanel: Bool {
+        navigationController?.parent is StarMapViewController
+    }
     
-    private var isHeaderCompact = false
-    private let compactThreshold: CGFloat = 12
-    private let expandThreshold: CGFloat = 2
-
     init(object: SkyObject, dependencies: AstroContextMenuDependencies) {
         self.skyObject = object
         self.dependencies = dependencies
@@ -202,6 +201,10 @@ final class AstroContextMenuViewController: UIViewController {
         }
         submitCards()
     }
+    
+    func isDisplaying(_ object: SkyObject) -> Bool {
+        skyObject?.id == object.id
+    }
 
     func applyRedFilter(enabled: Bool) {
         redFilterEnabled = enabled
@@ -259,6 +262,7 @@ final class AstroContextMenuViewController: UIViewController {
             let bottomInset = visible ? tabBarHeight + self.view.safeAreaInsets.bottom + 16 : 16
             self.scrollView.contentInset.bottom = bottomInset
             self.scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
+            self.tabBar.invalidateIntrinsicContentSize()
         }
         if animated {
             UIView.animate(withDuration: 0.2, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction], animations: updates)
@@ -279,7 +283,12 @@ final class AstroContextMenuViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = AstroContextMenuTheme.pageBackground
+        
+        sheetHeaderBlurView.translatesAutoresizingMaskIntoConstraints = false
+        sheetHeaderBlurView.clipsToBounds = true
+        sheetHeaderBlurView.alpha = 0
 
+        sheetHeaderView.addSubview(sheetHeaderBlurView)
         sheetHeaderView.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -291,7 +300,12 @@ final class AstroContextMenuViewController: UIViewController {
         titleLabel.accessibilityTraits = .header
         sheetHeaderView.addSubview(titleLabel)
 
-        var closeButtonConfig = UIButton.Configuration.plain()
+        var closeButtonConfig: UIButton.Configuration
+        if #available(iOS 26.0, *) {
+            closeButtonConfig = UIButton.Configuration.glass()
+        } else {
+            closeButtonConfig = UIButton.Configuration.plain()
+        }
         closeButtonConfig.image = UIImage(systemName: "xmark")
         closeButtonConfig.baseForegroundColor = .label
         closeButtonConfig.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
@@ -340,8 +354,9 @@ final class AstroContextMenuViewController: UIViewController {
         scrollView.addSubview(contentStack)
 
         contentStack.addArrangedSubview(headerType)
-        contentStack.setCustomSpacing(16, after: headerType)
+        contentStack.setCustomSpacing(12, after: headerType)
         contentStack.addArrangedSubview(metricsContainer)
+        contentStack.setCustomSpacing(11, after: metricsContainer)
         contentStack.addArrangedSubview(actionsStack)
 
         cardsStack.axis = .vertical
@@ -351,16 +366,24 @@ final class AstroContextMenuViewController: UIViewController {
 
         setupTabBar()
         view.addSubview(tabBar)
+        tabBar.invalidateIntrinsicContentSize()
+        tabBar.layoutIfNeeded()
+        tabBar.alpha = 0
 
         NSLayoutConstraint.activate([
+            sheetHeaderBlurView.leadingAnchor.constraint(equalTo: sheetHeaderView.leadingAnchor),
+            sheetHeaderBlurView.trailingAnchor.constraint(equalTo: sheetHeaderView.trailingAnchor),
+            sheetHeaderBlurView.topAnchor.constraint(equalTo: sheetHeaderView.topAnchor),
+            sheetHeaderBlurView.bottomAnchor.constraint(equalTo: sheetHeaderView.bottomAnchor),
+            
             sheetHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             sheetHeaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             sheetHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            sheetHeaderView.heightAnchor.constraint(equalToConstant: 64),
+            sheetHeaderView.heightAnchor.constraint(equalToConstant: headerHeight),
 
             titleLabel.leadingAnchor.constraint(equalTo: sheetHeaderView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -16),
-            titleLabel.topAnchor.constraint(equalTo: sheetHeaderView.topAnchor, constant: 18),
+            titleLabel.topAnchor.constraint(equalTo: sheetHeaderView.topAnchor, constant: 22),
 
             closeButton.trailingAnchor.constraint(equalTo: sheetHeaderView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             closeButton.topAnchor.constraint(equalTo: sheetHeaderView.topAnchor, constant: 16),
@@ -375,7 +398,7 @@ final class AstroContextMenuViewController: UIViewController {
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: sheetHeaderView.bottomAnchor, constant: -6),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 63),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
@@ -391,11 +414,18 @@ final class AstroContextMenuViewController: UIViewController {
         tabBar.delegate = self
         tabBar.isTranslucent = true
         tabBar.setContentCompressionResistancePriority(.required, for: .vertical)
+        tabBar.setContentCompressionResistancePriority(.required, for: .horizontal)
         tabBar.setItems([overviewTabItem, visibilityTabItem, scheduleTabItem], animated: false)
         tabBar.selectedItem = overviewTabItem
-        tabBar.alpha = 0
         tabBar.isUserInteractionEnabled = false
         
+        let appearance = UITabBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.stackedLayoutAppearance.normal.titlePositionAdjustment = .zero
+        appearance.stackedLayoutAppearance.selected.titlePositionAdjustment = .zero
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+
         scrollView.contentInset.bottom = 16
         scrollView.verticalScrollIndicatorInsets.bottom = 16
     }
@@ -467,10 +497,10 @@ final class AstroContextMenuViewController: UIViewController {
     private func configureActionButton(_ button: UIButton) {
         var config = UIButton.Configuration.filled()
         config.imagePlacement = .top
-        config.imagePadding = 4
+        config.imagePadding = 8
         config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
         config.baseForegroundColor = .buttonTextColorSecondary
-        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 4, bottom: 10, trailing: 4)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 4, bottom: 10, trailing: 4)
         config.background.cornerRadius = 16
         config.titleLineBreakMode = .byTruncatingTail
         config.imageColorTransformer = UIConfigurationColorTransformer { _ in
@@ -500,7 +530,7 @@ final class AstroContextMenuViewController: UIViewController {
 
     private func bindControllerCallbacks() {
         visibilityController.onDataChanged = { [weak self] in self?.submitCards() }
-        scheduleController.onDataChanged = { [weak self] in self?.submitCards() }
+        scheduleController.onDataChanged = { [weak self] in self?.refreshScheduleCardOnly() }
     }
 
     private func buildHeaderTypeText(_ obj: SkyObject) -> String {
@@ -691,7 +721,7 @@ final class AstroContextMenuViewController: UIViewController {
         let currentStart = uiState.schedulePeriodStart ?? scheduleController.periodStart
         let nextStart = Calendar.current.date(byAdding: .day, value: daysDelta, to: currentStart) ?? currentStart
         updateScheduleCard(obj, periodStartOverride: nextStart)
-        submitCards()
+        refreshScheduleCardOnly()
     }
 
     private func resetScheduleToCurrentPeriod() {
@@ -699,7 +729,28 @@ final class AstroContextMenuViewController: UIViewController {
             return
         }
         updateScheduleCard(obj, periodStartOverride: normalizedDay(dependencies.currentDate()))
-        submitCards()
+        refreshScheduleCardOnly()
+    }
+    
+    private func refreshScheduleCardOnly() {
+        guard isViewLoaded,
+              let item = scheduleController.buildItem(),
+              let oldView = cardViewsByKey[.schedule],
+              let stackIndex = cardsStack.arrangedSubviews.firstIndex(of: oldView) else {
+            return
+        }
+
+        if let index = adapter.currentList.firstIndex(where: { $0.key == .schedule }) {
+            var list = adapter.currentList
+            list[index] = item
+            adapter.submitItems(list)
+        }
+
+        let newView = adapter.makeScheduleCardView(item: item)
+        cardsStack.insertArrangedSubview(newView, at: stackIndex)
+        cardsStack.removeArrangedSubview(oldView)
+        oldView.removeFromSuperview()
+        cardViewsByKey[.schedule] = newView
     }
 
     private func selectVisibilityDate(_ date: Date) {
@@ -804,10 +855,39 @@ final class AstroContextMenuViewController: UIViewController {
 
     private func showOfflineArticle() -> Bool {
         guard let article,
-              article.hasOfflineContent() else {
+              article.hasOfflineContent(),
+              let mobileHtml = article.getMobileHtmlString() else {
             return false
         }
-        return AstroArticleViewController.showInstance(from: self, article: article)
+        let body = extractBody(from: mobileHtml)
+        let locale = article.lang == "en" ? "" : article.lang
+        let onlineURL = article.getOnlineArticleUrl().flatMap { URL(string: $0) }
+        let vc = OAWikiWebViewController(
+            astroWikiHtml: body,
+            title: article.title,
+            locale: locale,
+            onlineURL: onlineURL
+        )
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        
+        navigationController?.present(navController, animated: true)
+        return true
+    }
+    
+    private func extractBody(from html: String) -> String {
+        let bodyContentRegex = try? NSRegularExpression(
+            pattern: "<body[^>]*>([\\s\\S]*?)</body>",
+            options: [.caseInsensitive]
+        )
+        guard let regex = bodyContentRegex else { return html }
+        let range = NSRange(html.startIndex..<html.endIndex, in: html)
+        guard let match = regex.firstMatch(in: html, options: [], range: range),
+              match.numberOfRanges > 1,
+              let bodyRange = Range(match.range(at: 1), in: html) else {
+            return html
+        }
+        return String(html[bodyRange])
     }
 
     private func buildKnowledgeCardItem() -> AstroKnowledgeCardItem? {
@@ -1057,9 +1137,7 @@ final class AstroContextMenuViewController: UIViewController {
     
     private func animateHeader(toCompact compact: Bool) {
         UIView.animate(withDuration: 0.35, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
-            self.sheetHeaderView.backgroundColor = compact
-            ? AstroContextMenuTheme.pageBackground
-            : AstroContextMenuTheme.pageBackground.withAlphaComponent(0)
+            self.sheetHeaderBlurView.alpha = compact ? 1 : 0
             
             let scale: CGFloat = compact ? (28 / 34) : (34 / 28)
             self.applyTitleScale(scale)
@@ -1226,7 +1304,7 @@ extension AstroContextMenuViewController: UIScrollViewDelegate {
         let visibilityY = cardViewsByKey[.visibility].map { $0.convert($0.bounds, to: scrollView).minY }
         let scheduleY = cardViewsByKey[.schedule].map { $0.convert($0.bounds, to: scrollView).minY }
         let nextTab: Tab
-        if let scheduleY, y >= scheduleY - 24 {
+        if let scheduleY, y >= scheduleY - scrollView.bounds.height / 3 {
             nextTab = .schedule
         } else if let visibilityY, y >= visibilityY - 24 {
             nextTab = .visibility

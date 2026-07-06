@@ -9,6 +9,11 @@
 import UIKit
 
 enum AstroScheduleCardViewHolder {
+    private enum TimeBlockAlignment {
+        case leading
+        case trailing
+    }
+    
     private static let riseArrow = "▲"
     private static let setArrow = "▼"
     private static let emptyTime = "—"
@@ -67,13 +72,13 @@ enum AstroScheduleCardViewHolder {
                 daysStack.addArrangedSubview(placeholderRow(showDivider: index != AstroScheduleCardController.periodDays - 1))
             }
         }
-        contentStack.setCustomSpacing(12, after: headerCardView)
+        contentStack.setCustomSpacing(18, after: headerCardView)
         contentStack.addArrangedSubview(divider)
         contentStack.addArrangedSubview(daysStack)
         
         let mainStack = UIStackView(arrangedSubviews: [headerView, card])
         mainStack.axis = .vertical
-        mainStack.spacing = 10
+        mainStack.spacing = 11
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         if item.days.contains(where: { $0.setDayOffset > 0 }) {
@@ -82,7 +87,7 @@ enum AstroScheduleCardViewHolder {
             note.translatesAutoresizingMaskIntoConstraints = false
             note.text = localizedString("astro_schedule_next_day_note")
             note.textColor = AstroContextMenuTheme.secondaryText
-            note.font = .systemFont(ofSize: 14)
+            note.font = .preferredFont(forTextStyle: .footnote)
             note.numberOfLines = 0
             noteContainer.addSubview(note)
             NSLayoutConstraint.activate([
@@ -91,14 +96,14 @@ enum AstroScheduleCardViewHolder {
                 note.topAnchor.constraint(equalTo: noteContainer.topAnchor),
                 note.bottomAnchor.constraint(equalTo: noteContainer.bottomAnchor)
             ])
-            mainStack.setCustomSpacing(4, after: card)
+            mainStack.setCustomSpacing(6, after: card)
             mainStack.addArrangedSubview(noteContainer)
         }
 
         NSLayoutConstraint.activate([
             contentStack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             contentStack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            contentStack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
+            contentStack.topAnchor.constraint(equalTo: card.topAnchor, constant: 18),
             contentStack.bottomAnchor.constraint(equalTo: card.bottomAnchor)
         ])
         return mainStack
@@ -163,7 +168,7 @@ enum AstroScheduleCardViewHolder {
                                    action: @escaping () -> Void) -> UIButton {
         
         let iconConfig = UIImage.SymbolConfiguration(
-            font: .preferredFont(forTextStyle: .headline)
+            font: .systemFont(ofSize: 13, weight: .semibold)
         )
         
         let image = UIImage(
@@ -173,7 +178,7 @@ enum AstroScheduleCardViewHolder {
         
         var config = UIButton.Configuration.plain()
         config.image = image
-        config.contentInsets = .zero
+        config.contentInsets = .init(top: 8, leading: 0, bottom: 8, trailing: 0)
         config.cornerStyle = .capsule
         
         let button = UIButton(configuration: config)
@@ -219,9 +224,18 @@ enum AstroScheduleCardViewHolder {
         control.addSubview(row)
 
         let dayLabel = UILabel()
-        dayLabel.text = day.dayLabel
-        dayLabel.textColor = AstroContextMenuTheme.primaryText
-        dayLabel.font = .systemFont(ofSize: 16)
+
+        let attributedText = NSMutableAttributedString(string: day.dayLabel, attributes: [
+            .foregroundColor: UIColor.textColorPrimary,
+            .font: UIFont.preferredFont(forTextStyle: .body)
+        ])
+        if let commaIndex = day.dayLabel.firstIndex(of: ",") {
+            let start = day.dayLabel.index(after: commaIndex)
+            let nsRange = NSRange(start..<day.dayLabel.endIndex, in: day.dayLabel)
+            attributedText.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: nsRange)
+        }
+        
+        dayLabel.attributedText = attributedText
         dayLabel.numberOfLines = 1
         dayLabel.lineBreakMode = .byTruncatingTail
         dayLabel.adjustsFontSizeToFitWidth = true
@@ -249,16 +263,15 @@ enum AstroScheduleCardViewHolder {
         divider.isHidden = !showDivider
         divider.translatesAutoresizingMaskIntoConstraints = false
         control.addSubview(divider)
-        let dividerHeight = divider.heightAnchor.constraint(equalToConstant: showDivider ? 1 : 0)
+        let dividerHeight = divider.heightAnchor.constraint(equalToConstant: 1)
 
         NSLayoutConstraint.activate([
-            control.heightAnchor.constraint(greaterThanOrEqualToConstant: 56),
+            control.heightAnchor.constraint(equalToConstant: 52),
 
             row.leadingAnchor.constraint(equalTo: control.leadingAnchor, constant: 16),
-            row.trailingAnchor.constraint(equalTo: control.trailingAnchor, constant: -4),
+            row.trailingAnchor.constraint(equalTo: control.trailingAnchor, constant: -16),
             row.topAnchor.constraint(equalTo: control.topAnchor),
-            row.bottomAnchor.constraint(equalTo: divider.topAnchor),
-            row.heightAnchor.constraint(greaterThanOrEqualToConstant: 55),
+            row.bottomAnchor.constraint(equalTo: control.bottomAnchor),
 
             dayLabel.leadingAnchor.constraint(equalTo: row.leadingAnchor),
             dayLabel.centerYAnchor.constraint(equalTo: row.centerYAnchor),
@@ -269,13 +282,13 @@ enum AstroScheduleCardViewHolder {
 
             graph.leadingAnchor.constraint(equalTo: riseBlock.trailingAnchor, constant: 10),
             graph.centerYAnchor.constraint(equalTo: row.centerYAnchor),
-            graph.widthAnchor.constraint(equalTo: dayLabel.widthAnchor, multiplier: 1.6),
+            graph.widthAnchor.constraint(equalToConstant: 100),
             graph.heightAnchor.constraint(equalToConstant: 22),
 
             setBlock.leadingAnchor.constraint(equalTo: graph.trailingAnchor, constant: 10),
             setBlock.trailingAnchor.constraint(equalTo: row.trailingAnchor),
             setBlock.centerYAnchor.constraint(equalTo: row.centerYAnchor),
-            setBlock.widthAnchor.constraint(equalTo: dayLabel.widthAnchor, multiplier: 1.35),
+            setBlock.widthAnchor.constraint(equalTo: graph.widthAnchor, multiplier: 0.69),
 
             divider.leadingAnchor.constraint(equalTo: control.leadingAnchor, constant: 16),
             divider.trailingAnchor.constraint(equalTo: control.trailingAnchor, constant: -16),
@@ -287,14 +300,9 @@ enum AstroScheduleCardViewHolder {
 
     private static func placeholderRow(showDivider _: Bool) -> UIView {
         let view = UIView()
-        view.heightAnchor.constraint(greaterThanOrEqualToConstant: 56).isActive = true
+        view.heightAnchor.constraint(greaterThanOrEqualToConstant: 52).isActive = true
         view.alpha = 0
         return view
-    }
-
-    private enum TimeBlockAlignment {
-        case leading
-        case trailing
     }
 
     private static func timeBlock(time: String?,
@@ -307,14 +315,14 @@ enum AstroScheduleCardViewHolder {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.spacing = 4
+        stack.spacing = 3
         stack.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(stack)
 
         let arrowLabel = UILabel()
         arrowLabel.text = arrow
         arrowLabel.textColor = AstroContextMenuTheme.secondaryText
-        arrowLabel.font = .systemFont(ofSize: 12)
+        arrowLabel.font = .systemFont(ofSize: 15)
         let timeLabel = UILabel()
         timeLabel.attributedText = buildTimeText(time: time, suffix: suffix)
         timeLabel.textColor = AstroContextMenuTheme.secondaryText
@@ -350,21 +358,21 @@ enum AstroScheduleCardViewHolder {
             return NSAttributedString(string: emptyTime, attributes: [.foregroundColor: AstroContextMenuTheme.secondaryText])
         }
         let result = NSMutableAttributedString(string: parts.main, attributes: [
-            .font: UIFont.systemFont(ofSize: 16),
+            .font: UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .regular),
             .foregroundColor: AstroContextMenuTheme.secondaryText
         ])
         if let meridiem = parts.meridiem, !meridiem.isEmpty {
             result.append(NSAttributedString(string: " "))
             result.append(NSAttributedString(string: meridiem, attributes: [
-                .font: UIFont.systemFont(ofSize: 11),
+                .font: UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular),
                 .foregroundColor: AstroContextMenuTheme.secondaryText
             ]))
         }
         if let suffix, !suffix.isEmpty {
             result.append(NSAttributedString(string: suffix, attributes: [
-                .font: UIFont.systemFont(ofSize: 10),
+                .font: UIFont.systemFont(ofSize: 9),
                 .foregroundColor: AstroContextMenuTheme.secondaryText,
-                .baselineOffset: 6
+                .baselineOffset: 5
             ]))
         }
         return result

@@ -49,6 +49,10 @@
     BOOL _isDownloadImagesOnlyNow;
     BOOL _isFirstLaunch;
     OAWikiImageCacheHelper *_imageCacheHelper;
+    BOOL _isAstroArticle;
+    NSString *_astroTitle;
+    NSString *_astroRawHtml;
+    NSURL *_astroOnlineURL;
 }
 
 #pragma mark - Initialization
@@ -89,6 +93,25 @@
         _currentLocale = nil;
         _contentLocale = nil;
         [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithAstroWikiHtml:(NSString *)html
+                                title:(NSString *)title
+                               locale:(NSString *)locale
+                            onlineURL:(nullable NSURL *)onlineURL
+{
+    self = [super init];
+    if (self) {
+        _isAstroArticle = YES;
+        _astroRawHtml = html;
+        _astroTitle = title;
+        _astroOnlineURL = onlineURL;
+        _isFirstLaunch = YES;
+        _contentLocale = [locale isEqualToString:@"en"] ? @"" : locale;
+        [self commonInit];
+        [self updateAstroContent];
     }
     return self;
 }
@@ -183,10 +206,20 @@
         _content = [self appendHeadToContent:_content];
 }
 
+- (void)updateAstroContent
+{
+    NSString *body = _astroRawHtml;
+    if (body.length == 0) return;
+    _content = [self appendHeadToContent:body];
+}
+
 - (void)updateAppearance
 {
     [super updateAppearance];
-    [self updateContent];
+    if (_isAstroArticle)
+        [self updateAstroContent];
+    else
+        [self updateContent];
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
@@ -264,7 +297,9 @@
 {
     if (!_externalURL)
     {
-        [self createLanguagesNavbarButton];
+        if (!_isAstroArticle) {
+            [self createLanguagesNavbarButton];
+        }
         [self createImagesNavbarButton];
     }
 
@@ -282,6 +317,8 @@
 
 - (NSString *)getTitle
 {
+    if (_isAstroArticle)
+        return _astroTitle;
     if (_externalURLTitle)
         return _externalURLTitle;
     
@@ -377,6 +414,9 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
+    if (_isAstroArticle)
+        return @[_imagesBarButtonItem];
+    
     return _externalURL ? @[] : @[_imagesBarButtonItem, _languageBarButtonItem];
 }
 
@@ -418,6 +458,8 @@
 
 - (NSURL *)getUrl
 {
+    if (_isAstroArticle && _astroOnlineURL)
+        return _astroOnlineURL;
     if (_externalURL) {
         return _externalURL;
     } else {
@@ -699,7 +741,15 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
     NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     cssContents = [cssContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-    NSString *javascriptWithCSSString = [NSString stringWithFormat:kLargeTitleJS, cssContents, [[self getTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
+    NSString *javascriptWithCSSString;
+    if (_isAstroArticle)
+    {
+        javascriptWithCSSString = [NSString stringWithFormat:@"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style);", cssContents];
+    }
+    else
+    {
+        javascriptWithCSSString = [NSString stringWithFormat:kLargeTitleJS, cssContents, [[self getTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
+    }
     [self.webView evaluateJavaScript:kCollapseJS completionHandler:nil];
     [self.webView evaluateJavaScript:javascriptWithCSSString completionHandler:^(id _Nullable object, NSError * _Nullable error) {
         if (!containsRTL && onViewCommitted)

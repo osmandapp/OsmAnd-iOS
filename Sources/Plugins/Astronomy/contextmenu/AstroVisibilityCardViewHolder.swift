@@ -20,15 +20,15 @@ enum AstroVisibilityCardViewHolder {
 
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 0
+        stack.spacing = 6
         stack.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(stack)
         
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: card.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
+            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 14),
+            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -20)
         ])
 
         let header = UIStackView()
@@ -115,7 +115,7 @@ enum AstroVisibilityCardViewHolder {
             location.textColor = .textColorSecondary
             location.font = .preferredFont(forTextStyle: .footnote)
             location.numberOfLines = 0
-            let iconView = UIImageView(image: .icCustomLocationMarker)
+            let iconView = UIImageView(image: UIImage(systemName: "location.fill"))
             iconView.tintColor = .textColorSecondary
             iconView.contentMode = .scaleAspectFit
             let row = UIStackView(arrangedSubviews: [iconView, location])
@@ -124,10 +124,10 @@ enum AstroVisibilityCardViewHolder {
             row.spacing = 2
             row.isLayoutMarginsRelativeArrangement = true
             row.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
-            iconView.widthAnchor.constraint(equalToConstant: 20).isActive = true
-            iconView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            iconView.widthAnchor.constraint(equalToConstant: 16).isActive = true
+            iconView.heightAnchor.constraint(equalToConstant: 16).isActive = true
             mainStack.addArrangedSubview(row)
-            mainStack.setCustomSpacing(4, after: card)
+            mainStack.setCustomSpacing(6, after: card)
         }
 
         return mainStack
@@ -180,7 +180,7 @@ enum AstroVisibilityCardViewHolder {
         wrapper.addSubview(divider)
         divider.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            wrapper.widthAnchor.constraint(equalToConstant: 17),
+            wrapper.widthAnchor.constraint(equalToConstant: 27),
             divider.centerXAnchor.constraint(equalTo: wrapper.centerXAnchor),
             divider.topAnchor.constraint(equalTo: wrapper.topAnchor),
             divider.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor)

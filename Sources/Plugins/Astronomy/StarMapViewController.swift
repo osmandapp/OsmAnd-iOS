@@ -1061,9 +1061,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     private func showObjectInfo(_ object: SkyObject, centerInVisibleMapOnPresentation: Bool = false) {
         if let objectInfoController {
-            objectInfoController.updateObjectInfo(object)
-            objectInfoNavigationController?.sheetPresentationController?.animateChanges { [weak self] in
-                self?.objectInfoNavigationController?.sheetPresentationController?.selectedDetentIdentifier = .medium
+            if !objectInfoController.isDisplaying(object) {
+                objectInfoController.updateObjectInfo(object)
             }
             updateMapControlsVisibility()
             if centerInVisibleMapOnPresentation {
@@ -1156,7 +1155,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
                 sheet.selectedDetentIdentifier = .medium
                 sheet.prefersGrabberVisible = true
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-                sheet.preferredCornerRadius = 24
+                sheet.preferredCornerRadius = 34
                 sheet.largestUndimmedDetentIdentifier = .medium
             }
             present(navigationController, animated: true) { [weak self] in

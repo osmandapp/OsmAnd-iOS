@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithPoi:(OAPOI *)poi;
 - (instancetype)initWithPoi:(OAPOI *)poi locale:(NSString *)locale;
 - (instancetype)initWithURL:(NSURL *)url title:(NSString *)title;
+- (instancetype)initWithAstroWikiHtml:(NSString *)html
+                                title:(NSString *)title
+                               locale:(NSString *)locale
+                            onlineURL:(nullable NSURL *)onlineURL;
 
 @end
 

@@ -112,22 +112,22 @@ private final class AstroGalleryCardView: UIView {
         NSLayoutConstraint.activate([
             iconView.leadingAnchor.constraint(equalTo: headerButton.leadingAnchor, constant: 16),
             iconView.centerYAnchor.constraint(equalTo: headerButton.centerYAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: 24),
-            iconView.heightAnchor.constraint(equalToConstant: 24),
+            iconView.widthAnchor.constraint(equalToConstant: 30),
+            iconView.heightAnchor.constraint(equalToConstant: 30),
 
             titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16),
             titleLabel.centerYAnchor.constraint(equalTo: headerButton.centerYAnchor),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: arrowContainer.leadingAnchor, constant: -16),
 
-            arrowContainer.trailingAnchor.constraint(equalTo: headerButton.trailingAnchor, constant: -4),
+            arrowContainer.trailingAnchor.constraint(equalTo: headerButton.trailingAnchor, constant: -1),
             arrowContainer.centerYAnchor.constraint(equalTo: headerButton.centerYAnchor),
             arrowContainer.widthAnchor.constraint(equalToConstant: 48),
             arrowContainer.heightAnchor.constraint(equalToConstant: 48),
 
             arrowView.centerXAnchor.constraint(equalTo: arrowContainer.centerXAnchor),
             arrowView.centerYAnchor.constraint(equalTo: arrowContainer.centerYAnchor),
-            arrowView.widthAnchor.constraint(equalToConstant: 24),
-            arrowView.heightAnchor.constraint(equalToConstant: 24)
+            arrowView.widthAnchor.constraint(equalToConstant: 30),
+            arrowView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
 
@@ -135,9 +135,9 @@ private final class AstroGalleryCardView: UIView {
         let arrowName: String
         switch item.state {
         case .collapsed:
-            arrowName = "ic_custom_arrow_down"
+            arrowName = "ic_custom_arrow_right"
         case .loading, .ready:
-            arrowName = "ic_custom_arrow_up"
+            arrowName = "ic_custom_arrow_down"
         }
         arrowView.image = AstroIcon.template(arrowName)
 
@@ -200,7 +200,7 @@ private final class AstroGalleryCardView: UIView {
         config.title = localizedString("shared_string_show_all")
         config.baseBackgroundColor = .buttonBgColorTertiary
         config.baseForegroundColor = .buttonTextColorSecondary
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
         config.background.cornerRadius = 8
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -221,8 +221,8 @@ private final class AstroGalleryCardView: UIView {
         container.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            button.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -16),
+            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+            button.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -20),
             button.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
             button.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16),
             button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)

@@ -71,11 +71,12 @@ private final class MetricView: UIView {
 
     private func setup() {
         translatesAutoresizingMaskIntoConstraints = false
-        widthAnchor.constraint(greaterThanOrEqualToConstant: 84).isActive = true
+        widthAnchor.constraint(greaterThanOrEqualToConstant: 85).isActive = true
 
         let stack = UIStackView(arrangedSubviews: [valueLabel, titleLabel])
         stack.axis = .vertical
         stack.alignment = .leading
+        stack.spacing = 3
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         valueLabel.font = .preferredFont(forTextStyle: .subheadline)
@@ -100,7 +101,7 @@ private final class MetricView: UIView {
             divider.trailingAnchor.constraint(equalTo: trailingAnchor),
             divider.centerYAnchor.constraint(equalTo: centerYAnchor),
             divider.widthAnchor.constraint(equalToConstant: 1),
-            divider.heightAnchor.constraint(equalToConstant: 34)
+            divider.heightAnchor.constraint(equalToConstant: 36)
         ])
     }
 }

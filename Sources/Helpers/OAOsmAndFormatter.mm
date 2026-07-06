@@ -460,7 +460,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         else
         {
             int seconds = round(minPerKm * 60);
-            NSString *value = [self getFormattedTimeInterval:seconds withUnit:NO];
+            NSString *value = [self getFormattedDurationShort:seconds fullForm:NO];
             [valueUnitArray addObject:value];
             [valueUnitArray addObject:_unitsMinKm];
             return [OAUtilities getFormattedValue:value unit:_unitsMinKm];

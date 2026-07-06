@@ -36,27 +36,30 @@ final class StarMapSearchPreparedDataFactory {
 
     func create(parent: StarMapViewController?) -> StarMapSearchPreparedData {
         let objects = parent?.searchableObjects() ?? []
+        let constellations = parent?.searchConstellations() ?? []
         let observer = parent?.searchObserver() ?? Observer(latitude: 0.0, longitude: 0.0, height: 0.0)
         let currentDate = parent?.searchCurrentDate() ?? Date()
         let computationContext = createComputationContext(observer: observer, date: currentDate)
         var widToDisplayName: [String: String] = [:]
         let starConstellationNameByObjectId = buildStarConstellationNameMap(
             objects: objects,
-            constellations: parent?.searchConstellations() ?? []
+            constellations: constellations
         )
         let primaryIconColor = StarMapControlTheme.resolved(.iconColorDefault, nightMode: nightMode)
 
-        let entries = objects.map { obj in
+        var entries: [StarMapSearchEntry] = []
+        for obj in objects {
+            let displayName = obj.niceName()
             if !obj.wid.isEmpty {
-                widToDisplayName[obj.wid] = obj.niceName()
+                widToDisplayName[obj.wid] = displayName
             }
-            return StarMapSearchEntry(objectRef: obj,
-                                      displayName: obj.niceName(),
-                                      magnitude: obj.magnitude,
-                                      category: mapStarMapSearchCategory(obj),
-                                      iconRes: AstroUtils.getObjectTypeIcon(obj.type),
-                                      iconColor: obj.type.isSunSystem() ? obj.color : primaryIconColor,
-                                      catalogWids: Set(obj.catalogs.map(\.wid)))
+            entries.append(StarMapSearchEntry(objectRef: obj,
+                                              displayName: displayName,
+                                              magnitude: obj.magnitude,
+                                              category: mapStarMapSearchCategory(obj),
+                                              iconRes: AstroUtils.getObjectTypeIcon(obj.type),
+                                              iconColor: obj.type.isSunSystem() ? obj.color : primaryIconColor,
+                                              catalogWids: Set(obj.catalogs.map(\.wid))))
         }
 
         return StarMapSearchPreparedData(entries: entries,

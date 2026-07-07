@@ -20,6 +20,8 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         static let transparencySliderHeight: CGFloat = 150
         static let regularMapHeight: CGFloat = 300
         static let regularMapHeightLandscape: CGFloat = 110
+        static let regularMapHeightFractionForPad: CGFloat = 0.33
+        static let regularMapHeightFractionForPadLandscape: CGFloat = 0.3
         static let maxMagnitude: Double = 7.0
         static let leftPanelWidth: CGFloat = 393
     }
@@ -863,7 +865,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         let isLandscape = OAUtilities.isLandscape()
         
         if OAUtilities.isIPad() {
-            let fraction: CGFloat = isLandscape ? 0.30 : 0.33
+            let fraction: CGFloat = isLandscape ? Layout.regularMapHeightFractionForPadLandscape : Layout.regularMapHeightFractionForPad
             return view.bounds.height * fraction
         }
         return isLandscape ? Layout.regularMapHeightLandscape : Layout.regularMapHeight
@@ -917,11 +919,11 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
               mapView.superview === regularMapContainer else {
             return
         }
-        let target = regularMapContainer.bounds
-        guard !target.isEmpty else { return }
+        let bounds = regularMapContainer.bounds
+        guard !bounds.isEmpty else { return }
         
-        if forceResize || mapView.frame != target {
-            mapView.frame = target
+        if forceResize || mapView.frame != bounds {
+            mapView.frame = bounds
             mapView.autoresizingMask = []
             mapView.layoutIfNeeded()
         }

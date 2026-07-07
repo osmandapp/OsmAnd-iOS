@@ -301,28 +301,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func moveSegment(from srcIdx: Int, to dstIdx: Int) {
         guard srcIdx != dstIdx else { return }
-        let segments = routeSegments
-        guard srcIdx < segments.count, dstIdx < segments.count else { return }
-        let srcPointCount = segments[srcIdx].pointIndexes.count
-        guard srcPointCount > 0 else { return }
-
-        if srcIdx < dstIdx {
-            for _ in 0..<srcPointCount {
-                let current = routeSegments
-                guard srcIdx < current.count, dstIdx < current.count,
-                      let srcFirst = current[srcIdx].pointIndexes.first,
-                      let dstLast = current[dstIdx].pointIndexes.last else { return }
-                bridge.movePoint(from: srcFirst, to: dstLast)
-            }
-        } else {
-            for _ in 0..<srcPointCount {
-                let current = routeSegments
-                guard srcIdx < current.count, dstIdx < current.count,
-                      let srcLast = current[srcIdx].pointIndexes.last,
-                      let dstFirst = current[dstIdx].pointIndexes.first else { return }
-                bridge.movePoint(from: srcLast, to: dstFirst)
-            }
-        }
+        bridge.reorderSegment(from: srcIdx, to: dstIdx)
     }
 
     func saveSegment(pointIndexes: [Int]) {

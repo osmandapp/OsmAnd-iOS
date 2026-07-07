@@ -27,6 +27,7 @@
 #import "OASplitPointsCommand.h"
 #import "OARemovePointCommand.h"
 #import "OAReorderPointCommand.h"
+#import "OAReorderSegmentCommand.h"
 #import "OAChangeRouteModeCommand.h"
 #import "OAReversePointsCommand.h"
 #import "OAClearPointsCommand.h"
@@ -1130,6 +1131,18 @@
     [self invalidateTerrainElevationGpx];
     [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to]];
     [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
+}
+
+- (void)reorderSegmentFrom:(NSInteger)from to:(NSInteger)to
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil || from == to)
+        return;
+    [self invalidateTerrainElevationGpx];
+    [ctx.commandManager execute:[[OAReorderSegmentCommand alloc] initWithLayer:layer from:from to:to]];
     if (self.onChange)
         self.onChange();
 }

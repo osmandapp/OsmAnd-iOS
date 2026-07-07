@@ -98,6 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)deletePointAtIndex:(NSInteger)index;
 - (void)movePointFrom:(NSInteger)from to:(NSInteger)to;
+- (void)reorderSegmentFrom:(NSInteger)from to:(NSInteger)to NS_SWIFT_NAME(reorderSegment(from:to:));
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)startNewSegment;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;

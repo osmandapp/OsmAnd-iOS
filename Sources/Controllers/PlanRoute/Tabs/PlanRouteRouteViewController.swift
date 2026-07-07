@@ -144,7 +144,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func makeSections(for segment: PlanRouteSegment, multipleSegments: Bool) -> [SectionModel] {
-        let straightLineColor: UIColor = .iconColorActive
+        let straightLineColor: UIColor = .buttonAccentsBlue
 
         let title = multipleSegments
             ? String(format: localizedString("segments_count"), segment.index + 1)
@@ -153,10 +153,22 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
         if segment.multiMode {
             var rows: [Row] = []
-            for group in segment.groups {
-                let groupColor = group.appMode?.getProfileColor() ?? straightLineColor
-                rows.append(.profileGroup(group, segment: segment))
-                rows.append(contentsOf: group.points.map { Row.point($0, color: groupColor) })
+            let allGroups = segment.groups
+            for (i, group) in allGroups.enumerated() {
+                let isLastGroup = i == allGroups.count - 1
+                let isBoundaryMarker = multipleSegments
+                    && isLastGroup
+                    && group.appMode == nil
+                    && group.points.count == 1
+                    && allGroups.count > 1
+                if isBoundaryMarker {
+                    let prevColor = allGroups[i - 1].appMode?.getProfileColor() ?? straightLineColor
+                    rows.append(contentsOf: group.points.map { Row.point($0, color: prevColor) })
+                } else {
+                    let groupColor = group.appMode?.getProfileColor() ?? straightLineColor
+                    rows.append(.profileGroup(group, segment: segment))
+                    rows.append(contentsOf: group.points.map { Row.point($0, color: groupColor) })
+                }
             }
             return [SectionModel(headerTitle: title,
                                  headerSubtitle: nil,
@@ -321,7 +333,7 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
             cell.configure(title: mode?.toHumanString() ?? localizedString("plan_route_straight_line"),
                            distanceText: formattedDistance(group.distance),
                            icon: mode?.getIcon() ?? .templateImageNamed("ic_custom_straight_line"),
-                           tintColor: mode?.getProfileColor() ?? .iconColorActive,
+                           tintColor: mode?.getProfileColor() ?? .buttonAccentsBlue,
                            menu: makeGroupMenu(for: group, in: segment))
             return cell
         case let .point(point, color):

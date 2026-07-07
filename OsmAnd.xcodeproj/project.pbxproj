@@ -2795,6 +2795,7 @@
 		DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7526C563A500F274C7 /* OAReversePointsCommand.mm */; };
 		DA5A849F26C563A900F274C7 /* OAChangeRouteModeCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7826C563A500F274C7 /* OAChangeRouteModeCommand.mm */; };
 		DA5A84A026C563A900F274C7 /* OAReorderPointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7926C563A500F274C7 /* OAReorderPointCommand.mm */; };
+		9F1DFF9BD0F14BA79BE7CD99 /* OAReorderSegmentCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 93EE05AC4330494D87F1FC7F /* OAReorderSegmentCommand.mm */; };
 		DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7A26C563A500F274C7 /* OAApplyGpxApproximationCommand.mm */; };
 		DA5A84A226C563A900F274C7 /* OAMovePointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7C26C563A500F274C7 /* OAMovePointCommand.mm */; };
 		DA5A84A326C563A900F274C7 /* OAAddPointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7E26C563A500F274C7 /* OAAddPointCommand.mm */; };
@@ -7453,6 +7454,8 @@
 		DA5A7F7B26C563A500F274C7 /* OASplitPointsCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASplitPointsCommand.h; sourceTree = "<group>"; };
 		DA5A7F7C26C563A500F274C7 /* OAMovePointCommand.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMovePointCommand.mm; sourceTree = "<group>"; };
 		DA5A7F7D26C563A500F274C7 /* OAReorderPointCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAReorderPointCommand.h; sourceTree = "<group>"; };
+		B8D1538015F84B1D978AE6FB /* OAReorderSegmentCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAReorderSegmentCommand.h; sourceTree = "<group>"; };
+		93EE05AC4330494D87F1FC7F /* OAReorderSegmentCommand.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReorderSegmentCommand.mm; sourceTree = "<group>"; };
 		DA5A7F7E26C563A500F274C7 /* OAAddPointCommand.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddPointCommand.mm; sourceTree = "<group>"; };
 		DA5A7F7F26C563A500F274C7 /* OAJoinPointsCommand.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAJoinPointsCommand.mm; sourceTree = "<group>"; };
 		DA5A7F8026C563A500F274C7 /* OAReversePointsCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAReversePointsCommand.h; sourceTree = "<group>"; };
@@ -13758,6 +13761,8 @@
 				DA5A7F7426C563A500F274C7 /* OARemovePointCommand.mm */,
 				DA5A7F7D26C563A500F274C7 /* OAReorderPointCommand.h */,
 				DA5A7F7926C563A500F274C7 /* OAReorderPointCommand.mm */,
+				B8D1538015F84B1D978AE6FB /* OAReorderSegmentCommand.h */,
+				93EE05AC4330494D87F1FC7F /* OAReorderSegmentCommand.mm */,
 				DA5A7F8026C563A500F274C7 /* OAReversePointsCommand.h */,
 				DA5A7F7526C563A500F274C7 /* OAReversePointsCommand.mm */,
 				DA5A7F7B26C563A500F274C7 /* OASplitPointsCommand.h */,
@@ -18815,6 +18820,7 @@
 				DAD3FD262A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift in Sources */,
 				C5A89E132FC2E58A00E5E8E1 /* GradientEditorBehavior.swift in Sources */,
 				DA5A84A026C563A900F274C7 /* OAReorderPointCommand.mm in Sources */,
+				9F1DFF9BD0F14BA79BE7CD99 /* OAReorderSegmentCommand.mm in Sources */,
 				FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */,
 				C5E3B59F2DDDC40800083695 /* SelectRouteActivityViewController.swift in Sources */,
 				DA5A848626C563A900F274C7 /* OAMapInfoController.mm in Sources */,

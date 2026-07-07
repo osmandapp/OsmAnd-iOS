@@ -183,6 +183,10 @@ extension RouteBetweenPointsViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension RouteBetweenPointsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        50
+    }
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         sections[section].headerTitle != nil ? 44 : 0
     }
@@ -243,13 +247,12 @@ private final class RouteGroupCell: UITableViewCell {
         let mode = group.appMode
         if let mode {
             iconView.image = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
-            iconView.tintColor = profileTintColor(for: mode)
             titleLabel.text = mode.toHumanString()
         } else {
             iconView.image = .templateImageNamed("ic_custom_straight_line")
-            iconView.tintColor = .iconColorActive
             titleLabel.text = localizedString("plan_route_straight_line")
         }
+        iconView.tintColor = .iconColorActive
         distanceLabel.text = formattedDistance(group.distance)
     }
 
@@ -296,10 +299,6 @@ private final class RouteGroupCell: UITableViewCell {
 
     private func formattedDistance(_ meters: Double) -> String {
         OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
-    }
-
-    private func profileTintColor(for mode: OAApplicationMode) -> UIColor {
-        mode.isDerivedRouting(from: .car()) ? .buttonBgColorPrimary : (mode.getProfileColor() ?? .iconColorActive)
     }
 }
 

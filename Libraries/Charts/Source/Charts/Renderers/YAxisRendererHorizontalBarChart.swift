@@ -133,9 +133,10 @@ open class YAxisRendererHorizontalBarChart: YAxisRenderer
         for i in from..<to
         {
             let text = axis.getFormattedLabel(i)
+            let align: TextAlignment = i == from ? .left : .center
             context.drawText(text,
                              at: CGPoint(x: positions[i].x, y: fixedPosition - offset + xOffset),
-                             align: .center,
+                             align: align,
                              attributes: [.font: labelFont, .foregroundColor: labelTextColor])
         }
     }

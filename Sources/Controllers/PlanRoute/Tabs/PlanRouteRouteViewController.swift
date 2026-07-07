@@ -144,7 +144,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     private func makeSections(for segment: PlanRouteSegment, multipleSegments: Bool) -> [SectionModel] {
-        let straightLineColor = OAApplicationMode.pedestrian().getProfileColor() ?? .iconColorActive
+        let straightLineColor: UIColor = .iconColorActive
 
         let title = multipleSegments
             ? String(format: localizedString("segments_count"), segment.index + 1)

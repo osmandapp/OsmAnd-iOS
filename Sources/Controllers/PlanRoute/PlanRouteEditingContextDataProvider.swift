@@ -283,7 +283,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext) {
         guard let effectiveMode = mode ?? OAApplicationMode.default() else { return }
         if case let .profileGroup(group, _) = context {
-            for point in group.points where !point.isStart {
+            for point in group.points {
                 bridge.apply(effectiveMode, pointIndex: point.index, wholeRoute: false)
             }
         } else {

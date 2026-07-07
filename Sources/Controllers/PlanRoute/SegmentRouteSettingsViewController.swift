@@ -195,11 +195,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             dataSource?.applyModeToContext(selectedMode, context: context)
         }
         dataSource?.applyRoutingParams(routingParams, for: context)
-        if context.usesCloseButton {
-            navigationController?.dismiss(animated: true)
-        } else {
-            navigationController?.popViewController(animated: true)
-        }
+        navigationController?.dismiss(animated: true)
     }
 
     @objc private func onCloseTapped() {

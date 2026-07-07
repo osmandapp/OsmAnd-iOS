@@ -8,11 +8,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface SpeedLimitData : NSObject
+
+@property (nonatomic, readonly) int value;
+@property (nullable, nonatomic, copy, readonly) NSString *text;
+
+- (instancetype)initWithValue:(int)value text:(nullable NSString *)text;
+
+@end
+
 @interface SpeedLimitWrapper : NSObject
 
 - (int)speedLimit;
+- (SpeedLimitData *)speedLimitData;
 
 @end
 
 NS_ASSUME_NONNULL_END
-

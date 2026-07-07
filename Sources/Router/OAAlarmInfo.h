@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
 
 - (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex;
 
-+ (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate;
++ (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate speedMetersPerSecond:(float)speedMetersPerSecond;
 + (OAAlarmInfo *) createAlarmInfo:(RouteTypeRule&)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate;
 
 + (int) getPriority:(EOAAlarmInfoType)type;

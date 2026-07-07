@@ -17,6 +17,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let cornerRadius: CGFloat = 28
     private static let fullScreenTopGap: CGFloat = 8
     private static let animationDuration: TimeInterval = 0.3
+    private static let flingVelocityThreshold: CGFloat = 800
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         OAAppSettings.sharedManager().nightMode ? .lightContent : .default
@@ -535,8 +536,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func nearestState(for currentHeight: CGFloat, velocity: CGFloat) -> EOADraggableMenuState {
-        if velocity < -800 { return .fullScreen }
-        if velocity > 800 { return .initial }
+        if velocity < -Self.flingVelocityThreshold { return .fullScreen }
+        if velocity > Self.flingVelocityThreshold { return .initial }
         let candidates: [EOADraggableMenuState] = [.initial, .expanded, .fullScreen]
         return candidates.min { abs(height(for: $0) - currentHeight) < abs(height(for: $1) - currentHeight) } ?? .expanded
     }

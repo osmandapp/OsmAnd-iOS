@@ -69,10 +69,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         return routeInfo
     }
 
-    var elevationData: PlanRouteElevationData? {
-        nil
-    }
-
     var isCalculatingElevation: Bool {
         bridge.isCalculatingElevation
     }
@@ -186,6 +182,18 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func cancelElevationCalculation() {
         bridge.cancelElevationCalculation()
+    }
+
+    func hideChartHighlight() {
+        bridge.hideChartHighlight()
+    }
+
+    func showChartHighlightedLocation(_ points: TrackChartPoints) {
+        bridge.showChartHighlightedLocation(points)
+    }
+
+    func showChartStatisticsLocation(_ points: TrackChartPoints) {
+        bridge.showChartStatisticsLocation(points)
     }
 
     func addRoutePoint() {
@@ -384,12 +392,12 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func mapSegment(_ segment: OAPlanRouteSegmentData) -> PlanRouteSegment {
-        return PlanRouteSegment(index: segment.index,
-                                groups: segment.groups.map { mapGroup($0) },
-                                routed: segment.routed,
-                                multiMode: segment.multiMode,
-                                singleMode: segment.singleMode,
-                                distance: segment.distance)
+        PlanRouteSegment(index: segment.index,
+                         groups: segment.groups.map { mapGroup($0) },
+                         routed: segment.routed,
+                         multiMode: segment.multiMode,
+                         singleMode: segment.singleMode,
+                         distance: segment.distance)
     }
 
     private func poiGroupName(for item: OAGpxWptItem) -> String {
@@ -406,11 +414,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func mapGroup(_ group: OAPlanRouteGroupData) -> PlanRouteProfileGroup {
-        let pointIndices = group.points.map { $0.globalIndex }
-        return PlanRouteProfileGroup(appMode: group.appMode,
-                                     distance: group.distance,
-                                     lastPointIndex: group.lastGlobalIndex,
-                                     points: group.points.map { mapPoint($0) })
+        PlanRouteProfileGroup(appMode: group.appMode,
+                              distance: group.distance,
+                              lastPointIndex: group.lastGlobalIndex,
+                              points: group.points.map { mapPoint($0) })
     }
 
     private func mapPoint(_ point: OAPlanRoutePointData) -> PlanRoutePoint {

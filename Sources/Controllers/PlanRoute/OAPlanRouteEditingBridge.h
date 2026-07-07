@@ -11,8 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode, UIViewController, OASGpxFile;
-@class OAApplicationMode, OAGpxWptItem, UIViewController, OARouteStatistics;
+@class OAApplicationMode, UIViewController, OASGpxFile, OAGpxWptItem, OARouteStatistics, TrackChartPoints;
 
 @interface OAPlanRoutePointData : NSObject
 
@@ -73,6 +72,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<OARouteStatistics *> *)calculateRouteStatistics;
 - (void)startElevationCalculationWithNearbyRoads:(BOOL)useNearbyRoads;
 - (void)cancelElevationCalculation;
+
+- (void)hideChartHighlight;
+- (void)showChartHighlightedLocation:(TrackChartPoints *)points;
+- (void)showChartStatisticsLocation:(TrackChartPoints *)points;
 
 - (void)dismiss;
 - (void)prepareNewRoute;

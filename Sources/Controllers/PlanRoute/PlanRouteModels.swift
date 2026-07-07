@@ -126,7 +126,7 @@ struct PlanRouteInfo {
     let bearing: Double
 
     var showsTime: Bool {
-        !isStraightLine && duration > 0
+        !isNewRoute && !isStraightLine && duration > 0
     }
 }
 
@@ -169,12 +169,6 @@ struct PlanRoutePoiPoint {
     let subtitle: String
     let icon: UIImage
     let item: OAGpxWptItem
-}
-
-struct PlanRouteElevationData {
-    let uphill: Double
-    let downhill: Double
-    let elevations: [Double]
 }
 
 struct PlanRouteAnalysisData {
@@ -278,13 +272,15 @@ protocol PlanRoutePoiDataSource: AnyObject {
 
 protocol PlanRouteAnalyzeDataSource: AnyObject {
     var routeInfo: PlanRouteInfo { get }
-    var elevationData: PlanRouteElevationData? { get }
     var isCalculatingElevation: Bool { get }
     var isCalculatingRoute: Bool { get }
     var analysisData: PlanRouteAnalysisData? { get }
 
     func startElevationCalculation(useNearbyRoads: Bool)
     func cancelElevationCalculation()
+    func hideChartHighlight()
+    func showChartHighlightedLocation(_ points: TrackChartPoints)
+    func showChartStatisticsLocation(_ points: TrackChartPoints)
 }
 
 protocol PlanRoutePointsDataSource: AnyObject {

@@ -2306,6 +2306,28 @@
         self.onChange();
 }
 
+// MARK: - Chart highlight on map
+
+- (OAGPXLayer *)gpxLayer
+{
+    return OARootViewController.instance.mapPanel.mapViewController.mapLayers.gpxMapLayer;
+}
+
+- (void)hideChartHighlight
+{
+    [self.gpxLayer hideCurrentStatisticsLocation];
+}
+
+- (void)showChartHighlightedLocation:(TrackChartPoints *)points
+{
+    [self.gpxLayer showCurrentHighlitedLocation:points];
+}
+
+- (void)showChartStatisticsLocation:(TrackChartPoints *)points
+{
+    [self.gpxLayer showCurrentStatisticsLocation:points];
+}
+
 // MARK: - OASnapToRoadProgressDelegate
 
 - (void)showProgressBar

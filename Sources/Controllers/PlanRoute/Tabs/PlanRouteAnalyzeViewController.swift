@@ -10,122 +10,6 @@ import UIKit
 import DGCharts
 import OsmAndShared
 
-private final class ElevationActionRow: UIControl {
-    var action: (() -> Void)?
-
-    override var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? UIColor.black.withAlphaComponent(0.06) : .clear
-        }
-    }
-
-    private let titleLabel = UILabel()
-
-    init() {
-        super.init(frame: .zero)
-        titleLabel.font = .preferredFont(forTextStyle: .body)
-        titleLabel.textColor = .textColorActive
-        titleLabel.isUserInteractionEnabled = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -16)
-        ])
-        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func configure(title: String) {
-        titleLabel.text = title
-    }
-
-    @objc private func handleTap() {
-        action?()
-    }
-}
-
-private final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
-    static let reuseId = String(describing: AnalyzeRouteAttributeHeaderView.self)
-
-    private let titleLabel = UILabel()
-    private let chevronImageView = UIImageView()
-
-    private var onTap: (() -> Void)?
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        setupView()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        onTap = nil
-    }
-
-    func configure(title: String, isExpanded: Bool, onTap: @escaping () -> Void) {
-        titleLabel.text = title
-        chevronImageView.image = UIImage(
-            systemName: isExpanded ? "chevron.down" : "chevron.right",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)
-        )
-        self.onTap = onTap
-    }
-
-    private func setupView() {
-        contentView.backgroundColor = .clear
-        backgroundView = UIView()
-        backgroundView?.backgroundColor = .clear
-
-        titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
-        titleLabel.textColor = .textColorPrimary
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        chevronImageView.contentMode = .scaleAspectFit
-        chevronImageView.tintColor = .iconColorActive
-        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        contentView.addGestureRecognizer(tap)
-
-        [titleLabel, chevronImageView].forEach { contentView.addSubview($0) }
-
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-
-            chevronImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            chevronImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            chevronImageView.widthAnchor.constraint(equalToConstant: 18),
-            chevronImageView.heightAnchor.constraint(equalToConstant: 18)
-        ])
-    }
-
-    @objc private func handleTap() {
-        onTap?()
-    }
-}
-
-private struct RoadAttributeLegendItem {
-    let title: String
-    let color: UIColor
-    let distance: String
-}
-
-private struct SyntheticSteepnessSegment {
-    let classIndex: Int
-    let distance: Double
-}
-
 private struct AnalyzeRenderState: Equatable {
     let state: AnalyzeState
     let hasOverviewData: Bool
@@ -163,15 +47,6 @@ private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
 
     func chartTranslated(_ chartView: ChartViewBase, dX: CGFloat, dY: CGFloat) {
         onTranslated?()
-    }
-}
-
-private final class AnalyzeTableView: UITableView {
-    override func touchesShouldCancel(in view: UIView) -> Bool {
-        if view is UIControl {
-            return true
-        }
-        return super.touchesShouldCancel(in: view)
     }
 }
 
@@ -221,11 +96,6 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
 
     private var currentState: AnalyzeState {
         cachedState
-    }
-
-    private var gpxMapLayer: NSObject? {
-        guard let mapViewController = OARootViewController.instance()?.mapPanel?.mapViewController else { return nil }
-        return mapViewController.value(forKeyPath: "mapLayers.gpxMapLayer") as? NSObject
     }
 
     init(dataSource: PlanRouteAnalyzeDataSource?) {
@@ -406,7 +276,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     }
 
     private func hideChartLocation() {
-        gpxMapLayer?.perform(NSSelectorFromString("hideCurrentStatisticsLocation"))
+        dataSource?.hideChartHighlight()
     }
 
     @objc private func onChartScrolled(_ recognizer: UIPanGestureRecognizer) {
@@ -1382,11 +1252,11 @@ extension PlanRouteAnalyzeViewController: ChartHelperDelegate {
     func adjustViewPort(_ landscape: Bool) {}
 
     func showCurrentHighlitedLocation(_ trackChartPoints: TrackChartPoints) {
-        gpxMapLayer?.perform(NSSelectorFromString("showCurrentHighlitedLocation:"), with: trackChartPoints)
+        dataSource?.showChartHighlightedLocation(trackChartPoints)
     }
 
     func showCurrentStatisticsLocation(_ trackChartPoints: TrackChartPoints) {
-        gpxMapLayer?.perform(NSSelectorFromString("showCurrentStatisticsLocation:"), with: trackChartPoints)
+        dataSource?.showChartStatisticsLocation(trackChartPoints)
     }
 }
 

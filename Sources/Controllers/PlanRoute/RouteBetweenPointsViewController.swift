@@ -83,7 +83,7 @@ final class RouteBetweenPointsViewController: UIViewController {
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0
         tableView.register(RouteGroupCell.self, forCellReuseIdentifier: RouteGroupCell.reuseId)
-        tableView.register(RouteActionCell.self, forCellReuseIdentifier: RouteActionCell.reuseId)
+        tableView.register(PlanRouteActionCell.self, forCellReuseIdentifier: PlanRouteActionCell.reuseId)
         tableView.tableHeaderView = makeHintHeaderView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -198,13 +198,13 @@ extension RouteBetweenPointsViewController: UITableViewDataSource {
             cell.configureWholeSegment(segment: segment)
             return cell
         case .startNewSegment:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteActionCell.reuseId, for: indexPath) as? RouteActionCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseId, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false)
             return cell
         case .changeWholeTrack:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RouteActionCell.reuseId, for: indexPath) as? RouteActionCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseId, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
             cell.configure(title: localizedString("plan_route_change_for_whole_track"), isDestructive: false)
@@ -234,10 +234,6 @@ extension RouteBetweenPointsViewController: UITableViewDelegate {
         return header
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        nil
-    }
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = sections[indexPath.section].rows[indexPath.row]
@@ -252,135 +248,5 @@ extension RouteBetweenPointsViewController: UITableViewDelegate {
         case .changeWholeTrack:
             openSettings(context: .wholeTrack)
         }
-    }
-}
-
-// MARK: - RouteGroupCell
-
-private final class RouteGroupCell: UITableViewCell {
-    static let reuseId = "RouteGroupCell"
-
-    private static let iconSize: CGFloat = 24
-    private static let titleLeadingInset: CGFloat = 20 + 24 + 16
-
-    private let iconView = UIImageView()
-    private let titleLabel = UILabel()
-    private let distanceLabel = UILabel()
-    private var titleLeadingWithIcon: NSLayoutConstraint!
-    private var titleLeadingWithoutIcon: NSLayoutConstraint!
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupCell()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func configure(group: PlanRouteProfileGroup) {
-        let mode = group.appMode
-        if let mode {
-            iconView.image = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
-            titleLabel.text = mode.toHumanString()
-        } else {
-            iconView.image = .templateImageNamed("ic_custom_straight_line")
-            titleLabel.text = localizedString("plan_route_straight_line")
-        }
-        iconView.isHidden = false
-        iconView.tintColor = .iconColorActive
-        distanceLabel.text = formattedDistance(group.distance)
-        titleLeadingWithIcon.isActive = true
-        titleLeadingWithoutIcon.isActive = false
-        separatorInset = UIEdgeInsets(top: 0, left: Self.titleLeadingInset, bottom: 0, right: 0)
-    }
-
-    func configureWholeSegment(segment: PlanRouteSegment) {
-        iconView.isHidden = true
-        titleLabel.text = localizedString("plan_route_change_for_whole_segment")
-        distanceLabel.text = formattedDistance(segment.distance)
-        titleLeadingWithIcon.isActive = false
-        titleLeadingWithoutIcon.isActive = true
-        separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-    }
-
-    private func setupCell() {
-        backgroundColor = .groupBg
-        accessoryType = .disclosureIndicator
-        selectionStyle = .default
-
-        iconView.contentMode = .scaleAspectFit
-
-        titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
-
-        distanceLabel.font = .scaledSystemFont(ofSize: 17)
-        distanceLabel.textColor = .textColorSecondary
-        distanceLabel.setContentHuggingPriority(.required, for: .horizontal)
-
-        [iconView, titleLabel, distanceLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
-        }
-
-        titleLeadingWithIcon = titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16)
-        titleLeadingWithoutIcon = titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-
-        NSLayoutConstraint.activate([
-            iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            iconView.widthAnchor.constraint(equalToConstant: Self.iconSize),
-            iconView.heightAnchor.constraint(equalToConstant: Self.iconSize),
-
-            titleLeadingWithIcon,
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 12),
-
-            distanceLabel.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 8),
-            distanceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            distanceLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        ])
-    }
-
-    private func formattedDistance(_ meters: Double) -> String {
-        OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
-    }
-}
-
-// MARK: - RouteActionCell
-
-private final class RouteActionCell: UITableViewCell {
-    static let reuseId = "RouteActionCell"
-
-    private let titleLabel = UILabel()
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupCell()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func configure(title: String, isDestructive: Bool) {
-        titleLabel.text = title
-        titleLabel.textColor = isDestructive ? .systemRed : .iconColorActive
-    }
-
-    private func setupCell() {
-        backgroundColor = .groupBg
-        selectionStyle = .default
-
-        titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
-
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -14)
-        ])
     }
 }

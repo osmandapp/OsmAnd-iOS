@@ -1031,7 +1031,8 @@
             currentKey = key;
             hasCurrent = YES;
         }
-        if (![key isEqualToString:currentKey] && currentIndexes.count > 0)
+        BOOL isGap = allPoints[index].isGap;
+        if (!isGap && ![key isEqualToString:currentKey] && currentIndexes.count > 0)
         {
             [groups addObject:[self buildGroupWithKey:currentKey indexes:currentIndexes allPoints:allPoints]];
             currentIndexes = [NSMutableArray array];

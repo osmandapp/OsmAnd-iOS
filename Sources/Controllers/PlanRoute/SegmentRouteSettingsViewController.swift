@@ -29,6 +29,15 @@ final class SegmentRouteSettingsViewController: UIViewController {
     private var activeTabViewController: UIViewController?
     private weak var dataSource: PlanRoutePointsDataSource?
 
+    private var defaultRoutingParams: PlanRouteSegmentRoutingParams {
+        PlanRouteSegmentRoutingParams(useElevationData: false,
+                                      considerTemporaryLimitations: true)
+    }
+
+    private var settingsMode: OAApplicationMode? {
+        selectedMode ?? context.currentMode ?? dataSource?.defaultMode ?? OAApplicationMode.getFirstAvailableNavigation()
+    }
+
     init(context: SegmentRouteContext, dataSource: PlanRoutePointsDataSource?, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil) {
         self.context = context
         self.applyFromPointIndex = applyFromPointIndex
@@ -39,8 +48,9 @@ final class SegmentRouteSettingsViewController: UIViewController {
         } else {
             self.selectedMode = context.currentMode
         }
-        self.routingParams = dataSource?.routingParams(for: context) ?? PlanRouteSegmentRoutingParams(useElevationData: false,
-                                                                                                      considerTemporaryLimitations: true)
+        let resolvedSettingsMode = self.selectedMode ?? context.currentMode ?? dataSource?.defaultMode ?? OAApplicationMode.getFirstAvailableNavigation()
+        self.routingParams = resolvedSettingsMode.flatMap { dataSource?.routingParams(for: $0) } ?? PlanRouteSegmentRoutingParams(useElevationData: false,
+                                                                                                                                    considerTemporaryLimitations: true)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -126,6 +136,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             routeTypeVC = vc
             newVC = vc
         case .settings:
+            reloadRoutingParams()
             let vc = makeSettingsVC()
             settingsVC = vc
             newVC = vc
@@ -168,21 +179,42 @@ final class SegmentRouteSettingsViewController: UIViewController {
         let vc = RouteSettingsViewController(
             params: routingParams,
             onParamsChanged: { [weak self] updated in
-                self?.routingParams = updated
+                self?.applyRoutingParams(updated)
             }
         )
         vc.onAvoidRoadsTapped = { [weak self] in
-            guard let appMode = self?.selectedMode ?? OAApplicationMode.default(),
+            guard let self, let appMode = self.settingsMode,
                   let avoidVC = OAAvoidPreferParametersViewController(appMode: appMode, isAvoid: true) else { return }
-            self?.navigationController?.pushViewController(avoidVC, animated: true)
+            avoidVC.delegate = self
+            navigationController?.pushViewController(avoidVC, animated: true)
         }
         vc.onNavigationSettingsTapped = { [weak self] in
-            guard let appMode = self?.selectedMode ?? OAApplicationMode.default(),
+            guard let self, let appMode = self.settingsMode,
                   let navSettingsVC = OAProfileNavigationSettingsViewController(appMode: appMode) else { return }
             navSettingsVC.openFromRouteInfo = true
-            self?.navigationController?.pushViewController(navSettingsVC, animated: true)
+            navSettingsVC.delegate = self
+            navigationController?.pushViewController(navSettingsVC, animated: true)
         }
         return vc
+    }
+
+    private func reloadRoutingParams() {
+        guard let settingsMode else {
+            routingParams = defaultRoutingParams
+            return
+        }
+        routingParams = dataSource?.routingParams(for: settingsMode) ?? defaultRoutingParams
+    }
+
+    private func applyRoutingParams(_ updatedParams: PlanRouteSegmentRoutingParams) {
+        routingParams = updatedParams
+        guard let settingsMode else { return }
+        dataSource?.applyRoutingParams(updatedParams, mode: settingsMode)
+    }
+
+    private func refreshSettingsState() {
+        reloadRoutingParams()
+        settingsVC?.update(params: routingParams)
     }
 
     @objc private func onSegmentChanged() {
@@ -204,7 +236,6 @@ final class SegmentRouteSettingsViewController: UIViewController {
         } else {
             dataSource?.applyModeToContext(selectedMode, context: context)
         }
-        dataSource?.applyRoutingParams(routingParams, for: context)
         navigationController?.dismiss(animated: true)
     }
 
@@ -572,6 +603,12 @@ private final class RouteSettingsViewController: UIViewController {
         setupTableView()
     }
 
+    func update(params: PlanRouteSegmentRoutingParams) {
+        self.params = params
+        guard isViewLoaded else { return }
+        tableView.reloadData()
+    }
+
     private func setupTableView() {
         view.backgroundColor = .viewBg
         tableView.backgroundColor = .viewBg
@@ -651,6 +688,20 @@ extension RouteSettingsViewController: UITableViewDelegate {
         default:
             break
         }
+    }
+}
+
+extension SegmentRouteSettingsViewController: OASettingsDataDelegate {
+    func onSettingsChanged() {
+        refreshSettingsState()
+        guard let settingsMode else { return }
+        dataSource?.refreshRoute(for: settingsMode)
+    }
+
+    func closeSettingsScreenWithRouteInfo() {
+    }
+
+    func openNavigationSettings() {
     }
 }
 

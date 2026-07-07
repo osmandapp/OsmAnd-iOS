@@ -10,6 +10,8 @@ import UIKit
 
 final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
+    private static let heightObstaclesParameterKey = "height_obstacles"
+
     let mode: PlanRouteMode
 
     var onDataChanged: (() -> Void)?
@@ -159,7 +161,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     private var cachedRouteSegments: [PlanRouteSegment]?
     private var cachedAnalysisData: PlanRouteAnalysisData?
     private var hasCachedAnalysisData = false
-    private var routingParamsCache: [String: PlanRouteSegmentRoutingParams] = [:]
 
     init(mode: PlanRouteMode = .newRoute, filePath: String? = nil) {
         self.mode = mode
@@ -340,25 +341,25 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.trimAfter(index: index)
     }
 
-    func routingParams(for context: SegmentRouteContext) -> PlanRouteSegmentRoutingParams {
-        let key = cacheKey(for: context)
-        return routingParamsCache[key] ?? PlanRouteSegmentRoutingParams(useElevationData: false, considerTemporaryLimitations: true)
+    func routingParams(for mode: OAApplicationMode) -> PlanRouteSegmentRoutingParams {
+        let settings = OAAppSettings.sharedManager()
+        let useElevationData = settings.getCustomRoutingBooleanProperty(Self.heightObstaclesParameterKey, defaultValue: false).get(mode)
+        let considerTemporaryLimitations = settings.enableTimeConditionalRouting.get(mode)
+        return PlanRouteSegmentRoutingParams(useElevationData: useElevationData,
+                                             considerTemporaryLimitations: considerTemporaryLimitations)
     }
 
-    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, for context: SegmentRouteContext) {
-        let key = cacheKey(for: context)
-        routingParamsCache[key] = params
+    func applyRoutingParams(_ params: PlanRouteSegmentRoutingParams, mode: OAApplicationMode) {
+        let currentParams = routingParams(for: mode)
+        guard currentParams != params else { return }
+        let settings = OAAppSettings.sharedManager()
+        settings.getCustomRoutingBooleanProperty(Self.heightObstaclesParameterKey, defaultValue: false).set(params.useElevationData, mode: mode)
+        settings.enableTimeConditionalRouting.set(params.considerTemporaryLimitations, mode: mode)
+        bridge.refreshRoute(for: mode)
     }
 
-    private func cacheKey(for context: SegmentRouteContext) -> String {
-        switch context {
-        case let .profileGroup(group, segment):
-            return "group_\(segment.index)_\(group.lastPointIndex)"
-        case let .wholeSegment(segment):
-            return "segment_\(segment.index)"
-        case .wholeTrack:
-            return "whole"
-        }
+    func refreshRoute(for mode: OAApplicationMode) {
+        bridge.refreshRoute(for: mode)
     }
 
     private func bridgeSegments() -> [OAPlanRouteSegmentData] {

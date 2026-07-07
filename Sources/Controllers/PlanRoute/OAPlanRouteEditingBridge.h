@@ -103,6 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startNewSegment;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
 - (void)applyModeAllNextFromIndex:(NSInteger)pointIndex appMode:(nullable OAApplicationMode *)appMode NS_SWIFT_NAME(applyModeAllNext(fromIndex:appMode:));
+- (void)refreshRouteForMode:(OAApplicationMode *)mode NS_SWIFT_NAME(refreshRoute(for:));
 - (void)clearAppMode;
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)selectPointAtIndex:(NSInteger)index;

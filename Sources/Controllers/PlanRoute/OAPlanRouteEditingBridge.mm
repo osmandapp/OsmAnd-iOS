@@ -54,6 +54,12 @@
 
 @class OAMeasurementToolLayer, OAMeasurementEditingContext;
 
+@interface OAMeasurementEditingContext (PlanRouteSettings)
+
+- (void)recalculateRouteSegmentsWithMode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OAPlanRoutePoiStateSnapshot : NSObject
 
 @property (nonatomic, readonly) NSArray<OASWptPt *> *gpxPoints;
@@ -1261,6 +1267,19 @@
     ctx.appMode = mode;
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer appMode:mode changeRouteType:EOAChangeRouteAllNextSegments pointIndex:pointIndex]];
     [layer updateLayer];
+}
+
+- (void)refreshRouteForMode:(OAApplicationMode *)mode
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (layer == nil || ctx == nil || ctx.getPointsCount == 0 || mode == nil)
+        return;
+    [self invalidateTerrainElevationGpx];
+    [ctx recalculateRouteSegmentsWithMode:mode];
+    [layer updateLayer];
+    if (self.onChange)
+        self.onChange();
 }
 
 - (void)selectPointAtIndex:(NSInteger)index

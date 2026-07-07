@@ -14,8 +14,33 @@ enum AstroCatalogsCardViewHolder {
     static func makeView(item: AstroCatalogsCardItem,
                          onToggleExpanded: @escaping () -> Void,
                          onCatalogClick: @escaping (Catalog) -> Void) -> UIView {
-        let card = AstroCardContainerView(title: localizedString("astro_designations"))
+
+        let headerLabel = UILabel()
+        headerLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerLabel.text = localizedString("astro_designations")
+        headerLabel.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
+        headerLabel.adjustsFontForContentSizeCategory = true
+        headerLabel.textColor = AstroContextMenuTheme.secondaryText
+        
+        let headerView = UIView()
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.addSubview(headerLabel)
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 10),
+            headerLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+            headerLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            headerLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16)
+        ])
+
+        let card = UIView()
+        card.layer.cornerRadius = 26
+        card.clipsToBounds = true
+        card.backgroundColor = AstroContextMenuTheme.cardBackground
+        card.translatesAutoresizingMaskIntoConstraints = false
+
         let chips = WrappingChipsView()
+        chips.translatesAutoresizingMaskIntoConstraints = false
+
         let needShowMore = item.catalogs.count > maxVisible
         let visible = !item.expanded && needShowMore ? Array(item.catalogs.prefix(maxVisible)) : item.catalogs
         visible.forEach { catalog in
@@ -30,34 +55,25 @@ enum AstroCatalogsCardViewHolder {
                 onToggleExpanded()
             }
         }
-        card.stack.addArrangedSubview(chips)
-        return card
+
+        card.addSubview(chips)
+        NSLayoutConstraint.activate([
+            chips.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
+            chips.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16),
+            chips.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            chips.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16)
+        ])
+        
+        let stack = UIStackView(arrangedSubviews: [headerView, card])
+        stack.axis = .vertical
+        stack.spacing = 10
+        
+        return stack
     }
 }
 
 final class WrappingChipsView: UIView {
     private var chips: [UIButton] = []
-
-    func addChip(title: String, action: @escaping () -> Void) {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.baseBackgroundColor = AstroContextMenuTheme.actionBackground
-        config.baseForegroundColor = AstroContextMenuTheme.activeText
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = .systemFont(ofSize: 14)
-            outgoing.foregroundColor = AstroContextMenuTheme.activeText
-            return outgoing
-        }
-        let button = UIButton(configuration: config)
-        button.layer.cornerRadius = 19
-        button.layer.masksToBounds = true
-        button.addAction(UIAction { _ in action() }, for: .touchUpInside)
-        chips.append(button)
-        addSubview(button)
-        invalidateIntrinsicContentSize()
-    }
 
     override var intrinsicContentSize: CGSize {
         CGSize(width: UIView.noIntrinsicMetric, height: layoutHeight(for: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width - 64))
@@ -66,6 +82,27 @@ final class WrappingChipsView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         _ = layoutHeight(for: bounds.width, apply: true)
+    }
+
+    func addChip(title: String, action: @escaping () -> Void) {
+        var config = UIButton.Configuration.filled()
+        config.title = title
+        config.baseBackgroundColor = .buttonBgColorSecondary
+        config.baseForegroundColor = .buttonTextColorSecondary
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+        config.background.cornerRadius = 10
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            outgoing.foregroundColor = .buttonTextColorSecondary
+            return outgoing
+        }
+        let button = UIButton(configuration: config)
+        button.layer.masksToBounds = true
+        button.addAction(UIAction { _ in action() }, for: .touchUpInside)
+        chips.append(button)
+        addSubview(button)
+        invalidateIntrinsicContentSize()
     }
 
     private func layoutHeight(for width: CGFloat, apply: Bool = false) -> CGFloat {

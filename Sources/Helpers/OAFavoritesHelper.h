@@ -79,6 +79,10 @@
             visible:(BOOL)visible
     saveImmediately:(BOOL)saveImmediately;
 
++ (void)updateGroup:(OAFavoriteGroup *)group
+             pinned:(BOOL)pinned
+    saveImmediately:(BOOL)saveImmediately;
+
 + (NSArray<OAFavoriteGroup *> *)getFavoriteGroups;
 
 + (void) addFavoriteGroup:(NSString *)name
@@ -123,6 +127,7 @@
 @property (nonatomic) NSString* name;
 @property (nonatomic) UIColor* color;
 @property (nonatomic) BOOL isVisible;
+@property (nonatomic) BOOL isPinned;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *backgroundType;
 @property (nonatomic) NSMutableArray<OAFavoriteItem*> *points;

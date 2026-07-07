@@ -12,6 +12,11 @@ final class SortButtonCollectionViewCell: UICollectionViewListCell {
         config.imagePadding = 7
         config.imagePlacement = .leading
         config.baseForegroundColor = .iconColorActive
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = .preferredFont(forTextStyle: .subheadline)
+            return outgoing
+        }
         let button = UIButton(configuration: config, primaryAction: nil)
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
@@ -27,7 +32,7 @@ final class SortButtonCollectionViewCell: UICollectionViewListCell {
         sortButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            sortButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -16),
+            sortButton.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             sortButton.topAnchor.constraint(equalTo: topAnchor),
             sortButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             sortButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),

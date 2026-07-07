@@ -756,7 +756,7 @@
     
     if (!locations || ![locations lastObject] || [_locationSimulation isRouteAnimating])
         return;
-    
+
     BOOL wasLocationUnknown = (_lastLocation == nil);
     
     [self setLocation:[locations lastObject]];

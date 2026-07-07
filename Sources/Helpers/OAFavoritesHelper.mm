@@ -168,22 +168,71 @@ static NSOperationQueue *_favQueue;
     return [OASGpxUtilities.shared loadGpxFileFile:favoriteGPXFile];
 }
 
++ (void)addParentGroupNamesForGroupName:(NSString *)groupName toSet:(NSMutableOrderedSet<NSString *> *)parentGroupNames
+{
+    if (groupName.length == 0 || ![groupName containsString:@"/"])
+        return;
+    
+    NSString *parentGroupName = @"";
+    NSArray<NSString *> *components = [groupName componentsSeparatedByString:@"/"];
+    for (NSUInteger i = 0; i + 1 < components.count; i++)
+    {
+        NSString *component = components[i];
+        if (component.length == 0)
+            continue;
+        
+        parentGroupName = parentGroupName.length == 0 ? component : [parentGroupName stringByAppendingFormat:@"/%@", component];
+        [parentGroupNames addObject:parentGroupName];
+    }
+}
+
++ (void)createMissingParentGroupsForGpx:(OASGpxFile *)gpxFile
+{
+    NSMutableOrderedSet<NSString *> *parentGroupNames = [NSMutableOrderedSet orderedSet];
+    for (OASGpxUtilitiesPointsGroup *pointsGroup in gpxFile.pointsGroups.allValues)
+    {
+        for (OASWptPt *point in pointsGroup.points)
+        {
+            [self addParentGroupNamesForGroupName:point.category toSet:parentGroupNames];
+        }
+    }
+    
+    for (NSString *groupName in parentGroupNames)
+    {
+        if (groupName.length == 0 || _flatGroups[groupName])
+            continue;
+        
+        OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:groupName isVisible:YES color:nil];
+        _flatGroups[group.name] = group;
+        _favoriteGroups = [_favoriteGroups arrayByAddingObject:group];
+    }
+}
+
 + (void)importFavoritesFromGpx:(OASGpxFile *)gpxFile
 {
     NSString *defCategory = @"";
     OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
+    [self createMissingParentGroupsForGpx:gpxFile];
     NSArray<OASGpxUtilitiesPointsGroup *> *pointsGroups = gpxFile.pointsGroups.allValues;
+    BOOL favoritesImported = NO;
     for (OASGpxUtilitiesPointsGroup *pointsGroup in pointsGroups)
     {
         NSArray<OAFavoriteItem *> *favorites = [self wptAsFavorites:pointsGroup.points defaultCategory:defCategory];
         [self checkDuplicateNames:favorites];
         [self deleteFavorites:favorites.copy saveImmediately:NO];
-        [self addFavorites:favorites lookupAddress:YES sortAndSave:pointsGroup == pointsGroups.lastObject pointsGroup:pointsGroup];
+        if ([self addFavorites:favorites lookupAddress:YES sortAndSave:NO pointsGroup:pointsGroup])
+            favoritesImported = YES;
         for (OAFavoriteItem *favorite in favorites)
         {
             if (plugin && favorite.specialPointType == OASpecialPointType.PARKING)
                 [plugin updateParkingPoint:favorite];
         }
+    }
+
+    if (favoritesImported)
+    {
+        [self sortAll];
+        [self saveCurrentPointsIntoFile];
     }
 }
 
@@ -582,6 +631,15 @@ static NSOperationQueue *_favQueue;
         [self saveCurrentPointsIntoFile];
 }
 
++ (void)updateGroup:(OAFavoriteGroup *)group
+             pinned:(BOOL)pinned
+    saveImmediately:(BOOL)saveImmediately
+{
+    group.isPinned = pinned;
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
+}
+
 + (void) saveCurrentPointsIntoFile
 {
     [self saveCurrentPointsIntoFile:YES];
@@ -913,6 +971,7 @@ static NSOperationQueue *_favQueue;
         favoriteGroup.iconName = pointsGroup.iconName;
         favoriteGroup.backgroundType = pointsGroup.backgroundType;
         favoriteGroup.isVisible = ![pointsGroup isHidden];
+        favoriteGroup.isPinned = pointsGroup.isPinned.boolValue;
     }
 }
 
@@ -1008,7 +1067,10 @@ static NSOperationQueue *_favQueue;
     }
     
     if (!isNewFavorite)
+    {
+        [self recalculateCachedFavPoints];
         [self saveCurrentPointsIntoFile];
+    }
     
     return YES;
 }
@@ -1218,6 +1280,14 @@ static NSOperationQueue *_favQueue;
 
 @end
 
+@interface OAFavoriteGroup ()
+
+- (void)updateMissingAppearanceFromPoint:(OAFavoriteItem *)point;
+- (void)applyMissingAppearanceToPoint:(OAFavoriteItem *)point;
++ (BOOL)isBaseFavoriteOrPersonalGroup:(NSString *)name;
+
+@end
+
 @implementation OAFavoriteGroup
 
 - (instancetype)init
@@ -1244,6 +1314,7 @@ static NSOperationQueue *_favQueue;
     return ([self.name isEqualToString:otherGroup.name] &&
             [self.color isEqual:otherGroup.color] &&
             self.isVisible == otherGroup.isVisible &&
+            self.isPinned == otherGroup.isPinned &&
             [self.iconName isEqualToString:otherGroup.iconName] &&
             [self.backgroundType isEqualToString:otherGroup.backgroundType] &&
             [self.points isEqualToArray:otherGroup.points]);
@@ -1291,7 +1362,35 @@ static NSOperationQueue *_favQueue;
 
 - (void) addPoint:(OAFavoriteItem *)point
 {
+    [self updateMissingAppearanceFromPoint:point];
     [_points addObject:point];
+}
+
+- (void)updateMissingAppearanceFromPoint:(OAFavoriteItem *)point
+{
+    UIColor *pointColor = [point getInternalColor];
+    if ((_color == nil || [_color toRGBNumber] == 0) && pointColor)
+        _color = pointColor;
+
+    NSString *pointIcon = [point getInternalIcon];
+    if (_iconName.length == 0 && pointIcon.length > 0)
+        _iconName = pointIcon;
+
+    NSString *pointBackground = [point getInternalBackgroundIcon];
+    if (_backgroundType.length == 0 && pointBackground.length > 0)
+        _backgroundType = pointBackground;
+}
+
+- (void)applyMissingAppearanceToPoint:(OAFavoriteItem *)point
+{
+    if (_color != nil && [_color toRGBNumber] != 0 && ![point getInternalColor])
+        [point setColor:_color];
+
+    if (_iconName.length > 0 && [point getInternalIcon].length == 0)
+        [point setIcon:_iconName];
+
+    if (_backgroundType.length > 0 && [point getInternalBackgroundIcon].length == 0)
+        [point setBackgroundIcon:_backgroundType];
 }
 
 - (UIColor *) color
@@ -1310,6 +1409,11 @@ static NSOperationQueue *_favQueue;
 + (BOOL) isPersonal:(NSString *)name
 {
     return [name isEqualToString:kPersonalCategory];
+}
+
++ (BOOL)isBaseFavoriteOrPersonalGroup:(NSString *)name
+{
+    return name.length == 0 || [self isPersonal:name];
 }
 
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
@@ -1340,7 +1444,8 @@ static NSOperationQueue *_favQueue;
 {
     NSString *mxPrefix = @"mx_";
     _iconName = [self removePrefix:mxPrefix fromValue:_iconName];
-    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber hidden:!_isVisible];
+    OASBoolean *pinned = [OASBoolean numberWithBool:_isPinned];
+    OASGpxUtilitiesPointsGroup *pointsGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:_name iconName:_iconName backgroundType:_backgroundType color:[self color].toARGBNumber hidden:!_isVisible pinned:pinned];
     NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
     
     for (OAFavoriteItem *point in _points)
@@ -1362,16 +1467,20 @@ static NSOperationQueue *_favQueue;
 {
     OAFavoriteGroup *favoriteGroup = [[OAFavoriteGroup alloc] init];
     favoriteGroup.name = pointsGroup.name;
-    favoriteGroup.color = UIColorFromRGB(pointsGroup.color);
+    favoriteGroup.color = pointsGroup.color != 0 ? UIColorFromRGB(pointsGroup.color) : nil;
     favoriteGroup.iconName = pointsGroup.iconName;
     favoriteGroup.backgroundType = pointsGroup.backgroundType;
+    favoriteGroup.isPinned = pointsGroup.isPinned ? pointsGroup.isPinned.boolValue : [self isBaseFavoriteOrPersonalGroup:favoriteGroup.name ?: @""];
     for (OASWptPt *point in pointsGroup.points)
     {
-        [favoriteGroup.points addObject:[OAFavoriteItem fromWpt:point
-                                                       category:nil]];
+        OAFavoriteItem *favorite = [OAFavoriteItem fromWpt:point category:nil];
+        [favoriteGroup applyMissingAppearanceToPoint:favorite];
+        [favoriteGroup addPoint:favorite];
     }
+    
     if (favoriteGroup.points && favoriteGroup.points.count > 0)
         favoriteGroup.isVisible = favoriteGroup.points[0].isVisible;
+    
     return favoriteGroup;
 }
 
@@ -1380,6 +1489,7 @@ static NSOperationQueue *_favQueue;
 - (id) copyWithZone:(NSZone *)zone
 {
     OAFavoriteGroup *clone = [[OAFavoriteGroup alloc] initWithPoints:_points name:_name isVisible:_isVisible color:_color];
+    clone.isPinned = _isPinned;
     clone.iconName = _iconName;
     clone.backgroundType = _backgroundType;
     return clone;

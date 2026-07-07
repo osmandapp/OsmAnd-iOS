@@ -15,10 +15,16 @@ final class StarMapSearchHelper {
         let nextRise: Date?
         let nextSet: Date?
     }
+    
+    private static let RISE_ARROW = "↗"
+    private static let SET_ARROW = "↘"
+    private static let UP_ARROW = "↑"
+    private static let DOWN_ARROW = "↓"
+    
+    private let cacheLock = NSLock()
 
     private var riseSetCache: [String: RiseSetCacheEntry] = [:]
     private var visibleTonightCache: [String: Bool] = [:]
-    private let cacheLock = NSLock()
     private var computationContext = StarMapSearchComputationContext(observer: Observer(latitude: 0.0, longitude: 0.0, height: 0.0),
                                                                      now: Date(),
                                                                      dusk: Date(),
@@ -82,6 +88,43 @@ final class StarMapSearchHelper {
         ensureRiseSet(entry)
         let rise = entry.nextRise
         let set = entry.nextSet
+        if rise == nil, set == nil, entry.objectRef.altitude > 0 {
+            return replaceEventArrowWithIcon(localizedString("astro_search_always_up"))
+        }
+        return formatEventText(rise: rise, set: set)
+    }
+
+    func resolveConstellationVisibilityAttributedText(_ entry: StarMapSearchEntry) -> NSAttributedString {
+        cacheLock.lock()
+        let context = computationContext
+        cacheLock.unlock()
+
+        let nightRiseSet = AstroUtils.nextRiseSet(object: entry.objectRef,
+                                                  startSearch: context.dusk,
+                                                  observer: context.observer,
+                                                  windowStart: context.dusk,
+                                                  windowEnd: context.dawn)
+        let visibleAtDusk = AstroUtils.altitude(entry.objectRef, at: context.dusk, observer: context.observer) > 0
+
+        if visibleAtDusk, nightRiseSet.set == nil {
+            return NSAttributedString(string: localizedString("astro_search_visible_all_night"))
+        }
+
+        let rise = nightRiseSet.rise
+        let set = nightRiseSet.set
+        if rise == nil, set == nil {
+            return replaceEventArrowWithIcon(localizedString("astro_search_never_rises"))
+        }
+        return formatEventText(rise: rise, set: set)
+    }
+
+    func preloadRiseSet(_ entries: ArraySlice<StarMapSearchEntry>) {
+        for entry in entries {
+            ensureRiseSet(entry)
+        }
+    }
+    
+    private func formatEventText(rise: Date?, set: Date?) -> NSAttributedString {
         let eventText: String
         if let rise, let set {
             if rise < set {
@@ -93,18 +136,10 @@ final class StarMapSearchHelper {
             eventText = formatEvent(rise, isRise: true)
         } else if let set {
             eventText = formatEvent(set, isRise: false)
-        } else if entry.objectRef.altitude > 0 {
-            eventText = localizedString("astro_search_always_up")
         } else {
             eventText = localizedString("astro_search_never_rises")
         }
         return replaceEventArrowWithIcon(eventText)
-    }
-
-    func preloadRiseSet(_ entries: ArraySlice<StarMapSearchEntry>) {
-        for entry in entries {
-            ensureRiseSet(entry)
-        }
     }
 
     private func ensureRiseSet(_ entry: StarMapSearchEntry) {
@@ -168,21 +203,21 @@ final class StarMapSearchHelper {
         let arrow: String
         if text.contains(Self.RISE_ARROW) {
             arrow = Self.RISE_ARROW
-            iconName = "ic_action_arrow_top_right_16"
+            iconName = "arrow.up.right"
         } else if text.contains(Self.SET_ARROW) {
             arrow = Self.SET_ARROW
-            iconName = "ic_action_arrow_bottom_right_16"
+            iconName = "arrow.down.right"
         } else if text.contains(Self.UP_ARROW) {
             arrow = Self.UP_ARROW
-            iconName = "ic_action_arrow_up2_16"
+            iconName = "arrow.up"
         } else if text.contains(Self.DOWN_ARROW) {
             arrow = Self.DOWN_ARROW
-            iconName = "ic_action_arrow_down_16"
+            iconName = "eye.slash.fill"
         } else {
             return NSAttributedString(string: text)
         }
 
-        guard let image = AstroIcon.template(iconName)?.withTintColor(.iconColorSecondary, renderingMode: .alwaysOriginal) else {
+        guard let image = UIImage(systemName: iconName)?.withTintColor(.iconColorSecondary, renderingMode: .alwaysOriginal) else {
             return NSAttributedString(string: text)
         }
         let attachment = NSTextAttachment()
@@ -200,9 +235,4 @@ final class StarMapSearchHelper {
     private func millisecondsSince1970(_ date: Date) -> Int64 {
         Int64((date.timeIntervalSince1970 * 1000.0).rounded())
     }
-
-    private static let RISE_ARROW = "↗"
-    private static let SET_ARROW = "↘"
-    private static let UP_ARROW = "↑"
-    private static let DOWN_ARROW = "↓"
 }

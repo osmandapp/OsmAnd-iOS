@@ -36,7 +36,7 @@ enum AstroIcon {
                                 baseColor: UIColor,
                                 overlayName: String,
                                 overlayColor: UIColor,
-                                size: CGSize = CGSize(width: 24, height: 24)) -> UIImage? {
+                                size: CGSize = CGSize(width: 30, height: 30)) -> UIImage? {
         guard let base = template(baseName),
               let overlay = template(overlayName) else {
             return template(baseName)

@@ -180,7 +180,9 @@ final class CardsViewController: UIView {
         }
         dataSource.applySnapshotUsingReloadData(snapshot) { [weak self] in
             guard let self else { return }
-            didChangeHeightAction?(section, contentHeight)
+            DispatchQueue.main.async {
+                self.didChangeHeightAction?(section, self.contentHeight)
+            }
         }
     }
     

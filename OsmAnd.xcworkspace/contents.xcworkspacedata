@@ -14,6 +14,282 @@
                location = "group:net"
                name = "net">
                <Group
+                  location = "group:sf"
+                  name = "sf">
+                  <Group
+                     location = "group:marineapi"
+                     name = "marineapi">
+                     <Group
+                        location = "group:nmea"
+                        name = "nmea">
+                        <Group
+                           location = "group:util"
+                           name = "util">
+                           <FileRef
+                              location = "group:Position.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:NmeaDate.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Datum.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Direction.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Waypoint.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Time.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:CompassPoint.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
+                           location = "group:parser"
+                           name = "parser">
+                           <FileRef
+                              location = "group:SentenceFactory.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:VDMParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:VDOParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:SentenceParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:DataNotAvailableException.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ParseException.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:UnsupportedSentenceException.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
+                           location = "group:sentence"
+                           name = "sentence">
+                           <FileRef
+                              location = "group:Sentence.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TalkerId.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Checksum.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:SentenceValidator.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:SentenceId.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISSentence.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
+                           location = "group:event"
+                           name = "event">
+                           <FileRef
+                              location = "group:SentenceListener.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:SentenceEvent.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AbstractSentenceListener.kt">
+                           </FileRef>
+                        </Group>
+                     </Group>
+                     <Group
+                        location = "group:ais"
+                        name = "ais">
+                        <Group
+                           location = "group:util"
+                           name = "util">
+                           <FileRef
+                              location = "group:MMSI.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Angle12.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:PositioningDevice.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Sixbit.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:RateOfTurn.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Longitude18.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:NavigationalStatus.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Longitude28.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TimeStamp.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISRuleViolation.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:SpeedOverGround.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Latitude17.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Latitude27.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ShipType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Violation.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:BitVector.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:NavAidType.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ManeuverIndicator.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Angle9.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
+                           location = "group:message"
+                           name = "message">
+                           <FileRef
+                              location = "group:AISPositionInfo.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISPositionReportB.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage04.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISUTCReport.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage24.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage01.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage05.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage21.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage02.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage03.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage27.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage18.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISPositionReport.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage09.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage19.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
+                           location = "group:parser"
+                           name = "parser">
+                           <FileRef
+                              location = "group:AISPositionReportParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage24Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISUTCParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessageParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage01Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessageFactory.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISPositionReportBParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage19Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage18Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AisMessage27Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage04Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage05Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage03Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage02Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage09Parser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:AISMessage21Parser.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
+                           location = "group:event"
+                           name = "event">
+                           <FileRef
+                              location = "group:AbstractAISMessageListener.kt">
+                           </FileRef>
+                        </Group>
+                     </Group>
+                  </Group>
+               </Group>
+               <Group
                   location = "group:osmand"
                   name = "osmand">
                   <Group
@@ -549,6 +825,9 @@
                               location = "group:RouteActivity.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:Linkable.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:Bounds.kt">
                            </FileRef>
                            <FileRef
@@ -646,10 +925,41 @@
                         location = "group:ColorPalette.kt">
                      </FileRef>
                      <Group
+                        location = "group:aistracker"
+                        name = "aistracker">
+                        <FileRef
+                           location = "group:AisTrackerMath.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisCpa.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisObject.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisObjectConstants.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisLatLon.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisObjType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisMessageListener.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisLocation.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
                         location = "group:api"
                         name = "api">
                         <FileRef
                            location = "group:SQLiteAPI.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:NetworkProxyState.kt">
                         </FileRef>
                         <FileRef
                            location = "group:NetworkAPI.kt">
@@ -831,6 +1141,26 @@
                            location = "group:ButtonPositionSize.kt">
                         </FileRef>
                      </Group>
+                     <Group
+                        location = "group:media"
+                        name = "media">
+                        <FileRef
+                           location = "group:RemoteMediaFactory.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:LinkMediaFactory.kt">
+                        </FileRef>
+                        <Group
+                           location = "group:domain"
+                           name = "domain">
+                           <FileRef
+                              location = "group:MediaItem.kt">
+                           </FileRef>
+                        </Group>
+                        <FileRef
+                           location = "group:MediaUriResolver.kt">
+                        </FileRef>
+                     </Group>
                   </Group>
                </Group>
             </Group>
@@ -952,7 +1282,7 @@
                            location = "group:XmlFactoryAPI.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:NetworkAPIImpl.kt">
+                           location = "group:NetworkProxyState.kt">
                         </FileRef>
                         <FileRef
                            location = "group:XmlSerializerAPI.kt">

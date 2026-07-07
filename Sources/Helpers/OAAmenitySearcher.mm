@@ -579,7 +579,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
     for (OAPOI *amenity in sorted)
     {
-        NSString *travelRouteId = amenity.getAdditionalInfo[@"route_id"];
+        NSString *travelRouteId = amenity.getAdditionalInfo[ROUTE_ID];
         if (![amenity isClosed] && [amenity isRoutePoint] && NSStringIsEmpty(amenity.name) && travelRouteId && [names containsObject:travelRouteId])
         {
             return amenity;
@@ -718,18 +718,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     
     OsmAndAppInstance app = [OsmAndApp instance];
     QList<std::shared_ptr<const OsmAnd::ObfFile> > obfFiles = app.resourcesManager->obfsCollection->getObfFiles();
-    
-    std::sort(obfFiles.begin(), obfFiles.end(), [](const auto &a, const auto &b) {
-        NSString *nameA = a->filePath.toNSString();
-        NSString *nameB = b->filePath.toNSString();
-        if (nameA)
-            nameA = [OAUtilities simplifyFileName:[nameA lastPathComponent]];
-        if (nameB)
-            nameB = [OAUtilities simplifyFileName:[nameB lastPathComponent]];
-        
-        return [nameA compare:nameB] == NSOrderedAscending;
-    });
-    
+
     for (const auto& file : obfFiles)
     {
         NSString *path = file->filePath.toNSString();
@@ -1565,6 +1554,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     }
     if (!isEmpty || additionalFilter)
     {
+        NSMutableSet<NSNumber *> *allIds = [NSMutableSet set]; // live updates filter
         for (NSString *repoName in repos)
         {
             if (matcher && matcher.isCancelled)
@@ -1604,7 +1594,8 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                                         }
                                   },
                                   ctrl);
-            
+
+            NSMutableSet<NSNumber *> *localIds = [NSMutableSet set];
             for (OAPOI *amenity in foundAmenities)
             {
                 NSNumber *obfId = @(amenity.obfId);
@@ -1612,12 +1603,14 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                 {
                     [closedAmenities addObject:obfId];
                 }
-                else if (![closedAmenities containsObject:obfId])
+                else if (![closedAmenities containsObject:obfId]  && ![allIds containsObject:obfId])
                 {
                     [openAmenities addObject:obfId];
                     [actualAmenities addObject:amenity];
+                    [localIds addObject:obfId];
                 }
             }
+            [allIds unionSet:localIds];
         }
     }
     return actualAmenities;
@@ -1817,6 +1810,144 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                               ctrl);
     }
     return [NSArray arrayWithArray:arr];
+}
+
+- (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId
+{
+    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+    QString qRouteMebersIdKey = QString::fromNSString(ROUTE_MEMBERS_IDS);
+    QString qRouteId = QString::fromNSString(routeId);
+    
+    OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(__autoreleasing id *objectPtr) {
+        if (objectPtr == nil || *objectPtr == nil)
+            return false;
+
+        NSValue *value = (NSValue *)*objectPtr;
+        const OsmAnd::ISearch::IResultEntry *resultEntry = static_cast<const OsmAnd::ISearch::IResultEntry *>([value pointerValue]);
+        
+        if (resultEntry)
+        {
+            const auto amenity = OAGetAmenityFromSearchResult(*resultEntry);
+            if (amenity)
+            {
+                QHash<QString, QString> valuesHash = amenity->getDecodedValuesHash();
+                const auto it = valuesHash.constFind(qRouteMebersIdKey);
+                if (it != valuesHash.constEnd())
+                {
+                    const QString members = it.value();
+                    if (!members.isEmpty())
+                    {
+                        const QStringList ids = members.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+                        if (ids.contains(qRouteId))
+                        {
+                            OAPOI *poi = [OAAmenitySearcher parsePOI:*resultEntry];
+                            if (poi)
+                            {
+                                [result addObject:poi];
+                                return YES;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NO;
+        
+    } cancelledFunc:^BOOL{
+        return false;
+    }];
+    
+    [self searchRouteByName:routeId mode:OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE matcher:matcher];
+    return result;
+}
+
+- (NSDictionary<NSString *, NSArray<OAPOI *> *> *)searchRouteMembers:(NSString *)multipleSearch
+{
+    NSMutableArray<OAPOI *> *result = [NSMutableArray new];
+    QString qRouteIdKey = QString::fromNSString(ROUTE_ID);
+    
+    QSet<QString> routeIds;
+    NSArray<NSString *> *components = [multipleSearch componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    for (NSString *routeId in components)
+    {
+        if (routeId.length > 0)
+            routeIds.insert(QString::fromNSString(routeId));
+    }
+    
+    
+    OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(__autoreleasing id *objectPtr) {
+        if (objectPtr == nil || *objectPtr == nil)
+            return false;
+
+        NSValue *value = (NSValue *)*objectPtr;
+        const OsmAnd::ISearch::IResultEntry *resultEntry = static_cast<const OsmAnd::ISearch::IResultEntry *>([value pointerValue]);
+        if (resultEntry)
+        {
+            const auto amenity = OAGetAmenityFromSearchResult(*resultEntry);
+            if (amenity)
+            {
+                QHash<QString, QString> valuesHash = amenity->getDecodedValuesHash();
+                const auto it = valuesHash.constFind(qRouteIdKey);
+                if (it != valuesHash.constEnd())
+                {
+                    const QString qRouteIdValue = it.value();
+                    if (routeIds.contains(qRouteIdValue))
+                    {
+                        OAPOI *poi = [OAAmenitySearcher parsePOI:*resultEntry];
+                        if (poi)
+                        {
+                            [result addObject:poi];
+                            return YES;
+                        }
+                    }
+                }
+            }
+        }
+        return NO;
+        
+    } cancelledFunc:^BOOL{
+        return false;
+    }];
+    
+    [self searchRouteByName:multipleSearch mode:OsmAnd::StringMatcherMode::MULTISEARCH matcher:matcher];
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOI *> *> *map = [NSMutableDictionary new];
+    
+    for (OAPOI *am in result)
+    {
+        NSString *routeId = [am getAdditionalInfo:ROUTE_ID];
+        if (map[routeId] == nil)
+        {
+            map[routeId] = [NSMutableArray new];
+        }
+        [map[routeId] addObject:am];
+    }
+    
+    return map;
+}
+
+- (void)searchRouteByName:(NSString *)multipleSearch mode:(OsmAnd::StringMatcherMode)mode matcher:(OAResultMatcher *)matcher
+{
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&matcher]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      return matcher && [matcher isCancelled];
+                                                  }));
+    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+
+    searchCriteria->name = QString::fromNSString(multipleSearch);
+    searchCriteria->obfInfoAreaFilter = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
+    searchCriteria->matcherMode = mode;
+
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    search->performSearch(*searchCriteria,
+                          [&matcher]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                            [matcher publish:[NSValue valueWithPointer:&resultEntry]];
+                          },
+                          ctrl);
 }
 
 @end

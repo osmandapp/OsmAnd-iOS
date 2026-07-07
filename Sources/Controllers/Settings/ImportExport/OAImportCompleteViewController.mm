@@ -443,8 +443,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeGpxTrips)
     {
-        UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-        [myPlacesViewController setSelectedIndex:1];
+        MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
+        [myPlacesViewController setSelectedTab:TabTracks];
         [rootController.navigationController pushViewController:myPlacesViewController animated:YES];
     }
     else if (dataType == EOAImportDataTypeAvoidRoads)
@@ -460,16 +460,17 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeFavorites)
     {
-        UIViewController* favoritesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-        [rootController.navigationController pushViewController:favoritesViewController animated:YES];
+        MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
+        [myPlacesViewController setSelectedTab:TabFavorites];
+        [rootController.navigationController pushViewController:myPlacesViewController animated:YES];
     }
     else if (dataType == EOAImportDataTypeOsmNotes || dataType == EOAImportDataTypeOsmEdits)
     {
         BOOL isOsmEditingEnabled = [[OAIAPHelper sharedInstance].osmEditing isActive];
         if (isOsmEditingEnabled)
         {
-            UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-            [myPlacesViewController setSelectedIndex:2];
+            MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
+            [myPlacesViewController setSelectedTab:TabOsm];
             [rootController.navigationController pushViewController:myPlacesViewController animated:YES];
         }
         else

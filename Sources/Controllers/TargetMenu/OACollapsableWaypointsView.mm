@@ -178,8 +178,9 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     }
     else if (_type == EOAWaypointFavorite)
     {
-        UIViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-        [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
+        MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
+        [myPlacesViewController setSelectedTab:TabFavorites];
+        [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
     }
 }
 

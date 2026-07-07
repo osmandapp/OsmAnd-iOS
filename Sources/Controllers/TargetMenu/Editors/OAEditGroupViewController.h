@@ -22,6 +22,6 @@
 
 @property (nonatomic, weak) id<OAEditGroupViewControllerDelegate> delegate;
 
--(instancetype)initWithGroupName:(NSString *)groupName groups:(NSArray *)groups;
+-(instancetype)initWithGroupName:(nullable NSString *)groupName groups:(NSArray *)groups;
 
 @end

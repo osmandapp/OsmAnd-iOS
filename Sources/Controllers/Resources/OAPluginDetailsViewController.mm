@@ -191,7 +191,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 - (void)updateSettingsButtonState {
     NSArray *supportedIdentifiers = @[
         kInAppId_Addon_External_Sensors,
-        kInAppId_Addon_Vehicle_Metrics
+        kInAppId_Addon_Vehicle_Metrics,
+        kInAppId_Addon_Ais_Tracker
     ];
 
     if ([supportedIdentifiers containsObject:_product.productIdentifier]) {
@@ -445,6 +446,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         return [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
     else if ([_product isKindOfClass:OAVehicleMetricsProduct.class])
         return [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
+    else if ([_product isKindOfClass:AisTrackerProduct.class])
+        return [[OAPluginsHelper getPlugin:AisTrackerPlugin.class] getSettingsController];
     
     return nil;
 }

@@ -103,6 +103,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     self.tableView.delegate = self;
     
     self.tableView.tableHeaderView = [self getHeaderForTableView:self.tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText];
+    self.tableView.sectionFooterHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedSectionFooterHeight = 44.0;
     
     [self setupView];
 

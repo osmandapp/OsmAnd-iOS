@@ -235,7 +235,7 @@ final class AstroVisibilityCardController {
                 return
             }
             let address = mapPanel?.findRoadName(byLat: coordinate.latitude, lon: coordinate.longitude)
-            let resolved = self.extractCity(address) ?? coords
+            let resolved = [self.extractCity(address), "(\(coords))"].compactMap { $0 }.joined(separator: " ")
             DispatchQueue.main.async { [weak self] in
                 guard let self,
                       !(self.locationWorkItem?.isCancelled ?? true),

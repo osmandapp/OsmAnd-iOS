@@ -411,7 +411,7 @@
         {
             [names addObject:group[@"title"]];
             [colors addObject:group[@"color"] ? [UIColor colorFromString:group[@"color"]] : [UIColor colorNamed:ACColorNameIconColorActive]];
-            [sizes addObject:@([group[@"count"] integerValue])];
+            [sizes addObject:@(group[@"count"].intValue)];
         }
     }
 
@@ -503,7 +503,7 @@
     _selectCategoryLabelRowIndex = section.count -1;
 
     NSUInteger selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
-    if (selectedGroupIndex < 0)
+    if (selectedGroupIndex == NSNotFound)
         selectedGroupIndex = 0;
     [section addObject:@{
         @"type" : [FolderCardsCell getCellIdentifier],
@@ -1056,6 +1056,7 @@
         if (_editPointType == EOAEditPointTypeFavorite)
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
     }
+    [self.delegate saveTapped];
     [self dismissViewController];
 }
 

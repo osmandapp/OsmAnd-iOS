@@ -84,10 +84,7 @@
 
 - (void)removePoints:(NSArray *)items
 {
-    for (OAHistoryItem *item in items)
-    {
-        [_db deletePoint:item];
-    }
+    [_db deletePoints:items];
     [_historyPointsRemoveObservable notifyEventWithKey:items];
 }
 

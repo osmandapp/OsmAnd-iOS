@@ -53,6 +53,7 @@ final class OsmEditsListViewController: UIViewController {
     // MARK: - Properties
     
     private static let imageSize: CGFloat = 30
+    private static let sortHeaderHeight: CGFloat = 44.0
 
     weak var myPlacesDelegate: MyPlacesDelegate?
     
@@ -65,6 +66,7 @@ final class OsmEditsListViewController: UIViewController {
     private var headerViews: [UITableViewHeaderFooterView] = []
 
     private var selectButton: UIBarButtonItem?
+    private var searchButton: UIBarButtonItem?
 
     private var sortMode: MyPlacesSortMode = .nameAZ
     private var isSearchActive = false
@@ -72,7 +74,7 @@ final class OsmEditsListViewController: UIViewController {
     private let estimatedRowHeight: CGFloat = 48.0
     private let poiTypeTag = "poi_type_tag"
     
-    private let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, OsmPoint> { cell, indexPath, item in
+    private let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, OsmPoint> { cell, _, item in
         let translatedNames = OAPOIHelper.sharedInstance().getAllTranslatedNames(false)
         var poiType: OAPOIType?
         if let poiTypeString = item.poiType {
@@ -82,11 +84,14 @@ final class OsmEditsListViewController: UIViewController {
         content.image = poiType?.icon().resizedTemplateImage(with: imageSize) ?? .icCustomOsmNoteUnresolved.withRenderingMode(.alwaysOriginal)
         content.text = item.title
         content.secondaryText = item.descr
+        var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
+        backgroundConfig.backgroundColor = .groupBg
+        cell.backgroundConfiguration = backgroundConfig
         cell.contentConfiguration = content
         cell.accessories = [.multiselect()]
     }
     
-    private let headerCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Header> { (cell, indexPath, headerItem) in
+    private let headerCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Header> { (cell, _, headerItem) in
         var content = cell.defaultContentConfiguration()
         content.text = headerItem.title
         content.textProperties.color = .textColorPrimary
@@ -94,12 +99,12 @@ final class OsmEditsListViewController: UIViewController {
         cell.contentConfiguration = content
         
         let headerDisclosureOption = UICellAccessory.OutlineDisclosureOptions(style: .header)
-        cell.accessories = [.outlineDisclosure(options:headerDisclosureOption)]
+        cell.accessories = [.outlineDisclosure(options: headerDisclosureOption)]
         cell.tintColor = .iconColorActive
     }
     
-    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, indexPath, headerItem) in
-        cell.sortButton.setImage(headerItem.sortMode.image, for: .normal)
+    private let sortHeaderCellRegistration = UICollectionView.CellRegistration<SortButtonCollectionViewCell, SortHeader> { (cell, _, headerItem) in
+        cell.sortButton.setImage(headerItem.sortMode.image?.resizedMenuImage(), for: .normal)
         cell.sortButton.menu = headerItem.menu
     }
 
@@ -122,6 +127,7 @@ final class OsmEditsListViewController: UIViewController {
         sortMode = savedSortMode()
         configureCollectionView()
         dataSource = makeDataSource()
+        applySnapshot()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -129,21 +135,9 @@ final class OsmEditsListViewController: UIViewController {
 
         navigationController?.setNavigationBarHidden(false, animated: false)
 
-        selectButton = OABaseNavbarViewController.createRightNavbarButton(
-            localizedString("shared_string_select"),
-            icon: nil,
-            color: .label,
-            action: #selector(selectButtonPressed(_:)),
-            target: self,
-            menu: nil
-        )
-        if let selectButton {
-            selectButton.accessibilityLabel = localizedString("shared_string_select")
-            navigationController?.navigationBar.topItem?.rightBarButtonItems = [selectButton]
-        }
+        setupNavbarButtons()
         
         definesPresentationContext = true
-        applySnapshot()
         updateNavigationBarTitle()
 
         NotificationCenter.default.addObserver(
@@ -172,12 +166,13 @@ final class OsmEditsListViewController: UIViewController {
     // MARK: - Generate Data
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .viewBg
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.allowsMultipleSelectionDuringEditing = true
+        collectionView.tintColor = .iconColorActive
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -188,13 +183,39 @@ final class OsmEditsListViewController: UIViewController {
         ])
     }
     
+    private func sortHeaderLayoutSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(Self.sortHeaderHeight))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
+        return NSCollectionLayoutSection(group: group)
+    }
+
     private func createLayout() -> UICollectionViewLayout {
-        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-        if !isSearchActive {
-            config.headerMode = .firstItemInSection
+        UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+            guard let self else { return nil }
+            if self.isSortHeaderSection(at: sectionIndex) {
+                return self.sortHeaderLayoutSection()
+            }
+
+            var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            config.backgroundColor = .clear
+            if !self.isSearchActive {
+                config.headerMode = .firstItemInSection
+            }
+
+            return NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
         }
-        let layout = UICollectionViewCompositionalLayout.list(using: config)
-        return layout
+    }
+
+    private func isSortHeaderSection(at sectionIndex: Int) -> Bool {
+        guard let dataSource else { return false }
+        let snapshot = dataSource.snapshot()
+        guard snapshot.sectionIdentifiers.indices.contains(sectionIndex) else { return false }
+        let section = snapshot.sectionIdentifiers[sectionIndex]
+        return snapshot.itemIdentifiers(inSection: section).contains {
+            guard case .sortHeader = $0 else { return false }
+            return true
+        }
     }
     
     private func makeDataSource() -> DataSource {
@@ -333,6 +354,45 @@ final class OsmEditsListViewController: UIViewController {
             navigationController?.navigationBar.topItem?.leftBarButtonItem = nil
             navigationItem.leftBarButtonItem = nil
         }
+
+        setupNavbarButtons()
+    }
+
+    private func setupNavbarButtons() {
+        if collectionView.isEditing {
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems(nil, animated: false)
+            navigationItem.setRightBarButtonItems(nil, animated: false)
+            return
+        }
+
+        selectButton = OABaseNavbarViewController.createRightNavbarButton(
+            nil,
+            icon: UIImage(systemName: "checkmark.circle"),
+            color: .label,
+            action: #selector(selectButtonPressed(_:)),
+            target: self,
+            menu: nil
+        )
+        selectButton?.accessibilityLabel = localizedString("shared_string_select")
+
+        searchButton = OABaseNavbarViewController.createRightNavbarButton(
+            nil,
+            icon: UIImage(systemName: "magnifyingglass"),
+            color: .label,
+            action: #selector(searchButtonPressed(_:)),
+            target: self,
+            menu: nil
+        )
+        searchButton?.accessibilityLabel = localizedString("shared_string_search")
+
+        if #available(iOS 26.0, *) {
+            searchButton?.style = .prominent
+            searchButton?.tintColor = .clear
+        }
+
+        let rightButtons = [selectButton, isSearchActive || collectionView.isEditing ? nil : searchButton].compactMap { $0 }
+        navigationController?.navigationBar.topItem?.setRightBarButtonItems(rightButtons, animated: false)
+        navigationItem.setRightBarButtonItems(rightButtons, animated: false)
     }
     
     private func updateNavigationBarTitle() {
@@ -349,13 +409,12 @@ final class OsmEditsListViewController: UIViewController {
             title = localizedString("osm_edits_title")
         }
         
-        myPlacesDelegate?.updateTitle?(title, hideSubtitle: collectionView.isEditing)
+        myPlacesDelegate?.updateTitle(title, hideSubtitle: collectionView.isEditing)
     }
     
     private func setEdit(_ isEdit: Bool) {
         collectionView.isEditing = isEdit
         navigationController?.setToolbarHidden(!isEdit, animated: true)
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = isEdit ? nil : selectButton
         myPlacesDelegate?.updateEditMode(isEdit)
         setupNavbar()
         updateNavigationBarTitle()
@@ -488,7 +547,7 @@ final class OsmEditsListViewController: UIViewController {
         deleteButton.isEnabled = isSelected
         
         let items = [uploadButton, flexibleSpacer, deleteButton]
-        myPlacesDelegate?.updateToolbar?(with: items)
+        myPlacesDelegate?.updateToolbar(with: items)
     }
     
     // MARK: - Actions
@@ -498,6 +557,13 @@ final class OsmEditsListViewController: UIViewController {
         setEdit(true)
     }
     
+    @objc
+    private func searchButtonPressed(_ sender: Any) {
+        myPlacesDelegate?.updateSearchEnabling(true)
+        isSearchActive = true
+        setupNavbarButtons()
+    }
+
     @objc
     private func cancelButtonPressed(_ sender: Any) {
         setEdit(false)
@@ -750,6 +816,10 @@ extension OsmEditsListViewController: MyPlacesSearchable {
             collectionView.setCollectionViewLayout(createLayout(), animated: false)
             applySnapshot()
         }
-        myPlacesDelegate?.updateSegmentedControlVisibility(!isSearchActive)
+        setupNavbarButtons()
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        myPlacesDelegate?.updateSearchEnabling(false)
     }
 }

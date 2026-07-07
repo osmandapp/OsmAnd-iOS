@@ -38,6 +38,7 @@ static NSString *kGroupRowType = @"kGroupRowType";
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (void) buildPluginRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildMenu:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp;
 - (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment;

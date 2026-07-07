@@ -22,6 +22,7 @@
 
 - (NSArray<OATravelArticle *> *) readSavedArticles;
 - (BOOL) hasSavedArticles;
+- (int)savedArticelsCount;
 - (void) addSavedArticle:(OATravelArticle *)article;
 - (void) removeSavedArticle:(OATravelArticle *)article;
 - (void) updateSavedArticle:(OATravelArticle *)oldArticle newArticle:(OATravelArticle *)newArticle;

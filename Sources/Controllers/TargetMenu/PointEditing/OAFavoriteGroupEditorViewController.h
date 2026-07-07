@@ -10,4 +10,7 @@
 
 @interface OAFavoriteGroupEditorViewController : OAGroupEditorViewController
 
+@property(nonatomic, copy, nullable) NSString *parentGroupName;
+@property(nonatomic) BOOL validatesGroupUniqueness;
+
 @end

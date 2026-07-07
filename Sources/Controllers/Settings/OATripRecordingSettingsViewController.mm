@@ -769,13 +769,8 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
     }
     else if ([@"open_trips" isEqualToString:name])
     {
-        UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-        [myPlacesViewController setSelectedIndex:1];
-        
-        TracksViewController *gpxController = myPlacesViewController.viewControllers[1];
-        if (gpxController == nil)
-            return;
-        
+        MyPlacesContainerViewController *myPlacesViewController = [[MyPlacesContainerViewController alloc] init];
+        [myPlacesViewController setSelectedTab:TabTracks];
         [self.navigationController pushViewController:myPlacesViewController animated:YES];
     }
     else if ([@"reset_plugin" isEqualToString:name])

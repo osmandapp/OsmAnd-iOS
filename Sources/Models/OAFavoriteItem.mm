@@ -442,7 +442,12 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     {
         _color = [UIColor colorWithRed:color.r/255.0 green:color.g/255.0 blue:color.b/255.0 alpha:color.a/255.0];
     }
-    return nil;
+    else
+    {
+        _color = nil;
+    }
+
+    return _color;
 }
 
 - (UIColor *) getColor

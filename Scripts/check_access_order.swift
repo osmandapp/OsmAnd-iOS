@@ -84,6 +84,7 @@ private struct TypeContext {
     var sawWeakProperty: [AccessGroup: Set<MemberBucket>] = [:]
     var sawAccessorProperty: [AccessGroup: Set<MemberBucket>] = [:]
     var sawPostWeakProperty: [AccessGroup: Set<MemberBucket>] = [:]
+    var sawMutableProperty: [AccessGroup: Set<MemberBucket>] = [:]
 
     mutating func markAccessGroup(_ accessGroup: AccessGroup, bucket: MemberBucket) {
         let current = lastAccessGroup[bucket]
@@ -102,6 +103,10 @@ private struct TypeContext {
 
     mutating func markPostWeakProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) {
         sawPostWeakProperty[accessGroup, default: []].insert(bucket)
+    }
+
+    mutating func markMutableProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) {
+        sawMutableProperty[accessGroup, default: []].insert(bucket)
     }
 
     func hasSeenMoreRestrictiveAccessGroup(
@@ -125,11 +130,17 @@ private struct TypeContext {
     func hasSeenPostWeakProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) -> Bool {
         sawPostWeakProperty[accessGroup]?.contains(bucket) == true
     }
+
+    func hasSeenMutableProperty(_ bucket: MemberBucket, accessGroup: AccessGroup) -> Bool {
+        sawMutableProperty[accessGroup]?.contains(bucket) == true
+    }
 }
 
 private struct MemberDeclaration {
     let bucket: MemberBucket
     let accessGroup: AccessGroup
+    let isLetProperty: Bool
+    let hasDefaultValue: Bool
     let isWeakProperty: Bool
     let isLazyProperty: Bool
     let isAccessorProperty: Bool
@@ -317,6 +328,24 @@ private func propertyCanFollowWeakProperty(
     return accessorCode.range(of: observerPattern, options: .regularExpression) != nil
 }
 
+private func propertyHasDefaultValue(_ declarationCode: String) -> Bool {
+    let declarationPrefix: Substring
+    if let openingBrace = declarationCode.firstIndex(of: "{") {
+        declarationPrefix = declarationCode[..<openingBrace]
+    } else {
+        declarationPrefix = declarationCode[...]
+    }
+
+    return declarationPrefix.contains("=")
+}
+
+private func isLetPropertyDeclaration(_ declarationCode: String) -> Bool {
+    declarationCode.range(
+        of: #"(^|[^A-Za-z0-9_])let([^A-Za-z0-9_]|$)"#,
+        options: .regularExpression
+    ) != nil
+}
+
 private func memberDeclaration(
     from code: String,
     pendingAttributes: [String],
@@ -335,6 +364,8 @@ private func memberDeclaration(
         return MemberDeclaration(
             bucket: isTypeMember ? .typeProperty : .instanceProperty,
             accessGroup: accessGroup,
+            isLetProperty: isLetPropertyDeclaration(code),
+            hasDefaultValue: propertyHasDefaultValue(code),
             isWeakProperty: propertyTokens.contains("weak"),
             isLazyProperty: isLazyProperty,
             isAccessorProperty: propertyCanFollowWeak,
@@ -353,6 +384,8 @@ private func memberDeclaration(
         return MemberDeclaration(
             bucket: isTypeMember ? .typeMethod : .instanceMethod,
             accessGroup: accessGroup,
+            isLetProperty: false,
+            hasDefaultValue: false,
             isWeakProperty: false,
             isLazyProperty: false,
             isAccessorProperty: false,
@@ -428,6 +461,14 @@ private func check(filePath: String) -> Int {
                     ) {
                         print("\(filePath):\(lineNumber):1: warning: Non-weak \(member.accessGroup.displayName) \(member.bucket.displayName) should be declared before weak \(member.bucket.pluralDisplayName) (property_access_order)")
                         violationCount += 1
+                    } else if member.isLetProperty,
+                              member.hasDefaultValue,
+                              contexts[contexts.count - 1].hasSeenMutableProperty(
+                                member.bucket,
+                                accessGroup: member.accessGroup
+                              ) {
+                        print("\(filePath):\(lineNumber):1: warning: Immutable \(member.accessGroup.displayName) \(member.bucket.displayName) with default value should be declared before mutable \(member.bucket.pluralDisplayName) (property_access_order)")
+                        violationCount += 1
                     }
 
                     if member.isAccessorProperty {
@@ -438,6 +479,12 @@ private func check(filePath: String) -> Int {
                     }
                     if member.canFollowWeakProperty, !member.isWeakProperty {
                         contexts[contexts.count - 1].markPostWeakProperty(
+                            member.bucket,
+                            accessGroup: member.accessGroup
+                        )
+                    }
+                    if !member.isLetProperty, !member.isAccessorProperty {
+                        contexts[contexts.count - 1].markMutableProperty(
                             member.bucket,
                             accessGroup: member.accessGroup
                         )

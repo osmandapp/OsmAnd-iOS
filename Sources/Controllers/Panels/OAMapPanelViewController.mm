@@ -1424,7 +1424,7 @@ typedef enum
     if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
         [validPoints addObjectsFromArray:targetPoints];
-        if (selectedObjects)
+        if (!NSArrayIsEmpty(selectedObjects))
             [validSelectedObjects addObjectsFromArray:selectedObjects];
     }
     else
@@ -1435,7 +1435,7 @@ typedef enum
             if ([self processTargetPoint:targetPoint])
             {
                 [validPoints addObject:targetPoint];
-                if (selectedObjects)
+                if (!NSArrayIsEmpty(selectedObjects))
                     [validSelectedObjects addObject:selectedObjects[i]];
             }
         }
@@ -1521,7 +1521,10 @@ typedef enum
         [_mapViewController hidePolygonHighlight];
     }
     // show context marker on map
-    [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
+    if (targetPoint.type == OATargetAisObject)
+        [_mapViewController hideContextPinMarker];
+    else
+        [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
@@ -1553,16 +1556,26 @@ typedef enum
 
 - (void)setSelectedObject:(OATargetPoint *)targetPoint
 {
+
+    OAMapObject *obj = nil;
     if ([targetPoint.targetObj isKindOfClass:OAMapObject.class])
     {
+        obj = targetPoint.targetObj;
+
+    }
+    else if([targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
+    {
+        BaseDetailsObject *baseDetails = (BaseDetailsObject *) targetPoint.targetObj;
+        obj = (OAMapObject *) [baseDetails syntheticAmenity];
+    }
+    if (obj != nil)
+    {
         QVector<OsmAnd::PointI> points;
-        OAMapObject *obj = targetPoint.targetObj;
         if (obj.x && obj.x.count > 0)
         {
             for (int i = 0; i < obj.x.count; i++)
                 points.push_back(OsmAnd::PointI(obj.x[i].intValue, obj.y[i].intValue));
         }
-
         [_mapViewController.mapLayers.contextMenuLayer highlightPolygon:points];
     }
 }
@@ -1683,7 +1696,10 @@ typedef enum
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
 {
     // show context marker on map
-    [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
+    if (targetPoint.type == OATargetAisObject)
+        [_mapViewController hideContextPinMarker];
+    else
+        [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
@@ -2519,6 +2535,7 @@ typedef enum
         case OATargetTurn:
         case OATargetMyLocation:
         case OATargetLocation:
+        case OATargetAisObject:
         case OATargetRenderedObject:
         case OATargetBaseDetailsObject:
         {

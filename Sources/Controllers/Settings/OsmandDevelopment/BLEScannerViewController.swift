@@ -141,7 +141,12 @@ final class BLEScannerViewController: UIViewController {
 
         let logsPath = documentsURL.appendingPathComponent("Logs")
 
-        guard let files = try? fileManager.contentsOfDirectory(atPath: logsPath.path), !files.isEmpty else {
+        guard let allFiles = try? fileManager.contentsOfDirectory(atPath: logsPath.path) else {
+            return
+        }
+
+        let files = allFiles.filter { URL(fileURLWithPath: $0).pathExtension == "log" }
+        guard !files.isEmpty else {
             return
         }
 

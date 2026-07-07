@@ -28,6 +28,12 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 
 @end
 
+@protocol OAEditPointViewControllerDelegate <NSObject>
+
+- (void)saveTapped;
+
+@end
+
 @interface OAEditPointViewController : OABaseNavbarSubviewViewController
 
 @property (nonatomic, copy) NSString *name;
@@ -38,6 +44,7 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 @property (nonatomic, copy) NSString *groupTitle;
 
 @property (nonatomic, weak) id<OAGpxWptEditingHandlerDelegate> gpxWptDelegate;
+@property (nonatomic, weak) id<OAEditPointViewControllerDelegate> delegate;
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
 - (instancetype)initWithGpxWpt:(OAGpxWptItem *)gpxWpt;

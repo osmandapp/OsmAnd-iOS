@@ -11,70 +11,46 @@ import UIKit
 enum AstroDescriptionCardViewHolder {
     static func makeView(item: AstroDescriptionCardItem,
                          onReadClick: @escaping (AstroDescriptionCardItem) -> Void) -> UIView {
-        let card = AstroCardContainerView()
 
-        if !item.description.isEmpty {
-            let description = UILabel()
-            let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 5
-            paragraphStyle.lineBreakMode = .byTruncatingTail
-            description.attributedText = NSAttributedString(
-                string: item.description,
-                attributes: [
-                    .font: UIFont.systemFont(ofSize: 16),
-                    .foregroundColor: AstroContextMenuTheme.primaryText,
-                    .paragraphStyle: paragraphStyle
-                ])
-            description.textColor = AstroContextMenuTheme.primaryText
-            description.font = .systemFont(ofSize: 16)
-            description.numberOfLines = 3
-            description.lineBreakMode = .byTruncatingTail
-            card.stack.addArrangedSubview(description)
+        let card = WikipediaContextMenuView()
+        card.backgroundColor = .groupBg
+        card.layer.cornerRadius = 26
+        card.layer.masksToBounds = true
+        
+        let showButton = item.linkType != nil && (item.readMoreUri != nil || item.hasOfflineArticle)
+        let buttonText: String
+        var icon: UIImage? = .templateImageNamed("ic_custom_wikipedia")?.withTintColor(.iconColorDefault)
+        
+        if showButton, let linkType = item.linkType {
+            buttonText = makeReadButtonText(linkType: linkType, hasOfflineArticle: item.hasOfflineArticle)
+            icon = linkType == .wikidata ? .init(named: "ic_custom_logo_wikidata") : .templateImageNamed("ic_custom_wikipedia")?.withTintColor(.iconColorDefault)
+        } else {
+            buttonText = ""
+            icon = nil
         }
-
-        if let linkType = item.linkType, item.readMoreUri != nil || item.hasOfflineArticle {
-            var config = UIButton.Configuration.plain()
-            config.image = AstroIcon.template(linkType == .wikidata ? "ic_custom_logo_wikidata" : "ic_plugin_wikipedia")
-            config.imagePadding = 10
-            config.imageColorTransformer = UIConfigurationColorTransformer { _ in
-                AstroContextMenuTheme.defaultIcon
-            }
-            config.baseForegroundColor = AstroContextMenuTheme.secondaryText
-            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 14, bottom: 0, trailing: 14)
-            config.background.backgroundColor = .clear
-            config.background.cornerRadius = 6
-            config.background.strokeColor = AstroContextMenuTheme.separator
-            config.background.strokeWidth = 1
-
-            let opensOfflineArticle = item.hasOfflineArticle && linkType == .wikipedia
-            let text: String
-            let activeText: String
-            if opensOfflineArticle {
-                text = localizedString("context_menu_read_full_article")
-                activeText = text
-            } else {
-                let targetName = linkType == .wikidata
-                    ? localizedString("wikidata")
-                    : localizedString("shared_string_wikipedia")
-                let readOn = localizedString("read_on")
-                text = readOn.contains("%@") ? String(format: readOn, targetName) : "\(readOn) \(targetName)"
-                activeText = targetName
-            }
-
-            var attributedTitle = AttributedString(text)
-            attributedTitle.font = .systemFont(ofSize: 16)
-            attributedTitle.foregroundColor = AstroContextMenuTheme.secondaryText
-            if let range = attributedTitle.range(of: activeText) {
-                attributedTitle[range].foregroundColor = AstroContextMenuTheme.activeText
-            }
-            config.attributedTitle = attributedTitle
-
-            let button = UIButton(configuration: config)
-            button.contentHorizontalAlignment = .leading
-            button.heightAnchor.constraint(greaterThanOrEqualToConstant: 48).isActive = true
-            button.addAction(UIAction { _ in onReadClick(item) }, for: .touchUpInside)
-            card.stack.addArrangedSubview(button)
-        }
+        card.configure(
+            text: item.description,
+            buttonText: buttonText,
+            icon: icon,
+            onButtonAction: showButton ? { onReadClick(item) } : {}
+        )
+        
         return card
+    }
+    
+    private static func makeReadButtonText(linkType: AstroDescriptionLinkType, hasOfflineArticle: Bool) -> String {
+        let opensOfflineArticle = hasOfflineArticle && linkType == .wikipedia
+        
+        if opensOfflineArticle {
+            return localizedString("context_menu_read_full_article")
+        }
+        
+        let targetName = linkType == .wikidata
+            ? localizedString("wikidata")
+            : localizedString("shared_string_wikipedia")
+        
+        let readOn = localizedString("read_on")
+        
+        return readOn.contains("%@") ? String(format: readOn, targetName) : "\(readOn) \(targetName)"
     }
 }

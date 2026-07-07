@@ -641,6 +641,12 @@
 
 - (BOOL) hasSavedArticles
 {
+    int count = [self savedArticelsCount];
+    return count > 0;
+}
+
+- (int)savedArticelsCount
+{
     __block int count = 0;
     const char *dbpath = [_dbFilePath UTF8String];
     dispatch_sync(_dbQueue, ^{
@@ -660,7 +666,7 @@
         }
         sqlite3_close(_dbInstance);
     });
-    return count > 0;
+    return count;
 }
 
 - (void) addSavedArticle:(OATravelArticle *)article

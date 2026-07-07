@@ -22,7 +22,7 @@ enum AstroGalleryCardViewHolder {
 
 private final class AstroGalleryCardView: UIView {
     private let item: AstroGalleryCardItem
-    private weak var presentingController: UIViewController?
+    
     private let onUpdateImage: () -> Void
     private let onToggle: (String) -> Void
 
@@ -32,6 +32,8 @@ private final class AstroGalleryCardView: UIView {
     private let titleLabel = UILabel()
     private let arrowView = UIImageView()
     private var galleryHeightConstraint: NSLayoutConstraint?
+    
+    private weak var presentingController: UIViewController?
 
     init(item: AstroGalleryCardItem,
          presentingController: UIViewController,
@@ -59,7 +61,7 @@ private final class AstroGalleryCardView: UIView {
 
     private func setupView() {
         translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = 12
+        layer.cornerRadius = 26
         layer.masksToBounds = true
 
         stack.axis = .vertical
@@ -93,7 +95,8 @@ private final class AstroGalleryCardView: UIView {
         iconView.contentMode = .scaleAspectFit
         iconView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = localizedString("online_photos")
-        titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        titleLabel.font = .preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 1
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         arrowView.contentMode = .scaleAspectFit
@@ -154,7 +157,6 @@ private final class AstroGalleryCardView: UIView {
 
         let contentStack = UIStackView()
         contentStack.axis = .vertical
-        contentStack.spacing = 12
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(contentStack)
 
@@ -188,23 +190,45 @@ private final class AstroGalleryCardView: UIView {
             contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         return contentView
     }
 
-    private func makeShowAllButton(cards: [ImageCard]) -> UIButton {
-        var config = UIButton.Configuration.plain()
+    private func makeShowAllButton(cards: [ImageCard]) -> UIView {
+        var config = UIButton.Configuration.filled()
         config.title = localizedString("shared_string_show_all")
-        config.baseForegroundColor = AstroContextMenuTheme.activeText
+        config.baseBackgroundColor = .buttonBgColorTertiary
+        config.baseForegroundColor = .buttonTextColorSecondary
         config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20)
+        config.background.cornerRadius = 8
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredFont(forTextStyle: .subheadline)
+            return outgoing
+        }
 
         let button = UIButton(configuration: config)
         button.contentHorizontalAlignment = .leading
         button.addAction(UIAction { [weak self] _ in
             self?.openGalleryGrid(cards: cards)
         }, for: .touchUpInside)
-        return button
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        let container = UIView()
+        container.addSubview(button)
+        container.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            button.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -16),
+            button.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
+            button.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16),
+            button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
+        ])
+        
+        return container
     }
 
     private func openGalleryGrid(cards: [ImageCard]) {
@@ -224,7 +248,7 @@ private final class AstroGalleryCardView: UIView {
     private func applyTheme() {
         backgroundColor = AstroContextMenuTheme.cardBackground
         iconView.tintColor = AstroContextMenuTheme.defaultIcon
-        arrowView.tintColor = AstroContextMenuTheme.defaultIcon
+        arrowView.tintColor = AstroContextMenuTheme.activeIcon
         titleLabel.textColor = AstroContextMenuTheme.primaryText
     }
 }
@@ -243,7 +267,11 @@ private final class AstroIndeterminateProgressLine: UIView {
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
-        window == nil ? progressView.layer.removeAllAnimations() : startAnimating()
+        if window == nil {
+            progressView.layer.removeAllAnimations()
+        } else {
+            startAnimating()
+        }
     }
 
     private func setup() {

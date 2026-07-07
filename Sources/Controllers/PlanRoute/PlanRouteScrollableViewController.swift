@@ -416,15 +416,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let segments = dataProvider.routeSegments
         guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
         let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
-        NSLog("[PlanRouteDbg] presentChangeRouteType(before): pointIndex=%d segmentIndex=%d groupIndex=%d totalGroups=%d",
-              pointIndex, segment.index, groupIndex, segment.groups.count)
         if groupIndex > 0 {
             let prevGroup = segment.groups[groupIndex - 1]
-            NSLog("[PlanRouteDbg]   using prevGroup: appMode=%@ lastPointIndex=%d points=%d",
-                  prevGroup.appMode?.stringKey ?? "nil", prevGroup.lastPointIndex, prevGroup.points.count)
             presentSettingsForContext(.profileGroup(prevGroup, segment: segment))
         } else {
-            NSLog("[PlanRouteDbg]   using profileGroup(first) upToIndex=%d", pointIndex)
             presentSettingsForContext(.profileGroup(group, segment: segment), applyUpToPointIndex: pointIndex)
         }
     }
@@ -432,11 +427,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func presentChangeRouteType(after pointIndex: Int) {
         let segments = dataProvider.routeSegments
         guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
-        NSLog("[PlanRouteDbg] presentChangeRouteType(after): pointIndex=%d segmentIndex=%d groupAppMode=%@ groupLastPointIndex=%d groupPoints=%d",
-              pointIndex, segment.index,
-              group.appMode?.stringKey ?? "nil",
-              group.lastPointIndex,
-              group.points.count)
         presentSettingsForContext(.profileGroup(group, segment: segment), applyFromPointIndex: pointIndex)
     }
 

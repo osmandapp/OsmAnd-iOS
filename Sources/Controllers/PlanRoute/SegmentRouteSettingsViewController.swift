@@ -191,22 +191,13 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     @objc private func onConfirmTapped() {
-        NSLog("[PlanRouteDbg] onConfirmTapped: context=%@ selectedMode=%@ applyFromPointIndex=%@ applyUpToPointIndex=%@",
-              String(describing: context),
-              selectedMode?.stringKey ?? "nil",
-              applyFromPointIndex.map { String($0) } ?? "nil",
-              applyUpToPointIndex.map { String($0) } ?? "nil")
         if let fromIndex = applyFromPointIndex, case let .profileGroup(group, _) = context {
             guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
-            NSLog("[PlanRouteDbg] onConfirmTapped: profileGroup fromIndex=%d groupPoints=%d mode=%@",
-                  fromIndex, group.points.count, mode.stringKey ?? "nil")
             for point in group.points where point.index >= fromIndex {
                 dataSource?.applyMode(mode, pointIndex: point.index, wholeRoute: false)
             }
         } else if let upToIndex = applyUpToPointIndex, case let .profileGroup(group, _) = context {
             guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
-            NSLog("[PlanRouteDbg] onConfirmTapped: profileGroup upToIndex=%d groupPoints=%d mode=%@",
-                  upToIndex, group.points.count, mode.stringKey ?? "nil")
             for point in group.points where point.index <= upToIndex {
                 dataSource?.applyMode(mode, pointIndex: point.index, wholeRoute: false)
             }
@@ -412,17 +403,14 @@ extension RouteTypeViewController: UITableViewDelegate {
         let row = sections[indexPath.section].rows[indexPath.row]
         switch row {
         case .straightLine:
-            NSLog("[PlanRouteDbg] userSelected: straightLine (nil mode)")
             selectedMode = nil
             onModeSelected(nil)
             tableView.reloadData()
         case let .mode(mode):
-            NSLog("[PlanRouteDbg] userSelected: mode=%@", mode.stringKey ?? "nil")
             selectedMode = mode
             onModeSelected(mode)
             tableView.reloadData()
         case .startNewSegment:
-            NSLog("[PlanRouteDbg] userSelected: startNewSegment")
             onStartNewSegment()
         }
     }

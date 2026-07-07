@@ -51,6 +51,17 @@ final class RouteBetweenPointsViewController: UIViewController {
         reloadData()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard let header = tableView.tableHeaderView else { return }
+        let targetSize = CGSize(width: tableView.bounds.width, height: UIView.layoutFittingCompressedSize.height)
+        let size = header.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        if header.frame.height != size.height {
+            header.frame.size.height = size.height
+            tableView.tableHeaderView = header
+        }
+    }
+
     private func setupNavigationBar() {
         title = localizedString("route_between_points")
         navigationItem.backButtonDisplayMode = .minimal
@@ -84,12 +95,12 @@ final class RouteBetweenPointsViewController: UIViewController {
     private func makeHintHeaderView() -> UIView {
         let label = UILabel()
         label.text = localizedString("plan_route_select_segment_hint")
-        label.font = .scaledSystemFont(ofSize: 13)
+        label.font = .scaledSystemFont(ofSize: 15)
         label.textColor = .textColorSecondary
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
 
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 52))
+        let container = UIView()
         container.addSubview(label)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 32),
@@ -122,14 +133,7 @@ final class RouteBetweenPointsViewController: UIViewController {
     }
 
     private func makeSegmentSection(_ segment: PlanRouteSegment) -> SectionModel {
-        NSLog("[PlanRouteDbg] makeSegmentSection: segment=%d groups=%d multiMode=%@",
-              segment.index, segment.groups.count, segment.multiMode ? "true" : "false")
-        for (i, g) in segment.groups.enumerated() {
-            NSLog("[PlanRouteDbg]   group[%d] appMode=%@ distance=%.1f lastPointIndex=%d points=%d",
-                  i, g.appMode?.stringKey ?? "nil", g.distance, g.lastPointIndex, g.points.count)
-        }
         let effective = mergedGroups(from: segment.groups)
-        NSLog("[PlanRouteDbg]   after merge: effectiveGroups=%d", effective.count)
         var rows: [Row] = effective.map { .profileGroup($0, segment: segment) }
         if effective.count > 1 {
             rows.append(.changeWholeSegment(segment))
@@ -221,7 +225,7 @@ extension RouteBetweenPointsViewController: UITableViewDelegate {
         let header = UITableViewHeaderFooterView()
         var config = header.defaultContentConfiguration()
         config.text = title
-        config.textProperties.font = .scaledSystemFont(ofSize: 13)
+        config.textProperties.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
         config.textProperties.color = .textColorSecondary
         header.contentConfiguration = config
         return header
@@ -254,10 +258,13 @@ private final class RouteGroupCell: UITableViewCell {
     static let reuseId = "RouteGroupCell"
 
     private static let iconSize: CGFloat = 24
+    private static let titleLeadingInset: CGFloat = 20 + 24 + 16
 
     private let iconView = UIImageView()
     private let titleLabel = UILabel()
     private let distanceLabel = UILabel()
+    private var titleLeadingWithIcon: NSLayoutConstraint!
+    private var titleLeadingWithoutIcon: NSLayoutConstraint!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -277,14 +284,21 @@ private final class RouteGroupCell: UITableViewCell {
             iconView.image = .templateImageNamed("ic_custom_straight_line")
             titleLabel.text = localizedString("plan_route_straight_line")
         }
+        iconView.isHidden = false
         iconView.tintColor = .iconColorActive
         distanceLabel.text = formattedDistance(group.distance)
+        titleLeadingWithIcon.isActive = true
+        titleLeadingWithoutIcon.isActive = false
+        separatorInset = UIEdgeInsets(top: 0, left: Self.titleLeadingInset, bottom: 0, right: 0)
     }
 
     func configureWholeSegment(segment: PlanRouteSegment) {
-        iconView.image = nil
+        iconView.isHidden = true
         titleLabel.text = localizedString("plan_route_change_for_whole_segment")
         distanceLabel.text = formattedDistance(segment.distance)
+        titleLeadingWithIcon.isActive = false
+        titleLeadingWithoutIcon.isActive = true
+        separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
     }
 
     private func setupCell() {
@@ -306,18 +320,21 @@ private final class RouteGroupCell: UITableViewCell {
             contentView.addSubview($0)
         }
 
+        titleLeadingWithIcon = titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16)
+        titleLeadingWithoutIcon = titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+
         NSLayoutConstraint.activate([
             iconView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             iconView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             iconView.widthAnchor.constraint(equalToConstant: Self.iconSize),
             iconView.heightAnchor.constraint(equalToConstant: Self.iconSize),
 
-            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 16),
+            titleLeadingWithIcon,
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 12),
 
             distanceLabel.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 8),
-            distanceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            distanceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             distanceLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }

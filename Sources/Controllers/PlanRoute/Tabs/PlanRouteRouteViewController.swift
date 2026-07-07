@@ -467,11 +467,11 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
     }
 
     private func setupView() {
-        titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
+        titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 1
 
-        subtitleLabel.font = .scaledSystemFont(ofSize: 13)
+        subtitleLabel.font = .scaledSystemFont(ofSize: 15)
         subtitleLabel.textColor = .textColorSecondary
         subtitleLabel.numberOfLines = 1
 
@@ -545,10 +545,10 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
 
         iconView.contentMode = .scaleAspectFit
 
-        titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .medium)
+        titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.textColor = .textColorPrimary
 
-        distanceLabel.font = .scaledSystemFont(ofSize: 15)
+        distanceLabel.font = .scaledSystemFont(ofSize: 17)
         distanceLabel.textColor = .textColorSecondary
         distanceLabel.setContentHuggingPriority(.required, for: .horizontal)
 

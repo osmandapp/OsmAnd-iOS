@@ -1042,6 +1042,31 @@
     if (currentIndexes.count > 0)
         [groups addObject:[self buildGroupWithKey:currentKey indexes:currentIndexes allPoints:allPoints]];
 
+    NSMutableArray<OAPlanRouteGroupData *> *mergedGroups = [NSMutableArray array];
+    for (OAPlanRouteGroupData *group in groups)
+    {
+        OAPlanRouteGroupData *last = mergedGroups.lastObject;
+        BOOL sameMode = last != nil &&
+            ((last.appMode == nil && group.appMode == nil) ||
+             (last.appMode != nil && group.appMode != nil &&
+              [last.appMode.stringKey isEqualToString:group.appMode.stringKey]));
+        if (sameMode)
+        {
+            NSMutableArray<OAPlanRoutePointData *> *combinedPoints = [NSMutableArray arrayWithArray:last.points];
+            [combinedPoints addObjectsFromArray:group.points];
+            OAPlanRouteGroupData *merged = [[OAPlanRouteGroupData alloc] initWithAppMode:last.appMode
+                                                                                distance:last.distance + group.distance
+                                                                         lastGlobalIndex:group.lastGlobalIndex
+                                                                                  points:combinedPoints];
+            [mergedGroups replaceObjectAtIndex:mergedGroups.count - 1 withObject:merged];
+        }
+        else
+        {
+            [mergedGroups addObject:group];
+        }
+    }
+    groups = mergedGroups;
+
     NSInteger routedCount = 0;
     OAApplicationMode *singleMode = nil;
     double distance = 0;

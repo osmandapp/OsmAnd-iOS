@@ -399,8 +399,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func presentPointMenuVC(point: PlanRoutePoint, group: PlanRouteProfileGroup, segment: PlanRouteSegment) {
         let menuVC = PlanRoutePointMenuViewController(point: point, segment: segment, group: group, dataSource: dataProvider)
-        menuVC.onChangeRouteType = { [weak self] context, fromPointIndex in
-            self?.presentSettingsForContext(context, applyFromPointIndex: fromPointIndex)
+        menuVC.onChangeRouteType = { [weak self] context, fromPointIndex, upToPointIndex in
+            self?.presentSettingsForContext(context, applyFromPointIndex: fromPointIndex, applyUpToPointIndex: upToPointIndex)
         }
         let nav = UINavigationController(rootViewController: menuVC)
         nav.modalPresentationStyle = .pageSheet
@@ -416,22 +416,32 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let segments = dataProvider.routeSegments
         guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
         let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
+        NSLog("[PlanRouteDbg] presentChangeRouteType(before): pointIndex=%d segmentIndex=%d groupIndex=%d totalGroups=%d",
+              pointIndex, segment.index, groupIndex, segment.groups.count)
         if groupIndex > 0 {
             let prevGroup = segment.groups[groupIndex - 1]
+            NSLog("[PlanRouteDbg]   using prevGroup: appMode=%@ lastPointIndex=%d points=%d",
+                  prevGroup.appMode?.stringKey ?? "nil", prevGroup.lastPointIndex, prevGroup.points.count)
             presentSettingsForContext(.profileGroup(prevGroup, segment: segment))
         } else {
-            presentSettingsForContext(.wholeSegment(segment))
+            NSLog("[PlanRouteDbg]   using profileGroup(first) upToIndex=%d", pointIndex)
+            presentSettingsForContext(.profileGroup(group, segment: segment), applyUpToPointIndex: pointIndex)
         }
     }
 
     private func presentChangeRouteType(after pointIndex: Int) {
         let segments = dataProvider.routeSegments
         guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
+        NSLog("[PlanRouteDbg] presentChangeRouteType(after): pointIndex=%d segmentIndex=%d groupAppMode=%@ groupLastPointIndex=%d groupPoints=%d",
+              pointIndex, segment.index,
+              group.appMode?.stringKey ?? "nil",
+              group.lastPointIndex,
+              group.points.count)
         presentSettingsForContext(.profileGroup(group, segment: segment), applyFromPointIndex: pointIndex)
     }
 
-    private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil) {
-        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex)
+    private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil) {
+        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex, applyUpToPointIndex: applyUpToPointIndex)
         let nav = UINavigationController(rootViewController: settingsVC)
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {

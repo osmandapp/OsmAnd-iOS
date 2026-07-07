@@ -38,7 +38,7 @@ final class PlanRoutePointMenuViewController: UIViewController {
         let isDestructive: Bool
     }
 
-    var onChangeRouteType: ((SegmentRouteContext, Int?) -> Void)?
+    var onChangeRouteType: ((SegmentRouteContext, Int?, Int?) -> Void)?
     var onDismissed: (() -> Void)?
 
     private let point: PlanRoutePoint
@@ -183,39 +183,54 @@ final class PlanRoutePointMenuViewController: UIViewController {
     private func handle(row: Row) {
         switch row {
         case .movePoint:
+            NSLog("[PlanRouteDbg] pointMenu: movePoint index=%d", point.index)
             dataSource?.selectRoutePoint(at: point.index)
             dismiss(animated: true)
         case .addBefore:
+            NSLog("[PlanRouteDbg] pointMenu: addBefore index=%d", point.index)
             dataSource?.addPointBefore(index: point.index)
             dismiss(animated: true)
         case .addAfter:
+            NSLog("[PlanRouteDbg] pointMenu: addAfter index=%d", point.index)
             dataSource?.addPointAfter(index: point.index)
             dismiss(animated: true)
         case .trimBefore:
+            NSLog("[PlanRouteDbg] pointMenu: trimBefore index=%d", point.index)
             dataSource?.trimBefore(index: point.index)
             dismiss(animated: true)
         case .trimAfter:
+            NSLog("[PlanRouteDbg] pointMenu: trimAfter index=%d", point.index)
             dataSource?.trimAfter(index: point.index)
             dismiss(animated: true)
         case .changeTypeBefore:
             let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
-            let context: SegmentRouteContext
             if groupIndex > 0 {
                 let prevGroup = segment.groups[groupIndex - 1]
-                context = .profileGroup(prevGroup, segment: segment)
+                let context = SegmentRouteContext.profileGroup(prevGroup, segment: segment)
+                NSLog("[PlanRouteDbg] pointMenu: changeTypeBefore pointIndex=%d -> profileGroup prevGroup.appMode=%@ prevGroup.lastPointIndex=%d prevGroup.points=%d",
+                      point.index, prevGroup.appMode?.stringKey ?? "nil", prevGroup.lastPointIndex, prevGroup.points.count)
+                dismiss(animated: true) { [weak self] in
+                    self?.onChangeRouteType?(context, nil, nil)
+                }
             } else {
-                context = .wholeSegment(segment)
-            }
-            dismiss(animated: true) { [weak self] in
-                self?.onChangeRouteType?(context, nil)
+                let context = SegmentRouteContext.profileGroup(group, segment: segment)
+                let upToIndex = point.index
+                NSLog("[PlanRouteDbg] pointMenu: changeTypeBefore pointIndex=%d -> profileGroup(first) upToIndex=%d group.points=%d",
+                      point.index, upToIndex, group.points.count)
+                dismiss(animated: true) { [weak self] in
+                    self?.onChangeRouteType?(context, nil, upToIndex)
+                }
             }
         case .changeTypeAfter:
             let context = SegmentRouteContext.profileGroup(group, segment: segment)
             let fromIndex = point.index
+            NSLog("[PlanRouteDbg] pointMenu: changeTypeAfter pointIndex=%d group.appMode=%@ group.lastPointIndex=%d group.points=%d",
+                  fromIndex, group.appMode?.stringKey ?? "nil", group.lastPointIndex, group.points.count)
             dismiss(animated: true) { [weak self] in
-                self?.onChangeRouteType?(context, fromIndex)
+                self?.onChangeRouteType?(context, fromIndex, nil)
             }
         case .delete:
+            NSLog("[PlanRouteDbg] pointMenu: deletePoint index=%d", point.index)
             dataSource?.deleteRoutePoint(at: point.index)
             dismiss(animated: true)
         }

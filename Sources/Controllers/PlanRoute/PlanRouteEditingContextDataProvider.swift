@@ -188,6 +188,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func addRoutePoint() {
+        NSLog("[PlanRouteDbg] addRoutePoint (center point)")
         bridge.addCenterPoint()
     }
 
@@ -273,25 +274,39 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func startNewSegment() {
+        NSLog("[PlanRouteDbg] startNewSegment")
         bridge.startNewSegment()
     }
 
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool) {
+        NSLog("[PlanRouteDbg] applyMode: mode=%@ pointIndex=%d wholeRoute=%@",
+              mode.stringKey ?? "nil", pointIndex, wholeRoute ? "true" : "false")
         bridge.apply(mode, pointIndex: pointIndex, wholeRoute: wholeRoute)
     }
 
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext) {
         guard let effectiveMode = mode ?? OAApplicationMode.default() else { return }
+        NSLog("[PlanRouteDbg] applyModeToContext: mode=%@ context=%@",
+              effectiveMode.stringKey ?? "nil", String(describing: context))
         if case let .profileGroup(group, _) = context {
+            NSLog("[PlanRouteDbg] applyModeToContext profileGroup: pointsCount=%d indices=%@",
+                  group.points.count,
+                  group.points.map { String($0.index) }.joined(separator: ","))
             for point in group.points {
+                NSLog("[PlanRouteDbg]   bridge.apply mode=%@ pointIndex=%d wholeRoute=false",
+                      effectiveMode.stringKey ?? "nil", point.index)
                 bridge.apply(effectiveMode, pointIndex: point.index, wholeRoute: false)
             }
         } else {
+            NSLog("[PlanRouteDbg] applyModeToContext other: applyPointIndex=%d wholeRoute=%@",
+                  context.applyPointIndex, context.applyWholeRoute ? "true" : "false")
             bridge.apply(effectiveMode, pointIndex: context.applyPointIndex, wholeRoute: context.applyWholeRoute)
         }
     }
 
     func applyModeAllNext(fromPointIndex index: Int, mode: OAApplicationMode?) {
+        NSLog("[PlanRouteDbg] applyModeAllNext: fromIndex=%d mode=%@",
+              index, mode?.stringKey ?? "nil")
         bridge.applyModeAllNext(fromIndex: index, appMode: mode ?? OAApplicationMode.default())
     }
 
@@ -320,10 +335,12 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     func addPointBefore(index: Int) {
+        NSLog("[PlanRouteDbg] addPointBefore: index=%d", index)
         bridge.addPointBefore(index: index)
     }
 
     func addPointAfter(index: Int) {
+        NSLog("[PlanRouteDbg] addPointAfter: index=%d", index)
         bridge.addPointAfter(index: index)
     }
 
@@ -378,12 +395,18 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func mapSegment(_ segment: OAPlanRouteSegmentData) -> PlanRouteSegment {
-        PlanRouteSegment(index: segment.index,
-                         groups: segment.groups.map { mapGroup($0) },
-                         routed: segment.routed,
-                         multiMode: segment.multiMode,
-                         singleMode: segment.singleMode,
-                         distance: segment.distance)
+        NSLog("[PlanRouteDbg] mapSegment: index=%d groupsCount=%d multiMode=%@ routed=%@ distance=%.1f singleMode=%@",
+              segment.index, segment.groups.count,
+              segment.multiMode ? "true" : "false",
+              segment.routed ? "true" : "false",
+              segment.distance,
+              segment.singleMode?.stringKey ?? "nil")
+        return PlanRouteSegment(index: segment.index,
+                                groups: segment.groups.map { mapGroup($0) },
+                                routed: segment.routed,
+                                multiMode: segment.multiMode,
+                                singleMode: segment.singleMode,
+                                distance: segment.distance)
     }
 
     private func poiGroupName(for item: OAGpxWptItem) -> String {
@@ -400,10 +423,17 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
     }
 
     private func mapGroup(_ group: OAPlanRouteGroupData) -> PlanRouteProfileGroup {
-        PlanRouteProfileGroup(appMode: group.appMode,
-                              distance: group.distance,
-                              lastPointIndex: group.lastGlobalIndex,
-                              points: group.points.map { mapPoint($0) })
+        let pointIndices = group.points.map { $0.globalIndex }
+        NSLog("[PlanRouteDbg] mapGroup: appMode=%@ distance=%.1f lastGlobalIndex=%d pointsCount=%d pointIndices=%@",
+              group.appMode?.stringKey ?? "nil",
+              group.distance,
+              group.lastGlobalIndex,
+              group.points.count,
+              pointIndices.map { String($0) }.joined(separator: ","))
+        return PlanRouteProfileGroup(appMode: group.appMode,
+                                     distance: group.distance,
+                                     lastPointIndex: group.lastGlobalIndex,
+                                     points: group.points.map { mapPoint($0) })
     }
 
     private func mapPoint(_ point: OAPlanRoutePointData) -> PlanRoutePoint {

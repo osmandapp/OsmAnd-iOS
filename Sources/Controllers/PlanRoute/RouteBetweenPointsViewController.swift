@@ -122,12 +122,37 @@ final class RouteBetweenPointsViewController: UIViewController {
     }
 
     private func makeSegmentSection(_ segment: PlanRouteSegment) -> SectionModel {
-        var rows: [Row] = segment.groups.map { .profileGroup($0, segment: segment) }
-        if segment.groups.count > 1 {
+        NSLog("[PlanRouteDbg] makeSegmentSection: segment=%d groups=%d multiMode=%@",
+              segment.index, segment.groups.count, segment.multiMode ? "true" : "false")
+        for (i, g) in segment.groups.enumerated() {
+            NSLog("[PlanRouteDbg]   group[%d] appMode=%@ distance=%.1f lastPointIndex=%d points=%d",
+                  i, g.appMode?.stringKey ?? "nil", g.distance, g.lastPointIndex, g.points.count)
+        }
+        let effective = mergedGroups(from: segment.groups)
+        NSLog("[PlanRouteDbg]   after merge: effectiveGroups=%d", effective.count)
+        var rows: [Row] = effective.map { .profileGroup($0, segment: segment) }
+        if effective.count > 1 {
             rows.append(.changeWholeSegment(segment))
         }
         let title = String(format: localizedString("segments_count"), segment.index + 1)
         return SectionModel(headerTitle: title, rows: rows)
+    }
+
+    private func mergedGroups(from groups: [PlanRouteProfileGroup]) -> [PlanRouteProfileGroup] {
+        var result: [PlanRouteProfileGroup] = []
+        for group in groups {
+            if let last = result.last, last.appMode?.stringKey == group.appMode?.stringKey {
+                result[result.count - 1] = PlanRouteProfileGroup(
+                    appMode: last.appMode,
+                    distance: last.distance + group.distance,
+                    lastPointIndex: group.lastPointIndex,
+                    points: last.points + group.points
+                )
+            } else {
+                result.append(group)
+            }
+        }
+        return result
     }
 
     private func openSettings(context: SegmentRouteContext, applyFromPointIndex: Int? = nil) {

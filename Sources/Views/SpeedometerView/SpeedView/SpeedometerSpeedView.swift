@@ -180,16 +180,21 @@ final class SpeedometerSpeedView: UIView {
     private func updateSpeedValueAndUnit(with value: Float) {
         let valueUnitArray: NSMutableArray = []
         OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)
-        if let result = getValueAndUnit(with: valueUnitArray) {
-            let normalizedValue = result.value.replacingOccurrences(of: ",", with: ".")
-            if let formattedValue = Float(normalizedValue) {
-                cachedFormattedSpeed = formattedValue
-            } else {
-                debugPrint("updateSpeedValueAndUnit -> Invalid number")
-            }
-            valueSpeedLabel.text = normalizedValue
-            unitSpeedLabel.text = result.unit.uppercased()
+
+        guard let result = getValueAndUnit(with: valueUnitArray) else { return }
+
+        let normalizedCachedValue = result.value
+            .replacingOccurrences(of: ",", with: ".")
+            .replacingOccurrences(of: ":", with: ".")
+
+        if let cachedValue = Float(normalizedCachedValue) {
+            cachedFormattedSpeed = cachedValue
+        } else {
+            debugPrint("Failed to parse cached speed value: \(result.value)")
         }
+
+        valueSpeedLabel.text = result.value
+        unitSpeedLabel.text = result.unit.uppercased()
     }
     
     private func isUpdateNeeded() -> Bool {

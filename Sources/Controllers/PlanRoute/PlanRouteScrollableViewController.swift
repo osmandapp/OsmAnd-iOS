@@ -399,8 +399,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func presentPointMenuVC(point: PlanRoutePoint, group: PlanRouteProfileGroup, segment: PlanRouteSegment) {
         let menuVC = PlanRoutePointMenuViewController(point: point, segment: segment, group: group, dataSource: dataProvider)
-        menuVC.onChangeRouteType = { [weak self] context in
-            self?.presentSettingsForContext(context)
+        menuVC.onChangeRouteType = { [weak self] context, fromPointIndex in
+            self?.presentSettingsForContext(context, applyFromPointIndex: fromPointIndex)
         }
         let nav = UINavigationController(rootViewController: menuVC)
         nav.modalPresentationStyle = .pageSheet
@@ -416,26 +416,22 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let segments = dataProvider.routeSegments
         guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
         let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
-        guard groupIndex > 0 else { return }
-        let prevGroup = segment.groups[groupIndex - 1]
-        presentSettingsForContext(.profileGroup(prevGroup, segment: segment))
+        if groupIndex > 0 {
+            let prevGroup = segment.groups[groupIndex - 1]
+            presentSettingsForContext(.profileGroup(prevGroup, segment: segment))
+        } else {
+            presentSettingsForContext(.wholeSegment(segment))
+        }
     }
 
     private func presentChangeRouteType(after pointIndex: Int) {
         let segments = dataProvider.routeSegments
-        guard let (segment, _, _) = findPointContext(index: pointIndex, in: segments) else { return }
-        let listVC = RouteBetweenPointsViewController(dataSource: dataProvider, fromPointIndex: pointIndex, scopedSegment: segment)
-        let nav = UINavigationController(rootViewController: listVC)
-        nav.modalPresentationStyle = .pageSheet
-        if let sheet = nav.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
-        }
-        present(nav, animated: true)
+        guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
+        presentSettingsForContext(.profileGroup(group, segment: segment), applyFromPointIndex: pointIndex)
     }
 
-    private func presentSettingsForContext(_ context: SegmentRouteContext) {
-        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider)
+    private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil) {
+        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex)
         let nav = UINavigationController(rootViewController: settingsVC)
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {

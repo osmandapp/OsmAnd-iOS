@@ -189,8 +189,11 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     @objc private func onConfirmTapped() {
-        if let pointIndex = applyFromPointIndex {
-            dataSource?.applyModeAllNext(fromPointIndex: pointIndex, mode: selectedMode)
+        if let fromIndex = applyFromPointIndex, case let .profileGroup(group, _) = context {
+            guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
+            for point in group.points where point.index >= fromIndex {
+                dataSource?.applyMode(mode, pointIndex: point.index, wholeRoute: false)
+            }
         } else {
             dataSource?.applyModeToContext(selectedMode, context: context)
         }

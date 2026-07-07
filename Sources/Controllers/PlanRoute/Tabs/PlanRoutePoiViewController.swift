@@ -83,7 +83,7 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
     }
 
     private func sortMode(for groupName: String) -> TrackFavoriteSortMode {
-        sortModeByGroupName[groupName] ?? TrackFavoriteSortModeHelper.defaultSortMode()
+        sortModeByGroupName[groupName] ?? TrackFavoriteSortModeHelper.defaultSortMode
     }
 
     private func updateVisiblePoiCells() {

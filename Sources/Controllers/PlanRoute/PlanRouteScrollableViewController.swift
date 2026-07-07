@@ -316,9 +316,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshairImage() {
-        let isNight = OAAppSettings.sharedManager().nightMode
-        let name = isNight ? "map_ruler_center_night" : "map_ruler_center_day"
-        crosshairView.image = UIImage(named: name)
+        crosshairView.image = UIImage(named: "map_ruler_center_day")
     }
 
     private func setupCrosshair() {

@@ -1156,7 +1156,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
     private func makeNoElevationStatusCardCell() -> UITableViewCell {
         makeStatusCardCell(
             icon: UIImage(named: "ic_custom_desert"),
-            iconTint: UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgbValue: 0x65616B) : UIColor(rgbValue: 0xBEB9C5) },
+            iconTint: .iconColorDefault,
             title: localizedString("no_elevation_data"),
             description: localizedString("no_elevation_data_description"),
             actionTitle: localizedString("get_elevation_data"),

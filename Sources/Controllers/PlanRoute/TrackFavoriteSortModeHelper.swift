@@ -17,27 +17,27 @@ import UIKit
     
     var title: String {
         switch self {
-        case .lastModified: return localizedString("sort_last_modified")
-        case .nameAZ: return localizedString("track_sort_az")
-        case .nameZA: return localizedString("track_sort_za")
-        case .newestDateFirst: return localizedString("newest_date_first")
-        case .oldestDateFirst: return localizedString("oldest_date_first")
+        case .lastModified: localizedString("sort_last_modified")
+        case .nameAZ: localizedString("track_sort_az")
+        case .nameZA: localizedString("track_sort_za")
+        case .newestDateFirst: localizedString("newest_date_first")
+        case .oldestDateFirst: localizedString("oldest_date_first")
         }
     }
-    
+
     var image: UIImage? {
         switch self {
-        case .lastModified: return .icCustomLastModified
-        case .nameAZ: return .icCustomSortNameAscending
-        case .nameZA: return .icCustomSortNameDescending
-        case .newestDateFirst: return .icCustomSortDateNewest
-        case .oldestDateFirst: return .icCustomSortDateOldest
+        case .lastModified: .icCustomLastModified
+        case .nameAZ: .icCustomSortNameAscending
+        case .nameZA: .icCustomSortNameDescending
+        case .newestDateFirst: .icCustomSortDateNewest
+        case .oldestDateFirst: .icCustomSortDateOldest
         }
     }
 }
 
 @objc final class TrackFavoriteSortModeHelper: NSObject {
-    static func defaultSortMode() -> TrackFavoriteSortMode {
+    static var defaultSortMode: TrackFavoriteSortMode {
         .nameAZ
     }
     

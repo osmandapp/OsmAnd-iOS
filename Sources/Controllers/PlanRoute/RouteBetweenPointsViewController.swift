@@ -22,6 +22,9 @@ final class RouteBetweenPointsViewController: UIViewController {
         let rows: [Row]
     }
 
+    private static let rowHeight: CGFloat = 50
+    private static let sectionHeaderHeight: CGFloat = 44
+
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
     private weak var dataSource: PlanRoutePointsDataSource?
@@ -213,11 +216,11 @@ extension RouteBetweenPointsViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension RouteBetweenPointsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        50
+        Self.rowHeight
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        sections[section].headerTitle != nil ? 44 : 0
+        sections[section].headerTitle != nil ? Self.sectionHeaderHeight : 0
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

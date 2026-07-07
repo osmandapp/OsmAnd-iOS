@@ -692,7 +692,7 @@ private final class RouteSettingToggleCell: UITableViewCell {
         titleLabel.textColor = .textColorPrimary
         titleLabel.numberOfLines = 0
 
-        toggle.onTintColor = UIColor(rgbValue: 0x65C366)
+        toggle.onTintColor = .accentsGreen
         toggle.addTarget(self, action: #selector(onToggleSwitched), for: .valueChanged)
 
         [iconContainer, titleLabel, toggle].forEach {

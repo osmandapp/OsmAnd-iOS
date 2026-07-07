@@ -339,7 +339,7 @@ final class AstroVisibilityGraphView: UIView {
         let font = UIFont.systemFont(ofSize: Constants.markerTextSize)
         let timeAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: .textColorPrimary.currentMapThemeColor
+            .foregroundColor: UIColor.textColorPrimary.currentMapThemeColor
         ]
         let altitudeAttributes: [NSAttributedString.Key: Any] = [
             .font: font,

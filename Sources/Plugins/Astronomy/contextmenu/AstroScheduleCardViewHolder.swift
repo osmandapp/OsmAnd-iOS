@@ -355,23 +355,23 @@ enum AstroScheduleCardViewHolder {
     private static func buildTimeText(time: String?, suffix: String?) -> NSAttributedString {
         let parts = splitTimeParts(time)
         guard parts.main != emptyTime else {
-            return NSAttributedString(string: emptyTime, attributes: [.foregroundColor: .textColorSecondary])
+            return NSAttributedString(string: emptyTime, attributes: [.foregroundColor: UIColor.textColorSecondary])
         }
         let result = NSMutableAttributedString(string: parts.main, attributes: [
             .font: UIFont.monospacedDigitSystemFont(ofSize: 16, weight: .regular),
-            .foregroundColor: .textColorSecondary
+            .foregroundColor: UIColor.textColorSecondary
         ])
         if let meridiem = parts.meridiem, !meridiem.isEmpty {
             result.append(NSAttributedString(string: " "))
             result.append(NSAttributedString(string: meridiem, attributes: [
                 .font: UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular),
-                .foregroundColor: .textColorSecondary
+                .foregroundColor: UIColor.textColorSecondary
             ]))
         }
         if let suffix, !suffix.isEmpty {
             result.append(NSAttributedString(string: suffix, attributes: [
                 .font: UIFont.systemFont(ofSize: 9),
-                .foregroundColor: .textColorSecondary,
+                .foregroundColor: UIColor.textColorSecondary,
                 .baselineOffset: 5
             ]))
         }

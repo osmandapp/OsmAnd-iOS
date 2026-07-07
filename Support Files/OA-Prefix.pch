@@ -22,7 +22,7 @@
 #define kWorldSeamarksKey "world_seamarks.obf"
 #define kWorldSeamarksOldKey "world_seamarks_basemap.obf"
 #define kAppExecCounter @"kAppExecCounter"
-#define kAppInstalledDate @"kAppInstalledDate"
+static NSString * const kAppInstalledDate = @"kAppInstalledDate";
 #define kShowMapIterator @"kShowMapIterator"
 #define kMapDownloadStopReminding @"kMapDownloadStopReminding"
 #define kMapDownloadReminderStoppedDate @"kMapDownloadReminderStoppedDate"

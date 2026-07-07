@@ -2747,14 +2747,11 @@
 		DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5226C563A400F274C7 /* OARoadSegmentData.mm */; };
 		DA5A848C26C563A900F274C7 /* OASelectTrackFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5426C563A400F274C7 /* OASelectTrackFolderViewController.m */; };
 		DA5A848D26C563A900F274C7 /* OASaveTrackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F5726C563A400F274C7 /* OASaveTrackViewController.xib */; };
-		DA5A848E26C563A900F274C7 /* OARoutePlanningHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F5926C563A400F274C7 /* OARoutePlanningHudViewController.xib */; };
 		DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5C26C563A400F274C7 /* OABaseTableViewController.m */; };
 		DA5A849026C563A900F274C7 /* OABaseTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F5D26C563A400F274C7 /* OABaseTableViewController.xib */; };
-		DA5A849126C563A900F274C7 /* OASaveGpxRouteAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F5F26C563A400F274C7 /* OASaveGpxRouteAsyncTask.mm */; };
 		DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6226C563A400F274C7 /* OAMeasurementEditingContext.mm */; };
 		DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6326C563A400F274C7 /* OAGpxApproximationViewController.mm */; };
 		DA5A849426C563A900F274C7 /* OASaveTrackBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F6526C563A400F274C7 /* OASaveTrackBottomSheetViewController.xib */; };
-		DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6726C563A400F274C7 /* OARoutePlanningHudViewController.mm */; };
 		DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6926C563A400F274C7 /* InitialRoutePlanningBottomSheetViewController.mm */; };
 		DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6A26C563A500F274C7 /* OAGpxData.mm */; };
 		DA5A849826C563A900F274C7 /* OAExitRoutePlanningBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F6B26C563A500F274C7 /* OAExitRoutePlanningBottomSheetViewController.m */; };
@@ -7355,21 +7352,16 @@
 		DA5A7F5626C563A400F274C7 /* OARouteExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteExporter.h; sourceTree = "<group>"; };
 		DA5A7F5726C563A400F274C7 /* OASaveTrackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASaveTrackViewController.xib; sourceTree = "<group>"; };
 		DA5A7F5826C563A400F274C7 /* OAAddTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddTrackFolderViewController.h; sourceTree = "<group>"; };
-		DA5A7F5926C563A400F274C7 /* OARoutePlanningHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutePlanningHudViewController.xib; sourceTree = "<group>"; };
 		DA5A7F5A26C563A400F274C7 /* OAGpxApproximationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxApproximationViewController.h; sourceTree = "<group>"; };
 		DA5A7F5B26C563A400F274C7 /* OAPlanningPopupBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPlanningPopupBaseViewController.h; sourceTree = "<group>"; };
 		DA5A7F5C26C563A400F274C7 /* OABaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OABaseTableViewController.m; sourceTree = "<group>"; };
 		DA5A7F5D26C563A400F274C7 /* OABaseTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OABaseTableViewController.xib; sourceTree = "<group>"; };
 		DA5A7F5E26C563A400F274C7 /* OASnapTrackWarningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASnapTrackWarningViewController.h; sourceTree = "<group>"; };
-		DA5A7F5F26C563A400F274C7 /* OASaveGpxRouteAsyncTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASaveGpxRouteAsyncTask.mm; sourceTree = "<group>"; };
-		DA5A7F6026C563A400F274C7 /* OARoutePlanningHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePlanningHudViewController.h; sourceTree = "<group>"; };
 		DA5A7F6126C563A400F274C7 /* OASaveTrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASaveTrackViewController.h; sourceTree = "<group>"; };
 		DA5A7F6226C563A400F274C7 /* OAMeasurementEditingContext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMeasurementEditingContext.mm; sourceTree = "<group>"; };
 		DA5A7F6326C563A400F274C7 /* OAGpxApproximationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxApproximationViewController.mm; sourceTree = "<group>"; };
 		DA5A7F6426C563A400F274C7 /* OAMeasurementEditingContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContext.h; sourceTree = "<group>"; };
 		DA5A7F6526C563A400F274C7 /* OASaveTrackBottomSheetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASaveTrackBottomSheetViewController.xib; sourceTree = "<group>"; };
-		DA5A7F6626C563A400F274C7 /* OASaveGpxRouteAsyncTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASaveGpxRouteAsyncTask.h; sourceTree = "<group>"; };
-		DA5A7F6726C563A400F274C7 /* OARoutePlanningHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutePlanningHudViewController.mm; sourceTree = "<group>"; };
 		DA5A7F6826C563A400F274C7 /* OASelectTrackFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectTrackFolderViewController.h; sourceTree = "<group>"; };
 		DA5A7F6926C563A400F274C7 /* InitialRoutePlanningBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InitialRoutePlanningBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7F6A26C563A500F274C7 /* OAGpxData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxData.mm; sourceTree = "<group>"; };
@@ -13606,11 +13598,6 @@
 				DA5A7F5226C563A400F274C7 /* OARoadSegmentData.mm */,
 				DA5A7F5626C563A400F274C7 /* OARouteExporter.h */,
 				DA5A7F8826C563A500F274C7 /* OARouteExporter.mm */,
-				DA5A7F6026C563A400F274C7 /* OARoutePlanningHudViewController.h */,
-				DA5A7F6726C563A400F274C7 /* OARoutePlanningHudViewController.mm */,
-				DA5A7F5926C563A400F274C7 /* OARoutePlanningHudViewController.xib */,
-				DA5A7F6626C563A400F274C7 /* OASaveGpxRouteAsyncTask.h */,
-				DA5A7F5F26C563A400F274C7 /* OASaveGpxRouteAsyncTask.mm */,
 				DA5A7F5126C563A400F274C7 /* OASaveTrackBottomSheetViewController.h */,
 				DA5A7F8B26C563A500F274C7 /* OASaveTrackBottomSheetViewController.mm */,
 				DA5A7F6526C563A400F274C7 /* OASaveTrackBottomSheetViewController.xib */,
@@ -16667,7 +16654,6 @@
 				DA13A01D2345FA0100C1A1A8 /* ic_custom_allow_private_access@2x.png in Resources */,
 				DA5A82AC26C563A700F274C7 /* OARouteStatisticsModeCell.xib in Resources */,
 				DA8DB8E4218DA8AA00EBF914 /* ic_ruler_center_light@2x.png in Resources */,
-				DA5A848E26C563A900F274C7 /* OARoutePlanningHudViewController.xib in Resources */,
 				DAEC06062296CA7C00045298 /* ic_navbar_close@3x.png in Resources */,
 				DA5A829326C563A700F274C7 /* OADestinationCollectionViewCell.xib in Resources */,
 				DA2EC78329FBBE0400ECEB37 /* warnings_railways_us@3x.png in Resources */,
@@ -17522,7 +17508,6 @@
 				321C839A2F33CC140028FCCC /* PopulationRowBehaviour.swift in Sources */,
 				DA5A84E326C563A900F274C7 /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				32B383122AEFDE2D0072A3FB /* TravelGuidesImageCacheHelper.swift in Sources */,
-				DA5A849126C563A900F274C7 /* OASaveGpxRouteAsyncTask.mm in Sources */,
 				DA5A812126C563A700F274C7 /* OAAnalyticsHelper.m in Sources */,
 				DA5A84EE26C563A900F274C7 /* OASuperViewController.m in Sources */,
 				DA5A817826C563A700F274C7 /* MGSwipeButton.m in Sources */,
@@ -17719,7 +17704,6 @@
 				FA6439E92B04D81B00331006 /* Data+Extension.swift in Sources */,
 				DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */,
 				462E13E82BFA36D40038BCCB /* CustomMapButtonsViewController.swift in Sources */,
-				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,
 				C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */,
 				DA5A81A626C563A700F274C7 /* OASearchCoreAPI.mm in Sources */,

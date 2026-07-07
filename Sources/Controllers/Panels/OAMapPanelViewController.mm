@@ -90,7 +90,6 @@
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
 #import "OAEditPointViewController.h"
-#import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
@@ -407,7 +406,7 @@ typedef enum
 
     self.sidePanelController.recognizesPanGesture = NO;
 
-    if ([controller isKindOfClass:OARoutePlanningHudViewController.class] || [controller isKindOfClass:PlanRouteScrollableViewController.class])
+    if ([controller isKindOfClass:PlanRouteScrollableViewController.class])
         _activeTargetType = OATargetRoutePlanning;
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;
@@ -437,11 +436,6 @@ typedef enum
     [_hudViewController updateDependentButtonsVisibility];
 }
 
-- (void)showPlanRouteViewController:(OARoutePlanningHudViewController *)controller
-{
-    _activeTargetType = OATargetRoutePlanning;
-    [self showScrollableHudViewController:controller];
-}
 
 - (void)showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller
 {
@@ -1312,7 +1306,7 @@ typedef enum
     navController.navigationBarHidden = YES;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
 
-    if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:OARoutePlanningHudViewController.class])
+    if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
         _isNewContextMenuStillEnabled = YES;
 
     [self presentViewController:navController animated:YES completion:nil];
@@ -2398,9 +2392,7 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc]
-                                                                                        initWithLatitude:_targetLatitude
-                                                                                               longitude:_targetLongitude]]];
+    [PlanRouteScrollableViewController showNewRoute];
 }
 
 - (void) targetGoToPoint

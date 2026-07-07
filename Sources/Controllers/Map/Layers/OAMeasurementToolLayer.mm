@@ -42,7 +42,6 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _pointMarkers;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _selectedMarkerCollection;
     
-    sk_sp<SkImage> _pointMarkerIcon;
     sk_sp<SkImage> _selectedMarkerIcon;
     
     OsmAnd::PointI _cachedCenter;
@@ -65,7 +64,6 @@
     _pointMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
-    _pointMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"];
     _selectedMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_movable"];
     
     _initDone = YES;
@@ -156,7 +154,7 @@
     return nullptr;
 }
 
-- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection bitmap:(sk_sp<SkImage>&)bitmap
+- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection bitmap:(const sk_sp<SkImage> &)bitmap
 {
     if (collection->getMarkers().isEmpty())
     {
@@ -184,7 +182,7 @@
 
 - (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
-    return [self drawMarker:position collection:collection bitmap:_pointMarkerIcon];
+    return [self drawMarker:position collection:collection bitmap:[OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"]];
 }
 
 - (void) updateLastPointToCenter
@@ -340,13 +338,7 @@
 - (void) drawPointMarkers:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
     collection->removeAllMarkers();
-    OsmAnd::MapMarkerBuilder pointMarkerBuilder;
-    pointMarkerBuilder.setIsAccuracyCircleSupported(false);
-    pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
-    pointMarkerBuilder.setIsHidden(false);
-    pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
-    pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
-    pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(_pointMarkerIcon));
+    sk_sp<SkImage> pointMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"];
     
     if (_editingCtx.getPointsCount > 500)
     {
@@ -363,6 +355,13 @@
                 prevPnt = p;
                 if (currentDist > distThreshold)
                 {
+                    OsmAnd::MapMarkerBuilder pointMarkerBuilder;
+                    pointMarkerBuilder.setIsAccuracyCircleSupported(false);
+                    pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
+                    pointMarkerBuilder.setIsHidden(false);
+                    pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+                    pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
+                    pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(pointMarkerIcon));
                     auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
                     marker->setPosition(p);
                     marker->setUpdateAfterCreated(true);
@@ -375,6 +374,13 @@
     {
         for (const auto& p : points)
         {
+            OsmAnd::MapMarkerBuilder pointMarkerBuilder;
+            pointMarkerBuilder.setIsAccuracyCircleSupported(false);
+            pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
+            pointMarkerBuilder.setIsHidden(false);
+            pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+            pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
+            pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(pointMarkerIcon));
             auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
             marker->setPosition(p);
             marker->setUpdateAfterCreated(true);

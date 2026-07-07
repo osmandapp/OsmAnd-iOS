@@ -1667,17 +1667,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func onTrackEditClicked(_ track: TrackItem?) {
-        guard let track else { return }
-        
-        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-            let state = OATrackMenuViewControllerState()
-            state.openedFromTracksList = true
-            state.gpxFilePath = track.gpxFilePath
-            state.navControllerHistory = newCurrentHistory
-            if let vc = OARoutePlanningHudViewController(fileName: track.gpxFilePath, targetMenuState: state, adjustMapPosition: false) {
-                rootVC.mapPanel.showScrollableHudViewController(vc)
-            }
-        }
+        guard let track,
+              let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(),
+              !newCurrentHistory.isEmpty else { return }
+
+        PlanRouteScrollableViewController.openExistingTrack(filePath: track.gpxFilePath)
     }
     
     private func onTrackDuplicateClicked(track: TrackItem?) {

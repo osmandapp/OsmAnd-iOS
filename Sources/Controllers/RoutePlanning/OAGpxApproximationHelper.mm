@@ -112,12 +112,9 @@
             return NO;
         }]];
     } else {
-        if (approximateResult.count > 0)
-        {
-            NSArray *pair = [self processApproximationResults:approximateResult];
-            if (self.delegate)
-                [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
-        }
+        NSArray *pair = [self processApproximationResults:approximateResult];
+        if (self.delegate)
+            [self.delegate didFinishAllApproximationsWithResults:pair.firstObject points:pair.lastObject];
     }
 }
 

@@ -508,14 +508,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     private func onTrackEditClicked(track: TrackItem) {
         guard let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty else { return }
-        let state = OATrackMenuViewControllerState()
-        state.openedFromTracksList = true
-        state.gpxFilePath = track.gpxFilePath
-        state.navControllerHistory = newCurrentHistory
-        if let vc = OARoutePlanningHudViewController(fileName: track.gpxFilePath, targetMenuState: state, adjustMapPosition: true) {
-            rootVC?.mapPanel.closeDashboardLastScreen()
-            rootVC?.mapPanel.showScrollableHudViewController(vc)
-        }
+        rootVC?.mapPanel.closeDashboardLastScreen()
+        PlanRouteScrollableViewController.openExistingTrack(filePath: track.gpxFilePath)
     }
     
     private func onTrackDuplicateClicked(track: TrackItem) {

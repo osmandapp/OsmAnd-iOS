@@ -38,16 +38,15 @@ final class PlanRoutePointMenuViewController: UIViewController {
         let isDestructive: Bool
     }
 
-    private let point: PlanRoutePoint
-    private let segment: PlanRouteSegment
-    private let group: PlanRouteProfileGroup
-    private weak var dataSource: PlanRoutePointsDataSource?
-
     var onChangeRouteType: ((SegmentRouteContext) -> Void)?
     var onDismissed: (() -> Void)?
 
+    private let point: PlanRoutePoint
+    private let segment: PlanRouteSegment
+    private let group: PlanRouteProfileGroup
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [[RowModel]] = []
+    private weak var dataSource: PlanRoutePointsDataSource?
 
     init(point: PlanRoutePoint,
          segment: PlanRouteSegment,
@@ -163,7 +162,7 @@ final class PlanRoutePointMenuViewController: UIViewController {
                       title: localizedString("plan_route_change_route_type_before"),
                       subtitle: nil,
                       icon: changeTypeBeforeIcon,
-                      isEnabled: !point.isStart,
+                      isEnabled: prevGroup != nil,
                       isDestructive: false),
              RowModel(row: .changeTypeAfter,
                       title: localizedString("plan_route_change_route_type_after"),

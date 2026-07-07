@@ -15,8 +15,8 @@ final class SegmentRouteSettingsViewController: UIViewController {
         case settings
     }
 
-    private weak var dataSource: PlanRoutePointsDataSource?
     private let context: SegmentRouteContext
+    private let applyFromPointIndex: Int?
     private var activeTab: ActiveTab = .routeType
     private var selectedMode: OAApplicationMode?
     private var routingParams: PlanRouteSegmentRoutingParams
@@ -26,11 +26,17 @@ final class SegmentRouteSettingsViewController: UIViewController {
     private var routeTypeVC: RouteTypeViewController?
     private var settingsVC: RouteSettingsViewController?
     private var activeTabViewController: UIViewController?
+    private weak var dataSource: PlanRoutePointsDataSource?
 
-    init(context: SegmentRouteContext, dataSource: PlanRoutePointsDataSource?) {
+    init(context: SegmentRouteContext, dataSource: PlanRoutePointsDataSource?, applyFromPointIndex: Int? = nil) {
         self.context = context
+        self.applyFromPointIndex = applyFromPointIndex
         self.dataSource = dataSource
-        self.selectedMode = context.currentMode
+        if case .wholeTrack = context {
+            self.selectedMode = dataSource?.defaultMode
+        } else {
+            self.selectedMode = context.currentMode
+        }
         self.routingParams = dataSource?.routingParams(for: context) ?? PlanRouteSegmentRoutingParams(useElevationData: false,
                                                                                                       considerTemporaryLimitations: true)
         super.init(nibName: nil, bundle: nil)
@@ -58,9 +64,9 @@ final class SegmentRouteSettingsViewController: UIViewController {
 
         if context.usesCloseButton {
             let closeButton = UIBarButtonItem(image: UIImage(systemName: "xmark"),
-                                             style: .plain,
-                                             target: self,
-                                             action: #selector(onCloseTapped))
+                                              style: .plain,
+                                              target: self,
+                                              action: #selector(onCloseTapped))
             closeButton.tintColor = .textColorPrimary
             navigationItem.leftBarButtonItem = closeButton
         }
@@ -145,7 +151,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             context: context,
             availableModes: dataSource?.availableModes ?? [],
             selectedMode: selectedMode,
-            canStartNewSegment: context.usesCloseButton && (dataSource?.canStartNewSegment ?? false),
+            canStartNewSegment: context.usesCloseButton,
             onModeSelected: { [weak self] mode in
                 self?.selectedMode = mode
             },
@@ -157,12 +163,24 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     private func makeSettingsVC() -> RouteSettingsViewController {
-        RouteSettingsViewController(
+        let vc = RouteSettingsViewController(
             params: routingParams,
             onParamsChanged: { [weak self] updated in
                 self?.routingParams = updated
             }
         )
+        vc.onAvoidRoadsTapped = { [weak self] in
+            guard let appMode = self?.selectedMode ?? OAApplicationMode.default(),
+                  let avoidVC = OAAvoidPreferParametersViewController(appMode: appMode, isAvoid: true) else { return }
+            self?.navigationController?.pushViewController(avoidVC, animated: true)
+        }
+        vc.onNavigationSettingsTapped = { [weak self] in
+            guard let appMode = self?.selectedMode ?? OAApplicationMode.default(),
+                  let navSettingsVC = OAProfileNavigationSettingsViewController(appMode: appMode) else { return }
+            navSettingsVC.openFromRouteInfo = true
+            self?.navigationController?.pushViewController(navSettingsVC, animated: true)
+        }
+        return vc
     }
 
     @objc private func onSegmentChanged() {
@@ -171,7 +189,11 @@ final class SegmentRouteSettingsViewController: UIViewController {
     }
 
     @objc private func onConfirmTapped() {
-        dataSource?.applyModeToContext(selectedMode, context: context)
+        if let pointIndex = applyFromPointIndex {
+            dataSource?.applyModeAllNext(fromPointIndex: pointIndex, mode: selectedMode)
+        } else {
+            dataSource?.applyModeToContext(selectedMode, context: context)
+        }
         dataSource?.applyRoutingParams(routingParams, for: context)
         if context.usesCloseButton {
             navigationController?.dismiss(animated: true)
@@ -295,8 +317,7 @@ private final class RouteTypeViewController: UIViewController {
         result.append(SectionModel(rows: [.straightLine], footerTitle: nil))
 
         let modeRows: [Row] = availableModes.map { .mode($0) }
-        let modesFooter: String? = canStartNewSegment ? nil : nil
-        result.append(SectionModel(rows: modeRows, footerTitle: modesFooter))
+        result.append(SectionModel(rows: modeRows, footerTitle: nil))
 
         if canStartNewSegment {
             result.append(SectionModel(rows: [.startNewSegment],
@@ -517,6 +538,9 @@ private final class RouteSettingsViewController: UIViewController {
         let rows: [Row]
     }
 
+    var onAvoidRoadsTapped: (() -> Void)?
+    var onNavigationSettingsTapped: (() -> Void)?
+
     private var params: PlanRouteSegmentRoutingParams
     private let onParamsChanged: (PlanRouteSegmentRoutingParams) -> Void
 
@@ -612,6 +636,15 @@ extension RouteSettingsViewController: UITableViewDataSource {
 extension RouteSettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let row = sections[indexPath.section].rows[indexPath.row]
+        switch row {
+        case .avoidRoads:
+            onAvoidRoadsTapped?()
+        case .navigationSettings:
+            onNavigationSettingsTapped?()
+        default:
+            break
+        }
     }
 }
 

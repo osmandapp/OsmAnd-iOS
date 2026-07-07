@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OARoutePlanningHudViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -106,10 +105,7 @@
 - (IBAction)createNewTrackButtonPressed:(id)sender
 {
     [self hide:YES];
-    const auto point = OsmAnd::Utilities::convert31ToLatLon(OARootViewController.instance.mapPanel.mapViewController.mapView.target31);
-    CLLocation *coord = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:
-            [[OARoutePlanningHudViewController alloc] initWithInitialPoint:coord]];
+    [PlanRouteScrollableViewController showNewRoute];
 }
 
 - (IBAction)shareButtonPressed:(id)sender

@@ -24,6 +24,7 @@ struct CLLocationCoordinate2D;
 
 - (instancetype)initWithItem:(OAGpxWptItem *)gpxWpt;
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi;
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi gpxDocument:(nullable OASGpxFile *)gpxDocument;
 
 @end
 

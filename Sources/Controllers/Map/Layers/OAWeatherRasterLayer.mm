@@ -22,7 +22,6 @@
 #import "OAAppData.h"
 #import "OAObservable.h"
 #import "OAOsmAndFormatter.h"
-#import "OARoutePlanningHudViewController.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>

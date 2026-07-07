@@ -22,12 +22,16 @@ final class RouteBetweenPointsViewController: UIViewController {
         let rows: [Row]
     }
 
-    private weak var dataSource: PlanRoutePointsDataSource?
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
+    private weak var dataSource: PlanRoutePointsDataSource?
+    private let fromPointIndex: Int?
+    private let scopedSegment: PlanRouteSegment?
 
-    init(dataSource: PlanRoutePointsDataSource?) {
+    init(dataSource: PlanRoutePointsDataSource?, fromPointIndex: Int? = nil, scopedSegment: PlanRouteSegment? = nil) {
         self.dataSource = dataSource
+        self.fromPointIndex = fromPointIndex
+        self.scopedSegment = scopedSegment
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -51,9 +55,9 @@ final class RouteBetweenPointsViewController: UIViewController {
         title = localizedString("route_between_points")
         navigationItem.backButtonDisplayMode = .minimal
         let closeButton = UIBarButtonItem(image: UIImage(systemName: "xmark"),
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(onCloseTapped))
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(onCloseTapped))
         closeButton.tintColor = .textColorPrimary
         navigationItem.leftBarButtonItem = closeButton
     }
@@ -102,10 +106,15 @@ final class RouteBetweenPointsViewController: UIViewController {
     }
 
     private func buildSections() -> [SectionModel] {
-        let segments = dataSource?.routeSegments ?? []
+        let segments: [PlanRouteSegment]
+        if let scoped = scopedSegment {
+            segments = [scoped]
+        } else {
+            segments = dataSource?.routeSegments ?? []
+        }
         var result: [SectionModel] = segments.map { makeSegmentSection($0) }
 
-        if dataSource?.canStartNewSegment ?? false {
+        if scopedSegment == nil, dataSource?.canStartNewSegment ?? false {
             result.append(SectionModel(headerTitle: nil, rows: [.startNewSegment]))
         }
         result.append(SectionModel(headerTitle: nil, rows: [.changeWholeTrack]))
@@ -121,8 +130,8 @@ final class RouteBetweenPointsViewController: UIViewController {
         return SectionModel(headerTitle: title, rows: rows)
     }
 
-    private func openSettings(context: SegmentRouteContext) {
-        let detailVC = SegmentRouteSettingsViewController(context: context, dataSource: dataSource)
+    private func openSettings(context: SegmentRouteContext, applyFromPointIndex: Int? = nil) {
+        let detailVC = SegmentRouteSettingsViewController(context: context, dataSource: dataSource, applyFromPointIndex: applyFromPointIndex)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 
@@ -198,7 +207,7 @@ extension RouteBetweenPointsViewController: UITableViewDelegate {
         let row = sections[indexPath.section].rows[indexPath.row]
         switch row {
         case let .profileGroup(group, segment):
-            openSettings(context: .profileGroup(group, segment: segment))
+            openSettings(context: .profileGroup(group, segment: segment), applyFromPointIndex: fromPointIndex)
         case let .changeWholeSegment(segment):
             openSettings(context: .wholeSegment(segment))
         case .startNewSegment:
@@ -234,7 +243,7 @@ private final class RouteGroupCell: UITableViewCell {
         let mode = group.appMode
         if let mode {
             iconView.image = mode.getIcon()?.withRenderingMode(.alwaysTemplate)
-            iconView.tintColor = mode.getProfileColor() ?? .iconColorActive
+            iconView.tintColor = profileTintColor(for: mode)
             titleLabel.text = mode.toHumanString()
         } else {
             iconView.image = .templateImageNamed("ic_custom_straight_line")
@@ -287,6 +296,10 @@ private final class RouteGroupCell: UITableViewCell {
 
     private func formattedDistance(_ meters: Double) -> String {
         OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
+    }
+
+    private func profileTintColor(for mode: OAApplicationMode) -> UIColor {
+        mode.isDerivedRouting(from: .car()) ? .buttonBgColorPrimary : (mode.getProfileColor() ?? .iconColorActive)
     }
 }
 

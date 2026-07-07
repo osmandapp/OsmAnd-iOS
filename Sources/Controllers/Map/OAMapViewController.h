@@ -232,6 +232,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void)getAltitudeForMapCenter:(void (^)(float height))callback;
 - (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^)(float height))callback;
+- (void)getAltitudesForCoordinates:(NSArray<NSValue *> *)coordinates callback:(void (^)(NSArray<NSNumber *> *heights))callback;
 
 - (CLLocation *) getLatLonFromElevatedPixel:(CGFloat)x y:(CGFloat)y;
 

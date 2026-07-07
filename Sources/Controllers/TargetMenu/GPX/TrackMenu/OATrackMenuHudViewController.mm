@@ -12,7 +12,6 @@
 #import "OASaveTrackViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OASelectTrackFolderViewController.h"
-#import "OARoutePlanningHudViewController.h"
 #import "OADeleteWaypointsViewController.h"
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
 #import "OAEditWaypointsGroupOptionsViewController.h"
@@ -981,12 +980,8 @@
     _pushedNewScreen = YES;
     __weak __typeof(self) weakSelf = self;
     [self hide:YES duration:.2 onComplete:^{
-        OATrackMenuViewControllerState *state = [weakSelf getCurrentState];
-        state.openedFromTrackMenu = YES;
-        [weakSelf.mapPanelViewController showScrollableHudViewController:[
-            [OARoutePlanningHudViewController alloc] initWithFileName:weakSelf.gpx.gpxFilePath
-                                                      targetMenuState:state
-                                                    adjustMapPosition:NO]];
+        NSString *absolutePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:weakSelf.gpx.gpxFilePath];
+        [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath];
     }];
 }
 
@@ -1128,6 +1123,7 @@
 - (void)deleteWaypointsGroup:(NSString *)groupName
            selectedWaypoints:(NSArray<OAGpxWptItem *> *)selectedWaypoints
 {
+    BOOL deleteGroup = selectedWaypoints == nil && ![self isRteGroup:groupName];
     NSMutableArray<NSNumber *> *waypointsIdxToDelete = [NSMutableArray array];
     NSArray<OAGpxWptItem *> *waypointsToDelete = selectedWaypoints ? selectedWaypoints : _waypointGroups[groupName];
     for (OAGpxWptItem *waypoint in _waypointGroups[groupName])
@@ -1145,6 +1141,36 @@
     };
 
     [self updateGpxData:YES updateDocument:YES];
+    if (deleteGroup)
+    {
+        NSString *groupKey = [self isDefaultGroup:groupName] ? @"" : groupName;
+        BOOL groupMetadataDeleted = NO;
+        for (NSString *key in [self.doc.pointsGroups.allKeys copy])
+        {
+            OASGpxUtilitiesPointsGroup *group = self.doc.pointsGroups[key];
+            NSString *name = key.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : group.name.length > 0 ? group.name : key;
+            if ([key isEqualToString:groupKey] || [name isEqualToString:groupName])
+            {
+                [self.doc.pointsGroups removeObjectForKey:key];
+                groupMetadataDeleted = YES;
+            }
+        }
+
+        if (groupMetadataDeleted && !self.isCurrentTrack)
+        {
+            NSString *path = self.doc.path;
+            if (path.length == 0 && self.gpx.gpxFilePath.length > 0)
+            {
+                path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+            }
+            if (path.length > 0)
+            {
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+                self.doc.author = [OAAppVersion getFullVersionWithAppName];
+                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:self.doc];
+            }
+        }
+    }
 
     [_uiBuilder updateProperty:dataToUpdate tableData:_tableData];
     [_uiBuilder updateData:_tableData];

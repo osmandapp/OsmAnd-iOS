@@ -1073,6 +1073,10 @@
 "poi_search_near_center" = "Search is performed near the center of the map";
 "shared_string_hide" = "Hide";
 "shared_string_show" = "Show";
+"shared_string_copy_from" = "Copy from";
+"add_points" = "Add Points";
+"add_points_description" = "Select places on the map or copy them from your Favorites to see them along your route.";
+"shared_string_new_name" = "New name";
 
 // My Places
 "favorites_item" = "Favorites";
@@ -4795,3 +4799,19 @@
 "selected_waypoints_exit_descr" = "Your waypoint selections will not be saved if you close now";
 "auto_select_nearest_points" = "Auto-select nearest points";
 "auto_select_nearest_footer" = "Automatically find and select the waypoints closest to this track.";
+
+"no_elevation_data" = "No elevation data";
+"no_elevation_data_description" = "OsmAnd can retrieve elevation data from nearby roads or terrain maps.";
+"get_elevation_data" = "Get elevation data";
+"get_elevation_data_description" = "Select a method to retrieve altitude data from offline maps or terrain maps.";
+"message_graph_will_be_available_after_recalculation" = "Please wait.\nGraph will be available after route recalculation.";
+"plan_route_graph_available_after_recalculation" = "Graph will be available after route recalculation.";
+"use_nearby_roads" = "Use nearby roads";
+"may_adjust_track_geometry" = "May adjust track geometry";
+"use_terrain_maps" = "Use Terrain maps";
+"track_geometry_stays_unchanged" = "Track geometry stays unchanged";
+"route_is_being_calculated" = "Calculating elevation...";
+"calculating_elevation_nearby_roads_description" = "Adjusting track to nearby roads to retrieve altitude data.";
+"calculating_elevation_terrain_maps_description" = "Retrieving altitude data from terrain maps.";
+"recalculate_elevation" = "Recalculate elevation";
+"average_speed" = "Avg. speed";

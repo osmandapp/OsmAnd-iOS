@@ -398,12 +398,22 @@ class GpxUIHelper: NSObject {
                                 nightMode: Bool) {
         setupHorizontalGPXChart(chart: chartView,
                                 yLabelsCount: 4,
-                                topOffset: 20,
-                                bottomOffset: 4,
+                                topOffset: 0,
+                                bottomOffset: 0,
                                 useGesturesAndScale: true,
                                 nightMode: nightMode)
+        chartView.minOffset = 0
         chartView.extraLeftOffset = 16
         chartView.extraRightOffset = 16
+        chartView.drawBordersEnabled = false
+
+        let yr = chartView.rightAxis
+        yr.drawAxisLineEnabled = true
+        yr.axisLineColor = .chartAxisGridLine
+        yr.drawGridLinesEnabled = true
+        yr.gridColor = .chartAxisGridLine
+        yr.labelTextColor = .textColorSecondary
+
         let barData = buildStatisticChart(chartView: chartView,
                                           routeStatistics: statistics,
                                           analysis: analysis,

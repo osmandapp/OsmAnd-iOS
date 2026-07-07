@@ -110,7 +110,8 @@ final class CollectTracksTask: OAAsyncTask {
 
         for point in pointsList {
             guard !isCancelled() else { return }
-            guard let trackIndex = index.nearestTrackIndex(lat: point.lat, lon: point.lon) else { continue }
+            guard let trackIndex = index.nearestTrackIndex(lat: point.lat, lon: point.lon, isCancelled: { [weak self] in
+                self?.isCancelled() ?? false }) else { continue }
 
             let nearestItem = items[trackIndex]
             nearestItem.selectedPoints.append(point)

@@ -15,50 +15,87 @@ struct IndexedTrackPoint {
     let pointIndex: Int
 }
 
-private struct GeoBBox {
-    var minLat: Double
-    var maxLat: Double
-    var minLon: Double
-    var maxLon: Double
+// MARK: - 3D unit-sphere coordinates
 
-    static func from(_ points: [IndexedTrackPoint], indices: ArraySlice<Int>) -> GeoBBox {
-        var minLat = Double.greatestFiniteMagnitude
-        var maxLat = -Double.greatestFiniteMagnitude
-        var minLon = Double.greatestFiniteMagnitude
-        var maxLon = -Double.greatestFiniteMagnitude
-        for i in indices {
-            let p = points[i]
-            minLat = min(minLat, p.lat)
-            maxLat = max(maxLat, p.lat)
-            minLon = min(minLon, p.lon)
-            maxLon = max(maxLon, p.lon)
-        }
-        return GeoBBox(minLat: minLat, maxLat: maxLat, minLon: minLon, maxLon: maxLon)
+private struct Vector3 {
+    let x: Double
+    let y: Double
+    let z: Double
+
+    static func from(lat: Double, lon: Double) -> Vector3 {
+        let latRad = lat * .pi / 180.0
+        let lonRad = lon * .pi / 180.0
+        let cosLat = cos(latRad)
+        return Vector3(
+            x: cosLat * cos(lonRad),
+            y: cosLat * sin(lonRad),
+            z: sin(latRad)
+        )
     }
 
-    func minHaversineDistance(lat: Double, lon: Double) -> Double {
-        let clampedLat = min(max(lat, minLat), maxLat)
-        let clampedLon = min(max(lon, minLon), maxLon)
-        return OAMapUtils.getDistance(lat, lon1: lon, lat2: clampedLat, lon2: clampedLon)
+    func distance(to other: Vector3) -> Double {
+        let dx = x - other.x
+        let dy = y - other.y
+        let dz = z - other.z
+        return (dx * dx + dy * dy + dz * dz).squareRoot()
+    }
+}
+
+private struct BBox3 {
+    var minX: Double
+    var maxX: Double
+    var minY: Double
+    var maxY: Double
+    var minZ: Double
+    var maxZ: Double
+
+    static func from(_ vectors: [Vector3], indices: ArraySlice<Int>) -> BBox3 {
+        var minX = Double.greatestFiniteMagnitude
+        var maxX = -Double.greatestFiniteMagnitude
+        var minY = Double.greatestFiniteMagnitude
+        var maxY = -Double.greatestFiniteMagnitude
+        var minZ = Double.greatestFiniteMagnitude
+        var maxZ = -Double.greatestFiniteMagnitude
+
+        for i in indices {
+            let v = vectors[i]
+            minX = min(minX, v.x); maxX = max(maxX, v.x)
+            minY = min(minY, v.y); maxY = max(maxY, v.y)
+            minZ = min(minZ, v.z); maxZ = max(maxZ, v.z)
+        }
+        return BBox3(minX: minX, maxX: maxX, minY: minY, maxY: maxY, minZ: minZ, maxZ: maxZ)
+    }
+
+    /// Valid lower bound for Euclidean distance to any point inside the box.
+    func minDistance(to query: Vector3) -> Double {
+        let cx = clamp(query.x, minX, maxX)
+        let cy = clamp(query.y, minY, maxY)
+        let cz = clamp(query.z, minZ, maxZ)
+        return query.distance(to: Vector3(x: cx, y: cy, z: cz))
+    }
+
+    private func clamp(_ value: Double, _ minValue: Double, _ maxValue: Double) -> Double {
+        max(minValue, min(value, maxValue))
     }
 }
 
 private final class KDNode {
     let pointIndex: Int
-    let axis: Int // 0 = lat, 1 = lon
-    let bbox: GeoBBox
+    let bbox: BBox3
     var left: KDNode?
     var right: KDNode?
 
-    init(pointIndex: Int, axis: Int, bbox: GeoBBox) {
+    init(pointIndex: Int, bbox: BBox3) {
         self.pointIndex = pointIndex
-        self.axis = axis
         self.bbox = bbox
     }
 }
 
+// MARK: - Index
+
 final class TrackPointsKDIndex {
     private let points: [IndexedTrackPoint]
+    private let vectors: [Vector3]
     private let root: KDNode?
 
     init(itemsWaypoints: [[WptPt]]) {
@@ -75,44 +112,47 @@ final class TrackPointsKDIndex {
                 ))
             }
         }
+
         self.points = flat
-        self.root = Self.build(points: flat, indices: Array(flat.indices), depth: 0)
+        self.vectors = flat.map { Vector3.from(lat: $0.lat, lon: $0.lon) }
+        self.root = Self.build(vectors: vectors, indices: Array(flat.indices), depth: 0)
     }
-    
-    private static func build(points: [IndexedTrackPoint], indices: [Int], depth: Int) -> KDNode? {
+
+    private static func build(vectors: [Vector3], indices: [Int], depth: Int) -> KDNode? {
         guard !indices.isEmpty else { return nil }
 
-        let axis = depth & 1
-        let bbox = GeoBBox.from(points, indices: indices[indices.startIndex..<indices.endIndex])
+        let axis = depth % 3
+        let bbox = BBox3.from(vectors, indices: indices[indices.startIndex..<indices.endIndex])
 
         var sorted = indices
         sorted.sort { a, b in
-            let pa = points[a]
-            let pb = points[b]
-            if axis == 0 {
-                if pa.lat != pb.lat { return pa.lat < pb.lat }
-                if pa.lon != pb.lon { return pa.lon < pb.lon }
-            } else {
-                if pa.lon != pb.lon { return pa.lon < pb.lon }
-                if pa.lat != pb.lat { return pa.lat < pb.lat }
+            let va = vectors[a]
+            let vb = vectors[b]
+            let cmp: Double
+            switch axis {
+            case 0: cmp = va.x - vb.x
+            case 1: cmp = va.y - vb.y
+            default: cmp = va.z - vb.z
             }
-            if pa.trackIndex != pb.trackIndex { return pa.trackIndex < pb.trackIndex }
-            return pa.pointIndex < pb.pointIndex
+            if cmp != 0 { return cmp < 0 }
+            if va.x != vb.x { return va.x < vb.x }
+            if va.y != vb.y { return va.y < vb.y }
+            if va.z != vb.z { return va.z < vb.z }
+            return a < b
         }
 
         let mid = sorted.count / 2
-        let node = KDNode(pointIndex: sorted[mid], axis: axis, bbox: bbox)
+        let node = KDNode(pointIndex: sorted[mid], bbox: bbox)
 
-        let leftIndices = Array(sorted[..<mid])
-        let rightIndices = Array(sorted[(mid + 1)...])
-
-        node.left = build(points: points, indices: leftIndices, depth: depth + 1)
-        node.right = build(points: points, indices: rightIndices, depth: depth + 1)
+        node.left = build(vectors: vectors, indices: Array(sorted[..<mid]), depth: depth + 1)
+        node.right = build(vectors: vectors, indices: Array(sorted[(mid + 1)...]), depth: depth + 1)
         return node
     }
-    
-    func nearestTrackIndex(lat: Double, lon: Double) -> Int? {
+
+    func nearestTrackIndex(lat: Double, lon: Double, isCancelled: (() -> Bool)? = nil) -> Int? {
         guard let root else { return nil }
+
+        let query = Vector3.from(lat: lat, lon: lon)
 
         var bestDist = Double.greatestFiniteMagnitude
         var bestTrackIndex = -1
@@ -126,9 +166,9 @@ final class TrackPointsKDIndex {
             return p < bestPointIndex
         }
 
-        func consider(_ p: IndexedTrackPoint) {
-            let d = OAMapUtils.getDistance(lat, lon1: lon,
-                                           lat2: p.lat, lon2: p.lon)
+        func consider(_ index: Int) {
+            let p = points[index]
+            let d = OAMapUtils.getDistance(lat, lon1: lon, lat2: p.lat, lon2: p.lon)
             if isBetter(d, p.trackIndex, p.pointIndex) {
                 bestDist = d
                 bestTrackIndex = p.trackIndex
@@ -136,31 +176,35 @@ final class TrackPointsKDIndex {
             }
         }
 
-        struct StackItem {
-            let node: KDNode
-        }
-
         var stack: [KDNode] = [root]
-
         while let node = stack.popLast() {
-
-            consider(points[node.pointIndex])
+            if isCancelled?() == true { return nil }
+            consider(node.pointIndex)
 
             let left = node.left
             let right = node.right
 
-            let leftMin = left?.bbox.minHaversineDistance(lat: lat, lon: lon) ?? .infinity
-            let rightMin = right?.bbox.minHaversineDistance(lat: lat, lon: lon) ?? .infinity
-
-            if leftMin < rightMin {
-                if rightMin <= bestDist, let r = right { stack.append(r) }
-                if leftMin <= bestDist, let l = left { stack.append(l) }
+            let maxChord = maxChord(forHaversineMeters: bestDist)
+            let leftChord = left?.bbox.minDistance(to: query) ?? .infinity
+            let rightChord = right?.bbox.minDistance(to: query) ?? .infinity
+            
+            let slack = 1e-6
+            if leftChord < rightChord {
+                if rightChord <= maxChord + slack, let r = right { stack.append(r) }
+                if leftChord <= maxChord + slack, let l = left { stack.append(l) }
             } else {
-                if leftMin <= bestDist, let l = left { stack.append(l) }
-                if rightMin <= bestDist, let r = right { stack.append(r) }
+                if leftChord <= maxChord + slack, let l = left { stack.append(l) }
+                if rightChord <= maxChord + slack, let r = right { stack.append(r) }
             }
         }
 
         return bestTrackIndex >= 0 ? bestTrackIndex : nil
+    }
+
+    private func maxChord(forHaversineMeters meters: Double) -> Double {
+        guard meters.isFinite else { return .infinity }
+
+        let angular = meters / 6_372_800.0
+        return 2.0 * sin(min(.pi / 2.0, angular / 2.0))
     }
 }
